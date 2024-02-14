@@ -7,7 +7,7 @@ public class DataSource {
     private Connection connection;
     private static DataSource instance;
 
-    private final String URL = "jdbc:mysql://localhost:3306/rakcha";
+    private final String URL = "jdbc:mysql://localhost:3306/gestioncinemas";
     private final String USER = "root";
     private  final String PASSWORD = "";
 
