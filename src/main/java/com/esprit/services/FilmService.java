@@ -76,10 +76,10 @@ public class FilmService implements IService<Film> {
 
     @Override
     public void delete(Film film) {
-        String req = " DELETE  FROM film";
+        String req = " DELETE  FROM film where id = ?";
         try {
             PreparedStatement statement = connection.prepareStatement(req);
-            //statement.setInt(1, film.getId());
+            statement.setInt(1, film.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
