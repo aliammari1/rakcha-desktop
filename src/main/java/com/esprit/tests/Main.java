@@ -32,5 +32,7 @@ public class Main {
         userService.update(client);
 
         userService.delete(sponsor);
+
+        userService.sendMail("ali.ammari@esprit.tn", "Testing the javamail API...");
     }
 }

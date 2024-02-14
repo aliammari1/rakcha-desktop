@@ -2,6 +2,7 @@ package com.esprit.services;
 
 import com.esprit.models.*;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.SendMail;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -139,5 +140,9 @@ public class UserService implements IService<User> {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public void sendMail(String Recipient, String messageToSend) {
+        SendMail.send(Recipient, messageToSend);
     }
 }
