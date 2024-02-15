@@ -15,54 +15,53 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserPDF {
-    public void generate(List<User> userData) {
-        Document document = new Document();
+    public void generate(final List<User> userData) {
+        final Document document = new Document();
         try {
             PdfWriter.getInstance(document, new FileOutputStream("iTextTable.pdf"));
-        } catch (DocumentException | FileNotFoundException e) {
+        } catch (final DocumentException | FileNotFoundException e) {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
         }
 
         document.open();
-        List<String> attributes = new ArrayList<>() {{
-            add("id");
-            add("nom");
-            add("prenom");
-            add("num_telephone");
-            add("email");
-            add("role");
+        final List<String> attributes = new ArrayList<>() {{
+            this.add("id");
+            this.add("nom");
+            this.add("prenom");
+            this.add("num_telephone");
+            this.add("email");
+            this.add("role");
         }};
-        float[] widths = {50, 50, 50, 80, 50, 50};
-        PdfPTable table = new PdfPTable(widths);
-        addTableHeader(table, attributes);
-        addRows(table, userData);
+        final float[] widths = {50, 50, 50, 80, 50, 50};
+        final PdfPTable table = new PdfPTable(widths);
+        this.addTableHeader(table, attributes);
+        this.addRows(table, userData);
         // addCustomRows(table);
 
         try {
             document.add(table);
-        } catch (DocumentException e) {
+        } catch (final DocumentException e) {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
         }
         document.close();
     }
 
-    private void addTableHeader(PdfPTable table, List<String> attributes) {
+    private void addTableHeader(final PdfPTable table, final List<String> attributes) {
 
-        attributes.stream().forEach(columnTitle -> {
-            PdfPCell header = new PdfPCell();
+        attributes.forEach(columnTitle -> {
+            final PdfPCell header = new PdfPCell();
             header.setBackgroundColor(BaseColor.LIGHT_GRAY);
             header.setBorderWidth(2);
             header.setIndent(10);
-            Phrase phrase = new Phrase();
             header.setPhrase(new Phrase(columnTitle));
             table.addCell(header);
         });
     }
 
-    private void addRows(PdfPTable table, List<User> userData) {
-        for (User user : userData) {
+    private void addRows(final PdfPTable table, final List<User> userData) {
+        for (final User user : userData) {
             table.addCell(String.valueOf(user.getId()));
             table.addCell(user.getNom());
             table.addCell(user.getPrenom());
