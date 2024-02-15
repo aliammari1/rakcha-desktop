@@ -5,7 +5,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
-public class SendMail {
+public class UserMail {
     public static void send(String Recipient, String messageToSend) {
 
         // Sender's email ID needs to be mentioned
