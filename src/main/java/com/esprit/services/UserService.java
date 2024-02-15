@@ -2,7 +2,8 @@ package com.esprit.services;
 
 import com.esprit.models.*;
 import com.esprit.utils.DataSource;
-import com.esprit.utils.SendMail;
+import com.esprit.utils.UserMail;
+import com.esprit.utils.UserPDF;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -35,7 +36,8 @@ public class UserService implements IService<User> {
     public List<User> read() {
         try {
             List<User> userList = new ArrayList<>();
-            PreparedStatement statement = con.prepareStatement("SELECT * FROM users");
+            String query = "SELECT * FROM users";
+            PreparedStatement statement = con.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
             int i = 0;
             while (resultSet.next()) {
@@ -143,6 +145,11 @@ public class UserService implements IService<User> {
     }
 
     public void sendMail(String Recipient, String messageToSend) {
-        SendMail.send(Recipient, messageToSend);
+        UserMail.send(Recipient, messageToSend);
+    }
+
+    public void generateUserPDF() {
+        UserPDF userPDF = new UserPDF();
+        userPDF.generate(read());
     }
 }
