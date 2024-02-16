@@ -1,6 +1,9 @@
 package com.esprit.models;
 
+import com.esprit.services.CategorieService;
+
 public class Produit {
+
 
 
     private int id_produit;
@@ -10,23 +13,30 @@ public class Produit {
     private String image;
     private String description;
 
+    private Categorie categorie;
 
-    public Produit(int id_produit,  String nom, String prix, String image, String description) {
+    private int quantiteP;
+
+
+
+    public Produit(int id_produit, String nom, String prix, String image, String description, Categorie categorie, int quantiteP) {
         this.id_produit = id_produit;
-
         this.nom = nom;
         this.prix = prix;
         this.image = image;
         this.description = description;
-
+        this.categorie = categorie;
+        this.quantiteP = quantiteP;
     }
 
-    public Produit(String nom, String prix, String image, String description) {
+
+    public Produit(String nom, String prix, String image, String description, Categorie categorie, int quantiteP) {
         this.nom = nom;
         this.prix = prix;
         this.image = image;
         this.description = description;
-
+        this.categorie = categorie;
+        this.quantiteP = quantiteP;
     }
 
     public int getId_produit() {
@@ -74,6 +84,24 @@ public class Produit {
         this.description = description;
     }
 
+    public int getQuantiteP() {
+        return quantiteP;
+    }
+
+    public void setQuantiteP(int quantiteP) {
+        this.quantiteP = quantiteP;
+    }
+
+
+    public Categorie getCategorie() {
+        return categorie;
+    }
+
+    public void setCategorie(Categorie categorie) {
+        this.categorie = categorie;
+    }
+
+
     @Override
     public String toString() {
         return "Produit{" +
@@ -82,6 +110,8 @@ public class Produit {
                 ", prix='" + prix + '\'' +
                 ", image='" + image + '\'' +
                 ", description='" + description + '\'' +
+                ", categorie=" + categorie.getNom_categorie() +
+                ", quantiteP=" + quantiteP +
                 '}';
     }
 }

@@ -8,4 +8,5 @@ public interface IService<T> {
     public List<T> read();
     public void update(T t);
     public void delete(T t);
+
 }

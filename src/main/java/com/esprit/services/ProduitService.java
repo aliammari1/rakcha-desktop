@@ -1,5 +1,6 @@
 package com.esprit.services;
 
+import com.esprit.models.Categorie;
 import com.esprit.models.Produit;
 import com.esprit.utils.DataSource;
 
@@ -11,6 +12,7 @@ public class ProduitService  implements IService<Produit>{
 
     private Connection connection;
 
+
     public ProduitService() {
         connection = DataSource.getInstance().getConnection();
     }
@@ -19,13 +21,17 @@ public class ProduitService  implements IService<Produit>{
 
     @Override
     public void create(Produit produit) {
-        String req = "INSERT into produit(nom, prix,image,description) values (?, ?,?,?);";
+        String req = "INSERT into produit(nom, prix,image,description,quantiteP,id_categorieProduit) values (?, ?,?,?,?,?) ;";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setString(1, produit.getNom());
             pst.setString(2, produit.getPrix());
             pst.setString(3, produit.getImage());
             pst.setString(4, produit.getDescription());
+            pst.setInt(5, produit.getQuantiteP());
+            pst.setInt(6, produit.getCategorie().getId_categorie());
+
+
 
             pst.executeUpdate();
             System.out.println("Produit ajoutée !");
@@ -35,16 +41,25 @@ public class ProduitService  implements IService<Produit>{
 
     }
 
+
+
+
+
     @Override
     public List<Produit> read() {
         List<Produit> produits = new ArrayList<>();
 
-        String req = "SELECT * from produit";
+        String req = "SELECT  produit.* , categorie.nom_categorie from produit  JOIN categorie  ON produit.id_categorieProduit = categorie.id_categorie";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             ResultSet rs = pst.executeQuery();
+            CategorieService cs = new CategorieService();
+            int i = 0;
             while (rs.next()) {
-                produits.add(new Produit(rs.getInt("id_produit") ,rs.getString("nom"), rs.getString("prix"),rs.getString("description"),rs.getString("image")));
+
+                 produits.add(new Produit( rs.getInt("id_produit"), rs.getString("nom"), rs.getString("prix"), rs.getString("image"), rs.getString("description"), cs.getCategorie(rs.getInt("id_categorieProduit")),  rs.getInt("quantiteP")));
+                System.out.println(produits.get(i));
+                i++;
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -55,16 +70,18 @@ public class ProduitService  implements IService<Produit>{
 
     @Override
     public void update(Produit produit) {
-        String req = "UPDATE personne set nom = ?, prix = ? , description = ? , image = ? where id_produit = ?;";
+        String req = "UPDATE produit set nom = ?, prix = ? , description = ? , image = ? , quantiteP = ?, id_categorieProduit = ? where id_produit = ?;";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
-            pst.setInt(5, produit.getId_produit());
+            pst.setInt(7, produit.getId_produit());
             pst.setString(1, produit.getNom());
             pst.setString(2, produit.getPrix());
             pst.setString(3, produit.getDescription());
             pst.setString(4, produit.getImage());
+            pst.setInt(5, produit.getQuantiteP());
+            pst.setInt(6, produit.getCategorie().getId_categorie());
             pst.executeUpdate();
-            System.out.println("Personne modifiée !");
+            System.out.println("produit modifiée !");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -74,7 +91,7 @@ public class ProduitService  implements IService<Produit>{
     @Override
     public void delete(Produit produit) {
 
-        String req = "DELETE from personne where id_produit = ?;";
+        String req = "DELETE from produit where id_produit = ?;";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(1, produit.getId_produit());

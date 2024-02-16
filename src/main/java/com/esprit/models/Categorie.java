@@ -2,35 +2,37 @@ package com.esprit.models;
 
 public class Categorie {
 
-    private int id_categorieProduit;
-    private String nom;
+    private int id_categorie;
+    private String nom_categorie;
     private String description;
 
-    public Categorie(int id_categorieProduit, String nom, String description) {
-        this.id_categorieProduit = id_categorieProduit;
-        this.nom = nom;
+    public Categorie(int id_categorie, String nom_categorie, String description) {
+        this.id_categorie = id_categorie;
+        this.nom_categorie = nom_categorie;
         this.description = description;
     }
 
-    public Categorie(String nom, String description) {
-        this.nom = nom;
+    public Categorie(String nom_categorie, String description) {
+        this.nom_categorie = nom_categorie;
         this.description = description;
     }
 
-    public int getId_categorieProduit() {
-        return id_categorieProduit;
+
+
+    public int getId_categorie() {
+        return id_categorie;
     }
 
-    public void setId_categorieProduit(int id_categorieProduit) {
-        this.id_categorieProduit = id_categorieProduit;
+    public void setId_categorieProduit(int id_categorie) {
+        this.id_categorie = id_categorie;
     }
 
-    public String getNom() {
-        return nom;
+    public String getNom_categorie() {
+        return nom_categorie;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
+    public void setNom_categorie(String nom_categorie) {
+        this.nom_categorie = nom_categorie;
     }
 
     public String getDescription() {
@@ -44,9 +46,11 @@ public class Categorie {
     @Override
     public String toString() {
         return "Categorie{" +
-                "id_categorieProduit=" + id_categorieProduit +
-                ", nom='" + nom + '\'' +
+                "id_categorieProduit=" + id_categorie +
+                ", nom='" + nom_categorie + '\'' +
                 ", description='" + description + '\'' +
                 '}';
     }
+
+
 }
