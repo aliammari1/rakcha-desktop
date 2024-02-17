@@ -19,7 +19,7 @@ public class CategorieService  implements IService<Categorie> {
 
     @Override
     public void create(Categorie categorie) {
-        String req = "INSERT into categorie(nom_categorie, description) values (?, ?);";
+        String req = "INSERT into categorie_produit(nom_categorie, description) values (?, ?);";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setString(1, categorie.getNom_categorie());
@@ -38,7 +38,7 @@ public class CategorieService  implements IService<Categorie> {
 
         List<Categorie> categories = new ArrayList<>();
 
-        String req = "SELECT * from categorie";
+        String req = "SELECT * from categorie_produit";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             ResultSet rs = pst.executeQuery();
@@ -54,7 +54,7 @@ public class CategorieService  implements IService<Categorie> {
 
     @Override
     public void update(Categorie categorie) {
-        String req = "UPDATE categorie set nom_categorie = ?,  description = ? where id_categorie=?";
+        String req = "UPDATE categorie_produit set nom_categorie = ?,  description = ? where id_categorie=?";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setString(1, categorie.getNom_categorie());
@@ -71,7 +71,7 @@ public class CategorieService  implements IService<Categorie> {
 
     @Override
     public void delete(Categorie categorie) {
-        String req = "DELETE from categorie where id_categorie = ?;";
+        String req = "DELETE from categorie_produit where id_categorie = ?;";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(1, categorie.getId_categorie());
@@ -87,10 +87,29 @@ public class CategorieService  implements IService<Categorie> {
 
         Categorie category = null;
 
-        String req = "SELECT * from categorie where id_categorie = ?";
+        String req = "SELECT * from categorie_produit where id_categorie = ?";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(1, categorie_id);
+            ResultSet rs = pst.executeQuery();
+            rs.next();
+                category = new Categorie(rs.getInt("id_categorie"), rs.getString("nom_categorie"), rs.getString("description")) ;
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return category;
+    }
+
+    public Categorie getCategorieByNom(String categorie_nom) {
+
+        Categorie category = null;
+
+        String req = "SELECT * from categorie_produit where nom_categorie = ?";
+        try {
+            PreparedStatement pst = connection.prepareStatement(req);
+            pst.setString(1, categorie_nom);
             ResultSet rs = pst.executeQuery();
             rs.next();
                 category = new Categorie(rs.getInt("id_categorie"), rs.getString("nom_categorie"), rs.getString("description")) ;
