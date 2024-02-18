@@ -1,6 +1,5 @@
 package com.esprit.models;
 
-import com.esprit.services.CategorieService;
 import com.esprit.utils.DataSource;
 
 import java.io.File;
@@ -36,8 +35,28 @@ public class Produit {
 
     }
 
+    public Produit(int id_produit, String nom, String prix, String image_path, String description, Categorie categorie, int quantiteP) {
+        this.id_produit = id_produit;
+        this.nom = nom;
+        this.prix = prix;
+        this.description = description;
+        this.categorie = categorie;
+        this.quantiteP = quantiteP;
+        File file = new File(image_path);
+        try (InputStream in = new FileInputStream(file)) {
+            this.image = DataSource.getInstance().getConnection().createBlob();
+            this.image.setBinaryStream(1).write(in.readAllBytes());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
-    public Produit(String nom, String prix,Blob image, String description, Categorie categorie, int quantiteP) {
+    }
+
+    public Produit(int id_produit) {
+        this.id_produit = id_produit;
+    }
+
+    public Produit(String nom, String prix, Blob image, String description, Categorie categorie, int quantiteP) {
         this.nom = nom;
         this.prix = prix;
         this.image = image;
@@ -61,6 +80,7 @@ public class Produit {
             System.out.println(e.getMessage());
         }
     }
+
 
     public int getId_produit() {
         return id_produit;
@@ -136,5 +156,13 @@ public class Produit {
                 ", categorie=" + categorie.getNom_categorie() +
                 ", quantiteP=" + quantiteP +
                 '}';
+    }
+
+    public Categorie getId_categorieProduit() {
+        return categorie;
+    }
+
+    public String getNom_categorie() {
+        return categorie.getNom_categorie();
     }
 }

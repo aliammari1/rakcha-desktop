@@ -38,6 +38,7 @@
                 <version>0.0.8</version>
                 <configuration>
                     <mainClass>com.esprit.tests.Main</mainClass>
+
                 </configuration>
             </plugin>
         </plugins>

@@ -8,8 +8,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane prefHeight="525.0" prefWidth="868.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.AjouterProduitController">
+<AnchorPane fx:id="image_view" prefHeight="525.0" prefWidth="868.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.AjouterProduitController">
    <children>
       <Label layoutX="50.0" layoutY="54.0" prefHeight="17.0" prefWidth="64.0" text="id_produit" />
       <Label layoutX="46.0" layoutY="101.0" text="nom_categorie" />
@@ -21,21 +20,23 @@
       <TextField fx:id="idP_textFiled" layoutX="159.0" layoutY="50.0" />
       <TextField fx:id="nomP_textFiled" layoutX="159.0" layoutY="148.0" />
       <TextField fx:id="prix_textFiled" layoutX="159.0" layoutY="197.0" />
-      <TextField fx:id="image_textFiled" layoutX="159.0" layoutY="245.0" />
+      <TextField fx:id="image_textFiled" layoutX="160.0" layoutY="254.0" />
       <TextField fx:id="descriptionP_textFiled" layoutX="159.0" layoutY="298.0" />
       <TextField fx:id="quantiteP_textFiled" layoutX="159.0" layoutY="345.0" />
-      <Button layoutX="180.0" layoutY="434.0" mnemonicParsing="false" onAction="#add_produit" text="ajouter" />
+      <Button layoutX="205.0" layoutY="434.0" mnemonicParsing="false" onAction="#add_produit" text="add" />
       <TableView fx:id="Produit_tableview" layoutX="328.0" layoutY="101.0" prefHeight="252.0" prefWidth="524.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="id_produit" />
-          <TableColumn prefWidth="75.0" text="nom_Cat" />
-            <TableColumn prefWidth="75.0" text="nom_P" />
-            <TableColumn prefWidth="75.0" text="prix" />
-            <TableColumn prefWidth="75.0" text="image" />
-            <TableColumn prefWidth="75.0" text="description" />
-            <TableColumn prefWidth="75.0" text="quantiteP" />
+          <TableColumn fx:id="idP_tableC" prefWidth="75.0" text="id_produit" />
+          <TableColumn fx:id="nomCP_tableC" prefWidth="75.0" text="nom_Cat" />
+            <TableColumn fx:id="nomP_tableC" prefWidth="75.0" text="nom_P" />
+            <TableColumn fx:id="PrixP_tableC" prefWidth="75.0" text="prix" />
+            <TableColumn fx:id="image_tableC" prefWidth="75.0" text="image" />
+            <TableColumn fx:id="descriptionP_tableC" prefWidth="75.0" text="description" />
+            <TableColumn fx:id="quantiteP_tableC" prefWidth="75.0" text="quantiteP" />
         </columns>
       </TableView>
       <ComboBox fx:id="nomC_comboBox" layoutX="159.0" layoutY="97.0" prefWidth="150.0" />
+      <Button layoutX="270.0" layoutY="434.0" mnemonicParsing="false" onAction="#modifier_produit" text="update" />
+      <Button layoutX="350.0" layoutY="434.0" mnemonicParsing="false" onAction="#supprimer_produit" text="delete" />
    </children>
 </AnchorPane>

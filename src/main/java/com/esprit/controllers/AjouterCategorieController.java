@@ -37,12 +37,79 @@ public class AjouterCategorieController {
 
     @FXML
     void ajouter_categorie(ActionEvent event) {
-        CategorieService ps = new CategorieService();
-        ps.create(new Categorie( nomC_textFile.getText(), descriptionC_textFile.getText()));
+        CategorieService cs = new CategorieService();
+        cs.create(new Categorie( nomC_textFile.getText(), descriptionC_textFile.getText()));
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Categorie ajoutée");
         alert.setContentText("Categorie ajoutée !");
         alert.show();
+        idC_tableC.setCellValueFactory(new PropertyValueFactory<Categorie,Integer>("id_categorie"));
+        nomC_tableC.setCellValueFactory(new PropertyValueFactory<Categorie,String>("nom_categorie"));
+        descriptionC_tableC.setCellValueFactory(new PropertyValueFactory<Categorie,String>("description"));
+        ObservableList<Categorie> list = FXCollections.observableArrayList();
+        list.addAll(cs.read());
+        categorie_tableView.setItems(list);
+        categorie_tableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                Categorie selectedUser = categorie_tableView.getSelectionModel().getSelectedItem();
+                idC_textFile.setText(String.valueOf(selectedUser.getId_categorie()));
+                nomC_textFile.setText(selectedUser.getNom_categorie());
+                descriptionC_textFile.setText(selectedUser.getDescription());
+            }
+        });
+
+
+    }
+
+    @FXML
+    void modifier_categorie(ActionEvent event) {
+        CategorieService cs = new CategorieService();
+        cs.update(new Categorie(Integer.parseInt(idC_textFile.getText()), nomC_textFile.getText(), descriptionC_textFile.getText()));
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Categorie modifiée");
+        alert.setContentText("Categorie modifiée !");
+        alert.show();
+        idC_tableC.setCellValueFactory(new PropertyValueFactory<Categorie,Integer>("id_categorie"));
+        nomC_tableC.setCellValueFactory(new PropertyValueFactory<Categorie,String>("nom_categorie"));
+        descriptionC_tableC.setCellValueFactory(new PropertyValueFactory<Categorie,String>("description"));
+        ObservableList<Categorie> list = FXCollections.observableArrayList();
+        list.addAll(cs.read());
+        categorie_tableView.setItems(list);
+        categorie_tableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                Categorie selectedUser = categorie_tableView.getSelectionModel().getSelectedItem();
+                idC_textFile.setText(String.valueOf(selectedUser.getId_categorie()));
+                nomC_textFile.setText(selectedUser.getNom_categorie());
+                descriptionC_textFile.setText(selectedUser.getDescription());
+            }
+        });
+
+
+
+    }
+
+    @FXML
+    void supprimer_categorie(ActionEvent event) {
+        CategorieService cs = new CategorieService();
+        cs.delete(new Categorie(Integer.parseInt(idC_textFile.getText()), nomC_textFile.getText(), descriptionC_textFile.getText()));
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Categorie supprimée");
+        alert.setContentText("Categorie supprimée !");
+        alert.show();
+        idC_tableC.setCellValueFactory(new PropertyValueFactory<Categorie,Integer>("id_categorie"));
+        nomC_tableC.setCellValueFactory(new PropertyValueFactory<Categorie,String>("nom_categorie"));
+        descriptionC_tableC.setCellValueFactory(new PropertyValueFactory<Categorie,String>("description"));
+        ObservableList<Categorie> list = FXCollections.observableArrayList();
+        list.addAll(cs.read());
+        categorie_tableView.setItems(list);
+        categorie_tableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                Categorie selectedUser = categorie_tableView.getSelectionModel().getSelectedItem();
+                idC_textFile.setText(String.valueOf(selectedUser.getId_categorie()));
+                nomC_textFile.setText(selectedUser.getNom_categorie());
+                descriptionC_textFile.setText(selectedUser.getDescription());
+            }
+        });
 
     }
 
