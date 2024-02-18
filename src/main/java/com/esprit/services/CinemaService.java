@@ -12,13 +12,13 @@ public class CinemaService implements IService<Cinema> {
     private Connection connection;
     public CinemaService() { connection = DataSource.getInstance().getConnection(); }
     public void create(Cinema cinema) {
-        String req = "INSERT into cinema(nom, adresse, responsable, image) values (?, ?, ?, ?);";
+        String req = "INSERT into cinema(nom, adresse, responsable, logo) values (?, ?, ?, ?);";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setString(1, cinema.getNom());
             pst.setString(2, cinema.getAdresse());
             pst.setString(3, cinema.getResponsable());
-            pst.setString(4, cinema.getImage());
+            pst.setBlob(4, cinema.getLogo());
             pst.executeUpdate();
             System.out.println("Cinéma ajoutée !");
         } catch (SQLException e) {
@@ -27,14 +27,14 @@ public class CinemaService implements IService<Cinema> {
     }
 
     public void update(Cinema cinema) {
-        String req = "UPDATE cinema set nom = ?, adresse = ?, responsable = ?, image = ? where id_cinema = ?;";
+        String req = "UPDATE cinema set nom = ?, adresse = ?, responsable = ?, logo = ? where id_cinema = ?;";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(5, cinema.getId_cinema());
             pst.setString(1, cinema.getNom());
             pst.setString(2, cinema.getAdresse());
             pst.setString(3, cinema.getResponsable());
-            pst.setString(4, cinema.getImage());
+            pst.setBlob(4, cinema.getLogo());
             pst.executeUpdate();
             System.out.println("Cinéma modifiée !");
         } catch (SQLException e) {
@@ -62,7 +62,7 @@ public class CinemaService implements IService<Cinema> {
             PreparedStatement pst = connection.prepareStatement(req);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
-                cinemas.add(new Cinema(rs.getInt("id_cinema"), rs.getString("nom"), rs.getString("adresse"), rs.getString("responsable"), rs.getString("image")));
+                cinemas.add(new Cinema(rs.getInt("id_cinema"), rs.getString("nom"), rs.getString("adresse"), rs.getString("responsable"), rs.getBlob("logo")));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
