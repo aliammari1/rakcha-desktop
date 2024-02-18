@@ -66,16 +66,16 @@ public class ProduitService  implements IService<Produit>{
 
     @Override
     public void update(Produit produit) {
-        String req = "UPDATE produit set nom = ?, prix = ? , description = ? , image = ? , quantiteP = ?, id_categorieProduit = ? where id_produit = ?;";
+        String req = "UPDATE produit set id_categorieProduit = ? ,nom = ?, prix = ? , description = ? , image = ? , quantiteP = ? where id_produit = ?;";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(7, produit.getId_produit());
-            pst.setString(1, produit.getNom());
-            pst.setString(2, produit.getPrix());
-            pst.setString(3, produit.getDescription());
-            pst.setBlob(4, produit.getImage());
-            pst.setInt(5, produit.getQuantiteP());
-            pst.setInt(6, produit.getCategorie().getId_categorie());
+            pst.setString(2, produit.getNom());
+            pst.setString(3, produit.getPrix());
+            pst.setString(4, produit.getDescription());
+            pst.setBlob(5, produit.getImage());
+            pst.setInt(6, produit.getQuantiteP());
+            pst.setInt(1, produit.getCategorie().getId_categorie());
             pst.executeUpdate();
             System.out.println("produit modifiée !");
         } catch (SQLException e) {
