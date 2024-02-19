@@ -2,7 +2,6 @@ package com.esprit.controllers;
 
 import com.esprit.models.Categorie;
 import com.esprit.models.Produit;
-import com.esprit.models.Produit;
 import com.esprit.services.CategorieService;
 import com.esprit.services.ProduitService;
 import com.esprit.utils.DataSource;
@@ -11,14 +10,11 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import com.esprit.services.ProduitService;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.sql.Blob;
 import java.sql.Connection;
@@ -85,7 +81,6 @@ public class AjouterProduitController {
 
     @FXML
     void initialize() {
-        //ProduitService cs = new ProduitService();
         CategorieService cs = new CategorieService();
 
         for (Categorie c : cs.read()) {
@@ -169,16 +164,15 @@ public class AjouterProduitController {
                         prix_textFiled.setText(selectedUser.getPrix());
                         descriptionP_textFiled.setText(selectedUser.getDescription());
                         quantiteP_textFiled.setText(String.valueOf(selectedUser.getQuantiteP()));
-                        //image_view.toString();
-                        /*Blob imageBlob1 = selectedUser.getImage();
-                        try (InputStream inputStream = imageBlob.getBinaryStream()) {
+                        Blob imageBlob1 = selectedUser.getImage();
+                        try (InputStream inputStream = imageBlob1.getBinaryStream()) {
                             Image image1 = new Image(inputStream);
                             image.setImage(image1);
                     }
                      catch (SQLException | IOException e) {
                         e.printStackTrace();
                         showAlert("Erreur lors de la récupération de l'image : " + e.getMessage());
-                    }*/
+                    }
                 }
                 });
             } catch (SQLException | IOException e) {
@@ -206,7 +200,7 @@ public class AjouterProduitController {
 
 
         idP_tableC.setCellValueFactory(new PropertyValueFactory<Produit, Integer>("id_produit"));
-        nomCP_tableC.setCellValueFactory(new PropertyValueFactory<Produit,String>("id_categorieProduit"));
+        nomCP_tableC.setCellValueFactory(new PropertyValueFactory<Produit,String>("nom_categorie"));
         nomP_tableC.setCellValueFactory(new PropertyValueFactory<Produit, String>("nom"));
         PrixP_tableC.setCellValueFactory(new PropertyValueFactory<Produit, String>("prix"));
         image_tableC.setCellValueFactory(new PropertyValueFactory<Produit, Blob>("image"));
@@ -224,10 +218,19 @@ public class AjouterProduitController {
                 nomC_comboBox.getValue();
                 nomP_textFiled.setText(selectedUser.getNom());
                 prix_textFiled.setText(selectedUser.getPrix());
-                //image_textFiled.setText(selectedUser.getImage().toString());
                 image_view.toString();
                 descriptionP_textFiled.setText(selectedUser.getDescription());
                 quantiteP_textFiled.setText(String.valueOf(selectedUser.getQuantiteP()));
+
+                Blob imageBlob1 = selectedUser.getImage();
+                try (InputStream inputStream = imageBlob1.getBinaryStream()) {
+                    Image image1 = new Image(inputStream);
+                    image.setImage(image1);
+                }
+                catch (SQLException | IOException e) {
+                    e.printStackTrace();
+                    showAlert("Erreur lors de la récupération de l'image : " + e.getMessage());
+                }
 
             }
         });
@@ -273,7 +276,7 @@ public class AjouterProduitController {
                  alert.show();
 
                  idP_tableC.setCellValueFactory(new PropertyValueFactory<Produit, Integer>("id_produit"));
-                 nomCP_tableC.setCellValueFactory(new PropertyValueFactory<Produit,String>("id_categorieProduit"));
+                 nomCP_tableC.setCellValueFactory(new PropertyValueFactory<Produit,String>("nom_categorie"));
                  nomP_tableC.setCellValueFactory(new PropertyValueFactory<Produit, String>("nom"));
                  PrixP_tableC.setCellValueFactory(new PropertyValueFactory<Produit, String>("prix"));
                  image_tableC.setCellValueFactory(new PropertyValueFactory<Produit, Blob>("image"));
@@ -288,10 +291,17 @@ public class AjouterProduitController {
                 nomC_comboBox.getValue();
                 nomP_textFiled.setText(selectedUser.getNom());
                 prix_textFiled.setText(selectedUser.getPrix());
-                //image_textFiled.setText(selectedUser.getImage().toString());
-                         image_view.toString();
                 descriptionP_textFiled.setText(selectedUser.getDescription());
                 quantiteP_textFiled.setText(String.valueOf(selectedUser.getQuantiteP()));
+                         Blob imageBlob1 = selectedUser.getImage();
+                         try (InputStream inputStream = imageBlob1.getBinaryStream()) {
+                             Image image1 = new Image(inputStream);
+                             image.setImage(image1);
+                         }
+                         catch (SQLException | IOException e) {
+                             e.printStackTrace();
+                             showAlert("Erreur lors de la récupération de l'image : " + e.getMessage());
+                         }
             }
         });
 
@@ -321,7 +331,7 @@ public class AjouterProduitController {
         alert.setContentText("Produit supprimée !");
         alert.show();
         idP_tableC.setCellValueFactory(new PropertyValueFactory<Produit, Integer>("id_produit"));
-        nomCP_tableC.setCellValueFactory(new PropertyValueFactory<Produit,String>("id_categorieProduit"));
+        nomCP_tableC.setCellValueFactory(new PropertyValueFactory<Produit,String>("nom_categorie"));
         nomP_tableC.setCellValueFactory(new PropertyValueFactory<Produit, String>("nom"));
         PrixP_tableC.setCellValueFactory(new PropertyValueFactory<Produit, String>("prix"));
         image_tableC.setCellValueFactory(new PropertyValueFactory<Produit, Blob>("image"));
@@ -338,7 +348,6 @@ public class AjouterProduitController {
                 nomC_comboBox.getValue();
                 nomP_textFiled.setText(selectedUser.getNom());
                 prix_textFiled.setText(selectedUser.getPrix());
-                //image_textFiled.setText(selectedUser.getImage().toString());
                 image_view.toString();
                 descriptionP_textFiled.setText(selectedUser.getDescription());
                 quantiteP_textFiled.setText(String.valueOf(selectedUser.getQuantiteP()));
