@@ -70,7 +70,7 @@ public class CategoryService implements IService<Category> {
 
     @Override
     public void delete(Category category) {
-        String req = " DELETE FROM category  where id = ?";
+        String req = "DELETE FROM category where id = ?";
         try {
             PreparedStatement statement = connection.prepareStatement(req);
             statement.setInt(1, category.getId());
