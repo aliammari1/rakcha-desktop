@@ -11,12 +11,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.sql.*;
 
 public class AjoutCinemaController {
+
+    private File selectedFile; // Pour stocker le fichier image sélectionné
 
     @FXML
     private ImageView image;
@@ -31,17 +31,43 @@ public class AjoutCinemaController {
     private TextField tfResponsable;
 
     @FXML
-    void addCinema(ActionEvent event) {
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.show();
+    }
+
+    @FXML
+    void selectImage(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Sélectionner une image à ajouter");
-        File file = fileChooser.showOpenDialog(null);
-        if (file != null) {
+        fileChooser.setTitle("Sélectionner une image");
+        selectedFile = fileChooser.showOpenDialog(null);
+        if (selectedFile != null) {
+            Image selectedImage = new Image(selectedFile.toURI().toString());
+            image.setImage(selectedImage);
+        }
+    }
+
+    @FXML
+    void addCinema(ActionEvent event) {
+        if (selectedFile != null) { // Vérifier si une image a été sélectionnée
+            Connection connection = null;
             try {
                 // Convertir le fichier en un objet Blob
-                FileInputStream fis = new FileInputStream(file);
-                Connection connection = DataSource.getInstance().getConnection();
+                FileInputStream fis = new FileInputStream(selectedFile);
+                connection = DataSource.getInstance().getConnection();
                 Blob imageBlob = connection.createBlob();
-                imageBlob.setBinaryStream(1);
+
+                // Définir le flux d'entrée de l'image dans l'objet Blob
+                try (OutputStream outputStream = imageBlob.setBinaryStream(1)) {
+                    byte[] buffer = new byte[4096];
+                    int bytesRead;
+                    while ((bytesRead = fis.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, bytesRead);
+                    }
+                }
 
                 // Créer l'objet Cinema avec l'image Blob
                 Cinema cinema = new Cinema(tfNom.getText(), tfAdresse.getText(), tfResponsable.getText(), imageBlob);
@@ -50,29 +76,19 @@ public class AjoutCinemaController {
                 CinemaService cs = new CinemaService();
                 cs.create(cinema);
                 showAlert("Cinéma ajouté avec succès !");
-                connection.close(); // Fermer la connexion après utilisation
-            } catch (FileNotFoundException | SQLException e) {
+            } catch (SQLException | IOException e) {
                 showAlert("Erreur lors de l'ajout du cinéma : " + e.getMessage());
+            } finally {
+                if (connection != null) {
+                    try {
+                        connection.close();
+                    } catch (SQLException e) {
+                        showAlert("Erreur lors de la fermeture de la connexion : " + e.getMessage());
+                    }
+                }
             }
+        } else {
+            showAlert("Veuillez sélectionner une image d'abord !");
         }
-    }
-
-    @FXML
-    void selectImage(ActionEvent event) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Sélectionner une image");
-        File file = fileChooser.showOpenDialog(null);
-        if (file != null) {
-            Image selectedImage = new Image(file.toURI().toString());
-            image.setImage(selectedImage);
-        }
-    }
-
-    private void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Information");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.show();
     }
 }
