@@ -21,7 +21,7 @@ public class ProduitService  implements IService<Produit>{
 
     @Override
     public void create(Produit produit) {
-        String req = "INSERT into produit(nom, prix,image,description,quantiteP,id_categorieProduit) values (?, ?,?,?,?,?) ;";
+        String req = "INSERT into produit(nom, prix,image,description,quantiteP,id_categorieProduit) values (?, ?,?,?,?,?)  ;";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setString(1, produit.getNom());
@@ -66,7 +66,12 @@ public class ProduitService  implements IService<Produit>{
 
     @Override
     public void update(Produit produit) {
-        String req = "UPDATE produit set id_categorieProduit = ? ,nom = ?, prix = ? , description = ? , image = ? , quantiteP = ? where id_produit = ?;";
+        //String req = "UPDATE produit set id_categorieProduit = ? ,nom = ?, prix = ? , description = ? , image = ? , quantiteP = ? where id_produit = ?;";
+        String req = "UPDATE produit p " +
+                "INNER JOIN categorie_produit c ON p.id_categorieProduit = c.id_categorie " +
+                "SET p.id_categorieProduit = ?, p.nom = ?, p.prix = ?, p.description = ?, p.image = ?, p.quantiteP = ? " +
+                "WHERE p.id_produit = ?;";
+
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(7, produit.getId_produit());
