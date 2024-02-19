@@ -19,6 +19,7 @@ public class CategorieService  implements IService<Categorie> {
 
     @Override
     public void create(Categorie categorie) {
+
         String req = "INSERT into categorie_produit(nom_categorie, description) values (?, ?);";
         try {
             PreparedStatement pst = connection.prepareStatement(req);

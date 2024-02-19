@@ -6,25 +6,25 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="image_view" prefHeight="525.0" prefWidth="868.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.AjouterProduitController">
+<AnchorPane fx:id="image_view" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.AjouterProduitController">
    <children>
       <Label layoutX="50.0" layoutY="54.0" prefHeight="17.0" prefWidth="64.0" text="id_produit" />
       <Label layoutX="46.0" layoutY="101.0" text="nom_categorie" />
       <Label layoutX="48.0" layoutY="152.0" text="nom_produit" />
       <Label layoutX="60.0" layoutY="201.0" text="prix" />
-      <Label layoutX="53.0" layoutY="249.0" text="image" />
-      <Label layoutX="53.0" layoutY="302.0" text="description" />
-      <Label layoutX="57.0" layoutY="349.0" text="quantiteP" />
+      <Label layoutX="66.0" layoutY="382.0" text="image" AnchorPane.leftAnchor="66.0" />
+      <Label layoutX="51.0" layoutY="253.0" text="description" />
+      <Label layoutX="55.0" layoutY="313.0" text="quantiteP" />
       <TextField fx:id="idP_textFiled" layoutX="159.0" layoutY="50.0" />
       <TextField fx:id="nomP_textFiled" layoutX="159.0" layoutY="148.0" />
       <TextField fx:id="prix_textFiled" layoutX="159.0" layoutY="197.0" />
-      <TextField fx:id="image_textFiled" layoutX="160.0" layoutY="254.0" />
-      <TextField fx:id="descriptionP_textFiled" layoutX="159.0" layoutY="298.0" />
-      <TextField fx:id="quantiteP_textFiled" layoutX="159.0" layoutY="345.0" />
-      <Button layoutX="205.0" layoutY="434.0" mnemonicParsing="false" onAction="#add_produit" text="add" />
-      <TableView fx:id="Produit_tableview" layoutX="328.0" layoutY="101.0" prefHeight="252.0" prefWidth="524.0">
+      <TextField fx:id="descriptionP_textFiled" layoutX="160.0" layoutY="249.0" />
+      <TextField fx:id="quantiteP_textFiled" layoutX="159.0" layoutY="309.0" />
+      <Button layoutX="448.0" layoutY="424.0" mnemonicParsing="false" onAction="#add_produit" text="add" />
+      <TableView fx:id="Produit_tableview" layoutX="426.0" layoutY="101.0" prefHeight="252.0" prefWidth="524.0">
         <columns>
           <TableColumn fx:id="idP_tableC" prefWidth="75.0" text="id_produit" />
           <TableColumn fx:id="nomCP_tableC" prefWidth="75.0" text="nom_Cat" />
@@ -36,7 +36,9 @@
         </columns>
       </TableView>
       <ComboBox fx:id="nomC_comboBox" layoutX="159.0" layoutY="97.0" prefWidth="150.0" />
-      <Button layoutX="270.0" layoutY="434.0" mnemonicParsing="false" onAction="#modifier_produit" text="update" />
-      <Button layoutX="350.0" layoutY="434.0" mnemonicParsing="false" onAction="#supprimer_produit" text="delete" />
+      <Button layoutX="516.0" layoutY="424.0" mnemonicParsing="false" onAction="#modifier_produit" text="update" />
+      <Button layoutX="601.0" layoutY="424.0" mnemonicParsing="false" onAction="#supprimer_produit" text="delete" />
+      <ImageView fx:id="image" fitHeight="73.0" fitWidth="132.0" layoutX="168.0" layoutY="363.0" pickOnBounds="true" preserveRatio="true" />
+      <Button layoutX="106.0" layoutY="449.0" mnemonicParsing="false" onAction="#selectImage" text="Button" />
    </children>
 </AnchorPane>
