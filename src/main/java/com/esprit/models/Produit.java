@@ -2,10 +2,13 @@ package com.esprit.models;
 
 import com.esprit.utils.DataSource;
 
+import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
+import java.sql.SQLException;
 
 public class Produit {
 
@@ -157,6 +160,7 @@ public class Produit {
                 ", quantiteP=" + quantiteP +
                 '}';
     }
+
 
     public Categorie getId_categorieProduit() {
         return categorie;
