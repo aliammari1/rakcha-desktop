@@ -12,19 +12,22 @@ public class CinemaService implements IService<Cinema> {
     private Connection connection;
     public CinemaService() { connection = DataSource.getInstance().getConnection(); }
     public void create(Cinema cinema) {
-        String req = "INSERT into cinema(nom, adresse, responsable, logo) values (?, ?, ?, ?);";
+        String req = "INSERT into cinema(nom, adresse, responsable, logo, Statut) values (?, ?, ?, ?, ?);";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setString(1, cinema.getNom());
             pst.setString(2, cinema.getAdresse());
             pst.setString(3, cinema.getResponsable());
             pst.setBlob(4, cinema.getLogo());
+            // Définition de la valeur par défaut pour le champ Statut
+            pst.setString(5, cinema.getStatut() != null ? cinema.getStatut() : "En_attente");
             pst.executeUpdate();
-            System.out.println("Cinéma ajoutée !");
+            System.out.println("Cinéma ajouté !");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
+
 
     public void update(Cinema cinema) {
         String req = "UPDATE cinema set nom = ?, adresse = ?, responsable = ?, logo = ? where id_cinema = ?;";
@@ -62,7 +65,7 @@ public class CinemaService implements IService<Cinema> {
             PreparedStatement pst = connection.prepareStatement(req);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
-                cinemas.add(new Cinema(rs.getInt("id_cinema"), rs.getString("nom"), rs.getString("adresse"), rs.getString("responsable"), rs.getBlob("logo")));
+                cinemas.add(new Cinema(rs.getInt("id_cinema"), rs.getString("nom"), rs.getString("adresse"), rs.getString("responsable"), rs.getBlob("logo"), rs.getString("Statut")));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());

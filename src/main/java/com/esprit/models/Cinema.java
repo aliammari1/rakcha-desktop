@@ -9,20 +9,23 @@ public class Cinema {
     private String adresse;
     private String responsable;
     private Blob logo;
+    private String Statut;
 
-    public Cinema(int id_cinema, String nom, String adresse, String responsable, Blob logo) {
+    public Cinema(int id_cinema, String nom, String adresse, String responsable, Blob logo, String statut) {
         this.id_cinema = id_cinema;
         this.nom = nom;
         this.adresse = adresse;
         this.responsable = responsable;
         this.logo = logo;
+        Statut = statut;
     }
 
-    public Cinema(String nom, String adresse, String responsable, Blob logo) {
+    public Cinema(String nom, String adresse, String responsable, Blob logo, String statut) {
         this.nom = nom;
         this.adresse = adresse;
         this.responsable = responsable;
         this.logo = logo;
+        Statut = statut;
     }
 
     public int getId_cinema() {
@@ -65,6 +68,14 @@ public class Cinema {
         this.logo = logo;
     }
 
+    public String getStatut() {
+        return Statut;
+    }
+
+    public void setStatut(String statut) {
+        Statut = statut;
+    }
+
     @Override
     public String toString() {
         return "Cinema{" +
@@ -73,6 +84,7 @@ public class Cinema {
                 ", adresse='" + adresse + '\'' +
                 ", responsable='" + responsable + '\'' +
                 ", logo=" + logo +
+                ", Statut='" + Statut + '\'' +
                 '}';
     }
 }
