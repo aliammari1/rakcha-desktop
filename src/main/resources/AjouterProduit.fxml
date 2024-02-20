@@ -24,15 +24,15 @@
       <TextField fx:id="descriptionP_textFiled" layoutX="160.0" layoutY="249.0" />
       <TextField fx:id="quantiteP_textFiled" layoutX="159.0" layoutY="309.0" />
       <Button layoutX="448.0" layoutY="424.0" mnemonicParsing="false" onAction="#add_produit" text="add" />
-      <TableView fx:id="Produit_tableview" layoutX="426.0" layoutY="101.0" prefHeight="252.0" prefWidth="524.0">
+      <TableView fx:id="Produit_tableview" layoutX="416.0" layoutY="75.0" prefHeight="303.0" prefWidth="638.0">
         <columns>
           <TableColumn fx:id="idP_tableC" prefWidth="75.0" text="id_produit" />
           <TableColumn fx:id="nomCP_tableC" prefWidth="75.0" text="nom_Cat" />
             <TableColumn fx:id="nomP_tableC" prefWidth="75.0" text="nom_P" />
             <TableColumn fx:id="PrixP_tableC" prefWidth="75.0" text="prix" />
-            <TableColumn fx:id="image_tableC" prefWidth="75.0" text="image" />
-            <TableColumn fx:id="descriptionP_tableC" prefWidth="75.0" text="description" />
-            <TableColumn fx:id="quantiteP_tableC" prefWidth="75.0" text="quantiteP" />
+            <TableColumn fx:id="image_tableC" prefWidth="131.0" text="image" />
+            <TableColumn fx:id="descriptionP_tableC" prefWidth="100.0" text="description" />
+            <TableColumn fx:id="quantiteP_tableC" prefWidth="106.0" text="quantiteP" />
         </columns>
       </TableView>
       <ComboBox fx:id="nomC_comboBox" layoutX="159.0" layoutY="97.0" prefWidth="150.0" />
