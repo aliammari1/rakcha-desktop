@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.ListCinemaAdmin">
-   <children>
-      <ImageView fx:id="imageadmin" fitHeight="150.0" fitWidth="200.0" layoutX="190.0" layoutY="113.0" pickOnBounds="true" preserveRatio="true" />
-   </children>
+    <children>
+        <TableView fx:id="listCinema" layoutX="4.0" layoutY="58.0" prefHeight="328.0" prefWidth="591.0">
+            <columns>
+                <TableColumn fx:id="colCinema" prefWidth="137.5999755859375" text="Cinéma" />
+                <TableColumn fx:id="colAdresse" prefWidth="121.5999755859375" text="Adresse" />
+                <TableColumn fx:id="colResponsable" prefWidth="133.5999755859375" text="Responsable" />
+                <TableColumn fx:id="colLogo" prefWidth="197.60002441406255" text="Logo" />
+            </columns>
+        </TableView>
+    </children>
 </AnchorPane>

@@ -16,7 +16,7 @@
       <TextField fx:id="tfAdresse" layoutX="236.0" layoutY="103.0" />
       <TextField fx:id="tfResponsable" layoutX="237.0" layoutY="146.0" />
       <Button layoutX="422.0" layoutY="347.0" mnemonicParsing="false" onAction="#addCinema" prefHeight="38.0" prefWidth="142.0" text="Ajouter" />
-      <ImageView fx:id="image" fitHeight="147.0" fitWidth="197.0" layoutX="215.0" layoutY="183.0" pickOnBounds="true" preserveRatio="true" />
-      <Button layoutX="458.0" layoutY="251.0" mnemonicParsing="false" onAction="#selectImage" text="Sélectionner" />
+      <ImageView fx:id="image" fitHeight="147.0" fitWidth="297.0" layoutX="153.0" layoutY="183.0" pickOnBounds="true" preserveRatio="true" />
+      <Button layoutX="461.0" layoutY="243.0" mnemonicParsing="false" onAction="#selectImage" text="Sélectionner" />
    </children>
 </AnchorPane>
