@@ -48,7 +48,7 @@ public class AjouterProduitController {
     private TextField idP_textFiled;
 
     @FXML
-    private TableColumn<Produit, Blob> image_tableC;
+    private TableColumn<Produit, ImageView> image_tableC;
 
 
     @FXML
@@ -173,9 +173,31 @@ public class AjouterProduitController {
         nomCP_tableC.setCellValueFactory(new PropertyValueFactory<Produit,String>("nom_categorie"));
         nomP_tableC.setCellValueFactory(new PropertyValueFactory<Produit, String>("nom"));
         PrixP_tableC.setCellValueFactory(new PropertyValueFactory<Produit, String>("prix"));
-        image_tableC.setCellValueFactory(new PropertyValueFactory<Produit, Blob>("image"));
+        //image_tableC.setCellValueFactory(new PropertyValueFactory<Produit,ImageView>("image"));
         descriptionP_tableC.setCellValueFactory(new PropertyValueFactory<Produit, String>("description"));
         quantiteP_tableC.setCellValueFactory(new PropertyValueFactory<Produit, Integer>("quantiteP"));
+
+        // Configurer la cellule de la colonne Logo pour afficher l'image
+        image_tableC.setCellValueFactory(cellData -> {
+            Produit p = cellData.getValue();
+            ImageView imageView = new ImageView();
+            imageView.setFitWidth(50); // Réglez la largeur de l'image selon vos préférences
+            imageView.setFitHeight(50); // Réglez la hauteur de l'image selon vos préférences
+            try {
+                Blob blob = p.getImage();
+                if (blob != null) {
+                    Image image = new Image(blob.getBinaryStream());
+                    imageView.setImage(image);
+                } else {
+                    // Afficher une image par défaut si le logo est null
+                    Image defaultImage = new Image(getClass().getResourceAsStream("default_image.png"));
+                    imageView.setImage(defaultImage);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return new javafx.beans.property.SimpleObjectProperty<>(imageView);
+        });
         ObservableList<Produit> list = FXCollections.observableArrayList();
         ProduitService ps = new ProduitService();
         CategorieService cs = new CategorieService();
@@ -201,6 +223,7 @@ public class AjouterProduitController {
                     e.printStackTrace();
                     showAlert("Erreur lors de la récupération de l'image : " + e.getMessage());
                 }
+
 
             }
         });
