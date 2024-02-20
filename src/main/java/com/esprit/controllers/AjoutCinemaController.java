@@ -69,8 +69,11 @@ public class AjoutCinemaController {
                     }
                 }
 
+                // Définir le statut par défaut
+                String defaultStatut = "En_Attente";
+
                 // Créer l'objet Cinema avec l'image Blob
-                Cinema cinema = new Cinema(tfNom.getText(), tfAdresse.getText(), tfResponsable.getText(), imageBlob);
+                Cinema cinema = new Cinema(tfNom.getText(), tfAdresse.getText(), tfResponsable.getText(), imageBlob, defaultStatut);
 
                 // Ajouter le cinéma à la base de données
                 CinemaService cs = new CinemaService();

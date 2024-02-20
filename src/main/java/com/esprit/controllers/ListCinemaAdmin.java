@@ -33,6 +33,10 @@ public class ListCinemaAdmin {
     private TableColumn<Cinema, ImageView> colLogo; // Utilisation de ImageView pour afficher l'image
 
     @FXML
+    private TableColumn<Cinema, String> colStatut;
+
+
+    @FXML
     private void initialize() {
         // Appelée lorsque le fichier FXML est chargé
         // Configurer les cellules des colonnes pour afficher les données
@@ -61,6 +65,9 @@ public class ListCinemaAdmin {
             }
             return new javafx.beans.property.SimpleObjectProperty<>(imageView);
         });
+
+        colStatut.setCellValueFactory(new PropertyValueFactory<>("Statut"));
+
 
         // Charger les données depuis la base de données dans le TableView
         loadCinemas();
