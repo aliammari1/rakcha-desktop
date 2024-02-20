@@ -30,14 +30,15 @@ public class CinemaService implements IService<Cinema> {
 
 
     public void update(Cinema cinema) {
-        String req = "UPDATE cinema set nom = ?, adresse = ?, responsable = ?, logo = ? where id_cinema = ?;";
+        String req = "UPDATE cinema set nom = ?, adresse = ?, responsable = ?, logo = ?, Statut = ? where id_cinema = ?;";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
-            pst.setInt(5, cinema.getId_cinema());
+            pst.setInt(6, cinema.getId_cinema());
             pst.setString(1, cinema.getNom());
             pst.setString(2, cinema.getAdresse());
             pst.setString(3, cinema.getResponsable());
             pst.setBlob(4, cinema.getLogo());
+            pst.setString(5, cinema.getStatut());
             pst.executeUpdate();
             System.out.println("Cinéma modifiée !");
         } catch (SQLException e) {

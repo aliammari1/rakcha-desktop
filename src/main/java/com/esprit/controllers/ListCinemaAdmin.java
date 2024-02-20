@@ -5,11 +5,16 @@ import com.esprit.services.CinemaService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
+import javafx.util.Callback;
+
 
 import java.sql.Blob;
 import java.sql.SQLException;
@@ -34,6 +39,9 @@ public class ListCinemaAdmin {
 
     @FXML
     private TableColumn<Cinema, String> colStatut;
+
+    @FXML
+    private TableColumn<Cinema, Void> colAction;
 
 
     @FXML
@@ -68,6 +76,50 @@ public class ListCinemaAdmin {
 
         colStatut.setCellValueFactory(new PropertyValueFactory<>("Statut"));
 
+        // Configurer la cellule de la colonne Action
+        colAction.setCellFactory(new Callback<TableColumn<Cinema, Void>, TableCell<Cinema, Void>>() {
+            @Override
+            public TableCell<Cinema, Void> call(TableColumn<Cinema, Void> param) {
+                return new TableCell<Cinema, Void>() {
+                    private final Button acceptButton = new Button("Accepter");
+                    private final Button refuseButton = new Button("Refuser");
+
+                    {
+                        acceptButton.setOnAction(event -> {
+                            Cinema cinema = getTableView().getItems().get(getIndex());
+                            // Mettre à jour le statut du cinéma en "Acceptée"
+                            cinema.setStatut("Acceptée");
+                            // Mettre à jour le statut dans la base de données
+                            CinemaService cinemaService = new CinemaService();
+                            cinemaService.update(cinema);
+                            // Rafraîchir la TableView pour refléter les changements
+                            getTableView().refresh();
+                        });
+
+                        refuseButton.setOnAction(event -> {
+                            Cinema cinema = getTableView().getItems().get(getIndex());
+                            // Supprimer le cinéma de la base de données
+                            CinemaService cinemaService = new CinemaService();
+                            cinemaService.delete(cinema);
+                            // Supprimer le cinéma de la TableView
+                            getTableView().getItems().remove(cinema);
+                        });
+
+                    }
+
+                    @Override
+                    protected void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            // Afficher les boutons dans la cellule de la colonne Action
+                            setGraphic(new HBox(acceptButton, refuseButton));
+                        }
+                    }
+                };
+            }
+        });
 
         // Charger les données depuis la base de données dans le TableView
         loadCinemas();
