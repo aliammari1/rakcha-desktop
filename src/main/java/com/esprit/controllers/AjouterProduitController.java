@@ -144,37 +144,7 @@ public class AjouterProduitController {
                 alert.setTitle("Produit ajoutée");
                 alert.setContentText("Produit ajoutée !");
                 alert.show();
-
-                idP_tableC.setCellValueFactory(new PropertyValueFactory<Produit, Integer>("id_produit"));
-                nomCP_tableC.setCellValueFactory(new PropertyValueFactory<Produit,String>("nom_categorie"));
-                nomP_tableC.setCellValueFactory(new PropertyValueFactory<Produit, String>("nom"));
-                PrixP_tableC.setCellValueFactory(new PropertyValueFactory<Produit, String>("prix"));
-                image_tableC.setCellValueFactory(new PropertyValueFactory<Produit, Blob>("image"));
-                descriptionP_tableC.setCellValueFactory(new PropertyValueFactory<Produit, String>("description"));
-                quantiteP_tableC.setCellValueFactory(new PropertyValueFactory<Produit, Integer>("quantiteP"));
-                ObservableList<Produit> list = FXCollections.observableArrayList();
-                list.addAll(ps.read());
-                Produit_tableview.setItems(list);
-                Produit_tableview.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-                    if (newSelection != null) {
-                        Produit selectedUser = Produit_tableview.getSelectionModel().getSelectedItem();
-                        idP_textFiled.setText(String.valueOf(selectedUser.getId_produit()));
-                        nomC_comboBox.getValue();
-                        nomP_textFiled.setText(selectedUser.getNom());
-                        prix_textFiled.setText(selectedUser.getPrix());
-                        descriptionP_textFiled.setText(selectedUser.getDescription());
-                        quantiteP_textFiled.setText(String.valueOf(selectedUser.getQuantiteP()));
-                        Blob imageBlob1 = selectedUser.getImage();
-                        try (InputStream inputStream = imageBlob1.getBinaryStream()) {
-                            Image image1 = new Image(inputStream);
-                            image.setImage(image1);
-                    }
-                     catch (SQLException | IOException e) {
-                        e.printStackTrace();
-                        showAlert("Erreur lors de la récupération de l'image : " + e.getMessage());
-                    }
-                }
-                });
+                afficher_produit();
             } catch (SQLException | IOException e) {
                 showAlert("Erreur lors de l'ajout du produit : " + e.getMessage());
             } finally {
@@ -235,9 +205,6 @@ public class AjouterProduitController {
             }
         });
 
-
-
-
         }
     @FXML
     void modifier_produit(ActionEvent event) {
@@ -263,8 +230,6 @@ public class AjouterProduitController {
 
 
                 ProduitService ps = new ProduitService();
-
-
                 ps.update(new Produit(Integer.parseInt(idP_textFiled.getText()), nomP_textFiled.getText(),
                         prix_textFiled.getText(), imageBlob, descriptionP_textFiled.getText(),
                         new CategorieService().read().get(nomC_comboBox.getSelectionModel().getSelectedIndex()),
@@ -274,36 +239,7 @@ public class AjouterProduitController {
                 alert.setTitle("Produit modifiée");
                 alert.setContentText("Produit modifiée !");
                  alert.show();
-
-                 idP_tableC.setCellValueFactory(new PropertyValueFactory<Produit, Integer>("id_produit"));
-                 nomCP_tableC.setCellValueFactory(new PropertyValueFactory<Produit,String>("nom_categorie"));
-                 nomP_tableC.setCellValueFactory(new PropertyValueFactory<Produit, String>("nom"));
-                 PrixP_tableC.setCellValueFactory(new PropertyValueFactory<Produit, String>("prix"));
-                 image_tableC.setCellValueFactory(new PropertyValueFactory<Produit, Blob>("image"));
-                 quantiteP_tableC.setCellValueFactory(new PropertyValueFactory<Produit, Integer>("quantiteP"));
-                 ObservableList<Produit> list = FXCollections.observableArrayList();
-                 list.addAll(ps.read());
-                 Produit_tableview.setItems(list);
-                 Produit_tableview.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-                     if (newSelection != null) {
-                Produit selectedUser = Produit_tableview.getSelectionModel().getSelectedItem();
-                idP_textFiled.setText(String.valueOf(selectedUser.getId_produit()));
-                nomC_comboBox.getValue();
-                nomP_textFiled.setText(selectedUser.getNom());
-                prix_textFiled.setText(selectedUser.getPrix());
-                descriptionP_textFiled.setText(selectedUser.getDescription());
-                quantiteP_textFiled.setText(String.valueOf(selectedUser.getQuantiteP()));
-                         Blob imageBlob1 = selectedUser.getImage();
-                         try (InputStream inputStream = imageBlob1.getBinaryStream()) {
-                             Image image1 = new Image(inputStream);
-                             image.setImage(image1);
-                         }
-                         catch (SQLException | IOException e) {
-                             e.printStackTrace();
-                             showAlert("Erreur lors de la récupération de l'image : " + e.getMessage());
-                         }
-            }
-        });
+                afficher_produit();
 
 
     } catch (SQLException | IOException e) {
@@ -330,29 +266,7 @@ public class AjouterProduitController {
         alert.setTitle("Produit supprimée");
         alert.setContentText("Produit supprimée !");
         alert.show();
-        idP_tableC.setCellValueFactory(new PropertyValueFactory<Produit, Integer>("id_produit"));
-        nomCP_tableC.setCellValueFactory(new PropertyValueFactory<Produit,String>("nom_categorie"));
-        nomP_tableC.setCellValueFactory(new PropertyValueFactory<Produit, String>("nom"));
-        PrixP_tableC.setCellValueFactory(new PropertyValueFactory<Produit, String>("prix"));
-        image_tableC.setCellValueFactory(new PropertyValueFactory<Produit, Blob>("image"));
-        descriptionP_tableC.setCellValueFactory(new PropertyValueFactory<Produit, String>("description"));
-        quantiteP_tableC.setCellValueFactory(new PropertyValueFactory<Produit, Integer>("quantiteP"));
-        ObservableList<Produit> list = FXCollections.observableArrayList();
-        list.addAll(ps.read());
-        Produit_tableview.setItems(list);
-        Produit_tableview.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
-                Produit selectedUser = Produit_tableview.getSelectionModel().getSelectedItem();
-                idP_textFiled.setText(String.valueOf(selectedUser.getId_produit()));
-                //nomC_comboBox.setText(selectedUser.getCategorie().getNom_categorie());
-                nomC_comboBox.getValue();
-                nomP_textFiled.setText(selectedUser.getNom());
-                prix_textFiled.setText(selectedUser.getPrix());
-                image_view.toString();
-                descriptionP_textFiled.setText(selectedUser.getDescription());
-                quantiteP_textFiled.setText(String.valueOf(selectedUser.getQuantiteP()));
-            }
-        });
+        afficher_produit();
 
     }
 
