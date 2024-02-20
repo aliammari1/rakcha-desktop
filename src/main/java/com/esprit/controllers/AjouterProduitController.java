@@ -209,7 +209,6 @@ public class AjouterProduitController {
     @FXML
     void modifier_produit(ActionEvent event) {
 
-
         if (selectedFile != null) { // Vérifier si une image a été sélectionnée
             Connection connection = null;
             try {
