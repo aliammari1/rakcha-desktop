@@ -3,7 +3,10 @@ package com.esprit.controllers;
 import com.esprit.models.Cinema;
 import com.esprit.services.CinemaService;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -11,8 +14,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
+import javafx.stage.Stage;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Blob;
 import java.util.List;
@@ -23,6 +28,7 @@ public class ListCinemaResponsableController implements Initializable {
 
     @FXML
     private FlowPane cinemaFlowPane;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -92,12 +98,41 @@ public class ListCinemaResponsableController implements Initializable {
         Button editButton = new Button("Modifier");
         editButton.setLayoutX(10);
         editButton.setLayoutY(160);
-        // Définir l'action du bouton Modifier
+// Définir l'action du bouton Modifier
         editButton.setOnAction(event -> {
-            // Insérez ici la logique pour modifier le cinéma
-            System.out.println("Modifier le cinéma: " + cinema.getNom());
+            // Charger la nouvelle interface ModifierCinema.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ModifierCinema.fxml"));
+            Parent root = null;
+            try {
+                root = loader.load();
+                // Passer les données du cinéma à la nouvelle interface
+                ModifierCinemaController controller = loader.getController();
+                controller.initData(cinema); // Passer le cinéma correspondant
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            // Créer une nouvelle scène avec la nouvelle interface
+            Scene scene = new Scene(root);
+
+            // Obtenir la scène actuelle
+            Stage currentStage = (Stage) cinemaFlowPane.getScene().getWindow();
+
+            // Créer une nouvelle fenêtre (stage) et y attacher la scène
+            Stage stage = new Stage();
+            stage.setScene(scene);
+
+            // Définir le titre de la nouvelle fenêtre
+            stage.setTitle("Modifier Cinema");
+
+            // Fermer la fenêtre actuelle lorsque la nouvelle fenêtre est affichée
+            stage.setOnShown(e -> currentStage.close());
+
+            // Afficher la nouvelle fenêtre
+            stage.show();
         });
         card.getChildren().add(editButton);
+
 
         // Bouton Supprimer
         Button deleteButton = new Button("Supprimer");
