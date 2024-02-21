@@ -1,18 +1,38 @@
 package com.esprit.models;
+
+import com.esprit.utils.DataSource;
+
+import java.awt.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Blob;
+import java.sql.SQLException;
 
 public class serie {
 
-    public static int idserie;
-
-
-
+    public  int idserie;
     public String nom;
     public String resume;
     public String directeur;
     private Blob image;
+    public String pays;
+    private categorie categorie;
 
-    public serie(int idserie, String serie1, String resumeserie, String directeurdelaserie, String pays, String image1) {
+    public serie() {
+        
+    }
+
+    public serie(int idserie, String serie1, String resume, String directeur1, String pays, String image1, serie serie) {
+    }
+
+    public serie(int i, String serie1, String resume, String directeur1, String pays, String image1, com.esprit.models.categorie categorie) {
+    }
+
+
+    public categorie getCategorie() {
+        return categorie;
     }
 
     public Blob getImage() {
@@ -23,11 +43,10 @@ public class serie {
         this.image = image;
     }
 
-    public String pays;
 
 
 
-    public static int getIdserie() {
+    public int getIdserie() {
         return idserie;
     }
 
@@ -70,21 +89,23 @@ public class serie {
     }
 
 
-    public serie(int idserie,String nom, String resume, String directeur, Blob image, String pays) {
+    public serie(int idserie,String nom, String resume, String directeur, Blob image, String pays,categorie categorie) {
         this.idserie = idserie;
         this.nom = nom;
         this.resume = resume;
         this.directeur = directeur;
         this.image = image;
         this.pays = pays;
+        this.categorie=categorie;
     }
 
-    public serie(String nom, String resume, String directeur, Blob image, String pays) {
+    public serie(String nom, String resume, String directeur, Blob image, String pays,categorie categorie) {
         this.nom = nom;
         this.resume = resume;
         this.directeur = directeur;
         this.image = image;
         this.pays = pays;
+        this.categorie=categorie;
     }
     @Override
     public String toString() {
@@ -93,9 +114,12 @@ public class serie {
                 ", resume='" + resume + '\'' +
                 ", directeur='" + directeur + '\'' +
                 ", image=" + image +
+                ", categorie=" + categorie +
                 ", pays='" + pays + '\'' +
                 '}';
     }
+
+
 
 
 }

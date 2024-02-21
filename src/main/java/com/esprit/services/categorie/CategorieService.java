@@ -68,4 +68,9 @@ public class CategorieService implements IService<categorie> {
 
         return categories;
     }
+
+
+    public Object getClass(int idcategorie) {
+        return null;
+    }
 }

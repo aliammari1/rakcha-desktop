@@ -7,7 +7,6 @@ public class categorie {
 
     public String description;
 
-
     public categorie() {
     }
 
@@ -44,8 +43,13 @@ public class categorie {
         this.description = description;
     }
 
-
-
-
+    @Override
+    public String toString() {
+        return "categorie{" +
+                "idcategorie=" + idcategorie +
+                ", nom='" + nom + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 
 }

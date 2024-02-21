@@ -13,10 +13,6 @@ public class episode {
     public episode(int idepisode, String titre, int numeroepisode, int saison, Blob image, int idserie) {
     }
 
-    public episode(int i, String premierEpisode, int saison, int i1, int i2) {
-    }
-
-
     public serie getSerie() {
         return serie;
     }
