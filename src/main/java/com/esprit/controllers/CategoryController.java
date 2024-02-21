@@ -11,6 +11,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 
 public class CategoryController {
 
@@ -33,6 +35,12 @@ public class CategoryController {
 
     @FXML
     private TableColumn<Category, Integer> idCategory_tableColumn;
+
+    @FXML
+    private AnchorPane categoryCrudInterface;
+
+    @FXML
+    private StackPane stackPane;
 
     @FXML
     void initialize() {
@@ -77,7 +85,6 @@ public class CategoryController {
     @FXML
     void deleteCategory(ActionEvent event) {
         try {
-
             CategoryService categoryService = new CategoryService();
             Category category = new Category(Integer.parseInt(idCategory_textArea.getText()), nomCategory_textArea.getText(), descriptionCategory_textArea.getText());
             categoryService.delete(category);

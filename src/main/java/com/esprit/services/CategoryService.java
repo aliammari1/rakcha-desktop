@@ -79,6 +79,43 @@ public class CategoryService implements IService<Category> {
             throw new RuntimeException(e);
         }
 
+    }
 
+    public Category getCategory(int id) {
+        Category category = null;
+        String req = "SELECT * FROM category where id = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(req);
+            statement.setInt(1, id);
+            ResultSet rs = statement.executeQuery();
+            rs.next();
+            System.out.println("ID: " + rs.getInt("id"));
+            System.out.println("Nom: " + rs.getString("nom"));
+            System.out.println("Description: " + rs.getString("description"));
+            category = new Category(rs.getInt("id"), rs.getString("nom"), rs.getString("description"));
+            System.out.println(category);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return category;
+    }
+
+    public Category getCategoryByNom(String nom) {
+        Category category = null;
+        String req = "SELECT * FROM category where nom LIKE ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(req);
+            statement.setString(1, nom);
+            ResultSet rs = statement.executeQuery();
+            rs.next();
+            System.out.println("ID: " + rs.getInt("id"));
+            System.out.println("Nom: " + rs.getString("nom"));
+            System.out.println("Description: " + rs.getString("description"));
+            category = new Category(rs.getInt("id"), rs.getString("nom"), rs.getString("description"));
+            System.out.println(category);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return category;
     }
 }
