@@ -13,7 +13,7 @@ public class EpisodeService implements IService<episode> {
     private Connection connection;
     public EpisodeService() { connection = DataSource.getInstance().getConnection(); }
     public void create(episode episode) {
-        String req = "INSERT into episode(titre, numeroepisode, saison,image,idserie) values (?, ?,?,?,?,?)  ;";
+        String req = "INSERT into episode(titre, numeroepisode, saison,image,idserie) values (?, ?,?,?,?)  ;";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setString(1, episode.getTitre());
