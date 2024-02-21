@@ -1,13 +1,14 @@
 package com.esprit.services.serie;
 
 import com.esprit.models.serie;
+import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SerieService implements Iserie<serie>{
+public class SerieService implements IService<serie> {
     private Connection connection;
 
     public SerieService() { connection = DataSource.getInstance().getConnection(); }
@@ -71,6 +72,10 @@ public class SerieService implements Iserie<serie>{
         }
 
         return series;
+    }
+
+    public int getSerie(int idserie) {
+        return 0;
     }
 }
 
