@@ -22,15 +22,26 @@ public class maincategorie {
          //es.delete(new  episode(5,"Troixieme episode",1,1));
         //:System.out.println(es.read());
 
-        SerieService ss = new SerieService();
-        ss.create(new serie(3,"Serie1","Resumeserie1","directeur","pays","image1"));
-        ss.create(new serie(4,"Serie2","Resumeserie2","directeur","paysd","image2"));
-        ss.create(new serie(5,"Serie3","Resumeserie3","directeur","pays","image3"));
+        //SerieService ss = new SerieService();
+        //ss.create(new serie(3,"Serie1","Resumeserie1","directeur","pays","image1"));
+        //ss.create(new serie(4,"Serie2","Resumeserie2","directeur","paysd","image2"));
+        //ss.create(new serie(5,"Serie3","Resumeserie3","directeur","pays","image3"));
 
 
-        ss.delete(new serie(3,"Serie1","Resumeserie","directeurdelaserie","pays","image1"));
+        //ss.delete(new serie(3,"Serie1","Resumeserie","directeurdelaserie","pays","image1"));
 
-        System.out.println(ss.read());
+        //System.out.println(ss.read());
+
+        EpisodeService es = new EpisodeService();
+        es.create(new episode(3,"Premier episode",1,1,2));
+        es.create(new episode(4,"deuxieme episode",1,1,3));
+        es.create(new episode(3,"troisieme episode",1,1,4));
+        es.delete(new episode(3,"troisieme episode",1,1,4));
+        System.out.println(es.read());
+
+
+
+
 
 
 
