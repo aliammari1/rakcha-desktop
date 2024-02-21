@@ -1,11 +1,27 @@
 package com.esprit.models;
+import java.sql.Blob;
 
 public class serie {
 
     public static int idserie;
+
+
+
     public String nom;
     public String resume;
     public String directeur;
+    private Blob image;
+
+    public serie(int idserie, String serie1, String resumeserie, String directeurdelaserie, String pays, String image1) {
+    }
+
+    public Blob getImage() {
+        return image;
+    }
+
+    public void setImage(Blob image) {
+        this.image = image;
+    }
 
     public String pays;
 
@@ -53,31 +69,33 @@ public class serie {
         this.pays = pays;
     }
 
-    public serie(String nom, String resume, String directeur, String pays) {
-        this.nom = nom;
-        this.resume = resume;
-        this.directeur = directeur;
 
-        this.pays = pays;
-    }
-
-    public serie(int idserie, String nom, String resume,  String directeur, String pays) {
+    public serie(int idserie,String nom, String resume, String directeur, Blob image, String pays) {
         this.idserie = idserie;
         this.nom = nom;
         this.resume = resume;
         this.directeur = directeur;
+        this.image = image;
         this.pays = pays;
     }
 
+    public serie(String nom, String resume, String directeur, Blob image, String pays) {
+        this.nom = nom;
+        this.resume = resume;
+        this.directeur = directeur;
+        this.image = image;
+        this.pays = pays;
+    }
     @Override
     public String toString() {
         return "serie{" +
-                "idserie=" + idserie +
-                ", nom='" + nom + '\'' +
+                "nom='" + nom + '\'' +
                 ", resume='" + resume + '\'' +
                 ", directeur='" + directeur + '\'' +
+                ", image=" + image +
                 ", pays='" + pays + '\'' +
                 '}';
     }
+
 
 }
