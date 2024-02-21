@@ -18,9 +18,9 @@ public class maincategorie {
         //
 
 
-        EpisodeService es = new EpisodeService();
-        es.create(new episode(3, "Premier episode", 1, 1, null, new Serie()));
-        System.out.println(es.read());
+       // EpisodeService es = new EpisodeService();
+       // es.create(new episode(3, "Premier episode", 1, 1, null, new Serie()));
+       // System.out.println(es.read());
 
 
 //SerieService ss = new SerieService();
@@ -32,9 +32,26 @@ public class maincategorie {
         //ss.delete(new serie(3,"Serie1","Resumeserie","directeurdelaserie","pays","image1"));
 
         //System.out.println(ss.read());
+        //SerieService ss = new SerieService();
+
+        CategorieService cs = new CategorieService();
+        SerieService ss = new SerieService();
+
+// Création de la catégorie
+        categorie nouvelleCategorie = new categorie("Drama", "DescriptionCategorie");
+        cs.create(nouvelleCategorie);
+
+// Création de la série avec la catégorie associée
+        serie nouvelleSerie = new serie(0, "Serie1", "Resume", "directeur1", "pays", "image1", nouvelleCategorie);
+        ss.create(nouvelleSerie);
+        System.out.println(ss.read());
+
+
+
 
 
     }
+
 }
 
 
