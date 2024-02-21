@@ -38,7 +38,7 @@ public class Produit {
 
     }
 
-    public Produit(int id_produit, String nom, String prix, String image_path, String description, Categorie categorie, int quantiteP) {
+   /* public Produit(int id_produit, String nom, String prix, String image_path, String description, Categorie categorie, int quantiteP) {
         this.id_produit = id_produit;
         this.nom = nom;
         this.prix = prix;
@@ -53,7 +53,7 @@ public class Produit {
             System.out.println(e.getMessage());
         }
 
-    }
+    }*/
 
     public Produit(int id_produit) {
         this.id_produit = id_produit;
@@ -68,7 +68,7 @@ public class Produit {
         this.quantiteP = quantiteP;
     }
 
-    public Produit(String nom, String prix,String image_path, String description, Categorie categorie, int quantiteP) {
+    /*public Produit(String nom, String prix,String image_path, String description, Categorie categorie, int quantiteP) {
         this.nom = nom;
         this.prix = prix;
         this.description = description;
@@ -82,7 +82,7 @@ public class Produit {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-    }
+    }*/
 
 
     public int getId_produit() {

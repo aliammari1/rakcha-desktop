@@ -31,8 +31,6 @@ public class ProduitService  implements IService<Produit>{
             pst.setInt(5, produit.getQuantiteP());
             pst.setInt(6, produit.getCategorie().getId_categorie());
 
-
-
             pst.executeUpdate();
             System.out.println("Produit ajoutée !");
         } catch (SQLException e) {
@@ -44,7 +42,6 @@ public class ProduitService  implements IService<Produit>{
     @Override
     public List<Produit> read() {
         List<Produit> produits = new ArrayList<>();
-
         String req = "SELECT  produit.* , categorie_produit.nom_categorie from produit  JOIN categorie_produit  ON produit.id_categorieProduit = categorie_produit.id_categorie";
         try {
             PreparedStatement pst = connection.prepareStatement(req);

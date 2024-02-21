@@ -18,13 +18,13 @@
       <Label layoutX="66.0" layoutY="382.0" text="image" AnchorPane.leftAnchor="66.0" />
       <Label layoutX="51.0" layoutY="253.0" text="description" />
       <Label layoutX="55.0" layoutY="313.0" text="quantiteP" />
-      <TextField fx:id="idP_textFiled" layoutX="159.0" layoutY="50.0" />
+      <TextField fx:id="idP_textFiled" editable="false" layoutX="159.0" layoutY="50.0" />
       <TextField fx:id="nomP_textFiled" layoutX="159.0" layoutY="148.0" />
       <TextField fx:id="prix_textFiled" layoutX="159.0" layoutY="197.0" />
       <TextField fx:id="descriptionP_textFiled" layoutX="160.0" layoutY="249.0" />
       <TextField fx:id="quantiteP_textFiled" layoutX="159.0" layoutY="309.0" />
-      <Button layoutX="448.0" layoutY="424.0" mnemonicParsing="false" onAction="#add_produit" text="add" />
-      <TableView fx:id="Produit_tableview" layoutX="416.0" layoutY="75.0" prefHeight="303.0" prefWidth="638.0">
+      <Button layoutX="339.0" layoutY="497.0" mnemonicParsing="false" onAction="#add_produit" text="add" />
+      <TableView fx:id="Produit_tableview" layoutX="408.0" layoutY="158.0" prefHeight="303.0" prefWidth="638.0">
         <columns>
           <TableColumn fx:id="idP_tableC" prefWidth="75.0" text="id_produit" />
           <TableColumn fx:id="nomCP_tableC" prefWidth="75.0" text="nom_Cat" />
@@ -36,9 +36,10 @@
         </columns>
       </TableView>
       <ComboBox fx:id="nomC_comboBox" layoutX="159.0" layoutY="97.0" prefWidth="150.0" />
-      <Button layoutX="516.0" layoutY="424.0" mnemonicParsing="false" onAction="#modifier_produit" text="update" />
-      <Button layoutX="601.0" layoutY="424.0" mnemonicParsing="false" onAction="#supprimer_produit" text="delete" />
+      <Button layoutX="416.0" layoutY="497.0" mnemonicParsing="false" onAction="#modifier_produit" text="update" />
+      <Button layoutX="512.0" layoutY="497.0" mnemonicParsing="false" onAction="#supprimer_produit" text="delete" />
       <ImageView fx:id="image" fitHeight="73.0" fitWidth="132.0" layoutX="168.0" layoutY="363.0" pickOnBounds="true" preserveRatio="true" />
       <Button layoutX="106.0" layoutY="449.0" mnemonicParsing="false" onAction="#selectImage" text="Button" />
+      <TextField fx:id="SearchBar" layoutX="499.0" layoutY="110.0" prefHeight="25.0" prefWidth="319.0" />
    </children>
 </AnchorPane>
