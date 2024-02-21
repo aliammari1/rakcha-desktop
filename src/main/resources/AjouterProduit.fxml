@@ -39,7 +39,7 @@
       <Button layoutX="416.0" layoutY="497.0" mnemonicParsing="false" onAction="#modifier_produit" text="update" />
       <Button layoutX="512.0" layoutY="497.0" mnemonicParsing="false" onAction="#supprimer_produit" text="delete" />
       <ImageView fx:id="image" fitHeight="73.0" fitWidth="132.0" layoutX="168.0" layoutY="363.0" pickOnBounds="true" preserveRatio="true" />
-      <Button layoutX="106.0" layoutY="449.0" mnemonicParsing="false" onAction="#selectImage" text="Button" />
+      <Button layoutX="106.0" layoutY="449.0" mnemonicParsing="false" onAction="#selectImage" text="importer" />
       <TextField fx:id="SearchBar" layoutX="499.0" layoutY="110.0" prefHeight="25.0" prefWidth="319.0" />
    </children>
 </AnchorPane>
