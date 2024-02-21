@@ -23,12 +23,12 @@ public class maincategorie {
         //:System.out.println(es.read());
 
         SerieService ss = new SerieService();
-        ss.create(new serie(3,"Serie1","Resumeserie1","directeur","pays"));
-        ss.create(new serie(4,"Serie2","Resumeserie2","directeur","paysd"));
-        ss.create(new serie(5,"Serie3","Resumeserie3","directeur","pays"));
+        ss.create(new serie(3,"Serie1","Resumeserie1","directeur","pays","image1"));
+        ss.create(new serie(4,"Serie2","Resumeserie2","directeur","paysd","image2"));
+        ss.create(new serie(5,"Serie3","Resumeserie3","directeur","pays","image3"));
 
 
-        ss.delete(new serie(3,"Serie1","Resumeserie","directeurdelaserie","paysdeproduction"));
+        ss.delete(new serie(3,"Serie1","Resumeserie","directeurdelaserie","pays","image1"));
 
         System.out.println(ss.read());
 

@@ -12,13 +12,14 @@ public class SerieService implements Iserie<serie>{
 
     public SerieService() { connection = DataSource.getInstance().getConnection(); }
     public void create(serie serie) {
-        String req = "INSERT into serie(nom, resume,directeur,pays) values (?, ?, ?, ?);";
+        String req = "INSERT into serie(nom, resume,directeur,pays,image) values (?, ?, ?, ?,?);";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setString(1, serie.getNom());
             pst.setString(2, serie.getResume());
             pst.setString(3, serie.getDirecteur());
             pst.setString(4, serie.getPays());
+            pst.setBlob(5, serie.getImage());
             pst.executeUpdate();
             System.out.println("Serie ajoutée !");
         } catch (SQLException e) {
@@ -27,7 +28,7 @@ public class SerieService implements Iserie<serie>{
     }
 
     public void update(serie serie) {
-        String req = "UPDATE serie set nom = ?, resume = ?,directeur = ?, pays = ? where idserie = ?;";
+        String req = "UPDATE serie set nom = ?, resume = ?,directeur = ?, pays = ?, image = ? where idserie = ?;";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(5, serie.getIdserie());
@@ -35,6 +36,7 @@ public class SerieService implements Iserie<serie>{
             pst.setString(2, serie.getResume());
             pst.setString(3, serie.getDirecteur());
             pst.setString(4, serie.getPays());
+            pst.setBlob(5, serie.getImage());
             pst.executeUpdate();
             System.out.println("Serie modifiée !");
         } catch (SQLException e) {
@@ -62,7 +64,7 @@ public class SerieService implements Iserie<serie>{
             PreparedStatement pst = connection.prepareStatement(req);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
-                series.add(new serie(rs.getInt("idserie"), rs.getString("nom"), rs.getString("resume"),rs.getString("directeur"),rs.getString("pays")));
+                series.add(new serie(rs.getInt("idserie"), rs.getString("nom"), rs.getString("resume"),rs.getString("directeur"),rs.getString("pays"),rs.getString("image")));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());

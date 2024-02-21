@@ -1,6 +1,7 @@
 package com.esprit.services.categorie;
 
 import com.esprit.models.categorie;
+import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
 
 import java.sql.SQLException;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class CategorieService implements Icategorie<categorie> {
+public class CategorieService implements IService<categorie> {
 
     private Connection connection;
     public CategorieService() { connection = DataSource.getInstance().getConnection(); }

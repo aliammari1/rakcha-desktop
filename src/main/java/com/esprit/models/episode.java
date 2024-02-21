@@ -1,27 +1,41 @@
 package com.esprit.models;
 
+import java.sql.Blob;
+
 public class episode {
            public int idepisode;
            public String titre;
            public  int  numeroepisode;
            public int saison;
+           private Blob image;
+           private serie serie;
+
+
+    public serie getSerie() {
+        return serie;
+    }
+
+    public void setSerie(serie serie) {
+        this.serie = serie;
+    }
 
     public episode(int i, String premierEpisode, int saison) {
     }
-
-    public episode(String titre, int numeroepisode, int saison) {
+    public episode(String titre, int numeroepisode, int saison, Blob image,serie serie) {
         this.titre = titre;
         this.numeroepisode = numeroepisode;
         this.saison = saison;
-    }
+        this.image = image;
+        this.serie=serie;   }
 
-    public episode(int idepisode, String titre, int numeroepisode, int saison) {
+    public episode(int idepisode, String titre, int numeroepisode, int saison, Blob image,serie serie) {
         this.idepisode = idepisode;
         this.titre = titre;
         this.numeroepisode = numeroepisode;
         this.saison = saison;
+        this.image = image;
+        this.serie=serie;
     }
-
     public int getIdepisode() {
         return idepisode;
     }
@@ -53,6 +67,13 @@ public class episode {
     public void setSaison(int saison) {
         this.saison = saison;
     }
+    public Blob getImage() {
+        return image;
+    }
+
+    public void setImage(Blob image) {
+        this.image = image;
+    }
 
     @Override
     public String toString() {
@@ -61,7 +82,13 @@ public class episode {
                 ", titre='" + titre + '\'' +
                 ", numeroepisode=" + numeroepisode +
                 ", saison=" + saison +
+                ", image=" + image +
+                ", serie=" + serie +
                 '}';
+    }
+
+
+    public int getIdserie() {
     }
 
 }
