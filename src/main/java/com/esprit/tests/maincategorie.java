@@ -9,20 +9,21 @@ import com.esprit.services.serie.SerieService;
 import com.esprit.utils.DataSource;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class maincategorie {
     public static void main(String[] args) {
 
-            DataSource d = DataSource.getInstance();
-          //
-             //EpisodeService es = new EpisodeService();
-            //es.create(new episode(3,"Premier episode",1,1));
-           //es.create(new episode(4,"Deuxieme episode",1,1));
-          //es.create(new episode(5,"Troixieme episode",1,1));
-         //es.delete(new  episode(5,"Troixieme episode",1,1));
-        //:System.out.println(es.read());
+        DataSource d = DataSource.getInstance();
+        //
 
-        //SerieService ss = new SerieService();
+
+        EpisodeService es = new EpisodeService();
+        es.create(new episode(3, "Premier episode", 1, 1, null, new Serie()));
+        System.out.println(es.read());
+
+
+//SerieService ss = new SerieService();
         //ss.create(new serie(3,"Serie1","Resumeserie1","directeur","pays","image1"));
         //ss.create(new serie(4,"Serie2","Resumeserie2","directeur","paysd","image2"));
         //ss.create(new serie(5,"Serie3","Resumeserie3","directeur","pays","image3"));
@@ -32,12 +33,9 @@ public class maincategorie {
 
         //System.out.println(ss.read());
 
-        EpisodeService es = new EpisodeService();
-        es.create(new episode(3,"Premier episode",1,1,2));
-        es.create(new episode(4,"deuxieme episode",1,1,3));
-        es.create(new episode(3,"troisieme episode",1,1,4));
-        es.delete(new episode(3,"troisieme episode",1,1,4));
-        System.out.println(es.read());
+
+    }
+}
 
 
 
@@ -45,5 +43,3 @@ public class maincategorie {
 
 
 
-
-    }}
