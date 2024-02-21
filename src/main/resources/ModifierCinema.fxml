@@ -15,7 +15,7 @@
       <TextField fx:id="tfNom" layoutX="205.0" layoutY="56.0" />
       <TextField fx:id="tfAdresse" layoutX="206.0" layoutY="113.0" />
       <ImageView fx:id="tfLogo" fitHeight="150.0" fitWidth="200.0" layoutX="181.0" layoutY="164.0" pickOnBounds="true" preserveRatio="true" />
-      <Button layoutX="441.0" layoutY="226.0" mnemonicParsing="false" text="Sélectionner" />
-      <Button layoutX="381.0" layoutY="350.0" mnemonicParsing="false" text="Enregistrer" />
+      <Button layoutX="441.0" layoutY="226.0" mnemonicParsing="false" onAction="#select" text="Sélectionner" />
+      <Button layoutX="381.0" layoutY="350.0" mnemonicParsing="false" onAction="#modifier" text="Enregistrer" />
    </children>
 </AnchorPane>
