@@ -49,7 +49,6 @@ public class UserPDF {
     }
 
     private void addTableHeader(final PdfPTable table, final List<String> attributes) {
-
         attributes.forEach(columnTitle -> {
             final PdfPCell header = new PdfPCell();
             header.setBackgroundColor(BaseColor.LIGHT_GRAY);
