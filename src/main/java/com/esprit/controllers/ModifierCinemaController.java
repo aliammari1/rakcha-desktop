@@ -4,12 +4,16 @@ import com.esprit.models.Cinema;
 import com.esprit.services.CinemaService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 import java.io.*;
 import java.net.URL;
@@ -32,24 +36,21 @@ public class ModifierCinemaController implements Initializable {
 
     private Cinema cinema;
 
-    private File selectedFile; // Pour stocker le fichier image sélectionné
+    private File selectedFile;
 
 
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Initialisation des éléments de l'interface
     }
 
-    // Méthode pour initialiser les données du cinéma
+    // initialiser les données du cinéma
     public void initData(Cinema cinema) {
         this.cinema = cinema;
-        // Pré-remplir les champs avec les données du cinéma
         tfNom.setText(cinema.getNom());
         tfAdresse.setText(cinema.getAdresse());
 
-        // Afficher l'image du logo du cinéma s'il existe
         Blob logoBlob = cinema.getLogo();
         if (logoBlob != null) {
             try {
@@ -61,22 +62,20 @@ public class ModifierCinemaController implements Initializable {
                 e.printStackTrace();
             }
         } else {
-            // Afficher une image par défaut si le logo n'est pas défini
             tfLogo.setImage(new Image(getClass().getResourceAsStream("default_logo.png")));
         }
     }
 
     @FXML
-    void modifier(ActionEvent event) {
-        // Vérifier si un cinéma est sélectionné
+    void modifier(ActionEvent event) throws IOException {
         if (cinema == null) {
             showAlert("Veuillez sélectionner un cinéma.");
             return;
         }
 
         // Récupérer les nouvelles valeurs des champs
-        String nouveauNom = tfNom.getText().trim();
-        String nouvelleAdresse = tfAdresse.getText().trim();
+        String nouveauNom = tfNom.getText();
+        String nouvelleAdresse = tfAdresse.getText();
 
         // Vérifier si les champs obligatoires sont remplis
         if (nouveauNom.isEmpty() || nouvelleAdresse.isEmpty()) {
@@ -107,6 +106,18 @@ public class ModifierCinemaController implements Initializable {
         cinemaService.update(cinema);
 
         showAlert("Les modifications ont été enregistrées avec succès.");
+
+        // Charger la nouvelle interface ListCinemaAdmin.fxml
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ListCinemaResponsable.fxml"));
+        Parent root = loader.load();
+
+        // Créer une nouvelle scène avec la nouvelle interface
+        Scene scene = new Scene(root);
+
+        // Créer une nouvelle fenêtre (stage) et y attacher la scène
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.show();
     }
 
 
