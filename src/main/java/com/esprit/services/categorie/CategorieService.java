@@ -70,7 +70,33 @@ public class CategorieService implements IService<categorie> {
     }
 
 
+   // public Object getClass(int idcategorie) {
+     //   return null;
+   // }
+
+    //public categorie getCategorie(int i) {
+      //  return null;
+    //}
     public Object getClass(int idcategorie) {
-        return null;
+        return getCategorie(idcategorie);
+    }
+
+    public categorie getCategorie(int idcategorie) {
+        categorie categorie = null;
+
+        String req = "SELECT * FROM categorie WHERE idcategorie = ?";
+        try {
+            PreparedStatement pst = connection.prepareStatement(req);
+            pst.setInt(1, idcategorie);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                categorie = new categorie(rs.getInt("idcategorie"), rs.getString("nom"), rs.getString("description"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return categorie;
     }
 }
+

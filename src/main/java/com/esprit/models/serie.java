@@ -1,14 +1,6 @@
 package com.esprit.models;
 
-import com.esprit.utils.DataSource;
-
-import java.awt.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Blob;
-import java.sql.SQLException;
 
 public class serie {
 
@@ -24,10 +16,7 @@ public class serie {
         
     }
 
-    public serie(int idserie, String serie1, String resume, String directeur1, String pays, String image1, serie serie) {
-    }
-
-    public serie(int i, String serie1, String resume, String directeur1, String pays, String image1, com.esprit.models.categorie categorie) {
+    public serie(int idserie, String nom, String resume, String directeur1, String pays, String image1, int idcategorie) {
     }
 
 
