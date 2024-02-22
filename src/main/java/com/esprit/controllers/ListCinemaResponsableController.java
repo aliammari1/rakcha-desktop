@@ -148,6 +148,16 @@ public class ListCinemaResponsableController implements Initializable {
         });
         card.getChildren().add(deleteButton);
 
+        //Button ajouter salle
+        Button salleButton = new Button("Ajouter salle");
+        salleButton.setLayoutX(20);
+        salleButton.setLayoutY(200);
+        // Définir l'action du bouton Ajouter salle
+        salleButton.setOnAction(event -> {
+
+        });
+        card.getChildren().add(salleButton);
+
         return card;
     }
 
