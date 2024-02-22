@@ -1,9 +1,14 @@
 package com.esprit.services;
 
-import com.esprit.models.*;
+import com.esprit.models.Admin;
+import com.esprit.models.Client;
+import com.esprit.models.Responsable_de_cinema;
+import com.esprit.models.User;
 import com.esprit.utils.DataSource;
 import com.esprit.utils.UserMail;
 import com.esprit.utils.UserPDF;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,46 +25,59 @@ public class UserService implements IService<User> {
     }
 
     @Override
-    public void create(final User user) {
+    public void create(User user) {
         try {
-            final PreparedStatement statement = this.con.prepareStatement(
+            PreparedStatement statement = this.con.prepareStatement(
                     "INSERT INTO users (nom,prenom,num_telephone,password,role,adresse,date_de_naissance,email,photo_de_profil) VALUES (?,?,?,?,?,?,?,?,?)");
-            this.updateAndAddStatementSetter(user, statement);
+            updateAndAddStatementSetter(user, statement);
             statement.executeUpdate();
             System.out.println("user was added");
-        } catch (final SQLException e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
 
+
     @Override
     public List<User> read() {
         try {
-            final List<User> userList = new ArrayList<>();
-            final String query = "SELECT * FROM users";
-            final PreparedStatement statement = this.con.prepareStatement(query);
+            List<User> userList = new ArrayList<>();
+            String query = "SELECT * FROM users";
+            PreparedStatement statement = this.con.prepareStatement(query);
             return this.getUsers(userList, statement);
-        } catch (final SQLException e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         return null;
     }
 
     @Override
-    public void update(final User user) {
+    public void update(User user) {
         try {
-            final PreparedStatement statement = this.con.prepareStatement(
+            PreparedStatement statement = this.con.prepareStatement(
                     "UPDATE users SET  nom=?,prenom=?,num_telephone=?,password=?,role=?,adresse=?,date_de_naissance=?,email=?,photo_de_profil=? WHERE id=?");
-            this.updateAndAddStatementSetter(user, statement);
+            updateAndAddStatementSetter(user, statement);
             statement.setInt(10, user.getId());
             statement.executeUpdate();
             System.out.println("user is updated");
-        } catch (final SQLException e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    private void updateAndAddStatementSetter(final User user, final PreparedStatement statement) throws SQLException {
+    @Override
+    public void delete(User user) {
+        try {
+            PreparedStatement statement = this.con.prepareStatement("DELETE FROM users WHERE id = ?");
+            statement.setInt(1, user.getId());
+            statement.executeUpdate();
+            System.out.println("user is deleted");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void updateAndAddStatementSetter(User user, PreparedStatement statement) throws SQLException {
         statement.setString(1, user.getNom());
         statement.setString(2, user.getPrenom());
         statement.setInt(3, user.getNum_telephone());
@@ -71,45 +89,32 @@ public class UserService implements IService<User> {
         statement.setBlob(9, user.getPhoto_de_profil());
     }
 
-    @Override
-    public void delete(final User user) {
-        try {
-            final PreparedStatement statement = this.con.prepareStatement("DELETE FROM users WHERE id = ?");
-            statement.setInt(1, user.getId());
-            statement.executeUpdate();
-            System.out.println("user is deleted");
-        } catch (final SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public void sendMail(final String Recipient, final String messageToSend) {
+    public void sendMail(String Recipient, String messageToSend) {
         UserMail.send(Recipient, messageToSend);
     }
 
     public void generateUserPDF() {
-        final UserPDF userPDF = new UserPDF();
+        UserPDF userPDF = new UserPDF();
         userPDF.generate(this.sort("role"));
     }
 
 
-    public List<User> sort(final String Option) {
+    public List<User> sort(String Option) {
         try {
-            final List<User> userList = new ArrayList<>();
+            List<User> userList = new ArrayList<>();
             String query = "SELECT * FROM users ORDER BY " + Option;
-            final PreparedStatement statement = this.con.prepareStatement(query);
+            PreparedStatement statement = this.con.prepareStatement(query);
             return this.getUsers(userList, statement);
-        } catch (final SQLException e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         return null;
     }
 
-    private List<User> getUsers(final List<User> userList, final PreparedStatement statement) throws SQLException {
-        final ResultSet resultSet = statement.executeQuery();
-        int i = 0;
+    private List<User> getUsers(List<User> userList, PreparedStatement statement) throws SQLException {
+        ResultSet resultSet = statement.executeQuery();
         while (resultSet.next()) {
-            final String role = resultSet.getString("role");
+            String role = resultSet.getString("role");
             userList.add(
                     switch (role) {
                         case "admin":
@@ -148,26 +153,104 @@ public class UserService implements IService<User> {
                                     resultSet.getDate("date_de_naissance"),
                                     resultSet.getString("email"),
                                     resultSet.getBlob("photo_de_profil"));
-                        case "sponsor":
-                            yield new Sponsor(
-                                    resultSet.getInt("id"),
-                                    resultSet.getString("nom"),
-                                    resultSet.getString("prenom"),
-                                    resultSet.getInt("num_telephone"),
-                                    resultSet.getString("password"),
-                                    resultSet.getString("role"),
-                                    resultSet.getString("adresse"),
-                                    resultSet.getDate("date_de_naissance"),
-                                    resultSet.getString("email"),
-                                    resultSet.getBlob("photo_de_profil"));
                         default:
-                            throw new IllegalStateException("Unexpected role value: " + role);
+                            throw new IllegalStateException("Unexpected value: " + role);
                     });
-            System.out.println(userList.get(i));
-            i++;
-
         }
         return userList;
     }
 
+    public void updatePassword(String email, String NewPassword) {
+        try {
+            PreparedStatement statement = this.con.prepareStatement("UPDATE users SET password=? where email=? ");
+            statement.setString(1, NewPassword);
+            statement.setString(2, email);
+            statement.executeUpdate();
+            System.out.println("user password is updated");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void forgetPassword(String email, String Password) {
+        String query = "select * from users where email = ?";
+        try {
+            PreparedStatement preparedStatement = this.con.prepareStatement(query);
+            preparedStatement.setString(1, email);
+            User user = getUserRow(preparedStatement);
+            if (user != null)
+                sendMail(user.getEmail(), "you forget your password dumbhead hhhh");
+            else {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "the user was not found", ButtonType.CLOSE);
+                alert.show();
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private User getUserRow(PreparedStatement preparedStatement) throws SQLException {
+        ResultSet resultSet = preparedStatement.executeQuery();
+        resultSet.next();
+        String role = resultSet.getString("role");
+        return switch (role) {
+            case "admin":
+                yield new Admin(
+                        resultSet.getInt("id"),
+                        resultSet.getString("nom"),
+                        resultSet.getString("prenom"),
+                        resultSet.getInt("num_telephone"),
+                        resultSet.getString("password"),
+                        resultSet.getString("role"),
+                        resultSet.getString("adresse"),
+                        resultSet.getDate("date_de_naissance"),
+                        resultSet.getString("email"),
+                        resultSet.getBlob("photo_de_profil"));
+            case "client":
+                yield new Client(
+                        resultSet.getInt("id"),
+                        resultSet.getString("nom"),
+                        resultSet.getString("prenom"),
+                        resultSet.getInt("num_telephone"),
+                        resultSet.getString("password"),
+                        resultSet.getString("role"),
+                        resultSet.getString("adresse"),
+                        resultSet.getDate("date_de_naissance"),
+                        resultSet.getString("email"),
+                        resultSet.getBlob("photo_de_profil"));
+            case "responsable de cinema":
+                yield new Responsable_de_cinema(
+                        resultSet.getInt("id"),
+                        resultSet.getString("nom"),
+                        resultSet.getString("prenom"),
+                        resultSet.getInt("num_telephone"),
+                        resultSet.getString("password"),
+                        resultSet.getString("role"),
+                        resultSet.getString("adresse"),
+                        resultSet.getDate("date_de_naissance"),
+                        resultSet.getString("email"),
+                        resultSet.getBlob("photo_de_profil"));
+            default:
+                yield null;
+        };
+    }
+
+    public void login(String email, String password) {
+        String query = "select * from users where (email LIKE ?) AND (password LIKE ?)";
+        try {
+            PreparedStatement statement = this.con.prepareStatement(query);
+            statement.setString(1, email);
+            statement.setString(2, password);
+            User user = getUserRow(statement);
+            if (user != null) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "the user was found", ButtonType.CLOSE);
+                alert.show();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "the user was not found", ButtonType.CLOSE);
+                alert.show();
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }
