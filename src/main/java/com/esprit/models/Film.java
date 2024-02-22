@@ -73,6 +73,19 @@ public class Film {
         this.idcinema = idcinema;
     }
 
+    public Film(int id) {
+        this.id = id;
+        this.nom = null;
+        this.image = null;
+        this.duree = null;
+        this.description = null;
+        this.annederalisation = 0;
+        this.idcategory = null;
+        this.idacteur = 0;
+        this.idcinema = 0;
+        this.categoryNom = null;
+    }
+
 
     public String getNom() {
         return nom;

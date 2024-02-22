@@ -5,7 +5,6 @@ import com.esprit.models.Film;
 import com.esprit.services.CategoryService;
 import com.esprit.services.FilmService;
 import com.esprit.utils.DataSource;
-import com.mysql.cj.jdbc.Blob;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,6 +17,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 
 import java.io.*;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Time;
@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class FilmController {
-    java.sql.Blob imageBlob;
+    Blob imageBlob;
     private File selectedFile;
     @FXML
     private TableColumn<Film, Integer> annederalisationFilm_tableColumn;
@@ -68,7 +68,7 @@ public class FilmController {
     @FXML
     private TextArea nomFilm_textArea;
     @FXML
-    private ImageView image;
+    private AnchorPane image_view;
 
     @FXML
     void initialize() {
@@ -97,31 +97,37 @@ public class FilmController {
 
     @FXML
     void importFilmImage(ActionEvent event) {
-
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Sélectionner une image");
         selectedFile = fileChooser.showOpenDialog(null);
         if (selectedFile != null) {
             Image selectedImage = new Image(selectedFile.toURI().toString());
-            image.setImage(selectedImage);
+            imageFilm_ImageView.setImage(selectedImage);
         }
-
     }
 
     @FXML
     void deleteFilm(ActionEvent event) {
-
+        FilmService fs = new FilmService();
+        fs.delete(new Film(Integer.parseInt(idFilm_textArea.getText())));
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Produit supprimée");
+        alert.setContentText("Produit supprimée !");
+        alert.show();
+        readFilmTable();
+        clear();
     }
 
     @FXML
-    void insertFilm(ActionEvent event) throws FileNotFoundException {
+    void insertFilm(ActionEvent event) {
+
         if (selectedFile != null) { // Vérifier si une image a été sélectionnée
             Connection connection = null;
             try {
                 // Convertir le fichier en un objet Blob
                 FileInputStream fis = new FileInputStream(selectedFile);
                 connection = DataSource.getInstance().getConnection();
-                java.sql.Blob imageBlob = connection.createBlob();
+                Blob imageBlob = connection.createBlob();
 
                 // Définir le flux d'entrée de l'image dans l'objet Blob
                 try (OutputStream outputStream = imageBlob.setBinaryStream(1)) {
@@ -132,33 +138,35 @@ public class FilmController {
                     }
                 }
 
-                FilmService filmService = new FilmService();
-                CategoryService categoryService = new CategoryService();
-                Film film = new Film(nomFilm_textArea.getText(), imageBlob, new Time(Long.valueOf(dureeFilm_textArea.getText())), descriptionFilm_textArea.getText(), Integer.parseInt(annederealisationFilm_textArea.getText()), categoryService.getCategoryByNom(idcategoryFilm_comboBox.getValue()), Integer.parseInt(idacteurFilm_comboBox.getValue()), Integer.parseInt(idcinemaFilm_comboBox.getValue()));
-                filmService.create(film);
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setContentText("l'insertion est terminer");
-                alert.setHeaderText("categorie");
-                alert.setHeaderText("categorie");
+                // Créer l'objet Cinema avec l'image Blob
+                System.out.println("passed the image");
+                FilmService fs = new FilmService();
+                fs.create(new Film(nomFilm_textArea.getText(), imageBlob, Time.valueOf(dureeFilm_textArea.getText()), descriptionFilm_textArea.getText(), Integer.parseInt(annederealisationFilm_textArea.getText()), new CategoryService().getCategoryByNom(idcategoryFilm_comboBox.getValue()), Integer.parseInt(idacteurFilm_comboBox.getValue()), Integer.parseInt(idcinemaFilm_comboBox.getValue())));
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Film ajoutée");
+                alert.setContentText("Film ajoutée !");
                 alert.show();
                 readFilmTable();
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            } finally {
-                if (connection != null) {
-                    try {
-                        connection.close();
-                    } catch (SQLException e) {
-                        showAlert("Erreur lors de la fermeture de la connexion : " + e.getMessage());
-                    }
-                }
+                clear();
+            } catch (SQLException | IOException e) {
+                showAlert("Erreur lors de l'ajout du Film : " + e.getMessage());
             }
         } else {
             showAlert("Veuillez sélectionner une image d'abord !");
         }
-
     }
 
+    void clear() {
+        idFilm_textArea.setText("");
+        nomFilm_textArea.setText("");
+        dureeFilm_textArea.setText("");
+        descriptionFilm_textArea.setText("");
+        annederealisationFilm_textArea.setText("");
+        idcategoryFilm_comboBox.setValue("");
+        idacteurFilm_comboBox.setValue("");
+        idcinemaFilm_comboBox.setValue("");
+
+    }
 
     void readFilmTable() {
         try {
@@ -178,7 +186,7 @@ public class FilmController {
                 imageView.setFitWidth(100); // Réglez la largeur de l'image selon vos préférences
                 imageView.setFitHeight(50); // Réglez la hauteur de l'image selon vos préférences
                 try {
-                    Blob blob = (Blob) film.getImage();
+                    Blob blob = film.getImage();
                     if (blob != null) {
                         Image image = new Image(blob.getBinaryStream());
                         imageView.setImage(image);
@@ -214,10 +222,10 @@ public class FilmController {
                     idacteurFilm_comboBox.setValue(String.valueOf(f.getIdacteur()));
                     idcinemaFilm_comboBox.setValue(String.valueOf(f.getIdcinema()));
                     imageBlob = f.getImage();
-                    java.sql.Blob imageBlob1 = f.getImage();
+                    Blob imageBlob1 = f.getImage();
                     try (InputStream inputStream = imageBlob1.getBinaryStream()) {
                         Image image1 = new Image(inputStream);
-                        image.setImage(image1);
+                        imageFilm_ImageView.setImage(image1);
                     } catch (SQLException | IOException e) {
                         e.printStackTrace();
                         showAlert("Erreur lors de la récupération de l'image : " + e.getMessage());
@@ -259,7 +267,7 @@ public class FilmController {
                         Integer.parseInt(idFilm_textArea.getText()),
                         nomFilm_textArea.getText(),
                         imageBlob,
-                        dureeFilm_textArea.getText(),
+                        Time.valueOf(dureeFilm_textArea.getText()),
                         descriptionFilm_textArea.getText(),
                         Integer.parseInt(annederealisationFilm_textArea.getText()), // Comma added here
                         new CategoryService().getCategoryByNom(idcategoryFilm_comboBox.getValue()),
@@ -270,18 +278,10 @@ public class FilmController {
                 alert.setContentText("Produit modifiée !");
                 alert.show();
                 readFilmTable();
-
+                clear();
 
             } catch (SQLException | IOException e) {
                 showAlert("Erreur lors de la modification du produit : " + e.getMessage());
-            } finally {
-                if (connection != null) {
-                    try {
-                        connection.close();
-                    } catch (SQLException e) {
-                        showAlert("Erreur lors de la fermeture de la connexion : " + e.getMessage());
-                    }
-                }
             }
         }
         readFilmTable();
