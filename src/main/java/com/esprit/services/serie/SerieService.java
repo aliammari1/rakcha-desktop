@@ -12,6 +12,7 @@ import java.util.List;
 
 public class SerieService implements IService<serie> {
     private Connection connection;
+    private int serie;
 
     public SerieService() {
         connection = DataSource.getInstance().getConnection();
@@ -22,6 +23,12 @@ public class SerieService implements IService<serie> {
 
         try {
             PreparedStatement pst = connection.prepareStatement(req);
+            // Affichez les valeurs que vous essayez d'insérer (pour débogage)
+            System.out.println("Nom: " + serie.getNom());
+            System.out.println("Resume: " + serie.getResume());
+            System.out.println("Directeur: " + serie.getDirecteur());
+            System.out.println("Pays: " + serie.getPays());
+            // ...
             pst.setString(1, serie.getNom());
             pst.setString(2, serie.getResume());
             pst.setString(3, serie.getDirecteur());
@@ -97,8 +104,8 @@ public class SerieService implements IService<serie> {
         return series;
     }
 
-    public int getSerie(int idserie) {
-        return 0;
+    public int getSerie(int idserie) { return idserie;
+
     }
 }
 

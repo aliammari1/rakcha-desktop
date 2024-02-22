@@ -34,22 +34,33 @@ public class maincategorie {
         //System.out.println(ss.read());
         //SerieService ss = new SerieService();
 
-        CategorieService cs = new CategorieService();
+
         SerieService ss = new SerieService();
 
-// Création de la catégorie
-        categorie nouvelleCategorie = new categorie("Drama", "DescriptionCategorie");
-        cs.create(nouvelleCategorie);
 
 // Création de la série avec la catégorie associée
-        serie nouvelleSerie = new serie(0, "Serie1", "Resume", "directeur1", "pays", "image1", nouvelleCategorie);
+        //CategorieService categorieService = new CategorieService();
+        //categorie categorie = categorieService.getCategorie(5);
+
+        //if (categorie != null && categorie.getNom() != null) {
+          //  serie nouvelleSerie = new serie(0, "nom", "Resume", "directeur1", "pays", "image1", categorie.getIdcategorie());
+            //ss.create(nouvelleSerie);
+            //System.out.println(ss.read());
+        //} else {
+          //  System.out.println("Unable to retrieve the category with ID 5.");
+        //}
+
+    //}
+        //Création d'une nouvelle catégorie sans la récupérer de la base de données
+        categorie nouvelleCategorie = new categorie();
+        nouvelleCategorie.setIdcategorie(5); // Remplacez par l'ID que vous souhaitez
+        nouvelleCategorie.setNom("NomCategorie");
+        nouvelleCategorie.setDescription("DescriptionCategorie");
+
+        // Utilisation de la nouvelle catégorie pour créer une série
+        serie nouvelleSerie = new serie(0, "NomSerie", "ResumeSerie", "DirecteurSerie", "PaysSerie", "ImageSerie", nouvelleCategorie.getIdcategorie());
         ss.create(nouvelleSerie);
         System.out.println(ss.read());
-
-
-
-
-
     }
 
 }
