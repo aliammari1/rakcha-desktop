@@ -76,8 +76,8 @@ public class ListCinemaResponsableController implements Initializable {
         ImageView logoImageView = new ImageView();
         logoImageView.setLayoutX(10);
         logoImageView.setLayoutY(50);
-        logoImageView.setFitWidth(100); // Réglez la largeur de l'image selon vos préférences
-        logoImageView.setFitHeight(100); // Réglez la hauteur de l'image selon vos préférences
+        logoImageView.setFitWidth(100); // la largeur de l'image
+        logoImageView.setFitHeight(100); // la hauteur de l'image
         try {
             Blob logoBlob = cinema.getLogo();
             if (logoBlob != null) {
@@ -98,37 +98,28 @@ public class ListCinemaResponsableController implements Initializable {
         Button editButton = new Button("Modifier");
         editButton.setLayoutX(10);
         editButton.setLayoutY(160);
-// Définir l'action du bouton Modifier
         editButton.setOnAction(event -> {
-            // Charger la nouvelle interface ModifierCinema.fxml
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ModifierCinema.fxml"));
             Parent root = null;
             try {
                 root = loader.load();
-                // Passer les données du cinéma à la nouvelle interface
                 ModifierCinemaController controller = loader.getController();
-                controller.initData(cinema); // Passer le cinéma correspondant
+                controller.initData(cinema);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
 
-            // Créer une nouvelle scène avec la nouvelle interface
             Scene scene = new Scene(root);
 
-            // Obtenir la scène actuelle
             Stage currentStage = (Stage) cinemaFlowPane.getScene().getWindow();
 
-            // Créer une nouvelle fenêtre (stage) et y attacher la scène
             Stage stage = new Stage();
             stage.setScene(scene);
 
-            // Définir le titre de la nouvelle fenêtre
             stage.setTitle("Modifier Cinema");
 
-            // Fermer la fenêtre actuelle lorsque la nouvelle fenêtre est affichée
             stage.setOnShown(e -> currentStage.close());
 
-            // Afficher la nouvelle fenêtre
             stage.show();
         });
         card.getChildren().add(editButton);
@@ -149,11 +140,24 @@ public class ListCinemaResponsableController implements Initializable {
         card.getChildren().add(deleteButton);
 
         //Button ajouter salle
-        Button salleButton = new Button("Ajouter salle");
+        Button salleButton = new Button("List des salle");
         salleButton.setLayoutX(20);
         salleButton.setLayoutY(200);
-        // Définir l'action du bouton Ajouter salle
         salleButton.setOnAction(event -> {
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ListSalleResponsable.fxml"));
+            Parent root = null;
+            try {
+                root = loader.load();
+                ListSalleResponsableController controller = loader.getController();
+                controller.initData(cinema.getId_cinema());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.show();
 
         });
         card.getChildren().add(salleButton);

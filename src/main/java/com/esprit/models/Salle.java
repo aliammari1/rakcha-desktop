@@ -5,25 +5,19 @@ public class Salle {
     private int id_salle;
     private int id_cinema;
     private int nb_places;
-    private int nb_places_reserve;
-    private int num_salle;
-    private String statut;
+    private String nom_salle;
 
-    public Salle(int id_salle, int id_cinema, int nb_places, int nb_places_reserve, int num_salle, String statut) {
+    public Salle(int id_salle, int id_cinema, int nb_places, String nom_salle) {
         this.id_salle = id_salle;
         this.id_cinema = id_cinema;
         this.nb_places = nb_places;
-        this.nb_places_reserve = nb_places_reserve;
-        this.num_salle = num_salle;
-        this.statut = statut;
+        this.nom_salle = nom_salle;
     }
 
-    public Salle(int id_cinema, int nb_places, int nb_places_reserve, int num_salle, String statut) {
+    public Salle(int id_cinema, int nb_places, String nom_salle) {
         this.id_cinema = id_cinema;
         this.nb_places = nb_places;
-        this.nb_places_reserve = nb_places_reserve;
-        this.num_salle = num_salle;
-        this.statut = statut;
+        this.nom_salle = nom_salle;
     }
 
     public int getId_salle() {
@@ -50,28 +44,12 @@ public class Salle {
         this.nb_places = nb_places;
     }
 
-    public int getNb_places_reserve() {
-        return nb_places_reserve;
+    public String getNom_salle() {
+        return nom_salle;
     }
 
-    public void setNb_places_reserve(int nb_places_reserve) {
-        this.nb_places_reserve = nb_places_reserve;
-    }
-
-    public int getNum_salle() {
-        return num_salle;
-    }
-
-    public void setNum_salle(int num_salle) {
-        this.num_salle = num_salle;
-    }
-
-    public String getStatut() {
-        return statut;
-    }
-
-    public void setStatut(String statut) {
-        this.statut = statut;
+    public void setNom_salle(String nom_salle) {
+        this.nom_salle = nom_salle;
     }
 
     @Override
@@ -80,9 +58,7 @@ public class Salle {
                 "id_salle=" + id_salle +
                 ", id_cinema=" + id_cinema +
                 ", nb_places=" + nb_places +
-                ", nb_places_reserve=" + nb_places_reserve +
-                ", num_salle=" + num_salle +
-                ", statut='" + statut + '\'' +
+                ", nom_salle=" + nom_salle +
                 '}';
     }
 }

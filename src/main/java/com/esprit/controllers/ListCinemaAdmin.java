@@ -35,7 +35,7 @@ public class ListCinemaAdmin {
     private TableColumn<Cinema, String> colResponsable;
 
     @FXML
-    private TableColumn<Cinema, ImageView> colLogo; // Utilisation de ImageView pour afficher l'image
+    private TableColumn<Cinema, ImageView> colLogo;
 
     @FXML
     private TableColumn<Cinema, String> colStatut;
@@ -98,10 +98,8 @@ public class ListCinemaAdmin {
 
                         refuseButton.setOnAction(event -> {
                             Cinema cinema = getTableView().getItems().get(getIndex());
-                            // Supprimer le cinéma de la base de données
                             CinemaService cinemaService = new CinemaService();
                             cinemaService.delete(cinema);
-                            // Supprimer le cinéma de la TableView
                             getTableView().getItems().remove(cinema);
                         });
 
@@ -121,19 +119,15 @@ public class ListCinemaAdmin {
             }
         });
 
-        // Charger les données depuis la base de données dans le TableView
         loadCinemas();
     }
 
     private void loadCinemas() {
-        // Récupérer la liste des cinémas depuis la base de données
         CinemaService cinemaService = new CinemaService();
         List<Cinema> cinemas = cinemaService.read();
 
-        // Convertir la liste en une observable list pour le TableView
         ObservableList<Cinema> cinemaObservableList = FXCollections.observableArrayList(cinemas);
 
-        // Ajouter les données au TableView
         listCinema.setItems(cinemaObservableList);
     }
 }
