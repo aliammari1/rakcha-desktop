@@ -154,7 +154,7 @@ public class UserService implements IService<User> {
                                     resultSet.getString("email"),
                                     resultSet.getBlob("photo_de_profil"));
                         default:
-                            throw new IllegalStateException("Unexpected value: " + role);
+                            yield null;
                     });
         }
         return userList;
@@ -188,7 +188,7 @@ public class UserService implements IService<User> {
             System.out.println(e.getMessage());
         }
     }
-
+    
     private User getUserRow(PreparedStatement preparedStatement) throws SQLException {
         ResultSet resultSet = preparedStatement.executeQuery();
         resultSet.next();
