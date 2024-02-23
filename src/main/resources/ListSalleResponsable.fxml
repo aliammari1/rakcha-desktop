@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.ListSalleResponsableController">
+   <children>
+      <Button layoutX="428.0" layoutY="33.0" mnemonicParsing="false" onAction="#addSalle" prefHeight="38.0" prefWidth="147.0" text="Ajouter une salle" />
+      <ListView fx:id="salleListView" layoutX="196.0" layoutY="100.0" prefHeight="200.0" prefWidth="344.0" />
+      <Button layoutX="93.0" layoutY="153.0" mnemonicParsing="false" onAction="#modifiersalle" text="Modifier" />
+      <Button layoutX="88.0" layoutY="214.0" mnemonicParsing="false" onAction="#supprimersalle" text="Supprimer" />
+   </children>
+</AnchorPane>

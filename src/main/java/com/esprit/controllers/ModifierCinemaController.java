@@ -45,7 +45,6 @@ public class ModifierCinemaController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
     }
 
-    // initialiser les données du cinéma
     public void initData(Cinema cinema) {
         this.cinema = cinema;
         tfNom.setText(cinema.getNom());
