@@ -14,7 +14,7 @@
       <Label layoutX="32.0" layoutY="227.0" text="description_categorie" />
       <TextField fx:id="descriptionC_textFile" layoutX="153.0" layoutY="223.0" />
       <TextField fx:id="nomC_textFile" layoutX="153.0" layoutY="162.0" />
-      <TextField fx:id="idC_textFile" layoutX="153.0" layoutY="98.0" />
+      <TextField fx:id="idC_textFile" editable="false" layoutX="153.0" layoutY="98.0" />
       <Button layoutX="153.0" layoutY="353.0" mnemonicParsing="false" onAction="#ajouter_categorie" text="create" />
       <TableView fx:id="categorie_tableView" layoutX="323.0" layoutY="87.0" prefHeight="200.0" prefWidth="342.0">
         <columns>

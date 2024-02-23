@@ -16,12 +16,13 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
 
-       // FXMLLoader loader = new FXMLLoader(getClass().getResource("/AjouterProduit.fxml"));
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/AjouterCategorie.fxml"));
+       //FXMLLoader loader = new FXMLLoader(getClass().getResource("/AjouterProduit.fxml"));
+        //FXMLLoader loader = new FXMLLoader(getClass().getResource("/AjouterCategorie.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherProduitClient.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Ajout Produit" );
+        primaryStage.setTitle("Afficher Produit Client" );
         primaryStage.show();
 
     }
