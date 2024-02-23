@@ -250,4 +250,10 @@ public class AdminDashboardController {
         }
     }
 
+    @FXML
+    void generatePDF() {
+        UserService userService = new UserService();
+        userService.generateUserPDF();
+    }
+
 }
