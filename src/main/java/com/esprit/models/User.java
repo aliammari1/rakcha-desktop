@@ -1,18 +1,21 @@
 package com.esprit.models;
 
 import com.esprit.utils.DataSource;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Blob;
 import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public abstract class User {
 
     private Blob photo_de_profil;
+    private ImageView photo_de_profil_imageView;
     private int id;
     private String nom;
     private String prenom;
@@ -46,13 +49,32 @@ public abstract class User {
         this.adresse = adresse;
         this.date_de_naissance = date_de_naissance;
         this.email = email;
-
-        File file = new File(photo_de_profil_filepath);
-        try (InputStream in = new FileInputStream(file)) {
+        try {
+            byte[] imageBytes = Files.readAllBytes(Path.of(photo_de_profil_filepath));
             this.photo_de_profil = DataSource.getInstance().getConnection().createBlob();
-            this.photo_de_profil.setBinaryStream(1).write(in.readAllBytes());
+            this.photo_de_profil.setBytes(0, imageBytes);
         } catch (Exception e) {
             System.out.println(e.getMessage());
+        }
+    }
+
+    public User(int id, String nom, String prenom, int num_telephone, String password, String role, String adresse,
+            Date date_de_naissance, String email, File file) {
+        this.id = id;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.num_telephone = num_telephone;
+        this.password = password;
+        this.role = role;
+        this.adresse = adresse;
+        this.date_de_naissance = date_de_naissance;
+        this.email = email;
+        try {
+            byte[] imageBytes = Files.readAllBytes(file.toPath());
+            this.photo_de_profil = DataSource.getInstance().getConnection().createBlob();
+            this.photo_de_profil.setBytes(1, imageBytes);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -68,6 +90,25 @@ public abstract class User {
         this.date_de_naissance = date_de_naissance;
         this.email = email;
         this.photo_de_profil = photo_de_profil;
+        try {
+            this.photo_de_profil_imageView = new ImageView(
+                    new Image(new ByteArrayInputStream(this.photo_de_profil.getBinaryStream().readAllBytes())));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public User(int id, String nom, String prenom, int num_telephone, String password, String role, String adresse,
+            Date date_de_naissance, String email) {
+        this.id = id;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.num_telephone = num_telephone;
+        this.password = password;
+        this.role = role;
+        this.adresse = adresse;
+        this.date_de_naissance = date_de_naissance;
+        this.email = email;
     }
 
     public int getId() {
@@ -155,10 +196,24 @@ public abstract class User {
         }
     }
 
+    public void setPhoto_de_profil(Blob photo_de_profil) {
+        this.photo_de_profil = photo_de_profil;
+    }
+
+    public ImageView getPhoto_de_profil_imageView() {
+        return photo_de_profil_imageView;
+    }
+
+    public void setPhoto_de_profil_imageView(ImageView photo_de_profil_imageView) {
+        this.photo_de_profil_imageView = photo_de_profil_imageView;
+    }
+
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
+                "photo_de_profil=" + photo_de_profil +
+                ", photo_de_profil_imageView=" + photo_de_profil_imageView +
+                ", id=" + id +
                 ", nom='" + nom + '\'' +
                 ", prenom='" + prenom + '\'' +
                 ", num_telephone=" + num_telephone +
@@ -167,7 +222,7 @@ public abstract class User {
                 ", adresse='" + adresse + '\'' +
                 ", date_de_naissance=" + date_de_naissance +
                 ", email='" + email + '\'' +
-                ", photo_de_profil=" + photo_de_profil +
                 '}';
     }
+
 }
