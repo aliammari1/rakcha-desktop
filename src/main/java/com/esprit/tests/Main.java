@@ -20,7 +20,7 @@ public class Main extends Application {
         //FXMLLoader loader = new FXMLLoader(getClass().getResource("/AjouterCategorie.fxml"));
         //FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignProduitClient.fxml"));
         Parent root = loader.load();
-        Scene scene = new Scene(root,1200,700);
+        Scene scene = new Scene(root,1280,700);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Afficher Produit Client" );
         primaryStage.show();

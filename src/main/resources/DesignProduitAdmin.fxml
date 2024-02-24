@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="669.0" prefWidth="1170.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.DesignProduitAdminContoller">
+<AnchorPane prefHeight="669.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.DesignProduitAdminContoller">
    <children>
       <AnchorPane prefHeight="707.0" prefWidth="208.0" styleClass="nav-form" stylesheets="@Dashbord.css">
          <children>
@@ -40,7 +40,7 @@
             <FontAwesomeIconView fill="#ebe5e5" glyphName="TV" layoutX="18.0" layoutY="269.0" size="30" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="image_view" layoutX="1169.0" prefHeight="707.0" prefWidth="111.0" styleClass="nav-form" stylesheets="@../../../../../Downloads/dashbord.css" />
+      <AnchorPane layoutX="1280.0" prefHeight="707.0" prefWidth="0.0" styleClass="nav-form" stylesheets="@../../../../../Downloads/dashbord.css" />
       <AnchorPane layoutX="235.0" layoutY="93.0" prefHeight="607.0" prefWidth="309.0" styleClass="bg-white" stylesheets="@Dashbord.css">
          <children>
             <ComboBox fx:id="nomC_comboBox" layoutX="107.0" layoutY="163.0" prefHeight="25.0" prefWidth="105.0" styleClass="combo-box-red" />
@@ -81,34 +81,36 @@
             <ImageView fx:id="image" fitHeight="81.0" fitWidth="100.0" layoutX="103.0" layoutY="448.0" pickOnBounds="true" preserveRatio="true" styleClass="image-view-red" />
             <Button layoutX="90.0" layoutY="545.0" mnemonicParsing="false" onAction="#add_produit" prefHeight="50.0" prefWidth="100.0" styleClass="instert-btn" text="ADD" />
             <Button layoutX="18.0" layoutY="489.0" mnemonicParsing="false" onAction="#selectImage" styleClass="instert-btn-picture" text="Choose" />
-            <Label contentDisplay="CENTER" layoutX="49.0" layoutY="35.0" prefHeight="42.0" prefWidth="200.0" text="Add Product" textAlignment="CENTER" textFill="#f8da18">
+            <Label contentDisplay="CENTER" layoutX="49.0" layoutY="35.0" prefHeight="42.0" prefWidth="200.0" text="Add Product" textAlignment="CENTER" textFill="#466288">
                <font>
                   <Font name="Arial Narrow Bold Italic" size="36.0" />
                </font>
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="566.0" layoutY="242.0" prefHeight="385.0" prefWidth="551.0" styleClass="bg-white" stylesheets="@Dashbord.css">
+      <AnchorPane layoutX="601.0" layoutY="244.0" prefHeight="385.0" prefWidth="615.0" styleClass="bg-white" stylesheets="@Dashbord.css">
          <children>
-            <TableView fx:id="Produit_tableview" layoutX="11.0" layoutY="95.0" prefHeight="269.0" prefWidth="562.0">
+            <TableView fx:id="Produit_tableview" layoutX="11.0" layoutY="95.0" prefHeight="269.0" prefWidth="588.0">
               <columns>
                 <TableColumn fx:id="nomP_tableC" prefWidth="68.0" text="Product" />
-                <TableColumn fx:id="nomCP_tableC" prefWidth="82.0" text="Category" />
-                  <TableColumn fx:id="quantiteP_tableC" prefWidth="68.0" text="Qantity" />
-                  <TableColumn fx:id="PrixP_tableC" prefWidth="68.0" text="Price" />
-                  <TableColumn fx:id="descriptionP_tableC" prefWidth="111.0" text="Description" />
-                  <TableColumn fx:id="image_tableC" prefWidth="87.0" text="Picture" />
-                  <TableColumn fx:id="deleteColumn" prefWidth="87.0" text="Delete" />
+                <TableColumn fx:id="nomCP_tableC" prefWidth="69.0" text="Category" />
+                  <TableColumn fx:id="quantiteP_tableC" prefWidth="70.0" text="Qantity" />
+                  <TableColumn fx:id="PrixP_tableC" prefWidth="67.0" text="Price" />
+                  <TableColumn fx:id="descriptionP_tableC" prefWidth="109.0" text="Description" />
+                  <TableColumn fx:id="image_tableC" prefWidth="113.0" text="Picture" />
+                  <TableColumn fx:id="deleteColumn" prefWidth="90.0" text="Delete" />
                  
               </columns>
             </TableView>
-            <Label layoutX="216.0" layoutY="24.0" text="Table View" textFill="#f8da18">
+            <Label layoutX="216.0" layoutY="24.0" text="Table View" textFill="#466288">
                <font>
                   <Font name="Arial Narrow Bold Italic" size="36.0" />
                </font>
             </Label>
          </children>
       </AnchorPane>
+      <Button layoutX="1052.0" layoutY="210.0" mnemonicParsing="false" onAction="#GestionCategorie" styleClass="navig-button" stylesheets="@Dashbord.css" text=" Category Management" />
+      <TextField fx:id="SearchBar" layoutX="940.0" layoutY="31.0" prefHeight="25.0" prefWidth="188.0" stylesheets="@Dashbord.css" />
 
    </children>
 </AnchorPane>

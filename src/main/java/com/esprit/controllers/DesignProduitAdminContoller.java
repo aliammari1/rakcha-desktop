@@ -6,13 +6,14 @@ import com.esprit.services.ProduitService;
 import com.esprit.utils.DataSource;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
-import javafx.collections.transformation.SortedList;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
@@ -23,16 +24,13 @@ import java.io.*;
 import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 import javafx.util.Callback;
-import javafx.util.converter.DefaultStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 
 import javax.sql.rowset.serial.SerialBlob;
@@ -433,6 +431,23 @@ public class DesignProduitAdminContoller {
                 showAlert("Erreur lors du chargement de la nouvelle image : " + e.getMessage());
             }
         }
+    }
+
+    @FXML
+    void GestionCategorie(ActionEvent event) throws IOException {
+
+        // Charger la nouvelle interface ListCinemaAdmin.fxml
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignCategorieAdmin.fxml"));
+        Parent root = loader.load();
+
+        // Créer une nouvelle scène avec la nouvelle interface
+        Scene scene = new Scene(root);
+
+        // Créer une nouvelle fenêtre (stage) et y attacher la scène
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.show();
+
     }
 
 
