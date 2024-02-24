@@ -18,6 +18,8 @@
         <ImageView fx:id="imageView" fitHeight="150.0" fitWidth="200.0" layoutX="43.0" layoutY="134.0" pickOnBounds="true" preserveRatio="true" />
         <Button fx:id="ajouterPanierButton" layoutX="43.0" layoutY="316.0" mnemonicParsing="false" text="Ajouter au panier" />
         <Button fx:id="retourButton" layoutX="163.0" layoutY="316.0" mnemonicParsing="false" text="Retour" />
-    </children>
 
-</AnchorPane>
+
+    </AnchorPane>
+
+
