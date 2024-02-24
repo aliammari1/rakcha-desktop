@@ -150,3 +150,17 @@
     -fx-background-color: #d62651;
 }
 
+.navig-button {
+    -fx-background-color: #466288;
+    -fx-background-radius: 10px;
+    -fx-text-fill: #FCE19A;
+    -fx-font-size: 15px;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+    -fx-font-family: "Arial Rounded MT Bold";
+}
+
+.navig-button:hover {
+    -fx-background-color:  #466288;
+}
+
