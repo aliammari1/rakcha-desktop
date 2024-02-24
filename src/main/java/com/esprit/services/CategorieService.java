@@ -103,7 +103,7 @@ public class CategorieService  implements IService<Categorie> {
         return category;
     }
 
-    public Categorie getCategorieByNom(String categorie_nom) {
+   public Categorie getCategorieByNom(String categorie_nom) {
 
         Categorie category = null;
 
@@ -113,7 +113,7 @@ public class CategorieService  implements IService<Categorie> {
             pst.setString(1, categorie_nom);
             ResultSet rs = pst.executeQuery();
             rs.next();
-                category = new Categorie(rs.getInt("id_categorie"), rs.getString("nom_categorie"), rs.getString("description")) ;
+            category = new Categorie(rs.getInt("id_categorie"), rs.getString("nom_categorie"), rs.getString("description")) ;
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -121,5 +121,8 @@ public class CategorieService  implements IService<Categorie> {
 
         return category;
     }
+
+
+
 
 }

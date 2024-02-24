@@ -148,7 +148,7 @@ Blob imageBlob;
                 // Créer l'objet Cinema avec l'image Blob
 
                 ProduitService ps = new ProduitService();
-                ps.create(new Produit(nomP_textFiled.getText(), prix_textFiled.getText(), imageBlob, descriptionP_textFiled.getText(), new CategorieService().getCategorieByNom(nomC_comboBox.getValue()), Integer.parseInt(quantiteP_textFiled.getText())));
+                ps.create(new Produit(nomP_textFiled.getText(), prix_textFiled.getText(), imageBlob, descriptionP_textFiled.getText(), (Categorie) new CategorieService().getCategorieByNom(nomC_comboBox.getValue()), Integer.parseInt(quantiteP_textFiled.getText())));
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Produit ajoutée");
                 alert.setContentText("Produit ajoutée !");
@@ -297,7 +297,7 @@ Blob imageBlob;
                 ProduitService ps = new ProduitService();
                 ps.update(new Produit(Integer.parseInt(idP_textFiled.getText()), nomP_textFiled.getText(),
                         prix_textFiled.getText(), imageBlob, descriptionP_textFiled.getText(),
-                        new CategorieService().getCategorieByNom(nomC_comboBox.getValue()),
+                        (Categorie) new CategorieService().getCategorieByNom(nomC_comboBox.getValue()),
                         Integer.parseInt(quantiteP_textFiled.getText())));
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Produit modifiée");

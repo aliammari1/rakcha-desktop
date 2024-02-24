@@ -1,7 +1,6 @@
 package com.esprit.controllers;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -13,6 +12,20 @@ import java.sql.Blob;
 import java.sql.SQLException;
 
 public class DetailsProduitClientController {
+    public TextField idP_textFiled;
+    public TextField nomP_textFiled;
+    public TextField prix_textFiled;
+    public TextField descriptionP_textFiled;
+    public TextField quantiteP_textFiled;
+    public TableView Produit_tableview;
+    public TableColumn idP_tableC;
+    public TableColumn nomCP_tableC;
+    public TableColumn nomP_tableC;
+    public TableColumn PrixP_tableC;
+    public TableColumn image_tableC;
+    public TableColumn descriptionP_tableC;
+    public TableColumn quantiteP_tableC;
+    public ComboBox nomC_comboBox;
     @FXML
     private Label nomLabel;
 
