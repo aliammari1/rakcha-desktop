@@ -5,7 +5,9 @@ import com.esprit.utils.DataSource;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ActorService implements IService<Actor> {
@@ -32,7 +34,22 @@ public class ActorService implements IService<Actor> {
 
     @Override
     public List<Actor> read() {
-        return null;
+        List<Actor> actorArrayList = new ArrayList<>();
+        String req = "SELECT * from actor";
+        try {
+            PreparedStatement pst = connection.prepareStatement(req);
+            ResultSet rs = pst.executeQuery();
+            // int i = 0;
+            while (rs.next()) {
+                actorArrayList.add(new Actor(rs.getInt("id"), rs.getString("nom"), rs.getBlob("image"), rs.getInt("idfilm")));
+                //     System.out.println(filmArrayList.get(i));
+                //       i++;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return actorArrayList;
     }
 
     @Override
