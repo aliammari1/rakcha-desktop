@@ -89,11 +89,7 @@ public class CategoryService implements IService<Category> {
             statement.setInt(1, id);
             ResultSet rs = statement.executeQuery();
             rs.next();
-            System.out.println("ID: " + rs.getInt("id"));
-            System.out.println("Nom: " + rs.getString("nom"));
-            System.out.println("Description: " + rs.getString("description"));
             category = new Category(rs.getInt("id"), rs.getString("nom"), rs.getString("description"));
-            System.out.println(category);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -108,11 +104,7 @@ public class CategoryService implements IService<Category> {
             statement.setString(1, nom);
             ResultSet rs = statement.executeQuery();
             rs.next();
-            System.out.println("ID: " + rs.getInt("id"));
-            System.out.println("Nom: " + rs.getString("nom"));
-            System.out.println("Description: " + rs.getString("description"));
             category = new Category(rs.getInt("id"), rs.getString("nom"), rs.getString("description"));
-            System.out.println(category);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

@@ -20,7 +20,7 @@ public class FilmService implements IService<Film> {
     @Override
     public void create(Film film) {
 
-        String req = "insert into film (nom,image,duree,description,annederalisation,idcategory) values (?,?,?,?,?,?) ";
+        String req = "insert into film (nom,image,duree,description,annederalisation) values (?,?,?,?,?) ";
         try {
             PreparedStatement statement = connection.prepareStatement(req);
             statement.setString(1, film.getNom());
@@ -28,7 +28,6 @@ public class FilmService implements IService<Film> {
             statement.setTime(3, film.getDuree());
             statement.setString(4, film.getDescription());
             statement.setInt(5, film.getAnnederalisation());
-            statement.setInt(6, film.getIdcategory().getId());
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -38,16 +37,15 @@ public class FilmService implements IService<Film> {
     @Override
     public List<Film> read() {
         List<Film> filmArrayList = new ArrayList<>();
-        String req = "SELECT film.*, category.nom from film  JOIN category  ON film.idcategory = category.id";
+        String req = "SELECT * from film";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             ResultSet rs = pst.executeQuery();
-            CategoryService cs = new CategoryService();
-            int i = 0;
+            // int i = 0;
             while (rs.next()) {
-                filmArrayList.add(new Film(rs.getInt("id"), rs.getString("nom"), rs.getBlob("image"), rs.getTime("duree"), rs.getString("description"), rs.getInt("annederalisation"), cs.getCategory(rs.getInt("idcategory")).getNom(), rs.getInt("idacteur"), rs.getInt("idcinema")));
-                System.out.println(filmArrayList.get(i));
-                i++;
+                filmArrayList.add(new Film(rs.getInt("id"), rs.getString("nom"), rs.getBlob("image"), rs.getTime("duree"), rs.getString("description"), rs.getInt("annederalisation"), rs.getInt("idacteur"), rs.getInt("idcinema")));
+                //     System.out.println(filmArrayList.get(i));
+                //       i++;
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -60,7 +58,7 @@ public class FilmService implements IService<Film> {
     @Override
     public void update(Film film) {
 
-        String req = "UPDATE film set nom=?,image=?,duree=?,description=?,annederalisation=?,idcategory=? where id=?;";
+        String req = "UPDATE film set nom=?,image=?,duree=?,description=?,annederalisation=? where id=?;";
         try {
             PreparedStatement statement = connection.prepareStatement(req);
             statement.setString(1, film.getNom());
@@ -68,8 +66,7 @@ public class FilmService implements IService<Film> {
             statement.setTime(3, film.getDuree());
             statement.setString(4, film.getDescription());
             statement.setInt(5, film.getAnnederalisation());
-            statement.setInt(6, film.getIdcategory().getId());
-            statement.setInt(7, film.getId());
+            statement.setInt(6, film.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

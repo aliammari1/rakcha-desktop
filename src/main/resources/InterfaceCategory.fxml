@@ -60,7 +60,7 @@
                         <Label layoutX="99.0" layoutY="121.0" text="Admin" textFill="#e1cfcf" />
                         <Button alignment="CENTER" layoutX="1.0" layoutY="201.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="239.0" styleClass="nav-btn" stylesheets="@dashbord.css" text="Ajouter films" textAlignment="CENTER" />
                         <Button layoutX="1.0" layoutY="298.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="239.0" styleClass="nav-btn" stylesheets="@dashbord.css" text="Ajouter produit" />
-                        <Button layoutX="1.0" layoutY="247.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="239.0" styleClass="nav-btn" stylesheets="@dashbord.css" text="Ajouter Cinema" />
+                        <Button fx:id="AjouterCategory_Button" layoutX="1.0" layoutY="247.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="239.0" styleClass="nav-btn" stylesheets="@dashbord.css" text="Ajouter Category" />
                         <Button layoutY="344.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="241.0" styleClass="nav-btn" stylesheets="@dashbord.css" text="Liste des films" />
                         <Button layoutX="20.0" layoutY="603.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="42.0" styleClass="signout">
                             <stylesheets>
