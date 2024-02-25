@@ -54,6 +54,15 @@ public class ActorService implements IService<Actor> {
 
     @Override
     public void update(Actor actor) {
+        String req = "UPDATE actor set nom=?,image=? where id=?;";
+        try {
+            PreparedStatement statement = connection.prepareStatement(req);
+            statement.setString(1, actor.getNom());
+            statement.setBlob(2, actor.getImage());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
