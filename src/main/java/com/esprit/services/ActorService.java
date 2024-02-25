@@ -68,6 +68,13 @@ public class ActorService implements IService<Actor> {
 
     @Override
     public void delete(Actor actor) {
-
+        String req = " DELETE  FROM actor where id = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(req);
+            statement.setInt(1, actor.getId());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
