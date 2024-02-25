@@ -6,10 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
@@ -41,6 +38,8 @@ public class CategoryController {
 
     @FXML
     private StackPane stackPane;
+    @FXML
+    private Button AjouterCategory_Button;
 
     @FXML
     void initialize() {
@@ -79,6 +78,12 @@ public class CategoryController {
             });
         } catch (Exception e) {
             System.out.println(e.getMessage());
+        }
+    }
+
+    public void switchForm(ActionEvent event) {
+        if (event.getSource() == AjouterCategory_Button) {
+            categoryCrudInterface.setVisible(true);
         }
     }
 

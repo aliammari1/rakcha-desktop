@@ -2,89 +2,113 @@ package com.esprit.controllers;
 
 import com.esprit.models.Category;
 import com.esprit.models.Film;
+import com.esprit.models.Filmcategory;
 import com.esprit.services.CategoryService;
 import com.esprit.services.FilmService;
+import com.esprit.services.FilmcategoryService;
 import com.esprit.utils.DataSource;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
+import javafx.util.Callback;
+import org.controlsfx.control.CheckComboBox;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class FilmController {
     Blob imageBlob;
     private File selectedFile;
     @FXML
-    private TableColumn<Film, Integer> annederalisationFilm_tableColumn;
+    private TableColumn<Filmcategory, Integer> annederalisationFilm_tableColumn;
     @FXML
     private TextArea annederealisationFilm_textArea;
     @FXML
-    private TableColumn<Film, String> descriptionFilm_tableColumn;
+    private TableColumn<Filmcategory, String> descriptionFilm_tableColumn;
     @FXML
     private TextArea descriptionFilm_textArea;
     @FXML
-    private TableColumn<Film, Time> dureeFilm_tableColumn;
+    private TableColumn<Filmcategory, Time> dureeFilm_tableColumn;
     @FXML
     private TextArea dureeFilm_textArea;
     @FXML
-    private TableView<Film> filmCategory_tableView1;
+    private TableColumn<Filmcategory, Button> Delete_Column;
+
+    @FXML
+    private TableView<Filmcategory> filmCategory_tableView1;
     @FXML
     private AnchorPane filmCrudInterface;
     @FXML
-    private TableColumn<Film, Integer> idFilm_tableColumn;
+    private TableColumn<Filmcategory, Integer> idFilm_tableColumn;
     @FXML
     private TextArea idFilm_textArea;
     @FXML
-    private TableColumn<Film, Integer> idacteurFilm_tableColumn;
+    private TableColumn<Filmcategory, Integer> idacteurFilm_tableColumn;
     @FXML
     private ComboBox<String> idacteurFilm_comboBox;
     @FXML
-    private TableColumn<Film, String> idcategoryFilm_tableColumn;
+    private TableColumn<Filmcategory, CheckComboBox<String>> idcategoryFilm_tableColumn;
     @FXML
-    private ComboBox<String> idcategoryFilm_comboBox;
-    @FXML
-    private TableColumn<Film, Integer> idcinemaFilm_tableColumn;
+    private TableColumn<Filmcategory, Integer> idcinemaFilm_tableColumn;
     @FXML
     private ComboBox<String> idcinemaFilm_comboBox;
     @FXML
     private ImageView imageFilm_ImageView;
     @FXML
-    private TableColumn<Film, ImageView> imageFilm_tableColumn;
+    private TableColumn<Filmcategory, ImageView> imageFilm_tableColumn;
     @FXML
-    private TableColumn<Film, String> nomFilm_tableColumn;
+    private TableColumn<Filmcategory, String> nomFilm_tableColumn;
     @FXML
     private TextArea nomFilm_textArea;
     @FXML
     private AnchorPane image_view;
+    @FXML
+    private Button AjouterFilm_Button;
+    @FXML
+    private CheckComboBox<String> Categorychecj_ComboBox;
 
     @FXML
     void initialize() {
         readFilmTable();
         CategoryService cs = new CategoryService();
         FilmService fs = new FilmService();
-        for (Category c : cs.read())
-            idcategoryFilm_comboBox.getItems().add(c.getNom());
 
         for (Film f : fs.read())
             idacteurFilm_comboBox.getItems().add(String.valueOf(f.getIdacteur()));
 
         for (Film f : fs.read())
-            idcinemaFilm_comboBox.getItems().add(String.valueOf(f.getIdcinema()));
-    }
 
+            idcinemaFilm_comboBox.getItems().add(String.valueOf(f.getIdcinema()));
+        // Populate the CheckComboBox with category names
+        CategoryService categoryService = new CategoryService();
+        List<Category> categories = categoryService.read();
+        List<String> categoryNames = categories.stream().map(Category::getNom).collect(Collectors.toList());
+        Categorychecj_ComboBox.getItems().addAll(categoryNames);
+    }
 
     @FXML
     private void showAlert(String message) {
@@ -106,10 +130,9 @@ public class FilmController {
         }
     }
 
-    @FXML
-    void deleteFilm(ActionEvent event) {
+    void deleteFilm(int id) {
         FilmService fs = new FilmService();
-        fs.delete(new Film(Integer.parseInt(idFilm_textArea.getText())));
+        fs.delete(new Film(id));
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Produit supprimée");
         alert.setContentText("Produit supprimée !");
@@ -120,7 +143,6 @@ public class FilmController {
 
     @FXML
     void insertFilm(ActionEvent event) {
-
         if (selectedFile != null) { // Vérifier si une image a été sélectionnée
             Connection connection = null;
             try {
@@ -139,16 +161,17 @@ public class FilmController {
                 }
 
                 // Créer l'objet Cinema avec l'image Blob
-                System.out.println("passed the image");
-                FilmService fs = new FilmService();
-                fs.create(new Film(nomFilm_textArea.getText(), imageBlob, Time.valueOf(dureeFilm_textArea.getText()), descriptionFilm_textArea.getText(), Integer.parseInt(annederealisationFilm_textArea.getText()), new CategoryService().getCategoryByNom(idcategoryFilm_comboBox.getValue()), Integer.parseInt(idacteurFilm_comboBox.getValue()), Integer.parseInt(idcinemaFilm_comboBox.getValue())));
+
+                FilmcategoryService fs = new FilmcategoryService();
+
+                fs.create(new Filmcategory(new Category(Categorychecj_ComboBox.getCheckModel().getCheckedItems().stream().collect(Collectors.joining(", ")), ""), new Film(nomFilm_textArea.getText(), imageBlob, Time.valueOf(dureeFilm_textArea.getText()), descriptionFilm_textArea.getText(), Integer.parseInt(annederealisationFilm_textArea.getText()), Integer.parseInt(idacteurFilm_comboBox.getValue()), Integer.parseInt(idcinemaFilm_comboBox.getValue()))));
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Film ajoutée");
                 alert.setContentText("Film ajoutée !");
                 alert.show();
                 readFilmTable();
                 clear();
-            } catch (SQLException | IOException e) {
+            } catch (Exception e) {
                 showAlert("Erreur lors de l'ajout du Film : " + e.getMessage());
             }
         } else {
@@ -156,13 +179,19 @@ public class FilmController {
         }
     }
 
+    public void switchForm(ActionEvent event) {
+        if (event.getSource() == AjouterFilm_Button) {
+            filmCrudInterface.setVisible(true);
+        }
+    }
+
     void clear() {
         idFilm_textArea.setText("");
         nomFilm_textArea.setText("");
+        // image_view.setVisible(false);
         dureeFilm_textArea.setText("");
         descriptionFilm_textArea.setText("");
         annederealisationFilm_textArea.setText("");
-        idcategoryFilm_comboBox.setValue("");
         idacteurFilm_comboBox.setValue("");
         idcinemaFilm_comboBox.setValue("");
 
@@ -170,18 +199,85 @@ public class FilmController {
 
     void readFilmTable() {
         try {
-            idFilm_tableColumn.setCellValueFactory(new PropertyValueFactory<Film, Integer>("id"));
-            nomFilm_tableColumn.setCellValueFactory(new PropertyValueFactory<Film, String>("nom"));
-            // imageFilm_tableColumn.setCellValueFactory(new PropertyValueFactory<Film, ImageView>("image"));
-            dureeFilm_tableColumn.setCellValueFactory(new PropertyValueFactory<Film, Time>("duree"));
-            descriptionFilm_tableColumn.setCellValueFactory(new PropertyValueFactory<Film, String>("description"));
-            annederalisationFilm_tableColumn.setCellValueFactory(new PropertyValueFactory<Film, Integer>("annederalisation"));
-            idcategoryFilm_tableColumn.setCellValueFactory(new PropertyValueFactory<Film, String>("categoryNom"));
-            idacteurFilm_tableColumn.setCellValueFactory(new PropertyValueFactory<Film, Integer>("idacteur"));
-            idcinemaFilm_tableColumn.setCellValueFactory(new PropertyValueFactory<Film, Integer>("idcinema"));
+            filmCategory_tableView1.setEditable(true);
+            idFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, Integer>, ObservableValue<Integer>>() {
+                @Override
+                public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Filmcategory, Integer> filmcategoryIntegerCellDataFeatures) {
+                    return new SimpleIntegerProperty(filmcategoryIntegerCellDataFeatures.getValue().getFilmId().getId()).asObject();
+                }
+            });
+            nomFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, String>, ObservableValue<String>>() {
+                @Override
+                public ObservableValue<String> call(TableColumn.CellDataFeatures<Filmcategory, String> filmcategoryStringCellDataFeatures) {
+                    return new SimpleStringProperty(filmcategoryStringCellDataFeatures.getValue().getFilmId().getNom());
+                }
+            });
+            nomFilm_tableColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+            imageFilm_tableColumn.setCellValueFactory(new PropertyValueFactory<Filmcategory, ImageView>("image"));
+            dureeFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, Time>, ObservableValue<Time>>() {
+                @Override
+                public ObservableValue<Time> call(TableColumn.CellDataFeatures<Filmcategory, Time> filmcategoryTimeCellDataFeatures) {
+                    return new SimpleObjectProperty<Time>(filmcategoryTimeCellDataFeatures.getValue().getFilmId().getDuree());
+                }
+
+
+            });
+            descriptionFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, String>, ObservableValue<String>>() {
+                @Override
+                public ObservableValue<String> call(TableColumn.CellDataFeatures<Filmcategory, String> filmcategoryStringCellDataFeatures) {
+                    return new SimpleStringProperty(filmcategoryStringCellDataFeatures.getValue().getFilmId().getDescription());
+                }
+            });
+            annederalisationFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, Integer>, ObservableValue<Integer>>() {
+                @Override
+                public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Filmcategory, Integer> filmcategoryIntegerCellDataFeatures) {
+                    return new SimpleIntegerProperty(filmcategoryIntegerCellDataFeatures.getValue().getFilmId().getAnnederalisation()).asObject();
+                }
+            });
+            //idcategoryFilm_tableColumn.setCellValueFactory(new PropertyValueFactory<Film, String>("categoryNom"));
+            idcategoryFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, CheckComboBox<String>>, ObservableValue<CheckComboBox<String>>>() {
+                @Override
+                public ObservableValue<CheckComboBox<String>> call(TableColumn.CellDataFeatures<Filmcategory, CheckComboBox<String>> p) {
+                    CheckComboBox<String> checkComboBox = new CheckComboBox<>();
+                    List<String> l = new ArrayList<>();
+                    CategoryService cs = new CategoryService();
+                    for (Category c : cs.read())
+                        l.add(c.getNom());
+                    checkComboBox.getItems().addAll(l);
+                    List<String> ls = Stream.of(p.getValue().getCategoryId().getNom().split(", ")).toList();
+                    for (String checkedString : ls)
+                        checkComboBox.getCheckModel().check(checkedString);
+                    return new SimpleObjectProperty<CheckComboBox<String>>(checkComboBox);
+                }
+            });
+            idacteurFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, Integer>, ObservableValue<Integer>>() {
+                @Override
+                public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Filmcategory, Integer> filmcategoryIntegerCellDataFeatures) {
+                    return new SimpleIntegerProperty(filmcategoryIntegerCellDataFeatures.getValue().getFilmId().getIdacteur()).asObject();
+                }
+            });
+            idcinemaFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, Integer>, ObservableValue<Integer>>() {
+                @Override
+                public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Filmcategory, Integer> filmcategoryIntegerCellDataFeatures) {
+                    return new SimpleIntegerProperty(filmcategoryIntegerCellDataFeatures.getValue().getFilmId().getIdcinema()).asObject();
+                }
+            });
+            Delete_Column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, Button>, ObservableValue<Button>>() {
+                public ObservableValue<Button> call(TableColumn.CellDataFeatures<Filmcategory, Button> p) {
+                    // p.getValue() returns the Person instance for a particular TableView row
+                    Button button = new Button("add");
+                    button.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            deleteFilm(p.getValue().getFilmId().getId());
+                        }
+                    });
+                    return new SimpleObjectProperty<Button>(button);
+                }
+            });
             // Configurer la cellule de la colonne Logo pour afficher l'image
             imageFilm_tableColumn.setCellValueFactory(cellData -> {
-                Film film = cellData.getValue();
+                Film film = cellData.getValue().getFilmId();
                 ImageView imageView = new ImageView();
                 imageView.setFitWidth(100); // Réglez la largeur de l'image selon vos préférences
                 imageView.setFitHeight(50); // Réglez la hauteur de l'image selon vos préférences
@@ -200,38 +296,35 @@ public class FilmController {
                 }
                 return new javafx.beans.property.SimpleObjectProperty<>(imageView);
             });
-            FilmService filmService = new FilmService();
+            FilmcategoryService filmcategoryService = new FilmcategoryService();
             CategoryService categoryService = new CategoryService();
-            System.out.println("passed");
-            List<Film> lf = filmService.read();
-            System.out.println("passed 2");
-            for (Film ff : lf)
-                System.out.println(ff);
-            ObservableList<Film> obF = FXCollections.observableArrayList(filmService.read());
+
+            //           for (Film ff : lf)
+//                System.out.println(ff);
+            ObservableList<Filmcategory> obF = FXCollections.observableArrayList(filmcategoryService.read());
             filmCategory_tableView1.setItems(obF);
-            filmCategory_tableView1.getSelectionModel().selectedItemProperty().addListener((observableValue, category, t1) -> {
-                Film f = filmCategory_tableView1.getSelectionModel().getSelectedItem();
-                if (f != null) {
-                    idFilm_textArea.setText(String.valueOf(f.getId()));
-                    nomFilm_textArea.setText(f.getNom());
-                    imageFilm_ImageView.toString();
-                    dureeFilm_textArea.setText(f.getDuree().toString());
-                    descriptionFilm_textArea.setText(f.getDescription());
-                    annederealisationFilm_textArea.setText(String.valueOf(f.getAnnederalisation()));
-                    idcategoryFilm_comboBox.setValue(f.getCategoryNom());
-                    idacteurFilm_comboBox.setValue(String.valueOf(f.getIdacteur()));
-                    idcinemaFilm_comboBox.setValue(String.valueOf(f.getIdcinema()));
-                    imageBlob = f.getImage();
-                    Blob imageBlob1 = f.getImage();
-                    try (InputStream inputStream = imageBlob1.getBinaryStream()) {
-                        Image image1 = new Image(inputStream);
-                        imageFilm_ImageView.setImage(image1);
-                    } catch (SQLException | IOException e) {
-                        e.printStackTrace();
-                        showAlert("Erreur lors de la récupération de l'image : " + e.getMessage());
-                    }
-                }
-            });
+//            filmCategory_tableView1.getSelectionModel().selectedItemProperty().addListener((observableValue, category, t1) -> {
+//                Filmcategory f = filmCategory_tableView1.getSelectionModel().getSelectedItem();
+//                if (f != null) {
+//                    idFilm_textArea.setText(String.valueOf(f.getId()));
+//                    nomFilm_textArea.setText(f.getNom());
+//                    imageFilm_ImageView.toString();
+//                    dureeFilm_textArea.setText(f.getDuree().toString());
+//                    descriptionFilm_textArea.setText(f.getDescription());
+//                    annederealisationFilm_textArea.setText(String.valueOf(f.getAnnederalisation()));
+//                    idacteurFilm_comboBox.setValue(String.valueOf(f.getIdacteur()));
+//                    idcinemaFilm_comboBox.setValue(String.valueOf(f.getIdcinema()));
+//                    imageBlob = f.getImage();
+//                    Blob imageBlob1 = f.getImage();
+//                    try (InputStream inputStream = imageBlob1.getBinaryStream()) {
+//                        Image image1 = new Image(inputStream);
+//                        imageFilm_ImageView.setImage(image1);
+//                    } catch (SQLException | IOException e) {
+//                        e.printStackTrace();
+//                        showAlert("Erreur lors de la récupération de l'image : " + e.getMessage());
+//                    }
+//                }
+//            });
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -270,7 +363,6 @@ public class FilmController {
                         Time.valueOf(dureeFilm_textArea.getText()),
                         descriptionFilm_textArea.getText(),
                         Integer.parseInt(annederealisationFilm_textArea.getText()), // Comma added here
-                        new CategoryService().getCategoryByNom(idcategoryFilm_comboBox.getValue()),
                         Integer.parseInt(idacteurFilm_comboBox.getValue()),
                         Integer.parseInt(idcinemaFilm_comboBox.getValue())));
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
