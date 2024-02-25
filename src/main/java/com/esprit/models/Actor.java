@@ -8,19 +8,27 @@ import java.io.InputStream;
 import java.sql.Blob;
 
 public class Actor {
+    private final String biographie;
     private int id;
     private String nom;
     private Blob image;
-    private int idfilm;
 
-    public Actor(String nom, Blob image, int idfilm) {
+
+    public Actor(String nom, Blob image, String biographie) {
         this.nom = nom;
         this.image = image;
-        this.idfilm = idfilm;
+        this.biographie = biographie;
     }
 
-    public Actor(int id, String nom, String image_path, int idfilm) {
+    public Actor(int id, String nom, Blob image, String biographie) {
         this.id = id;
+        this.nom = nom;
+        this.image = image;
+        this.biographie = biographie;
+    }
+
+    public Actor(String nom, String image_path, String biographie) {
+        this.nom = nom;
         File file = new File(image_path);
         try (InputStream in = new FileInputStream(file)) {
             this.image = DataSource.getInstance().getConnection().createBlob();
@@ -28,22 +36,16 @@ public class Actor {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        this.image = image;
-        this.idfilm = idfilm;
+        this.biographie = biographie;
     }
 
-    public Actor(int id, String nom, Blob image, int idfilm) {
-        this.id = id;
-        this.image = image;
-        this.image = image;
-        this.idfilm = idfilm;
-    }
 
     public Actor(int id) {
         this.id = id;
         this.nom = null;
         this.image = null;
-        this.idfilm = 0;
+        this.biographie = null;
+
     }
 
     public int getId() {
@@ -70,12 +72,8 @@ public class Actor {
         this.image = image;
     }
 
-    public int getIdfilm() {
-        return idfilm;
-    }
-
-    public void setIdfilm(int idfilm) {
-        this.idfilm = idfilm;
+    public String getBiographie() {
+        return biographie;
     }
 
     @Override
@@ -84,7 +82,7 @@ public class Actor {
                 "id=" + id +
                 ", nom='" + nom + '\'' +
                 ", image=" + image +
-                ", idfilm=" + idfilm +
+                ", biographie='" + biographie + '\'' +
                 '}';
     }
 }
