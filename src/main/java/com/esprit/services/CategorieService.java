@@ -80,4 +80,42 @@ public class CategorieService  implements IService<Categorie> {
 
         return categories;
     }
+
+    public Categorie getCategorie(int categorie_id) {
+
+        Categorie category = null;
+
+        String req = "SELECT * from categorie_evenement where id = ?";
+        try {
+            PreparedStatement pst = connection.prepareStatement(req);
+            pst.setInt(1, categorie_id);
+            ResultSet rs = pst.executeQuery();
+            rs.next();
+            category = new Categorie(rs.getInt("ID"), rs.getString("Nom_Categorie"), rs.getString("Description")) ;
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return category;
+    }
+    public Categorie getCategorieByNom(String categorie_nom) {
+
+        Categorie category = null;
+
+        String req = "SELECT * from categorie_evenement where nom_categorie = ?";
+        try {
+            PreparedStatement pst = connection.prepareStatement(req);
+            pst.setString(1, categorie_nom);
+            ResultSet rs = pst.executeQuery();
+            rs.next();
+            category = new Categorie(rs.getInt("id"), rs.getString("nom_categorie"), rs.getString("description")) ;
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return category;
+    }
+
 }

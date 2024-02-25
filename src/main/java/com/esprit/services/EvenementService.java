@@ -25,7 +25,7 @@ public class EvenementService implements IService<Evenement> {
             pst.setDate(3, evenement.getDateDebut());
             pst.setDate(4, evenement.getDateFin());
             pst.setString(5, evenement.getLieu());
-            pst.setInt(6, evenement.getId_categorie());
+            pst.setInt(6, evenement.getCategorie().getId_categorie());
             pst.setString(7, evenement.getEtat());
             pst.setString(8, evenement.getDescription());
             pst.executeUpdate();
@@ -45,7 +45,7 @@ public class EvenementService implements IService<Evenement> {
             pst.setDate(2, evenement.getDateDebut());
             pst.setDate(3, evenement.getDateFin());
             pst.setString(4, evenement.getLieu());
-            pst.setInt(5, evenement.getId_categorie());
+            pst.setInt(5, evenement.getCategorie().getId_categorie());
             pst.setString(6, evenement.getEtat());
             pst.setString(7, evenement.getDescription());
             pst.executeUpdate();
@@ -72,12 +72,14 @@ public class EvenementService implements IService<Evenement> {
     public List<Evenement> show() {
         List<Evenement> evenements = new ArrayList<>();
 
-        String req = "SELECT * from evenement";
+        String req = "SELECT evenement.* , categorie_evenement.nom_categorie from evenement JOIN categorie_evenement ON evenement.id_categorie = categorie_evenement.id";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             ResultSet rs = pst.executeQuery();
+            CategorieService cs = new CategorieService();
             while (rs.next()) {
-                evenements.add(new Evenement(rs.getInt("ID"), rs.getString("nom"), rs.getDate("dateDebut"), rs.getDate("dateFin"), rs.getString("lieu"), rs.getInt("id_categorie"), rs.getString("etat"), rs.getString("description")));
+                evenements.add(new Evenement(rs.getInt("ID"), rs.getString("nom"), rs.getDate("dateDebut"), rs.getDate("dateFin"), rs.getString("lieu"), cs.getCategorie(rs.getInt("id_categorie")), rs.getString("etat"), rs.getString("description")));
+
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
