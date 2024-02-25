@@ -21,24 +21,25 @@ public class MainProg {
 
     public static void main(String[] args) {
         //Evenement
-        /*EvenementService es = new EvenementService();
+        EvenementService es = new EvenementService();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
        try {
-            java.util.Date utildateDebut = dateFormat.parse("02/12/2024");
-            java.util.Date utildateFin = dateFormat.parse("04/12/2024");
+            java.util.Date utildateDebut = dateFormat.parse("10/12/2024");
+            java.util.Date utildateFin = dateFormat.parse("14/12/2024");
 
             // Convert java.util.Date to java.sql.Date
             java.sql.Date sqldateDebut = new java.sql.Date(utildateDebut.getTime());
             java.sql.Date sqldateFin = new java.sql.Date(utildateFin.getTime());
+           Categorie cc = new Categorie(1,"horreur","cest un film dhorreur");
 
-            es.add(new Evenement(1, "Soiree", sqldateDebut, sqldateFin, "Sfax", 12, "en cours", "soiree jeune"));
-            es.update(new Evenement(1,"soiree2",sqldateDebut,sqldateFin,"Tunis",13,"fini","soiree jeune"));
-           System.out.println(es.show());
-           es.delete(new Evenement(1,"ahmed",null,null,null,13,null,null));
+            //es.add(new Evenement(1, "Soiree3", sqldateDebut, sqldateFin, "Sfax",cc , "en cours", "soiree jeune"));
+            //es.update(new Evenement(1,"soiree4",sqldateDebut,sqldateFin,"Tunis",cc,"fini","soiree jeune"));
+            System.out.println(es.show());
+           //es.delete(new Evenement(1,"ahmed",null,null,null,cc,null,null));
         } catch (ParseException e) {
             System.out.println("Erreur date invalide : " + e.getMessage());
         }
-*/
+
         //Sponsor
        /* SponsorService ss = new SponsorService();
         try {
