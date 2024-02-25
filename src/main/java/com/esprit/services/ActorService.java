@@ -20,11 +20,12 @@ public class ActorService implements IService<Actor> {
 
     @Override
     public void create(Actor actor) {
-        String req = "insert into actor (nom,image) values (?,?) ";
+        String req = "insert into actor (nom,image,biographie) values (?,?,?) ";
         try {
             PreparedStatement statement = connection.prepareStatement(req);
             statement.setString(1, actor.getNom());
             statement.setBlob(2, actor.getImage());
+            statement.setString(3, actor.getBiographie());
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -39,11 +40,11 @@ public class ActorService implements IService<Actor> {
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             ResultSet rs = pst.executeQuery();
-            // int i = 0;
+            int i = 0;
             while (rs.next()) {
-                actorArrayList.add(new Actor(rs.getInt("id"), rs.getString("nom"), rs.getBlob("image"), rs.getInt("idfilm")));
-                //     System.out.println(filmArrayList.get(i));
-                //       i++;
+                actorArrayList.add(new Actor(rs.getInt("id"), rs.getString("nom"), rs.getBlob("image"), rs.getString("biographie")));
+                System.out.println(actorArrayList.get(i));
+                i++;
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -54,11 +55,12 @@ public class ActorService implements IService<Actor> {
 
     @Override
     public void update(Actor actor) {
-        String req = "UPDATE actor set nom=?,image=? where id=?;";
+        String req = "UPDATE actor set nom=?,image=?,biographie=? where id=?;";
         try {
             PreparedStatement statement = connection.prepareStatement(req);
             statement.setString(1, actor.getNom());
             statement.setBlob(2, actor.getImage());
+            statement.setString(3, actor.getBiographie());
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
