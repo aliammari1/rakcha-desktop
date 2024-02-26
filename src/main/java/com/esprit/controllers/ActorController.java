@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -22,6 +23,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import net.synedra.validatorfx.Validator;
 
 import java.io.*;
 import java.sql.Blob;
@@ -39,6 +41,8 @@ public class ActorController {
     @FXML
     private Button AjouterFilm_Button;
 
+    @FXML
+    private AnchorPane anchorActor_Form;
     @FXML
     private TableColumn<Actor, Button> DeleteActor_Column1;
 
@@ -71,6 +75,21 @@ public class ActorController {
     @FXML
     void initialize() {
         readActorTable();
+        TextField userTextField = new TextField();
+        for (Node n : anchorActor_Form.getChildren())
+            System.out.println(n);
+        Validator validator = new Validator();
+
+        validator.createCheck()
+                .dependsOn("nom", nomAcotr_textArea1.textProperty())
+                .withMethod(c -> {
+                    String nom = c.get("nom");
+                    if (!nom.toLowerCase().equals(nom)) {
+                        c.error("Please use only lowercase letters.");
+                    }
+                })
+                .decorates(nomAcotr_textArea1)
+                .immediate();
     }
 
     @FXML
@@ -91,6 +110,7 @@ public class ActorController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.show();
+
     }
 
     @FXML
@@ -186,14 +206,20 @@ public class ActorController {
                 }
             });
             nomAcotr_tableColumn1.setCellFactory(TextFieldTableCell.forTableColumn());
-            bioActor_tableColumn1.setCellValueFactory(new PropertyValueFactory<Actor, String>("biographie"));
+            bioActor_tableColumn1.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Actor, String>, ObservableValue<String>>() {
+                @Override
+                public ObservableValue<String> call(TableColumn.CellDataFeatures<Actor, String> actorStringCellDataFeatures) {
+                    return new SimpleStringProperty(actorStringCellDataFeatures.getValue().getBiographie());
+                }
+            });
+            bioActor_tableColumn1.setCellFactory(TextFieldTableCell.forTableColumn());
             imageAcotr_tableColumn1.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Actor, HBox>, ObservableValue<HBox>>() {
                 @Override
                 public ObservableValue<HBox> call(TableColumn.CellDataFeatures<Actor, HBox> param) {
                     HBox hBox = new HBox();
                     ImageView imageView = new ImageView();
-                    imageView.setFitWidth(100); // Réglez la largeur de l'image selon vos préférences
-                    imageView.setFitHeight(50); // Réglez la hauteur de l'image selon vos préférences
+                    imageView.setFitWidth(120); // Réglez la largeur de l'image selon vos préférences
+                    imageView.setFitHeight(100); // Réglez la hauteur de l'image selon vos préférences
                     try {
                         imageView.setImage(new Image(new ByteArrayInputStream(param.getValue().getImage().getBinaryStream().readAllBytes())));
                     } catch (Exception e) {

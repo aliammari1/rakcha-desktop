@@ -68,6 +68,21 @@ public class ActorService implements IService<Actor> {
 
     }
 
+    public Actor getActorByNom(String nom) {
+        Actor actor = null;
+        String req = "SELECT * FROM actor where nom LIKE ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(req);
+            statement.setString(1, nom);
+            ResultSet rs = statement.executeQuery();
+            rs.next();
+            actor = new Actor(rs.getInt("id"), rs.getString("nom"), rs.getBlob("image"), rs.getString("biographie"));
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return actor;
+    }
+
     @Override
     public void delete(Actor actor) {
         String req = " DELETE  FROM actor where id = ?";
