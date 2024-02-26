@@ -1,11 +1,7 @@
 package com.esprit.controllers;
 
-import com.esprit.models.Category;
-import com.esprit.models.Film;
-import com.esprit.models.Filmcategory;
-import com.esprit.services.CategoryService;
-import com.esprit.services.FilmService;
-import com.esprit.services.FilmcategoryService;
+import com.esprit.models.*;
+import com.esprit.services.*;
 import com.esprit.utils.DataSource;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -67,7 +63,7 @@ public class FilmController {
     @FXML
     private TextArea idFilm_textArea;
     @FXML
-    private TableColumn<Filmcategory, Integer> idacteurFilm_tableColumn;
+    private TableColumn<Filmcategory, String> idacteurFilm_tableColumn;
     @FXML
     private ComboBox<String> idacteurFilm_comboBox;
     @FXML
@@ -92,13 +88,19 @@ public class FilmController {
     private CheckComboBox<String> Categorychecj_ComboBox;
 
     @FXML
+    private CheckComboBox<String> Actorcheck_ComboBox1;
+
+    @FXML
     void initialize() {
         readFilmTable();
         CategoryService cs = new CategoryService();
         FilmService fs = new FilmService();
 
-        for (Film f : fs.read())
-            idacteurFilm_comboBox.getItems().add(String.valueOf(f.getIdacteur()));
+        ActorService actorService = new ActorService();
+        List<Actor> actors = actorService.read();
+        List<String> actorNames = actors.stream().map(Actor::getNom).collect(Collectors.toList());
+        Actorcheck_ComboBox1.getItems().addAll(actorNames);
+
 
         for (Film f : fs.read())
 
@@ -164,7 +166,9 @@ public class FilmController {
 
                 FilmcategoryService fs = new FilmcategoryService();
 
-                fs.create(new Filmcategory(new Category(Categorychecj_ComboBox.getCheckModel().getCheckedItems().stream().collect(Collectors.joining(", ")), ""), new Film(nomFilm_textArea.getText(), imageBlob, Time.valueOf(dureeFilm_textArea.getText()), descriptionFilm_textArea.getText(), Integer.parseInt(annederealisationFilm_textArea.getText()), Integer.parseInt(idacteurFilm_comboBox.getValue()), Integer.parseInt(idcinemaFilm_comboBox.getValue()))));
+                fs.create(new Filmcategory(new Category(Categorychecj_ComboBox.getCheckModel().getCheckedItems().stream().collect(Collectors.joining(", ")), ""), new Film(nomFilm_textArea.getText(), imageBlob, Time.valueOf(dureeFilm_textArea.getText()), descriptionFilm_textArea.getText(), Integer.parseInt(annederealisationFilm_textArea.getText()), Integer.parseInt(idcinemaFilm_comboBox.getValue()))));
+                ActorfilmService actorfilmService = new ActorfilmService();
+                actorfilmService.create(new Actorfilm(new Actor(Actorcheck_ComboBox1.getCheckModel().getCheckedItems().stream().collect(Collectors.joining(", ")), "", ""), new Film(nomFilm_textArea.getText(), imageBlob, Time.valueOf(dureeFilm_textArea.getText()), descriptionFilm_textArea.getText(), Integer.parseInt(annederealisationFilm_textArea.getText()), Integer.parseInt(idcinemaFilm_comboBox.getValue()))));
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Film ajoutée");
                 alert.setContentText("Film ajoutée !");
@@ -250,10 +254,13 @@ public class FilmController {
                     return new SimpleObjectProperty<CheckComboBox<String>>(checkComboBox);
                 }
             });
-            idacteurFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, Integer>, ObservableValue<Integer>>() {
+            idacteurFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, String>, ObservableValue<String>>() {
+
                 @Override
-                public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Filmcategory, Integer> filmcategoryIntegerCellDataFeatures) {
-                    return new SimpleIntegerProperty(filmcategoryIntegerCellDataFeatures.getValue().getFilmId().getIdacteur()).asObject();
+                public ObservableValue<String> call(TableColumn.CellDataFeatures<Filmcategory, String> filmcategoryStringCellDataFeatures) {
+                    ActorfilmService actorfilmService = new ActorfilmService();
+                    String actorsNames = actorfilmService.getActorsNames(filmcategoryStringCellDataFeatures.getValue().getFilmId().getId());
+                    return new SimpleStringProperty(actorsNames);
                 }
             });
             idcinemaFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, Integer>, ObservableValue<Integer>>() {
@@ -363,7 +370,6 @@ public class FilmController {
                         Time.valueOf(dureeFilm_textArea.getText()),
                         descriptionFilm_textArea.getText(),
                         Integer.parseInt(annederealisationFilm_textArea.getText()), // Comma added here
-                        Integer.parseInt(idacteurFilm_comboBox.getValue()),
                         Integer.parseInt(idcinemaFilm_comboBox.getValue())));
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Produit modifiée");

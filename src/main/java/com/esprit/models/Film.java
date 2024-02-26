@@ -16,35 +16,32 @@ public class Film {
     private Time duree;
     private String description;
     private int annederalisation;
-    private int idacteur;
     private int idcinema;
 
     // Existing constructor
 
 
-    public Film(int id, String nom, Blob image, Time duree, String description, int annederalisation, int idacteur, int idcinema) {
+    public Film(int id, String nom, Blob image, Time duree, String description, int annederalisation, int idcinema) {
         this.id = id;
         this.nom = nom;
         this.image = image;
         this.duree = duree;
         this.description = description;
         this.annederalisation = annederalisation;
-        this.idacteur = idacteur;
         this.idcinema = idcinema;
 
     }
 
-    public Film(String nom, Blob image, Time duree, String description, int annederalisation, int idacteur, int idcinema) {
+    public Film(String nom, Blob image, Time duree, String description, int annederalisation, int idcinema) {
         this.nom = nom;
         this.image = image;
         this.duree = duree;
         this.description = description;
         this.annederalisation = annederalisation;
-        this.idacteur = idacteur;
         this.idcinema = idcinema;
     }
 
-    public Film(String nom, String image_path, Time duree, String description, int annederalisation, int idacteur, int idcinema) {
+    public Film(String nom, String image_path, Time duree, String description, int annederalisation, int idcinema) {
         this.nom = nom;
         File file = new File(image_path);
         try (InputStream in = new FileInputStream(file)) {
@@ -56,7 +53,6 @@ public class Film {
         this.duree = duree;
         this.description = description;
         this.annederalisation = annederalisation;
-        this.idacteur = idacteur;
         this.idcinema = idcinema;
     }
 
@@ -67,7 +63,6 @@ public class Film {
         this.duree = null;
         this.description = null;
         this.annederalisation = 0;
-        this.idacteur = 0;
         this.idcinema = 0;
     }
 
@@ -116,13 +111,6 @@ public class Film {
         this.annederalisation = annederalisation;
     }
 
-    public int getIdacteur() {
-        return idacteur;
-    }
-
-    public void setIdacteur(int idacteur) {
-        this.idacteur = idacteur;
-    }
 
     public int getIdcinema() {
         return idcinema;
@@ -141,7 +129,6 @@ public class Film {
                 ", duree=" + duree +
                 ", description='" + description + '\'' +
                 ", annederalisation=" + annederalisation +
-                ", idacteur=" + idacteur +
                 ", idcinema=" + idcinema +
                 '}';
     }

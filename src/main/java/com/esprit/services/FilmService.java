@@ -11,10 +11,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FilmService implements IService<Film> {
+    static private int filmLastInsertID;
     Connection connection;
 
     public FilmService() {
         connection = DataSource.getInstance().getConnection();
+    }
+
+    public static int getFilmLastInsertID() {
+        return filmLastInsertID;
     }
 
     @Override
@@ -29,6 +34,14 @@ public class FilmService implements IService<Film> {
             statement.setString(4, film.getDescription());
             statement.setInt(5, film.getAnnederalisation());
             statement.executeUpdate();
+            
+            String selectSql = "SELECT LAST_INSERT_ID()";
+            PreparedStatement selectPs = connection.prepareStatement(selectSql);
+            ResultSet rs = selectPs.executeQuery();
+            if (rs.next()) {
+                filmLastInsertID = rs.getInt(1);
+                System.out.println(filmLastInsertID);
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -43,7 +56,7 @@ public class FilmService implements IService<Film> {
             ResultSet rs = pst.executeQuery();
             // int i = 0;
             while (rs.next()) {
-                filmArrayList.add(new Film(rs.getInt("id"), rs.getString("nom"), rs.getBlob("image"), rs.getTime("duree"), rs.getString("description"), rs.getInt("annederalisation"), rs.getInt("idacteur"), rs.getInt("idcinema")));
+                filmArrayList.add(new Film(rs.getInt("id"), rs.getString("nom"), rs.getBlob("image"), rs.getTime("duree"), rs.getString("description"), rs.getInt("annederalisation"), rs.getInt("idcinema")));
                 //     System.out.println(filmArrayList.get(i));
                 //       i++;
             }
@@ -53,7 +66,6 @@ public class FilmService implements IService<Film> {
 
         return filmArrayList;
     }
-
 
     @Override
     public void update(Film film) {
@@ -77,7 +89,7 @@ public class FilmService implements IService<Film> {
 
     @Override
     public void delete(Film film) {
-        String req = " DELETE  FROM film where id = ?";
+        String req = "DELETE FROM film where id = ?";
         try {
             PreparedStatement statement = connection.prepareStatement(req);
             statement.setInt(1, film.getId());
@@ -85,7 +97,5 @@ public class FilmService implements IService<Film> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 }
