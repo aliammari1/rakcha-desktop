@@ -153,9 +153,10 @@
                                                 <Font size="16.0" />
                                             </font>
                                         </Label>
-                                        <ComboBox fx:id="idacteurFilm_comboBox" layoutX="164.0" layoutY="501.0" prefHeight="35.0" prefWidth="202.0" />
+                                        <ComboBox fx:id="idacteurFilm_comboBox" layoutX="165.0" layoutY="501.0" prefHeight="35.0" prefWidth="202.0" />
                                         <ComboBox fx:id="idcinemaFilm_comboBox" layoutX="165.0" layoutY="545.0" prefHeight="35.0" prefWidth="202.0" />
-                                        <CheckComboBox fx:id="Categorychecj_ComboBox" layoutX="170.0" layoutY="607.0" prefHeight="25.0" prefWidth="185.0" />
+                                        <CheckComboBox fx:id="Categorychecj_ComboBox" layoutX="165.0" layoutY="454.0" prefHeight="37.0" prefWidth="201.0" />
+                              <CheckComboBox fx:id="Actorcheck_ComboBox1" layoutX="146.0" layoutY="631.0" prefHeight="37.0" prefWidth="201.0" />
                                     </children>
                                 </AnchorPane>
                                 <AnchorPane layoutX="474.0" layoutY="13.0" prefHeight="662.0" prefWidth="940.0" styleClass="bg-white" stylesheets="@dashbord.css">

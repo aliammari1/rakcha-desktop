@@ -47,7 +47,7 @@ public class FilmcategoryService implements IService<Filmcategory> {
             ResultSet rs = pst.executeQuery();
             // int i = 0;
             while (rs.next()) {
-                filmcategoryArrayList.add(new Filmcategory(new Category(rs.getInt("category.id"), rs.getString("category_names"), rs.getString("category.description")), new Film(rs.getInt("film.id"), rs.getNString("film.nom"), rs.getBlob("image"), rs.getTime("duree"), rs.getString("film.description"), rs.getInt("annederalisation"), rs.getInt("idacteur"), rs.getInt("idcinema"))));
+                filmcategoryArrayList.add(new Filmcategory(new Category(rs.getInt("category.id"), rs.getString("category_names"), rs.getString("category.description")), new Film(rs.getInt("film.id"), rs.getNString("film.nom"), rs.getBlob("image"), rs.getTime("duree"), rs.getString("film.description"), rs.getInt("annederalisation"), rs.getInt("idcinema"))));
                 //     System.out.println(filmArrayList.get(i));
                 //       i++;
             }

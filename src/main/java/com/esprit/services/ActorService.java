@@ -77,6 +77,8 @@ public class ActorService implements IService<Actor> {
             ResultSet rs = statement.executeQuery();
             rs.next();
             actor = new Actor(rs.getInt("id"), rs.getString("nom"), rs.getBlob("image"), rs.getString("biographie"));
+            System.out.println(actor);
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
