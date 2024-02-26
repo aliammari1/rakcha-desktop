@@ -92,7 +92,7 @@
         <center>
             <AnchorPane fx:id="ActorCrudInterface" layoutX="2.0" prefHeight="877.0" prefWidth="1445.0">
                 <children>
-                    <AnchorPane fx:id="image_view2" layoutX="7.0" layoutY="38.0" prefHeight="671.0" prefWidth="443.0" styleClass="bg-white" stylesheets="@dashbord.css">
+                    <AnchorPane fx:id="anchorActor_Form" layoutX="7.0" layoutY="38.0" prefHeight="671.0" prefWidth="443.0" styleClass="bg-white" stylesheets="@dashbord.css">
                         <children>
                             <Label layoutX="16.0" layoutY="412.0">
                                 <font>
@@ -130,7 +130,7 @@
                     </AnchorPane>
                     <AnchorPane layoutX="463.0" layoutY="52.0" prefHeight="595.0" prefWidth="896.0" styleClass="bg-white" stylesheets="@dashbord.css">
                         <children>
-                            <TableView fx:id="filmActor_tableView11" layoutX="10.0" layoutY="65.0" prefHeight="579.0" prefWidth="925.0">
+                            <TableView fx:id="filmActor_tableView11" layoutX="5.0" layoutY="51.0" prefHeight="579.0" prefWidth="925.0">
                                 <columns>
                                     <TableColumn fx:id="idActor_tableColumn1" prefWidth="49.0" text="Id film" />
                                     <TableColumn fx:id="nomAcotr_tableColumn1" prefWidth="182.0" text="Name of actor " />
