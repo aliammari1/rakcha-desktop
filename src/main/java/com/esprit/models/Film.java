@@ -9,7 +9,8 @@ import java.sql.Blob;
 import java.sql.Time;
 
 public class Film {
-    private final String nom;
+    private
+    String nom;
     private String categoryNom;
     private int id;
     private Blob image;
@@ -71,6 +72,10 @@ public class Film {
         return nom;
     }
 
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
     public int getId() {
         return id;
     }
@@ -93,6 +98,10 @@ public class Film {
 
     public void setDuree(Time duree) {
         this.duree = duree;
+    }
+
+    public void setCategoryNom(String categoryNom) {
+        this.categoryNom = categoryNom;
     }
 
     public String getDescription() {

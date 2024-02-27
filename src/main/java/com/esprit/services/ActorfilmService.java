@@ -59,7 +59,17 @@ public class ActorfilmService implements IService<Actorfilm> {
 
     @Override
     public void update(Actorfilm actorfilm) {
-
+        String req = "UPDATE actorFilm " +
+                "INNER JOIN actor ON actorFilm.idactor = actor.id " +
+                "INNER JOIN film ON actorFilm.idfilm = film.id " +
+                "SET actorFilm.idfilm = ?, " +
+                "    actor.nom = ? " +
+                "WHERE actor.id = ? AND film.id = ?;";
+        try {
+            PreparedStatement statement = connection.prepareStatement(req);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Override

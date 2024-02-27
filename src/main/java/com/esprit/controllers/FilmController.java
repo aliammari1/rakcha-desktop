@@ -8,6 +8,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -17,22 +18,22 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.util.StringConverter;
 import org.controlsfx.control.CheckComboBox;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -75,7 +76,7 @@ public class FilmController {
     @FXML
     private ImageView imageFilm_ImageView;
     @FXML
-    private TableColumn<Filmcategory, ImageView> imageFilm_tableColumn;
+    private TableColumn<Filmcategory, HBox> imageFilm_tableColumn;
     @FXML
     private TableColumn<Filmcategory, String> nomFilm_tableColumn;
     @FXML
@@ -92,6 +93,27 @@ public class FilmController {
 
     @FXML
     void initialize() {
+        //  nomFilm_tableColumn.setCellValueFactory(new PropertyValueFactory<Filmcategory, String>("nom"));
+
+
+        //     descriptionFilm_tableColumn.setCellValueFactory(new PropertyValueFactory<Filmcategory, String>("description"));
+
+//        idcategoryFilm_tableColumn.setOnEditStart(new EventHandler<TableColumn.CellEditEvent<Filmcategory, CheckComboBox<String>>>() {
+//            @Override
+//            public void handle(TableColumn.CellEditEvent<Filmcategory, CheckComboBox<String>> filmcategoryCheckComboBoxCellEditEvent) {
+//                try {
+//                    filmcategoryCheckComboBoxCellEditEvent.getTableView().getItems().get(
+//                            filmcategoryCheckComboBoxCellEditEvent.getTablePosition().getRow()).getFilmId().setCategoryNom((filmcategoryCheckComboBoxCellEditEvent.getNewValue()));
+//                } catch (Exception e) {
+//                    System.out.println(e.getMessage());
+//                }
+//            }
+//        });
+
+        setupCellValueFactory();
+        setupCellFactory();
+        setupCellOnEditCommit();
+
         readFilmTable();
         CategoryService cs = new CategoryService();
         FilmService fs = new FilmService();
@@ -110,7 +132,10 @@ public class FilmController {
         List<Category> categories = categoryService.read();
         List<String> categoryNames = categories.stream().map(Category::getNom).collect(Collectors.toList());
         Categorychecj_ComboBox.getItems().addAll(categoryNames);
+
+
     }
+
 
     @FXML
     private void showAlert(String message) {
@@ -201,108 +226,73 @@ public class FilmController {
 
     }
 
+    void updateActorlist() {
+        CheckComboBox<Actor> checkComboBox = new CheckComboBox<>(FXCollections.observableArrayList());
+
+        checkComboBox.getCheckModel().getCheckedItems().addListener(new ListChangeListener<Actor>() {
+            @Override
+            public void onChanged(Change<? extends Actor> c) {
+                while (c.next()) {
+                    if (c.wasAdded()) {
+                        for (Actor actor : c.getAddedSubList()) {
+                            // Add actor to actorFilm table
+                            String sql = "INSERT INTO actorFilm (actor_id, film_id) VALUES (?, ?)";
+                            // Execute SQL command
+                        }
+                    }
+                    if (c.wasRemoved()) {
+                        for (Actor actor : c.getRemoved()) {
+                            // Remove actor from actorFilm table
+                            String sql = "DELETE FROM actorFilm WHERE actor_id = ?";
+                            // Execute SQL command
+                        }
+                    }
+                }
+            }
+        });
+    }
+
     void readFilmTable() {
         try {
             filmCategory_tableView1.setEditable(true);
-            idFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, Integer>, ObservableValue<Integer>>() {
-                @Override
-                public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Filmcategory, Integer> filmcategoryIntegerCellDataFeatures) {
-                    return new SimpleIntegerProperty(filmcategoryIntegerCellDataFeatures.getValue().getFilmId().getId()).asObject();
-                }
-            });
-            nomFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, String>, ObservableValue<String>>() {
-                @Override
-                public ObservableValue<String> call(TableColumn.CellDataFeatures<Filmcategory, String> filmcategoryStringCellDataFeatures) {
-                    return new SimpleStringProperty(filmcategoryStringCellDataFeatures.getValue().getFilmId().getNom());
-                }
-            });
-            nomFilm_tableColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-            imageFilm_tableColumn.setCellValueFactory(new PropertyValueFactory<Filmcategory, ImageView>("image"));
-            dureeFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, Time>, ObservableValue<Time>>() {
-                @Override
-                public ObservableValue<Time> call(TableColumn.CellDataFeatures<Filmcategory, Time> filmcategoryTimeCellDataFeatures) {
-                    return new SimpleObjectProperty<Time>(filmcategoryTimeCellDataFeatures.getValue().getFilmId().getDuree());
-                }
+
+            //imageFilm_tableColumn.setCellValueFactory(new PropertyValueFactory<Filmcategory, HBox>("image"));
 
 
-            });
-            descriptionFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, String>, ObservableValue<String>>() {
-                @Override
-                public ObservableValue<String> call(TableColumn.CellDataFeatures<Filmcategory, String> filmcategoryStringCellDataFeatures) {
-                    return new SimpleStringProperty(filmcategoryStringCellDataFeatures.getValue().getFilmId().getDescription());
-                }
-            });
-            annederalisationFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, Integer>, ObservableValue<Integer>>() {
-                @Override
-                public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Filmcategory, Integer> filmcategoryIntegerCellDataFeatures) {
-                    return new SimpleIntegerProperty(filmcategoryIntegerCellDataFeatures.getValue().getFilmId().getAnnederalisation()).asObject();
-                }
-            });
-            //idcategoryFilm_tableColumn.setCellValueFactory(new PropertyValueFactory<Film, String>("categoryNom"));
-            idcategoryFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, CheckComboBox<String>>, ObservableValue<CheckComboBox<String>>>() {
-                @Override
-                public ObservableValue<CheckComboBox<String>> call(TableColumn.CellDataFeatures<Filmcategory, CheckComboBox<String>> p) {
-                    CheckComboBox<String> checkComboBox = new CheckComboBox<>();
-                    List<String> l = new ArrayList<>();
-                    CategoryService cs = new CategoryService();
-                    for (Category c : cs.read())
-                        l.add(c.getNom());
-                    checkComboBox.getItems().addAll(l);
-                    List<String> ls = Stream.of(p.getValue().getCategoryId().getNom().split(", ")).toList();
-                    for (String checkedString : ls)
-                        checkComboBox.getCheckModel().check(checkedString);
-                    return new SimpleObjectProperty<CheckComboBox<String>>(checkComboBox);
-                }
-            });
-            idacteurFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, String>, ObservableValue<String>>() {
-
-                @Override
-                public ObservableValue<String> call(TableColumn.CellDataFeatures<Filmcategory, String> filmcategoryStringCellDataFeatures) {
-                    ActorfilmService actorfilmService = new ActorfilmService();
-                    String actorsNames = actorfilmService.getActorsNames(filmcategoryStringCellDataFeatures.getValue().getFilmId().getId());
-                    return new SimpleStringProperty(actorsNames);
-                }
-            });
-            idcinemaFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, Integer>, ObservableValue<Integer>>() {
-                @Override
-                public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Filmcategory, Integer> filmcategoryIntegerCellDataFeatures) {
-                    return new SimpleIntegerProperty(filmcategoryIntegerCellDataFeatures.getValue().getFilmId().getIdcinema()).asObject();
-                }
-            });
-            Delete_Column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, Button>, ObservableValue<Button>>() {
-                public ObservableValue<Button> call(TableColumn.CellDataFeatures<Filmcategory, Button> p) {
-                    // p.getValue() returns the Person instance for a particular TableView row
-                    Button button = new Button("add");
-                    button.setOnAction(new EventHandler<ActionEvent>() {
-                        @Override
-                        public void handle(ActionEvent event) {
-                            deleteFilm(p.getValue().getFilmId().getId());
-                        }
-                    });
-                    return new SimpleObjectProperty<Button>(button);
-                }
-            });
-            // Configurer la cellule de la colonne Logo pour afficher l'image
-            imageFilm_tableColumn.setCellValueFactory(cellData -> {
-                Film film = cellData.getValue().getFilmId();
-                ImageView imageView = new ImageView();
-                imageView.setFitWidth(100); // Réglez la largeur de l'image selon vos préférences
-                imageView.setFitHeight(50); // Réglez la hauteur de l'image selon vos préférences
-                try {
-                    Blob blob = film.getImage();
-                    if (blob != null) {
-                        Image image = new Image(blob.getBinaryStream());
-                        imageView.setImage(image);
-                    } else {
-                        // Afficher une image par défaut si le logo est null
-                        Image defaultImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("default_image.png")));
-                        imageView.setImage(defaultImage);
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                return new javafx.beans.property.SimpleObjectProperty<>(imageView);
-            });
+//            Delete_Column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, Button>, ObservableValue<Button>>() {
+//                public ObservableValue<Button> call(TableColumn.CellDataFeatures<Filmcategory, Button> p) {
+//                    // p.getValue() returns the Person instance for a particular TableView row
+//                    Button button = new Button("add");
+//                    button.setOnAction(new EventHandler<ActionEvent>() {
+//                        @Override
+//                        public void handle(ActionEvent event) {
+//                            deleteFilm(p.getValue().getFilmId().getId());
+//                        }
+//                    });
+//                    return new SimpleObjectProperty<Button>(button);
+//                }
+//            });
+//            // Configurer la cellule de la colonne Logo pour afficher l'image
+//            imageFilm_tableColumn.setCellValueFactory(cellData -> {
+//                Film film = cellData.getValue().getFilmId();
+//                ImageView imageView = new ImageView();
+//                imageView.setFitWidth(100); // Réglez la largeur de l'image selon vos préférences
+//                imageView.setFitHeight(50); // Réglez la hauteur de l'image selon vos préférences
+//                try {
+//                    Blob blob = film.getImage();
+//                    if (blob != null) {
+//                        Image image = new Image(blob.getBinaryStream());
+//                        imageView.setImage(image);
+//                    } else {
+//                        // Afficher une image par défaut si le logo est null
+//                        Image defaultImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("default_image.png")));
+//                        imageView.setImage(defaultImage);
+//                    }
+//                } catch (SQLException e) {
+//                    e.printStackTrace();
+//                }
+//                return new javafx.beans.property.SimpleObjectProperty<>(imageView);
+//            });
             FilmcategoryService filmcategoryService = new FilmcategoryService();
             CategoryService categoryService = new CategoryService();
 
@@ -335,6 +325,219 @@ public class FilmController {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    private void setupCellFactory() {
+        annederalisationFilm_tableColumn.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Integer>() {
+            @Override
+            public String toString(Integer object) {
+                System.out.println("error");
+                return object.toString();
+            }
+
+            @Override
+            public Integer fromString(String string) {
+                return Integer.parseInt(string);
+            }
+        }));
+        //idcategoryFilm_tableColumn.setCellFactory(ComboBoxTableCell.forTableColumn());
+
+        dureeFilm_tableColumn.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Time>() {
+            @Override
+            public String toString(Time time) {
+                return time.toString();
+            }
+
+            @Override
+            public Time fromString(String s) {
+                return Time.valueOf(s);
+            }
+        }));
+        nomFilm_tableColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+
+
+    }
+
+    private void setupCellValueFactory() {
+        annederalisationFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, Integer>, ObservableValue<Integer>>() {
+            @Override
+            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Filmcategory, Integer> filmcategoryIntegerCellDataFeatures) {
+                return new SimpleIntegerProperty(filmcategoryIntegerCellDataFeatures.getValue().getFilmId().getAnnederalisation()).asObject();
+            }
+        });
+        descriptionFilm_tableColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        idcategoryFilm_tableColumn.setCellValueFactory(new PropertyValueFactory<Filmcategory, CheckComboBox<String>>("idcategory"));
+        dureeFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, Time>, ObservableValue<Time>>() {
+            @Override
+            public ObservableValue<Time> call(TableColumn.CellDataFeatures<Filmcategory, Time> filmcategoryTimeCellDataFeatures) {
+                return new SimpleObjectProperty<Time>(filmcategoryTimeCellDataFeatures.getValue().getFilmId().getDuree());
+            }
+        });
+        imageFilm_tableColumn.setCellValueFactory(
+                new Callback<TableColumn.CellDataFeatures<Filmcategory, HBox>, ObservableValue<HBox>>() {
+                    @Override
+                    public ObservableValue<HBox> call(TableColumn.CellDataFeatures<Filmcategory, HBox> param) {
+                        HBox hBox = new HBox();
+                        try {
+                            ImageView imageView = new ImageView(
+                                    new Image(new ByteArrayInputStream(param.getValue().getFilmId().getImage().getBinaryStream().readAllBytes())));
+                            hBox.getChildren().add(imageView);
+                            imageView.setFitWidth(100);
+                            imageView.setFitHeight(50);
+                            hBox.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+                                @Override
+                                public void handle(MouseEvent event) {
+                                    try {
+                                        FileChooser fileChooser = new FileChooser();
+                                        fileChooser.getExtensionFilters().addAll(
+                                                new FileChooser.ExtensionFilter("PNG", "*.png"),
+                                                new FileChooser.ExtensionFilter("JPG", "*.jpg"));
+
+                                        File file = fileChooser.showOpenDialog(new Stage());
+                                        if (file != null) {
+                                            Image image = new Image(file.toURI().toURL().toString());
+                                            imageView.setImage(image);
+                                            hBox.getChildren().clear();
+                                            System.out.println(image);
+                                            hBox.getChildren().add(imageView);
+
+
+                                        }
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage());
+                                    }
+                                }
+                            });
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                        }
+                        return new SimpleObjectProperty<HBox>(hBox);
+                    }
+                });
+        dureeFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, Time>, ObservableValue<Time>>() {
+            @Override
+            public ObservableValue<Time> call(TableColumn.CellDataFeatures<Filmcategory, Time> filmcategoryTimeCellDataFeatures) {
+                return new SimpleObjectProperty<Time>(filmcategoryTimeCellDataFeatures.getValue().getFilmId().getDuree());
+            }
+        });
+        descriptionFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Filmcategory, String> filmcategoryStringCellDataFeatures) {
+                return new SimpleStringProperty(filmcategoryStringCellDataFeatures.getValue().getFilmId().getDescription());
+            }
+        });
+        annederalisationFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, Integer>, ObservableValue<Integer>>() {
+            @Override
+            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Filmcategory, Integer> filmcategoryIntegerCellDataFeatures) {
+                return new SimpleIntegerProperty(filmcategoryIntegerCellDataFeatures.getValue().getFilmId().getAnnederalisation()).asObject();
+            }
+        });
+        //idcategoryFilm_tableColumn.setCellValueFactory(new PropertyValueFactory<Film, String>("categoryNom"));
+        idcategoryFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, CheckComboBox<String>>, ObservableValue<CheckComboBox<String>>>() {
+            @Override
+            public ObservableValue<CheckComboBox<String>> call(TableColumn.CellDataFeatures<Filmcategory, CheckComboBox<String>> p) {
+                CheckComboBox<String> checkComboBox = new CheckComboBox<>();
+                List<String> l = new ArrayList<>();
+                CategoryService cs = new CategoryService();
+                for (Category c : cs.read())
+                    l.add(c.getNom());
+                checkComboBox.getItems().addAll(l);
+                List<String> ls = Stream.of(p.getValue().getCategoryId().getNom().split(", ")).toList();
+                for (String checkedString : ls)
+                    checkComboBox.getCheckModel().check(checkedString);
+                return new SimpleObjectProperty<CheckComboBox<String>>(checkComboBox);
+            }
+        });
+        idFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, Integer>, ObservableValue<Integer>>() {
+            @Override
+            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Filmcategory, Integer> filmcategoryIntegerCellDataFeatures) {
+                return new SimpleIntegerProperty(filmcategoryIntegerCellDataFeatures.getValue().getFilmId().getId()).asObject();
+            }
+        });
+        nomFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Filmcategory, String> filmcategoryStringCellDataFeatures) {
+
+                return new SimpleStringProperty(filmcategoryStringCellDataFeatures.getValue().getFilmId().getNom());
+            }
+        });
+        idacteurFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, String>, ObservableValue<String>>() {
+
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Filmcategory, String> filmcategoryStringCellDataFeatures) {
+                ActorfilmService actorfilmService = new ActorfilmService();
+                String actorsNames = actorfilmService.getActorsNames(filmcategoryStringCellDataFeatures.getValue().getFilmId().getId());
+                return new SimpleStringProperty(actorsNames);
+            }
+        });
+        idcinemaFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, Integer>, ObservableValue<Integer>>() {
+            @Override
+            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Filmcategory, Integer> filmcategoryIntegerCellDataFeatures) {
+                return new SimpleIntegerProperty(filmcategoryIntegerCellDataFeatures.getValue().getFilmId().getIdcinema()).asObject();
+            }
+        });
+    }
+
+    private void setupCellOnEditCommit() {
+        annederalisationFilm_tableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Filmcategory, Integer>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<Filmcategory, Integer> event) {
+                try {
+                    event.getTableView().getItems().get(
+                            event.getTablePosition().getRow()).getFilmId().setAnnederalisation(event.getNewValue());
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        });
+        nomFilm_tableColumn.setOnEditStart(new EventHandler<TableColumn.CellEditEvent<Filmcategory, String>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<Filmcategory, String> event) {
+                try {
+                    event.getTableView().getItems().get(
+                            event.getTablePosition().getRow()).getFilmId().setNom(event.getNewValue());
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        });
+        descriptionFilm_tableColumn.setOnEditStart(new EventHandler<TableColumn.CellEditEvent<Filmcategory, String>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<Filmcategory, String> event) {
+                try {
+                    event.getTableView().getItems().get(
+                            event.getTablePosition().getRow()).getFilmId().setDescription(event.getNewValue());
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        });
+        dureeFilm_tableColumn.setOnEditStart(new EventHandler<TableColumn.CellEditEvent<Filmcategory, Time>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<Filmcategory, Time> event) {
+                try {
+                    event.getTableView().getItems().get(
+                            event.getTablePosition().getRow()).getFilmId().setDuree(event.getNewValue());
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        });
+        imageFilm_tableColumn.setOnEditCommit(
+                new EventHandler<TableColumn.CellEditEvent<Filmcategory, HBox>>() {
+                    @Override
+                    public void handle(TableColumn.CellEditEvent<Filmcategory, HBox> event) {
+                        try {
+                            event.getTableView().getItems().get(
+                                    event.getTablePosition().getRow()).getFilmId().setImage(
+                                    (Blob) event.getNewValue().getChildren().get(0));
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                        }
+                    }
+                });
+
+
     }
 
     @FXML
