@@ -29,21 +29,24 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.util.StringConverter;
 import javafx.util.converter.IntegerStringConverter;
 
 import java.io.*;
 import java.net.URL;
 import java.sql.*;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class DashboardResponsableController implements Initializable {
@@ -193,7 +196,7 @@ public class DashboardResponsableController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        List<Cinema> acceptedCinemas = loadAcceptedCinemas();
+        HashSet<Cinema> acceptedCinemas = loadAcceptedCinemas();
 
         cinemaFormPane.setVisible(true);
         sessionFormPane.setVisible(false);
@@ -242,23 +245,43 @@ public class DashboardResponsableController implements Initializable {
         }
     }
 
-    private List<Cinema> loadAcceptedCinemas() {
+
+    private HashSet<Cinema> loadAcceptedCinemas() {
         CinemaService cinemaService = new CinemaService();
         List<Cinema> cinemas = cinemaService.read();
 
-        List<Cinema> acceptedCinemas = cinemas.stream()
+        List<Cinema> acceptedCinemasList = cinemas.stream()
                 .filter(cinema -> cinema.getStatut().equals("Acceptée"))
                 .collect(Collectors.toList());
 
-        if (acceptedCinemas.isEmpty()) {
+        if (acceptedCinemasList.isEmpty()) {
             showAlert("Aucun cinéma accepté n'est disponible.");
         }
 
-        for (Cinema cinema : acceptedCinemas) {
+        HashSet<Cinema> acceptedCinemasSet = new HashSet<>(acceptedCinemasList);
+
+        for (Cinema cinema : acceptedCinemasSet) {
             HBox cardContainer = createCinemaCard(cinema);
             cinemaFlowPane.getChildren().add(cardContainer);
         }
-        return acceptedCinemas;
+
+        return acceptedCinemasSet;
+    }
+
+    private HashSet<Cinema> chargerAcceptedCinemas() {
+        CinemaService cinemaService = new CinemaService();
+        List<Cinema> cinemas = cinemaService.read();
+
+        List<Cinema> acceptedCinemasList = cinemas.stream()
+                .filter(cinema -> cinema.getStatut().equals("Acceptée"))
+                .collect(Collectors.toList());
+
+        if (acceptedCinemasList.isEmpty()) {
+            showAlert("Aucun cinéma accepté n'est disponible.");
+        }
+
+        HashSet<Cinema> acceptedCinemasSet = new HashSet<>(acceptedCinemasList);
+        return acceptedCinemasSet;
     }
 
 
@@ -471,6 +494,298 @@ public class DashboardResponsableController implements Initializable {
                 seanceService.update(seance);
                 setText(newValue + " DT");
                 setGraphic(null);
+            }
+        });
+        colEndTime.setCellFactory(tc -> new TableCell<Seance, Time>() {
+
+            @Override
+            protected void updateItem(Time HF, boolean empty) {
+                super.updateItem(HF, empty);
+                if (empty || HF == null) {
+                    setText(null);
+                } else {
+                    setText(String.valueOf(HF));
+                }
+            }
+            @Override
+            public void startEdit() {
+                super.startEdit();
+                if (isEmpty()) {
+                    return;
+                }
+                TextField textField = new TextField(getItem().toString());
+                textField.setOnAction(event -> {
+                    commitEdit(Time.valueOf((textField.getText())));
+                });
+                setGraphic(textField);
+                setText(null);
+            }
+
+            @Override
+            public void cancelEdit() {
+                super.cancelEdit();
+                setText(String.valueOf(getItem()));
+                setGraphic(null);
+            }
+
+            @Override
+            public void commitEdit(Time newValue) {
+                super.commitEdit(newValue);
+                Seance seance = getTableView().getItems().get(getIndex());
+                seance.setHF(newValue);
+                SeanceService seanceService = new SeanceService();
+                seanceService.update(seance);
+                setText(String.valueOf(newValue));
+                setGraphic(null);
+            }
+        });
+        colDepartTime.setCellFactory(tc -> new TableCell<Seance, Time>() {
+
+            @Override
+            protected void updateItem(Time HD, boolean empty) {
+                super.updateItem(HD, empty);
+                if (empty || HD == null) {
+                    setText(null);
+                } else {
+                    setText(String.valueOf(HD));
+                }
+            }
+            @Override
+            public void startEdit() {
+                super.startEdit();
+                if (isEmpty()) {
+                    return;
+                }
+                TextField textField = new TextField(getItem().toString());
+                textField.setOnAction(event -> {
+                    commitEdit(Time.valueOf((textField.getText())));
+                });
+                setGraphic(textField);
+                setText(null);
+            }
+
+            @Override
+            public void cancelEdit() {
+                super.cancelEdit();
+                setText(String.valueOf(getItem()));
+                setGraphic(null);
+            }
+
+            @Override
+            public void commitEdit(Time newValue) {
+                super.commitEdit(newValue);
+                Seance seance = getTableView().getItems().get(getIndex());
+                seance.setHD(newValue);
+                SeanceService seanceService = new SeanceService();
+                seanceService.update(seance);
+                setText(String.valueOf(newValue));
+                setGraphic(null);
+            }
+        });
+
+        colDate.setCellFactory(tc -> new TableCell<Seance, Date>() {
+            @Override
+            protected void updateItem(Date date, boolean empty) {
+                super.updateItem(date, empty);
+                if (empty || date == null) {
+                    setText(null);
+                } else {
+                    setText(date.toString());
+                }
+
+                // Double clic détecté
+                setOnMouseClicked(event -> {
+                    if (event.getClickCount() == 2) {
+                        // Ouvrir un DatePicker
+                        DatePicker datePicker = new DatePicker();
+
+                        // Si la valeur de la cellule n'est pas vide, définissez la date sélectionnée dans le DatePicker
+                        if (!isEmpty() && getItem() != null) {
+                            datePicker.setValue(getItem().toLocalDate());
+                        }
+
+                        // Définir un EventHandler pour le changement de date dans le DatePicker
+                        datePicker.setOnAction(e -> {
+                            LocalDate selectedDate = datePicker.getValue();
+                            if (selectedDate != null) {
+                                Date newDate = Date.valueOf(selectedDate);
+                                commitEdit(newDate);
+                            }
+                        });
+
+                        // Afficher le DatePicker dans une fenêtre contextuelle
+                        StackPane root = new StackPane(datePicker);
+                        Stage stage = new Stage();
+                        stage.initModality(Modality.APPLICATION_MODAL);
+                        stage.setScene(new Scene(root));
+                        stage.show();
+                    }
+                });
+            }
+            @Override
+            public void commitEdit(Date newValue) {
+                super.commitEdit(newValue);
+                Seance seance = getTableView().getItems().get(getIndex());
+                seance.setDate(newValue);
+                SeanceService seanceService = new SeanceService();
+                seanceService.update(seance);
+                setText(String.valueOf(newValue));
+                setGraphic(null);
+            }
+        });
+        colCinema.setCellFactory(tc -> new TableCell<Seance, String>() {
+            @Override
+            protected void updateItem(String cinemaName, boolean empty) {
+                super.updateItem(cinemaName, empty);
+                if (empty || cinemaName == null) {
+                    setText(null);
+                } else {
+                    setText(cinemaName);
+                }
+
+                // Double clic détecté
+                setOnMouseClicked(event -> {
+                    if (event.getClickCount() == 2) {
+                        // Créer un ComboBox contenant les noms des cinémas acceptés
+                        ComboBox<String> cinemaComboBox = new ComboBox<>();
+                        HashSet<Cinema> acceptedCinema = chargerAcceptedCinemas();
+                        for (Cinema cinema : acceptedCinema) {
+                            cinemaComboBox.getItems().add(cinema.getNom());
+                        }
+
+                        // Sélectionner le nom du cinéma correspondant à la valeur actuelle de la cellule
+                        cinemaComboBox.setValue(cinemaName);
+
+                        // Définir un EventHandler pour le changement de sélection dans le ComboBox
+                        cinemaComboBox.setOnAction(e -> {
+                            String selectedCinemaName = cinemaComboBox.getValue();
+                            // Mettre à jour la valeur de la cellule dans le TableView
+                            commitEdit(selectedCinemaName);
+                            // Mettre à jour la base de données en utilisant la méthode update de seanceService
+                            Seance seance = getTableView().getItems().get(getIndex());
+                            for (Cinema cinema : acceptedCinema) {
+                                if (cinema.getNom().equals(selectedCinemaName)) {
+                                    seance.setCinema(cinema);
+                                    break;
+                                }
+                            }
+                            SeanceService seanceService = new SeanceService();
+                            seanceService.update(seance);
+                        });
+
+                        // Afficher le ComboBox dans la cellule
+                        setGraphic(cinemaComboBox);
+                    }
+                });
+            }
+        });
+        colMovieRoom.setCellFactory(tc -> new TableCell<Seance, String>() {
+            @Override
+            protected void updateItem(String salleName, boolean empty) {
+                super.updateItem(salleName, empty);
+                if (empty || salleName == null) {
+                    setText(null);
+                } else {
+                    setText(salleName);
+                }
+
+
+                // Double clic détecté
+                setOnMouseClicked(event -> {
+                    if (event.getClickCount() == 2) {
+                        // Créer un ComboBox contenant les noms des salles associées au cinéma sélectionné
+                        ComboBox<String> salleComboBox = new ComboBox<>();
+                        Seance seance = getTableView().getItems().get(getIndex());
+                        Cinema selectedCinema = seance.getCinema();
+
+                        // Récupérer les salles associées au cinéma sélectionné
+                        List<Salle> associatedSalles = loadAssociatedSalles(selectedCinema.getId_cinema());
+                        for (Salle salle : associatedSalles) {
+                            salleComboBox.getItems().add(salle.getNom_salle());
+                        }
+
+                        // Sélectionner le nom de la salle correspondant à la valeur actuelle de la cellule
+                        salleComboBox.setValue(salleName);
+
+                        // Définir un EventHandler pour le changement de sélection dans le ComboBox
+                        salleComboBox.setOnAction(e -> {
+                            String selectedSalleName = salleComboBox.getValue();
+                            // Mettre à jour la valeur de la cellule dans le TableView
+                            commitEdit(selectedSalleName);
+                            // Mettre à jour la base de données en utilisant la méthode update de seanceService
+                            for (Salle salle : associatedSalles) {
+                                if (salle.getNom_salle().equals(selectedSalleName)) {
+                                    seance.setSalle(salle);
+                                    break;
+                                }
+                            }
+                            SeanceService seanceService = new SeanceService();
+                            seanceService.update(seance);
+                        });
+
+                        // Afficher le ComboBox dans la cellule
+                        setGraphic(salleComboBox);
+                    }
+                });
+            }
+            private List<Salle> loadAssociatedSalles(int idCinema) {
+                SalleService salleService = new SalleService();
+                return salleService.readRoomsForCinema(idCinema);
+            }
+        });
+
+        colMovie.setCellFactory(tc -> new TableCell<Seance, String>() {
+            @Override
+            protected void updateItem(String filmName, boolean empty) {
+                super.updateItem(filmName, empty);
+                if (empty || filmName == null) {
+                    setText(null);
+                } else {
+                    setText(filmName);
+                }
+
+
+                // Double clic détecté
+                setOnMouseClicked(event -> {
+                    if (event.getClickCount() == 2) {
+                        // Créer un ComboBox contenant les noms des films associées au cinéma sélectionné
+                        ComboBox<String> filmComboBox = new ComboBox<>();
+                        Seance seance = getTableView().getItems().get(getIndex());
+                        Cinema selectedCinema = seance.getCinema();
+
+                        // Récupérer les films associées au cinéma sélectionné
+                        List<Film> associatedFilms = loadAssociatedFilms(selectedCinema.getId_cinema());
+                        for (Film film : associatedFilms) {
+                            filmComboBox.getItems().add(film.getNom());
+                        }
+
+                        // Sélectionner le nom de la salle correspondant à la valeur actuelle de la cellule
+                        filmComboBox.setValue(filmName);
+
+                        // Définir un EventHandler pour le changement de sélection dans le ComboBox
+                        filmComboBox.setOnAction(e -> {
+                            String selectedFilmName = filmComboBox.getValue();
+                            // Mettre à jour la valeur de la cellule dans le TableView
+                            commitEdit(selectedFilmName);
+                            // Mettre à jour la base de données en utilisant la méthode update de seanceService
+                            for (Film film : associatedFilms) {
+                                if (film.getNom().equals(selectedFilmName)) {
+                                    seance.setFilm(film);
+                                    break;
+                                }
+                            }
+                            SeanceService seanceService = new SeanceService();
+                            seanceService.update(seance);
+                        });
+
+                        // Afficher le ComboBox dans la cellule
+                        setGraphic(filmComboBox);
+                    }
+                });
+            }
+            private List<Film> loadAssociatedFilms(int idCinema) {
+                FilmService filmService = new FilmService();
+                return filmService.readMoviesForCinema(idCinema);
             }
         });
         loadSeances();
