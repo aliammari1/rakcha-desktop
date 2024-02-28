@@ -1,5 +1,6 @@
 package com.esprit.services;
 
+import com.esprit.models.Film;
 import com.esprit.models.Salle;
 import com.esprit.utils.DataSource;
 
@@ -70,6 +71,60 @@ public class SalleService implements IService<Salle> {
         }
 
         return salles;
+    }
+
+    public Salle getSalle(int salle_id) {
+
+        Salle salle = null;
+
+        String req = "SELECT * from salle where id_salle = ?";
+        try {
+            PreparedStatement pst = connection.prepareStatement(req);
+            pst.setInt(1, salle_id);
+            ResultSet rs = pst.executeQuery();
+            rs.next();
+            salle = new Salle(rs.getInt("id_salle"), rs.getInt("id_cinema"), rs.getInt("nb_places"), rs.getString("nom_salle")) ;
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return salle;
+    }
+
+    public Salle getSalleByName(String nom_salle) {
+
+        Salle salle = null;
+
+        String req = "SELECT * from salle where nom_salle = ?";
+        try {
+            PreparedStatement pst = connection.prepareStatement(req);
+            pst.setString(1, nom_salle);
+            ResultSet rs = pst.executeQuery();
+            rs.next();
+            salle = new Salle(rs.getInt("id_salle"), rs.getInt("id_cinema"), rs.getInt("nb_places"), rs.getString("nom_salle")) ;
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return salle;
+    }
+
+    public List<Salle> readRoomsForCinema(int cinemaId) {
+        List<Salle> roomsForCinema = new ArrayList<>();
+        String query = "SELECT * FROM salle WHERE id_cinema = ?";
+        try (PreparedStatement pst = connection.prepareStatement(query)) {
+            pst.setInt(1, cinemaId);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                Salle salle = new Salle(rs.getInt("id_salle"), rs.getInt("id_cinema"), rs.getInt("nb_places"), rs.getString("nom_salle")) ;
+                roomsForCinema.add(salle);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return roomsForCinema;
     }
 
 }

@@ -112,3 +112,32 @@
     -fx-border-radius: 5px;
     -fx-background-radius: 5px;
 }
+.combo-box-red {
+    -fx-background-color: #fff;
+    -fx-border-color: #800000;
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+    -fx-border-width: 2px;
+}
+
+.combo-box-red .arrow {
+    -fx-background-color: #800000;
+}
+
+.date-picker-red {
+    -fx-background-color: #fff;
+    -fx-border-color: #800000;
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+    -fx-border-width: 2px;
+}
+
+.date-picker-red .arrow-button {
+    -fx-background-radius: 20px;
+    -fx-color: #800000;
+}
+
+.date-picker-red .text-field {
+    -fx-text-fill: #000000;
+    -fx-background-radius: 20px; /* Rayon de fond arrondi */
+}
