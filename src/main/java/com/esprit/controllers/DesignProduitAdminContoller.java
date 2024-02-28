@@ -4,6 +4,7 @@ import com.esprit.models.Produit;
 import com.esprit.services.CategorieService;
 import com.esprit.services.ProduitService;
 import com.esprit.utils.DataSource;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -25,6 +26,8 @@ import java.io.*;
 import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -97,17 +100,26 @@ public class DesignProduitAdminContoller {
     @FXML
     private TableColumn<Produit, Void> deleteColumn;
 
-
+    private List<Produit> l1=new ArrayList<>();
 
     @FXML
     void initialize() {
+        ProduitService produitService=new ProduitService();
+        l1=produitService.read();
+        SearchBar.textProperty().addListener((ChangeListener<String>) (observable, oldValue, newValue) -> {
+            List<Produit> pro;
+            pro=rechercher(l1,newValue);
+            afficher_produit(pro);
+        });
+
+
         CategorieService cs = new CategorieService();
 
         for (Categorie c : cs.read()) {
             nomC_comboBox.getItems().add(c.getNom_categorie());
         }
         //searchFilter();
-        afficher_produit();
+        afficher_produit(l1);
         initDeleteColumn();
 
     }
@@ -162,7 +174,7 @@ public class DesignProduitAdminContoller {
                 alert.setTitle("Produit ajoutée");
                 alert.setContentText("Produit ajoutée !");
                 alert.show();
-                afficher_produit();
+                afficher_produit(l1);
             } catch (SQLException | IOException e) {
                 showAlert("Erreur lors de l'ajout du produit : " + e.getMessage());
             } finally {
@@ -177,45 +189,12 @@ public class DesignProduitAdminContoller {
         } else {
             showAlert("Veuillez sélectionner une image d'abord !");
         }
-        afficher_produit();
+        afficher_produit(l1);
     }
 
 
 
-   /* @FXML
-    void searchFilter() {
-        ObservableList<Produit> list = FXCollections.observableArrayList();
-        // Wrap the ObservableList in a FilteredList
-        FilteredList<Produit> filteredData = new FilteredList<>(list, p -> true);
 
-        // Add a listener to the search bar text property to update the filteredData when the text changes
-        SearchBar.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredData.setPredicate(produit -> {
-                if (newValue == null || newValue.isEmpty()) {
-                    return true; // Show all items when the search bar is empty
-                }
-
-                String lowerCaseFilter = newValue.toLowerCase();
-
-                // Customize the conditions for searching based on your requirements
-                return produit.getNom().toLowerCase().contains(lowerCaseFilter)
-                        || produit.getPrix().toLowerCase().contains(lowerCaseFilter)
-                        || produit.getDescription().toLowerCase().contains(lowerCaseFilter)
-                        || produit.getNom_categorie().toLowerCase().contains(lowerCaseFilter);
-            });
-        });
-
-        // Wrap the FilteredList in a SortedList
-        SortedList<Produit> sortedData = new SortedList<>(filteredData);
-
-        // Bind the SortedList comparator to the TableView comparator
-        sortedData.comparatorProperty().bind(Produit_tableview.comparatorProperty());
-
-        // Set the TableView items to the sorted and filtered list
-        Produit_tableview.setItems(sortedData);
-
-
-    }*/
 
     @FXML
     void modifier_produit(Produit produit) {
@@ -249,10 +228,11 @@ public class DesignProduitAdminContoller {
             alert.setContentText("Produit supprimé !");
             alert.show();
 
-            // Rafraîchir la TableView après la suppression
+
 
         }
-afficher_produit();
+        // Rafraîchir la TableView après la suppression
+afficher_produit(l1);
     }
 
     private void initDeleteColumn() {
@@ -296,8 +276,10 @@ afficher_produit();
     }
 
 
-    @FXML
-    void afficher_produit() {
+
+    void afficher_produit(List<Produit> listproduit){
+        Produit_tableview.getItems().clear();
+
 
         // Créer un nouveau ComboBox
         ImageView imageView = new ImageView();
@@ -332,7 +314,6 @@ afficher_produit();
                         modifier_produit(produit);
                         newComboBox.getStyleClass().add("combo-box-red");
                     });
-
                 }
             }
         });
@@ -407,7 +388,7 @@ afficher_produit();
                 setOnMouseClicked(event -> {
                     if (!isEmpty()) {
                         changerImage(produit);
-                        afficher_produit();
+                        afficher_produit(l1);
                     }
                 });
             }
@@ -431,11 +412,6 @@ afficher_produit();
             }
         });
 
-        // Chargement des données depuis la base de données
-        ObservableList<Produit> list = FXCollections.observableArrayList();
-        ProduitService ps = new ProduitService();
-        list.addAll(ps.read());
-        Produit_tableview.setItems(list);
 
         // Activer l'édition en cliquant sur une ligne
         Produit_tableview.setEditable(true);
@@ -452,9 +428,9 @@ afficher_produit();
 
         // Activer la sélection de cellules
         Produit_tableview.getSelectionModel().setCellSelectionEnabled(true);
-
-
+        Produit_tableview.getItems().addAll(listproduit);
     }
+
     // Méthode pour changer l'image
     private void changerImage(Produit produit) {
          FileChooser fileChooser = new FileChooser();
@@ -502,11 +478,23 @@ afficher_produit();
         // Créer une nouvelle fenêtre (stage) et y attacher la scène
         Stage stage = new Stage();
         stage.setScene(scene);
+        stage.setTitle("Gestion des categories");
         stage.show();
 
     }
 
+    @FXML
+    public static List<Produit> rechercher(List<Produit> liste, String recherche) {
+        List<Produit> resultats = new ArrayList<>();
 
+        for (Produit element : liste) {
+            if (element.getNom() != null && element.getNom().contains(recherche)) {
+                resultats.add(element);
+            }
+        }
+
+        return resultats;
+    }
 
 
 

@@ -36,6 +36,7 @@
                   <FontAwesomeIconView fill="#ebe5e5" glyphName="TV" layoutX="18.0" layoutY="269.0" size="30" />
                </children>
             </AnchorPane>
-         </children></FlowPane>
+         </children>
+      </FlowPane>
    </children>
 </AnchorPane>
