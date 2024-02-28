@@ -110,7 +110,7 @@
          </children>
       </AnchorPane>
       <Button layoutX="1052.0" layoutY="210.0" mnemonicParsing="false" onAction="#GestionCategorie" styleClass="navig-button" stylesheets="@Dashbord.css" text=" Category Management" />
-      <TextField fx:id="SearchBar" layoutX="940.0" layoutY="31.0" prefHeight="25.0" prefWidth="188.0" stylesheets="@Dashbord.css" />
+      <TextField fx:id="SearchBar" layoutX="940.0" layoutY="34.0" prefHeight="25.0" prefWidth="188.0" stylesheets="@Dashbord.css" />
 
    </children>
 </AnchorPane>

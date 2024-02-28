@@ -1,8 +1,10 @@
 package com.esprit.controllers;
 import com.esprit.models.Categorie;
 
+
 import com.esprit.services.CategorieService;
 
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,12 +16,12 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.io.IOException;
-import java.sql.Blob;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DesignCategorieAdminController {
 
@@ -45,10 +47,12 @@ public class DesignCategorieAdminController {
     @FXML
     private TableColumn<Categorie, String> description_tableC;
 
+    private List<Categorie> l1=new ArrayList<>();
+
     @FXML
     void GestionCategorie(ActionEvent event) throws IOException {
         // Charger la nouvelle interface ListCinemaAdmin.fxml
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignProduitAdmin.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignCategorieAdmin.fxml"));
         Parent root = loader.load();
 
         // Créer une nouvelle scène avec la nouvelle interface
@@ -57,6 +61,7 @@ public class DesignCategorieAdminController {
         // Créer une nouvelle fenêtre (stage) et y attacher la scène
         Stage stage = new Stage();
         stage.setScene(scene);
+        stage.setTitle("GGestion des produits");
         stage.show();
 
     }
@@ -64,7 +69,15 @@ public class DesignCategorieAdminController {
 
     @FXML
     void initialize(){
-        afficher_categorie();
+
+        CategorieService categorieservice=new CategorieService();
+        l1=categorieservice.read();
+        SearchBar.textProperty().addListener((ChangeListener<String>) (observable, oldValue, newValue) -> {
+            List<Categorie> cat;
+            cat=recherchercat(l1,newValue);
+            afficher_categorie(cat);
+        });
+        afficher_categorie(l1);
         initDeleteColumn();
     }
 
@@ -106,7 +119,7 @@ public class DesignCategorieAdminController {
             alert.show();
 
             // Rafraîchir la TableView après la suppression
-            afficher_categorie();
+            afficher_categorie(l1);
         }
 
     }
@@ -168,7 +181,8 @@ public class DesignCategorieAdminController {
 
 
     @FXML
-    void afficher_categorie() {
+    void afficher_categorie(List<Categorie> listcategorie){
+        categorie_tableview.getItems().clear();
 
 
         nomC_tableC.setCellValueFactory(new PropertyValueFactory<Categorie,String>("nom_categorie"));
@@ -188,11 +202,6 @@ public class DesignCategorieAdminController {
         });
 
 
-        ObservableList<Categorie> list = FXCollections.observableArrayList();
-        CategorieService cs = new CategorieService();
-        list.addAll(cs.read());
-        categorie_tableview.setItems(list);
-
         // Activer l'édition en cliquant sur une ligne
         categorie_tableview.setEditable(true);
 
@@ -208,9 +217,23 @@ public class DesignCategorieAdminController {
 
         // Activer la sélection de cellules
         categorie_tableview.getSelectionModel().setCellSelectionEnabled(true);
+        categorie_tableview.getItems().addAll(listcategorie);
 
 
     }
+    @FXML
+    public static List<Categorie> recherchercat(List<Categorie> liste, String recherche) {
+        List<Categorie> resultats = new ArrayList<>();
+
+        for (Categorie element : liste) {
+            if (element.getNom_categorie() != null && element.getNom_categorie().contains(recherche)) {
+                resultats.add(element);
+            }
+        }
+
+        return resultats;
+    }
+
 
 
 }

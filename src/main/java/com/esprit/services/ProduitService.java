@@ -100,4 +100,40 @@ public class ProduitService  implements IService<Produit>{
         }
 
     }
+
+
+    public Produit getProduitById(int produitId) {
+        Produit produit = null;
+
+        String req = "SELECT produit.*, categorie_produit.nom_categorie FROM produit JOIN categorie_produit ON produit.id_categorieProduit = categorie_produit.id_categorie WHERE id_produit = ?";
+        try {
+            PreparedStatement pst = connection.prepareStatement(req);
+            pst.setInt(1, produitId);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                CategorieService cs = new CategorieService();
+
+                produit = new Produit(
+                        rs.getInt("id_produit"),
+                        rs.getString("nom"),
+                        rs.getString("prix"),
+                        rs.getBlob("image"),
+                        rs.getString("description"),
+                        cs.getCategorie(rs.getInt("id_categorieProduit")),
+                        rs.getInt("quantiteP")
+                );
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return produit;
+    }
 }
+
+
+
+
+
