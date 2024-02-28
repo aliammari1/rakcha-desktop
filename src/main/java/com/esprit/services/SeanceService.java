@@ -87,7 +87,7 @@ public class SeanceService implements IService<Seance> {
             FilmService fs = new FilmService();
             int i = 0;
             while (rs.next()) {
-                seances.add(new Seance(rs.getInt("id_seance"), fs.getFilm(rs.getInt("film_id")), ss.getSalle(rs.getInt("salle_id")), rs.getTime("HD"), rs.getTime("HF"), rs.getDate("date"), cs.getCinema(rs.getInt("cinema_id")), rs.getInt("prix")));
+                seances.add(new Seance(rs.getInt("id_seance"), fs.getFilm(rs.getInt("id_film")), ss.getSalle(rs.getInt("id_salle")), rs.getTime("HD"), rs.getTime("HF"), rs.getDate("date"), cs.getCinema(rs.getInt("id_cinema")), rs.getInt("prix")));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());

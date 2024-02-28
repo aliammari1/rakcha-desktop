@@ -5,6 +5,8 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -123,5 +125,17 @@
             <Button layoutX="130.0" layoutY="555.0" mnemonicParsing="false" onAction="#addSeance" prefHeight="47.0" prefWidth="122.0" styleClass="instert-btn" text="ADD" />
          </children>
       </AnchorPane>
+      <TableView fx:id="SessionTableView" layoutX="640.0" layoutY="36.0" prefHeight="362.0" prefWidth="625.0" stylesheets="@dashboard.css">
+        <columns>
+          <TableColumn fx:id="colMovie" prefWidth="64.00006103515625" text="Movie" />
+          <TableColumn fx:id="colCinema" prefWidth="65.5999755859375" text="Cinema" />
+            <TableColumn fx:id="colMovieRoom" prefWidth="88.800048828125" text="Movie Room" />
+            <TableColumn fx:id="colDate" prefWidth="72.79998779296875" text="Date" />
+            <TableColumn fx:id="colDepartTime" prefWidth="120.00006103515625" text="Departure Time" />
+            <TableColumn fx:id="colEndTime" prefWidth="77.5999755859375" text="End Time" />
+            <TableColumn fx:id="colPrice" prefWidth="56.800048828125" text="Price" />
+            <TableColumn fx:id="colAction" prefWidth="77.5999755859375" text="Action" />
+        </columns>
+      </TableView>
    </children>
 </AnchorPane>
