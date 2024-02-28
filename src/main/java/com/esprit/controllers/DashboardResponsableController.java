@@ -10,7 +10,10 @@ import com.esprit.services.SalleService;
 import com.esprit.services.SeanceService;
 import com.esprit.utils.DataSource;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +21,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -29,6 +34,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Callback;
+import javafx.util.converter.IntegerStringConverter;
 
 import java.io.*;
 import java.net.URL;
@@ -89,7 +96,31 @@ public class DashboardResponsableController implements Initializable {
     private TextField tfPrice;
 
     @FXML
-    private Button addButton;
+    private TableView<Seance> SessionTableView;
+
+    @FXML
+    private TableColumn<Seance,Void> colAction;
+
+    @FXML
+    private TableColumn<Seance, String> colCinema;
+
+    @FXML
+    private TableColumn<Seance, Date> colDate;
+
+    @FXML
+    private TableColumn<Seance, Time> colDepartTime;
+
+    @FXML
+    private TableColumn<Seance, Time> colEndTime;
+
+    @FXML
+    private TableColumn<Seance, String> colMovie;
+
+    @FXML
+    private TableColumn<Seance, String> colMovieRoom;
+
+    @FXML
+    private TableColumn<Seance, Integer> colPrice;
 
 
     @FXML
@@ -167,6 +198,7 @@ public class DashboardResponsableController implements Initializable {
         cinemaFormPane.setVisible(true);
         sessionFormPane.setVisible(false);
         cinemaListPane.setVisible(true);
+        SessionTableView.setVisible(false);
 
         for (Cinema c : acceptedCinemas) {
             comboCinema.getItems().add(c.getNom());
@@ -193,24 +225,18 @@ public class DashboardResponsableController implements Initializable {
 
 
     private void loadMoviesForCinema(int cinemaId) {
-        // Effacer la liste actuelle de films
         comboMovie.getItems().clear();
-        // Charger les films en fonction de l'ID du cinéma
         FilmService fs = new FilmService();
         List<Film> moviesForCinema = fs.readMoviesForCinema(cinemaId);
-        // Ajouter les films à la liste des films
         for (Film f : moviesForCinema) {
             comboMovie.getItems().add(f.getNom());
         }
     }
 
     private void loadRoomsForCinema(int cinemaId) {
-        // Effacer la liste actuelle des salles
         comboRoom.getItems().clear();
-        // Charger les salles en fonction de l'ID du cinéma
         SalleService ss = new SalleService();
         List<Salle> roomsForCinema = ss.readRoomsForCinema(cinemaId);
-        // Ajouter les salles à la liste des salles
         for (Salle s : roomsForCinema) {
             comboRoom.getItems().add(s.getNom_salle());
         }
@@ -354,14 +380,101 @@ public class DashboardResponsableController implements Initializable {
         cinemaFormPane.setVisible(true);
         sessionFormPane.setVisible(false);
         cinemaListPane.setVisible(true);
+        SessionTableView.setVisible(false);
+
     }
 
     @FXML
     private void showSessionForm() {
-        // Afficher le formulaire d'ajout de session
         cinemaFormPane.setVisible(false);
         sessionFormPane.setVisible(true);
         cinemaListPane.setVisible(false);
+        SessionTableView.setVisible(true);
+        colMovie.setCellValueFactory(new PropertyValueFactory<>("nom_film"));
+        colCinema.setCellValueFactory(new PropertyValueFactory<>("nom_cinema"));
+        colMovieRoom.setCellValueFactory(new PropertyValueFactory<>("nom_salle"));
+        colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
+        colDepartTime.setCellValueFactory(new PropertyValueFactory<>("HD"));
+        colEndTime.setCellValueFactory(new PropertyValueFactory<>("HF"));
+        colPrice.setCellValueFactory(new PropertyValueFactory<>("prix"));
+        colAction.setCellFactory(new Callback<TableColumn<Seance, Void>, TableCell<Seance, Void>>() {
+            @Override
+            public TableCell<Seance, Void> call(TableColumn<Seance, Void> param) {
+                return new TableCell<Seance,Void>() {
+                    private final Button deleteButton = new Button("Delete");
+
+                    {
+                        deleteButton.getStyleClass().add("delete-btn");
+                        deleteButton.setOnAction(event -> {
+                            Seance seance = getTableView().getItems().get(getIndex());
+                            SeanceService seanceService = new SeanceService();
+                            seanceService.delete(seance);
+                            getTableView().getItems().remove(seance);
+                        });
+                    }
+
+
+                    @Override
+                    protected void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            // Afficher les boutons dans la cellule de la colonne Action
+                            setGraphic(new HBox(deleteButton));
+                        }
+                    }
+                };
+            }
+        });
+
+        SessionTableView.setEditable(true);
+
+        colPrice.setCellFactory(tc -> new TableCell<Seance, Integer>() {
+            @Override
+            protected void updateItem(Integer prix, boolean empty) {
+                super.updateItem(prix, empty);
+                if (empty || prix == null) {
+                    setText(null);
+                } else {
+                    setText(prix + " DT");
+                }
+            }
+
+            @Override
+            public void startEdit() {
+                super.startEdit();
+                if (isEmpty()) {
+                    return;
+                }
+                TextField textField = new TextField(getItem().toString());
+                textField.setOnAction(event -> {
+                    commitEdit(Integer.parseInt(textField.getText()));
+                });
+                setGraphic(textField);
+                setText(null);
+            }
+
+            @Override
+            public void cancelEdit() {
+                super.cancelEdit();
+                setText(getItem() + " DT");
+                setGraphic(null);
+            }
+
+            @Override
+            public void commitEdit(Integer newValue) {
+                super.commitEdit(newValue);
+                Seance seance = getTableView().getItems().get(getIndex());
+                seance.setPrix(newValue);
+                SeanceService seanceService = new SeanceService();
+                seanceService.update(seance);
+                setText(newValue + " DT");
+                setGraphic(null);
+            }
+        });
+        loadSeances();
+
     }
 
     @FXML
@@ -376,12 +489,10 @@ public class DashboardResponsableController implements Initializable {
 
         if (selectedCinemaName == null || selectedFilmName == null || selectedRoomName == null || selectedDate == null ||
                 departureTimeText.isEmpty() || endTimeText.isEmpty() || priceText.isEmpty()) {
-            // Gérer le cas où l'un des champs est vide
             System.out.println("Veuillez remplir tous les champs.");
             return;
         }
 
-        // Récupérer les objets correspondants aux noms sélectionnés
         CinemaService cinemaService = new CinemaService();
         Cinema selectedCinema = cinemaService.getCinemaByName(selectedCinemaName);
 
@@ -391,25 +502,29 @@ public class DashboardResponsableController implements Initializable {
         SalleService salleService = new SalleService();
         Salle selectedRoom = salleService.getSalleByName(selectedRoomName);
 
-        // Convertir les textes en objet Time pour l'heure de début et de fin
         Time departureTime = Time.valueOf(LocalTime.parse(departureTimeText));
         Time endTime = Time.valueOf(LocalTime.parse(endTimeText));
 
-        // Convertir la date sélectionnée en objet Date SQL
         Date date = Date.valueOf(selectedDate);
 
-        // Convertir le prix en entier
         int price = Integer.parseInt(priceText);
 
-        // Créer une nouvelle instance de séance avec les données saisies
         Seance newSeance = new Seance(selectedFilm, selectedRoom, departureTime, endTime, date, selectedCinema, price);
 
-        // Appeler le service pour ajouter la séance à la base de données
         SeanceService seanceService = new SeanceService();
         seanceService.create(newSeance);
 
-        // Afficher un message de succès
         System.out.println("Séance ajoutée avec succès !");
+        loadSeances();
+    }
+
+    private void loadSeances() {
+        SeanceService seanceService = new SeanceService();
+        List<Seance> seances = seanceService.read();
+
+        ObservableList<Seance> seanceObservableList = FXCollections.observableArrayList(seances);
+
+        SessionTableView.setItems(seanceObservableList);
     }
 
 
