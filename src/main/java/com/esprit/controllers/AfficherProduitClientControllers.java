@@ -1,4 +1,5 @@
 package com.esprit.controllers;
+
 import com.esprit.models.Produit;
 import com.esprit.services.ProduitService;
 import javafx.fxml.FXML;
@@ -9,22 +10,21 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Spinner;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.fxml.FXML;
 
-import java.awt.*;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Blob;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.scene.text.Font;
 
 public class AfficherProduitClientControllers implements Initializable  {
 
@@ -43,37 +43,38 @@ public class AfficherProduitClientControllers implements Initializable  {
     List<Produit>Produits =produitService.read();
     // Créer une carte pour chaque produit et l'ajouter à la FlowPane
     for (Produit produit : Produits){
-        AnchorPane card = createProduitCard(produit);
-        produitFlowPane.getChildren().add(card);
+        //VBox card = createProduitCard(produit);
+        VBox cardContainer = createProduitCard(produit);
+
+        produitFlowPane.getChildren().add(cardContainer);
     }
 }
 
-    private AnchorPane createProduitCard (Produit Produit) {
+    private VBox createProduitCard (Produit Produit) {
         // Créer une carte pour le produit avec ses informations
+
+        VBox cardContainer = new VBox();
+        cardContainer.setStyle("-fx-padding: 110px 0 0  50px;"); // Ajout de remplissage à gauche pour le décalage
+
         AnchorPane card = new AnchorPane();
-
-
-        // Nom du Produit
-        Label nameLabel = new Label(Produit.getNom());
-        nameLabel.setLayoutX(10);
-        nameLabel.setLayoutY(10);
-        nameLabel.setFont(Font.font("Arial", 16)); // Définir la police et la taille
-        nameLabel.setStyle("-fx-text-fill: #000066;"); // Définir la couleur du texte
-        card.getChildren().add(nameLabel);
-
-        // Prix du Produit
-        Label priceLabel = new Label(" " + Produit.getPrix()+" DT");
-        priceLabel.setLayoutX(10);
-        priceLabel.setLayoutY(40);
-        priceLabel.setFont(Font.font("Helvetica", 12)); // Définir la police et la taille
-        card.getChildren().add(priceLabel);
+        card.setStyle("-fx-padding: 110 0 0 50;\" +\n" +
+                "                \"-fx-background-color: #ffffff; \" +\n" +
+                "                \"-fx-border-radius: 5px; \" +\n" +
+                "                \"-fx-border-color: #000000; \" +\n" +
+                "                \"-fx-background-radius: 5px; \" +\n" +
+                "                \"-fx-border-width: 1px; \" +\n" +
+                "                \"-fx-pref-width: 50px;\" +\n" +
+                "                \"-fx-pref-height: 10px;\"");
+        card.setPrefWidth(100);
 
         // Image du Produit
         ImageView imageView = new ImageView();
         imageView.setLayoutX(10);
-        imageView.setLayoutY(60);
+        imageView.setLayoutY(140);
         imageView.setFitWidth(200);
         imageView.setFitHeight(150);
+
+
         try {
             Blob blob = Produit.getImage();
             if (blob != null) {
@@ -88,21 +89,38 @@ public class AfficherProduitClientControllers implements Initializable  {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        card.getChildren().add(imageView);
 
-        // Spinner pour la quantité
+
+
+        // Prix du Produit
+        Label priceLabel = new Label(" " + Produit.getPrix()+" DT");
+        priceLabel.setLayoutX(10);
+        priceLabel.setLayoutY(300);
+        priceLabel.setFont(Font.font("Helvetica", 16)); // Définir la police et la taille
+
+
+
+        // Nom du Produit
+        Label nameLabel = new Label(Produit.getNom());
+        nameLabel.setLayoutX(70);
+        nameLabel.setLayoutY(310);
+        nameLabel.setFont(Font.font("Arial", 12)); // Définir la police et la taille
+        nameLabel.setStyle("-fx-text-fill: black;"); // Définir la couleur du texte
+
+
+       /* // Spinner pour la quantité
         Spinner<Integer> quantitySpinner = new Spinner<>(1, 100, 1); // Valeurs min, max, valeur initiale
         quantitySpinner.setLayoutX(10);
-        quantitySpinner.setLayoutY(220);
+        quantitySpinner.setLayoutY(300);
         quantitySpinner.setPrefWidth(70); // Largeur souhaitée
         quantitySpinner.setPrefHeight(25); // Hauteur souhaitée
 
-        card.getChildren().add(quantitySpinner);
+        card.getChildren().add(quantitySpinner);*/
 
         // Bouton Ajouter au Panier
         Button addToCartButton = new Button("Ajouter au panier");
         addToCartButton.setLayoutX(10);
-        addToCartButton.setLayoutY(260);
+        addToCartButton.setLayoutY(330);
         addToCartButton.setStyle("-fx-background-color: #C62828; -fx-text-fill: White;"); // Style du bouton
         addToCartButton.setOnAction(event -> {
             // Récupérer la quantité sélectionnée
@@ -118,7 +136,12 @@ public class AfficherProduitClientControllers implements Initializable  {
             // Par exemple, afficher un message de confirmation
             afficherMessageConfirmation("Produit ajouté à la commande!");*/
         });
-        card.getChildren().add(addToCartButton);
+
+        cardContainer.getChildren().addAll(imageView,nameLabel,priceLabel,addToCartButton);
+
+
+
+
         // Ajoutez un gestionnaire d'événements pour ouvrir la nouvelle interface lors du clic sur la carte
         card.setOnMouseClicked(event -> {
             // Charger la nouvelle interface DetailsProduit.fxml
@@ -140,10 +163,9 @@ public class AfficherProduitClientControllers implements Initializable  {
                 e.printStackTrace();
             }
         });
+        cardContainer.getChildren().add(card);
 
-
-
-        return card;
+        return cardContainer;
     }
 
 

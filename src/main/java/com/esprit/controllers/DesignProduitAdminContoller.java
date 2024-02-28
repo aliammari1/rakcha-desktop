@@ -17,6 +17,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 
@@ -121,7 +122,7 @@ public class DesignProduitAdminContoller {
     }
 
     @FXML
-    void selectImage(ActionEvent event) {
+    void selectImage(MouseEvent event) {
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Sélectionner une image");
@@ -153,7 +154,7 @@ public class DesignProduitAdminContoller {
                     }
                 }
 
-                // Créer l'objet Cinema avec l'image Blob
+                // Créer l'objet Produit avec l'image Blob
 
                 ProduitService ps = new ProduitService();
                 ps.create(new Produit(nomP_textFiled.getText(), prix_textFiled.getText(), imageBlob, descriptionP_textArea.getText(),  new CategorieService().getCategorieByNom(nomC_comboBox.getValue()), Integer.parseInt(quantiteP_textFiled.getText())));
@@ -176,6 +177,7 @@ public class DesignProduitAdminContoller {
         } else {
             showAlert("Veuillez sélectionner une image d'abord !");
         }
+        afficher_produit();
     }
 
 
@@ -248,9 +250,9 @@ public class DesignProduitAdminContoller {
             alert.show();
 
             // Rafraîchir la TableView après la suppression
-            afficher_produit();
-        }
 
+        }
+afficher_produit();
     }
 
     private void initDeleteColumn() {
@@ -297,7 +299,47 @@ public class DesignProduitAdminContoller {
     @FXML
     void afficher_produit() {
 
-        nomCP_tableC.setCellValueFactory(new PropertyValueFactory<Produit,String>("nom_categorie"));
+        // Créer un nouveau ComboBox
+        ImageView imageView = new ImageView();
+
+        nomCP_tableC.setCellValueFactory(new PropertyValueFactory<Produit, String>("nom_categorie"));
+
+
+// Définissez le rendu de la cellule en utilisant le ComboBox
+        nomCP_tableC.setCellFactory(column -> new TableCell<Produit, String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (item == null || empty) {
+                    setGraphic(null);
+                } else {
+                    CategorieService cs = new CategorieService();
+                    ComboBox<String> newComboBox = new ComboBox<>();
+
+                    // Utilisez la méthode getCategorieByNom pour obtenir la catégorie
+                    Categorie categorie = cs.getCategorieByNom(item);
+                   // ComboBox newComboBox =new ComboBox<>();
+                    // Ajoutez le nom de la catégorie au ComboBox
+                    newComboBox.setItems(nomC_comboBox.getItems());
+                    newComboBox.setValue(categorie.getNom_categorie());
+
+                    // Afficher le ComboBox nouvellement créé dans la cellule
+                    setGraphic(newComboBox);
+                    newComboBox.setOnAction(event ->{
+                        Produit produit = getTableView().getItems().get(getIndex());
+                        produit.setCategorie( new CategorieService().getCategorieByNom(newComboBox.getValue()));
+                        modifier_produit(produit);
+                        newComboBox.getStyleClass().add("combo-box-red");
+                    });
+
+                }
+            }
+        });
+
+
+
+
 
         nomP_tableC.setCellValueFactory(new PropertyValueFactory<Produit, String>("nom"));
         nomP_tableC.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -336,7 +378,7 @@ public class DesignProduitAdminContoller {
         // Configurer la colonne Logo pour afficher et changer l'image
         image_tableC.setCellValueFactory(cellData -> {
             Produit p = cellData.getValue();
-            ImageView imageView = new ImageView();
+
             imageView.setFitWidth(100); // Réglez la largeur de l'image selon vos préférences
             imageView.setFitHeight(50); // Réglez la hauteur de l'image selon vos préférences
             try {
@@ -355,8 +397,9 @@ public class DesignProduitAdminContoller {
             return new javafx.beans.property.SimpleObjectProperty<>(imageView);
         });
 
-        /*// Configurer l'événement de clic pour changer l'image
+        // Configurer l'événement de clic pour changer l'image
         image_tableC.setCellFactory(col -> new TableCell<Produit, ImageView>() {
+
             private final ImageView imageView = new ImageView();
             private Produit produit;
 
@@ -364,6 +407,7 @@ public class DesignProduitAdminContoller {
                 setOnMouseClicked(event -> {
                     if (!isEmpty()) {
                         changerImage(produit);
+                        afficher_produit();
                     }
                 });
             }
@@ -377,13 +421,15 @@ public class DesignProduitAdminContoller {
                     setText(null);
                 } else {
                     imageView.setImage(item.getImage());
+                    imageView.setFitWidth(100);
+                    imageView.setFitHeight(50);
                     setGraphic(imageView);
                     setText(null);
                 }
 
                 produit = getTableRow().getItem();
             }
-        });*/
+        });
 
         // Chargement des données depuis la base de données
         ObservableList<Produit> list = FXCollections.observableArrayList();
@@ -411,22 +457,32 @@ public class DesignProduitAdminContoller {
     }
     // Méthode pour changer l'image
     private void changerImage(Produit produit) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Choisir une nouvelle image");
-        File selectedFile = fileChooser.showOpenDialog(null);
+         FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Sélectionner une image");
+        selectedFile = fileChooser.showOpenDialog(null);
 
-        if (selectedFile != null) {
-            try {
-                // Charger la nouvelle image
-                InputStream inputStream = new FileInputStream(selectedFile);
-                Image newImage = new Image(inputStream);
+           Image selectedImage = new Image(selectedFile.toURI().toString());
 
-                // Mettre à jour l'image dans le modèle Produit
-                produit.setImage(new SerialBlob(inputStream.readAllBytes()));
+            if (selectedFile != null) { // Vérifier si une image a été sélectionnée
+                Connection connection = null;
+                try {
+                    // Convertir le fichier en un objet Blob
+                    FileInputStream fis = new FileInputStream(selectedFile);
+                    connection = DataSource.getInstance().getConnection();
+                    Blob imageBlob = connection.createBlob();
 
-                // Mettre à jour la vue
-                Produit_tableview.refresh();
-            } catch ( SQLException | IOException e) {
+                    // Définir le flux d'entrée de l'image dans l'objet Blob
+                    try (OutputStream outputStream = imageBlob.setBinaryStream(1)) {
+                        byte[] buffer = new byte[4096];
+                        int bytesRead;
+                        while ((bytesRead = fis.read(buffer)) != -1) {
+                            outputStream.write(buffer, 0, bytesRead);
+                        }
+                    }
+                    produit.setImage(imageBlob);
+                    modifier_produit(produit);
+
+        } catch ( SQLException | IOException e) {
                 e.printStackTrace();
                 showAlert("Erreur lors du chargement de la nouvelle image : " + e.getMessage());
             }

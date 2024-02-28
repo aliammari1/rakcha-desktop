@@ -17,6 +17,9 @@ public class Categorie {
         this.description = description;
     }
 
+    public Categorie() {
+
+    }
 
 
     public int getId_categorie() {
