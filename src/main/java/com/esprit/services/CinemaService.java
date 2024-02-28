@@ -1,6 +1,7 @@
 package com.esprit.services;
 
 import com.esprit.models.Cinema;
+import com.esprit.models.Film;
 import com.esprit.utils.DataSource;
 
 import java.sql.*;
@@ -72,5 +73,43 @@ public class CinemaService implements IService<Cinema> {
         }
 
         return cinemas;
+    }
+
+    public Cinema getCinema(int cinema_id) {
+
+        Cinema cinema = null;
+
+        String req = "SELECT * from cinema where id_cinema = ?";
+        try {
+            PreparedStatement pst = connection.prepareStatement(req);
+            pst.setInt(1, cinema_id);
+            ResultSet rs = pst.executeQuery();
+            rs.next();
+            cinema = new Cinema(rs.getInt("id_cinema"), rs.getString("nom"), rs.getString("adresse"), rs.getString("responsable"), rs.getBlob("logo"), rs.getString("Statut")) ;
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return cinema;
+    }
+
+    public Cinema getCinemaByName(String nom_cinema) {
+
+        Cinema cinema = null;
+
+        String req = "SELECT * from cinema where nom = ?";
+        try {
+            PreparedStatement pst = connection.prepareStatement(req);
+            pst.setString(1, nom_cinema);
+            ResultSet rs = pst.executeQuery();
+            rs.next();
+            cinema = new Cinema(rs.getInt("id_cinema"), rs.getString("nom"), rs.getString("adresse"), rs.getString("responsable"), rs.getBlob("logo"), rs.getString("Statut")) ;
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return cinema;
     }
 }

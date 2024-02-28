@@ -6,27 +6,33 @@ import java.sql.Time;
 public class Seance {
 
     private int id_seance;
-    private int id_film;
-    private int id_salle;
+    private Film film;
+    private Salle salle;
     private Time HD;
     private Time HF;
     private Date date;
+    private Cinema cinema ;
+    private int prix;
 
-    public Seance(int id_seance, int id_film, int id_salle, Time HD, Time HF, Date date) {
+    public Seance(int id_seance, Film film, Salle salle, Time HD, Time HF, Date date, Cinema cinema, int prix) {
         this.id_seance = id_seance;
-        this.id_film = id_film;
-        this.id_salle = id_salle;
+        this.film = film;
+        this.salle = salle;
         this.HD = HD;
         this.HF = HF;
         this.date = date;
+        this.cinema = cinema;
+        this.prix = prix;
     }
 
-    public Seance(int id_film, int id_salle, Time HD, Time HF, Date date) {
-        this.id_film = id_film;
-        this.id_salle = id_salle;
+    public Seance(Film film, Salle salle, Time HD, Time HF, Date date, Cinema cinema, int prix) {
+        this.film = film;
+        this.salle = salle;
         this.HD = HD;
         this.HF = HF;
         this.date = date;
+        this.cinema = cinema;
+        this.prix = prix;
     }
 
     public int getId_seance() {
@@ -37,20 +43,20 @@ public class Seance {
         this.id_seance = id_seance;
     }
 
-    public int getId_film() {
-        return id_film;
+    public Film getFilm() {
+        return film;
     }
 
-    public void setId_film(int id_film) {
-        this.id_film = id_film;
+    public void setFilm(Film film) {
+        this.film = film;
     }
 
-    public int getId_salle() {
-        return id_salle;
+    public Salle getSalle() {
+        return salle;
     }
 
-    public void setId_salle(int id_salle) {
-        this.id_salle = id_salle;
+    public void setSalle(Salle salle) {
+        this.salle = salle;
     }
 
     public Time getHD() {
@@ -77,15 +83,57 @@ public class Seance {
         this.date = date;
     }
 
+    public Cinema getCinema() {
+        return cinema;
+    }
+
+    public void setCinema(Cinema cinema) {
+        this.cinema = cinema;
+    }
+
+    public int getPrix() {
+        return prix;
+    }
+
+    public void setPrix(int prix) {
+        this.prix = prix;
+    }
+
     @Override
     public String toString() {
         return "Seance{" +
                 "id_seance=" + id_seance +
-                ", id_film=" + id_film +
-                ", id_salle=" + id_salle +
+                ", film=" + film +
+                ", salle=" + salle +
                 ", HD=" + HD +
                 ", HF=" + HF +
                 ", date=" + date +
+                ", cinema=" + cinema +
+                ", prix=" + prix +
                 '}';
+    }
+
+    public Cinema getId_cinema() {
+        return cinema;
+    }
+
+    public String getNom_cinema() {
+        return cinema.getNom();
+    }
+
+    public Film getId_film() {
+        return film;
+    }
+
+    public String getNom_film() {
+        return film.getNom();
+    }
+
+    public Salle getId_salle() {
+        return salle;
+    }
+
+    public String getNom_salle() {
+        return salle.getNom_salle();
     }
 }

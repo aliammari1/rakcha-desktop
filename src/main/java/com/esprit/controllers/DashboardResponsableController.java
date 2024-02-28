@@ -1,18 +1,23 @@
 package com.esprit.controllers;
 
 import com.esprit.models.Cinema;
+import com.esprit.models.Film;
+import com.esprit.models.Salle;
+import com.esprit.models.Seance;
 import com.esprit.services.CinemaService;
+import com.esprit.services.FilmService;
+import com.esprit.services.SalleService;
+import com.esprit.services.SeanceService;
 import com.esprit.utils.DataSource;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -27,9 +32,9 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.net.URL;
-import java.sql.Blob;
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -53,6 +58,39 @@ public class DashboardResponsableController implements Initializable {
 
     @FXML
     private FlowPane cinemaFlowPane;
+    @FXML
+    private AnchorPane cinemaFormPane;
+
+    @FXML
+    private AnchorPane sessionFormPane;
+
+    @FXML
+    private AnchorPane cinemaListPane;
+
+    @FXML
+    private ComboBox<String> comboCinema;
+
+    @FXML
+    private ComboBox<String> comboMovie;
+
+    @FXML
+    private ComboBox<String> comboRoom;
+
+    @FXML
+    private DatePicker dpDate;
+
+    @FXML
+    private TextField tfDepartureTime;
+
+    @FXML
+    private TextField tfEndTime;
+
+    @FXML
+    private TextField tfPrice;
+
+    @FXML
+    private Button addButton;
+
 
     @FXML
     private void showAlert(String message) {
@@ -120,26 +158,65 @@ public class DashboardResponsableController implements Initializable {
 
     }
 
-    @FXML
-    void listerCinemas(ActionEvent event) throws IOException {
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ListCinemaResponsable.fxml"));
-        Parent root = loader.load();
-
-        Scene scene = new Scene(root);
-
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.show();
-
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        loadAcceptedCinemas();
+        List<Cinema> acceptedCinemas = loadAcceptedCinemas();
+
+        cinemaFormPane.setVisible(true);
+        sessionFormPane.setVisible(false);
+        cinemaListPane.setVisible(true);
+
+        for (Cinema c : acceptedCinemas) {
+            comboCinema.getItems().add(c.getNom());
+        }
+
+        // Ajouter un écouteur de changement de sélection pour le ComboBox des cinémas
+        comboCinema.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (newValue != null) {
+                // Convertir newValue en objet Cinema
+                Cinema selectedCinema = acceptedCinemas.stream()
+                        .filter(cinema -> cinema.getNom().equals(newValue))
+                        .findFirst()
+                        .orElse(null);
+
+                if (selectedCinema != null) {
+                    // Charger les films en fonction du cinéma sélectionné
+                    loadMoviesForCinema(selectedCinema.getId_cinema());
+                    // Charger les salles en fonction du cinéma sélectionné
+                    loadRoomsForCinema(selectedCinema.getId_cinema());
+                }
+            }
+        });
     }
 
-    private void loadAcceptedCinemas() {
+
+    private void loadMoviesForCinema(int cinemaId) {
+        // Effacer la liste actuelle de films
+        comboMovie.getItems().clear();
+        // Charger les films en fonction de l'ID du cinéma
+        FilmService fs = new FilmService();
+        List<Film> moviesForCinema = fs.readMoviesForCinema(cinemaId);
+        // Ajouter les films à la liste des films
+        for (Film f : moviesForCinema) {
+            comboMovie.getItems().add(f.getNom());
+        }
+    }
+
+    private void loadRoomsForCinema(int cinemaId) {
+        // Effacer la liste actuelle des salles
+        comboRoom.getItems().clear();
+        // Charger les salles en fonction de l'ID du cinéma
+        SalleService ss = new SalleService();
+        List<Salle> roomsForCinema = ss.readRoomsForCinema(cinemaId);
+        // Ajouter les salles à la liste des salles
+        for (Salle s : roomsForCinema) {
+            comboRoom.getItems().add(s.getNom_salle());
+        }
+    }
+
+    private List<Cinema> loadAcceptedCinemas() {
         CinemaService cinemaService = new CinemaService();
         List<Cinema> cinemas = cinemaService.read();
 
@@ -149,14 +226,16 @@ public class DashboardResponsableController implements Initializable {
 
         if (acceptedCinemas.isEmpty()) {
             showAlert("Aucun cinéma accepté n'est disponible.");
-            return;
         }
 
         for (Cinema cinema : acceptedCinemas) {
             HBox cardContainer = createCinemaCard(cinema);
             cinemaFlowPane.getChildren().add(cardContainer);
         }
+        return acceptedCinemas;
     }
+
+
 
     private HBox createCinemaCard(Cinema cinema) {
         HBox cardContainer = new HBox();
@@ -268,5 +347,70 @@ public class DashboardResponsableController implements Initializable {
         cardContainer.getChildren().add(card);
         return cardContainer;
     }
+
+    @FXML
+    private void showCinemaList() {
+        // Afficher le formulaire d'ajout de cinéma et la liste des cinémas
+        cinemaFormPane.setVisible(true);
+        sessionFormPane.setVisible(false);
+        cinemaListPane.setVisible(true);
+    }
+
+    @FXML
+    private void showSessionForm() {
+        // Afficher le formulaire d'ajout de session
+        cinemaFormPane.setVisible(false);
+        sessionFormPane.setVisible(true);
+        cinemaListPane.setVisible(false);
+    }
+
+    @FXML
+    void addSeance() {
+        String selectedCinemaName = comboCinema.getValue();
+        String selectedFilmName = comboMovie.getValue();
+        String selectedRoomName = comboRoom.getValue();
+        LocalDate selectedDate = dpDate.getValue();
+        String departureTimeText = tfDepartureTime.getText();
+        String endTimeText = tfEndTime.getText();
+        String priceText = tfPrice.getText();
+
+        if (selectedCinemaName == null || selectedFilmName == null || selectedRoomName == null || selectedDate == null ||
+                departureTimeText.isEmpty() || endTimeText.isEmpty() || priceText.isEmpty()) {
+            // Gérer le cas où l'un des champs est vide
+            System.out.println("Veuillez remplir tous les champs.");
+            return;
+        }
+
+        // Récupérer les objets correspondants aux noms sélectionnés
+        CinemaService cinemaService = new CinemaService();
+        Cinema selectedCinema = cinemaService.getCinemaByName(selectedCinemaName);
+
+        FilmService filmService = new FilmService();
+        Film selectedFilm = filmService.getFilmByName(selectedFilmName);
+
+        SalleService salleService = new SalleService();
+        Salle selectedRoom = salleService.getSalleByName(selectedRoomName);
+
+        // Convertir les textes en objet Time pour l'heure de début et de fin
+        Time departureTime = Time.valueOf(LocalTime.parse(departureTimeText));
+        Time endTime = Time.valueOf(LocalTime.parse(endTimeText));
+
+        // Convertir la date sélectionnée en objet Date SQL
+        Date date = Date.valueOf(selectedDate);
+
+        // Convertir le prix en entier
+        int price = Integer.parseInt(priceText);
+
+        // Créer une nouvelle instance de séance avec les données saisies
+        Seance newSeance = new Seance(selectedFilm, selectedRoom, departureTime, endTime, date, selectedCinema, price);
+
+        // Appeler le service pour ajouter la séance à la base de données
+        SeanceService seanceService = new SeanceService();
+        seanceService.create(newSeance);
+
+        // Afficher un message de succès
+        System.out.println("Séance ajoutée avec succès !");
+    }
+
 
 }
