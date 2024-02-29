@@ -2,14 +2,23 @@ package com.esprit.controllers;
 
 import com.esprit.models.Category;
 import com.esprit.services.CategoryService;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Bounds;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Window;
+import javafx.util.Callback;
+import javafx.util.converter.DefaultStringConverter;
+import net.synedra.validatorfx.Validator;
 
 public class CategoryController {
 
@@ -117,4 +126,72 @@ public class CategoryController {
         readCategoryTable(event);
     }
 
+    private void setupCellFactory() {
+        idCategory_tableColumn.setVisible(false);
+
+        nomCategory_tableColumn.setCellFactory(new Callback<TableColumn<Category, String>, TableCell<Category, String>>() {
+            @Override
+            public TableCell<Category, String> call(TableColumn<Category, String> param) {
+                return new TextFieldTableCell<Category, String>(new DefaultStringConverter()) {
+                    private Validator validator;
+
+
+                    @Override
+                    public void startEdit() {
+                        super.startEdit();
+                        TextField textField = (TextField) getGraphic();
+                        if (textField != null && validator == null) {
+                            validator = new Validator();
+                            validator.createCheck()
+                                    .dependsOn("nom", textField.textProperty())
+                                    .withMethod(c -> {
+                                        String input = c.get("nom");
+                                        if (input == null || input.trim().isEmpty()) {
+                                            c.error("Input cannot be empty.");
+                                        } else if (!Character.isUpperCase(input.charAt(0))) {
+                                            c.error("Please start with an uppercase letter.");
+                                        }
+                                    })
+                                    .decorates(textField)
+                                    .immediate();
+                            Window window = this.getScene().getWindow();
+                            Tooltip tooltip = new Tooltip();
+                            Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
+                            textField.textProperty().addListener(new ChangeListener<String>() {
+                                @Override
+                                public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                                    System.out.println(validator.containsErrors());
+                                    if (validator.containsErrors()) {
+                                        tooltip.setText(validator.createStringBinding().getValue());
+                                        tooltip.setStyle("-fx-background-color: #f00;");
+                                        textField.setTooltip(tooltip);
+                                        textField.getTooltip().show(window, bounds.getMinX(), bounds.getMinY() - 30);
+                                    } else {
+                                        if (textField.getTooltip() != null)
+                                            textField.getTooltip().hide();
+                                    }
+                                }
+                            });
+
+                        }
+                    }
+
+
+                };
+            }
+        });
+
+    }
+
+    private void setupCellValueFactory() {
+
+        nomCategory_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Category, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Category, String> filmcategoryStringCellDataFeatures) {
+
+                return new SimpleStringProperty(filmcategoryStringCellDataFeatures.getValue().getNom());
+            }
+        });
+    }
+    
 }

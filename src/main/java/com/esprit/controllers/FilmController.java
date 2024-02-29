@@ -6,6 +6,7 @@ import com.esprit.utils.DataSource;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -13,8 +14,8 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Bounds;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -23,15 +24,22 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+import javafx.util.converter.DefaultStringConverter;
+import javafx.util.converter.IntegerStringConverter;
+import net.synedra.validatorfx.Validator;
 import org.controlsfx.control.CheckComboBox;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.OutputStream;
 import java.sql.Blob;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.sql.Time;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,44 +49,43 @@ public class FilmController {
     Blob imageBlob;
     private File selectedFile;
     @FXML
-    private TableColumn<Filmcategory, Integer> annederalisationFilm_tableColumn;
+    private TableColumn<Film, Integer> annederalisationFilm_tableColumn;
     @FXML
     private TextArea annederealisationFilm_textArea;
     @FXML
-    private TableColumn<Filmcategory, String> descriptionFilm_tableColumn;
+    private TableColumn<Film, String> descriptionFilm_tableColumn;
     @FXML
     private TextArea descriptionFilm_textArea;
     @FXML
-    private TableColumn<Filmcategory, Time> dureeFilm_tableColumn;
+    private TableColumn<Film, Time> dureeFilm_tableColumn;
     @FXML
     private TextArea dureeFilm_textArea;
     @FXML
-    private TableColumn<Filmcategory, Button> Delete_Column;
-
+    private TableColumn<Film, Button> Delete_Column;
     @FXML
-    private TableView<Filmcategory> filmCategory_tableView1;
+    private TableView<Film> filmCategory_tableView1;
     @FXML
     private AnchorPane filmCrudInterface;
     @FXML
-    private TableColumn<Filmcategory, Integer> idFilm_tableColumn;
+    private TableColumn<Film, Integer> idFilm_tableColumn;
     @FXML
     private TextArea idFilm_textArea;
     @FXML
-    private TableColumn<Filmcategory, String> idacteurFilm_tableColumn;
+    private TableColumn<Film, CheckComboBox<String>> idacteurFilm_tableColumn;
     @FXML
     private ComboBox<String> idacteurFilm_comboBox;
     @FXML
-    private TableColumn<Filmcategory, CheckComboBox<String>> idcategoryFilm_tableColumn;
+    private TableColumn<Film, CheckComboBox<String>> idcategoryFilm_tableColumn;
     @FXML
-    private TableColumn<Filmcategory, Integer> idcinemaFilm_tableColumn;
+    private TableColumn<Film, Integer> idcinemaFilm_tableColumn;
     @FXML
     private ComboBox<String> idcinemaFilm_comboBox;
     @FXML
     private ImageView imageFilm_ImageView;
     @FXML
-    private TableColumn<Filmcategory, HBox> imageFilm_tableColumn;
+    private TableColumn<Film, HBox> imageFilm_tableColumn;
     @FXML
-    private TableColumn<Filmcategory, String> nomFilm_tableColumn;
+    private TableColumn<Film, String> nomFilm_tableColumn;
     @FXML
     private TextArea nomFilm_textArea;
     @FXML
@@ -87,32 +94,42 @@ public class FilmController {
     private Button AjouterFilm_Button;
     @FXML
     private CheckComboBox<String> Categorychecj_ComboBox;
-
     @FXML
     private CheckComboBox<String> Actorcheck_ComboBox1;
 
     @FXML
     void initialize() {
-        //  nomFilm_tableColumn.setCellValueFactory(new PropertyValueFactory<Filmcategory, String>("nom"));
 
-
-        //     descriptionFilm_tableColumn.setCellValueFactory(new PropertyValueFactory<Filmcategory, String>("description"));
-
-//        idcategoryFilm_tableColumn.setOnEditStart(new EventHandler<TableColumn.CellEditEvent<Filmcategory, CheckComboBox<String>>>() {
-//            @Override
-//            public void handle(TableColumn.CellEditEvent<Filmcategory, CheckComboBox<String>> filmcategoryCheckComboBoxCellEditEvent) {
-//                try {
-//                    filmcategoryCheckComboBoxCellEditEvent.getTableView().getItems().get(
-//                            filmcategoryCheckComboBoxCellEditEvent.getTablePosition().getRow()).getFilmId().setCategoryNom((filmcategoryCheckComboBoxCellEditEvent.getNewValue()));
-//                } catch (Exception e) {
-//                    System.out.println(e.getMessage());
-//                }
-//            }
-//        });
-
-        setupCellValueFactory();
-        setupCellFactory();
-        setupCellOnEditCommit();
+        Validator validator = new Validator();
+        validator.createCheck()
+                .dependsOn("nom", nomFilm_textArea.textProperty())
+                .withMethod(c -> {
+                    String input = c.get("nom");
+                    if (input == null || input.trim().isEmpty()) {
+                        c.error("Input cannot be empty.");
+                    } else if (!Character.isUpperCase(input.charAt(0))) {
+                        c.error("Please start with an uppercase letter.");
+                    }
+                })
+                .decorates(nomFilm_textArea)
+                .immediate();
+        Tooltip tooltip = new Tooltip();
+        Bounds bounds = nomFilm_textArea.localToScreen(nomFilm_textArea.getBoundsInLocal());
+        nomFilm_textArea.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                System.out.println(validator.containsErrors());
+                if (validator.containsErrors()) {
+                    tooltip.setText(validator.createStringBinding().getValue());
+                    tooltip.setStyle("-fx-background-color: #f00;");
+                    nomFilm_textArea.setTooltip(tooltip);
+                    nomFilm_textArea.getTooltip().show(new Stage(), bounds.getMinX(), bounds.getMinY() - 30);
+                } else {
+                    if (nomFilm_textArea.getTooltip() != null)
+                        nomFilm_textArea.getTooltip().hide();
+                }
+            }
+        });
 
         readFilmTable();
         CategoryService cs = new CategoryService();
@@ -122,6 +139,11 @@ public class FilmController {
         List<Actor> actors = actorService.read();
         List<String> actorNames = actors.stream().map(Actor::getNom).collect(Collectors.toList());
         Actorcheck_ComboBox1.getItems().addAll(actorNames);
+        Actorcheck_ComboBox1.getItems().forEach(item -> {
+            Tooltip tooltip2 = new Tooltip("Tooltip text for " + item); // Create a tooltip for each item
+            Tooltip.install(Actorcheck_ComboBox1, tooltip2); // Set the tooltip for the ComboBox
+
+        });
 
 
         for (Film f : fs.read())
@@ -235,16 +257,13 @@ public class FilmController {
                 while (c.next()) {
                     if (c.wasAdded()) {
                         for (Actor actor : c.getAddedSubList()) {
-                            // Add actor to actorFilm table
                             String sql = "INSERT INTO actorFilm (actor_id, film_id) VALUES (?, ?)";
-                            // Execute SQL command
                         }
                     }
                     if (c.wasRemoved()) {
                         for (Actor actor : c.getRemoved()) {
                             // Remove actor from actorFilm table
                             String sql = "DELETE FROM actorFilm WHERE actor_id = ?";
-                            // Execute SQL command
                         }
                     }
                 }
@@ -255,132 +274,280 @@ public class FilmController {
     void readFilmTable() {
         try {
             filmCategory_tableView1.setEditable(true);
-
-            //imageFilm_tableColumn.setCellValueFactory(new PropertyValueFactory<Filmcategory, HBox>("image"));
-
-
-//            Delete_Column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, Button>, ObservableValue<Button>>() {
-//                public ObservableValue<Button> call(TableColumn.CellDataFeatures<Filmcategory, Button> p) {
-//                    // p.getValue() returns the Person instance for a particular TableView row
-//                    Button button = new Button("add");
-//                    button.setOnAction(new EventHandler<ActionEvent>() {
-//                        @Override
-//                        public void handle(ActionEvent event) {
-//                            deleteFilm(p.getValue().getFilmId().getId());
-//                        }
-//                    });
-//                    return new SimpleObjectProperty<Button>(button);
-//                }
-//            });
-//            // Configurer la cellule de la colonne Logo pour afficher l'image
-//            imageFilm_tableColumn.setCellValueFactory(cellData -> {
-//                Film film = cellData.getValue().getFilmId();
-//                ImageView imageView = new ImageView();
-//                imageView.setFitWidth(100); // Réglez la largeur de l'image selon vos préférences
-//                imageView.setFitHeight(50); // Réglez la hauteur de l'image selon vos préférences
-//                try {
-//                    Blob blob = film.getImage();
-//                    if (blob != null) {
-//                        Image image = new Image(blob.getBinaryStream());
-//                        imageView.setImage(image);
-//                    } else {
-//                        // Afficher une image par défaut si le logo est null
-//                        Image defaultImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("default_image.png")));
-//                        imageView.setImage(defaultImage);
-//                    }
-//                } catch (SQLException e) {
-//                    e.printStackTrace();
-//                }
-//                return new javafx.beans.property.SimpleObjectProperty<>(imageView);
-//            });
-            FilmcategoryService filmcategoryService = new FilmcategoryService();
-            CategoryService categoryService = new CategoryService();
-
-            //           for (Film ff : lf)
-//                System.out.println(ff);
-            ObservableList<Filmcategory> obF = FXCollections.observableArrayList(filmcategoryService.read());
+            setupCellValueFactory();
+            setupCellFactory();
+            setupCellOnEditCommit();
+            FilmService filmService = new FilmService();
+            ObservableList<Film> obF = FXCollections.observableArrayList(filmService.read());
             filmCategory_tableView1.setItems(obF);
-//            filmCategory_tableView1.getSelectionModel().selectedItemProperty().addListener((observableValue, category, t1) -> {
-//                Filmcategory f = filmCategory_tableView1.getSelectionModel().getSelectedItem();
-//                if (f != null) {
-//                    idFilm_textArea.setText(String.valueOf(f.getId()));
-//                    nomFilm_textArea.setText(f.getNom());
-//                    imageFilm_ImageView.toString();
-//                    dureeFilm_textArea.setText(f.getDuree().toString());
-//                    descriptionFilm_textArea.setText(f.getDescription());
-//                    annederealisationFilm_textArea.setText(String.valueOf(f.getAnnederalisation()));
-//                    idacteurFilm_comboBox.setValue(String.valueOf(f.getIdacteur()));
-//                    idcinemaFilm_comboBox.setValue(String.valueOf(f.getIdcinema()));
-//                    imageBlob = f.getImage();
-//                    Blob imageBlob1 = f.getImage();
-//                    try (InputStream inputStream = imageBlob1.getBinaryStream()) {
-//                        Image image1 = new Image(inputStream);
-//                        imageFilm_ImageView.setImage(image1);
-//                    } catch (SQLException | IOException e) {
-//                        e.printStackTrace();
-//                        showAlert("Erreur lors de la récupération de l'image : " + e.getMessage());
-//                    }
-//                }
-//            });
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
     private void setupCellFactory() {
-        annederalisationFilm_tableColumn.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Integer>() {
+        idFilm_tableColumn.setVisible(false);
+
+        nomFilm_tableColumn.setCellFactory(new Callback<TableColumn<Film, String>, TableCell<Film, String>>() {
             @Override
-            public String toString(Integer object) {
-                System.out.println("error");
-                return object.toString();
-            }
+            public TableCell<Film, String> call(TableColumn<Film, String> param) {
+                return new TextFieldTableCell<Film, String>(new DefaultStringConverter()) {
+                    private Validator validator;
 
+
+                    @Override
+                    public void startEdit() {
+                        super.startEdit();
+                        TextField textField = (TextField) getGraphic();
+                        if (textField != null && validator == null) {
+                            validator = new Validator();
+                            validator.createCheck()
+                                    .dependsOn("nom", textField.textProperty())
+                                    .withMethod(c -> {
+                                        String input = c.get("nom");
+                                        if (input == null || input.trim().isEmpty()) {
+                                            c.error("Input cannot be empty.");
+                                        } else if (!Character.isUpperCase(input.charAt(0))) {
+                                            c.error("Please start with an uppercase letter.");
+                                        }
+                                    })
+                                    .decorates(textField)
+                                    .immediate();
+                            Window window = this.getScene().getWindow();
+                            Tooltip tooltip = new Tooltip();
+                            Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
+                            textField.textProperty().addListener(new ChangeListener<String>() {
+                                @Override
+                                public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                                    System.out.println(validator.containsErrors());
+                                    if (validator.containsErrors()) {
+                                        tooltip.setText(validator.createStringBinding().getValue());
+                                        tooltip.setStyle("-fx-background-color: #f00;");
+                                        textField.setTooltip(tooltip);
+                                        textField.getTooltip().show(window, bounds.getMinX(), bounds.getMinY() - 30);
+                                    } else {
+                                        if (textField.getTooltip() != null)
+                                            textField.getTooltip().hide();
+                                    }
+                                }
+                            });
+
+                        }
+                    }
+
+
+                };
+            }
+        });
+        annederalisationFilm_tableColumn.setCellFactory(new Callback<TableColumn<Film, Integer>, TableCell<Film, Integer>>() {
             @Override
-            public Integer fromString(String string) {
-                return Integer.parseInt(string);
-            }
-        }));
-        //idcategoryFilm_tableColumn.setCellFactory(ComboBoxTableCell.forTableColumn());
+            public TableCell<Film, Integer> call(TableColumn<Film, Integer> param) {
+                return new TextFieldTableCell<Film, Integer>(new IntegerStringConverter()) {
+                    private Validator validator;
 
-        dureeFilm_tableColumn.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Time>() {
+                    @Override
+                    public void startEdit() {
+                        super.startEdit();
+                        TextField textField = (TextField) getGraphic();
+                        if (textField != null && validator == null) {
+                            validator = new Validator();
+                            validator.createCheck()
+                                    .dependsOn("annederalisation", textField.textProperty())
+                                    .withMethod(c -> {
+                                        String input = c.get("annederalisation");
+                                        if (input == null || input.trim().isEmpty()) {
+                                            c.error("Input cannot be empty.");
+                                        } else {
+                                            try {
+                                                int year = Integer.parseInt(input);
+                                                if (year < 1800 || year > Year.now().getValue()) {
+                                                    c.error("Please enter a year between 1800 and " + Year.now().getValue());
+                                                }
+                                            } catch (NumberFormatException e) {
+                                                c.error("Please enter a valid year.");
+                                            }
+                                        }
+                                    })
+                                    .decorates(textField)
+                                    .immediate();
+                            Window window = this.getScene().getWindow();
+                            Tooltip tooltip = new Tooltip();
+                            Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
+                            textField.textProperty().addListener(new ChangeListener<String>() {
+                                @Override
+                                public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                                    if (validator.containsErrors()) {
+                                        tooltip.setText(validator.createStringBinding().getValue());
+                                        tooltip.setStyle("-fx-background-color: #f00;");
+                                        textField.setTooltip(tooltip);
+                                        textField.getTooltip().show(window, bounds.getMinX(), bounds.getMinY() - 30);
+                                    } else {
+                                        if (textField.getTooltip() != null) {
+                                            textField.getTooltip().hide();
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    }
+
+                };
+            }
+        });
+        //i dcategoryFilm_tableColumn.setCellFactory(ComboBoxTableCell.forTableColumn());
+
+        dureeFilm_tableColumn.setCellFactory(new Callback<TableColumn<Film, Time>, TableCell<Film, Time>>() {
             @Override
-            public String toString(Time time) {
-                return time.toString();
-            }
+            public TableCell<Film, Time> call(TableColumn<Film, Time> filmcategoryTimeTableColumn) {
+                return new TextFieldTableCell<Film, Time>(new StringConverter<Time>() {
+                    @Override
+                    public String toString(Time time) {
+                        return time.toString();
+                    }
 
+                    @Override
+                    public Time fromString(String s) {
+                        return Time.valueOf(s);
+                    }
+                }) {
+                    private Validator validator;
+
+                    @Override
+                    public void startEdit() {
+                        super.startEdit();
+                        TextField textField = (TextField) getGraphic();
+                        if (textField != null && validator == null) {
+                            validator = new Validator();
+                            validator.createCheck()
+                                    .dependsOn("duree", textField.textProperty())
+                                    .withMethod(c -> {
+                                        String input = c.get("duree");
+                                        if (input == null || input.trim().isEmpty()) {
+                                            c.error("Input cannot be empty.");
+                                        } else if (!isValidTimeFormat(input)) {
+                                            c.error("Invalid time format. Please enter the time in the format HH:MM:SS (hours:minutes:seconds).");
+                                        }
+                                    })
+                                    .decorates(textField)
+                                    .immediate();
+                            Window window = this.getScene().getWindow();
+                            Tooltip tooltip = new Tooltip();
+                            Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
+                            textField.textProperty().addListener(new ChangeListener<String>() {
+                                @Override
+                                public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                                    System.out.println(validator.containsErrors());
+                                    if (validator.containsErrors()) {
+                                        tooltip.setText(validator.createStringBinding().getValue());
+                                        tooltip.setStyle("-fx-background-color: #f00;");
+                                        textField.setTooltip(tooltip);
+                                        textField.getTooltip().show(window, bounds.getMinX(), bounds.getMinY() - 30);
+                                    } else {
+                                        if (textField.getTooltip() != null)
+                                            textField.getTooltip().hide();
+                                    }
+                                }
+                            });
+
+                        }
+                    }
+
+                    private boolean isValidTimeFormat(String time) {
+                        // Regular expression to validate time in HH:MM:SS format
+                        String timeRegex = "^([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$";
+                        return time.matches(timeRegex);
+                    }
+                };
+            }
+        });
+        //  nomFilm_tableColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        descriptionFilm_tableColumn.setCellFactory(new Callback<TableColumn<Film, String>, TableCell<Film, String>>() {
             @Override
-            public Time fromString(String s) {
-                return Time.valueOf(s);
+            public TableCell<Film, String> call(TableColumn<Film, String> param) {
+                return new TextFieldTableCell<Film, String>(new DefaultStringConverter()) {
+                    private Validator validator;
+
+
+                    @Override
+                    public void startEdit() {
+                        super.startEdit();
+                        TextField textField = (TextField) getGraphic();
+                        if (textField != null && validator == null) {
+                            validator = new Validator();
+                            validator.createCheck()
+                                    .dependsOn("description", textField.textProperty())
+                                    .withMethod(c -> {
+                                        String input = c.get("description");
+                                        if (input == null || input.trim().isEmpty()) {
+                                            c.error("Input cannot be empty.");
+                                        } else if (!Character.isUpperCase(input.charAt(0))) {
+                                            c.error("Please start with an uppercase letter.");
+                                        }
+                                    })
+                                    .decorates(textField)
+                                    .immediate();
+                            Window window = this.getScene().getWindow();
+                            Tooltip tooltip = new Tooltip();
+                            Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
+                            textField.textProperty().addListener(new ChangeListener<String>() {
+                                @Override
+                                public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                                    System.out.println(validator.containsErrors());
+                                    if (validator.containsErrors()) {
+                                        tooltip.setText(validator.createStringBinding().getValue());
+                                        tooltip.setStyle("-fx-background-color: #f00;");
+                                        textField.setTooltip(tooltip);
+                                        textField.getTooltip().show(window, bounds.getMinX(), bounds.getMinY() - 30);
+                                    } else {
+                                        if (textField.getTooltip() != null)
+                                            textField.getTooltip().hide();
+                                    }
+                                }
+                            });
+
+                        }
+                    }
+                };
             }
-        }));
-        nomFilm_tableColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-
-
+        });
     }
 
     private void setupCellValueFactory() {
-        annederalisationFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, Integer>, ObservableValue<Integer>>() {
+        Delete_Column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Film, Button>, ObservableValue<Button>>() {
             @Override
-            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Filmcategory, Integer> filmcategoryIntegerCellDataFeatures) {
-                return new SimpleIntegerProperty(filmcategoryIntegerCellDataFeatures.getValue().getFilmId().getAnnederalisation()).asObject();
+            public ObservableValue<Button> call(TableColumn.CellDataFeatures<Film, Button> filmcategoryButtonCellDataFeatures) {
+                Button button = new Button("delete");
+                button.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        deleteFilm(filmcategoryButtonCellDataFeatures.getValue().getId());
+                    }
+                });
+                return new SimpleObjectProperty<Button>(button);
             }
         });
-        descriptionFilm_tableColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        idcategoryFilm_tableColumn.setCellValueFactory(new PropertyValueFactory<Filmcategory, CheckComboBox<String>>("idcategory"));
-        dureeFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, Time>, ObservableValue<Time>>() {
+        annederalisationFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Film, Integer>, ObservableValue<Integer>>() {
             @Override
-            public ObservableValue<Time> call(TableColumn.CellDataFeatures<Filmcategory, Time> filmcategoryTimeCellDataFeatures) {
-                return new SimpleObjectProperty<Time>(filmcategoryTimeCellDataFeatures.getValue().getFilmId().getDuree());
+            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Film, Integer> filmcategoryIntegerCellDataFeatures) {
+                return new SimpleIntegerProperty(filmcategoryIntegerCellDataFeatures.getValue().getAnnederalisation()).asObject();
+            }
+        });
+
+        dureeFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Film, Time>, ObservableValue<Time>>() {
+            @Override
+            public ObservableValue<Time> call(TableColumn.CellDataFeatures<Film, Time> filmcategoryTimeCellDataFeatures) {
+                return new SimpleObjectProperty<Time>(filmcategoryTimeCellDataFeatures.getValue().getDuree());
             }
         });
         imageFilm_tableColumn.setCellValueFactory(
-                new Callback<TableColumn.CellDataFeatures<Filmcategory, HBox>, ObservableValue<HBox>>() {
+                new Callback<TableColumn.CellDataFeatures<Film, HBox>, ObservableValue<HBox>>() {
                     @Override
-                    public ObservableValue<HBox> call(TableColumn.CellDataFeatures<Filmcategory, HBox> param) {
+                    public ObservableValue<HBox> call(TableColumn.CellDataFeatures<Film, HBox> param) {
                         HBox hBox = new HBox();
                         try {
                             ImageView imageView = new ImageView(
-                                    new Image(new ByteArrayInputStream(param.getValue().getFilmId().getImage().getBinaryStream().readAllBytes())));
+                                    new Image(new ByteArrayInputStream(param.getValue().getImage().getBinaryStream().readAllBytes())));
                             hBox.getChildren().add(imageView);
                             imageView.setFitWidth(100);
                             imageView.setFitHeight(50);
@@ -398,10 +565,22 @@ public class FilmController {
                                             Image image = new Image(file.toURI().toURL().toString());
                                             imageView.setImage(image);
                                             hBox.getChildren().clear();
-                                            System.out.println(image);
                                             hBox.getChildren().add(imageView);
 
+                                            FileInputStream fis = new FileInputStream(file);
+                                            Blob imageBlob = DataSource.getInstance().getConnection().createBlob();
 
+                                            // Définir le flux d'entrée de l'image dans l'objet Blob
+                                            try (OutputStream outputStream = imageBlob.setBinaryStream(1)) {
+                                                byte[] buffer = new byte[4096];
+                                                int bytesRead;
+                                                while ((bytesRead = fis.read(buffer)) != -1) {
+                                                    outputStream.write(buffer, 0, bytesRead);
+                                                }
+                                            }
+                                            Film film = param.getValue();
+                                            film.setImage(imageBlob);
+                                            updateFilm(film);
                                         }
                                     } catch (Exception e) {
                                         System.out.println(e.getMessage());
@@ -414,122 +593,152 @@ public class FilmController {
                         return new SimpleObjectProperty<HBox>(hBox);
                     }
                 });
-        dureeFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, Time>, ObservableValue<Time>>() {
+        dureeFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Film, Time>, ObservableValue<Time>>() {
             @Override
-            public ObservableValue<Time> call(TableColumn.CellDataFeatures<Filmcategory, Time> filmcategoryTimeCellDataFeatures) {
-                return new SimpleObjectProperty<Time>(filmcategoryTimeCellDataFeatures.getValue().getFilmId().getDuree());
+            public ObservableValue<Time> call(TableColumn.CellDataFeatures<Film, Time> filmcategoryTimeCellDataFeatures) {
+                return new SimpleObjectProperty<Time>(filmcategoryTimeCellDataFeatures.getValue().getDuree());
             }
         });
-        descriptionFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, String>, ObservableValue<String>>() {
+        descriptionFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Film, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Filmcategory, String> filmcategoryStringCellDataFeatures) {
-                return new SimpleStringProperty(filmcategoryStringCellDataFeatures.getValue().getFilmId().getDescription());
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Film, String> filmcategoryStringCellDataFeatures) {
+                return new SimpleStringProperty(filmcategoryStringCellDataFeatures.getValue().getDescription());
             }
         });
-        annederalisationFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, Integer>, ObservableValue<Integer>>() {
+        annederalisationFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Film, Integer>, ObservableValue<Integer>>() {
             @Override
-            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Filmcategory, Integer> filmcategoryIntegerCellDataFeatures) {
-                return new SimpleIntegerProperty(filmcategoryIntegerCellDataFeatures.getValue().getFilmId().getAnnederalisation()).asObject();
+            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Film, Integer> filmcategoryIntegerCellDataFeatures) {
+                return new SimpleIntegerProperty(filmcategoryIntegerCellDataFeatures.getValue().getAnnederalisation()).asObject();
             }
         });
-        //idcategoryFilm_tableColumn.setCellValueFactory(new PropertyValueFactory<Film, String>("categoryNom"));
-        idcategoryFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, CheckComboBox<String>>, ObservableValue<CheckComboBox<String>>>() {
+        idcategoryFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Film, CheckComboBox<String>>, ObservableValue<CheckComboBox<String>>>() {
             @Override
-            public ObservableValue<CheckComboBox<String>> call(TableColumn.CellDataFeatures<Filmcategory, CheckComboBox<String>> p) {
+            public ObservableValue<CheckComboBox<String>> call(TableColumn.CellDataFeatures<Film, CheckComboBox<String>> p) {
                 CheckComboBox<String> checkComboBox = new CheckComboBox<>();
                 List<String> l = new ArrayList<>();
                 CategoryService cs = new CategoryService();
                 for (Category c : cs.read())
                     l.add(c.getNom());
                 checkComboBox.getItems().addAll(l);
-                List<String> ls = Stream.of(p.getValue().getCategoryId().getNom().split(", ")).toList();
-                for (String checkedString : ls)
+                FilmcategoryService fcs = new FilmcategoryService();
+                List<String> ls = Stream.of(fcs.getActorsNames(p.getValue().getId()).split(", ")).toList();
+                for (String checkedString : ls) {
+                    System.out.println(checkedString);
                     checkComboBox.getCheckModel().check(checkedString);
+                }
+                checkComboBox.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
+                    @Override
+                    public void onChanged(Change<? extends String> change) {
+                        System.out.println(checkComboBox.getCheckModel().getCheckedItems());
+                        FilmcategoryService fcs = new FilmcategoryService();
+                        fcs.updateCategories(p.getValue(), checkComboBox.getCheckModel().getCheckedItems());
+                    }
+                });
+
                 return new SimpleObjectProperty<CheckComboBox<String>>(checkComboBox);
             }
         });
-        idFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, Integer>, ObservableValue<Integer>>() {
+        idFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Film, Integer>, ObservableValue<Integer>>() {
             @Override
-            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Filmcategory, Integer> filmcategoryIntegerCellDataFeatures) {
-                return new SimpleIntegerProperty(filmcategoryIntegerCellDataFeatures.getValue().getFilmId().getId()).asObject();
+            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Film, Integer> filmcategoryIntegerCellDataFeatures) {
+                return new SimpleIntegerProperty(filmcategoryIntegerCellDataFeatures.getValue().getId()).asObject();
             }
         });
-        nomFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, String>, ObservableValue<String>>() {
+        nomFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Film, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Filmcategory, String> filmcategoryStringCellDataFeatures) {
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Film, String> filmcategoryStringCellDataFeatures) {
 
-                return new SimpleStringProperty(filmcategoryStringCellDataFeatures.getValue().getFilmId().getNom());
+                return new SimpleStringProperty(filmcategoryStringCellDataFeatures.getValue().getNom());
             }
         });
-        idacteurFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, String>, ObservableValue<String>>() {
+        idacteurFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Film, CheckComboBox<String>>, ObservableValue<CheckComboBox<String>>>() {
 
             @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Filmcategory, String> filmcategoryStringCellDataFeatures) {
-                ActorfilmService actorfilmService = new ActorfilmService();
-                String actorsNames = actorfilmService.getActorsNames(filmcategoryStringCellDataFeatures.getValue().getFilmId().getId());
-                return new SimpleStringProperty(actorsNames);
+            public ObservableValue<CheckComboBox<String>> call(TableColumn.CellDataFeatures<Film, CheckComboBox<String>> filmcategoryStringCellDataFeatures) {
+                CheckComboBox<String> checkComboBox = new CheckComboBox<>();
+                List<String> l = new ArrayList<>();
+                ActorService cs = new ActorService();
+                for (Actor a : cs.read())
+                    l.add(a.getNom());
+                checkComboBox.getItems().addAll(l);
+                ActorfilmService afs = new ActorfilmService();
+                List<String> ls = Stream.of(afs.getActorsNames(filmcategoryStringCellDataFeatures.getValue().getId()).split(", ")).toList();
+                for (String checkedString : ls)
+                    checkComboBox.getCheckModel().check(checkedString);
+                checkComboBox.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
+                    @Override
+                    public void onChanged(Change<? extends String> change) {
+                        System.out.println(checkComboBox.getCheckModel().getCheckedItems());
+                        ActorfilmService afs = new ActorfilmService();
+                        afs.updateActors(filmcategoryStringCellDataFeatures.getValue(), checkComboBox.getCheckModel().getCheckedItems());
+                    }
+                });
+
+                return new SimpleObjectProperty<CheckComboBox<String>>(checkComboBox);
             }
         });
-        idcinemaFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Filmcategory, Integer>, ObservableValue<Integer>>() {
+        idcinemaFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Film, Integer>, ObservableValue<Integer>>() {
             @Override
-            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Filmcategory, Integer> filmcategoryIntegerCellDataFeatures) {
-                return new SimpleIntegerProperty(filmcategoryIntegerCellDataFeatures.getValue().getFilmId().getIdcinema()).asObject();
+            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Film, Integer> filmcategoryIntegerCellDataFeatures) {
+                return new SimpleIntegerProperty(filmcategoryIntegerCellDataFeatures.getValue().getIdcinema()).asObject();
             }
         });
     }
 
     private void setupCellOnEditCommit() {
-        annederalisationFilm_tableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Filmcategory, Integer>>() {
+        annederalisationFilm_tableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Film, Integer>>() {
             @Override
-            public void handle(TableColumn.CellEditEvent<Filmcategory, Integer> event) {
+            public void handle(TableColumn.CellEditEvent<Film, Integer> event) {
                 try {
                     event.getTableView().getItems().get(
-                            event.getTablePosition().getRow()).getFilmId().setAnnederalisation(event.getNewValue());
+                            event.getTablePosition().getRow()).setAnnederalisation(event.getNewValue());
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
             }
         });
-        nomFilm_tableColumn.setOnEditStart(new EventHandler<TableColumn.CellEditEvent<Filmcategory, String>>() {
+        nomFilm_tableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Film, String>>() {
             @Override
-            public void handle(TableColumn.CellEditEvent<Filmcategory, String> event) {
+            public void handle(TableColumn.CellEditEvent<Film, String> event) {
                 try {
                     event.getTableView().getItems().get(
-                            event.getTablePosition().getRow()).getFilmId().setNom(event.getNewValue());
+                            event.getTablePosition().getRow()).setNom(event.getNewValue());
+                    updateFilm(event.getTableView().getItems().get(
+                            event.getTablePosition().getRow()));
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
             }
         });
-        descriptionFilm_tableColumn.setOnEditStart(new EventHandler<TableColumn.CellEditEvent<Filmcategory, String>>() {
+        descriptionFilm_tableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Film, String>>() {
             @Override
-            public void handle(TableColumn.CellEditEvent<Filmcategory, String> event) {
+            public void handle(TableColumn.CellEditEvent<Film, String> event) {
                 try {
                     event.getTableView().getItems().get(
-                            event.getTablePosition().getRow()).getFilmId().setDescription(event.getNewValue());
+                            event.getTablePosition().getRow()).setDescription(event.getNewValue());
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
             }
         });
-        dureeFilm_tableColumn.setOnEditStart(new EventHandler<TableColumn.CellEditEvent<Filmcategory, Time>>() {
+        dureeFilm_tableColumn.setOnEditStart(new EventHandler<TableColumn.CellEditEvent<Film, Time>>() {
             @Override
-            public void handle(TableColumn.CellEditEvent<Filmcategory, Time> event) {
+            public void handle(TableColumn.CellEditEvent<Film, Time> event) {
                 try {
                     event.getTableView().getItems().get(
-                            event.getTablePosition().getRow()).getFilmId().setDuree(event.getNewValue());
+                            event.getTablePosition().getRow()).setDuree(event.getNewValue());
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
             }
         });
         imageFilm_tableColumn.setOnEditCommit(
-                new EventHandler<TableColumn.CellEditEvent<Filmcategory, HBox>>() {
+                new EventHandler<TableColumn.CellEditEvent<Film, HBox>>() {
                     @Override
-                    public void handle(TableColumn.CellEditEvent<Filmcategory, HBox> event) {
+                    public void handle(TableColumn.CellEditEvent<Film, HBox> event) {
                         try {
                             event.getTableView().getItems().get(
-                                    event.getTablePosition().getRow()).getFilmId().setImage(
+                                    event.getTablePosition().getRow()).setImage(
                                     (Blob) event.getNewValue().getChildren().get(0));
                         } catch (Exception e) {
                             System.out.println(e.getMessage());
@@ -540,53 +749,26 @@ public class FilmController {
 
     }
 
-    @FXML
-    void updateFilm(ActionEvent event) {
-        if (imageBlob != null) { // Vérifier si une image a été sélectionnée
-            Connection connection = null;
-            try {
-                if (selectedFile != null)
-                // Convertir le fichier en un objet Blob
-                {
-                    FileInputStream fis = new FileInputStream(selectedFile);
 
-                    connection = DataSource.getInstance().getConnection();
+    void updateFilm(Film film) {
+//        if (imageBlob != null) { // Vérifier si une image a été sélectionnée
+        Connection connection = null;
+        try {
 
-                    // Définir le flux d'entrée de l'image dans l'objet Blob
-                    try (OutputStream outputStream = imageBlob.setBinaryStream(1)) {
-                        byte[] buffer = new byte[4096];
-                        int bytesRead;
-                        while ((bytesRead = fis.read(buffer)) != -1) {
-                            outputStream.write(buffer, 0, bytesRead);
-                        }
-                    }
-                }
-                // modifier un produit
+            FilmService fs = new FilmService();
+            fs.update(film);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Produit modifiée");
+            alert.setContentText("Produit modifiée !");
+            alert.show();
+            readFilmTable();
+            clear();
 
-                FilmService fs = new FilmService();
-// Assign value to imageBlob
-                /* assign the blob value here */
-                fs.update(new Film(
-                        Integer.parseInt(idFilm_textArea.getText()),
-                        nomFilm_textArea.getText(),
-                        imageBlob,
-                        Time.valueOf(dureeFilm_textArea.getText()),
-                        descriptionFilm_textArea.getText(),
-                        Integer.parseInt(annederealisationFilm_textArea.getText()), // Comma added here
-                        Integer.parseInt(idcinemaFilm_comboBox.getValue())));
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Produit modifiée");
-                alert.setContentText("Produit modifiée !");
-                alert.show();
-                readFilmTable();
-                clear();
-
-            } catch (SQLException | IOException e) {
-                showAlert("Erreur lors de la modification du produit : " + e.getMessage());
-            }
+        } catch (Exception e) {
+            showAlert("Erreur lors de la modification du produit : " + e.getMessage());
         }
+//        }
         readFilmTable();
 
     }
-
 }

@@ -34,7 +34,7 @@ public class FilmService implements IService<Film> {
             statement.setString(4, film.getDescription());
             statement.setInt(5, film.getAnnederalisation());
             statement.executeUpdate();
-            
+
             String selectSql = "SELECT LAST_INSERT_ID()";
             PreparedStatement selectPs = connection.prepareStatement(selectSql);
             ResultSet rs = selectPs.executeQuery();
@@ -72,6 +72,7 @@ public class FilmService implements IService<Film> {
 
         String req = "UPDATE film set nom=?,image=?,duree=?,description=?,annederalisation=? where id=?;";
         try {
+            System.out.println("uodate: " + film);
             PreparedStatement statement = connection.prepareStatement(req);
             statement.setString(1, film.getNom());
             statement.setBlob(2, film.getImage());

@@ -97,66 +97,57 @@
 
                         <AnchorPane fx:id="filmCrudInterface" prefHeight="686.0" prefWidth="1050.0">
                             <children>
-                                <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="799.0" prefWidth="443.0" styleClass="bg-white" stylesheets="@dashbord.css">
+                                <AnchorPane layoutX="28.0" layoutY="43.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="685.0" prefWidth="410.0" styleClass="bg-white" stylesheets="@dashbord.css">
                                     <children>
-                                        <Label layoutX="16.0" layoutY="412.0" text="annederealisation">
+                                        <Label layoutX="6.0" layoutY="438.0" text="annederealisation">
                                             <font>
                                                 <Font size="16.0" />
                                             </font>
                                         </Label>
-                                        <TextArea fx:id="annederealisationFilm_textArea" layoutX="164.0" layoutY="409.0" prefHeight="25.0" prefWidth="200.0" />
-                                        <Label layoutX="25.0" layoutY="460.0" text="categroy">
+                                        <TextArea fx:id="annederealisationFilm_textArea" layoutX="164.0" layoutY="432.0" prefHeight="25.0" prefWidth="200.0" />
+                                        <Label layoutX="17.0" layoutY="486.0" text="categroy">
                                             <font>
                                                 <Font size="16.0" />
                                             </font>
                                         </Label>
-                                        <Button layoutX="140.0" layoutY="745.0" mnemonicParsing="false" onAction="#insertFilm" prefHeight="40.0" prefWidth="79.0" styleClass="instert-btn" stylesheets="@dashbord.css" text="Insérer" />
-                                        <Button layoutX="35.0" layoutY="745.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="88.0" styleClass="instert-btn" stylesheets="@dashbord.css" text="Supprimer" />
-                                        <Button layoutX="238.0" layoutY="745.0" mnemonicParsing="false" onAction="#updateFilm" prefHeight="40.0" prefWidth="79.0" styleClass="instert-btn" stylesheets="@dashbord.css" text="Modifier" />
-                                        <Label layoutX="14.0" layoutY="370.0" text="description">
+                                        <Button layoutX="166.0" layoutY="634.0" mnemonicParsing="false" onAction="#insertFilm" prefHeight="40.0" prefWidth="79.0" styleClass="instert-btn" stylesheets="@dashbord.css" text="Insérer" />
+                                        <Label layoutX="14.0" layoutY="382.0" text="description">
                                             <font>
                                                 <Font size="16.0" />
                                             </font>
                                         </Label>
-                                        <TextArea fx:id="descriptionFilm_textArea" layoutX="163.0" layoutY="363.0" prefHeight="25.0" prefWidth="200.0" />
-                                        <Label layoutX="24.0" layoutY="508.0" text="idacteur">
+                                        <TextArea fx:id="descriptionFilm_textArea" layoutX="162.0" layoutY="375.0" prefHeight="25.0" prefWidth="200.0" />
+                                        <Label layoutX="19.0" layoutY="534.0" text="idacteur">
                                             <font>
                                                 <Font size="16.0" />
                                             </font>
                                         </Label>
-                                        <Label layoutX="15.0" layoutY="322.0" text="duree">
+                                        <Label layoutX="15.0" layoutY="333.0" text="duree">
                                             <font>
                                                 <Font size="16.0" />
                                             </font>
                                         </Label>
-                                        <TextArea fx:id="dureeFilm_textArea" layoutX="162.0" layoutY="318.0" prefHeight="13.0" prefWidth="200.0" wrapText="true" />
-                                        <Label layoutX="15.0" layoutY="276.0" text="nom">
+                                        <TextArea fx:id="dureeFilm_textArea" layoutX="162.0" layoutY="326.0" prefHeight="13.0" prefWidth="200.0" wrapText="true" />
+                                        <Label layoutX="21.0" layoutY="282.0" text="nom">
                                             <font>
                                                 <Font size="16.0" />
                                             </font>
                                         </Label>
-                                        <TextArea fx:id="nomFilm_textArea" layoutX="162.0" layoutY="272.0" prefHeight="13.0" prefWidth="200.0" wrapText="true" />
-                                        <Button layoutX="179.0" layoutY="180.0" mnemonicParsing="false" onAction="#importFilmImage" prefHeight="40.0" prefWidth="88.0" styleClass="instert-btn" stylesheets="@dashbord.css" text="imprimer" />
-                                        <AnchorPane fx:id="image_view" layoutX="160.0" layoutY="14.0" prefHeight="136.0" prefWidth="125.0" styleClass="bg-white" stylesheets="@dashbord.css">
-                                            <children>
-                                                <ImageView fx:id="imageFilm_ImageView" fitHeight="155.0" fitWidth="126.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" />
-                                            </children>
+                                        <TextArea fx:id="nomFilm_textArea" layoutX="162.0" layoutY="275.0" prefHeight="13.0" prefWidth="200.0" wrapText="true" />
+                                        <Button layoutX="161.0" layoutY="199.0" mnemonicParsing="false" onAction="#importFilmImage" prefHeight="40.0" prefWidth="88.0" styleClass="instert-btn" stylesheets="@dashbord.css" text="imprimer" />
+                                        <AnchorPane fx:id="image_view" layoutX="138.0" layoutY="14.0" prefHeight="167.0" prefWidth="141.0" styleClass="bg-white" stylesheets="@dashbord.css">
+                                 <children>
+                                                <ImageView fx:id="imageFilm_ImageView" fitHeight="155.0" fitWidth="126.0" layoutX="8.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true" />
+                                 </children>
                                         </AnchorPane>
-                                        <Label layoutX="15.0" layoutY="232.0" text="id film">
+                                        <Label layoutX="14.0" layoutY="583.0" text="id cinema">
                                             <font>
                                                 <Font size="16.0" />
                                             </font>
                                         </Label>
-                                        <TextArea fx:id="idFilm_textArea" editable="false" layoutX="162.0" layoutY="228.0" prefHeight="13.0" prefWidth="200.0" wrapText="true" />
-                                        <Label layoutX="17.0" layoutY="551.0" text="id cinema">
-                                            <font>
-                                                <Font size="16.0" />
-                                            </font>
-                                        </Label>
-                                        <ComboBox fx:id="idacteurFilm_comboBox" layoutX="165.0" layoutY="501.0" prefHeight="35.0" prefWidth="202.0" />
-                                        <ComboBox fx:id="idcinemaFilm_comboBox" layoutX="165.0" layoutY="545.0" prefHeight="35.0" prefWidth="202.0" />
-                                        <CheckComboBox fx:id="Categorychecj_ComboBox" layoutX="165.0" layoutY="454.0" prefHeight="37.0" prefWidth="201.0" />
-                              <CheckComboBox fx:id="Actorcheck_ComboBox1" layoutX="146.0" layoutY="631.0" prefHeight="37.0" prefWidth="201.0" />
+                                        <ComboBox fx:id="idcinemaFilm_comboBox" layoutX="161.0" layoutY="578.0" prefHeight="35.0" prefWidth="202.0" />
+                                        <CheckComboBox fx:id="Categorychecj_ComboBox" layoutX="162.0" layoutY="480.0" prefHeight="37.0" prefWidth="201.0" />
+                                        <CheckComboBox fx:id="Actorcheck_ComboBox1" layoutX="162.0" layoutY="528.0" prefHeight="37.0" prefWidth="201.0" />
                                     </children>
                                 </AnchorPane>
                                 <AnchorPane layoutX="474.0" layoutY="13.0" prefHeight="662.0" prefWidth="940.0" styleClass="bg-white" stylesheets="@dashbord.css">

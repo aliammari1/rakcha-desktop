@@ -72,6 +72,33 @@ public class ActorfilmService implements IService<Actorfilm> {
         }
     }
 
+    public void updateActors(Film film, List<String> actorNames) {
+        FilmService filmService = new FilmService();
+        ActorService actorService = new ActorService();
+        filmService.update(film);
+        System.out.println("filmCategory---------------: " + film);
+        String reqDelete = "DELETE FROM actorfilm WHERE idfilm = ?;";
+        try {
+            PreparedStatement statement = connection.prepareStatement(reqDelete);
+            statement.setInt(1, film.getId());
+            statement.executeUpdate();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        String req = "INSERT INTO actorfilm (idfilm, idactor) VALUES (?,?)";
+        try {
+            PreparedStatement statement = connection.prepareStatement(req);
+            statement.setInt(1, film.getId());
+            for (String actorname : actorNames) {
+                statement.setInt(2, new ActorService().getActorByNom(actorname).getId());
+                statement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
     @Override
     public void delete(Actorfilm actorfilm) {
 
