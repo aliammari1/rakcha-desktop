@@ -56,7 +56,16 @@ public class UserService implements IService<User> {
         try {
             PreparedStatement statement = this.con.prepareStatement(
                     "UPDATE users SET  nom=?,prenom=?,num_telephone=?,password=?,role=?,adresse=?,date_de_naissance=?,email=?,photo_de_profil=? WHERE id=?");
-            updateAndAddStatementSetter(user, statement);
+            System.out.println(user);
+            statement.setString(1, user.getFirstName());
+            statement.setString(2, user.getLastName());
+            statement.setInt(3, user.getPhoneNumber());
+            statement.setString(4, user.getPassword());
+            statement.setString(5, user.getRole());
+            statement.setString(6, user.getAddress());
+            statement.setDate(7, user.getBirthDate());
+            statement.setString(8, user.getEmail());
+            statement.setBlob(9, user.getPhoto_de_profil());
             statement.setInt(10, user.getId());
             statement.executeUpdate();
             System.out.println("user is updated");
@@ -78,13 +87,13 @@ public class UserService implements IService<User> {
     }
 
     private void updateAndAddStatementSetter(User user, PreparedStatement statement) throws SQLException {
-        statement.setString(1, user.getNom());
-        statement.setString(2, user.getPrenom());
-        statement.setInt(3, user.getNum_telephone());
+        statement.setString(1, user.getFirstName());
+        statement.setString(2, user.getLastName());
+        statement.setInt(3, user.getPhoneNumber());
         statement.setString(4, user.getPassword());
         statement.setString(5, user.getRole());
-        statement.setString(6, user.getAdresse());
-        statement.setDate(7, user.getDate_de_naissance());
+        statement.setString(6, user.getAddress());
+        statement.setDate(7, user.getBirthDate());
         statement.setString(8, user.getEmail());
         statement.setBlob(9, user.getPhoto_de_profil());
     }
@@ -188,7 +197,7 @@ public class UserService implements IService<User> {
             System.out.println(e.getMessage());
         }
     }
-    
+
     private User getUserRow(PreparedStatement preparedStatement) throws SQLException {
         ResultSet resultSet = preparedStatement.executeQuery();
         resultSet.next();
@@ -235,22 +244,17 @@ public class UserService implements IService<User> {
         };
     }
 
-    public void login(String email, String password) {
+    public User login(String email, String password) {
         String query = "select * from users where (email LIKE ?) AND (password LIKE ?)";
+        User user = null;
         try {
             PreparedStatement statement = this.con.prepareStatement(query);
             statement.setString(1, email);
             statement.setString(2, password);
-            User user = getUserRow(statement);
-            if (user != null) {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "the user was found", ButtonType.CLOSE);
-                alert.show();
-            } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "the user was not found", ButtonType.CLOSE);
-                alert.show();
-            }
+            user = getUserRow(statement);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        return user;
     }
 }
