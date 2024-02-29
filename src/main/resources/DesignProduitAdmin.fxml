@@ -14,7 +14,7 @@
 
 <AnchorPane prefHeight="669.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.DesignProduitAdminContoller">
    <children>
-      <AnchorPane prefHeight="707.0" prefWidth="208.0" styleClass="nav-form" stylesheets="@Dashbord.css">
+      <AnchorPane prefHeight="707.0" prefWidth="187.0" styleClass="nav-form" stylesheets="@Dashbord.css">
          <children>
             <Button layoutY="282.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Movies">
                <font>
@@ -22,7 +22,7 @@
                </font>
             </Button>
             <FontAwesomeIconView fill="#ebe5e5" glyphName="FILM" layoutX="20.0" layoutY="308.0" size="30" text="" />
-            <Button layoutX="1.0" layoutY="321.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Products" />
+            <Button layoutX="1.0" layoutY="321.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="202.0" styleClass="nav-btn" text="Products" />
             <FontAwesomeIconView fill="#ebe5e5" glyphName="CUBES" layoutX="20.0" layoutY="347.0" size="30" text="" />
             <FontAwesomeIconView fill="#ebe5e5" glyphName="VIDEO_CAMERA" layoutX="24.0" layoutY="390.0" size="30" text="" />
             <Button layoutY="364.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="202.0" styleClass="nav-btn" text="Cinema" textAlignment="CENTER" />
@@ -36,12 +36,12 @@
                   <Font size="13.0" />
                </font>
             </Button>
-            <Button layoutX="1.0" layoutY="244.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Series" />
+            <Button layoutX="1.0" layoutY="244.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="194.0" styleClass="nav-btn" text="Series" />
             <FontAwesomeIconView fill="#ebe5e5" glyphName="TV" layoutX="18.0" layoutY="269.0" size="30" />
          </children>
       </AnchorPane>
       <AnchorPane layoutX="1280.0" prefHeight="707.0" prefWidth="0.0" styleClass="nav-form" stylesheets="@../../../../../Downloads/dashbord.css" />
-      <AnchorPane layoutX="235.0" layoutY="93.0" prefHeight="607.0" prefWidth="309.0" styleClass="bg-white" stylesheets="@Dashbord.css">
+      <AnchorPane layoutX="215.0" layoutY="75.0" prefHeight="607.0" prefWidth="309.0" styleClass="bg-white" stylesheets="@Dashbord.css">
          <children>
             <ComboBox fx:id="nomC_comboBox" layoutX="107.0" layoutY="163.0" prefHeight="25.0" prefWidth="105.0" styleClass="combo-box-red" />
             <Label layoutX="13.0" layoutY="118.0" text="Product :">
@@ -88,7 +88,7 @@
             <FontAwesomeIconView fill="#bf1515" glyphName="UPLOAD" layoutX="38.0" layoutY="506.0" onMouseClicked="#selectImage" selectionFill="#2c2a2a" size="20" />
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="555.0" layoutY="244.0" prefHeight="418.0" prefWidth="720.0" styleClass="bg-white" stylesheets="@Dashbord.css">
+      <AnchorPane layoutX="540.0" layoutY="263.0" prefHeight="418.0" prefWidth="726.0" styleClass="bg-white" stylesheets="@Dashbord.css">
          <children>
             <TableView fx:id="Produit_tableview" layoutX="12.0" layoutY="92.0" prefHeight="308.0" prefWidth="698.0">
               <columns>
@@ -109,8 +109,8 @@
             </Label>
          </children>
       </AnchorPane>
-      <Button layoutX="1052.0" layoutY="210.0" mnemonicParsing="false" onAction="#GestionCategorie" styleClass="navig-button" stylesheets="@Dashbord.css" text=" Category Management" />
-      <TextField fx:id="SearchBar" layoutX="940.0" layoutY="34.0" prefHeight="25.0" prefWidth="188.0" stylesheets="@Dashbord.css" />
+      <Button layoutX="1096.0" layoutY="231.0" mnemonicParsing="false" onAction="#GestionCategorie" styleClass="navig-button" stylesheets="@Dashbord.css" text=" Category Management" />
+      <TextField fx:id="SearchBar" layoutX="1014.0" layoutY="59.0" prefHeight="31.0" prefWidth="240.0" styleClass="search-pane" stylesheets="@Dashbord.css" />
 
    </children>
 </AnchorPane>
