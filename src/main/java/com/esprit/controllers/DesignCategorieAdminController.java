@@ -1,10 +1,9 @@
 package com.esprit.controllers;
-import com.esprit.models.Categorie;
 
+import com.esprit.models.Categorie_Produit;
 
 import com.esprit.services.CategorieService;
 
-import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,24 +15,26 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
+
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.sql.Connection;
 import java.util.List;
 
 public class DesignCategorieAdminController {
 
     @FXML
-    private TableView<Categorie> categorie_tableview;
+    private TableView<Categorie_Produit> categorie_tableview;
 
     @FXML
     private TextField SearchBar;
 
 
     @FXML
-    private TableColumn<Categorie,Void> deleteColumn;
+    private TableColumn<Categorie_Produit,Void> deleteColumn;
 
     @FXML
     private TextArea descriptionC_textArea;
@@ -43,16 +44,15 @@ public class DesignCategorieAdminController {
 
 
     @FXML
-    private TableColumn<Categorie,String> nomC_tableC;
+    private TableColumn<Categorie_Produit,String> nomC_tableC;
     @FXML
-    private TableColumn<Categorie, String> description_tableC;
+    private TableColumn<Categorie_Produit, String> description_tableC;
 
-    private List<Categorie> l1=new ArrayList<>();
 
     @FXML
     void GestionCategorie(ActionEvent event) throws IOException {
-        // Charger la nouvelle interface ListCinemaAdmin.fxml
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignCategorieAdmin.fxml"));
+        // Charger la nouvelle interface ListproduitAdmin.fxml
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignProduitAdmin.fxml"));
         Parent root = loader.load();
 
         // Créer une nouvelle scène avec la nouvelle interface
@@ -61,7 +61,7 @@ public class DesignCategorieAdminController {
         // Créer une nouvelle fenêtre (stage) et y attacher la scène
         Stage stage = new Stage();
         stage.setScene(scene);
-        stage.setTitle("GGestion des produits");
+        stage.setTitle("Gestion des categories");
         stage.show();
 
     }
@@ -70,76 +70,50 @@ public class DesignCategorieAdminController {
     @FXML
     void initialize(){
 
-        CategorieService categorieservice=new CategorieService();
-        l1=categorieservice.read();
-        SearchBar.textProperty().addListener((ChangeListener<String>) (observable, oldValue, newValue) -> {
-            List<Categorie> cat;
-            cat=recherchercat(l1,newValue);
-            afficher_categorie(cat);
-        });
-        afficher_categorie(l1);
+
+        afficher_categorie();
         initDeleteColumn();
     }
 
     @FXML
     void ajouter_categorie(ActionEvent event) {
+        // Créer l'objet Categorie
         CategorieService cs = new CategorieService();
-        cs.create(new Categorie( nomC_textFile.getText(), descriptionC_textArea.getText()));
+        Categorie_Produit nouvelleCategorieProduit = new Categorie_Produit(nomC_textFile.getText(),  descriptionC_textArea.getText());
+        cs.create(nouvelleCategorieProduit);
+        // Ajouter le nouveau categorie à la liste existante
+        categorie_tableview.getItems().add(nouvelleCategorieProduit);
+
+        // Rafraîchir la TableView
+        categorie_tableview.refresh();
+
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Categorie ajoutée");
-        alert.setContentText("Categorie ajoutée !");
+        alert.setTitle("Categorie ajouté");
+        alert.setContentText("Categorie ajouté !");
         alert.show();
-        nomC_tableC.setCellValueFactory(new PropertyValueFactory<Categorie,String>("nom_categorie"));
-        description_tableC.setCellValueFactory(new PropertyValueFactory<Categorie,String>("description"));
-        ObservableList<Categorie> list = FXCollections.observableArrayList();
-        list.addAll(cs.read());
-        categorie_tableview.setItems(list);
-        categorie_tableview.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
-                Categorie selectedUser = categorie_tableview.getSelectionModel().getSelectedItem();
-                nomC_textFile.setText(selectedUser.getNom_categorie());
-                descriptionC_textArea.setText(selectedUser.getDescription());
-            }
-        });
 
     }
 
 
-    @FXML
-    void supprimer_categorie(Categorie categorie) {
-        Categorie selectedProduct = categorie_tableview.getSelectionModel().getSelectedItem();
-
-        if (selectedProduct != null) {
-            CategorieService ps = new CategorieService();
-            ps.delete(selectedProduct);
-
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Categorie supprimé");
-            alert.setContentText("Categorie supprimé !");
-            alert.show();
-
-            // Rafraîchir la TableView après la suppression
-            afficher_categorie(l1);
-        }
-
-    }
 
     private void initDeleteColumn() {
 
-        // Créer une cellule de la colonne Supprimer
-        Callback<TableColumn<Categorie, Void>, TableCell<Categorie, Void>> cellFactory = new Callback<>() {
+        Callback<TableColumn<Categorie_Produit, Void>, TableCell<Categorie_Produit, Void>> cellFactory = new Callback<>() {
             @Override
-            public TableCell<Categorie, Void> call(final TableColumn<Categorie, Void> param) {
-                final TableCell<Categorie, Void> cell = new TableCell<>() {
+            public TableCell<Categorie_Produit, Void> call(final TableColumn<Categorie_Produit, Void> param) {
+                final TableCell<Categorie_Produit, Void> cell = new TableCell<>() {
                     private final Button btnDelete = new Button("Delete");
 
                     {
-
                         btnDelete.getStyleClass().add("delete-button");
                         btnDelete.setOnAction((ActionEvent event) -> {
-                            Categorie categorie = getTableView().getItems().get(getIndex());
-                            supprimer_categorie(categorie);
-                            categorie_tableview.getItems().remove(categorie);
+                            Categorie_Produit categorieProduit = getTableView().getItems().get(getIndex());
+                            CategorieService cs = new CategorieService();
+                            cs.delete(categorieProduit);
+
+                            categorie_tableview.getItems().remove(categorieProduit);
+                            categorie_tableview.refresh();
+
                         });
                     }
 
@@ -157,48 +131,46 @@ public class DesignCategorieAdminController {
             }
         };
 
-        // Définir la cellule de la colonne Supprimer
         deleteColumn.setCellFactory(cellFactory);
-
-        // Ajouter la colonne Supprimer à la TableView
         categorie_tableview.getColumns().add(deleteColumn);
     }
 
+
+
+
     @FXML
-    void modifier_categorie(Categorie categorie) {
+    void modifier_categorie(Categorie_Produit categorieProduit) {
 
-        String nouveauNom = categorie.getNom_categorie();
-        String nouvelleDescription = categorie.getDescription();
-
-
+        String nouveauNom = categorieProduit.getNom_categorie();
+        String nouvelleDescription = categorieProduit.getDescription();
 
         // Enregistrez les modifications dans la base de données en utilisant un service approprié
         CategorieService ps = new CategorieService();
-        ps.update(categorie);
+        ps.update(categorieProduit);
 
 
     }
 
 
     @FXML
-    void afficher_categorie(List<Categorie> listcategorie){
-        categorie_tableview.getItems().clear();
+    void afficher_categorie(){
 
 
-        nomC_tableC.setCellValueFactory(new PropertyValueFactory<Categorie,String>("nom_categorie"));
+
+        nomC_tableC.setCellValueFactory(new PropertyValueFactory<Categorie_Produit,String>("nom_categorie"));
         nomC_tableC.setCellFactory(TextFieldTableCell.forTableColumn());
         nomC_tableC.setOnEditCommit(event -> {
-            Categorie categorie = event.getRowValue();
-            categorie.setNom_categorie(event.getNewValue());
-            modifier_categorie(categorie);
+            Categorie_Produit categorieProduit = event.getRowValue();
+            categorieProduit.setNom_categorie(event.getNewValue());
+            modifier_categorie(categorieProduit);
         });
 
-        description_tableC.setCellValueFactory(new PropertyValueFactory<Categorie,String>("description"));
+        description_tableC.setCellValueFactory(new PropertyValueFactory<Categorie_Produit,String>("description"));
         description_tableC.setCellFactory(TextFieldTableCell.forTableColumn());
         description_tableC.setOnEditCommit(event -> {
-            Categorie categorie = event.getRowValue();
-            categorie.setDescription(event.getNewValue());
-            modifier_categorie(categorie);
+            Categorie_Produit categorieProduit = event.getRowValue();
+            categorieProduit.setDescription(event.getNewValue());
+            modifier_categorie(categorieProduit);
         });
 
 
@@ -208,24 +180,27 @@ public class DesignCategorieAdminController {
         // Gérer la modification du texte dans une cellule et le valider en appuyant sur Enter
         categorie_tableview.setOnKeyPressed(event -> {
             if (event.getCode().equals(KeyCode.ENTER)) {
-                Categorie selectedCategorie = categorie_tableview.getSelectionModel().getSelectedItem();
-                if (selectedCategorie != null) {
-                    modifier_categorie(selectedCategorie);
+                Categorie_Produit selectedCategorieProduit = categorie_tableview.getSelectionModel().getSelectedItem();
+                if (selectedCategorieProduit != null) {
+                    modifier_categorie(selectedCategorieProduit);
                 }
             }
         });
+        // Utiliser une ObservableList pour stocker les éléments
+        ObservableList<Categorie_Produit> list = FXCollections.observableArrayList();
+        CategorieService cs = new CategorieService();
+        list.addAll(cs.read());
+        categorie_tableview.setItems(list);
 
         // Activer la sélection de cellules
         categorie_tableview.getSelectionModel().setCellSelectionEnabled(true);
-        categorie_tableview.getItems().addAll(listcategorie);
-
 
     }
     @FXML
-    public static List<Categorie> recherchercat(List<Categorie> liste, String recherche) {
-        List<Categorie> resultats = new ArrayList<>();
+    public static List<Categorie_Produit> recherchercat(List<Categorie_Produit> liste, String recherche) {
+        List<Categorie_Produit> resultats = new ArrayList<>();
 
-        for (Categorie element : liste) {
+        for (Categorie_Produit element : liste) {
             if (element.getNom_categorie() != null && element.getNom_categorie().contains(recherche)) {
                 resultats.add(element);
             }

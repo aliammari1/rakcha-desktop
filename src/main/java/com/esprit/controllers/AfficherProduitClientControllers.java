@@ -2,20 +2,25 @@ package com.esprit.controllers;
 
 import com.esprit.models.Produit;
 import com.esprit.services.ProduitService;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
+
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.VBox;
+
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -23,45 +28,59 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Blob;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class AfficherProduitClientControllers implements Initializable  {
+public class AfficherProduitClientControllers implements Initializable {
+
 
     @FXML
-   private  FlowPane produitFlowPane;
+    public TextField SearchBar;
+    @FXML
+    private FlowPane produitFlowPane;
 
+    private FlowPane FlowPane;
+    private List<Produit> l1 = new ArrayList<>();
 
 
     public void initialize(URL location, ResourceBundle resources) {
+
+        ProduitService produitService = new ProduitService();
+        l1 = produitService.read();
+
+        SearchBar.textProperty().addListener((ChangeListener<String>) (observable, oldValue, newValue) -> {
+            List<Produit> produitsRecherches = rechercher(l1, newValue);
+            // Effacer la FlowPane actuelle pour afficher les nouveaux résultats
+            produitFlowPane.getChildren().clear();
+            createProduitCards(produitsRecherches);
+        });
         loadAcceptedProduits();
 
     }
+
     private void loadAcceptedProduits() {
         // Récupérer toutes les produits depuis le service
-    ProduitService produitService = new ProduitService();
-    List<Produit>Produits =produitService.read();
-    // Créer une carte pour chaque produit et l'ajouter à la FlowPane
-    for (Produit produit : Produits){
-        //VBox card = createProduitCard(produit);
-        VBox cardContainer = createProduitCard(produit);
+        ProduitService produitService = new ProduitService();
+        List<Produit> Produits = produitService.read();
 
-        produitFlowPane.getChildren().add(cardContainer);
+        // Créer une carte pour chaque produit et l'ajouter à la FlowPane
+        for (Produit produit : Produits) {
+            VBox cardContainer = createProduitCard(produit);
+
+            produitFlowPane.getChildren().add(cardContainer);
+
+
+        }
     }
-}
 
-    private VBox createProduitCard (Produit Produit)  {
+    private VBox createProduitCard(Produit Produit) {
         // Créer une carte pour le produit avec ses informations
 
         VBox cardContainer = new VBox(5);
-        cardContainer.setStyle("-fx-padding: 110px 0 0  50px;"); // Ajout de remplissage à gauche pour le décalage
-
-        AnchorPane card = new AnchorPane();
 
         // Image du Produit
         ImageView imageView = new ImageView();
-        /*imageView.setLayoutX(10);
-        imageView.setLayoutY(140);*/
         imageView.setFitWidth(200);
         imageView.setFitHeight(150);
 
@@ -94,7 +113,7 @@ public class AfficherProduitClientControllers implements Initializable  {
 
                 // Afficher la nouvelle interface
                 Stage stage = new Stage();
-                stage.setScene(new Scene(root,1280,700));
+                stage.setScene(new Scene(root, 1280, 700));
                 stage.setTitle("Détails du Produit");
                 stage.show();
             } catch (IOException e) {
@@ -105,112 +124,68 @@ public class AfficherProduitClientControllers implements Initializable  {
         });
 
 
-
         // Prix du Produit
-        Label priceLabel = new Label(" " + Produit.getPrix()+" DT");
+        Label priceLabel = new Label(" " + Produit.getPrix() + " DT");
         /*priceLabel.setLayoutX(10);
         priceLabel.setLayoutY(300);*/
-        priceLabel.setFont(Font.font("Helvetica", 16)); // Définir la police et la taille
+        priceLabel.setFont(Font.font("Arial", 15));
 
-
+        // Description du produit
+        Label descriptionLabel = new Label(Produit.getDescription());
+        descriptionLabel.setFont(Font.font("Arial", 14));
+        descriptionLabel.setStyle("-fx-text-fill: #666666;");
 
         // Nom du Produit
         Label nameLabel = new Label(Produit.getNom());
        /*nameLabel.setLayoutX(70);
         nameLabel.setLayoutY(310);*/
-        nameLabel.setFont(Font.font("Arial", 12)); // Définir la police et la taille
-        nameLabel.setStyle("-fx-text-fill: black;"); // Définir la couleur du texte
-        nameLabel.setOnMouseClicked(event -> {
+        nameLabel.setFont(Font.font("Verdana", 15));
+        nameLabel.setStyle("-fx-text-fill: black;");
 
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/DetailsProduitClient.fxml"));
-
-                Parent root = null;
-                System.out.println("Clique sur le nom du produit. ID du produit : " + Produit.getId_produit());
-                root = loader.load();
-                // Récupérez le contrôleur et passez l'id du produit lors de l'initialisation
-                DetailsProduitClientController controller = loader.getController();
-                controller.setProduitId(Produit.getId_produit());
-
-                // Afficher la nouvelle interface
-                Stage stage = new Stage();
-                stage.setScene(new Scene(root,1280,700));
-                stage.setTitle("Détails du Produit");
-                stage.show();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-
-        });
-
-
-       /* // Spinner pour la quantité
-        Spinner<Integer> quantitySpinner = new Spinner<>(1, 100, 1); // Valeurs min, max, valeur initiale
-        quantitySpinner.setLayoutX(10);
-        quantitySpinner.setLayoutY(300);
-        quantitySpinner.setPrefWidth(70); // Largeur souhaitée
-        quantitySpinner.setPrefHeight(25); // Hauteur souhaitée
-
-        card.getChildren().add(quantitySpinner);*/
 
         // Bouton Ajouter au Panier
-        Button addToCartButton = new Button("Ajouter au panier");
-        /*addToCartButton.setLayoutX(10);
-        addToCartButton.setLayoutY(330);*/
-        addToCartButton.setStyle("-fx-background-color: #C62828; -fx-text-fill: White;"); // Style du bouton
+        Button addToCartButton = new Button("Ajouter au panier", new FontAwesomeIconView(FontAwesomeIcon.CART_PLUS));
+        addToCartButton.setStyle("-fx-background-color: #dd4f4d; -fx-text-fill: #FFFFFF; -fx-font-size: 12px; -fx-font-weight: bold; -fx-padding: 10px 10px;");
+        //addToCartButton.setStyle("-fx-background-color: #624970; -fx-text-fill: white; -fx-font-size: 11px; -fx-font-weight: bold; -fx-padding: 5px 10px;");
         addToCartButton.setOnAction(event -> {
-            // Récupérer la quantité sélectionnée
-           /* int quantity = quantitySpinner.getValue();
 
-            // Créer un objet représentant l'élément du panier
-            PanierProduitControllers commandeItem = new PanierProduitControllers(produit, quantity);
-
-            // Ajouter l'élément à la commande
-            Commande.getInstance().ajouterAuPanier(commandeItem);
-
-            // Vous pouvez également mettre à jour l'interface utilisateur pour refléter l'ajout à la commande
-            // Par exemple, afficher un message de confirmation
-            afficherMessageConfirmation("Produit ajouté à la commande!");*/
         });
 
-        cardContainer.getChildren().addAll(imageView,nameLabel,priceLabel,addToCartButton);
+        cardContainer.getChildren().addAll(imageView, nameLabel, descriptionLabel, priceLabel, addToCartButton);
+        //cardContainer.getChildren().add(card);
+
+        cardContainer.setStyle("-fx-padding: 20px 30 20  30px;");
+       cardContainer.getStyleClass().add("card-container");
 
 
-
-
-       /* // Ajoutez un gestionnaire d'événements pour ouvrir la nouvelle interface lors du clic sur la carte
-        nameLabel.setOnMouseClicked(event -> {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("DetailsProduitClient.fxml"));
-            Parent root = null;
-            try {
-                root = loader.load();
-             // Récupérez le contrôleur et passez l'id du produit lors de l'initialisation
-                DetailsProduitClientController controller = loader.getController();
-                controller.setProduitId(Produit.getId_produit());
-
-                // Afficher la nouvelle interface
-                Stage stage = new Stage();
-                stage.setScene(new Scene(root));
-                stage.setTitle("Détails du Produit");
-                stage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });*/
-        cardContainer.getChildren().add(card);
 
         return cardContainer;
     }
 
 
-    private void showAlert (String message){
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Information");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+    @FXML
+    public static List<Produit> rechercher(List<Produit> liste, String recherche) {
+        List<Produit> resultats = new ArrayList<>();
+
+        for (Produit element : liste) {
+            if (element.getNom() != null && element.getNom().contains(recherche)) {
+                resultats.add(element);
+            }
+        }
+
+        return resultats;
     }
 
+    private void createProduitCards(List<Produit> produits) {
+        for (Produit produit : produits) {
+            VBox cardContainer = createProduitCard(produit);
+            produitFlowPane.getChildren().add(cardContainer);
 
+
+        }
+
+    }
 }
+
+
+
