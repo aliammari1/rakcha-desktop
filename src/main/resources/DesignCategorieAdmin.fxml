@@ -79,7 +79,7 @@
             </children>
         </AnchorPane>
         <Button layoutX="1043.0" layoutY="175.0" mnemonicParsing="false" onAction="#GestionCategorie" styleClass="navig-button" stylesheets="@Dashbord.css" text="Product Management" />
-        <TextField fx:id="SearchBar" layoutX="926.0" layoutY="36.0" prefHeight="25.0" prefWidth="188.0" stylesheets="@Dashbord.css" />
+        <TextField fx:id="SearchBar" layoutX="926.0" layoutY="36.0" prefHeight="25.0" prefWidth="188.0" styleClass="search-pane" stylesheets="@Dashbord.css" />
 
     </children>
 

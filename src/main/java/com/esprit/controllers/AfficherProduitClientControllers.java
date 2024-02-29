@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -28,6 +29,9 @@ import java.util.ResourceBundle;
 
 public class AfficherProduitClientControllers implements Initializable  {
 
+
+    @FXML
+    public TextField SearchBar;
     @FXML
    private  FlowPane produitFlowPane;
 
@@ -54,7 +58,7 @@ public class AfficherProduitClientControllers implements Initializable  {
         // Créer une carte pour le produit avec ses informations
 
         VBox cardContainer = new VBox(5);
-        cardContainer.setStyle("-fx-padding: 110px 0 0  50px;"); // Ajout de remplissage à gauche pour le décalage
+        cardContainer.setStyle("-fx-padding: 50px 0 0  50px;"); // Ajout de remplissage à gauche pour le décalage
 
         AnchorPane card = new AnchorPane();
 
