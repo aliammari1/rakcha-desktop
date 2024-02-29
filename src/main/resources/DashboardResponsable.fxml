@@ -159,7 +159,7 @@
             <Button layoutX="130.0" layoutY="483.0" mnemonicParsing="false" onAction="#AjouterSalle" prefHeight="47.0" prefWidth="122.0" styleClass="instert-btn" text="ADD" />
          </children>
       </AnchorPane>
-      <TableView fx:id="RoomTableView" layoutX="732.0" layoutY="164.0" prefHeight="200.0" prefWidth="460.0" stylesheets="@dashboard.css">
+      <TableView fx:id="RoomTableView" layoutX="731.0" layoutY="36.0" prefHeight="200.0" prefWidth="460.0" stylesheets="@dashboard.css">
         <columns>
           <TableColumn fx:id="colNameRoom" prefWidth="152.0" text="Name" />
           <TableColumn fx:id="colNbrPlaces" prefWidth="152.0" text="Number of places" />
