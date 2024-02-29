@@ -32,7 +32,8 @@
     -fx-background-color: transparent;
     -fx-cursor: hand;
     -fx-text-fill: #fff;
-    -fx-font-size: 14px;
+    -fx-font-family: "Arial Rounded MT Bold";
+    -fx-font-size: 15px;
 
 }
 

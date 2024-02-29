@@ -342,10 +342,8 @@ public class DashboardResponsableController implements Initializable {
         }
         card.getChildren().add(logoImageView);
 
-        // Modifier la partie où vous créez l'ImageView pour permettre le double clic
         logoImageView.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
-                // Ouvrir une boîte de dialogue de sélection de fichier pour choisir une nouvelle image
                 FileChooser fileChooser = new FileChooser();
                 fileChooser.setTitle("Choisir une nouvelle image");
                 fileChooser.getExtensionFilters().addAll(
@@ -353,9 +351,7 @@ public class DashboardResponsableController implements Initializable {
                 );
                 File selectedFile = fileChooser.showOpenDialog(null);
 
-                // Si l'utilisateur a choisi un fichier
                 if (selectedFile != null) {
-                    // Mettre à jour l'image dans la base de données
                     try {
                         // Convertir le fichier en tableau de bytes
                         byte[] imageBytes = Files.readAllBytes(selectedFile.toPath());
@@ -369,7 +365,6 @@ public class DashboardResponsableController implements Initializable {
                         logoImageView.setImage(newImage);
                     } catch (IOException | SQLException e) {
                         e.printStackTrace();
-                        // Gérer l'exception
                     }
                 }
             }
