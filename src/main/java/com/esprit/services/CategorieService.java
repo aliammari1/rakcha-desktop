@@ -1,6 +1,6 @@
 package com.esprit.services;
 
-import com.esprit.models.Categorie;
+import com.esprit.models.Categorie_Produit;
 import com.esprit.utils.DataSource;
 
 import java.sql.*;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class CategorieService  implements IService<Categorie> {
+public class CategorieService  implements IService<Categorie_Produit> {
 
     private Connection connection;
 
@@ -18,14 +18,14 @@ public class CategorieService  implements IService<Categorie> {
 
 
     @Override
-    public void create(Categorie categorie) {
+    public void create(Categorie_Produit categorieProduit) {
 
         String req = "INSERT into categorie_produit(nom_categorie, description) values (?, ?);";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
-            pst.setString(1, categorie.getNom_categorie());
+            pst.setString(1, categorieProduit.getNom_categorie());
 
-            pst.setString(2, categorie.getDescription());
+            pst.setString(2, categorieProduit.getDescription());
 
             pst.executeUpdate();
             System.out.println("Categorie ajoutée !");
@@ -35,16 +35,16 @@ public class CategorieService  implements IService<Categorie> {
     }
 
     @Override
-    public List<Categorie> read() {
+    public List<Categorie_Produit> read() {
 
-        List<Categorie> categories = new ArrayList<>();
+        List<Categorie_Produit> categories = new ArrayList<>();
 
         String req = "SELECT * from categorie_produit";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
-                categories.add(new Categorie(rs.getInt("id_categorie"), rs.getString("nom_categorie"), rs.getString("description")));
+                categories.add(new Categorie_Produit(rs.getInt("id_categorie"), rs.getString("nom_categorie"), rs.getString("description")));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -54,13 +54,13 @@ public class CategorieService  implements IService<Categorie> {
     }
 
     @Override
-    public void update(Categorie categorie) {
+    public void update(Categorie_Produit categorieProduit) {
         String req = "UPDATE categorie_produit set nom_categorie = ?,  description = ? where id_categorie=?";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
-            pst.setString(1, categorie.getNom_categorie());
-            pst.setString(2, categorie.getDescription());
-            pst.setInt(3, categorie.getId_categorie());
+            pst.setString(1, categorieProduit.getNom_categorie());
+            pst.setString(2, categorieProduit.getDescription());
+            pst.setInt(3, categorieProduit.getId_categorie());
 
             pst.executeUpdate();
             System.out.println("categorie modifiée !");
@@ -71,11 +71,11 @@ public class CategorieService  implements IService<Categorie> {
     }
 
     @Override
-    public void delete(Categorie categorie) {
+    public void delete(Categorie_Produit categorieProduit) {
         String req = "DELETE from categorie_produit where id_categorie = ?;";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
-            pst.setInt(1, categorie.getId_categorie());
+            pst.setInt(1, categorieProduit.getId_categorie());
             pst.executeUpdate();
             System.out.println("categorie supprmiée !");
         } catch (SQLException e) {
@@ -84,9 +84,9 @@ public class CategorieService  implements IService<Categorie> {
     }
 
 
-    public Categorie getCategorie(int categorie_id) {
+    public Categorie_Produit getCategorie(int categorie_id) {
 
-        Categorie category = null;
+        Categorie_Produit category = null;
 
         String req = "SELECT * from categorie_produit where id_categorie = ?";
         try {
@@ -94,7 +94,7 @@ public class CategorieService  implements IService<Categorie> {
             pst.setInt(1, categorie_id);
             ResultSet rs = pst.executeQuery();
             rs.next();
-                category = new Categorie(rs.getInt("id_categorie"), rs.getString("nom_categorie"), rs.getString("description")) ;
+                category = new Categorie_Produit(rs.getInt("id_categorie"), rs.getString("nom_categorie"), rs.getString("description")) ;
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -103,9 +103,9 @@ public class CategorieService  implements IService<Categorie> {
         return category;
     }
 
-   public Categorie getCategorieByNom(String categorie_nom) {
+   public Categorie_Produit getCategorieByNom(String categorie_nom) {
 
-        Categorie category = null;
+        Categorie_Produit category = null;
 
         String req = "SELECT * from categorie_produit where nom_categorie = ?";
         try {
@@ -113,13 +113,28 @@ public class CategorieService  implements IService<Categorie> {
             pst.setString(1, categorie_nom);
             ResultSet rs = pst.executeQuery();
             rs.next();
-            category = new Categorie(rs.getInt("id_categorie"), rs.getString("nom_categorie"), rs.getString("description")) ;
+            category = new Categorie_Produit(rs.getInt("id_categorie"), rs.getString("nom_categorie"), rs.getString("description")) ;
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
         return category;
+    }
+
+    // Ajoutez cette méthode pour récupérer tous les noms de catégories
+    public List<String> getAllCategoriesNames() {
+        List<String> categorieNames = new ArrayList<>();
+
+        // Remplacez "getAllCategories()" par la méthode réelle qui récupère toutes les catégories
+        List<Categorie_Produit> categories = read();
+
+        // Ajoutez les noms de catégories à la liste
+        for (Categorie_Produit categorieProduit : categories) {
+            categorieNames.add(categorieProduit.getNom_categorie());
+        }
+
+        return categorieNames;
     }
 
 

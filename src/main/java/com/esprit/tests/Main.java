@@ -16,9 +16,9 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
 
-       //FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignProduitAdmin.fxml"));
+       FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignProduitAdmin.fxml"));
         //FXMLLoader loader = new FXMLLoader(getClass().getResource("/AjouterCategorie.fxml"));
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherProduitClient.fxml"));
+        //FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherProduitClient.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root,1280,700);
         primaryStage.setScene(scene);

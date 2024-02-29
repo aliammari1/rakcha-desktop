@@ -1,6 +1,5 @@
 package com.esprit.services;
 
-import com.esprit.models.Categorie;
 import com.esprit.models.Produit;
 import com.esprit.utils.DataSource;
 
@@ -25,7 +24,7 @@ public class ProduitService  implements IService<Produit>{
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setString(1, produit.getNom());
-            pst.setString(2, produit.getPrix());
+            pst.setInt(2, produit.getPrix());
             pst.setBlob(3, produit.getImage());
             pst.setString(4, produit.getDescription());
             pst.setInt(5, produit.getQuantiteP());
@@ -50,7 +49,7 @@ public class ProduitService  implements IService<Produit>{
             int i = 0;
             while (rs.next()) {
 
-                 produits.add(new Produit( rs.getInt("id_produit"), rs.getString("nom"), rs.getString("prix"), rs.getBlob("image"), rs.getString("description"), cs.getCategorie(rs.getInt("id_categorieProduit")),  rs.getInt("quantiteP")));
+                 produits.add(new Produit( rs.getInt("id_produit"), rs.getString("nom"), rs.getInt("prix"), rs.getBlob("image"), rs.getString("description"), cs.getCategorie(rs.getInt("id_categorieProduit")),  rs.getInt("quantiteP")));
                 System.out.println(produits.get(i));
                 i++;
             }
@@ -73,7 +72,7 @@ public class ProduitService  implements IService<Produit>{
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(7, produit.getId_produit());
             pst.setString(2, produit.getNom());
-            pst.setString(3, produit.getPrix());
+            pst.setInt(3, produit.getPrix());
             pst.setString(4, produit.getDescription());
             pst.setBlob(5, produit.getImage());
             pst.setInt(6, produit.getQuantiteP());
@@ -117,7 +116,7 @@ public class ProduitService  implements IService<Produit>{
                 produit = new Produit(
                         rs.getInt("id_produit"),
                         rs.getString("nom"),
-                        rs.getString("prix"),
+                        rs.getInt("prix"),
                         rs.getBlob("image"),
                         rs.getString("description"),
                         cs.getCategorie(rs.getInt("id_categorieProduit")),

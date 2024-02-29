@@ -9,28 +9,28 @@ public class Produit {
     private int id_produit;
 
     private String nom;
-    private String prix;
+    private int prix;
     private Blob image;
     private String description;
 
-    private Categorie categorie;
+    private Categorie_Produit categorieProduit;
 
     private int quantiteP;
 
 
 
-    public Produit(int id_produit, String nom, String prix, Blob image, String description, Categorie categorie, int quantiteP) {
+    public Produit(int id_produit, String nom, int prix, Blob image, String description, Categorie_Produit categorieProduit, int quantiteP) {
         this.id_produit = id_produit;
         this.nom = nom;
         this.prix = prix;
         this.image = image;
         this.description = description;
-        this.categorie = categorie;
+        this.categorieProduit = categorieProduit;
         this.quantiteP = quantiteP;
 
     }
 
-   /* public Produit(int id_produit, String nom, String prix, String image_path, String description, Categorie categorie, int quantiteP) {
+   /* public Produit(int id_produit, String nom, int prix, String image_path, String description, Categorie categorie, int quantiteP) {
         this.id_produit = id_produit;
         this.nom = nom;
         this.prix = prix;
@@ -51,16 +51,16 @@ public class Produit {
         this.id_produit = id_produit;
     }
 
-    public Produit(String nom, String prix, Blob image, String description, Categorie categorie, int quantiteP) {
+    public Produit(String nom, int prix, Blob image, String description, Categorie_Produit categorieProduit, int quantiteP) {
         this.nom = nom;
         this.prix = prix;
         this.image = image;
         this.description = description;
-        this.categorie = categorie;
+        this.categorieProduit = categorieProduit;
         this.quantiteP = quantiteP;
     }
 
-    /*public Produit(String nom, String prix,String image_path, String description, Categorie categorie, int quantiteP) {
+    /*public Produit(String nom, int prix,String image_path, String description, Categorie categorie, int quantiteP) {
         this.nom = nom;
         this.prix = prix;
         this.description = description;
@@ -87,7 +87,7 @@ public class Produit {
         return nom;
     }
 
-    public String getPrix() {
+    public int getPrix() {
         return prix;
     }
 
@@ -110,7 +110,7 @@ public class Produit {
         this.nom = nom;
     }
 
-    public void setPrix(String prix) {
+    public void setPrix(int prix) {
         this.prix = prix;
     }
 
@@ -131,13 +131,13 @@ public class Produit {
     }
 
 
-    public Categorie getCategorie() {
-        return categorie;
+    public Categorie_Produit getCategorie() {
+        return categorieProduit;
     }
 
 
-    public void setCategorie(Categorie categorie) {
-        this.categorie = categorie;
+    public void setCategorie(Categorie_Produit categorieProduit) {
+        this.categorieProduit = categorieProduit;
     }
 
     @Override
@@ -148,17 +148,17 @@ public class Produit {
                 ", prix='" + prix + '\'' +
                 ", image='" + image + '\'' +
                 ", description='" + description + '\'' +
-                ", categorie=" + categorie.getNom_categorie() +
+                ", categorie=" + categorieProduit.getNom_categorie() +
                 ", quantiteP=" + quantiteP +
                 '}';
     }
 
 
-    public Categorie getId_categorieProduit() {
-        return categorie;
+    public Categorie_Produit getId_categorieProduit() {
+        return categorieProduit;
     }
 
     public String getNom_categorie() {
-        return categorie.getNom_categorie();
+        return categorieProduit.getNom_categorie();
     }
 }

@@ -1,32 +1,30 @@
 package com.esprit.models;
 
-public class Categorie {
+public class Categorie_Produit {
 
     private int id_categorie;
     private String nom_categorie;
     private String description;
 
-    public Categorie(int id_categorie, String nom_categorie, String description) {
+    public Categorie_Produit(int id_categorie, String nom_categorie, String description) {
         this.id_categorie = id_categorie;
         this.nom_categorie = nom_categorie;
         this.description = description;
     }
 
-    public Categorie(String nom_categorie, String description) {
+    public Categorie_Produit(String nom_categorie, String description) {
         this.nom_categorie = nom_categorie;
         this.description = description;
     }
 
-    public Categorie() {
 
-    }
 
 
     public int getId_categorie() {
         return id_categorie;
     }
 
-    public void setId_categorieProduit(int id_categorie) {
+    public void setId_categorie(int id_categorie) {
         this.id_categorie = id_categorie;
     }
 

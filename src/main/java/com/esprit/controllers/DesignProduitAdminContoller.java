@@ -1,13 +1,12 @@
 package com.esprit.controllers;
-import com.esprit.models.Categorie;
+import com.esprit.models.Categorie_Produit;
 import com.esprit.models.Produit;
 import com.esprit.services.CategorieService;
 import com.esprit.services.ProduitService;
 import com.esprit.utils.DataSource;
-import javafx.beans.value.ChangeListener;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,7 +18,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 
 import java.io.*;
@@ -37,7 +35,6 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.converter.IntegerStringConverter;
 
-import javax.sql.rowset.serial.SerialBlob;
 
 
 public class DesignProduitAdminContoller {
@@ -45,7 +42,7 @@ public class DesignProduitAdminContoller {
     private File selectedFile; // pour stocke le fichier image selectionné
 
     @FXML
-    private TableColumn<Produit, String> PrixP_tableC;
+    private TableColumn<Produit, Integer> PrixP_tableC;
 
     @FXML
     private TableView<Produit> Produit_tableview;
@@ -55,12 +52,6 @@ public class DesignProduitAdminContoller {
 
     @FXML
     private TextArea descriptionP_textArea;
-
-    @FXML
-    private TableColumn<Produit, Integer> idP_tableC;
-
-    @FXML
-    private TextField idP_textFiled;
 
     @FXML
     private TableColumn<Produit, ImageView> image_tableC;
@@ -87,8 +78,6 @@ public class DesignProduitAdminContoller {
     @FXML
     private TextField quantiteP_textFiled;
 
-    @FXML
-    private AnchorPane image_view;
 
     @FXML
     private ImageView image;
@@ -96,33 +85,56 @@ public class DesignProduitAdminContoller {
     @FXML
     private TextField SearchBar;
 
-    Blob imageBlob;
+
+
+
     @FXML
     private TableColumn<Produit, Void> deleteColumn;
 
     private List<Produit> l1=new ArrayList<>();
 
+
+
+
+
+
     @FXML
     void initialize() {
-        ProduitService produitService=new ProduitService();
-        l1=produitService.read();
-        SearchBar.textProperty().addListener((ChangeListener<String>) (observable, oldValue, newValue) -> {
+       /*roduitService produitService = new ProduitService();
+        l1 = produitService.read();
+        /*SearchBar.textProperty().addListener((ChangeListener<String>) (observable, oldValue, newValue) -> {
             List<Produit> pro;
-            pro=rechercher(l1,newValue);
+            Produit_tableview.getItems().clear();
+            pro = rechercher(l1, newValue);
+
+
             afficher_produit(pro);
-        });
+        });*/
 
 
         CategorieService cs = new CategorieService();
 
-        for (Categorie c : cs.read()) {
+        for (Categorie_Produit c : cs.read()) {
             nomC_comboBox.getItems().add(c.getNom_categorie());
         }
-        //searchFilter();
-        afficher_produit(l1);
+
+
+        afficher_produit();
         initDeleteColumn();
 
     }
+
+    private void loadProduits() {
+        ProduitService produitService = new ProduitService();
+        List<Produit> produits = produitService.read();
+
+        ObservableList<Produit> produitObservableList = FXCollections.observableArrayList(produits);
+
+        Produit_tableview.setItems(produitObservableList);
+    }
+
+
+
 
     @FXML
     private void showAlert(String message) {
@@ -167,14 +179,20 @@ public class DesignProduitAdminContoller {
                 }
 
                 // Créer l'objet Produit avec l'image Blob
-
                 ProduitService ps = new ProduitService();
-                ps.create(new Produit(nomP_textFiled.getText(), prix_textFiled.getText(), imageBlob, descriptionP_textArea.getText(),  new CategorieService().getCategorieByNom(nomC_comboBox.getValue()), Integer.parseInt(quantiteP_textFiled.getText())));
+                Produit nouveauProduit = new Produit(nomP_textFiled.getText(), Integer.parseInt(prix_textFiled.getText()), imageBlob, descriptionP_textArea.getText(),  new CategorieService().getCategorieByNom(nomC_comboBox.getValue()), Integer.parseInt(quantiteP_textFiled.getText()));
+                ps.create(nouveauProduit);
+
+                // Ajouter le nouveau produit à la liste existante
+                Produit_tableview.getItems().add(nouveauProduit);
+
+                // Rafraîchir la TableView
+                Produit_tableview.refresh();
+
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Produit ajoutée");
-                alert.setContentText("Produit ajoutée !");
+                alert.setTitle("Produit ajouté");
+                alert.setContentText("Produit ajouté !");
                 alert.show();
-                afficher_produit(l1);
             } catch (SQLException | IOException e) {
                 showAlert("Erreur lors de l'ajout du produit : " + e.getMessage());
             } finally {
@@ -189,8 +207,8 @@ public class DesignProduitAdminContoller {
         } else {
             showAlert("Veuillez sélectionner une image d'abord !");
         }
-        afficher_produit(l1);
     }
+
 
 
 
@@ -202,7 +220,7 @@ public class DesignProduitAdminContoller {
         // Récupérez les valeurs modifiées depuis la ligne
         String nouvelleCategorie = produit.getNom_categorie();
         String nouveauNom = produit.getNom();
-        String nouveauPrix = produit.getPrix();
+        int nouveauPrix = produit.getPrix();
         String nouvelleDescription = produit.getDescription();
         Blob img = produit.getImage();
         int nouvelleQuantite = produit.getQuantiteP();
@@ -215,82 +233,15 @@ public class DesignProduitAdminContoller {
 
 
 
-    @FXML
-    void supprimer_produit(Produit produit) {
-        Produit selectedProduct = Produit_tableview.getSelectionModel().getSelectedItem();
-
-        if (selectedProduct != null) {
-            ProduitService ps = new ProduitService();
-            ps.delete(selectedProduct);
-
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Produit supprimé");
-            alert.setContentText("Produit supprimé !");
-            alert.show();
-
-
-
-        }
-        // Rafraîchir la TableView après la suppression
-afficher_produit(l1);
-    }
-
-    private void initDeleteColumn() {
-
-        // Créer une cellule de la colonne Supprimer
-        Callback<TableColumn<Produit, Void>, TableCell<Produit, Void>> cellFactory = new Callback<>() {
-            @Override
-            public TableCell<Produit, Void> call(final TableColumn<Produit, Void> param) {
-                final TableCell<Produit, Void> cell = new TableCell<>() {
-                    private final Button btnDelete = new Button("Delete");
-
-                    {
-
-                        btnDelete.getStyleClass().add("delete-button");
-                        btnDelete.setOnAction((ActionEvent event) -> {
-                            Produit produit = getTableView().getItems().get(getIndex());
-                            supprimer_produit(produit);
-                            Produit_tableview.getItems().remove(produit);
-                        });
-                    }
-
-                    @Override
-                    protected void updateItem(Void item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty) {
-                            setGraphic(null);
-                        } else {
-                            setGraphic(btnDelete);
-                        }
-                    }
-                };
-                return cell;
-            }
-        };
-
-        // Définir la cellule de la colonne Supprimer
-        deleteColumn.setCellFactory(cellFactory);
-
-        // Ajouter la colonne Supprimer à la TableView
-        Produit_tableview.getColumns().add(deleteColumn);
-    }
-
-
-
-    void afficher_produit(List<Produit> listproduit){
-        Produit_tableview.getItems().clear();
-
+    void afficher_produit(){
 
         // Créer un nouveau ComboBox
         ImageView imageView = new ImageView();
 
         nomCP_tableC.setCellValueFactory(new PropertyValueFactory<Produit, String>("nom_categorie"));
-
-
-// Définissez le rendu de la cellule en utilisant le ComboBox
         nomCP_tableC.setCellFactory(column -> new TableCell<Produit, String>() {
             @Override
-            protected void updateItem(String item, boolean empty) {
+           /* protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
 
                 if (item == null || empty) {
@@ -299,25 +250,82 @@ afficher_produit(l1);
                     CategorieService cs = new CategorieService();
                     ComboBox<String> newComboBox = new ComboBox<>();
 
-                    // Utilisez la méthode getCategorieByNom pour obtenir la catégorie
-                    Categorie categorie = cs.getCategorieByNom(item);
-                   // ComboBox newComboBox =new ComboBox<>();
-                    // Ajoutez le nom de la catégorie au ComboBox
-                    newComboBox.setItems(nomC_comboBox.getItems());
-                    newComboBox.setValue(categorie.getNom_categorie());
+                    // Obtenez la liste des noms de catégories
+                    List<String> categorieNames = cs.getAllCategoriesNames();
+
+                    // Ajoutez les noms de catégories au ComboBox
+                    newComboBox.getItems().addAll(categorieNames);
+
+                    // Sélectionnez le nom de la catégorie associée au produit
+                    newComboBox.setValue(item);
 
                     // Afficher le ComboBox nouvellement créé dans la cellule
                     setGraphic(newComboBox);
-                    newComboBox.setOnAction(event ->{
+                    newComboBox.setOnAction(event -> {
                         Produit produit = getTableView().getItems().get(getIndex());
-                        produit.setCategorie( new CategorieService().getCategorieByNom(newComboBox.getValue()));
+                        // Mise à jour de la catégorie associée au produit
+                        Categorie selectedCategorie = cs.getCategorieByNom(newComboBox.getValue());
+                        produit.setCategorie(selectedCategorie);
                         modifier_produit(produit);
                         newComboBox.getStyleClass().add("combo-box-red");
+
                     });
                 }
             }
-        });
+        });*/
 
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item);
+                }
+
+                setOnMouseClicked(event -> {
+                    if (event.getClickCount() == 2) {
+                        CategorieService cs = new CategorieService();
+
+                        // Créer un ComboBox contenant les noms des catégories
+                        ComboBox<String> produitComboBox = new ComboBox<>();
+
+                        // Obtenez la liste des noms de catégories
+                        List<String> categorieNames = cs.getAllCategoriesNames();
+
+                        // Ajoutez les noms de catégories au ComboBox
+                        produitComboBox.getItems().addAll(categorieNames);
+
+                        // Sélectionnez le nom de la catégorie associée au produit
+                        produitComboBox.setValue(getItem());
+
+                        // Définir un EventHandler pour le changement de sélection dans le ComboBox
+                        produitComboBox.setOnAction(e -> {
+                            Produit produit = getTableView().getItems().get(getIndex());
+                            // Mise à jour de la catégorie associée au produit
+                            Categorie_Produit selectedCategorieProduit = cs.getCategorieByNom(produitComboBox.getValue());
+                            produit.setCategorie(selectedCategorieProduit);
+                            produitComboBox.getStyleClass().add("combo-box-red");
+
+                            // Mise à jour de la cellule à partir du ComboBox
+                            commitEdit(produitComboBox.getValue());
+
+                            // Rétablir la classe CSS pour afficher le texte
+                            getStyleClass().remove("cell-hide-text");
+                        });
+
+                        // Appliquer la classe CSS pour masquer le texte
+                        getStyleClass().add("cell-hide-text");
+
+                        // Afficher le ComboBox dans la cellule
+                        setGraphic(produitComboBox);
+                    }
+                });
+
+
+
+
+            }
+        });
 
 
 
@@ -332,8 +340,8 @@ afficher_produit(l1);
 
 
 
-        PrixP_tableC.setCellValueFactory(new PropertyValueFactory<Produit, String>("prix"));
-        PrixP_tableC.setCellFactory(TextFieldTableCell.forTableColumn());
+        PrixP_tableC.setCellValueFactory(new PropertyValueFactory<Produit, Integer>("prix"));
+        PrixP_tableC.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
         PrixP_tableC.setOnEditCommit(event -> {
             Produit produit = event.getRowValue();
             produit.setPrix(event.getNewValue());
@@ -388,7 +396,7 @@ afficher_produit(l1);
                 setOnMouseClicked(event -> {
                     if (!isEmpty()) {
                         changerImage(produit);
-                        afficher_produit(l1);
+                        afficher_produit();
                     }
                 });
             }
@@ -413,6 +421,7 @@ afficher_produit(l1);
         });
 
 
+
         // Activer l'édition en cliquant sur une ligne
         Produit_tableview.setEditable(true);
 
@@ -426,18 +435,65 @@ afficher_produit(l1);
             }
         });
 
+        // Utiliser une ObservableList pour stocker les éléments
+        ObservableList<Produit> list = FXCollections.observableArrayList();
+        ProduitService ps = new ProduitService();
+        list.addAll(ps.read());
+        Produit_tableview.setItems(list);
+
         // Activer la sélection de cellules
         Produit_tableview.getSelectionModel().setCellSelectionEnabled(true);
-        Produit_tableview.getItems().addAll(listproduit);
+
     }
+
+
+
+
+    private void initDeleteColumn() {
+        Callback<TableColumn<Produit, Void>, TableCell<Produit, Void>> cellFactory = new Callback<>() {
+            @Override
+            public TableCell<Produit, Void> call(final TableColumn<Produit, Void> param) {
+                final TableCell<Produit, Void> cell = new TableCell<>() {
+                    private final Button btnDelete = new Button("Delete");
+
+                    {
+                        btnDelete.getStyleClass().add("delete-button");
+                        btnDelete.setOnAction((ActionEvent event) -> {
+                            Produit produit = getTableView().getItems().get(getIndex());
+                            ProduitService ps = new ProduitService();
+                            ps.delete(produit);
+
+                            // Mise à jour de la TableView après la suppression de la base de données
+                            Produit_tableview.getItems().remove(produit);
+                            Produit_tableview.refresh();
+                        });
+                    }
+
+                    @Override
+                    protected void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(btnDelete);
+                        }
+                    }
+                };
+                return cell;
+            }
+        };
+
+        deleteColumn.setCellFactory(cellFactory);
+        Produit_tableview.getColumns().add(deleteColumn);
+    }
+
+
 
     // Méthode pour changer l'image
     private void changerImage(Produit produit) {
          FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Sélectionner une image");
         selectedFile = fileChooser.showOpenDialog(null);
-
-           Image selectedImage = new Image(selectedFile.toURI().toString());
 
             if (selectedFile != null) { // Vérifier si une image a été sélectionnée
                 Connection connection = null;
@@ -468,7 +524,7 @@ afficher_produit(l1);
     @FXML
     void GestionCategorie(ActionEvent event) throws IOException {
 
-        // Charger la nouvelle interface ListCinemaAdmin.fxml
+        // Charger la nouvelle interface ListProduitAdmin.fxml
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignCategorieAdmin.fxml"));
         Parent root = loader.load();
 
@@ -484,8 +540,13 @@ afficher_produit(l1);
     }
 
     @FXML
+
     public static List<Produit> rechercher(List<Produit> liste, String recherche) {
         List<Produit> resultats = new ArrayList<>();
+
+        if (recherche.isEmpty()) {
+            return resultats;
+        }
 
         for (Produit element : liste) {
             if (element.getNom() != null && element.getNom().contains(recherche)) {
@@ -495,6 +556,8 @@ afficher_produit(l1);
 
         return resultats;
     }
+
+
 
 
 
