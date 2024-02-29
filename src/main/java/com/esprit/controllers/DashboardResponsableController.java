@@ -10,7 +10,6 @@ import com.esprit.services.SalleService;
 import com.esprit.services.SeanceService;
 import com.esprit.utils.DataSource;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,11 +17,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -37,9 +34,9 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import javafx.util.StringConverter;
-import javafx.util.converter.IntegerStringConverter;
 
+
+import javax.imageio.IIOParam;
 import java.io.*;
 import java.net.URL;
 import java.sql.*;
@@ -48,6 +45,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static java.lang.Integer.parseInt;
 
 public class DashboardResponsableController implements Initializable {
 
@@ -124,6 +123,29 @@ public class DashboardResponsableController implements Initializable {
 
     @FXML
     private TableColumn<Seance, Integer> colPrice;
+
+    @FXML
+    private AnchorPane addRoomForm;
+
+    @FXML
+    private TextField tfNbrPlaces;
+
+    @FXML
+    private TextField tfNomSalle;
+
+    private int cinemaId;
+
+    @FXML
+    private TableView<Salle> RoomTableView;
+
+    @FXML
+    private TableColumn<Salle, Void> colActionRoom;
+
+    @FXML
+    private TableColumn<Salle, String> colNameRoom;
+
+    @FXML
+    private TableColumn<Salle, Integer> colNbrPlaces;
 
 
     @FXML
@@ -202,6 +224,9 @@ public class DashboardResponsableController implements Initializable {
         sessionFormPane.setVisible(false);
         cinemaListPane.setVisible(true);
         SessionTableView.setVisible(false);
+        addRoomForm.setVisible(false);
+        RoomTableView.setVisible(false);
+
 
         for (Cinema c : acceptedCinemas) {
             comboCinema.getItems().add(c.getNom());
@@ -377,20 +402,133 @@ public class DashboardResponsableController implements Initializable {
         salleIcon.setFill(Color.WHITE);
 
         salleIcon.setOnMouseClicked(event -> {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ListSalleResponsable.fxml"));
-            Parent root = null;
-            try {
-                root = loader.load();
-                ListSalleResponsableController controller = loader.getController();
-                controller.initData(cinema.getId_cinema());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            Scene scene = new Scene(root);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.show();
+            cinemaId = cinema.getId_cinema();
+            cinemaFormPane.setVisible(false);
+            cinemaListPane.setVisible(false);
+            addRoomForm.setVisible(true);
+            RoomTableView.setVisible(true);
+            colNameRoom.setCellValueFactory(new PropertyValueFactory<>("nom_salle"));
+            colNbrPlaces.setCellValueFactory(new PropertyValueFactory<>("nb_places"));
+            colActionRoom.setCellFactory(new Callback<TableColumn<Salle, Void>, TableCell<Salle, Void>>() {
+                @Override
+                public TableCell<Salle, Void> call(TableColumn<Salle, Void> param) {
+                    return new TableCell<Salle,Void>() {
+                        private final Button deleteRoomButton = new Button("Delete");
+
+                        {
+                            deleteRoomButton.getStyleClass().add("delete-btn");
+                            deleteRoomButton.setOnAction(event -> {
+                                Salle salle = getTableView().getItems().get(getIndex());
+                                SalleService salleService = new SalleService();
+                                salleService.delete(salle);
+                                getTableView().getItems().remove(salle);
+                            });
+                        }
+
+
+                        @Override
+                        protected void updateItem(Void item, boolean empty) {
+                            super.updateItem(item, empty);
+                            if (empty) {
+                                setGraphic(null);
+                            } else {
+                                // Afficher les boutons dans la cellule de la colonne Action
+                                setGraphic(new HBox(deleteRoomButton));
+                            }
+                        }
+                    };
+                }
+            });
+            RoomTableView.setEditable(true);
+            colNbrPlaces.setCellFactory(tc -> new TableCell<Salle, Integer>() {
+                @Override
+                protected void updateItem(Integer nb_salles, boolean empty) {
+                    super.updateItem(nb_salles, empty);
+                    if (empty || nb_salles == null) {
+                        setText(null);
+                    } else {
+                        setText(nb_salles + " places");
+                    }
+                }
+
+                @Override
+                public void startEdit() {
+                    super.startEdit();
+                    if (isEmpty()) {
+                        return;
+                    }
+                    TextField textField = new TextField(getItem().toString());
+                    textField.setOnAction(event -> {
+                        commitEdit(Integer.parseInt(textField.getText()));
+                    });
+                    setGraphic(textField);
+                    setText(null);
+                }
+
+                @Override
+                public void cancelEdit() {
+                    super.cancelEdit();
+                    setText(getItem() + " places");
+                    setGraphic(null);
+                }
+
+                @Override
+                public void commitEdit(Integer newValue) {
+                    super.commitEdit(newValue);
+                    Salle salle = getTableView().getItems().get(getIndex());
+                    salle.setNb_places(newValue);
+                    SalleService salleService = new SalleService();
+                    salleService.update(salle);
+                    setText(newValue + " places");
+                    setGraphic(null);
+                }
+            });
+            colNameRoom.setCellFactory(tc -> new TableCell<Salle, String>() {
+                @Override
+                protected void updateItem(String nom_salle, boolean empty) {
+                    super.updateItem(nom_salle, empty);
+                    if (empty || nom_salle == null) {
+                        setText(null);
+                    } else {
+                        setText(nom_salle);
+                    }
+                }
+
+                @Override
+                public void startEdit() {
+                    super.startEdit();
+                    if (isEmpty()) {
+                        return;
+                    }
+                    TextField textField = new TextField(getItem().toString());
+                    textField.setOnAction(event -> {
+                        commitEdit((textField.getText()));
+                    });
+                    setGraphic(textField);
+                    setText(null);
+                }
+
+                @Override
+                public void cancelEdit() {
+                    super.cancelEdit();
+                    setText(getItem());
+                    setGraphic(null);
+                }
+
+                @Override
+                public void commitEdit(String newValue) {
+                    super.commitEdit(newValue);
+                    Salle salle = getTableView().getItems().get(getIndex());
+                    salle.setNom_salle(newValue);
+                    SalleService salleService = new SalleService();
+                    salleService.update(salle);
+                    setText(newValue);
+                    setGraphic(null);
+                }
+            });
+            loadsalles();
         });
+
 
         card.getChildren().addAll(SalleCircle, salleIcon);
         cardContainer.getChildren().add(card);
@@ -404,7 +542,8 @@ public class DashboardResponsableController implements Initializable {
         sessionFormPane.setVisible(false);
         cinemaListPane.setVisible(true);
         SessionTableView.setVisible(false);
-
+        addRoomForm.setVisible(false);
+        RoomTableView.setVisible(false);
     }
 
     @FXML
@@ -413,6 +552,8 @@ public class DashboardResponsableController implements Initializable {
         sessionFormPane.setVisible(true);
         cinemaListPane.setVisible(false);
         SessionTableView.setVisible(true);
+        addRoomForm.setVisible(false);
+        RoomTableView.setVisible(false);
         colMovie.setCellValueFactory(new PropertyValueFactory<>("nom_film"));
         colCinema.setCellValueFactory(new PropertyValueFactory<>("nom_cinema"));
         colMovieRoom.setCellValueFactory(new PropertyValueFactory<>("nom_salle"));
@@ -842,5 +983,32 @@ public class DashboardResponsableController implements Initializable {
         SessionTableView.setItems(seanceObservableList);
     }
 
+    @FXML
+    void AjouterSalle(ActionEvent event) {
+        SalleService ss = new SalleService();
+        ss.create(new Salle( cinemaId, parseInt(tfNbrPlaces.getText()), tfNomSalle.getText()));
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Salle ajoutée");
+        alert.setContentText("Salle ajoutée !");
+        alert.show();
+        loadsalles();
+    }
 
+    private void loadsalles() {
+        SalleService salleService = new SalleService();
+        List<Salle> salles = salleService.read();
+
+        List<Salle> salles_cinema = salles.stream()
+                .filter(salle -> salle.getId_cinema() == cinemaId)
+                .collect(Collectors.toList());
+
+        if (salles_cinema.isEmpty()) {
+            showAlert("Aucune salle n'est disponible");
+            return;
+        }
+
+        ObservableList<Salle> salleInfos = FXCollections.observableArrayList(salles_cinema);
+
+        RoomTableView.setItems(salleInfos);
+    }
 }
