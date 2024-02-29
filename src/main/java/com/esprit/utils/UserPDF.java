@@ -62,9 +62,9 @@ public class UserPDF {
     private void addRows(final PdfPTable table, final List<User> userData) {
         for (final User user : userData) {
             table.addCell(String.valueOf(user.getId()));
-            table.addCell(user.getNom());
-            table.addCell(user.getPrenom());
-            table.addCell(String.valueOf(user.getNum_telephone()));
+            table.addCell(user.getFirstName());
+            table.addCell(user.getLastName());
+            table.addCell(String.valueOf(user.getPhoneNumber()));
             table.addCell(user.getEmail());
             table.addCell(user.getRole());
         }
