@@ -39,6 +39,7 @@ import javafx.util.Callback;
 import javax.imageio.IIOParam;
 import java.io.*;
 import java.net.URL;
+import java.nio.file.Files;
 import java.sql.*;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -341,19 +342,116 @@ public class DashboardResponsableController implements Initializable {
         }
         card.getChildren().add(logoImageView);
 
+        // Modifier la partie où vous créez l'ImageView pour permettre le double clic
+        logoImageView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                // Ouvrir une boîte de dialogue de sélection de fichier pour choisir une nouvelle image
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Choisir une nouvelle image");
+                fileChooser.getExtensionFilters().addAll(
+                        new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.gif")
+                );
+                File selectedFile = fileChooser.showOpenDialog(null);
 
-        Label nameLabel = new Label("Name: " + cinema.getNom());
-        nameLabel.setLayoutX(115);
+                // Si l'utilisateur a choisi un fichier
+                if (selectedFile != null) {
+                    // Mettre à jour l'image dans la base de données
+                    try {
+                        // Convertir le fichier en tableau de bytes
+                        byte[] imageBytes = Files.readAllBytes(selectedFile.toPath());
+                        // Mettre à jour l'image dans la base de données pour le cinéma
+                        CinemaService cinemaService = new CinemaService();
+                        cinema.setLogo(new javax.sql.rowset.serial.SerialBlob(imageBytes));
+                        cinemaService.update(cinema);
+
+                        // Mettre à jour l'image dans l'ImageView
+                        Image newImage = new Image(new ByteArrayInputStream(imageBytes));
+                        logoImageView.setImage(newImage);
+                    } catch (IOException | SQLException e) {
+                        e.printStackTrace();
+                        // Gérer l'exception
+                    }
+                }
+            }
+        });
+
+        Label NomLabel = new Label("Name: ");
+        NomLabel.setLayoutX(115);
+        NomLabel.setLayoutY(25);
+        NomLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
+        card.getChildren().add(NomLabel);
+
+        Label nameLabel = new Label(cinema.getNom());
+        nameLabel.setLayoutX(160);
         nameLabel.setLayoutY(25);
         nameLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
         card.getChildren().add(nameLabel);
+        nameLabel.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) { // Vérifiez si c'est un double clic
+                TextField nameTextField = new TextField(nameLabel.getText()); // Créez un TextField avec le texte actuel du Label
+                nameTextField.setLayoutX(nameLabel.getLayoutX());
+                nameTextField.setLayoutY(nameLabel.getLayoutY());
+                nameTextField.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
+                nameTextField.setPrefWidth(nameLabel.getWidth()); // Ajustez la largeur pour correspondre au Label
 
+                // Lorsque l'utilisateur appuie sur Entrée dans le TextField, mettez à jour le Label avec le nouveau nom
+                nameTextField.setOnAction(e -> {
+                    nameLabel.setText(nameTextField.getText());
+                    // Mettez à jour le nom du cinéma dans la base de données si nécessaire
+                    cinema.setNom(nameTextField.getText()); // Assurez-vous de mettre à jour le nom du cinéma dans votre objet Cinema
+                    CinemaService cinemaService = new CinemaService();
+                    cinemaService.update(cinema); // Mettez à jour le cinéma dans la base de données
+                    card.getChildren().remove(nameTextField); // Supprimez le TextField
+                });
 
-        Label adresseLabel = new Label("Address: " + cinema.getAdresse());
-        adresseLabel.setLayoutX(115);
+                // Ajoutez le TextField au conteneur AnchorPane
+                card.getChildren().add(nameTextField);
+
+                // Focus sur le TextField pour permettre la saisie immédiate
+                nameTextField.requestFocus();
+                nameTextField.selectAll(); // Sélectionnez tout le texte pour une modification facile
+            }
+        });
+
+        Label AdrsLabel = new Label("Adresse: ");
+        AdrsLabel.setLayoutX(115);
+        AdrsLabel.setLayoutY(50);
+        AdrsLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
+        card.getChildren().add(AdrsLabel);
+
+        Label adresseLabel = new Label(cinema.getAdresse());
+        adresseLabel.setLayoutX(180);
         adresseLabel.setLayoutY(50);
         adresseLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
         card.getChildren().add(adresseLabel);
+
+        adresseLabel.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) { // Vérifiez si c'est un double clic
+                TextField adresseTextField = new TextField(adresseLabel.getText()); // Créez un TextField avec le texte actuel du Label
+                adresseTextField.setLayoutX(adresseLabel.getLayoutX());
+                adresseTextField.setLayoutY(adresseLabel.getLayoutY());
+                adresseTextField.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
+                adresseTextField.setPrefWidth(adresseLabel.getWidth()); // Ajustez la largeur pour correspondre au Label
+
+                // Lorsque l'utilisateur appuie sur Entrée dans le TextField, mettez à jour le Label avec la nouvelle adresse
+                adresseTextField.setOnAction(e -> {
+                    adresseLabel.setText(adresseTextField.getText());
+                    // Mettez à jour l'adresse du cinéma dans la base de données si nécessaire
+                    cinema.setAdresse(adresseTextField.getText());
+                    CinemaService cinemaService = new CinemaService();
+                    cinemaService.update(cinema);
+                    card.getChildren().remove(adresseTextField); // Supprimez le TextField
+                });
+
+
+                card.getChildren().add(adresseTextField);
+
+                // Focus sur le TextField pour permettre la saisie immédiate
+                adresseTextField.requestFocus();
+                adresseTextField.selectAll(); // Sélectionnez tout le texte pour une modification facile
+            }
+        });
+
 
         Line verticalLine = new Line();
         verticalLine.setStartX(240);
