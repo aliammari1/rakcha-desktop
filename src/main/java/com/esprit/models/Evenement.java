@@ -107,4 +107,11 @@ public class Evenement {
                 ", description='" + description + '\'' +
                 '}';
     }
+    public Categorie getId_categorieEvenement() {
+        return categorie;
+    }
+
+    public String getNom_categorieEvenement() {
+        return categorie.getNom_categorie();
+    }
 }
