@@ -44,6 +44,7 @@ import java.sql.*;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -123,7 +124,7 @@ public class DashboardResponsableController implements Initializable {
     private TableColumn<Seance, String> colMovieRoom;
 
     @FXML
-    private TableColumn<Seance, Integer> colPrice;
+    private TableColumn<Seance, Double> colPrice;
 
     @FXML
     private AnchorPane addRoomForm;
@@ -160,6 +161,18 @@ public class DashboardResponsableController implements Initializable {
 
     @FXML
     void addCinema(ActionEvent event) {
+        // Vérifier si tous les champs sont remplis
+        if (tfNom.getText().isEmpty() || tfAdresse.getText().isEmpty() || tfResponsable.getText().isEmpty()) {
+            showAlert("Veuillez remplir tous les champs !");
+            return; // Arrêter l'exécution de la méthode si un champ est vide
+        }
+
+        // Vérifier si le champ responsable contient uniquement des caractères alphabétiques
+        if (!tfResponsable.getText().matches("[a-zA-Z]+")) {
+            showAlert("Le champ Responsable ne doit contenir que des lettres !");
+            return; // Arrêter l'exécution de la méthode si le champ responsable contient des caractères non alphabétiques
+        }
+
         if (selectedFile != null) { // Vérifier si une image a été sélectionnée
             Connection connection = null;
             try {
@@ -198,22 +211,28 @@ public class DashboardResponsableController implements Initializable {
         } else {
             showAlert("Veuillez sélectionner une image d'abord !");
         }
-
     }
+
+
+
 
 
 
     @FXML
     void selectImage(MouseEvent event) {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Sélectionner une image");
-        selectedFile = fileChooser.showOpenDialog(null);
+        fileChooser.setTitle("Choisir une nouvelle image");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.gif")
+        );
+        selectedFile = fileChooser.showOpenDialog(null); // Utilisation de la variable de classe
+
         if (selectedFile != null) {
             Image selectedImage = new Image(selectedFile.toURI().toString());
             image.setImage(selectedImage);
         }
-
     }
+
 
 
 
@@ -687,9 +706,9 @@ public class DashboardResponsableController implements Initializable {
 
         SessionTableView.setEditable(true);
 
-        colPrice.setCellFactory(tc -> new TableCell<Seance, Integer>() {
+        colPrice.setCellFactory(tc -> new TableCell<Seance, Double>() {
             @Override
-            protected void updateItem(Integer prix, boolean empty) {
+            protected void updateItem(Double prix, boolean empty) {
                 super.updateItem(prix, empty);
                 if (empty || prix == null) {
                     setText(null);
@@ -706,7 +725,7 @@ public class DashboardResponsableController implements Initializable {
                 }
                 TextField textField = new TextField(getItem().toString());
                 textField.setOnAction(event -> {
-                    commitEdit(Integer.parseInt(textField.getText()));
+                    commitEdit(Double.parseDouble(textField.getText()));
                 });
                 setGraphic(textField);
                 setText(null);
@@ -720,7 +739,7 @@ public class DashboardResponsableController implements Initializable {
             }
 
             @Override
-            public void commitEdit(Integer newValue) {
+            public void commitEdit(Double newValue) {
                 super.commitEdit(newValue);
                 Seance seance = getTableView().getItems().get(getIndex());
                 seance.setPrix(newValue);
@@ -1036,9 +1055,31 @@ public class DashboardResponsableController implements Initializable {
         String endTimeText = tfEndTime.getText();
         String priceText = tfPrice.getText();
 
+        // Vérifier que tous les champs sont remplis
         if (selectedCinemaName == null || selectedFilmName == null || selectedRoomName == null || selectedDate == null ||
                 departureTimeText.isEmpty() || endTimeText.isEmpty() || priceText.isEmpty()) {
-            System.out.println("Veuillez remplir tous les champs.");
+            showAlert("Veuillez remplir tous les champs.");
+            return;
+        }
+
+        // Vérifier que les champs de l'heure de début et de fin sont au format heure
+        try {
+            Time.valueOf(LocalTime.parse(departureTimeText));
+            Time.valueOf(LocalTime.parse(endTimeText));
+        } catch (DateTimeParseException e) {
+            showAlert("Les champs Heure de début et Heure de fin doivent être au format HH:MM:SS.");
+            return;
+        }
+
+        // Vérifier que le champ price contient un nombre réel
+        try {
+            double price = Double.parseDouble(priceText);
+            if (price <= 0) {
+                showAlert("Le prix doit être un nombre positif.");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            showAlert("Le champ Prix doit être un nombre réel.");
             return;
         }
 
@@ -1056,16 +1097,17 @@ public class DashboardResponsableController implements Initializable {
 
         Date date = Date.valueOf(selectedDate);
 
-        int price = Integer.parseInt(priceText);
+        double price = Double.parseDouble(priceText);
 
         Seance newSeance = new Seance(selectedFilm, selectedRoom, departureTime, endTime, date, selectedCinema, price);
 
         SeanceService seanceService = new SeanceService();
         seanceService.create(newSeance);
 
-        System.out.println("Séance ajoutée avec succès !");
+        showAlert("Séance ajoutée avec succès !");
         loadSeances();
     }
+
 
     private void loadSeances() {
         SeanceService seanceService = new SeanceService();
@@ -1078,14 +1120,35 @@ public class DashboardResponsableController implements Initializable {
 
     @FXML
     void AjouterSalle(ActionEvent event) {
+        // Vérifier que tous les champs sont remplis
+        if (tfNbrPlaces.getText().isEmpty() || tfNomSalle.getText().isEmpty()) {
+            showAlert("Veuillez remplir tous les champs !");
+            return;
+        }
+
+
+        try {
+            int nombrePlaces = Integer.parseInt(tfNbrPlaces.getText());
+            if (nombrePlaces <= 0) {
+                showAlert("Le nombre de places doit être un entier positif !");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            showAlert("Le nombre de places doit être un entier !");
+            return;
+        }
+
         SalleService ss = new SalleService();
-        ss.create(new Salle( cinemaId, parseInt(tfNbrPlaces.getText()), tfNomSalle.getText()));
+        ss.create(new Salle(cinemaId, Integer.parseInt(tfNbrPlaces.getText()), tfNomSalle.getText()));
+
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Salle ajoutée");
         alert.setContentText("Salle ajoutée !");
         alert.show();
+
         loadsalles();
     }
+
 
     private void loadsalles() {
         SalleService salleService = new SalleService();
@@ -1096,7 +1159,7 @@ public class DashboardResponsableController implements Initializable {
                 .collect(Collectors.toList());
 
         if (salles_cinema.isEmpty()) {
-            showAlert("Aucune salle n'est disponible");
+            showAlert("No rooms are available");
             return;
         }
 
