@@ -163,13 +163,13 @@ public class DashboardResponsableController implements Initializable {
     void addCinema(ActionEvent event) {
         // Vérifier si tous les champs sont remplis
         if (tfNom.getText().isEmpty() || tfAdresse.getText().isEmpty() || tfResponsable.getText().isEmpty()) {
-            showAlert("Veuillez remplir tous les champs !");
+            showAlert("please complete all fields!");
             return; // Arrêter l'exécution de la méthode si un champ est vide
         }
 
         // Vérifier si le champ responsable contient uniquement des caractères alphabétiques
         if (!tfResponsable.getText().matches("[a-zA-Z]+")) {
-            showAlert("Le champ Responsable ne doit contenir que des lettres !");
+            showAlert("The Responsible field must only contain letters!");
             return; // Arrêter l'exécution de la méthode si le champ responsable contient des caractères non alphabétiques
         }
 
@@ -196,20 +196,20 @@ public class DashboardResponsableController implements Initializable {
 
                 CinemaService cs = new CinemaService();
                 cs.create(cinema);
-                showAlert("Cinéma ajouté avec succès !");
+                showAlert("Cinema added successfully !");
             } catch (SQLException | IOException e) {
-                showAlert("Erreur lors de l'ajout du cinéma : " + e.getMessage());
+                showAlert("Error when adding cinema:" + e.getMessage());
             } finally {
                 if (connection != null) {
                     try {
                         connection.close();
                     } catch (SQLException e) {
-                        showAlert("Erreur lors de la fermeture de la connexion : " + e.getMessage());
+                        showAlert("Error closing connection: " + e.getMessage());
                     }
                 }
             }
         } else {
-            showAlert("Veuillez sélectionner une image d'abord !");
+            showAlert("Please select an image first!");
         }
     }
 
@@ -221,7 +221,7 @@ public class DashboardResponsableController implements Initializable {
     @FXML
     void selectImage(MouseEvent event) {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Choisir une nouvelle image");
+        fileChooser.setTitle("Choose a new image");
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.gif")
         );
@@ -300,7 +300,7 @@ public class DashboardResponsableController implements Initializable {
                 .collect(Collectors.toList());
 
         if (acceptedCinemasList.isEmpty()) {
-            showAlert("Aucun cinéma accepté n'est disponible.");
+            showAlert("No accepted cinemas are available.");
         }
 
         HashSet<Cinema> acceptedCinemasSet = new HashSet<>(acceptedCinemasList);
@@ -322,7 +322,7 @@ public class DashboardResponsableController implements Initializable {
                 .collect(Collectors.toList());
 
         if (acceptedCinemasList.isEmpty()) {
-            showAlert("Aucun cinéma accepté n'est disponible.");
+            showAlert("No accepted cinemas are available.");
         }
 
         HashSet<Cinema> acceptedCinemasSet = new HashSet<>(acceptedCinemasList);
@@ -364,7 +364,7 @@ public class DashboardResponsableController implements Initializable {
         logoImageView.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
                 FileChooser fileChooser = new FileChooser();
-                fileChooser.setTitle("Choisir une nouvelle image");
+                fileChooser.setTitle("Choose a new image");
                 fileChooser.getExtensionFilters().addAll(
                         new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.gif")
                 );
@@ -427,7 +427,7 @@ public class DashboardResponsableController implements Initializable {
             }
         });
 
-        Label AdrsLabel = new Label("Adresse: ");
+        Label AdrsLabel = new Label("Address: ");
         AdrsLabel.setLayoutX(115);
         AdrsLabel.setLayoutY(50);
         AdrsLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
@@ -1058,7 +1058,7 @@ public class DashboardResponsableController implements Initializable {
         // Vérifier que tous les champs sont remplis
         if (selectedCinemaName == null || selectedFilmName == null || selectedRoomName == null || selectedDate == null ||
                 departureTimeText.isEmpty() || endTimeText.isEmpty() || priceText.isEmpty()) {
-            showAlert("Veuillez remplir tous les champs.");
+            showAlert("Please complete all fields.");
             return;
         }
 
@@ -1067,7 +1067,7 @@ public class DashboardResponsableController implements Initializable {
             Time.valueOf(LocalTime.parse(departureTimeText));
             Time.valueOf(LocalTime.parse(endTimeText));
         } catch (DateTimeParseException e) {
-            showAlert("Les champs Heure de début et Heure de fin doivent être au format HH:MM:SS.");
+            showAlert("The Start Time and End Time fields must be in the format HH:MM:SS.");
             return;
         }
 
@@ -1075,11 +1075,11 @@ public class DashboardResponsableController implements Initializable {
         try {
             double price = Double.parseDouble(priceText);
             if (price <= 0) {
-                showAlert("Le prix doit être un nombre positif.");
+                showAlert("The price must be a positive number.");
                 return;
             }
         } catch (NumberFormatException e) {
-            showAlert("Le champ Prix doit être un nombre réel.");
+            showAlert("The Price field must be a real number.");
             return;
         }
 
@@ -1104,7 +1104,7 @@ public class DashboardResponsableController implements Initializable {
         SeanceService seanceService = new SeanceService();
         seanceService.create(newSeance);
 
-        showAlert("Séance ajoutée avec succès !");
+        showAlert("Session added successfully!");
         loadSeances();
     }
 
@@ -1122,7 +1122,7 @@ public class DashboardResponsableController implements Initializable {
     void AjouterSalle(ActionEvent event) {
         // Vérifier que tous les champs sont remplis
         if (tfNbrPlaces.getText().isEmpty() || tfNomSalle.getText().isEmpty()) {
-            showAlert("Veuillez remplir tous les champs !");
+            showAlert("please complete all fields!");
             return;
         }
 
@@ -1130,11 +1130,11 @@ public class DashboardResponsableController implements Initializable {
         try {
             int nombrePlaces = Integer.parseInt(tfNbrPlaces.getText());
             if (nombrePlaces <= 0) {
-                showAlert("Le nombre de places doit être un entier positif !");
+                showAlert("The number of places must be a positive integer!");
                 return;
             }
         } catch (NumberFormatException e) {
-            showAlert("Le nombre de places doit être un entier !");
+            showAlert("The number of places must be an integer!");
             return;
         }
 
@@ -1142,8 +1142,8 @@ public class DashboardResponsableController implements Initializable {
         ss.create(new Salle(cinemaId, Integer.parseInt(tfNbrPlaces.getText()), tfNomSalle.getText()));
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Salle ajoutée");
-        alert.setContentText("Salle ajoutée !");
+        alert.setTitle("Added room");
+        alert.setContentText("Added room!");
         alert.show();
 
         loadsalles();
