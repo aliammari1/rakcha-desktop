@@ -25,7 +25,7 @@ public class SeanceService implements IService<Seance> {
             pst.setTime(4, seance.getHF());
             pst.setDate(5, seance.getDate());
             pst.setInt(6, seance.getCinema().getId_cinema());
-            pst.setInt(7, seance.getPrix());
+            pst.setDouble(7, seance.getPrix());
             pst.executeUpdate();
             System.out.println("Seance ajoutée !");
         } catch (SQLException e) {
@@ -49,7 +49,7 @@ public class SeanceService implements IService<Seance> {
             pst.setTime(4, seance.getHF());
             pst.setDate(5, seance.getDate());
             pst.setInt(6, seance.getCinema().getId_cinema());
-            pst.setInt(7, seance.getPrix());
+            pst.setDouble(7, seance.getPrix());
             pst.setInt(8, seance.getId_seance());
             pst.executeUpdate();
             System.out.println("Seance modifiée !");

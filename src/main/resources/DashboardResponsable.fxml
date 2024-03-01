@@ -58,7 +58,7 @@
                   <Font name="Arial Rounded MT Bold" size="17.0" />
                </font>
             </Label>
-            <Label layoutX="56.0" layoutY="265.0" text="Responsible:">
+            <Label layoutX="56.0" layoutY="265.0" text="Responsable:">
                <font>
                   <Font name="Arial Rounded MT Bold" size="17.0" />
                </font>

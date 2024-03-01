@@ -12,9 +12,9 @@ public class Seance {
     private Time HF;
     private Date date;
     private Cinema cinema ;
-    private int prix;
+    private double prix;
 
-    public Seance(int id_seance, Film film, Salle salle, Time HD, Time HF, Date date, Cinema cinema, int prix) {
+    public Seance(int id_seance, Film film, Salle salle, Time HD, Time HF, Date date, Cinema cinema, double prix) {
         this.id_seance = id_seance;
         this.film = film;
         this.salle = salle;
@@ -25,7 +25,7 @@ public class Seance {
         this.prix = prix;
     }
 
-    public Seance(Film film, Salle salle, Time HD, Time HF, Date date, Cinema cinema, int prix) {
+    public Seance(Film film, Salle salle, Time HD, Time HF, Date date, Cinema cinema, double prix) {
         this.film = film;
         this.salle = salle;
         this.HD = HD;
@@ -91,11 +91,11 @@ public class Seance {
         this.cinema = cinema;
     }
 
-    public int getPrix() {
+    public double getPrix() {
         return prix;
     }
 
-    public void setPrix(int prix) {
+    public void setPrix(double prix) {
         this.prix = prix;
     }
 
