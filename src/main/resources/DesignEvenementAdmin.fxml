@@ -8,27 +8,52 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="675.0" prefWidth="1164.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.DesignEvenementAdminController">
+<AnchorPane prefHeight="675.0" prefWidth="1164.0" styleClass="nav-form" stylesheets="@dashboard.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.DesignEvenementAdminController">
    <children>
-      <Label layoutX="100.0" layoutY="65.0" text="Nom de l'évenement :" />
-      <Label layoutX="100.0" layoutY="105.0" text="Date de début :" />
-      <TextField fx:id="tfID" layoutX="250.0" layoutY="20.0" />
-      <TextField fx:id="tfNomEvenement" layoutX="250.0" layoutY="60.0" />
-      <Button layoutX="279.0" layoutY="420.0" mnemonicParsing="false" onAction="#addEvenement" text="Envoyer" />
-      <Label layoutX="100.0" layoutY="25.0" text="ID :" />
-      <DatePicker fx:id="dpDD" layoutX="250.0" layoutY="100.0" />
-      <DatePicker fx:id="dpDF" layoutX="250.0" layoutY="140.0" />
-      <Label layoutX="100.0" layoutY="145.0" text="Date de fin :" />
-      <Label layoutX="100.0" layoutY="185.0" text="Lieu :" />
-      <Label layoutX="100.0" layoutY="225.0" text="Catégorie : " />
-      <Label layoutX="100.0" layoutY="265.0" text="État :" />
-      <Label layoutX="100.0" layoutY="305.0" text="Description :" />
-      <TextField fx:id="tfLieu" layoutX="250.0" layoutY="180.0" />
-      <TextField fx:id="tfEtat" layoutX="250.0" layoutY="260.0" />
-      <TextField fx:id="tfDescription" layoutX="250.0" layoutY="300.0" prefHeight="66.0" prefWidth="149.0" />
-      <ComboBox fx:id="cbCategorie" layoutX="250.0" layoutY="220.0" prefWidth="150.0" promptText="Choisir la catégorie" />
-      <TableView fx:id="tvEvenement" layoutX="441.0" layoutY="116.0" prefHeight="396.0" prefWidth="668.0">
+      <Label layoutX="100.0" layoutY="65.0" text="Event Name :" textFill="#fff6f6">
+         <font>
+            <Font size="15.0" />
+         </font></Label>
+      <Label layoutX="100.0" layoutY="105.0" text="Start Date :" textFill="#fff6f6">
+         <font>
+            <Font size="15.0" />
+         </font></Label>
+      <TextField fx:id="tfID" layoutX="250.0" layoutY="20.0" styleClass="text-area-red" stylesheets="@dashboard.css" />
+      <TextField fx:id="tfNomEvenement" layoutX="250.0" layoutY="60.0" styleClass="text-area-red" />
+      <Button layoutX="196.0" layoutY="541.0" mnemonicParsing="false" onAction="#addEvenement" prefHeight="45.0" prefWidth="109.0" styleClass="button-client" stylesheets="@dashboard.css" text="Envoyer" />
+      <Label layoutX="100.0" layoutY="25.0" text="ID :" textFill="#fff6f6">
+         <font>
+            <Font size="15.0" />
+         </font></Label>
+      <DatePicker fx:id="dpDD" layoutX="250.0" layoutY="100.0" styleClass="text-area-red" />
+      <DatePicker fx:id="dpDF" layoutX="250.0" layoutY="140.0" styleClass="text-area-red" />
+      <Label layoutX="100.0" layoutY="145.0" text="End Date :" textFill="#fff6f6">
+         <font>
+            <Font size="15.0" />
+         </font></Label>
+      <Label layoutX="100.0" layoutY="193.0" stylesheets="@dashboard.css" text="Localisation :" textFill="#fff6f6">
+         <font>
+            <Font size="15.0" />
+         </font></Label>
+      <Label layoutX="100.0" layoutY="258.0" stylesheets="@dashboard.css" text="Category : " textFill="#fff6f6">
+         <font>
+            <Font size="15.0" />
+         </font></Label>
+      <Label layoutX="100.0" layoutY="318.0" stylesheets="@dashboard.css" text="Status :" textFill="#fff6f6">
+         <font>
+            <Font size="15.0" />
+         </font></Label>
+      <Label layoutX="94.0" layoutY="416.0" stylesheets="@dashboard.css" text="Description :" textFill="#fff6f6">
+         <font>
+            <Font size="15.0" />
+         </font></Label>
+      <TextField fx:id="tfLieu" layoutX="250.0" layoutY="187.0" styleClass="text-area-red" />
+      <TextField fx:id="tfEtat" layoutX="239.0" layoutY="311.0" styleClass="text-area-red" />
+      <TextField fx:id="tfDescription" layoutX="240.0" layoutY="391.0" prefHeight="66.0" prefWidth="149.0" styleClass="text-area-red" />
+      <ComboBox fx:id="cbCategorie" layoutX="240.0" layoutY="254.0" prefWidth="150.0" promptText="choose category" />
+      <TableView fx:id="tvEvenement" layoutX="466.0" layoutY="120.0" prefHeight="396.0" prefWidth="668.0">
         <columns>
           <TableColumn fx:id="tcIDE" prefWidth="75.0" text="ID" />
           <TableColumn fx:id="tcNomE" prefWidth="75.0" text="Nom_Evenement" />
@@ -41,6 +66,10 @@
             <TableColumn fx:id="tcDeleteE" prefWidth="75.0" text="Delete" />
         </columns>
       </TableView>
-      <TextField fx:id="tfRechercheE" layoutX="678.0" layoutY="33.0" />
+      <TextField fx:id="tfRechercheE" layoutX="875.0" layoutY="33.0" styleClass="text-field-red" />
+      <Label layoutX="789.0" layoutY="35.0" text="Search Bar :" textFill="WHITE">
+         <font>
+            <Font size="15.0" />
+         </font></Label>
    </children>
 </AnchorPane>
