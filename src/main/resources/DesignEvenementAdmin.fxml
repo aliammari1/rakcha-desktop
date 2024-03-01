@@ -9,7 +9,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="656.0" prefWidth="1054.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.AjoutEvenementController">
+<AnchorPane prefHeight="675.0" prefWidth="1164.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.DesignEvenementAdminController">
    <children>
       <Label layoutX="100.0" layoutY="65.0" text="Nom de l'évenement :" />
       <Label layoutX="100.0" layoutY="105.0" text="Date de début :" />
@@ -28,17 +28,19 @@
       <TextField fx:id="tfEtat" layoutX="250.0" layoutY="260.0" />
       <TextField fx:id="tfDescription" layoutX="250.0" layoutY="300.0" prefHeight="66.0" prefWidth="149.0" />
       <ComboBox fx:id="cbCategorie" layoutX="250.0" layoutY="220.0" prefWidth="150.0" promptText="Choisir la catégorie" />
-      <TableView layoutX="441.0" layoutY="116.0" prefHeight="396.0" prefWidth="599.0">
+      <TableView fx:id="tvEvenement" layoutX="441.0" layoutY="116.0" prefHeight="396.0" prefWidth="668.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="ID" />
-          <TableColumn prefWidth="75.0" text="Nom_Evenement" />
-            <TableColumn prefWidth="75.0" text="Date_Fin" />
-            <TableColumn prefWidth="75.0" text="Date_debut" />
-            <TableColumn prefWidth="75.0" text="Lieu" />
-            <TableColumn prefWidth="75.0" text="Catégorie" />
-            <TableColumn prefWidth="75.0" text="Etat" />
-            <TableColumn prefWidth="75.0" text="Description" />
+          <TableColumn fx:id="tcIDE" prefWidth="75.0" text="ID" />
+          <TableColumn fx:id="tcNomE" prefWidth="75.0" text="Nom_Evenement" />
+            <TableColumn fx:id="tcDDE" prefWidth="75.0" text="Date_Fin" />
+            <TableColumn fx:id="tcDFE" prefWidth="75.0" text="Date_debut" />
+            <TableColumn fx:id="tcLieuE" prefWidth="75.0" text="Lieu" />
+            <TableColumn fx:id="tcCategorieE" prefWidth="75.0" text="Catégorie" />
+            <TableColumn fx:id="tcEtatE" prefWidth="75.0" text="Etat" />
+            <TableColumn fx:id="tcDescriptionE" prefWidth="75.0" text="Description" />
+            <TableColumn fx:id="tcDeleteE" prefWidth="75.0" text="Delete" />
         </columns>
       </TableView>
+      <TextField fx:id="tfRechercheE" layoutX="678.0" layoutY="33.0" />
    </children>
 </AnchorPane>

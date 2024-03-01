@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 
-<AnchorPane prefHeight="583.0" prefWidth="883.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.AjoutSponsorController">
+<AnchorPane prefHeight="583.0" prefWidth="883.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.DesignSponsorAdminController">
    <children>
       <Label layoutX="49.0" layoutY="67.0" text="ID :" />
       <Label layoutX="39.0" layoutY="155.0" text="Nom Société :" />
