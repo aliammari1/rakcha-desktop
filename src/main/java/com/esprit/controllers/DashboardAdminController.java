@@ -88,8 +88,10 @@ public class DashboardAdminController {
                 return new TableCell<Cinema, Void>() {
                     private final Button acceptButton = new Button("Accepter");
                     private final Button refuseButton = new Button("Refuser");
+                    private final Button showMoviesButton = new Button("Show Movies");
 
                     {
+                        acceptButton.getStyleClass().add("delete-btn");
                         acceptButton.setOnAction(event -> {
                             Cinema cinema = getTableView().getItems().get(getIndex());
                             // Mettre à jour le statut du cinéma en "Acceptée"
@@ -101,13 +103,17 @@ public class DashboardAdminController {
                             getTableView().refresh();
                         });
 
+                        refuseButton.getStyleClass().add("delete-btn");
                         refuseButton.setOnAction(event -> {
                             Cinema cinema = getTableView().getItems().get(getIndex());
                             CinemaService cinemaService = new CinemaService();
                             cinemaService.delete(cinema);
                             getTableView().getItems().remove(cinema);
                         });
+                        showMoviesButton.getStyleClass().add("delete-btn");
+                        showMoviesButton.setOnAction(event -> {
 
+                        });
                     }
 
                     @Override
@@ -116,13 +122,21 @@ public class DashboardAdminController {
                         if (empty) {
                             setGraphic(null);
                         } else {
-                            // Afficher les boutons dans la cellule de la colonne Action
-                            setGraphic(new HBox(acceptButton, refuseButton));
+                            // Récupérer le cinéma associé à cette ligne
+                            Cinema cinema = getTableView().getItems().get(getIndex());
+                            if (cinema.getStatut().equals("Acceptée")) {
+                                // Afficher le bouton "Show Movies" si le statut est "Acceptée"
+                                setGraphic(showMoviesButton);
+                            } else {
+                                // Afficher les boutons "Accepter" et "Refuser" si le statut est "En attente"
+                                setGraphic(new HBox(acceptButton, refuseButton));
+                            }
                         }
                     }
                 };
             }
         });
+
 
         loadCinemas();
     }
