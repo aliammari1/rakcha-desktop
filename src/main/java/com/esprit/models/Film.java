@@ -20,7 +20,15 @@ public class Film {
     private int idcinema;
 
     // Existing constructor
-
+    public Film(final Film f) {
+        this.id = f.id;
+        this.nom = f.nom;
+        this.image = f.image;
+        this.duree = f.duree;
+        this.description = f.description;
+        this.annederalisation = f.annederalisation;
+        this.idcinema = f.idcinema;
+    }
 
     public Film(int id, String nom, Blob image, Time duree, String description, int annederalisation, int idcinema) {
         this.id = id;

@@ -13,6 +13,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.CheckComboBox?>
 
@@ -110,7 +111,6 @@
                                                 <Font size="16.0" />
                                             </font>
                                         </Label>
-                                        <Button layoutX="166.0" layoutY="634.0" mnemonicParsing="false" onAction="#insertFilm" prefHeight="40.0" prefWidth="79.0" styleClass="instert-btn" stylesheets="@dashbord.css" text="Insérer" />
                                         <Label layoutX="14.0" layoutY="382.0" text="description">
                                             <font>
                                                 <Font size="16.0" />
@@ -148,6 +148,11 @@
                                         <ComboBox fx:id="idcinemaFilm_comboBox" layoutX="161.0" layoutY="578.0" prefHeight="35.0" prefWidth="202.0" />
                                         <CheckComboBox fx:id="Categorychecj_ComboBox" layoutX="162.0" layoutY="480.0" prefHeight="37.0" prefWidth="201.0" />
                                         <CheckComboBox fx:id="Actorcheck_ComboBox1" layoutX="162.0" layoutY="528.0" prefHeight="37.0" prefWidth="201.0" />
+                              <HBox fx:id="addHbox" layoutX="138.0" layoutY="629.0" prefHeight="42.0" prefWidth="141.0">
+                                 <children>
+                                              <Button fx:id="addButton" mnemonicParsing="false" onAction="#insertFilm" prefHeight="40.0" prefWidth="147.0" styleClass="instert-btn" stylesheets="@dashbord.css" text="Insérer" />
+                                 </children>
+                              </HBox>
                                     </children>
                                 </AnchorPane>
                                 <AnchorPane layoutX="474.0" layoutY="13.0" prefHeight="662.0" prefWidth="940.0" styleClass="bg-white" stylesheets="@dashbord.css">

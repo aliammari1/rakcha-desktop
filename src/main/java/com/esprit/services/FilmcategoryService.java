@@ -121,7 +121,7 @@ public class FilmcategoryService implements IService<Filmcategory> {
 
     }
 
-    public String getActorsNames(int id) {
+    public String getCategoryNames(int id) {
         String s = "";
         String req = "SELECT GROUP_CONCAT(category.nom SEPARATOR ', ') AS ActorNames from filmcategory JOIN category  ON filmcategory.category_id  = category.id JOIN film on filmcategory.film_id  = film.id where film.id = ? GROUP BY film.id;";
         try {

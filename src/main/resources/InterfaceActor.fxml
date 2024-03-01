@@ -3,7 +3,6 @@
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import java.net.URL?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -102,11 +101,6 @@
                             <Button layoutX="182.0" layoutY="587.0" mnemonicParsing="false" onAction="#insertActor" prefHeight="40.0" prefWidth="79.0" styleClass="instert-btn" stylesheets="@dashbord.css" text="Insérer" />
                             <Button layoutX="58.0" layoutY="587.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="88.0" styleClass="instert-btn" stylesheets="@dashbord.css" text="Supprimer" />
                             <Button layoutX="286.0" layoutY="587.0" mnemonicParsing="false" onAction="#updateActor" prefHeight="40.0" prefWidth="79.0" styleClass="instert-btn" stylesheets="@dashbord.css" text="Modifier" />
-                            <Label layoutX="18.0" layoutY="349.0" text="idfilm">
-                                <font>
-                                    <Font size="16.0" />
-                                </font>
-                            </Label>
                             <Label layoutX="21.0" layoutY="276.0" text="nom">
                                 <font>
                                     <Font size="16.0" />
@@ -119,7 +113,6 @@
                                     <ImageView fx:id="imageAcotr_ImageView1" fitHeight="155.0" fitWidth="126.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" />
                                 </children>
                             </AnchorPane>
-                            <ComboBox fx:id="idfilmActor_comboBox1" layoutX="161.0" layoutY="344.0" prefHeight="35.0" prefWidth="202.0" />
                      <TextArea fx:id="bioAcotr_textArea" layoutX="161.0" layoutY="406.0" prefHeight="122.0" prefWidth="200.0" wrapText="true" />
                      <Label layoutX="25.0" layoutY="420.0" text="biographie">
                         <font>
@@ -134,10 +127,9 @@
                                 <columns>
                                     <TableColumn fx:id="idActor_tableColumn1" prefWidth="49.0" text="Id film" />
                                     <TableColumn fx:id="nomAcotr_tableColumn1" prefWidth="182.0" text="Name of actor " />
-                                    <TableColumn fx:id="imageAcotr_tableColumn1" prefWidth="159.0" text="image" />
-                                    <TableColumn fx:id="idfilmActor_tableColumn1" prefWidth="88.0" text="id film" />
-                           <TableColumn fx:id="bioActor_tableColumn1" prefWidth="237.0" text="BIO" />
-                                    <TableColumn fx:id="DeleteActor_Column1" minWidth="0.0" prefWidth="283.0" text="Delete" />
+                                    <TableColumn fx:id="imageAcotr_tableColumn1" prefWidth="217.0" text="image" />
+                           <TableColumn fx:id="bioActor_tableColumn1" prefWidth="273.0" text="BIO" />
+                                    <TableColumn fx:id="DeleteActor_Column1" minWidth="0.0" prefWidth="189.0" text="Delete" />
                                 </columns>
                             </TableView>
                             <TextField layoutX="412.0" layoutY="17.0" prefHeight="29.0" prefWidth="158.0" promptText="rechercher" />

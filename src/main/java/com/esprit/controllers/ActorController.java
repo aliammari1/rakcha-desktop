@@ -25,10 +25,12 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import net.synedra.validatorfx.Validator;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.OutputStream;
 import java.sql.Blob;
 import java.sql.Connection;
-import java.sql.SQLException;
 
 public class ActorController {
     Blob imageBlob;
@@ -37,14 +39,16 @@ public class ActorController {
     private TextArea bioAcotr_textArea;
     @FXML
     private AnchorPane ActorCrudInterface;
+    @FXML
+    private TableColumn<Actor, Button> DeleteActor_Column1;
+
 
     @FXML
     private Button AjouterFilm_Button;
 
     @FXML
     private AnchorPane anchorActor_Form;
-    @FXML
-    private TableColumn<Actor, Button> DeleteActor_Column1;
+
 
     @FXML
     private TableView<Actor> filmActor_tableView11;
@@ -79,7 +83,7 @@ public class ActorController {
         for (Node n : anchorActor_Form.getChildren())
             System.out.println(n);
         Validator validator = new Validator();
-
+        setupCellOnEditCommit();
         validator.createCheck()
                 .dependsOn("nom", nomAcotr_textArea1.textProperty())
                 .withMethod(c -> {
@@ -138,8 +142,8 @@ public class ActorController {
                 Actor actor = new Actor(nomAcotr_textArea1.getText(), imageBlob, bioAcotr_textArea.getText());
                 actorService.create(actor);
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Film ajoutée");
-                alert.setContentText("Film ajoutée !");
+                alert.setTitle("Actor ajoutée");
+                alert.setContentText("Actor ajoutée !");
                 alert.show();
             } catch (Exception e) {
                 showAlert("Erreur lors de l'ajout du Film : " + e.getMessage());
@@ -147,47 +151,43 @@ public class ActorController {
         } else {
             showAlert("Veuillez sélectionner une image d'abord !");
         }
+        readActorTable();
+    }
 
+    private void setupCellOnEditCommit() {
+        nomAcotr_tableColumn1.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Actor, String>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<Actor, String> event) {
+                try {
+                    event.getTableView().getItems().get(
+                            event.getTablePosition().getRow()).setNom(event.getNewValue());
+                    updateActor(event.getTableView().getItems().get(
+                            event.getTablePosition().getRow()));
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        });
     }
 
     @FXML
-    void updateActor(ActionEvent event) {
-        if (imageBlob != null) { // Vérifier si une image a été sélectionnée
-            Connection connection = null;
-            try {
-                if (selectedFile != null)
-                // Convertir le fichier en un objet Blob
-                {
-                    FileInputStream fis = new FileInputStream(selectedFile);
+    void updateActor(Actor actor) {
+        Connection connection = null;
+        try {
 
-                    connection = DataSource.getInstance().getConnection();
-
-                    // Définir le flux d'entrée de l'image dans l'objet Blob
-                    try (OutputStream outputStream = imageBlob.setBinaryStream(1)) {
-                        byte[] buffer = new byte[4096];
-                        int bytesRead;
-                        while ((bytesRead = fis.read(buffer)) != -1) {
-                            outputStream.write(buffer, 0, bytesRead);
-                        }
-                    }
-                }
-                // modifier un produit
-
-                ActorService actorService = new ActorService();
+            connection = DataSource.getInstance().getConnection();
+            ActorService actorService = new ActorService();
 // Assign value to imageBlob
-                /* assign the blob value here */
-                actorService.update(new Actor(
-                        nomAcotr_textArea1.getText(),
-                        imageBlob,
-                        bioAcotr_textArea.getText()));
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Produit modifiée");
-                alert.setContentText("Produit modifiée !");
-                alert.show();
+            /* assign the blob value here */
+            System.out.println(actor);
+            actorService.update(actor);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Produit modifiée");
+            alert.setContentText("Produit modifiée !");
+            alert.show();
 
-            } catch (SQLException | IOException e) {
-                showAlert("Erreur lors de la modification du produit : " + e.getMessage());
-            }
+        } catch (Exception e) {
+            showAlert("Erreur lors de la modification du produit : " + e.getMessage());
         }
         readActorTable();
 
@@ -197,7 +197,9 @@ public class ActorController {
     @FXML
     void readActorTable() {
         try {
+
             filmActor_tableView11.setEditable(true);
+            idActor_tableColumn1.setVisible(false);
             idActor_tableColumn1.setCellValueFactory(new PropertyValueFactory<Actor, Integer>("id"));
             nomAcotr_tableColumn1.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Actor, String>, ObservableValue<String>>() {
                 @Override
@@ -206,6 +208,19 @@ public class ActorController {
                 }
             });
             nomAcotr_tableColumn1.setCellFactory(TextFieldTableCell.forTableColumn());
+            DeleteActor_Column1.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Actor, Button>, ObservableValue<Button>>() {
+                @Override
+                public ObservableValue<Button> call(TableColumn.CellDataFeatures<Actor, Button> filmcategoryButtonCellDataFeatures) {
+                    Button button = new Button("delete");
+                    button.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            deleteFilm(filmcategoryButtonCellDataFeatures.getValue().getId());
+                        }
+                    });
+                    return new SimpleObjectProperty<Button>(button);
+                }
+            });
             bioActor_tableColumn1.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Actor, String>, ObservableValue<String>>() {
                 @Override
                 public ObservableValue<String> call(TableColumn.CellDataFeatures<Actor, String> actorStringCellDataFeatures) {
@@ -251,40 +266,14 @@ public class ActorController {
                     return new SimpleObjectProperty<HBox>(hBox);
                 }
             });
-//            imageAcotr_tableColumn1.setCellValueFactory(cellData -> {
-//                Actor actor = cellData.getValue();
-//                ImageView imageView = new ImageView();
-//                imageView.setFitWidth(100); // Réglez la largeur de l'image selon vos préférences
-//                imageView.setFitHeight(50); // Réglez la hauteur de l'image selon vos préférences
-//                try {
-//                    Blob blob = actor.getImage();
-//                    if (blob != null) {
-//                        Image image = new Image(blob.getBinaryStream());
-//                        imageView.setImage(image);
-//                    } else {
-//                        // Afficher une image par défaut si le logo est null
-//                        Image defaultImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("default_image.png")));
-//                        imageView.setImage(defaultImage);
-//                    }
-//                } catch (SQLException e) {
-//                    e.printStackTrace();
-//                }
-//                return new javafx.beans.property.SimpleObjectProperty<>(imageView);
-//            });
             ActorService categoryService = new ActorService();
             ObservableList<Actor> obC = FXCollections.observableArrayList(categoryService.read());
             filmActor_tableView11.setItems(obC);
-            filmActor_tableView11.getSelectionModel().selectedItemProperty().addListener((observableValue, actor, t1) -> {
-                Actor a = filmActor_tableView11.getSelectionModel().getSelectedItem();
-                if (a != null) {
-                    nomAcotr_textArea1.setText(a.getNom());
-                    nomAcotr_textArea1.setText(String.valueOf(a.getId()));
-                }
-            });
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
+
 
     void deleteFilm(int id) {
         ActorService actorService = new ActorService();
@@ -296,6 +285,4 @@ public class ActorController {
         readActorTable();
 
     }
-
-
 }

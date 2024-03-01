@@ -61,6 +61,7 @@ public class ActorService implements IService<Actor> {
             statement.setString(1, actor.getNom());
             statement.setBlob(2, actor.getImage());
             statement.setString(3, actor.getBiographie());
+            statement.setInt(4, actor.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
