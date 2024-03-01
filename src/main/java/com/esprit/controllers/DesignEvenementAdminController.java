@@ -279,7 +279,24 @@ public class DesignEvenementAdminController {
             }
         });
 
-    void GestionCategorie(ActionEvent event) throws IOException {
+        tcNomE.setCellValueFactory(new PropertyValueFactory<Evenement, String>("nom"));
+        tcNomE.setCellFactory(TextFieldTableCell.forTableColumn());
+        tcNomE.setOnEditCommit(event -> {
+            Evenement evenement = event.getRowValue();
+            evenement.setNom(event.getNewValue());
+            updateEvenement(evenement);
+        });
+
+        tcDDE.setCellValueFactory(new PropertyValueFactory<Evenement, Date>("Date Debut"));
+        tcDDE.setCellFactory(TextFieldTableCell.forTableColumn());
+        tcDDE.setOnEditCommit(event -> {
+            Evenement evenement = event.getRowValue();
+            evenement.setDateDebut(event.getNewValue());
+            updateEvenement(evenement);
+        });
+
+
+        void GestionCategorie(ActionEvent event) throws IOException {
 
         // Charger la nouvelle interface ListCinemaAdmin.fxml
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignCategorieAdmin.fxml"));
@@ -296,21 +313,23 @@ public class DesignEvenementAdminController {
 
     }
 
+        @FXML
         public static List<Evenement> rechercher(List<Evenement> liste, String recherche) {
-        List<Evenement> resultats = new ArrayList<>();
+            List<Evenement> resultats = new ArrayList<>();
 
-        for (Evenement element : liste) {
-            if (element.getNom() != null && element.getNom().contains(recherche)) {
-                resultats.add(element);
+            for (Evenement element : liste) {
+                if (element.getNom() != null && element.getNom().contains(recherche)) {
+                    resultats.add(element);
+                }
             }
+
+            return resultats;
         }
 
-        return resultats;
+
+
+
+
+
+
     }
-
-
-
-
-
-
-}
