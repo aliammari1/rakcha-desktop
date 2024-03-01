@@ -86,18 +86,20 @@
     -fx-background-color: #d62651;
 }
 
-.accept-btn {
-    -fx-background-color: #3699ef;
+.movies-btn {
+    -fx-background-color: #ae2d3c;
     -fx-background-radius: 8px;
-    -fx-text-fill: #000000;
-    -fx-font-size: 12px;
+    -fx-text-fill: #FCE19A;
+    -fx-font-size: 16px;
     -fx-font-family: "Arial Rounded MT Bold";
     -fx-cursor: hand;
 }
 
-.accept-btn:hover {
-    -fx-background-color: #5db9fa;
+.movies-btn:hover {
+    -fx-background-color: #d62651;
 }
+
+
 
 .instert-btn:hover {
     -fx-background-color: #d62651;
