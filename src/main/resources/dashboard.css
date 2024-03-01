@@ -86,6 +86,19 @@
     -fx-background-color: #d62651;
 }
 
+.accept-btn {
+    -fx-background-color: #3699ef;
+    -fx-background-radius: 8px;
+    -fx-text-fill: #000000;
+    -fx-font-size: 12px;
+    -fx-font-family: "Arial Rounded MT Bold";
+    -fx-cursor: hand;
+}
+
+.accept-btn:hover {
+    -fx-background-color: #5db9fa;
+}
+
 .instert-btn:hover {
     -fx-background-color: #d62651;
 }
