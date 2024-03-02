@@ -44,6 +44,11 @@
             <artifactId>validatorfx</artifactId>
             <version>0.4.2</version>
         </dependency>
+        <dependency>
+            <groupId>com.stripe</groupId>
+            <artifactId>stripe-java</artifactId>
+            <version>24.17.0</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

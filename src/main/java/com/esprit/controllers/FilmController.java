@@ -313,7 +313,7 @@ public class FilmController {
             }
         });
         //----------------------
-      
+
         readFilmTable();
         CategoryService cs = new CategoryService();
         FilmService fs = new FilmService();
@@ -359,8 +359,8 @@ public class FilmController {
         FilmService fs = new FilmService();
         fs.delete(new Film(id));
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Produit supprimée");
-        alert.setContentText("Produit supprimée !");
+        alert.setTitle("Film supprimée");
+        alert.setContentText("Film supprimée !");
         alert.show();
         readFilmTable();
     }
@@ -368,9 +368,8 @@ public class FilmController {
     @FXML
     void insertFilm(ActionEvent event) {
         if (validator.containsErrors())
-            addButton.setDisable(true);
+            System.out.println();
         else {
-            addButton.setDisable(false);
             if (selectedFile != null) { // Vérifier si une image a été sélectionnée
                 Connection connection = null;
                 try {
@@ -419,7 +418,6 @@ public class FilmController {
         dureeFilm_textArea.setText("");
         descriptionFilm_textArea.setText("");
         annederealisationFilm_textArea.setText("");
-        idacteurFilm_comboBox.setValue("");
         idcinemaFilm_comboBox.setValue("");
     }
 
@@ -914,7 +912,6 @@ public class FilmController {
 
     }
 
-
     void updateFilm(Film film) {
 //        if (imageBlob != null) { // Vérifier si une image a été sélectionnée
         Connection connection = null;
@@ -923,12 +920,12 @@ public class FilmController {
             FilmService fs = new FilmService();
             fs.update(film);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Produit modifiée");
-            alert.setContentText("Produit modifiée !");
+            alert.setTitle("Film modifiée");
+            alert.setContentText("Film modifiée !");
             alert.show();
             readFilmTable();
         } catch (Exception e) {
-            showAlert("Erreur lors de la modification du produit : " + e.getMessage());
+            showAlert("Erreur lors de la modification du Film : " + e.getMessage());
         }
 //        }
         readFilmTable();
