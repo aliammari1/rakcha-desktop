@@ -57,14 +57,6 @@ public class FilmUserController {
                 anchorPaneFilm.setDisable(false);
             }
         });
-        detailFilm.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
-            @Override
-            public void handle(javafx.event.ActionEvent event) {
-                detalAnchorPane.setVisible(true);
-                anchorPaneFilm.setOpacity(0.26);
-                anchorPaneFilm.setDisable(true);
-            }
-        });
 // Set the padding
         flowpaneFilm.setPadding(new Insets(10, 10, 10, 10));
         List<Film> filmList = new FilmService().read();
