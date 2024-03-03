@@ -199,14 +199,6 @@ public class DashboardResponsableController implements Initializable {
                 showAlert("Cinema added successfully !");
             } catch (SQLException | IOException e) {
                 showAlert("Error when adding cinema:" + e.getMessage());
-            } finally {
-                if (connection != null) {
-                    try {
-                        connection.close();
-                    } catch (SQLException e) {
-                        showAlert("Error closing connection: " + e.getMessage());
-                    }
-                }
             }
         } else {
             showAlert("Please select an image first!");
@@ -493,10 +485,22 @@ public class DashboardResponsableController implements Initializable {
         deleteIcon.setFill(Color.WHITE);
 
         deleteIcon.setOnMouseClicked(event -> {
-            CinemaService cinemaService = new CinemaService();
-            cinemaService.delete(cinema);
-            cinemaFlowPane.getChildren().remove(card);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmation de suppression");
+            alert.setHeaderText(null);
+            alert.setContentText("Voulez-vous vraiment supprimer ce cinéma ?");
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                // Supprimer le cinéma de la base de données
+                CinemaService cinemaService = new CinemaService();
+                cinemaService.delete(cinema);
+
+                // Supprimer la carte du cinéma du conteneur parent
+                cardContainer.getChildren().remove(card);
+            }
         });
+
 
         card.getChildren().addAll(circle, deleteIcon);
 
