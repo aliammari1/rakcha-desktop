@@ -1,7 +1,7 @@
-package com.esprit.controllers;
+package com.esprit.controllers.films;
 
-import com.esprit.models.*;
-import com.esprit.services.*;
+import com.esprit.models.films.*;
+import com.esprit.services.films.*;
 import com.esprit.utils.DataSource;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleIntegerProperty;

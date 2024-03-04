@@ -1,7 +1,7 @@
-package com.esprit.controllers;
+package com.esprit.controllers.films;
 
-import com.esprit.models.Actor;
-import com.esprit.services.ActorService;
+import com.esprit.models.films.Actor;
+import com.esprit.services.films.ActorService;
 import com.esprit.utils.DataSource;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;

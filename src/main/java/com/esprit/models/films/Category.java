@@ -1,4 +1,4 @@
-package com.esprit.models;
+package com.esprit.models.films;
 
 public class Category {
     private final String nom;

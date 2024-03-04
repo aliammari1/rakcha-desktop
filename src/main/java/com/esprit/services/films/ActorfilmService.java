@@ -1,8 +1,9 @@
-package com.esprit.services;
+package com.esprit.services.films;
 
-import com.esprit.models.Actor;
-import com.esprit.models.Actorfilm;
-import com.esprit.models.Film;
+import com.esprit.models.films.Actor;
+import com.esprit.models.films.Actorfilm;
+import com.esprit.models.films.Film;
+import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
 
 import java.sql.Connection;

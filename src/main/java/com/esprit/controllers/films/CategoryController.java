@@ -1,7 +1,7 @@
-package com.esprit.controllers;
+package com.esprit.controllers.films;
 
-import com.esprit.models.Category;
-import com.esprit.services.CategoryService;
+import com.esprit.models.films.Category;
+import com.esprit.services.films.CategoryService;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -193,5 +193,5 @@ public class CategoryController {
             }
         });
     }
-    
+
 }
