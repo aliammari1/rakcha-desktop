@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -51,20 +52,29 @@ public class DesignCategorieAdminController {
 
     @FXML
     void GestionCategorie(ActionEvent event) throws IOException {
-        // Charger la nouvelle interface ListproduitAdmin.fxml
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignProduitAdmin.fxml"));
-        Parent root = loader.load();
 
-        // Créer une nouvelle scène avec la nouvelle interface
-        Scene scene = new Scene(root);
+            // Charger la nouvelle interface ListproduitAdmin.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignProduitAdmin.fxml"));
+            Parent root = loader.load();
 
-        // Créer une nouvelle fenêtre (stage) et y attacher la scène
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.setTitle("Gestion des categories");
-        stage.show();
+            // Créer une nouvelle scène avec la nouvelle interface
+            Scene scene = new Scene(root);
 
-    }
+            // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Créer une nouvelle fenêtre (stage) et y attacher la scène
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("Gestion des categories");
+            stage.show();
+
+            // Fermer la fenêtre actuelle
+            currentStage.close();
+        }
+
+
+
 
 
     @FXML
@@ -77,11 +87,25 @@ public class DesignCategorieAdminController {
 
     @FXML
     void ajouter_categorie(ActionEvent event) {
+        // Récupérer les valeurs des champs de saisie
+        String nomCategorie = nomC_textFile.getText().trim();
+        String descriptionCategorie = descriptionC_textArea.getText().trim();
+
+        // Vérifier si les champs sont vides
+        if (nomCategorie.isEmpty() || descriptionCategorie.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur de saisie");
+            alert.setContentText("Veuillez remplir tous les champs.");
+            alert.show();
+            return; // Arrêter l'exécution de la méthode si les champs sont vides
+        }
+
         // Créer l'objet Categorie
         CategorieService cs = new CategorieService();
-        Categorie_Produit nouvelleCategorieProduit = new Categorie_Produit(nomC_textFile.getText(),  descriptionC_textArea.getText());
-        cs.create(nouvelleCategorieProduit);
+        Categorie_Produit nouvelleCategorieProduit = new Categorie_Produit(nomCategorie, descriptionCategorie);
+
         // Ajouter le nouveau categorie à la liste existante
+        cs.create(nouvelleCategorieProduit);
         categorie_tableview.getItems().add(nouvelleCategorieProduit);
 
         // Rafraîchir la TableView
@@ -91,8 +115,9 @@ public class DesignCategorieAdminController {
         alert.setTitle("Categorie ajouté");
         alert.setContentText("Categorie ajouté !");
         alert.show();
-
     }
+
+
 
 
 

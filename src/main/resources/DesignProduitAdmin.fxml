@@ -8,6 +8,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
@@ -38,10 +39,15 @@
             </Button>
             <Button layoutX="1.0" layoutY="244.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="194.0" styleClass="nav-btn" text="Series" />
             <FontAwesomeIconView fill="#ebe5e5" glyphName="TV" layoutX="18.0" layoutY="269.0" size="30" />
+            <ImageView fitHeight="168.0" fitWidth="205.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../../../xampp/htdocs/img/417882432_24845175578463813_8129699764434025723_n.png" />
+               </image>
+            </ImageView>
          </children>
       </AnchorPane>
       <AnchorPane layoutX="1280.0" prefHeight="707.0" prefWidth="0.0" styleClass="nav-form" stylesheets="@../../../../../Downloads/dashbord.css" />
-      <AnchorPane layoutX="215.0" layoutY="75.0" prefHeight="607.0" prefWidth="309.0" styleClass="bg-white" stylesheets="@Dashbord.css">
+      <AnchorPane layoutX="214.0" layoutY="86.0" prefHeight="595.0" prefWidth="292.0" styleClass="bg-white" stylesheets="@Dashbord.css">
          <children>
             <ComboBox fx:id="nomC_comboBox" layoutX="107.0" layoutY="163.0" prefHeight="25.0" prefWidth="105.0" styleClass="combo-box-red" />
             <Label layoutX="13.0" layoutY="118.0" text="Product :">
@@ -88,9 +94,9 @@
             <FontAwesomeIconView fill="#bf1515" glyphName="UPLOAD" layoutX="38.0" layoutY="506.0" onMouseClicked="#selectImage" selectionFill="#2c2a2a" size="20" />
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="540.0" layoutY="263.0" prefHeight="418.0" prefWidth="726.0" styleClass="bg-white" stylesheets="@Dashbord.css">
+      <AnchorPane layoutX="540.0" layoutY="194.0" prefHeight="487.0" prefWidth="726.0" styleClass="bg-white" stylesheets="@Dashbord.css">
          <children>
-            <TableView fx:id="Produit_tableview" layoutX="12.0" layoutY="92.0" prefHeight="308.0" prefWidth="698.0">
+            <TableView fx:id="Produit_tableview" layoutX="12.0" layoutY="69.0" prefHeight="399.0" prefWidth="698.0">
               <columns>
                 <TableColumn fx:id="nomP_tableC" prefWidth="106.0" text="Product" />
                 <TableColumn fx:id="nomCP_tableC" prefWidth="108.0" text="Category" />
@@ -102,16 +108,19 @@
                  
               </columns>
             </TableView>
-            <Label layoutX="216.0" layoutY="24.0" text="Table View" textFill="#466288">
+            <Label layoutX="299.0" layoutY="14.0" text="Product" textFill="#466288">
                <font>
                   <Font name="Arial Narrow Bold Italic" size="36.0" />
                </font>
             </Label>
          </children>
       </AnchorPane>
-      <Button layoutX="1096.0" layoutY="231.0" mnemonicParsing="false" onAction="#GestionCategorie" styleClass="navig-button" stylesheets="@Dashbord.css" text=" Category Management" />
-      <TextField fx:id="SearchBar" layoutX="1060.0" layoutY="59.0" prefHeight="31.0" prefWidth="194.0" styleClass="search-pane" stylesheets="@Dashbord.css" />
-      <FontAwesomeIconView fill="#6f6a6a" glyphName="SEARCH" layoutX="1068.0" layoutY="80.0" size="13" wrappingWidth="21.428571701049805" />
+      <Button layoutX="1095.0" layoutY="158.0" mnemonicParsing="false" onAction="#GestionCategorie" styleClass="navig-button" stylesheets="@Dashbord.css" text=" Category Management" />
+
+      <TextField fx:id="SearchBar" layoutX="756.0" layoutY="29.0" prefHeight="31.0" prefWidth="194.0" styleClass="search-pane" stylesheets="@Dashbord.css" />
+      <FontAwesomeIconView fill="#6f6a6a" glyphName="SEARCH" layoutX="763.0" layoutY="49.0" size="13" wrappingWidth="21.428571701049805" />
+
+
 
    </children>
 </AnchorPane>

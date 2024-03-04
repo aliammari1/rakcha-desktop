@@ -1,3 +1,5 @@
+
+
 /* Styles par défaut */
 .top-form {
     -fx-background-color: #fff;
@@ -164,7 +166,7 @@
     -fx-background-color:  #466288;
 }
 .flow-pane {
-    -fx-border-color: linear-gradient(to top left, #624970, #ae2d3c);;
+    -fx-border-color: linear-gradient(to top left, #624970, #ae2d3c);
     -fx-border-width: 3px; /* Largeur de la bordure (2 pixels dans cet exemple) */
     -fx-border-style: solid; /* Style de la bordure (ligne solide dans cet exemple) */
     -fx-border-radius: 5px; /* Rayon de la bordure pour des coins arrondis (facultatif) */
@@ -195,13 +197,44 @@
     -fx-cursor: hand;
     -fx-font-family: "Arial Rounded MT Bold";
 }
-.card-container {
-    -fx-border-color: #dd4f4d;
-    -fx-border-width: 2px;
-    -fx-border-radius: 5px;
-    -fx-padding: 10px;
-    -fx-margin: 50px; /* Ajout de marge à l'extérieur de la bordure */
-}
+
 .cell-hide-text {
     -fx-text-fill: transparent;
+
+}
+.ajouter-panier{
+    -fx-background-color: #dd4f4d;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 10px;
+}
+
+.ajouter-panier:hover {
+    -fx-background-color: #ae2d3c;
+}
+
+.commande-button{
+
+    -fx-background-color: #624970;
+    -fx-text-fill: #FCE19A;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 10px;
+}
+
+.commande-button:hover {
+    -fx-background-color: #6f7b94;
+}
+
+.achat-button{
+    -fx-background-color: #466288;
+    -fx-text-fill: #FCE19A;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 10px;
+}
+
+.achat-button:hover {
+    -fx-background-color: #6f7b94;
 }

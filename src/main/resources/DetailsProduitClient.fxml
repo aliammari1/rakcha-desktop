@@ -9,9 +9,9 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="712.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.DetailsProduitClientController">
+<AnchorPane fx:id="anchordetail" prefHeight="700.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.DetailsProduitClientController">
    <children>
-      <AnchorPane prefHeight="712.0" prefWidth="208.0" styleClass="nav-form" stylesheets="@Dashbord.css">
+      <AnchorPane prefHeight="702.0" prefWidth="211.0" styleClass="nav-form" stylesheets="@Dashbord.css">
          <children>
             <Button layoutY="282.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Movies">
                <font>
@@ -35,17 +35,24 @@
             </Button>
             <Button layoutX="1.0" layoutY="244.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Series" />
             <FontAwesomeIconView fill="#ebe5e5" glyphName="TV" layoutX="18.0" layoutY="269.0" size="30" />
-            <ImageView fitHeight="167.0" fitWidth="208.0" layoutX="1.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="9.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../../../../Desktop/417882432_24845175578463813_8129699764434025723_n.png" />
+                  <Image url="@../../../../../../../xampp/htdocs/img/417882432_24845175578463813_8129699764434025723_n.png" />
                </image>
             </ImageView>
          </children>
       </AnchorPane>
-      <FlowPane fx:id="detailFlowPane" layoutX="260.0" layoutY="176.0" prefHeight="485.0" prefWidth="791.0" stylesheets="@Dashbord.css" />
-      <TextField fx:id="SearchBar" layoutX="841.0" layoutY="47.0" prefHeight="31.0" prefWidth="200.0" styleClass="search-pane" stylesheets="@Dashbord.css" />
-      <FontAwesomeIconView fill="#6f6a6a" glyphName="SEARCH" layoutX="852.0" layoutY="68.0" size="13" text="" wrappingWidth="21.428571701049805" />
-      <FontAwesomeIconView fx:id="retour" fill="#94342a" glyphName="ARROW_LEFT" layoutX="286.0" layoutY="165.0" onMouseClicked="#afficherProduit" size="20" />
-      <FontAwesomeIconView fill="#94342a" glyphName="ARROW_RIGHT" layoutX="320.0" layoutY="165.0" size="20" />
+      <TextField fx:id="SearchBar" layoutX="820.0" layoutY="72.0" styleClass="search-pane" stylesheets="@Dashbord.css" />
+      <FlowPane fx:id="detailFlowPane" layoutX="238.0" layoutY="169.0" prefHeight="474.0" prefWidth="717.0" styleClass="flow-pane" stylesheets="@Dashbord.css">
+         <children>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+         </children></FlowPane>
+      <FontAwesomeIconView fx:id="retour" fill="#6b2a2a" glyphName="ARROW_LEFT" layoutX="252.0" layoutY="159.0" onMouseClicked="#afficherProduit" size="20" text="" />
+      <FontAwesomeIconView fill="#6b2a2a" glyphName="ARROW_RIGHT" layoutX="285.0" layoutY="158.0" size="20" />
+      <AnchorPane fx:id="panierAnchorPane" layoutX="983.0" layoutY="171.0" prefHeight="474.0" prefWidth="273.0">
+         <children>
+            <FlowPane fx:id="panierFlowPane" prefHeight="474.0" prefWidth="273.0" styleClass="flow-pane" stylesheets="@Dashbord.css" visible="false" />
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>
