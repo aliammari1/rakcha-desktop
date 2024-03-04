@@ -99,6 +99,12 @@
             <groupId>com.github.scribejava</groupId>
             <artifactId>scribejava-apis</artifactId>
             <version>8.3.3</version>
+            <version>11.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-base</artifactId>
+            <version>21.0.2</version>
         </dependency>
     </dependencies>
     <build>
@@ -113,4 +119,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>
