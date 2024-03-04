@@ -1,4 +1,4 @@
-package com.esprit.models;
+package com.esprit.models.films;
 
 public class Actorfilm {
     private Actor idactor;

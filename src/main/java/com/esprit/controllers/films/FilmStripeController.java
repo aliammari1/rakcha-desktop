@@ -1,4 +1,4 @@
-package com.esprit.controllers;
+package com.esprit.controllers.films;
 
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;

@@ -1,9 +1,9 @@
-package com.esprit.controllers;
+package com.esprit.controllers.films;
 
-import com.esprit.models.Film;
-import com.esprit.services.ActorfilmService;
-import com.esprit.services.FilmService;
-import com.esprit.services.FilmcategoryService;
+import com.esprit.models.films.Film;
+import com.esprit.services.films.ActorfilmService;
+import com.esprit.services.films.FilmService;
+import com.esprit.services.films.FilmcategoryService;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
