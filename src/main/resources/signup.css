@@ -1,0 +1,45 @@
+.leftSideBar {
+    -fx-background-color: #e8626d;
+}
+
+.loginTextField {
+    -fx-background-radius: 20px;
+}
+
+.loginButton {
+    -fx-background-radius: 20px;
+    -fx-background-color: #e8626d;
+}
+
+#rememberMe:selected .mark {
+    -fx-background-color: #fff;
+}
+
+#rememberMe:selected .box {
+    -fx-background-color: #e8626d;
+}
+
+.subLogin {
+    -fx-background-color: #e8626d;
+    -fx-background-radius: 20px;
+}
+
+.signupButton {
+    -fx-background-color: transparent;
+    -fx-background-radius: 20px;
+    -fx-border-color: white;
+    -fx-border-radius: 20px;
+    -fx-border-width: 2px;
+}
+
+.checked {
+    -fx-border-width: 2px;
+    -fx-border-radius: 20px;
+    -fx-border-color: #76ff76;
+}
+
+.notChecked {
+    -fx-border-width: 2px;
+    -fx-border-radius: 20px;
+    -fx-border-color: red;
+}
