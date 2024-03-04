@@ -2,84 +2,95 @@
 
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.Hyperlink?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
-
-<AnchorPane prefHeight="520.0" prefWidth="929.0" stylesheets="@signup.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.LoginController">
+<?import javafx.scene.text.*?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="520.0" prefWidth="929.0" stylesheets="@signup.css"
+            xmlns="http://javafx.com/javafx/21" fx:controller="com.esprit.controllers.users.LoginController">
     <children>
-      <AnchorPane layoutX="467.0" prefHeight="520.0" prefWidth="468.0" styleClass="leftSideBar">
-         <children>
-            <Label layoutX="97.0" layoutY="122.0" prefHeight="58.0" prefWidth="318.0" text="Welcome to Rakcha" textFill="WHITE">
-               <font>
-                  <Font name="Outfit SemiBold" size="35.0" />
-               </font>
-            </Label>
-            <Label layoutX="162.0" layoutY="219.0" text="Don't have an account" textFill="WHITE">
-               <font>
-                  <Font size="19.0" />
-               </font>
-            </Label>
-            <Button fx:id="signUpButton" layoutX="207.0" layoutY="276.0" mnemonicParsing="false" onAction="#switchToSignUp" prefHeight="34.0" prefWidth="97.0" styleClass="signupButton" text="Sign up" textFill="WHITE">
-               <font>
-                  <Font name="Outfit Medium" size="17.0" />
-               </font>
-            </Button>
-         </children></AnchorPane>
-      <AnchorPane prefHeight="520.0" prefWidth="461.0">
-         <children>
-              <Label layoutX="87.0" layoutY="217.0" text="Password">
-               <font>
-                  <Font name="Outfit Medium" size="17.0" />
-               </font></Label>
-              <TextField fx:id="emailTextField" layoutX="88.0" layoutY="150.0" prefHeight="42.0" prefWidth="271.0" promptText="Username" styleClass="loginTextField">
-               <font>
-                  <Font name="Outfit Regular" size="15.0" />
-               </font>
-               <padding>
-                  <Insets left="20.0" />
-               </padding></TextField>
-              <Label layoutX="85.0" layoutY="113.0" prefHeight="30.0" prefWidth="88.0" text="Username">
-               <font>
-                  <Font name="Outfit Medium" size="17.0" />
-               </font></Label>
-              <Button layoutX="88.0" layoutY="333.0" mnemonicParsing="false" onAction="#login" prefHeight="42.0" prefWidth="271.0" styleClass="loginButton" text="Sign In" textFill="WHITE">
-               <font>
-                  <Font name="Outfit Medium" size="20.0" />
-               </font></Button>
-            <PasswordField fx:id="passwordTextField" layoutX="88.0" layoutY="247.0" prefHeight="42.0" prefWidth="271.0" promptText="Password" styleClass="loginTextField">
-               <padding>
-                  <Insets left="20.0" />
-               </padding>
-               <font>
-                  <Font name="Outfit Regular" size="15.0" />
-               </font>
-            </PasswordField>
-            <Label layoutX="62.0" layoutY="35.0" text="Sign In">
-               <font>
-                  <Font name="Outfit Bold" size="36.0" />
-               </font>
-            </Label>
-            <CheckBox id="rememberMe" layoutX="74.0" layoutY="404.0" mnemonicParsing="false" text="Remember Me" />
-            <Hyperlink layoutX="266.0" layoutY="401.0" text="Forgot Password" />
-            <Button layoutX="323.0" layoutY="37.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="44.0" styleClass="subLogin">
-               <graphic>
-                  <FontAwesomeIconView fill="WHITE" glyphName="TWITTER" size="28" />
-               </graphic>
-            </Button>
-            <Button layoutX="270.0" layoutY="37.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="44.0" styleClass="subLogin">
-               <graphic>
-                  <FontAwesomeIconView fill="WHITE" glyphName="FACEBOOK" size="28" text="" wrappingWidth="17.60003626346588" />
-               </graphic>
-            </Button>
-            <Label fx:id="emailErrorLabel" layoutX="88.0" layoutY="192.0" prefHeight="18.0" prefWidth="271.0" textFill="RED" />
-            <Label fx:id="passwordErrorLabel" layoutX="88.0" layoutY="289.0" prefHeight="18.0" prefWidth="271.0" textFill="RED" />
-         </children>
-      </AnchorPane>
+        <AnchorPane layoutX="467.0" prefHeight="520.0" prefWidth="468.0" styleClass="leftSideBar">
+            <children>
+                <Label layoutX="97.0" layoutY="122.0" prefHeight="58.0" prefWidth="318.0" text="Welcome to Rakcha"
+                       textFill="WHITE">
+                    <font>
+                        <Font name="Outfit SemiBold" size="35.0"/>
+                    </font>
+                </Label>
+                <Label layoutX="162.0" layoutY="219.0" text="Don't have an account" textFill="WHITE">
+                    <font>
+                        <Font size="19.0"/>
+                    </font>
+                </Label>
+                <Button fx:id="signUpButton" layoutX="207.0" layoutY="276.0" mnemonicParsing="false"
+                        onAction="#switchToSignUp" prefHeight="34.0" prefWidth="97.0" styleClass="signupButton"
+                        text="Sign up" textFill="WHITE">
+                    <font>
+                        <Font name="Outfit Medium" size="17.0"/>
+                    </font>
+                </Button>
+            </children>
+        </AnchorPane>
+        <AnchorPane prefHeight="520.0" prefWidth="461.0">
+            <children>
+                <Label layoutX="87.0" layoutY="217.0" text="Password">
+                    <font>
+                        <Font name="Outfit Medium" size="17.0"/>
+                    </font>
+                </Label>
+                <TextField fx:id="emailTextField" layoutX="88.0" layoutY="150.0" prefHeight="42.0" prefWidth="271.0"
+                           promptText="Username" styleClass="loginTextField">
+                    <font>
+                        <Font name="Outfit Regular" size="15.0"/>
+                    </font>
+                    <padding>
+                        <Insets left="20.0"/>
+                    </padding>
+                </TextField>
+                <Label layoutX="85.0" layoutY="113.0" prefHeight="30.0" prefWidth="88.0" text="Username">
+                    <font>
+                        <Font name="Outfit Medium" size="17.0"/>
+                    </font>
+                </Label>
+                <Button layoutX="88.0" layoutY="333.0" mnemonicParsing="false" onAction="#login" prefHeight="42.0"
+                        prefWidth="271.0" styleClass="loginButton" text="Sign In" textFill="WHITE">
+                    <font>
+                        <Font name="Outfit Medium" size="20.0"/>
+                    </font>
+                </Button>
+                <PasswordField fx:id="passwordTextField" layoutX="88.0" layoutY="247.0" prefHeight="42.0"
+                               prefWidth="271.0" promptText="Password" styleClass="loginTextField">
+                    <padding>
+                        <Insets left="20.0"/>
+                    </padding>
+                    <font>
+                        <Font name="Outfit Regular" size="15.0"/>
+                    </font>
+                </PasswordField>
+                <Label layoutX="62.0" layoutY="35.0" text="Sign In">
+                    <font>
+                        <Font name="Outfit Bold" size="36.0"/>
+                    </font>
+                </Label>
+                <CheckBox id="rememberMe" layoutX="74.0" layoutY="404.0" mnemonicParsing="false" text="Remember Me"/>
+                <Hyperlink layoutX="266.0" layoutY="401.0" text="Forgot Password"/>
+                <Button layoutX="323.0" layoutY="37.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="44.0"
+                        styleClass="subLogin">
+                    <graphic>
+                        <FontAwesomeIconView fill="WHITE" glyphName="TWITTER" size="28"/>
+                    </graphic>
+                </Button>
+                <Button layoutX="270.0" layoutY="37.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="44.0"
+                        styleClass="subLogin">
+                    <graphic>
+                        <FontAwesomeIconView fill="WHITE" glyphName="FACEBOOK" size="28" text=""
+                                             wrappingWidth="17.60003626346588"/>
+                    </graphic>
+                </Button>
+                <Label fx:id="emailErrorLabel" layoutX="88.0" layoutY="192.0" prefHeight="18.0" prefWidth="271.0"
+                       textFill="RED"/>
+                <Label fx:id="passwordErrorLabel" layoutX="88.0" layoutY="289.0" prefHeight="18.0" prefWidth="271.0"
+                       textFill="RED"/>
+            </children>
+        </AnchorPane>
     </children>
 </AnchorPane>

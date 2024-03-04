@@ -1,9 +1,10 @@
-package com.esprit.services;
+package com.esprit.services.users;
 
-import com.esprit.models.Admin;
-import com.esprit.models.Client;
-import com.esprit.models.Responsable_de_cinema;
-import com.esprit.models.User;
+import com.esprit.models.users.Admin;
+import com.esprit.models.users.Client;
+import com.esprit.models.users.Responsable_de_cinema;
+import com.esprit.models.users.User;
+import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
 import com.esprit.utils.UserMail;
 import com.esprit.utils.UserPDF;
