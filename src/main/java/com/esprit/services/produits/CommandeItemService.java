@@ -1,7 +1,8 @@
-package com.esprit.services;
+package com.esprit.services.produits;
 
-import com.esprit.models.CommandeItem;
-import com.esprit.models.Produit;
+import com.esprit.models.produits.CommandeItem;
+import com.esprit.models.produits.Produit;
+import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
 
 import java.sql.Connection;
@@ -11,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommandeItemService implements IService <CommandeItem>{
+public class CommandeItemService implements IService<CommandeItem> {
 
     private Connection connection;
 

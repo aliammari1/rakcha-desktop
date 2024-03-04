@@ -1,8 +1,8 @@
-package com.esprit.controllers;
+package com.esprit.controllers.produits;
 
-import com.esprit.models.Categorie_Produit;
+import com.esprit.models.produits.Categorie_Produit;
 
-import com.esprit.services.CategorieService;
+import com.esprit.services.produits.CategorieService;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,7 +22,6 @@ import javafx.util.Callback;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.sql.Connection;
 import java.util.List;
 
 public class DesignCategorieAdminController {
