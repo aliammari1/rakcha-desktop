@@ -1,6 +1,7 @@
-package com.esprit.services;
+package com.esprit.services.produits;
 
-import com.esprit.models.Users;
+import com.esprit.models.produits.Users;
+import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
 
 import java.sql.Connection;

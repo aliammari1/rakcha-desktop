@@ -1,8 +1,8 @@
-package com.esprit.controllers;
-import com.esprit.models.Categorie_Produit;
-import com.esprit.models.Produit;
-import com.esprit.services.CategorieService;
-import com.esprit.services.ProduitService;
+package com.esprit.controllers.produits;
+import com.esprit.models.produits.Categorie_Produit;
+import com.esprit.models.produits.Produit;
+import com.esprit.services.produits.CategorieService;
+import com.esprit.services.produits.ProduitService;
 import com.esprit.utils.DataSource;
 
 import javafx.collections.FXCollections;

@@ -1,9 +1,9 @@
-package com.esprit.controllers;
+package com.esprit.controllers.produits;
 
-import com.esprit.models.CommandeItem;
-import com.esprit.models.Produit;
-import com.esprit.services.CommandeItemService;
-import com.esprit.services.ProduitService;
+import com.esprit.models.produits.CommandeItem;
+import com.esprit.models.produits.Produit;
+import com.esprit.services.produits.CommandeItemService;
+import com.esprit.services.produits.ProduitService;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 
@@ -35,8 +35,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Blob;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 

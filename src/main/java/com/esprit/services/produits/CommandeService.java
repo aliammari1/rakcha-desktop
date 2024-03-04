@@ -1,14 +1,14 @@
-package com.esprit.services;
+package com.esprit.services.produits;
 
-import com.esprit.models.Commande;
-import com.esprit.models.CommandeItem;
+import com.esprit.models.produits.Commande;
+import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommandeService implements IService <Commande>{
+public class CommandeService implements IService<Commande> {
 
     private Connection connection;
 
