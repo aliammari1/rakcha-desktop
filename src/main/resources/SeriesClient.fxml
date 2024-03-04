@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="600.0" prefWidth="953.0" stylesheets="@dashbord.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.rakcha1.controllers.series.SerieClientController">
+   <children>
+      <Pane layoutX="-6.0" prefHeight="600.0" prefWidth="170.0" styleClass="nav-form" stylesheets="@dashbord.css" />
+      <Pane layoutX="169.0" layoutY="14.0" prefHeight="70.0" prefWidth="781.0" styleClass="bg-white" stylesheets="@dashbord.css">
+         <children>
+            <TextField fx:id="recherchefld" layoutX="317.0" layoutY="19.0" prefHeight="26.0" prefWidth="455.0" promptText=" Search Series " />
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="9.0" prefHeight="46.0" prefWidth="149.0" stylesheets="@dashbord.css" text="Categories" textFill="#d12a2a">
+               <font>
+                  <Font name="Dubai Regular" size="12.0" />
+               </font></Label>
+            <ComboBox fx:id="CamboxCategorie" layoutX="149.0" layoutY="19.0" prefHeight="26.0" prefWidth="158.0" promptText="select category" stylesheets="@dashbord.css">
+               <styleClass>
+                  <String fx:value="arrow" />
+                  <String fx:value="arrow" />
+               </styleClass></ComboBox>
+         </children>
+      </Pane>
+      <ListView fx:id="listeSerie" layoutX="181.0" layoutY="99.0" prefHeight="490.0" prefWidth="767.0">
+         <styleClass>
+            <String fx:value="arrow" />
+            <String fx:value="arrow" />
+         </styleClass></ListView>
+   </children>
+</AnchorPane>
