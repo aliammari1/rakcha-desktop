@@ -1,15 +1,16 @@
-package com.esprit.services;
+package com.esprit.services.cinemas;
 
-import com.esprit.models.Salle;
-import com.esprit.models.Seance;
+import com.esprit.models.cinemas.Cinema;
+import com.esprit.models.cinemas.Seance;
+import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SeanceService implements IService<Seance> {
 
@@ -95,4 +96,37 @@ public class SeanceService implements IService<Seance> {
 
         return seances;
     }
+
+    // Méthode pour récupérer les séances dans une plage de dates spécifiée
+    public Map<LocalDate, List<Seance>> getSeancesByDateRangeAndCinema(LocalDate startDate, LocalDate endDate, Cinema cinema) {
+        Map<LocalDate, List<Seance>> seancesByDate = new HashMap<>();
+
+        try {
+            // Créer la requête SQL pour récupérer les séances dans la plage de dates spécifiée et pour le cinéma donné
+            String query = "SELECT * FROM seance WHERE date BETWEEN ? AND ? AND id_cinema = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setDate(1, Date.valueOf(startDate)); // Utilisez java.sql.Date.valueOf
+            statement.setDate(2, Date.valueOf(endDate)); // Utilisez java.sql.Date.valueOf
+            statement.setInt(3, cinema.getId_cinema()); // Supposons que getId() renvoie l'identifiant du cinéma
+
+            // Exécuter la requête
+            ResultSet rs = statement.executeQuery();
+            CinemaService cs = new CinemaService();
+            SalleService ss = new SalleService();
+            FilmService fs = new FilmService();
+
+            // Parcourir les résultats de la requête et créer des objets Seance
+            while (rs.next()) {
+                LocalDate seanceDate = rs.getDate("date").toLocalDate(); // Convertir java.sql.Date en java.time.LocalDate
+                List<Seance> seancesForDate = seancesByDate.getOrDefault(seanceDate, new ArrayList<>());
+                seancesForDate.add(new Seance(rs.getInt("id_seance"), fs.getFilm(rs.getInt("id_film")), ss.getSalle(rs.getInt("id_salle")), rs.getTime("HD"), rs.getTime("HF"), seanceDate, cs.getCinema(rs.getInt("id_cinema")), rs.getInt("prix")));
+                seancesByDate.put(seanceDate, seancesForDate);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return seancesByDate;
+    }
+
 }
