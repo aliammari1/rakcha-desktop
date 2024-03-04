@@ -1,4 +1,4 @@
-package com.esprit.models;
+package com.esprit.models.cinemas;
 
 import java.sql.Blob;
 

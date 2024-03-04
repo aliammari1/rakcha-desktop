@@ -1,7 +1,8 @@
-package com.esprit.models;
+package com.esprit.models.cinemas;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDate;
 
 public class Seance {
 
@@ -31,6 +32,17 @@ public class Seance {
         this.HD = HD;
         this.HF = HF;
         this.date = date;
+        this.cinema = cinema;
+        this.prix = prix;
+    }
+
+    public Seance(int idSeance, Film film, Salle salle, Time HD, Time HF, LocalDate date, Cinema cinema, int prix) {
+        this.id_seance = id_seance;
+        this.film = film;
+        this.salle = salle;
+        this.HD = HD;
+        this.HF = HF;
+        this.date = Date.valueOf(date);
         this.cinema = cinema;
         this.prix = prix;
     }

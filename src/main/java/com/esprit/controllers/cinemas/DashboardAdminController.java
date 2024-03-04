@@ -1,7 +1,7 @@
-package com.esprit.controllers;
+package com.esprit.controllers.cinemas;
 
-import com.esprit.models.Cinema;
-import com.esprit.services.CinemaService;
+import com.esprit.models.cinemas.Cinema;
+import com.esprit.services.cinemas.CinemaService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;

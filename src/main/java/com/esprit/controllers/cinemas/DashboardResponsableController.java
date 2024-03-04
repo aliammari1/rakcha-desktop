@@ -1,13 +1,13 @@
-package com.esprit.controllers;
+package com.esprit.controllers.cinemas;
 
-import com.esprit.models.Cinema;
-import com.esprit.models.Film;
-import com.esprit.models.Salle;
-import com.esprit.models.Seance;
-import com.esprit.services.CinemaService;
-import com.esprit.services.FilmService;
-import com.esprit.services.SalleService;
-import com.esprit.services.SeanceService;
+import com.esprit.models.cinemas.Cinema;
+import com.esprit.models.cinemas.Film;
+import com.esprit.models.cinemas.Salle;
+import com.esprit.models.cinemas.Seance;
+import com.esprit.services.cinemas.CinemaService;
+import com.esprit.services.cinemas.FilmService;
+import com.esprit.services.cinemas.SalleService;
+import com.esprit.services.cinemas.SeanceService;
 import com.esprit.utils.DataSource;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.value.ObservableValue;
@@ -15,7 +15,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -36,7 +35,6 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 
 
-import javax.imageio.IIOParam;
 import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
