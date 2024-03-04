@@ -4,8 +4,6 @@ import com.esprit.models.Client;
 import com.esprit.models.Responsable_de_cinema;
 import com.esprit.models.User;
 import com.esprit.services.UserService;
-import com.esprit.utils.DataSource;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -28,13 +26,8 @@ import net.synedra.validatorfx.Validator;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.sql.Blob;
 import java.sql.Date;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SignUpController {
@@ -69,6 +62,37 @@ public class SignUpController {
     @FXML
     void initialize() {
         Tooltip tooltip = new Tooltip();
+        UserService userService = new UserService();
+        emailTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
+            if (!emailTextField.getText().matches(emailRegex)) {
+                emailTextField.getStyleClass().removeAll("checked");
+                //emailErrorLabel.setText("this mail format is wrong");
+                emailTextField.getStyleClass().add("notChecked");
+            } else if (userService.checkEmailFound(newValue)) {
+                emailTextField.getStyleClass().removeAll("checked");
+                // emailErrorLabel.setText("this mail address is used");
+                emailTextField.getStyleClass().add("notChecked");
+            } else {
+                //emailErrorLabel.setText("");
+                emailTextField.getStyleClass().removeAll("notChecked");
+                emailTextField.getStyleClass().add("checked");
+            }
+        });
+
+        passwordTextField.textProperty().addListener((observable, oldValue, newValue) ->
+        {
+            if (passwordTextField.getLength() < 8) {
+                passwordTextField.getStyleClass().removeAll("checked");
+                //passwordErrorLabel.setText("the password must contain at least 8 characters");
+                emailTextField.getStyleClass().add("notChecked");
+            } else {
+                //passwordErrorLabel.setText("");
+                passwordTextField.getStyleClass().removeAll("notChecked");
+                passwordTextField.getStyleClass().add("checked");
+            }
+        });
+
         nomTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -90,7 +114,7 @@ public class SignUpController {
                 nomTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
                     public void changed(ObservableValue<? extends String> observable, String oldValue,
-                            String newValue) {
+                                        String newValue) {
                         if (validator.containsErrors()) {
                             tooltip.setText(validator.createStringBinding().getValue());
                             tooltip.setStyle("-fx-background-color: #f00;");
@@ -139,7 +163,7 @@ public class SignUpController {
                 prenomTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
                     public void changed(ObservableValue<? extends String> observable, String oldValue,
-                            String newValue) {
+                                        String newValue) {
                         if (validator.containsErrors()) {
                             tooltip.setText(validator.createStringBinding().getValue());
                             tooltip.setStyle("-fx-background-color: #f00;");
@@ -187,7 +211,7 @@ public class SignUpController {
                 adresseTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
                     public void changed(ObservableValue<? extends String> observable, String oldValue,
-                            String newValue) {
+                                        String newValue) {
                         if (validator.containsErrors()) {
                             tooltip.setText(validator.createStringBinding().getValue());
                             tooltip.setStyle("-fx-background-color: #f00;");
@@ -239,7 +263,7 @@ public class SignUpController {
                 emailTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
                     public void changed(ObservableValue<? extends String> observable, String oldValue,
-                            String newValue) {
+                                        String newValue) {
                         if (validator.containsErrors()) {
                             tooltip.setText(validator.createStringBinding().getValue());
                             tooltip.setStyle("-fx-background-color: #f00;");
@@ -286,7 +310,7 @@ public class SignUpController {
                 passwordTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
                     public void changed(ObservableValue<? extends String> observable, String oldValue,
-                            String newValue) {
+                                        String newValue) {
                         if (validator.containsErrors()) {
                             tooltip.setText(validator.createStringBinding().getValue());
                             tooltip.setStyle("-fx-background-color: #f00;");
@@ -338,7 +362,7 @@ public class SignUpController {
                 num_telephoneTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
                     public void changed(ObservableValue<? extends String> observable, String oldValue,
-                            String newValue) {
+                                        String newValue) {
                         if (validator.containsErrors()) {
                             tooltip.setText(validator.createStringBinding().getValue());
                             tooltip.setStyle("-fx-background-color: #f00;");
@@ -365,12 +389,8 @@ public class SignUpController {
             }
         });
 
-        List<String> roleList = new ArrayList<>() {
-            {
-                add("responsable de cinema");
-                add("client");
-            }
-        };
+        List<String> roleList = Arrays.asList("client", "responsable de cinema");
+
         for (String role : roleList)
             roleComboBox.getItems().add(role);
     }
@@ -398,25 +418,17 @@ public class SignUpController {
         String role = roleComboBox.getValue();
         User user = null;
         URI uri = null;
-        Blob imageBlob = null;
-        try {
-            byte[] imageBytes = Files.readAllBytes(Path.of(new URI(photoDeProfilImageView.getImage().getUrl())));
-            imageBlob = DataSource.getInstance().getConnection().createBlob();
-            imageBlob.setBytes(1, imageBytes);
-        } catch (SQLException | URISyntaxException e) {
-            System.out.println(e.getMessage());
-        }
 
         if (role.equals("responsable de cinema")) {
             user = new Responsable_de_cinema(nomTextField.getText(), prenomTextField.getText(),
                     Integer.parseInt(num_telephoneTextField.getText()), passwordTextField.getText(),
                     roleComboBox.getValue(), emailTextField.getText(),
-                    Date.valueOf(dateDeNaissanceDatePicker.getValue()), emailTextField.getText(), imageBlob);
+                    Date.valueOf(dateDeNaissanceDatePicker.getValue()), emailTextField.getText(), "");
         } else if (role.equals("client")) {
             user = new Client(nomTextField.getText(), prenomTextField.getText(),
                     Integer.parseInt(num_telephoneTextField.getText()), passwordTextField.getText(),
                     roleComboBox.getValue(), emailTextField.getText(),
-                    Date.valueOf(dateDeNaissanceDatePicker.getValue()), emailTextField.getText(), imageBlob);
+                    Date.valueOf(dateDeNaissanceDatePicker.getValue()), emailTextField.getText(), "");
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR, "the given role is not available", ButtonType.CLOSE);
             alert.show();
