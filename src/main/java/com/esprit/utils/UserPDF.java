@@ -1,6 +1,6 @@
 package com.esprit.utils;
 
-import com.esprit.models.User;
+import com.esprit.models.users.User;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -11,7 +11,6 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,7 +27,7 @@ public class UserPDF {
         document.open();
         List<String> attributes = Arrays.asList("id", "nom", "prenom", "num_telephone", "email", "role");
 
-        final float[] widths = { 50, 50, 50, 80, 50, 50 };
+        final float[] widths = {50, 50, 50, 80, 50, 50};
         final PdfPTable table = new PdfPTable(widths);
         this.addTableHeader(table, attributes);
         this.addRows(table, userData);

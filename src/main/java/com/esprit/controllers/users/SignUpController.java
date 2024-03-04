@@ -1,9 +1,9 @@
-package com.esprit.controllers;
+package com.esprit.controllers.users;
 
-import com.esprit.models.Client;
-import com.esprit.models.Responsable_de_cinema;
-import com.esprit.models.User;
-import com.esprit.services.UserService;
+import com.esprit.models.users.Client;
+import com.esprit.models.users.Responsable_de_cinema;
+import com.esprit.models.users.User;
+import com.esprit.services.users.UserService;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;

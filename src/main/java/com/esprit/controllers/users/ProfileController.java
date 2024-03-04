@@ -1,7 +1,7 @@
-package com.esprit.controllers;
+package com.esprit.controllers.users;
 
-import com.esprit.models.User;
-import com.esprit.services.UserService;
+import com.esprit.models.users.User;
+import com.esprit.services.users.UserService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

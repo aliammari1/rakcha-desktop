@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="474.0" prefWidth="864.0" xmlns="http://javafx.com/javafx/21"
-            fx:controller="com.esprit.controllers.AdminDashboardController">
+            fx:controller="com.esprit.controllers.users.AdminDashboardController">
     <BorderPane layoutX="521.0" layoutY="139.0" prefHeight="745.0" prefWidth="1291.0" styleClass="top-form"
                 stylesheets="@dashbord.css"
                 AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
