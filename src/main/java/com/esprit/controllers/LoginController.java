@@ -7,9 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -17,16 +15,29 @@ import java.io.IOException;
 public class LoginController {
 
     @FXML
+    private Button signUpButton;
+
+    @FXML
+    private Label emailErrorLabel;
+
+    @FXML
     private TextField emailTextField;
 
     @FXML
-    private TextField passwordTextField;
+    private Label passwordErrorLabel;
+
+    @FXML
+    private PasswordField passwordTextField;
+
+    @FXML
+    void initialize() {
+
+    }
 
     @FXML
     void login(ActionEvent event) throws IOException {
         UserService userService = new UserService();
         User user = userService.login(emailTextField.getText(), passwordTextField.getText());
-        System.out.println(user.getRole());
         if (user != null) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "the user was found", ButtonType.CLOSE);
             alert.show();
@@ -45,6 +56,14 @@ public class LoginController {
             Alert alert = new Alert(Alert.AlertType.ERROR, "the user was not found", ButtonType.CLOSE);
             alert.show();
         }
+    }
+
+    @FXML
+    void switchToSignUp(ActionEvent event) throws IOException {
+        Stage stage = (Stage) signUpButton.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/SignUp.fxml"));
+        Parent root = loader.load();
+        stage.setScene(new Scene(root));
     }
 
 }

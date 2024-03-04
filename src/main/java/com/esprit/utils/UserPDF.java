@@ -12,6 +12,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class UserPDF {
@@ -25,15 +26,9 @@ public class UserPDF {
         }
 
         document.open();
-        final List<String> attributes = new ArrayList<>() {{
-            this.add("id");
-            this.add("nom");
-            this.add("prenom");
-            this.add("num_telephone");
-            this.add("email");
-            this.add("role");
-        }};
-        final float[] widths = {50, 50, 50, 80, 50, 50};
+        List<String> attributes = Arrays.asList("id", "nom", "prenom", "num_telephone", "email", "role");
+
+        final float[] widths = { 50, 50, 50, 80, 50, 50 };
         final PdfPTable table = new PdfPTable(widths);
         this.addTableHeader(table, attributes);
         this.addRows(table, userData);
@@ -69,33 +64,33 @@ public class UserPDF {
             table.addCell(user.getRole());
         }
     }
-//
-//    private void addCustomRows(PdfPTable table) {
-//        Path path = null;
-//        try {
-//            path = Paths.get(ClassLoader.getSystemResource("Java_logo.png").toURI());
-//        } catch (URISyntaxException e) {
-//            System.out.println(e.getMessage());
-//            throw new RuntimeException(e);
-//        }
-//        Image img = null;
-//        try {
-//            img = Image.getInstance(path.toAbsolutePath().toString());
-//        } catch (BadElementException | IOException e) {
-//            System.out.println(e.getMessage());
-//            throw new RuntimeException(e);
-//        }
-//        img.scalePercent(10);
-//
-//        PdfPCell imageCell = new PdfPCell(img);
-//        table.addCell(imageCell);
-//
-//        PdfPCell horizontalAlignCell = new PdfPCell(new Phrase("row 2, col 2"));
-//        horizontalAlignCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-//        table.addCell(horizontalAlignCell);
-//
-//        PdfPCell verticalAlignCell = new PdfPCell(new Phrase("row 2, col 3"));
-//        verticalAlignCell.setVerticalAlignment(Element.ALIGN_BOTTOM);
-//        table.addCell(verticalAlignCell);
-//    }
+    //
+    // private void addCustomRows(PdfPTable table) {
+    // Path path = null;
+    // try {
+    // path = Paths.get(ClassLoader.getSystemResource("Java_logo.png").toURI());
+    // } catch (URISyntaxException e) {
+    // System.out.println(e.getMessage());
+    // throw new RuntimeException(e);
+    // }
+    // Image img = null;
+    // try {
+    // img = Image.getInstance(path.toAbsolutePath().toString());
+    // } catch (BadElementException | IOException e) {
+    // System.out.println(e.getMessage());
+    // throw new RuntimeException(e);
+    // }
+    // img.scalePercent(10);
+    //
+    // PdfPCell imageCell = new PdfPCell(img);
+    // table.addCell(imageCell);
+    //
+    // PdfPCell horizontalAlignCell = new PdfPCell(new Phrase("row 2, col 2"));
+    // horizontalAlignCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+    // table.addCell(horizontalAlignCell);
+    //
+    // PdfPCell verticalAlignCell = new PdfPCell(new Phrase("row 2, col 3"));
+    // verticalAlignCell.setVerticalAlignment(Element.ALIGN_BOTTOM);
+    // table.addCell(verticalAlignCell);
+    // }
 }
