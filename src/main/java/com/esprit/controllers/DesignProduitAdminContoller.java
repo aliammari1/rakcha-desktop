@@ -10,6 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -61,10 +62,10 @@ public class DesignProduitAdminContoller {
     private ComboBox<String> nomC_comboBox;
 
     @FXML
-    private TableColumn<Produit,String> nomCP_tableC;
+    private TableColumn<Produit, String> nomCP_tableC;
 
     @FXML
-    private TableColumn<Produit,String> nomP_tableC;
+    private TableColumn<Produit, String> nomP_tableC;
 
     @FXML
     private TextField nomP_textFiled;
@@ -86,16 +87,10 @@ public class DesignProduitAdminContoller {
     private TextField SearchBar;
 
 
-
-
     @FXML
     private TableColumn<Produit, Void> deleteColumn;
 
-    private List<Produit> l1=new ArrayList<>();
-
-
-
-
+    private List<Produit> l1 = new ArrayList<>();
 
 
     @FXML
@@ -134,8 +129,6 @@ public class DesignProduitAdminContoller {
     }
 
 
-
-
     @FXML
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -161,55 +154,95 @@ public class DesignProduitAdminContoller {
 
     @FXML
     public void add_produit(ActionEvent actionEvent) {
-        if (selectedFile != null) { // Vérifier si une image a été sélectionnée
-            Connection connection = null;
-            try {
-                // Convertir le fichier en un objet Blob
-                FileInputStream fis = new FileInputStream(selectedFile);
-                connection = DataSource.getInstance().getConnection();
-                Blob imageBlob = connection.createBlob();
 
-                // Définir le flux d'entrée de l'image dans l'objet Blob
-                try (OutputStream outputStream = imageBlob.setBinaryStream(1)) {
-                    byte[] buffer = new byte[4096];
-                    int bytesRead;
-                    while ((bytesRead = fis.read(buffer)) != -1) {
-                        outputStream.write(buffer, 0, bytesRead);
-                    }
-                }
+        // Vérifier si une image a été sélectionnée
+        if (selectedFile != null) {
+            // Récupérer les valeurs des champs de saisie
+            String nomProduit = nomP_textFiled.getText().trim();
+            String prixText = prix_textFiled.getText().trim();
+            String descriptionProduit = descriptionP_textArea.getText().trim();
+            String nomCategorie = nomC_comboBox.getValue();
+            String quantiteText = quantiteP_textFiled.getText().trim();
 
-                // Créer l'objet Produit avec l'image Blob
-                ProduitService ps = new ProduitService();
-                Produit nouveauProduit = new Produit(nomP_textFiled.getText(), Integer.parseInt(prix_textFiled.getText()), imageBlob, descriptionP_textArea.getText(),  new CategorieService().getCategorieByNom(nomC_comboBox.getValue()), Integer.parseInt(quantiteP_textFiled.getText()));
-                ps.create(nouveauProduit);
-
-                // Ajouter le nouveau produit à la liste existante
-                Produit_tableview.getItems().add(nouveauProduit);
-
-                // Rafraîchir la TableView
-                Produit_tableview.refresh();
-
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Produit ajouté");
-                alert.setContentText("Produit ajouté !");
+            // Vérifier si les champs sont vides
+            if (nomProduit.isEmpty() || prixText.isEmpty() || descriptionProduit.isEmpty() || nomCategorie == null || quantiteText.isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Erreur de saisie");
+                alert.setContentText("Veuillez remplir tous les champs.");
                 alert.show();
-            } catch (SQLException | IOException e) {
-                showAlert("Erreur lors de l'ajout du produit : " + e.getMessage());
-            } finally {
-                if (connection != null) {
-                    try {
-                        connection.close();
-                    } catch (SQLException e) {
-                        showAlert("Erreur lors de la fermeture de la connexion : " + e.getMessage());
+            }
+
+            try {
+                // Convertir le prix et la quantité en entiers
+                int prix = Integer.parseInt(prixText);
+                int quantite = Integer.parseInt(quantiteText);
+
+                // Vérifier si le prix et la quantité sont des valeurs valides
+                if (prix <= 0 || quantite <= 0) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Erreur de saisie");
+                    alert.setContentText("Veuillez entrer des valeurs valides pour le prix et la quantité (supérieures à zéro)");
+                    alert.show(); // Arrêter l'exécution de la méthode si les valeurs ne sont pas valides
+                }
+
+
+                // Vérifier si le nom ne contient que des alphabets et des chiffres
+                if (!nomProduit.matches("[a-zA-Z0-9]*")) {
+                    showAlert("Veuillez entrer un nom valide sans caractères spéciaux.");
+                    return; // Arrêter l'exécution de la méthode si le nom n'est pas valide
+                }
+
+                // Convertir le fichier en un objet Blob
+                Connection connection = null;
+                try {
+                    FileInputStream fis = new FileInputStream(selectedFile);
+                    connection = DataSource.getInstance().getConnection();
+                    Blob imageBlob = connection.createBlob();
+
+                    // Définir le flux d'entrée de l'image dans l'objet Blob
+                    try (OutputStream outputStream = imageBlob.setBinaryStream(1)) {
+                        byte[] buffer = new byte[4096];
+                        int bytesRead;
+                        while ((bytesRead = fis.read(buffer)) != -1) {
+                            outputStream.write(buffer, 0, bytesRead);
+                        }
+                    }
+
+                    // Créer l'objet Produit avec l'image Blob
+                    ProduitService ps = new ProduitService();
+                    CategorieService cs = new CategorieService();
+                    Produit nouveauProduit = new Produit(nomProduit, prix, imageBlob, descriptionProduit, cs.getCategorieByNom(nomCategorie), quantite);
+                    ps.create(nouveauProduit);
+
+                    // Ajouter le nouveau produit à la liste existante
+                    Produit_tableview.getItems().add(nouveauProduit);
+
+                    // Rafraîchir la TableView
+                    Produit_tableview.refresh();
+
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Produit ajouté");
+                    alert.setContentText("Produit ajouté !");
+                    alert.show();
+                } catch (SQLException | IOException e) {
+                    showAlert("Erreur lors de l'ajout du produit : " + e.getMessage());
+                } finally {
+                    if (connection != null) {
+                        try {
+                            connection.close();
+                        } catch (SQLException e) {
+                            showAlert("Erreur lors de la fermeture de la connexion : " + e.getMessage());
+                        }
                     }
                 }
+
+            } catch (NumberFormatException e) {
+                showAlert("Veuillez entrer des valeurs numériques valides pour le prix et la quantité.");
             }
         } else {
             showAlert("Veuillez sélectionner une image d'abord !");
         }
     }
-
-
 
 
 
@@ -524,20 +557,28 @@ public class DesignProduitAdminContoller {
     @FXML
     void GestionCategorie(ActionEvent event) throws IOException {
 
-        // Charger la nouvelle interface ListProduitAdmin.fxml
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignCategorieAdmin.fxml"));
-        Parent root = loader.load();
 
-        // Créer une nouvelle scène avec la nouvelle interface
-        Scene scene = new Scene(root);
+            // Charger la nouvelle interface ListproduitAdmin.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignCategorieAdmin.fxml"));
+            Parent root = loader.load();
 
-        // Créer une nouvelle fenêtre (stage) et y attacher la scène
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.setTitle("Gestion des categories");
-        stage.show();
+            // Créer une nouvelle scène avec la nouvelle interface
+            Scene scene = new Scene(root);
 
-    }
+            // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Créer une nouvelle fenêtre (stage) et y attacher la scène
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("Gestion des categories");
+            stage.show();
+
+            // Fermer la fenêtre actuelle
+            currentStage.close();
+        }
+
+
 
     @FXML
 

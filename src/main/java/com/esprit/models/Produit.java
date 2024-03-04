@@ -30,22 +30,6 @@ public class Produit {
 
     }
 
-   /* public Produit(int id_produit, String nom, int prix, String image_path, String description, Categorie categorie, int quantiteP) {
-        this.id_produit = id_produit;
-        this.nom = nom;
-        this.prix = prix;
-        this.description = description;
-        this.categorie = categorie;
-        this.quantiteP = quantiteP;
-        File file = new File(image_path);
-        try (InputStream in = new FileInputStream(file)) {
-            this.image = DataSource.getInstance().getConnection().createBlob();
-            this.image.setBinaryStream(1).write(in.readAllBytes());
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-
-    }*/
 
     public Produit(int id_produit) {
         this.id_produit = id_produit;
@@ -60,21 +44,7 @@ public class Produit {
         this.quantiteP = quantiteP;
     }
 
-    /*public Produit(String nom, int prix,String image_path, String description, Categorie categorie, int quantiteP) {
-        this.nom = nom;
-        this.prix = prix;
-        this.description = description;
-        this.categorie = categorie;
-        this.quantiteP = quantiteP;
 
-        File file = new File(image_path);
-        try (InputStream in = new FileInputStream(file)) {
-            this.image = DataSource.getInstance().getConnection().createBlob();
-            this.image.setBinaryStream(1).write(in.readAllBytes());
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }*/
 
 
     public int getId_produit() {
