@@ -2,6 +2,7 @@ package com.esprit.services.cinemas;
 
 import com.esprit.models.cinemas.Cinema;
 import com.esprit.models.cinemas.Seance;
+import com.esprit.models.films.Filmcinema;
 import com.esprit.services.IService;
 import com.esprit.services.films.FilmService;
 import com.esprit.utils.DataSource;
@@ -25,12 +26,12 @@ public class SeanceService implements IService<Seance> {
         String req = "INSERT into seance(id_film, id_salle, HD, HF, date, id_cinema, prix) values (?, ?, ?, ?, ?, ?, ?);";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
-            pst.setInt(1, seance.getFilm().getId());
+            pst.setInt(1, seance.getFilmcinema().getId_film().getId());
             pst.setInt(2, seance.getSalle().getId_salle());
             pst.setTime(3, seance.getHD());
             pst.setTime(4, seance.getHF());
             pst.setDate(5, seance.getDate());
-            pst.setInt(6, seance.getCinema().getId_cinema());
+            pst.setInt(6, seance.getFilmcinema().getId_cinema().getId_cinema());
             pst.setDouble(7, seance.getPrix());
             pst.executeUpdate();
             System.out.println("Seance ajoutée !");
@@ -49,12 +50,12 @@ public class SeanceService implements IService<Seance> {
                 "WHERE seance.id_seance = ?;";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
-            pst.setInt(1, seance.getFilm().getId());
+            pst.setInt(1, seance.getFilmcinema().getId_film().getId());
             pst.setInt(2, seance.getSalle().getId_salle());
             pst.setTime(3, seance.getHD());
             pst.setTime(4, seance.getHF());
             pst.setDate(5, seance.getDate());
-            pst.setInt(6, seance.getCinema().getId_cinema());
+            pst.setInt(6, seance.getFilmcinema().getId_cinema().getId_cinema());
             pst.setDouble(7, seance.getPrix());
             pst.setInt(8, seance.getId_seance());
             pst.executeUpdate();
@@ -77,6 +78,28 @@ public class SeanceService implements IService<Seance> {
         }
     }
 
+    public List<Seance> readLoujain(int id) {
+        List<Seance> seances = new ArrayList<>();
+
+        String req = "SELECT * FROM seance where id_film = ?";
+        try {
+            PreparedStatement pst = connection.prepareStatement(req);
+            pst.setInt(1, id);
+            ResultSet rs = pst.executeQuery();
+            CinemaService cs = new CinemaService();
+            SalleService ss = new SalleService();
+            FilmService fs = new FilmService();
+            int i = 0;
+            while (rs.next()) {
+                seances.add(new Seance(rs.getInt("id_seance"), ss.getSalle(rs.getInt("id_salle")), rs.getTime("HD"), rs.getTime("HF"), rs.getDate("date"), rs.getInt("prix"), new Filmcinema(fs.getFilm(rs.getInt("id_film")), cs.getCinema(rs.getInt("id_cinema")))));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return seances;
+    }
+
     public List<Seance> read() {
         List<Seance> seances = new ArrayList<>();
 
@@ -93,7 +116,7 @@ public class SeanceService implements IService<Seance> {
             FilmService fs = new FilmService();
             int i = 0;
             while (rs.next()) {
-                seances.add(new Seance(rs.getInt("id_seance"), fs.getFilm(rs.getInt("id_film")), ss.getSalle(rs.getInt("id_salle")), rs.getTime("HD"), rs.getTime("HF"), rs.getDate("date"), cs.getCinema(rs.getInt("id_cinema")), rs.getInt("prix")));
+                seances.add(new Seance(rs.getInt("id_seance"), ss.getSalle(rs.getInt("id_salle")), rs.getTime("HD"), rs.getTime("HF"), rs.getDate("date"), rs.getInt("prix"), new Filmcinema(fs.getFilm(rs.getInt("id_film")), cs.getCinema(rs.getInt("id_cinema")))));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -124,7 +147,7 @@ public class SeanceService implements IService<Seance> {
             while (rs.next()) {
                 LocalDate seanceDate = rs.getDate("date").toLocalDate(); // Convertir java.sql.Date en java.time.LocalDate
                 List<Seance> seancesForDate = seancesByDate.getOrDefault(seanceDate, new ArrayList<>());
-                seancesForDate.add(new Seance(rs.getInt("id_seance"), fs.getFilm(rs.getInt("id_film")), ss.getSalle(rs.getInt("id_salle")), rs.getTime("HD"), rs.getTime("HF"), seanceDate, cs.getCinema(rs.getInt("id_cinema")), rs.getInt("prix")));
+                seancesForDate.add(new Seance(rs.getInt("id_seance"), ss.getSalle(rs.getInt("id_salle")), rs.getTime("HD"), rs.getTime("HF"), seanceDate, rs.getInt("prix"), new Filmcinema(fs.getFilm(rs.getInt("id_film")), cs.getCinema(rs.getInt("id_cinema")))));
                 seancesByDate.put(seanceDate, seancesForDate);
             }
         } catch (SQLException e) {

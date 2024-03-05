@@ -4,6 +4,7 @@ import com.esprit.models.cinemas.Cinema;
 import com.esprit.models.cinemas.Salle;
 import com.esprit.models.cinemas.Seance;
 import com.esprit.models.films.Film;
+import com.esprit.models.films.Filmcinema;
 import com.esprit.models.users.Responsable_de_cinema;
 import com.esprit.services.cinemas.CinemaService;
 import com.esprit.services.cinemas.SalleService;
@@ -49,9 +50,6 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 public class DashboardResponsableController implements Initializable {
-
-    @FXML
-    private File selectedFile;
 
     @FXML
     private ImageView image;
@@ -166,7 +164,7 @@ public class DashboardResponsableController implements Initializable {
 
         String defaultStatut = "En_Attente";
 
-        Cinema cinema = new Cinema(tfNom.getText(), tfAdresse.getText(), (Responsable_de_cinema) new UserService().getUserById(1), "", defaultStatut);
+        Cinema cinema = new Cinema(tfNom.getText(), tfAdresse.getText(), (Responsable_de_cinema) new UserService().getUserById(1), image.getImage().getUrl(), defaultStatut);
 
         CinemaService cs = new CinemaService();
         cs.create(cinema);
@@ -182,7 +180,7 @@ public class DashboardResponsableController implements Initializable {
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.gif")
         );
-        selectedFile = fileChooser.showOpenDialog(null); // Utilisation de la variable de classe
+        File selectedFile = fileChooser.showOpenDialog(null); // Utilisation de la variable de classe
 
         if (selectedFile != null) {
             Image selectedImage = new Image(selectedFile.toURI().toString());
@@ -300,8 +298,12 @@ public class DashboardResponsableController implements Initializable {
         logoImageView.setLayoutY(15); // Padding en haut
         logoImageView.setStyle("-fx-border-color: #000000 ; -fx-border-width: 2px; -fx-border-radius: 5px;");
 
-
-        logoImageView.setImage(new Image(cinema.getLogo()));
+        Image image = null;
+        if (!cinema.getLogo().isEmpty())
+            image = new Image(cinema.getLogo());
+        else
+            image = new Image("Logo.png");
+        logoImageView.setImage(image);
         card.getChildren().add(logoImageView);
 
         logoImageView.setOnMouseClicked(event -> {
@@ -871,7 +873,7 @@ public class DashboardResponsableController implements Initializable {
                             Seance seance = getTableView().getItems().get(getIndex());
                             for (Cinema cinema : acceptedCinema) {
                                 if (cinema.getNom().equals(selectedCinemaName)) {
-                                    seance.setCinema(cinema);
+                                    seance.getFilmcinema().setId_cinema(cinema);
                                     break;
                                 }
                             }
@@ -902,7 +904,7 @@ public class DashboardResponsableController implements Initializable {
                         // Créer un ComboBox contenant les noms des salles associées au cinéma sélectionné
                         ComboBox<String> salleComboBox = new ComboBox<>();
                         Seance seance = getTableView().getItems().get(getIndex());
-                        Cinema selectedCinema = seance.getCinema();
+                        Cinema selectedCinema = seance.getFilmcinema().getId_cinema();
 
                         // Récupérer les salles associées au cinéma sélectionné
                         List<Salle> associatedSalles = loadAssociatedSalles(selectedCinema.getId_cinema());
@@ -958,7 +960,7 @@ public class DashboardResponsableController implements Initializable {
                         // Créer un ComboBox contenant les noms des films associées au cinéma sélectionné
                         ComboBox<String> filmComboBox = new ComboBox<>();
                         Seance seance = getTableView().getItems().get(getIndex());
-                        Cinema selectedCinema = seance.getCinema();
+                        Cinema selectedCinema = seance.getFilmcinema().getId_cinema();
 
                         // Récupérer les films associées au cinéma sélectionné
                         List<Film> associatedFilms = loadAssociatedFilms(selectedCinema.getId_cinema());
@@ -977,7 +979,7 @@ public class DashboardResponsableController implements Initializable {
                             // Mettre à jour la base de données en utilisant la méthode update de seanceService
                             for (Film film : associatedFilms) {
                                 if (film.getNom().equals(selectedFilmName)) {
-                                    seance.setFilm(film);
+                                    seance.getFilmcinema().setId_film(film);
                                     break;
                                 }
                             }
@@ -1054,7 +1056,7 @@ public class DashboardResponsableController implements Initializable {
 
         double price = Double.parseDouble(priceText);
 
-        Seance newSeance = new Seance(selectedFilm, selectedRoom, departureTime, endTime, date, selectedCinema, price);
+        Seance newSeance = new Seance(selectedRoom, departureTime, endTime, date, price, new Filmcinema(selectedFilm, selectedCinema));
 
         SeanceService seanceService = new SeanceService();
         seanceService.create(newSeance);

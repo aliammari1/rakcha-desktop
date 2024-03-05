@@ -240,7 +240,7 @@ public class DashboardClientController {
         card.setPrefWidth(400);
         card.setPrefHeight(100);
 
-        Label filmLabel = new Label("Film: " + (seance.getFilm() != null ? seance.getFilm().getNom() : "Unknown"));
+        Label filmLabel = new Label("Film: " + (seance.getFilmcinema().getId_film() != null ? seance.getFilmcinema().getId_film().getNom() : "Unknown"));
         Label salleLabel = new Label("Salle: " + (seance.getSalle() != null ? seance.getSalle().getNom_salle() : "Unknown"));
         Label timeLabel = new Label("Heure: " + seance.getHD() + " - " + seance.getHF());
         Label priceLabel = new Label("Prix: " + seance.getPrix());
