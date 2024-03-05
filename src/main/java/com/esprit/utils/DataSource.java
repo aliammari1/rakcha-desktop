@@ -1,15 +1,16 @@
 package com.esprit.utils;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class DataSource {
 
-    private Connection connection;
     private static DataSource instance;
-
-    private final String URL = "jdbc:mysql://localhost:3306/gestioncinemas";
+    private final String URL = "jdbc:mysql://localhost:3306/rakcha";
     private final String USER = "root";
-    private  final String PASSWORD = "";
+    private final String PASSWORD = "";
+    private Connection connection;
 
     private DataSource() {
         try {
@@ -20,7 +21,7 @@ public class DataSource {
     }
 
     public static DataSource getInstance() {
-        if(instance == null){
+        if (instance == null) {
             instance = new DataSource();
         }
         return instance;

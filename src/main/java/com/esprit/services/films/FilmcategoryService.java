@@ -50,7 +50,7 @@ public class FilmcategoryService implements IService<Filmcategory> {
             // int i = 0;
             while (rs.next()) {
                 System.out.println();
-                filmcategoryArrayList.add(new Filmcategory(new Category(rs.getInt("category.id"), rs.getString("category_names"), rs.getString("category.description")), new Film(rs.getInt("film.id"), rs.getNString("film.nom"), rs.getBlob("image"), rs.getTime("duree"), rs.getString("film.description"), rs.getInt("annederalisation"), rs.getInt("idcinema"))));
+                filmcategoryArrayList.add(new Filmcategory(new Category(rs.getInt("category.id"), rs.getString("category_names"), rs.getString("category.description")), new Film(rs.getInt("film.id"), rs.getNString("film.nom"), rs.getString("image"), rs.getTime("duree"), rs.getString("film.description"), rs.getInt("annederalisation"))));
                 //     System.out.println(filmArrayList.get(i));
                 //       i++;
             }

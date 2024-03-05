@@ -47,7 +47,7 @@ public class ActorfilmService implements IService<Actorfilm> {
             ResultSet rs = pst.executeQuery();
             // int i = 0;
             while (rs.next()) {
-                actorfilmArrayList.add(new Actorfilm(new Actor(rs.getInt("actor.id"), rs.getString("actor_names"), rs.getBlob("actor.image"), rs.getString("actor.biographie")), new Film(rs.getInt("film.id"), rs.getNString("film.nom"), rs.getBlob("image"), rs.getTime("duree"), rs.getString("film.description"), rs.getInt("annederalisation"), rs.getInt("idcinema"))));
+                actorfilmArrayList.add(new Actorfilm(new Actor(rs.getInt("actor.id"), rs.getString("actor_names"), rs.getString("actor.image"), rs.getString("actor.biographie")), new Film(rs.getInt("film.id"), rs.getNString("film.nom"), rs.getString("image"), rs.getTime("duree"), rs.getString("film.description"), rs.getInt("annederalisation"))));
                 //     System.out.println(filmArrayList.get(i));
                 //       i++;
             }

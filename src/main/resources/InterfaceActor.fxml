@@ -116,7 +116,7 @@
                             <Button layoutX="58.0" layoutY="587.0" mnemonicParsing="false" prefHeight="40.0"
                                     prefWidth="88.0" styleClass="instert-btn" stylesheets="@dashbord.css"
                                     text="Supprimer"/>
-                            <Button layoutX="286.0" layoutY="587.0" mnemonicParsing="false" onAction="#updateActor"
+                            <Button layoutX="286.0" layoutY="587.0" mnemonicParsing="false"
                                     prefHeight="40.0" prefWidth="79.0" styleClass="instert-btn"
                                     stylesheets="@dashbord.css" text="Modifier"/>
                             <Label layoutX="21.0" layoutY="276.0" text="nom">

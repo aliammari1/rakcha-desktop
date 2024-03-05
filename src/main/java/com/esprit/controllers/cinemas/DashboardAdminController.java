@@ -17,8 +17,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 
-import java.sql.Blob;
-import java.sql.SQLException;
 import java.util.List;
 
 
@@ -63,19 +61,17 @@ public class DashboardAdminController {
             ImageView imageView = new ImageView();
             imageView.setFitWidth(50); // Réglez la largeur de l'image selon vos préférences
             imageView.setFitHeight(50); // Réglez la hauteur de l'image selon vos préférences
-            try {
-                Blob blob = cinema.getLogo();
-                if (blob != null) {
-                    Image image = new Image(blob.getBinaryStream());
-                    imageView.setImage(image);
-                } else {
-                    // Afficher une image par défaut si le logo est null
-                    Image defaultImage = new Image(getClass().getResourceAsStream("default_logo.png"));
-                    imageView.setImage(defaultImage);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
+
+            String logo = cinema.getLogo();
+            if (logo != null) {
+                Image image = new Image(logo);
+                imageView.setImage(image);
+            } else {
+                // Afficher une image par défaut si le logo est null
+                Image defaultImage = new Image(getClass().getResourceAsStream("default_logo.png"));
+                imageView.setImage(defaultImage);
             }
+
             return new javafx.beans.property.SimpleObjectProperty<>(imageView);
         });
 

@@ -25,13 +25,12 @@ public class ActorService implements IService<Actor> {
         try {
             PreparedStatement statement = connection.prepareStatement(req);
             statement.setString(1, actor.getNom());
-            statement.setBlob(2, actor.getImage());
+            statement.setString(2, actor.getImage());
             statement.setString(3, actor.getBiographie());
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     @Override
@@ -43,7 +42,7 @@ public class ActorService implements IService<Actor> {
             ResultSet rs = pst.executeQuery();
             int i = 0;
             while (rs.next()) {
-                actorArrayList.add(new Actor(rs.getInt("id"), rs.getString("nom"), rs.getBlob("image"), rs.getString("biographie")));
+                actorArrayList.add(new Actor(rs.getInt("id"), rs.getString("nom"), rs.getString("image"), rs.getString("biographie")));
                 System.out.println(actorArrayList.get(i));
                 i++;
             }
@@ -60,7 +59,7 @@ public class ActorService implements IService<Actor> {
         try {
             PreparedStatement statement = connection.prepareStatement(req);
             statement.setString(1, actor.getNom());
-            statement.setBlob(2, actor.getImage());
+            statement.setString(2, actor.getImage());
             statement.setString(3, actor.getBiographie());
             statement.setInt(4, actor.getId());
             statement.executeUpdate();
@@ -78,7 +77,7 @@ public class ActorService implements IService<Actor> {
             statement.setString(1, nom);
             ResultSet rs = statement.executeQuery();
             rs.next();
-            actor = new Actor(rs.getInt("id"), rs.getString("nom"), rs.getBlob("image"), rs.getString("biographie"));
+            actor = new Actor(rs.getInt("id"), rs.getString("nom"), rs.getString("image"), rs.getString("biographie"));
             System.out.println(actor);
 
         } catch (SQLException e) {

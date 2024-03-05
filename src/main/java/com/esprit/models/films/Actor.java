@@ -1,41 +1,22 @@
 package com.esprit.models.films;
 
-import com.esprit.utils.DataSource;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.sql.Blob;
-
 public class Actor {
     private final String biographie;
     private int id;
     private String nom;
-    private Blob image;
+    private String image;
 
 
-    public Actor(String nom, Blob image, String biographie) {
-        this.nom = nom;
-        this.image = image;
-        this.biographie = biographie;
-    }
-
-    public Actor(int id, String nom, Blob image, String biographie) {
+    public Actor(int id, String nom, String image, String biographie) {
         this.id = id;
         this.nom = nom;
         this.image = image;
         this.biographie = biographie;
     }
 
-    public Actor(String nom, String image_path, String biographie) {
+    public Actor(String nom, String image, String biographie) {
         this.nom = nom;
-        File file = new File(image_path);
-        try (InputStream in = new FileInputStream(file)) {
-            this.image = DataSource.getInstance().getConnection().createBlob();
-            this.image.setBinaryStream(1).write(in.readAllBytes());
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        this.image = image;
         this.biographie = biographie;
     }
 
@@ -64,11 +45,11 @@ public class Actor {
         this.nom = nom;
     }
 
-    public Blob getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(Blob image) {
+    public void setImage(String image) {
         this.image = image;
     }
 

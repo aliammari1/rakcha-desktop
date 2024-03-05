@@ -1,11 +1,5 @@
 package com.esprit.models.films;
 
-import com.esprit.utils.DataSource;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.sql.Blob;
 import java.sql.Time;
 
 public class Film {
@@ -13,11 +7,11 @@ public class Film {
     String nom;
     private String categoryNom;
     private int id;
-    private Blob image;
+    private String image;
     private Time duree;
     private String description;
     private int annederalisation;
-    private int idcinema;
+
 
     // Existing constructor
     public Film(final Film f) {
@@ -27,43 +21,26 @@ public class Film {
         this.duree = f.duree;
         this.description = f.description;
         this.annederalisation = f.annederalisation;
-        this.idcinema = f.idcinema;
     }
 
-    public Film(int id, String nom, Blob image, Time duree, String description, int annederalisation, int idcinema) {
+    public Film(int id, String nom, String image, Time duree, String description, int annederalisation) {
         this.id = id;
         this.nom = nom;
         this.image = image;
         this.duree = duree;
         this.description = description;
         this.annederalisation = annederalisation;
-        this.idcinema = idcinema;
 
     }
 
-    public Film(String nom, Blob image, Time duree, String description, int annederalisation, int idcinema) {
+    public Film(String nom, String image, Time duree, String description, int annederalisation) {
         this.nom = nom;
         this.image = image;
         this.duree = duree;
         this.description = description;
         this.annederalisation = annederalisation;
-        this.idcinema = idcinema;
     }
 
-    public Film(String nom, String image_path, Time duree, String description, int annederalisation, int idcinema) {
-        this.nom = nom;
-        File file = new File(image_path);
-        try (InputStream in = new FileInputStream(file)) {
-            this.image = DataSource.getInstance().getConnection().createBlob();
-            this.image.setBinaryStream(1).write(in.readAllBytes());
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        this.duree = duree;
-        this.description = description;
-        this.annederalisation = annederalisation;
-        this.idcinema = idcinema;
-    }
 
     public Film(int id) {
         this.id = id;
@@ -72,7 +49,6 @@ public class Film {
         this.duree = null;
         this.description = null;
         this.annederalisation = 0;
-        this.idcinema = 0;
     }
 
 
@@ -92,11 +68,11 @@ public class Film {
         this.id = id;
     }
 
-    public Blob getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(Blob image) {
+    public void setImage(String image) {
         this.image = image;
     }
 
@@ -129,14 +105,6 @@ public class Film {
     }
 
 
-    public int getIdcinema() {
-        return idcinema;
-    }
-
-    public void setIdcinema(int idcinema) {
-        this.idcinema = idcinema;
-    }
-
     @Override
     public String toString() {
         return "Film{" +
@@ -146,7 +114,6 @@ public class Film {
                 ", duree=" + duree +
                 ", description='" + description + '\'' +
                 ", annederalisation=" + annederalisation +
-                ", idcinema=" + idcinema +
                 '}';
     }
 

@@ -6,7 +6,9 @@ import com.esprit.services.cinemas.CinemaService;
 import com.esprit.services.cinemas.SeanceService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -16,9 +18,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
-import java.io.ByteArrayInputStream;
-
-import java.sql.Blob;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.*;
@@ -96,15 +95,9 @@ public class DashboardClientController {
         logoImageView.setStyle("-fx-border-color: #000000 ; -fx-border-width: 2px; -fx-border-radius: 5px;");
 
         try {
-            Blob logoBlob = cinema.getLogo();
-            if (logoBlob != null) {
-                byte[] logoBytes = logoBlob.getBytes(1, (int) logoBlob.length());
-                Image logoImage = new Image(new ByteArrayInputStream(logoBytes));
-                logoImageView.setImage(logoImage);
-            } else {
-                Image defaultImage = new Image(getClass().getResourceAsStream("default_logo.png"));
-                logoImageView.setImage(defaultImage);
-            }
+            String logoString = cinema.getLogo();
+            Image logoImage = new Image("Logo.png");
+            logoImageView.setImage(logoImage);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -239,10 +232,6 @@ public class DashboardClientController {
         }
         return null; // Aucune cinéma trouvée
     }
-
-
-
-
 
 
     private HBox createSeanceCard(Seance seance) {

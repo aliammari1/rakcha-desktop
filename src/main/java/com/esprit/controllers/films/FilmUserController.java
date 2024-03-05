@@ -18,9 +18,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Font;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 
 public class FilmUserController {
@@ -60,8 +57,10 @@ public class FilmUserController {
 // Set the padding
         flowpaneFilm.setPadding(new Insets(10, 10, 10, 10));
         List<Film> filmList = new FilmService().read();
-        for (Film film : filmList)
+        for (Film film : filmList) {
+            System.out.println(film);
             flowpaneFilm.getChildren().add(createFilmCard(film));
+        }
     }
 
 
@@ -74,9 +73,11 @@ public class FilmUserController {
         copyOfAnchorPane.setPrefSize(213, 334);
         copyOfAnchorPane.getStyleClass().add("anchorfilm");
 // Copy children nodes
-        ImageView imageView = null;
+        ImageView imageView = new ImageView();
         try {
-            imageView = new ImageView(new Image(new ByteArrayInputStream(film.getImage().getBinaryStream().readAllBytes())));
+            System.out.println("here");
+            if (!film.getImage().isEmpty())
+                imageView.setImage(new Image(film.getImage()));
         } catch (Exception e) {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
@@ -112,11 +113,8 @@ public class FilmUserController {
                 Film film1 = new Film(film);
                 filmNomDetail.setText(film1.getNom());
                 descriptionDETAILfilm.setText(film1.getDescription() + "\nTime:" + film1.getDuree() + "\nYear:" + film1.getAnnederalisation() + "\nCategories: " + new FilmcategoryService().getCategoryNames(film1.getId()) + "\nActors: " + new ActorfilmService().getActorsNames(film1.getId()));
-                try {
-                    imagefilmDetail.setImage(new Image(new ByteArrayInputStream(film1.getImage().getBinaryStream().readAllBytes())));
-                } catch (IOException | SQLException e) {
-                    throw new RuntimeException(e);
-                }
+                imagefilmDetail.setImage(new Image("Logo.png"));
+
 
             }
         });
