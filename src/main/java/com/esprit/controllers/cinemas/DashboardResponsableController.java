@@ -1,14 +1,15 @@
 package com.esprit.controllers.cinemas;
 
 import com.esprit.models.cinemas.Cinema;
-import com.esprit.models.cinemas.Film;
 import com.esprit.models.cinemas.Salle;
 import com.esprit.models.cinemas.Seance;
+import com.esprit.models.films.Film;
+import com.esprit.models.users.Responsable_de_cinema;
 import com.esprit.services.cinemas.CinemaService;
-import com.esprit.services.cinemas.FilmService;
 import com.esprit.services.cinemas.SalleService;
 import com.esprit.services.cinemas.SeanceService;
-import com.esprit.utils.DataSource;
+import com.esprit.services.films.FilmService;
+import com.esprit.services.users.UserService;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -34,19 +35,18 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
-
-import java.io.*;
+import java.io.File;
 import java.net.URL;
-import java.nio.file.Files;
-import java.sql.*;
 import java.sql.Date;
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
-
-import static java.lang.Integer.parseInt;
 
 public class DashboardResponsableController implements Initializable {
 
@@ -61,9 +61,6 @@ public class DashboardResponsableController implements Initializable {
 
     @FXML
     private TextField tfNom;
-
-    @FXML
-    private TextField tfResponsable;
 
     @FXML
     private FlowPane cinemaFlowPane;
@@ -101,7 +98,7 @@ public class DashboardResponsableController implements Initializable {
     private TableView<Seance> SessionTableView;
 
     @FXML
-    private TableColumn<Seance,Void> colAction;
+    private TableColumn<Seance, Void> colAction;
 
     @FXML
     private TableColumn<Seance, String> colCinema;
@@ -160,52 +157,22 @@ public class DashboardResponsableController implements Initializable {
     @FXML
     void addCinema(ActionEvent event) {
         // Vérifier si tous les champs sont remplis
-        if (tfNom.getText().isEmpty() || tfAdresse.getText().isEmpty() || tfResponsable.getText().isEmpty()) {
+        if (tfNom.getText().isEmpty() || tfAdresse.getText().isEmpty()) {
             showAlert("please complete all fields!");
             return; // Arrêter l'exécution de la méthode si un champ est vide
         }
 
-        // Vérifier si le champ responsable contient uniquement des caractères alphabétiques
-        if (!tfResponsable.getText().matches("[a-zA-Z]+")) {
-            showAlert("The Responsible field must only contain letters!");
-            return; // Arrêter l'exécution de la méthode si le champ responsable contient des caractères non alphabétiques
-        }
+        // Convertir le fichier en un objet String
 
-        if (selectedFile != null) { // Vérifier si une image a été sélectionnée
-            Connection connection = null;
-            try {
-                // Convertir le fichier en un objet Blob
-                FileInputStream fis = new FileInputStream(selectedFile);
-                connection = DataSource.getInstance().getConnection();
-                Blob imageBlob = connection.createBlob();
+        String defaultStatut = "En_Attente";
 
-                // Définir le flux d'entrée de l'image dans l'objet Blob
-                try (OutputStream outputStream = imageBlob.setBinaryStream(1)) {
-                    byte[] buffer = new byte[4096];
-                    int bytesRead;
-                    while ((bytesRead = fis.read(buffer)) != -1) {
-                        outputStream.write(buffer, 0, bytesRead);
-                    }
-                }
+        Cinema cinema = new Cinema(tfNom.getText(), tfAdresse.getText(), (Responsable_de_cinema) new UserService().getUserById(1), "", defaultStatut);
 
-                String defaultStatut = "En_Attente";
+        CinemaService cs = new CinemaService();
+        cs.create(cinema);
+        showAlert("Cinema added successfully !");
 
-                Cinema cinema = new Cinema(tfNom.getText(), tfAdresse.getText(), tfResponsable.getText(), imageBlob, defaultStatut);
-
-                CinemaService cs = new CinemaService();
-                cs.create(cinema);
-                showAlert("Cinema added successfully !");
-            } catch (SQLException | IOException e) {
-                showAlert("Error when adding cinema:" + e.getMessage());
-            }
-        } else {
-            showAlert("Please select an image first!");
-        }
     }
-
-
-
-
 
 
     @FXML
@@ -222,8 +189,6 @@ public class DashboardResponsableController implements Initializable {
             image.setImage(selectedImage);
         }
     }
-
-
 
 
     @Override
@@ -320,7 +285,6 @@ public class DashboardResponsableController implements Initializable {
     }
 
 
-
     private HBox createCinemaCard(Cinema cinema) {
         HBox cardContainer = new HBox();
         cardContainer.setStyle("-fx-padding: 10px 0 0  25px;"); // Ajout de remplissage à gauche pour le décalage
@@ -336,19 +300,8 @@ public class DashboardResponsableController implements Initializable {
         logoImageView.setLayoutY(15); // Padding en haut
         logoImageView.setStyle("-fx-border-color: #000000 ; -fx-border-width: 2px; -fx-border-radius: 5px;");
 
-        try {
-            Blob logoBlob = cinema.getLogo();
-            if (logoBlob != null) {
-                byte[] logoBytes = logoBlob.getBytes(1, (int) logoBlob.length());
-                Image logoImage = new Image(new ByteArrayInputStream(logoBytes));
-                logoImageView.setImage(logoImage);
-            } else {
-                Image defaultImage = new Image(getClass().getResourceAsStream("default_logo.png"));
-                logoImageView.setImage(defaultImage);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        logoImageView.setImage(new Image(cinema.getLogo()));
         card.getChildren().add(logoImageView);
 
         logoImageView.setOnMouseClicked(event -> {
@@ -361,20 +314,15 @@ public class DashboardResponsableController implements Initializable {
                 File selectedFile = fileChooser.showOpenDialog(null);
 
                 if (selectedFile != null) {
-                    try {
-                        // Convertir le fichier en tableau de bytes
-                        byte[] imageBytes = Files.readAllBytes(selectedFile.toPath());
-                        // Mettre à jour l'image dans la base de données pour le cinéma
-                        CinemaService cinemaService = new CinemaService();
-                        cinema.setLogo(new javax.sql.rowset.serial.SerialBlob(imageBytes));
-                        cinemaService.update(cinema);
+                    // Convertir le fichier en tableau de bytes
+                    // Mettre à jour l'image dans la base de données pour le cinéma
+                    CinemaService cinemaService = new CinemaService();
+                    cinema.setLogo("");
+                    cinemaService.update(cinema);
 
-                        // Mettre à jour l'image dans l'ImageView
-                        Image newImage = new Image(new ByteArrayInputStream(imageBytes));
-                        logoImageView.setImage(newImage);
-                    } catch (IOException | SQLException e) {
-                        e.printStackTrace();
-                    }
+                    // Mettre à jour l'image dans l'ImageView
+                    Image newImage = new Image(cinema.getLogo());
+                    logoImageView.setImage(newImage);
                 }
             }
         });
@@ -526,7 +474,7 @@ public class DashboardResponsableController implements Initializable {
             colActionRoom.setCellFactory(new Callback<TableColumn<Salle, Void>, TableCell<Salle, Void>>() {
                 @Override
                 public TableCell<Salle, Void> call(TableColumn<Salle, Void> param) {
-                    return new TableCell<Salle,Void>() {
+                    return new TableCell<Salle, Void>() {
                         private final Button deleteRoomButton = new Button("Delete");
 
                         {
@@ -614,7 +562,7 @@ public class DashboardResponsableController implements Initializable {
                     if (isEmpty()) {
                         return;
                     }
-                    TextField textField = new TextField(getItem().toString());
+                    TextField textField = new TextField(getItem());
                     textField.setOnAction(event -> {
                         commitEdit((textField.getText()));
                     });
@@ -678,7 +626,7 @@ public class DashboardResponsableController implements Initializable {
         colAction.setCellFactory(new Callback<TableColumn<Seance, Void>, TableCell<Seance, Void>>() {
             @Override
             public TableCell<Seance, Void> call(TableColumn<Seance, Void> param) {
-                return new TableCell<Seance,Void>() {
+                return new TableCell<Seance, Void>() {
                     private final Button deleteButton = new Button("Delete");
 
                     {
@@ -762,6 +710,7 @@ public class DashboardResponsableController implements Initializable {
                     setText(String.valueOf(HF));
                 }
             }
+
             @Override
             public void startEdit() {
                 super.startEdit();
@@ -805,6 +754,7 @@ public class DashboardResponsableController implements Initializable {
                     setText(String.valueOf(HD));
                 }
             }
+
             @Override
             public void startEdit() {
                 super.startEdit();
@@ -877,6 +827,7 @@ public class DashboardResponsableController implements Initializable {
                     }
                 });
             }
+
             @Override
             public void commitEdit(Date newValue) {
                 super.commitEdit(newValue);
@@ -983,6 +934,7 @@ public class DashboardResponsableController implements Initializable {
                     }
                 });
             }
+
             private List<Salle> loadAssociatedSalles(int idCinema) {
                 SalleService salleService = new SalleService();
                 return salleService.readRoomsForCinema(idCinema);
@@ -1038,6 +990,7 @@ public class DashboardResponsableController implements Initializable {
                     }
                 });
             }
+
             private List<Film> loadAssociatedFilms(int idCinema) {
                 FilmService filmService = new FilmService();
                 return filmService.readMoviesForCinema(idCinema);

@@ -3,6 +3,7 @@ package com.esprit.services.cinemas;
 import com.esprit.models.cinemas.Cinema;
 import com.esprit.models.cinemas.Seance;
 import com.esprit.services.IService;
+import com.esprit.services.films.FilmService;
 import com.esprit.utils.DataSource;
 
 import java.sql.*;
@@ -14,8 +15,12 @@ import java.util.Map;
 
 public class SeanceService implements IService<Seance> {
 
-    private Connection connection;
-    public SeanceService() { connection = DataSource.getInstance().getConnection(); }
+    private final Connection connection;
+
+    public SeanceService() {
+        connection = DataSource.getInstance().getConnection();
+    }
+
     public void create(Seance seance) {
         String req = "INSERT into seance(id_film, id_salle, HD, HF, date, id_cinema, prix) values (?, ?, ?, ?, ?, ?, ?);";
         try {

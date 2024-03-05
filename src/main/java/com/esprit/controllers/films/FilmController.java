@@ -1,8 +1,9 @@
 package com.esprit.controllers.films;
 
+import com.esprit.models.cinemas.Cinema;
 import com.esprit.models.films.*;
+import com.esprit.services.cinemas.CinemaService;
 import com.esprit.services.films.*;
-import com.esprit.utils.DataSource;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -15,7 +16,9 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Bounds;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
@@ -37,11 +40,7 @@ import net.synedra.validatorfx.Validator;
 import org.controlsfx.control.CheckComboBox;
 import org.controlsfx.control.IndexedCheckModel;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.OutputStream;
-import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.Time;
 import java.time.Year;
@@ -51,9 +50,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class FilmController {
-    Blob imageBlob;
+
     Validator validator;
-    private File selectedFile;
+
+    @FXML
+    private Button ajouterCinema_Button;
     @FXML
     private TableColumn<Film, Integer> annederalisationFilm_tableColumn;
     @FXML
@@ -76,14 +77,13 @@ public class FilmController {
     private TableColumn<Film, Integer> idFilm_tableColumn;
     @FXML
     private TableColumn<Film, CheckComboBox<String>> idacteurFilm_tableColumn;
-    @FXML
-    private ComboBox<String> idacteurFilm_comboBox;
+
     @FXML
     private TableColumn<Film, CheckComboBox<String>> idcategoryFilm_tableColumn;
     @FXML
-    private TableColumn<Film, Integer> idcinemaFilm_tableColumn;
+    private TableColumn<Film, CheckComboBox<String>> idcinemaFilm_tableColumn;
     @FXML
-    private ComboBox<String> idcinemaFilm_comboBox;
+    private CheckComboBox<String> idcinemaFilm_comboBox;
     @FXML
     private ImageView imageFilm_ImageView;
     @FXML
@@ -317,7 +317,7 @@ public class FilmController {
         readFilmTable();
         CategoryService cs = new CategoryService();
         FilmService fs = new FilmService();
-
+        CinemaService cinemaService = new CinemaService();
         ActorService actorService = new ActorService();
         List<Actor> actors = actorService.read();
         List<String> actorNames = actors.stream().map(Actor::getNom).collect(Collectors.toList());
@@ -326,8 +326,13 @@ public class FilmController {
             Tooltip tooltip2 = new Tooltip("Tooltip text for " + item); // Create a tooltip for each item
             Tooltip.install(Actorcheck_ComboBox1, tooltip2); // Set the tooltip for the ComboBox
         });
-        for (Film f : fs.read())
-            idcinemaFilm_comboBox.getItems().add(String.valueOf(f.getIdcinema()));
+        List<Cinema> cinemaList = cinemaService.read();
+        List<String> cinemaNames = cinemaList.stream().map(Cinema::getNom).collect(Collectors.toList());
+        idcinemaFilm_comboBox.getItems().addAll(cinemaNames);
+        idcinemaFilm_comboBox.getItems().forEach(item -> {
+            Tooltip tooltip2 = new Tooltip("Tooltip text for " + item); // Create a tooltip for each item
+            Tooltip.install(idcinemaFilm_comboBox, tooltip2); // Set the tooltip for the ComboBox
+        });
         // Populate the CheckComboBox with category names
         CategoryService categoryService = new CategoryService();
         List<Category> categories = categoryService.read();
@@ -348,7 +353,7 @@ public class FilmController {
     void importFilmImage(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Sélectionner une image");
-        selectedFile = fileChooser.showOpenDialog(null);
+        File selectedFile = fileChooser.showOpenDialog(null);
         if (selectedFile != null) {
             Image selectedImage = new Image(selectedFile.toURI().toString());
             imageFilm_ImageView.setImage(selectedImage);
@@ -370,39 +375,24 @@ public class FilmController {
         if (validator.containsErrors())
             System.out.println();
         else {
-            if (selectedFile != null) { // Vérifier si une image a été sélectionnée
-                Connection connection = null;
-                try {
-                    // Convertir le fichier en un objet Blob
-                    FileInputStream fis = new FileInputStream(selectedFile);
-                    connection = DataSource.getInstance().getConnection();
-                    Blob imageBlob = connection.createBlob();
 
-                    // Définir le flux d'entrée de l'image dans l'objet Blob
-                    try (OutputStream outputStream = imageBlob.setBinaryStream(1)) {
-                        byte[] buffer = new byte[4096];
-                        int bytesRead;
-                        while ((bytesRead = fis.read(buffer)) != -1) {
-                            outputStream.write(buffer, 0, bytesRead);
-                        }
-                    }
-                    // Créer l'objet Cinema avec l'image Blob
-                    FilmcategoryService fs = new FilmcategoryService();
-                    fs.create(new Filmcategory(new Category(Categorychecj_ComboBox.getCheckModel().getCheckedItems().stream().collect(Collectors.joining(", ")), ""), new Film(nomFilm_textArea.getText(), imageBlob, Time.valueOf(dureeFilm_textArea.getText()), descriptionFilm_textArea.getText(), Integer.parseInt(annederealisationFilm_textArea.getText()), Integer.parseInt(idcinemaFilm_comboBox.getValue()))));
-                    ActorfilmService actorfilmService = new ActorfilmService();
-                    actorfilmService.create(new Actorfilm(new Actor(Actorcheck_ComboBox1.getCheckModel().getCheckedItems().stream().collect(Collectors.joining(", ")), "", ""), new Film(nomFilm_textArea.getText(), imageBlob, Time.valueOf(dureeFilm_textArea.getText()), descriptionFilm_textArea.getText(), Integer.parseInt(annederealisationFilm_textArea.getText()), Integer.parseInt(idcinemaFilm_comboBox.getValue()))));
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Film ajoutée");
-                    alert.setContentText("Film ajoutée !");
-                    alert.show();
-                    readFilmTable();
-                    clear();
-                } catch (Exception e) {
-                    showAlert("Erreur lors de l'ajout du Film : " + e.getMessage());
-                }
-            } else {
-                showAlert("Veuillez sélectionner une image d'abord !");
+            try {
+
+                // Créer l'objet Cinema avec l'image String
+                FilmcategoryService fs = new FilmcategoryService();
+                fs.create(new Filmcategory(new Category(Categorychecj_ComboBox.getCheckModel().getCheckedItems().stream().collect(Collectors.joining(", ")), ""), new Film(nomFilm_textArea.getText(), "", Time.valueOf(dureeFilm_textArea.getText()), descriptionFilm_textArea.getText(), Integer.parseInt(annederealisationFilm_textArea.getText()))));
+                ActorfilmService actorfilmService = new ActorfilmService();
+                actorfilmService.create(new Actorfilm(new Actor(Actorcheck_ComboBox1.getCheckModel().getCheckedItems().stream().collect(Collectors.joining(", ")), "", ""), new Film(nomFilm_textArea.getText(), "", Time.valueOf(dureeFilm_textArea.getText()), descriptionFilm_textArea.getText(), Integer.parseInt(annederealisationFilm_textArea.getText()))));
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Film ajoutée");
+                alert.setContentText("Film ajoutée !");
+                alert.show();
+                readFilmTable();
+                clear();
+            } catch (Exception e) {
+                showAlert("Erreur lors de l'ajout du Film : " + e.getMessage());
             }
+
         }
     }
 
@@ -418,7 +408,6 @@ public class FilmController {
         dureeFilm_textArea.setText("");
         descriptionFilm_textArea.setText("");
         annederealisationFilm_textArea.setText("");
-        idcinemaFilm_comboBox.setValue("");
     }
 
     void updateActorlist() {
@@ -707,7 +696,7 @@ public class FilmController {
                         HBox hBox = new HBox();
                         try {
                             ImageView imageView = new ImageView(
-                                    new Image(new ByteArrayInputStream(param.getValue().getImage().getBinaryStream().readAllBytes())));
+                                    new Image(param.getValue().getImage()));
                             hBox.getChildren().add(imageView);
                             imageView.setFitWidth(100);
                             imageView.setFitHeight(50);
@@ -726,19 +715,8 @@ public class FilmController {
                                             imageView.setImage(image);
                                             hBox.getChildren().clear();
                                             hBox.getChildren().add(imageView);
-
-                                            FileInputStream fis = new FileInputStream(file);
-                                            Blob imageBlob = DataSource.getInstance().getConnection().createBlob();
-                                            // Définir le flux d'entrée de l'image dans l'objet Blob
-                                            try (OutputStream outputStream = imageBlob.setBinaryStream(1)) {
-                                                byte[] buffer = new byte[4096];
-                                                int bytesRead;
-                                                while ((bytesRead = fis.read(buffer)) != -1) {
-                                                    outputStream.write(buffer, 0, bytesRead);
-                                                }
-                                            }
                                             Film film = param.getValue();
-                                            film.setImage(imageBlob);
+                                            film.setImage(file.toURI().toURL().toString());
                                             updateFilm(film);
                                         }
                                     } catch (Exception e) {
@@ -834,10 +812,28 @@ public class FilmController {
                 return new SimpleObjectProperty<CheckComboBox<String>>(checkComboBox);
             }
         });
-        idcinemaFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Film, Integer>, ObservableValue<Integer>>() {
+        idcinemaFilm_tableColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Film, CheckComboBox<String>>, ObservableValue<CheckComboBox<String>>>() {
             @Override
-            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Film, Integer> filmcategoryIntegerCellDataFeatures) {
-                return new SimpleIntegerProperty(filmcategoryIntegerCellDataFeatures.getValue().getIdcinema()).asObject();
+            public ObservableValue<CheckComboBox<String>> call(TableColumn.CellDataFeatures<Film, CheckComboBox<String>> filmcategoryStringCellDataFeatures) {
+                CheckComboBox<String> checkComboBox = new CheckComboBox<>();
+                List<String> l = new ArrayList<>();
+                CinemaService cs = new CinemaService();
+                for (Cinema c : cs.read())
+                    l.add(c.getNom());
+                checkComboBox.getItems().addAll(l);
+                FilmcinemaService cfs = new FilmcinemaService();
+                List<String> ls = Stream.of(cfs.getcinemaNames(filmcategoryStringCellDataFeatures.getValue().getId()).split(", ")).toList();
+                for (String checkedString : ls)
+                    checkComboBox.getCheckModel().check(checkedString);
+                checkComboBox.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
+                    @Override
+                    public void onChanged(Change<? extends String> change) {
+                        System.out.println(checkComboBox.getCheckModel().getCheckedItems());
+                        FilmcinemaService afs = new FilmcinemaService();
+                        afs.updatecinemas(filmcategoryStringCellDataFeatures.getValue(), checkComboBox.getCheckModel().getCheckedItems());
+                    }
+                });
+                return new SimpleObjectProperty<CheckComboBox<String>>(checkComboBox);
             }
         });
     }
@@ -895,25 +891,12 @@ public class FilmController {
                 }
             }
         });
-        imageFilm_tableColumn.setOnEditCommit(
-                new EventHandler<TableColumn.CellEditEvent<Film, HBox>>() {
-                    @Override
-                    public void handle(TableColumn.CellEditEvent<Film, HBox> event) {
-                        try {
-                            event.getTableView().getItems().get(
-                                    event.getTablePosition().getRow()).setImage(
-                                    (Blob) event.getNewValue().getChildren().get(0));
-                        } catch (Exception e) {
-                            System.out.println(e.getMessage());
-                        }
-                    }
-                });
 
 
     }
 
     void updateFilm(Film film) {
-//        if (imageBlob != null) { // Vérifier si une image a été sélectionnée
+//        if (imageString != null) { // Vérifier si une image a été sélectionnée
         Connection connection = null;
         try {
 
@@ -930,5 +913,18 @@ public class FilmController {
 //        }
         readFilmTable();
 
+    }
+
+    @FXML
+    public void switchtoajouterCinema(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/DashboardResponsableCinema.fxml"));
+            AnchorPane root = fxmlLoader.load();
+            Stage stage = (Stage) ajouterCinema_Button.getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

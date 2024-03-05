@@ -109,8 +109,6 @@
                         </VBox>
                     </children>
                 </AnchorPane>
-                <FontAwesomeIconView fill="#f2efef" glyphName="PRODUCT" layoutX="58.0" layoutY="314.0" size="30"
-                                     text="" wrappingWidth="36.0"/>
             </children>
         </AnchorPane>
         <AnchorPane fx:id="detalAnchorPane" layoutX="245.0" layoutY="68.0" prefHeight="719.0" prefWidth="942.0"

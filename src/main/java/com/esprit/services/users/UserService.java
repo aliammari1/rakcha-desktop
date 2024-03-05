@@ -25,6 +25,19 @@ public class UserService implements IService<User> {
         this.con = DataSource.getInstance().getConnection();
     }
 
+    public User getUserById(int id) {
+        String req = "select * from users where id = ?";
+        User user = null;
+        try {
+            PreparedStatement preparedStatement = con.prepareStatement(req);
+            preparedStatement.setInt(1, id);
+            user = getUserRow(preparedStatement);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return user;
+    }
+
     @Override
     public void create(User user) {
         try {

@@ -30,7 +30,7 @@ public class FilmService implements IService<Film> {
         try {
             PreparedStatement statement = connection.prepareStatement(req);
             statement.setString(1, film.getNom());
-            statement.setBlob(2, film.getImage());
+            statement.setString(2, film.getImage());
             statement.setTime(3, film.getDuree());
             statement.setString(4, film.getDescription());
             statement.setInt(5, film.getAnnederalisation());
@@ -57,7 +57,7 @@ public class FilmService implements IService<Film> {
             ResultSet rs = pst.executeQuery();
             // int i = 0;
             while (rs.next()) {
-                filmArrayList.add(new Film(rs.getInt("id"), rs.getString("nom"), rs.getBlob("image"), rs.getTime("duree"), rs.getString("description"), rs.getInt("annederalisation"), rs.getInt("idcinema")));
+                filmArrayList.add(new Film(rs.getInt("id"), rs.getString("nom"), rs.getString("image"), rs.getTime("duree"), rs.getString("description"), rs.getInt("annederalisation")));
                 //     System.out.println(filmArrayList.get(i));
                 //       i++;
             }
@@ -76,7 +76,7 @@ public class FilmService implements IService<Film> {
             System.out.println("uodate: " + film);
             PreparedStatement statement = connection.prepareStatement(req);
             statement.setString(1, film.getNom());
-            statement.setBlob(2, film.getImage());
+            statement.setString(2, film.getImage());
             statement.setTime(3, film.getDuree());
             statement.setString(4, film.getDescription());
             statement.setInt(5, film.getAnnederalisation());
@@ -99,5 +99,60 @@ public class FilmService implements IService<Film> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public Film getFilm(int film_id) {
+
+        Film film = null;
+
+        String req = "SELECT * from film where id = ?";
+        try {
+            PreparedStatement pst = connection.prepareStatement(req);
+            pst.setInt(1, film_id);
+            ResultSet rs = pst.executeQuery();
+            rs.next();
+            film = new Film(rs.getInt("id"), rs.getString("nom"), rs.getString("image"), rs.getTime("duree"), rs.getString("description"), rs.getInt("annederalisation"));
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return film;
+    }
+
+    public Film getFilmByName(String nom_film) {
+
+        Film film = null;
+
+        String req = "SELECT * from film where nom = ?";
+        try {
+            PreparedStatement pst = connection.prepareStatement(req);
+            pst.setString(1, nom_film);
+            ResultSet rs = pst.executeQuery();
+            rs.next();
+            film = new Film(rs.getInt("id"), rs.getString("nom"), rs.getString("image"), rs.getTime("duree"), rs.getString("description"), rs.getInt("annederalisation"));
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return film;
+    }
+
+    public List<Film> readMoviesForCinema(int cinemaId) {
+        List<Film> moviesForCinema = new ArrayList<>();
+        String query = "SELECT * FROM film WHERE idcinema = ?";
+        try (PreparedStatement pst = connection.prepareStatement(query)) {
+            pst.setInt(1, cinemaId);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+
+                Film film = new Film(rs.getInt("id"), rs.getString("nom"), rs.getString("image"), rs.getTime("duree"), rs.getString("description"), rs.getInt("annederalisation"));
+                moviesForCinema.add(film);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return moviesForCinema;
     }
 }

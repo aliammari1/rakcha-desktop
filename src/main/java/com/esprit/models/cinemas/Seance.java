@@ -1,5 +1,7 @@
 package com.esprit.models.cinemas;
 
+import com.esprit.models.films.Film;
+
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
@@ -12,7 +14,7 @@ public class Seance {
     private Time HD;
     private Time HF;
     private Date date;
-    private Cinema cinema ;
+    private Cinema cinema;
     private double prix;
 
     public Seance(int id_seance, Film film, Salle salle, Time HD, Time HF, Date date, Cinema cinema, double prix) {

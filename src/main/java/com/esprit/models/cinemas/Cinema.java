@@ -1,17 +1,17 @@
 package com.esprit.models.cinemas;
 
-import java.sql.Blob;
+import com.esprit.models.users.Responsable_de_cinema;
 
 public class Cinema {
 
+    private final Responsable_de_cinema responsable;
     private int id_cinema;
     private String nom;
     private String adresse;
-    private String responsable;
-    private Blob logo;
+    private String logo;
     private String Statut;
 
-    public Cinema(int id_cinema, String nom, String adresse, String responsable, Blob logo, String statut) {
+    public Cinema(int id_cinema, String nom, String adresse, Responsable_de_cinema responsable, String logo, String statut) {
         this.id_cinema = id_cinema;
         this.nom = nom;
         this.adresse = adresse;
@@ -20,7 +20,7 @@ public class Cinema {
         Statut = statut;
     }
 
-    public Cinema(String nom, String adresse, String responsable, Blob logo, String statut) {
+    public Cinema(String nom, String adresse, Responsable_de_cinema responsable, String logo, String statut) {
         this.nom = nom;
         this.adresse = adresse;
         this.responsable = responsable;
@@ -52,19 +52,15 @@ public class Cinema {
         this.adresse = adresse;
     }
 
-    public String getResponsable() {
+    public Responsable_de_cinema getResponsable() {
         return responsable;
     }
 
-    public void setResponsable(String responsable) {
-        this.responsable = responsable;
-    }
-
-    public Blob getLogo() {
+    public String getLogo() {
         return logo;
     }
 
-    public void setLogo(Blob logo) {
+    public void setLogo(String logo) {
         this.logo = logo;
     }
 

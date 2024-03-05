@@ -15,11 +15,9 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.sql.Blob;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 
@@ -39,8 +37,6 @@ public class ModifierCinemaController implements Initializable {
     private File selectedFile;
 
 
-
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
     }
@@ -50,19 +46,9 @@ public class ModifierCinemaController implements Initializable {
         tfNom.setText(cinema.getNom());
         tfAdresse.setText(cinema.getAdresse());
 
-        Blob logoBlob = cinema.getLogo();
-        if (logoBlob != null) {
-            try {
-                byte[] logoBytes = logoBlob.getBytes(1, (int) logoBlob.length());
-                ByteArrayInputStream inputStream = new ByteArrayInputStream(logoBytes);
-                Image image = new Image(inputStream);
-                tfLogo.setImage(image);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        } else {
-            tfLogo.setImage(new Image(getClass().getResourceAsStream("default_logo.png")));
-        }
+        String logo = cinema.getLogo();
+        Image image = new Image(logo);
+        tfLogo.setImage(image);
     }
 
     @FXML
@@ -85,20 +71,8 @@ public class ModifierCinemaController implements Initializable {
         // Mettre à jour les informations du cinéma
         cinema.setNom(nouveauNom);
         cinema.setAdresse(nouvelleAdresse);
+        cinema.setLogo("");
 
-        // Mettre à jour l'image du logo si elle a été modifiée
-        if (selectedFile != null) {
-            try {
-                // Convertir le fichier en tableau de bytes
-                byte[] logoBytes = Files.readAllBytes(selectedFile.toPath());
-                // Créer un objet Blob à partir du tableau de bytes
-                Blob blob = new javax.sql.rowset.serial.SerialBlob(logoBytes);
-                // Mettre à jour le logo du cinéma
-                cinema.setLogo(blob);
-            } catch (IOException | SQLException e) {
-                e.printStackTrace();
-            }
-        }
 
         // Mettre à jour le cinéma dans la base de données
         CinemaService cinemaService = new CinemaService();

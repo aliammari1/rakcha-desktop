@@ -8,7 +8,8 @@
 <?import javafx.scene.text.*?>
 <?import org.controlsfx.control.CheckComboBox?>
 <?import java.net.*?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+            minWidth="-Infinity"
             prefHeight="936.0" prefWidth="1688.0" stylesheets="@dashbord.css"
             xmlns="http://javafx.com/javafx/21" fx:controller="com.esprit.controllers.films.FilmController">
     <children>
@@ -69,9 +70,9 @@
                         <Button layoutX="1.0" layoutY="298.0" mnemonicParsing="false" prefHeight="47.0"
                                 prefWidth="239.0" styleClass="nav-btn" stylesheets="@dashbord.css"
                                 text="Ajouter produit"/>
-                        <Button layoutX="1.0" layoutY="247.0" mnemonicParsing="false" prefHeight="47.0"
-                                prefWidth="239.0" styleClass="nav-btn" stylesheets="@dashbord.css"
-                                text="Ajouter Cinema"/>
+                        <Button fx:id="ajouterCinema_Button" layoutX="1.0" layoutY="247.0" mnemonicParsing="false"
+                                onAction="#switchtoajouterCinema" prefHeight="47.0" prefWidth="239.0"
+                                styleClass="nav-btn" stylesheets="@dashbord.css" text="Ajouter Cinema"/>
                         <Button layoutY="344.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="241.0"
                                 styleClass="nav-btn" stylesheets="@dashbord.css" text="Liste des films"/>
                         <Button layoutX="19.0" layoutY="823.0" mnemonicParsing="false" prefHeight="40.0"
@@ -110,7 +111,7 @@
 
                         <AnchorPane fx:id="filmCrudInterface" prefHeight="686.0" prefWidth="1050.0">
                             <children>
-                                <AnchorPane layoutX="28.0" layoutY="43.0" maxHeight="-Infinity" maxWidth="-Infinity"
+                                <AnchorPane layoutX="27.0" layoutY="175.0" maxHeight="-Infinity" maxWidth="-Infinity"
                                             minHeight="-Infinity" minWidth="-Infinity" prefHeight="685.0"
                                             prefWidth="410.0" styleClass="bg-white" stylesheets="@dashbord.css">
                                     <children>
@@ -168,8 +169,8 @@
                                                 <Font size="16.0"/>
                                             </font>
                                         </Label>
-                                        <ComboBox fx:id="idcinemaFilm_comboBox" layoutX="161.0" layoutY="578.0"
-                                                  prefHeight="35.0" prefWidth="202.0"/>
+                                        <CheckComboBox fx:id="idcinemaFilm_comboBox" layoutX="161.0" layoutY="578.0"
+                                                       prefHeight="35.0" prefWidth="202.0"/>
                                         <CheckComboBox fx:id="Categorychecj_ComboBox" layoutX="162.0" layoutY="480.0"
                                                        prefHeight="37.0" prefWidth="201.0"/>
                                         <CheckComboBox fx:id="Actorcheck_ComboBox1" layoutX="162.0" layoutY="528.0"
@@ -184,7 +185,7 @@
                                         </HBox>
                                     </children>
                                 </AnchorPane>
-                                <AnchorPane layoutX="474.0" layoutY="13.0" prefHeight="662.0" prefWidth="940.0"
+                                <AnchorPane layoutX="466.0" layoutY="194.0" prefHeight="662.0" prefWidth="940.0"
                                             styleClass="bg-white" stylesheets="@dashbord.css">
                                     <children>
                                         <TableView fx:id="filmCategory_tableView1" layoutX="10.0" layoutY="65.0"

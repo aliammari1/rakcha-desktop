@@ -25,15 +25,10 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import net.synedra.validatorfx.Validator;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.OutputStream;
-import java.sql.Blob;
 import java.sql.Connection;
 
 public class ActorController {
-    Blob imageBlob;
     private File selectedFile;
     @FXML
     private TextArea bioAcotr_textArea;
@@ -121,33 +116,18 @@ public class ActorController {
     void insertActor(ActionEvent event) {
         if (selectedFile != null) { // Vérifier si une image a été sélectionnée
             Connection connection = null;
-            try {
-                // Convertir le fichier en un objet Blob
-                FileInputStream fis = new FileInputStream(selectedFile);
-                connection = DataSource.getInstance().getConnection();
-                Blob imageBlob = connection.createBlob();
 
-                // Définir le flux d'entrée de l'image dans l'objet Blob
-                try (OutputStream outputStream = imageBlob.setBinaryStream(1)) {
-                    byte[] buffer = new byte[4096];
-                    int bytesRead;
-                    while ((bytesRead = fis.read(buffer)) != -1) {
-                        outputStream.write(buffer, 0, bytesRead);
-                    }
-                }
 
-                // Créer l'objet Cinema avec l'image Blob
+            // Créer l'objet Cinema avec l'image String
 
-                ActorService actorService = new ActorService();
-                Actor actor = new Actor(nomAcotr_textArea1.getText(), imageBlob, bioAcotr_textArea.getText());
-                actorService.create(actor);
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Actor ajoutée");
-                alert.setContentText("Actor ajoutée !");
-                alert.show();
-            } catch (Exception e) {
-                showAlert("Erreur lors de l'ajout du Film : " + e.getMessage());
-            }
+            ActorService actorService = new ActorService();
+            Actor actor = new Actor(nomAcotr_textArea1.getText(), "", bioAcotr_textArea.getText());
+            actorService.create(actor);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Actor ajoutée");
+            alert.setContentText("Actor ajoutée !");
+            alert.show();
+
         } else {
             showAlert("Veuillez sélectionner une image d'abord !");
         }
@@ -177,8 +157,8 @@ public class ActorController {
 
             connection = DataSource.getInstance().getConnection();
             ActorService actorService = new ActorService();
-// Assign value to imageBlob
-            /* assign the blob value here */
+// Assign value to imageString
+            /* assign the String value here */
             System.out.println(actor);
             actorService.update(actor);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -236,7 +216,7 @@ public class ActorController {
                     imageView.setFitWidth(120); // Réglez la largeur de l'image selon vos préférences
                     imageView.setFitHeight(100); // Réglez la hauteur de l'image selon vos préférences
                     try {
-                        imageView.setImage(new Image(new ByteArrayInputStream(param.getValue().getImage().getBinaryStream().readAllBytes())));
+                        imageView.setImage(new Image(param.getValue().getImage()));
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
