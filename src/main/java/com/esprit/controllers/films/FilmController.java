@@ -380,9 +380,11 @@ public class FilmController {
 
                 // Créer l'objet Cinema avec l'image String
                 FilmcategoryService fs = new FilmcategoryService();
-                fs.create(new Filmcategory(new Category(Categorychecj_ComboBox.getCheckModel().getCheckedItems().stream().collect(Collectors.joining(", ")), ""), new Film(nomFilm_textArea.getText(), "", Time.valueOf(dureeFilm_textArea.getText()), descriptionFilm_textArea.getText(), Integer.parseInt(annederealisationFilm_textArea.getText()))));
+                fs.create(new Filmcategory(new Category(Categorychecj_ComboBox.getCheckModel().getCheckedItems().stream().collect(Collectors.joining(", ")), ""), new Film(nomFilm_textArea.getText(), imageFilm_ImageView.getImage().getUrl(), Time.valueOf(dureeFilm_textArea.getText()), descriptionFilm_textArea.getText(), Integer.parseInt(annederealisationFilm_textArea.getText()))));
                 ActorfilmService actorfilmService = new ActorfilmService();
-                actorfilmService.create(new Actorfilm(new Actor(Actorcheck_ComboBox1.getCheckModel().getCheckedItems().stream().collect(Collectors.joining(", ")), "", ""), new Film(nomFilm_textArea.getText(), "", Time.valueOf(dureeFilm_textArea.getText()), descriptionFilm_textArea.getText(), Integer.parseInt(annederealisationFilm_textArea.getText()))));
+                actorfilmService.create(new Actorfilm(new Actor(Actorcheck_ComboBox1.getCheckModel().getCheckedItems().stream().collect(Collectors.joining(", ")), "", ""), new Film(nomFilm_textArea.getText(), imageFilm_ImageView.getImage().getUrl(), Time.valueOf(dureeFilm_textArea.getText()), descriptionFilm_textArea.getText(), Integer.parseInt(annederealisationFilm_textArea.getText()))));
+                FilmcinemaService filmcinemaService = new FilmcinemaService();
+                filmcinemaService.create(new Filmcinema(new Film(nomFilm_textArea.getText(), imageFilm_ImageView.getImage().getUrl(), Time.valueOf(dureeFilm_textArea.getText()), descriptionFilm_textArea.getText(), Integer.parseInt(annederealisationFilm_textArea.getText())), new Cinema(idcinemaFilm_comboBox.getCheckModel().getCheckedItems().stream().collect(Collectors.joining(", ")), "", null, "", "")));
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Film ajoutée");
                 alert.setContentText("Film ajoutée !");

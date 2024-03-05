@@ -63,12 +63,12 @@ public class DashboardAdminController {
             imageView.setFitHeight(50); // Réglez la hauteur de l'image selon vos préférences
 
             String logo = cinema.getLogo();
-            if (logo != null) {
+            if (!logo.isEmpty()) {
                 Image image = new Image(logo);
                 imageView.setImage(image);
             } else {
                 // Afficher une image par défaut si le logo est null
-                Image defaultImage = new Image(getClass().getResourceAsStream("default_logo.png"));
+                Image defaultImage = new Image(getClass().getResourceAsStream("/Logo.png"));
                 imageView.setImage(defaultImage);
             }
 
