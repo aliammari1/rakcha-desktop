@@ -139,20 +139,14 @@ public class FilmService implements IService<Film> {
         return film;
     }
 
-    public List<Film> readMoviesForCinema(int cinemaId) {
-        List<Film> moviesForCinema = new ArrayList<>();
-        String query = "SELECT * FROM film WHERE idcinema = ?";
-        try (PreparedStatement pst = connection.prepareStatement(query)) {
-            pst.setInt(1, cinemaId);
-            ResultSet rs = pst.executeQuery();
-            while (rs.next()) {
-
-                Film film = new Film(rs.getInt("id"), rs.getString("nom"), rs.getString("image"), rs.getTime("duree"), rs.getString("description"), rs.getInt("annederalisation"));
-                moviesForCinema.add(film);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public String getTrailerFilm(String nomFilm) {
+        String s = "";
+        try {
+            FilmYoutubeTrailer filmYoutubeTrailer = new FilmYoutubeTrailer();
+            s = filmYoutubeTrailer.watchTrailer(nomFilm);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
-        return moviesForCinema;
+        return s;
     }
 }

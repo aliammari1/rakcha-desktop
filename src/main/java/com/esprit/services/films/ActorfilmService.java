@@ -41,13 +41,13 @@ public class ActorfilmService implements IService<Actorfilm> {
     @Override
     public List<Actorfilm> read() {
         List<Actorfilm> actorfilmArrayList = new ArrayList<>();
-        String req = "SELECT film.*,actor.id,actor.image,actor.biographie, GROUP_CONCAT(actor.nom SEPARATOR ', ') AS ActorNames from actorfilm JOIN actor  ON actorfilm.idactor  = actor.id JOIN film on actorfilm.idfilm  = film.id GROUP BY film.id;";
+        String req = "SELECT film.*,GROUP_CONCAT(actor.nom SEPARATOR ', ') AS actorNames,actor.id,actor.image,actor.biographie from actorfilm JOIN actor  ON actorfilm.idactor  = actor.id JOIN film on actorfilm.idfilm  = film.id GROUP BY film.id;";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             ResultSet rs = pst.executeQuery();
             // int i = 0;
             while (rs.next()) {
-                actorfilmArrayList.add(new Actorfilm(new Actor(rs.getInt("actor.id"), rs.getString("actor_names"), rs.getString("actor.image"), rs.getString("actor.biographie")), new Film(rs.getInt("film.id"), rs.getNString("film.nom"), rs.getString("image"), rs.getTime("duree"), rs.getString("film.description"), rs.getInt("annederalisation"))));
+                actorfilmArrayList.add(new Actorfilm(new Actor(rs.getInt("actor.id"), rs.getString("actorNames"), rs.getString("actor.image"), rs.getString("actor.biographie")), new Film(rs.getInt("film.id"), rs.getNString("film.nom"), rs.getString("image"), rs.getTime("duree"), rs.getString("film.description"), rs.getInt("annederalisation"))));
                 //     System.out.println(filmArrayList.get(i));
                 //       i++;
             }
@@ -107,14 +107,15 @@ public class ActorfilmService implements IService<Actorfilm> {
 
     public String getActorsNames(int id) {
         String s = "";
-        String req = "SELECT GROUP_CONCAT(actor.nom SEPARATOR ', ') AS ActorNames from actorfilm JOIN actor  ON actorfilm.idactor  = actor.id JOIN film on actorfilm.idfilm  = film.id where film.id = ? GROUP BY film.id;";
+        String req = "SELECT GROUP_CONCAT(actor.nom SEPARATOR ', ') AS actorNames from actorfilm JOIN actor  ON actorfilm.idactor  = actor.id JOIN film on actorfilm.idfilm  = film.id where film.id = ? GROUP BY film.id;";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(1, id);
             ResultSet rs = pst.executeQuery();
             // int i = 0;
             rs.next();
-            s = rs.getString("ActorNames");
+            System.out.println(rs.getMetaData());
+            s = rs.getString("actorNames");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

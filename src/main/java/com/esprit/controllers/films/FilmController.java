@@ -800,7 +800,9 @@ public class FilmController {
                     l.add(a.getNom());
                 checkComboBox.getItems().addAll(l);
                 ActorfilmService afs = new ActorfilmService();
+                System.out.println(filmcategoryStringCellDataFeatures.getValue().getId() + " " + afs.getActorsNames(filmcategoryStringCellDataFeatures.getValue().getId()));
                 List<String> ls = Stream.of(afs.getActorsNames(filmcategoryStringCellDataFeatures.getValue().getId()).split(", ")).toList();
+                System.out.println("pass: " + filmcategoryStringCellDataFeatures.getValue().getId());
                 for (String checkedString : ls)
                     checkComboBox.getCheckModel().check(checkedString);
                 checkComboBox.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
@@ -923,7 +925,7 @@ public class FilmController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/DashboardResponsableCinema.fxml"));
             AnchorPane root = fxmlLoader.load();
             Stage stage = (Stage) ajouterCinema_Button.getScene().getWindow();
-            Scene scene = new Scene(root);
+            Scene scene = new Scene(root, 1280, 700);
             stage.setScene(scene);
         } catch (Exception e) {
             System.out.println(e.getMessage());
