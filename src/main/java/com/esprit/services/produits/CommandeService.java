@@ -18,40 +18,71 @@ public class CommandeService implements IService<Commande> {
     }
     @Override
     public void create(Commande commande) {
-        String req = "INSERT into commande(idCommandeItem,dateCommande,etat , idClient) values (?, ?,?,?)  ;";
+        String req = "INSERT into commande(dateCommande,statu , idClient,num_telephone,adresse) values ( ?,?,?,?,?)  ;";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
 
-            pst.setInt(1, commande.getCommandeItem().getIdCommandeItem());
-            pst.setDate(2, (Date) commande.getDateCommande());
-            pst.setString(3, commande.getEtatCommande());
-            pst.setInt(2, commande.getIdClient().getId());
+            //pst.setInt(1, commande.getCommandeItem().());
+            pst.setDate(1, (Date) commande.getDateCommande());
+            pst.setString(2, commande.getStatu()!= null ? commande.getStatu() : "En_attente");
+            pst.setInt(3, commande.getIdClient().getId());
+            pst.setInt(4, commande.getNum_telephone());
+            pst.setString(5, commande.getAdresse());
 
             pst.executeUpdate();
             System.out.println("commande remplit !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("commande nom remplit ");
         }
 
 
     }
 
+    public int createcommande(Commande commande)throws SQLException {
+        int commandeId = 0;
+        String req = "INSERT into commande(dateCommande,statu , idClient,num_telephone,adresse) values ( ?,?,?,?,?)  ;";
+        PreparedStatement pst = connection.prepareStatement(req, Statement.RETURN_GENERATED_KEYS);
+            //pst.setInt(1, commande.getCommandeItem().());
+            pst.setDate(1, (Date) commande.getDateCommande());
+            pst.setString(2, commande.getStatu()!= null ? commande.getStatu() : "En_attente");
+            pst.setInt(3, commande.getIdClient().getId());
+            pst.setInt(4, commande.getNum_telephone());
+            pst.setString(5, commande.getAdresse());
+
+            pst.executeUpdate();
+            ResultSet rs = pst.getGeneratedKeys();
+
+            if (rs.next()) {
+                commandeId = rs.getInt(1);
+            }
+            return commandeId;
+
+
+
+    }
+
+
+
+
+
+
+
     @Override
     public List<Commande> read() {
+        CommandeItemService commandeItemService=new CommandeItemService();
         List<Commande> commande = new ArrayList<>();
-        String req = "SELECT  commande.* ,  from commandeitem  JOIN commandeitem  ON commande.idCommandeitem = commandeitem.idCommandeItem JOIN users ON commande.idClient=users.id ";
+        String req = "SELECT * from commande ";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             ResultSet rs = pst.executeQuery();
             CommandeItemService cs = new CommandeItemService();
             UsersService us = new UsersService();
 
-            int i = 0;
-            while (rs.next()) {
 
-                commande.add(new Commande( rs.getInt("idCommande"),rs.getDate("dateCommande") , rs.getString("etatCommande"),us.getUsers(rs.getInt("idClient")) , cs.getCommandeItem (rs.getInt("idCommandeItem"))));
-                System.out.println(commande.get(i));
-                i++;
+            while (rs.next()) {
+                Commande c1=new Commande( rs.getInt("idCommande"),rs.getDate("dateCommande") ,rs.getString("statuCommande"), us.getUsers(rs.getInt("idClient")) ,rs.getInt("num_telephone"), rs.getString("adresse"));
+                c1.setCommandeItem(commandeItemService.readCommandeItem(c1.getIdCommande()));
+                commande.add(c1);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -60,20 +91,47 @@ public class CommandeService implements IService<Commande> {
         return commande;
     }
 
+
+    public List<Commande> readClient() {
+        CommandeItemService commandeItemService=new CommandeItemService();
+        List<Commande> commande = new ArrayList<>();
+        String req = "SELECT * from commande WHERE idClient=?";
+        try {
+            PreparedStatement pst = connection.prepareStatement(req);
+            ResultSet rs = pst.executeQuery();
+            CommandeItemService cs = new CommandeItemService();
+            UsersService us = new UsersService();
+
+
+            while (rs.next()) {
+                Commande c1=new Commande( rs.getInt("idCommande"),rs.getDate("dateCommande") ,rs.getString("statuCommande"), us.getUsers(rs.getInt("idClient")) ,rs.getInt("num_telephone"), rs.getString("adresse"));
+                c1.setCommandeItem(commandeItemService.readCommandeItem(c1.getIdCommande()));
+                commande.add(c1);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return commande;
+    }
+
+
     @Override
     public void update(Commande commande) {
 
         String req = "UPDATE commande c"+
        " JOIN commande_item ci ON c.id_commande = ci.id_commande"+
         "JOIN client cl ON c.id_client = cl.id_client"+
-        "SET c.date_commande = ?, c.etat = ?, " +
+        "SET c.date_commande = ?, c.statu = ?, c.num_telephone=? , c.adresse=?, " +
        " WHERE c.id_commande = ? ";
 
         try {
             PreparedStatement pst = connection.prepareStatement(req);
-            pst.setDate(7, (Date) commande.getDateCommande());
-            pst.setString(2, commande.getEtatCommande());
-            pst.setInt(3, commande.getIdCommande());
+            pst.setDate(1, (Date) commande.getDateCommande());
+            pst.setString(2, commande.getStatu());
+            pst.setInt(3, commande.getNum_telephone());
+            pst.setString(4, commande.getAdresse());
+            pst.setInt(5, commande.getIdCommande());
 
             System.out.println("commande modifiée !");
         } catch (SQLException e) {
@@ -98,4 +156,21 @@ public class CommandeService implements IService<Commande> {
     }
 
 
+    public Commande getCommandeByID(int idCommande)throws SQLException {
+        UsersService usersService=new UsersService();
+        Commande commande=new Commande();
+        String req = "SELECT * from commande  WHERE idCommande=?";
+        PreparedStatement ps = connection.prepareStatement(req);
+        ps.setInt(1, idCommande);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()){
+        commande.setIdCommande(rs.getInt("idCommande"));
+        commande.setDateCommande(rs.getDate("dateCommande"));
+        commande.setIdClient(usersService.getUserById(rs.getInt("idClient")));
+        commande.setAdresse(rs.getString("adresse"));
+        commande.setNum_telephone(rs.getInt("num_telephone"));
+
+        }
+        return commande;
+    }
 }

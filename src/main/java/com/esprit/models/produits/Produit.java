@@ -44,7 +44,9 @@ public class Produit {
         this.quantiteP = quantiteP;
     }
 
+    public Produit() {
 
+    }
 
 
     public int getId_produit() {

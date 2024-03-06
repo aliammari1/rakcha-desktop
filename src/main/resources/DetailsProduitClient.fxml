@@ -54,5 +54,6 @@
             <FlowPane fx:id="panierFlowPane" prefHeight="474.0" prefWidth="273.0" styleClass="flow-pane" stylesheets="@Dashbord.css" visible="false" />
          </children>
       </AnchorPane>
+      <FontAwesomeIconView glyphName="SHOPPING_CART" layoutX="1217.0" layoutY="137.0" onMouseClicked="#panier" size="25" />
    </children>
 </AnchorPane>

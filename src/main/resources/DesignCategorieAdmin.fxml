@@ -88,7 +88,7 @@
         <Button layoutX="1108.0" layoutY="130.0" mnemonicParsing="false" onAction="#GestionCategorie" styleClass="navig-button" stylesheets="@Dashbord.css" text="Product Management" />
         <TextField fx:id="SearchBar" layoutX="763.0" layoutY="28.0" prefHeight="25.0" prefWidth="188.0" styleClass="search-pane" stylesheets="@Dashbord.css" />
 
-      <FontAwesomeIconView fill="#6f6a6a" glyphName="SEARCH" layoutX="769.0" layoutY="49.0" size="13" text="" wrappingWidth="21.428571701049805" />
+      <FontAwesomeIconView fill="#6f6a6a" glyphName="SEARCH" layoutX="741.0" layoutY="48.0" size="13" text="" wrappingWidth="21.428571701049805" />
 
     </children>
 

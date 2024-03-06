@@ -192,6 +192,15 @@ public class DesignProduitAdminContoller {
                     return; // Arrêter l'exécution de la méthode si le nom n'est pas valide
                 }
 
+                // Vérifier si la description a au moins 20 caractères
+                if (descriptionProduit.length() < 20) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Erreur de saisie");
+                    alert.setContentText("La description doit contenir au moins 20 caractères.");
+                    alert.show();
+                    return; // Arrêter l'exécution de la méthode si les champs sont vides
+                }
+
                 // Convertir le fichier en un objet Blob
                 Connection connection = null;
                 try {
