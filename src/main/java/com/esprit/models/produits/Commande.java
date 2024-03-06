@@ -1,5 +1,8 @@
 package com.esprit.models.produits;
 
+import com.esprit.models.users.Client;
+import com.esprit.models.users.User;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,7 +16,7 @@ public class Commande {
 
     private String statu;
 
-    private Users idClient;
+    private Client idClient;
 
     private List<CommandeItem> commandeItem=new ArrayList<>();
 
@@ -24,7 +27,7 @@ public class Commande {
     public Commande() {
     }
 
-    public Commande(Date dateCommande, String statu, Users idClient, int num_telephone, String adresse) {
+    public Commande(Date dateCommande, String statu, Client idClient, int num_telephone, String adresse) {
         this.dateCommande = dateCommande;
         this.statu = statu;
         this.idClient = idClient;
@@ -33,7 +36,7 @@ public class Commande {
         this.adresse = adresse;
     }
 
-    public Commande(int idCommande, Date dateCommande, String statu, Users idClient, int num_telephone, String adresse) {
+    public Commande(int idCommande, Date dateCommande, String statu, Client idClient, int num_telephone, String adresse) {
         this.idCommande = idCommande;
         this.dateCommande = dateCommande;
         this.statu = statu;
@@ -66,11 +69,11 @@ public class Commande {
         this.statu = statu;
     }
 
-    public Users getIdClient() {
+    public Client getIdClient() {
         return idClient;
     }
 
-    public void setIdClient(Users idClient) {
+    public void setIdClient(Client idClient) {
         this.idClient = idClient;
     }
 

@@ -1,5 +1,7 @@
 package com.esprit.models.produits;
 
+import com.esprit.models.users.Client;
+
 public class Avis {
 
 

@@ -1,11 +1,12 @@
 package com.esprit.controllers.produits;
 
 import com.esprit.models.produits.*;
+import com.esprit.models.users.Client;
+import com.esprit.models.users.User;
 import com.esprit.services.produits.CommandeItemService;
 import com.esprit.services.produits.CommandeService;
 import com.esprit.services.produits.ProduitService;
-import com.esprit.services.produits.UsersService;
-import com.mysql.cj.xdevapi.Client;
+import com.esprit.services.users.UserService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,8 +28,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 
@@ -46,9 +45,9 @@ public class CommandeClientController implements Initializable {
     Commande commande = new Commande();
 
     private final CommandeService commandeService = new CommandeService();
-    private final UsersService usersService = new UsersService();
+    private final UserService usersService = new UserService();
 
-    private Users connectedUser;
+    private User connectedUser;
 
     @FXML
     private FlowPane prixtotaleFlowPane;
@@ -114,7 +113,7 @@ public class CommandeClientController implements Initializable {
 
         commande.setAdresse(adresseTextField.getText());
         commande.setNum_telephone(Integer.parseInt(numTelephoneTextField.getText()));
-        commande.setIdClient(connectedUser);
+        commande.setIdClient((Client) connectedUser);
         LocalDate date1 = LocalDate.now();
         commande.setDateCommande(java.sql.Date.valueOf(date1));
         try {

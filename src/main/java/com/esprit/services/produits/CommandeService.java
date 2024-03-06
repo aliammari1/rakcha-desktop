@@ -1,7 +1,9 @@
 package com.esprit.services.produits;
 
 import com.esprit.models.produits.Commande;
+import com.esprit.models.users.Client;
 import com.esprit.services.IService;
+import com.esprit.services.users.UserService;
 import com.esprit.utils.DataSource;
 
 import java.sql.*;
@@ -76,11 +78,11 @@ public class CommandeService implements IService<Commande> {
             PreparedStatement pst = connection.prepareStatement(req);
             ResultSet rs = pst.executeQuery();
             CommandeItemService cs = new CommandeItemService();
-            UsersService us = new UsersService();
+            UserService us = new UserService();
 
 
             while (rs.next()) {
-                Commande c1=new Commande( rs.getInt("idCommande"),rs.getDate("dateCommande") ,rs.getString("statuCommande"), us.getUsers(rs.getInt("idClient")) ,rs.getInt("num_telephone"), rs.getString("adresse"));
+                Commande c1=new Commande(rs.getInt("idCommande"),rs.getDate("dateCommande") ,rs.getString("statuCommande"),(Client) us.getUserById(rs.getInt("idClient")) ,rs.getInt("num_telephone"), rs.getString("adresse"));
                 c1.setCommandeItem(commandeItemService.readCommandeItem(c1.getIdCommande()));
                 commande.add(c1);
             }
@@ -100,11 +102,11 @@ public class CommandeService implements IService<Commande> {
             PreparedStatement pst = connection.prepareStatement(req);
             ResultSet rs = pst.executeQuery();
             CommandeItemService cs = new CommandeItemService();
-            UsersService us = new UsersService();
+            UserService us = new UserService();
 
 
             while (rs.next()) {
-                Commande c1=new Commande( rs.getInt("idCommande"),rs.getDate("dateCommande") ,rs.getString("statuCommande"), us.getUsers(rs.getInt("idClient")) ,rs.getInt("num_telephone"), rs.getString("adresse"));
+                Commande c1=new Commande( rs.getInt("idCommande"),rs.getDate("dateCommande") ,rs.getString("statuCommande"),(Client) us.getUserById(rs.getInt("idClient")) ,rs.getInt("num_telephone"), rs.getString("adresse"));
                 c1.setCommandeItem(commandeItemService.readCommandeItem(c1.getIdCommande()));
                 commande.add(c1);
             }
@@ -120,10 +122,10 @@ public class CommandeService implements IService<Commande> {
     public void update(Commande commande) {
 
         String req = "UPDATE commande c"+
-       " JOIN commande_item ci ON c.id_commande = ci.id_commande"+
-        "JOIN client cl ON c.id_client = cl.id_client"+
-        "SET c.date_commande = ?, c.statu = ?, c.num_telephone=? , c.adresse=?, " +
-       " WHERE c.id_commande = ? ";
+       " JOIN commandeitem ci ON c.idCommande = ci.idCommande "+
+        "JOIN users cl ON c.idClient = cl.id "+
+        "SET c.dateCommande = ?, c.statu = ?, c.num_telephone=? , c.adresse=? " +
+       " WHERE c.idCommande = ? ";
 
         try {
             PreparedStatement pst = connection.prepareStatement(req);
@@ -157,7 +159,7 @@ public class CommandeService implements IService<Commande> {
 
 
     public Commande getCommandeByID(int idCommande)throws SQLException {
-        UsersService usersService=new UsersService();
+        UserService usersService=new UserService();
         Commande commande=new Commande();
         String req = "SELECT * from commande  WHERE idCommande=?";
         PreparedStatement ps = connection.prepareStatement(req);
@@ -166,7 +168,7 @@ public class CommandeService implements IService<Commande> {
         while (rs.next()){
         commande.setIdCommande(rs.getInt("idCommande"));
         commande.setDateCommande(rs.getDate("dateCommande"));
-        commande.setIdClient(usersService.getUserById(rs.getInt("idClient")));
+        commande.setIdClient((Client) usersService.getUserById(rs.getInt("idClient")));
         commande.setAdresse(rs.getString("adresse"));
         commande.setNum_telephone(rs.getInt("num_telephone"));
 

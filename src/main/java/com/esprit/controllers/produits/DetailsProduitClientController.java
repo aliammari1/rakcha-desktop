@@ -1,13 +1,13 @@
 package com.esprit.controllers.produits;
 
 import com.esprit.models.produits.Avis;
-import com.esprit.models.produits.Client;
 import com.esprit.models.produits.Panier;
 import com.esprit.models.produits.Produit;
+import com.esprit.models.users.Client;
 import com.esprit.services.produits.AvisService;
 import com.esprit.services.produits.PanierService;
 import com.esprit.services.produits.ProduitService;
-import com.esprit.services.produits.UsersService;
+import com.esprit.services.users.UserService;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.value.ChangeListener;
@@ -253,7 +253,7 @@ public class DetailsProduitClientController implements Initializable {
                 Avis ratingFilm = ratingFilmService.ratingExiste(produit1.getId_produit(), 1 /*(Client) stage.getUserData()*/);
                 if (ratingFilm != null)
                     ratingFilmService.delete(ratingFilm);
-                ratingFilmService.create(new Avis(/*(Client) stage.getUserData()*/(Client) new UsersService().getUserById(1),t1.intValue(),null,produit1));
+                ratingFilmService.create(new Avis(/*(Client) stage.getUserData()*/(Client) new UserService().getUserById(1),t1.intValue(),null,produit1));
                 double rate = new AvisService().getavergerating(produit1.getId_produit());
                 System.out.println(BigDecimal.valueOf(rate).setScale(1, RoundingMode.FLOOR));
                 etoilelabel.setText(rate + "/5");}});
@@ -277,14 +277,14 @@ public class DetailsProduitClientController implements Initializable {
     private void ajouterAuPanier(int produitId, int quantity) {
         ProduitService produitService = new ProduitService();
         PanierService panierService=new PanierService();
-        UsersService usersService=new UsersService();
+        UserService usersService=new UserService();
         // Vérifier le stock disponible avant d'ajouter au panier
         if (produitService.verifierStockDisponible(produitId, quantity)) {
             Produit produit = produitService.getProduitById(produitId);
             Panier panier=new Panier();
             panier.setProduit(produit);
             panier.setQuantity(quantity);
-            panier.setUsers(usersService.getUserById(4));
+            panier.setUser(usersService.getUserById(4));
             panierService.create(panier);
             afficherpanier(); // Utilisez le produit ajouté pour afficher dans le panier
         } else {

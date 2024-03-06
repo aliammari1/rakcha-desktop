@@ -2,6 +2,7 @@ package com.esprit.services.produits;
 
 import com.esprit.models.produits.Panier;
 import com.esprit.services.IService;
+import com.esprit.services.users.UserService;
 import com.esprit.utils.DataSource;
 
 import java.sql.Connection;
@@ -29,7 +30,7 @@ public class PanierService implements IService<Panier> {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(2, panier.getQuantity());
             pst.setInt(1, panier.getProduit().getId_produit());
-            pst.setInt(3, panier.getUsers().getId());
+            pst.setInt(3, panier.getUser().getId());
 
             pst.executeUpdate();
             System.out.println("panier remplit !");
@@ -46,7 +47,7 @@ public class PanierService implements IService<Panier> {
 
 
     public List<Panier> readUserPanier(int iduser) throws SQLException {
-        UsersService usersService=new UsersService();
+        UserService usersService=new UserService();
         ProduitService produitService=new ProduitService();
         List<Panier> paniers = new ArrayList<>();
         String req = "SELECT * from panier  WHERE id_client=?";
@@ -55,7 +56,7 @@ public class PanierService implements IService<Panier> {
         ResultSet rs = ps.executeQuery();
         while (rs.next()){
             Panier panier=new Panier();
-            panier.setUsers(usersService.getUsers(iduser));
+            panier.setUser(usersService.getUserById(iduser));
             panier.setProduit(produitService.getProduitById(rs.getInt("id_produit")));
             panier.setQuantity(rs.getInt("quantity"));
             paniers.add(panier);
@@ -74,7 +75,7 @@ public class PanierService implements IService<Panier> {
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(4, panier.getIdPanier());
-            pst.setInt(3, panier.getUsers().getId());
+            pst.setInt(3, panier.getUser().getId());
             pst.setInt(2, panier.getQuantity());
             pst.setInt(1, panier.getProduit().getId_produit());
             pst.executeUpdate();
@@ -91,7 +92,7 @@ public class PanierService implements IService<Panier> {
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(1, panier.getProduit().getId_produit());
-            pst.setInt(2, panier.getUsers().getId());
+            pst.setInt(2, panier.getUser().getId());
             pst.executeUpdate();
             System.out.println("panier supprmiée !");
         } catch (SQLException e) {
