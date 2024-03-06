@@ -78,13 +78,14 @@ public class SeanceService implements IService<Seance> {
         }
     }
 
-    public List<Seance> readLoujain(int id) {
+    public List<Seance> readLoujain(int id_film, int id_cinema) {
         List<Seance> seances = new ArrayList<>();
 
-        String req = "SELECT * FROM seance where id_film = ?";
+        String req = "SELECT * FROM seance where id_film = ? AND id_cinema = ?";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
-            pst.setInt(1, id);
+            pst.setInt(1, id_film);
+            pst.setInt(2, id_cinema);
             ResultSet rs = pst.executeQuery();
             CinemaService cs = new CinemaService();
             SalleService ss = new SalleService();
