@@ -124,14 +124,14 @@ public class FilmcategoryService implements IService<Filmcategory> {
 
     public String getCategoryNames(int id) {
         String s = "";
-        String req = "SELECT GROUP_CONCAT(category.nom SEPARATOR ', ') AS ActorNames from filmcategory JOIN category  ON filmcategory.category_id  = category.id JOIN film on filmcategory.film_id  = film.id where film.id = ? GROUP BY film.id;";
+        String req = "SELECT GROUP_CONCAT(category.nom SEPARATOR ', ') AS categoryNames from filmcategory JOIN category  ON filmcategory.category_id  = category.id JOIN film on filmcategory.film_id  = film.id where film.id = ? GROUP BY film.id;";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(1, id);
             ResultSet rs = pst.executeQuery();
             // int i = 0;
             rs.next();
-            s = rs.getString("ActorNames");
+            s = rs.getString("categoryNames");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

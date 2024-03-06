@@ -28,12 +28,12 @@ public class FilmcinemaService implements IService<Filmcinema> {
         String req = "INSERT INTO filmcinema (id_film,id_cinema) VALUES (?,?)";
         try {
             Cinema cinema = filmcinema.getId_cinema();
-            String[] actorNames = cinema.getNom().split(", ");
+            String[] cinemanames = cinema.getNom().split(", ");
             PreparedStatement statement = connection.prepareStatement(req);
-            for (String actorname : actorNames) {
-                System.out.println(actorname);
+            for (String cinemaname : cinemanames) {
+                System.out.println(cinemaname);
                 statement.setInt(1, FilmService.getFilmLastInsertID());
-                statement.setInt(2, new ActorService().getActorByNom(actorname).getId());
+                statement.setInt(2, new CinemaService().getCinemaByName(cinemaname).getId_cinema());
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
@@ -86,7 +86,7 @@ public class FilmcinemaService implements IService<Filmcinema> {
             PreparedStatement statement = connection.prepareStatement(req);
             statement.setInt(1, film.getId());
             for (String cinemaname : cinemaNames) {
-                statement.setInt(2, new ActorService().getActorByNom(cinemaname).getId());
+                statement.setInt(2, cinemaService.getCinemaByName(cinemaname).getId_cinema());
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
@@ -103,12 +103,27 @@ public class FilmcinemaService implements IService<Filmcinema> {
             pst.setInt(1, id);
             ResultSet rs = pst.executeQuery();
             // int i = 0;
-            rs.next();
-            s = rs.getString("ActorNames");
+            s = rs.next() ? rs.getString("cinemaNames") : "";
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         return s;
+    }
+
+    public List<Film> readMoviesForCinema(int cinemaId) {
+        List<Film> moviesForCinema = new ArrayList<>();
+        String query = "SELECT film.*,cinema.* from filmcinema  JOIN cinema  ON filmcinema.id_cinema  = cinema.id_cinema  JOIN film on filmcinema.id_film  = film.id where cinema.id_cinema = ? GROUP BY film.id;";
+        try (PreparedStatement pst = connection.prepareStatement(query)) {
+            pst.setInt(1, cinemaId);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                Film film = new Film(rs.getInt("id"), rs.getString("nom"), rs.getString("image"), rs.getTime("duree"), rs.getString("description"), rs.getInt("annederalisation"));
+                moviesForCinema.add(film);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return moviesForCinema;
     }
 
 }

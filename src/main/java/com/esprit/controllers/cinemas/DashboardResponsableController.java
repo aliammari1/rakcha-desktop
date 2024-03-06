@@ -10,8 +10,10 @@ import com.esprit.services.cinemas.CinemaService;
 import com.esprit.services.cinemas.SalleService;
 import com.esprit.services.cinemas.SeanceService;
 import com.esprit.services.films.FilmService;
+import com.esprit.services.films.FilmcinemaService;
 import com.esprit.services.users.UserService;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -226,10 +228,12 @@ public class DashboardResponsableController implements Initializable {
 
 
     private void loadMoviesForCinema(int cinemaId) {
+        System.out.println("enter the movie ");
         comboMovie.getItems().clear();
-        FilmService fs = new FilmService();
+        FilmcinemaService fs = new FilmcinemaService();
         List<Film> moviesForCinema = fs.readMoviesForCinema(cinemaId);
         for (Film f : moviesForCinema) {
+            System.out.println("moviesForCinema: " + f);
             comboMovie.getItems().add(f.getNom());
         }
     }
@@ -618,8 +622,18 @@ public class DashboardResponsableController implements Initializable {
         SessionTableView.setVisible(true);
         addRoomForm.setVisible(false);
         RoomTableView.setVisible(false);
-        colMovie.setCellValueFactory(new PropertyValueFactory<>("nom_film"));
-        colCinema.setCellValueFactory(new PropertyValueFactory<>("nom_cinema"));
+        colMovie.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Seance, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Seance, String> seanceStringCellDataFeatures) {
+                return new SimpleStringProperty(seanceStringCellDataFeatures.getValue().getFilmcinema().getId_film().getNom());
+            }
+        });
+        colCinema.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Seance, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Seance, String> seanceStringCellDataFeatures) {
+                return new SimpleStringProperty(seanceStringCellDataFeatures.getValue().getFilmcinema().getId_cinema().getNom());
+            }
+        });
         colMovieRoom.setCellValueFactory(new PropertyValueFactory<>("nom_salle"));
         colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
         colDepartTime.setCellValueFactory(new PropertyValueFactory<>("HD"));
@@ -994,7 +1008,7 @@ public class DashboardResponsableController implements Initializable {
             }
 
             private List<Film> loadAssociatedFilms(int idCinema) {
-                FilmService filmService = new FilmService();
+                FilmcinemaService filmService = new FilmcinemaService();
                 return filmService.readMoviesForCinema(idCinema);
             }
         });
