@@ -1,24 +1,21 @@
 package com.esprit.controllers;
 
-import com.esprit.models.Categorie;
+import com.esprit.models.Categorie_evenement;
 import com.esprit.services.CategorieService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.beans.value.ChangeListener;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
@@ -32,33 +29,25 @@ import java.util.List;
 public class DesignCategorieAdminController {
 
     @FXML
-    private TableView<Categorie> categorie_tableView;
+    private TableView<Categorie_evenement> categorie_tableView;
 
     @FXML
-    private TableColumn<Categorie,String> tcDescriptionC;
+    private TableColumn<Categorie_evenement, String> tcDescriptionC;
 
     @FXML
-    private TableColumn<Categorie,Void> tcDeleteC;
+    private TableColumn<Categorie_evenement, Void> tcDeleteC;
 
     @FXML
-    private TextField tfDescriptionC;
+    private TextArea tfDescriptionC;
 
     @FXML
-    private TableColumn<Categorie,Integer> tcIDC;
-
-    @FXML
-    private TextField tfIDC;
-
-    @FXML
-    private TableColumn<Categorie,String> tcNomC;
+    private TableColumn<Categorie_evenement, String> tcNomC;
 
     @FXML
     private TextField tfNomC;
 
     @FXML
     private TextField tfRechercheC;
-
-    private List<Categorie> l1=new ArrayList<>();
 
     @FXML
     void GestionCategorie(ActionEvent event) throws IOException {
@@ -69,106 +58,79 @@ public class DesignCategorieAdminController {
         // Créer une nouvelle scène avec la nouvelle interface
         Scene scene = new Scene(root);
 
+        // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
         // Créer une nouvelle fenêtre (stage) et y attacher la scène
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.setTitle("Gestion d'evenements");
         stage.show();
 
+        // Fermer la fenêtre actuelle
+        currentStage.close();
+
     }
 
     @FXML
-    void initialize(){
+    void initialize() {
 
-        CategorieService categorieservice=new CategorieService();
-        l1=categorieservice.show();
-        tfRechercheC.textProperty().addListener((ChangeListener<String>) (observable, oldValue, newValue) -> {
-            List<Categorie> cat;
-            cat=recherchercat(l1,newValue);
-            showCategorie(cat);
-        });
-        showCategorie(l1);
+
+        afficher_categorie();
         initDeleteColumn();
     }
 
 
     @FXML
-    void addCategorie(ActionEvent event) {
+    void ajouter_categorie(ActionEvent event) {
+        // Récupérer les valeurs des champs de saisie
+        String nomCategorie = tfNomC.getText().trim();
+        String descriptionCategorie = tfDescriptionC.getText().trim();
+
+        // Vérifier si les champs sont vides
+        if (nomCategorie.isEmpty() || descriptionCategorie.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur de saisie");
+            alert.setContentText("Veuillez remplir tous les champs.");
+            alert.show();
+            return; // Arrêter l'exécution de la méthode si les champs sont vides
+        }
+
+        // Créer l'objet Categorie
         CategorieService cs = new CategorieService();
-        cs.add(new Categorie( Integer.parseInt(tfIDC.getText()), tfNomC.getText(), tfDescriptionC.getText()));
+        Categorie_evenement nouvelleCategorieEvenement = new Categorie_evenement(nomCategorie, descriptionCategorie);
+
+        // Ajouter le nouveau categorie à la liste existante
+        cs.add(nouvelleCategorieEvenement);
+        categorie_tableView.getItems().add(nouvelleCategorieEvenement);
+
+        // Rafraîchir la TableView
+        categorie_tableView.refresh();
+
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Categorie ajoutée");
         alert.setContentText("Categorie ajoutée !");
         alert.show();
-        tcIDC.setCellValueFactory(new PropertyValueFactory<Categorie,Integer>("id_categorie"));
-        tcNomC.setCellValueFactory(new PropertyValueFactory<Categorie,String>("nom_categorie"));
-        tcDescriptionC.setCellValueFactory(new PropertyValueFactory<Categorie,String>("description"));
-        ObservableList<Categorie> list = FXCollections.observableArrayList();
-        list.addAll(cs.show());
-        categorie_tableView.setItems(list);
-        categorie_tableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
-                Categorie selectedUser = categorie_tableView.getSelectionModel().getSelectedItem();
-                tfIDC.setText(String.valueOf(selectedUser.getId_categorie()));
-                tfNomC.setText(selectedUser.getNom_categorie());
-                tfDescriptionC.setText(selectedUser.getDescription());
-            }
-        });
-
-    }
-
-
-
-    @FXML
-    void updateCategorie(Categorie categorie) {
-
-        String nouveauNom = categorie.getNom_categorie();
-        String nouvelleDescription = categorie.getDescription();
-
-
-
-        // Enregistrez les modifications dans la base de données en utilisant un service approprié
-        CategorieService cs = new CategorieService();
-        cs.update(categorie);
-
-
-    }
-
-    @FXML
-    void deleteCategorie(Categorie categorie) {
-        Categorie selectedProduct = categorie_tableView.getSelectionModel().getSelectedItem();
-
-        if (selectedProduct != null) {
-            CategorieService ps = new CategorieService();
-            ps.delete(selectedProduct);
-
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Categorie supprimée");
-            alert.setContentText("Categorie supprimée !");
-            alert.show();
-
-            // Rafraîchir la TableView après la suppression
-            showCategorie(l1);
-        }
-
     }
 
     private void initDeleteColumn() {
 
-        // Créer une cellule de la colonne Supprimer
-        Callback<TableColumn<Categorie, Void>, TableCell<Categorie, Void>> cellFactory = new Callback<>() {
+        Callback<TableColumn<Categorie_evenement, Void>, TableCell<Categorie_evenement, Void>> cellFactory = new Callback<>() {
             @Override
-            public TableCell<Categorie, Void> call(final TableColumn<Categorie, Void> param) {
-                final TableCell<Categorie, Void> cell = new TableCell<>() {
+            public TableCell<Categorie_evenement, Void> call(final TableColumn<Categorie_evenement, Void> param) {
+                final TableCell<Categorie_evenement, Void> cell = new TableCell<>() {
                     private final Button btnDelete = new Button("Delete");
 
                     {
-
                         btnDelete.getStyleClass().add("delete-button");
                         btnDelete.setOnAction((ActionEvent event) -> {
-                            Categorie categorie = getTableView().getItems().get(getIndex());
-                            deleteCategorie(categorie);
-                            categorie_tableView.getItems().remove(categorie);
+                            Categorie_evenement categorieEvenement = getTableView().getItems().get(getIndex());
+                            CategorieService cs = new CategorieService();
+                            cs.delete(categorieEvenement);
+
+                            categorie_tableView.getItems().remove(categorieEvenement);
+                            categorie_tableView.refresh();
+
                         });
                     }
 
@@ -186,31 +148,43 @@ public class DesignCategorieAdminController {
             }
         };
 
-        // Définir la cellule de la colonne Supprimer
         tcDeleteC.setCellFactory(cellFactory);
-
-        // Ajouter la colonne Supprimer à la TableView
         categorie_tableView.getColumns().add(tcDeleteC);
     }
+
+
     @FXML
-    void showCategorie(List<Categorie> listcategorie){
-        categorie_tableView.getItems().clear();
+    void modifier_categorie(Categorie_evenement categorieEvenement) {
+
+        String nouveauNom = categorieEvenement.getNom_categorie();
+        String nouvelleDescription = categorieEvenement.getDescription();
+
+        // Enregistrez les modifications dans la base de données en utilisant un service approprié
+        CategorieService cs = new CategorieService();
+        cs.update(categorieEvenement);
 
 
-        tcNomC.setCellValueFactory(new PropertyValueFactory<Categorie,String>("nom_categorie"));
+    }
+
+    @FXML
+    void afficher_categorie(){
+
+
+
+        tcNomC.setCellValueFactory(new PropertyValueFactory<Categorie_evenement,String>("nom_categorie"));
         tcNomC.setCellFactory(TextFieldTableCell.forTableColumn());
         tcNomC.setOnEditCommit(event -> {
-            Categorie categorie = event.getRowValue();
-            categorie.setNom_categorie(event.getNewValue());
-            updateCategorie(categorie);
+            Categorie_evenement categorieEvenement = event.getRowValue();
+            categorieEvenement.setNom_categorie(event.getNewValue());
+            modifier_categorie(categorieEvenement);
         });
 
-        tcDescriptionC.setCellValueFactory(new PropertyValueFactory<Categorie,String>("description"));
+        tcDescriptionC.setCellValueFactory(new PropertyValueFactory<Categorie_evenement,String>("description"));
         tcDescriptionC.setCellFactory(TextFieldTableCell.forTableColumn());
         tcDescriptionC.setOnEditCommit(event -> {
-            Categorie categorie = event.getRowValue();
-            categorie.setDescription(event.getNewValue());
-            updateCategorie(categorie);
+            Categorie_evenement categorieEvenement = event.getRowValue();
+            categorieEvenement.setDescription(event.getNewValue());
+            modifier_categorie(categorieEvenement);
         });
 
 
@@ -220,24 +194,28 @@ public class DesignCategorieAdminController {
         // Gérer la modification du texte dans une cellule et le valider en appuyant sur Enter
         categorie_tableView.setOnKeyPressed(event -> {
             if (event.getCode().equals(KeyCode.ENTER)) {
-                Categorie selectedCategorie = categorie_tableView.getSelectionModel().getSelectedItem();
-                if (selectedCategorie != null) {
-                    updateCategorie(selectedCategorie);
+                Categorie_evenement selectedCategorieEvenement = categorie_tableView.getSelectionModel().getSelectedItem();
+                if (selectedCategorieEvenement != null) {
+                    modifier_categorie(selectedCategorieEvenement);
                 }
             }
         });
+        // Utiliser une ObservableList pour stocker les éléments
+        ObservableList<Categorie_evenement> list = FXCollections.observableArrayList();
+        CategorieService cs = new CategorieService();
+        list.addAll(cs.show());
+        categorie_tableView.setItems(list);
 
         // Activer la sélection de cellules
         categorie_tableView.getSelectionModel().setCellSelectionEnabled(true);
-        categorie_tableView.getItems().addAll(listcategorie);
-
 
     }
-    @FXML
-    public static List<Categorie> recherchercat(List<Categorie> liste, String recherche) {
-        List<Categorie> resultats = new ArrayList<>();
 
-        for (Categorie element : liste) {
+    @FXML
+    public static List<Categorie_evenement> recherchercat(List<Categorie_evenement> liste, String recherche) {
+        List<Categorie_evenement> resultats = new ArrayList<>();
+
+        for (Categorie_evenement element : liste) {
             if (element.getNom_categorie() != null && element.getNom_categorie().contains(recherche)) {
                 resultats.add(element);
             }
@@ -245,6 +223,8 @@ public class DesignCategorieAdminController {
 
         return resultats;
     }
+
+
 
 
 

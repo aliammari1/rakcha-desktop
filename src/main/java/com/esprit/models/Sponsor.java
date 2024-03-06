@@ -1,4 +1,5 @@
 package com.esprit.models;
+import java.sql.Blob;
 import java.util.Base64;
 
 public class Sponsor {
@@ -7,10 +8,15 @@ private int id;
 
 private String nomSociete;
 
-private byte[] logo;
+private Blob logo;
 
-    public Sponsor(int id, String nomSociete, byte[] logo) {
+    public Sponsor(int id, String nomSociete, Blob logo) {
         this.id = id;
+        this.nomSociete = nomSociete;
+        this.logo = logo;
+    }
+
+    public Sponsor(String nomSociete, Blob logo) {
         this.nomSociete = nomSociete;
         this.logo = logo;
     }
@@ -32,11 +38,11 @@ private byte[] logo;
         this.nomSociete = nomSociete;
     }
 
-    public byte[] getLogo() {
+    public Blob getLogo() {
         return logo;
     }
 
-    public void setLogo(byte[] logo) {
+    public void setLogo(Blob logo) {
         this.logo = logo;
     }
 
