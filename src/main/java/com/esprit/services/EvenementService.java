@@ -17,17 +17,16 @@ public class EvenementService implements IService<Evenement> {
     }
     @Override
     public void add(Evenement evenement) {
-        String req = "INSERT into evenement(id,nom,dateDebut,dateFin,lieu,id_categorie,etat,description) values (?, ?, ?, ?, ?, ?, ?, ?)";
+        String req = "INSERT into evenement(nom,dateDebut,dateFin,lieu,id_categorie,etat,description) values (?, ?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
-            pst.setInt(1, evenement.getId());
-            pst.setString(2, evenement.getNom());
-            pst.setDate(3, evenement.getDateDebut());
-            pst.setDate(4, evenement.getDateFin());
-            pst.setString(5, evenement.getLieu());
-            pst.setInt(6, evenement.getCategorie().getId_categorie());
-            pst.setString(7, evenement.getEtat());
-            pst.setString(8, evenement.getDescription());
+            pst.setString(1, evenement.getNom());
+            pst.setDate(2, evenement.getDateDebut());
+            pst.setDate(3, evenement.getDateFin());
+            pst.setString(4, evenement.getLieu());
+            pst.setInt(5, evenement.getCategorie().getId_categorie());
+            pst.setString(6, evenement.getEtat());
+            pst.setString(7, evenement.getDescription());
             pst.executeUpdate();
             System.out.println("Evenement ajouté !");
         } catch (SQLException e) {

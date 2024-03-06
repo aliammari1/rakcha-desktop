@@ -1,6 +1,5 @@
 package com.esprit.models;
 import java.sql.Date;
-import java.time.LocalDate;
 
 public class Evenement {
 
@@ -10,15 +9,26 @@ public class Evenement {
     private Date dateFin;
     private String lieu;
 
-    private Categorie categorie;
+    private Categorie_evenement categorie;
 
     private String etat;
 
     private String description;
 
 
-    public Evenement(int id, String nom, Date dateDebut, Date dateFin, String lieu, Categorie categorie, String etat, String description) {
+    public Evenement(int id, String nom, Date dateDebut, Date dateFin, String lieu, Categorie_evenement categorie, String etat, String description) {
         this.id = id;
+        this.nom = nom;
+        this.dateDebut = dateDebut;
+        this.dateFin = dateFin;
+        this.lieu = lieu;
+        this.categorie = categorie;
+        this.etat = etat;
+        this.description = description;
+
+
+    }
+    public Evenement(String nom, Date dateDebut, Date dateFin, String lieu, Categorie_evenement categorie, String etat, String description) {
         this.nom = nom;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
@@ -70,11 +80,11 @@ public class Evenement {
         this.lieu = lieu;
     }
 
-    public Categorie getCategorie() {
+    public Categorie_evenement getCategorie() {
         return categorie;
     }
 
-    public void setCategorie(Categorie categorie) {
+    public void setCategorie(Categorie_evenement categorie) {
         this.categorie = categorie;
     }
 
@@ -107,7 +117,7 @@ public class Evenement {
                 ", description='" + description + '\'' +
                 '}';
     }
-    public Categorie getId_categorieEvenement() {
+    public Categorie_evenement getId_categorieEvenement() {
         return categorie;
     }
 

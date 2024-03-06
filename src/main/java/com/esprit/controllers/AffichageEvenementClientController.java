@@ -1,4 +1,4 @@
-package com.esprit.controllers;
+/*package com.esprit.controllers;
 
 import com.esprit.models.Evenement;
 import com.esprit.services.EvenementService;
@@ -90,7 +90,7 @@ public class AffichageEvenementClientController implements Initializable  {
         // Lieu de l'evenement
         Label lieuLabel = new Label(" " + Evenement.getLieu());
         /*priceLabel.setLayoutX(10);
-        priceLabel.setLayoutY(300);*/
+        priceLabel.setLayoutY(300);
         priceLabel.setFont(Font.font("Helvetica", 16)); // Définir la police et la taille
 
 
@@ -98,7 +98,7 @@ public class AffichageEvenementClientController implements Initializable  {
         // Nom de l'evenement
         Label nameLabel = new Label(Evenement.getNom());
        /*nameLabel.setLayoutX(70);
-        nameLabel.setLayoutY(310);*/
+        nameLabel.setLayoutY(310);
         nameLabel.setFont(Font.font("Arial", 12)); // Définir la police et la taille
         nameLabel.setStyle("-fx-text-fill: black;"); // Définir la couleur du texte
         nameLabel.setOnMouseClicked(event -> {
@@ -134,4 +134,4 @@ public class AffichageEvenementClientController implements Initializable  {
     }
 
 
-}
+} */

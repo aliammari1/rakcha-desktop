@@ -1,88 +1,76 @@
 package com.esprit.controllers;
 
-import com.esprit.models.Categorie;
+import com.esprit.models.Categorie_evenement;
 import com.esprit.models.Evenement;
 import com.esprit.services.CategorieService;
 import com.esprit.services.EvenementService;
-import com.esprit.utils.DataSource;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
 import javafx.scene.control.*;
+import javafx.util.Callback;
+import org.w3c.dom.events.EventException;
+import com.esprit.utils.DataSource;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.beans.value.ChangeListener;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
+import java.sql.Connection;
+import java.io.*;
+
 import java.io.*;
 import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.sql.Date;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+
+
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.converter.IntegerStringConverter;
 
-import javax.sql.rowset.serial.SerialBlob;
+import java.io.IOException;
+import java.sql.Date;
+import java.sql.SQLException;
 
 public class DesignEvenementAdminController {
 
     @FXML
-    private ComboBox<String> cbCategorieE;
+    private ComboBox<String> cbCategorie;
 
     @FXML
-    private DatePicker dpDDE;
+    private DatePicker dpDD;
 
     @FXML
-    private DatePicker dpDFE;
+    private DatePicker dpDF;
 
     @FXML
-    private TextField tfDescriptionE;
+    private TableColumn<Evenement, String> tcCategorieE;
 
     @FXML
-    private TextField tfEtatE;
+    private TableColumn<Evenement, Date> tcDDE;
 
     @FXML
-    private TextField tfIDE;
+    private TableColumn<Evenement, Date> tcDFE;
 
     @FXML
-    private TextField tfLieuE;
-
-    @FXML
-    private TextField tfNomEvenement;
-
-    @FXML
-    private TableView<Evenement> tvEvenement;
-
-    @FXML
-    private TableColumn<Evenement, Categorie> tcCategorieE;
-
-    @FXML
-    private TableColumn<Evenement, Date > tcDDE;
-
-    @FXML
-    private TableColumn<Evenement, Date > tcDFE;
+    private TableColumn<Evenement, Void> tcDeleteE;
 
     @FXML
     private TableColumn<Evenement, String> tcDescriptionE;
@@ -91,117 +79,45 @@ public class DesignEvenementAdminController {
     private TableColumn<Evenement, String> tcEtatE;
 
     @FXML
-    private TableColumn<Evenement, Integer> tcIDE;
-
-    @FXML
     private TableColumn<Evenement, String> tcLieuE;
 
     @FXML
     private TableColumn<Evenement, String> tcNomE;
 
     @FXML
+    private TextArea taDescription;
+
+    @FXML
+    private TextField tfEtat;
+
+    @FXML
+    private TextField tfLieu;
+
+    @FXML
+    private TextField tfNomEvenement;
+
+    @FXML
     private TextField tfRechercheE;
 
     @FXML
-    private TableColumn<Evenement,Void> tcDeleteE;
+    private TableView<Evenement> tvEvenement;
 
-    private List<Evenement> l1=new ArrayList<>();
+
     @FXML
     void initialize() {
-        EvenementService es =new EvenementService();
-        l1=es.show();
-        tfRechercheE.textProperty().addListener((ChangeListener<String>) (observable, oldValue, newValue) -> {
-            List<Evenement> eve;
-            eve=rechercher(l1,newValue);
-            showEvenement(eve);
-        });
         CategorieService cs = new CategorieService();
 
-        for (Categorie c : cs.show()) {
-            cbCategorieE.getItems().add(c.getNom_categorie());
+        for (Categorie_evenement c : cs.show()) {
+            cbCategorie.getItems().add(c.getNom_categorie());
         }
-        //searchFilter();
-        showEvenement(l1);
+
+
+        afficher_evenement();
         initDeleteColumn();
 
     }
 
-    @FXML
-    private void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Information");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.show();
-    }
-
-
-
-
-    @FXML
-    void addEvenement(ActionEvent event) {
-        Connection connection = null;
-        connection = DataSource.getInstance().getConnection();
-        EvenementService es = new EvenementService();
-        es.add(new Evenement(Integer.parseInt(tfIDE.getText()),tfNomEvenement.getText(), Date.valueOf(dpDDE.getValue()),Date.valueOf(dpDFE.getValue()),tfLieuE.getText(),new CategorieService().getCategorieByNom(String.valueOf(cbCategorieE.getValue())),tfEtatE.getText(),tfDescriptionE.getText()));
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Evenement ajouté");
-        alert.setContentText("Evenement ajouté !");
-        alert.show();
-        showEvenement(l1);
-        if (connection != null) {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                showAlert("Erreur lors de la fermeture de la connexion : " + e.getMessage());
-            }
-
-        }
-        showEvenement(l1);
-    }
-
-
-    @FXML
-    void updateEvenement(Evenement evenement) {
-
-        // Récupérez les valeurs modifiées depuis la ligne
-        String nouvelleCategorie = evenement.getNom_categorieEvenement();
-        String nouveauNom = evenement.getNom();
-        Date nouvelleDateDebut = evenement.getDateDebut();
-        Date nouvelleDateFin = evenement.getDateFin();
-        String nouveauLieu = evenement.getLieu();
-        String nouvelEtat = evenement.getEtat();
-        String nouvelleDescription = evenement.getDescription();
-        int id = evenement.getId();
-
-        // Enregistrez les modifications dans la base de données en utilisant un service approprié
-        EvenementService es = new EvenementService();
-        es.update(evenement);
-    }
-
-    @FXML
-    void deleteEvenement(Evenement evenement) {
-        Evenement selectedProduct = tvEvenement.getSelectionModel().getSelectedItem();
-
-        if (selectedProduct != null) {
-            EvenementService ps = new EvenementService();
-            ps.delete(selectedProduct);
-
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Evenement supprimé");
-            alert.setContentText("Evenement supprimé !");
-            alert.show();
-
-
-
-        }
-        // Rafraîchir la TableView après la suppression
-        showEvenement(l1);
-    }
-
     private void initDeleteColumn() {
-
-        // Créer une cellule de la colonne Supprimer
         Callback<TableColumn<Evenement, Void>, TableCell<Evenement, Void>> cellFactory = new Callback<>() {
             @Override
             public TableCell<Evenement, Void> call(final TableColumn<Evenement, Void> param) {
@@ -209,12 +125,15 @@ public class DesignEvenementAdminController {
                     private final Button btnDelete = new Button("Delete");
 
                     {
-
                         btnDelete.getStyleClass().add("delete-button");
                         btnDelete.setOnAction((ActionEvent event) -> {
                             Evenement evenement = getTableView().getItems().get(getIndex());
-                            deleteEvenement(evenement);
+                            EvenementService es = new EvenementService();
+                            es.delete(evenement);
+
+                            // Mise à jour de la TableView après la suppression de la base de données
                             tvEvenement.getItems().remove(evenement);
+                            tvEvenement.refresh();
                         });
                     }
 
@@ -232,104 +151,252 @@ public class DesignEvenementAdminController {
             }
         };
 
-        // Définir la cellule de la colonne Supprimer
         tcDeleteE.setCellFactory(cellFactory);
-
-        // Ajouter la colonne Supprimer à la TableView
         tvEvenement.getColumns().add(tcDeleteE);
     }
 
-    void showEvenement(List<Evenement> listevenement){
-        tvEvenement.getItems().clear();
+
+    @FXML
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.show();
+    }
 
 
-        // Créer un nouveau ComboBox
+    @FXML
+    void ajouterEvenement(ActionEvent event) {
+
+        // Récupérer les valeurs des champs de saisie
+        String nomEvenement = tfNomEvenement.getText().trim();
+        LocalDate dateDebut = dpDD.getValue();
+        LocalDate dateFin = dpDF.getValue();
+        String lieu = tfLieu.getText().trim();
+        String nomCategorie = cbCategorie.getValue();
+        String etat = tfEtat.getText().trim();
+        String description = taDescription.getText().trim();
+
+        // Vérifier si les champs sont vides
+        if (nomEvenement.isEmpty() || lieu.isEmpty() || nomCategorie.isEmpty() || etat.isEmpty() || description.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur de saisie");
+            alert.setContentText("Veuillez remplir tous les champs.");
+            alert.show();}
+             // Arrêter l'exécution de la méthode si les champs sont vides
+
+        if (!nomEvenement.matches("[a-zA-Z0-9]*")) {
+                showAlert("Veuillez entrer un nom valide sans caractères spéciaux.");
+                 // Arrêter l'exécution de la méthode si le nom n'est pas valide
+            }
+
+        // Créer l'objet Evenement
+        EvenementService es = new EvenementService();
+        CategorieService cs = new CategorieService();
+        Evenement nouvelEvenement = new Evenement(nomEvenement, Date.valueOf(dateDebut),Date.valueOf(dateFin), lieu, cs.getCategorieByNom(nomCategorie), etat, description);
+        es.add(nouvelEvenement);
+
+        // Ajouter le nouvel evenement à la liste existante
+        tvEvenement.getItems().add(nouvelEvenement);
+
+        // Rafraîchir la TableView
+        tvEvenement.refresh();
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Event added");
+        alert.setContentText("Event added !");
+        alert.show();
+        }
+
+    @FXML
+    void afficher_evenement(){
+
 
         tcCategorieE.setCellValueFactory(new PropertyValueFactory<Evenement, String>("nom_categorie"));
-
-
-// Définissez le rendu de la cellule en utilisant le ComboBox
         tcCategorieE.setCellFactory(column -> new TableCell<Evenement, String>() {
+
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
-
-                if (item == null || empty) {
-                    setGraphic(null);
+                if (empty || item == null) {
+                    setText(null);
                 } else {
-                    CategorieService cs = new CategorieService();
-                    ComboBox<String> newComboBox = new ComboBox<>();
-
-                    // Utilisez la méthode getCategorieByNom pour obtenir la catégorie
-                    Categorie categorie = cs.getCategorieByNom(item);
-                    // ComboBox newComboBox =new ComboBox<>();
-                    // Ajoutez le nom de la catégorie au ComboBox
-                    newComboBox.setItems(cbCategorieE.getItems());
-                    newComboBox.setValue(categorie.getNom_categorie());
-
-                    // Afficher le ComboBox nouvellement créé dans la cellule
-                    setGraphic(newComboBox);
-                    newComboBox.setOnAction(event ->{
-                        Evenement evenement = getTableView().getItems().get(getIndex());
-                        evenement.setCategorie( new CategorieService().getCategorieByNom(newComboBox.getValue()));
-                        updateEvenement(evenement);
-                        newComboBox.getStyleClass().add("combo-box-red");
-                    });
+                    setText(item);
                 }
-            }
+
+                setOnMouseClicked(event -> {
+                    if (event.getClickCount() == 2) {
+                        CategorieService cs = new CategorieService();
+
+                        // Créer un ComboBox contenant les noms des catégories
+                        ComboBox<String> evenemenetComboBox = new ComboBox<>();
+
+                        // Obtenez la liste des noms de catégories
+                        List<String> categorieNames = cs.getAllCategoriesNames();
+
+                        // Ajoutez les noms de catégories au ComboBox
+                        evenemenetComboBox.getItems().addAll(categorieNames);
+
+                        // Sélectionnez le nom de la catégorie associée au produit
+                        evenemenetComboBox.setValue(getItem());
+
+                        // Définir un EventHandler pour le changement de sélection dans le ComboBox
+                        evenemenetComboBox.setOnAction(e -> {
+                            Evenement evenement = getTableView().getItems().get(getIndex());
+                            // Mise à jour de la catégorie associée au produit
+                            Categorie_evenement selectedCategorieProduit = cs.getCategorieByNom(evenemenetComboBox.getValue());
+                            evenement.setCategorie(selectedCategorieProduit);
+                            evenemenetComboBox.getStyleClass().add("combo-box-red");
+
+                            // Mise à jour de la cellule à partir du ComboBox
+                            commitEdit(evenemenetComboBox.getValue());
+
+                            // Rétablir la classe CSS pour afficher le texte
+                            getStyleClass().remove("cell-hide-text");
+                        });
+
+                        // Appliquer la classe CSS pour masquer le texte
+                        getStyleClass().add("cell-hide-text");
+
+                        // Afficher le ComboBox dans la cellule
+                        setGraphic(evenemenetComboBox);
+                    }
+                });
+
+
+
+
+
+        }
         });
 
-        tcNomE.setCellValueFactory(new PropertyValueFactory<Evenement, String>("nom"));
+
+
+
+        tcNomE.setCellValueFactory(new PropertyValueFactory<Evenement,String>("nom"));
         tcNomE.setCellFactory(TextFieldTableCell.forTableColumn());
         tcNomE.setOnEditCommit(event -> {
             Evenement evenement = event.getRowValue();
             evenement.setNom(event.getNewValue());
-            updateEvenement(evenement);
-        });
-
-        tcDDE.setCellValueFactory(new PropertyValueFactory<Evenement, Date>("Date Debut"));
-        tcDDE.setCellFactory(TextFieldTableCell.forTableColumn());
-        tcDDE.setOnEditCommit(event -> {
-            Evenement evenement = event.getRowValue();
-            evenement.setDateDebut(event.getNewValue());
-            updateEvenement(evenement);
+            modifier_evenement(evenement);
         });
 
 
-        void GestionCategorie(ActionEvent event) throws IOException {
+        tcDDE.setCellValueFactory(cellData -> {
+            SimpleObjectProperty<Date> property = new SimpleObjectProperty<>(cellData.getValue().getDateDebut());
+            return property;
+        });
 
-        // Charger la nouvelle interface ListCinemaAdmin.fxml
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignCategorieAdmin.fxml"));
-        Parent root = loader.load();
+        tcDDE.setCellFactory(column -> new TableCell<Evenement, Date>() {
+            private final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
-        // Créer une nouvelle scène avec la nouvelle interface
-        Scene scene = new Scene(root);
+            @Override
+            protected void updateItem(Date date, boolean empty) {
+                super.updateItem(date, empty);
 
-        // Créer une nouvelle fenêtre (stage) et y attacher la scène
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.setTitle("Gestion des categories");
-        stage.show();
-
-    }
-
-        @FXML
-        public static List<Evenement> rechercher(List<Evenement> liste, String recherche) {
-            List<Evenement> resultats = new ArrayList<>();
-
-            for (Evenement element : liste) {
-                if (element.getNom() != null && element.getNom().contains(recherche)) {
-                    resultats.add(element);
+                if (empty || date == null) {
+                    setText(null);
+                } else {
+                    setText(format.format(date));
                 }
             }
-
-            return resultats;
-        }
+        });
 
 
+        tcDFE.setCellValueFactory(cellData -> {
+            SimpleObjectProperty<Date> property = new SimpleObjectProperty<>(cellData.getValue().getDateFin());
+            return property;
+        });
+
+        tcDFE.setCellFactory(column -> new TableCell<Evenement, Date>() {
+            private final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+            @Override
+            protected void updateItem(Date date, boolean empty) {
+                super.updateItem(date, empty);
+
+                if (empty || date == null) {
+                    setText(null);
+                } else {
+                    setText(format.format(date));
+                }
+            }
+        });
+
+        tcLieuE.setCellValueFactory(new PropertyValueFactory<Evenement,String>("lieu"));
+        tcLieuE.setCellFactory(TextFieldTableCell.forTableColumn());
+        tcLieuE.setOnEditCommit(event -> {
+            Evenement evenement = event.getRowValue();
+            evenement.setLieu(event.getNewValue());
+            modifier_evenement(evenement);
+        });
+
+        tcEtatE.setCellValueFactory(new PropertyValueFactory<Evenement,String>("etat"));
+        tcEtatE.setCellFactory(TextFieldTableCell.forTableColumn());
+        tcEtatE.setOnEditCommit(event -> {
+            Evenement evenement = event.getRowValue();
+            evenement.setEtat(event.getNewValue());
+            modifier_evenement(evenement);
+        });
+
+        tcDescriptionE.setCellValueFactory(new PropertyValueFactory<Evenement,String>("description"));
+        tcDescriptionE.setCellFactory(TextFieldTableCell.forTableColumn());
+        tcDescriptionE.setOnEditCommit(event -> {
+            Evenement evenement = event.getRowValue();
+            evenement.setDescription(event.getNewValue());
+            modifier_evenement(evenement);
+        });
 
 
+        // Activer l'édition en cliquant sur une ligne
+        tvEvenement.setEditable(true);
 
+        // Gérer la modification du texte dans une cellule et le valider en appuyant sur Enter
+        tvEvenement.setOnKeyPressed(event -> {
+            if (event.getCode().equals(KeyCode.ENTER)) {
+                Evenement selectedEvent = tvEvenement.getSelectionModel().getSelectedItem();
+                if (selectedEvent != null) {
+                    modifier_evenement(selectedEvent);
+                }
+            }
+        });
 
+        // Utiliser une ObservableList pour stocker les éléments
+        ObservableList<Evenement> list = FXCollections.observableArrayList();
+        EvenementService es = new EvenementService();
+        list.addAll(es.show());
+        tvEvenement.setItems(list);
+
+        // Activer la sélection de cellules
+        tvEvenement.getSelectionModel().setCellSelectionEnabled(true);
 
     }
+
+
+
+    @FXML
+    void modifier_evenement(Evenement evenement) {
+
+        // Récupérez les valeurs modifiées depuis la ligne
+        String nouvelleCategorie = evenement.getNom_categorieEvenement();
+        String nouveauNom = evenement.getNom();
+        Date nouvelledateD = evenement.getDateDebut();
+        Date nouvelledateF = evenement.getDateFin();
+        String nouveauLieu = evenement.getLieu();
+        String nouvelEtat = evenement.getEtat();
+        String nouvelleDescription = evenement.getDescription();
+        int id = evenement.getId();
+
+        // Enregistrez les modifications dans la base de données en utilisant un service approprié
+        EvenementService es = new EvenementService();
+        es.update(evenement);
+    }
+
+
+
+
+}
+
+
+
