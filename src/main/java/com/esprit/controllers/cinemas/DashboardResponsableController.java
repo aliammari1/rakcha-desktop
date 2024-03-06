@@ -20,16 +20,14 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -38,8 +36,13 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
-import java.io.File;
+
+import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.sql.*;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
@@ -143,6 +146,12 @@ public class DashboardResponsableController implements Initializable {
 
     @FXML
     private TableColumn<Salle, Integer> colNbrPlaces;
+
+    @FXML
+    private AnchorPane facebookAnchor;
+
+    @FXML
+    private TextArea txtareaStatut;
 
 
     @FXML
@@ -384,7 +393,7 @@ public class DashboardResponsableController implements Initializable {
         card.getChildren().add(adresseLabel);
 
         adresseLabel.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) { // Vérifiez si c'est un double clic
+            if (event.getClickCount() == 2) {
                 TextField adresseTextField = new TextField(adresseLabel.getText()); // Créez un TextField avec le texte actuel du Label
                 adresseTextField.setLayoutX(adresseLabel.getLayoutX());
                 adresseTextField.setLayoutY(adresseLabel.getLayoutY());
@@ -597,6 +606,17 @@ public class DashboardResponsableController implements Initializable {
             loadsalles();
         });
 
+        FontAwesomeIconView facebookIcon = new FontAwesomeIconView();
+        facebookIcon.setGlyphName("FACEBOOK");
+        facebookIcon.setSize("3.5em");
+        facebookIcon.setLayoutX(270);
+        facebookIcon.setLayoutY(100);
+        facebookIcon.setFill(Color.WHITE);
+        facebookIcon.setOnMouseClicked(event -> {
+            facebookAnchor.setVisible(true);
+        });
+
+        card.getChildren().addAll(facebookIcon);
 
         card.getChildren().addAll(SalleCircle, salleIcon);
         cardContainer.getChildren().add(card);
@@ -1137,5 +1157,36 @@ public class DashboardResponsableController implements Initializable {
         ObservableList<Salle> salleInfos = FXCollections.observableArrayList(salles_cinema);
 
         RoomTableView.setItems(salleInfos);
+    }
+
+    @FXML
+    void closeAnchor(ActionEvent event) {
+        facebookAnchor.setVisible(false);
+    }
+
+    @FXML
+    void PublierStatut(ActionEvent event) {
+        String message = txtareaStatut.getText();
+        String accessToken = "EAAQzq3ZC1QRwBO1ANXqPJE0gbGdvugxiIwh4y5UuB4H9touxQpQaZBzDQ8gwewD4JVRMUzqOwbDmsrC8EMYRb19deQAEhWFX7uQJAcOIAnBcpHx1JnbNgMITZCq55N6ZCppxZBmHAS1itmrSt9B4aCQbNsP3AMi6mXZAJZAwaZAXCe72fP6OuzjWZAgdUgZAygeFsZD";
+        String url = "https://graph.facebook.com/v19.0/me/feed";
+        String data = "message=" + message + "&access_token=" + accessToken;
+        try {
+            URL obj = new URL(url);
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+            con.setDoOutput(true);
+            OutputStream os = con.getOutputStream();
+            os.write(data.getBytes(StandardCharsets.UTF_8));
+            os.flush();
+            os.close();
+
+            int responseCode = con.getResponseCode();
+            System.out.println("Response Code : " + responseCode);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }
