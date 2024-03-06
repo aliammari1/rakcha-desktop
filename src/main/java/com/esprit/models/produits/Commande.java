@@ -1,6 +1,8 @@
 package com.esprit.models.produits;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Commande {
 
@@ -9,28 +11,35 @@ public class Commande {
 
     private Date dateCommande;
 
-    private String etatCommande;
+    private String statu;
 
     private Users idClient;
 
-    private CommandeItem commandeItem;
+    private List<CommandeItem> commandeItem=new ArrayList<>();
+
+    private int num_telephone;
+
+    private String adresse;
 
     public Commande() {
     }
 
-    public Commande(int idCommande, Date dateCommande, String etatCommande, Users idClient, CommandeItem commandeItem) {
-        this.idCommande = idCommande;
+    public Commande(Date dateCommande, String statu, Users idClient, int num_telephone, String adresse) {
         this.dateCommande = dateCommande;
-        this.etatCommande = etatCommande;
+        this.statu = statu;
         this.idClient = idClient;
-        this.commandeItem = commandeItem;
+
+        this.num_telephone = num_telephone;
+        this.adresse = adresse;
     }
 
-    public Commande(Date dateCommande, String etatCommande, Users idClient, CommandeItem commandeItem) {
+    public Commande(int idCommande, Date dateCommande, String statu, Users idClient, int num_telephone, String adresse) {
+        this.idCommande = idCommande;
         this.dateCommande = dateCommande;
-        this.etatCommande = etatCommande;
+        this.statu = statu;
         this.idClient = idClient;
-        this.commandeItem = commandeItem;
+        this.num_telephone = num_telephone;
+        this.adresse = adresse;
     }
 
     public int getIdCommande() {
@@ -49,12 +58,12 @@ public class Commande {
         this.dateCommande = dateCommande;
     }
 
-    public String getEtatCommande() {
-        return etatCommande;
+    public String getStatu() {
+        return statu;
     }
 
-    public void setEtatCommande(String etatCommande) {
-        this.etatCommande = etatCommande;
+    public void setStatu(String statu) {
+        this.statu = statu;
     }
 
     public Users getIdClient() {
@@ -65,12 +74,28 @@ public class Commande {
         this.idClient = idClient;
     }
 
-    public CommandeItem getCommandeItem() {
+    public List<CommandeItem> getCommandeItem() {
         return commandeItem;
     }
 
-    public void setCommandeItem(CommandeItem commandeItem) {
+    public void setCommandeItem(List<CommandeItem> commandeItem) {
         this.commandeItem = commandeItem;
+    }
+
+    public int getNum_telephone() {
+        return num_telephone;
+    }
+
+    public void setNum_telephone(int num_telephone) {
+        this.num_telephone = num_telephone;
+    }
+
+    public String getAdresse() {
+        return adresse;
+    }
+
+    public void setAdresse(String adresse) {
+        this.adresse = adresse;
     }
 
     @Override
@@ -78,9 +103,11 @@ public class Commande {
         return "Commande{" +
                 "idCommande=" + idCommande +
                 ", dateCommande=" + dateCommande +
-                ", etatCommande='" + etatCommande + '\'' +
+                ", statu='" + statu + '\'' +
                 ", idClient=" + idClient +
                 ", commandeItem=" + commandeItem +
+                ", num_telephone=" + num_telephone +
+                ", adresse='" + adresse + '\'' +
                 '}';
     }
 }

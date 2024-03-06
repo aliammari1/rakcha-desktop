@@ -99,6 +99,15 @@ public class DesignCategorieAdminController {
             return; // Arrêter l'exécution de la méthode si les champs sont vides
         }
 
+        // Vérifier si la description a au moins 20 caractères
+        if (descriptionCategorie.length() < 20) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur de saisie");
+            alert.setContentText("La description doit contenir au moins 20 caractères.");
+            alert.show();
+            return; // Arrêter l'exécution de la méthode si les champs sont vides
+        }
+
         // Créer l'objet Categorie
         CategorieService cs = new CategorieService();
         Categorie_Produit nouvelleCategorieProduit = new Categorie_Produit(nomCategorie, descriptionCategorie);

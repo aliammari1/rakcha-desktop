@@ -4,6 +4,9 @@ import com.esprit.models.produits.Users;
 import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
 
+import com.esprit.models.produits.Client;
+import com.mysql.cj.jdbc.Blob;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -116,6 +119,75 @@ public class UsersService implements IService<Users> {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        return user;
+    }
+
+
+
+
+   /* private List<Users> getAllUsers(List<Users> userList, PreparedStatement statement) throws SQLException {
+        ResultSet resultSet = statement.executeQuery();
+        while (resultSet.next()) {
+            String role = resultSet.getString("role");
+            userList.add(
+                    switch (role) {
+                        case "client":
+                            yield new Client(
+                                    resultSet.getInt("id"),
+                                    resultSet.getString("nom"),
+                                    resultSet.getString("prenom"),
+                                    resultSet.getInt("num_telephone"),
+                                    resultSet.getString("password"),
+                                    resultSet.getString("role"),
+                                    resultSet.getString("adresse"),
+                                    resultSet.getDate("date_de_naissance"),
+                                    resultSet.getString("email"),
+                                    resultSet.getBlob("photo_de_profil")) {
+                            };
+
+                        default:
+                            yield null;
+                    });
+        }
+        return userList;
+    }*/
+   public Client getClientByUser(Users connectedUser) {
+       Client client = null;
+
+       String query = "SELECT * FROM users WHERE id = ?";
+       try {
+           PreparedStatement statement = connection.prepareStatement(query);
+           statement.setInt(1, connectedUser.getId());
+           ResultSet rs = statement.executeQuery();
+
+           if (rs.next()) {
+               client = new Client(rs.getInt("id"), rs.getString("nom"), rs.getString("prenom"), rs.getInt("num_telephone"), rs.getString("password"), rs.getString("role"), rs.getString("adresse"), rs.getDate("date_de_naissance"), rs.getString("email"), (Blob) rs.getBlob("photo_de_profil"));
+           }
+       } catch (SQLException e) {
+           System.out.println(e.getMessage());
+       }
+
+       return client;
+   }
+
+
+    public Users getUserById(int idUser) {
+
+        Users user = null;
+
+        String query = "SELECT * FROM users WHERE id = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, idUser);
+            ResultSet rs = statement.executeQuery();
+
+            if (rs.next()) {
+                user = new Users(rs.getInt("id"), rs.getString("nom"), rs.getString("prenom"), rs.getInt("num_telephone"), rs.getString("password"), rs.getString("role"), rs.getString("adresse"), rs.getDate("date_de_naissance"), rs.getString("email"), (Blob) rs.getBlob("photo_de_profil"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
         return user;
     }
 }

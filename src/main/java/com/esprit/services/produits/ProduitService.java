@@ -144,8 +144,24 @@ public class ProduitService  implements IService<Produit> {
         }
     }
 
+    public double getPrixProduit(int idProduit) {
+        String req = "SELECT prix FROM produit WHERE id_produit = ?";
+        double prixProduit = 0;
 
+        try {
+            PreparedStatement pst = connection.prepareStatement(req);
+            pst.setInt(1, idProduit);
+            ResultSet rs = pst.executeQuery();
 
+            if (rs.next()) {
+                prixProduit = rs.getDouble("prix");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return prixProduit;
+    }
 
 
 

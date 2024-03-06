@@ -1,9 +1,12 @@
 package com.esprit.controllers.produits;
 
 import com.esprit.models.produits.CommandeItem;
+import com.esprit.models.produits.Panier;
 import com.esprit.models.produits.Produit;
 import com.esprit.services.produits.CommandeItemService;
+import com.esprit.services.produits.PanierService;
 import com.esprit.services.produits.ProduitService;
+import com.esprit.services.produits.UsersService;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.value.ChangeListener;
@@ -11,12 +14,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -58,6 +63,9 @@ public class AfficherProduitClientControllers implements Initializable {
     private List<Produit> l1 = new ArrayList<>();
 
     private int produitId;
+
+    @FXML
+    private ScrollPane produitscrollpane;
 
     private List<Produit> panierList = new ArrayList<Produit>();
 
@@ -189,6 +197,7 @@ public class AfficherProduitClientControllers implements Initializable {
 
 
 
+
         // Nom du Produit
         Label nameLabel = new Label(Produit.getNom());
         nameLabel.setLayoutX(50);
@@ -243,14 +252,18 @@ public class AfficherProduitClientControllers implements Initializable {
         addToCartButton.setOnAction(event -> {
 
 
-                int produitId = Produit.getId_produit();
+
+            int produitId = Produit.getId_produit();
                 int quantity = 1; // Vous pouvez ajuster la quantité en fonction de vos besoins
                 ajouterAuPanier(produitId, quantity);
+
+
             });
 
 
 
         card.getChildren().addAll(imageView, nameLabel, descriptionLabel, priceLabel, addToCartButton);
+
         card.setStyle("-fx-background-color:#F6F2F2;\n" +
                 " -fx-text-fill: #FFFFFF;\n" +
                 "    -fx-font-size: 12px;\n" +
@@ -279,40 +292,30 @@ public class AfficherProduitClientControllers implements Initializable {
 
         // Affichez la FlowPane du panier et masquez les autres FlowPanes
         panierFlowPane.setVisible(true);
-        produitFlowPane.setVisible(false);
+        produitFlowPane.setVisible(true);
         topproduitFlowPane.setVisible(false);
+
+        produitFlowPane.setOpacity(0.2);
     }
 
     private void ajouterAuPanier(int produitId, int quantity) {
         ProduitService produitService = new ProduitService();
-
+        PanierService panierService=new PanierService();
+        UsersService usersService=new UsersService();
         // Vérifier le stock disponible avant d'ajouter au panier
         if (produitService.verifierStockDisponible(produitId, quantity)) {
             Produit produit = produitService.getProduitById(produitId);
-
-            // Créer un objet CommandeItem pour représenter l'élément du panier
-            CommandeItem commandeItem = new CommandeItem(produit, quantity);
-
-            // Ajouter l'élément au panier
-            CommandeItemService commandeItemservice = new CommandeItemService();
-            commandeItemservice.create(commandeItem);
-
-            // Afficher le panier mis à jour
+            Panier panier=new Panier();
+            panier.setProduit(produit);
+            panier.setQuantity(quantity);
+            panier.setUsers(usersService.getUserById(4));
+            panierService.create(panier);
             afficherPanier(produit); // Utilisez le produit ajouté pour afficher dans le panier
         } else {
             // Afficher un message d'avertissement sur le stock insuffisant
             System.out.println("Stock insuffisant pour le produit avec l'ID : " + produitId);
         }
     }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -339,23 +342,35 @@ public class AfficherProduitClientControllers implements Initializable {
 
     }
 
-    @FXML
-    void panier(MouseEvent event) {
-
-    }
 
 
     private HBox createPanierCard(Produit produit) {
         // Créer une carte pour le produit avec ses informations
 
         HBox panierContainer = new HBox();
-        panierContainer.setStyle("-fx-padding: 30px 0 0 20px;"); // Ajout de remplissage à gauche pour le décalage
+        panierContainer.setStyle("-fx-padding: 10px 0 0 20px;"); // Ajout de remplissage à gauche pour le décalage
 
         AnchorPane card = new AnchorPane();
+
+
+        // Ajouter un label "Card"
+        Label cartLabel = new Label("My Cart");
+        cartLabel.setFont(Font.font("Arial Rounded MT Bold", FontWeight.BOLD, 25));
+        cartLabel.setTextFill(Color.web("#B40C0C")); // Définir la couleur du texte
+        cartLabel.setPrefWidth(230);
+        cartLabel.setLayoutY(30);
+
+        // Centrer le texte dans le label
+        cartLabel.setAlignment(Pos.CENTER);
+
+
+
+
+
         // Image du Produit
         ImageView imageView = new ImageView();
         imageView.setLayoutX(50);
-        imageView.setLayoutY(40);
+        imageView.setLayoutY(70);
         imageView.setFitWidth(150);
         imageView.setFitHeight(150);
 
@@ -378,37 +393,30 @@ public class AfficherProduitClientControllers implements Initializable {
 
         // Nom du Produit
         Label nameLabel = new Label(produit.getNom());
-        nameLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
+        nameLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 25));
         nameLabel.setStyle("-fx-text-fill: #333333;");
         nameLabel.setLayoutX(10);
-        nameLabel.setLayoutY(190);
+        nameLabel.setLayoutY (220);
         nameLabel.setMaxWidth(200); // Ajuster la largeur maximale selon vos besoins
         nameLabel.setWrapText(true); // Activer le retour à la ligne automatique
 
-        // Prix du Produit
-        Label priceLabel = new Label(" " + produit.getPrix() + " DT");
-        priceLabel.setFont(Font.font("Arial", FontWeight.BOLD, 15));
-        priceLabel.setLayoutX(10);
-        priceLabel.setLayoutY(230);
-        CommandeItemService commandeItemService = new CommandeItemService();
 
-        // Récupérer la quantité du produit dans le panier
-        int totalQuantiteProduit = commandeItemService.calculerQuantiteProduitDansPanier(produit.getId_produit());
+
 
         // Champ de texte pour la quantité
-        Label quantiteLabel = new Label("Quantité : " + totalQuantiteProduit);
+        Label quantiteLabel = new Label("Quantité : 1"  );
         quantiteLabel.setFont(Font.font("Arial", FontWeight.BOLD, 15));
         quantiteLabel.setLayoutX(30);
-        quantiteLabel.setLayoutY(260);
+        quantiteLabel.setLayoutY(330);
 
         // Récupérer la somme totale du prix du produit dans le panier
-        double sommeTotaleProduit = commandeItemService.calculerSommeTotaleProduit(produit.getId_produit());
+        //double sommeTotaleProduit = commandeItemService.calculerSommeTotaleProduit(produit.getId_produit());
 
         // Champ de texte pour la somme totale
-        Label sommeTotaleLabel = new Label("Somme totale : " + sommeTotaleProduit + " DT");
+        Label sommeTotaleLabel = new Label("Somme totale : " + produit.getPrix() + " DT");
         sommeTotaleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 15));
         sommeTotaleLabel.setLayoutX(30);
-        sommeTotaleLabel.setLayoutY(280);
+        sommeTotaleLabel.setLayoutY(350);
 
 
 
@@ -416,8 +424,9 @@ public class AfficherProduitClientControllers implements Initializable {
         // Bouton Ajouter au Panier
         Button commandebutton = new Button("Order", new FontAwesomeIconView(FontAwesomeIcon.CART_PLUS));
         commandebutton.setLayoutX(50);
-        commandebutton.setLayoutY(330);
+        commandebutton.setLayoutY(380);
         commandebutton.setPrefWidth(120);
+        commandebutton.setPrefHeight(30);
         commandebutton.setStyle("-fx-background-color: #624970;\n" +
                 " -fx-text-fill: #FCE19A;" +
                 "   -fx-font-size: 12px;\n" +
@@ -454,7 +463,10 @@ public class AfficherProduitClientControllers implements Initializable {
         // Bouton Ajouter au Panier
         Button achatbutton = new Button("continue shopping");
         achatbutton.setLayoutX(50);
-        achatbutton.setLayoutY(380);
+        achatbutton.setLayoutY(440);
+        commandebutton.setPrefHeight(50);
+
+
         achatbutton.setStyle(" -fx-background-color: #466288;\n" +
                 "    -fx-text-fill: #FCE19A;\n" +
                 "    -fx-font-size: 12px;\n" +
@@ -463,28 +475,86 @@ public class AfficherProduitClientControllers implements Initializable {
         achatbutton.setOnAction(
                 event -> {
 
-
+                    // Rendre panierFlowPane invisible
                     panierFlowPane.setVisible(false);
+
+                    // Rendre detailFlowPane visible et ajuster l'opacité à 1
+
+                    topproduitFlowPane.setVisible(true);
+                    produitFlowPane.setVisible(true);
+                    produitFlowPane.setOpacity(1);
+
+
 
 
                 });
 
 
 
-        card.getChildren().addAll(imageView, nameLabel, priceLabel,quantiteLabel,sommeTotaleLabel,achatbutton,commandebutton);
+        // Icône de fermeture (close)
+        FontAwesomeIconView closeIcon = new FontAwesomeIconView();
+        closeIcon.setGlyphName("TIMES_CIRCLE");
+        closeIcon.setSize("20");
+        closeIcon.setLayoutX(230);
+        closeIcon.setLayoutY(10);
+        closeIcon.getStyleClass().add("close"); // Style de l'icône
+
+
+        // Attachez un gestionnaire d'événements pour fermer la carte du panier
+        closeIcon.setOnMouseClicked(event -> fermerPanierCard(panierContainer));
+
+
+
+
+        card.getChildren().addAll(cartLabel,closeIcon,imageView, nameLabel,quantiteLabel,sommeTotaleLabel,achatbutton,commandebutton);
         panierContainer.getChildren().add(card);
         return panierContainer;
     }
 
 
+    private void fermerPanierCard(HBox panierContainer) {
+        // Rendre la carte du panier invisible
+        // Rendre panierFlowPane invisible
+        panierFlowPane.setVisible(false);
+
+        // Rendre detailFlowPane visible et ajuster l'opacité à 1
+        topproduitFlowPane.setVisible(true);
+        produitFlowPane.setVisible(true);
+        produitFlowPane.setOpacity(1);
 
 
 
+    }
 
 
+    @FXML
+    void panier(MouseEvent event) {
+
+        try {
+            // Charger la nouvelle interface PanierProduit.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/PanierProduit.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène avec la nouvelle interface
+            Scene scene = new Scene(root);
+
+            // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Créer une nouvelle fenêtre (stage) et y attacher la scène
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("Panier des produits");
+            stage.show();
+
+            // Fermer la fenêtre actuelle
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace(); // Gérer l'exception d'entrée/sortie
+        }
 
 
-
+    }
 
 
 
