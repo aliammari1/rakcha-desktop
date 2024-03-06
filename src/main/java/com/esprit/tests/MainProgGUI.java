@@ -17,9 +17,9 @@ public class MainProgGUI extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/DashboardResponsable.fxml"));
-        //FXMLLoader loader = new FXMLLoader(getClass().getResource("/DashboardAdmin.fxml"));
-        //FXMLLoader loader = new FXMLLoader(getClass().getResource("/DashboardClient.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/DashboardResponsableCinema.fxml"));
+        //FXMLLoader loader = new FXMLLoader(getClass().getResource("/DashboardAdminCinema.fxml"));
+        //FXMLLoader loader = new FXMLLoader(getClass().getResource("/DashboardClientCinema.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);

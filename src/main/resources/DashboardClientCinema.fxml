@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="750.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.DashboardClientController">
+<AnchorPane prefHeight="750.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.cinemas.DashboardClientController">
     <children>
         <AnchorPane prefHeight="750.0" prefWidth="209.0" styleClass="nav-form" stylesheets="@dashboard.css">
             <children>
@@ -39,6 +39,16 @@
                   <Font name="Arial Rounded MT Bold" size="48.0" />
                </font>
             </Label>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="PlanningPane" layoutX="227.0" layoutY="25.0" prefHeight="706.0" prefWidth="857.0" styleClass="bg-white" stylesheets="@dashboard.css" visible="false">
+         <children>
+            <Label layoutX="319.0" layoutY="34.0" text="Planning:" textFill="#fce19a">
+               <font>
+                  <Font name="Arial Rounded MT Bold" size="48.0" />
+               </font>
+            </Label>
+            <FlowPane fx:id="planningFlowPane" layoutX="31.0" layoutY="108.0" prefHeight="562.0" prefWidth="796.0" styleClass="table-view" />
          </children>
       </AnchorPane>
     </children>

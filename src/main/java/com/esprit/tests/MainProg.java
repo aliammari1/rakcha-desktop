@@ -1,12 +1,5 @@
 package com.esprit.tests;
 
-import com.esprit.models.Cinema;
-import com.esprit.models.Salle;
-import com.esprit.models.Seance;
-import com.esprit.services.CinemaService;
-import com.esprit.services.SalleService;
-import com.esprit.services.SeanceService;
-
 public class MainProg {
 
     public static void main(String[] args) {
@@ -19,8 +12,7 @@ public class MainProg {
         // ss.create(new Salle(2, 150, 50, 2, "non complet"));
         // ss.delete(new Salle(3, 2, 150, 50, 2, "non complet"));
         // System.out.println(ss.read());
-        SeanceService ses = new SeanceService();
-        System.out.println(ses.read());
+
 
 
 

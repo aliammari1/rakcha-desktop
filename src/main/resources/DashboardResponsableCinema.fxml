@@ -7,6 +7,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -14,7 +15,7 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="700.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.DashboardResponsableController">
+<AnchorPane prefHeight="700.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.cinemas.DashboardResponsableController">
    <children>
       <AnchorPane prefHeight="750.0" prefWidth="209.0" styleClass="nav-form" stylesheets="@dashboard.css">
          <children>
@@ -172,5 +173,22 @@
             <TableColumn fx:id="colActionRoom" minWidth="0.0" prefWidth="152.0" text="Action" />
         </columns>
       </TableView>
+      <AnchorPane fx:id="facebookAnchor" layoutX="400.0" layoutY="120.0" prefHeight="376.0" prefWidth="419.0" styleClass="bg-white" stylesheets="@dashboard.css" visible="false">
+         <children>
+            <Label layoutX="49.0" layoutY="21.0" prefHeight="43.0" prefWidth="321.0" text="Facebook Publish" textFill="#fce19a">
+               <font>
+                  <Font name="Arial Rounded MT Bold" size="36.0" />
+               </font>
+            </Label>
+            <TextArea fx:id="txtareaStatut" layoutX="171.0" layoutY="74.0" prefHeight="200.0" prefWidth="200.0" />
+            <Label layoutX="70.0" layoutY="160.0" text="Status:">
+               <font>
+                  <Font name="Arial Rounded MT Bold" size="24.0" />
+               </font>
+            </Label>
+            <Button fx:id="publierStatut" layoutX="297.0" layoutY="313.0" mnemonicParsing="false" onAction="#PublierStatut" styleClass="instert-btn" stylesheets="@dashboard.css" text="Publish" />
+            <Button fx:id="fermerAnchor" layoutX="210.0" layoutY="313.0" mnemonicParsing="false" onAction="#closeAnchor" styleClass="instert-btn" text="Close" />
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>
