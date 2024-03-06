@@ -1,12 +1,10 @@
 package com.esprit.controllers.produits;
 
-import com.esprit.models.produits.CommandeItem;
 import com.esprit.models.produits.Panier;
 import com.esprit.models.produits.Produit;
-import com.esprit.services.produits.CommandeItemService;
 import com.esprit.services.produits.PanierService;
 import com.esprit.services.produits.ProduitService;
-import com.esprit.services.produits.UsersService;
+import com.esprit.services.users.UserService;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.value.ChangeListener;
@@ -301,14 +299,14 @@ public class AfficherProduitClientControllers implements Initializable {
     private void ajouterAuPanier(int produitId, int quantity) {
         ProduitService produitService = new ProduitService();
         PanierService panierService=new PanierService();
-        UsersService usersService=new UsersService();
+        UserService usersService=new UserService();
         // Vérifier le stock disponible avant d'ajouter au panier
         if (produitService.verifierStockDisponible(produitId, quantity)) {
             Produit produit = produitService.getProduitById(produitId);
             Panier panier=new Panier();
             panier.setProduit(produit);
             panier.setQuantity(quantity);
-            panier.setUsers(usersService.getUserById(4));
+            panier.setUser(usersService.getUserById(4));
             panierService.create(panier);
             afficherPanier(produit); // Utilisez le produit ajouté pour afficher dans le panier
         } else {

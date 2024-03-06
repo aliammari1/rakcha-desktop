@@ -2,11 +2,10 @@ package com.esprit.services.produits;
 
 
 import com.esprit.models.produits.Avis;
-import com.esprit.models.produits.Client;
-import com.esprit.models.produits.Users;
+import com.esprit.models.users.Client;
 import com.esprit.services.IService;
+import com.esprit.services.users.UserService;
 import com.esprit.utils.DataSource;
-import com.esprit.services.produits.ProduitService;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -48,7 +47,7 @@ public class AvisService  implements IService<Avis> {
 
    /* public Avis getmy(int id) throws SQLException {
         Avis avis=new Avis();
-        UsersService usersService=new UsersService();
+        UserService usersService=new UserService();
         String req = "SELECT * FROM `avis`  where iduser = ?";
         PreparedStatement ps = connection.prepareStatement(req);
         ps.setInt(1, id);
@@ -65,7 +64,7 @@ public class AvisService  implements IService<Avis> {
 
     /*public List<Avis> gettall(int id) throws SQLException {
         List<Avis> avisList=new ArrayList<>();
-        UsersService usersService=new UsersService();
+        UserService usersService=new UserService();
         String req = "SELECT * FROM `avis`  where iduser != ?";
         PreparedStatement ps = connection.prepareStatement(req);
         ps.setInt(1, id);
@@ -154,7 +153,7 @@ public class AvisService  implements IService<Avis> {
             preparedStatement.setInt(2, id_user);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next())
-                rate=new Avis((Client) new UsersService().getUserById(id_user), (int) resultSet.getDouble("averageRate"),null,new ProduitService().getProduitById(resultSet.getInt("id_ptoduit")));
+                rate=new Avis((Client) new UserService().getUserById(id_user), (int) resultSet.getDouble("averageRate"),null,new ProduitService().getProduitById(resultSet.getInt("id_ptoduit")));
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

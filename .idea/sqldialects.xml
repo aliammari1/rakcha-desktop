@@ -6,8 +6,9 @@
     <file url="file://$PROJECT_DIR$/src/main/java/com/esprit/services/films/FilmcategoryService.java" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/esprit/services/films/FilmcinemaService.java" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/esprit/services/films/RatingFilmService.java" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/src/main/java/com/esprit/services/produits/CommandeItemService.java" dialect="GenericSQL" />
-    <file url="file://$PROJECT_DIR$/src/main/java/com/esprit/services/produits/CommandeService.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/esprit/services/produits/CommandeItemService.java" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/esprit/services/produits/CommandeService.java" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/esprit/services/produits/PanierService.java" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/esprit/services/produits/ProduitService.java" dialect="MySQL" />
   </component>
 </project>

@@ -1,5 +1,7 @@
 package com.esprit.models.produits;
 
+import com.esprit.models.users.User;
+
 import java.util.Objects;
 
 public class Panier {
@@ -11,13 +13,13 @@ public class Panier {
 
         private Produit produit;
 
-        private Users users;
+        private User users;
 
 
         public Panier(){
 
         }
-        public Panier(int idpanier, Produit produit,int quantity , Users users) {
+        public Panier(int idpanier, Produit produit,int quantity , User users) {
             this.idpanier = idpanier;
             this.quantity = quantity;
             this.produit = produit;
@@ -25,7 +27,7 @@ public class Panier {
 
         }
 
-        public Panier(Produit produit,int quantity,Users users) {
+        public Panier(Produit produit,int quantity,User users) {
             this.quantity = quantity;
             this.produit = produit;
             this.users = users;
@@ -64,11 +66,11 @@ public class Panier {
             this.produit = produit;
         }
 
-    public Users getUsers() {
+    public User getUser() {
         return users;
     }
 
-    public void setUsers(Users users) {
+    public void setUser(User users) {
         this.users = users;
     }
 
