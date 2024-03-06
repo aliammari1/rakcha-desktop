@@ -1,19 +1,20 @@
 package com.esprit.controllers.produits;
 
-import com.esprit.models.produits.CommandeItem;
+import com.esprit.models.produits.Avis;
+import com.esprit.models.produits.Client;
 import com.esprit.models.produits.Panier;
 import com.esprit.models.produits.Produit;
-import com.esprit.services.produits.CommandeItemService;
+import com.esprit.services.produits.AvisService;
 import com.esprit.services.produits.PanierService;
 import com.esprit.services.produits.ProduitService;
 import com.esprit.services.produits.UsersService;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -21,7 +22,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -31,13 +31,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import org.controlsfx.control.Rating;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URL;
 import java.sql.Blob;
 import java.util.Optional;
@@ -223,7 +225,47 @@ public class DetailsProduitClientController implements Initializable {
                     });
 
 
-                    card.getChildren().addAll(imageView, nameLabel, descriptionLabel, priceLabel,    addToCartButton);
+        Avis avis = new Avis();
+        Produit produit1 = avis.getProduit();
+        double rate = new AvisService().getavergerating(produit1.getId_produit());
+        System.out.println(BigDecimal.valueOf(rate).setScale(1, RoundingMode.FLOOR));
+
+        // Champ de notation (Rating)
+        Rating rating = new Rating();
+        rating.setLayoutX(410);
+        rating.setLayoutY(375);
+        rating.setMax(5);
+        rating.setRating(avis.getNote()); // Vous pouvez ajuster en fonction de la valeur du produit
+
+        Label etoilelabel = new Label(rate+"/5");
+        etoilelabel.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
+        etoilelabel.setStyle("-fx-text-fill: #333333;");
+        etoilelabel.setLayoutX(410);
+        etoilelabel.setLayoutY (230);
+
+        Avis ratingFilm = new AvisService().ratingExiste(produit1.getId_produit(),/*(Client) stage.getUserData()*/1);
+        rating.setRating(ratingFilm != null ? ratingFilm.getNote() : 0);
+        //Stage stage = (Stage) hyperlink.getScene().getWindow();
+        rating.ratingProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                AvisService ratingFilmService = new AvisService();
+                Avis ratingFilm = ratingFilmService.ratingExiste(produit1.getId_produit(), 1 /*(Client) stage.getUserData()*/);
+                if (ratingFilm != null)
+                    ratingFilmService.delete(ratingFilm);
+                ratingFilmService.create(new Avis(/*(Client) stage.getUserData()*/(Client) new UsersService().getUserById(1),t1.intValue(),null,produit1));
+                double rate = new AvisService().getavergerating(produit1.getId_produit());
+                System.out.println(BigDecimal.valueOf(rate).setScale(1, RoundingMode.FLOOR));
+                etoilelabel.setText(rate + "/5");}});
+
+
+
+
+
+
+
+
+        card.getChildren().addAll(imageView, nameLabel, descriptionLabel, priceLabel,rating,  etoilelabel,  addToCartButton);
 
                     cardContainer.getChildren().add(card);
 
@@ -446,6 +488,9 @@ public class DetailsProduitClientController implements Initializable {
         closeIcon.setLayoutX(220);
         closeIcon.setLayoutY(20);
         closeIcon.getStyleClass().add("close"); // Style de l'icône
+
+
+
 
 
         // Attachez un gestionnaire d'événements pour fermer la carte du panier
