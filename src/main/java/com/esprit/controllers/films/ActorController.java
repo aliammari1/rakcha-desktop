@@ -11,7 +11,9 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -121,7 +123,7 @@ public class ActorController {
             // Créer l'objet Cinema avec l'image String
 
             ActorService actorService = new ActorService();
-            Actor actor = new Actor(nomAcotr_textArea1.getText(), "", bioAcotr_textArea.getText());
+            Actor actor = new Actor(nomAcotr_textArea1.getText(), imageAcotr_ImageView1.getImage().getUrl(), bioAcotr_textArea.getText());
             actorService.create(actor);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Actor ajoutée");
@@ -211,40 +213,46 @@ public class ActorController {
             imageAcotr_tableColumn1.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Actor, HBox>, ObservableValue<HBox>>() {
                 @Override
                 public ObservableValue<HBox> call(TableColumn.CellDataFeatures<Actor, HBox> param) {
+
                     HBox hBox = new HBox();
-                    ImageView imageView = new ImageView();
-                    imageView.setFitWidth(120); // Réglez la largeur de l'image selon vos préférences
-                    imageView.setFitHeight(100); // Réglez la hauteur de l'image selon vos préférences
                     try {
-                        imageView.setImage(new Image(param.getValue().getImage()));
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                    hBox.getChildren().add(imageView);
-                    hBox.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-                        @Override
-                        public void handle(MouseEvent event) {
-                            try {
-                                FileChooser fileChooser = new FileChooser();
-                                fileChooser.getExtensionFilters().addAll(
-                                        new FileChooser.ExtensionFilter("PNG", "*.png"),
-                                        new FileChooser.ExtensionFilter("JPG", "*.jpg")
-                                );
-                                File file = fileChooser.showOpenDialog(new Stage());
-                                if (file != null) {
-                                    Image image = new Image(file.toURI().toURL().toString());
-                                    imageView.setImage(image);
-                                    hBox.getChildren().clear();
-                                    System.out.println(image);
-                                    hBox.getChildren().add(imageView);
-                                }
-                            } catch (Exception e) {
-                                System.out.println(e.getMessage());
-                            }
+                        ImageView imageView = new ImageView();
+                        imageView.setFitWidth(120); // Réglez la largeur de l'image selon vos préférences
+                        imageView.setFitHeight(100); // Réglez la hauteur de l'image selon vos préférences
+                        try {
+                            imageView.setImage(new Image(param.getValue().getImage()));
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
                         }
-                    });
+                        hBox.getChildren().add(imageView);
+                        hBox.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+                            @Override
+                            public void handle(MouseEvent event) {
+                                try {
+                                    FileChooser fileChooser = new FileChooser();
+                                    fileChooser.getExtensionFilters().addAll(
+                                            new FileChooser.ExtensionFilter("PNG", "*.png"),
+                                            new FileChooser.ExtensionFilter("JPG", "*.jpg")
+                                    );
+                                    File file = fileChooser.showOpenDialog(new Stage());
+                                    if (file != null) {
+                                        Image image = new Image(file.toURI().toURL().toString());
+                                        imageView.setImage(image);
+                                        hBox.getChildren().clear();
+                                        System.out.println(image);
+                                        hBox.getChildren().add(imageView);
+                                    }
+                                } catch (Exception e) {
+                                    System.out.println(e.getMessage());
+                                }
+                            }
+                        });
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
                     return new SimpleObjectProperty<HBox>(hBox);
                 }
+
             });
             ActorService categoryService = new ActorService();
             ObservableList<Actor> obC = FXCollections.observableArrayList(categoryService.read());
@@ -264,5 +272,18 @@ public class ActorController {
         alert.show();
         readActorTable();
 
+    }
+
+    @FXML
+    public void switchtoajouterCinema(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/InterfaceFilm.fxml"));
+            AnchorPane root = fxmlLoader.load();
+            Stage stage = (Stage) AjouterFilm_Button.getScene().getWindow();
+            Scene scene = new Scene(root, 1280, 700);
+            stage.setScene(scene);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

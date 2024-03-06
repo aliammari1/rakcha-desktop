@@ -3,6 +3,7 @@ package com.esprit.services.films;
 import com.esprit.models.films.Film;
 import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.FilmYoutubeTrailer;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
