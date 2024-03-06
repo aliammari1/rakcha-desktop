@@ -27,6 +27,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 
@@ -58,6 +60,8 @@ public class CommandeClientController implements Initializable {
     private static final String CLIENT_ID = "YOUR_PAYPAL_CLIENT_ID";
     private static final String CLIENT_SECRET = "YOUR_PAYPAL_CLIENT_SECRET";
 
+    double totalPrix = SharedData.getInstance().getTotalPrix();
+
 
     @FXML
     void initialize(Commande commandeselectionner) {
@@ -66,7 +70,7 @@ public class CommandeClientController implements Initializable {
 
 
         // Récupérer le prix total depuis SharedData et créer le Label correspondant
-        double totalPrix = SharedData.getInstance().getTotalPrix();
+
         Label prixTotalLabel = createPrixTotalLabel(totalPrix);
 
 
@@ -185,7 +189,9 @@ public class CommandeClientController implements Initializable {
     @FXML
     void payment(ActionEvent event) {
 
+
+
     }
 
-   
+
 }
