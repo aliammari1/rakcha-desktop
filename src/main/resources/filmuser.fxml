@@ -1,107 +1,123 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.CheckComboBox?>
 <?import org.controlsfx.control.Rating?>
-
-<AnchorPane stylesheets="@dashbord.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.films.FilmUserController">
-    <children>
-        <AnchorPane fx:id="anchorPaneFilm" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="855.0" prefWidth="1507.0" stylesheets="@dashbord.css">
-            <children>
-                <AnchorPane prefHeight="855.0" prefWidth="248.0" styleClass="nav-form" stylesheets="@dashbord.css">
-                    <children>
-                        <ImageView fitHeight="208.0" fitWidth="239.0" layoutX="14.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@Logo.png" />
-                            </image>
-                        </ImageView>
-                        <Button layoutY="334.0" mnemonicParsing="false" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" stylesheets="@dashbord.css" text="Films" />
-                        <Button layoutY="396.0" mnemonicParsing="false" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" stylesheets="@dashbord.css" text="Button" />
-                        <Button layoutY="458.0" mnemonicParsing="false" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" text="Button" />
-                        <FontAwesomeIconView fill="#f2efef" glyphName="FILM" layoutX="59.0" layoutY="376.0" size="30" text="" wrappingWidth="36.0" />
-                    </children>
-                </AnchorPane>
-                <Button layoutY="271.0" mnemonicParsing="false" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" stylesheets="@dashbord.css" text="Button" />
-                <AnchorPane layoutX="248.0" prefHeight="855.0" prefWidth="1263.0" styleClass="tab-pane" stylesheets="@dashbord.css">
-                    <children>
-                        <ScrollPane fx:id="filmScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" hmax="9.0" hvalue="1.0" layoutY="185.0" prefHeight="669.0" prefWidth="702.0" vbarPolicy="ALWAYS" />
-                        <ImageView fitHeight="69.0" fitWidth="62.0" layoutX="25.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@Logo.png" />
-                            </image>
-                        </ImageView>
-                        <Label layoutX="81.0" layoutY="23.0" prefHeight="17.0" prefWidth="132.0" text="Loujain Hajlaoui" />
-                        <TextField layoutX="657.0" layoutY="28.0" prefHeight="42.0" prefWidth="248.0" promptText="Search here ......................">
-                            <cursor>
-                                <Cursor fx:constant="TEXT" />
-                            </cursor>
-                        </TextField>
-                        <Button layoutX="865.0" layoutY="35.0" mnemonicParsing="false" style="-fx-background-color: AE2D3C;">
-                            <graphic>
-                                <FontAwesomeIconView fill="#f5f5f5" glyphName="SEARCH" size="19" text="" textAlignment="RIGHT" />
-                            </graphic>
-                        </Button>
-                        <CheckComboBox layoutX="547.0" layoutY="28.0" prefHeight="42.0" prefWidth="100.0" style="-fx-background-color: #AE2D3C;" styleClass="check-combobox" stylesheets="@dashbord.css" title="Category" />
-                        <Label layoutX="25.0" layoutY="132.0" prefHeight="35.0" prefWidth="172.0" text="All movies :">
-                            <font>
-                                <Font name="System Bold" size="24.0" />
-                            </font>
-                        </Label>
-                        <Label layoutX="721.0" layoutY="140.0" prefHeight="35.0" prefWidth="321.0" text="Top 3 best rating movies :">
-                            <font>
-                                <Font name="System Bold" size="24.0" />
-                            </font>
-                        </Label>
-                        <Label layoutX="86.0" layoutY="46.0" prefHeight="17.0" prefWidth="48.0" text="User" />
-                        <VBox fx:id="topthreeVbox" layoutX="705.0" layoutY="185.0" prefHeight="638.0" prefWidth="544.0" />
-                    </children>
-                </AnchorPane>
-            </children>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" stylesheets="@styles/filmStyle.css" xmlns="http://javafx.com/javafx/21"
+            fx:controller="com.esprit.controllers.films.FilmUserController">
+    <AnchorPane fx:id="anchorPaneFilm" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                minWidth="-Infinity" prefHeight="855.0" prefWidth="1507.0" stylesheets="@styles/filmStyle.css">
+        <AnchorPane prefHeight="855.0" prefWidth="248.0" styleClass="nav-form"
+                    stylesheets="@styles/filmStyle.css">
+            <ImageView fitHeight="208.0" fitWidth="239.0" layoutX="14.0" layoutY="9.0" pickOnBounds="true"
+                       preserveRatio="true">
+                <Image url="@Logo.png"/>
+            </ImageView>
+            <Button layoutY="334.0" mnemonicParsing="false" prefHeight="63.0" prefWidth="248.0"
+                    styleClass="nav-btn" stylesheets="@styles/filmStyle.css" text="Films"/>
+            <Button layoutY="396.0" mnemonicParsing="false" prefHeight="63.0" prefWidth="248.0"
+                    styleClass="nav-btn" stylesheets="@styles/filmStyle.css" text="Button"/>
+            <Button layoutY="458.0" mnemonicParsing="false" prefHeight="63.0" prefWidth="248.0"
+                    styleClass="nav-btn" text="Button"/>
+            <FontAwesomeIconView fill="#f2efef" glyphName="FILM" layoutX="59.0" layoutY="376.0" size="30"
+                                 text="" wrappingWidth="36.0"/>
         </AnchorPane>
-        <AnchorPane fx:id="detalAnchorPane" layoutX="245.0" layoutY="68.0" prefHeight="719.0" prefWidth="942.0" styleClass="bg-white" stylesheets="@dashbord.css" visible="false">
+        <Button layoutY="271.0" mnemonicParsing="false" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn"
+                stylesheets="@styles/filmStyle.css" text="Button"/>
+        <AnchorPane layoutX="248.0" prefHeight="855.0" prefWidth="1263.0" styleClass="tab-pane"
+                    stylesheets="@styles/filmStyle.css">
             <children>
-                <ImageView fx:id="imagefilmDetail" fitHeight="421.0" fitWidth="348.0" layoutX="57.0" layoutY="57.0" pickOnBounds="true" preserveRatio="true" />
-                <Button fx:id="trailer_Button" layoutX="422.0" layoutY="505.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="172.0" styleClass="sale" stylesheets="@dashbord.css" text="Trailer" textFill="#ebe3e3">
+                <ScrollPane fx:id="filmScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER"
+                            hmax="9.0" hvalue="1.0" layoutY="185.0" prefHeight="669.0" prefWidth="702.0"
+                            vbarPolicy="ALWAYS"/>
+                <ImageView fitHeight="69.0" fitWidth="62.0" layoutX="25.0" layoutY="14.0" pickOnBounds="true"
+                           preserveRatio="true">
+                    <image>
+                        <Image url="@Logo.png"/>
+                    </image>
+                </ImageView>
+                <Label layoutX="81.0" layoutY="23.0" prefHeight="17.0" prefWidth="132.0"
+                       text="Loujain Hajlaoui"/>
+                <TextField layoutX="657.0" layoutY="28.0" prefHeight="42.0" prefWidth="248.0"
+                           promptText="Search here ......................">
                     <cursor>
-                        <Cursor fx:constant="OPEN_HAND" />
+                        <Cursor fx:constant="TEXT"/>
                     </cursor>
-                </Button>
-                <Label fx:id="filmNomDetail" layoutX="422.0" layoutY="56.0" prefHeight="62.0" prefWidth="228.0" text="Nom du film :">
-                    <font>
-                        <Font size="24.0" />
-                    </font>
-                </Label>
-                <TextArea fx:id="descriptionDETAILfilm" editable="false" layoutX="422.0" layoutY="110.0" prefHeight="384.0" prefWidth="402.0" text="the description is here : " wrapText="true" />
-                <Button layoutX="611.0" layoutY="504.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="172.0" styleClass="sale" stylesheets="@dashbord.css" text="RESERVE" textFill="#ebe3e3">
-                    <cursor>
-                        <Cursor fx:constant="OPEN_HAND" />
-                    </cursor>
-                </Button>
-                <Button fx:id="closeDetailFilm" layoutX="880.0" layoutY="14.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="48.0" styleClass="close" stylesheets="@dashbord.css">
+                </TextField>
+                <Button layoutX="865.0" layoutY="35.0" mnemonicParsing="false"
+                        style="-fx-background-color: AE2D3C;">
                     <graphic>
-                        <FontAwesomeIconView glyphName="CLOSE" styleClass="close" />
+                        <FontAwesomeIconView fill="#f5f5f5" glyphName="SEARCH" size="19" text=""
+                                             textAlignment="RIGHT"/>
                     </graphic>
                 </Button>
-                <Rating fx:id="filmRate" layoutX="103.0" layoutY="494.0" prefHeight="35.0" prefWidth="199.0" rating="0.0" />
-                <FontAwesomeIconView fill="#f2b604" glyphName="STAR" layoutX="649.0" layoutY="98.0" size="35" />
-                <Label fx:id="labelavregeRate" layoutX="588.0" layoutY="69.0" text="4.5/5">
+                <CheckComboBox layoutX="547.0" layoutY="28.0" prefHeight="42.0" prefWidth="100.0"
+                               style="-fx-background-color: #AE2D3C;" styleClass="check-combobox"
+                               stylesheets="@styles/filmStyle.css" title="Category"/>
+                <Label layoutX="25.0" layoutY="132.0" prefHeight="35.0" prefWidth="172.0" text="All movies :">
                     <font>
-                        <Font size="24.0" />
+                        <Font name="System Bold" size="24.0"/>
                     </font>
                 </Label>
+                <Label layoutX="721.0" layoutY="140.0" prefHeight="35.0" prefWidth="321.0"
+                       text="Top 3 best rating movies :">
+                    <font>
+                        <Font name="System Bold" size="24.0"/>
+                    </font>
+                </Label>
+                <Label layoutX="86.0" layoutY="46.0" prefHeight="17.0" prefWidth="48.0" text="User"/>
+                <VBox fx:id="topthreeVbox" layoutX="705.0" layoutY="185.0" prefHeight="638.0"
+                      prefWidth="544.0"/>
             </children>
         </AnchorPane>
-        <AnchorPane fx:id="anchorPane_Trailer" layoutX="443.0" layoutY="206.0" prefHeight="453.0" prefWidth="702.0" visible="false" />
-    </children>
+    </AnchorPane>
+    <AnchorPane fx:id="detalAnchorPane" layoutX="245.0" layoutY="68.0" prefHeight="719.0" prefWidth="942.0"
+                styleClass="bg-white" stylesheets="@styles/filmStyle.css" visible="false">
+        <children>
+            <ImageView fx:id="imagefilmDetail" fitHeight="421.0" fitWidth="348.0" layoutX="57.0" layoutY="57.0"
+                       pickOnBounds="true" preserveRatio="true"/>
+            <Button fx:id="trailer_Button" layoutX="422.0" layoutY="505.0" mnemonicParsing="false" prefHeight="42.0"
+                    prefWidth="172.0" styleClass="sale" stylesheets="@styles/filmStyle.css" text="Trailer"
+                    textFill="#ebe3e3">
+                <cursor>
+                    <Cursor fx:constant="OPEN_HAND"/>
+                </cursor>
+            </Button>
+            <Label fx:id="filmNomDetail" layoutX="422.0" layoutY="56.0" prefHeight="62.0" prefWidth="228.0"
+                   text="Nom du film :">
+                <font>
+                    <Font size="24.0"/>
+                </font>
+            </Label>
+            <TextArea fx:id="descriptionDETAILfilm" editable="false" layoutX="422.0" layoutY="110.0"
+                      prefHeight="384.0" prefWidth="402.0" text="the description is here : " wrapText="true"/>
+            <Button layoutX="611.0" layoutY="504.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="172.0"
+                    styleClass="sale" stylesheets="@styles/filmStyle.css" text="RESERVE" textFill="#ebe3e3">
+                <cursor>
+                    <Cursor fx:constant="OPEN_HAND"/>
+                </cursor>
+            </Button>
+            <Button fx:id="closeDetailFilm" layoutX="880.0" layoutY="14.0" mnemonicParsing="false" prefHeight="35.0"
+                    prefWidth="48.0" styleClass="close" stylesheets="@styles/filmStyle.css">
+                <graphic>
+                    <FontAwesomeIconView glyphName="CLOSE" styleClass="close"/>
+                </graphic>
+            </Button>
+            <Rating fx:id="filmRate" layoutX="103.0" layoutY="494.0" prefHeight="35.0" prefWidth="199.0"
+                    rating="0.0"/>
+            <FontAwesomeIconView fill="#f2b604" glyphName="STAR" layoutX="649.0" layoutY="98.0" size="35"/>
+            <Label fx:id="labelavregeRate" layoutX="588.0" layoutY="69.0" text="4.5/5">
+                <font>
+                    <Font size="24.0"/>
+                </font>
+            </Label>
+        </children>
+    </AnchorPane>
+    <AnchorPane fx:id="anchorPane_Trailer" layoutX="443.0" layoutY="206.0" prefHeight="453.0" prefWidth="702.0"
+                visible="false"/>
 </AnchorPane>

@@ -1,7 +1,7 @@
 package com.esprit.models.films;
 
 public class Actor {
-    private final String biographie;
+    private String biographie;
     private int id;
     private String nom;
     private String image;
@@ -55,6 +55,10 @@ public class Actor {
 
     public String getBiographie() {
         return biographie;
+    }
+
+    public void setBiographie(String biographie) {
+        this.biographie = biographie;
     }
 
     @Override

@@ -20,14 +20,16 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -36,13 +38,15 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
-
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.sql.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
@@ -165,13 +169,10 @@ public class DashboardResponsableController implements Initializable {
 
     @FXML
     void addCinema(ActionEvent event) {
-        // Vérifier si tous les champs sont remplis
         if (tfNom.getText().isEmpty() || tfAdresse.getText().isEmpty()) {
             showAlert("please complete all fields!");
-            return; // Arrêter l'exécution de la méthode si un champ est vide
+            return;
         }
-
-        // Convertir le fichier en un objet String
 
         String defaultStatut = "En_Attente";
 
@@ -183,19 +184,23 @@ public class DashboardResponsableController implements Initializable {
 
     }
 
-
     @FXML
     void selectImage(MouseEvent event) {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Choose a new image");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.gif")
-        );
-        File selectedFile = fileChooser.showOpenDialog(null); // Utilisation de la variable de classe
-
+        fileChooser.setTitle("Sélectionner une image");
+        File selectedFile = fileChooser.showOpenDialog(null);
         if (selectedFile != null) {
-            Image selectedImage = new Image(selectedFile.toURI().toString());
-            image.setImage(selectedImage);
+            try {
+                String destinationDirectory = "./src/main/resources/pictures/films/";
+                Path destinationPath = Paths.get(destinationDirectory);
+                String uniqueFileName = System.currentTimeMillis() + "_" + selectedFile.getName();
+                Path destinationFilePath = destinationPath.resolve(uniqueFileName);
+                Files.copy(selectedFile.toPath(), destinationFilePath);
+                Image selectedImage = new Image(destinationFilePath.toUri().toString());
+                image.setImage(selectedImage);
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
         }
     }
 
@@ -216,19 +221,15 @@ public class DashboardResponsableController implements Initializable {
             comboCinema.getItems().add(c.getNom());
         }
 
-        // Ajouter un écouteur de changement de sélection pour le ComboBox des cinémas
         comboCinema.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             if (newValue != null) {
-                // Convertir newValue en objet Cinema
                 Cinema selectedCinema = acceptedCinemas.stream()
                         .filter(cinema -> cinema.getNom().equals(newValue))
                         .findFirst()
                         .orElse(null);
 
                 if (selectedCinema != null) {
-                    // Charger les films en fonction du cinéma sélectionné
                     loadMoviesForCinema(selectedCinema.getId_cinema());
-                    // Charger les salles en fonction du cinéma sélectionné
                     loadRoomsForCinema(selectedCinema.getId_cinema());
                 }
             }
@@ -237,7 +238,6 @@ public class DashboardResponsableController implements Initializable {
 
 
     private void loadMoviesForCinema(int cinemaId) {
-        System.out.println("enter the movie ");
         comboMovie.getItems().clear();
         FilmcinemaService fs = new FilmcinemaService();
         List<Film> moviesForCinema = fs.readMoviesForCinema(cinemaId);
@@ -298,17 +298,17 @@ public class DashboardResponsableController implements Initializable {
 
     private HBox createCinemaCard(Cinema cinema) {
         HBox cardContainer = new HBox();
-        cardContainer.setStyle("-fx-padding: 10px 0 0  25px;"); // Ajout de remplissage à gauche pour le décalage
+        cardContainer.setStyle("-fx-padding: 10px 0 0  25px;");
 
         AnchorPane card = new AnchorPane();
         card.setStyle("-fx-background-color: #ffffff; -fx-border-radius: 10px; -fx-border-color: #000000; -fx-background-radius: 10px; -fx-border-width: 2px;");
         card.setPrefWidth(400);
 
         ImageView logoImageView = new ImageView();
-        logoImageView.setFitWidth(70); // la largeur de l'image
+        logoImageView.setFitWidth(70);
         logoImageView.setFitHeight(70);
-        logoImageView.setLayoutX(15); // Padding à droite
-        logoImageView.setLayoutY(15); // Padding en haut
+        logoImageView.setLayoutX(15);
+        logoImageView.setLayoutY(15);
         logoImageView.setStyle("-fx-border-color: #000000 ; -fx-border-width: 2px; -fx-border-radius: 5px;");
 
         Image image = null;
@@ -329,13 +329,10 @@ public class DashboardResponsableController implements Initializable {
                 File selectedFile = fileChooser.showOpenDialog(null);
 
                 if (selectedFile != null) {
-                    // Convertir le fichier en tableau de bytes
-                    // Mettre à jour l'image dans la base de données pour le cinéma
                     CinemaService cinemaService = new CinemaService();
                     cinema.setLogo("");
                     cinemaService.update(cinema);
 
-                    // Mettre à jour l'image dans l'ImageView
                     Image newImage = new Image(cinema.getLogo());
                     logoImageView.setImage(newImage);
                 }
@@ -354,29 +351,26 @@ public class DashboardResponsableController implements Initializable {
         nameLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
         card.getChildren().add(nameLabel);
         nameLabel.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) { // Vérifiez si c'est un double clic
-                TextField nameTextField = new TextField(nameLabel.getText()); // Créez un TextField avec le texte actuel du Label
+            if (event.getClickCount() == 2) {
+                TextField nameTextField = new TextField(nameLabel.getText());
                 nameTextField.setLayoutX(nameLabel.getLayoutX());
                 nameTextField.setLayoutY(nameLabel.getLayoutY());
                 nameTextField.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
-                nameTextField.setPrefWidth(nameLabel.getWidth()); // Ajustez la largeur pour correspondre au Label
-
-                // Lorsque l'utilisateur appuie sur Entrée dans le TextField, mettez à jour le Label avec le nouveau nom
+                nameTextField.setPrefWidth(nameLabel.getWidth());
                 nameTextField.setOnAction(e -> {
                     nameLabel.setText(nameTextField.getText());
-                    // Mettez à jour le nom du cinéma dans la base de données si nécessaire
-                    cinema.setNom(nameTextField.getText()); // Assurez-vous de mettre à jour le nom du cinéma dans votre objet Cinema
+                    cinema.setNom(nameTextField.getText());
                     CinemaService cinemaService = new CinemaService();
-                    cinemaService.update(cinema); // Mettez à jour le cinéma dans la base de données
-                    card.getChildren().remove(nameTextField); // Supprimez le TextField
+                    cinemaService.update(cinema);
+                    card.getChildren().remove(nameTextField);
                 });
 
-                // Ajoutez le TextField au conteneur AnchorPane
+
                 card.getChildren().add(nameTextField);
 
-                // Focus sur le TextField pour permettre la saisie immédiate
+
                 nameTextField.requestFocus();
-                nameTextField.selectAll(); // Sélectionnez tout le texte pour une modification facile
+                nameTextField.selectAll();
             }
         });
 
@@ -394,28 +388,26 @@ public class DashboardResponsableController implements Initializable {
 
         adresseLabel.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
-                TextField adresseTextField = new TextField(adresseLabel.getText()); // Créez un TextField avec le texte actuel du Label
+                TextField adresseTextField = new TextField(adresseLabel.getText());
                 adresseTextField.setLayoutX(adresseLabel.getLayoutX());
                 adresseTextField.setLayoutY(adresseLabel.getLayoutY());
                 adresseTextField.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
-                adresseTextField.setPrefWidth(adresseLabel.getWidth()); // Ajustez la largeur pour correspondre au Label
+                adresseTextField.setPrefWidth(adresseLabel.getWidth());
 
-                // Lorsque l'utilisateur appuie sur Entrée dans le TextField, mettez à jour le Label avec la nouvelle adresse
+
                 adresseTextField.setOnAction(e -> {
                     adresseLabel.setText(adresseTextField.getText());
-                    // Mettez à jour l'adresse du cinéma dans la base de données si nécessaire
                     cinema.setAdresse(adresseTextField.getText());
                     CinemaService cinemaService = new CinemaService();
                     cinemaService.update(cinema);
-                    card.getChildren().remove(adresseTextField); // Supprimez le TextField
+                    card.getChildren().remove(adresseTextField);
                 });
 
 
                 card.getChildren().add(adresseTextField);
 
-                // Focus sur le TextField pour permettre la saisie immédiate
                 adresseTextField.requestFocus();
-                adresseTextField.selectAll(); // Sélectionnez tout le texte pour une modification facile
+                adresseTextField.selectAll();
             }
         });
 
@@ -453,11 +445,9 @@ public class DashboardResponsableController implements Initializable {
 
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                // Supprimer le cinéma de la base de données
                 CinemaService cinemaService = new CinemaService();
                 cinemaService.delete(cinema);
 
-                // Supprimer la carte du cinéma du conteneur parent
                 cardContainer.getChildren().remove(card);
             }
         });
@@ -509,7 +499,6 @@ public class DashboardResponsableController implements Initializable {
                             if (empty) {
                                 setGraphic(null);
                             } else {
-                                // Afficher les boutons dans la cellule de la colonne Action
                                 setGraphic(new HBox(deleteRoomButton));
                             }
                         }
@@ -625,7 +614,6 @@ public class DashboardResponsableController implements Initializable {
 
     @FXML
     private void showCinemaList() {
-        // Afficher le formulaire d'ajout de cinéma et la liste des cinémas
         cinemaFormPane.setVisible(true);
         sessionFormPane.setVisible(false);
         cinemaListPane.setVisible(true);
@@ -682,7 +670,6 @@ public class DashboardResponsableController implements Initializable {
                         if (empty) {
                             setGraphic(null);
                         } else {
-                            // Afficher les boutons dans la cellule de la colonne Action
                             setGraphic(new HBox(deleteButton));
                         }
                     }
@@ -834,18 +821,14 @@ public class DashboardResponsableController implements Initializable {
                     setText(date.toString());
                 }
 
-                // Double clic détecté
                 setOnMouseClicked(event -> {
                     if (event.getClickCount() == 2) {
-                        // Ouvrir un DatePicker
                         DatePicker datePicker = new DatePicker();
 
-                        // Si la valeur de la cellule n'est pas vide, définissez la date sélectionnée dans le DatePicker
                         if (!isEmpty() && getItem() != null) {
                             datePicker.setValue(getItem().toLocalDate());
                         }
 
-                        // Définir un EventHandler pour le changement de date dans le DatePicker
                         datePicker.setOnAction(e -> {
                             LocalDate selectedDate = datePicker.getValue();
                             if (selectedDate != null) {
@@ -854,7 +837,6 @@ public class DashboardResponsableController implements Initializable {
                             }
                         });
 
-                        // Afficher le DatePicker dans une fenêtre contextuelle
                         StackPane root = new StackPane(datePicker);
                         Stage stage = new Stage();
                         stage.initModality(Modality.APPLICATION_MODAL);
@@ -885,10 +867,8 @@ public class DashboardResponsableController implements Initializable {
                     setText(cinemaName);
                 }
 
-                // Double clic détecté
                 setOnMouseClicked(event -> {
                     if (event.getClickCount() == 2) {
-                        // Créer un ComboBox contenant les noms des cinémas acceptés
                         ComboBox<String> cinemaComboBox = new ComboBox<>();
                         HashSet<Cinema> acceptedCinema = chargerAcceptedCinemas();
                         for (Cinema cinema : acceptedCinema) {

@@ -1,7 +1,7 @@
 package com.esprit.models.films;
 
 public class Category {
-    private final String nom;
+    private String nom;
     private int id;
     private String description;
 
@@ -22,6 +22,10 @@ public class Category {
 
     public String getNom() {
         return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
     }
 
     public int getId() {

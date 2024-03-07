@@ -5,7 +5,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.*?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="520.0" prefWidth="929.0" stylesheets="@signup.css"
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="520.0" prefWidth="929.0" stylesheets="@styles/signup.css"
             xmlns="http://javafx.com/javafx/21" fx:controller="com.esprit.controllers.users.LoginController">
     <children>
         <AnchorPane layoutX="467.0" prefHeight="520.0" prefWidth="468.0" styleClass="leftSideBar">

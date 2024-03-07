@@ -25,9 +25,7 @@ public class CategoryService implements IService<Category> {
         try {
             PreparedStatement statement = connection.prepareStatement(req);
             statement.setString(1, category.getNom());
-
             statement.setString(2, category.getDescription());
-
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -38,7 +36,7 @@ public class CategoryService implements IService<Category> {
     @Override
     public List<Category> read() {
         List<Category> categoryArrayList = new ArrayList<>();
-        String req = "SELECT * FROM category ";
+        String req = "SELECT * FROM category";
         try {
             PreparedStatement statement = connection.prepareStatement(req);
             ResultSet rs = statement.executeQuery();

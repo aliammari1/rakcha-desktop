@@ -7,7 +7,6 @@ import java.sql.Time;
 import java.time.LocalDate;
 
 public class Seance {
-
     private Filmcinema filmcinema;
     private int id_seance;
     private Salle salle;

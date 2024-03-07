@@ -10,221 +10,217 @@
 <?import java.net.*?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
             minWidth="-Infinity"
-            prefHeight="936.0" prefWidth="1688.0" stylesheets="@dashbord.css"
+            prefHeight="936.0" prefWidth="1688.0" stylesheets="@styles/filmStyle.css"
             xmlns="http://javafx.com/javafx/21" fx:controller="com.esprit.controllers.films.FilmController">
-    <children>
-        <BorderPane layoutX="521.0" layoutY="139.0" prefHeight="745.0" prefWidth="1291.0" styleClass="top-form"
-                    stylesheets="@dashbord.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                    AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-            <top>
-                <AnchorPane prefHeight="40.0" prefWidth="1291.0" BorderPane.alignment="CENTER">
-                    <children>
-                        <AnchorPane layoutX="578.0" layoutY="-80.0" prefHeight="59.0" prefWidth="1291.0"
-                                    styleClass="top-form" stylesheets="@dashbord.css" AnchorPane.bottomAnchor="1.0"
-                                    AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                            <children>
-                                <Button layoutX="1221.0" layoutY="14.0" mnemonicParsing="false" prefHeight="27.0"
-                                        prefWidth="56.0" styleClass="close" AnchorPane.rightAnchor="14.0"
-                                        AnchorPane.topAnchor="14.0">
-                                    <graphic>
-                                        <FontAwesomeIconView glyphName="CLOSE"/>
-                                    </graphic>
-                                    <stylesheets>
-                                        <URL value="@dashbord.css"/>
-                                        <URL value="@dashbord.css"/>
-                                    </stylesheets>
-                                </Button>
-                                <Button layoutX="1560.0" layoutY="14.0" mnemonicParsing="false" prefHeight="28.0"
-                                        prefWidth="58.0" styleClass="minus" stylesheets="@dashbord.css"/>
-                                <Label layoutX="53.0" layoutY="15.0" text="Rakcha">
-                                    <font>
-                                        <Font name="Microsoft Sans Serif" size="14.0"/>
-                                    </font>
-                                </Label>
-                                <ImageView fitHeight="63.0" fitWidth="80.0" layoutX="-10.0" layoutY="-5.0"
-                                           pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                        <Image url="@Logo.png"/>
-                                    </image>
-                                </ImageView>
-                                <FontAwesomeIconView glyphName="MINUS" layoutX="1584.0" layoutY="33.0"/>
-                            </children>
-                        </AnchorPane>
-                    </children>
+    <BorderPane layoutX="521.0" layoutY="139.0" prefHeight="745.0" prefWidth="1291.0" styleClass="top-form"
+                stylesheets="@styles/filmStyle.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <top>
+            <AnchorPane prefHeight="40.0" prefWidth="1291.0" BorderPane.alignment="CENTER">
+                <AnchorPane layoutX="578.0" layoutY="-80.0" prefHeight="59.0" prefWidth="1291.0"
+                            styleClass="top-form" stylesheets="@styles/filmStyle.css"
+                            AnchorPane.bottomAnchor="1.0"
+                            AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <Button layoutX="1221.0" layoutY="14.0" mnemonicParsing="false" prefHeight="27.0"
+                            prefWidth="56.0" styleClass="close" AnchorPane.rightAnchor="14.0"
+                            AnchorPane.topAnchor="14.0">
+                        <graphic>
+                            <FontAwesomeIconView glyphName="CLOSE"/>
+                        </graphic>
+                        <stylesheets>
+                            <URL value="@styles/filmStyle.css"/>
+                            <URL value="@styles/filmStyle.css"/>
+                        </stylesheets>
+                    </Button>
+                    <Button layoutX="1560.0" layoutY="14.0" mnemonicParsing="false" prefHeight="28.0"
+                            prefWidth="58.0" styleClass="minus" stylesheets="@styles/filmStyle.css"/>
+                    <Label layoutX="53.0" layoutY="15.0" text="Rakcha">
+                        <font>
+                            <Font name="Microsoft Sans Serif" size="14.0"/>
+                        </font>
+                    </Label>
+                    <ImageView fitHeight="63.0" fitWidth="80.0" layoutX="-10.0" layoutY="-5.0"
+                               pickOnBounds="true" preserveRatio="true">
+                        <Image url="@Logo.png"/>
+                    </ImageView>
+                    <FontAwesomeIconView glyphName="MINUS" layoutX="1584.0" layoutY="33.0"/>
                 </AnchorPane>
-            </top>
-            <left>
-                <AnchorPane prefHeight="702.0" prefWidth="235.0" styleClass="nav-form" BorderPane.alignment="CENTER">
-                    <children>
-                        <FontAwesomeIconView fill="#e1cfcf" glyphName="USER" layoutX="88.0" layoutY="83.0" size="80"
-                                             stroke="BLACK" text="" wrappingWidth="60.0"/>
-                        <Label layoutX="82.0" layoutY="96.0" text="Welcome" textAlignment="CENTER" textFill="#e1cfcf">
-                            <font>
-                                <Font size="16.0"/>
-                            </font>
-                        </Label>
-                        <Label layoutX="99.0" layoutY="121.0" text="Admin" textFill="#e1cfcf"/>
-                        <Button fx:id="AjouterFilm_Button" alignment="CENTER" layoutX="1.0" layoutY="201.0"
-                                mnemonicParsing="false" prefHeight="47.0" prefWidth="239.0" styleClass="nav-btn"
-                                stylesheets="@dashbord.css" text="Ajouter films" textAlignment="CENTER"/>
-                        <Button layoutX="1.0" layoutY="298.0" mnemonicParsing="false" prefHeight="47.0"
-                                prefWidth="239.0" styleClass="nav-btn" stylesheets="@dashbord.css"
-                                text="Ajouter produit"/>
-                        <Button fx:id="ajouterCinema_Button" layoutX="1.0" layoutY="247.0" mnemonicParsing="false"
-                                onAction="#switchtoajouterCinema" prefHeight="47.0" prefWidth="239.0"
-                                styleClass="nav-btn" stylesheets="@dashbord.css" text="Ajouter Cinema"/>
-                        <Button layoutY="344.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="241.0"
-                                styleClass="nav-btn" stylesheets="@dashbord.css" text="Liste des films"/>
-                        <Button layoutX="19.0" layoutY="823.0" mnemonicParsing="false" prefHeight="40.0"
-                                prefWidth="42.0" styleClass="signout">
-                            <stylesheets>
-                                <URL value="@dashbord.css"/>
-                                <URL value="@dashbord.css"/>
-                            </stylesheets>
-                        </Button>
-                        <FontAwesomeIconView fill="#fffefe" glyphName="SIGN_OUT" layoutX="30.0" layoutY="851.0"
-                                             size="20" wrappingWidth="19.85714340209961">
-                            <font>
-                                <Font size="65.0"/>
-                            </font>
-                        </FontAwesomeIconView>
-                        <Label layoutX="73.0" layoutY="833.0" text="Sign out" textFill="#e1cfcf">
-                            <font>
-                                <Font size="14.0"/>
-                            </font>
-                        </Label>
-                        <FontAwesomeIconView fill="WHITE" glyphName="PLAY_CIRCLE" layoutX="22.0" layoutY="235.0"
-                                             size="30" wrappingWidth="17.714284896850586"/>
-                        <FontAwesomeIconView fill="WHITE" glyphName="PLUS" layoutX="23.0" layoutY="281.0" size="30"/>
-                        <FontAwesomeIconView fill="WHITE" glyphName="SERVER" layoutX="21.0" layoutY="378.0" size="30"/>
-                        <FontAwesomeIconView fill="WHITE" glyphName="PLUS" layoutX="23.0" layoutY="332.0" size="30"/>
-                    </children>
-                    <stylesheets>
-                        <URL value="@dashbord.css"/>
-                        <URL value="@dashbord.css"/>
-                    </stylesheets>
-                </AnchorPane>
-            </left>
-            <center>
-                <AnchorPane prefHeight="681.0" prefWidth="1154.0" BorderPane.alignment="CENTER">
-                    <children>
+            </AnchorPane>
+        </top>
+        <left>
+            <AnchorPane prefHeight="702.0" prefWidth="235.0" styleClass="nav-form" BorderPane.alignment="CENTER">
+                <children>
+                    <FontAwesomeIconView fill="#e1cfcf" glyphName="USER" layoutX="88.0" layoutY="83.0" size="80"
+                                         stroke="BLACK" text="" wrappingWidth="60.0"/>
+                    <Label layoutX="82.0" layoutY="96.0" text="Welcome" textAlignment="CENTER" textFill="#e1cfcf">
+                        <font>
+                            <Font size="16.0"/>
+                        </font>
+                    </Label>
+                    <Label layoutX="99.0" layoutY="121.0" text="Admin" textFill="#e1cfcf"/>
+                    <Button fx:id="AjouterFilm_Button" alignment="CENTER" layoutX="1.0" layoutY="201.0"
+                            mnemonicParsing="false" prefHeight="47.0" prefWidth="239.0" styleClass="nav-btn"
+                            stylesheets="@styles/filmStyle.css" text="Ajouter films" textAlignment="CENTER"/>
+                    <Button layoutX="1.0" layoutY="298.0" mnemonicParsing="false" prefHeight="47.0"
+                            prefWidth="239.0" styleClass="nav-btn" stylesheets="@styles/filmStyle.css"
+                            text="Ajouter produit"/>
+                    <Button fx:id="ajouterCinema_Button" layoutX="1.0" layoutY="247.0" mnemonicParsing="false"
+                            onAction="#switchtoajouterCinema" prefHeight="47.0" prefWidth="239.0"
+                            styleClass="nav-btn" stylesheets="@styles/filmStyle.css" text="Ajouter Cinema"/>
+                    <Button layoutY="344.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="241.0"
+                            styleClass="nav-btn" stylesheets="@styles/filmStyle.css" text="Liste des films"/>
+                    <Button layoutX="19.0" layoutY="823.0" mnemonicParsing="false" prefHeight="40.0"
+                            prefWidth="42.0" styleClass="signout">
+                        <stylesheets>
+                            <URL value="@styles/filmStyle.css"/>
+                            <URL value="@styles/filmStyle.css"/>
+                        </stylesheets>
+                    </Button>
+                    <FontAwesomeIconView fill="#fffefe" glyphName="SIGN_OUT" layoutX="30.0" layoutY="851.0"
+                                         size="20" wrappingWidth="19.85714340209961">
+                        <font>
+                            <Font size="65.0"/>
+                        </font>
+                    </FontAwesomeIconView>
+                    <Label layoutX="73.0" layoutY="833.0" text="Sign out" textFill="#e1cfcf">
+                        <font>
+                            <Font size="14.0"/>
+                        </font>
+                    </Label>
+                    <FontAwesomeIconView fill="WHITE" glyphName="PLAY_CIRCLE" layoutX="22.0" layoutY="235.0"
+                                         size="30" wrappingWidth="17.714284896850586"/>
+                    <FontAwesomeIconView fill="WHITE" glyphName="PLUS" layoutX="23.0" layoutY="281.0" size="30"/>
+                    <FontAwesomeIconView fill="WHITE" glyphName="SERVER" layoutX="21.0" layoutY="378.0" size="30"/>
+                    <FontAwesomeIconView fill="WHITE" glyphName="PLUS" layoutX="23.0" layoutY="332.0" size="30"/>
+                </children>
+                <stylesheets>
+                    <URL value="@styles/filmStyle.css"/>
+                    <URL value="@styles/filmStyle.css"/>
+                </stylesheets>
+            </AnchorPane>
+        </left>
+        <center>
+            <AnchorPane prefHeight="681.0" prefWidth="1154.0" BorderPane.alignment="CENTER">
+                <children>
 
-                        <AnchorPane fx:id="filmCrudInterface" prefHeight="686.0" prefWidth="1050.0">
-                            <children>
-                                <AnchorPane layoutX="27.0" layoutY="175.0" maxHeight="-Infinity" maxWidth="-Infinity"
-                                            minHeight="-Infinity" minWidth="-Infinity" prefHeight="685.0"
-                                            prefWidth="410.0" styleClass="bg-white" stylesheets="@dashbord.css">
-                                    <children>
-                                        <Label layoutX="6.0" layoutY="438.0" text="annederealisation">
-                                            <font>
-                                                <Font size="16.0"/>
-                                            </font>
-                                        </Label>
-                                        <TextArea fx:id="annederealisationFilm_textArea" layoutX="164.0" layoutY="432.0"
-                                                  prefHeight="25.0" prefWidth="200.0"/>
-                                        <Label layoutX="17.0" layoutY="486.0" text="categroy">
-                                            <font>
-                                                <Font size="16.0"/>
-                                            </font>
-                                        </Label>
-                                        <Label layoutX="14.0" layoutY="382.0" text="description">
-                                            <font>
-                                                <Font size="16.0"/>
-                                            </font>
-                                        </Label>
-                                        <TextArea fx:id="descriptionFilm_textArea" layoutX="162.0" layoutY="375.0"
-                                                  prefHeight="25.0" prefWidth="200.0"/>
-                                        <Label layoutX="19.0" layoutY="534.0" text="idacteur">
-                                            <font>
-                                                <Font size="16.0"/>
-                                            </font>
-                                        </Label>
-                                        <Label layoutX="15.0" layoutY="333.0" text="duree">
-                                            <font>
-                                                <Font size="16.0"/>
-                                            </font>
-                                        </Label>
-                                        <TextArea fx:id="dureeFilm_textArea" layoutX="162.0" layoutY="326.0"
-                                                  prefHeight="13.0" prefWidth="200.0" wrapText="true"/>
-                                        <Label layoutX="21.0" layoutY="282.0" text="nom">
-                                            <font>
-                                                <Font size="16.0"/>
-                                            </font>
-                                        </Label>
-                                        <TextArea fx:id="nomFilm_textArea" layoutX="162.0" layoutY="275.0"
-                                                  prefHeight="13.0" prefWidth="200.0" wrapText="true"/>
-                                        <Button layoutX="161.0" layoutY="199.0" mnemonicParsing="false"
-                                                onAction="#importFilmImage" prefHeight="40.0" prefWidth="88.0"
-                                                styleClass="instert-btn" stylesheets="@dashbord.css" text="imprimer"/>
-                                        <AnchorPane fx:id="image_view" layoutX="138.0" layoutY="14.0" prefHeight="167.0"
-                                                    prefWidth="141.0" styleClass="bg-white" stylesheets="@dashbord.css">
-                                            <children>
-                                                <ImageView fx:id="imageFilm_ImageView" fitHeight="155.0"
-                                                           fitWidth="126.0" layoutX="8.0" layoutY="6.0"
-                                                           pickOnBounds="true" preserveRatio="true"/>
-                                            </children>
-                                        </AnchorPane>
-                                        <Label layoutX="14.0" layoutY="583.0" text="id cinema">
-                                            <font>
-                                                <Font size="16.0"/>
-                                            </font>
-                                        </Label>
-                                        <CheckComboBox fx:id="idcinemaFilm_comboBox" layoutX="161.0" layoutY="578.0"
-                                                       prefHeight="35.0" prefWidth="202.0"/>
-                                        <CheckComboBox fx:id="Categorychecj_ComboBox" layoutX="162.0" layoutY="480.0"
-                                                       prefHeight="37.0" prefWidth="201.0"/>
-                                        <CheckComboBox fx:id="Actorcheck_ComboBox1" layoutX="162.0" layoutY="528.0"
-                                                       prefHeight="37.0" prefWidth="201.0"/>
-                                        <HBox fx:id="addHbox" layoutX="138.0" layoutY="629.0" prefHeight="42.0"
-                                              prefWidth="141.0">
-                                            <children>
-                                                <Button fx:id="addButton" mnemonicParsing="false" onAction="#insertFilm"
-                                                        prefHeight="40.0" prefWidth="147.0" styleClass="instert-btn"
-                                                        stylesheets="@dashbord.css" text="Insérer"/>
-                                            </children>
-                                        </HBox>
-                                    </children>
-                                </AnchorPane>
-                                <AnchorPane layoutX="466.0" layoutY="194.0" prefHeight="662.0" prefWidth="940.0"
-                                            styleClass="bg-white" stylesheets="@dashbord.css">
-                                    <children>
-                                        <TableView fx:id="filmCategory_tableView1" layoutX="10.0" layoutY="65.0"
-                                                   prefHeight="579.0" prefWidth="925.0">
-                                            <columns>
-                                                <TableColumn fx:id="idFilm_tableColumn" prefWidth="49.0"
-                                                             text="Id film"/>
-                                                <TableColumn fx:id="nomFilm_tableColumn" prefWidth="103.0"
-                                                             text="Nom du film"/>
-                                                <TableColumn fx:id="imageFilm_tableColumn" prefWidth="79.0"
-                                                             text="image"/>
-                                                <TableColumn fx:id="dureeFilm_tableColumn" prefWidth="60.0"
-                                                             text="duree"/>
-                                                <TableColumn fx:id="descriptionFilm_tableColumn" prefWidth="171.0"
-                                                             text="description"/>
-                                                <TableColumn fx:id="annederalisationFilm_tableColumn" prefWidth="88.0"
-                                                             text="annederealisation"/>
-                                                <TableColumn fx:id="idcategoryFilm_tableColumn" prefWidth="96.0"
-                                                             text="category"/>
-                                                <TableColumn fx:id="idacteurFilm_tableColumn" prefWidth="83.0"
-                                                             text="id acteur"/>
-                                                <TableColumn fx:id="idcinemaFilm_tableColumn" prefWidth="64.0"
-                                                             text="id cinema"/>
-                                                <TableColumn fx:id="Delete_Column" prefWidth="75.0" text="Delete"/>
-                                            </columns>
-                                        </TableView>
-                                        <TextField layoutX="412.0" layoutY="17.0" prefHeight="29.0" prefWidth="158.0"
-                                                   promptText="rechercher"/>
-                                        <FontAwesomeIconView fill="#ae2d3c" glyphName="SEARCH" layoutX="545.0"
-                                                             layoutY="38.0" size="19" text="" textAlignment="RIGHT"/>
-                                        <Button layoutX="592.0" layoutY="16.0" mnemonicParsing="false"
-                                                styleClass="instert-btn" stylesheets="@dashbord.css" text="chercher"/>
-                                    </children>
-                                </AnchorPane>
-                            </children>
-                        </AnchorPane>
-                    </children>
-                </AnchorPane>
-            </center>
-        </BorderPane>
-    </children>
+                    <AnchorPane fx:id="filmCrudInterface" prefHeight="686.0" prefWidth="1050.0">
+                        <children>
+                            <AnchorPane layoutX="27.0" layoutY="175.0" maxHeight="-Infinity" maxWidth="-Infinity"
+                                        minHeight="-Infinity" minWidth="-Infinity" prefHeight="685.0"
+                                        prefWidth="410.0" styleClass="bg-white" stylesheets="@styles/filmStyle.css">
+                                <children>
+                                    <Label layoutX="6.0" layoutY="438.0" text="annederealisation">
+                                        <font>
+                                            <Font size="16.0"/>
+                                        </font>
+                                    </Label>
+                                    <TextArea fx:id="annederealisationFilm_textArea" layoutX="164.0" layoutY="432.0"
+                                              prefHeight="25.0" prefWidth="200.0"/>
+                                    <Label layoutX="17.0" layoutY="486.0" text="categroy">
+                                        <font>
+                                            <Font size="16.0"/>
+                                        </font>
+                                    </Label>
+                                    <Label layoutX="14.0" layoutY="382.0" text="description">
+                                        <font>
+                                            <Font size="16.0"/>
+                                        </font>
+                                    </Label>
+                                    <TextArea fx:id="descriptionFilm_textArea" layoutX="162.0" layoutY="375.0"
+                                              prefHeight="25.0" prefWidth="200.0"/>
+                                    <Label layoutX="19.0" layoutY="534.0" text="idacteur">
+                                        <font>
+                                            <Font size="16.0"/>
+                                        </font>
+                                    </Label>
+                                    <Label layoutX="15.0" layoutY="333.0" text="duree">
+                                        <font>
+                                            <Font size="16.0"/>
+                                        </font>
+                                    </Label>
+                                    <TextArea fx:id="dureeFilm_textArea" layoutX="162.0" layoutY="326.0"
+                                              prefHeight="13.0" prefWidth="200.0" wrapText="true"/>
+                                    <Label layoutX="21.0" layoutY="282.0" text="nom">
+                                        <font>
+                                            <Font size="16.0"/>
+                                        </font>
+                                    </Label>
+                                    <TextArea fx:id="nomFilm_textArea" layoutX="162.0" layoutY="275.0"
+                                              prefHeight="13.0" prefWidth="200.0" wrapText="true"/>
+                                    <Button layoutX="161.0" layoutY="199.0" mnemonicParsing="false"
+                                            onAction="#importFilmImage" prefHeight="40.0" prefWidth="88.0"
+                                            styleClass="instert-btn" stylesheets="@styles/filmStyle.css"
+                                            text="imprimer"/>
+                                    <AnchorPane fx:id="image_view" layoutX="138.0" layoutY="14.0" prefHeight="167.0"
+                                                prefWidth="141.0" styleClass="bg-white"
+                                                stylesheets="@styles/filmStyle.css">
+                                        <children>
+                                            <ImageView fx:id="imageFilm_ImageView" fitHeight="155.0"
+                                                       fitWidth="126.0" layoutX="8.0" layoutY="6.0"
+                                                       pickOnBounds="true" preserveRatio="true"/>
+                                        </children>
+                                    </AnchorPane>
+                                    <Label layoutX="14.0" layoutY="583.0" text="id cinema">
+                                        <font>
+                                            <Font size="16.0"/>
+                                        </font>
+                                    </Label>
+                                    <CheckComboBox fx:id="idcinemaFilm_comboBox" layoutX="161.0" layoutY="578.0"
+                                                   prefHeight="35.0" prefWidth="202.0"/>
+                                    <CheckComboBox fx:id="Categorychecj_ComboBox" layoutX="162.0" layoutY="480.0"
+                                                   prefHeight="37.0" prefWidth="201.0"/>
+                                    <CheckComboBox fx:id="Actorcheck_ComboBox1" layoutX="162.0" layoutY="528.0"
+                                                   prefHeight="37.0" prefWidth="201.0"/>
+                                    <HBox fx:id="addHbox" layoutX="138.0" layoutY="629.0" prefHeight="42.0"
+                                          prefWidth="141.0">
+                                        <children>
+                                            <Button fx:id="addButton" mnemonicParsing="false" onAction="#insertFilm"
+                                                    prefHeight="40.0" prefWidth="147.0" styleClass="instert-btn"
+                                                    stylesheets="@styles/filmStyle.css" text="Insérer"/>
+                                        </children>
+                                    </HBox>
+                                </children>
+                            </AnchorPane>
+                            <AnchorPane layoutX="466.0" layoutY="194.0" prefHeight="662.0" prefWidth="940.0"
+                                        styleClass="bg-white" stylesheets="@styles/filmStyle.css">
+                                <children>
+                                    <TableView fx:id="filmCategory_tableView1" layoutX="10.0" layoutY="65.0"
+                                               prefHeight="579.0" prefWidth="925.0">
+                                        <columns>
+                                            <TableColumn fx:id="idFilm_tableColumn" prefWidth="49.0"
+                                                         text="Id film"/>
+                                            <TableColumn fx:id="nomFilm_tableColumn" prefWidth="103.0"
+                                                         text="Nom du film"/>
+                                            <TableColumn fx:id="imageFilm_tableColumn" prefWidth="79.0"
+                                                         text="image"/>
+                                            <TableColumn fx:id="dureeFilm_tableColumn" prefWidth="60.0"
+                                                         text="duree"/>
+                                            <TableColumn fx:id="descriptionFilm_tableColumn" prefWidth="171.0"
+                                                         text="description"/>
+                                            <TableColumn fx:id="annederalisationFilm_tableColumn" prefWidth="88.0"
+                                                         text="annederealisation"/>
+                                            <TableColumn fx:id="idcategoryFilm_tableColumn" prefWidth="96.0"
+                                                         text="category"/>
+                                            <TableColumn fx:id="idacteurFilm_tableColumn" prefWidth="83.0"
+                                                         text="id acteur"/>
+                                            <TableColumn fx:id="idcinemaFilm_tableColumn" prefWidth="64.0"
+                                                         text="id cinema"/>
+                                            <TableColumn fx:id="Delete_Column" prefWidth="75.0" text="Delete"/>
+                                        </columns>
+                                    </TableView>
+                                    <TextField layoutX="412.0" layoutY="17.0" prefHeight="29.0" prefWidth="158.0"
+                                               promptText="rechercher"/>
+                                    <FontAwesomeIconView fill="#ae2d3c" glyphName="SEARCH" layoutX="545.0"
+                                                         layoutY="38.0" size="19" text="" textAlignment="RIGHT"/>
+                                    <Button layoutX="592.0" layoutY="16.0" mnemonicParsing="false"
+                                            styleClass="instert-btn" stylesheets="@styles/filmStyle.css"
+                                            text="chercher"/>
+                                </children>
+                            </AnchorPane>
+                        </children>
+                    </AnchorPane>
+                </children>
+            </AnchorPane>
+        </center>
+    </BorderPane>
 </AnchorPane>
