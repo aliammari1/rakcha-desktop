@@ -17,35 +17,30 @@ import java.sql.Date;
 
 public class ProfileController {
 
+    User user;
     @FXML
     private TextField adresseTextField;
-
     @FXML
     private DatePicker dateDeNaissanceDatePicker;
-
     @FXML
     private TextField emailTextField;
-
     @FXML
     private TextField firstNameTextField;
-
     @FXML
     private TextField lastNameTextField;
-
     @FXML
     private TextField passwordTextField;
-
     @FXML
     private TextField phoneNumberTextField;
-
     @FXML
     private ImageView photoDeProfilImageView;
 
-
     @FXML
     public void initialize() {
-        Stage stage = (Stage) firstNameTextField.getScene().getWindow();
-        User user = (User) stage.getUserData();
+    }
+
+    public void setData(User user) {
+        this.user = user;
         firstNameTextField.setText(user.getFirstName());
         lastNameTextField.setText(user.getLastName());
         adresseTextField.setText(user.getAddress());
@@ -54,6 +49,7 @@ public class ProfileController {
         dateDeNaissanceDatePicker.setValue(user.getBirthDate().toLocalDate());
         passwordTextField.setText(user.getPassword());
     }
+
 
     @FXML
     public void deleteAccount(ActionEvent event) throws IOException {

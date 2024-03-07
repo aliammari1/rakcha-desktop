@@ -26,6 +26,9 @@ import net.synedra.validatorfx.Validator;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Date;
 import java.util.Arrays;
 import java.util.List;
@@ -397,18 +400,21 @@ public class SignUpController {
 
     @FXML
     void importImage(ActionEvent event) {
-        try {
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.getExtensionFilters().addAll(
-                    new FileChooser.ExtensionFilter("PNG", "*.png"),
-                    new FileChooser.ExtensionFilter("JPG", "*.jpg"));
-            File file = fileChooser.showOpenDialog(new Stage());
-            if (file != null) {
-                Image image = new Image(file.toURI().toURL().toString());
-                photoDeProfilImageView.setImage(image);
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Sélectionner une image");
+        File selectedFile = fileChooser.showOpenDialog(null);
+        if (selectedFile != null) {
+            try {
+                String destinationDirectory = "./src/main/resources/pictures/films/";
+                Path destinationPath = Paths.get(destinationDirectory);
+                String uniqueFileName = System.currentTimeMillis() + "_" + selectedFile.getName();
+                Path destinationFilePath = destinationPath.resolve(uniqueFileName);
+                Files.copy(selectedFile.toPath(), destinationFilePath);
+                Image selectedImage = new Image(destinationFilePath.toUri().toString());
+                photoDeProfilImageView.setImage(selectedImage);
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
             }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
 
     }
@@ -439,7 +445,8 @@ public class SignUpController {
         Stage stage = (Stage) nomTextField.getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Profile.fxml"));
         Parent root = loader.load();
-        stage.setUserData(user);
+        ProfileController profileController = loader.getController();
+        profileController.setData(user);
         stage.setScene(new Scene(root));
     }
 }

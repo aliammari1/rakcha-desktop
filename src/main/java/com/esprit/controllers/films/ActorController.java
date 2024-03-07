@@ -12,7 +12,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -25,26 +24,28 @@ import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import net.synedra.validatorfx.Validator;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 
 public class ActorController {
-    private File selectedFile;
     @FXML
     private TextArea bioAcotr_textArea;
-    @FXML
-    private AnchorPane ActorCrudInterface;
+
     @FXML
     private TableColumn<Actor, Button> DeleteActor_Column1;
+    @FXML
+    private Label errorBio;
 
+    @FXML
+    private Label errorNameActor;
 
     @FXML
     private Button AjouterFilm_Button;
-
-    @FXML
-    private AnchorPane anchorActor_Form;
 
 
     @FXML
@@ -54,53 +55,41 @@ public class ActorController {
     private TableColumn<Actor, Integer> idActor_tableColumn1;
 
     @FXML
-    private ComboBox<String> idfilmActor_comboBox1;
-    @FXML
     private TableColumn<Actor, String> bioActor_tableColumn1;
-
     @FXML
     private ImageView imageAcotr_ImageView1;
-
     @FXML
     private TableColumn<Actor, HBox> imageAcotr_tableColumn1;
 
-    @FXML
-    private AnchorPane image_view2;
 
     @FXML
     private TableColumn<Actor, String> nomAcotr_tableColumn1;
-
     @FXML
     private TextArea nomAcotr_textArea1;
 
     @FXML
     void initialize() {
         readActorTable();
-        TextField userTextField = new TextField();
-        for (Node n : anchorActor_Form.getChildren())
-            System.out.println(n);
-        Validator validator = new Validator();
         setupCellOnEditCommit();
-        validator.createCheck()
-                .dependsOn("nom", nomAcotr_textArea1.textProperty())
-                .withMethod(c -> {
-                    String nom = c.get("nom");
-                    if (!nom.toLowerCase().equals(nom)) {
-                        c.error("Please use only lowercase letters.");
-                    }
-                })
-                .decorates(nomAcotr_textArea1)
-                .immediate();
     }
 
     @FXML
     void importAcotrImage(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Sélectionner une image");
-        selectedFile = fileChooser.showOpenDialog(null);
+        File selectedFile = fileChooser.showOpenDialog(null);
         if (selectedFile != null) {
-            Image selectedImage = new Image(selectedFile.toURI().toString());
-            imageAcotr_ImageView1.setImage(selectedImage);
+            try {
+                String destinationDirectory = "./src/main/resources/pictures/films/";
+                Path destinationPath = Paths.get(destinationDirectory);
+                String uniqueFileName = System.currentTimeMillis() + "_" + selectedFile.getName();
+                Path destinationFilePath = destinationPath.resolve(uniqueFileName);
+                Files.copy(selectedFile.toPath(), destinationFilePath);
+                Image selectedImage = new Image(destinationFilePath.toUri().toString());
+                imageAcotr_ImageView1.setImage(selectedImage);
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
         }
     }
 
@@ -116,23 +105,13 @@ public class ActorController {
 
     @FXML
     void insertActor(ActionEvent event) {
-        if (selectedFile != null) { // Vérifier si une image a été sélectionnée
-            Connection connection = null;
-
-
-            // Créer l'objet Cinema avec l'image String
-
-            ActorService actorService = new ActorService();
-            Actor actor = new Actor(nomAcotr_textArea1.getText(), imageAcotr_ImageView1.getImage().getUrl(), bioAcotr_textArea.getText());
-            actorService.create(actor);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Actor ajoutée");
-            alert.setContentText("Actor ajoutée !");
-            alert.show();
-
-        } else {
-            showAlert("Veuillez sélectionner une image d'abord !");
-        }
+        ActorService actorService = new ActorService();
+        Actor actor = new Actor(nomAcotr_textArea1.getText(), imageAcotr_ImageView1.getImage().getUrl(), bioAcotr_textArea.getText());
+        actorService.create(actor);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Actor ajoutée");
+        alert.setContentText("Actor ajoutée !");
+        alert.show();
         readActorTable();
     }
 
@@ -150,9 +129,22 @@ public class ActorController {
                 }
             }
         });
-    }
+        bioActor_tableColumn1.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Actor, String>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<Actor, String> event) {
+                try {
+                    event.getTableView().getItems().get(
+                            event.getTablePosition().getRow()).setBiographie(event.getNewValue());
+                    updateActor(event.getTableView().getItems().get(
+                            event.getTablePosition().getRow()));
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        });
 
-    @FXML
+    }
+    
     void updateActor(Actor actor) {
         Connection connection = null;
         try {
@@ -161,15 +153,14 @@ public class ActorController {
             ActorService actorService = new ActorService();
 // Assign value to imageString
             /* assign the String value here */
-            System.out.println(actor);
             actorService.update(actor);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Produit modifiée");
-            alert.setContentText("Produit modifiée !");
+            alert.setTitle("Actor modifiée");
+            alert.setContentText("Actor modifiée !");
             alert.show();
 
         } catch (Exception e) {
-            showAlert("Erreur lors de la modification du produit : " + e.getMessage());
+            showAlert("Erreur lors de la modification du Actor : " + e.getMessage());
         }
         readActorTable();
 
@@ -234,13 +225,18 @@ public class ActorController {
                                             new FileChooser.ExtensionFilter("PNG", "*.png"),
                                             new FileChooser.ExtensionFilter("JPG", "*.jpg")
                                     );
-                                    File file = fileChooser.showOpenDialog(new Stage());
+                                    File file = fileChooser.showOpenDialog(null);
                                     if (file != null) {
-                                        Image image = new Image(file.toURI().toURL().toString());
+                                        String destinationDirectory = "./src/main/resources/pictures/films/";
+                                        Path destinationPath = Paths.get(destinationDirectory);
+                                        String uniqueFileName = System.currentTimeMillis() + "_" + file.getName();
+                                        Path destinationFilePath = destinationPath.resolve(uniqueFileName);
+                                        Files.copy(file.toPath(), destinationFilePath);
+                                        Image image = new Image(destinationFilePath.toUri().toString());
                                         imageView.setImage(image);
                                         hBox.getChildren().clear();
-                                        System.out.println(image);
                                         hBox.getChildren().add(imageView);
+                                        new ActorService().update(new Actor(null, destinationFilePath.toUri().toString(), null));
                                     }
                                 } catch (Exception e) {
                                     System.out.println(e.getMessage());
@@ -252,7 +248,6 @@ public class ActorController {
                     }
                     return new SimpleObjectProperty<HBox>(hBox);
                 }
-
             });
             ActorService categoryService = new ActorService();
             ObservableList<Actor> obC = FXCollections.observableArrayList(categoryService.read());

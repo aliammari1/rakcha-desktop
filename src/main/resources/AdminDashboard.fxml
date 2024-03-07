@@ -9,7 +9,7 @@
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="474.0" prefWidth="864.0" xmlns="http://javafx.com/javafx/21"
             fx:controller="com.esprit.controllers.users.AdminDashboardController">
     <BorderPane layoutX="521.0" layoutY="139.0" prefHeight="745.0" prefWidth="1291.0" styleClass="top-form"
-                stylesheets="@dashbord.css"
+                stylesheets="@styles/dashbord.css"
                 AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                 AnchorPane.topAnchor="0.0">
         <top>
@@ -17,13 +17,13 @@
                 <children>
                     <AnchorPane layoutX="578.0" layoutY="-80.0" prefHeight="59.0" prefWidth="1291.0"
                                 styleClass="top-form"
-                                stylesheets="@dashbord.css"
+                                stylesheets="@styles/dashbord.css"
                                 AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                                 AnchorPane.topAnchor="0.0">
                         <children>
                             <Button layoutX="1221.0" layoutY="14.0" mnemonicParsing="false" prefHeight="27.0"
                                     prefWidth="56.0" styleClass="close"
-                                    stylesheets="@dashbord.css"
+                                    stylesheets="@styles/dashbord.css"
                                     AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
                                 <graphic>
                                     <FontAwesomeIconView glyphName="CLOSE"/>
@@ -31,7 +31,7 @@
                             </Button>
                             <Button layoutX="1163.0" layoutY="15.0" mnemonicParsing="false" prefHeight="28.0"
                                     prefWidth="58.0" styleClass="minus"
-                                    stylesheets="@dashbord.css"/>
+                                    stylesheets="@styles/dashbord.css"/>
                             <Label layoutX="53.0" layoutY="15.0" text="Rakcha">
                                 <font>
                                     <Font name="Microsoft Sans Serif" size="14.0"/>
@@ -51,7 +51,7 @@
         </top>
         <left>
             <AnchorPane prefHeight="702.0" prefWidth="235.0" styleClass="nav-form"
-                        stylesheets="@dashbord.css"
+                        stylesheets="@styles/dashbord.css"
                         BorderPane.alignment="CENTER">
                 <children>
                     <FontAwesomeIconView fill="#e1cfcf" glyphName="USER" layoutX="88.0" layoutY="83.0" size="80"
@@ -64,23 +64,23 @@
                     <Label layoutX="99.0" layoutY="121.0" text="Admin" textFill="#e1cfcf"/>
                     <Button alignment="CENTER" layoutX="1.0" layoutY="201.0" mnemonicParsing="false" prefHeight="47.0"
                             prefWidth="239.0" styleClass="nav-btn"
-                            stylesheets="@dashbord.css"
+                            stylesheets="@styles/dashbord.css"
                             text="Ajouter films" textAlignment="CENTER"/>
                     <Button layoutX="1.0" layoutY="298.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="239.0"
                             styleClass="nav-btn"
-                            stylesheets="@dashbord.css"
+                            stylesheets="@styles/dashbord.css"
                             text="Ajouter produit"/>
                     <Button layoutX="1.0" layoutY="247.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="239.0"
                             styleClass="nav-btn"
-                            stylesheets="@dashbord.css"
+                            stylesheets="@styles/dashbord.css"
                             text="Ajouter Cinema"/>
                     <Button layoutY="344.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="241.0"
                             styleClass="nav-btn"
-                            stylesheets="@dashbord.css"
+                            stylesheets="@styles/dashbord.css"
                             text="Liste des films"/>
                     <Button layoutX="20.0" layoutY="603.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="42.0"
                             styleClass="signout"
-                            stylesheets="@dashbord.css"
+                            stylesheets="@styles/dashbord.css"
                             onAction="#signOut"/>
                     <FontAwesomeIconView fill="#fffefe" glyphName="SIGN_OUT" layoutX="31.0" layoutY="631.0" size="20"
                                          wrappingWidth="19.85714340209961">
