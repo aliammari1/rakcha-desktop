@@ -30,8 +30,6 @@ import javafx.scene.text.Font;
 import javafx.scene.web.WebView;
 import org.controlsfx.control.Rating;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
 
 public class FilmUserController {
@@ -69,7 +67,6 @@ public class FilmUserController {
         topthreeVbox.setSpacing(10);
         FilmService filmService = new FilmService();
         String trailerURL = filmService.getTrailerFilm("garfield");
-        System.out.println(trailerURL);
         flowpaneFilm.setHgap(10);
         flowpaneFilm.setVgap(10);
         closeDetailFilm.setOnAction(new EventHandler<ActionEvent>() {
@@ -89,7 +86,6 @@ public class FilmUserController {
 
 
         ObservableList<Node> topthreevboxChildren = topthreeVbox.getChildren();
-        System.out.println(topthreevboxChildren.size());
         for (int i = 0; i < flowpaneFilm.getChildren().size() && i < 3; i++) {
             topthreevboxChildren.add(createtopthree(i));
         }
@@ -106,7 +102,6 @@ public class FilmUserController {
         copyOfAnchorPane.getStyleClass().add("anchorfilm");
         ImageView imageView = new ImageView();
         try {
-            System.out.println("here");
             if (!film.getImage().isEmpty())
                 imageView.setImage(new Image(film.getImage()));
         } catch (Exception e) {
@@ -133,10 +128,11 @@ public class FilmUserController {
         ratefilm.setFont(new Font(18)); // Copy the font size
         ratefilm.getStyleClass().addAll("labeltext");
         double rate = new RatingFilmService().getavergerating(film.getId());
-        System.out.println(BigDecimal.valueOf(rate).setScale(1, RoundingMode.FLOOR));
         ratefilm.setText(rate + "/5");
-        RatingFilm ratingFilm = new RatingFilmService().ratingExiste(film.getId(),/*(Client) stage.getUserData()*/1);
+
+        RatingFilm ratingFilm = new RatingFilmService().ratingExiste(film.getId(),/*(Client) stage.getUserData()*/2);
         filmRate.setRating(ratingFilm != null ? ratingFilm.getRate() : 0);
+
         FontAwesomeIconView etoile = new FontAwesomeIconView();
         etoile.setGlyphName("STAR");
         etoile.setLayoutX(128);
@@ -153,6 +149,7 @@ public class FilmUserController {
         Hyperlink hyperlink = new Hyperlink("Details");
         hyperlink.setLayoutX(89);
         hyperlink.setLayoutY(251);
+
         hyperlink.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -162,34 +159,33 @@ public class FilmUserController {
                 Film film1 = new Film(film);
                 filmNomDetail.setText(film1.getNom());
                 descriptionDETAILfilm.setText(film1.getDescription() + "\nTime:" + film1.getDuree() + "\nYear:" + film1.getAnnederalisation() + "\nCategories: " + new FilmcategoryService().getCategoryNames(film1.getId()) + "\nActors: " + new ActorfilmService().getActorsNames(film1.getId()));
-                imagefilmDetail.setImage(new Image("Logo.png"));
+                imagefilmDetail.setImage(new Image(film1.getImage()));
                 double rate = new RatingFilmService().getavergerating(film1.getId());
-                System.out.println(BigDecimal.valueOf(rate).setScale(1, RoundingMode.FLOOR));
                 labelavregeRate.setText(rate + "/5");
-                RatingFilm ratingFilm = new RatingFilmService().ratingExiste(film1.getId(),/*(Client) stage.getUserData()*/1);
-                filmRate.setRating(ratingFilm != null ? ratingFilm.getRate() : 0);
+                RatingFilm ratingFilm = new RatingFilmService().ratingExiste(film1.getId(),/*(Client) stage.getUserData()*/2);
+                Rating rateFilm = new Rating();
+                rateFilm.setLayoutX(103);
+                rateFilm.setLayoutY(494);
+                rateFilm.setPrefSize(199, 35);
+                rateFilm.setRating(ratingFilm != null ? ratingFilm.getRate() : 0);
                 //Stage stage = (Stage) hyperlink.getScene().getWindow();
-                filmRate.ratingProperty().addListener(new ChangeListener<Number>() {
+
+                rateFilm.ratingProperty().addListener(new ChangeListener<Number>() {
                     @Override
                     public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
                         RatingFilmService ratingFilmService = new RatingFilmService();
-                        RatingFilm ratingFilm = ratingFilmService.ratingExiste(film1.getId(), 1 /*(Client) stage.getUserData()*/);
+                        RatingFilm ratingFilm = ratingFilmService.ratingExiste(film1.getId(), 2/*(Client) stage.getUserData()*/);
+                        System.out.println("---------   " + film1.getId());
                         if (ratingFilm != null)
                             ratingFilmService.delete(ratingFilm);
                         ratingFilmService.create(new RatingFilm(film1, /*(Client) stage.getUserData()*/(Client) new UserService().getUserById(2), t1.intValue()));
                         double rate = new RatingFilmService().getavergerating(film1.getId());
-                        System.out.println(BigDecimal.valueOf(rate).setScale(1, RoundingMode.FLOOR));
                         labelavregeRate.setText(rate + "/5");
-                        List<Film> filmList = new FilmService().read();
-//                        flowpaneFilm.getChildren().clear();
-//                        for (Film film : filmList) {
-//                            System.out.println(film);
-//                            flowpaneFilm.getChildren().add(createFilmCard(film));
-//                        }
-//                        topthreeVbox.getChildren().clear();
-//                        for (int i = 0; i < 3; i++) {
-//                            topthreeVbox.getChildren().add(createtopthree(i));
-//                        }
+                        ratefilm.setText(rate + "/5");
+                        topthreeVbox.getChildren().clear();
+                        for (int i = 0; i < 3; i++) {
+                            topthreeVbox.getChildren().add(createtopthree(i));
+                        }
                     }
                 });
                 trailer_Button.setOnAction(new EventHandler<ActionEvent>() {
@@ -199,7 +195,6 @@ public class FilmUserController {
                             node.setDisable(false);
                         });
                         WebView webView = new WebView();
-                        System.out.println(film1.getNom());
                         webView.getEngine().load(new FilmService().getTrailerFilm(film1.getNom()));
                         anchorPane_Trailer.setVisible(true);
                         anchorPane_Trailer.getChildren().add(webView);
@@ -216,6 +211,7 @@ public class FilmUserController {
                         });
                     }
                 });
+                detalAnchorPane.getChildren().add(rateFilm);
 
             }
         });
@@ -225,24 +221,23 @@ public class FilmUserController {
     }
 
     public AnchorPane createtopthree(int filmRank) {
-        AnchorPane anchorPane = new AnchorPane();
-        anchorPane.setLayoutX(0);
-        anchorPane.setLayoutY(0);
-        anchorPane.setPrefSize(544, 226);
-        anchorPane.getStyleClass().add("meilleurfilm");
         List<RatingFilm> ratingFilmList = new RatingFilmService().getavergeratingSorted();
+        AnchorPane anchorPane = new AnchorPane();
         if (ratingFilmList.size() > filmRank) {
+            anchorPane.setLayoutX(0);
+            anchorPane.setLayoutY(0);
+            anchorPane.setPrefSize(544, 226);
+            anchorPane.getStyleClass().add("meilleurfilm");
             RatingFilm ratingFilm = ratingFilmList.get(filmRank);
-            System.out.println(ratingFilm);
             ImageView imageView = new ImageView();
             try {
-                System.out.println("here");
                 if (!ratingFilm.getId_film().getImage().isEmpty())
                     imageView.setImage(new Image(ratingFilm.getId_film().getImage()));
             } catch (Exception e) {
                 System.out.println(e.getMessage());
                 throw new RuntimeException(e);
             }
+
             imageView.setLayoutX(21);
             imageView.setLayoutY(21);
             imageView.setFitHeight(167);
@@ -266,81 +261,12 @@ public class FilmUserController {
             rating.setLayoutX(344);
             rating.setLayoutY(38);
             rating.setPrefSize(176, 32);
-            rating.setRating(ratingFilm.getRate());
-            rating.setDisable(true);
             rating.setPartialRating(true);
+            double rate = new RatingFilmService().getavergerating(ratingFilm.getId_film().getId());
+            rating.setRating(rate);
+            rating.setDisable(true);
 
-            Hyperlink hyperlink = new Hyperlink("detail");
-            hyperlink.setLayoutX(404);
-            hyperlink.setLayoutY(118);
-            hyperlink.setPrefSize(56, 35);
-            hyperlink.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    detalAnchorPane.setVisible(true);
-                    anchorPaneFilm.setOpacity(0.26);
-                    anchorPaneFilm.setDisable(true);
-                    Film film1 = new Film(ratingFilm.getId_film());
-                    filmNomDetail.setText(film1.getNom());
-                    descriptionDETAILfilm.setText(film1.getDescription() + "\nTime:" + film1.getDuree() + "\nYear:" + film1.getAnnederalisation() + "\nCategories: " + new FilmcategoryService().getCategoryNames(film1.getId()) + "\nActors: " + new ActorfilmService().getActorsNames(film1.getId()));
-                    imagefilmDetail.setImage(new Image("Logo.png"));
-
-                    double rate = new RatingFilmService().getavergerating(film1.getId());
-                    System.out.println(BigDecimal.valueOf(rate).setScale(1, RoundingMode.FLOOR));
-                    labelavregeRate.setText(rate + "/5");
-                    RatingFilm ratingFilm = new RatingFilmService().ratingExiste(film1.getId(),/*(Client) stage.getUserData()*/1);
-                    filmRate.setRating(ratingFilm != null ? ratingFilm.getRate() : 0);
-                    //Stage stage = (Stage) hyperlink.getScene().getWindow();
-                    filmRate.ratingProperty().addListener(new ChangeListener<Number>() {
-                        @Override
-                        public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                            RatingFilmService ratingFilmService = new RatingFilmService();
-                            RatingFilm ratingFilm = ratingFilmService.ratingExiste(film1.getId(), 1 /*(Client) stage.getUserData()*/);
-                            if (ratingFilm != null)
-                                ratingFilmService.delete(ratingFilm);
-                            ratingFilmService.create(new RatingFilm(film1, /*(Client) stage.getUserData()*/(Client) new UserService().getUserById(2), t1.intValue()));
-                            double rate = new RatingFilmService().getavergerating(film1.getId());
-                            System.out.println(BigDecimal.valueOf(rate).setScale(1, RoundingMode.FLOOR));
-                            labelavregeRate.setText(rate + "/5");
-
-//                            List<Film> filmList = new FilmService().read();
-//                            flowpaneFilm.getChildren().clear();
-//                            for (Film film : filmList) {
-//                                System.out.println(film);
-//                                flowpaneFilm.getChildren().add(createFilmCard(film));
-//                            }
-
-                        }
-                    });
-                    trailer_Button.setOnAction(new EventHandler<ActionEvent>() {
-                        @Override
-                        public void handle(ActionEvent event) {
-                            anchorPane_Trailer.getChildren().forEach(node -> {
-                                node.setDisable(false);
-                            });
-                            WebView webView = new WebView();
-                            System.out.println(film1.getNom());
-                            webView.getEngine().load(new FilmService().getTrailerFilm(film1.getNom()));
-                            anchorPane_Trailer.setVisible(true);
-                            anchorPane_Trailer.getChildren().add(webView);
-                            anchorPane_Trailer.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-                                @Override
-                                public void handle(KeyEvent keyEvent) {
-                                    if (keyEvent.getCode() == KeyCode.ESCAPE) {
-                                        anchorPane_Trailer.getChildren().forEach(node -> {
-                                            node.setDisable(true);
-                                        });
-                                        anchorPane_Trailer.setVisible(false);
-                                    }
-                                }
-                            });
-                        }
-                    });
-                }
-            });
-
-
-            anchorPane.getChildren().addAll(nomFilm, button, rating, imageView, hyperlink);
+            anchorPane.getChildren().addAll(nomFilm, button, rating, imageView);
         }
         return anchorPane;
     }
