@@ -1,47 +1,24 @@
-package com.example.rakcha1.controllers.series;
+package com.esprit.controllers.series;
 
-import com.example.rakcha1.HelloApplication;
-import com.example.rakcha1.modeles.series.Episode;
-import com.example.rakcha1.modeles.series.Serie;
-import com.example.rakcha1.service.series.IServiceEpisode;
-import com.example.rakcha1.service.series.IServiceEpisodeImpl;
-import javafx.event.ActionEvent;
+import com.esprit.models.series.Episode;
+import com.esprit.models.series.Serie;
+import com.esprit.services.series.IServiceEpisode;
+import com.esprit.services.series.IServiceEpisodeImpl;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
-import javafx.scene.layout.HBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import javafx.fxml.FXML;
 import javafx.scene.media.MediaView;
-
-import javafx.scene.image.Image;
-
-
-import javax.imageio.ImageIO;
-import java.awt.image.RenderedImage;
-import javax.imageio.ImageIO;
-
-
-
 
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 

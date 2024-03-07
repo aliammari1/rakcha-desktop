@@ -1,7 +1,7 @@
-package com.example.rakcha1.service.series;
+package com.esprit.services.series;
 
-import com.example.rakcha1.modeles.series.Categorie;
-import com.example.rakcha1.utils.mydatabase;
+import com.esprit.models.series.Categorie;
+import com.esprit.utils.mydatabase;
 
 import java.sql.*;
 import java.util.ArrayList;

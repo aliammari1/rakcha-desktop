@@ -1,15 +1,14 @@
-package com.example.rakcha1.controllers.series;
+package com.esprit.controllers.series;
 
 
-import com.example.rakcha1.modeles.series.Categorie;
-import com.example.rakcha1.modeles.series.Serie;
-import com.example.rakcha1.service.series.DTO.SerieDto;
-import com.example.rakcha1.service.series.IServiceCategorieImpl;
-import com.example.rakcha1.service.series.IServiceSerieImpl;
+import com.esprit.services.series.DTO.SerieDto;
+import com.esprit.models.series.Categorie;
+import com.esprit.models.series.Serie;
+import com.esprit.services.series.IServiceCategorieImpl;
+import com.esprit.services.series.IServiceSerieImpl;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;

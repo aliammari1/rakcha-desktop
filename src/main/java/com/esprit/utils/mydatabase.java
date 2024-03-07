@@ -1,4 +1,4 @@
-package com.example.rakcha1.utils;
+package com.esprit.utils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

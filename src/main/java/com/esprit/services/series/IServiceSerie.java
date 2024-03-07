@@ -1,11 +1,10 @@
-package com.example.rakcha1.service.series;
+package com.esprit.services.series;
 
 
-import com.example.rakcha1.service.series.DTO.SerieDto;
+import com.esprit.services.series.DTO.SerieDto;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;  // Import Map
 
 
 public interface IServiceSerie<T> {

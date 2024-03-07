@@ -1,8 +1,8 @@
-package com.example.rakcha1.service.series;
+package com.esprit.services.series;
 
 
 
-import com.example.rakcha1.modeles.series.Categorie;
+import com.esprit.models.series.Categorie;
 
 import java.sql.SQLException;
 import java.util.List;

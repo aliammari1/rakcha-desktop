@@ -1,4 +1,4 @@
-package com.example.rakcha1.modeles.series;
+package com.esprit.models.series;
 
 
 public class Episode {
