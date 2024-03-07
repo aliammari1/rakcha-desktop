@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.rakcha1.controllers.series.EpisodeController">
+<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.rakcha1.controllers.EpisodeController">
    <children>
       <SplitPane layoutX="26.0" layoutY="27.0" prefHeight="591.0" prefWidth="157.0" stylesheets="@dashbord.css">
          <items>

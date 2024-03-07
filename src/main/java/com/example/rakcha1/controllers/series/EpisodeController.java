@@ -17,9 +17,13 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import com.twilio.Twilio;
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.type.PhoneNumber;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
@@ -367,9 +371,33 @@ public class EpisodeController {
     }
 
 
-    ////
+
+
+
+    // Méthode pour envoyer un SMS avec Twilio
+    private void sendSMS(String recipientNumber, String messageBody) {
+        PhoneNumber fromPhoneNumber = new PhoneNumber("+17573640849");
+        PhoneNumber toPhoneNumber = new PhoneNumber(recipientNumber);
+
+        Message message = Message.creator(toPhoneNumber, fromPhoneNumber, messageBody).create();
+
+        System.out.println("SMS sent successfully: " + message.getSid());
+    }
+
+
+
+
+
+
+
+
+
+
+    public static final String ACCOUNT_SID = "ACd3d2094ef7f546619e892605940f1631";
+    public static final String AUTH_TOKEN = "8d56f8a04d84ff2393de4ea888f677a1";
     @FXML
     void ajouterSerie(ActionEvent event) {
+        Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
         IServiceEpisodeImpl episodeserv = new IServiceEpisodeImpl();
         Episode episode = new Episode();
         titrecheck();numbercheck( );seasoncheck( );picturechek( );videocheck( );seriecheck( );
@@ -388,8 +416,22 @@ public class EpisodeController {
                     }
                 }
                 episodeserv.ajouter(episode);
+            // Envoi d'un SMS après avoir ajouté l'épisode avec succès
+            //String message = "A new episode is here : " + episode.getNomSerie();
+            //sendSMS("+21653775010", message);
+            for (Serie s : serieList) {
+                if (Objects.equals(s.getNom(), serieF.getValue())) {
+                    episode.setIdserie(s.getIdserie());
+                    // Envoi d'un SMS après avoir ajouté l'épisode avec succès
+                    String message = " Episode " + episode.getNumeroepisode() + " Season " + episode.getSaison() +  "from your series : " + s.getNom()+ " is now available!";
+                    sendSMS("+21653775010", message);
+                    break; // Sortir de la boucle une fois la série trouvée
+                }
+            }
 
-                showAlert("Succes", "The episode has been successfully saved");
+
+
+
                 tableView.refresh();
                 ref();
             } catch(Exception e){

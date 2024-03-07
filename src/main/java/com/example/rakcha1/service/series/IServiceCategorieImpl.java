@@ -5,10 +5,13 @@ import com.example.rakcha1.utils.mydatabase;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class IServiceCategorieImpl implements IServiceCategorie<Categorie> {
     private Connection connection;
+    private static List<Categorie> categories;
     public IServiceCategorieImpl(){
         connection= mydatabase.getInstance().getConnection();
     }
@@ -60,5 +63,33 @@ public class IServiceCategorieImpl implements IServiceCategorie<Categorie> {
         System.out.println(categories);
         return categories;
 
+    }
+
+
+    public Map<Categorie, Long> getCategoriesStatistics() {
+        Map<Categorie, Long> statistics = new HashMap<>();
+
+        try {
+            String query = "SELECT categories.*, COUNT(series.idserie) as series_count " +
+                    "FROM categories " +
+                    "LEFT JOIN series ON categories.idcategorie = series.idcategorie " +
+                    "GROUP BY categories.idcategorie";
+            PreparedStatement statement = connection.prepareStatement(query);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                Categorie categorie = new Categorie();
+                categorie.setIdcategorie(resultSet.getInt("idcategorie"));
+                categorie.setNom(resultSet.getString("nom"));
+                categorie.setDescription(resultSet.getString("description"));
+
+                long seriesCount = resultSet.getLong("series_count");
+                statistics.put(categorie, seriesCount);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return statistics;
     }
 }

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
@@ -10,7 +9,7 @@
 <?import javafx.scene.media.MediaView?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="900.0" stylesheets="@dashbord.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.rakcha1.controllers.series.EpisodeClientController">
+<AnchorPane prefHeight="600.0" prefWidth="900.0" stylesheets="@dashbord.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.rakcha1.controllers.EpisodeClientController">
    <children>
       <Pane layoutY="-1.0" prefHeight="606.0" prefWidth="158.0" styleClass="nav-form" stylesheets="@dashbord.css">
          <children>
@@ -61,19 +60,15 @@
       <Pane layoutX="379.0" layoutY="87.0" prefHeight="448.0" prefWidth="516.0" styleClass="bg-white">
          <children>
             <MediaView fx:id="midiavideo" fitHeight="400.0" fitWidth="500.0" layoutX="6.0" layoutY="14.0" />
-            <Button id="jouerbtn" fx:id="jouerbtn" alignment="CENTER" contentDisplay="CENTER" layoutX="256.0" layoutY="399.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="83.0" stylesheets="@dashbord.css" text="Play" textFill="#cc2020">
-               <styleClass>
-                  <String fx:value="arrow" />
-                  <String fx:value="bg-white" />
-               </styleClass>
+            <Button id="jouerbtn" fx:id="jouerbtn" alignment="CENTER" contentDisplay="CENTER" layoutX="256.0" layoutY="399.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="83.0" styleClass="arrow" stylesheets="@dashbord.css" text="Play" textFill="#cc2020">
                <font>
                   <Font name="Bodoni MT Black" size="12.0" />
                </font></Button>
-            <Button fx:id="pausebtn" alignment="CENTER" contentDisplay="CENTER" layoutX="346.0" layoutY="398.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="74.0" styleClass="bg-white" stylesheets="@dashbord.css" text="Pause" textFill="#ac3131" textOverrun="WORD_ELLIPSIS">
+            <Button fx:id="pausebtn" alignment="CENTER" contentDisplay="CENTER" layoutX="345.0" layoutY="399.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="74.0" stylesheets="@dashbord.css" text="Pause" textFill="#ac3131" textOverrun="WORD_ELLIPSIS">
                <font>
                   <Font name="Bodoni MT Black" size="12.0" />
                </font></Button>
-            <Button fx:id="arreterbtn" alignment="CENTER" contentDisplay="CENTER" layoutX="428.0" layoutY="398.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="74.0" styleClass="bg-white" stylesheets="@dashbord.css" text="Stop" textFill="#d73333">
+            <Button fx:id="arreterbtn" alignment="CENTER" contentDisplay="CENTER" layoutX="428.0" layoutY="399.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="74.0" stylesheets="@dashbord.css" text="Stop" textFill="#d73333">
                <font>
                   <Font name="Bodoni MT Black" size="12.0" />
                </font></Button>

@@ -9,8 +9,11 @@ public class Episode {
     private String image;
     private String video;
     private int idserie;
-
+    ///
+    private Serie serie;
+///
     public Episode() {
+        this.serie = new Serie();
     }
 
     public Episode(String titre, int numeroepisode, int saison, String image,String video, int idserie) {
@@ -90,4 +93,21 @@ public class Episode {
                 ", idserie=" + idserie +
                 '}';
     }
+
+    public Serie getSerie() {
+        return serie;
+    }
+
+    public void setSerie(Serie serie) {
+        this.serie = serie;
+    }
+
+    // Méthode pour obtenir le nom de la série associée à l'épisode
+    public String getNomSerie() {
+        return serie != null ? serie.getNom() : null;
+    }
+
+
+
+
 }

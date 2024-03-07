@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.rakcha1.controllers.series.CategoriesClientController">
+<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.rakcha1.controllers.CategoriesClientController">
    <children>
       <SplitPane layoutX="26.0" layoutY="27.0" prefHeight="591.0" prefWidth="157.0" stylesheets="@dashbord.css">
          <items>

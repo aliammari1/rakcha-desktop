@@ -13,6 +13,9 @@ public class Serie {
     public Serie() {
     }
 
+    public Serie(String s, String s1, String s2, String s3, String image) {
+    }
+
     public String getNom() {
         return nom;
     }

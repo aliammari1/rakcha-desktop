@@ -1,5 +1,6 @@
 package com.example.rakcha1.controllers.series;
 
+
 import com.example.rakcha1.modeles.series.Categorie;
 import com.example.rakcha1.modeles.series.Serie;
 import com.example.rakcha1.service.series.DTO.SerieDto;
@@ -8,6 +9,7 @@ import com.example.rakcha1.service.series.IServiceSerieImpl;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -17,15 +19,18 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import org.apache.commons.mail.DefaultAuthenticator;
+import org.apache.commons.mail.Email;
+import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.HtmlEmail;
 
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 public class SerieController {
+    ///
     @FXML
     private Label categoriecheck;
     @FXML
@@ -52,6 +57,8 @@ public class SerieController {
     private List<Categorie> categorieList;
     @FXML
     private TableView<SerieDto> tableView;
+    
+
     private void ref(){
         tableView.getItems().clear();
         tableView.getColumns().clear();
@@ -322,6 +329,27 @@ boolean nomcheck( ){
 
 //////////////////////
 
+    public void sendEmail(String recipientEmail, String subject, String message) {
+        try {
+
+            Email email = new HtmlEmail();
+            email.setHostName("smtp.gmail.com");
+            email.setSmtpPort(587); // Port SMTP
+            email.setStartTLSEnabled(true); // Utiliser STARTTLS
+            email.setAuthenticator(new DefaultAuthenticator("nourhene.ftaymia@esprit.tn", "211JFT2451"));
+            //email.setSSLOnConnect(true); // Utiliser SSL
+            email.setFrom("nourhene.ftaymia@esprit.tn");
+            email.setSubject(subject);
+            email.setMsg(message);
+            email.addTo(recipientEmail);
+            email.send();
+            System.out.println("Email sent successfully.");
+        } catch (EmailException e) {
+            System.out.println("Error sending email: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
 
     @FXML
     void ajouterSerie(ActionEvent event) {
@@ -345,14 +373,44 @@ boolean nomcheck( ){
                 serieserv.ajouter(serie);
                 showAlert("successfully", "The serie has been successfully saved");
                 nomcheck.setText("");categoriecheck.setText("");directeurcheck.setText("");payscheck.setText("");resumecheck.setText("");imagechek.setText("");
+                // Envoyer un e-mail de notification
+                String recipientEmail = "nourhene.ftaymia@esprit.tn"; // Remplacez par l'adresse e-mail réelle du destinataire
+                String subject = "Exciting News! New Series Alert 🚀";
+                String message = "Dear Viewer,\n\nWe are thrilled to announce a new series on our platform!\n\n" +
+                        "Title: " + serie.getNom() + "\n" +
+                        "Description: " + serie.getResume() + "\n\n" +
+                        "Get ready for an incredible viewing experience. Enjoy the show!\n\n" +
+                        "Best regards.\n";
+                String newSerieTitle = serie.getNom();
+                String newSerieDescription = serie.getResume(); // Vous pouvez personnaliser cela
+                sendEmail(recipientEmail, newSerieTitle, message);
                 ref();
+
 
             } catch (Exception e) {
                 showAlert("Error", "An error occurred while saving the serie: " + e.getMessage());
                 System.out.println(e.getMessage());
+
             }
         }
-    }
+///
+        /*
+        private void showStatistics() {
+            IServiceSerieImpl serviceSerie = new IServiceSerieImpl();
+
+            try {
+                Map<String, Long> statistics = serviceSerie.getSeriesStatisticsByCategory();
+                // Handle or display the statistics as needed
+                System.out.println(statistics);
+            } catch (SQLException e) {
+                e.printStackTrace();
+                // Handle the exception
+            }
+        }
+        */
+       ///
+        }
+
     //Gestion du menu
     @FXML
     void Ocategories(ActionEvent event) throws IOException {
@@ -381,4 +439,18 @@ boolean nomcheck( ){
         stage.show();
 
     }
-}
+
+    }
+   /*
+    @FXML
+    public void showStatistics(ActionEvent actionEvent) {
+        statstiqueController.handleShowPieChart();
+
+    }
+    */
+
+
+
+
+
+
