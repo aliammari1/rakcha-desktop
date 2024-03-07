@@ -1,17 +1,13 @@
-package com.example.rakcha1.service.series;
+package com.esprit.services.series;
 
-import com.example.rakcha1.modeles.series.Serie;
-import com.example.rakcha1.service.series.DTO.SerieDto;
-import com.example.rakcha1.utils.mydatabase;
-
-import java.util.HashMap;
-import java.util.Map;  // Import Map
+import com.esprit.models.series.Serie;
+import com.esprit.services.series.DTO.SerieDto;
+import com.esprit.utils.mydatabase;
 
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class IServiceSerieImpl implements IServiceSerie<Serie> {
     private List<Serie> seriesList;  // Assurez-vous d'initialiser cette liste

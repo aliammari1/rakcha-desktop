@@ -1,10 +1,10 @@
-package com.example.rakcha1.controllers.series;
+package com.esprit.controllers.series;
 
-import com.example.rakcha1.modeles.series.Episode;
-import com.example.rakcha1.modeles.series.Serie;
-import com.example.rakcha1.service.series.DTO.EpisodeDto;
-import com.example.rakcha1.service.series.IServiceEpisodeImpl;
-import com.example.rakcha1.service.series.IServiceSerieImpl;
+import com.esprit.models.series.Episode;
+import com.esprit.models.series.Serie;
+import com.esprit.services.series.DTO.EpisodeDto;
+import com.esprit.services.series.IServiceSerieImpl;
+import com.esprit.services.series.IServiceEpisodeImpl;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,7 +23,6 @@ import com.twilio.type.PhoneNumber;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;

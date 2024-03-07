@@ -1,4 +1,4 @@
-package com.example.rakcha1.controllers.series;
+package com.esprit.controllers.series;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

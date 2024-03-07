@@ -1,6 +1,6 @@
-package com.example.rakcha1.service.series.DTO;
+package com.esprit.services.series.DTO;
 
-import com.example.rakcha1.modeles.series.Serie;
+import com.esprit.models.series.Serie;
 
 public class SerieDto extends Serie {
     private String nomCategories;

@@ -1,7 +1,7 @@
-package com.example.rakcha1.controllers.series;
+package com.esprit.controllers.series;
 
-import com.example.rakcha1.modeles.series.Categorie;
-import com.example.rakcha1.service.series.IServiceCategorieImpl;
+import com.esprit.models.series.Categorie;
+import com.esprit.services.series.IServiceCategorieImpl;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

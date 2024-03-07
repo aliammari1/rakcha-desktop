@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="953.0" stylesheets="@dashbord.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.rakcha1.controllers.SerieClientController">
+<AnchorPane prefHeight="600.0" prefWidth="953.0" stylesheets="@dashbord.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.series.SerieClientController">
    <children>
       <Pane layoutX="-6.0" prefHeight="600.0" prefWidth="170.0" styleClass="nav-form" stylesheets="@dashbord.css" />
       <Pane layoutX="164.0" prefHeight="70.0" prefWidth="781.0" stylesheets="@dashbord.css">

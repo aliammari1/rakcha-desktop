@@ -1,10 +1,9 @@
-package com.example.rakcha1.controllers.series;
+package com.esprit.controllers.series;
 
-import com.example.rakcha1.HelloApplication;
-import com.example.rakcha1.modeles.series.Categorie;
-import com.example.rakcha1.modeles.series.Serie;
-import com.example.rakcha1.service.series.IServiceCategorieImpl;
-import com.example.rakcha1.service.series.IServiceSerieImpl;
+import com.esprit.models.series.Categorie;
+import com.esprit.models.series.Serie;
+import com.esprit.services.series.IServiceCategorieImpl;
+import com.esprit.services.series.IServiceSerieImpl;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import javafx.collections.ObservableList;
 
 
 public class SerieClientController {
@@ -132,7 +130,7 @@ public class SerieClientController {
         listeSerie.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.intValue() >= 0) {
                 Serie selectedSerie = listeSerie.getItems().get(newValue.intValue());
-                FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/EpisodeClient.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/EpisodeClient.fxml"));
                 Stage stage = new Stage();
                 try {
                     Parent root = fxmlLoader.load();

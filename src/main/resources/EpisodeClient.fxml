@@ -9,7 +9,7 @@
 <?import javafx.scene.media.MediaView?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="900.0" stylesheets="@dashbord.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.rakcha1.controllers.EpisodeClientController">
+<AnchorPane prefHeight="600.0" prefWidth="900.0" stylesheets="@dashbord.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.series.EpisodeClientController">
    <children>
       <Pane layoutY="-1.0" prefHeight="606.0" prefWidth="158.0" styleClass="nav-form" stylesheets="@dashbord.css">
          <children>
