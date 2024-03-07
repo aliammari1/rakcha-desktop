@@ -13,6 +13,8 @@ public class Categorie {
         this.description = description;
     }
 
+
+
     public int getIdcategorie() {
         return idcategorie;
     }

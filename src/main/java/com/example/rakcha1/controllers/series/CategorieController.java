@@ -5,6 +5,7 @@ import com.example.rakcha1.service.series.IServiceCategorieImpl;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -227,4 +228,48 @@ public class CategorieController {
         stage.setScene(scene);
         stage.show();
     }
+    @FXML
+    public void showStatistics(ActionEvent actionEvent) {
+        if (actionEvent != null) {
+
+
+            // Logique pour basculer vers la vue des statistiques
+            // Vous pouvez utiliser un FXMLLoader pour charger la vue des statistiques
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/StatistiquesView.fxml"));
+                Parent root = loader.load();
+                StatistiqueController statistiqueController = loader.getController();
+                // Initialisez le contrôleur statistique si nécessaire
+                statistiqueController.initialize();
+
+                // Créez une nouvelle scène
+                Scene scene = new Scene(root);
+
+                // Obtenez la scène actuelle à partir de l'événement
+                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+
+                // Remplacez la scène actuelle par la nouvelle scène
+                stage.setScene(scene);
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+                // Gérer l'exception
+            }
+        } else {
+            // Gérer le cas où actionEvent est nul
+            System.out.println("actionEvent is null");
+        }
+
+
+    }
+
+
+
+
+
+
+
+
+
+
 }

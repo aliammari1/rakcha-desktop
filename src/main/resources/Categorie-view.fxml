@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="1000.0" stylesheets="@dashbord.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.rakcha1.controllers.series.CategorieController">
+<AnchorPane prefHeight="600.0" prefWidth="1000.0" stylesheets="@dashbord.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.rakcha1.controllers.CategorieController">
    <children>
       <SplitPane layoutX="16.0" layoutY="17.0" prefHeight="591.0" prefWidth="157.0" stylesheets="@dashbord.css">
          <items>
@@ -85,5 +85,6 @@
             <Image url="@../../../../../../Downloads/107122.png" />
          </image>
       </ImageView>
+      <Button layoutX="458.0" layoutY="54.0" mnemonicParsing="false" onAction="#showStatistics" prefHeight="35.0" prefWidth="170.0" styleClass="instert-btn" stylesheets="@dashbord.css" text="Show Statistics" />
    </children>
 </AnchorPane>

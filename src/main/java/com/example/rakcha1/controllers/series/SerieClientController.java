@@ -16,16 +16,24 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+
 import javafx.stage.Stage;
+
+
 
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import javafx.collections.ObservableList;
+
 
 public class SerieClientController {
+    @FXML
+    private Label resultatLabel;
     private ObservableList<String> selectedCategories = FXCollections.observableArrayList();
     @FXML
     private ComboBox<String> CamboxCategorie;
@@ -35,10 +43,18 @@ public class SerieClientController {
     private List<Serie> listerecherche;
     @FXML
     private TextField recherchefld;
+
+
     public void afficher() throws SQLException {
         IServiceCategorieImpl iServiceCategorie=new IServiceCategorieImpl();
         categorieList=iServiceCategorie.recuperer();
     }
+    private void trierParNom(List<Serie> series) {
+        Collections.sort(series, (serie1, serie2) -> serie1.getNom().compareToIgnoreCase(serie2.getNom()));
+    }
+
+
+
     //FOCTION RECHERCHE
     public static List<Serie> rechercher(List<Serie> liste, String recherche) {
         List<Serie> resultats = new ArrayList<>();
@@ -51,32 +67,34 @@ public class SerieClientController {
 
         return resultats;
     }
- public void afficherliste(List<Serie> series){
-     listeSerie.getItems().clear();
+    public void afficherliste(List<Serie> series){
+        listeSerie.getItems().clear();
 
-     listeSerie.getItems().addAll(series);
-     listeSerie.setCellFactory(param -> new ListCell<Serie>() {
-         @Override
-         protected void updateItem(Serie item, boolean empty) {
-             super.updateItem(item, empty);
-             if (empty || item == null) {
-                 setText(null);
-             } else {
-                 double imageWidth = 200; // Largeur fixe souhaitée
-                 double imageHeight = 200; // Hauteur fixe souhaitée
-                 String img =item.getImage();
-                 File file = new File(img);
-                 Image image = new Image(file.toURI().toString());
-                 ImageView imageView = new ImageView(image);
-                 imageView.setFitWidth(imageWidth);
-                 imageView.setFitHeight(imageHeight);
-                 imageView.setPreserveRatio(true);
-                 setText("\n   Name :"+item.getNom()+"\n  Summary: "+item.getResume()+ "\n   Director : "+item.getDirecteur()+"\n   Country: " +item.getPays() );
-                 setGraphic(imageView);
-             }
-         }
-     });
- }
+        listeSerie.getItems().addAll(series);
+        listeSerie.setCellFactory(param -> new ListCell<Serie>() {
+            @Override
+            protected void updateItem(Serie item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    double imageWidth = 200; // Largeur fixe souhaitée
+                    double imageHeight = 200; // Hauteur fixe souhaitée
+                    String img =item.getImage();
+                    File file = new File(img);
+                    Image image = new Image(file.toURI().toString());
+                    ImageView imageView = new ImageView(image);
+                    imageView.setFitWidth(imageWidth);
+                    imageView.setFitHeight(imageHeight);
+                    imageView.setPreserveRatio(true);
+                    setText("\n   Name :"+item.getNom()+"\n  Summary: "+item.getResume()+ "\n   Director : "+item.getDirecteur()+"\n   Country: " +item.getPays() );
+                    setGraphic(imageView);
+                }
+            }
+        });
+    }
+
+
     @FXML
     private void initialize() throws SQLException {
         IServiceSerieImpl iServiceSerie = new IServiceSerieImpl();
@@ -96,6 +114,7 @@ public class SerieClientController {
 
                         try {
                             listerecherche=iServiceSerie.recuperes(c.getIdcategorie());
+                            trierParNom(listerecherche); // Tri des séries par nom
                             afficherliste(listerecherche);
                         } catch (SQLException e) {
                             throw new RuntimeException(e);
@@ -129,6 +148,7 @@ public class SerieClientController {
             }
         });
 
+
     }
     ///gestion de menu
     @FXML
@@ -155,4 +175,6 @@ public class SerieClientController {
         stage.setScene(scene);
         stage.show();
     }
+
+
 }
