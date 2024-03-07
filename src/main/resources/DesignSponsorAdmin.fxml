@@ -13,11 +13,11 @@
 
 <AnchorPane prefHeight="716.0" prefWidth="918.0" stylesheets="@dashboard.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.DesignSponsorAdminController">
    <children>
-      <TableView fx:id="tvSponsor" layoutX="580.0" layoutY="157.0" prefHeight="432.0" prefWidth="331.0" stylesheets="@dashboard.css">
+      <TableView fx:id="tvSponsor" layoutX="628.0" layoutY="198.0" prefHeight="432.0" prefWidth="510.0" stylesheets="@dashboard.css">
         <columns>
           <TableColumn fx:id="tcNomS" prefWidth="142.0" text="Nom Société" />
-            <TableColumn fx:id="tcLogo" minWidth="5.0" prefWidth="118.0" text="Logo" />
-            <TableColumn fx:id="tcDeleteS" prefWidth="75.0" text="Delete" />
+            <TableColumn fx:id="tcLogo" minWidth="5.0" prefWidth="128.0" text="Logo" />
+            <TableColumn fx:id="tcDeleteS" prefWidth="65.0" />
         </columns>
       </TableView>
       <AnchorPane prefHeight="717.0" prefWidth="215.0" styleClass="nav-form" stylesheets="@dashboard.css">
@@ -51,28 +51,35 @@
             </ImageView>
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="224.0" layoutY="122.0" prefHeight="534.0" prefWidth="342.0" styleClass="bg-white" stylesheets="@dashboard.css">
+      <AnchorPane layoutX="224.0" layoutY="122.0" prefHeight="508.0" prefWidth="342.0" styleClass="bg-white" stylesheets="@dashboard.css">
          <children>
-            <Label layoutX="13.0" layoutY="118.0" text="Company Name :">
+            <Label layoutX="12.0" layoutY="106.0" text="Company Name :">
                <font>
                   <Font name="Arial Rounded MT Bold" size="16.0" />
                </font>
             </Label>
-            <Label layoutX="13.0" layoutY="194.0" text="Logo (PNG format) :">
+            <Label layoutX="14.0" layoutY="174.0" text="Logo (PNG format) :">
                <font>
                   <Font name="Arial Rounded MT Bold" size="16.0" />
                </font>
             </Label>
-            <ImageView fx:id="image" fitHeight="81.0" fitWidth="100.0" layoutX="103.0" layoutY="448.0" pickOnBounds="true" preserveRatio="true" styleClass="image-view-red" />
-            <Label contentDisplay="CENTER" layoutX="49.0" layoutY="35.0" prefHeight="53.0" prefWidth="215.0" text="Add Sponsor" textAlignment="CENTER" textFill="#466288">
-               <font>
-                  <Font name="Arial Narrow Bold Italic" size="36.0" />
-               </font>
-            </Label>
-            <FontAwesomeIconView fx:id="iconLogoS" fill="#bf1515" glyphName="UPLOAD" layoutX="181.0" layoutY="211.0" onMouseClicked="#selectImage" selectionFill="#2c2a2a" size="20" />
-            <TextField fx:id="tfNomS" layoutX="168.0" layoutY="116.0" />
-            <Button fx:id="bAddS" layoutX="119.0" layoutY="263.0" mnemonicParsing="false" onAction="#ajouter_sponsor" prefHeight="30.0" prefWidth="69.0" styleClass="button-client" stylesheets="@dashboard.css" text="Add" />
+            <ImageView fx:id="image" fitHeight="168.0" fitWidth="254.0" layoutX="44.0" layoutY="237.0" pickOnBounds="true" preserveRatio="true" styleClass="image-view-red" />
+            <FontAwesomeIconView fx:id="iconLogoS" fill="#bf1515" glyphName="UPLOAD" layoutX="194.0" layoutY="191.0" onMouseClicked="#selectImage" selectionFill="#2c2a2a" size="20" />
+            <TextField fx:id="tfNomS" layoutX="168.0" layoutY="104.0" />
+            <Button fx:id="bAddS" layoutX="125.0" layoutY="427.0" mnemonicParsing="false" onAction="#ajouter_sponsor" prefHeight="30.0" prefWidth="69.0" styleClass="instert-btn" stylesheets="@dashboard.css" text="Add" />
          </children>
       </AnchorPane>
+      <Label layoutX="548.0" layoutY="30.0" text="SPONSOR MANAGEMENT" textFill="#943232">
+         <font>
+            <Font name="Dosis ExtraBold" size="60.0" />
+         </font>
+      </Label>
+      <Label layoutX="243.0" layoutY="88.0" text="Add Sponsor :" textFill="#943232">
+         <font>
+            <Font name="Britannic Bold" size="30.0" />
+         </font>
+      </Label>
+      <TextField fx:id="tfRechercheS" layoutX="649.0" layoutY="154.0" prefHeight="25.0" prefWidth="188.0" promptText="Keywords.." styleClass="search-pane" stylesheets="@dashboard.css" />
+      <FontAwesomeIconView fill="#6f6a6a" glyphName="SEARCH" layoutX="628.0" layoutY="174.0" size="13" text="" wrappingWidth="21.428571701049805" />
    </children>
 </AnchorPane>

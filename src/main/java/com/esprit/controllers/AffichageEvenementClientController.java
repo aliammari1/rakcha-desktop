@@ -1,16 +1,21 @@
-/*package com.esprit.controllers;
+package com.esprit.controllers;
 
+import com.esprit.models.Categorie_evenement;
 import com.esprit.models.Evenement;
+import com.esprit.models.Feedback;
+import com.esprit.services.CategorieService;
 import com.esprit.services.EvenementService;
+import com.esprit.services.FeedbackEvenementService;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -24,114 +29,129 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Blob;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class AffichageEvenementClientController implements Initializable  {
+
+import javafx.fxml.FXML;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.FlowPane;
+
+public class AffichageEvenementClientController {
+
+    @FXML
+    private FlowPane EventFlowPane;
+
+    @FXML
+    private Button bSend;
+
+    @FXML
+    private ComboBox<String> cbeventname;
+
+    @FXML
+    private TextArea taComment;
 
 
     @FXML
-    public TextField SearchBar;
+    private TableColumn<Evenement, String> tcCategorieE;
+
     @FXML
-    private  FlowPane evenementFlowPane;
+    private TableColumn<Evenement, Date> tcDDE;
+
+    @FXML
+    private TableColumn<Evenement, Date> tcDFE;
+
+    @FXML
+    private TableColumn<Evenement, String> tcDescriptionE;
+
+    @FXML
+    private TableColumn<Evenement, String> tcEtatE;
+
+    @FXML
+    private TableColumn<Evenement, String> tcLieuE;
+
+    @FXML
+    private TableColumn<Evenement, String> tcNomE;
+
+    @FXML
+    private TextField tfRechercheEc;
+
+    @FXML
+    private TableView<Evenement> tvEvenement;
 
 
+        @FXML
+        void initialize() {
 
-    public void initialize(URL location, ResourceBundle resources) {
-        loadAcceptedEvents();
+            EvenementService es = new EvenementService();
 
-    }
-    private void loadAcceptedEvents() {
-        // Récupérer toutes les evenements depuis le service
-        EvenementService es = new EvenementService();
-        List<Evenement>Evenements =es.show();
-        // Créer une carte pour chaque évenement et l'ajouter à la FlowPane
-        for (Evenement evenement : Evenements){
-            //VBox card = createEventCard(evenement);
-            VBox cardContainer = createEvenementCard(evenement);
+            for (Evenement e : es.show()) {
+                cbeventname.getItems().add(e.getNom());
+            }
 
-            evenementFlowPane.getChildren().add(cardContainer);
+
+            afficher_evenements();
+
+
         }
+
+    private void afficher_evenements() {
+        // Initialiser les cellules de la TableView
+        tcNomE.setCellValueFactory(new PropertyValueFactory<Evenement,String>("nom"));
+        tcCategorieE.setCellValueFactory(new PropertyValueFactory<Evenement,String>("nomCategorie"));
+        tcDDE.setCellValueFactory(new PropertyValueFactory<Evenement,Date>("dateDebut"));
+        tcDFE.setCellValueFactory(new PropertyValueFactory<Evenement,Date>("dateFin"));
+        tcLieuE.setCellValueFactory(new PropertyValueFactory<Evenement,String>("lieu"));
+        tcEtatE.setCellValueFactory(new PropertyValueFactory<Evenement,String>("etat"));
+        tcDescriptionE.setCellValueFactory(new PropertyValueFactory<Evenement,String>("description"));
+
+
+        // Utiliser une ObservableList pour stocker les éléments
+        ObservableList<Evenement> list = FXCollections.observableArrayList();
+        EvenementService es = new EvenementService();
+        list.addAll(es.show());
+        tvEvenement.setItems(list);
+
     }
 
-    private VBox createEvenementCard (Evenement evenement)  {
-        // Créer une carte pour l'evenement avec ses informations
+    @FXML
+    void ajouterFeedback(ActionEvent event) {
 
-        VBox cardContainer = new VBox(5);
-        cardContainer.setStyle("-fx-padding: 50px 0 0  50px;"); // Ajout de remplissage à gauche pour le décalage
+        // Récupérer les valeurs des champs de saisie
+        String nomEvenement = cbeventname.getValue();
+        int id_user;
+        String comment = taComment.getText().trim();
 
-        AnchorPane card = new AnchorPane();
-
-
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/DetailsEvenementClient.fxml"));
-
-                Parent root = null;
-                System.out.println("Clique sur le nom de l'évenement. ID de l'evenement : " + evenement.getId());
-                root = loader.load();
-                // Récupérez le contrôleur et passez l'id du produit lors de l'initialisation
-                DetailsEvenementClientController controller = loader.getController();
-                controller.setId(evenement.getId());
-
-                // Afficher la nouvelle interface
-                Stage stage = new Stage();
-                stage.setScene(new Scene(root,1280,700));
-                stage.setTitle("Détails de l'evenemnt");
-                stage.show();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+        // Vérifier si les champs sont vides
+        if (nomEvenement.isEmpty() || comment.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Typing Error !");
+            alert.setContentText("Please fill out the form");
+            alert.show();
+        }
 
 
-        });
+        // Créer l'objet Feedback
+        FeedbackEvenementService fs = new FeedbackEvenementService();
+        EvenementService es = new EvenementService();
+        Feedback nouveauFeedback = new Feedback(es.getEvenementByNom(nomEvenement), id_user =0, comment);
+        fs.add(nouveauFeedback);
 
-
-
-        // Lieu de l'evenement
-        Label lieuLabel = new Label(" " + Evenement.getLieu());
-        /*priceLabel.setLayoutX(10);
-        priceLabel.setLayoutY(300);
-        priceLabel.setFont(Font.font("Helvetica", 16)); // Définir la police et la taille
-
-
-
-        // Nom de l'evenement
-        Label nameLabel = new Label(Evenement.getNom());
-       /*nameLabel.setLayoutX(70);
-        nameLabel.setLayoutY(310);
-        nameLabel.setFont(Font.font("Arial", 12)); // Définir la police et la taille
-        nameLabel.setStyle("-fx-text-fill: black;"); // Définir la couleur du texte
-        nameLabel.setOnMouseClicked(event -> {
-
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/DetailsProduitClient.fxml"));
-
-                Parent root = null;
-                System.out.println("Clique sur le nom du produit. ID de l'evenement : " + evenement.getId_produit());
-                root = loader.load();
-                // Récupérez le contrôleur et passez l'id du produit lors de l'initialisation
-                DetailsEvenementClientController controller = loader.getController();
-                controller.setId(Evenement.getId());
-
-                // Afficher la nouvelle interface
-                Stage stage = new Stage();
-                stage.setScene(new Scene(root,1280,700));
-                stage.setTitle("Détails de l'evenement");
-                stage.show();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-
-        };
-
-    private void showAlert (String message){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Information");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+        alert.setTitle("Feedback Sent");
+        alert.setContentText("Feedback Sent !");
+        alert.show();
+
+        taComment.clear();
+
     }
 
+}
 
-} */
+
+
+
+
+
