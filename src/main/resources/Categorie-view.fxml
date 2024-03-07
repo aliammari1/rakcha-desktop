@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="600.0" prefWidth="1000.0" stylesheets="@dashbord.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.rakcha1.controllers.CategorieController">
+   <children>
+      <SplitPane layoutX="16.0" layoutY="17.0" prefHeight="591.0" prefWidth="157.0" stylesheets="@dashbord.css">
+         <items>
+            <Pane prefHeight="605.0" prefWidth="156.0" styleClass="nav-form" stylesheets="@dashbord.css">
+               <children>
+                  <Button layoutX="8.0" layoutY="143.0" mnemonicParsing="false" onAction="#Ocategories" prefHeight="25.0" prefWidth="141.0" styleClass="nav-btn" stylesheets="@dashbord.css" text="Categories" />
+                  <Button layoutX="8.0" layoutY="211.0" mnemonicParsing="false" onAction="#Oseries" prefHeight="25.0" prefWidth="141.0" styleClass="nav-btn" stylesheets="@dashbord.css" text="Series" />
+                  <Button layoutX="11.0" layoutY="277.0" mnemonicParsing="false" onAction="#Oepisode" prefWidth="134.0" styleClass="nav-btn" stylesheets="@dashbord.css" text="Episodes" />
+               </children>
+            </Pane>
+         </items>
+      </SplitPane>
+      <Pane layoutX="183.0" layoutY="99.0" prefHeight="449.0" prefWidth="248.0" styleClass="bg-white" stylesheets="@dashbord.css">
+         <children>
+            <Label layoutX="14.0" layoutY="71.0" prefHeight="17.0" prefWidth="68.0" stylesheets="@dashbord.css" text="Name :" textFill="#a42121">
+            <font>
+               <Font name="Arial Rounded MT Bold" size="16.0" />
+            </font>
+            </Label>
+            <Label layoutX="14.0" layoutY="178.0" prefHeight="20.0" prefWidth="112.0" stylesheets="@dashbord.css" text="Description :" textFill="#a42121">
+            <font>
+               <Font name="Arial Rounded MT Bold" size="16.0" />
+            </font>
+            </Label>
+            <TextField fx:id="nomF" layoutX="40.0" layoutY="108.0" prefHeight="25.0" prefWidth="193.0" styleClass="text-field-red" stylesheets="@dashbord.css" />
+            <TextField fx:id="descreptionF" layoutX="40.0" layoutY="215.0" prefHeight="25.0" prefWidth="193.0" styleClass="text-field-red" stylesheets="@dashbord.css" />
+            <Button layoutX="111.0" layoutY="305.0" mnemonicParsing="false" onAction="#ajouteroeuvre" prefHeight="25.0" prefWidth="104.0" styleClass="instert-btn" stylesheets="@dashbord.css" text="ADD">
+               <font>
+                  <Font name="Blackadder ITC" size="12.0" />
+               </font></Button>
+            <Label fx:id="checkname" layoutX="21.0" layoutY="147.0" prefHeight="20.0" prefWidth="210.0" stylesheets="@dashbord.css" textFill="RED">
+               <font>
+                  <Font name="Arial" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="checkdescreption" layoutX="26.0" layoutY="257.0" prefHeight="20.0" prefWidth="210.0" stylesheets="@dashbord.css" textFill="RED">
+               <font>
+                  <Font name="Arial" size="12.0" />
+               </font>
+            </Label>
+            <Label layoutX="40.0" layoutY="14.0" prefHeight="37.0" prefWidth="193.0" stylesheets="@dashbord.css" text="Add Category" textFill="#8785d4">
+               <font>
+                  <Font name="Arial Rounded MT Bold" size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Pane layoutX="447.0" layoutY="95.0" prefHeight="496.0" prefWidth="542.0" styleClass="bg-white" stylesheets="@dashbord.css">
+         <children>
+            <TableView fx:id="tableView" layoutX="16.0" layoutY="58.0" prefHeight="315.0" prefWidth="518.0" stylesheets="@dashbord.css">
+
+            </TableView>
+            <Button layoutX="312.0" layoutY="14.0" mnemonicParsing="false" onAction="#ajouteroeuvre" prefHeight="35.0" prefWidth="216.0" stylesheets="@dashbord.css" text="Categories Details " textFill="#c3c75e" textOverrun="CENTER_ELLIPSIS">
+               <font>
+                  <Font name="Yu Gothic Medium" size="12.0" />
+               </font>
+               <styleClass>
+                  <String fx:value="insert-btn" />
+                  <String fx:value="instert-btn" />
+               </styleClass>
+            </Button>
+         </children></Pane>
+      <TextField layoutX="748.0" layoutY="56.0" prefHeight="26.0" prefWidth="239.0" text="Search">
+         <font>
+            <Font name="Bell MT" size="12.0" />
+         </font>
+      </TextField>
+      <ImageView fitHeight="20.0" fitWidth="23.0" layoutX="963.0" layoutY="59.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../../../Downloads/107122.png" />
+         </image>
+      </ImageView>
+      <Button layoutX="458.0" layoutY="54.0" mnemonicParsing="false" onAction="#showStatistics" prefHeight="35.0" prefWidth="170.0" styleClass="instert-btn" stylesheets="@dashbord.css" text="Show Statistics" />
+   </children>
+</AnchorPane>
