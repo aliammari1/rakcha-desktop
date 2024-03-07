@@ -50,9 +50,11 @@ public class DesignCategorieAdminController {
     private TextField tfRechercheC;
 
     @FXML
-    void GestionCategorie(ActionEvent event) throws IOException {
-        // Charger la nouvelle interface ListCinemaAdmin.fxml
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignCategorieAdmin.fxml"));
+    void gestionEvenement(ActionEvent event) throws IOException {
+
+
+        // Charger la nouvelle interface ListevenementAdmin.fxml
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignEvenementAdmin.fxml"));
         Parent root = loader.load();
 
         // Créer une nouvelle scène avec la nouvelle interface
@@ -64,14 +66,12 @@ public class DesignCategorieAdminController {
         // Créer une nouvelle fenêtre (stage) et y attacher la scène
         Stage stage = new Stage();
         stage.setScene(scene);
-        stage.setTitle("Gestion d'evenements");
+        stage.setTitle("Event Management");
         stage.show();
 
         // Fermer la fenêtre actuelle
         currentStage.close();
-
     }
-
     @FXML
     void initialize() {
 

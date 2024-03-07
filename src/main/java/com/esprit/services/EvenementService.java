@@ -1,8 +1,14 @@
 package com.esprit.services;
 
+import com.esprit.models.Categorie_evenement;
 import com.esprit.models.Evenement;
 
+import com.esprit.models.Feedback;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.EventExcel;
+import com.esprit.utils.EventPDF;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -86,4 +92,68 @@ public class EvenementService implements IService<Evenement> {
 
         return evenements;
     }
+
+    public Evenement getEvenement(int evenement_id) {
+
+        Evenement evenement = null;
+
+        String req = "SELECT * from evenement where id = ?";
+        try {
+            PreparedStatement pst = connection.prepareStatement(req);
+            pst.setInt(1, evenement_id);
+            ResultSet rs = pst.executeQuery();
+            rs.next();
+            CategorieService cs = new CategorieService();
+            evenement = new Evenement((rs.getInt("ID")), rs.getString("nom"), rs.getDate("dateDebut"), rs.getDate("dateFin"), rs.getString("lieu"), cs.getCategorie(rs.getInt("id_categorie")), rs.getString("etat"), rs.getString("description")) ;
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return evenement;
+    }
+
+        public Evenement getEvenementByNom(String evenement_nom) {
+
+        Evenement evenement = null;
+
+        String req = "SELECT * from evenement where nom = ?";
+        try {
+            PreparedStatement pst = connection.prepareStatement(req);
+            pst.setString(1, evenement_nom);
+            ResultSet rs = pst.executeQuery();
+            rs.next();
+            CategorieService cs = new CategorieService();
+            evenement = new Evenement((rs.getInt("ID")), rs.getString("nom"), rs.getDate("dateDebut"), rs.getDate("dateFin"), rs.getString("lieu"), cs.getCategorie(rs.getInt("id_categorie")), rs.getString("etat"), rs.getString("description")) ;
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return evenement;
+    }
+
+    public void generateEventPDF() {
+        EventPDF eventPDF = new EventPDF();
+        eventPDF.generate(this.sort("id"));
+    }
+
+    public void generateEventExcel() {
+        EventExcel eventExcel = new EventExcel();
+        eventExcel.generate(this.sort("id"));
+    }
+
+    public List<Evenement> sort(String Option) {
+        try {
+            List<Evenement> eventList = new ArrayList<>();
+            String query = "SELECT * FROM evenement ORDER BY " + Option;
+            PreparedStatement statement = this.connection.prepareStatement(query);
+            return this.show();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+
 }
