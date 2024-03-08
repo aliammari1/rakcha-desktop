@@ -4,11 +4,10 @@ import com.esprit.models.cinemas.Cinema;
 import com.esprit.models.cinemas.Seance;
 import com.esprit.services.cinemas.CinemaService;
 import com.esprit.services.cinemas.SeanceService;
+import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -17,12 +16,25 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 
+import java.io.ByteArrayInputStream;
+
+import java.sql.Blob;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
+import javafx.application.Platform;
+import javafx.scene.control.Button;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 public class DashboardClientController {
     @FXML
     private FlowPane cinemaFlowPane;
@@ -101,6 +113,7 @@ public class DashboardClientController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         card.getChildren().add(logoImageView);
 
         Label NomLabel = new Label("Name: ");
@@ -150,11 +163,73 @@ public class DashboardClientController {
         planningButton.setUserData(cinema); // Stocker le cinéma dans userData
         planningButton.setOnAction(this::showPlanning);
         card.getChildren().addAll(planningButton);
-
-
+        cardContainer.setOnMouseClicked(event -> geocodeAddress(cinema.getAdresse()));
         cardContainer.getChildren().add(card);
         return cardContainer;
     }
+    private void geocodeAddress(String address) {
+        new Thread(() -> {
+            try {
+                String apiUrl = "https://nominatim.openstreetmap.org/search?format=json&q=" + address.replaceAll(" ", "+");
+                URL url = new URL(apiUrl);
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                con.setRequestMethod("GET");
+                con.setRequestProperty("User-Agent", "Mozilla/5.0");
+
+                BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                String inputLine;
+                StringBuilder content = new StringBuilder();
+                while ((inputLine = in.readLine()) != null) {
+                    content.append(inputLine);
+                }
+                in.close();
+                con.disconnect();
+
+                JSONArray jsonArray = new JSONArray(content.toString());
+                if (jsonArray.length() > 0) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+                    double lat = jsonObject.getDouble("lat");
+                    double lon = jsonObject.getDouble("lon");
+
+                    // Open the dialog with the map on the JavaFX Application Thread
+                    Platform.runLater(() -> openMapDialog(lat, lon));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+    private void openMapDialog(double lat, double lon) {
+        // Create a new dialog
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle("Map");
+
+        // Create a WebView and load the map
+        WebView webView = new WebView();
+        WebEngine webEngine = webView.getEngine();
+        webEngine.load(getClass().getResource("/map.html").toExternalForm());
+        webEngine.setJavaScriptEnabled(true);
+        // Wait for the map to be loaded before placing the marker
+        webEngine.getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == Worker.State.SUCCEEDED) {
+                // Call JavaScript function to update the marker
+                webEngine.executeScript("updateMarker(" + lat + ", " + lon + ");");
+            }
+        });
+
+        // Set the WebView as the dialog content
+        dialog.getDialogPane().setContent(webView);
+        dialog.getDialogPane().setPrefSize(600, 400); // Set dialog size (adjust as needed)
+
+        // Add a close button
+        ButtonType closeButton = new ButtonType("Close", ButtonBar.ButtonData.CANCEL_CLOSE);
+        dialog.getDialogPane().getButtonTypes().add(closeButton);
+
+        // Show the dialog
+        dialog.showAndWait();
+    }
+
+
 
     private void showPlanning(ActionEvent event) {
         planningFlowPane.getChildren().clear();
@@ -232,6 +307,10 @@ public class DashboardClientController {
         }
         return null; // Aucune cinéma trouvée
     }
+
+
+
+
 
 
     private HBox createSeanceCard(Seance seance) {
