@@ -4,10 +4,18 @@ import com.esprit.models.evenements.Sponsor;
 import com.esprit.services.evenements.SponsorService;
 import com.esprit.utils.DataSource;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -16,6 +24,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.io.File;
@@ -31,6 +40,7 @@ import java.util.Objects;
 
 public class DesignSponsorAdminController {
 
+    private final ObservableList<Sponsor> masterData = FXCollections.observableArrayList();
     private File selectedFile; // pour stocke le fichier image selectionné
 
     @FXML
@@ -55,7 +65,10 @@ public class DesignSponsorAdminController {
     private TableView<Sponsor> tvSponsor;
 
     @FXML
-    private TableColumn<Sponsor, Void> tcDeleteS;
+    private TableColumn<Sponsor, Button> tcDeleteS;
+
+    @FXML
+    private TextField tfRechercheS;
 
     @FXML
 
@@ -80,6 +93,7 @@ public class DesignSponsorAdminController {
 
         afficher_sponsor();
         initDeleteColumn();
+        setupSearchFilter();
 
     }
 
@@ -96,7 +110,7 @@ public class DesignSponsorAdminController {
     void selectImage(MouseEvent event) {
 
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Sélectionner une image");
+        fileChooser.setTitle("Select an image");
         selectedFile = fileChooser.showOpenDialog(null);
         if (selectedFile != null) {
             Image selectedImage = new Image(selectedFile.toURI().toString());
@@ -143,13 +157,13 @@ public class DesignSponsorAdminController {
                     }
                 }
 
-                // Créer l'objet Produit avec l'image Blob
+                // Créer l'objet Sponsor avec l'image Blob
                 SponsorService ss = new SponsorService();
                 Sponsor nouveauSponsor = new Sponsor(nomSponsor, imageBlob);
                 ss.create(nouveauSponsor);
 
                 // Ajouter le nouveau produit à la liste existante
-                tvSponsor.getItems().add(nouveauSponsor);
+                tvSponsor.setItems(FXCollections.observableArrayList(ss.read()));
 
                 // Rafraîchir la TableView
                 tvSponsor.refresh();
@@ -160,16 +174,7 @@ public class DesignSponsorAdminController {
                 alert.show();
             } catch (SQLException | IOException e) {
                 showAlert("Error while adding sponsor : " + e.getMessage());
-            } finally {
-                if (connection != null) {
-                    try {
-                        connection.close();
-                    } catch (SQLException e) {
-                        showAlert("Error while closing connection : " + e.getMessage());
-                    }
-                }
             }
-
         } else {
             showAlert("Please select an image !");
         }
@@ -188,12 +193,132 @@ public class DesignSponsorAdminController {
         ss.update(sponsor);
     }
 
+    @FXML
+    void gestionSeries(ActionEvent event) throws IOException {
+
+
+        // Charger la nouvelle interface ListevenementAdmin.fxml
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Serie-view.fxml"));
+        Parent root = loader.load();
+
+        // Créer une nouvelle scène avec la nouvelle interface
+        Scene scene = new Scene(root);
+
+        // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        // Créer une nouvelle fenêtre (stage) et y attacher la scène
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Series Management");
+        stage.show();
+
+        // Fermer la fenêtre actuelle
+        currentStage.close();
+    }
+
+    @FXML
+    void gestionProduits(ActionEvent event) throws IOException {
+
+
+        // Charger la nouvelle interface ListevenementAdmin.fxml
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignProduitAdmin.fxml"));
+        Parent root = loader.load();
+
+        // Créer une nouvelle scène avec la nouvelle interface
+        Scene scene = new Scene(root);
+
+        // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        // Créer une nouvelle fenêtre (stage) et y attacher la scène
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Products Management");
+        stage.show();
+
+        // Fermer la fenêtre actuelle
+        currentStage.close();
+    }
+
+    @FXML
+    void gestionFilms(ActionEvent event) throws IOException {
+
+
+        // Charger la nouvelle interface ListevenementAdmin.fxml
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/InterfaceFilm.fxml"));
+        Parent root = loader.load();
+
+        // Créer une nouvelle scène avec la nouvelle interface
+        Scene scene = new Scene(root);
+
+        // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        // Créer une nouvelle fenêtre (stage) et y attacher la scène
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Movies Management");
+        stage.show();
+
+        // Fermer la fenêtre actuelle
+        currentStage.close();
+    }
+
+    @FXML
+    void gestionCinemas(ActionEvent event) throws IOException {
+
+
+        // Charger la nouvelle interface ListevenementAdmin.fxml
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/DashboardAdminCinema.fxml"));
+        Parent root = loader.load();
+
+        // Créer une nouvelle scène avec la nouvelle interface
+        Scene scene = new Scene(root);
+
+        // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        // Créer une nouvelle fenêtre (stage) et y attacher la scène
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Cinemas Management");
+        stage.show();
+
+        // Fermer la fenêtre actuelle
+        currentStage.close();
+    }
+
+    @FXML
+    void gestionEvenements(ActionEvent event) throws IOException {
+
+
+        // Charger la nouvelle interface ListevenementAdmin.fxml
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignEvenementAdmin.fxml"));
+        Parent root = loader.load();
+
+        // Créer une nouvelle scène avec la nouvelle interface
+        Scene scene = new Scene(root);
+
+        // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        // Créer une nouvelle fenêtre (stage) et y attacher la scène
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Events Management");
+        stage.show();
+
+        // Fermer la fenêtre actuelle
+        currentStage.close();
+    }
+
     void afficher_sponsor() {
 
         // Créer un nouveau ComboBox
         ImageView imageView = new ImageView();
 
-        tcNomS.setCellValueFactory(new PropertyValueFactory<Sponsor, String>("nom"));
+        tcNomS.setCellValueFactory(new PropertyValueFactory<Sponsor, String>("nomSociete"));
         tcNomS.setCellFactory(TextFieldTableCell.forTableColumn());
         tcNomS.setOnEditCommit(event -> {
             Sponsor sponsor = event.getRowValue();
@@ -273,10 +398,9 @@ public class DesignSponsorAdminController {
         });
 
         // Utiliser une ObservableList pour stocker les éléments
-        ObservableList<Sponsor> list = FXCollections.observableArrayList();
         SponsorService ss = new SponsorService();
-        list.addAll(ss.read());
-        tvSponsor.setItems(list);
+        masterData.addAll(ss.read());
+        tvSponsor.setItems(masterData);
 
         // Activer la sélection de cellules
         tvSponsor.getSelectionModel().setCellSelectionEnabled(true);
@@ -284,10 +408,10 @@ public class DesignSponsorAdminController {
     }
 
     private void initDeleteColumn() {
-        Callback<TableColumn<Sponsor, Void>, TableCell<Sponsor, Void>> cellFactory = new Callback<>() {
+        Callback<TableColumn<Sponsor, Button>, TableCell<Sponsor, Button>> cellFactory = new Callback<>() {
             @Override
-            public TableCell<Sponsor, Void> call(final TableColumn<Sponsor, Void> param) {
-                final TableCell<Sponsor, Void> cell = new TableCell<>() {
+            public TableCell<Sponsor, Button> call(final TableColumn<Sponsor, Button> param) {
+                return new TableCell<Sponsor, Button>() {
                     private final Button btnDelete = new Button("Delete");
 
                     {
@@ -298,13 +422,13 @@ public class DesignSponsorAdminController {
                             ss.delete(sponsor);
 
                             // Mise à jour de la TableView après la suppression de la base de données
-                            tvSponsor.getItems().remove(sponsor);
+                            tvSponsor.setItems(FXCollections.observableArrayList(ss.read()));
                             tvSponsor.refresh();
                         });
                     }
 
                     @Override
-                    protected void updateItem(Void item, boolean empty) {
+                    protected void updateItem(Button item, boolean empty) {
                         super.updateItem(item, empty);
                         if (empty) {
                             setGraphic(null);
@@ -313,12 +437,56 @@ public class DesignSponsorAdminController {
                         }
                     }
                 };
-                return cell;
+
             }
         };
 
-        tcDeleteS.setCellFactory(cellFactory);
-        tvSponsor.getColumns().add(tcDeleteS);
+        //tcDeleteS.setCellFactory(cellFactory);
+
+        //tvSponsor.getColumns().add(tcDeleteS);
+        tcDeleteS.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Sponsor, Button>, ObservableValue<Button>>() {
+            @Override
+            public ObservableValue<Button> call(TableColumn.CellDataFeatures<Sponsor, Button> sponsorButtonCellDataFeatures) {
+                final Button btnDelete = new Button("Delete");
+                btnDelete.getStyleClass().add("delete-button");
+                btnDelete.setOnAction((ActionEvent event) -> {
+                    //Evenement evenement = getTableView().getItems().get(getIndex());
+                    SponsorService ss = new SponsorService();
+                    ss.delete(sponsorButtonCellDataFeatures.getValue());
+                    // Mise à jour de la TableView après la suppression de la base de données
+                    tvSponsor.setItems(FXCollections.observableArrayList(ss.read()));
+                    tvSponsor.refresh();
+                });
+                return new SimpleObjectProperty<Button>(btnDelete);
+            }
+        });
+    }
+
+    private void setupSearchFilter() {
+        FilteredList<Sponsor> filteredData = new FilteredList<>(masterData, p -> true);
+
+        tfRechercheS.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(sponsor -> {
+                // If filter text is empty, display all events.
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+
+                // Compare event name, category, and description of every event with filter text.
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                return sponsor.getNomSociete().toLowerCase().contains(lowerCaseFilter); // Filter matches category name.
+            });
+        });
+
+        // Wrap the FilteredList in a SortedList.
+        SortedList<Sponsor> sortedData = new SortedList<>(filteredData);
+
+        // Bind the SortedList comparator to the TableView comparator.
+        sortedData.comparatorProperty().bind(tvSponsor.comparatorProperty());
+
+        // Add sorted (and filtered) data to the table.
+        tvSponsor.setItems(sortedData);
     }
 
     // Méthode pour changer l'image
