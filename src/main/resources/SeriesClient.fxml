@@ -9,10 +9,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="600.0" prefWidth="953.0" stylesheets="@dashbord.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.series.SerieClientController">
    <children>
-      <Pane layoutX="-6.0" prefHeight="600.0" prefWidth="170.0" styleClass="nav-form" stylesheets="@dashbord.css" />
+      <Pane layoutX="-6.0" prefHeight="600.0" prefWidth="170.0" styleClass="nav-form" stylesheets="@dashbord.css">
+         <children>
+            <Button fx:id="listseries" layoutX="10.0" layoutY="130.0" mnemonicParsing="false" onAction="#loadSeriesList" prefHeight="37.0" prefWidth="150.0" styleClass="nav-btn" stylesheets="@dashbord.css" text="List Series" />
+         </children></Pane>
       <Pane layoutX="164.0" prefHeight="70.0" prefWidth="781.0" stylesheets="@dashbord.css">
          <children>
             <ComboBox fx:id="CamboxCategorie" layoutX="637.0" layoutY="17.0" prefHeight="26.0" prefWidth="132.0" promptText="Select Category" stylesheets="@dashbord.css">
@@ -34,8 +38,11 @@
             <Font size="11.0" />
          </font>
       </Label>
-
-
+      <Text layoutX="184.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="All Series :" wrappingWidth="132.0">
+         <font>
+            <Font name="Agency FB" size="18.0" />
+         </font>
+      </Text>
 
    </children>
 </AnchorPane>
