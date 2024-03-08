@@ -13,6 +13,10 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -27,6 +31,7 @@ import javafx.scene.web.WebView;
 
 import java.io.ByteArrayInputStream;
 
+import java.io.IOException;
 import java.sql.Blob;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -34,6 +39,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
+import javafx.stage.Stage;
 import org.controlsfx.control.Rating;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -511,6 +517,66 @@ public class DashboardClientController {
                 .map(Cinema::getNom)
                 .distinct()
                 .collect(Collectors.toList());
+    }
+
+    @FXML
+    void afficherEventsClient(ActionEvent event) throws IOException {
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/AffichageEvenementClient.fxml"));
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Event Client");
+        stage.show();
+        currentStage.close();
+
+    }
+
+    @FXML
+    void afficherMoviesClient(ActionEvent event) throws IOException {
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/filmuser.fxml"));
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Movie Manegement");
+        stage.show();
+        currentStage.close();
+
+    }
+
+    @FXML
+    void afficherProduitsClient(ActionEvent event) throws IOException {
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherProduitClient.fxml"));
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Product Client");
+        stage.show();
+        currentStage.close();
+
+    }
+
+    @FXML
+    void afficherSeriesClient(ActionEvent event) throws IOException {
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/SeriesClient.fxml"));
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Serie Client");
+        stage.show();
+        currentStage.close();
+
     }
 
 
