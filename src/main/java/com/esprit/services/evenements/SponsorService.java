@@ -1,6 +1,9 @@
-package com.esprit.services;
-import com.esprit.models.Sponsor;
+package com.esprit.services.evenements;
+
+import com.esprit.models.evenements.Sponsor;
+import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,7 +14,7 @@ import java.util.List;
 
 public class SponsorService implements IService<Sponsor> {
 
-    private Connection connection;
+    private final Connection connection;
 
     public SponsorService() {
         connection = DataSource.getInstance().getConnection();

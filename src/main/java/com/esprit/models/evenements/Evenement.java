@@ -1,4 +1,5 @@
-package com.esprit.models;
+package com.esprit.models.evenements;
+
 import java.sql.Date;
 
 public class Evenement {
@@ -28,6 +29,7 @@ public class Evenement {
 
 
     }
+
     public Evenement(String nom, Date dateDebut, Date dateFin, String lieu, Categorie_evenement categorie, String etat, String description) {
         this.nom = nom;
         this.dateDebut = dateDebut;
@@ -117,6 +119,7 @@ public class Evenement {
                 ", description='" + description + '\'' +
                 '}';
     }
+
     public Categorie_evenement getId_categorieEvenement() {
         return categorie;
     }

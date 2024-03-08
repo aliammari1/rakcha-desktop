@@ -1,6 +1,7 @@
 package com.esprit.tests;
-import com.esprit.models.Categorie_evenement;
-import com.esprit.services.EvenementService;
+
+import com.esprit.models.evenements.Categorie_evenement;
+import com.esprit.services.evenements.EvenementService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,19 +13,19 @@ public class MainProg {
         //Evenement
         EvenementService es = new EvenementService();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-       try {
+        try {
             java.util.Date utildateDebut = dateFormat.parse("10/12/2024");
             java.util.Date utildateFin = dateFormat.parse("14/12/2024");
 
             // Convert java.util.Date to java.sql.Date
             java.sql.Date sqldateDebut = new java.sql.Date(utildateDebut.getTime());
             java.sql.Date sqldateFin = new java.sql.Date(utildateFin.getTime());
-           Categorie_evenement cc = new Categorie_evenement(1,"horreur","cest un film dhorreur");
+            Categorie_evenement cc = new Categorie_evenement(1, "horreur", "cest un film dhorreur");
 
             //es.add(new Evenement(1, "Soiree3", sqldateDebut, sqldateFin, "Sfax",cc , "en cours", "soiree jeune"));
             //es.update(new Evenement(1,"soiree4",sqldateDebut,sqldateFin,"Tunis",cc,"fini","soiree jeune"));
             System.out.println(es.show());
-           //es.delete(new Evenement(1,"ahmed",null,null,null,cc,null,null));
+            //es.delete(new Evenement(1,"ahmed",null,null,null,cc,null,null));
         } catch (ParseException e) {
             System.out.println("Erreur date invalide : " + e.getMessage());
         }

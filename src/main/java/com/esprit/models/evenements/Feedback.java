@@ -1,12 +1,11 @@
-package com.esprit.models;
+package com.esprit.models.evenements;
 
 public class Feedback {
 
     int IDFeedback;
-
-    private Evenement feedbackevenement;
     int id_user;
     String commentaire;
+    private Evenement feedbackevenement;
 
     public Feedback(int IDFeedback, Evenement feedbackevenement, int id_user, String commentaire) {
         this.IDFeedback = IDFeedback;

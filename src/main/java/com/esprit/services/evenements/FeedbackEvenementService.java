@@ -1,7 +1,7 @@
-package com.esprit.services;
+package com.esprit.services.evenements;
 
-import com.esprit.models.Evenement;
-import com.esprit.models.Feedback;
+import com.esprit.models.evenements.Feedback;
+import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
 
 import java.sql.Connection;
@@ -11,9 +11,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FeedbackEvenementService implements IService<Feedback>{
+public class FeedbackEvenementService implements IService<Feedback> {
 
-    private Connection connection;
+    private final Connection connection;
 
     public FeedbackEvenementService() {
         connection = DataSource.getInstance().getConnection();
@@ -78,7 +78,7 @@ public class FeedbackEvenementService implements IService<Feedback>{
             ResultSet rs = pst.executeQuery();
             EvenementService es = new EvenementService();
             while (rs.next()) {
-                feedbacks.add(new Feedback(rs.getInt("ID"),es.getEvenement(rs.getInt("id_evenement")),rs.getInt("id_user"), rs.getString("Commentaire")));
+                feedbacks.add(new Feedback(rs.getInt("ID"), es.getEvenement(rs.getInt("id_evenement")), rs.getInt("id_user"), rs.getString("Commentaire")));
 
             }
         } catch (SQLException e) {

@@ -1,122 +1,73 @@
-package com.esprit.controllers;
+package com.esprit.controllers.evenements;
 
-import com.esprit.models.Categorie_evenement;
-import com.esprit.models.Evenement;
-import com.esprit.services.CategorieService;
-import com.esprit.services.EvenementService;
+import com.esprit.models.evenements.Categorie_evenement;
+import com.esprit.models.evenements.Evenement;
+import com.esprit.services.evenements.CategorieService;
+import com.esprit.services.evenements.EvenementService;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.collections.transformation.FilteredList;
-import javafx.collections.transformation.SortedList;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.*;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.util.Callback;
-import org.w3c.dom.events.EventException;
-import com.esprit.utils.DataSource;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseEvent;
-import javafx.stage.FileChooser;
-
-import java.net.URL;
-import java.sql.*;
-import java.io.*;
-
-import java.io.*;
-import java.sql.Connection;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
-
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import javafx.util.converter.IntegerStringConverter;
 
 import java.io.IOException;
-import java.sql.SQLException;
-import java.util.ResourceBundle;
-import java.util.stream.Collectors;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 
-public class DesignEvenementAdminController{
-
-    @FXML
-    private ComboBox<String> cbCategorie;
-
-    @FXML
-    private Button bPDF;
-
-    @FXML
-    private Button bExcel;
-
-    @FXML
-    private DatePicker dpDD;
-
-    @FXML
-    private DatePicker dpDF;
-
-    @FXML
-    private TableColumn<Evenement, String> tcCategorieE;
-
-    @FXML
-    private TableColumn<Evenement, Date> tcDDE;
-
-    @FXML
-    private TableColumn<Evenement, Date> tcDFE;
-
-    @FXML
-    private TableColumn<Evenement, Void> tcDeleteE;
-
-    @FXML
-    private TableColumn<Evenement, String> tcDescriptionE;
-
-    @FXML
-    private TableColumn<Evenement, String> tcEtatE;
-
-    @FXML
-    private TableColumn<Evenement, String> tcLieuE;
-
-    @FXML
-    private TableColumn<Evenement, String> tcNomE;
-
-    @FXML
-    private TextArea taDescription;
-
-    @FXML
-    private TextField tfEtat;
-
-    @FXML
-    private TextField tfLieu;
-
-    @FXML
-    private TextField tfNomEvenement;
-
-    @FXML
-    private TextField SearchBar;
-
-    @FXML
-    private TableView<Evenement> tvEvenement;
+public class DesignEvenementAdminController {
 
     ObservableList<Evenement> eventSearchModel = FXCollections.observableArrayList();
-
+    @FXML
+    private ComboBox<String> cbCategorie;
+    @FXML
+    private Button bPDF;
+    @FXML
+    private Button bExcel;
+    @FXML
+    private DatePicker dpDD;
+    @FXML
+    private DatePicker dpDF;
+    @FXML
+    private TableColumn<Evenement, String> tcCategorieE;
+    @FXML
+    private TableColumn<Evenement, Date> tcDDE;
+    @FXML
+    private TableColumn<Evenement, Date> tcDFE;
+    @FXML
+    private TableColumn<Evenement, Button> tcDeleteE;
+    @FXML
+    private TableColumn<Evenement, String> tcDescriptionE;
+    @FXML
+    private TableColumn<Evenement, String> tcEtatE;
+    @FXML
+    private TableColumn<Evenement, String> tcLieuE;
+    @FXML
+    private TableColumn<Evenement, String> tcNomE;
+    @FXML
+    private TextArea taDescription;
+    @FXML
+    private TextField tfEtat;
+    @FXML
+    private TextField tfLieu;
+    @FXML
+    private TextField tfNomEvenement;
+    @FXML
+    private TextField SearchBar;
+    @FXML
+    private TableView<Evenement> tvEvenement;
 
     @FXML
     void initialize() {
@@ -135,10 +86,10 @@ public class DesignEvenementAdminController{
     }
 
     private void initDeleteColumn() {
-        Callback<TableColumn<Evenement, Void>, TableCell<Evenement, Void>> cellFactory = new Callback<>() {
+        Callback<TableColumn<Evenement, Button>, TableCell<Evenement, Button>> cellFactory = new Callback<>() {
             @Override
-            public TableCell<Evenement, Void> call(final TableColumn<Evenement, Void> param) {
-                final TableCell<Evenement, Void> cell = new TableCell<>() {
+            public TableCell<Evenement, Button> call(final TableColumn<Evenement, Button> param) {
+                return new TableCell<Evenement, Button>() {
                     private final Button btnDelete = new Button("Delete");
 
                     {
@@ -155,7 +106,7 @@ public class DesignEvenementAdminController{
                     }
 
                     @Override
-                    protected void updateItem(Void item, boolean empty) {
+                    protected void updateItem(Button item, boolean empty) {
                         super.updateItem(item, empty);
                         if (empty) {
                             setGraphic(null);
@@ -164,12 +115,28 @@ public class DesignEvenementAdminController{
                         }
                     }
                 };
-                return cell;
             }
         };
 
-        tcDeleteE.setCellFactory(cellFactory);
-        tvEvenement.getColumns().add(tcDeleteE);
+        //tcDeleteE.setCellFactory(cellFactory);
+
+        tcDeleteE.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Evenement, Button>, ObservableValue<Button>>() {
+            @Override
+            public ObservableValue<Button> call(TableColumn.CellDataFeatures<Evenement, Button> evenementButtonCellDataFeatures) {
+                final Button btnDelete = new Button("Delete");
+                btnDelete.getStyleClass().add("delete-button");
+                btnDelete.setOnAction((ActionEvent event) -> {
+                    //Evenement evenement = getTableView().getItems().get(getIndex());
+                    EvenementService es = new EvenementService();
+                    es.delete(evenementButtonCellDataFeatures.getValue());
+                    // Mise à jour de la TableView après la suppression de la base de données
+                    tvEvenement.getItems().remove(evenementButtonCellDataFeatures.getValue());
+                    tvEvenement.refresh();
+                });
+                return new SimpleObjectProperty<Button>(btnDelete);
+            }
+        });
+        //tvEvenement.getColumns().add(tcDeleteE);
     }
 
 
@@ -231,7 +198,12 @@ public class DesignEvenementAdminController{
     void afficher_evenement() {
         tvEvenement.getItems().clear();
 
-       tcCategorieE.setCellValueFactory(new PropertyValueFactory<Evenement, String>("nom_categorie"));
+        tcCategorieE.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Evenement, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Evenement, String> evenementStringCellDataFeatures) {
+                return new SimpleStringProperty(evenementStringCellDataFeatures.getValue().getNom_categorieEvenement());
+            }
+        });
         // Définissez le rendu de la cellule en utilisant le ComboBox
         tcCategorieE.setCellFactory(column -> {
             return new TableCell<Evenement, String>() {
@@ -406,6 +378,7 @@ public class DesignEvenementAdminController{
         // Fermer la fenêtre actuelle
         currentStage.close();
     }
+
     @FXML
     void generatePDF() {
         EvenementService es = new EvenementService();

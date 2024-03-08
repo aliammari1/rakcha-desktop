@@ -1,4 +1,4 @@
-package com.esprit.models;
+package com.esprit.models.evenements;
 
 public class Categorie_evenement {
 
@@ -16,7 +16,6 @@ public class Categorie_evenement {
         this.nom_categorie = nom_categorie;
         this.description = description;
     }
-
 
 
     public int getId_categorie() {
