@@ -18,7 +18,7 @@ public class MainProgGUI extends Application {
     public void start(Stage primaryStage) throws IOException {
         //FXMLLoader loader = new FXMLLoader(getClass().getResource("/AffichageEvenementClient.fxml"));
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignEvenementAdmin.fxml"));
-        //FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignCategorieAdmin.fxml"));
+        //FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignCategorieEventAdmin.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
