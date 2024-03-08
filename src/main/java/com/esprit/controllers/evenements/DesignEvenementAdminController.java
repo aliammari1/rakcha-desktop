@@ -360,7 +360,7 @@ public class DesignEvenementAdminController {
 
 
         // Charger la nouvelle interface ListproduitAdmin.fxml
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignCategorieAdmin.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignCategorieEventAdmin.fxml"));
         Parent root = loader.load();
 
         // Créer une nouvelle scène avec la nouvelle interface
