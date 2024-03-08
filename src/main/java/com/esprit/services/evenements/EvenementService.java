@@ -1,26 +1,26 @@
-package com.esprit.services;
+package com.esprit.services.evenements;
 
-import com.esprit.models.Categorie_evenement;
-import com.esprit.models.Evenement;
-
-import com.esprit.models.Feedback;
+import com.esprit.models.evenements.Evenement;
+import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
 import com.esprit.utils.EventExcel;
 import com.esprit.utils.EventPDF;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EvenementService implements IService<Evenement> {
 
-    private Connection connection;
+    private final Connection connection;
 
     public EvenementService() {
         connection = DataSource.getInstance().getConnection();
     }
+
     @Override
     public void add(Evenement evenement) {
         String req = "INSERT into evenement(nom,dateDebut,dateFin,lieu,id_categorie,etat,description) values (?, ?, ?, ?, ?, ?, ?)";
@@ -84,7 +84,6 @@ public class EvenementService implements IService<Evenement> {
             CategorieService cs = new CategorieService();
             while (rs.next()) {
                 evenements.add(new Evenement(rs.getInt("ID"), rs.getString("nom"), rs.getDate("dateDebut"), rs.getDate("dateFin"), rs.getString("lieu"), cs.getCategorie(rs.getInt("id_categorie")), rs.getString("etat"), rs.getString("description")));
-
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -104,7 +103,7 @@ public class EvenementService implements IService<Evenement> {
             ResultSet rs = pst.executeQuery();
             rs.next();
             CategorieService cs = new CategorieService();
-            evenement = new Evenement((rs.getInt("ID")), rs.getString("nom"), rs.getDate("dateDebut"), rs.getDate("dateFin"), rs.getString("lieu"), cs.getCategorie(rs.getInt("id_categorie")), rs.getString("etat"), rs.getString("description")) ;
+            evenement = new Evenement((rs.getInt("ID")), rs.getString("nom"), rs.getDate("dateDebut"), rs.getDate("dateFin"), rs.getString("lieu"), cs.getCategorie(rs.getInt("id_categorie")), rs.getString("etat"), rs.getString("description"));
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -113,7 +112,7 @@ public class EvenementService implements IService<Evenement> {
         return evenement;
     }
 
-        public Evenement getEvenementByNom(String evenement_nom) {
+    public Evenement getEvenementByNom(String evenement_nom) {
 
         Evenement evenement = null;
 
@@ -124,7 +123,7 @@ public class EvenementService implements IService<Evenement> {
             ResultSet rs = pst.executeQuery();
             rs.next();
             CategorieService cs = new CategorieService();
-            evenement = new Evenement((rs.getInt("ID")), rs.getString("nom"), rs.getDate("dateDebut"), rs.getDate("dateFin"), rs.getString("lieu"), cs.getCategorie(rs.getInt("id_categorie")), rs.getString("etat"), rs.getString("description")) ;
+            evenement = new Evenement((rs.getInt("ID")), rs.getString("nom"), rs.getDate("dateDebut"), rs.getDate("dateFin"), rs.getString("lieu"), cs.getCategorie(rs.getInt("id_categorie")), rs.getString("etat"), rs.getString("description"));
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());

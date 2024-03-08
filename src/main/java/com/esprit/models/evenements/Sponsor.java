@@ -1,14 +1,14 @@
-package com.esprit.models;
+package com.esprit.models.evenements;
+
 import java.sql.Blob;
-import java.util.Base64;
 
 public class Sponsor {
 
-private int id;
+    private int id;
 
-private String nomSociete;
+    private String nomSociete;
 
-private Blob logo;
+    private Blob logo;
 
     public Sponsor(int id, String nomSociete, Blob logo) {
         this.id = id;
@@ -55,4 +55,4 @@ private Blob logo;
     }
 
 
-    }
+}

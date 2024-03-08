@@ -1,9 +1,7 @@
-package com.esprit.controllers;
+package com.esprit.controllers.evenements;
 
-import com.esprit.models.Evenement;
-import com.esprit.models.Sponsor;
-import com.esprit.services.CategorieService;
-import com.esprit.services.SponsorService;
+import com.esprit.models.evenements.Sponsor;
+import com.esprit.services.evenements.SponsorService;
 import com.esprit.utils.DataSource;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.collections.FXCollections;
@@ -19,7 +17,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
-import javafx.util.converter.IntegerStringConverter;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -59,6 +56,24 @@ public class DesignSponsorAdminController {
 
     @FXML
     private TableColumn<Sponsor, Void> tcDeleteS;
+
+    @FXML
+
+    public static List<Sponsor> rechercher(List<Sponsor> liste, String recherche) {
+        List<Sponsor> resultats = new ArrayList<>();
+
+        if (recherche.isEmpty()) {
+            return resultats;
+        }
+
+        for (Sponsor element : liste) {
+            if (element.getNomSociete() != null && element.getNomSociete().contains(recherche)) {
+                resultats.add(element);
+            }
+        }
+
+        return resultats;
+    }
 
     @FXML
     void initialize() {
@@ -106,60 +121,59 @@ public class DesignSponsorAdminController {
                 alert.show();
             }
 
-                // Vérifier si le nom ne contient que des alphabets et des chiffres
+            // Vérifier si le nom ne contient que des alphabets et des chiffres
             if (!nomSponsor.matches("[a-zA-Z0-9]*")) {
-                    showAlert("Please enter a valid name with no special characters.");
-                    return; // Arrêter l'exécution de la méthode si le nom n'est pas valide
-                }
+                showAlert("Please enter a valid name with no special characters.");
+                return; // Arrêter l'exécution de la méthode si le nom n'est pas valide
+            }
 
-                // Convertir le fichier en un objet Blob
-                Connection connection = null;
-                try {
-                    FileInputStream fis = new FileInputStream(selectedFile);
-                    connection = DataSource.getInstance().getConnection();
-                    Blob imageBlob = connection.createBlob();
+            // Convertir le fichier en un objet Blob
+            Connection connection = null;
+            try {
+                FileInputStream fis = new FileInputStream(selectedFile);
+                connection = DataSource.getInstance().getConnection();
+                Blob imageBlob = connection.createBlob();
 
-                    // Définir le flux d'entrée de l'image dans l'objet Blob
-                    try (OutputStream outputStream = imageBlob.setBinaryStream(1)) {
-                        byte[] buffer = new byte[4096];
-                        int bytesRead;
-                        while ((bytesRead = fis.read(buffer)) != -1) {
-                            outputStream.write(buffer, 0, bytesRead);
-                        }
-                    }
-
-                    // Créer l'objet Produit avec l'image Blob
-                    SponsorService ss = new SponsorService();
-                    Sponsor nouveauSponsor = new Sponsor(nomSponsor, imageBlob);
-                    ss.add(nouveauSponsor);
-
-                    // Ajouter le nouveau produit à la liste existante
-                    tvSponsor.getItems().add(nouveauSponsor);
-
-                    // Rafraîchir la TableView
-                    tvSponsor.refresh();
-
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Sponsor Added");
-                    alert.setContentText("Sponsor Added !");
-                    alert.show();
-                } catch (SQLException | IOException e) {
-                    showAlert("Error while adding sponsor : " + e.getMessage());
-                } finally {
-                    if (connection != null) {
-                        try {
-                            connection.close();
-                        } catch (SQLException e) {
-                            showAlert("Error while closing connection : " + e.getMessage());
-                        }
+                // Définir le flux d'entrée de l'image dans l'objet Blob
+                try (OutputStream outputStream = imageBlob.setBinaryStream(1)) {
+                    byte[] buffer = new byte[4096];
+                    int bytesRead;
+                    while ((bytesRead = fis.read(buffer)) != -1) {
+                        outputStream.write(buffer, 0, bytesRead);
                     }
                 }
+
+                // Créer l'objet Produit avec l'image Blob
+                SponsorService ss = new SponsorService();
+                Sponsor nouveauSponsor = new Sponsor(nomSponsor, imageBlob);
+                ss.add(nouveauSponsor);
+
+                // Ajouter le nouveau produit à la liste existante
+                tvSponsor.getItems().add(nouveauSponsor);
+
+                // Rafraîchir la TableView
+                tvSponsor.refresh();
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Sponsor Added");
+                alert.setContentText("Sponsor Added !");
+                alert.show();
+            } catch (SQLException | IOException e) {
+                showAlert("Error while adding sponsor : " + e.getMessage());
+            } finally {
+                if (connection != null) {
+                    try {
+                        connection.close();
+                    } catch (SQLException e) {
+                        showAlert("Error while closing connection : " + e.getMessage());
+                    }
+                }
+            }
 
         } else {
             showAlert("Please select an image !");
         }
     }
-
 
     @FXML
     void modifier_sponsor(Sponsor sponsor) {
@@ -174,8 +188,7 @@ public class DesignSponsorAdminController {
         ss.update(sponsor);
     }
 
-
-    void afficher_sponsor(){
+    void afficher_sponsor() {
 
         // Créer un nouveau ComboBox
         ImageView imageView = new ImageView();
@@ -187,7 +200,6 @@ public class DesignSponsorAdminController {
             sponsor.setNomSociete(event.getNewValue());
             modifier_sponsor(sponsor);
         });
-
 
 
         // Configurer la colonne Logo pour afficher et changer l'image
@@ -245,7 +257,6 @@ public class DesignSponsorAdminController {
                 sponsor = getTableRow().getItem();
             }
         });
-
 
 
         // Activer l'édition en cliquant sur une ligne
@@ -310,7 +321,6 @@ public class DesignSponsorAdminController {
         tvSponsor.getColumns().add(tcDeleteS);
     }
 
-
     // Méthode pour changer l'image
     private void changerImage(Sponsor sponsor) {
         FileChooser fileChooser = new FileChooser();
@@ -336,34 +346,12 @@ public class DesignSponsorAdminController {
                 sponsor.setLogo(imageBlob);
                 modifier_sponsor(sponsor);
 
-            } catch ( SQLException | IOException e) {
+            } catch (SQLException | IOException e) {
                 e.printStackTrace();
                 showAlert("Error while loading image : " + e.getMessage());
             }
         }
     }
-
-    @FXML
-
-    public static List<Sponsor> rechercher(List<Sponsor> liste, String recherche) {
-        List<Sponsor> resultats = new ArrayList<>();
-
-        if (recherche.isEmpty()) {
-            return resultats;
-        }
-
-        for (Sponsor element : liste) {
-            if (element.getNomSociete() != null && element.getNomSociete().contains(recherche)) {
-                resultats.add(element);
-            }
-        }
-
-        return resultats;
-    }
-
-
-
-
 
 
 }

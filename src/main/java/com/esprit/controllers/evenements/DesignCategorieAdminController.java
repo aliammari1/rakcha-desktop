@@ -1,21 +1,17 @@
-package com.esprit.controllers;
+package com.esprit.controllers.evenements;
 
-import com.esprit.models.Categorie_evenement;
-import com.esprit.services.CategorieService;
+import com.esprit.models.evenements.Categorie_evenement;
+import com.esprit.services.evenements.CategorieService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
@@ -50,6 +46,19 @@ public class DesignCategorieAdminController {
     private TextField tfRechercheC;
 
     @FXML
+    public static List<Categorie_evenement> recherchercat(List<Categorie_evenement> liste, String recherche) {
+        List<Categorie_evenement> resultats = new ArrayList<>();
+
+        for (Categorie_evenement element : liste) {
+            if (element.getNom_categorie() != null && element.getNom_categorie().contains(recherche)) {
+                resultats.add(element);
+            }
+        }
+
+        return resultats;
+    }
+
+    @FXML
     void gestionEvenement(ActionEvent event) throws IOException {
 
 
@@ -72,6 +81,7 @@ public class DesignCategorieAdminController {
         // Fermer la fenêtre actuelle
         currentStage.close();
     }
+
     @FXML
     void initialize() {
 
@@ -79,7 +89,6 @@ public class DesignCategorieAdminController {
         afficher_categorie();
         initDeleteColumn();
     }
-
 
     @FXML
     void ajouter_categorie(ActionEvent event) {
@@ -152,7 +161,6 @@ public class DesignCategorieAdminController {
         categorie_tableView.getColumns().add(tcDeleteC);
     }
 
-
     @FXML
     void modifier_categorie(Categorie_evenement categorieEvenement) {
 
@@ -167,11 +175,10 @@ public class DesignCategorieAdminController {
     }
 
     @FXML
-    void afficher_categorie(){
+    void afficher_categorie() {
 
 
-
-        tcNomC.setCellValueFactory(new PropertyValueFactory<Categorie_evenement,String>("nom_categorie"));
+        tcNomC.setCellValueFactory(new PropertyValueFactory<Categorie_evenement, String>("nom_categorie"));
         tcNomC.setCellFactory(TextFieldTableCell.forTableColumn());
         tcNomC.setOnEditCommit(event -> {
             Categorie_evenement categorieEvenement = event.getRowValue();
@@ -179,7 +186,7 @@ public class DesignCategorieAdminController {
             modifier_categorie(categorieEvenement);
         });
 
-        tcDescriptionC.setCellValueFactory(new PropertyValueFactory<Categorie_evenement,String>("description"));
+        tcDescriptionC.setCellValueFactory(new PropertyValueFactory<Categorie_evenement, String>("description"));
         tcDescriptionC.setCellFactory(TextFieldTableCell.forTableColumn());
         tcDescriptionC.setOnEditCommit(event -> {
             Categorie_evenement categorieEvenement = event.getRowValue();
@@ -210,22 +217,6 @@ public class DesignCategorieAdminController {
         categorie_tableView.getSelectionModel().setCellSelectionEnabled(true);
 
     }
-
-    @FXML
-    public static List<Categorie_evenement> recherchercat(List<Categorie_evenement> liste, String recherche) {
-        List<Categorie_evenement> resultats = new ArrayList<>();
-
-        for (Categorie_evenement element : liste) {
-            if (element.getNom_categorie() != null && element.getNom_categorie().contains(recherche)) {
-                resultats.add(element);
-            }
-        }
-
-        return resultats;
-    }
-
-
-
 
 
 }

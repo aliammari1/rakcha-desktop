@@ -1,16 +1,20 @@
-package com.esprit.services;
+package com.esprit.services.evenements;
 
-import com.esprit.models.Categorie_evenement;
+import com.esprit.models.evenements.Categorie_evenement;
+import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class CategorieService  implements IService<Categorie_evenement> {
+public class CategorieService implements IService<Categorie_evenement> {
 
-    private Connection connection;
+    private final Connection connection;
 
     public CategorieService() {
         connection = DataSource.getInstance().getConnection();
@@ -90,7 +94,7 @@ public class CategorieService  implements IService<Categorie_evenement> {
             pst.setInt(1, categorie_id);
             ResultSet rs = pst.executeQuery();
             rs.next();
-            category = new Categorie_evenement(rs.getInt("ID"), rs.getString("Nom_Categorie"), rs.getString("Description")) ;
+            category = new Categorie_evenement(rs.getInt("ID"), rs.getString("Nom_Categorie"), rs.getString("Description"));
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -98,6 +102,7 @@ public class CategorieService  implements IService<Categorie_evenement> {
 
         return category;
     }
+
     public Categorie_evenement getCategorieByNom(String categorie_nom) {
 
         Categorie_evenement category = null;
@@ -108,7 +113,7 @@ public class CategorieService  implements IService<Categorie_evenement> {
             pst.setString(1, categorie_nom);
             ResultSet rs = pst.executeQuery();
             rs.next();
-            category = new Categorie_evenement(rs.getInt("id"), rs.getString("nom_categorie"), rs.getString("description")) ;
+            category = new Categorie_evenement(rs.getInt("id"), rs.getString("nom_categorie"), rs.getString("description"));
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
