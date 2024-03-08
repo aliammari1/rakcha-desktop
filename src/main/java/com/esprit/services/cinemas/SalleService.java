@@ -13,12 +13,8 @@ import java.util.List;
 
 public class SalleService implements IService<Salle> {
 
-    private final Connection connection;
-
-    public SalleService() {
-        connection = DataSource.getInstance().getConnection();
-    }
-
+    private Connection connection;
+    public SalleService() { connection = DataSource.getInstance().getConnection(); }
     public void create(Salle salle) {
         String req = "INSERT into salle(id_cinema, nb_places, nom_salle) values (?, ?, ?);";
         try {
@@ -87,7 +83,7 @@ public class SalleService implements IService<Salle> {
             pst.setInt(1, salle_id);
             ResultSet rs = pst.executeQuery();
             rs.next();
-            salle = new Salle(rs.getInt("id_salle"), rs.getInt("id_cinema"), rs.getInt("nb_places"), rs.getString("nom_salle"));
+            salle = new Salle(rs.getInt("id_salle"), rs.getInt("id_cinema"), rs.getInt("nb_places"), rs.getString("nom_salle")) ;
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -106,7 +102,7 @@ public class SalleService implements IService<Salle> {
             pst.setString(1, nom_salle);
             ResultSet rs = pst.executeQuery();
             rs.next();
-            salle = new Salle(rs.getInt("id_salle"), rs.getInt("id_cinema"), rs.getInt("nb_places"), rs.getString("nom_salle"));
+            salle = new Salle(rs.getInt("id_salle"), rs.getInt("id_cinema"), rs.getInt("nb_places"), rs.getString("nom_salle")) ;
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -122,7 +118,7 @@ public class SalleService implements IService<Salle> {
             pst.setInt(1, cinemaId);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
-                Salle salle = new Salle(rs.getInt("id_salle"), rs.getInt("id_cinema"), rs.getInt("nb_places"), rs.getString("nom_salle"));
+                Salle salle = new Salle(rs.getInt("id_salle"), rs.getInt("id_cinema"), rs.getInt("nb_places"), rs.getString("nom_salle")) ;
                 roomsForCinema.add(salle);
             }
         } catch (SQLException e) {
