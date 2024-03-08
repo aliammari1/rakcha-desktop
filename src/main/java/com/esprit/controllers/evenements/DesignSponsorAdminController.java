@@ -146,7 +146,7 @@ public class DesignSponsorAdminController {
                 // Créer l'objet Produit avec l'image Blob
                 SponsorService ss = new SponsorService();
                 Sponsor nouveauSponsor = new Sponsor(nomSponsor, imageBlob);
-                ss.add(nouveauSponsor);
+                ss.create(nouveauSponsor);
 
                 // Ajouter le nouveau produit à la liste existante
                 tvSponsor.getItems().add(nouveauSponsor);
@@ -275,7 +275,7 @@ public class DesignSponsorAdminController {
         // Utiliser une ObservableList pour stocker les éléments
         ObservableList<Sponsor> list = FXCollections.observableArrayList();
         SponsorService ss = new SponsorService();
-        list.addAll(ss.show());
+        list.addAll(ss.read());
         tvSponsor.setItems(list);
 
         // Activer la sélection de cellules

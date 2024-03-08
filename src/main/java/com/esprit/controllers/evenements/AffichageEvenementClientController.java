@@ -62,7 +62,7 @@ public class AffichageEvenementClientController {
 
         EvenementService es = new EvenementService();
 
-        for (Evenement e : es.show()) {
+        for (Evenement e : es.read()) {
             cbeventname.getItems().add(e.getNom());
         }
 
@@ -86,7 +86,7 @@ public class AffichageEvenementClientController {
         // Utiliser une ObservableList pour stocker les éléments
         ObservableList<Evenement> list = FXCollections.observableArrayList();
         EvenementService es = new EvenementService();
-        list.addAll(es.show());
+        list.addAll(es.read());
         tvEvenement.setItems(list);
 
     }
@@ -112,7 +112,7 @@ public class AffichageEvenementClientController {
         FeedbackEvenementService fs = new FeedbackEvenementService();
         EvenementService es = new EvenementService();
         Feedback nouveauFeedback = new Feedback(es.getEvenementByNom(nomEvenement), id_user = 0, comment);
-        fs.add(nouveauFeedback);
+        fs.create(nouveauFeedback);
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Feedback Sent");
