@@ -8,6 +8,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -66,11 +67,36 @@ public class ActorController {
     private TableColumn<Actor, String> nomAcotr_tableColumn1;
     @FXML
     private TextArea nomAcotr_textArea1;
+    private FilteredList<Actor> filteredActors;
+    @FXML
+    private TextField recherche_textField;
 
     @FXML
     void initialize() {
         readActorTable();
         setupCellOnEditCommit();
+        filteredActors = new FilteredList<>(filmActor_tableView11.getItems());
+
+        // Réinitialiser la TableView avec la liste filtrée
+        filmActor_tableView11.setItems(filteredActors);
+
+        // Appliquer le filtre lorsque le texte de recherche change
+        recherche_textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            searchActor(newValue);
+        });
+    }
+
+    private void searchActor(String searchText) {
+        filteredActors.setPredicate(actor -> {
+            // Si le champ de recherche est vide, afficher tous les acteurs
+            if (searchText == null || searchText.isEmpty()) {
+                return true;
+            }
+
+            // Vérifier si le nom de l'acteur contient le texte de recherche (en ignorant la casse)
+            String lowerCaseFilter = searchText.toLowerCase();
+            return actor.getNom().toLowerCase().contains(lowerCaseFilter);
+        });
     }
 
     @FXML
@@ -144,7 +170,7 @@ public class ActorController {
         });
 
     }
-    
+
     void updateActor(Actor actor) {
         Connection connection = null;
         try {
