@@ -13,27 +13,27 @@
    <children>
       <AnchorPane prefHeight="702.0" prefWidth="211.0" styleClass="nav-form" stylesheets="@Dashbord.css">
          <children>
-            <Button layoutY="282.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Movies">
+            <Button layoutY="282.0" mnemonicParsing="false" onAction="#MovieClient" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Movies">
                <font>
                   <Font name="System Italic" size="17.0" />
                </font>
             </Button>
             <FontAwesomeIconView fill="#ebe5e5" glyphName="FILM" layoutX="20.0" layoutY="308.0" size="30" text="" />
-            <Button layoutX="1.0" layoutY="321.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Products" />
+            <Button layoutX="1.0" layoutY="321.0" mnemonicParsing="false" onAction="#produitClient" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Products" />
             <FontAwesomeIconView fill="#ebe5e5" glyphName="CUBES" layoutX="20.0" layoutY="347.0" size="30" text="" />
             <FontAwesomeIconView fill="#ebe5e5" glyphName="VIDEO_CAMERA" layoutX="24.0" layoutY="390.0" size="30" text="" />
-            <Button layoutY="364.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="202.0" styleClass="nav-btn" text="Cinema" textAlignment="CENTER" />
+            <Button layoutY="364.0" mnemonicParsing="false" onAction="#cinemaclient" prefHeight="30.0" prefWidth="202.0" styleClass="nav-btn" text="Cinema" textAlignment="CENTER" />
             <FontAwesomeIconView fill="#ebe5e5" glyphName="USER" layoutX="39.0" layoutY="611.0" size="30" text="" />
-            <Button layoutX="74.0" layoutY="584.0" mnemonicParsing="false" styleClass="nav-btn" text="Account" />
+            <Button layoutX="74.0" layoutY="584.0" mnemonicParsing="false" onAction="#profilclient" styleClass="nav-btn" text="Account" />
             <FontAwesomeIconView fill="#ebe5e5" glyphName="SIGN_OUT" layoutX="38.0" layoutY="651.0" size="30" text="" />
             <Button layoutX="82.0" layoutY="624.0" mnemonicParsing="false" styleClass="nav-btn" text="EXIT" />
             <FontAwesomeIconView fill="#ebe5e5" glyphName="CALENDAR" layoutX="22.0" layoutY="432.0" size="30" text="" />
-            <Button layoutX="1.0" layoutY="407.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Event">
+            <Button layoutX="1.0" layoutY="407.0" mnemonicParsing="false" onAction="#eventClient" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Event">
                <font>
                   <Font size="13.0" />
                </font>
             </Button>
-            <Button layoutX="1.0" layoutY="244.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Series" />
+            <Button layoutX="1.0" layoutY="244.0" mnemonicParsing="false" onAction="#SerieClient" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Series" />
             <FontAwesomeIconView fill="#ebe5e5" glyphName="TV" layoutX="18.0" layoutY="269.0" size="30" />
             <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="9.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -55,5 +55,6 @@
          </children>
       </AnchorPane>
       <FontAwesomeIconView glyphName="SHOPPING_CART" layoutX="1217.0" layoutY="137.0" onMouseClicked="#panier" size="25" />
+      <FontAwesomeIconView glyphName="COMMENTING" layoutX="1177.0" layoutY="137.0" onMouseClicked="#commentaire" size="25" />
    </children>
 </AnchorPane>

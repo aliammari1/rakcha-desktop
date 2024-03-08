@@ -7,7 +7,7 @@ public class Avis {
 
     private Client user;
     private int note;
-    private String avis;
+
 
     private Produit produit;
 
@@ -16,10 +16,9 @@ public class Avis {
 
 
 
-    public Avis(Client user, int note, String avis, Produit produit) {
+    public Avis(Client user, int note, Produit produit) {
         this.user = user;
         this.note = note;
-        this.avis = avis;
         this.produit = produit;
     }
 
@@ -41,13 +40,6 @@ public class Avis {
         this.note = note;
     }
 
-    public String getAvis() {
-        return avis;
-    }
-
-    public void setAvis(String avis) {
-        this.avis = avis;
-    }
 
     public Produit getProduit() {
         return produit;
@@ -62,7 +54,6 @@ public class Avis {
         return "Avis{" +
                 ", user=" + user +
                 ", note=" + note +
-                ", avis='" + avis + '\'' +
                 ", produit=" + produit +
                 '}';
     }

@@ -82,7 +82,7 @@ public class CommandeService implements IService<Commande> {
 
 
             while (rs.next()) {
-                Commande c1=new Commande(rs.getInt("idCommande"),rs.getDate("dateCommande") ,rs.getString("statuCommande"),(Client) us.getUserById(rs.getInt("idClient")) ,rs.getInt("num_telephone"), rs.getString("adresse"));
+                Commande c1=new Commande(rs.getInt("idCommande"),rs.getDate("dateCommande") ,rs.getString("statu"),(Client) us.getUserById(rs.getInt("idClient")) ,rs.getInt("num_telephone"), rs.getString("adresse"));
                 c1.setCommandeItem(commandeItemService.readCommandeItem(c1.getIdCommande()));
                 commande.add(c1);
             }
