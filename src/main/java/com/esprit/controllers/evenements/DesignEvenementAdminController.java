@@ -4,11 +4,14 @@ import com.esprit.models.evenements.Categorie_evenement;
 import com.esprit.models.evenements.Evenement;
 import com.esprit.services.evenements.CategorieService;
 import com.esprit.services.evenements.EvenementService;
+import com.esprit.services.evenements.SmsService;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,10 +29,11 @@ import java.io.IOException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class DesignEvenementAdminController {
 
-    ObservableList<Evenement> eventSearchModel = FXCollections.observableArrayList();
+    private final ObservableList<Evenement> masterData = FXCollections.observableArrayList();
     @FXML
     private ComboBox<String> cbCategorie;
     @FXML
@@ -67,6 +71,8 @@ public class DesignEvenementAdminController {
     @FXML
     private TextField SearchBar;
     @FXML
+    private Button bgesSeries;
+    @FXML
     private TableView<Evenement> tvEvenement;
 
     @FXML
@@ -81,6 +87,7 @@ public class DesignEvenementAdminController {
 
         afficher_evenement();
         initDeleteColumn();
+        setupSearchFilter();
 
 
     }
@@ -100,7 +107,7 @@ public class DesignEvenementAdminController {
                             es.delete(evenement);
 
                             // Mise à jour de la TableView après la suppression de la base de données
-                            tvEvenement.getItems().remove(evenement);
+                            tvEvenement.setItems(FXCollections.observableArrayList(es.read()));
                             tvEvenement.refresh();
                         });
                     }
@@ -130,7 +137,7 @@ public class DesignEvenementAdminController {
                     EvenementService es = new EvenementService();
                     es.delete(evenementButtonCellDataFeatures.getValue());
                     // Mise à jour de la TableView après la suppression de la base de données
-                    tvEvenement.getItems().remove(evenementButtonCellDataFeatures.getValue());
+                    tvEvenement.setItems(FXCollections.observableArrayList(es.read()));
                     tvEvenement.refresh();
                 });
                 return new SimpleObjectProperty<Button>(btnDelete);
@@ -183,7 +190,9 @@ public class DesignEvenementAdminController {
         es.create(nouvelEvenement);
 
         // Ajouter le nouvel evenement à la liste existante
-        tvEvenement.getItems().add(nouvelEvenement);
+        tvEvenement.setItems(FXCollections.observableArrayList(es.read()));
+
+        SmsService.sendSms("+21622757828", "   A new adventure is here ! RAKCHA just added an event, feel free to know the details in the events list !");
 
         // Rafraîchir la TableView
         tvEvenement.refresh();
@@ -326,16 +335,50 @@ public class DesignEvenementAdminController {
         });
 
         // Utiliser une ObservableList pour stocker les éléments
-        ObservableList<Evenement> list = FXCollections.observableArrayList();
         EvenementService es = new EvenementService();
-        list.addAll(es.read());
-        tvEvenement.setItems(list);
+        masterData.addAll(es.read());
+        tvEvenement.setItems(masterData);
 
         // Activer la sélection de cellules
         tvEvenement.getSelectionModel().setCellSelectionEnabled(true);
 
     }
 
+    private void setupSearchFilter() {
+        FilteredList<Evenement> filteredData = new FilteredList<>(masterData, p -> true);
+
+        SearchBar.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(evenement -> {
+                // If filter text is empty, display all events.
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+
+                // Compare event name, category, and description of every event with filter text.
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                if (evenement.getNom().toLowerCase().contains(lowerCaseFilter)) {
+                    return true; // Filter matches event name.
+                } else if (evenement.getNom_categorieEvenement().toLowerCase().contains(lowerCaseFilter)) {
+                    return true; // Filter matches category.
+                } else if (evenement.getLieu().toLowerCase().contains(lowerCaseFilter)) {
+                    return true; // Filter matches description.
+                } else // Filter matches description.
+                    if (evenement.getEtat().toLowerCase().contains(lowerCaseFilter)) {
+                        return true; // Filter matches description.
+                    } else return evenement.getDescription().toLowerCase().contains(lowerCaseFilter);// Does not match.
+            });
+        });
+
+        // Wrap the FilteredList in a SortedList.
+        SortedList<Evenement> sortedData = new SortedList<>(filteredData);
+
+        // Bind the SortedList comparator to the TableView comparator.
+        sortedData.comparatorProperty().bind(tvEvenement.comparatorProperty());
+
+        // Add sorted (and filtered) data to the table.
+        tvEvenement.setItems(sortedData);
+    }
 
     @FXML
     void modifier_evenement(Evenement evenement) {
@@ -353,6 +396,13 @@ public class DesignEvenementAdminController {
         // Enregistrez les modifications dans la base de données en utilisant un service approprié
         EvenementService es = new EvenementService();
         es.update(evenement);
+        if (Objects.equals(evenement.getEtat().toLowerCase(), "postponed")) {
+            SmsService.sendSms("+21622757828", String.format("We're sorry, The event '%s' has been postponed to a later date", evenement.getNom()));
+
+        } else if (Objects.equals(evenement.getEtat().toLowerCase(), "ongoing")) {
+            SmsService.sendSms("+21622757828", String.format("Hurry up ! The event '%s' has just started, Feel free to Join us as soon as possible ", evenement.getNom()));
+
+        }
     }
 
     @FXML
@@ -378,6 +428,127 @@ public class DesignEvenementAdminController {
         // Fermer la fenêtre actuelle
         currentStage.close();
     }
+
+    @FXML
+    void gestionSeries(ActionEvent event) throws IOException {
+
+
+        // Charger la nouvelle interface ListevenementAdmin.fxml
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Serie-view.fxml"));
+        Parent root = loader.load();
+
+        // Créer une nouvelle scène avec la nouvelle interface
+        Scene scene = new Scene(root);
+
+        // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        // Créer une nouvelle fenêtre (stage) et y attacher la scène
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Series Management");
+        stage.show();
+
+        // Fermer la fenêtre actuelle
+        currentStage.close();
+    }
+
+    @FXML
+    void gestionProduits(ActionEvent event) throws IOException {
+
+
+        // Charger la nouvelle interface ListevenementAdmin.fxml
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignProduitAdmin.fxml"));
+        Parent root = loader.load();
+
+        // Créer une nouvelle scène avec la nouvelle interface
+        Scene scene = new Scene(root);
+
+        // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        // Créer une nouvelle fenêtre (stage) et y attacher la scène
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Products Management");
+        stage.show();
+
+        // Fermer la fenêtre actuelle
+        currentStage.close();
+    }
+
+    @FXML
+    void gestionFilms(ActionEvent event) throws IOException {
+
+
+        // Charger la nouvelle interface ListevenementAdmin.fxml
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/InterfaceFilm.fxml"));
+        Parent root = loader.load();
+
+        // Créer une nouvelle scène avec la nouvelle interface
+        Scene scene = new Scene(root);
+
+        // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        // Créer une nouvelle fenêtre (stage) et y attacher la scène
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Movies Management");
+        stage.show();
+
+        // Fermer la fenêtre actuelle
+        currentStage.close();
+    }
+
+    @FXML
+    void gestionCinemas(ActionEvent event) throws IOException {
+
+
+        // Charger la nouvelle interface ListevenementAdmin.fxml
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/DashboardAdminCinema.fxml"));
+        Parent root = loader.load();
+
+        // Créer une nouvelle scène avec la nouvelle interface
+        Scene scene = new Scene(root);
+
+        // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        // Créer une nouvelle fenêtre (stage) et y attacher la scène
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Cinemas Management");
+        stage.show();
+
+        // Fermer la fenêtre actuelle
+        currentStage.close();
+    }
+
+    @FXML
+    void gestionEvenements(ActionEvent event) throws IOException {
+
+
+        // Charger la nouvelle interface ListevenementAdmin.fxml
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignEvenementAdmin.fxml"));
+        Parent root = loader.load();
+
+        // Créer une nouvelle scène avec la nouvelle interface
+        Scene scene = new Scene(root);
+
+        // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        // Créer une nouvelle fenêtre (stage) et y attacher la scène
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Events Management");
+        stage.show();
+
+        // Fermer la fenêtre actuelle
+        currentStage.close();
+    }
+
 
     @FXML
     void generatePDF() {
