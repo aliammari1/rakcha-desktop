@@ -1,6 +1,9 @@
-package com.esprit.services;
-import com.esprit.models.Sponsor;
+package com.esprit.services.evenements;
+
+import com.esprit.models.evenements.Sponsor;
+import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,7 +14,7 @@ import java.util.List;
 
 public class SponsorService implements IService<Sponsor> {
 
-    private Connection connection;
+    private final Connection connection;
 
     public SponsorService() {
         connection = DataSource.getInstance().getConnection();
@@ -19,12 +22,11 @@ public class SponsorService implements IService<Sponsor> {
 
     @Override
     public void add(Sponsor sponsor) {
-        String req = "INSERT into sponsor(id,nomSociete,logo) values (?, ?, ?);";
+        String req = "INSERT into sponsor(nomSociete,logo) values (?, ?);";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
-            pst.setInt(1, sponsor.getId());
-            pst.setString(2, sponsor.getNomSociete());
-            pst.setBytes(3, sponsor.getLogo());
+            pst.setString(1, sponsor.getNomSociete());
+            pst.setBlob(2, sponsor.getLogo());
             pst.executeUpdate();
             System.out.println("Sponsor ajouté !");
         } catch (SQLException e) {
@@ -39,7 +41,7 @@ public class SponsorService implements IService<Sponsor> {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(3, sponsor.getId());
             pst.setString(1, sponsor.getNomSociete());
-            pst.setBytes(2, sponsor.getLogo());
+            pst.setBlob(2, sponsor.getLogo());
             pst.executeUpdate();
             System.out.println("Sponsor modifié !");
         } catch (SQLException e) {
@@ -69,7 +71,7 @@ public class SponsorService implements IService<Sponsor> {
             PreparedStatement pst = connection.prepareStatement(req);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
-                sponsors.add(new Sponsor(rs.getInt("ID"), rs.getString("NomSociete"), rs.getBytes("Logo")));
+                sponsors.add(new Sponsor(rs.getInt("ID"), rs.getString("NomSociete"), rs.getBlob("Logo")));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
