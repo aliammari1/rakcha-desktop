@@ -1,12 +1,26 @@
 package com.esprit.controllers.produits;
-
-import com.esprit.models.produits.*;
+import com.esprit.models.produits.Commande;
+import com.esprit.models.produits.CommandeItem;
+import com.esprit.models.produits.Produit;
+import com.esprit.models.produits.SharedData;
 import com.esprit.models.users.Client;
 import com.esprit.models.users.User;
 import com.esprit.services.produits.CommandeItemService;
 import com.esprit.services.produits.CommandeService;
 import com.esprit.services.produits.ProduitService;
 import com.esprit.services.users.UserService;
+import com.paypal.api.payments.Amount;
+import com.paypal.api.payments.Links;
+import com.paypal.api.payments.Payer;
+import com.paypal.api.payments.Payment;
+import com.paypal.api.payments.PaymentExecution;
+import com.paypal.api.payments.RedirectUrls;
+import com.paypal.api.payments.Transaction;
+import com.paypal.base.rest.APIContext;
+import com.paypal.base.rest.PayPalRESTException;
+
+import javafx.application.Platform;
+import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,23 +28,38 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
+import java.awt.Desktop;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.sql.SQLException;
 import java.time.LocalDate;
+<<<<<<< Updated upstream
 import java.util.Objects;
+=======
+import java.util.ArrayList;
+import java.util.List;
+>>>>>>> Stashed changes
 import java.util.ResourceBundle;
 
+// For URL parsing
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URLEncodedUtils;
+import java.net.URI;
 
 
 public class CommandeClientController implements Initializable {
@@ -56,17 +85,17 @@ public class CommandeClientController implements Initializable {
     @FXML
     private Button idpayment;
 
-    // PayPal API credentials
-    private static final String CLIENT_ID = "YOUR_PAYPAL_CLIENT_ID";
-    private static final String CLIENT_SECRET = "YOUR_PAYPAL_CLIENT_SECRET";
+
+    private static final String CLIENT_ID = "Ac_87vQSawIKlwhFFCBiYH0VYygxg5MWi0xakK3w0FyJirTITgf5CqfaE65WLUlia16-D5deHq6XKWo8";
+    private static final String CLIENT_SECRET = "EKDa_P0DqelT1SNHMbfbVS6Pqp25dvz3fVlf_nwPMRAnqMwe2c6vX6yV2iW8lBFdMr_aXG8FD8cDCMt7";
 
     double totalPrix = SharedData.getInstance().getTotalPrix();
 
 
     @FXML
     void initialize(Commande commandeselectionner) {
-     commande=commandeselectionner;
-     connectedUser=usersService.getUserById(4);
+        commande=commandeselectionner;
+        connectedUser=usersService.getUserById(4);
 
 
         // Récupérer le prix total depuis SharedData et créer le Label correspondant
@@ -84,7 +113,8 @@ public class CommandeClientController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
     }
-
+    private static final String SUCCESS_URL = CommandeClientController.class.getResource("/success.html").toExternalForm();
+    private static final String CANCEL_URL = CommandeClientController.class.getResource("/cancel.html").toExternalForm();
     private Label createPrixTotalLabel(double prixTotal) {
         Label prixTotalLabel = new Label(prixTotal + " DT");
         prixTotalLabel.setFont(Font.font("Verdana", 25));
@@ -124,7 +154,7 @@ public class CommandeClientController implements Initializable {
             throw new RuntimeException(e);
         }
         for (CommandeItem commandeItem: commande.getCommandeItem()
-             ) {
+        ) {
             System.out.println(commande.getIdCommande());
             commandeItem.setCommande(commande);
 
@@ -188,6 +218,218 @@ public class CommandeClientController implements Initializable {
 
     @FXML
     void payment(ActionEvent event) {
+        APIContext apiContext = new APIContext(CLIENT_ID, CLIENT_SECRET, "sandbox");
+
+        Amount amount = new Amount();
+        amount.setCurrency("USD");
+        amount.setTotal(String.valueOf(totalPrix)); // totalPrix should be set to the total price of the order
+
+        Transaction transaction = new Transaction();
+        transaction.setDescription("Your Purchase Description");
+        transaction.setAmount(amount);
+
+        List<Transaction> transactions = new ArrayList<>();
+        transactions.add(transaction);
+
+        Payer payer = new Payer();
+        payer.setPaymentMethod("paypal");
+
+        Payment payment = new Payment();
+        payment.setIntent("sale");
+        payment.setPayer(payer);
+        payment.setTransactions(transactions);
+
+        RedirectUrls redirectUrls = new RedirectUrls();
+        redirectUrls.setCancelUrl("http://localhost/cancel");
+        redirectUrls.setReturnUrl("http://localhost/success");
+        payment.setRedirectUrls(redirectUrls);
+        payment.setRedirectUrls(redirectUrls);
+
+
+        try {
+            Payment createdPayment = payment.create(apiContext);
+            for (Links link : createdPayment.getLinks()) {
+                if (link.getRel().equalsIgnoreCase("approval_url")) {
+                    System.out.println(link.getHref());
+                    redirectToPayPal(link.getHref());
+                    break;
+                }
+            }
+        } catch (PayPalRESTException e) {
+            e.printStackTrace();
+            showAlert("Error", "Could not initiate PayPal payment.");
+        }
+    }
+
+
+    private void redirectToPayPal(String approvalLink) {
+        Platform.runLater(() -> {
+            Dialog<Void> dialog = new Dialog<>();
+            dialog.initModality(Modality.APPLICATION_MODAL);
+            dialog.initStyle(StageStyle.UNDECORATED);
+
+            WebView webView = new WebView();
+            webView.getEngine().load(approvalLink);
+
+            // Add a progress bar to the web view
+            ProgressBar progressBar = new ProgressBar();
+            webView.getEngine().getLoadWorker().progressProperty().addListener((obs, oldProgress, newProgress) -> {
+                progressBar.setProgress(newProgress.doubleValue());
+            });
+
+            // Create a close button
+            Button closeButton = new Button("Close");
+            closeButton.setOnAction(e -> {
+                System.out.println("Close button clicked");
+                dialog.hide();
+            });
+
+            VBox vBox = new VBox(5);
+            vBox.getChildren().addAll(webView, progressBar, closeButton);
+
+            // Handle successful redirection
+            webView.getEngine().locationProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue.contains("http://localhost/success")) {
+                    String paymentId = extractQueryParameter(newValue, "paymentId");
+                    String payerId = extractQueryParameter(newValue, "PayerID");
+                    URL successUrl = getClass().getResource("/success.html");
+                    webView.getEngine().load(successUrl.toExternalForm());
+                    completePayment(paymentId, payerId);
+                }
+            });
+
+            dialog.getDialogPane().setContent(vBox);
+            dialog.getDialogPane().setPrefSize(800, 600);
+            dialog.showAndWait();
+        });
+    }
+
+    private String extractQueryParameter(String url, String parameterName) {
+        try {
+            List<NameValuePair> params = URLEncodedUtils.parse(new URI(url), Charset.forName("UTF-8"));
+            for (NameValuePair param : params) {
+                if (param.getName().equals(parameterName)) {
+                    return param.getValue();
+                }
+            }
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return null; // Parameter not found
+    }
+
+    private void completePayment(String paymentId, String payerId) {
+        APIContext apiContext = new APIContext(CLIENT_ID, CLIENT_SECRET, "sandbox");
+
+        Payment payment = new Payment();
+        payment.setId(paymentId);
+
+        PaymentExecution paymentExecution = new PaymentExecution();
+        paymentExecution.setPayerId(payerId);
+
+        try {
+            Payment executedPayment = payment.execute(apiContext, paymentExecution);
+            if (executedPayment.getState().equals("approved")) {
+
+                commande.setStatu("Payee");
+
+
+                commandeService.update(commande);
+
+
+            }
+        } catch (PayPalRESTException e) {
+            e.printStackTrace();
+
+        }
+    }
+
+    @FXML
+    void cinemaclient(ActionEvent event) {
+        try {
+            // Charger la nouvelle interface PanierProduit.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/CommentaireProduit.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène avec la nouvelle interface
+            Scene scene = new Scene(root);
+
+            // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Créer une nouvelle fenêtre (stage) et y attacher la scène
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("cinema ");
+            stage.show();
+
+            // Fermer la fenêtre actuelle
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace(); // Gérer l'exception d'entrée/sortie
+        }
+
+
+    }
+
+    @FXML
+    void eventClient(ActionEvent event) {
+        try {
+            // Charger la nouvelle interface PanierProduit.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AffichageEvenementClient.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène avec la nouvelle interface
+            Scene scene = new Scene(root);
+
+            // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Créer une nouvelle fenêtre (stage) et y attacher la scène
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("Event ");
+            stage.show();
+
+            // Fermer la fenêtre actuelle
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace(); // Gérer l'exception d'entrée/sortie
+        }
+
+
+    }
+
+    @FXML
+    void produitClient(ActionEvent event) {
+        try {
+            // Charger la nouvelle interface PanierProduit.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherProduitClient.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène avec la nouvelle interface
+            Scene scene = new Scene(root);
+
+            // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Créer une nouvelle fenêtre (stage) et y attacher la scène
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("products ");
+            stage.show();
+
+            // Fermer la fenêtre actuelle
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace(); // Gérer l'exception d'entrée/sortie
+        }
+
+
+    }
+
+    @FXML
+    void profilclient(ActionEvent event) {
 
 
 
@@ -267,6 +509,60 @@ public class CommandeClientController implements Initializable {
 
 
 
+
+
+    @FXML
+    void MovieClient(ActionEvent event) {
+        try {
+            // Charger la nouvelle interface PanierProduit.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/filmuser.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène avec la nouvelle interface
+            Scene scene = new Scene(root);
+
+            // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Créer une nouvelle fenêtre (stage) et y attacher la scène
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("movie ");
+            stage.show();
+
+            // Fermer la fenêtre actuelle
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace(); // Gérer l'exception d'entrée/sortie
+        }
+    }
+
+    @FXML
+    void SerieClient(ActionEvent event) {
+        try {
+            // Charger la nouvelle interface PanierProduit.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Series-view.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène avec la nouvelle interface
+            Scene scene = new Scene(root);
+
+            // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Créer une nouvelle fenêtre (stage) et y attacher la scène
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("chat ");
+            stage.show();
+
+            // Fermer la fenêtre actuelle
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace(); // Gérer l'exception d'entrée/sortie
+        }
+
+    }
 
 
 }

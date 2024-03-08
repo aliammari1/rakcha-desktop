@@ -12,31 +12,31 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="707.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.produits.DesignCategorieAdminController">
+<AnchorPane fx:id="categorieList" prefHeight="707.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.produits.DesignCategorieAdminController">
     <children>
-        <AnchorPane prefHeight="707.0" prefWidth="208.0" styleClass="nav-form" stylesheets="@Dashbord.css">
+        <AnchorPane prefHeight="707.0" prefWidth="208.0" styleClass="nav-form" stylesheets="@dashboard.css">
             <children>
-                <Button layoutY="282.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Movies">
+                <Button layoutY="282.0" mnemonicParsing="false" onAction="#MovieClient" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Movies">
                     <font>
                         <Font name="System Italic" size="17.0" />
                     </font>
                 </Button>
                 <FontAwesomeIconView fill="#ebe5e5" glyphName="FILM" layoutX="20.0" layoutY="308.0" size="30" text="" />
-                <Button layoutX="1.0" layoutY="321.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Products" />
+                <Button layoutX="1.0" layoutY="321.0" mnemonicParsing="false" onAction="#produitClient" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Products" />
                 <FontAwesomeIconView fill="#ebe5e5" glyphName="CUBES" layoutX="20.0" layoutY="347.0" size="30" text="" />
                 <FontAwesomeIconView fill="#ebe5e5" glyphName="VIDEO_CAMERA" layoutX="24.0" layoutY="390.0" size="30" text="" />
-                <Button layoutY="364.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="202.0" styleClass="nav-btn" text="Cinema" textAlignment="CENTER" />
+                <Button layoutY="364.0" mnemonicParsing="false" onAction="#cinemaclient" prefHeight="30.0" prefWidth="202.0" styleClass="nav-btn" text="Cinema" textAlignment="CENTER" />
                 <FontAwesomeIconView fill="#ebe5e5" glyphName="USER" layoutX="39.0" layoutY="611.0" size="30" text="" />
-                <Button layoutX="74.0" layoutY="584.0" mnemonicParsing="false" styleClass="nav-btn" text="Account" />
+                <Button layoutX="74.0" layoutY="584.0" mnemonicParsing="false" onAction="#profilclient" styleClass="nav-btn" text="Account" />
                 <FontAwesomeIconView fill="#ebe5e5" glyphName="SIGN_OUT" layoutX="38.0" layoutY="651.0" size="30" text="" />
                 <Button layoutX="82.0" layoutY="624.0" mnemonicParsing="false" styleClass="nav-btn" text="EXIT" />
                 <FontAwesomeIconView fill="#ebe5e5" glyphName="CALENDAR" layoutX="22.0" layoutY="432.0" size="30" text="" />
-                <Button layoutX="1.0" layoutY="407.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Event">
+                <Button layoutX="1.0" layoutY="407.0" mnemonicParsing="false" onAction="#eventClient" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Event">
                     <font>
                         <Font size="13.0" />
                     </font>
                 </Button>
-                <Button layoutX="1.0" layoutY="244.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Series" />
+                <Button layoutX="1.0" layoutY="244.0" mnemonicParsing="false" onAction="#SerieClient" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Series" />
                 <FontAwesomeIconView fill="#ebe5e5" glyphName="TV" layoutX="18.0" layoutY="269.0" size="30" />
             <ImageView fitHeight="178.0" fitWidth="215.0" layoutX="-3.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -45,8 +45,8 @@
             </ImageView>
             </children>
         </AnchorPane>
-        <AnchorPane layoutX="1280.0" prefHeight="707.0" prefWidth="0.0" styleClass="nav-form" stylesheets="@../../../../../Downloads/dashbord.css" />
-        <AnchorPane layoutX="276.0" layoutY="130.0" prefHeight="499.0" prefWidth="309.0" styleClass="bg-white" stylesheets="@Dashbord.css">
+        <AnchorPane layoutX="1280.0" prefHeight="707.0" prefWidth="0.0" styleClass="nav-form" stylesheets="@dashboard.css" />
+        <AnchorPane fx:id="formulaire" layoutX="276.0" layoutY="130.0" prefHeight="499.0" prefWidth="309.0" styleClass="bg-white" stylesheets="@dashboard.css">
             <children>
                 <Label layoutX="13.0" layoutY="118.0" text="Category :">
                     <font>
@@ -68,7 +68,7 @@
                 </Label>
             </children>
         </AnchorPane>
-        <AnchorPane layoutX="640.0" layoutY="158.0" prefHeight="471.0" prefWidth="621.0" styleClass="bg-white" stylesheets="@Dashbord.css">
+        <AnchorPane layoutX="640.0" layoutY="158.0" prefHeight="471.0" prefWidth="621.0" styleClass="bg-white" stylesheets="@dashboard.css">
             <children>
                 <TableView fx:id="categorie_tableview" layoutX="19.0" layoutY="79.0" prefHeight="381.0" prefWidth="591.0">
                     <columns>
@@ -85,10 +85,16 @@
                 </Label>
             </children>
         </AnchorPane>
-        <Button layoutX="1108.0" layoutY="130.0" mnemonicParsing="false" onAction="#GestionCategorie" styleClass="navig-button" stylesheets="@Dashbord.css" text="Product Management" />
-        <TextField fx:id="SearchBar" layoutX="763.0" layoutY="28.0" prefHeight="25.0" prefWidth="188.0" styleClass="search-pane" stylesheets="@Dashbord.css" />
+        <Button layoutX="1108.0" layoutY="130.0" mnemonicParsing="false" onAction="#GestionProduit" styleClass="navig-button" stylesheets="@dashboard.css" text="Product Management" />
+        <TextField fx:id="SearchBar" layoutX="763.0" layoutY="28.0" prefHeight="25.0" prefWidth="188.0" styleClass="search-pane" stylesheets="@dashboard.css" />
 
       <FontAwesomeIconView fill="#6f6a6a" glyphName="SEARCH" layoutX="741.0" layoutY="48.0" size="13" text="" wrappingWidth="21.428571701049805" />
+      <FontAwesomeIconView fx:id="idfilter" glyphName="FILTER" layoutX="1205.0" layoutY="70.0" onMouseClicked="#filtrer" size="20" />
+      <AnchorPane fx:id="FilterAnchor" layoutX="640.0" layoutY="67.0" prefHeight="147.0" prefWidth="202.0" styleClass="bg-white" stylesheets="@dashboard.css" visible="false">
+         <children>
+            <Button layoutX="80.0" layoutY="117.0" mnemonicParsing="false" onAction="#filtercinema" text="Filter" />
+         </children>
+      </AnchorPane>
 
     </children>
 

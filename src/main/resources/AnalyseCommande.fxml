@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.produits.AnalyseCommande">
+    <children>
+        <LineChart fx:id="TauxCommande" layoutX="30.0" layoutY="20.0" prefHeight="342.0" prefWidth="542.0">
+            <xAxis>
+                <CategoryAxis fx:id="xAxis" />
+            </xAxis>
+            <yAxis>
+                <NumberAxis />
+            </yAxis>
+        </LineChart>
+    </children>
+</AnchorPane>

@@ -1,36 +1,31 @@
-
-
-/* Styles par défaut */
 .top-form {
     -fx-background-color: #fff;
     -fx-border-color: #000;
     -fx-border-width: .2px .2px .4px .2px;
+
 }
 
-.close, .minus {
+.close {
     -fx-background-color: transparent;
     -fx-cursor: hand;
+
 }
 
 .close:hover {
     -fx-background-color: #e74141;
 }
 
+.minus {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
+
 .minus:hover {
     -fx-background-color: #dadada;
 }
 
-/* Media Query pour écrans plus petits */
-@media screen and (max-width: 600px) {
-    .top-form {
-        /* Ajustez les styles pour les écrans plus petits */
-        -fx-border-width: .1px .1px .2px .1px;
-    }
-    /* Ajoutez d'autres ajustements en fonction des besoins */
-}
-
 .nav-form {
-    -fx-background-color: linear-gradient(to top right, #624970, #ae2d3c, black);
+    -fx-background-color: linear-gradient(to top right, #1e242e, #ae2d3c);
 }
 
 .nav-btn {
@@ -38,6 +33,7 @@
     -fx-cursor: hand;
     -fx-text-fill: #fff;
     -fx-font-size: 14px;
+
 }
 
 .nav-btn:hover {
@@ -58,30 +54,19 @@
     -fx-background-color: #fff;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, .3), 8, 0, 0, 0);
     -fx-background-radius: 8px;
-    -fx-border-color: linear-gradient(to top right,  #624970,#FCE19A,#ae2d3c); /* Couleur de la bordure rouge */
-    -fx-border-radius: 8px; /* Rayon de la bordure rouge */
-    -fx-border-width: 5px ;
 }
 
 .bg-white:hover {
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 8, 0, 0, 0);
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 8, 0, 0, 0)
 }
+
 
 .instert-btn {
     -fx-background-color: #ae2d3c;
     -fx-background-radius: 8px;
-    -fx-text-fill: #FCE19A;
-    -fx-font-size: 18px;
+    -fx-text-fill: #fff;
+    -fx-font-size: 14px;
     -fx-cursor: hand;
-    -fx-font-family: "Arial Rounded MT Bold";
-}
-.instert-btn-picture {
-    -fx-background-color:  #FCE19A;
-    -fx-background-radius: 8px;
-    -fx-text-fill: #624970;
-    -fx-font-size: 12px;
-    -fx-cursor: hand;
-    -fx-font-family: "Arial Rounded MT Bold";
 }
 
 .instert-btn:hover {
@@ -98,12 +83,13 @@
 }
 
 .table-view .column-header-background {
-    -fx-background-color: linear-gradient(to top left, #466288, #ae2d3c);
+    -fx-background-color: linear-gradient(to top left, #1e242e, #ae2d3c);
     -fx-background-insets: 0 0 0 0;
     -fx-background-radius: 10px 0px 0px 0px;
 }
 
-.table-view .column-header, .table-view .filler {
+.table-view .column-header,
+.table-view .filler {
     -fx-background-color: transparent;
     -fx-size: 50px;
     -fx-fill: #fff;
@@ -112,129 +98,200 @@
 .table-view .column-header .label {
     -fx-text-fill: #fff;
 }
-.text-field-red {
-    -fx-border-color: #800000; /* Couleur bordeaux */
-    -fx-border-radius: 20px; /* Rayon de la bordure arrondie */
-    -fx-background-radius: 20px; /* Rayon du fond arrondi */
-}
-.text-area-red {
-    -fx-border-color: #800000; /* Couleur bordeaux */
-    -fx-border-radius: 5px; /* Rayon de la bordure arrondie */
-    -fx-background-radius: 30px; /* Rayon du fond arrondi */
-}
-.combo-box-red {
-    -fx-background-color: #fff; /* Couleur de fond */
-    -fx-border-color: #800000; /* Couleur de la bordure */
-    -fx-border-radius: 5px; /* Rayon de la bordure arrondie */
-    -fx-background-radius: 5px; /* Rayon du fond arrondi */
+
+.btn-reserver {
+    -fx-background-color: #000000;
+    -fx-cursor: hand;
+    -fx-text-fill: #fff;
+    -fx-font-size: 14px;
+
 }
 
-.combo-box-red .arrow {
-    -fx-background-color: #800000; /* Couleur de la flèche déroulante */
+.btn-reserver:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 8, 0, 0, 0)
 }
 
-.image-view-red {
-    -fx-border-color: #800000; /* Couleur de la bordure */
-    -fx-border-width: 2px; /* Largeur de la bordure */
-    -fx-border-radius: 5px; /* Rayon de la bordure arrondie */
-    -fx-background-radius: 5px; /* Rayon du fond arrondi */
+.scroll-pane {
+    -fx-background-color: transparent;
+    /* Transparent background */
+    -fx-background: transparent;
+    /* Additional transparency */
+    -fx-background-insets: 0;
+    /* Remove any insets */
+    -fx-padding: 0;
+    /* Remove any padding */
 }
-.delete-button {
-    -fx-background-color: #ae2d3c;
+
+.scroll-pane .scroll-bar {
+    -fx-padding: 2px;
+    /* Adjust the padding to make the scroll bar smaller */
+}
+
+.scroll-pane .scroll-bar .thumb {
+    -fx-background-color: #B52F3E;
+    /* Initial color for the thumb */
+    -fx-background-radius: 4px;
+    /* Adjust the radius to make it smaller */
+
+}
+
+/* Hover effect */
+.scroll-pane .scroll-bar .thumb:hover {
+    -fx-background-color: #ff3333;
+    /* Color when hovered */
+}
+
+/* Color gradient when pressed */
+.scroll-pane .scroll-bar .thumb:pressed {
+    -fx-background-color: #cc0000;
+    /* Color when pressed */
+}
+
+.scroll-pane .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    /* Transparent background for vertical scroll bar */
+}
+
+.scroll-pane .scroll-bar:horizontal {
+    -fx-background-color: transparent;
+    /* Transparent background for horizontal scroll bar */
+}
+
+.btn-reserver:pressed {
+    -fx-background-color: #d01313;
+    /* Change the color when pressed */
+}
+
+.tab-pane .tab {
+    -fx-background-insets: 0;
+    -fx-padding: 0 10px;
+}
+
+.tab-pane .tab:selected .tab-label {
+    -fx-background-color: transparent;
+}
+
+.tab-pane .tab:selected {
+    -fx-background-color: transparent;
+}
+
+.tab-pane .tab:selected .tab-label {
+    -fx-background-color: transparent;
+}
+
+.tab-pane .tab-header-area {
+    -fx-border-width: 0;
+}
+
+.tab-pane .headers-region {
+    -fx-padding: 0;
+}
+
+.tab-pane .tab:selected .focus-indicator {
+    -fx-color: transparent;
+}
+
+.tab-pane .tab:selected .focus-indicator {
+    -fx-background-color: transparent;
+}
+
+.tab-pane .tab:selected .focus-indicator {
+    -fx-background-insets: 0;
+}
+
+.tab-pane .tab-header-area {
+    -fx-border-color: transparent;
+}
+
+.sale {
+    -fx-padding: 8 15 15 15;
+    -fx-background-insets: 0, 0 0 5 0, 0 0 6 0, 0 0 7 0;
+    -fx-background-radius: 8;
+    -fx-background-color: linear-gradient(from 0% 93% to 0% 100%, #b71111 0%, #911010 100%),
+        #962222,
+        #d73535,
+        radial-gradient(center 50% 50%, radius 100%, #e03f3f, #b42828);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.75), 4, 0, 0, 1);
+    -fx-font-weight: bold;
+    -fx-font-size: 1.1em;
+    -fx-text-fill: white;
+}
+
+.sale:hover {
+
+    -fx-background-color: linear-gradient(from 0% 93% to 0% 100%, #a11212 0%, #851111 100),
+        #962121,
+        #de3838,
+        radial-gradient(center 50% 50%, radius 100%, #e54444, #c52828);
+}
+
+.sale:pressed {
+    -fx-padding: 10 15 13 15;
+    -fx-background-insets: 2 0 0 0, 2 0 3 0, 2 0 4 0, 2 0 5 0;
+
+}
+
+
+.anchorfilm {
+    -fx-background-color: #fff;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, .3), 8, 0, 0, 0);
     -fx-background-radius: 8px;
-    -fx-text-fill: #FCE19A;
-    -fx-font-size: 12px;
-    -fx-cursor: hand;
-    -fx-font-family: "Arial Rounded MT Bold";
+    -fx-border-color: linear-gradient(to top left, #1e242e, #ae2d3c);
 }
 
-.delete-button:hover {
-    -fx-background-color: #d62651;
+.anchorfilm:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 8, 0, 0, 0)
 }
 
-.navig-button {
-    -fx-background-color: #466288;
-    -fx-background-radius: 10px;
-    -fx-text-fill: #FCE19A;
-    -fx-font-size: 15px;
-    -fx-font-size: 12px;
-    -fx-cursor: hand;
-    -fx-font-family: "Arial Rounded MT Bold";
+.anchorfilm .image-view {
+    -fx-shape: "M 0 0 L 0 10 L 10 0 Z";
 }
 
-.navig-button:hover {
-    -fx-background-color:  #466288;
-}
-.flow-pane {
-    -fx-border-color: linear-gradient(to top left, #624970, #ae2d3c);
-    -fx-border-width: 3px; /* Largeur de la bordure (2 pixels dans cet exemple) */
-    -fx-border-style: solid; /* Style de la bordure (ligne solide dans cet exemple) */
-    -fx-border-radius: 5px; /* Rayon de la bordure pour des coins arrondis (facultatif) */
-}
-
-/* Appliquer un espacement intérieur au FlowPane (facultatif) */
-.flow-pane > * {
-    -fx-padding: 10px;
+.meilleurfilm {
+    -fx-background-color: linear-gradient(to top right, #1e242e, #ae2d3c);
+    -fx-background-radius: 50px;
+    /* Adjust the background radius */
+    -fx-border-radius: 50px;
+    /* Adjust the border radius */
+    -fx-border-color: transparent;
+    /* Make the border transparent */
 }
 
-.search-pane {
-    -fx-border-color: linear-gradient(to top left, #466288, #ae2d3c);;
-    -fx-border-width: 3px; /* Largeur de la bordure (2 pixels dans cet exemple) */
-    -fx-border-style: solid; /* Style de la bordure (ligne solide dans cet exemple) */
-    -fx-border-radius: 5px; /* Rayon de la bordure pour des coins arrondis (facultatif) */
-}
-.rating-pane {
-    -fx-border-color: #ae2d3c;
-    -fx-border-width: 3px; /* Largeur de la bordure (2 pixels dans cet exemple) */
-    -fx-border-radius: 10px; /* Rayon de la bordure pour des coins arrondis (facultatif) */
-    -fx-background-color: #ae2d3c;
-}
-.button-client{
-    -fx-background-color: #466288;
-    -fx-background-radius: 5px;
-    -fx-text-fill: #FCE19A;
-    -fx-font-size: 15px;
-    -fx-cursor: hand;
-    -fx-font-family: "Arial Rounded MT Bold";
+/* Custom style for the check combobox */
+.check-combobox .combo-box .list-cell {
+    -fx-background-color: #AE2D3C;
+    /* Set the background color */
+    -fx-text-fill: white;
+    /* Set the text color */
 }
 
-.cell-hide-text {
-    -fx-text-fill: transparent;
-
-}
-.ajouter-panier{
-    -fx-background-color: #dd4f4d;
-    -fx-text-fill: #FFFFFF;
-    -fx-font-size: 12px;
-    -fx-font-weight: bold;
-    -fx-padding: 10px 10px;
+.check-combobox .arrow-button {
+    -fx-background-color: #AE2D3C;
+    /* Set the arrow button color */
+    -fx-background-insets: 0;
 }
 
-.ajouter-panier:hover {
-    -fx-background-color: #ae2d3c;
+.check-combobox .arrow-button:hover {
+    -fx-background-color: #D62651;
+    /* Change arrow button color on hover */
 }
 
-.commande-button{
-
-    -fx-background-color: #624970;
-    -fx-text-fill: #FCE19A;
-    -fx-font-size: 12px;
-    -fx-font-weight: bold;
-    -fx-padding: 10px 10px;
+.check-combobox .arrow-button:pressed {
+    -fx-background-color: #AE2D3C;
+    /* Change arrow button color when pressed */
 }
 
-.commande-button:hover {
-    -fx-background-color: #6f7b94;
+.check-combobox .list-cell:odd {
+    -fx-background-color: #FFFFFF;
+    /* Set odd rows background color */
 }
 
-.achat-button{
-    -fx-background-color: #466288;
-    -fx-text-fill: #FCE19A;
-    -fx-font-size: 12px;
-    -fx-font-weight: bold;
-    -fx-padding: 10px 10px;
+.check-combobox .list-cell:even {
+    -fx-background-color: #F0F0F0;
+    /* Set even rows background color */
 }
 
-.achat-button:hover {
-    -fx-background-color: #6f7b94;
+.labeltext {
+    -fx-text-fill: black;
+    -fx-alignment: center;
 }

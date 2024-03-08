@@ -13,29 +13,29 @@
 
 <AnchorPane prefHeight="700.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.produits.AfficherProduitClientControllers">
    <children>
-      <AnchorPane prefHeight="712.0" prefWidth="216.0" styleClass="nav-form" stylesheets="@Dashbord.css">
+      <AnchorPane prefHeight="712.0" prefWidth="216.0" styleClass="nav-form" stylesheets="@dashboard.css">
          <children>
-            <Button layoutY="282.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Movies">
+            <Button layoutY="282.0" mnemonicParsing="false" onAction="#MovieClient" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Movies">
                <font>
                   <Font name="System Italic" size="17.0" />
                </font>
             </Button>
             <FontAwesomeIconView fill="#ebe5e5" glyphName="FILM" layoutX="20.0" layoutY="308.0" size="30" text="" />
-            <Button layoutX="1.0" layoutY="321.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Products" />
+            <Button layoutX="1.0" layoutY="321.0" mnemonicParsing="false" onAction="#produitClient" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Products" />
             <FontAwesomeIconView fill="#ebe5e5" glyphName="CUBES" layoutX="20.0" layoutY="347.0" size="30" text="" />
             <FontAwesomeIconView fill="#ebe5e5" glyphName="VIDEO_CAMERA" layoutX="24.0" layoutY="390.0" size="30" text="" />
-            <Button layoutY="364.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="202.0" styleClass="nav-btn" text="Cinema" textAlignment="CENTER" />
+            <Button layoutY="364.0" mnemonicParsing="false" onAction="#cinemaclient" prefHeight="30.0" prefWidth="202.0" styleClass="nav-btn" text="Cinema" textAlignment="CENTER" />
             <FontAwesomeIconView fill="#ebe5e5" glyphName="USER" layoutX="39.0" layoutY="611.0" size="30" text="" />
-            <Button layoutX="74.0" layoutY="584.0" mnemonicParsing="false" styleClass="nav-btn" text="Account" />
+            <Button layoutX="74.0" layoutY="584.0" mnemonicParsing="false" onAction="#profilclient" styleClass="nav-btn" text="Account" />
             <FontAwesomeIconView fill="#ebe5e5" glyphName="SIGN_OUT" layoutX="38.0" layoutY="651.0" size="30" text="" />
             <Button layoutX="82.0" layoutY="624.0" mnemonicParsing="false" styleClass="nav-btn" text="EXIT" />
             <FontAwesomeIconView fill="#ebe5e5" glyphName="CALENDAR" layoutX="22.0" layoutY="432.0" size="30" text="" />
-            <Button layoutX="1.0" layoutY="407.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Event">
+            <Button layoutX="1.0" layoutY="407.0" mnemonicParsing="false" onAction="#eventClient" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Event">
                <font>
                   <Font size="13.0" />
                </font>
             </Button>
-            <Button layoutX="1.0" layoutY="244.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Series" />
+            <Button layoutX="1.0" layoutY="244.0" mnemonicParsing="false" onAction="#SerieClient" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Series" />
             <FontAwesomeIconView fill="#ebe5e5" glyphName="TV" layoutX="18.0" layoutY="269.0" size="30" />
             <ImageView fitHeight="161.0" fitWidth="216.0" layoutX="1.0" layoutY="37.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -44,7 +44,7 @@
             </ImageView>
          </children>
       </AnchorPane>
-      <FlowPane fx:id="topproduitFlowPane" alignment="TOP_CENTER" layoutX="981.0" layoutY="161.0" prefHeight="483.0" prefWidth="279.0" styleClass="rating-pane" stylesheets="@Dashbord.css">
+      <FlowPane fx:id="topproduitFlowPane" alignment="TOP_CENTER" layoutX="981.0" layoutY="161.0" prefHeight="483.0" prefWidth="279.0" styleClass="rating-pane" stylesheets="@dashboard.css" visible="false">
          <children>
             <Label alignment="CENTER" text="Top 3" textAlignment="CENTER" textFill="#fce19a">
                <font>
@@ -52,7 +52,7 @@
                </font>
             </Label>
          </children></FlowPane>
-      <TextField fx:id="SearchBar" layoutX="857.0" layoutY="31.0" prefHeight="31.0" prefWidth="200.0" styleClass="search-pane" stylesheets="@Dashbord.css" />
+      <TextField fx:id="SearchBar" layoutX="857.0" layoutY="31.0" prefHeight="31.0" prefWidth="200.0" styleClass="search-pane" stylesheets="@dashboard.css" />
       <ScrollPane fx:id="produitscrollpane" layoutX="249.0" layoutY="146.0" prefHeight="538.0" prefWidth="686.0">
          <content>
       
@@ -61,7 +61,14 @@
          </content>
       </ScrollPane>
       <FontAwesomeIconView glyphName="SHOPPING_CART" layoutX="1220.0" layoutY="121.0" onMouseClicked="#panier" size="25" />
-      <FlowPane fx:id="panierFlowPane" layoutX="980.0" layoutY="157.0" prefHeight="500.0" prefWidth="279.0" styleClass="search-pane" stylesheets="@Dashbord.css" visible="false" />
+      <FlowPane fx:id="panierFlowPane" layoutX="980.0" layoutY="157.0" prefHeight="500.0" prefWidth="279.0" styleClass="search-pane" stylesheets="@dashboard.css" visible="false" />
+      <AnchorPane fx:id="FilterAnchor" layoutX="942.0" layoutY="146.0" prefHeight="147.0" prefWidth="202.0" styleClass="bg-white" stylesheets="@dashboard.css" visible="false">
+         <children>
+            <Button layoutX="80.0" layoutY="117.0" mnemonicParsing="false" onAction="#filtercinema" text="Filter" />
+         </children>
+      </AnchorPane>
+      <FontAwesomeIconView fx:id="idfilter" glyphName="FILTER" layoutX="1152.0" layoutY="119.0" onMouseClicked="#filtrer" size="20" />
+      <FontAwesomeIconView glyphName="COMMENTING" layoutX="1183.0" layoutY="120.0" onMouseClicked="#commentaire" size="25" />
 
 
    </children>

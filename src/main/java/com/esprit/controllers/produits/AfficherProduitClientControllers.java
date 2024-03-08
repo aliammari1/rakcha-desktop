@@ -1,13 +1,23 @@
 package com.esprit.controllers.produits;
 
+
+
+import com.esprit.models.produits.Avis;
 import com.esprit.models.produits.Panier;
 import com.esprit.models.produits.Produit;
+
+
+import com.esprit.services.produits.AvisService;
 import com.esprit.services.produits.PanierService;
 import com.esprit.services.produits.ProduitService;
 import com.esprit.services.users.UserService;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import javafx.beans.value.ChangeListener;
+
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -17,10 +27,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -33,19 +40,26 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+
 import javafx.stage.Stage;
+import org.controlsfx.control.Rating;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+
 import java.net.URL;
 import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
+
 
 public class AfficherProduitClientControllers implements Initializable {
 
 
+    @FXML
+    private AnchorPane FilterAnchor;
     @FXML
 
     public FlowPane panierFlowPane;
@@ -57,6 +71,10 @@ public class AfficherProduitClientControllers implements Initializable {
 
     @FXML
     private FlowPane topproduitFlowPane;
+
+    @FXML
+    private FontAwesomeIconView idfilter;
+
 
     private List<Produit> l1 = new ArrayList<>();
 
@@ -75,20 +93,21 @@ public class AfficherProduitClientControllers implements Initializable {
 
     public void initialize(URL location, ResourceBundle resources) {
 
+        loadAcceptedProduits();
+
+
         ProduitService produitService = new ProduitService();
         l1 = produitService.read();
 
-        SearchBar.textProperty().addListener((ChangeListener<String>) (observable, oldValue, newValue) -> {
+        SearchBar.textProperty().addListener((observable, oldValue, newValue) -> {
             List<Produit> produitsRecherches = rechercher(l1, newValue);
             // Effacer la FlowPane actuelle pour afficher les nouveaux résultats
             produitFlowPane.getChildren().clear();
             createProduitCards(produitsRecherches);
+            filterCategorieProduits(newValue.trim());
+
+
         });
-        loadAcceptedProduits();
-
-
-
-
 
     }
 
@@ -103,11 +122,19 @@ public class AfficherProduitClientControllers implements Initializable {
         for (Produit produit : Produits) {
             VBox cardContainer = createProduitCard(produit);
 
-            produitFlowPane.getChildren().add(cardContainer);
+            // Créer un AnchorPane pour le cardContainer et ajouter le produit comme UserData
+            AnchorPane produitNode = new AnchorPane();
+            produitNode.setUserData(produit);
+            produitNode.getChildren().add(cardContainer);
 
+            produitFlowPane.getChildren().add(produitNode);
 
 
         }
+       /* for (int i = 0; i < 3; i++) {
+            topproduitFlowPane.getChildren().add(createTopThree(i));
+        }*/
+
 
     }
 
@@ -329,6 +356,10 @@ public class AfficherProduitClientControllers implements Initializable {
 
         return resultats;
     }
+
+
+
+
 
     private void createProduitCards(List<Produit> produits) {
         for (Produit produit : produits) {
@@ -554,6 +585,304 @@ public class AfficherProduitClientControllers implements Initializable {
 
     }
 
+
+    @FXML
+    void commentaire(MouseEvent event) {
+        try {
+            // Charger la nouvelle interface PanierProduit.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/CommentaireProduit.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène avec la nouvelle interface
+            Scene scene = new Scene(root);
+
+            // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Créer une nouvelle fenêtre (stage) et y attacher la scène
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("chat ");
+            stage.show();
+
+            // Fermer la fenêtre actuelle
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace(); // Gérer l'exception d'entrée/sortie
+        }
+
+
+
+
+
+
+
+
+    }
+
+
+    private void filterCategorieProduits(String searchText) {
+        // Vérifier si le champ de recherche n'est pas vide
+        if (!searchText.isEmpty()) {
+            // Filtrer la liste des produits pour ne garder que ceux dont le nom contient le texte saisi
+            ObservableList<Node> filteredList = FXCollections.observableArrayList();
+            for (Node node : produitFlowPane.getChildren()) {
+                Produit produit = (Produit) node.getUserData(); // Récupérer le Produit associé au Node
+                if (produit.getCategorie().getNom_categorie().toLowerCase().contains(searchText.toLowerCase())) {
+                    filteredList.add(node);
+                }
+            }
+            // Mettre à jour le FlowPane avec la liste filtrée
+            produitFlowPane.getChildren().setAll(filteredList);
+        } else {
+            // Si le champ de recherche est vide, afficher tous les produits
+            loadAcceptedProduits();
+        }
+    }
+
+
+    private final List<CheckBox> addressCheckBoxes = new ArrayList<>();
+    private final List<CheckBox> statusCheckBoxes = new ArrayList<>();
+
+
+
+    private List<Produit> getAllCategories() {
+        ProduitService categorieservice = new ProduitService();
+        List<Produit> categorie = categorieservice.read();
+        return categorie;
+    }
+    @FXML
+    void filtrer(MouseEvent event) {
+
+        produitFlowPane.setOpacity(0.5);
+
+        FilterAnchor.setVisible(true);
+
+        // Nettoyer les listes des cases à cocher
+        addressCheckBoxes.clear();
+        statusCheckBoxes.clear();
+        // Récupérer les adresses uniques depuis la base de données
+        List<String> categorie = getCategorie_Produit();
+
+
+        // Créer des VBox pour les adresses
+        VBox addressCheckBoxesVBox = new VBox();
+        Label addressLabel = new Label("Adresse");
+        addressLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
+        addressCheckBoxesVBox.getChildren().add(addressLabel);
+        for (String address : categorie) {
+            CheckBox checkBox = new CheckBox(address);
+            addressCheckBoxesVBox.getChildren().add(checkBox);
+            addressCheckBoxes.add(checkBox);
+        }
+        addressCheckBoxesVBox.setLayoutX(25);
+        addressCheckBoxesVBox.setLayoutY(60);
+
+
+        // Ajouter les VBox dans le FilterAnchor
+        FilterAnchor.getChildren().addAll(addressCheckBoxesVBox);
+        FilterAnchor.setVisible(true);
+    }
+
+
+
+
+    public List<String> getCategorie_Produit() {
+        // Récupérer tous les cinémas depuis la base de données
+        List<Produit> categories = getAllCategories();
+
+
+
+        List<String> categorie = categories.stream()
+                .map(c -> c.getCategorie().getNom_categorie())
+                .distinct()
+                .collect(Collectors.toList());
+
+        return categorie;
+    }
+
+    @FXML
+    public void filtercinema(ActionEvent event) {
+
+        produitFlowPane.setOpacity(1);
+
+        FilterAnchor.setVisible(false);
+        produitFlowPane.setVisible(true);
+
+        // Récupérer les catégories sélectionnées
+        List<String> selectedCategories = getSelectedCategories();
+
+        // Filtrer les produits en fonction des catégories sélectionnées
+        List<Produit> filteredProducts = getAllCategories().stream()
+                .filter(produit -> selectedCategories.contains(produit.getCategorie().getNom_categorie()))
+                .collect(Collectors.toList());
+
+        // Mettre à jour la liste des produits affichés
+        updateProduitFlowPane(filteredProducts);
+    }
+
+    private void updateProduitFlowPane(List<Produit> filteredProducts) {
+        produitFlowPane.getChildren().clear(); // Effacez les éléments existants
+
+        for (Produit produit : filteredProducts) {
+            VBox cardContainer = createProduitCard(produit);
+            produitFlowPane.getChildren().add(cardContainer);
+        }
+    }
+
+
+    private List<String> getSelectedCategories() {
+        // Récupérer les adresses sélectionnées dans l'AnchorPane de filtrage
+        return addressCheckBoxes.stream()
+                .filter(CheckBox::isSelected)
+                .map(CheckBox::getText)
+                .collect(Collectors.toList());
+    }
+
+    @FXML
+    void cinemaclient(ActionEvent event) {
+        try {
+            // Charger la nouvelle interface PanierProduit.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/CommentaireProduit.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène avec la nouvelle interface
+            Scene scene = new Scene(root);
+
+            // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Créer une nouvelle fenêtre (stage) et y attacher la scène
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("cinema ");
+            stage.show();
+
+            // Fermer la fenêtre actuelle
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace(); // Gérer l'exception d'entrée/sortie
+        }
+
+
+    }
+
+    @FXML
+    void eventClient(ActionEvent event) {
+        try {
+            // Charger la nouvelle interface PanierProduit.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AffichageEvenementClient.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène avec la nouvelle interface
+            Scene scene = new Scene(root);
+
+            // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Créer une nouvelle fenêtre (stage) et y attacher la scène
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("Event ");
+            stage.show();
+
+            // Fermer la fenêtre actuelle
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace(); // Gérer l'exception d'entrée/sortie
+        }
+
+
+    }
+
+    @FXML
+    void produitClient(ActionEvent event) {
+        try {
+            // Charger la nouvelle interface PanierProduit.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherProduitClient.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène avec la nouvelle interface
+            Scene scene = new Scene(root);
+
+            // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Créer une nouvelle fenêtre (stage) et y attacher la scène
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("products ");
+            stage.show();
+
+            // Fermer la fenêtre actuelle
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace(); // Gérer l'exception d'entrée/sortie
+        }
+
+
+    }
+
+    @FXML
+    void profilclient(ActionEvent event) {
+
+
+
+    }
+
+
+    @FXML
+    void MovieClient(ActionEvent event) {
+        try {
+            // Charger la nouvelle interface PanierProduit.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/filmuser.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène avec la nouvelle interface
+            Scene scene = new Scene(root);
+
+            // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Créer une nouvelle fenêtre (stage) et y attacher la scène
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("movie ");
+            stage.show();
+
+            // Fermer la fenêtre actuelle
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace(); // Gérer l'exception d'entrée/sortie
+        }
+    }
+
+    @FXML
+    void SerieClient(ActionEvent event) {
+        try {
+            // Charger la nouvelle interface PanierProduit.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Series-view.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène avec la nouvelle interface
+            Scene scene = new Scene(root);
+
+            // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Créer une nouvelle fenêtre (stage) et y attacher la scène
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("series ");
+            stage.show();
+
+            // Fermer la fenêtre actuelle
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace(); // Gérer l'exception d'entrée/sortie
+        }
+
+    }
 
 
 

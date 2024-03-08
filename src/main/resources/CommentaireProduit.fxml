@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="700.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.produits.CommentaireProduitController">
+   <children>
+      <AnchorPane prefHeight="705.0" prefWidth="211.0" styleClass="nav-form" stylesheets="@dashboard.css">
+         <children>
+            <Button layoutY="278.0" mnemonicParsing="false" onAction="#MovieClient" prefHeight="33.0" prefWidth="200.0" styleClass="nav-btn" text="Movies">
+               <font>
+                  <Font name="System Italic" size="14.0" />
+               </font>
+            </Button>
+            <FontAwesomeIconView fill="#ebe5e5" glyphName="FILM" layoutX="20.0" layoutY="308.0" size="30" text="" />
+            <Button layoutX="1.0" layoutY="321.0" mnemonicParsing="false" onAction="#produitClient" prefHeight="38.0" prefWidth="200.0" styleClass="nav-btn" text="Products" />
+            <FontAwesomeIconView fill="#ebe5e5" glyphName="CUBES" layoutX="20.0" layoutY="347.0" size="30" text="" />
+            <Button layoutX="-1.0" layoutY="367.0" mnemonicParsing="false" onAction="#cinemaclient" prefHeight="38.0" prefWidth="200.0" styleClass="nav-btn" text="Cinema" textAlignment="CENTER" />
+            <FontAwesomeIconView fill="#ebe5e5" glyphName="VIDEO_CAMERA" layoutX="19.0" layoutY="393.0" size="32" text="" wrappingWidth="34.28571319580078" />
+            <FontAwesomeIconView fill="#ebe5e5" glyphName="USER" layoutX="39.0" layoutY="611.0" size="30" text="" />
+            <Button layoutX="74.0" layoutY="584.0" mnemonicParsing="false" onAction="#profilclient" styleClass="nav-btn" text="Account" />
+            <FontAwesomeIconView fill="#ebe5e5" glyphName="SIGN_OUT" layoutX="38.0" layoutY="651.0" size="30" text="" />
+            <Button layoutX="82.0" layoutY="624.0" mnemonicParsing="false" styleClass="nav-btn" text="EXIT" />
+            <Button layoutY="412.0" mnemonicParsing="false" onAction="#eventClient" prefHeight="38.0" prefWidth="200.0" styleClass="nav-btn" text="  Event">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Button>
+            <Button layoutX="1.0" layoutY="241.0" mnemonicParsing="false" onAction="#SerieClient" prefHeight="33.0" prefWidth="200.0" styleClass="nav-btn" text="Series" />
+            <FontAwesomeIconView fill="#ebe5e5" glyphName="TV" layoutX="18.0" layoutY="269.0" size="30" />
+            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="9.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../../../../xampp/htdocs/img/417882432_24845175578463813_8129699764434025723_n.png" />
+               </image>
+            </ImageView>
+            <FontAwesomeIconView fill="#ebe5e5" glyphName="CALENDAR" layoutX="6.0" layoutY="445.0" size="30" text="" textAlignment="RIGHT" wrappingWidth="43.85714340209961" />
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="237.0" layoutY="99.0" prefHeight="357.0" prefWidth="368.0" styleClass="bg-white" stylesheets="@dashboard.css">
+         <children>
+            <TextArea fx:id="monCommentaitreText" layoutX="51.0" layoutY="31.0" prefHeight="137.0" prefWidth="266.0" />
+            <Button layoutX="131.0" layoutY="270.0" mnemonicParsing="false" onAction="#addchat" styleClass="button-client" stylesheets="@dashboard.css" text="ADD Chat" />
+         </children>
+      </AnchorPane>
+      <ScrollPane fx:id="produitscrollpane" layoutX="697.0" layoutY="108.0" prefHeight="357.0" prefWidth="391.0">
+         <content>
+            <FlowPane fx:id="CommentaireFlowPane" prefHeight="301.0" prefWidth="390.0" stylesheets="@dashboard.css" />
+         </content>
+      </ScrollPane>
+   </children>
+</AnchorPane>
