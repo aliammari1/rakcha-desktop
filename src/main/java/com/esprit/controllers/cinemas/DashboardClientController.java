@@ -1,9 +1,15 @@
 package com.esprit.controllers.cinemas;
 
 import com.esprit.models.cinemas.Cinema;
+import com.esprit.models.cinemas.RatingCinema;
 import com.esprit.models.cinemas.Seance;
+import com.esprit.models.users.Client;
 import com.esprit.services.cinemas.CinemaService;
+import com.esprit.services.cinemas.RatingCinemaService;
 import com.esprit.services.cinemas.SeanceService;
+import com.esprit.services.users.UserService;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -28,6 +34,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
+import org.controlsfx.control.Rating;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -50,6 +57,11 @@ public class DashboardClientController {
 
     @FXML
     private FlowPane parentContainer;
+    @FXML
+    private TextField searchbar1;
+
+    @FXML
+    private AnchorPane FilterAnchor;
 
     @FXML
     void showListCinema(ActionEvent event) {
@@ -92,7 +104,7 @@ public class DashboardClientController {
 
     private HBox createCinemaCard(Cinema cinema) {
         HBox cardContainer = new HBox();
-        cardContainer.setStyle("-fx-padding: 25px 0 0 8px ;"); // Ajout de remplissage à gauche pour le décalage
+        cardContainer.setStyle("-fx-padding: 25px 0 0 8px ;");
 
         AnchorPane card = new AnchorPane();
         card.setStyle("-fx-background-color: #ffffff; -fx-border-radius: 10px; -fx-border-color: #000000; -fx-background-radius: 10px; -fx-border-width: 2px;  ");
@@ -100,20 +112,19 @@ public class DashboardClientController {
         card.setPrefHeight(150);
 
         ImageView logoImageView = new ImageView();
-        logoImageView.setFitWidth(140); // la largeur de l'image
+        logoImageView.setFitWidth(140);
         logoImageView.setFitHeight(100);
-        logoImageView.setLayoutX(15); // Padding à droite
-        logoImageView.setLayoutY(15); // Padding en haut
+        logoImageView.setLayoutX(15);
+        logoImageView.setLayoutY(15);
         logoImageView.setStyle("-fx-border-color: #000000 ; -fx-border-width: 2px; -fx-border-radius: 5px;");
 
         try {
             String logoString = cinema.getLogo();
-            Image logoImage = new Image("Logo.png");
+            Image logoImage = new Image(logoString);
             logoImageView.setImage(logoImage);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         card.getChildren().add(logoImageView);
 
         Label NomLabel = new Label("Name: ");
@@ -147,7 +158,6 @@ public class DashboardClientController {
         verticalLine.setEndY(140);
         verticalLine.setStroke(Color.BLACK);
         verticalLine.setStrokeWidth(3);
-
         card.getChildren().add(verticalLine);
 
         Button moviesButton = new Button("Show Movies");
@@ -160,13 +170,41 @@ public class DashboardClientController {
         planningButton.setLayoutX(302);
         planningButton.setLayoutY(77);
         planningButton.getStyleClass().add("movies-btn");
-        planningButton.setUserData(cinema); // Stocker le cinéma dans userData
+        planningButton.setUserData(cinema);
         planningButton.setOnAction(this::showPlanning);
         card.getChildren().addAll(planningButton);
-        cardContainer.setOnMouseClicked(event -> geocodeAddress(cinema.getAdresse()));
+
+        // Ajout du composant de notation (Rating)
+        RatingCinemaService ratingService = new RatingCinemaService();
+        Rating rating = new Rating();
+        rating.setLayoutX(100);
+        rating.setLayoutY(100);
+        rating.setMax(5);
+
+        // Obtenez la note moyenne depuis le service de notation
+        double averageRating = ratingService.getAverageRating(cinema.getId_cinema());
+
+        // Si la note moyenne est disponible, définissez la note affichée
+        if (averageRating > 0) {
+            rating.setRating(averageRating);
+        }
+
+        // Ajout d'un écouteur pour la notation
+        rating.ratingProperty().addListener((observable, oldValue, newValue) -> {
+            int userId = 1; // Supposons que l'ID de l'utilisateur est 1 (variable fixe)
+            RatingCinemaService ratingCinemaService = new RatingCinemaService(); // Instanciation du service
+            UserService userService = new UserService(); // Instanciation du service UserService
+            Client client = userService.getClientById(userId); // Récupérer le client par son ID à partir du service UserService
+            RatingCinema ratingCinema = new RatingCinema(cinema, client, newValue.intValue()); // Création de l'objet RatingCinema avec les valeurs appropriées
+            ratingCinemaService.create(ratingCinema); // Enregistrement de la note dans la base de données
+        });
+
+        card.getChildren().add(rating);
+
         cardContainer.getChildren().add(card);
         return cardContainer;
     }
+
     private void geocodeAddress(String address) {
         new Thread(() -> {
             try {
@@ -327,6 +365,155 @@ public class DashboardClientController {
         card.getChildren().addAll(filmLabel, salleLabel, timeLabel, priceLabel);
         return card;
     }
+    private List<Cinema> l1 = new ArrayList<>();
+    public void initialize() {
+        CinemaService cinemaService = new CinemaService();
+        l1 = cinemaService.read();
+
+        searchbar1.textProperty().addListener((observable, oldValue, newValue) -> {
+            List<Cinema> produitsRecherches = rechercher(l1, newValue);
+            // Effacer la FlowPane actuelle pour afficher les nouveaux résultats
+            cinemaFlowPane.getChildren().clear();
+            createfilmCards(produitsRecherches);
+});
+
+    }
+
+   private void createfilmCards(List<Cinema> Cinemas) {
+        for (Cinema cinema : Cinemas) {
+            HBox cardContainer = createCinemaCard(cinema);
+            cinemaFlowPane.getChildren().add(cardContainer);
+
+
+}
+
+}
+
+    @FXML
+    public static List<Cinema> rechercher(List<Cinema> liste, String recherche) {
+        List<Cinema> resultats = new ArrayList<>();
+
+        for (Cinema element : liste) {
+            if (element.getNom() != null && element.getNom().contains(recherche)) {
+                resultats.add(element);
+            }
+        }
+
+        return resultats;
+    }
+
+    private List<Cinema> getAllCinemas() {
+        CinemaService cinemaService = new CinemaService();
+        List<Cinema> cinemas = cinemaService.read();
+        return cinemas;
+    }
+
+    private final List<CheckBox> addressCheckBoxes = new ArrayList<>();
+    private final List<CheckBox> namesCheckBoxes = new ArrayList<>();
+
+    @FXML
+    void filtrer(ActionEvent event) {
+        listCinemaClient.setOpacity(0.5);
+        FilterAnchor.setVisible(true);
+        // Nettoyer les listes des cases à cocher
+        addressCheckBoxes.clear();
+        namesCheckBoxes.clear();
+        // Récupérer les adresses uniques depuis la base de données
+        List<String> addresses = getCinemaAddresses();
+        // Récupérer les statuts uniques depuis la base de données
+        List<String> names = getCinemaNames();
+
+        // Créer des VBox pour les adresses
+        VBox addressCheckBoxesVBox = new VBox();
+        Label addressLabel = new Label("Adresse");
+        addressLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
+        addressCheckBoxesVBox.getChildren().add(addressLabel);
+        for (String address : addresses) {
+            CheckBox checkBox = new CheckBox(address);
+            addressCheckBoxesVBox.getChildren().add(checkBox);
+            addressCheckBoxes.add(checkBox);
+        }
+        addressCheckBoxesVBox.setLayoutX(25);
+        addressCheckBoxesVBox.setLayoutY(60);
+
+        // Créer des VBox pour les statuts
+        VBox namesCheckBoxesVBox = new VBox();
+        Label statusLabel = new Label("Names");
+        statusLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
+        namesCheckBoxesVBox.getChildren().add(statusLabel);
+        for (String name : names) {
+            CheckBox checkBox = new CheckBox(name);
+            namesCheckBoxesVBox.getChildren().add(checkBox);
+            namesCheckBoxes.add(checkBox);
+        }
+        namesCheckBoxesVBox.setLayoutX(25);
+        namesCheckBoxesVBox.setLayoutY(120);
+
+        // Ajouter les VBox dans le FilterAnchor
+        FilterAnchor.getChildren().addAll(addressCheckBoxesVBox, namesCheckBoxesVBox);
+        FilterAnchor.setVisible(true);
+    }
+
+    @FXML
+    void filtrercinema(ActionEvent event) {
+        listCinemaClient.setOpacity(1);
+        FilterAnchor.setVisible(false);
+
+        // Récupérer les adresses sélectionnées
+        List<String> selectedAddresses = getSelectedAddresses();
+        // Récupérer les noms sélectionnés
+        List<String> selectedNames = getSelectedNames();
+
+        // Filtrer les cinémas en fonction des adresses et/ou des noms sélectionnés
+        List<Cinema> filteredCinemas = l1.stream()
+                .filter(cinema -> selectedAddresses.isEmpty() || selectedAddresses.contains(cinema.getAdresse()))
+                .filter(cinema -> selectedNames.isEmpty() || selectedNames.contains(cinema.getNom()))
+                .collect(Collectors.toList());
+
+        // Afficher les cinémas filtrés
+        cinemaFlowPane.getChildren().clear();
+        createfilmCards(filteredCinemas);
+    }
+
+    private List<String> getSelectedAddresses() {
+        // Récupérer les adresses sélectionnées dans l'AnchorPane de filtrage
+        return addressCheckBoxes.stream()
+                .filter(CheckBox::isSelected)
+                .map(CheckBox::getText)
+                .collect(Collectors.toList());
+    }
+
+    private List<String> getSelectedNames() {
+        // Récupérer les noms sélectionnés dans l'AnchorPane de filtrage
+        return namesCheckBoxes.stream()
+                .filter(CheckBox::isSelected)
+                .map(CheckBox::getText)
+                .collect(Collectors.toList());
+    }
+
+    public List<String> getCinemaAddresses() {
+        // Récupérer tous les cinémas depuis la base de données
+        List<Cinema> cinemas = getAllCinemas();
+
+        // Extraire les adresses uniques des cinémas
+        return cinemas.stream()
+                .map(Cinema::getAdresse)
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    public List<String> getCinemaNames() {
+        // Récupérer tous les cinémas depuis la base de données
+        List<Cinema> cinemas = getAllCinemas();
+
+        // Extraire les noms uniques des cinémas
+        return cinemas.stream()
+                .map(Cinema::getNom)
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+
 
 
 }

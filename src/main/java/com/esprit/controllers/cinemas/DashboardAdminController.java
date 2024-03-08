@@ -6,18 +6,19 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class DashboardAdminController {
@@ -45,6 +46,12 @@ public class DashboardAdminController {
 
     @FXML
     private TableView<Cinema> listCinema;
+
+    @FXML
+    private TextField tfSearch;
+
+    @FXML
+    private AnchorPane FilterAnchor;
 
     @FXML
     void afficherCinemas(ActionEvent event) {
@@ -144,6 +151,150 @@ public class DashboardAdminController {
         ObservableList<Cinema> cinemaObservableList = FXCollections.observableArrayList(cinemas);
 
         listCinema.setItems(cinemaObservableList);
+    }
+    private List<Cinema> getAllCinemas() {
+        CinemaService cinemaService = new CinemaService();
+        List<Cinema> cinemas = cinemaService.read();
+        return cinemas;
+    }
+    @FXML
+    public void initialize() {
+        // Ajouter un écouteur de changement pour le champ de recherche
+        tfSearch.textProperty().addListener((observable, oldValue, newValue) -> {
+            // Filtrer la liste des cinémas en fonction du nouveau texte saisi dans le champ de recherche
+            filterCinemas(newValue.trim());
+        });
+
+        // Charger tous les cinémas initialement
+        loadCinemas();
+    }
+
+    private void filterCinemas(String searchText) {
+        // Vérifier si le champ de recherche n'est pas vide
+        if (!searchText.isEmpty()) {
+            // Filtrer la liste des cinémas pour ne garder que ceux dont le nom contient le texte saisi
+            ObservableList<Cinema> filteredList = FXCollections.observableArrayList();
+            for (Cinema cinema : listCinema.getItems()) {
+                if (cinema.getNom().toLowerCase().contains(searchText.toLowerCase())) {
+                    filteredList.add(cinema);
+                }
+            }
+            // Mettre à jour la TableView avec la liste filtrée
+            listCinema.setItems(filteredList);
+        } else {
+            // Si le champ de recherche est vide, afficher tous les cinémas
+            loadCinemas();
+        }
+    }
+
+    private final List<CheckBox> addressCheckBoxes = new ArrayList<>();
+    private final List<CheckBox> statusCheckBoxes = new ArrayList<>();
+
+
+    @FXML
+    void filtrer(ActionEvent event) {
+        cinemasList.setOpacity(0.5);
+        FilterAnchor.setVisible(true);
+        // Nettoyer les listes des cases à cocher
+        addressCheckBoxes.clear();
+        statusCheckBoxes.clear();
+        // Récupérer les adresses uniques depuis la base de données
+        List<String> addresses = getCinemaAddresses();
+        // Récupérer les statuts uniques depuis la base de données
+        List<String> statuses = getCinemaStatuses();
+
+        // Créer des VBox pour les adresses
+        VBox addressCheckBoxesVBox = new VBox();
+        Label addressLabel = new Label("Adresse");
+        addressLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
+        addressCheckBoxesVBox.getChildren().add(addressLabel);
+        for (String address : addresses) {
+            CheckBox checkBox = new CheckBox(address);
+            addressCheckBoxesVBox.getChildren().add(checkBox);
+            addressCheckBoxes.add(checkBox);
+        }
+        addressCheckBoxesVBox.setLayoutX(25);
+        addressCheckBoxesVBox.setLayoutY(60);
+
+        // Créer des VBox pour les statuts
+        VBox statusCheckBoxesVBox = new VBox();
+        Label statusLabel = new Label("Statut");
+        statusLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
+        statusCheckBoxesVBox.getChildren().add(statusLabel);
+        for (String status : statuses) {
+            CheckBox checkBox = new CheckBox(status);
+            statusCheckBoxesVBox.getChildren().add(checkBox);
+            statusCheckBoxes.add(checkBox);
+        }
+        statusCheckBoxesVBox.setLayoutX(25);
+        statusCheckBoxesVBox.setLayoutY(120);
+
+        // Ajouter les VBox dans le FilterAnchor
+        FilterAnchor.getChildren().addAll(addressCheckBoxesVBox, statusCheckBoxesVBox);
+        FilterAnchor.setVisible(true);
+    }
+
+
+
+
+    public List<String> getCinemaAddresses() {
+        // Récupérer tous les cinémas depuis la base de données
+        List<Cinema> cinemas = getAllCinemas();
+
+        // Extraire les adresses uniques des cinémas
+        List<String> addresses = cinemas.stream()
+                .map(Cinema::getAdresse)
+                .distinct()
+                .collect(Collectors.toList());
+
+        return addresses;
+    }
+
+    public List<String> getCinemaStatuses() {
+        // Créer une liste de statuts pré-définis
+        List<String> statuses = new ArrayList<>();
+        statuses.add("En_Attente");
+        statuses.add("Acceptée");
+
+        return statuses;
+    }
+
+    @FXML
+    void filtrercinema(ActionEvent event) {
+        cinemasList.setOpacity(1);
+        FilterAnchor.setVisible(false);
+
+        // Récupérer les adresses sélectionnées
+        List<String> selectedAddresses = getSelectedAddresses();
+        // Récupérer les statuts sélectionnés
+        List<String> selectedStatuses = getSelectedStatuses();
+
+        // Filtrer les cinémas en fonction des adresses et/ou des statuts sélectionnés
+        List<Cinema> filteredCinemas = getAllCinemas().stream()
+                .filter(cinema -> selectedAddresses.isEmpty() || selectedAddresses.contains(cinema.getAdresse()))
+                .filter(cinema -> selectedStatuses.isEmpty() || selectedStatuses.contains(cinema.getStatut()))
+                .collect(Collectors.toList());
+
+        // Mettre à jour le TableView avec les cinémas filtrés
+        ObservableList<Cinema> filteredList = FXCollections.observableArrayList(filteredCinemas);
+        listCinema.setItems(filteredList);
+    }
+
+
+    private List<String> getSelectedAddresses() {
+        // Récupérer les adresses sélectionnées dans l'AnchorPane de filtrage
+        return addressCheckBoxes.stream()
+                .filter(CheckBox::isSelected)
+                .map(CheckBox::getText)
+                .collect(Collectors.toList());
+    }
+
+    private List<String> getSelectedStatuses() {
+        // Récupérer les statuts sélectionnés dans l'AnchorPane de filtrage
+        return statusCheckBoxes.stream()
+                .filter(CheckBox::isSelected)
+                .map(CheckBox::getText)
+                .collect(Collectors.toList());
     }
 
 }
