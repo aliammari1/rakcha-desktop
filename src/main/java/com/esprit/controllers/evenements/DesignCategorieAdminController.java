@@ -2,6 +2,8 @@ package com.esprit.controllers.evenements;
 
 import com.esprit.models.evenements.Categorie_evenement;
 import com.esprit.services.evenements.CategorieService;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -31,7 +33,7 @@ public class DesignCategorieAdminController {
     private TableColumn<Categorie_evenement, String> tcDescriptionC;
 
     @FXML
-    private TableColumn<Categorie_evenement, Void> tcDeleteC;
+    private TableColumn<Categorie_evenement, Button> tcDeleteC;
 
     @FXML
     private TextArea tfDescriptionC;
@@ -110,7 +112,7 @@ public class DesignCategorieAdminController {
         Categorie_evenement nouvelleCategorieEvenement = new Categorie_evenement(nomCategorie, descriptionCategorie);
 
         // Ajouter le nouveau categorie à la liste existante
-        cs.add(nouvelleCategorieEvenement);
+        cs.create(nouvelleCategorieEvenement);
         categorie_tableView.getItems().add(nouvelleCategorieEvenement);
 
         // Rafraîchir la TableView
@@ -157,8 +159,25 @@ public class DesignCategorieAdminController {
             }
         };
 
-        tcDeleteC.setCellFactory(cellFactory);
-        categorie_tableView.getColumns().add(tcDeleteC);
+        //tcDeleteC.setCellFactory(cellFactory);
+        tcDeleteC.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Categorie_evenement, Button>, ObservableValue<Button>>() {
+            @Override
+            public ObservableValue<Button> call(TableColumn.CellDataFeatures<Categorie_evenement, Button> categorieEvenementVoidCellDataFeatures) {
+                Button btnDelete = new Button("Delete");
+
+                btnDelete.getStyleClass().add("delete-button");
+                btnDelete.setOnAction((ActionEvent event) -> {
+                    //Categorie_evenement categorieEvenement = getTableView().getItems().get(getIndex());
+                    CategorieService cs = new CategorieService();
+                    cs.delete(categorieEvenementVoidCellDataFeatures.getValue());
+                    categorie_tableView.getItems().remove(categorieEvenementVoidCellDataFeatures.getValue());
+                    categorie_tableView.refresh();
+
+                });
+                return new SimpleObjectProperty<Button>(btnDelete);
+            }
+        });
+        //categorie_tableView.getColumns().add(tcDeleteC);
     }
 
     @FXML
@@ -210,7 +229,7 @@ public class DesignCategorieAdminController {
         // Utiliser une ObservableList pour stocker les éléments
         ObservableList<Categorie_evenement> list = FXCollections.observableArrayList();
         CategorieService cs = new CategorieService();
-        list.addAll(cs.show());
+        list.addAll(cs.read());
         categorie_tableView.setItems(list);
 
         // Activer la sélection de cellules

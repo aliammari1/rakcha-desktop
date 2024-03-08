@@ -22,7 +22,7 @@ public class EvenementService implements IService<Evenement> {
     }
 
     @Override
-    public void add(Evenement evenement) {
+    public void create(Evenement evenement) {
         String req = "INSERT into evenement(nom,dateDebut,dateFin,lieu,id_categorie,etat,description) values (?, ?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
@@ -74,7 +74,7 @@ public class EvenementService implements IService<Evenement> {
     }
 
     @Override
-    public List<Evenement> show() {
+    public List<Evenement> read() {
         List<Evenement> evenements = new ArrayList<>();
 
         String req = "SELECT evenement.* , categorie_evenement.nom_categorie from evenement JOIN categorie_evenement ON evenement.id_categorie = categorie_evenement.id";
@@ -147,7 +147,7 @@ public class EvenementService implements IService<Evenement> {
             List<Evenement> eventList = new ArrayList<>();
             String query = "SELECT * FROM evenement ORDER BY " + Option;
             PreparedStatement statement = this.connection.prepareStatement(query);
-            return this.show();
+            return this.read();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

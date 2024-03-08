@@ -21,7 +21,7 @@ public class SponsorService implements IService<Sponsor> {
     }
 
     @Override
-    public void add(Sponsor sponsor) {
+    public void create(Sponsor sponsor) {
         String req = "INSERT into sponsor(nomSociete,logo) values (?, ?);";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
@@ -63,7 +63,7 @@ public class SponsorService implements IService<Sponsor> {
     }
 
     @Override
-    public List<Sponsor> show() {
+    public List<Sponsor> read() {
         List<Sponsor> sponsors = new ArrayList<>();
 
         String req = "SELECT * from sponsor";

@@ -22,7 +22,7 @@ public class CategorieService implements IService<Categorie_evenement> {
 
 
     @Override
-    public void add(Categorie_evenement categorie) {
+    public void create(Categorie_evenement categorie) {
 
         String req = "INSERT into categorie_evenement(nom_categorie, description) values (?, ?);";
         try {
@@ -66,7 +66,7 @@ public class CategorieService implements IService<Categorie_evenement> {
     }
 
     @Override
-    public List<Categorie_evenement> show() {
+    public List<Categorie_evenement> read() {
 
         List<Categorie_evenement> categories = new ArrayList<>();
 
@@ -127,7 +127,7 @@ public class CategorieService implements IService<Categorie_evenement> {
         List<String> categorieNames = new ArrayList<>();
 
         // Remplacez "getAllCategories()" par la méthode réelle qui récupère toutes les catégories
-        List<Categorie_evenement> categories = show();
+        List<Categorie_evenement> categories = read();
 
         // Ajoutez les noms de catégories à la liste
         for (Categorie_evenement categorieEvenement : categories) {

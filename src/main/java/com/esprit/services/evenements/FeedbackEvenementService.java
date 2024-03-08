@@ -21,7 +21,7 @@ public class FeedbackEvenementService implements IService<Feedback> {
 
 
     @Override
-    public void add(Feedback feedback) {
+    public void create(Feedback feedback) {
         String req = "INSERT into feedback_evenement(id_evenement,id_user, commentaire) values (?, ?, ?);";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
@@ -69,7 +69,7 @@ public class FeedbackEvenementService implements IService<Feedback> {
     }
 
     @Override
-    public List<Feedback> show() {
+    public List<Feedback> read() {
         List<Feedback> feedbacks = new ArrayList<>();
 
         String req = "SELECT feedback_evenement.* , evenement.nom from feedback_evenement JOIN evenement ON feedback_evenement.id_evenement = evenement.id ";

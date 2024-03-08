@@ -74,7 +74,7 @@ public class DesignEvenementAdminController {
 
         CategorieService cs = new CategorieService();
 
-        for (Categorie_evenement c : cs.show()) {
+        for (Categorie_evenement c : cs.read()) {
             cbCategorie.getItems().add(c.getNom_categorie());
         }
 
@@ -180,7 +180,7 @@ public class DesignEvenementAdminController {
         EvenementService es = new EvenementService();
         CategorieService cs = new CategorieService();
         Evenement nouvelEvenement = new Evenement(nomEvenement, Date.valueOf(dateDebut), Date.valueOf(dateFin), lieu, cs.getCategorieByNom(nomCategorie), etat, description);
-        es.add(nouvelEvenement);
+        es.create(nouvelEvenement);
 
         // Ajouter le nouvel evenement à la liste existante
         tvEvenement.getItems().add(nouvelEvenement);
@@ -328,7 +328,7 @@ public class DesignEvenementAdminController {
         // Utiliser une ObservableList pour stocker les éléments
         ObservableList<Evenement> list = FXCollections.observableArrayList();
         EvenementService es = new EvenementService();
-        list.addAll(es.show());
+        list.addAll(es.read());
         tvEvenement.setItems(list);
 
         // Activer la sélection de cellules
