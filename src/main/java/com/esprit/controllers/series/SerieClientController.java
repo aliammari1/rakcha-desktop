@@ -3,7 +3,9 @@ package com.esprit.controllers.series;
 import com.esprit.models.series.Categorie;
 import com.esprit.models.series.Serie;
 import com.esprit.services.series.IServiceCategorieImpl;
+import com.esprit.services.series.IServiceSerie;
 import com.esprit.services.series.IServiceSerieImpl;
+import com.google.api.services.youtube.model.ChannelSectionListResponse;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,13 +18,16 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -36,8 +41,8 @@ public class SerieClientController {
     @FXML
     private ComboBox<String> CamboxCategorie;
     @FXML
-   private ListView<Serie> listeSerie;
-   private List<Categorie>categorieList=new ArrayList<>();
+    private ListView<Serie> listeSerie;
+    private List<Categorie>categorieList=new ArrayList<>();
     private List<Serie> listerecherche;
     @FXML
     private TextField recherchefld;
@@ -65,6 +70,7 @@ public class SerieClientController {
 
         return resultats;
     }
+    /*
     public void afficherliste(List<Serie> series){
         listeSerie.getItems().clear();
 
@@ -91,6 +97,67 @@ public class SerieClientController {
             }
         });
     }
+    */
+
+    public void afficherliste(List<Serie> series) {
+        listeSerie.getItems().clear();
+
+        listeSerie.setCellFactory(param -> new ListCell<Serie>() {
+            @Override
+            protected void updateItem(Serie item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setGraphic(null);
+                } else {
+                    // Créez un AnchorPane pour chaque série
+                    AnchorPane anchorPane = new AnchorPane();
+                    anchorPane.setPrefSize(400, 200); // Définissez la taille souhaitée
+
+                    // Ajoutez une ImageView pour afficher l'image
+                    ImageView imageView = new ImageView();
+                    imageView.setFitWidth(150);
+                    imageView.setFitHeight(150);
+                    imageView.setPreserveRatio(true);
+
+                    // Chargez l'image depuis le fichier
+                    File file = new File(item.getImage());
+                    Image image = new Image(file.toURI().toString());
+                    imageView.setImage(image);
+
+                    // Ajoutez des composants à l'AnchorPane (toutes les informations de la série)
+                    Label nameLabel = new Label("Name: " + item.getNom());
+                    Label summaryLabel = new Label("Summary: " + item.getResume());
+                    Label directorLabel = new Label("Director: " + item.getDirecteur());
+                    Label countryLabel = new Label("Country: " + item.getPays());
+                    // Ajoutez d'autres composants selon vos besoins
+
+                    // Positionnez les composants dans l'AnchorPane
+                    AnchorPane.setTopAnchor(imageView, 10.0);
+                    AnchorPane.setLeftAnchor(imageView, 10.0);
+                    AnchorPane.setTopAnchor(nameLabel, 10.0);
+                    AnchorPane.setLeftAnchor(nameLabel, 180.0);
+                    AnchorPane.setTopAnchor(summaryLabel, 40.0);
+                    AnchorPane.setLeftAnchor(summaryLabel, 180.0);
+                    AnchorPane.setTopAnchor(directorLabel, 70.0);
+                    AnchorPane.setLeftAnchor(directorLabel, 180.0);
+                    AnchorPane.setTopAnchor(countryLabel, 100.0);
+                    AnchorPane.setLeftAnchor(countryLabel, 180.0);
+                    // Positionnez d'autres composants selon vos besoins
+
+                    // Ajoutez les composants à l'AnchorPane
+                    anchorPane.getChildren().addAll(imageView, nameLabel, summaryLabel, directorLabel, countryLabel);
+                    // Ajoutez d'autres composants selon vos besoins
+
+                    // Définissez l'AnchorPane en tant que graphique pour la cellule
+                    setGraphic(anchorPane);
+                }
+            }
+        });
+
+        listeSerie.getItems().addAll(series);
+    }
+
 
 
     @FXML
@@ -121,12 +188,16 @@ public class SerieClientController {
                 }
             }
         });
+
         ///fonction recherche sur textfiled
         recherchefld.textProperty().addListener((ChangeListener<String>) (observable, oldValue, newValue) -> {
             List<Serie> series;
             series=rechercher(listerecherche,newValue);
             afficherliste(series);
         });
+
+
+
         listeSerie.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.intValue() >= 0) {
                 Serie selectedSerie = listeSerie.getItems().get(newValue.intValue());
@@ -174,5 +245,15 @@ public class SerieClientController {
         stage.show();
     }
 
+    @FXML
+    private void loadSeriesList() throws SQLException {
+        IServiceSerie<Serie> serieService = new IServiceSerieImpl();
+        List<Serie> series = serieService.recuperers();
+        afficherliste(series); // Utilisez votre méthode d'affichage pour la ListView
+    }
+
+
+
+    // Function to display a list of series in the JavaFX ListView
 
 }

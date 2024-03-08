@@ -57,6 +57,8 @@ import java.util.ResourceBundle;
         private Serie selectedSerie;
         private IServiceEpisode iServiceEpisode=new IServiceEpisodeImpl();
         private List<Episode> episodes=new ArrayList<>();
+        @FXML
+        private Label numberOfEpisodesLabel;  // Ajoutez un Label pour afficher le nombre d'épisodes
         
 
         public void initialize(Serie selectedSerie) {
@@ -114,13 +116,18 @@ import java.util.ResourceBundle;
                     jouerbtn.setOnAction(event -> mediaPlayer.play());
                     pausebtn.setOnAction(event -> mediaPlayer.pause());
                     arreterbtn.setOnAction(event -> mediaPlayer.stop());
+                    updateNumberOfEpisodesLabel();
 
                 }
             });
         }
 
 
-
+        @FXML
+        private void updateNumberOfEpisodesLabel() {
+            int numberOfEpisodes = ListEpisode.getItems().size();
+            numberOfEpisodesLabel.setText("Number of episodes  : " + numberOfEpisodes);
+        }
 
 
 
