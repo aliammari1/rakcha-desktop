@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.series.StatistiqueController">
+    <top>
+        <MenuBar BorderPane.alignment="CENTER">
+            <Menu mnemonicParsing="false" text="File">
+                <MenuItem mnemonicParsing="false" onAction="#handleShowBarChart" text="Show Bar Chart"/>
+                <MenuItem mnemonicParsing="false" onAction="#handleShowPieChart" text="Show Pie Chart"/>
+                <MenuItem mnemonicParsing="false" onAction="#handleClose" text="Close"/>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Edit">
+                <MenuItem mnemonicParsing="false" onAction="#handleUpdatePieData" text="Update Data"/>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Help">
+                <MenuItem mnemonicParsing="false" text="About"/>
+            </Menu>
+        </MenuBar>
+    </top>
+    <center>
+        <VBox alignment="CENTER" spacing="10">
+            <!-- Ajoutez le ComboBox ici -->
+            <ComboBox fx:id="statisticsComboBox"/>
+
+            <!-- Reste de votre définition, y compris le PieChart et les autres boutons -->
+            <PieChart fx:id="pieChart"/>
+            <Button text="Show Bar Chart" onAction="#handleShowBarChart"/>
+            <Button text="Show Pie Chart" onAction="#handleShowPieChart"/>
+            <Button text="Close" onAction="#handleClose"/>
+            <Button text="Update Data" onAction="#handleUpdatePieData"/>
+            <!-- Vous pouvez ajouter plus de boutons ou d'éléments ici selon vos besoins -->
+        </VBox>
+    </center>
+</BorderPane>
+
+

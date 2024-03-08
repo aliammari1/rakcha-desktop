@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.String?>
+<?import java.net.*?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+            minWidth="-Infinity"
+            prefHeight="745.0" prefWidth="1291.0" stylesheets="@styles/filmStyle.css"
+            xmlns="http://javafx.com/javafx/21" fx:controller="com.esprit.controllers.films.CategoryController">
+    <children>
+        <BorderPane layoutX="521.0" layoutY="139.0" prefHeight="745.0" prefWidth="1291.0" styleClass="top-form"
+                    stylesheets="@styles/filmStyle.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                    AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <top>
+                <AnchorPane prefHeight="40.0" prefWidth="1291.0" BorderPane.alignment="CENTER">
+                    <children>
+                        <AnchorPane layoutX="578.0" layoutY="-80.0" prefHeight="59.0" prefWidth="1291.0"
+                                    styleClass="top-form" stylesheets="@styles/filmStyle.css"
+                                    AnchorPane.bottomAnchor="1.0"
+                                    AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <children>
+                                <Button layoutX="1221.0" layoutY="14.0" mnemonicParsing="false" prefHeight="27.0"
+                                        prefWidth="56.0" styleClass="close" AnchorPane.rightAnchor="14.0"
+                                        AnchorPane.topAnchor="14.0">
+                                    <graphic>
+                                        <FontAwesomeIconView glyphName="CLOSE"/>
+                                    </graphic>
+                                    <stylesheets>
+                                        <URL value="@styles/filmStyle.css"/>
+                                        <URL value="@styles/filmStyle.css"/>
+                                    </stylesheets>
+                                </Button>
+                                <Button layoutX="1163.0" layoutY="15.0" mnemonicParsing="false" prefHeight="28.0"
+                                        prefWidth="58.0" styleClass="minus" stylesheets="@styles/filmStyle.css"/>
+                                <Label layoutX="53.0" layoutY="15.0" text="Rakcha">
+                                    <font>
+                                        <Font name="Microsoft Sans Serif" size="14.0"/>
+                                    </font>
+                                </Label>
+                                <ImageView fitHeight="63.0" fitWidth="80.0" layoutX="-10.0" layoutY="-5.0"
+                                           pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@Logo.png"/>
+                                    </image>
+                                </ImageView>
+                                <FontAwesomeIconView glyphName="MINUS" layoutX="1187.0" layoutY="34.0"/>
+                            </children>
+                        </AnchorPane>
+                    </children>
+                </AnchorPane>
+            </top>
+            <left>
+                <AnchorPane prefHeight="702.0" prefWidth="235.0" styleClass="nav-form" BorderPane.alignment="CENTER">
+                    <children>
+                        <FontAwesomeIconView fill="#e1cfcf" glyphName="USER" layoutX="88.0" layoutY="83.0" size="80"
+                                             stroke="BLACK" text="" wrappingWidth="60.0"/>
+                        <Label layoutX="82.0" layoutY="96.0" text="Welcome" textAlignment="CENTER" textFill="#e1cfcf">
+                            <font>
+                                <Font size="16.0"/>
+                            </font>
+                        </Label>
+                        <Label layoutX="99.0" layoutY="121.0" text="Admin" textFill="#e1cfcf"/>
+                        <Button alignment="CENTER" layoutX="1.0" layoutY="201.0" mnemonicParsing="false"
+                                prefHeight="47.0" prefWidth="239.0" styleClass="nav-btn"
+                                stylesheets="@styles/filmStyle.css"
+                                text="Ajouter films" textAlignment="CENTER"/>
+                        <Button layoutX="1.0" layoutY="298.0" mnemonicParsing="false" prefHeight="47.0"
+                                prefWidth="239.0" styleClass="nav-btn" stylesheets="@styles/filmStyle.css"
+                                text="Ajouter produit"/>
+                        <Button fx:id="AjouterCategory_Button" layoutX="1.0" layoutY="247.0" mnemonicParsing="false"
+                                prefHeight="47.0" prefWidth="239.0" styleClass="nav-btn"
+                                stylesheets="@styles/filmStyle.css"
+                                text="Ajouter Category"/>
+                        <Button layoutY="344.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="241.0"
+                                styleClass="nav-btn" stylesheets="@styles/filmStyle.css" text="Liste des films"/>
+                        <Button layoutX="20.0" layoutY="603.0" mnemonicParsing="false" prefHeight="40.0"
+                                prefWidth="42.0" styleClass="signout">
+                            <stylesheets>
+                                <URL value="@styles/filmStyle.css"/>
+                                <URL value="@styles/filmStyle.css"/>
+                            </stylesheets>
+                        </Button>
+                        <FontAwesomeIconView fill="#fffefe" glyphName="SIGN_OUT" layoutX="31.0" layoutY="631.0"
+                                             size="20" wrappingWidth="19.85714340209961">
+                            <font>
+                                <Font size="65.0"/>
+                            </font>
+                        </FontAwesomeIconView>
+                        <Label layoutX="70.0" layoutY="613.0" text="Sign out" textFill="#e1cfcf">
+                            <font>
+                                <Font size="14.0"/>
+                            </font>
+                        </Label>
+                        <FontAwesomeIconView fill="WHITE" glyphName="PLAY_CIRCLE" layoutX="22.0" layoutY="235.0"
+                                             size="30" wrappingWidth="17.714284896850586"/>
+                        <FontAwesomeIconView fill="WHITE" glyphName="PLUS" layoutX="23.0" layoutY="281.0" size="30"/>
+                        <FontAwesomeIconView fill="WHITE" glyphName="SERVER" layoutX="21.0" layoutY="378.0" size="30"/>
+                        <FontAwesomeIconView fill="WHITE" glyphName="PLUS" layoutX="23.0" layoutY="332.0" size="30"/>
+                    </children>
+                    <stylesheets>
+                        <URL value="@styles/filmStyle.css"/>
+                        <URL value="@styles/filmStyle.css"/>
+                    </stylesheets>
+                </AnchorPane>
+            </left>
+            <center>
+                <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                    <children>
+                        <AnchorPane fx:id="categoryCrudInterface" layoutX="265.0" layoutY="83.0" prefHeight="686.0"
+                                    prefWidth="1050.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                                    AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <children>
+                                <AnchorPane layoutX="23.0" layoutY="14.0" prefHeight="446.0" prefWidth="412.0"
+                                            styleClass="bg-white" stylesheets="@styles/filmStyle.css">
+                                    <children>
+                                        <Label layoutX="14.0" layoutY="69.0" text="Nom de catégory :">
+                                            <font>
+                                                <Font size="16.0"/>
+                                            </font>
+                                        </Label>
+                                        <TextArea fx:id="nomCategory_textArea" layoutX="162.0" layoutY="66.0"
+                                                  prefHeight="25.0" prefWidth="200.0"/>
+                                        <Label layoutX="16.0" layoutY="129.0" text="Déscription   :">
+                                            <font>
+                                                <Font size="16.0"/>
+                                            </font>
+                                        </Label>
+                                        <TextArea fx:id="descriptionCategory_textArea" layoutX="163.0" layoutY="128.0"
+                                                  prefHeight="190.0" prefWidth="200.0" wrapText="true"/>
+                                        <Button layoutX="172.0" layoutY="348.0" mnemonicParsing="false"
+                                                onAction="#insertCategory" prefHeight="40.0" prefWidth="172.0"
+                                                styleClass="instert-btn" stylesheets="@styles/filmStyle.css"
+                                                text="Insérer"/>
+                                    </children>
+                                </AnchorPane>
+                                <AnchorPane layoutX="452.0" layoutY="14.0" prefHeight="446.0" prefWidth="554.0"
+                                            styleClass="bg-white" stylesheets="@styles/filmStyle.css">
+                                    <children>
+                                        <ComboBox fx:id="filterCriteriaComboBox">
+                                            <items>
+                                                <FXCollections fx:factory="observableArrayList">
+                                                    <String fx:value="Name"/>
+                                                    <String fx:value="Description"/>
+                                                </FXCollections>
+                                            </items>
+                                        </ComboBox>
+                                        <TableView fx:id="filmCategory_tableView" layoutX="27.0" layoutY="96.0"
+                                                   prefHeight="317.0" prefWidth="508.0">
+                                            <columns>
+                                                <TableColumn fx:id="idCategory_tableColumn" prefWidth="93.0"
+                                                             text="Id Catégory"/>
+                                                <TableColumn fx:id="nomCategory_tableColumn" prefWidth="130.0"
+                                                             text="Nom"/>
+                                                <TableColumn fx:id="descrptionCategory_tableColumn" prefWidth="281.0"
+                                                             text="Déscription "/>
+                                            </columns>
+                                        </TableView>
+                                        <TextField fx:id="recherche_textField" layoutX="134.0" layoutY="25.0"
+                                                   prefHeight="29.0" prefWidth="158.0" promptText="rechercher"/>
+                                        <FontAwesomeIconView fill="#ae2d3c" glyphName="SEARCH" layoutX="263.0"
+                                                             layoutY="45.0" size="19" textAlignment="RIGHT"/>
+                                        <Button layoutX="303.0" layoutY="23.0" mnemonicParsing="false"
+                                                styleClass="instert-btn" stylesheets="@styles/filmStyle.css"
+                                                text="chercher"/>
+                                    </children>
+                                </AnchorPane>
+                            </children>
+                        </AnchorPane>
+                    </children>
+                </AnchorPane>
+            </center>
+        </BorderPane>
+    </children>
+</AnchorPane>

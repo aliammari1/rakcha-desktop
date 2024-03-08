@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import org.controlsfx.control.CheckComboBox?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" id="AnchorPane" prefHeight="754.0" prefWidth="782.0"
+            stylesheets="@../../../../resources/style.css" xmlns="http://javafx.com/javafx/21"
+            fx:controller="com.esprit.controllers.films.PaymentController">
+    <children>
+        <Label fx:id="filmLabel_Payment" alignment="CENTER" layoutX="222.0" layoutY="34.0" prefHeight="33.0"
+               prefWidth="168.0" style="-fx-font-size: 30;" text="loujain" AnchorPane.leftAnchor="222.0"
+               AnchorPane.rightAnchor="410.0"/>
+        <Pane layoutX="106.0" layoutY="629.0" prefHeight="53.0" prefWidth="199.0"
+              style="-fx-background-radius: 20; -fx-background-color: #5f6469;" AnchorPane.leftAnchor="106.0"
+              AnchorPane.rightAnchor="495.0"/>
+        <Pane fx:id="anchorpane_payment" layoutX="76.0" layoutY="105.0" prefHeight="494.0" prefWidth="638.0"
+              style="-fx-background-radius: 20; -fx-background-color: #5f6469;" styleClass="nav-form"
+              stylesheets="@styles/dashboard.css" AnchorPane.leftAnchor="76.0" AnchorPane.rightAnchor="68.0">
+            <children>
+                <Button fx:id="pay_btn" layoutX="512.0" layoutY="435.0" mnemonicParsing="false" onAction="#payment"
+                        prefHeight="38.0" prefWidth="102.0" text="Pay now"/>
+                <GridPane hgap="5.0" layoutX="50.0" layoutY="128.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
+                    </rowConstraints>
+                    <children>
+                        <Label style="-fx-text-fill: white;" text="Name :"/>
+                        <TextField fx:id="client_name" prefHeight="37.0" prefWidth="311.0" promptText="Your name"
+                                   GridPane.columnIndex="1"/>
+                    </children>
+                </GridPane>
+                <Label layoutX="56.0" layoutY="239.0" style="-fx-text-fill: white;" text="Card information :"/>
+                <ComboBox fx:id="cinemacombox_res" layoutX="105.0" layoutY="25.0" prefHeight="37.0" prefWidth="244.0"/>
+                <CheckComboBox fx:id="checkcomboboxseance_res" layoutX="104.0" layoutY="77.0" prefHeight="37.0"
+                               prefWidth="244.0"/>
+                <Spinner fx:id="nbrplacepPayment_Spinner" layoutX="442.0" layoutY="77.0" prefHeight="38.0"
+                         prefWidth="96.0"/>
+                <Label layoutX="44.0" layoutY="35.0" style="-fx-text-fill: white;" text="Cinema :"/>
+                <Label layoutX="51.0" layoutY="91.0" style="-fx-text-fill: white;" text="seance:"/>
+                <Label layoutX="361.0" layoutY="87.0" prefHeight="17.0" prefWidth="96.0" style="-fx-text-fill: white;"
+                       text="nbr de place:"/>
+                <GridPane hgap="5.0" layoutX="52.0" layoutY="186.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
+                    </rowConstraints>
+                    <children>
+                        <Label style="-fx-text-fill: white;" text="Email :"/>
+                        <TextField fx:id="email" prefHeight="37.0" prefWidth="311.0" promptText="example@gmail.com"
+                                   GridPane.columnIndex="1"/>
+                    </children>
+                </GridPane>
+                <GridPane hgap="5.0" layoutX="44.0" layoutY="316.0" prefHeight="37.0" prefWidth="300.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
+                    </rowConstraints>
+                    <children>
+                        <Spinner fx:id="MM" editable="true" prefHeight="37.0" prefWidth="102.0"
+                                 GridPane.columnIndex="1"/>
+                        <Spinner fx:id="YY" editable="true" prefHeight="37.0" prefWidth="102.0"
+                                 GridPane.columnIndex="3"/>
+                        <Label style="-fx-text-fill: white;" text="MM :"/>
+                        <Label style="-fx-text-fill: white;" text="YY :" GridPane.columnIndex="2"/>
+                    </children>
+                </GridPane>
+                <GridPane hgap="5.0" layoutX="70.0" layoutY="386.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
+                    </rowConstraints>
+                    <children>
+                        <Label style="-fx-text-fill: white;" text="CVC  :"/>
+                        <Spinner fx:id="cvc" editable="true" prefHeight="37.0" prefWidth="102.0"
+                                 GridPane.columnIndex="1"/>
+                    </children>
+                </GridPane>
+                <TextField fx:id="num_card" layoutX="54.0" layoutY="268.0" prefHeight="37.0" prefWidth="311.0"
+                           promptText="1234 1234 1234 1234"/>
+            </children>
+        </Pane>
+        <ImageView fitHeight="38.0" fitWidth="115.0" layoutX="382.0" layoutY="375.0" pickOnBounds="true"
+                   preserveRatio="true">
+            <image>
+                <Image url="@Logo.png"/>
+            </image>
+        </ImageView>
+        <Button fx:id="back_btn" layoutX="28.0" layoutY="33.0" mnemonicParsing="false"
+                onAction="#redirectToListReservation" prefHeight="41.0" prefWidth="129.0" text="Back ">
+            <graphic>
+                <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../../../resources/back-arrow.png"/>
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Label fx:id="total" layoutX="116.0" layoutY="640.0" prefHeight="31.0" prefWidth="168.0"
+               style="-fx-font-size: 20;" text="Total :"/>
+        <Label alignment="CENTER" layoutX="368.0" layoutY="33.0" prefHeight="33.0" prefWidth="168.0"
+               style="-fx-font-size: 30;" text="Payment :"/>
+    </children>
+</AnchorPane>
