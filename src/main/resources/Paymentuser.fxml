@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.*?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" id="AnchorPane" fx:id="bord" prefHeight="400.0"
+            prefWidth="600.0" style="-fx-background-image: red; -fx-background-color: red;"
+            styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/17.0.2-ea"
+            fx:controller="com.esprit.controllers.films.PaymentuserController">
+    <children>
+        <Pane layoutX="548.0" prefHeight="101.0" prefWidth="412.0" style="-fx-background-radius: 20 20 0 0;"
+              styleClass="linear-grad">
+            <children>
+                <ImageView fitHeight="76.0" fitWidth="58.0" layoutX="334.0" layoutY="12.0" pickOnBounds="true"
+                           preserveRatio="true">
+                    <image>
+                        <Image url="@Logo.png"/>
+                    </image>
+                </ImageView>
+                <Label fx:id="nomPrenom" layoutX="265.0" layoutY="28.0" text="Client" textFill="#fffefe">
+                    <font>
+                        <Font name="System Bold" size="18.0"/>
+                    </font>
+                </Label>
+            </children>
+        </Pane>
+        <AnchorPane layoutX="74.0" layoutY="71.0" prefHeight="528.0" prefWidth="889.0"
+                    style="-fx-background-color: #ffffff; -fx-background-radius: 10;">
+            <children>
+                <Line endX="100.0" endY="-36.600006103515625" layoutX="421.0" layoutY="66.0" startX="100.0"
+                      startY="424.20001220703125" stroke="#b9b1b1" strokeDashOffset="2.0"/>
+                <Label layoutX="94.0" layoutY="100.0" prefHeight="38.0" prefWidth="345.0"
+                       text="Paiement en ligne via Stripe" textAlignment="CENTER">
+                    <font>
+                        <Font name="System Bold" size="26.0"/>
+                    </font>
+                </Label>
+                <Label layoutX="571.0" layoutY="138.0" text="Notre paiement !" textAlignment="CENTER"
+                       textFill="#eab95f">
+                    <font>
+                        <Font name="System Bold Italic" size="32.0"/>
+                    </font>
+                </Label>
+                <Label alignment="CENTER" layoutX="553.0" layoutY="212.0" prefHeight="162.0" prefWidth="308.0"
+                       text="Votre sécurité est notre priorité et nous travaillons dur pour protéger vos informations de paiement"
+                       textFill="#9a9292" wrapText="true">
+                    <font>
+                        <Font size="26.0"/>
+                    </font>
+                </Label>
+                <TextField fx:id="carte" layoutX="129.0" layoutY="178.0" prefHeight="34.0" prefWidth="275.0"
+                           promptText="Numero de la carte"/>
+                <Button fx:id="Pay" layoutX="129.0" layoutY="399.0" mnemonicParsing="false" onAction="#Pay"
+                        prefHeight="34.0" prefWidth="275.0" style="-fx-background-color: #a48041;" text="Payer"
+                        textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="16.0"/>
+                    </font>
+                </Button>
+                <TextField fx:id="moisExp" layoutX="129.0" layoutY="230.0" prefHeight="34.0" prefWidth="275.0"
+                           promptText="Mois d'expiration"/>
+                <TextField fx:id="anneeExp" layoutX="129.0" layoutY="283.0" prefHeight="34.0" prefWidth="275.0"
+                           promptText="Année d'expiration"/>
+                <TextField fx:id="cvc" layoutX="129.0" layoutY="330.0" prefHeight="34.0" prefWidth="275.0"
+                           promptText="CVC"/>
+            </children>
+        </AnchorPane>
+        <ImageView fitHeight="86.0" fitWidth="154.0" layoutX="82.0" layoutY="-1.0" pickOnBounds="true"
+                   preserveRatio="true">
+            <image>
+                <Image url="@Logo.png"/>
+            </image>
+        </ImageView>
+    </children>
+</AnchorPane>
