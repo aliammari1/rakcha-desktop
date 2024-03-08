@@ -2,6 +2,7 @@ package com.esprit.services.produits;
 
 
 import com.esprit.models.produits.Avis;
+import com.esprit.models.produits.Produit;
 import com.esprit.models.users.Client;
 import com.esprit.services.IService;
 import com.esprit.services.users.UserService;
@@ -24,14 +25,13 @@ public class AvisService  implements IService<Avis> {
 
     @Override
     public void create(Avis avis) {
-        String req = "INSERT into avis(idusers,note,id_produit ,avis) values (?,?, ?,?);";
+        String req = "INSERT into avis(idusers,note,id_produit ) values (?,?, ?);";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(1, avis.getUser().getId() );
             pst.setInt(2, avis.getNote() );
             pst.setInt(3,avis.getProduit().getId_produit());
 
-            pst.setString(4,avis.getAvis());
 
             pst.executeUpdate();
             System.out.println("avis ajoutée !");
@@ -42,53 +42,40 @@ public class AvisService  implements IService<Avis> {
 
     @Override
     public List<Avis> read() {
-        return null;
-    }
+        List<Avis> avisList = new ArrayList<>();
+        String req = "SELECT * FROM avis;";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(req);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                int userId = resultSet.getInt("idusers");
+                int note = resultSet.getInt("note");
+                int produitId = resultSet.getInt("id_produit");
 
-   /* public Avis getmy(int id) throws SQLException {
-        Avis avis=new Avis();
-        UserService usersService=new UserService();
-        String req = "SELECT * FROM `avis`  where iduser = ?";
-        PreparedStatement ps = connection.prepareStatement(req);
-        ps.setInt(1, id);
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()){
-            avis.setUser(usersService.getUserById(rs.getInt("idusers")));
-            avis.setNote(rs.getInt("note"));
-            avis.setAvis(rs.getString("avis"));
+                // Remplacez les appels aux services par les méthodes correspondantes
+                Client user = (Client) new UserService().getUserById(userId);
+                Produit produit = new ProduitService().getProduitById(produitId);
 
-        }
-        return avis;
-    }*/
-
-
-    /*public List<Avis> gettall(int id) throws SQLException {
-        List<Avis> avisList=new ArrayList<>();
-        UserService usersService=new UserService();
-        String req = "SELECT * FROM `avis`  where iduser != ?";
-        PreparedStatement ps = connection.prepareStatement(req);
-        ps.setInt(1, id);
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()){
-            Avis avis=new Avis();
-            avis.setUser(usersService.getUserById(rs.getInt("idusers")));
-            avis.setNote(rs.getInt("note"));
-            avis.setAvis(rs.getString("avi"));
-            avisList.add(avis);
+                Avis avis = new Avis(user, note, produit);
+                avisList.add(avis);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
         return avisList;
-    }*/
+    }
+
 
 
 
     @Override
     public void update(Avis avis) {
 
-        String req = "UPDATE avis set note = ?,  avis = ? where idavis=?";
+        String req = "UPDATE avis set note = ? where idavis=?";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(1, avis.getNote());
-            pst.setString(2, avis.getAvis());
+
 
 
             pst.executeUpdate();
@@ -102,25 +89,25 @@ public class AvisService  implements IService<Avis> {
     @Override
     public void delete(Avis avis) {
 
-        String req = "DELETE from avis where id_client = ? and id_produit=?;";
+        String req = "DELETE from avis where iduseres = ? and id_produit=?;";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(1, avis.getUser().getId());
             pst.setInt(2,avis.getProduit().getId_produit());
             pst.executeUpdate();
-            System.out.println("categorie supprmiée !");
+            System.out.println("avis supprmiée !");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
     }
 
-    public double getavergerating(int id_film) {
-        String req = "SELECT AVG(rate) AS averageRate FROM ratingfilm WHERE id_film =? ";
+    public double getavergerating(int id_produit) {
+        String req = "SELECT AVG(note) AS averageRate FROM avis WHERE id_produit =? ";
         double aver = 0.0;
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(req);
-            preparedStatement.setInt(1, id_film);
+            preparedStatement.setInt(1, id_produit);
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             aver = resultSet.getDouble("averageRate");
@@ -131,29 +118,29 @@ public class AvisService  implements IService<Avis> {
     }
 
     public List<Avis> getavergeratingSorted() {
-        String req = "SELECT id_film, AVG(rate) AS averageRate FROM ratingfilm GROUP BY id_film  ORDER BY averageRate DESC ";
-        List<Avis> aver = new ArrayList<>();
+        String req = "SELECT id_produit, AVG(note) AS averageRate FROM avis GROUP BY id_produit  ORDER BY averageRate DESC ";
+        List<Avis> avis = new ArrayList<>();
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(req);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next())
-                aver.add(new Avis( null, (int) resultSet.getDouble("averageRate"),null,new ProduitService().getProduitById(resultSet.getInt("id_ptoduit"))));
+                avis.add(new Avis( null, (int) resultSet.getDouble("averageRate"),new ProduitService().getProduitById(resultSet.getInt("id_ptoduit"))));
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        return aver;
+        return avis;
     }
 
-    public Avis ratingExiste(int id_film, int id_user) {
-        String req = "SELECT *  FROM ratingfilm WHERE id_film =? AND id_user=? ";
+    public Avis ratingExiste(int id_produit, int iduseres) {
+        String req = "SELECT *  FROM avis WHERE id_produit =? AND iduseres=? ";
         Avis rate = null;
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(req);
-            preparedStatement.setInt(1, id_film);
-            preparedStatement.setInt(2, id_user);
+            preparedStatement.setInt(1, id_produit);
+            preparedStatement.setInt(2, iduseres);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next())
-                rate=new Avis((Client) new UserService().getUserById(id_user), (int) resultSet.getDouble("averageRate"),null,new ProduitService().getProduitById(resultSet.getInt("id_ptoduit")));
+                rate=new Avis((Client) new UserService().getUserById(iduseres), (int) resultSet.getDouble("averageRate"),new ProduitService().getProduitById(resultSet.getInt("id_ptoduit")));
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

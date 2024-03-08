@@ -14,27 +14,27 @@
    <children>
       <AnchorPane layoutY="-7.0" prefHeight="712.0" prefWidth="216.0" styleClass="nav-form" stylesheets="@dashbord.css">
          <children>
-            <Button layoutY="282.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Movies">
+            <Button layoutY="282.0" mnemonicParsing="false" onAction="#MovieClient" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Movies">
                <font>
                   <Font name="System Italic" size="17.0" />
                </font>
             </Button>
             <FontAwesomeIconView fill="#ebe5e5" glyphName="FILM" layoutX="20.0" layoutY="308.0" size="30" text="" />
-            <Button layoutX="1.0" layoutY="321.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Products" />
+            <Button layoutX="1.0" layoutY="321.0" mnemonicParsing="false" onAction="#produitClient" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Products" />
             <FontAwesomeIconView fill="#ebe5e5" glyphName="CUBES" layoutX="20.0" layoutY="347.0" size="30" text="" />
             <FontAwesomeIconView fill="#ebe5e5" glyphName="VIDEO_CAMERA" layoutX="24.0" layoutY="390.0" size="30" text="" />
-            <Button layoutY="364.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="202.0" styleClass="nav-btn" text="Cinema" textAlignment="CENTER" />
+            <Button layoutY="364.0" mnemonicParsing="false" onAction="#cinemaclient" prefHeight="30.0" prefWidth="202.0" styleClass="nav-btn" text="Cinema" textAlignment="CENTER" />
             <FontAwesomeIconView fill="#ebe5e5" glyphName="USER" layoutX="39.0" layoutY="611.0" size="30" text="" />
-            <Button layoutX="74.0" layoutY="584.0" mnemonicParsing="false" styleClass="nav-btn" text="Account" />
+            <Button layoutX="74.0" layoutY="584.0" mnemonicParsing="false" onAction="#profilclient" styleClass="nav-btn" text="Account" />
             <FontAwesomeIconView fill="#ebe5e5" glyphName="SIGN_OUT" layoutX="38.0" layoutY="651.0" size="30" text="" />
             <Button layoutX="82.0" layoutY="624.0" mnemonicParsing="false" styleClass="nav-btn" text="EXIT" />
             <FontAwesomeIconView fill="#ebe5e5" glyphName="CALENDAR" layoutX="22.0" layoutY="432.0" size="30" text="" />
-            <Button layoutX="1.0" layoutY="407.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Event">
+            <Button layoutX="1.0" layoutY="407.0" mnemonicParsing="false" onAction="#eventClient" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Event">
                <font>
                   <Font size="13.0" />
                </font>
             </Button>
-            <Button layoutX="1.0" layoutY="244.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Series" />
+            <Button layoutX="1.0" layoutY="244.0" mnemonicParsing="false" onAction="#SerieClient" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Series" />
             <FontAwesomeIconView fill="#ebe5e5" glyphName="TV" layoutX="18.0" layoutY="269.0" size="30" />
             <ImageView fitHeight="161.0" fitWidth="216.0" layoutX="1.0" layoutY="37.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -55,9 +55,13 @@
                   <Font name="Arial Rounded MT Bold" size="24.0" />
                </font>
             </Label>
+<<<<<<< Updated upstream
             <Button layoutX="191.0" layoutY="319.0" mnemonicParsing="false" onAction="#order" prefHeight="49.0" prefWidth="136.0" styleClass="achat-button" stylesheets="@dashbord.css" text="order">
+=======
+            <Button layoutX="191.0" layoutY="319.0" mnemonicParsing="false" onAction="#order" prefHeight="41.0" prefWidth="112.0" styleClass="achat-button" stylesheets="@Dashbord.css" text="order">
+>>>>>>> Stashed changes
                <font>
-                  <Font name="Arial" size="48.0" />
+                  <Font name="Arial" size="18.0" />
                </font>
             </Button>
             <TextField fx:id="numTelephoneTextField" layoutX="259.0" layoutY="98.0" />

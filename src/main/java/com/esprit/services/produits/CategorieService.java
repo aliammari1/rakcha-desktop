@@ -95,7 +95,7 @@ public class CategorieService  implements IService<Categorie_Produit> {
             pst.setInt(1, categorie_id);
             ResultSet rs = pst.executeQuery();
             rs.next();
-                category = new Categorie_Produit(rs.getInt("id_categorie"), rs.getString("nom_categorie"), rs.getString("description")) ;
+            category = new Categorie_Produit(rs.getInt("id_categorie"), rs.getString("nom_categorie"), rs.getString("description"));
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -104,7 +104,7 @@ public class CategorieService  implements IService<Categorie_Produit> {
         return category;
     }
 
-   public Categorie_Produit getCategorieByNom(String categorie_nom) {
+    public Categorie_Produit getCategorieByNom(String categorie_nom) {
 
         Categorie_Produit category = null;
 
@@ -114,7 +114,7 @@ public class CategorieService  implements IService<Categorie_Produit> {
             pst.setString(1, categorie_nom);
             ResultSet rs = pst.executeQuery();
             rs.next();
-            category = new Categorie_Produit(rs.getInt("id_categorie"), rs.getString("nom_categorie"), rs.getString("description")) ;
+            category = new Categorie_Produit(rs.getInt("id_categorie"), rs.getString("nom_categorie"), rs.getString("description"));
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -139,7 +139,51 @@ public class CategorieService  implements IService<Categorie_Produit> {
     }
 
 
+    public List<String> getAllCategories() {
+        List<String> categorieNames = new ArrayList<>();
+
+        // Remplacez "getAllCategories()" par la méthode réelle qui récupère toutes les catégories
+        List<Categorie_Produit> categories = read();
+
+        // Ajoutez les noms de catégories à la liste
+        for (Categorie_Produit categorieProduit : categories) {
+            categorieNames.add(categorieProduit.getNom_categorie());
+        }
+
+        return categorieNames;
+    }
 
 
 
+    public List<Categorie_Produit> searchCategoriesByName(String searchKeyword) {
+        List<Categorie_Produit> result = new ArrayList<>();
+
+        try {
+            String query = "SELECT * FROM categorie_produit WHERE nom_categorie LIKE ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, "%" + searchKeyword + "%");
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                int idCategorie = resultSet.getInt("id_categorie");
+                String nomCategorie = resultSet.getString("nom_categorie");
+                // Ajoutez d'autres colonnes si nécessaire
+
+                Categorie_Produit categorie = new Categorie_Produit(idCategorie, nomCategorie,null);
+                // Initialisez d'autres propriétés si nécessaire
+
+                result.add(categorie);
+            }
+
+            statement.close();
+            resultSet.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
 }
+
+

@@ -6,6 +6,8 @@ public class Categorie_Produit {
     private String nom_categorie;
     private String description;
 
+    public Categorie_Produit(){ }
+
     public Categorie_Produit(int id_categorie, String nom_categorie, String description) {
         this.id_categorie = id_categorie;
         this.nom_categorie = nom_categorie;
