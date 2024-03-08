@@ -121,4 +121,6 @@ public class CinemaService implements IService<Cinema> {
 
         return cinema;
     }
+
+
 }
