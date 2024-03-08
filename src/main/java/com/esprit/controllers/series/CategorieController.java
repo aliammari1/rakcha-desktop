@@ -213,7 +213,7 @@ public class CategorieController {
         stage.show();
     }
     @FXML
-    void Oseries(ActionEvent event) throws IOException {
+    void Oseriess(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Serie-view.fxml")));
         Scene scene = new Scene(root);
         Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
@@ -264,12 +264,18 @@ public class CategorieController {
     }
 
 
+    public void showmovies(ActionEvent actionEvent) {
+    }
 
+    public void showproducts(ActionEvent actionEvent) {
+    }
 
+    public void showcinema(ActionEvent actionEvent) {
+    }
 
+    public void showevent(ActionEvent actionEvent) {
+    }
 
-
-
-
-
+    public void showseries(ActionEvent actionEvent) {
+    }
 }
