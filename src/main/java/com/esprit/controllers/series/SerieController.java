@@ -412,8 +412,8 @@ boolean nomcheck( ){
 
     //Gestion du menu
     @FXML
-    void Ocategories(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Categorie-view.fxml")));
+    void Oepisodes(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Episode-view.fxml")));
         Scene scene = new Scene(root);
         Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
@@ -439,7 +439,21 @@ boolean nomcheck( ){
 
     }
 
+    public void showmovies(ActionEvent actionEvent) {
     }
+
+    public void showproducts(ActionEvent actionEvent) {
+    }
+
+    public void showcinema(ActionEvent actionEvent) {
+    }
+
+    public void showevent(ActionEvent actionEvent) {
+    }
+
+    public void showseries(ActionEvent actionEvent) {
+    }
+}
    /*
     @FXML
     public void showStatistics(ActionEvent actionEvent) {
