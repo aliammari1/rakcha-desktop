@@ -117,7 +117,7 @@
         <FontAwesomeIconView fill="#ebe5e5" glyphName="TV" layoutX="28.0" layoutY="279.0" size="30"/>
         <ImageView fitHeight="178.0" fitWidth="215.0" layoutX="22.0" layoutY="39.0" pickOnBounds="true"
                    preserveRatio="true">
-            <Image url="@../../../../../logo.png"/>
+            <Image url="Logo.png"/>
         </ImageView>
         <FontAwesomeIconView fill="#6f6a6a" glyphName="SEARCH" layoutX="585.0" layoutY="145.0" size="13" text=""
                              wrappingWidth="21.428571701049805"/>
