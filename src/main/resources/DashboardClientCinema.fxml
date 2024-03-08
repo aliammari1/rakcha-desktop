@@ -14,16 +14,18 @@
             <children>
                 <Button layoutY="146.0" mnemonicParsing="false" onAction="#showListCinema" prefHeight="47.0" prefWidth="210.0" styleClass="nav-btn" text="Cinema List" />
                 <FontAwesomeIconView fill="WHITE" glyphName="VIDEO_CAMERA" layoutX="24.0" layoutY="180.0" size="30" />
-                <Button layoutY="213.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="210.0" styleClass="nav-btn" text="Series" />
+                <Button layoutY="213.0" mnemonicParsing="false" onAction="#afficherSeriesClient" prefHeight="47.0" prefWidth="210.0" styleClass="nav-btn" text="Series" />
                 <FontAwesomeIconView fill="WHITE" glyphName="TV" layoutX="22.0" layoutY="247.0" size="30" />
-                <Button layoutY="278.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="210.0" styleClass="nav-btn" text="Products" />
+                <Button layoutY="278.0" mnemonicParsing="false" onAction="#afficherProduitsClient" prefHeight="47.0" prefWidth="210.0" styleClass="nav-btn" text="Products" />
                 <FontAwesomeIconView fill="WHITE" glyphName="CUBES" layoutX="20.0" layoutY="312.0" size="30" />
-                <Button layoutY="345.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="210.0" styleClass="nav-btn" text="Events" />
+                <Button layoutY="345.0" mnemonicParsing="false" onAction="#afficherEventsClient" prefHeight="47.0" prefWidth="210.0" styleClass="nav-btn" text="Events" />
                 <FontAwesomeIconView fill="WHITE" glyphName="CALENDAR" layoutX="25.0" layoutY="379.0" size="30" />
                 <Button layoutY="500.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="210.0" styleClass="nav-btn" text="Account" />
                 <FontAwesomeIconView fill="WHITE" glyphName="USER" layoutX="28.0" layoutY="534.0" size="30" />
                 <Button layoutY="567.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="210.0" styleClass="nav-btn" text="Exit" />
                 <FontAwesomeIconView fill="WHITE" glyphName="SIGN_OUT" layoutX="25.0" layoutY="601.0" size="30" />
+            <Button layoutX="-3.0" layoutY="395.0" mnemonicParsing="false" onAction="#afficherMoviesClient" prefHeight="56.0" prefWidth="210.0" styleClass="nav-btn" stylesheets="@dashboard.css" text="Movies" />
+            <FontAwesomeIconView fill="WHITE" glyphName="FILM" layoutX="22.0" layoutY="433.0" size="30" />
             </children>
         </AnchorPane>
       <AnchorPane fx:id="listCinemaClient" layoutX="227.0" layoutY="25.0" prefHeight="706.0" prefWidth="857.0" styleClass="bg-white" stylesheets="@dashboard.css" visible="false">
