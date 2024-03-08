@@ -15,8 +15,10 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -28,14 +30,25 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.web.WebView;
+import javafx.stage.Stage;
 import org.controlsfx.control.Rating;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FilmUserController {
+
+    private final List<CheckBox> addressCheckBoxes = new ArrayList<>();
+    private final List<CheckBox> yearsCheckBoxes = new ArrayList<>();
+
     FlowPane flowpaneFilm;
+    private List<Film> l1 = new ArrayList<>();
     @FXML
     private Rating filmRate;
+    @FXML
+    private Button product;
     @FXML
     private Button trailer_Button;
     @FXML
@@ -44,6 +57,8 @@ public class FilmUserController {
     private Label labelavregeRate;
     @FXML
     private AnchorPane anchorPaneFilm;
+    @FXML
+    private AnchorPane Anchore_Pane_filtrage;
     @FXML
     private AnchorPane detalAnchorPane;
     @FXML
@@ -58,8 +73,53 @@ public class FilmUserController {
     private VBox topthreeVbox;
     @FXML
     private ScrollPane filmScrollPane;
+    @FXML
+    private TextField serach_film_user;
+    @FXML
+    private Button reserver_Film;
+
+    @FXML
+    public static List<Film> rechercher(List<Film> liste, String recherche) {
+        List<Film> resultats = new ArrayList<>();
+
+        for (Film element : liste) {
+            if (element.getNom() != null && element.getNom().contains(recherche)) {
+                resultats.add(element);
+            }
+        }
+
+        return resultats;
+    }
+
+    @FXML
+    public void switchtopayment(ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Paymentuser.fxml"));
+        AnchorPane root = fxmlLoader.load();
+        Stage stage = (Stage) reserver_Film.getScene().getWindow();
+        Scene scene = new Scene(root, 1280, 700);
+        stage.setScene(scene);
+    }
+
+    private void createfilmCards(List<Film> Films) {
+        for (Film film : Films) {
+            AnchorPane cardContainer = createFilmCard(film);
+            flowpaneFilm.getChildren().add(cardContainer);
+
+
+        }
+
+    }
 
     public void initialize() {
+        FilmService filmService1 = new FilmService();
+        l1 = filmService1.read();
+
+        serach_film_user.textProperty().addListener((observable, oldValue, newValue) -> {
+            List<Film> produitsRecherches = rechercher(l1, newValue);
+            // Effacer la FlowPane actuelle pour afficher les nouveaux résultats
+            flowpaneFilm.getChildren().clear();
+            createfilmCards(produitsRecherches);
+        });
         flowpaneFilm = new FlowPane();
         filmScrollPane.setContent(flowpaneFilm);
         filmScrollPane.setFitToWidth(true);
@@ -69,6 +129,8 @@ public class FilmUserController {
         String trailerURL = filmService.getTrailerFilm("garfield");
         flowpaneFilm.setHgap(10);
         flowpaneFilm.setVgap(10);
+
+
         closeDetailFilm.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -91,10 +153,20 @@ public class FilmUserController {
         }
     }
 
+    private void filterByName(String keyword) {
+        for (Node node : flowpaneFilm.getChildren()) {
+            AnchorPane filmCard = (AnchorPane) node;
+            Label nomFilm = (Label) filmCard.lookup(".nomFilm"); // Supposons que le nom du film soit représenté par une classe CSS ".nomFilm"
+            if (nomFilm != null) {
+                boolean isVisible = nomFilm.getText().toLowerCase().contains(keyword); // Vérifie si le nom du film contient le mot-clé de recherche
+                filmCard.setVisible(isVisible); // Définit la visibilité de la carte en fonction du résultat du filtrage
+                filmCard.setManaged(isVisible); // Définit la gestion de la carte en fonction du résultat du filtrage
+            }
+        }
+    }
 
     private AnchorPane createFilmCard(Film film) {
         AnchorPane copyOfAnchorPane = new AnchorPane();
-
 
         copyOfAnchorPane.setLayoutX(0);
         copyOfAnchorPane.setLayoutY(0);
@@ -122,7 +194,7 @@ public class FilmUserController {
         nomFilm.getStyleClass().addAll("labeltext");
 
         Label ratefilm = new Label(film.getNom());
-        ratefilm.setLayoutX(9);
+        ratefilm.setLayoutX(15);
         ratefilm.setLayoutY(222);
         ratefilm.setPrefSize(176, 32);
         ratefilm.setFont(new Font(18)); // Copy the font size
@@ -145,6 +217,16 @@ public class FilmUserController {
         button.setLayoutY(278);
         button.setPrefSize(172, 42);
         button.getStyleClass().addAll("sale");
+        button.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    switchtopayment(event);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
 
         Hyperlink hyperlink = new Hyperlink("Details");
         hyperlink.setLayoutX(89);
@@ -154,6 +236,7 @@ public class FilmUserController {
             @Override
             public void handle(ActionEvent event) {
                 detalAnchorPane.setVisible(true);
+
                 anchorPaneFilm.setOpacity(0.26);
                 anchorPaneFilm.setDisable(true);
                 Film film1 = new Film(film);
@@ -168,6 +251,7 @@ public class FilmUserController {
                 rateFilm.setLayoutY(494);
                 rateFilm.setPrefSize(199, 35);
                 rateFilm.setRating(ratingFilm != null ? ratingFilm.getRate() : 0);
+
                 //Stage stage = (Stage) hyperlink.getScene().getWindow();
 
                 rateFilm.ratingProperty().addListener(new ChangeListener<Number>() {
@@ -188,6 +272,7 @@ public class FilmUserController {
                         }
                     }
                 });
+
                 trailer_Button.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent event) {
@@ -269,6 +354,83 @@ public class FilmUserController {
             anchorPane.getChildren().addAll(nomFilm, button, rating, imageView);
         }
         return anchorPane;
+    }//////////////////////////////////////////////////////////////
+
+    private List<Integer> getCinemaYears() {
+        FilmService cinemaService = new FilmService();
+        List<Film> cinemas = cinemaService.read();
+        // Extraire les années de réalisation uniques des films
+        return cinemas.stream()
+                .map(Film::getAnnederalisation)
+                .distinct()
+                .collect(Collectors.toList());
     }
+
+    @FXML
+    void filtrer(ActionEvent event) {
+        flowpaneFilm.setOpacity(0.5);
+        Anchore_Pane_filtrage.setVisible(true);
+        // Nettoyer la liste des cases à cocher
+        yearsCheckBoxes.clear();
+        // Récupérer les années de réalisation uniques depuis la base de données
+        List<Integer> years = getCinemaYears();
+
+        // Créer des VBox pour les années de réalisation
+        VBox yearsCheckBoxesVBox = new VBox();
+        Label yearLabel = new Label("Années de réalisation");
+        yearLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
+        yearsCheckBoxesVBox.getChildren().add(yearLabel);
+        for (Integer year : years) {
+            CheckBox checkBox = new CheckBox(String.valueOf(year));
+            yearsCheckBoxesVBox.getChildren().add(checkBox);
+            yearsCheckBoxes.add(checkBox);
+        }
+        yearsCheckBoxesVBox.setLayoutX(25);
+        yearsCheckBoxesVBox.setLayoutY(120);
+
+        // Ajouter les VBox dans le FilterAnchor
+        Anchore_Pane_filtrage.getChildren().addAll(yearsCheckBoxesVBox);
+        Anchore_Pane_filtrage.setVisible(true);
+    }
+
+    @FXML
+    void filtrercinema(ActionEvent event) {
+        flowpaneFilm.setOpacity(1);
+        Anchore_Pane_filtrage.setVisible(false);
+
+        // Récupérer les années de réalisation sélectionnées
+        List<Integer> selectedYears = getSelectedYears();
+
+        // Filtrer les films en fonction des années de réalisation sélectionnées
+        List<Film> filteredCinemas = l1.stream()
+                .filter(cinema -> selectedYears.isEmpty() || selectedYears.contains(cinema.getAnnederalisation()))
+                .collect(Collectors.toList());
+
+        // Afficher les films filtrés
+        flowpaneFilm.getChildren().clear();
+        createfilmCards(filteredCinemas);
+    }
+
+    private List<Integer> getSelectedYears() {
+        // Récupérer les années de réalisation sélectionnées dans l'AnchorPane de filtrage
+        return yearsCheckBoxes.stream()
+                .filter(CheckBox::isSelected)
+                .map(checkBox -> Integer.parseInt(checkBox.getText()))
+                .collect(Collectors.toList());
+    }
+
+    @FXML
+    public void switchtserie(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/SeriesClient.fxml"));
+            AnchorPane root = fxmlLoader.load();
+            Stage stage = (Stage) product.getScene().getWindow();
+            Scene scene = new Scene(root, 1280, 700);
+            stage.setScene(scene);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
 }
 
