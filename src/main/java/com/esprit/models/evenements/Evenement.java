@@ -1,6 +1,6 @@
-package com.esprit.models;
+package com.esprit.models.evenements;
+
 import java.sql.Date;
-import java.time.LocalDate;
 
 public class Evenement {
 
@@ -10,20 +10,32 @@ public class Evenement {
     private Date dateFin;
     private String lieu;
 
-    private int id_categorie;
+    private Categorie_evenement categorie;
 
     private String etat;
 
     private String description;
 
 
-    public Evenement(int id, String nom, Date dateDebut, Date dateFin, String lieu, int id_categorie, String etat, String description) {
+    public Evenement(int id, String nom, Date dateDebut, Date dateFin, String lieu, Categorie_evenement categorie, String etat, String description) {
         this.id = id;
         this.nom = nom;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
         this.lieu = lieu;
-        this.id_categorie = id_categorie;
+        this.categorie = categorie;
+        this.etat = etat;
+        this.description = description;
+
+
+    }
+
+    public Evenement(String nom, Date dateDebut, Date dateFin, String lieu, Categorie_evenement categorie, String etat, String description) {
+        this.nom = nom;
+        this.dateDebut = dateDebut;
+        this.dateFin = dateFin;
+        this.lieu = lieu;
+        this.categorie = categorie;
         this.etat = etat;
         this.description = description;
 
@@ -70,12 +82,12 @@ public class Evenement {
         this.lieu = lieu;
     }
 
-    public int getId_categorie() {
-        return id_categorie;
+    public Categorie_evenement getCategorie() {
+        return categorie;
     }
 
-    public void setId_categorie(int id_categorie) {
-        this.id_categorie = id_categorie;
+    public void setCategorie(Categorie_evenement categorie) {
+        this.categorie = categorie;
     }
 
     public String getEtat() {
@@ -102,9 +114,17 @@ public class Evenement {
                 ", dateDebut=" + dateDebut +
                 ", dateFin=" + dateFin +
                 ", lieu='" + lieu + '\'' +
-                ", id_categorie=" + id_categorie +
+                ", categorie=" + categorie +
                 ", etat='" + etat + '\'' +
                 ", description='" + description + '\'' +
                 '}';
+    }
+
+    public Categorie_evenement getId_categorieEvenement() {
+        return categorie;
+    }
+
+    public String getNom_categorieEvenement() {
+        return categorie.getNom_categorie();
     }
 }
