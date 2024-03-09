@@ -1,4 +1,5 @@
 package com.esprit.controllers.produits;
+
 import com.esprit.models.produits.Commande;
 import com.esprit.models.produits.CommandeItem;
 import com.esprit.models.produits.Produit;
@@ -9,18 +10,10 @@ import com.esprit.services.produits.CommandeItemService;
 import com.esprit.services.produits.CommandeService;
 import com.esprit.services.produits.ProduitService;
 import com.esprit.services.users.UserService;
-import com.paypal.api.payments.Amount;
-import com.paypal.api.payments.Links;
-import com.paypal.api.payments.Payer;
-import com.paypal.api.payments.Payment;
-import com.paypal.api.payments.PaymentExecution;
-import com.paypal.api.payments.RedirectUrls;
-import com.paypal.api.payments.Transaction;
+import com.paypal.api.payments.*;
 import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
-
 import javafx.application.Platform;
-import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -34,68 +27,52 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URLEncodedUtils;
 
-import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.time.LocalDate;
-<<<<<<< Updated upstream
-import java.util.Objects;
-=======
 import java.util.ArrayList;
 import java.util.List;
->>>>>>> Stashed changes
 import java.util.ResourceBundle;
-
-// For URL parsing
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
-import java.net.URI;
 
 
 public class CommandeClientController implements Initializable {
 
-    @FXML
-    private TextField adresseTextField;
-
-    @FXML
-    private TextField numTelephoneTextField;
-
-    @FXML
-    private AnchorPane paimenet;
-    Commande commande = new Commande();
-
+    private static final String CLIENT_ID = "Ac_87vQSawIKlwhFFCBiYH0VYygxg5MWi0xakK3w0FyJirTITgf5CqfaE65WLUlia16-D5deHq6XKWo8";
+    private static final String CLIENT_SECRET = "EKDa_P0DqelT1SNHMbfbVS6Pqp25dvz3fVlf_nwPMRAnqMwe2c6vX6yV2iW8lBFdMr_aXG8FD8cDCMt7";
+    private static final String SUCCESS_URL = CommandeClientController.class.getResource("/success.html").toExternalForm();
+    private static final String CANCEL_URL = CommandeClientController.class.getResource("/cancel.html").toExternalForm();
     private final CommandeService commandeService = new CommandeService();
     private final UserService usersService = new UserService();
-
+    Commande commande = new Commande();
+    double totalPrix = SharedData.getInstance().getTotalPrix();
+    @FXML
+    private TextField adresseTextField;
+    @FXML
+    private TextField numTelephoneTextField;
+    @FXML
+    private AnchorPane paimenet;
     private User connectedUser;
-
     @FXML
     private FlowPane prixtotaleFlowPane;
-
     @FXML
     private Button idpayment;
 
-
-    private static final String CLIENT_ID = "Ac_87vQSawIKlwhFFCBiYH0VYygxg5MWi0xakK3w0FyJirTITgf5CqfaE65WLUlia16-D5deHq6XKWo8";
-    private static final String CLIENT_SECRET = "EKDa_P0DqelT1SNHMbfbVS6Pqp25dvz3fVlf_nwPMRAnqMwe2c6vX6yV2iW8lBFdMr_aXG8FD8cDCMt7";
-
-    double totalPrix = SharedData.getInstance().getTotalPrix();
-
-
     @FXML
     void initialize(Commande commandeselectionner) {
-        commande=commandeselectionner;
-        connectedUser=usersService.getUserById(4);
+        commande = commandeselectionner;
+        connectedUser = usersService.getUserById(4);
 
 
         // Récupérer le prix total depuis SharedData et créer le Label correspondant
@@ -107,24 +84,24 @@ public class CommandeClientController implements Initializable {
         prixtotaleFlowPane.getChildren().add(prixTotalLabel);
 
 
-
     }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
     }
-    private static final String SUCCESS_URL = CommandeClientController.class.getResource("/success.html").toExternalForm();
-    private static final String CANCEL_URL = CommandeClientController.class.getResource("/cancel.html").toExternalForm();
+
     private Label createPrixTotalLabel(double prixTotal) {
         Label prixTotalLabel = new Label(prixTotal + " DT");
         prixTotalLabel.setFont(Font.font("Verdana", 25));
         prixTotalLabel.setStyle("-fx-text-fill: #d72222;");
         return prixTotalLabel;
     }
+
     @FXML
     void order(ActionEvent event) {
         CommandeItemService commandeItemService = new CommandeItemService();
-        int idcommande=0;
+        int idcommande = 0;
 
         // Validation du numéro de téléphone
         String numTelephone = numTelephoneTextField.getText();
@@ -141,25 +118,24 @@ public class CommandeClientController implements Initializable {
         }
 
 
-
         commande.setAdresse(adresseTextField.getText());
         commande.setNum_telephone(Integer.parseInt(numTelephoneTextField.getText()));
         commande.setIdClient((Client) connectedUser);
         LocalDate date1 = LocalDate.now();
         commande.setDateCommande(java.sql.Date.valueOf(date1));
         try {
-            idcommande=commandeService.createcommande(commande);
+            idcommande = commandeService.createcommande(commande);
             commande.setIdCommande(idcommande);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        for (CommandeItem commandeItem: commande.getCommandeItem()
+        for (CommandeItem commandeItem : commande.getCommandeItem()
         ) {
             System.out.println(commande.getIdCommande());
             commandeItem.setCommande(commande);
 
             commandeItemService.create(commandeItem);
-            decrementStock(commandeItem.getProduit(),commandeItem.getQuantity());
+            decrementStock(commandeItem.getProduit(), commandeItem.getQuantity());
             idpayment.setVisible(true);
 
         }
@@ -306,7 +282,7 @@ public class CommandeClientController implements Initializable {
 
     private String extractQueryParameter(String url, String parameterName) {
         try {
-            List<NameValuePair> params = URLEncodedUtils.parse(new URI(url), Charset.forName("UTF-8"));
+            List<NameValuePair> params = URLEncodedUtils.parse(new URI(url), StandardCharsets.UTF_8);
             for (NameValuePair param : params) {
                 if (param.getName().equals(parameterName)) {
                     return param.getValue();
@@ -432,7 +408,6 @@ public class CommandeClientController implements Initializable {
     void profilclient(ActionEvent event) {
 
 
-
     }
 
     @FXML
@@ -506,9 +481,6 @@ public class CommandeClientController implements Initializable {
         }
 
     }
-
-
-
 
 
     @FXML

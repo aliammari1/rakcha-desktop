@@ -7,12 +7,12 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.*?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="672.0" prefWidth="1192.0" styleClass="top-form"
-            stylesheets="@dashboard.css" xmlns="http://javafx.com/javafx/21"
+            stylesheets="@dashboard2.css" xmlns="http://javafx.com/javafx/21"
             fx:controller="com.esprit.controllers.evenements.DesignEvenementAdminController">
     <children>
         <AnchorPane prefHeight="675.0" prefWidth="227.0" styleClass="nav-form"/>
         <AnchorPane layoutX="248.0" layoutY="118.0" prefHeight="524.0" prefWidth="306.0" styleClass="bg-white"
-                    stylesheets="@dashboard.css">
+                    stylesheets="@dashboard2.css">
             <children>
                 <Label layoutX="23.0" layoutY="31.0" text="Event Name :" textFill="#bc5a5a">
                     <font>
@@ -29,24 +29,24 @@
                         <Font name="Montserrat SemiBold" size="14.0"/>
                     </font>
                 </Label>
-                <Label layoutX="23.0" layoutY="200.0" stylesheets="@dashboard.css" text="Localisation :"
+                <Label layoutX="23.0" layoutY="200.0" stylesheets="@dashboard2.css" text="Localisation :"
                        textFill="#bc5a5a">
                     <font>
                         <Font name="Montserrat SemiBold" size="14.0"/>
                     </font>
                 </Label>
-                <Label layoutX="30.0" layoutY="254.0" stylesheets="@dashboard.css" text="Category : "
+                <Label layoutX="30.0" layoutY="254.0" stylesheets="@dashboard2.css" text="Category : "
                        textFill="#bc5a5a">
                     <font>
                         <Font name="Montserrat SemiBold" size="14.0"/>
                     </font>
                 </Label>
-                <Label layoutX="48.0" layoutY="304.0" stylesheets="@dashboard.css" text="Status :" textFill="#bc5a5a">
+                <Label layoutX="48.0" layoutY="304.0" stylesheets="@dashboard2.css" text="Status :" textFill="#bc5a5a">
                     <font>
                         <Font name="Montserrat SemiBold" size="14.0"/>
                     </font>
                 </Label>
-                <Label layoutX="25.0" layoutY="356.0" stylesheets="@dashboard.css" text="Description :"
+                <Label layoutX="25.0" layoutY="356.0" stylesheets="@dashboard2.css" text="Description :"
                        textFill="#bc5a5a">
                     <font>
                         <Font name="Montserrat SemiBold" size="14.0"/>
@@ -62,7 +62,7 @@
                 <TextArea fx:id="taDescription" layoutX="125.0" layoutY="353.0" prefHeight="99.0" prefWidth="151.0"
                           styleClass="text-area-red"/>
                 <Button layoutX="119.0" layoutY="467.0" mnemonicParsing="false" onAction="#ajouterEvenement"
-                        prefHeight="13.0" prefWidth="69.0" styleClass="instert-btn" stylesheets="@dashboard.css"
+                        prefHeight="13.0" prefWidth="69.0" styleClass="instert-btn" stylesheets="@dashboard2.css"
                         text="ADD"/>
             </children>
         </AnchorPane>
@@ -127,7 +127,7 @@
             </font>
         </Label>
         <Button fx:id="bPDF" layoutX="953.0" layoutY="607.0" mnemonicParsing="false" onAction="#generatePDF"
-                prefHeight="30.0" prefWidth="118.0" styleClass="instert-btn" stylesheets="@dashboard.css"
+                prefHeight="30.0" prefWidth="118.0" styleClass="instert-btn" stylesheets="@dashboard2.css"
                 text="Print PDF ">
             <font>
                 <Font size="11.0"/>
