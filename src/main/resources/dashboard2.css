@@ -1,40 +1,42 @@
+/* Styles par défaut */
 .top-form {
     -fx-background-color: #fff;
     -fx-border-color: #000;
     -fx-border-width: .2px .2px .4px .2px;
-
 }
 
-.close {
+.close, .minus {
     -fx-background-color: transparent;
     -fx-cursor: hand;
-
 }
 
 .close:hover {
     -fx-background-color: #e74141;
 }
 
-.minus {
-    -fx-background-color: transparent;
-    -fx-cursor: hand;
-}
-
 .minus:hover {
     -fx-background-color: #dadada;
 }
 
+/* Media Query pour écrans plus petits */
+@media screen and (max-width: 600px) {
+    .top-form {
+        /* Ajustez les styles pour les écrans plus petits */
+        -fx-border-width: .1px .1px .2px .1px;
+    }
+
+    /* Ajoutez d'autres ajustements en fonction des besoins */
+}
+
 .nav-form {
-    -fx-background-color: linear-gradient(to top right, #ae2d3c, black);
+    -fx-background-color: linear-gradient(to top right, #624970, #ae2d3c, black);
 }
 
 .nav-btn {
     -fx-background-color: transparent;
     -fx-cursor: hand;
     -fx-text-fill: #fff;
-    -fx-font-family: "Arial Rounded MT Bold";
-    -fx-font-size: 15px;
-
+    -fx-font-size: 14px;
 }
 
 .nav-btn:hover {
@@ -55,17 +57,13 @@
     -fx-background-color: #fff;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, .3), 8, 0, 0, 0);
     -fx-background-radius: 8px;
-< < < < < < < Updated upstream -fx-border-color: linear-gradient(to top right, #624970, #FCE19A, #ae2d3c );
-    -fx-border-radius: 8px;
-    -fx-border-width: 6px;
-= = = = = = = -fx-border-color: #ae2d3c; /* Couleur de la bordure rouge */
+    -fx-border-color: linear-gradient(to top right, #624970, #FCE19A, #ae2d3c); /* Couleur de la bordure rouge */
     -fx-border-radius: 8px; /* Rayon de la bordure rouge */
-    -fx-border-width: 3px;
->>> >>> > Stashed changes
+    -fx-border-width: 5px;
 }
 
 .bg-white:hover {
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 8, 0, 0, 0)
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 8, 0, 0, 0);
 }
 
 .instert-btn {
@@ -73,36 +71,18 @@
     -fx-background-radius: 8px;
     -fx-text-fill: #FCE19A;
     -fx-font-size: 18px;
-    -fx-font-family: "Arial Rounded MT Bold";
     -fx-cursor: hand;
+    -fx-font-family: "Arial Rounded MT Bold";
 }
 
-.delete-btn {
-    -fx-background-color: #ae2d3c;
+.instert-btn-picture {
+    -fx-background-color: #FCE19A;
     -fx-background-radius: 8px;
-    -fx-text-fill: #FCE19A;
+    -fx-text-fill: #624970;
     -fx-font-size: 12px;
-    -fx-font-family: "Arial Rounded MT Bold";
     -fx-cursor: hand;
-}
-
-.delete-btn:hover {
-    -fx-background-color: #d62651;
-}
-
-.movies-btn {
-    -fx-background-color: #ae2d3c;
-    -fx-background-radius: 8px;
-    -fx-text-fill: #FCE19A;
-    -fx-font-size: 16px;
     -fx-font-family: "Arial Rounded MT Bold";
-    -fx-cursor: hand;
 }
-
-.movies-btn:hover {
-    -fx-background-color: #d62651;
-}
-
 
 .instert-btn:hover {
     -fx-background-color: #d62651;
@@ -111,18 +91,16 @@
 .table-view {
     -fx-background-color: #fff;
     -fx-size: 15;
-    -fx-border-color: linear-gradient(to top right, #624970, #FCE19A, #ae2d3c);
-    -fx-border-width: 3px;
+    -fx-border-color: #ae2d3c;
     -fx-border-radius: 10px;
     -fx-background-radius: 10px;
     -fx-fill: #fff;
 }
 
 .table-view .column-header-background {
-< < < < < < < Updated upstream -fx-background-color: linear-gradient(to top right, #624970, #ae2d3c, black);
-= = = = = = = -fx-background-color: linear-gradient(to top left, black, #ae2d3c);
->>> >>> > Stashed changes -fx-background-insets: 0 0 0 0;
-    -fx-background-radius: 10px 10px 10px 10px;
+    -fx-background-color: linear-gradient(to top left, #466288, #ae2d3c);
+    -fx-background-insets: 0 0 0 0;
+    -fx-background-radius: 10px 0px 0px 0px;
 }
 
 .table-view .column-header, .table-view .filler {
@@ -133,56 +111,53 @@
 
 .table-view .column-header .label {
     -fx-text-fill: #fff;
-    -fx-font-family: "Arial Rounded MT Bold";
-    -fx-font-size: 14.0;
 }
 
 .text-field-red {
-    -fx-border-color: #ae2d3c;
-    -fx-border-radius: 20px;
-    -fx-background-radius: 20px;
-    -fx-border-width: 2px;
+    -fx-border-color: #800000; /* Couleur bordeaux */
+    -fx-border-radius: 20px; /* Rayon de la bordure arrondie */
+    -fx-background-radius: 20px; /* Rayon du fond arrondi */
 }
 
-.image-view-red {
-    -fx-border-color: #ae2d3c;
-    -fx-border-width: 2px;
-    -fx-border-radius: 5px;
-    -fx-background-radius: 5px;
+.text-area-red {
+    -fx-border-color: #800000; /* Couleur bordeaux */
+    -fx-border-radius: 5px; /* Rayon de la bordure arrondie */
+    -fx-background-radius: 30px; /* Rayon du fond arrondi */
 }
 
 .combo-box-red {
-    -fx-background-color: #fff;
-    -fx-border-color: #800000;
-    -fx-border-radius: 20px;
-    -fx-background-radius: 20px;
-    -fx-border-width: 2px;
+    -fx-background-color: #fff; /* Couleur de fond */
+    -fx-border-color: #800000; /* Couleur de la bordure */
+    -fx-border-radius: 5px; /* Rayon de la bordure arrondie */
+    -fx-background-radius: 5px; /* Rayon du fond arrondi */
 }
 
 .combo-box-red .arrow {
-    -fx-background-color: #800000;
+    -fx-background-color: #800000; /* Couleur de la flèche déroulante */
 }
 
-.date-picker-red {
-    -fx-background-color: #fff;
-    -fx-border-color: #800000;
-    -fx-border-radius: 20px;
-    -fx-background-radius: 20px;
-    -fx-border-width: 2px;
+.image-view-red {
+    -fx-border-color: #800000; /* Couleur de la bordure */
+    -fx-border-width: 2px; /* Largeur de la bordure */
+    -fx-border-radius: 5px; /* Rayon de la bordure arrondie */
+    -fx-background-radius: 5px; /* Rayon du fond arrondi */
 }
 
-.date-picker-red .arrow-button {
-    -fx-background-radius: 20px;
-    -fx-color: #800000;
+.delete-button {
+    -fx-background-color: #ae2d3c;
+    -fx-background-radius: 8px;
+    -fx-text-fill: #FCE19A;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+    -fx-font-family: "Arial Rounded MT Bold";
 }
 
-.date-picker-red .text-field {
-    -fx-text-fill: #000000;
-    -fx-background-radius: 20px;
+.delete-button:hover {
+    -fx-background-color: #d62651;
 }
 
 .navig-button {
-    -fx-background-color: #800000;
+    -fx-background-color: #466288;
     -fx-background-radius: 10px;
     -fx-text-fill: #FCE19A;
     -fx-font-size: 15px;
@@ -196,20 +171,19 @@
 }
 
 .flow-pane {
-    -fx-border-color: #ae2d3c;
+    -fx-border-color: linear-gradient(to top left, #624970, #ae2d3c);;
     -fx-border-width: 3px; /* Largeur de la bordure (2 pixels dans cet exemple) */
     -fx-border-style: solid; /* Style de la bordure (ligne solide dans cet exemple) */
     -fx-border-radius: 5px; /* Rayon de la bordure pour des coins arrondis (facultatif) */
 }
 
 /* Appliquer un espacement intérieur au FlowPane (facultatif) */
-
 .flow-pane > * {
     -fx-padding: 10px;
 }
 
 .search-pane {
-    -fx-border-color: #ae2d3c;
+    -fx-border-color: linear-gradient(to top left, #466288, #ae2d3c);;
     -fx-border-width: 3px; /* Largeur de la bordure (2 pixels dans cet exemple) */
     -fx-border-style: solid; /* Style de la bordure (ligne solide dans cet exemple) */
     -fx-border-radius: 5px; /* Rayon de la bordure pour des coins arrondis (facultatif) */
@@ -223,12 +197,10 @@
 }
 
 .button-client {
-    -fx-background-color: #ae2d3c;
+    -fx-background-color: #466288;
     -fx-background-radius: 5px;
-    -fx-text-fill: white;
-    -fx-font-size: 13px;
+    -fx-text-fill: #FCE19A;
+    -fx-font-size: 15px;
     -fx-cursor: hand;
     -fx-font-family: "Arial Rounded MT Bold";
-
 }
-

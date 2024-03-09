@@ -21,10 +21,10 @@
                 <Image url="@Logo.png" />
             </ImageView>
             <Button layoutY="334.0" mnemonicParsing="false" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" stylesheets="@styles/filmStyle.css" text="Movies            " />
-            <Button fx:id="product" layoutY="396.0" mnemonicParsing="false" onAction="#switchtoajouterCinema" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" stylesheets="@styles/filmStyle.css" text="Products         " />
-            <Button layoutY="458.0" mnemonicParsing="false" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" text="Cinema         " />
+            <Button fx:id="product" layoutY="396.0" mnemonicParsing="false" onAction="#switchtoajouterproduct" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" stylesheets="@styles/filmStyle.css" text="Products         " />
+            <Button layoutY="458.0" mnemonicParsing="false" onAction="#switchtcinemaaa" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" text="Cinema         " />
             <FontAwesomeIconView fill="#f2efef" glyphName="FILM" layoutX="14.0" layoutY="377.0" size="30" text="" wrappingWidth="36.0" />
-         <Button layoutY="514.0" mnemonicParsing="false" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" text="Event           " />
+         <Button layoutY="514.0" mnemonicParsing="false" onAction="#switchtevent" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" text="Event           " />
          <FontAwesomeIconView fill="#ebe5e5" glyphName="CUBES" layoutX="13.0" layoutY="438.0" size="30" text="" />
          <FontAwesomeIconView fill="#ebe5e5" glyphName="CALENDAR" layoutX="19.0" layoutY="557.0" size="30" text="" />
          <FontAwesomeIconView fill="#ebe5e5" glyphName="VIDEO_CAMERA" layoutX="17.0" layoutY="500.0" size="30" text="" />
@@ -33,7 +33,7 @@
          <Button layoutX="117.0" layoutY="774.0" mnemonicParsing="false" styleClass="nav-btn" text="EXIT" />
          <FontAwesomeIconView fill="#ebe5e5" glyphName="SIGN_OUT" layoutX="61.0" layoutY="801.0" size="30" text="" />
         </AnchorPane>
-        <Button layoutY="271.0" mnemonicParsing="false" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" stylesheets="@styles/filmStyle.css" text="Series              " textAlignment="CENTER" />
+        <Button fx:id="SerieButton" layoutY="271.0" mnemonicParsing="false" onAction="#switchtoSerie" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" stylesheets="@styles/filmStyle.css" text="Series              " textAlignment="CENTER" />
         <AnchorPane layoutX="248.0" prefHeight="855.0" prefWidth="1263.0" styleClass="tab-pane" stylesheets="@styles/filmStyle.css">
             <children>
                 <ScrollPane fx:id="filmScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" hmax="9.0" hvalue="1.0" layoutY="185.0" prefHeight="669.0" prefWidth="702.0" vbarPolicy="ALWAYS" />

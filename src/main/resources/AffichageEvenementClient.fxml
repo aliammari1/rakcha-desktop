@@ -11,10 +11,10 @@
             fx:controller="com.esprit.controllers.evenements.AffichageEvenementClientController">
     <children>
         <AnchorPane layoutX="940.0" layoutY="170.0" prefHeight="399.0" prefWidth="202.0" styleClass="bg-white"
-                    stylesheets="@dashboard.css"/>
+                    stylesheets="@dashboard2.css"/>
         <AnchorPane layoutX="230.0" layoutY="148.0" prefHeight="489.0" prefWidth="697.0" styleClass="bg-white"
-                    stylesheets="@dashboard.css"/>
-        <AnchorPane prefHeight="707.0" prefWidth="208.0" styleClass="nav-form" stylesheets="@dashboard.css">
+                    stylesheets="@dashboard2.css"/>
+        <AnchorPane prefHeight="707.0" prefWidth="208.0" styleClass="nav-form" stylesheets="@dashboard2.css">
             <children>
                 <Button layoutY="282.0" mnemonicParsing="false" onAction="#showFilms" prefHeight="30.0"
                         prefWidth="200.0" styleClass="nav-btn" text="Movies">
@@ -58,9 +58,9 @@
         <FontAwesomeIconView fill="#6f6a6a" glyphName="SEARCH" layoutX="254.0" layoutY="181.0" size="13" text=""
                              wrappingWidth="21.428571701049805"/>
         <TextField fx:id="tfRechercheEc" layoutX="275.0" layoutY="161.0" prefHeight="25.0" prefWidth="179.0"
-                   promptText="Keywords.." styleClass="search-pane" stylesheets="@dashboard.css"/>
+                   promptText="Keywords.." styleClass="search-pane" stylesheets="@dashboard2.css"/>
         <TableView fx:id="tvEvenement" layoutX="248.0" layoutY="199.0" prefHeight="406.0" prefWidth="661.0"
-                   stylesheets="@dashboard.css">
+                   stylesheets="@dashboard2.css">
             <columns>
                 <TableColumn fx:id="tcNomE" prefWidth="104.0" text="Event Name"/>
                 <TableColumn fx:id="tcDDE" prefWidth="106.0" text="Start Date"/>
@@ -77,11 +77,11 @@
             </font>
         </Label>
         <TextArea fx:id="taComment" layoutX="958.0" layoutY="334.0" prefHeight="171.0" prefWidth="168.0"
-                  styleClass="text-area-red" stylesheets="@dashboard.css"/>
+                  styleClass="text-area-red" stylesheets="@dashboard2.css"/>
         <Button fx:id="bSend" layoutX="1001.0" layoutY="524.0" mnemonicParsing="false" onAction="#ajouterFeedback"
-                styleClass="button-client" stylesheets="@dashboard.css" text="Send"/>
+                styleClass="button-client" stylesheets="@dashboard2.css" text="Send"/>
         <ComboBox fx:id="cbeventname" layoutX="967.0" layoutY="286.0" prefWidth="150.0" promptText="Choose an event.."
-                  styleClass="combo-box-red" stylesheets="@dashboard.css"/>
+                  styleClass="combo-box-red" stylesheets="@dashboard2.css"/>
         <Label layoutX="413.0" layoutY="31.0" text="OUR EVENTS " textFill="#943232">
             <font>
                 <Font name="Dosis ExtraBold" size="80.0"/>

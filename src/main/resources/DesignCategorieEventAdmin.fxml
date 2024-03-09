@@ -10,7 +10,7 @@
             xmlns="http://javafx.com/javafx/21"
             fx:controller="com.esprit.controllers.evenements.DesignCategorieAdminController">
     <children>
-        <AnchorPane prefHeight="707.0" prefWidth="208.0" styleClass="nav-form" stylesheets="@dashboard.css">
+        <AnchorPane prefHeight="707.0" prefWidth="208.0" styleClass="nav-form" stylesheets="@dashboard2.css">
             <children>
                 <Button layoutY="282.0" mnemonicParsing="false" onAction="#gestionFilms" prefHeight="30.0"
                         prefWidth="200.0" styleClass="nav-btn"
@@ -57,9 +57,9 @@
             </children>
         </AnchorPane>
         <AnchorPane layoutX="1280.0" prefHeight="707.0" prefWidth="0.0" styleClass="nav-form"
-                    stylesheets="@dashboard.css"/>
+                    stylesheets="@dashboard2.css"/>
         <AnchorPane layoutX="276.0" layoutY="130.0" prefHeight="499.0" prefWidth="309.0" styleClass="bg-white"
-                    stylesheets="@dashboard.css">
+                    stylesheets="@dashboard2.css">
             <children>
                 <Label layoutX="13.0" layoutY="118.0" text="Category :">
                     <font>
@@ -79,7 +79,7 @@
             </children>
         </AnchorPane>
         <AnchorPane layoutX="622.0" layoutY="190.0" prefHeight="404.0" prefWidth="626.0" styleClass="bg-white"
-                    stylesheets="@dashboard.css">
+                    stylesheets="@dashboard2.css">
             <children>
                 <TableView fx:id="categorie_tableView" layoutX="18.0" layoutY="14.0" prefHeight="381.0"
                            prefWidth="591.0">
@@ -93,7 +93,7 @@
             </children>
         </AnchorPane>
         <TextField fx:id="tfRechercheC" layoutX="672.0" layoutY="144.0" prefHeight="25.0" prefWidth="188.0"
-                   promptText="Keywords.." styleClass="search-pane" stylesheets="@dashboard.css"/>
+                   promptText="Keywords.." styleClass="search-pane" stylesheets="@dashboard2.css"/>
 
         <FontAwesomeIconView fill="#6f6a6a" glyphName="SEARCH" layoutX="650.0" layoutY="164.0" size="13" text=""
                              wrappingWidth="21.428571701049805"/>
@@ -108,7 +108,7 @@
             </font>
         </Label>
         <Button fx:id="bEM" layoutX="1070.0" layoutY="117.0" mnemonicParsing="false" onAction="#gestionEvenement"
-                prefHeight="27.0" prefWidth="178.0" styleClass="button-client" stylesheets="@dashboard.css"
+                prefHeight="27.0" prefWidth="178.0" styleClass="button-client" stylesheets="@dashboard2.css"
                 text="Event Management &gt;" textFill="#a83333">
             <font>
                 <Font size="8.0"/>

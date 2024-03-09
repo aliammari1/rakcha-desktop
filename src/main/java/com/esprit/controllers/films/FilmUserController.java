@@ -48,6 +48,10 @@ public class FilmUserController {
     @FXML
     private Rating filmRate;
     @FXML
+    private Button Cinema_Button;
+    @FXML
+    private Button event_button;
+    @FXML
     private Button product;
     @FXML
     private Button trailer_Button;
@@ -77,6 +81,8 @@ public class FilmUserController {
     private TextField serach_film_user;
     @FXML
     private Button reserver_Film;
+    @FXML
+    private Button SerieButton;
 
     @FXML
     public static List<Film> rechercher(List<Film> liste, String recherche) {
@@ -419,8 +425,7 @@ public class FilmUserController {
                 .collect(Collectors.toList());
     }
 
-    @FXML
-    public void switchtserie(ActionEvent event) {
+    public void switchtoajouterCinema(ActionEvent event) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/SeriesClient.fxml"));
             AnchorPane root = fxmlLoader.load();
@@ -432,5 +437,52 @@ public class FilmUserController {
         }
     }
 
+    public void switchtevent(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/AffichageEvenementClient.fxml"));
+            AnchorPane root = fxmlLoader.load();
+            Stage stage = (Stage) event_button.getScene().getWindow();
+            Scene scene = new Scene(root, 1280, 700);
+            stage.setScene(scene);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void switchtcinemaaa(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/DashboardClientCinema.fxml"));
+            AnchorPane root = fxmlLoader.load();
+            Stage stage = (Stage) Cinema_Button.getScene().getWindow();
+            Scene scene = new Scene(root, 1280, 700);
+            stage.setScene(scene);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void switchtoajouterproduct(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/AfficherProduitClient.fxml"));
+            AnchorPane root = fxmlLoader.load();
+            Stage stage = (Stage) product.getScene().getWindow();
+            Scene scene = new Scene(root, 1280, 700);
+            stage.setScene(scene);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void switchtoSerie(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/SeriesClient.fxml"));
+            AnchorPane root = fxmlLoader.load();
+            Stage stage = (Stage) SerieButton.getScene().getWindow();
+            Scene scene = new Scene(root, 1280, 700);
+            stage.setScene(scene);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }
 
