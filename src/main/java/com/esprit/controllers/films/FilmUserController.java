@@ -364,7 +364,6 @@ public class FilmUserController extends Application {
                     }
                 });
                 detalAnchorPane.getChildren().add(rateFilm);
-
             }
         });
         // Copy CSS classes
