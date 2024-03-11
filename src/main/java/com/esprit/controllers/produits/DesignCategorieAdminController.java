@@ -1,13 +1,8 @@
 package com.esprit.controllers.produits;
 
 
-import com.esprit.models.cinemas.Cinema;
 import com.esprit.models.produits.Categorie_Produit;
-;
-
 import com.esprit.services.produits.CategorieService;
-
-
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,7 +16,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
-
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -35,19 +29,16 @@ import java.util.stream.Collectors;
 
 public class DesignCategorieAdminController {
 
+    private final List<CheckBox> addressCheckBoxes = new ArrayList<>();
+    private final List<CheckBox> statusCheckBoxes = new ArrayList<>();
     @FXML
     private TableView<Categorie_Produit> categorie_tableview;
-
     @FXML
     private TextField SearchBar;
-
-
     @FXML
-    private TableColumn<Categorie_Produit,Void> deleteColumn;
-
+    private TableColumn<Categorie_Produit, Void> deleteColumn;
     @FXML
     private TextArea descriptionC_textArea;
-
     @FXML
     private TextField nomC_textFile;
     @FXML
@@ -56,51 +47,38 @@ public class DesignCategorieAdminController {
     private AnchorPane categorieList;
     @FXML
     private AnchorPane FilterAnchor;
-
     @FXML
     private AnchorPane formulaire;
-
-
-
     @FXML
-    private TableColumn<Categorie_Produit,String> nomC_tableC;
+    private TableColumn<Categorie_Produit, String> nomC_tableC;
     @FXML
     private TableColumn<Categorie_Produit, String> description_tableC;
-
-
-
-
-
 
     @FXML
     void GestionProduit(ActionEvent event) throws IOException {
 
-            // Charger la nouvelle interface ListproduitAdmin.fxml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignProduitAdmin.fxml"));
-            Parent root = loader.load();
+        // Charger la nouvelle interface ListproduitAdmin.fxml
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignProduitAdmin.fxml"));
+        Parent root = loader.load();
 
-            // Créer une nouvelle scène avec la nouvelle interface
-            Scene scene = new Scene(root);
+        // Créer une nouvelle scène avec la nouvelle interface
+        Scene scene = new Scene(root);
 
-            // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
-            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
-            // Créer une nouvelle fenêtre (stage) et y attacher la scène
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.setTitle("Gestion des categories");
-            stage.show();
+        // Créer une nouvelle fenêtre (stage) et y attacher la scène
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Gestion des categories");
+        stage.show();
 
-            // Fermer la fenêtre actuelle
-            currentStage.close();
-        }
-
-
-
-
+        // Fermer la fenêtre actuelle
+        currentStage.close();
+    }
 
     @FXML
-    void initialize(){
+    void initialize() {
 
 
         SearchBar.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -111,7 +89,6 @@ public class DesignCategorieAdminController {
 
         afficher_categorie();
         initDeleteColumn();
-
 
 
     }
@@ -157,10 +134,6 @@ public class DesignCategorieAdminController {
         alert.show();
     }
 
-
-
-
-
     private void initDeleteColumn() {
 
         Callback<TableColumn<Categorie_Produit, Void>, TableCell<Categorie_Produit, Void>> cellFactory = new Callback<>() {
@@ -200,9 +173,6 @@ public class DesignCategorieAdminController {
         //categorie_tableview.getColumns().add(deleteColumn);
     }
 
-
-
-
     @FXML
     void modifier_categorie(Categorie_Produit categorieProduit) {
 
@@ -216,13 +186,11 @@ public class DesignCategorieAdminController {
 
     }
 
-
     @FXML
-    void afficher_categorie(){
+    void afficher_categorie() {
 
 
-
-        nomC_tableC.setCellValueFactory(new PropertyValueFactory<Categorie_Produit,String>("nom_categorie"));
+        nomC_tableC.setCellValueFactory(new PropertyValueFactory<Categorie_Produit, String>("nom_categorie"));
         nomC_tableC.setCellFactory(TextFieldTableCell.forTableColumn());
         nomC_tableC.setOnEditCommit(event -> {
             Categorie_Produit categorieProduit = event.getRowValue();
@@ -230,7 +198,7 @@ public class DesignCategorieAdminController {
             modifier_categorie(categorieProduit);
         });
 
-        description_tableC.setCellValueFactory(new PropertyValueFactory<Categorie_Produit,String>("description"));
+        description_tableC.setCellValueFactory(new PropertyValueFactory<Categorie_Produit, String>("description"));
         description_tableC.setCellFactory(TextFieldTableCell.forTableColumn());
         description_tableC.setOnEditCommit(event -> {
             Categorie_Produit categorieProduit = event.getRowValue();
@@ -279,7 +247,6 @@ public class DesignCategorieAdminController {
         categorie_tableview.setItems(filteredList);
     }
 
-
     private void filterCategorieProduits(String searchText) {
         // Vérifier si le champ de recherche n'est pas vide
         if (!searchText.isEmpty()) {
@@ -298,16 +265,12 @@ public class DesignCategorieAdminController {
         }
     }
 
-    private final List<CheckBox> addressCheckBoxes = new ArrayList<>();
-    private final List<CheckBox> statusCheckBoxes = new ArrayList<>();
-
-
-
     private List<Categorie_Produit> getAllCategories() {
         CategorieService categorieservice = new CategorieService();
         List<Categorie_Produit> categorie = categorieservice.read();
         return categorie;
     }
+
     @FXML
     void filtrer(MouseEvent event) {
 
@@ -342,8 +305,6 @@ public class DesignCategorieAdminController {
     }
 
 
-
-
     public List<String> getCategorie_Produit() {
         // Récupérer tous les cinémas depuis la base de données
         List<Categorie_Produit> categories = getAllCategories();
@@ -357,18 +318,17 @@ public class DesignCategorieAdminController {
         return categorie;
     }
 
-@FXML
+    @FXML
     public void filtercinema(ActionEvent event) {
 
         categorieList.setOpacity(1);
-    formulaire.setOpacity(1);
+        formulaire.setOpacity(1);
 
 
+        FilterAnchor.setVisible(false);
 
-    FilterAnchor.setVisible(false);
-
-    categorie_tableview.setVisible(true);
-    formulaire.setVisible(true);
+        categorie_tableview.setVisible(true);
+        formulaire.setVisible(true);
 
         // Récupérer les adresses sélectionnées
         List<String> selectedCategories = getSelectedCategories();
@@ -382,7 +342,7 @@ public class DesignCategorieAdminController {
 
         // Mettre à jour le TableView avec les cinémas filtrés
         ObservableList<Categorie_Produit> filteredList = FXCollections.observableArrayList(filteredCategories);
-       categorie_tableview.setItems(filteredList);
+        categorie_tableview.setItems(filteredList);
 
 
     }
@@ -483,7 +443,6 @@ public class DesignCategorieAdminController {
     void profilclient(ActionEvent event) {
 
 
-
     }
 
 
@@ -539,9 +498,6 @@ public class DesignCategorieAdminController {
         }
 
     }
-
-
-
 
 
 }

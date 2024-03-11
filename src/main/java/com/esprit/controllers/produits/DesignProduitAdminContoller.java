@@ -97,6 +97,9 @@ public class DesignProduitAdminContoller {
     private AnchorPane formulaire;
 
 
+
+
+
     @FXML
     private TableColumn<Produit, Void> deleteColumn;
 
@@ -649,8 +652,8 @@ public class DesignProduitAdminContoller {
 
 
         // Créer des VBox pour les adresses
-        VBox addressCheckBoxesVBox = new VBox();
-        Label addressLabel = new Label("Adresse");
+        VBox addressCheckBoxesVBox = new VBox(5);
+        Label addressLabel = new Label("Category");
         addressLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
         addressCheckBoxesVBox.getChildren().add(addressLabel);
         for (String address : categorie) {
@@ -659,7 +662,7 @@ public class DesignProduitAdminContoller {
             addressCheckBoxes.add(checkBox);
         }
         addressCheckBoxesVBox.setLayoutX(25);
-        addressCheckBoxesVBox.setLayoutY(60);
+        addressCheckBoxesVBox.setLayoutY(40);
 
 
         // Ajouter les VBox dans le FilterAnchor
