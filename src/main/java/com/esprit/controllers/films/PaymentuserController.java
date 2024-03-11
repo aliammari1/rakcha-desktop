@@ -1,22 +1,28 @@
 package com.esprit.controllers.films;
 
-
+import com.esprit.models.cinemas.Cinema;
 import com.esprit.models.cinemas.Seance;
 import com.esprit.models.films.Ticket;
 import com.esprit.models.users.Client;
+import com.esprit.services.cinemas.CinemaService;
 import com.esprit.services.cinemas.SeanceService;
+import com.esprit.services.films.FilmService;
 import com.esprit.services.films.TicketService;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.Paymentuser;
 import com.stripe.exception.StripeException;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.web.WebEngine;
@@ -26,37 +32,48 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.controlsfx.control.CheckComboBox;
 
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PaymentuserController implements Initializable {
-
+    private Seance seance;
+    @FXML
+    private Label total;
+    @FXML
+    private Label filmLabel_Payment;
+    @FXML
+    private Button Pay;
+    @FXML
+    private AnchorPane anchorpane_payment;
     @FXML
     private TextField anneeExp;
-
     @FXML
-    private Button filmm;
-
+    private AnchorPane bord;
     @FXML
     private TextField carte;
-
+    @FXML
+    private CheckComboBox<String> checkcomboboxseance_res;
+    @FXML
+    private ComboBox<String> cinemacombox_res;
     @FXML
     private TextField cvc;
-
+    @FXML
+    private Button filmm;
     @FXML
     private TextField moisExp;
-
     @FXML
-    private Button pay;
-
-    private Seance seance;
+    private Spinner<Integer> nbrplacepPayment_Spinner;
+    @FXML
+    private Label nomPrenom;
     @FXML
     private Button viewPDF;
 
@@ -71,6 +88,55 @@ public class PaymentuserController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        anchorpane_payment.getChildren().forEach(node -> {
+            node.setDisable(true);
+        });
+        filmm.setDisable(false);
+        cinemacombox_res.setDisable(false);
+        cinemacombox_res.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                java.util.List<Seance> seances = new SeanceService().readLoujain(new FilmService().getFilmByName(filmLabel_Payment.getText()).getId(), new CinemaService().getCinemaByName(cinemacombox_res.getValue()).getId_cinema());
+                checkcomboboxseance_res.setDisable(false);
+                System.out.println(new FilmService().getFilmByName(filmLabel_Payment.getText()).getId() + " " + new CinemaService().getCinemaByName(cinemacombox_res.getValue()).getId_cinema());
+                for (int i = 0; i < seances.size(); i++)
+                    checkcomboboxseance_res.getItems().add("Seance " + (i + 1) + " " + seances.get(i).getDate() + " " + seances.get(i).getHD() + "-" + seances.get(i).getHF());
+            }
+        });
+        checkcomboboxseance_res.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
+            @Override
+            public void onChanged(Change<? extends String> change) {
+                while (change.next()) {
+                    if (change.wasAdded()) {
+
+                        java.util.List<Seance> seances = new SeanceService().readLoujain(new FilmService().getFilmByName(filmLabel_Payment.getText()).getId(), new CinemaService().getCinemaByName(cinemacombox_res.getValue()).getId_cinema());
+                        anchorpane_payment.getChildren().forEach(node -> node.setDisable(false));
+                        nbrplacepPayment_Spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, seances.get(0).getId_salle().getNb_places(), 1, 1));
+
+                    }
+                }
+            }
+        });
+        nbrplacepPayment_Spinner.valueProperty().addListener(new ChangeListener<Integer>() {
+            @Override
+            public void changed(ObservableValue<? extends Integer> observableValue, Integer integer, Integer t1) {
+                List<Seance> seances = new SeanceService().readLoujain(new FilmService().getFilmByName(filmLabel_Payment.getText()).getId(), new CinemaService().getCinemaByName(cinemacombox_res.getValue()).getId_cinema());
+                double totalPrice = 0;
+                for (int i = 0; i < seances.size(); i++) {
+                    totalPrice += seances.get(i).getPrix() * nbrplacepPayment_Spinner.getValue();
+                }
+                System.out.println(totalPrice);
+                String total_txt = "Total : " + totalPrice + " Dt.";
+                total.setText(total_txt);
+            }
+        });
+        CinemaService cinemaService = new CinemaService();
+        List<Cinema> cinemaList = cinemaService.read();
+        if (cinemaList != null)
+            for (Cinema cinema : cinemaList) {
+                cinemacombox_res.getItems().add(cinema.getNom());
+
+            }
         try {
             seance = new SeanceService().read().get(0);
         } catch (Exception e) {
@@ -82,7 +148,7 @@ public class PaymentuserController implements Initializable {
     private void Pay(ActionEvent event) throws StripeException {
         TicketService scom = new TicketService();
         // TODO replace the next line with reservation
-        //Seance seance;
+        // Seance seance;
         UserService sc = new UserService();
         Client client = (Client) sc.getUserById(2);
         if (isValidInput()) {
@@ -98,10 +164,11 @@ public class PaymentuserController implements Initializable {
 
             final WebView webView = new WebView();
             final WebEngine webEngine = webView.getEngine();
+
             webView.getEngine().load(url);
 
             // create scene
-            //   stage.getIcons().add(new Image("/Images/logo.png"));
+            // stage.getIcons().add(new Image("/Images/logo.png"));
             stage.setTitle("localisation");
             Scene scene = new Scene(webView, 1000, 700, Color.web("#666970"));
             stage.setScene(scene);
@@ -130,12 +197,14 @@ public class PaymentuserController implements Initializable {
             return false;
         }
 
-        if (moisExp.getText().isEmpty() || !isNum(moisExp.getText()) || Integer.parseInt(moisExp.getText()) < 1 || Integer.parseInt(moisExp.getText()) > 12) {
+        if (moisExp.getText().isEmpty() || !isNum(moisExp.getText()) || Integer.parseInt(moisExp.getText()) < 1
+                || Integer.parseInt(moisExp.getText()) > 12) {
             showError("Mois d'expiration invalide", "Veuillez entrer un mois d'expiration valide (entre 1 et 12).");
             return false;
         }
 
-        if (anneeExp.getText().isEmpty() || !isNum(anneeExp.getText()) || Integer.parseInt(anneeExp.getText()) < LocalDate.now().getYear()) {
+        if (anneeExp.getText().isEmpty() || !isNum(anneeExp.getText())
+                || Integer.parseInt(anneeExp.getText()) < LocalDate.now().getYear()) {
             showError("Année d'expiration invalide", "Veuillez entrer une année d'expiration valide.");
             return false;
         }
@@ -166,21 +235,20 @@ public class PaymentuserController implements Initializable {
 
     public void init(Seance p) {
         this.seance = p;
-        this.pay.setText("Payer " + p.getPrix() + "dinars");
+        total.setText("Payer " + p.getPrix() + "dinars");
     }
 
     public void switchtfillmmaa(ActionEvent event) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/filmuser.fxml"));
             AnchorPane root = fxmlLoader.load();
-            Stage stage = (Stage) filmm.getScene().getWindow();
+            Stage stage = (Stage) anchorpane_payment.getScene().getWindow();
             Scene scene = new Scene(root, 1507, 855);
             stage.setScene(scene);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
-
 
     public void createReceiptPDF(String filename, Ticket ticket) throws IOException {
         try (PDDocument document = new PDDocument()) {
@@ -209,6 +277,5 @@ public class PaymentuserController implements Initializable {
             Desktop.getDesktop().open(myFile);
         }
     }
-
 
 }

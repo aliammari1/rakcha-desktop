@@ -3,7 +3,7 @@ package com.esprit.controllers.produits;
 
 import com.esprit.models.cinemas.Cinema;
 import com.esprit.models.produits.Categorie_Produit;
-;
+
 
 import com.esprit.services.produits.CategorieService;
 
