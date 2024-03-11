@@ -94,9 +94,9 @@
             <FontAwesomeIconView fill="#bf1515" glyphName="UPLOAD" layoutX="38.0" layoutY="506.0" onMouseClicked="#selectImage" selectionFill="#2c2a2a" size="20" />
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="540.0" layoutY="194.0" prefHeight="487.0" prefWidth="726.0" styleClass="bg-white" stylesheets="@dashboard.css">
+      <AnchorPane layoutX="521.0" layoutY="244.0" prefHeight="441.0" prefWidth="726.0" styleClass="bg-white" stylesheets="@dashboard.css">
          <children>
-            <TableView fx:id="Produit_tableview" layoutX="12.0" layoutY="69.0" prefHeight="399.0" prefWidth="696.0" stylesheets="@dashboard.css">
+            <TableView fx:id="Produit_tableview" layoutX="16.0" layoutY="67.0" prefHeight="348.0" prefWidth="696.0" stylesheets="@dashboard.css">
               <columns>
                 <TableColumn fx:id="nomP_tableC" prefWidth="106.0" text="Product" />
                 <TableColumn fx:id="nomCP_tableC" prefWidth="108.0" text="Category" />
@@ -108,24 +108,24 @@
 
               </columns>
             </TableView>
-            <Label layoutX="299.0" layoutY="14.0" text="Product" textFill="#466288">
+            <Label layoutX="301.0" layoutY="14.0" text="Product" textFill="#466288">
                <font>
                   <Font name="Arial Narrow Bold Italic" size="36.0" />
                </font>
             </Label>
          </children>
       </AnchorPane>
-      <Button layoutX="1094.0" layoutY="152.0" mnemonicParsing="false" onAction="#GestionCategorie" prefHeight="27.0" prefWidth="172.0" styleClass="button-client" stylesheets="@dashboard.css" text=" Category Management" />
+      <Button layoutX="1106.0" layoutY="202.0" mnemonicParsing="false" onAction="#GestionCategorie" prefHeight="27.0" prefWidth="149.0" styleClass="button-client" stylesheets="@dashboard.css" text=" Category Management" />
 
       <TextField fx:id="SearchBar" layoutX="756.0" layoutY="29.0" prefHeight="31.0" prefWidth="194.0" styleClass="search-pane" stylesheets="@dashboard.css" />
       <FontAwesomeIconView fill="#6f6a6a" glyphName="SEARCH" layoutX="763.0" layoutY="49.0" size="13" wrappingWidth="21.428571701049805" />
-      <AnchorPane fx:id="FilterAnchor" layoutX="554.0" layoutY="60.0" prefHeight="147.0" prefWidth="202.0" styleClass="bg-white" stylesheets="@dashboard.css" visible="false">
+      <AnchorPane fx:id="FilterAnchor" layoutX="1000.0" layoutY="29.0" prefHeight="162.0" prefWidth="194.0" styleClass="bg-white" stylesheets="@dashboard.css" visible="false">
          <children>
-            <Button layoutX="80.0" layoutY="117.0" mnemonicParsing="false" onAction="#filtercinema" text="Filter" />
+            <Button layoutX="137.0" layoutY="125.0" mnemonicParsing="false" onAction="#filtercinema" prefHeight="31.0" prefWidth="43.0" text="Filter" />
          </children>
       </AnchorPane>
       <FontAwesomeIconView fx:id="idfilter" glyphName="FILTER" layoutX="1215.0" layoutY="80.0" onMouseClicked="#filtrer" size="20" />
-      <Button layoutX="581.0" layoutY="160.0" mnemonicParsing="false" onAction="#statCommande" text="Commande" />
+      <Button layoutX="562.0" layoutY="215.0" mnemonicParsing="false" onAction="#statCommande" text="Commande" />
 
 
 

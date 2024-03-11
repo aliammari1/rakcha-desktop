@@ -41,11 +41,6 @@ public class AnalyseCommande implements Initializable {
         updateGraphs();
     }
 
-    @FXML
-    private void handleUpdateButton(ActionEvent event) {
-        // Appeler votre logique de mise à jour ici
-        updateGraphs();
-    }
 
     private void updateGraphs() {
         // Mettre à jour les graphiques ici
@@ -61,8 +56,6 @@ public class AnalyseCommande implements Initializable {
         CategorieService categorieService = new CategorieService();
         List<Categorie_Produit> categories = categorieService.read();
 
-        // Votre code d'analyse ici
-        // ...
 
         Map<String, Integer> enCoursByDate = new HashMap<>();
         Map<String, Integer> payeeByDate = new HashMap<>();
