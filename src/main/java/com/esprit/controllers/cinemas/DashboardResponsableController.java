@@ -160,6 +160,7 @@ public class DashboardResponsableController implements Initializable {
     @FXML
     private TextArea txtareaStatut;
 
+
     @FXML
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -178,8 +179,7 @@ public class DashboardResponsableController implements Initializable {
 
         String defaultStatut = "En_Attente";
 
-        Cinema cinema = new Cinema(tfNom.getText(), tfAdresse.getText(),
-                (Responsable_de_cinema) new UserService().getUserById(1), image.getImage().getUrl(), defaultStatut);
+        Cinema cinema = new Cinema(tfNom.getText(), tfAdresse.getText(), (Responsable_de_cinema) new UserService().getUserById(1), image.getImage().getUrl(), defaultStatut);
 
         CinemaService cs = new CinemaService();
         cs.create(cinema);
@@ -207,6 +207,7 @@ public class DashboardResponsableController implements Initializable {
         }
     }
 
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         HashSet<Cinema> acceptedCinemas = loadAcceptedCinemas();
@@ -218,25 +219,26 @@ public class DashboardResponsableController implements Initializable {
         addRoomForm.setVisible(false);
         RoomTableView.setVisible(false);
 
+
         for (Cinema c : acceptedCinemas) {
             comboCinema.getItems().add(c.getNom());
         }
 
-        comboCinema.getSelectionModel().selectedItemProperty()
-                .addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-                    if (newValue != null) {
-                        Cinema selectedCinema = acceptedCinemas.stream()
-                                .filter(cinema -> cinema.getNom().equals(newValue))
-                                .findFirst()
-                                .orElse(null);
+        comboCinema.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (newValue != null) {
+                Cinema selectedCinema = acceptedCinemas.stream()
+                        .filter(cinema -> cinema.getNom().equals(newValue))
+                        .findFirst()
+                        .orElse(null);
 
-                        if (selectedCinema != null) {
-                            loadMoviesForCinema(selectedCinema.getId_cinema());
-                            loadRoomsForCinema(selectedCinema.getId_cinema());
-                        }
-                    }
-                });
+                if (selectedCinema != null) {
+                    loadMoviesForCinema(selectedCinema.getId_cinema());
+                    loadRoomsForCinema(selectedCinema.getId_cinema());
+                }
+            }
+        });
     }
+
 
     private void loadMoviesForCinema(int cinemaId) {
         comboMovie.getItems().clear();
@@ -256,6 +258,7 @@ public class DashboardResponsableController implements Initializable {
             comboRoom.getItems().add(s.getNom_salle());
         }
     }
+
 
     private HashSet<Cinema> loadAcceptedCinemas() {
         CinemaService cinemaService = new CinemaService();
@@ -295,13 +298,13 @@ public class DashboardResponsableController implements Initializable {
         return acceptedCinemasSet;
     }
 
+
     private HBox createCinemaCard(Cinema cinema) {
         HBox cardContainer = new HBox();
         cardContainer.setStyle("-fx-padding: 10px 0 0  25px;");
 
         AnchorPane card = new AnchorPane();
-        card.setStyle(
-                "-fx-background-color: #ffffff; -fx-border-radius: 10px; -fx-border-color: #000000; -fx-background-radius: 10px; -fx-border-width: 2px;");
+        card.setStyle("-fx-background-color: #ffffff; -fx-border-radius: 10px; -fx-border-color: #000000; -fx-background-radius: 10px; -fx-border-width: 2px;");
         card.setPrefWidth(400);
 
         ImageView logoImageView = new ImageView();
@@ -324,7 +327,8 @@ public class DashboardResponsableController implements Initializable {
                 FileChooser fileChooser = new FileChooser();
                 fileChooser.setTitle("Choose a new image");
                 fileChooser.getExtensionFilters().addAll(
-                        new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.gif"));
+                        new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.gif")
+                );
                 File selectedFile = fileChooser.showOpenDialog(null);
 
                 if (selectedFile != null) {
@@ -364,7 +368,9 @@ public class DashboardResponsableController implements Initializable {
                     card.getChildren().remove(nameTextField);
                 });
 
+
                 card.getChildren().add(nameTextField);
+
 
                 nameTextField.requestFocus();
                 nameTextField.selectAll();
@@ -391,6 +397,7 @@ public class DashboardResponsableController implements Initializable {
                 adresseTextField.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
                 adresseTextField.setPrefWidth(adresseLabel.getWidth());
 
+
                 adresseTextField.setOnAction(e -> {
                     adresseLabel.setText(adresseTextField.getText());
                     cinema.setAdresse(adresseTextField.getText());
@@ -399,12 +406,14 @@ public class DashboardResponsableController implements Initializable {
                     card.getChildren().remove(adresseTextField);
                 });
 
+
                 card.getChildren().add(adresseTextField);
 
                 adresseTextField.requestFocus();
                 adresseTextField.selectAll();
             }
         });
+
 
         Line verticalLine = new Line();
         verticalLine.setStartX(240);
@@ -416,11 +425,13 @@ public class DashboardResponsableController implements Initializable {
 
         card.getChildren().add(verticalLine);
 
+
         Circle circle = new Circle();
         circle.setRadius(30);
         circle.setLayoutX(285);
         circle.setLayoutY(45);
         circle.setFill(Color.web("#ae2d3c"));
+
 
         FontAwesomeIconView deleteIcon = new FontAwesomeIconView();
         deleteIcon.setGlyphName("TRASH");
@@ -443,6 +454,7 @@ public class DashboardResponsableController implements Initializable {
                 cardContainer.getChildren().remove(card);
             }
         });
+
 
         card.getChildren().addAll(circle, deleteIcon);
 
@@ -482,6 +494,7 @@ public class DashboardResponsableController implements Initializable {
                                 getTableView().getItems().remove(salle);
                             });
                         }
+
 
                         @Override
                         protected void updateItem(Void item, boolean empty) {
@@ -620,24 +633,18 @@ public class DashboardResponsableController implements Initializable {
         SessionTableView.setVisible(true);
         addRoomForm.setVisible(false);
         RoomTableView.setVisible(false);
-        colMovie.setCellValueFactory(
-                new Callback<TableColumn.CellDataFeatures<Seance, String>, ObservableValue<String>>() {
-                    @Override
-                    public ObservableValue<String> call(
-                            TableColumn.CellDataFeatures<Seance, String> seanceStringCellDataFeatures) {
-                        return new SimpleStringProperty(
-                                seanceStringCellDataFeatures.getValue().getFilmcinema().getId_film().getNom());
-                    }
-                });
-        colCinema.setCellValueFactory(
-                new Callback<TableColumn.CellDataFeatures<Seance, String>, ObservableValue<String>>() {
-                    @Override
-                    public ObservableValue<String> call(
-                            TableColumn.CellDataFeatures<Seance, String> seanceStringCellDataFeatures) {
-                        return new SimpleStringProperty(
-                                seanceStringCellDataFeatures.getValue().getFilmcinema().getId_cinema().getNom());
-                    }
-                });
+        colMovie.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Seance, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Seance, String> seanceStringCellDataFeatures) {
+                return new SimpleStringProperty(seanceStringCellDataFeatures.getValue().getFilmcinema().getId_film().getNom());
+            }
+        });
+        colCinema.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Seance, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Seance, String> seanceStringCellDataFeatures) {
+                return new SimpleStringProperty(seanceStringCellDataFeatures.getValue().getFilmcinema().getId_cinema().getNom());
+            }
+        });
         colMovieRoom.setCellValueFactory(new PropertyValueFactory<>("nom_salle"));
         colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
         colDepartTime.setCellValueFactory(new PropertyValueFactory<>("HD"));
@@ -658,6 +665,7 @@ public class DashboardResponsableController implements Initializable {
                             getTableView().getItems().remove(seance);
                         });
                     }
+
 
                     @Override
                     protected void updateItem(Void item, boolean empty) {
@@ -870,8 +878,7 @@ public class DashboardResponsableController implements Initializable {
                             cinemaComboBox.getItems().add(cinema.getNom());
                         }
 
-                        // Sélectionner le nom du cinéma correspondant à la valeur actuelle de la
-                        // cellule
+                        // Sélectionner le nom du cinéma correspondant à la valeur actuelle de la cellule
                         cinemaComboBox.setValue(cinemaName);
 
                         // Définir un EventHandler pour le changement de sélection dans le ComboBox
@@ -879,8 +886,7 @@ public class DashboardResponsableController implements Initializable {
                             String selectedCinemaName = cinemaComboBox.getValue();
                             // Mettre à jour la valeur de la cellule dans le TableView
                             commitEdit(selectedCinemaName);
-                            // Mettre à jour la base de données en utilisant la méthode update de
-                            // seanceService
+                            // Mettre à jour la base de données en utilisant la méthode update de seanceService
                             Seance seance = getTableView().getItems().get(getIndex());
                             for (Cinema cinema : acceptedCinema) {
                                 if (cinema.getNom().equals(selectedCinemaName)) {
@@ -908,11 +914,11 @@ public class DashboardResponsableController implements Initializable {
                     setText(salleName);
                 }
 
+
                 // Double clic détecté
                 setOnMouseClicked(event -> {
                     if (event.getClickCount() == 2) {
-                        // Créer un ComboBox contenant les noms des salles associées au cinéma
-                        // sélectionné
+                        // Créer un ComboBox contenant les noms des salles associées au cinéma sélectionné
                         ComboBox<String> salleComboBox = new ComboBox<>();
                         Seance seance = getTableView().getItems().get(getIndex());
                         Cinema selectedCinema = seance.getFilmcinema().getId_cinema();
@@ -923,8 +929,7 @@ public class DashboardResponsableController implements Initializable {
                             salleComboBox.getItems().add(salle.getNom_salle());
                         }
 
-                        // Sélectionner le nom de la salle correspondant à la valeur actuelle de la
-                        // cellule
+                        // Sélectionner le nom de la salle correspondant à la valeur actuelle de la cellule
                         salleComboBox.setValue(salleName);
 
                         // Définir un EventHandler pour le changement de sélection dans le ComboBox
@@ -932,8 +937,7 @@ public class DashboardResponsableController implements Initializable {
                             String selectedSalleName = salleComboBox.getValue();
                             // Mettre à jour la valeur de la cellule dans le TableView
                             commitEdit(selectedSalleName);
-                            // Mettre à jour la base de données en utilisant la méthode update de
-                            // seanceService
+                            // Mettre à jour la base de données en utilisant la méthode update de seanceService
                             for (Salle salle : associatedSalles) {
                                 if (salle.getNom_salle().equals(selectedSalleName)) {
                                     seance.setSalle(salle);
@@ -966,11 +970,11 @@ public class DashboardResponsableController implements Initializable {
                     setText(filmName);
                 }
 
+
                 // Double clic détecté
                 setOnMouseClicked(event -> {
                     if (event.getClickCount() == 2) {
-                        // Créer un ComboBox contenant les noms des films associées au cinéma
-                        // sélectionné
+                        // Créer un ComboBox contenant les noms des films associées au cinéma sélectionné
                         ComboBox<String> filmComboBox = new ComboBox<>();
                         Seance seance = getTableView().getItems().get(getIndex());
                         Cinema selectedCinema = seance.getFilmcinema().getId_cinema();
@@ -981,8 +985,7 @@ public class DashboardResponsableController implements Initializable {
                             filmComboBox.getItems().add(film.getNom());
                         }
 
-                        // Sélectionner le nom de la salle correspondant à la valeur actuelle de la
-                        // cellule
+                        // Sélectionner le nom de la salle correspondant à la valeur actuelle de la cellule
                         filmComboBox.setValue(filmName);
 
                         // Définir un EventHandler pour le changement de sélection dans le ComboBox
@@ -990,8 +993,7 @@ public class DashboardResponsableController implements Initializable {
                             String selectedFilmName = filmComboBox.getValue();
                             // Mettre à jour la valeur de la cellule dans le TableView
                             commitEdit(selectedFilmName);
-                            // Mettre à jour la base de données en utilisant la méthode update de
-                            // seanceService
+                            // Mettre à jour la base de données en utilisant la méthode update de seanceService
                             for (Film film : associatedFilms) {
                                 if (film.getNom().equals(selectedFilmName)) {
                                     seance.getFilmcinema().setId_film(film);
@@ -1027,9 +1029,8 @@ public class DashboardResponsableController implements Initializable {
         String endTimeText = tfEndTime.getText();
         String priceText = tfPrice.getText();
 
-        // Vérifier que tous les champs sont remplis
-        if (selectedCinemaName == null || selectedFilmName == null || selectedRoomName == null || selectedDate == null
-                ||
+
+        if (selectedCinemaName == null || selectedFilmName == null || selectedRoomName == null || selectedDate == null ||
                 departureTimeText.isEmpty() || endTimeText.isEmpty() || priceText.isEmpty()) {
             showAlert("Please complete all fields.");
             return;
@@ -1072,8 +1073,7 @@ public class DashboardResponsableController implements Initializable {
 
         double price = Double.parseDouble(priceText);
 
-        Seance newSeance = new Seance(selectedRoom, departureTime, endTime, date, price,
-                new Filmcinema(selectedFilm, selectedCinema));
+        Seance newSeance = new Seance(selectedRoom, departureTime, endTime, date, price, new Filmcinema(selectedFilm, selectedCinema));
 
         SeanceService seanceService = new SeanceService();
         seanceService.create(newSeance);
@@ -1081,6 +1081,7 @@ public class DashboardResponsableController implements Initializable {
         showAlert("Session added successfully!");
         loadSeances();
     }
+
 
     private void loadSeances() {
         SeanceService seanceService = new SeanceService();
@@ -1098,6 +1099,7 @@ public class DashboardResponsableController implements Initializable {
             showAlert("please complete all fields!");
             return;
         }
+
 
         try {
             int nombrePlaces = Integer.parseInt(tfNbrPlaces.getText());
@@ -1120,6 +1122,7 @@ public class DashboardResponsableController implements Initializable {
 
         loadsalles();
     }
+
 
     private void loadsalles() {
         SalleService salleService = new SalleService();

@@ -40,7 +40,7 @@
                 <FontAwesomeIconView fill="#ebe5e5" glyphName="TV" layoutX="18.0" layoutY="269.0" size="30" />
             <ImageView fitHeight="178.0" fitWidth="215.0" layoutX="-3.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="Logo.png" />
+                  <Image url="@Logo.png" />
                </image>
             </ImageView>
             </children>

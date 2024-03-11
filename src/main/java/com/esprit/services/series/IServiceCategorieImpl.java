@@ -10,11 +10,13 @@ import java.util.List;
 import java.util.Map;
 
 public class IServiceCategorieImpl implements IServiceCategorie<Categorie> {
-    private Connection connection;
     private static List<Categorie> categories;
-    public IServiceCategorieImpl(){
-        connection= mydatabase.getInstance().getConnection();
+    private final Connection connection;
+
+    public IServiceCategorieImpl() {
+        connection = mydatabase.getInstance().getConnection();
     }
+
     @Override
     public void ajouter(Categorie categorie) throws SQLException {
 
@@ -28,7 +30,7 @@ public class IServiceCategorieImpl implements IServiceCategorie<Categorie> {
     public void modifier(Categorie categorie) throws SQLException {
         String req = "UPDATE categories SET nom = ?, description = ? WHERE idcategorie = ?";
         PreparedStatement os = connection.prepareStatement(req);
-        os.setString(1 , categorie.getNom());
+        os.setString(1, categorie.getNom());
         os.setString(2, categorie.getDescription());
         os.setInt(3, categorie.getIdcategorie());
         os.executeUpdate();
@@ -52,7 +54,7 @@ public class IServiceCategorieImpl implements IServiceCategorie<Categorie> {
         ResultSet rs = st.executeQuery(req);
 
 
-        while (rs.next()){
+        while (rs.next()) {
             Categorie categorie = new Categorie();
             categorie.setIdcategorie(rs.getInt("idcategorie"));
             categorie.setNom(rs.getString("nom"));
@@ -93,3 +95,6 @@ public class IServiceCategorieImpl implements IServiceCategorie<Categorie> {
         return statistics;
     }
 }
+
+
+

@@ -7,7 +7,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -42,7 +41,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class AdminDashboardController {
-    private static final int ROWS_PER_PAGE = 1;
     TableColumn<User, String> roleTableColumn;
     TableColumn<User, HBox> photoDeProfilTableColumn;
     TableColumn<User, String> lastNameTableColumn;
@@ -57,7 +55,6 @@ public class AdminDashboardController {
     Validator tableValidator;
     Tooltip formValidatorTooltip;
     Tooltip tableValidatorTooltip;
-    FilteredList<User> filteredData;
     @FXML
     private TextField adresseTextField;
     @FXML
@@ -80,45 +77,12 @@ public class AdminDashboardController {
     private ComboBox<String> roleComboBox;
     @FXML
     private TableView<User> userTableView;
-    @FXML
-    private TextField searchBar;
-    @FXML
-    private ComboBox<String> sortComboBox;
 
     @FXML
     void initialize() {
         try {
-
-            searchBar.textProperty()
-                    .addListener((observable, oldValue, newValue) -> {
-
-                        filteredData = new FilteredList<>(
-                                FXCollections.observableArrayList(new UserService().read()));
-                        filteredData.setPredicate(
-                                person -> person.getFirstName().toLowerCase().contains(newValue.toLowerCase())
-                                        || person.getLastName().toLowerCase().contains(newValue.toLowerCase()));
-                        userTableView.setItems(filteredData);
-                    });
-
-            sortComboBox.getItems().addAll("First Name", "Last Name", "Phone Number"); // Add sorting options to the
-            // ComboBox
-            sortComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
-                if (newVal != null) {
-                    switch (newVal) {
-                        case "First Name":
-                            userTableView.getSortOrder().setAll(firstNameTableColumn);
-                            break;
-                        case "Last Name":
-                            userTableView.getSortOrder().setAll(lastNameTableColumn);
-                            break;
-                        case "Phone Number":
-                            userTableView.getSortOrder().setAll(numTelTableColumn);
-                            break;
-                    }
-                }
-            });
-
-            //idTableColumn = new TableColumn<>("id");
+            roleTableColumn = new TableColumn<>("role");
+            photoDeProfilTableColumn = new TableColumn<>("photo de profil");
             lastNameTableColumn = new TableColumn<>("lastName");
             passwordTableColumn = new TableColumn<>("password");
             numTelTableColumn = new TableColumn<>("numero de telephone");
