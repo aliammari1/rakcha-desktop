@@ -240,6 +240,7 @@ public class PanierProduitControllers implements Initializable {
                     // L'utilisateur a confirmé la suppression
                     panierService.delete(Panier);
                     // Mettez à jour votre interface utilisateur ici
+                    refreshUI();
                 }
 
             }
@@ -261,6 +262,20 @@ public class PanierProduitControllers implements Initializable {
         produitVBox.getChildren().add(card);
 
         return produitVBox;
+    }
+
+    private void refreshUI() {
+
+
+        // Effacer les éléments actuels du panier
+        cartFlowPane.getChildren().clear();
+        produitVBoxMap.clear();
+
+        // Charger à nouveau les produits du panier
+        loadAcceptedPanier();
+
+        // Mettre à jour le prix total
+        updatePrixTotal();
     }
 
     private void decreaseQuantity(TextField quantityTextField, Panier panier) {

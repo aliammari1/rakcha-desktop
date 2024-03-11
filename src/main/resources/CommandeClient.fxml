@@ -55,9 +55,7 @@
                   <Font name="Arial Rounded MT Bold" size="24.0" />
                </font>
             </Label>
-
-            <Button layoutX="191.0" layoutY="319.0" mnemonicParsing="false" onAction="#order" prefHeight="49.0" prefWidth="136.0" styleClass="achat-button" stylesheets="@dashbord.css" text="order"/>
-    <Button layoutX="191.0" layoutY="319.0" mnemonicParsing="false" onAction="#order" prefHeight="41.0" prefWidth="112.0" styleClass="achat-button" stylesheets="@dashboard.css" text="order">
+    <Button layoutX="213.0" layoutY="314.0" mnemonicParsing="false" onAction="#order" prefHeight="41.0" prefWidth="112.0" styleClass="achat-button" stylesheets="@dashboard.css" text="order">
 
                <font>
                   <Font name="Arial" size="18.0" />
@@ -76,10 +74,11 @@
             <Font name="Tw Cen MT Condensed" size="36.0" />
          </font>
       </Label>
-      <Button fx:id="idpayment" layoutX="1012.0" layoutY="554.0" mnemonicParsing="false" onAction="#payment" text="Payment" visible="false">
+      <Button fx:id="idpaymentenligne" layoutX="996.0" layoutY="535.0" mnemonicParsing="false" onAction="#payment" prefHeight="25.0" prefWidth="126.0" text="Online Payment" visible="false">
          <font>
-            <Font size="24.0" />
+            <Font size="14.0" />
          </font>
       </Button>
+
    </children>
 </AnchorPane>

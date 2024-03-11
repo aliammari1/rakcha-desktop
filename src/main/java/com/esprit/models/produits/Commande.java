@@ -2,7 +2,12 @@ package com.esprit.models.produits;
 
 import com.esprit.models.users.Client;
 import com.esprit.models.users.User;
+import com.itextpdf.text.pdf.qrcode.QRCodeWriter;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,6 +29,8 @@ public class Commande {
 
     private String adresse;
 
+
+
     public Commande() {
     }
 
@@ -34,6 +41,7 @@ public class Commande {
 
         this.num_telephone = num_telephone;
         this.adresse = adresse;
+
     }
 
     public Commande(int idCommande, Date dateCommande, String statu, Client idClient, int num_telephone, String adresse) {
@@ -43,6 +51,7 @@ public class Commande {
         this.idClient = idClient;
         this.num_telephone = num_telephone;
         this.adresse = adresse;
+
     }
 
     public int getIdCommande() {
@@ -100,6 +109,7 @@ public class Commande {
     public void setAdresse(String adresse) {
         this.adresse = adresse;
     }
+
 
     @Override
     public String toString() {

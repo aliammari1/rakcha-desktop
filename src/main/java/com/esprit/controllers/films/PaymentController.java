@@ -1,10 +1,16 @@
 package com.esprit.controllers.films;
 
 
+import com.esprit.models.cinemas.Cinema;
 import com.esprit.models.cinemas.Seance;
+import com.esprit.services.cinemas.CinemaService;
 import com.esprit.services.cinemas.SeanceService;
+import com.esprit.services.films.FilmService;
 import com.esprit.utils.PaymentProcessor;
 import com.stripe.exception.StripeException;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -12,6 +18,7 @@ import javafx.scene.layout.Pane;
 import org.controlsfx.control.CheckComboBox;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -61,6 +68,51 @@ public class PaymentController {
 
     @FXML
     void initialize() {
+        anchorpane_payment.getChildren().forEach(node -> {
+            node.setDisable(true);
+        });
+        cinemacombox_res.setDisable(false);
+        cinemacombox_res.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                List<Seance> seances = new SeanceService().readLoujain(new FilmService().getFilmByName(filmLabel_Payment.getText()).getId(), new CinemaService().getCinemaByName(cinemacombox_res.getValue()).getId_cinema());
+                checkcomboboxseance_res.setDisable(false);
+                System.out.println(new FilmService().getFilmByName(filmLabel_Payment.getText()).getId() + " " + new CinemaService().getCinemaByName(cinemacombox_res.getValue()).getId_cinema());
+                for (int i = 0; i < seances.size(); i++)
+                    checkcomboboxseance_res.getItems().add("Seance " + (i + 1) + " " + seances.get(i).getDate() + " " + seances.get(i).getHD() + "-" + seances.get(i).getHF());
+            }
+        });
+        checkcomboboxseance_res.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
+            @Override
+            public void onChanged(Change<? extends String> change) {
+                while (change.next()) {
+                    if (change.wasAdded()) {
+                        List<Seance> seances = new SeanceService().readLoujain(new FilmService().getFilmByName(filmLabel_Payment.getText()).getId(), new CinemaService().getCinemaByName(cinemacombox_res.getValue()).getId_cinema());
+                        anchorpane_payment.getChildren().forEach(node -> node.setDisable(false));
+                        nbrplacepPayment_Spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, seances.get(0).getId_salle().getNb_places(), 1, 1));
+
+                    }
+                }
+            }
+        });
+        nbrplacepPayment_Spinner.valueProperty().addListener(new ChangeListener<Integer>() {
+            @Override
+            public void changed(ObservableValue<? extends Integer> observableValue, Integer integer, Integer t1) {
+                List<Seance> seances = new SeanceService().readLoujain(new FilmService().getFilmByName(filmLabel_Payment.getText()).getId(), new CinemaService().getCinemaByName(cinemacombox_res.getValue()).getId_cinema());
+                double totalPrice = 0;
+                for (int i = 0; i < seances.size(); i++) {
+                    totalPrice += seances.get(i).getPrix() * nbrplacepPayment_Spinner.getValue();
+                }
+                System.out.println(totalPrice);
+                String total_txt = "Total : " + totalPrice + " Dt.";
+                total.setText(total_txt);
+            }
+        });
+        CinemaService cinemaService = new CinemaService();
+        for (Cinema cinema : cinemaService.read()) {
+            cinemacombox_res.getItems().add(cinema.getNom());
+
+        }
         SpinnerValueFactory<Integer> valueFactory_month = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 12, 1, 1);// (min,max,startvalue,incrementValue)
         SpinnerValueFactory<Integer> valueFactory_year = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 9999999, 1, 1);// (min,max,startvalue,incrementValue)
         SpinnerValueFactory<Integer> valueFactory_cvc = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 999, 1, 1);// (min,max,startvalue,incrementValue)

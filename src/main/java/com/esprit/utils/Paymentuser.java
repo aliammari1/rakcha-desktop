@@ -1,5 +1,6 @@
 package com.esprit.utils;
 
+
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
@@ -15,9 +16,15 @@ public class Paymentuser {
         params.put("amount", f);
         params.put("currency", "usd");
         params.put("customer", "cus_PgYn51DmhdjzAw");
+
         // Get the client's Payment Page URL
+
         Charge charge = Charge.create(params);
         System.out.println(charge);
         return charge.getReceiptUrl();
+
+
     }
+
 }
+

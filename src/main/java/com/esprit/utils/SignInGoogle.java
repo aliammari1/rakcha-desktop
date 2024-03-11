@@ -1,4 +1,4 @@
-package com.esprit.utils;
+/*package com.esprit.utils;
 
 import com.github.scribejava.apis.GoogleApi20;
 import com.github.scribejava.core.builder.ServiceBuilder;
@@ -119,4 +119,4 @@ public class SignInGoogle {
             }
         }
     }
-}
+}*/
