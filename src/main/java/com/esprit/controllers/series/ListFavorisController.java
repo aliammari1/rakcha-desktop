@@ -1,165 +1,55 @@
 package com.esprit.controllers.series;
 
-import com.esprit.models.series.Categorie;
 import com.esprit.models.series.Favoris;
 import com.esprit.models.series.Serie;
-import com.esprit.services.series.IServiceCategorieImpl;
 import com.esprit.services.series.IServiceFavorisImpl;
-import com.esprit.services.series.IServiceSerie;
 import com.esprit.services.series.IServiceSerieImpl;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
+import java.util.ResourceBundle;
+
+public class ListFavorisController implements Initializable {
 
 
-public class SerieClientController {
-    private final ObservableList<String> selectedCategories = FXCollections.observableArrayList();
+    private final int idSession = 1;
 
     @FXML
-    private Label resultatLabel;
-    @FXML
-    private ComboBox<String> CamboxCategorie;
-    @FXML
-    private ListView<Serie> listeSerie;
-    private List<Categorie> categorieList = new ArrayList<>();
-    private List<Serie> listerecherche;
-    private List<Serie> listeTop3;
-    @FXML
-    private TextField recherchefld;
+    private ListView<Serie> listViewFav;
 
-    /*
-        @Override
-        public void initialize(URL url, ResourceBundle resourceBundle) {
-            IServiceSerieImpl ss = new IServiceSerieImpl();
-
-
-            hboxTop3.setSpacing(20); // Set the spacing between VBox instances
-            hboxTop3.setPadding(new Insets(10));
-            List<Serie> listeTop3 = ss.findMostLiked();
-
-            for (Serie serie : listeTop3) {
-                VBox vbox = createSeriesVBox(serie);
-                hboxTop3.getChildren().add(vbox);
-            }
-
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        try {
+            loadSeriesFavList();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-
-     */
-    @FXML
-    private HBox hboxTop3;
-
-
-    /*
-    public void afficherliste(List<Serie> series){
-        listeSerie.getItems().clear();
-
-        listeSerie.getItems().addAll(series);
-        listeSerie.setCellFactory(param -> new ListCell<Serie>() {
-            @Override
-            protected void updateItem(Serie item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    double imageWidth = 200; // Largeur fixe souhaitée
-                    double imageHeight = 200; // Hauteur fixe souhaitée
-                    String img =item.getImage();
-                    File file = new File(img);
-                    Image image = new Image(file.toURI().toString());
-                    ImageView imageView = new ImageView(image);
-                    imageView.setFitWidth(imageWidth);
-                    imageView.setFitHeight(imageHeight);
-                    imageView.setPreserveRatio(true);
-                    setText("\n   Name :"+item.getNom()+"\n  Summary: "+item.getResume()+ "\n   Director : "+item.getDirecteur()+"\n   Country: " +item.getPays() );
-                    setGraphic(imageView);
-                }
-            }
-        });
-    }
-    */
-
-    //FOCTION RECHERCHE
-    public static List<Serie> rechercher(List<Serie> liste, String recherche) {
-        List<Serie> resultats = new ArrayList<>();
-
-        for (Serie element : liste) {
-            if (element.getNom().contains(recherche)) {
-                resultats.add(element);
-            }
-        }
-
-        return resultats;
     }
 
-    private VBox createSeriesVBox(Serie serie) {
-        VBox vbox = new VBox();
-        vbox.setSpacing(8);
-        vbox.setAlignment(Pos.CENTER);
-        vbox.setPadding(new Insets(8));
-        vbox.setMinSize(250, 210);
-
-        // Créez d'abord le Label avec le nom
-        Label titleLabel = new Label(serie.getNom());
-        titleLabel.setStyle("-fx-font-family: 'Helvetica'; -fx-font-size: 18.0px; -fx-font-weight: bold; -fx-text-fill: #FCE19A;");
-        titleLabel.setAlignment(Pos.CENTER);
-
-
-        // Ensuite, ajoutez l'ImageView avec l'image
-        ImageView imageView = new ImageView();
-        imageView.setFitWidth(240);
-        imageView.setFitHeight(140);
-
-        // Chargez l'image depuis le fichier
-        File file = new File(serie.getImage());
-        Image image = new Image(file.toURI().toString());
-        imageView.setImage(image);
-        // Créer le Label pour afficher le nombre de likes
-        Label likesLabel = new Label("Likes: " + serie.getNbLikes());
-        likesLabel.setStyle("-fx-font-family: 'Helvetica'; -fx-font-size: 14.0px; -fx-text-fill: #FCE19A;");
-        likesLabel.setAlignment(Pos.CENTER);
-        // Ajoutez d'abord le Label, puis l'ImageView à la liste des enfants
-        //vbox.getChildren().addAll(titleLabel, imageView);
-        vbox.getChildren().addAll(imageView, titleLabel, likesLabel);
-
-        vbox.setStyle("-fx-background-color: linear-gradient(to top right, #ae2d3c, black);");
-        return vbox;
-    }
-
-    public void afficher() throws SQLException {
-        IServiceCategorieImpl iServiceCategorie = new IServiceCategorieImpl();
-        categorieList = iServiceCategorie.recuperer();
-    }
-
-    private void trierParNom(List<Serie> series) {
-        Collections.sort(series, (serie1, serie2) -> serie1.getNom().compareToIgnoreCase(serie2.getNom()));
-    }
 
     public void afficherliste(List<Serie> series) {
-        listeSerie.getItems().clear();
+        listViewFav.getItems().clear();
 
-        listeSerie.setCellFactory(param -> new ListCell<Serie>() {
+        listViewFav.setCellFactory(param -> new ListCell<Serie>() {
             @Override
             protected void updateItem(Serie item, boolean empty) {
                 super.updateItem(item, empty);
@@ -188,11 +78,6 @@ public class SerieClientController {
                     // Ajoutez des composants à l'AnchorPane (toutes les informations de la série)
                     Label nameLabel = new Label("Name: " + item.getNom());
                     nameLabel.setStyle("-fx-font-family: 'Helvetica'; -fx-font-size: 18.0px; -fx-font-weight: bold; -fx-text-fill: #333333;"); // Couleur de texte sombre
-                    Label directorLabel = new Label("Director: " + item.getDirecteur());
-                    directorLabel.setStyle("-fx-font-family: 'Helvetica'; -fx-font-size: 14.0px; -fx-font-weight: normal; -fx-text-fill: #666666;"); // Couleur de texte sombre plus claire
-                    Label countryLabel = new Label("Country: " + item.getPays());
-                    countryLabel.setStyle("-fx-font-family: 'Helvetica'; -fx-font-size: 14.0px; -fx-font-weight: normal; -fx-text-fill: #666666;"); // Couleur de texte sombre plus claire
-
 
                     //Label summaryLabel = new Label("Summary: " + item.getResume());
                     //Label directorLabel = new Label("Director: " + item.getDirecteur());
@@ -215,13 +100,9 @@ public class SerieClientController {
                     AnchorPane.setLeftAnchor(imageView, 10.0);
                     AnchorPane.setTopAnchor(nameLabel, 10.0);
                     AnchorPane.setLeftAnchor(nameLabel, 180.0);
-                    AnchorPane.setTopAnchor(directorLabel, 40.0);
-                    AnchorPane.setLeftAnchor(directorLabel, 180.0);
-                    AnchorPane.setTopAnchor(countryLabel, 70.0);
-                    AnchorPane.setLeftAnchor(countryLabel, 180.0);
-                    AnchorPane.setTopAnchor(likesLabel, 100.0);
+                    AnchorPane.setTopAnchor(likesLabel, 60.0);
                     AnchorPane.setLeftAnchor(likesLabel, 180.0);
-                    AnchorPane.setTopAnchor(HeartImageView, 105.0);
+                    AnchorPane.setTopAnchor(HeartImageView, 65.0);
                     AnchorPane.setLeftAnchor(HeartImageView, 230.0);
 
 
@@ -253,7 +134,7 @@ public class SerieClientController {
                     AnchorPane.setRightAnchor(likeButton, 10.0);
 
 
-                    Image iconFav = new Image("pictures/films/favoris.png");
+                    Image iconFav = new Image("pictures/films/heart.png");
                     ImageView iconImageViewFav = new ImageView(iconFav);
                     iconImageViewFav.setFitWidth(20.0);
                     iconImageViewFav.setFitHeight(20.0);
@@ -371,17 +252,17 @@ public class SerieClientController {
                             "-fx-font-size: 16px; " +
                             "-fx-font-family: 'Arial Rounded MT Bold'; " +
                             "-fx-cursor: hand;");                    // Set the layout constraints for the Watch Button in the AnchorPane
-                    AnchorPane.setTopAnchor(watchButton, 150.0);
+                    AnchorPane.setTopAnchor(watchButton, 120.0);
                     AnchorPane.setLeftAnchor(watchButton, 180.0);
                     Label dislikesLabel = new Label("DisLikes: " + item.getNbDislikes());
                     dislikesLabel.setStyle("-fx-font-family: 'Helvetica'; -fx-font-size: 14.0px; -fx-font-weight: normal; -fx-text-fill: #666666;"); // Couleur de texte sombre plus claire
-                    AnchorPane.setTopAnchor(dislikesLabel, 120.0);
+                    AnchorPane.setTopAnchor(dislikesLabel, 80.0);
                     AnchorPane.setLeftAnchor(dislikesLabel, 180.0);
 
 
                     // Ajoutez les composants à l'AnchorPane
                     //anchorPane.getChildren().addAll(imageView, nameLabel, summaryLabel, directorLabel, countryLabel, likesLabel, HeartImageView, likeButton, dislikeButton);
-                    anchorPane.getChildren().addAll(imageView, nameLabel, directorLabel, countryLabel, likesLabel, HeartImageView, likeButton, dislikeButton, favButton, watchButton, dislikesLabel);
+                    anchorPane.getChildren().addAll(imageView, nameLabel, likesLabel, HeartImageView, likeButton, dislikeButton, favButton, watchButton, dislikesLabel);
                     // Ajoutez d'autres composants selon vos besoins
 
                     // Définissez l'AnchorPane en tant que graphique pour la cellule
@@ -400,13 +281,6 @@ public class SerieClientController {
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
-
-                        // Ajoutez un séparateur après chaque élément sauf le dernier
-                        Separator separator = new Separator();
-                        separator.setPrefWidth(400); // Ajustez la largeur selon vos besoins
-                        separator.setStyle("-fx-border-color: #ae2d3c; -fx-border-width: 2px;");
-                        VBox vBoxWithSeparator = new VBox(anchorPane, separator);
-                        setGraphic(vBoxWithSeparator);
                     });
 
 
@@ -414,134 +288,22 @@ public class SerieClientController {
             }
         });
 
-        listeSerie.getItems().addAll(series);
-    }
-
-    @FXML
-    void AfficherFavList(ActionEvent event) {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ListFavoris.fxml"));
-        Stage stage = new Stage();
-        try {
-            Parent root = fxmlLoader.load();
-            Scene scene = new Scene(root);
-            stage.setTitle("Your Favorits");
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-
+        listViewFav.getItems().addAll(series);
     }
 
 
     @FXML
-    private void initialize() throws SQLException {
-
-        IServiceSerieImpl iServiceSerie = new IServiceSerieImpl();
-        IServiceCategorieImpl iServiceCategorie = new IServiceCategorieImpl();
-        List<Categorie> categorieList = iServiceCategorie.recuperer();
-        ObservableList<String> categorieNames = FXCollections.observableArrayList();
-        for (Categorie categorie : categorieList) {
-            categorieNames.add(categorie.getNom());
-        }
-        CamboxCategorie.setItems(categorieNames);
-        CamboxCategorie.setOnAction(event -> {
-            String selectedCategorie = CamboxCategorie.getValue();
-            if (!selectedCategories.contains(selectedCategorie)) {
-                for (Categorie c : categorieList
-                ) {
-                    if (c.getNom() == selectedCategorie) {
-
-                        try {
-                            listerecherche = iServiceSerie.recuperes(c.getIdcategorie());
-                            trierParNom(listerecherche); // Tri des séries par nom
-                            afficherliste(listerecherche);
-                        } catch (SQLException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                }
-            }
-
-        });
-
-        ///fonction recherche sur textfiled
-        recherchefld.textProperty().addListener((observable, oldValue, newValue) -> {
-            List<Serie> series;
-            series = rechercher(listerecherche, newValue);
-            afficherliste(series);
-        });
-
-
-        listeSerie.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.intValue() >= 0) {
-                Serie selectedSerie = listeSerie.getItems().get(newValue.intValue());
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/EpisodeClient.fxml"));
-                Stage stage = new Stage();
-                try {
-                    Parent root = fxmlLoader.load();
-                    EpisodeClientController controller = fxmlLoader.getController();
-                    controller.initialize(selectedSerie);
-                    Scene scene = new Scene(root);
-                    stage.setTitle("");
-                    stage.setScene(scene);
-                    stage.show();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
-
-
-    }
-
-    ///gestion de menu
-    @FXML
-    void Ocategories(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/CategorieClient.fxml")));
-        Scene scene = new Scene(root);
-        Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    @FXML
-    void Oseries(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/SeriesClient.fxml")));
-        Scene scene = new Scene(root);
-        Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    @FXML
-    void Oepisode(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/EpisodeClient.fxml")));
-        Scene scene = new Scene(root);
-        Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    @FXML
-    private void loadSeriesList() throws SQLException {
-        IServiceSerie<Serie> serieService = new IServiceSerieImpl();
-        List<Serie> series = serieService.recuperers();
-        afficherliste(series); // Utilisez votre méthode d'affichage pour la ListView
+    private void loadSeriesFavList() throws SQLException {
         IServiceSerieImpl ss = new IServiceSerieImpl();
-
-        hboxTop3.setSpacing(20); // Set the spacing between VBox instances
-        hboxTop3.setPadding(new Insets(10));
-        List<Serie> listeTop3 = ss.findMostLiked();
-
-        for (Serie serie : listeTop3) {
-            VBox vbox = createSeriesVBox(serie);
-            hboxTop3.getChildren().add(vbox);
+        IServiceFavorisImpl sf = new IServiceFavorisImpl();
+        List<Serie> listSerieById = new ArrayList<>();
+        List<Favoris> listFav = sf.afficherListeFavoris(idSession);
+        for (int i = 0; i < listFav.size(); i++) {
+            Serie s = ss.getByIdSerie(listFav.get(i).getId_serie());
+            listSerieById.add(s);
         }
+        afficherliste(listSerieById);
     }
 
-
-    // Function to display a list of series in the JavaFX ListView
 
 }

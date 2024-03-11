@@ -1,48 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="600.0" prefWidth="953.0" stylesheets="@dashbord.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.series.SerieClientController">
+<AnchorPane prefHeight="743.0" prefWidth="1168.0" stylesheets="@dashbord.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.series.SerieClientController">
    <children>
-      <Pane layoutX="-6.0" prefHeight="600.0" prefWidth="170.0" styleClass="nav-form" stylesheets="@dashbord.css">
+      <Pane layoutX="-6.0" prefHeight="742.0" prefWidth="199.0" styleClass="nav-form" stylesheets="@dashboard.css">
          <children>
-            <Button fx:id="listseries" layoutX="10.0" layoutY="130.0" mnemonicParsing="false" onAction="#loadSeriesList" prefHeight="37.0" prefWidth="150.0" styleClass="nav-btn" stylesheets="@dashbord.css" text="List Series" />
+            <Button fx:id="listseries" layoutX="40.0" layoutY="129.0" mnemonicParsing="false" onAction="#loadSeriesList" prefHeight="37.0" prefWidth="132.0" styleClass="nav-btn" stylesheets="@dashbord.css" text="Series Catalog" />
+            <FontAwesomeIconView fill="WHITE" glyphName="TV" layoutX="13.0" layoutY="158.0" size="30" />
+            <FontAwesomeIconView fill="#ebe5e5" glyphName="FILM" layoutX="15.0" layoutY="239.0" size="30" text="" />
+            <Button layoutY="214.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Movies">
+               <font>
+                  <Font name="System Italic" size="17.0" />
+               </font>
+            </Button>
+            <FontAwesomeIconView fill="WHITE" glyphName="CUBES" layoutX="15.0" layoutY="300.0" size="30" />
+            <Button layoutX="1.0" layoutY="266.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="210.0" styleClass="nav-btn" text="Products" />
+            <FontAwesomeIconView fill="WHITE" glyphName="CALENDAR" layoutX="17.0" layoutY="365.0" size="30" />
+            <Button layoutX="-5.0" layoutY="331.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="210.0" styleClass="nav-btn" text="Events" />
+            <FontAwesomeIconView fill="WHITE" glyphName="USER" layoutX="34.0" layoutY="504.0" size="30" />
+            <Button layoutX="5.0" layoutY="470.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="210.0" styleClass="nav-btn" text="Account" />
+            <Button layoutX="1.0" layoutY="517.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="210.0" styleClass="nav-btn" text="Exit" />
+            <FontAwesomeIconView fill="WHITE" glyphName="SIGN_OUT" layoutX="31.0" layoutY="551.0" size="30" />
          </children></Pane>
-      <Pane layoutX="164.0" prefHeight="70.0" prefWidth="781.0" stylesheets="@dashbord.css">
+      <Pane layoutX="241.0" layoutY="8.0" prefHeight="70.0" prefWidth="922.0" stylesheets="@dashbord.css">
          <children>
-            <ComboBox fx:id="CamboxCategorie" layoutX="637.0" layoutY="17.0" prefHeight="26.0" prefWidth="132.0" promptText="Select Category" stylesheets="@dashbord.css">
-               <styleClass>
-                  <String fx:value="arrow" />
-                  <String fx:value="arrow" />
-               </styleClass></ComboBox>
             <Label layoutX="686.0" layoutY="48.0" />
-            <TextField fx:id="recherchefld" layoutX="12.0" layoutY="17.0" prefHeight="26.0" prefWidth="615.0" promptText=" Search Series " />
+            <TextField fx:id="recherchefld" layoutX="-37.0" layoutY="13.0" prefHeight="30.0" prefWidth="605.0" promptText=" Search Series By Category " styleClass="image-view-red" stylesheets="@dashboard.css" />
+            <Button fx:id="favBtnList" layoutX="765.0" layoutY="14.0" mnemonicParsing="false" onAction="#AfficherFavList" prefHeight="26.0" prefWidth="157.0" styleClass="nav-form" stylesheets="@dashboard.css" text="Favorites " textFill="WHITE">
+               <font>
+                  <Font name="Berlin Sans FB Demi Bold" size="13.0" />
+               </font>
+            </Button>
+            <ComboBox fx:id="CamboxCategorie" layoutX="578.0" layoutY="14.0" prefHeight="26.0" prefWidth="178.0" promptText="Select Category" styleClass="instert-btn-picture" stylesheets="@dashboard.css" />
+            <Text layoutX="-44.0" layoutY="72.0" strokeType="OUTSIDE" strokeWidth="0.0" text="The Best Three Recommandations:" wrappingWidth="371.9999145507813">
+               <font>
+                  <Font name="Berlin Sans FB" size="24.0" />
+               </font>
+            </Text>
          </children>
       </Pane>
-      <ListView fx:id="listeSerie" layoutX="176.0" layoutY="122.0" prefHeight="470.0" prefWidth="767.0">
-         <styleClass>
-            <String fx:value="arrow" />
-            <String fx:value="arrow" />
-         </styleClass></ListView>
-      <Label fx:id="resultatLabel" layoutX="789.0" layoutY="133.0" prefHeight="17.0" prefWidth="149.0" textFill="RED">
-         <font>
-            <Font size="11.0" />
-         </font>
-      </Label>
-      <Text layoutX="184.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="All Series :" wrappingWidth="132.0">
-         <font>
-            <Font name="Agency FB" size="18.0" />
-         </font>
-      </Text>
+      <HBox fx:id="hboxTop3" layoutX="356.0" layoutY="94.0" prefHeight="100.0" prefWidth="646.0" stylesheets="@dashboard.css" />
+      <ListView fx:id="listeSerie" layoutX="199.0" layoutY="319.0" prefHeight="422.0" prefWidth="968.0" styleClass="image-view-red" stylesheets="@dashboard.css" />
 
    </children>
 </AnchorPane>
