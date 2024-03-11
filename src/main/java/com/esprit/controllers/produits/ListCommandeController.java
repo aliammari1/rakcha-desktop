@@ -110,7 +110,7 @@ public class ListCommandeController {
                 filteredList.addAll(commandeservice.read());
             } else {
                 for (Commande commande : commandeservice.read()) {
-                    if (commande.getEtat().toLowerCase().contains(keyword.toLowerCase()) ||
+                    if (
                             commande.getAdresse().toLowerCase().contains(keyword.toLowerCase())||
                             commande.getIdClient().getLastName().toLowerCase().contains(keyword.toLowerCase())||
                             commande.getIdClient().getFirstName().toLowerCase().contains(keyword.toLowerCase())||

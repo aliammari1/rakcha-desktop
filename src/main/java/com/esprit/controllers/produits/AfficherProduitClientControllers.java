@@ -1,10 +1,14 @@
 package com.esprit.controllers.produits;
 
 
+import com.esprit.models.films.RatingFilm;
+import com.esprit.models.produits.CommandeItem;
 import com.esprit.models.produits.Commentaire;
 import com.esprit.models.produits.Panier;
 import com.esprit.models.produits.Produit;
 import com.esprit.models.users.Client;
+import com.esprit.services.films.RatingFilmService;
+import com.esprit.services.produits.CommandeItemService;
 import com.esprit.services.produits.CommentaireService;
 import com.esprit.services.produits.PanierService;
 import com.esprit.services.produits.ProduitService;
@@ -37,6 +41,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.controlsfx.control.Rating;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -46,6 +51,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -75,11 +81,18 @@ public class AfficherProduitClientControllers implements Initializable {
     private int produitId;
 
     @FXML
+    private FlowPane topthreeVbox;
+
+    @FXML
     private TextArea txtAreaComments;
     @FXML
     private ScrollPane idcomment;
     @FXML
     private AnchorPane AnchorComments;
+
+    private Map<Integer, Integer> top3Produits;
+
+
 
     @FXML
     public static List<Produit> rechercher(List<Produit> liste, String recherche) {
@@ -98,6 +111,7 @@ public class AfficherProduitClientControllers implements Initializable {
 
         loadAcceptedProduits();
         displayAllComments();
+        loadAcceptedTop3();
 
 
         ProduitService produitService = new ProduitService();
@@ -113,26 +127,25 @@ public class AfficherProduitClientControllers implements Initializable {
 
         });
 
+
+
     }
 
     private void loadAcceptedProduits() {
-        // Récupérer toutes les produits depuis le service
+
         ProduitService produitService = new ProduitService();
-        List<Produit> Produits = produitService.read();
+        List<Produit> produits = produitService.read();
 
+        // Charger tous les produits dans produitFlowPane
+        for (Produit produit : produits) {
 
-        // Créer une carte pour chaque produit et l'ajouter à la FlowPane
-        for (Produit produit : Produits) {
             VBox cardContainer = createProduitCard(produit);
 
-            // Créer un AnchorPane pour le cardContainer et ajouter le produit comme UserData
             AnchorPane produitNode = new AnchorPane();
             produitNode.setUserData(produit);
             produitNode.getChildren().add(cardContainer);
 
             produitFlowPane.getChildren().add(produitNode);
-
-
         }
 
 
@@ -665,6 +678,12 @@ public class AfficherProduitClientControllers implements Initializable {
                 .collect(Collectors.toList());
     }
 
+
+
+
+
+
+
     @FXML
     void cinemaclient(ActionEvent event) {
         try {
@@ -822,9 +841,7 @@ public class AfficherProduitClientControllers implements Initializable {
         System.out.println("Badword Detection Result: " + badwordDetection);
 
         ProduitService produitService = new ProduitService();
-        Produit produit = new Produit();
-        Commentaire commentaire1 = new Commentaire();
-        int produitId = id;
+
 
         if (badwordDetection.equals("1")) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -954,6 +971,162 @@ public class AfficherProduitClientControllers implements Initializable {
 
 
     }
+    public void loadAcceptedTop3() {
+
+        ProduitService produitService = new ProduitService();
+
+        try {
+            List<Produit> produits = produitService.getProduitsOrderByQuantityAndStatus();
+
+            if (produits.size() < 3) {
+                System.out.println("Pas assez de produits disponibles");
+                return;
+            }
+
+
+            List<Produit> top3Produits = produits.subList(0, 3);
+            int j =0;
+            for (Produit produit : top3Produits) {
+                System.out.println(produit.getId_produit());
+                VBox cardContainer = createtopthree(produit);
+                System.out.println("------------------"+j+(cardContainer.getChildren()));
+                topthreeVbox.getChildren().add(cardContainer);
+                j++;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            System.out.println("Une erreur est survenue lors du chargement des produits");
+        }
+    }
+
+
+
+
+    public VBox createtopthree(Produit produit) {
+        VBox cardContainer = new VBox(30);
+        cardContainer.setStyle("-fx-padding: 20px 0 0 30px;"); // Add left padding
+
+        AnchorPane card = new AnchorPane();
+        card.setLayoutX(0);
+        card.setLayoutY(0);
+
+
+        card.getStyleClass().add("meilleurfilm");
+        cardContainer.setSpacing(10);
+
+        // Image of the product
+        ImageView imageView = new ImageView();
+        imageView.setLayoutX(10);
+        imageView.setLayoutY(21);
+        imageView.setFitWidth(50);
+        imageView.setFitHeight(50);
+
+        try {
+            Blob blob = produit.getImage();
+            if (blob != null) {
+                byte[] bytes = blob.getBytes(1, (int) blob.length());
+                Image image = new Image(new ByteArrayInputStream(bytes));
+                imageView.setImage(image);
+            } else {
+                // Use a default image if Blob is null
+                Image defaultImage = new Image(getClass().getResourceAsStream("defaultImage.png"));
+                imageView.setImage(defaultImage);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle any exceptions during image loading
+            System.out.println("Une erreur est survenue lors du chargement de l'image");
+        }
+
+        imageView.setOnMouseClicked(event -> {
+
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/DetailsProduitClient.fxml"));
+
+                Parent root = null;
+
+                System.out.println("Clique sur le nom du produit. ID du produit : " + produit.getId_produit());
+                root = loader.load();
+                // Récupérez le contrôleur et passez l'id du produit lors de l'initialisation
+                DetailsProduitClientController controller = loader.getController();
+                controller.setProduitId(produit.getId_produit());
+
+                // Afficher la nouvelle interface
+                Stage stage = new Stage();
+                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.setScene(new Scene(root, 1280, 700));
+                stage.setTitle("Détails du Produit");
+                stage.show();
+                currentStage.close();
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+
+        });
+
+
+        // Product name
+        Label nameLabel = new Label(produit.getNom());
+        nameLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
+        nameLabel.setStyle("-fx-text-fill: #333333;");
+        nameLabel.setLayoutX(60); // Adjust X position
+        nameLabel.setLayoutY(25);
+        nameLabel.setMaxWidth(200); // Adjust max width
+        nameLabel.setWrapText(true);
+        nameLabel.setOnMouseClicked(event -> {
+
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/DetailsProduitClient.fxml"));
+
+                Parent root = null;
+
+                System.out.println("Clique sur le nom du produit. ID du produit : " + produit.getId_produit());
+                root = loader.load();
+                // Récupérez le contrôleur et passez l'id du produit lors de l'initialisation
+                DetailsProduitClientController controller = loader.getController();
+                controller.setProduitId(produit.getId_produit());
+
+                // Afficher la nouvelle interface
+                Stage stage = new Stage();
+                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.setScene(new Scene(root, 1280, 700));
+                stage.setTitle("Détails du Produit");
+                stage.show();
+                currentStage.close();
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+
+        });
+
+
+
+
+        Label priceLabel = new Label(" " + produit.getPrix() + " DT");
+        priceLabel.setLayoutX(65);
+        priceLabel.setLayoutY(50);
+        priceLabel.setFont(Font.font("Arial", 14));
+        priceLabel.setStyle("-fx-text-fill: black;");
+
+
+        card.getChildren().addAll(nameLabel, priceLabel, imageView);
+        cardContainer.getChildren().addAll(card); // Add vertical space
+
+        return cardContainer;
+    }
+
+
+
+
+
+
+
+
 }
 
 

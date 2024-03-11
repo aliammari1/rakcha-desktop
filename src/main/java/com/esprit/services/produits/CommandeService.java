@@ -1,14 +1,19 @@
 package com.esprit.services.produits;
 
+import com.esprit.models.films.RatingFilm;
 import com.esprit.models.produits.Commande;
+import com.esprit.models.produits.CommandeItem;
 import com.esprit.models.users.Client;
 import com.esprit.services.IService;
+import com.esprit.services.films.FilmService;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.DataSource;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CommandeService implements IService<Commande> {
 
@@ -20,7 +25,7 @@ public class CommandeService implements IService<Commande> {
     }
     @Override
     public void create(Commande commande) {
-        String req = "INSERT into commande(dateCommande,statu , idClient,num_telephone,adresse,etat) values ( ?,?,?,?,?,?)  ;";
+        String req = "INSERT into commande(dateCommande,statu , idClient,num_telephone,adresse) values ( ?,?,?,?,?)  ;";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
 
@@ -30,7 +35,7 @@ public class CommandeService implements IService<Commande> {
             pst.setInt(3, commande.getIdClient().getId());
             pst.setInt(4, commande.getNum_telephone());
             pst.setString(5, commande.getAdresse());
-            pst.setString(6, commande.getEtat()!= null ? commande.getEtat() : "non livrée");
+
 
             pst.executeUpdate();
             System.out.println("commande remplit !");
@@ -43,14 +48,14 @@ public class CommandeService implements IService<Commande> {
 
     public int createcommande(Commande commande)throws SQLException {
         int commandeId = 0;
-        String req = "INSERT into commande(dateCommande,statu , idClient,num_telephone,adresse,etat) values ( ?,?,?,?,?,?)  ;";
+        String req = "INSERT into commande(dateCommande,statu , idClient,num_telephone,adresse) values ( ?,?,?,?,?)  ;";
         PreparedStatement pst = connection.prepareStatement(req, Statement.RETURN_GENERATED_KEYS);
             pst.setDate(1, (Date) commande.getDateCommande());
             pst.setString(2, commande.getStatu()!= null ? commande.getStatu() : "En_Cours");
             pst.setInt(3, commande.getIdClient().getId());
             pst.setInt(4, commande.getNum_telephone());
             pst.setString(5, commande.getAdresse());
-           pst.setString(6, commande.getEtat()!= null ? commande.getEtat() : "non livrée");
+
 
 
 
@@ -86,7 +91,7 @@ public class CommandeService implements IService<Commande> {
 
 
             while (rs.next()) {
-                Commande c1=new Commande(rs.getInt("idCommande"),rs.getDate("dateCommande") ,rs.getString("statu"),(Client) us.getUserById(rs.getInt("idClient")) ,rs.getInt("num_telephone"), rs.getString("adresse"),rs.getString("etat"));
+                Commande c1=new Commande(rs.getInt("idCommande"),rs.getDate("dateCommande") ,rs.getString("statu"),(Client) us.getUserById(rs.getInt("idClient")) ,rs.getInt("num_telephone"), rs.getString("adresse"));
                 c1.setCommandeItem(commandeItemService.readCommandeItem(c1.getIdCommande()));
                 commande.add(c1);
             }
@@ -110,7 +115,7 @@ public class CommandeService implements IService<Commande> {
 
 
             while (rs.next()) {
-                Commande c1=new Commande( rs.getInt("idCommande"),rs.getDate("dateCommande") ,rs.getString("statuCommande"),(Client) us.getUserById(rs.getInt("idClient")) ,rs.getInt("num_telephone"), rs.getString("adresse"),rs.getString("etat"));
+                Commande c1=new Commande( rs.getInt("idCommande"),rs.getDate("dateCommande") ,rs.getString("statuCommande"),(Client) us.getUserById(rs.getInt("idClient")) ,rs.getInt("num_telephone"), rs.getString("adresse"));
                 c1.setCommandeItem(commandeItemService.readCommandeItem(c1.getIdCommande()));
                 commande.add(c1);
             }
@@ -196,8 +201,7 @@ public class CommandeService implements IService<Commande> {
                         rs.getString("statu"),
                         (Client) usersService.getUserById(rs.getInt("idClient")),
                         rs.getInt("num_telephone"),
-                        rs.getString("adresse"),
-                        rs.getString("etat")
+                        rs.getString("adresse")
                 );
                 commande.setCommandeItem(commandeItemService.readCommandeItem(commande.getIdCommande()));
                 commandesPayees.add(commande);
@@ -208,6 +212,32 @@ public class CommandeService implements IService<Commande> {
         }
         return commandesPayees;
     }
+
+
+
+
+
+    // Compter le nombre d'achats d'un produit donné
+    public Map<Integer, Integer> getTop3ProduitsAchetes() {
+        String req = "SELECT ci.idProduit, SUM(ci.quantite) AS nombreAchats FROM commandeitem ci JOIN commande c ON ci.idCommande = c.idCommande WHERE c.etat = 'PAYEE' GROUP BY ci.idProduit ORDER BY nombreAchats DESC LIMIT 3";
+        Map<Integer, Integer> produitsAchats = new HashMap<>();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(req);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                int idProduit = resultSet.getInt("idProduit");
+                int nombreAchats = resultSet.getInt("nombreAchats");
+                produitsAchats.put(idProduit, nombreAchats);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return produitsAchats;
+    }
+
+
+
+
 
 
 }
