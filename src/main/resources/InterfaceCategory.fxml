@@ -116,7 +116,7 @@
                                 </AnchorPane>
                                 <AnchorPane layoutX="452.0" layoutY="14.0" prefHeight="446.0" prefWidth="554.0" styleClass="bg-white" stylesheets="@styles/filmStyle.css">
                                     <children>
-                                        <ComboBox fx:id="filterCriteriaComboBox" layoutX="71.0" layoutY="22.0" prefHeight="46.0" prefWidth="107.0">
+                                        <ComboBox fx:id="filterCriteriaComboBox">
                                             <items>
                                                 <FXCollections fx:factory="observableArrayList">
                                                     <String fx:value="Name" />
@@ -131,9 +131,9 @@
                                                 <TableColumn fx:id="descrptionCategory_tableColumn" prefWidth="281.0" text="Déscription " />
                                             </columns>
                                         </TableView>
-                                        <TextField fx:id="recherche_textField" layoutX="193.0" layoutY="30.0" prefHeight="29.0" prefWidth="158.0" promptText="rechercher" />
-                                        <FontAwesomeIconView fill="#ae2d3c" glyphName="SEARCH" layoutX="325.0" layoutY="52.0" size="19" text="" textAlignment="RIGHT" />
-                                        <Button layoutX="369.0" layoutY="30.0" mnemonicParsing="false" styleClass="instert-btn" stylesheets="@styles/filmStyle.css" text="chercher" />
+                                        <TextField fx:id="recherche_textField" layoutX="134.0" layoutY="25.0" prefHeight="29.0" prefWidth="158.0" promptText="rechercher" />
+                                        <FontAwesomeIconView fill="#ae2d3c" glyphName="SEARCH" layoutX="263.0" layoutY="45.0" size="19" textAlignment="RIGHT" />
+                                        <Button layoutX="303.0" layoutY="23.0" mnemonicParsing="false" styleClass="instert-btn" stylesheets="@styles/filmStyle.css" text="chercher" />
                                     </children>
                                 </AnchorPane>
                             </children>

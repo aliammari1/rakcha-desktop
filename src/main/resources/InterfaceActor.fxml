@@ -132,7 +132,7 @@
                                     <TableColumn fx:id="DeleteActor_Column1" minWidth="0.0" prefWidth="189.0" text="Delete" />
                                 </columns>
                             </TableView>
-                            <TextField fx:id="recherche_textField" layoutX="412.0" layoutY="17.0" prefHeight="29.0" prefWidth="158.0" promptText="rechercher" />
+                            <TextField layoutX="412.0" layoutY="17.0" prefHeight="29.0" prefWidth="158.0" promptText="rechercher" />
                             <FontAwesomeIconView fill="#ae2d3c" glyphName="SEARCH" layoutX="545.0" layoutY="38.0" size="19" text="" textAlignment="RIGHT" />
                             <Button layoutX="592.0" layoutY="16.0" mnemonicParsing="false" styleClass="instert-btn" stylesheets="@styles/filmStyle.css" text="chercher" />
                         </children>
