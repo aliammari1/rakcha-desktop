@@ -97,6 +97,9 @@ public class DesignProduitAdminContoller {
     private AnchorPane formulaire;
 
 
+
+
+
     @FXML
     private TableColumn<Produit, Void> deleteColumn;
 

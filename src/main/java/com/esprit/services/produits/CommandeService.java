@@ -20,16 +20,17 @@ public class CommandeService implements IService<Commande> {
     }
     @Override
     public void create(Commande commande) {
-        String req = "INSERT into commande(dateCommande,statu , idClient,num_telephone,adresse) values ( ?,?,?,?,?)  ;";
+        String req = "INSERT into commande(dateCommande,statu , idClient,num_telephone,adresse,etat) values ( ?,?,?,?,?,?)  ;";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
 
             //pst.setInt(1, commande.getCommandeItem().());
             pst.setDate(1, (Date) commande.getDateCommande());
-            pst.setString(2, commande.getStatu()!= null ? commande.getStatu() : "En_attente");
+            pst.setString(2, commande.getStatu()!= null ? commande.getStatu() : "En_Cours");
             pst.setInt(3, commande.getIdClient().getId());
             pst.setInt(4, commande.getNum_telephone());
             pst.setString(5, commande.getAdresse());
+            pst.setString(6, commande.getEtat()!= null ? commande.getEtat() : "non livrée");
 
             pst.executeUpdate();
             System.out.println("commande remplit !");
@@ -42,14 +43,17 @@ public class CommandeService implements IService<Commande> {
 
     public int createcommande(Commande commande)throws SQLException {
         int commandeId = 0;
-        String req = "INSERT into commande(dateCommande,statu , idClient,num_telephone,adresse) values ( ?,?,?,?,?)  ;";
+        String req = "INSERT into commande(dateCommande,statu , idClient,num_telephone,adresse,etat) values ( ?,?,?,?,?,?)  ;";
         PreparedStatement pst = connection.prepareStatement(req, Statement.RETURN_GENERATED_KEYS);
-            //pst.setInt(1, commande.getCommandeItem().());
             pst.setDate(1, (Date) commande.getDateCommande());
-            pst.setString(2, commande.getStatu()!= null ? commande.getStatu() : "En_attente");
+            pst.setString(2, commande.getStatu()!= null ? commande.getStatu() : "En_Cours");
             pst.setInt(3, commande.getIdClient().getId());
             pst.setInt(4, commande.getNum_telephone());
             pst.setString(5, commande.getAdresse());
+           pst.setString(6, commande.getEtat()!= null ? commande.getEtat() : "non livrée");
+
+
+
 
             pst.executeUpdate();
             ResultSet rs = pst.getGeneratedKeys();
@@ -82,7 +86,7 @@ public class CommandeService implements IService<Commande> {
 
 
             while (rs.next()) {
-                Commande c1=new Commande(rs.getInt("idCommande"),rs.getDate("dateCommande") ,rs.getString("statu"),(Client) us.getUserById(rs.getInt("idClient")) ,rs.getInt("num_telephone"), rs.getString("adresse"));
+                Commande c1=new Commande(rs.getInt("idCommande"),rs.getDate("dateCommande") ,rs.getString("statu"),(Client) us.getUserById(rs.getInt("idClient")) ,rs.getInt("num_telephone"), rs.getString("adresse"),rs.getString("etat"));
                 c1.setCommandeItem(commandeItemService.readCommandeItem(c1.getIdCommande()));
                 commande.add(c1);
             }
@@ -106,7 +110,7 @@ public class CommandeService implements IService<Commande> {
 
 
             while (rs.next()) {
-                Commande c1=new Commande( rs.getInt("idCommande"),rs.getDate("dateCommande") ,rs.getString("statuCommande"),(Client) us.getUserById(rs.getInt("idClient")) ,rs.getInt("num_telephone"), rs.getString("adresse"));
+                Commande c1=new Commande( rs.getInt("idCommande"),rs.getDate("dateCommande") ,rs.getString("statuCommande"),(Client) us.getUserById(rs.getInt("idClient")) ,rs.getInt("num_telephone"), rs.getString("adresse"),rs.getString("etat"));
                 c1.setCommandeItem(commandeItemService.readCommandeItem(c1.getIdCommande()));
                 commande.add(c1);
             }
@@ -175,4 +179,35 @@ public class CommandeService implements IService<Commande> {
         }
         return commande;
     }
+
+    public List<Commande> getCommandesPayees() {
+        List<Commande> commandesPayees = new ArrayList<>();
+        String req = "SELECT * FROM commande WHERE etat like 'payée'";
+        try {
+            PreparedStatement pst = connection.prepareStatement(req);
+            ResultSet rs = pst.executeQuery();
+            UserService usersService = new UserService();
+            CommandeItemService commandeItemService = new CommandeItemService();
+
+            while (rs.next()) {
+                Commande commande = new Commande(
+                        rs.getInt("idCommande"),
+                        rs.getDate("dateCommande"),
+                        rs.getString("statu"),
+                        (Client) usersService.getUserById(rs.getInt("idClient")),
+                        rs.getInt("num_telephone"),
+                        rs.getString("adresse"),
+                        rs.getString("etat")
+                );
+                commande.setCommandeItem(commandeItemService.readCommandeItem(commande.getIdCommande()));
+                commandesPayees.add(commande);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de la récupération des commandes payées : " + e.getMessage());
+        }
+        return commandesPayees;
+    }
+
+
 }

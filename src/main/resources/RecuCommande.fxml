@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+
+
+<AnchorPane prefHeight="700.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.produits.RecuCommandeController">
+   <children>
+      <AnchorPane layoutX="357.0" layoutY="34.0" prefHeight="532.0" prefWidth="402.0">
+         <children>
+            <FlowPane fx:id="detailCommande" prefHeight="536.0" prefWidth="415.0" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
