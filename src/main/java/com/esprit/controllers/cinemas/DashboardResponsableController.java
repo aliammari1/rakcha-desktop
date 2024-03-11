@@ -1029,7 +1029,7 @@ public class DashboardResponsableController implements Initializable {
         String endTimeText = tfEndTime.getText();
         String priceText = tfPrice.getText();
 
-        // Vérifier que tous les champs sont remplis
+
         if (selectedCinemaName == null || selectedFilmName == null || selectedRoomName == null || selectedDate == null ||
                 departureTimeText.isEmpty() || endTimeText.isEmpty() || priceText.isEmpty()) {
             showAlert("Please complete all fields.");
