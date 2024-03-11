@@ -5,7 +5,7 @@ public class Actor {
     private int id;
     private String nom;
     private String image;
-    private int numberOfAppearances;
+
 
     public Actor(int id, String nom, String image, String biographie) {
         this.id = id;
@@ -14,12 +14,12 @@ public class Actor {
         this.biographie = biographie;
     }
 
-
     public Actor(String nom, String image, String biographie) {
         this.nom = nom;
         this.image = image;
         this.biographie = biographie;
     }
+
 
     public Actor(int id) {
         this.id = id;
@@ -27,22 +27,6 @@ public class Actor {
         this.image = null;
         this.biographie = null;
 
-    }
-
-    public Actor(int id, String nom, String img, String s, int numberOfAppearances) {
-        this.id = id;
-        this.nom = nom;
-        this.biographie = s;
-        this.image = img;
-        this.numberOfAppearances = numberOfAppearances;
-    }
-
-    public int getNumberOfAppearances() {
-        return numberOfAppearances;
-    }
-
-    public void setNumberOfAppearances(int numberOfAppearances) {
-        this.numberOfAppearances = numberOfAppearances;
     }
 
     public int getId() {

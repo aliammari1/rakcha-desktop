@@ -11,25 +11,16 @@ import com.esprit.utils.Paymentuser;
 import com.stripe.exception.StripeException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
@@ -40,9 +31,6 @@ public class PaymentuserController implements Initializable {
 
     @FXML
     private TextField anneeExp;
-
-    @FXML
-    private Button filmm;
 
     @FXML
     private TextField carte;
@@ -57,8 +45,6 @@ public class PaymentuserController implements Initializable {
     private Button pay;
 
     private Seance seance;
-    @FXML
-    private Button viewPDF;
 
     public static boolean isNum(String str) {
         String expression = "\\d+";
@@ -168,47 +154,4 @@ public class PaymentuserController implements Initializable {
         this.seance = p;
         this.pay.setText("Payer " + p.getPrix() + "dinars");
     }
-
-    public void switchtfillmmaa(ActionEvent event) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/filmuser.fxml"));
-            AnchorPane root = fxmlLoader.load();
-            Stage stage = (Stage) filmm.getScene().getWindow();
-            Scene scene = new Scene(root, 1507, 855);
-            stage.setScene(scene);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-
-    public void createReceiptPDF(String filename, Ticket ticket) throws IOException {
-        try (PDDocument document = new PDDocument()) {
-            PDPage page = new PDPage();
-            document.addPage(page);
-
-            PDPageContentStream contentStream = new PDPageContentStream(document, page);
-
-            contentStream.beginText();
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
-            contentStream.newLineAtOffset(100, 700);
-            contentStream.showText("Receipt for Ticket Purchase");
-            contentStream.endText();
-
-            // Add more details as needed
-
-            contentStream.close();
-
-            document.save(filename);
-        }
-    }
-
-    public void openPDF(String filename) throws IOException {
-        if (Desktop.isDesktopSupported()) {
-            File myFile = new File(filename);
-            Desktop.getDesktop().open(myFile);
-        }
-    }
-
-
 }

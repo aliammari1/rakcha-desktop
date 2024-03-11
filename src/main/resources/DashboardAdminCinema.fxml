@@ -21,10 +21,10 @@
                 <FontAwesomeIconView fill="WHITE" glyphName="CUBES" layoutX="20.0" layoutY="312.0" size="30" />
                 <Button layoutY="345.0" mnemonicParsing="false" onAction="#afficherEventsAdmin" prefHeight="47.0" prefWidth="210.0" styleClass="nav-btn" text="Events" />
                 <FontAwesomeIconView fill="WHITE" glyphName="CALENDAR" layoutX="25.0" layoutY="379.0" size="30" />
-                <Button layoutY="500.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="210.0" styleClass="nav-btn" text="Account" />
-                <FontAwesomeIconView fill="WHITE" glyphName="USER" layoutX="28.0" layoutY="534.0" size="30" />
-                <Button layoutY="567.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="210.0" styleClass="nav-btn" text="Exit" />
-                <FontAwesomeIconView fill="WHITE" glyphName="SIGN_OUT" layoutX="25.0" layoutY="601.0" size="30" />
+                <Button layoutY="619.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="210.0" styleClass="nav-btn" text="Account" />
+                <FontAwesomeIconView fill="WHITE" glyphName="USER" layoutX="28.0" layoutY="653.0" size="30" />
+                <Button layoutX="6.0" layoutY="666.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="210.0" styleClass="nav-btn" text="Exit" />
+                <FontAwesomeIconView fill="WHITE" glyphName="SIGN_OUT" layoutX="35.0" layoutY="700.0" size="30" />
             <Button layoutY="405.0" mnemonicParsing="false" onAction="#afficherMovieAdmin" prefHeight="56.0" prefWidth="210.0" styleClass="nav-btn" stylesheets="@dashboard.css" text="Movies" />
             <FontAwesomeIconView fill="WHITE" glyphName="FILM" layoutX="23.0" layoutY="443.0" size="30" />
             </children>

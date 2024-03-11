@@ -66,8 +66,11 @@ public class CommandeClientController implements Initializable {
     private User connectedUser;
     @FXML
     private FlowPane prixtotaleFlowPane;
+
+
     @FXML
-    private Button idpayment;
+    private Button idpaymentenligne;
+
 
     @FXML
     void initialize(Commande commandeselectionner) {
@@ -136,7 +139,8 @@ public class CommandeClientController implements Initializable {
 
             commandeItemService.create(commandeItem);
             decrementStock(commandeItem.getProduit(), commandeItem.getQuantity());
-            idpayment.setVisible(true);
+            idpaymentenligne.setVisible(true);
+
 
         }
     }
@@ -535,6 +539,7 @@ public class CommandeClientController implements Initializable {
         }
 
     }
+
 
 
 }
