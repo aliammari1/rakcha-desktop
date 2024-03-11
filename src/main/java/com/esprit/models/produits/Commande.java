@@ -2,7 +2,12 @@ package com.esprit.models.produits;
 
 import com.esprit.models.users.Client;
 import com.esprit.models.users.User;
+import com.itextpdf.text.pdf.qrcode.QRCodeWriter;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,25 +29,29 @@ public class Commande {
 
     private String adresse;
 
+    private String etat;
+
     public Commande() {
     }
 
-    public Commande(Date dateCommande, String statu, Client idClient, int num_telephone, String adresse) {
+    public Commande(Date dateCommande, String statu, Client idClient, int num_telephone, String adresse,String etat) {
         this.dateCommande = dateCommande;
         this.statu = statu;
         this.idClient = idClient;
 
         this.num_telephone = num_telephone;
         this.adresse = adresse;
+        this.etat=etat;
     }
 
-    public Commande(int idCommande, Date dateCommande, String statu, Client idClient, int num_telephone, String adresse) {
+    public Commande(int idCommande, Date dateCommande, String statu, Client idClient, int num_telephone, String adresse,String etat) {
         this.idCommande = idCommande;
         this.dateCommande = dateCommande;
         this.statu = statu;
         this.idClient = idClient;
         this.num_telephone = num_telephone;
         this.adresse = adresse;
+        this.etat=etat;
     }
 
     public int getIdCommande() {
@@ -101,6 +110,14 @@ public class Commande {
         this.adresse = adresse;
     }
 
+    public String getEtat() {
+        return etat;
+    }
+
+    public void setEtat(String etat) {
+        this.etat = etat;
+    }
+
     @Override
     public String toString() {
         return "Commande{" +
@@ -111,6 +128,9 @@ public class Commande {
                 ", commandeItem=" + commandeItem +
                 ", num_telephone=" + num_telephone +
                 ", adresse='" + adresse + '\'' +
+                ", etat='" + etat + '\'' +
                 '}';
     }
+
+
 }

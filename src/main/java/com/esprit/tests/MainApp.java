@@ -16,8 +16,7 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-//        UserSMSAPI.sendSMS(28500013, "Rakcha", "hello, this message is from rakcha");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Paymentuser.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherProduitClient.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);

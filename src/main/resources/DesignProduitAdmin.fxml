@@ -41,7 +41,7 @@
             <FontAwesomeIconView fill="#ebe5e5" glyphName="TV" layoutX="18.0" layoutY="269.0" size="30" />
             <ImageView fitHeight="168.0" fitWidth="205.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="Logo.png" />
+                  <Image url="@Logo.png" />
                </image>
             </ImageView>
          </children>
@@ -96,7 +96,7 @@
       </AnchorPane>
       <AnchorPane layoutX="540.0" layoutY="194.0" prefHeight="487.0" prefWidth="726.0" styleClass="bg-white" stylesheets="@dashboard.css">
          <children>
-            <TableView fx:id="Produit_tableview" layoutX="12.0" layoutY="69.0" prefHeight="399.0" prefWidth="698.0" stylesheets="@dashboard.css">
+            <TableView fx:id="Produit_tableview" layoutX="12.0" layoutY="69.0" prefHeight="399.0" prefWidth="696.0" stylesheets="@dashboard.css">
               <columns>
                 <TableColumn fx:id="nomP_tableC" prefWidth="106.0" text="Product" />
                 <TableColumn fx:id="nomCP_tableC" prefWidth="108.0" text="Category" />
@@ -115,7 +115,7 @@
             </Label>
          </children>
       </AnchorPane>
-      <Button layoutX="1094.0" layoutY="141.0" mnemonicParsing="false" onAction="#GestionCategorie" prefHeight="38.0" prefWidth="172.0" styleClass="button-client" stylesheets="@dashboard.css" text=" Category Management" />
+      <Button layoutX="1094.0" layoutY="152.0" mnemonicParsing="false" onAction="#GestionCategorie" prefHeight="27.0" prefWidth="172.0" styleClass="button-client" stylesheets="@dashboard.css" text=" Category Management" />
 
       <TextField fx:id="SearchBar" layoutX="756.0" layoutY="29.0" prefHeight="31.0" prefWidth="194.0" styleClass="search-pane" stylesheets="@dashboard.css" />
       <FontAwesomeIconView fill="#6f6a6a" glyphName="SEARCH" layoutX="763.0" layoutY="49.0" size="13" wrappingWidth="21.428571701049805" />
