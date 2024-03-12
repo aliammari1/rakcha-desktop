@@ -204,3 +204,71 @@
     -fx-cursor: hand;
     -fx-font-family: "Arial Rounded MT Bold";
 }
+
+.list-view {
+    -fx-background-color: transparent; /* Transparent background */
+    -fx-background: transparent; /* Additional transparency */
+    -fx-background-insets: 0; /* Remove any insets */
+    -fx-padding: 0; /* Remove any padding */
+    -fx-font-family: sans-serif; /* Apply font family */
+}
+
+.list-view .scroll-bar {
+    -fx-padding: 2px; /* Adjust the padding to make the scroll bar smaller */
+}
+
+.list-view .scroll-bar .thumb {
+    -fx-background-color: #B52F3E; /* Initial color for the thumb */
+    -fx-background-radius: 4px; /* Rounded corners for the thumb */
+}
+
+/* Hover effect for the thumb */
+.list-view .scroll-bar .thumb:hover {
+    -fx-background-color: #ff3333; /* Color when hovered */
+}
+
+/* Color gradient for the thumb when pressed */
+.list-view .scroll-bar .thumb:pressed {
+    -fx-background-color: #cc0000; /* Color when pressed */
+}
+
+.list-view .scroll-bar:vertical {
+    -fx-background-color: transparent; /* Transparent background for vertical scroll bar */
+}
+
+.list-view .scroll-bar:horizontal {
+    -fx-background-color: transparent; /* Transparent background for horizontal scroll bar */
+}
+
+.list-view .list-cell {
+    -fx-border-color: #B52F3E; /* Add a black border */
+    -fx-border-width: 0 0 2 0; /* Specify border width, only bottom border */
+    -fx-padding: 15px; /* Apply padding */
+    -fx-background-color: #fff; /* Apply background color */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 0, 0, 0, 1); /* Apply drop shadow */
+    -fx-transition: transform 0.5s; /* Apply transition */
+}
+
+/* Apply styles to the items on hover */
+.list-view .list-cell:hover {
+    -fx-background-color: #AD4554; /* Background color when hovered */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.12), 0, 0, 0, 1); /* Drop shadow when hovered */
+    -fx-scale-x: 1.05; /* Scale effect when hovered */
+    -fx-scale-y: 1.05;
+    -fx-z-index: 5;
+    -fx-text-fill: #fff; /* Text color when hovered */
+}
+
+/* Apply styles to the item text */
+.list-view .list-cell .text {
+    -fx-font-size: 16px; /* Font size */
+    -fx-font-weight: bold; /* Font weight */
+    -fx-fill: #000; /* Text color */
+}
+
+/* Apply styles to the selected item */
+.list-view .list-cell:selected {
+    -fx-background-color: #AD344B; /* Background color when selected */
+    -fx-text-fill: #fff; /* Text color when selected */
+}
+

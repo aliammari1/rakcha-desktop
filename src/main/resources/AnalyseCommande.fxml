@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.StackedBarChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="700.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.produits.AnalyseCommande">
     <children>
-        <LineChart fx:id="TauxCommande" layoutX="30.0" layoutY="20.0" prefHeight="298.0" prefWidth="475.0">
+        <LineChart fx:id="TauxCommande" layoutX="336.0" layoutY="31.0" prefHeight="285.0" prefWidth="454.0">
             <xAxis>
                 <CategoryAxis fx:id="xAxis" />
             </xAxis>
@@ -16,7 +21,7 @@
                 <NumberAxis />
             </yAxis>
         </LineChart>
-        <StackedBarChart fx:id="TauxCategorie" layoutX="555.0" layoutY="339.0" prefHeight="318.0" prefWidth="433.0">
+        <StackedBarChart fx:id="TauxCategorie" layoutX="766.0" layoutY="337.0" prefHeight="317.0" prefWidth="454.0">
             <xAxis>
                 <CategoryAxis side="BOTTOM" fx:id="xCommandeAxis" />
             </xAxis>
@@ -24,5 +29,36 @@
                 <NumberAxis side="LEFT" />
             </yAxis>
         </StackedBarChart>
+      <AnchorPane prefHeight="712.0" prefWidth="223.0" styleClass="nav-form" stylesheets="@styles/produitStyle.css">
+         <children>
+            <Button layoutY="282.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Movies">
+               <font>
+                  <Font name="System Italic" size="17.0" />
+               </font>
+            </Button>
+            <FontAwesomeIconView fill="#ebe5e5" glyphName="FILM" layoutX="20.0" layoutY="308.0" size="30" text="" />
+            <Button layoutX="1.0" layoutY="321.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Products" />
+            <FontAwesomeIconView fill="#ebe5e5" glyphName="CUBES" layoutX="20.0" layoutY="347.0" size="30" text="" />
+            <FontAwesomeIconView fill="#ebe5e5" glyphName="VIDEO_CAMERA" layoutX="24.0" layoutY="390.0" size="30" text="" />
+            <Button layoutY="364.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="202.0" styleClass="nav-btn" text="Cinema" textAlignment="CENTER" />
+            <FontAwesomeIconView fill="#ebe5e5" glyphName="USER" layoutX="39.0" layoutY="611.0" size="30" text="" />
+            <Button layoutX="74.0" layoutY="584.0" mnemonicParsing="false" styleClass="nav-btn" text="Account" />
+            <FontAwesomeIconView fill="#ebe5e5" glyphName="SIGN_OUT" layoutX="38.0" layoutY="651.0" size="30" text="" />
+            <Button layoutX="82.0" layoutY="624.0" mnemonicParsing="false" styleClass="nav-btn" text="EXIT" />
+            <FontAwesomeIconView fill="#ebe5e5" glyphName="CALENDAR" layoutX="22.0" layoutY="432.0" size="30" text="" />
+            <Button layoutX="1.0" layoutY="407.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Event">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Button>
+            <Button layoutX="1.0" layoutY="244.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Series" />
+            <FontAwesomeIconView fill="#ebe5e5" glyphName="TV" layoutX="18.0" layoutY="269.0" size="30" />
+            <ImageView fitHeight="178.0" fitWidth="215.0" layoutX="-3.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@Logo.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
     </children>
 </AnchorPane>

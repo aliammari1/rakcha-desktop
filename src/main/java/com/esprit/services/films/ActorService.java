@@ -19,6 +19,7 @@ public class ActorService implements IService<Actor> {
 
     }
 
+
     @Override
     public void create(Actor actor) {
         String req = "insert into actor (nom,image,biographie) values (?,?,?) ";
@@ -96,5 +97,32 @@ public class ActorService implements IService<Actor> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public Actor getActorByPlacement(int actorPlacement) {
+        String req = "SELECT a.*, COUNT(af.idfilm) AS NumberOfAppearances " +
+                "FROM actor a " +
+                "JOIN actorfilm af ON a.id = af.idactor " +
+                "GROUP BY a.id, a.nom " +
+                "ORDER BY NumberOfAppearances DESC " +
+                "LIMIT ?, 1;"; // Use parameter placeholder for the limit
+        try {
+            PreparedStatement statement = connection.prepareStatement(req);
+            statement.setInt(1, actorPlacement - 1); // Placement starts from 1 but index starts from 0
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                int id = rs.getInt("id");
+                String img = rs.getString("image");
+                String nom = rs.getString("nom");
+                int numberOfAppearances = rs.getInt("NumberOfAppearances");
+                String bio = rs.getString("biographie");
+                return new Actor(id, nom, img, bio, numberOfAppearances); // Assuming Actor class has a constructor that accepts id, nom, img, and numberOfAppearances
+            }
+            rs.close();
+            statement.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null; // Return null if no actor found at the specified placement
     }
 }

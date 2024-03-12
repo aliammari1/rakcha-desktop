@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -10,45 +11,42 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="700.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.produits.ListCommandeController">
    <children>
-      <TableView fx:id="commandeTableView" layoutX="406.0" layoutY="188.0" prefHeight="413.0" prefWidth="776.0">
+      <TableView fx:id="commandeTableView" layoutX="406.0" layoutY="188.0" prefHeight="413.0" prefWidth="776.0" stylesheets="@styles/produitStyle.css">
         <columns>
-          <TableColumn fx:id="idnom" prefWidth="99.0" text="Nom" />
-          <TableColumn fx:id="idprenom" prefWidth="113.0" text="Prenom" />
-            <TableColumn fx:id="idadresse" prefWidth="86.0" text="Adresse" />
-            <TableColumn fx:id="idnumero" prefWidth="107.0" text="Phone Number" />
-            <TableColumn fx:id="iddate" prefWidth="89.0" text="Date " />
-            <TableColumn fx:id="idStatu" prefWidth="95.0" text="Statu" />
-            <TableColumn fx:id="idEtat" prefWidth="96.0" text="Etat" />
-            <TableColumn fx:id="deleteColumn" prefWidth="89.0" text="Delete" />
+          <TableColumn fx:id="idnom" prefWidth="117.0" text="Nom" />
+          <TableColumn fx:id="idprenom" prefWidth="124.0" text="Prenom" />
+            <TableColumn fx:id="idadresse" prefWidth="113.0" text="Adresse" />
+            <TableColumn fx:id="idnumero" prefWidth="114.0" text="Phone Number" />
+            <TableColumn fx:id="iddate" prefWidth="99.0" text="Date " />
+            <TableColumn fx:id="idStatu" prefWidth="102.0" text="Statu" />
+            <TableColumn fx:id="deleteColumn" prefWidth="106.0" text="Delete" />
         </columns>
       </TableView>
-      <TextField fx:id="SearchBar" layoutX="722.0" layoutY="48.0" prefHeight="25.0" prefWidth="180.0" />
-      <AnchorPane prefHeight="707.0" prefWidth="223.0" styleClass="nav-form" stylesheets="@dashboard.css">
+      <AnchorPane prefHeight="707.0" prefWidth="223.0" styleClass="nav-form" stylesheets="@styles/produitStyle.css">
          <children>
-            <Button layoutY="282.0" mnemonicParsing="false" onAction="#MovieClient" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Movies">
+            <Button layoutY="282.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Movies">
                <font>
                   <Font name="System Italic" size="17.0" />
                </font>
             </Button>
             <FontAwesomeIconView fill="#ebe5e5" glyphName="FILM" layoutX="20.0" layoutY="308.0" size="30" text="" />
-            <Button layoutX="1.0" layoutY="321.0" mnemonicParsing="false" onAction="#produitClient" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Products" />
+            <Button layoutX="1.0" layoutY="321.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Products" />
             <FontAwesomeIconView fill="#ebe5e5" glyphName="CUBES" layoutX="20.0" layoutY="347.0" size="30" text="" />
             <FontAwesomeIconView fill="#ebe5e5" glyphName="VIDEO_CAMERA" layoutX="24.0" layoutY="390.0" size="30" text="" />
-            <Button layoutY="364.0" mnemonicParsing="false" onAction="#cinemaclient" prefHeight="30.0" prefWidth="202.0" styleClass="nav-btn" text="Cinema" textAlignment="CENTER" />
+            <Button layoutY="364.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="202.0" styleClass="nav-btn" text="Cinema" textAlignment="CENTER" />
             <FontAwesomeIconView fill="#ebe5e5" glyphName="USER" layoutX="39.0" layoutY="611.0" size="30" text="" />
-            <Button layoutX="74.0" layoutY="584.0" mnemonicParsing="false" onAction="#profilclient" styleClass="nav-btn" text="Account" />
+            <Button layoutX="74.0" layoutY="584.0" mnemonicParsing="false" styleClass="nav-btn" text="Account" />
             <FontAwesomeIconView fill="#ebe5e5" glyphName="SIGN_OUT" layoutX="38.0" layoutY="651.0" size="30" text="" />
             <Button layoutX="82.0" layoutY="624.0" mnemonicParsing="false" styleClass="nav-btn" text="EXIT" />
             <FontAwesomeIconView fill="#ebe5e5" glyphName="CALENDAR" layoutX="22.0" layoutY="432.0" size="30" text="" />
-            <Button layoutX="1.0" layoutY="407.0" mnemonicParsing="false" onAction="#eventClient" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Event">
+            <Button layoutX="1.0" layoutY="407.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Event">
                <font>
                   <Font size="13.0" />
                </font>
             </Button>
-            <Button layoutX="1.0" layoutY="244.0" mnemonicParsing="false" onAction="#SerieClient" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Series" />
+            <Button layoutX="1.0" layoutY="244.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Series" />
             <FontAwesomeIconView fill="#ebe5e5" glyphName="TV" layoutX="18.0" layoutY="269.0" size="30" />
             <ImageView fitHeight="178.0" fitWidth="215.0" layoutX="-3.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -57,5 +55,16 @@
             </ImageView>
          </children>
       </AnchorPane>
+      <Button layoutX="1031.0" layoutY="123.0" mnemonicParsing="false" onAction="#statCommande" styleClass="instert-btn" stylesheets="@styles/produitStyle.css" text="Analyse Commande" />
+      <TextField fx:id="SearchBar" layoutX="683.0" layoutY="53.0" prefHeight="42.0" prefWidth="248.0" promptText="Search here ......................">
+         <cursor>
+            <Cursor fx:constant="TEXT" />
+         </cursor>
+      </TextField>
+      <Button layoutX="887.0" layoutY="61.0" mnemonicParsing="false" style="-fx-background-color: AE2D3C;">
+         <graphic>
+            <FontAwesomeIconView fill="#f5f5f5" glyphName="SEARCH" size="19" text="" textAlignment="RIGHT" />
+         </graphic>
+      </Button>
    </children>
 </AnchorPane>

@@ -641,7 +641,7 @@ public class DesignProduitAdminContoller {
     void filtrer(MouseEvent event) {
 
         Produit_tableview.setOpacity(0.5);
-        formulaire.setOpacity(0.5);
+
         FilterAnchor.setVisible(true);
 
         // Nettoyer les listes des cases à cocher
@@ -662,7 +662,7 @@ public class DesignProduitAdminContoller {
             addressCheckBoxes.add(checkBox);
         }
         addressCheckBoxesVBox.setLayoutX(25);
-        addressCheckBoxesVBox.setLayoutY(40);
+        addressCheckBoxesVBox.setLayoutY(25);
 
 
         // Ajouter les VBox dans le FilterAnchor
@@ -676,6 +676,7 @@ public class DesignProduitAdminContoller {
     public List<String> getCategorie_Produit() {
         // Récupérer tous les cinémas depuis la base de données
         List<Produit> categories = getAllCategories();
+
 
 
 
@@ -724,35 +725,8 @@ public class DesignProduitAdminContoller {
     }
 
 
-    @FXML
-    void statCommande(ActionEvent event) {
-
-        try {
-            // Charger la nouvelle interface PanierProduit.fxml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AnalyseCommande.fxml"));
-            Parent root = loader.load();
-
-            // Créer une nouvelle scène avec la nouvelle interface
-            Scene scene = new Scene(root);
-
-            // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
-            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-            // Créer une nouvelle fenêtre (stage) et y attacher la scène
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.setTitle("statisqtisue");
-            stage.setOnHidden(e -> currentStage.show()); // Afficher l'ancienne fenêtre lorsque la nouvelle est fermée
-            stage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace(); // Gérer l'exception d'entrée/sortie
-        }
 
 
-
-
-    }
 
     @FXML
     void cinemaclient(ActionEvent event) {
