@@ -1,66 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.FlowPane?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-
-<AnchorPane prefHeight="750.0" prefWidth="662.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.cinemas.DashboardClientController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="750.0" prefWidth="662.0" xmlns="http://javafx.com/javafx/21"
+            fx:controller="com.esprit.controllers.cinemas.DashboardClientController">
     <children>
-        <AnchorPane prefHeight="750.0" prefWidth="209.0" styleClass="nav-form" stylesheets="@dashboard.css">
+        <AnchorPane prefHeight="750.0" prefWidth="209.0" styleClass="nav-form" stylesheets="@dashboard2.css">
             <children>
-                <Button layoutY="146.0" mnemonicParsing="false" onAction="#showListCinema" prefHeight="47.0" prefWidth="210.0" styleClass="nav-btn" text="Cinema List" />
-                <FontAwesomeIconView fill="WHITE" glyphName="VIDEO_CAMERA" layoutX="24.0" layoutY="180.0" size="30" />
-                <Button layoutY="213.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="210.0" styleClass="nav-btn" text="Series" />
-                <FontAwesomeIconView fill="WHITE" glyphName="TV" layoutX="22.0" layoutY="247.0" size="30" />
-                <Button layoutY="278.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="210.0" styleClass="nav-btn" text="Products" />
-                <FontAwesomeIconView fill="WHITE" glyphName="CUBES" layoutX="20.0" layoutY="312.0" size="30" />
-                <Button layoutY="345.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="210.0" styleClass="nav-btn" text="Events" />
-                <FontAwesomeIconView fill="WHITE" glyphName="CALENDAR" layoutX="25.0" layoutY="379.0" size="30" />
-                <Button layoutY="500.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="210.0" styleClass="nav-btn" text="Account" />
-                <FontAwesomeIconView fill="WHITE" glyphName="USER" layoutX="28.0" layoutY="534.0" size="30" />
-                <Button layoutY="567.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="210.0" styleClass="nav-btn" text="Exit" />
-                <FontAwesomeIconView fill="WHITE" glyphName="SIGN_OUT" layoutX="25.0" layoutY="601.0" size="30" />
+                <Button layoutY="146.0" mnemonicParsing="false" onAction="#showListCinema" prefHeight="47.0"
+                        prefWidth="210.0" styleClass="nav-btn" text="Cinema List"/>
+                <FontAwesomeIconView fill="WHITE" glyphName="VIDEO_CAMERA" layoutX="24.0" layoutY="180.0" size="30"/>
+                <Button layoutY="213.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="210.0" styleClass="nav-btn"
+                        text="Series"/>
+                <FontAwesomeIconView fill="WHITE" glyphName="TV" layoutX="22.0" layoutY="247.0" size="30"/>
+                <Button layoutY="278.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="210.0" styleClass="nav-btn"
+                        text="Products"/>
+                <FontAwesomeIconView fill="WHITE" glyphName="CUBES" layoutX="20.0" layoutY="312.0" size="30"/>
+                <Button layoutY="345.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="210.0" styleClass="nav-btn"
+                        text="Events"/>
+                <FontAwesomeIconView fill="WHITE" glyphName="CALENDAR" layoutX="25.0" layoutY="379.0" size="30"/>
+                <Button layoutY="500.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="210.0" styleClass="nav-btn"
+                        text="Account"/>
+                <FontAwesomeIconView fill="WHITE" glyphName="USER" layoutX="28.0" layoutY="534.0" size="30"/>
+                <Button layoutY="567.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="210.0" styleClass="nav-btn"
+                        text="Exit"/>
+                <FontAwesomeIconView fill="WHITE" glyphName="SIGN_OUT" layoutX="25.0" layoutY="601.0" size="30"/>
             </children>
         </AnchorPane>
-      <AnchorPane fx:id="listCinemaClient" layoutX="227.0" layoutY="25.0" prefHeight="706.0" prefWidth="857.0" styleClass="bg-white" stylesheets="@dashboard.css" visible="false">
-         <children>
-            <Label fx:id="searchbar" layoutX="291.0" layoutY="34.0" text="Cinema List" textFill="#fce19a">
-               <font>
-                  <Font name="Arial Rounded MT Bold" size="48.0" />
-               </font>
-            </Label>
-            <FlowPane fx:id="cinemaFlowPane" layoutX="26.0" layoutY="99.0" prefHeight="587.0" prefWidth="475.0" styleClass="table-view" />
-            <FlowPane layoutX="534.0" layoutY="181.0" prefHeight="506.0" prefWidth="293.0" styleClass="delete-btn" />
-            <Label layoutX="616.0" layoutY="113.0" text="Top 3" textFill="#ae2d3c">
-               <font>
-                  <Font name="Arial Rounded MT Bold" size="48.0" />
-               </font>
-            </Label>
-            <TextField fx:id="searchbar1" layoutX="653.0" layoutY="62.0" />
-            <Button layoutX="119.0" layoutY="49.0" mnemonicParsing="false" onAction="#filtrer" prefHeight="26.0" prefWidth="106.0" text="Filter" />
-         </children>
-      </AnchorPane>
+        <AnchorPane fx:id="listCinemaClient" layoutX="227.0" layoutY="25.0" prefHeight="706.0" prefWidth="857.0"
+                    styleClass="bg-white" stylesheets="@dashboard2.css" visible="false">
+            <children>
+                <Label fx:id="searchbar" layoutX="291.0" layoutY="34.0" text="Cinema List" textFill="#fce19a">
+                    <font>
+                        <Font name="Arial Rounded MT Bold" size="48.0"/>
+                    </font>
+                </Label>
+                <FlowPane fx:id="cinemaFlowPane" layoutX="26.0" layoutY="99.0" prefHeight="587.0" prefWidth="475.0"
+                          styleClass="table-view"/>
+                <FlowPane layoutX="534.0" layoutY="181.0" prefHeight="506.0" prefWidth="293.0" styleClass="delete-btn"/>
+                <Label layoutX="616.0" layoutY="113.0" text="Top 3" textFill="#ae2d3c">
+                    <font>
+                        <Font name="Arial Rounded MT Bold" size="48.0"/>
+                    </font>
+                </Label>
+                <TextField fx:id="searchbar1" layoutX="653.0" layoutY="62.0"/>
+                <Button layoutX="119.0" layoutY="49.0" mnemonicParsing="false" onAction="#filtrer" prefHeight="26.0"
+                        prefWidth="106.0" text="Filter"/>
+            </children>
+        </AnchorPane>
 
-      <AnchorPane fx:id="PlanningPane" layoutX="227.0" layoutY="25.0" prefHeight="706.0" prefWidth="857.0" styleClass="bg-white" stylesheets="@dashboard.css" visible="false">
-         <children>
-            <Label layoutX="319.0" layoutY="34.0" text="Planning:" textFill="#fce19a">
-               <font>
-                  <Font name="Arial Rounded MT Bold" size="48.0" />
-               </font>
-            </Label>
-            <FlowPane fx:id="planningFlowPane" layoutX="31.0" layoutY="108.0" prefHeight="562.0" prefWidth="796.0" styleClass="table-view" />
-         </children>
-      </AnchorPane>
-      <AnchorPane fx:id="FilterAnchor" layoutX="556.0" layoutY="136.0" prefHeight="294.0" prefWidth="306.0" styleClass="bg-white" stylesheets="@dashboard.css" visible="false">
-         <children>
-            <Button layoutX="130.0" layoutY="246.0" mnemonicParsing="false" onAction="#filtrercinema" text="Filtrer" />
-         </children>
-      </AnchorPane>
-    
+        <AnchorPane fx:id="PlanningPane" layoutX="227.0" layoutY="25.0" prefHeight="706.0" prefWidth="857.0"
+                    styleClass="bg-white" stylesheets="@dashboard2.css" visible="false">
+            <children>
+                <Label layoutX="319.0" layoutY="34.0" text="Planning:" textFill="#fce19a">
+                    <font>
+                        <Font name="Arial Rounded MT Bold" size="48.0"/>
+                    </font>
+                </Label>
+                <FlowPane fx:id="planningFlowPane" layoutX="31.0" layoutY="108.0" prefHeight="562.0" prefWidth="796.0"
+                          styleClass="table-view"/>
+            </children>
+        </AnchorPane>
+        <AnchorPane fx:id="FilterAnchor" layoutX="556.0" layoutY="136.0" prefHeight="294.0" prefWidth="306.0"
+                    styleClass="bg-white" stylesheets="@dashboard2.css" visible="false">
+            <children>
+                <Button layoutX="130.0" layoutY="246.0" mnemonicParsing="false" onAction="#filtrercinema"
+                        text="Filtrer"/>
+            </children>
+        </AnchorPane>
+
     </children>
 
 </AnchorPane>
