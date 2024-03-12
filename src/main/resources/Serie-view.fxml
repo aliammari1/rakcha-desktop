@@ -1,30 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.series.SerieController">
+<AnchorPane prefHeight="744.0" prefWidth="1061.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.series.SerieController">
     <children>
-        <SplitPane layoutX="16.0" layoutY="17.0" prefHeight="591.0" prefWidth="157.0" stylesheets="@dashbord.css">
-            <items>
-                <Pane prefHeight="200.0" prefWidth="200.0" styleClass="nav-form" stylesheets="@dashbord.css">
-                    <children>
-                        <Button layoutX="8.0" layoutY="143.0" mnemonicParsing="false" onAction="#Ocategories" prefHeight="25.0" prefWidth="141.0" styleClass="nav-btn" stylesheets="@dashbord.css" text="Category" />
-                        <Button layoutX="8.0" layoutY="211.0" mnemonicParsing="false" onAction="#Oseries" prefHeight="25.0" prefWidth="141.0" styleClass="nav-btn" stylesheets="@dashbord.css" text="Serie" />
-                        <Button layoutX="11.0" layoutY="277.0" mnemonicParsing="false" onAction="#Oepisode" prefWidth="134.0" styleClass="nav-btn" stylesheets="@dashbord.css" text="Episode" />
-
-                    </children>
-                </Pane>
-            </items>
-        </SplitPane>
-        <Pane layoutX="187.0" layoutY="21.0" prefHeight="582.0" prefWidth="248.0" styleClass="bg-white" stylesheets="@dashbord.css">
+        <Pane layoutX="237.0" layoutY="113.0" prefHeight="582.0" prefWidth="248.0">
             <children>
                 <Label layoutX="14.0" layoutY="68.0" prefHeight="17.0" prefWidth="68.0" stylesheets="@dashbord.css" text="Name :" textFill="#a42121">
                     <font>
@@ -65,7 +56,7 @@
                   <Font name="Arial Rounded MT Bold" size="16.0" />
                </font>
             </Label>
-            <Label layoutX="61.0" layoutY="14.0" prefHeight="43.0" prefWidth="187.0" stylesheets="@dashbord.css" text="Add Serie" textFill="#8785d4">
+            <Label layoutX="50.0" layoutY="14.0" prefHeight="43.0" prefWidth="239.0" stylesheets="@dashbord.css" text="Add Serie" textFill="#c7d485">
                <font>
                   <Font name="Arial Rounded MT Bold" size="24.0" />
                </font>
@@ -101,18 +92,78 @@
                </font>
             </Label>
             </children>
+         <stylesheets>
+            <URL value="@dashbord.css" />
+            <URL value="@dashboard.css" />
+         </stylesheets>
         </Pane>
-        <Pane layoutX="441.0" layoutY="107.0" prefHeight="486.0" prefWidth="537.0" styleClass="bg-white" stylesheets="@dashbord.css">
+        <Pane layoutX="511.0" layoutY="126.0" prefHeight="486.0" prefWidth="537.0">
             <children>
-                <TableView fx:id="tableView" layoutX="15.0" layoutY="73.0" prefHeight="297.0" prefWidth="513.0" stylesheets="@dashbord.css">
+                <TableView fx:id="tableView" layoutX="2.0" layoutY="73.0" prefHeight="297.0" prefWidth="538.0" stylesheets="@dashbord.css">
 
                 </TableView>
-            <Button layoutX="337.0" layoutY="30.0" mnemonicParsing="false" onAction="#ajouterSerie" prefHeight="35.0" prefWidth="187.0" styleClass="instert-btn" stylesheets="@dashbord.css" text="Series Details" />
-            </children></Pane>
-      <TextField layoutX="733.0" layoutY="70.0" prefHeight="26.0" prefWidth="239.0" text="Search">
-         <font>
-            <Font name="Bell MT" size="12.0" />
-         </font>
-      </TextField>
+            <Button layoutX="337.0" layoutY="30.0" mnemonicParsing="false" onAction="#ajouterSerie" prefHeight="35.0" prefWidth="187.0" styleClass="nav-form" text="Series Details" textFill="#cdd961">
+               <stylesheets>
+                  <URL value="@dashbord.css" />
+                  <URL value="@dashboard.css" />
+               </stylesheets>
+               <font>
+                  <Font name="Berlin Sans FB Demi Bold" size="14.0" />
+               </font></Button>
+            <TextField layoutX="15.0" layoutY="35.0" prefHeight="26.0" prefWidth="239.0" styleClass="combo-box-red" stylesheets="@dashboard.css" text="Search">
+               <font>
+                  <Font name="Bell MT" size="12.0" />
+               </font>
+            </TextField>
+            <Button layoutX="337.0" layoutY="394.0" mnemonicParsing="false" onAction="#exportPdf" prefHeight="35.0" prefWidth="187.0" styleClass="nav-form" text="Export Feedback" textFill="#cdd961">
+               <stylesheets>
+                  <URL value="@dashbord.css" />
+                  <URL value="@dashboard.css" />
+               </stylesheets>
+               <font>
+                  <Font name="Berlin Sans FB Demi Bold" size="14.0" />
+               </font>
+            </Button>
+            </children>
+         <stylesheets>
+            <URL value="@dashbord.css" />
+            <URL value="@dashboard.css" />
+         </stylesheets></Pane>
+      <AnchorPane layoutX="-9.0" layoutY="-3.0" prefHeight="751.0" prefWidth="226.0" styleClass="nav-form">
+         <children>
+            <Button layoutY="282.0" mnemonicParsing="false" onAction="#showmovies" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Movies">
+               <font>
+                  <Font name="System Italic" size="17.0" />
+               </font>
+            </Button>
+            <FontAwesomeIconView fill="#ebe5e5" glyphName="FILM" layoutX="20.0" layoutY="308.0" size="30" text="" />
+            <Button layoutX="1.0" layoutY="321.0" mnemonicParsing="false" onAction="#showproducts" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Products" />
+            <FontAwesomeIconView fill="#ebe5e5" glyphName="CUBES" layoutX="20.0" layoutY="347.0" size="30" text="" />
+            <FontAwesomeIconView fill="#ebe5e5" glyphName="VIDEO_CAMERA" layoutX="24.0" layoutY="390.0" size="30" text="" />
+            <Button layoutY="364.0" mnemonicParsing="false" onAction="#showcinema" prefHeight="30.0" prefWidth="202.0" styleClass="nav-btn" text="Cinema" textAlignment="CENTER" />
+            <FontAwesomeIconView fill="#ebe5e5" glyphName="USER" layoutX="39.0" layoutY="611.0" size="30" text="" />
+            <Button layoutX="74.0" layoutY="584.0" mnemonicParsing="false" styleClass="nav-btn" text="Account" />
+            <FontAwesomeIconView fill="#ebe5e5" glyphName="SIGN_OUT" layoutX="38.0" layoutY="651.0" size="30" text="" />
+            <Button layoutX="82.0" layoutY="624.0" mnemonicParsing="false" styleClass="nav-btn" text="EXIT" />
+            <FontAwesomeIconView fill="#ebe5e5" glyphName="CALENDAR" layoutX="22.0" layoutY="432.0" size="30" text="" />
+            <Button layoutX="1.0" layoutY="407.0" mnemonicParsing="false" onAction="#showevent" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Event">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Button>
+            <Button layoutX="1.0" layoutY="244.0" mnemonicParsing="false" onAction="#showseries" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Series" />
+            <FontAwesomeIconView fill="#ebe5e5" glyphName="TV" layoutX="18.0" layoutY="269.0" size="30" />
+            <ImageView fitHeight="161.0" fitWidth="216.0" layoutX="1.0" layoutY="37.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@Logo.png" />
+               </image>
+            </ImageView>
+         </children>
+         <stylesheets>
+            <URL value="@dashbord.css" />
+            <URL value="@dashboard.css" />
+         </stylesheets>
+      </AnchorPane>
+      <Button layoutX="825.0" layoutY="113.0" mnemonicParsing="false" onAction="#Oepisodes" prefHeight="26.0" prefWidth="211.0" styleClass="instert-btn-picture" stylesheets="@dashbord.css" text="Episode Management " />
     </children>
 </AnchorPane>

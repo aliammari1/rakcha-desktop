@@ -164,6 +164,36 @@ public class ProduitService  implements IService<Produit> {
     }
 
 
+    public List<Produit> getProduitsOrderByQuantityAndStatus() {
+        List<Produit> produits = new ArrayList<>();
+        String req = "SELECT p.*, ci.*, c.*, SUM(ci.quantity) AS total_quantity FROM produit p JOIN commandeitem ci ON p.id_produit = ci.id_produit JOIN commande c ON ci.idCommande = c.idCommande WHERE c.statu = 'payee' GROUP BY p.id_produit ORDER BY total_quantity DESC;";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(req);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            while (resultSet.next()) {
+                CategorieService cs = new CategorieService();
+                System.out.println("****************id_produit: "+resultSet.getInt("id_produit")+ " " +resultSet.getInt("quantiteP") );
+                Produit produit = new Produit(
+                        resultSet.getInt("id_produit"),
+                        resultSet.getString("nom"),
+                        resultSet.getInt("prix"),
+                        resultSet.getBlob("image"),
+                        resultSet.getString("description"),
+                        cs.getCategorie(resultSet.getInt("id_categorieProduit")),
+                        resultSet.getInt("quantiteP")
+                );
+                produits.add(produit);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return produits;
+    }
+
+
+
 
 }
 

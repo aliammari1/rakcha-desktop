@@ -16,18 +16,11 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        //FXMLLoader loader = new FXMLLoader(getClass().getResource("/AffichageEvenementClient.fxml"));
-        //FXMLLoader loader = new FXMLLoader(getClass().getResource("/MeteoEvent.fxml"));
-        // FXMLLoader loader = new FXMLLoader(getClass().getResource("/DashboardClientCinema.fxml"));
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignEvenementAdmin.fxml"));
-        //FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignSponsorAdmin.fxml"));
-        //FXMLLoader loader = new FXMLLoader(getClass().getResource("/AffichageEvenementClient.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         //primaryStage.initStyle(StageStyle.TRANSPARENT);
         primaryStage.show();
     }
-
-
 }

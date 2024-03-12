@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.StackedBarChart?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="700.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.produits.AnalyseCommande">
+    <children>
+        <LineChart fx:id="TauxCommande" layoutX="30.0" layoutY="20.0" prefHeight="298.0" prefWidth="475.0">
+            <xAxis>
+                <CategoryAxis fx:id="xAxis" />
+            </xAxis>
+            <yAxis>
+                <NumberAxis />
+            </yAxis>
+        </LineChart>
+        <StackedBarChart fx:id="TauxCategorie" layoutX="555.0" layoutY="339.0" prefHeight="318.0" prefWidth="433.0">
+            <xAxis>
+                <CategoryAxis side="BOTTOM" fx:id="xCommandeAxis" />
+            </xAxis>
+            <yAxis>
+                <NumberAxis side="LEFT" />
+            </yAxis>
+        </StackedBarChart>
+    </children>
+</AnchorPane>
