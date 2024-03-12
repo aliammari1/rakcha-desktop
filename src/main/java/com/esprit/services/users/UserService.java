@@ -221,7 +221,8 @@ public class UserService implements IService<User> {
         ResultSet resultSet = preparedStatement.executeQuery();
         if (resultSet.next()) {
             String role = resultSet.getString("role");
-            return switch (role) {
+            System.out.println(role);
+            return switch (role.trim()) {
                 case "admin":
                     yield new Admin(
                             resultSet.getInt("id"),

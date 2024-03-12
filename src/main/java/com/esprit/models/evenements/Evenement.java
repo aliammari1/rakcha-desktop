@@ -1,5 +1,6 @@
 package com.esprit.models.evenements;
 
+import java.sql.Blob;
 import java.sql.Date;
 
 public class Evenement {
@@ -16,8 +17,10 @@ public class Evenement {
 
     private String description;
 
+    private Blob affiche_event;
 
-    public Evenement(int id, String nom, Date dateDebut, Date dateFin, String lieu, Categorie_evenement categorie, String etat, String description) {
+
+    public Evenement(int id, String nom, Date dateDebut, Date dateFin, String lieu, Categorie_evenement categorie, String etat, String description, Blob affiche_event) {
         this.id = id;
         this.nom = nom;
         this.dateDebut = dateDebut;
@@ -26,11 +29,12 @@ public class Evenement {
         this.categorie = categorie;
         this.etat = etat;
         this.description = description;
+        this.affiche_event = affiche_event;
 
 
     }
 
-    public Evenement(String nom, Date dateDebut, Date dateFin, String lieu, Categorie_evenement categorie, String etat, String description) {
+    public Evenement(String nom, Date dateDebut, Date dateFin, String lieu, Categorie_evenement categorie, String etat, String description, Blob affiche_event) {
         this.nom = nom;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
@@ -38,8 +42,12 @@ public class Evenement {
         this.categorie = categorie;
         this.etat = etat;
         this.description = description;
+        this.affiche_event = affiche_event;
 
 
+    }
+
+    public Evenement() {
     }
 
     public int getId() {
@@ -104,6 +112,14 @@ public class Evenement {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Blob getAffiche_event() {
+        return affiche_event;
+    }
+
+    public void setAffiche_event(Blob affiche_event) {
+        this.affiche_event = affiche_event;
     }
 
     @Override

@@ -18,7 +18,7 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="936.0" prefWidth="1688.0" stylesheets="@styles/filmStyle.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.films.FilmController">
     <BorderPane layoutX="521.0" layoutY="139.0" prefHeight="745.0" prefWidth="1291.0" styleClass="top-form" stylesheets="@styles/filmStyle.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <left>
-            <AnchorPane prefHeight="702.0" prefWidth="235.0" styleClass="nav-form" BorderPane.alignment="CENTER">
+            <AnchorPane prefHeight="817.0" prefWidth="105.0" styleClass="nav-form" BorderPane.alignment="CENTER">
                 <children>
                     <FontAwesomeIconView fill="#e1cfcf" glyphName="USER" layoutX="88.0" layoutY="83.0" size="80" stroke="BLACK" text="" wrappingWidth="60.0" />
                     <Label layoutX="82.0" layoutY="96.0" text="Welcome" textAlignment="CENTER" textFill="#e1cfcf">
@@ -59,7 +59,7 @@
             </AnchorPane>
         </left>
         <center>
-            <AnchorPane fx:id="filmCrudInterface" prefHeight="681.0" prefWidth="1154.0" BorderPane.alignment="CENTER">
+            <AnchorPane fx:id="filmCrudInterface" prefHeight="851.0" prefWidth="1243.0" BorderPane.alignment="CENTER">
                 <children>
                <AnchorPane fx:id="Anchore_Pane_filtrage" layoutX="471.0" layoutY="89.0" prefHeight="442.0" prefWidth="228.0" styleClass="bg-white" visible="false">
                   <children>
@@ -82,12 +82,9 @@
                                       <TableColumn fx:id="Delete_Column" prefWidth="75.0" text="Delete" />
                                   </columns>
                               </TableView>
-                              <TextField layoutX="412.0" layoutY="17.0" prefHeight="29.0" prefWidth="158.0" promptText="rechercher" />
-                              <FontAwesomeIconView fill="#ae2d3c" glyphName="SEARCH" layoutX="545.0" layoutY="38.0" size="19" text="" textAlignment="RIGHT" />
-                              <Button layoutX="592.0" layoutY="16.0" mnemonicParsing="false" styleClass="instert-btn" stylesheets="@styles/filmStyle.css" text="chercher" />
                           </children>
                       </AnchorPane>
-                      <AnchorPane layoutX="38.0" layoutY="178.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="685.0" prefWidth="410.0" styleClass="bg-white" stylesheets="@styles/filmStyle.css">
+                      <AnchorPane layoutX="10.0" layoutY="69.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="769.0" prefWidth="442.0" styleClass="bg-white" stylesheets="@styles/filmStyle.css">
                           <children>
                               <Label layoutX="6.0" layoutY="438.0" text="annederealisation">
                                   <font>
@@ -144,8 +141,9 @@
                               </HBox>
                           </children>
                       </AnchorPane>
-            
-                    <AnchorPane fx:id="filmCrudInterface" layoutX="-157.0" layoutY="-216.0" prefHeight="686.0" prefWidth="1050.0" />
+                        <TextField layoutX="735.0" layoutY="76.0" prefHeight="29.0" prefWidth="158.0" promptText="rechercher" />
+                        <FontAwesomeIconView fill="#ae2d3c" glyphName="SEARCH" layoutX="865.0" layoutY="97.0" size="19" text="" textAlignment="RIGHT" />
+                        <Button layoutX="915.0" layoutY="76.0" mnemonicParsing="false" styleClass="instert-btn" stylesheets="@styles/filmStyle.css" text="chercher" />
                 </children>
             </AnchorPane>
         </center>

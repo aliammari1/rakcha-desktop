@@ -8,11 +8,9 @@ import com.esprit.services.films.FilmService;
 import com.esprit.utils.DataSource;
 
 import java.sql.*;
+import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SeanceService implements IService<Seance> {
 
@@ -130,6 +128,12 @@ public class SeanceService implements IService<Seance> {
     public Map<LocalDate, List<Seance>> getSeancesByDateRangeAndCinema(LocalDate startDate, LocalDate endDate, Cinema cinema) {
         Map<LocalDate, List<Seance>> seancesByDate = new HashMap<>();
 
+        // Vérifier si cinema est null
+        if (cinema == null) {
+            System.out.println("Erreur : cinema est null");
+            return seancesByDate;
+        }
+
         try {
             // Créer la requête SQL pour récupérer les séances dans la plage de dates spécifiée et pour le cinéma donné
             String query = "SELECT * FROM seance WHERE date BETWEEN ? AND ? AND id_cinema = ?";
@@ -157,5 +161,33 @@ public class SeanceService implements IService<Seance> {
 
         return seancesByDate;
     }
+
+
+
+    public List<Seance> getSeancesByDate(LocalDate date) {
+        // Exemple de liste de séances fictive
+        List<Seance> seances = new ArrayList<>();
+
+        // Supposons que seanceList soit une liste de toutes les séances disponibles
+        // Vous devez définir seanceList en fonction de votre logique d'accès aux données
+        List<Seance> seanceList = null; // Logique pour récupérer les séances depuis la source de données
+
+        // Si seanceList est null, retourner une liste vide
+        if (seanceList == null) {
+            return Collections.emptyList();
+        }
+
+        // Parcourir toutes les séances disponibles et ajouter celles pour la date spécifiée à la liste
+        for (Seance seance : seanceList) {
+            if (seance.getDate().equals(date)) {
+                seances.add(seance);
+            }
+        }
+
+        // Retourner la liste des séances pour la date spécifiée
+        return seances;
+    }
+
+
 
 }

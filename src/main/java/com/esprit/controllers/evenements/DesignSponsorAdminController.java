@@ -315,7 +315,7 @@ public class DesignSponsorAdminController {
 
     void afficher_sponsor() {
 
-        // Créer un nouveau ComboBox
+        //tvSponsor.getItems().clear();
         ImageView imageView = new ImageView();
 
         tcNomS.setCellValueFactory(new PropertyValueFactory<Sponsor, String>("nomSociete"));
@@ -332,7 +332,7 @@ public class DesignSponsorAdminController {
             Sponsor s = cellData.getValue();
 
             imageView.setFitWidth(100); // Réglez la largeur de l'image selon vos préférences
-            imageView.setFitHeight(50); // Réglez la hauteur de l'image selon vos préférences
+            imageView.setFitHeight(100); // Réglez la hauteur de l'image selon vos préférences
             try {
                 Blob blob = s.getLogo();
                 if (blob != null) {
@@ -358,6 +358,7 @@ public class DesignSponsorAdminController {
             {
                 setOnMouseClicked(event -> {
                     if (!isEmpty()) {
+
                         changerImage(sponsor);
                         afficher_sponsor();
                     }
@@ -374,7 +375,7 @@ public class DesignSponsorAdminController {
                 } else {
                     imageView.setImage(item.getImage());
                     imageView.setFitWidth(100);
-                    imageView.setFitHeight(50);
+                    imageView.setFitHeight(100);
                     setGraphic(imageView);
                     setText(null);
                 }
@@ -400,7 +401,7 @@ public class DesignSponsorAdminController {
         // Utiliser une ObservableList pour stocker les éléments
         SponsorService ss = new SponsorService();
         masterData.addAll(ss.read());
-        tvSponsor.setItems(masterData);
+        tvSponsor.setItems(FXCollections.observableArrayList(ss.read()));
 
         // Activer la sélection de cellules
         tvSponsor.getSelectionModel().setCellSelectionEnabled(true);

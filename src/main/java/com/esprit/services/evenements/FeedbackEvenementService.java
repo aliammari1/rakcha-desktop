@@ -2,6 +2,7 @@ package com.esprit.services.evenements;
 
 import com.esprit.models.evenements.Feedback;
 import com.esprit.services.IService;
+import com.esprit.services.users.UserService;
 import com.esprit.utils.DataSource;
 
 import java.sql.Connection;
@@ -26,7 +27,7 @@ public class FeedbackEvenementService implements IService<Feedback> {
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(1, feedback.getFeedbackevenement().getId());
-            pst.setInt(2, feedback.getId_user());
+            pst.setInt(2, feedback.getUserevenement());
             pst.setString(3, feedback.getCommentaire());
             pst.executeUpdate();
             System.out.println("Feedback added !");
@@ -43,7 +44,7 @@ public class FeedbackEvenementService implements IService<Feedback> {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(4, feedback.getIDFeedback());
             pst.setInt(1, feedback.getFeedbackevenement().getId());
-            pst.setInt(2, feedback.getId_user());
+            pst.setInt(2, feedback.getUserevenement());
             pst.setString(3, feedback.getCommentaire());
             pst.executeUpdate();
             System.out.println("Feedback Updated !");
@@ -76,6 +77,7 @@ public class FeedbackEvenementService implements IService<Feedback> {
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             ResultSet rs = pst.executeQuery();
+            UserService us = new UserService();
             EvenementService es = new EvenementService();
             while (rs.next()) {
                 feedbacks.add(new Feedback(rs.getInt("ID"), es.getEvenement(rs.getInt("id_evenement")), rs.getInt("id_user"), rs.getString("Commentaire")));
