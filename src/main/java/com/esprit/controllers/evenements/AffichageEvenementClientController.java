@@ -2,11 +2,12 @@ package com.esprit.controllers.evenements;
 
 import com.esprit.models.evenements.Evenement;
 import com.esprit.models.evenements.Feedback;
+import com.esprit.models.evenements.Participation;
 import com.esprit.services.evenements.EvenementService;
 import com.esprit.services.evenements.FeedbackEvenementService;
+import com.esprit.services.evenements.ParticipationService;
 import com.esprit.services.evenements.SmsService;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
+import com.esprit.services.users.UserService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -18,19 +19,33 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.TilePane;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
-import java.io.IOException;
+import java.io.*;
+import java.sql.Blob;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class AffichageEvenementClientController {
 
     private final ObservableList<Evenement> masterData = FXCollections.observableArrayList();
+    private final ObservableList<Evenement> masterData2 = FXCollections.observableArrayList();
+    private final List<Evenement> l1 = new ArrayList<>();
     @FXML
-    private FlowPane EventFlowPane;
+    private ListView<Evenement> listeEvents;
+    @FXML
+    private AnchorPane anchplanning;
+    @FXML
+    private FlowPane planningFlowPane;
+    @FXML
+    private Button bHistory;
     @FXML
     private Button bSend;
     @FXML
@@ -55,24 +70,278 @@ public class AffichageEvenementClientController {
     private TextField tfRechercheEc;
     @FXML
     private TableView<Evenement> tvEvenement;
+    @FXML
+    private FlowPane eventFlowPane;
+
+    @FXML
+    private Button bWeather;
+    private TilePane tilePane;
 
     @FXML
     void initialize() {
 
         EvenementService es = new EvenementService();
-
         for (Evenement e : es.read()) {
             cbeventname.getItems().add(e.getNom());
         }
 
 
-        afficher_evenements();
+        afficherliste();
         setupSearchFilter();
+        listeEvents.setVisible(true);
+        anchplanning.setVisible(false);
 
 
     }
 
-    private void afficher_evenements() {
+
+    public void afficherliste() {
+        EvenementService es = new EvenementService();
+        listeEvents.getItems().clear();
+
+        listeEvents.setCellFactory(param -> {
+            return new ListCell<Evenement>() {
+                @Override
+                protected void updateItem(Evenement item, boolean empty) {
+                    super.updateItem(item, empty);
+
+                    if (empty || item == null) {
+                        setGraphic(null);
+                    } else {
+                        // Créez un AnchorPane pour chaque evenement
+                        AnchorPane anchorPane = new AnchorPane();
+                        anchorPane.setPrefSize(400, 200); // Définissez la taille souhaitée
+
+                        // Ajoutez une ImageView pour afficher l'image
+                        ImageView imageView = new ImageView();
+                        imageView.setFitWidth(150);
+                        imageView.setFitHeight(150);
+                        imageView.setPreserveRatio(true);
+
+                        Blob blob = item.getAffiche_event();
+                        InputStream inputStream = null;
+                        try {
+                            inputStream = blob.getBinaryStream();
+                        } catch (SQLException e) {
+                            throw new RuntimeException(e);
+                        }
+                        FileOutputStream outputStream = null; // Provide appropriate file name and extension
+                        try {
+                            outputStream = new FileOutputStream("image.png");
+                        } catch (FileNotFoundException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                        byte[] buffer = new byte[4096];
+                        int bytesRead = -1;
+
+                        while (true) {
+                            try {
+                                if ((bytesRead = inputStream.read(buffer)) == -1) break;
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            try {
+                                outputStream.write(buffer, 0, bytesRead);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+
+                        try {
+                            outputStream.close();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        try {
+                            inputStream.close();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                        File file = new File("image.png");
+
+                        Image image = new Image(file.toURI().toString());
+                        imageView.setImage(image);
+
+                        // Ajoutez des composants à l'AnchorPane (toutes les informations de la série)
+                        Label nameLabel = new Label("Name : " + item.getNom());
+                        nameLabel.setStyle(
+                                "-fx-text-fill: #000000;" +
+                                        "-fx-font-size: 40px;" +
+                                        "-fx-font-weight: bold;" +
+                                        "-fx-font-family: 'Bebas Neue';"
+
+                        );
+                        Label ddLabel = new Label("Start Date : " + item.getDateDebut());
+                        ddLabel.setStyle(
+                                " -fx-text-fill: #000000;" +
+                                        "   -fx-font-size: 15px;" +
+                                        "     -fx-font-weight: bold;\n" +
+                                        "-fx-font-family: 'Bebas Neue';"
+
+                        );
+                        Label dfLabel = new Label("End Date : " + item.getDateFin());
+                        dfLabel.setStyle(
+                                " -fx-text-fill: #000000;" +
+                                        "   -fx-font-size: 15px;\n" +
+                                        "     -fx-font-weight: bold;\n" +
+                                        "-fx-font-family: 'Bebas Neue';"
+
+                        );
+                        Label lieuLabel = new Label("Location : " + item.getLieu());
+                        lieuLabel.setStyle(
+                                " -fx-text-fill: #000000;" +
+                                        "   -fx-font-size: 15px;\n" +
+                                        "     -fx-font-weight: bold;\n" +
+                                        "-fx-font-family: 'Bebas Neue';"
+
+                        );
+                        Label categorieLabel = new Label("Category : " + item.getNom_categorieEvenement());
+                        categorieLabel.setStyle(
+                                " -fx-text-fill: #000000;" +
+                                        "   -fx-font-size: 15px;\n" +
+                                        "     -fx-font-weight: bold;\n" +
+                                        "-fx-font-family: 'Bebas Neue';"
+
+                        );
+                        Label etatLabel = new Label("Status : " + item.getEtat());
+                        etatLabel.setStyle(
+                                " -fx-text-fill: #000000;" +
+                                        "   -fx-font-size: 15px;\n" +
+                                        "     -fx-font-weight: bold;\n" +
+                                        "-fx-font-family: 'Bebas Neue';"
+
+                        );
+                        Label descriptionLabel = new Label("Description : " + item.getDescription());
+                        descriptionLabel.setStyle(
+                                " -fx-text-fill: #000000;" +
+                                        "   -fx-font-size: 15px;\n" +
+                                        "     -fx-font-weight: bold;\n" +
+                                        "-fx-font-family: 'Bebas Neue';"
+
+                        );
+                        Button joinButton = new Button("Join Event");
+
+
+                        joinButton.setStyle("-fx-background-color: #800000;\n" +
+                                " -fx-text-fill: #FCE19A;" +
+                                "   -fx-font-size: 17.5px;\n" +
+                                "     -fx-font-weight: bold;\n" +
+                                " -fx-background-color: #6f7b94");
+                        joinButton.setOnAction(
+                                event -> {
+
+                                    joinButton.setStyle("-fx-background-color: #800000;\n" +
+                                            " -fx-text-fill: #FCE18B;" +
+                                            "   -fx-font-size: 17.5px;\n" +
+                                            "     -fx-font-weight: bold;\n" +
+                                            " -fx-background-color: #6f7c84");
+
+                                    Label personsLabel = new Label("Number of persons: ");
+                                    TextField personstf = new TextField();
+                                    Button confirmButton = new Button("Confirm");
+                                    confirmButton.setStyle("-fx-background-color: #624970;\n" +
+                                            " -fx-text-fill: #FCE19A;" +
+                                            "   -fx-font-size: 12px;\n" +
+                                            "     -fx-font-weight: bold;\n" +
+                                            " -fx-background-color: #6f7b94");
+                                    confirmButton.setOnAction(
+                                            event2 -> {
+                                                ParticipationService ps = new ParticipationService();
+                                                UserService us = new UserService();
+                                                ps.create(new Participation(item, 0, Integer.parseInt(personstf.getText())));
+                                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                                alert.setTitle("Reservation Complete !");
+                                                alert.setContentText("Reservation Complete !");
+                                                alert.show();
+
+
+                                            });
+                                    AnchorPane.setTopAnchor(personsLabel, 119.0);
+                                    AnchorPane.setLeftAnchor(personsLabel, 570.0);
+                                    AnchorPane.setTopAnchor(personstf, 120.0);
+                                    AnchorPane.setLeftAnchor(personstf, 725.0);
+                                    AnchorPane.setTopAnchor(confirmButton, 160.0);
+                                    AnchorPane.setLeftAnchor(confirmButton, 700.0);
+                                    anchorPane.getChildren().addAll(personsLabel, personstf, confirmButton);
+                                    setGraphic(anchorPane);
+
+
+                                    //FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/DesignEvenementAdmin.fxml"));
+
+                                    // try {
+
+                                    //   Parent root = null;
+                                    //   root = fxmlLoader.load();
+                                    //  //Parent rootNode = fxmlLoader.load();
+                                    //Scene scene = new Scene(rootNode);
+
+                                    //   Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                                    //   Stage newStage = new Stage();
+                                    //   newStage.setScene(new Scene(root, 1280, 700));
+                                    //   newStage.setTitle("event");
+                                    //   newStage.show();
+
+                                    //    // Fermer la fenêtre actuelle
+                                    //    currentStage.close();
+                                    //  } catch (IOException e) {
+                                    //     e.printStackTrace(); // Affiche l'erreur dans la console (vous pourriez le remplacer par une boîte de dialogue)
+                                    //    System.out.println("Erreur lors du chargement du fichier FXML : " + e.getMessage());
+                                    // }
+
+
+                                });
+
+
+                        // Ajoutez d'autres composants selon vos besoins
+
+                        // Positionnez les composants dans l'AnchorPane
+                        AnchorPane.setTopAnchor(imageView, 10.0);
+                        AnchorPane.setLeftAnchor(imageView, 30.0);
+                        AnchorPane.setTopAnchor(nameLabel, 10.0);
+                        AnchorPane.setLeftAnchor(nameLabel, 220.0);
+                        AnchorPane.setTopAnchor(ddLabel, 40.0);
+                        AnchorPane.setLeftAnchor(ddLabel, 220.0);
+                        AnchorPane.setTopAnchor(dfLabel, 70.0);
+                        AnchorPane.setLeftAnchor(dfLabel, 220.0);
+                        AnchorPane.setTopAnchor(lieuLabel, 100.0);
+                        AnchorPane.setLeftAnchor(lieuLabel, 220.0);
+                        AnchorPane.setTopAnchor(categorieLabel, 130.0);
+                        AnchorPane.setLeftAnchor(categorieLabel, 220.0);
+                        AnchorPane.setTopAnchor(etatLabel, 160.0);
+                        AnchorPane.setLeftAnchor(etatLabel, 220.0);
+                        AnchorPane.setTopAnchor(descriptionLabel, 190.0);
+                        AnchorPane.setLeftAnchor(descriptionLabel, 220.0);
+                        AnchorPane.setTopAnchor(joinButton, 10.0);
+                        AnchorPane.setLeftAnchor(joinButton, 800.0);
+
+                        // Positionnez d'autres composants selon vos besoins
+
+                        // Ajoutez les composants à l'AnchorPane
+                        anchorPane.getChildren().addAll(imageView, nameLabel, ddLabel, dfLabel, lieuLabel, categorieLabel, etatLabel, descriptionLabel, joinButton);
+                        // Ajoutez d'autres composants selon vos besoins
+
+
+                        // Définissez l'AnchorPane en tant que graphique pour la cellule
+                        setGraphic(anchorPane);
+
+
+                    }
+                }
+            };
+        });
+        masterData2.addAll(es.read());
+        listeEvents.getItems().addAll(masterData2);
+    }
+
+
+
+
+
+
+
+  /*  private void afficher_evenements() {
         // Initialiser les cellules de la TableView
         tcNomE.setCellValueFactory(new PropertyValueFactory<Evenement, String>("nom"));
         //tcCategorieE.setCellValueFactory(new PropertyValueFactory<Evenement, String>("nomCategorie"));
@@ -97,9 +366,11 @@ public class AffichageEvenementClientController {
         tvEvenement.setItems(masterData);
 
 
-    }
+    }*/
 
     private void setupSearchFilter() {
+        EvenementService es = new EvenementService();
+        masterData.addAll(es.read());
         FilteredList<Evenement> filteredData = new FilteredList<>(masterData, p -> true);
 
         tfRechercheEc.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -125,14 +396,14 @@ public class AffichageEvenementClientController {
             });
         });
 
+
         // Wrap the FilteredList in a SortedList.
         SortedList<Evenement> sortedData = new SortedList<>(filteredData);
 
-        // Bind the SortedList comparator to the TableView comparator.
-        sortedData.comparatorProperty().bind(tvEvenement.comparatorProperty());
-
         // Add sorted (and filtered) data to the table.
-        tvEvenement.setItems(sortedData);
+        listeEvents.setItems(sortedData);
+
+
     }
 
     @FXML
@@ -140,7 +411,6 @@ public class AffichageEvenementClientController {
 
         // Récupérer les valeurs des champs de saisie
         String nomEvenement = cbeventname.getValue();
-        int id_user;
         String comment = taComment.getText().trim();
 
         // Vérifier si les champs sont vides
@@ -155,7 +425,8 @@ public class AffichageEvenementClientController {
         // Créer l'objet Feedback
         FeedbackEvenementService fs = new FeedbackEvenementService();
         EvenementService es = new EvenementService();
-        Feedback nouveauFeedback = new Feedback(es.getEvenementByNom(nomEvenement), id_user = 0, comment);
+        UserService us = new UserService();
+        Feedback nouveauFeedback = new Feedback(es.getEvenementByNom(nomEvenement), 0, comment);
         fs.create(nouveauFeedback);
         SmsService.sendSms("+21622757828", "Thank You ! We appreciate your feedback, may this be the starting point for a better RAKCHA :) ");
 
@@ -168,6 +439,130 @@ public class AffichageEvenementClientController {
         taComment.clear();
 
     }
+
+   /* public void showMonthlyCalendar(User user) {
+        // Hide other elements and show the monthly calendar pane
+        listeEvents.setVisible(false);
+        anchplanning.setVisible(true);
+
+        // Create a VBox to contain the monthly calendar
+        VBox monthlyCalendarContent = new VBox();
+        monthlyCalendarContent.setSpacing(10);
+
+        // Create a GridPane to display the days of the month
+        GridPane monthGrid = new GridPane();
+        monthGrid.setHgap(10);
+        monthGrid.setVgap(10);
+
+        // Get the current date and first day of the month
+        LocalDate currentDate = LocalDate.now();
+        LocalDate startDateOfMonth = LocalDate.now().with(TemporalAdjusters.firstDayOfMonth());
+
+        // Add each day of the month to the GridPane
+        int row = 0;
+        int col = 0;
+        while (startDateOfMonth.getMonth().equals(currentDate.getMonth())) {
+            Label dayLabel = new Label(String.valueOf(startDateOfMonth.getDayOfMonth()));
+            dayLabel.setStyle("-fx-background-color: #ae2d3c; -fx-padding: 10px; -fx-text-fill: white;"); // Red background with white text
+            dayLabel.setOnMouseClicked(event -> displayEventsForDate(startDateOfMonth, user));
+            dayLabel.setFont(Font.font("Arial Rounded MT Bold", FontWeight.BOLD, 14)); // Arial, bold, size 14
+            monthGrid.add(dayLabel, col, row);
+            startDateOfMonth = startDateOfMonth.plusDays(1);
+            col++;
+            if (col == 7) {
+                col = 0;
+                row++;
+            }
+        }
+
+        VBox.setMargin(monthGrid, new Insets(0, 0, 0, 50));
+        monthlyCalendarContent.getChildren().add(monthGrid);
+
+        Separator separator = new Separator(Orientation.HORIZONTAL);
+        separator.setPrefWidth(200);
+        monthlyCalendarContent.getChildren().add(separator);
+
+        // Clear any existing content in the monthly calendar pane
+        anchplanning.getChildren().clear();
+
+        // Add the monthly calendar content to the pane
+        anchplanning.getChildren().add(monthlyCalendarContent);
+        AnchorPane.setTopAnchor(monthlyCalendarContent, 50.0);
+    }
+
+    private void displayEventsForDate(LocalDate date, User user) {
+        // Load events for the specified date and client
+        List<Evenement> eventsForDate = loadEventsForDate(date, user+);
+
+        // Check if there are any events for the date
+        if (!eventsForDate.isEmpty()) {
+            // Create a VBox to contain the event cards for the date
+            VBox eventsForDateVBox = new VBox();
+            eventsForDateVBox.setSpacing(10);
+
+            // Add event cards to the VBox
+            for (Evenement event : eventsForDate) {
+                StackPane eventCard = createEventCard(event);
+                eventsForDateVBox.getChildren().add(eventCard);
+            }
+
+            // Clear existing content in the monthly calendar pane if it's a VBox
+            if (monthlyCalendarPane.getChildren().size() > 1 && monthlyCalendarPane.getChildren().get(1) instanceof VBox) {
+                VBox existingEventsVBox = (VBox) monthlyCalendarPane.getChildren().get(1);
+                existingEventsVBox.getChildren().clear();
+            }
+
+            // Add the event VBox to the monthly calendar pane
+            monthlyCalendarPane.getChildren().add(eventsForDateVBox);
+            AnchorPane.setTopAnchor(eventsForDateVBox, 30.0);
+        } else {
+            System.out.println("No events available for the specified date.");
+        }
+    }
+
+    private List<Evenement> loadEventsForDate(LocalDate date, User user) {
+        // Implement this method to load events for the specified date and client from the database or any other data source
+        // Return a list of events for the date
+        // Example:
+        // EventService eventService = new EventService();
+        // return eventService.getEventsForDateAndClient(date, client);
+        return Collections.emptyList(); // Placeholder implementation
+    }
+
+    private StackPane createEventCard(Evenement event) {
+        // Implement this method to create a UI card for displaying an event
+        // Example:
+        // StackPane eventCard = new StackPane();
+        // eventCard.setStyle("-fx-background-color: #ffffff; -fx-padding: 10px;"); // White background with padding
+        // Label eventNameLabel = new Label(event.getName());
+        // eventCard.getChildren().add(eventNameLabel);
+        // return eventCard;
+        return null; // Placeholder implementation
+    }
+*/
+
+    @FXML
+    void showHistory(ActionEvent event) throws IOException {
+
+
+        // Charger la nouvelle interface ListevenementAdmin.fxml
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/EventHistory.fxml"));
+        Parent root = loader.load();
+
+        // Créer une nouvelle scène avec la nouvelle interface
+        Scene scene = new Scene(root);
+
+        // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        // Créer une nouvelle fenêtre (stage) et y attacher la scène
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("My Events");
+        stage.show();
+
+    }
+
 
     @FXML
     void showFilms(ActionEvent event) throws IOException {
@@ -287,6 +682,28 @@ public class AffichageEvenementClientController {
 
         // Fermer la fenêtre actuelle
         currentStage.close();
+    }
+
+    @FXML
+    void showWeather(ActionEvent event) throws IOException {
+
+
+        // Charger la nouvelle interface ListevenementAdmin.fxml
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/MeteoEvent.fxml"));
+        Parent root = loader.load();
+
+        // Créer une nouvelle scène avec la nouvelle interface
+        Scene scene = new Scene(root);
+
+        // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        // Créer une nouvelle fenêtre (stage) et y attacher la scène
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Today's Weather");
+        stage.show();
+
     }
 
 }
