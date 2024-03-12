@@ -29,6 +29,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -43,6 +44,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URL;
 import java.sql.Blob;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -75,6 +77,11 @@ public class DetailsProduitClientController implements Initializable {
     private int produitId;
 
     private Button addToCartButton;
+    @FXML
+    private AnchorPane top3anchorpane;
+
+    @FXML
+    private FlowPane topthreeVbox;
 
     private int quantiteSelectionnee = 1; // Initialiser à 1 par défaut
 
@@ -101,8 +108,7 @@ public class DetailsProduitClientController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-
+        loadAcceptedTop3();
         // Attacher un gestionnaire d'événements au clic de la souris sur l'icône de retour
         retour.setOnMouseClicked(event -> afficherProduit());
 
@@ -221,20 +227,23 @@ public class DetailsProduitClientController implements Initializable {
                         int quantity = 1; // Vous pouvez ajuster la quantité en fonction de vos besoins
                         ajouterAuPanier(produitId, quantity);
 
-
+                          panierAnchorPane.setVisible(true);
+                          detailFlowPane.setVisible(true);
+                          detailFlowPane.setOpacity(0.2);
+                          top3anchorpane.setVisible(false);
 
                     });
 
 
         Avis avis = new Avis();
-        //Produit produit1 = avis.getProduit();
+
         double rate = new AvisService().getavergerating(produit.getId_produit());
         System.out.println(BigDecimal.valueOf(rate).setScale(1, RoundingMode.FLOOR));
 
         // Champ de notation (Rating)
         Rating rating = new Rating();
         rating.setLayoutX(410);
-        rating.setLayoutY(375);
+        rating.setLayoutY(390);
         rating.setMax(5);
         rating.setRating(avis.getNote()); // Vous pouvez ajuster en fonction de la valeur du produit
 
@@ -246,6 +255,13 @@ public class DetailsProduitClientController implements Initializable {
         etoilelabel.setStyle("-fx-text-fill: #333333;");
         etoilelabel.setLayoutX(410);
         etoilelabel.setLayoutY (230);
+
+        FontAwesomeIconView iconeetoile = new FontAwesomeIconView(FontAwesomeIcon.STAR);
+        iconeetoile.setGlyphName("STAR");
+        iconeetoile.setFill(Color.YELLOW);
+        iconeetoile.setSize("20");
+        iconeetoile.setLayoutX(465);
+        iconeetoile.setLayoutY(250);
 
         Avis avi = new AvisService().ratingExiste(produit.getId_produit(),/*(Client) stage.getUserData()*/4);
         rating.setRating(avi != null ? avi.getNote() : 0);
@@ -265,14 +281,7 @@ public class DetailsProduitClientController implements Initializable {
 
         });
 
-
-
-
-
-
-
-
-        card.getChildren().addAll(imageView, nameLabel, descriptionLabel, priceLabel,rating,  etoilelabel,  addToCartButton);
+        card.getChildren().addAll(imageView, nameLabel, descriptionLabel, priceLabel,rating,  etoilelabel,  addToCartButton,iconeetoile);
 
                     cardContainer.getChildren().add(card);
 
@@ -346,6 +355,8 @@ public class DetailsProduitClientController implements Initializable {
         panierFlowPane.setVisible(true);
         detailFlowPane.setVisible(true);
         detailFlowPane.setOpacity(0.2);
+        //top3anchorpane.setVisible(false);
+
 
     }
 
@@ -474,16 +485,9 @@ public class DetailsProduitClientController implements Initializable {
         achatbutton.getStyleClass().add("achat-button"); // Style du bouton
         achatbutton.setOnAction(
                 event -> {
+                    fermerPanierCard(panierContainer);
 
-                    // Rendre panierFlowPane invisible
-                    panierFlowPane.setVisible(false);
 
-                    // Rendre detailFlowPane visible et ajuster l'opacité à 1
-                    detailFlowPane.setVisible(true);
-                    detailFlowPane.setOpacity(1);
-
-                    anchordetail.setVisible(true);
-                    anchordetail.setOpacity(1);
 
                 });
 
@@ -531,6 +535,9 @@ public class DetailsProduitClientController implements Initializable {
 
         anchordetail.setVisible(true);
         anchordetail.setOpacity(1);
+
+        top3anchorpane.setVisible(true);
+        top3anchorpane.setOpacity(1);
 
     }
 
@@ -738,6 +745,160 @@ public class DetailsProduitClientController implements Initializable {
         }
 
     }
+
+
+
+    public void loadAcceptedTop3() {
+
+        ProduitService produitService = new ProduitService();
+
+        try {
+            List<Produit> produits = produitService.getProduitsOrderByQuantityAndStatus();
+
+            if (produits.size() < 3) {
+                System.out.println("Pas assez de produits disponibles");
+                return;
+            }
+
+
+            List<Produit> top3Produits = produits.subList(0, 3);
+            int j =0;
+            for (Produit produit : top3Produits) {
+                System.out.println(produit.getId_produit());
+                VBox cardContainer = createtopthree(produit);
+                System.out.println("------------------"+j+(cardContainer.getChildren()));
+                topthreeVbox.getChildren().add(cardContainer);
+                j++;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            System.out.println("Une erreur est survenue lors du chargement des produits");
+        }
+    }
+
+
+
+
+    public VBox createtopthree(Produit produit) {
+        VBox cardContainer = new VBox(5);
+        cardContainer.setStyle("-fx-padding: 20px 0 0 30px;"); // Add left padding
+
+        AnchorPane card = new AnchorPane();
+        card.setLayoutX(0);
+        card.setLayoutY(0);
+
+
+        card.getStyleClass().add("meilleurfilm");
+        cardContainer.setSpacing(10);
+
+        // Image of the product
+        ImageView imageView = new ImageView();
+        imageView.setLayoutX(5);
+        imageView.setLayoutY(21);
+        imageView.setFitWidth(50);
+        imageView.setFitHeight(50);
+
+        try {
+            Blob blob = produit.getImage();
+            if (blob != null) {
+                byte[] bytes = blob.getBytes(1, (int) blob.length());
+                Image image = new Image(new ByteArrayInputStream(bytes));
+                imageView.setImage(image);
+            } else {
+                // Use a default image if Blob is null
+                Image defaultImage = new Image(getClass().getResourceAsStream("defaultImage.png"));
+                imageView.setImage(defaultImage);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle any exceptions during image loading
+            System.out.println("Une erreur est survenue lors du chargement de l'image");
+        }
+
+        imageView.setOnMouseClicked(event -> {
+
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/DetailsProduitClient.fxml"));
+
+                Parent root = null;
+
+                System.out.println("Clique sur le nom du produit. ID du produit : " + produit.getId_produit());
+                root = loader.load();
+                // Récupérez le contrôleur et passez l'id du produit lors de l'initialisation
+                DetailsProduitClientController controller = loader.getController();
+                controller.setProduitId(produit.getId_produit());
+
+                // Afficher la nouvelle interface
+                Stage stage = new Stage();
+                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.setScene(new Scene(root, 1280, 700));
+                stage.setTitle("Détails du Produit");
+                stage.show();
+                currentStage.close();
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+
+        });
+
+
+        // Product name
+        Label nameLabel = new Label(produit.getNom());
+        nameLabel.setFont(Font.font("Arial", FontWeight.BOLD, 15));
+        nameLabel.setStyle("-fx-text-fill: #333333;");
+        nameLabel.setLayoutX(60); // Adjust X position
+        nameLabel.setLayoutY(25);
+        nameLabel.setMaxWidth(200); // Adjust max width
+        nameLabel.setWrapText(true);
+        nameLabel.setOnMouseClicked(event -> {
+
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/DetailsProduitClient.fxml"));
+
+                Parent root = null;
+
+                System.out.println("Clique sur le nom du produit. ID du produit : " + produit.getId_produit());
+                root = loader.load();
+                // Récupérez le contrôleur et passez l'id du produit lors de l'initialisation
+                DetailsProduitClientController controller = loader.getController();
+                controller.setProduitId(produit.getId_produit());
+
+                // Afficher la nouvelle interface
+                Stage stage = new Stage();
+                Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.setScene(new Scene(root, 1280, 700));
+                stage.setTitle("Détails du Produit");
+                stage.show();
+                currentStage.close();
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+
+        });
+
+
+
+
+        Label priceLabel = new Label(" " + produit.getPrix() + " DT");
+        priceLabel.setLayoutX(60);
+        priceLabel.setLayoutY(55);
+        priceLabel.setFont(Font.font("Arial", 14));
+        priceLabel.setStyle("-fx-text-fill: black;");
+
+
+        card.getChildren().addAll(nameLabel, priceLabel, imageView);
+        cardContainer.getChildren().addAll(card); // Add vertical space
+
+        return cardContainer;
+    }
+
+
+
 
 
 
