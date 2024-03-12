@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.net.URL?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -11,7 +12,7 @@
 
 <AnchorPane fx:id="anchordetail" prefHeight="700.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.produits.DetailsProduitClientController">
    <children>
-      <AnchorPane prefHeight="702.0" prefWidth="211.0" styleClass="nav-form" stylesheets="dashboard.css">
+      <AnchorPane prefHeight="702.0" prefWidth="211.0" styleClass="nav-form" stylesheets="@styles/produitStyle.css">
          <children>
             <Button layoutY="282.0" mnemonicParsing="false" onAction="#MovieClient" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Movies">
                <font>
@@ -42,19 +43,37 @@
             </ImageView>
          </children>
       </AnchorPane>
-      <TextField fx:id="SearchBar" layoutX="820.0" layoutY="72.0" styleClass="search-pane" stylesheets="@dashboard.css" />
-      <FlowPane fx:id="detailFlowPane" layoutX="238.0" layoutY="169.0" prefHeight="474.0" prefWidth="717.0" styleClass="flow-pane" stylesheets="@dashboard.css">
+      <FlowPane fx:id="detailFlowPane" layoutX="238.0" layoutY="149.0" prefHeight="494.0" prefWidth="717.0" styleClass="bg-white">
          <children>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" />
-         </children></FlowPane>
-      <FontAwesomeIconView fx:id="retour" fill="#6b2a2a" glyphName="ARROW_LEFT" layoutX="252.0" layoutY="159.0" onMouseClicked="#afficherProduit" size="20" text="" />
-      <FontAwesomeIconView fill="#6b2a2a" glyphName="ARROW_RIGHT" layoutX="285.0" layoutY="158.0" size="20" />
-      <AnchorPane fx:id="panierAnchorPane" layoutX="983.0" layoutY="171.0" prefHeight="474.0" prefWidth="273.0">
+         </children>
+         <stylesheets>
+            <URL value="@dashboard.css" />
+            <URL value="@styles/produitStyle.css" />
+         </stylesheets></FlowPane>
+      <FontAwesomeIconView fx:id="retour" fill="#b92d2d" glyphName="ARROW_LEFT" layoutX="253.0" layoutY="136.0" onMouseClicked="#afficherProduit" size="20" text="" />
+      <AnchorPane fx:id="panierAnchorPane" layoutX="983.0" layoutY="171.0" prefHeight="474.0" prefWidth="273.0" styleClass="bg-white" stylesheets="@styles/produitStyle.css" visible="false">
          <children>
             <FlowPane fx:id="panierFlowPane" prefHeight="474.0" prefWidth="273.0" styleClass="flow-pane" stylesheets="@dashboard.css" visible="false" />
          </children>
       </AnchorPane>
-      <FontAwesomeIconView glyphName="SHOPPING_CART" layoutX="1217.0" layoutY="137.0" onMouseClicked="#panier" size="25" />
-      <FontAwesomeIconView glyphName="COMMENTING" layoutX="1177.0" layoutY="137.0" onMouseClicked="#commentaire" size="25" />
+      <FontAwesomeIconView fill="#b92d2d" glyphName="SHOPPING_CART" layoutX="1210.0" layoutY="125.0" onMouseClicked="#panier" size="25" text="" />
+      <AnchorPane fx:id="top3anchorpane" layoutX="977.0" layoutY="209.0" prefHeight="399.0" prefWidth="279.0" styleClass="bg-white" stylesheets="@styles/produitStyle.css">
+         <children>
+            <FlowPane fx:id="topthreeVbox" layoutX="10.0" layoutY="83.0" prefHeight="307.0" prefWidth="260.0" />
+            <Label layoutX="19.0" layoutY="22.0" prefHeight="43.0" prefWidth="252.0" text="Top 3 best rating movies :">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <ImageView fitHeight="69.0" fitWidth="62.0" layoutX="222.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Logo.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="284.0" layoutY="30.0" prefHeight="17.0" prefWidth="132.0" text="Loujain Hajlaoui" />
+      <Label layoutX="289.0" layoutY="53.0" prefHeight="17.0" prefWidth="48.0" text="User" />
    </children>
 </AnchorPane>

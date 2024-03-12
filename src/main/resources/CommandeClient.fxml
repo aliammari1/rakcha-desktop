@@ -43,7 +43,7 @@
             </ImageView>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="paimenet" layoutX="311.0" layoutY="187.0" prefHeight="457.0" prefWidth="537.0" styleClass="search-pane" stylesheets="@dashbord.css">
+      <AnchorPane fx:id="paimenet" layoutX="341.0" layoutY="146.0" prefHeight="457.0" prefWidth="537.0" styleClass="search-pane" stylesheets="@styles/produitStyle.css">
          <children>
             <Label layoutX="45.0" layoutY="96.0" text="Phone Number :">
                <font>
@@ -55,7 +55,7 @@
                   <Font name="Arial Rounded MT Bold" size="24.0" />
                </font>
             </Label>
-    <Button layoutX="213.0" layoutY="314.0" mnemonicParsing="false" onAction="#order" prefHeight="41.0" prefWidth="112.0" styleClass="achat-button" stylesheets="@dashboard.css" text="order">
+    <Button layoutX="213.0" layoutY="314.0" mnemonicParsing="false" onAction="#order" prefHeight="41.0" prefWidth="112.0" styleClass="sale" stylesheets="@styles/produitStyle.css" text="order">
 
                <font>
                   <Font name="Arial" size="18.0" />
@@ -65,20 +65,25 @@
             <TextField fx:id="adresseTextField" layoutX="184.0" layoutY="189.0" />
          </children>
       </AnchorPane>
-      <FontAwesomeIconView fill="#6f6a6a" glyphName="SEARCH" layoutX="806.0" layoutY="57.0" size="13" />
-      <TextField layoutX="825.0" layoutY="40.0" prefHeight="25.0" prefWidth="171.0" styleClass="search-pane" stylesheets="@dashbord.css" />
-      <FontAwesomeIconView glyphName="SHOPPING_CART" layoutX="1228.0" layoutY="160.0" onMouseClicked="#panier" size="25" />
-      <FlowPane fx:id="prixtotaleFlowPane" layoutX="1032.0" layoutY="342.0" prefHeight="65.0" prefWidth="188.0" stylesheets="@dashbord.css" />
+      <FontAwesomeIconView fill="#ab4040" glyphName="SHOPPING_CART" layoutX="1208.0" layoutY="156.0" onMouseClicked="#panier" size="25" />
+      <FlowPane fx:id="prixtotaleFlowPane" layoutX="1032.0" layoutY="342.0" prefHeight="65.0" prefWidth="188.0" styleClass="bg-white" stylesheets="@styles/produitStyle.css" />
       <Label alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="1011.0" layoutY="301.0" text="Total Price :" textAlignment="CENTER">
          <font>
             <Font name="Tw Cen MT Condensed" size="36.0" />
          </font>
       </Label>
-      <Button fx:id="idpaymentenligne" layoutX="996.0" layoutY="535.0" mnemonicParsing="false" onAction="#payment" prefHeight="25.0" prefWidth="126.0" text="Online Payment" visible="false">
+      <Button fx:id="idpaymentenligne" layoutX="996.0" layoutY="535.0" mnemonicParsing="false" onAction="#payment" prefHeight="25.0" prefWidth="126.0" styleClass="sale" stylesheets="@styles/produitStyle.css" text="Online Payment" visible="false">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
+      <ImageView fitHeight="69.0" fitWidth="62.0" layoutX="242.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Logo.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="304.0" layoutY="39.0" prefHeight="17.0" prefWidth="132.0" text="Loujain Hajlaoui" />
+      <Label layoutX="309.0" layoutY="62.0" prefHeight="17.0" prefWidth="48.0" text="User" />
 
    </children>
 </AnchorPane>

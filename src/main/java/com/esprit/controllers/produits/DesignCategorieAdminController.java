@@ -275,7 +275,6 @@ public class DesignCategorieAdminController {
     void filtrer(MouseEvent event) {
 
         categorie_tableview.setOpacity(0.5);
-        formulaire.setOpacity(0.5);
         FilterAnchor.setVisible(true);
 
         // Nettoyer les listes des cases à cocher
@@ -287,7 +286,7 @@ public class DesignCategorieAdminController {
 
         // Créer des VBox pour les adresses
         VBox addressCheckBoxesVBox = new VBox();
-        Label addressLabel = new Label("Adresse");
+        Label addressLabel = new Label("Category");
         addressLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
         addressCheckBoxesVBox.getChildren().add(addressLabel);
         for (String address : categorie) {
@@ -323,6 +322,8 @@ public class DesignCategorieAdminController {
 
         categorieList.setOpacity(1);
         formulaire.setOpacity(1);
+        categorieList.setVisible(true);
+        categorie_tableview.setOpacity(1);
 
 
         FilterAnchor.setVisible(false);

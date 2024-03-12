@@ -34,7 +34,9 @@ import java.sql.SQLException;
 import java.util.*;
 
 import javafx.scene.text.FontWeight;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 
 public class PanierProduitControllers implements Initializable {
@@ -58,6 +60,9 @@ public class PanierProduitControllers implements Initializable {
     Panier panier = new Panier();
 
     private double prixTotal = 0.0;
+
+    @FXML
+    private FontAwesomeIconView retour;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -339,9 +344,6 @@ public class PanierProduitControllers implements Initializable {
     }
 
 
-    public void ReturnPage(MouseEvent event) {
-
-    }
 
 
     @FXML
@@ -515,4 +517,34 @@ public class PanierProduitControllers implements Initializable {
 
     }
 
+    public void afficherProduit(MouseEvent mouseEvent) {
+        // Obtenir la fenêtre précédente
+        Window previousWindow = retour.getScene().getWindow();
+
+        // Charger le fichier FXML de la page "AfficherProduit.fxml"
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/AfficherProduitClient.fxml"));
+
+        try {
+            Parent rootNode = fxmlLoader.load();
+            Scene scene = new Scene(rootNode);
+
+            // Créer une nouvelle fenêtre pour la page "AfficherProduit.fxml"
+            Stage previousStage = new Stage();
+
+            // Configurer la fenêtre précédente avec les propriétés nécessaires
+            previousStage.setScene(scene);
+            previousStage.setTitle(" Afficher Produit");
+
+            // Afficher la fenêtre précédente de manière bloquante
+            previousStage.initModality(Modality.APPLICATION_MODAL);
+            previousStage.initOwner(previousWindow);
+            previousStage.showAndWait();
+
+            // Fermer la fenêtre actuelle
+            Stage currentStage = (Stage) retour.getScene().getWindow();
+            currentStage.close();
+        } catch (Exception e) {
+            e.printStackTrace(); // Gérer l'exception selon vos besoins
+        }
+    }
 }

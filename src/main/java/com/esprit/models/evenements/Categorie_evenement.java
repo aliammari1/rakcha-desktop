@@ -17,6 +17,8 @@ public class Categorie_evenement {
         this.description = description;
     }
 
+    public Categorie_evenement() {
+    }
 
     public int getId_categorie() {
         return id_categorie;
