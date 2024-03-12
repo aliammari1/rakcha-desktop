@@ -258,6 +258,8 @@ public class AffichageEvenementClientController {
                                                 ParticipationService ps = new ParticipationService();
                                                 UserService us = new UserService();
                                                 ps.create(new Participation(item, 0, Integer.parseInt(personstf.getText())));
+                                                SmsService.sendSms("+21622757828", String.format("   Thank you for your reservation : your '%s' tickets for the event : '%s' have been confirmed !", personstf.getText(), item.getNom()));
+
                                                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                                                 alert.setTitle("Reservation Complete !");
                                                 alert.setContentText("Reservation Complete !");
