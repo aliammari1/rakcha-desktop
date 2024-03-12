@@ -275,7 +275,6 @@ public class DesignCategorieAdminController {
     void filtrer(MouseEvent event) {
 
         categorie_tableview.setOpacity(0.5);
-        formulaire.setOpacity(0.5);
         FilterAnchor.setVisible(true);
 
         // Nettoyer les listes des cases à cocher
@@ -323,6 +322,8 @@ public class DesignCategorieAdminController {
 
         categorieList.setOpacity(1);
         formulaire.setOpacity(1);
+        categorieList.setVisible(true);
+        categorie_tableview.setOpacity(1);
 
 
         FilterAnchor.setVisible(false);

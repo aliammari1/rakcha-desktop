@@ -226,7 +226,7 @@ public class AfficherProduitClientControllers implements Initializable {
         // Description du produit
         Label descriptionLabel = new Label(Produit.getDescription());
         descriptionLabel.setFont(Font.font("Arial", 14));
-        descriptionLabel.setTextFill(Color.web("#867e7e")); // Définir la même couleur de texte que descriptionText
+        descriptionLabel.setStyle("-fx-text-fill: black;"); // Définir la même couleur de texte que descriptionText
         descriptionLabel.setLayoutX(30);
         descriptionLabel.setLayoutY(220);
         descriptionLabel.setMaxWidth(230); // Ajuster la largeur maximale selon vos besoins
@@ -273,14 +273,17 @@ public class AfficherProduitClientControllers implements Initializable {
 
 
         // Bouton Ajouter au Panier
-        Button addToCartButton = new Button("Ajouter au panier", new FontAwesomeIconView(FontAwesomeIcon.CART_PLUS));
-        addToCartButton.setStyle("-fx-background-color: #dd4f4d;\n" +
+        Button addToCartButton = new Button("Add to Cart", new FontAwesomeIconView(FontAwesomeIcon.CART_PLUS));
+       /* addToCartButton.setStyle("-fx-background-color: #dd4f4d;\n" +
                 "    -fx-text-fill: #FFFFFF;\n" +
                 "    -fx-font-size: 12px;\n" +
                 "    -fx-font-weight: bold;\n" +
-                "    -fx-padding: 10px 10px;");
+                "    -fx-padding: 10px 10px;");*/
         addToCartButton.setLayoutX(65);
         addToCartButton.setLayoutY(330);
+
+        addToCartButton.getStyleClass().add("sale");
+
 
         addToCartButton.setOnAction(event -> {
 
@@ -428,7 +431,7 @@ public class AfficherProduitClientControllers implements Initializable {
 
         // Nom du Produit
         Label nameLabel = new Label(produit.getNom());
-        nameLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 25));
+        nameLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 23));
         nameLabel.setStyle("-fx-text-fill: #333333;");
         nameLabel.setLayoutX(10);
         nameLabel.setLayoutY(220);
@@ -440,7 +443,7 @@ public class AfficherProduitClientControllers implements Initializable {
         Label quantiteLabel = new Label("Quantité : 1");
         quantiteLabel.setFont(Font.font("Arial", FontWeight.BOLD, 15));
         quantiteLabel.setLayoutX(30);
-        quantiteLabel.setLayoutY(330);
+        quantiteLabel.setLayoutY(250);
 
         // Récupérer la somme totale du prix du produit dans le panier
         //double sommeTotaleProduit = commandeItemService.calculerSommeTotaleProduit(produit.getId_produit());
@@ -449,15 +452,15 @@ public class AfficherProduitClientControllers implements Initializable {
         Label sommeTotaleLabel = new Label("Somme totale : " + produit.getPrix() + " DT");
         sommeTotaleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 15));
         sommeTotaleLabel.setLayoutX(30);
-        sommeTotaleLabel.setLayoutY(350);
+        sommeTotaleLabel.setLayoutY(270);
 
 
         // Bouton Ajouter au Panier
         Button commandebutton = new Button("Order", new FontAwesomeIconView(FontAwesomeIcon.CART_PLUS));
         commandebutton.setLayoutX(50);
-        commandebutton.setLayoutY(380);
+        commandebutton.setLayoutY(300);
         commandebutton.setPrefWidth(120);
-        commandebutton.setPrefHeight(30);
+        commandebutton.setPrefHeight(50);
         commandebutton.setStyle("-fx-background-color: #624970;\n" +
                 " -fx-text-fill: #FCE19A;" +
                 "   -fx-font-size: 12px;\n" +
@@ -494,8 +497,8 @@ public class AfficherProduitClientControllers implements Initializable {
         // Bouton Ajouter au Panier
         Button achatbutton = new Button("continue shopping");
         achatbutton.setLayoutX(50);
-        achatbutton.setLayoutY(440);
-        commandebutton.setPrefHeight(50);
+        achatbutton.setLayoutY(370);
+        achatbutton.setPrefHeight(50);
 
 
         achatbutton.setStyle(" -fx-background-color: #466288;\n" +
@@ -1047,12 +1050,16 @@ public class AfficherProduitClientControllers implements Initializable {
         VBox cardContainer = new VBox(5);
         cardContainer.setStyle("-fx-padding: 20px 0 0 30px;"); // Add left padding
 
+        cardContainer.setPrefWidth(255);
+
+
         AnchorPane card = new AnchorPane();
         card.setLayoutX(0);
         card.setLayoutY(0);
+        card.getStyleClass().add("meilleurproduit");
 
 
-        card.getStyleClass().add("meilleurfilm");
+
         cardContainer.setSpacing(10);
 
         // Image of the product
