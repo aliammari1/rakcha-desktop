@@ -23,7 +23,7 @@ public class EvenementService implements IService<Evenement> {
 
     @Override
     public void create(Evenement evenement) {
-        String req = "INSERT into evenement(nom,dateDebut,dateFin,lieu,id_categorie,etat,description) values (?, ?, ?, ?, ?, ?, ?)";
+        String req = "INSERT into evenement(nom,dateDebut,dateFin,lieu,id_categorie,etat,description,affiche_event) values (?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setString(1, evenement.getNom());
@@ -33,8 +33,9 @@ public class EvenementService implements IService<Evenement> {
             pst.setInt(5, evenement.getCategorie().getId_categorie());
             pst.setString(6, evenement.getEtat());
             pst.setString(7, evenement.getDescription());
+            pst.setBlob(8, evenement.getAffiche_event());
             pst.executeUpdate();
-            System.out.println("Evenement ajouté !");
+            System.out.println("Event Added !");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -42,10 +43,10 @@ public class EvenementService implements IService<Evenement> {
 
     @Override
     public void update(Evenement evenement) {
-        String req = "UPDATE evenement set nom = ?, dateDebut = ?, dateFin = ?, lieu = ?, id_categorie = ?, etat = ?, description = ? where id = ?";
+        String req = "UPDATE evenement set nom = ?, dateDebut = ?, dateFin = ?, lieu = ?, id_categorie = ?, etat = ?, description = ?, affiche_event= ? where id = ?";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
-            pst.setInt(8, evenement.getId());
+            pst.setInt(9, evenement.getId());
             pst.setString(1, evenement.getNom());
             pst.setDate(2, evenement.getDateDebut());
             pst.setDate(3, evenement.getDateFin());
@@ -53,8 +54,9 @@ public class EvenementService implements IService<Evenement> {
             pst.setInt(5, evenement.getCategorie().getId_categorie());
             pst.setString(6, evenement.getEtat());
             pst.setString(7, evenement.getDescription());
+            pst.setBlob(8, evenement.getAffiche_event());
             pst.executeUpdate();
-            System.out.println("Evenement modifié !");
+            System.out.println("Event Updated !");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -67,7 +69,7 @@ public class EvenementService implements IService<Evenement> {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(1, evenement.getId());
             pst.executeUpdate();
-            System.out.println("Evenement supprimé !");
+            System.out.println("Event Deleted !");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -83,7 +85,7 @@ public class EvenementService implements IService<Evenement> {
             ResultSet rs = pst.executeQuery();
             CategorieService cs = new CategorieService();
             while (rs.next()) {
-                evenements.add(new Evenement(rs.getInt("ID"), rs.getString("nom"), rs.getDate("dateDebut"), rs.getDate("dateFin"), rs.getString("lieu"), cs.getCategorie(rs.getInt("id_categorie")), rs.getString("etat"), rs.getString("description")));
+                evenements.add(new Evenement(rs.getInt("ID"), rs.getString("nom"), rs.getDate("dateDebut"), rs.getDate("dateFin"), rs.getString("lieu"), cs.getCategorie(rs.getInt("id_categorie")), rs.getString("etat"), rs.getString("description"), rs.getBlob("affiche_event")));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -103,7 +105,7 @@ public class EvenementService implements IService<Evenement> {
             ResultSet rs = pst.executeQuery();
             rs.next();
             CategorieService cs = new CategorieService();
-            evenement = new Evenement((rs.getInt("ID")), rs.getString("nom"), rs.getDate("dateDebut"), rs.getDate("dateFin"), rs.getString("lieu"), cs.getCategorie(rs.getInt("id_categorie")), rs.getString("etat"), rs.getString("description"));
+            evenement = new Evenement((rs.getInt("ID")), rs.getString("nom"), rs.getDate("dateDebut"), rs.getDate("dateFin"), rs.getString("lieu"), cs.getCategorie(rs.getInt("id_categorie")), rs.getString("etat"), rs.getString("description"), rs.getBlob("affiche_event"));
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -123,7 +125,7 @@ public class EvenementService implements IService<Evenement> {
             ResultSet rs = pst.executeQuery();
             rs.next();
             CategorieService cs = new CategorieService();
-            evenement = new Evenement((rs.getInt("ID")), rs.getString("nom"), rs.getDate("dateDebut"), rs.getDate("dateFin"), rs.getString("lieu"), cs.getCategorie(rs.getInt("id_categorie")), rs.getString("etat"), rs.getString("description"));
+            evenement = new Evenement((rs.getInt("ID")), rs.getString("nom"), rs.getDate("dateDebut"), rs.getDate("dateFin"), rs.getString("lieu"), cs.getCategorie(rs.getInt("id_categorie")), rs.getString("etat"), rs.getString("description"), rs.getBlob("affiche_event"));
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -131,6 +133,31 @@ public class EvenementService implements IService<Evenement> {
 
         return evenement;
     }
+
+
+    public Evenement getEvenementById(int eventId) {
+        Evenement evenement = null;
+
+        String req = "SELECT * from evenement WHERE id = ?";
+        try {
+            PreparedStatement pst = connection.prepareStatement(req);
+            pst.setInt(1, eventId);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                com.esprit.services.evenements.CategorieService cs = new com.esprit.services.evenements.CategorieService();
+
+                evenement = new Evenement((rs.getInt("ID")), rs.getString("nom"), rs.getDate("dateDebut"), rs.getDate("dateFin"), rs.getString("lieu"), cs.getCategorie(rs.getInt("id_categorie")), rs.getString("etat"), rs.getString("description"), rs.getBlob("affiche_event"));
+
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return evenement;
+    }
+
 
     public void generateEventPDF() {
         EventPDF eventPDF = new EventPDF();

@@ -11,8 +11,8 @@ public class SmsService {
     public static void sendSms(String to, String message) {
         Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
         Message sms = Message.creator(
-                new PhoneNumber("+21622757828"), // to
-                new PhoneNumber("+16616009805"), // from
+                new PhoneNumber(to), // to
+                new PhoneNumber("+14422540252"), // from
                 message
         ).create();
     }

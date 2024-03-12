@@ -2,21 +2,21 @@ package com.esprit.models.evenements;
 
 public class Feedback {
 
-    int IDFeedback;
-    int id_user;
     String commentaire;
+    private int IDFeedback;
+    private int userevenement;
     private Evenement feedbackevenement;
 
-    public Feedback(int IDFeedback, Evenement feedbackevenement, int id_user, String commentaire) {
+    public Feedback(int IDFeedback, Evenement feedbackevenement, int userevenement, String commentaire) {
         this.IDFeedback = IDFeedback;
         this.feedbackevenement = feedbackevenement;
-        this.id_user = id_user;
+        this.userevenement = userevenement;
         this.commentaire = commentaire;
     }
 
-    public Feedback(Evenement feedbackevenement, int id_user, String commentaire) {
+    public Feedback(Evenement feedbackevenement, int userevenement, String commentaire) {
         this.feedbackevenement = feedbackevenement;
-        this.id_user = id_user;
+        this.userevenement = userevenement;
         this.commentaire = commentaire;
     }
 
@@ -36,12 +36,12 @@ public class Feedback {
         this.feedbackevenement = feedbackevenement;
     }
 
-    public int getId_user() {
-        return id_user;
+    public int getUserevenement() {
+        return userevenement;
     }
 
-    public void setId_user(int id_user) {
-        this.id_user = id_user;
+    public void setUserevenement(int userevenement) {
+        this.userevenement = userevenement;
     }
 
     public String getCommentaire() {
@@ -57,7 +57,7 @@ public class Feedback {
         return "Feedback{" +
                 "IDFeedback=" + IDFeedback +
                 ", feedbackevenement=" + feedbackevenement +
-                ", id_user=" + id_user +
+                ", id_user=" + userevenement +
                 ", commentaire='" + commentaire + '\'' +
                 '}';
     }
