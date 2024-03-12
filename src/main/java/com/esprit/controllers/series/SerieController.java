@@ -1,14 +1,21 @@
 package com.esprit.controllers.series;
 
 
-import com.esprit.services.series.DTO.SerieDto;
 import com.esprit.models.series.Categorie;
+import com.esprit.models.series.Feedback;
 import com.esprit.models.series.Serie;
+import com.esprit.services.series.DTO.SerieDto;
 import com.esprit.services.series.IServiceCategorieImpl;
+import com.esprit.services.series.IServiceFeedbackImpl;
 import com.esprit.services.series.IServiceSerieImpl;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -24,9 +31,13 @@ import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.*;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 public class SerieController {
     ///
@@ -56,9 +67,9 @@ public class SerieController {
     private List<Categorie> categorieList;
     @FXML
     private TableView<SerieDto> tableView;
-    
 
-    private void ref(){
+
+    private void ref() {
         tableView.getItems().clear();
         tableView.getColumns().clear();
         categorieF.getItems().clear();
@@ -66,12 +77,12 @@ public class SerieController {
         resumeF.setText("");
         directeurF.setText("");
         paysF.setText("");
-        imgpath="";
-        IServiceCategorieImpl categorieserv=new  IServiceCategorieImpl();
-        IServiceSerieImpl iServiceSerie=new IServiceSerieImpl();
+        imgpath = "";
+        IServiceCategorieImpl categorieserv = new IServiceCategorieImpl();
+        IServiceSerieImpl iServiceSerie = new IServiceSerieImpl();
         try {
-            categorieList=categorieserv.recuperer();
-            for (Categorie c  : categorieList
+            categorieList = categorieserv.recuperer();
+            for (Categorie c : categorieList
             ) {
                 categorieF.getItems().add(c.getNom());
             }
@@ -80,7 +91,7 @@ public class SerieController {
         }
         ///// affichage du tableau
         IServiceSerieImpl serviceSerie = new IServiceSerieImpl();
-       // TableColumn<SerieDto, Integer> idCol = new TableColumn<>("ID");
+        // TableColumn<SerieDto, Integer> idCol = new TableColumn<>("ID");
         //idCol.setCellValueFactory(new PropertyValueFactory<>("idserie"));
 
         TableColumn<SerieDto, String> nomCol = new TableColumn<>("Name");
@@ -109,13 +120,14 @@ public class SerieController {
                         iServiceSerie.supprimer(serieDto.getIdserie());
                         tableView.getItems().remove(serieDto);
                         tableView.refresh();
-                        showAlert("Succes","Deleted Successfully!");
+                        showAlert("Succes", "Deleted Successfully!");
                     } catch (SQLException e) {
                         e.printStackTrace();
-                        showAlert("Succes","Deleted Successfully!");
+                        showAlert("Succes", "Deleted Successfully!");
                     }
                 });
             }
+
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
@@ -129,15 +141,16 @@ public class SerieController {
         TableColumn<SerieDto, Void> modifierCol = new TableColumn<>("Edit");
         modifierCol.setCellFactory(param -> new TableCell<>() {
             private final Button button = new Button("Edit");
-            private int clickCount =0;
+            private int clickCount = 0;
+
             {
 
                 button.setOnAction(event -> {
                     clickCount++;
-                    if (clickCount==2){
-                    SerieDto serie = getTableView().getItems().get(getIndex());
-                    modifierSerie(serie);
-                        clickCount =0;
+                    if (clickCount == 2) {
+                        SerieDto serie = getTableView().getItems().get(getIndex());
+                        modifierSerie(serie);
+                        clickCount = 0;
                     }
                 });
             }
@@ -152,8 +165,10 @@ public class SerieController {
                 }
             }
         });
+
+
         //tableView.getColumns().addAll(idCol,nomCol, resumeCol,directeurCol,paysCol,categorieCol,supprimerCol,modifierCol);
-        tableView.getColumns().addAll(nomCol, resumeCol,directeurCol,paysCol,categorieCol,supprimerCol,modifierCol);
+        tableView.getColumns().addAll(nomCol, resumeCol, directeurCol, paysCol, categorieCol, supprimerCol, modifierCol);
 
         // Récupérer les catégories et les ajouter à la TableView
         try {
@@ -163,8 +178,138 @@ public class SerieController {
             e.printStackTrace();
         }
     }
+
+
+    @FXML
+    private void exportPdf(ActionEvent event) {
+        // Afficher la boîte de dialogue de sélection de fichier
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Enregistrer le fichier PDF");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichiers PDF", "*.pdf"));
+        File selectedFile = fileChooser.showSaveDialog(((Node) event.getSource()).getScene().getWindow());
+
+        if (selectedFile != null) {
+            IServiceFeedbackImpl sf = new IServiceFeedbackImpl();
+            List<Feedback> feedbackList = sf.Show();
+            try {
+                // Créer le document PDF
+                Document document = new Document();
+                PdfWriter.getInstance(document, new FileOutputStream(selectedFile));
+                document.open();
+
+                // Créer une police personnalisée pour la date
+                Font fontDate = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
+                BaseColor color = new BaseColor(114, 0, 0); // Rouge: 114, Vert: 0, Bleu: 0
+                fontDate.setColor(color); // Définir la couleur de la police
+
+                // Créer un paragraphe avec le lieu
+                Paragraph tunis = new Paragraph("Ariana", fontDate);
+                tunis.setIndentationLeft(455); // Définir la position horizontale
+                tunis.setSpacingBefore(-30); // Définir la position verticale
+                // Ajouter le paragraphe au document
+                document.add(tunis);
+
+                // Obtenir la date d'aujourd'hui
+                LocalDate today = LocalDate.now();
+
+                // Créer un paragraphe avec la date
+                Paragraph date = new Paragraph(today.toString(), fontDate);
+
+                date.setIndentationLeft(437); // Définir la position horizontale
+                date.setSpacingBefore(1); // Définir la position verticale
+                // Ajouter le paragraphe au document
+                document.add(date);
+
+                // Créer une police personnalisée
+                Font font = new Font(Font.FontFamily.TIMES_ROMAN, 32, Font.BOLD);
+                BaseColor titleColor = new BaseColor(114, 0, 0); //
+                font.setColor(titleColor);
+
+                // Ajouter le contenu au document
+                Paragraph title = new Paragraph("FeedBack List", font);
+                title.setAlignment(Element.ALIGN_CENTER);
+                title.setSpacingBefore(50); // Ajouter une marge avant le titre pour l'éloigner de l'image
+                title.setSpacingAfter(20);
+                document.add(title);
+
+
+                PdfPTable table = new PdfPTable(3);
+                table.setWidthPercentage(100);
+                table.setSpacingBefore(30f);
+                table.setSpacingAfter(30f);
+
+                // Ajouter les en-têtes de colonnes
+                Font hrFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
+                BaseColor hrColor = new BaseColor(255, 255, 255); //
+                hrFont.setColor(hrColor);
+
+                PdfPCell cell1 = new PdfPCell(new Paragraph("Description", hrFont));
+                BaseColor bgColor = new BaseColor(114, 0, 0);
+                cell1.setBackgroundColor(bgColor);
+                cell1.setBorderColor(titleColor);
+                cell1.setPaddingTop(20);
+                cell1.setPaddingBottom(20);
+                cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+
+                PdfPCell cell2 = new PdfPCell(new Paragraph("Date", hrFont));
+                cell2.setBackgroundColor(bgColor);
+                cell2.setBorderColor(titleColor);
+                cell2.setPaddingTop(20);
+                cell2.setPaddingBottom(20);
+                cell2.setHorizontalAlignment(Element.ALIGN_CENTER);
+
+                PdfPCell cell3 = new PdfPCell(new Paragraph("Episode", hrFont));
+                cell3.setBackgroundColor(bgColor);
+                cell3.setBorderColor(titleColor);
+                cell3.setPaddingTop(20);
+                cell3.setPaddingBottom(20);
+                cell3.setHorizontalAlignment(Element.ALIGN_CENTER);
+
+                table.addCell(cell1);
+                table.addCell(cell2);
+                table.addCell(cell3);
+
+                Font hdFont = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.NORMAL);
+                BaseColor hdColor = new BaseColor(255, 255, 255); //
+                hrFont.setColor(hdColor);
+                for (Feedback fee : feedbackList) {
+                    PdfPCell cellR1 = new PdfPCell(new Paragraph(String.valueOf(fee.getDescription()), hdFont));
+                    cellR1.setBorderColor(titleColor);
+                    cellR1.setPaddingTop(10);
+                    cellR1.setPaddingBottom(10);
+                    cellR1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table.addCell(cellR1);
+
+                    PdfPCell cellR2 = new PdfPCell(new Paragraph(String.valueOf(fee.getDate()), hdFont));
+                    cellR2.setBorderColor(titleColor);
+                    cellR2.setPaddingTop(10);
+                    cellR2.setPaddingBottom(10);
+                    cellR2.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table.addCell(cellR2);
+
+                    PdfPCell cellR3 = new PdfPCell(new Paragraph(String.valueOf(fee.getId_episode()), hdFont));
+                    cellR3.setBorderColor(titleColor);
+                    cellR3.setPaddingTop(10);
+                    cellR3.setPaddingBottom(10);
+                    cellR3.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table.addCell(cellR3);
+                }
+
+
+                table.setSpacingBefore(20);
+                document.add(table);
+                document.close();
+
+                System.out.println("Le Poster a été généré avec succès.");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
     private void modifierSerie(SerieDto serieDto) {
-        IServiceSerieImpl iServiceSerie=new IServiceSerieImpl();
+        IServiceSerieImpl iServiceSerie = new IServiceSerieImpl();
         Dialog<Pair<String, String>> dialog = new Dialog<>();
         dialog.setTitle("Edit Serie ");
 
@@ -173,12 +318,12 @@ public class SerieController {
         TextField directeurFild = new TextField(serieDto.getDirecteur());
         TextField paysFild = new TextField(serieDto.getPays());
         ComboBox<String> categorieComboBox = new ComboBox<>();
-        for (Categorie c  : categorieList
+        for (Categorie c : categorieList
         ) {
             categorieComboBox.getItems().add(c.getNom());
         }
         categorieComboBox.setValue(serieDto.getNomCategories());
-        Button Ajouterimage= new Button("ADD");
+        Button Ajouterimage = new Button("ADD");
 
         {
             Ajouterimage.setOnAction(event -> {
@@ -187,8 +332,7 @@ public class SerieController {
         }
 
 
-
-        dialog.getDialogPane().setContent(new VBox(8, new Label("Name:"), nomFild, new Label("Summary:"),resumeFild,new Label("Director :"),directeurFild,new Label("Country :"),paysFild,new Label("Add picture :") ,Ajouterimage,categorieComboBox));
+        dialog.getDialogPane().setContent(new VBox(8, new Label("Name:"), nomFild, new Label("Summary:"), resumeFild, new Label("Director :"), directeurFild, new Label("Country :"), paysFild, new Label("Add picture :"), Ajouterimage, categorieComboBox));
 
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
@@ -200,7 +344,7 @@ public class SerieController {
         });
 
         Optional<Pair<String, String>> result = dialog.showAndWait();
-            Serie serie=new Serie();
+        Serie serie = new Serie();
         result.ifPresent(pair -> {
             serie.setIdserie(serieDto.getIdserie());
             serie.setNom(nomFild.getText());
@@ -208,14 +352,15 @@ public class SerieController {
             serie.setDirecteur(directeurFild.getText());
             serie.setPays(paysFild.getText());
             serie.setImage(imgpath);
-            for (Categorie c: categorieList
+            for (Categorie c : categorieList
             ) {
-                if(c.getNom()==categorieComboBox.getValue()){
+                if (c.getNom() == categorieComboBox.getValue()) {
                     serie.setIdcategorie(c.getIdcategorie());
-                }}
+                }
+            }
             try {
                 iServiceSerie.modifier(serie);
-                showAlert("Succes","Successfully modified!");
+                showAlert("Succes", "Successfully modified!");
                 ref();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -223,6 +368,7 @@ public class SerieController {
 
         });
     }
+
     @FXML
     private void initialize() {
         ref();
@@ -236,8 +382,9 @@ public class SerieController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
     @FXML
-    void addimg(ActionEvent event){
+    void addimg(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose an Image");
         // Set file extension filter to only allow image files
@@ -266,22 +413,25 @@ public class SerieController {
     private boolean isImageFile(File file) {
         try {
             Image image = new Image(file.toURI().toString());
-            return image.isError() ? false : true;
+            return !image.isError();
         } catch (Exception e) {
             return false;
         }
     }
-////////////
-boolean nomcheck( ){
-    if(nomF.getText()!=""){
 
-        return true;
-    }else{
-        nomcheck.setText("Please enter a valid Name");
-        return false;
-    }}
-    boolean categoriecheck( ) {
-        if (categorieF.getValue()!=null) {
+    ////////////
+    boolean nomcheck() {
+        if (nomF.getText() != "") {
+
+            return true;
+        } else {
+            nomcheck.setText("Please enter a valid Name");
+            return false;
+        }
+    }
+
+    boolean categoriecheck() {
+        if (categorieF.getValue() != null) {
 
             return true;
         } else {
@@ -289,8 +439,9 @@ boolean nomcheck( ){
             return false;
         }
     }
-    boolean directeurcheck( ) {
-        if (directeurF.getText()!="") {
+
+    boolean directeurcheck() {
+        if (directeurF.getText() != "") {
 
             return true;
         } else {
@@ -298,8 +449,9 @@ boolean nomcheck( ){
             return false;
         }
     }
-    boolean payscheck( ) {
-        if (paysF.getText()!="") {
+
+    boolean payscheck() {
+        if (paysF.getText() != "") {
 
             return true;
         } else {
@@ -307,8 +459,9 @@ boolean nomcheck( ){
             return false;
         }
     }
-    boolean resumecheck( ) {
-        if (resumeF.getText()!="") {
+
+    boolean resumecheck() {
+        if (resumeF.getText() != "") {
 
             return true;
         } else {
@@ -316,8 +469,9 @@ boolean nomcheck( ){
             return false;
         }
     }
-    boolean imagechek( ) {
-        if (imgpath!="") {
+
+    boolean imagechek() {
+        if (imgpath != "") {
 
             return true;
         } else {
@@ -353,9 +507,14 @@ boolean nomcheck( ){
     @FXML
     void ajouterSerie(ActionEvent event) {
         IServiceSerieImpl serieserv = new IServiceSerieImpl();
-        Serie serie= new Serie();
-        nomcheck();categoriecheck( );directeurcheck( );payscheck( );resumecheck( );imagechek( );
-        if(nomcheck() && categoriecheck( ) && directeurcheck( ) && payscheck( ) && resumecheck( ) && imagechek( ) ) {
+        Serie serie = new Serie();
+        nomcheck();
+        categoriecheck();
+        directeurcheck();
+        payscheck();
+        resumecheck();
+        imagechek();
+        if (nomcheck() && categoriecheck() && directeurcheck() && payscheck() && resumecheck() && imagechek()) {
             try {
                 serie.setNom(nomF.getText());
                 serie.setResume(resumeF.getText());
@@ -371,7 +530,12 @@ boolean nomcheck( ){
                 }
                 serieserv.ajouter(serie);
                 showAlert("successfully", "The serie has been successfully saved");
-                nomcheck.setText("");categoriecheck.setText("");directeurcheck.setText("");payscheck.setText("");resumecheck.setText("");imagechek.setText("");
+                nomcheck.setText("");
+                categoriecheck.setText("");
+                directeurcheck.setText("");
+                payscheck.setText("");
+                resumecheck.setText("");
+                imagechek.setText("");
                 // Envoyer un e-mail de notification
                 String recipientEmail = "nourhene.ftaymia@esprit.tn"; // Remplacez par l'adresse e-mail réelle du destinataire
                 String subject = "Exciting News! New Series Alert 🚀";
@@ -407,19 +571,20 @@ boolean nomcheck( ){
             }
         }
         */
-       ///
-        }
+        ///
+    }
 
     //Gestion du menu
     @FXML
-    void Ocategories(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Categorie-view.fxml")));
+    void Oepisodes(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Episode-view.fxml")));
         Scene scene = new Scene(root);
         Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
 
     }
+
     @FXML
     void Oseries(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Serie-view.fxml")));
@@ -429,6 +594,7 @@ boolean nomcheck( ){
         stage.show();
 
     }
+
     @FXML
     void Oepisode(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Episode-view.fxml")));
@@ -439,7 +605,21 @@ boolean nomcheck( ){
 
     }
 
+    public void showmovies(ActionEvent actionEvent) {
     }
+
+    public void showproducts(ActionEvent actionEvent) {
+    }
+
+    public void showcinema(ActionEvent actionEvent) {
+    }
+
+    public void showevent(ActionEvent actionEvent) {
+    }
+
+    public void showseries(ActionEvent actionEvent) {
+    }
+}
    /*
     @FXML
     public void showStatistics(ActionEvent actionEvent) {

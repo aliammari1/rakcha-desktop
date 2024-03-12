@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+
 <?import de.jensd.fx.glyphs.fontawesome.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
@@ -160,8 +161,8 @@
                                                  text="Delete"/>
                                 </columns>
                             </TableView>
-                            <TextField layoutX="412.0" layoutY="17.0" prefHeight="29.0" prefWidth="158.0"
-                                       promptText="rechercher"/>
+                            <TextField fx:id="recherche_textField" layoutX="412.0" layoutY="17.0" prefHeight="29.0"
+                                       prefWidth="158.0" promptText="rechercher"/>
                             <FontAwesomeIconView fill="#ae2d3c" glyphName="SEARCH" layoutX="545.0" layoutY="38.0"
                                                  size="19" text="" textAlignment="RIGHT"/>
                             <Button layoutX="592.0" layoutY="16.0" mnemonicParsing="false" styleClass="instert-btn"

@@ -240,6 +240,7 @@ public class PanierProduitControllers implements Initializable {
                     // L'utilisateur a confirmé la suppression
                     panierService.delete(Panier);
                     // Mettez à jour votre interface utilisateur ici
+                    refreshUI();
                 }
 
             }
@@ -261,6 +262,20 @@ public class PanierProduitControllers implements Initializable {
         produitVBox.getChildren().add(card);
 
         return produitVBox;
+    }
+
+    private void refreshUI() {
+
+
+        // Effacer les éléments actuels du panier
+        cartFlowPane.getChildren().clear();
+        produitVBoxMap.clear();
+
+        // Charger à nouveau les produits du panier
+        loadAcceptedPanier();
+
+        // Mettre à jour le prix total
+        updatePrixTotal();
     }
 
     private void decreaseQuantity(TextField quantityTextField, Panier panier) {
@@ -354,4 +369,150 @@ public class PanierProduitControllers implements Initializable {
 
     public void Paiment(MouseEvent event) {
     }
+
+    @FXML
+    void cinemaclient(ActionEvent event) {
+        try {
+            // Charger la nouvelle interface PanierProduit.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/CommentaireProduit.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène avec la nouvelle interface
+            Scene scene = new Scene(root);
+
+            // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Créer une nouvelle fenêtre (stage) et y attacher la scène
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("cinema ");
+            stage.show();
+
+            // Fermer la fenêtre actuelle
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace(); // Gérer l'exception d'entrée/sortie
+        }
+
+
+    }
+
+    @FXML
+    void eventClient(ActionEvent event) {
+        try {
+            // Charger la nouvelle interface PanierProduit.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AffichageEvenementClient.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène avec la nouvelle interface
+            Scene scene = new Scene(root);
+
+            // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Créer une nouvelle fenêtre (stage) et y attacher la scène
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("Event ");
+            stage.show();
+
+            // Fermer la fenêtre actuelle
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace(); // Gérer l'exception d'entrée/sortie
+        }
+
+
+    }
+
+    @FXML
+    void produitClient(ActionEvent event) {
+        try {
+            // Charger la nouvelle interface PanierProduit.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherProduitClient.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène avec la nouvelle interface
+            Scene scene = new Scene(root);
+
+            // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Créer une nouvelle fenêtre (stage) et y attacher la scène
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("products ");
+            stage.show();
+
+            // Fermer la fenêtre actuelle
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace(); // Gérer l'exception d'entrée/sortie
+        }
+
+
+    }
+
+    @FXML
+    void profilclient(ActionEvent event) {
+
+
+
+    }
+
+
+    @FXML
+    void MovieClient(ActionEvent event) {
+        try {
+            // Charger la nouvelle interface PanierProduit.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/filmuser.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène avec la nouvelle interface
+            Scene scene = new Scene(root);
+
+            // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Créer une nouvelle fenêtre (stage) et y attacher la scène
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("movie ");
+            stage.show();
+
+            // Fermer la fenêtre actuelle
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace(); // Gérer l'exception d'entrée/sortie
+        }
+    }
+
+    @FXML
+    void SerieClient(ActionEvent event) {
+        try {
+            // Charger la nouvelle interface PanierProduit.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Series-view.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène avec la nouvelle interface
+            Scene scene = new Scene(root);
+
+            // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Créer une nouvelle fenêtre (stage) et y attacher la scène
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("chat ");
+            stage.show();
+
+            // Fermer la fenêtre actuelle
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace(); // Gérer l'exception d'entrée/sortie
+        }
+
+    }
+
 }

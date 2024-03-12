@@ -466,4 +466,19 @@ public class EpisodeController {
         stage.show();
 
     }
+
+    public void showmovies(ActionEvent actionEvent) {
+    }
+
+    public void showproducts(ActionEvent actionEvent) {
+    }
+
+    public void showcinema(ActionEvent actionEvent) {
+    }
+
+    public void showevent(ActionEvent actionEvent) {
+    }
+
+    public void showseries(ActionEvent actionEvent) {
+    }
 }

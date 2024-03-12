@@ -1,9 +1,11 @@
 package com.esprit.services.produits;
 
+import com.esprit.models.films.RatingFilm;
 import com.esprit.models.produits.Commande;
 import com.esprit.models.produits.CommandeItem;
 import com.esprit.models.produits.Produit;
 import com.esprit.services.IService;
+import com.esprit.services.films.FilmService;
 import com.esprit.utils.DataSource;
 
 import java.sql.Connection;
@@ -100,6 +102,102 @@ public class CommandeItemService implements IService<CommandeItem> {
 
     }
 
+    public List<CommandeItem> getCommandeItemsByCommande(int idCommande) {
+        List<CommandeItem> commandeItems = new ArrayList<>();
+        String req = "SELECT * FROM commandeitem WHERE idCommande = ?";
+        try {
+            PreparedStatement pst = connection.prepareStatement(req);
+            pst.setInt(1, idCommande);
+            ResultSet rs = pst.executeQuery();
+            ProduitService ps = new ProduitService();
+            CommandeService cs = new CommandeService();
 
+            while (rs.next()) {
+                commandeItems.add(new CommandeItem(
+                        rs.getInt("idCommandeItem"),
+                        rs.getInt("quantity"),
+                        ps.getProduitById(rs.getInt("id_produit")),
+                        cs.getCommandeByID(rs.getInt("idCommande"))
+                ));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return commandeItems;
+    }
+
+
+
+    public int getTotalQuantityByCategoryAndDate(String nomCategorie, String formattedDate) {
+        int totalQuantity = 0;
+        String req = "SELECT SUM(ci.quantity) AS totalQuantity " +
+                "FROM commandeitem ci " +
+                "JOIN produit p ON ci.id_produit = p.id_produit " +
+                "JOIN categorie_produit cp ON p.id_categorieProduit = cp.id_categorie " +
+                "JOIN commande c ON ci.idCommande = c.idCommande " +
+                "WHERE cp.nom_categorie = ? AND DATE(c.dateCommande) = ?";
+
+        try {
+            PreparedStatement pst = connection.prepareStatement(req);
+            pst.setString(1, nomCategorie);
+            pst.setString(2, formattedDate);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                totalQuantity = rs.getInt("totalQuantity");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return totalQuantity;
+    }
+
+    public List<CommandeItem> getItemsByCommande(int idCommande) {
+        List<CommandeItem> commandeItems = new ArrayList<>();
+        String req = "SELECT * FROM commandeitem WHERE idCommande = ?";
+
+        try {
+            PreparedStatement pst = connection.prepareStatement(req);
+            pst.setInt(1, idCommande);
+            ResultSet rs = pst.executeQuery();
+            ProduitService ps = new ProduitService();
+            CommandeService cs = new CommandeService();
+
+            while (rs.next()) {
+                Produit produit = ps.getProduitById(rs.getInt("id_produit"));
+                Commande commande = cs.getCommandeByID(rs.getInt("idCommande"));
+                CommandeItem commandeItem = new CommandeItem(
+                        rs.getInt("idCommandeItem"),
+                        rs.getInt("quantity"),
+                        produit,
+                        commande
+                );
+                commandeItems.add(commandeItem);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return commandeItems;
+    }
+
+    public List<CommandeItem> getavergeratingSorted() {
+        String req = "SELECT id_produit, quantity  FROM commandeitem GROUP BY id_produit ORDER BY quantity DESC WHERE statu like payee";
+        List<CommandeItem> aver = new ArrayList<>();
+        try {
+            PreparedStatement pst = connection.prepareStatement(req);
+            ResultSet rs = pst.executeQuery();
+            ProduitService ps = new ProduitService();
+            CommandeService cs =new CommandeService();
+
+            while (rs.next()) {
+                aver.add(new CommandeItem(rs.getInt("idCommandeItem"), rs.getInt("quantity"),ps.getProduitById(rs.getInt("id_produit")),cs.getCommandeByID(rs.getInt("idCommande"))));
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return aver;
+    }
 
 }

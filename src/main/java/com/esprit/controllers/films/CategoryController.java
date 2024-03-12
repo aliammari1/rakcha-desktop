@@ -47,11 +47,15 @@ public class CategoryController {
 
     @FXML
     private AnchorPane categoryCrudInterface;
+    @FXML
+    private ComboBox<String> filterCriteriaComboBox;
 
     @FXML
     private StackPane stackPane;
     @FXML
     private Button AjouterCategory_Button;
+    @FXML
+    private TextField recherche_textField;
 
     @FXML
     void initialize() {
@@ -62,6 +66,25 @@ public class CategoryController {
         setupCellValueFactory();
         setupCellOnEditCommit();
         readCategoryTable();
+        filterCriteriaComboBox.setItems(FXCollections.observableArrayList("Name", "Description"));
+
+
+    }
+
+    private void search(String keyword) {
+        CategoryService categoryService = new CategoryService();
+        ObservableList<Category> filteredList = FXCollections.observableArrayList();
+        if (keyword == null || keyword.trim().isEmpty()) {
+            filteredList.addAll(categoryService.read());
+        } else {
+            for (Category category : categoryService.read()) {
+                if (category.getNom().toLowerCase().contains(keyword.toLowerCase()) ||
+                        category.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
+                    filteredList.add(category);
+                }
+            }
+        }
+        filmCategory_tableView.setItems(filteredList);
     }
 
     @FXML
@@ -75,7 +98,9 @@ public class CategoryController {
         alert.setHeaderText("categorie");
         alert.show();
         readCategoryTable();
+
     }
+
 
     void readCategoryTable() {
         try {

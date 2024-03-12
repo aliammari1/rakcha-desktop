@@ -9,10 +9,9 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="700.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.produits.ListCommandeController">
    <children>
-      <AnchorPane layoutY="-7.0" prefHeight="712.0" prefWidth="216.0" styleClass="nav-form" stylesheets="@Dashbord.css">
+      <AnchorPane layoutY="-3.0" prefHeight="712.0" prefWidth="216.0" styleClass="nav-form" stylesheets="@dashboard.css">
          <children>
             <Button layoutY="282.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Movies">
                <font>
@@ -38,7 +37,7 @@
             <FontAwesomeIconView fill="#ebe5e5" glyphName="TV" layoutX="18.0" layoutY="269.0" size="30" />
             <ImageView fitHeight="161.0" fitWidth="216.0" layoutX="1.0" layoutY="37.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../../../../../../xampp/htdocs/img/417882432_24845175578463813_8129699764434025723_n.png" />
+                  <Image url="Logo.png" />
                </image>
             </ImageView>
          </children>

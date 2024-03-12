@@ -1,9 +1,9 @@
 package com.esprit.controllers.produits;
 
+
 import com.esprit.models.produits.Categorie_Produit;
-
 import com.esprit.services.produits.CategorieService;
-
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,72 +16,81 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
-
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DesignCategorieAdminController {
 
+    private final List<CheckBox> addressCheckBoxes = new ArrayList<>();
+    private final List<CheckBox> statusCheckBoxes = new ArrayList<>();
     @FXML
     private TableView<Categorie_Produit> categorie_tableview;
-
     @FXML
     private TextField SearchBar;
-
-
     @FXML
-    private TableColumn<Categorie_Produit,Void> deleteColumn;
-
+    private TableColumn<Categorie_Produit, Void> deleteColumn;
     @FXML
     private TextArea descriptionC_textArea;
-
     @FXML
     private TextField nomC_textFile;
-
-
     @FXML
-    private TableColumn<Categorie_Produit,String> nomC_tableC;
+    private FontAwesomeIconView idfilter;
+    @FXML
+    private AnchorPane categorieList;
+    @FXML
+    private AnchorPane FilterAnchor;
+    @FXML
+    private AnchorPane formulaire;
+    @FXML
+    private TableColumn<Categorie_Produit, String> nomC_tableC;
     @FXML
     private TableColumn<Categorie_Produit, String> description_tableC;
 
+    @FXML
+    void GestionProduit(ActionEvent event) throws IOException {
+
+        // Charger la nouvelle interface ListproduitAdmin.fxml
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignProduitAdmin.fxml"));
+        Parent root = loader.load();
+
+        // Créer une nouvelle scène avec la nouvelle interface
+        Scene scene = new Scene(root);
+
+        // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        // Créer une nouvelle fenêtre (stage) et y attacher la scène
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Gestion des categories");
+        stage.show();
+
+        // Fermer la fenêtre actuelle
+        currentStage.close();
+    }
 
     @FXML
-    void GestionCategorie(ActionEvent event) throws IOException {
-
-            // Charger la nouvelle interface ListproduitAdmin.fxml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignProduitAdmin.fxml"));
-            Parent root = loader.load();
-
-            // Créer une nouvelle scène avec la nouvelle interface
-            Scene scene = new Scene(root);
-
-            // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
-            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-            // Créer une nouvelle fenêtre (stage) et y attacher la scène
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.setTitle("Gestion des categories");
-            stage.show();
-
-            // Fermer la fenêtre actuelle
-            currentStage.close();
-        }
+    void initialize() {
 
 
-
-
-
-    @FXML
-    void initialize(){
+        SearchBar.textProperty().addListener((observable, oldValue, newValue) -> {
+            search(newValue);
+            filterCategorieProduits(newValue.trim());
+        });
 
 
         afficher_categorie();
         initDeleteColumn();
+
+
     }
 
     @FXML
@@ -125,10 +134,6 @@ public class DesignCategorieAdminController {
         alert.show();
     }
 
-
-
-
-
     private void initDeleteColumn() {
 
         Callback<TableColumn<Categorie_Produit, Void>, TableCell<Categorie_Produit, Void>> cellFactory = new Callback<>() {
@@ -165,11 +170,8 @@ public class DesignCategorieAdminController {
         };
 
         deleteColumn.setCellFactory(cellFactory);
-        categorie_tableview.getColumns().add(deleteColumn);
+        //categorie_tableview.getColumns().add(deleteColumn);
     }
-
-
-
 
     @FXML
     void modifier_categorie(Categorie_Produit categorieProduit) {
@@ -184,13 +186,11 @@ public class DesignCategorieAdminController {
 
     }
 
-
     @FXML
-    void afficher_categorie(){
+    void afficher_categorie() {
 
 
-
-        nomC_tableC.setCellValueFactory(new PropertyValueFactory<Categorie_Produit,String>("nom_categorie"));
+        nomC_tableC.setCellValueFactory(new PropertyValueFactory<Categorie_Produit, String>("nom_categorie"));
         nomC_tableC.setCellFactory(TextFieldTableCell.forTableColumn());
         nomC_tableC.setOnEditCommit(event -> {
             Categorie_Produit categorieProduit = event.getRowValue();
@@ -198,7 +198,7 @@ public class DesignCategorieAdminController {
             modifier_categorie(categorieProduit);
         });
 
-        description_tableC.setCellValueFactory(new PropertyValueFactory<Categorie_Produit,String>("description"));
+        description_tableC.setCellValueFactory(new PropertyValueFactory<Categorie_Produit, String>("description"));
         description_tableC.setCellFactory(TextFieldTableCell.forTableColumn());
         description_tableC.setOnEditCommit(event -> {
             Categorie_Produit categorieProduit = event.getRowValue();
@@ -229,19 +229,275 @@ public class DesignCategorieAdminController {
         categorie_tableview.getSelectionModel().setCellSelectionEnabled(true);
 
     }
-    @FXML
-    public static List<Categorie_Produit> recherchercat(List<Categorie_Produit> liste, String recherche) {
-        List<Categorie_Produit> resultats = new ArrayList<>();
 
-        for (Categorie_Produit element : liste) {
-            if (element.getNom_categorie() != null && element.getNom_categorie().contains(recherche)) {
-                resultats.add(element);
+    @FXML
+    private void search(String keyword) {
+        CategorieService categoryService = new CategorieService();
+        ObservableList<Categorie_Produit> filteredList = FXCollections.observableArrayList();
+        if (keyword == null || keyword.trim().isEmpty()) {
+            filteredList.addAll(categoryService.read());
+        } else {
+            for (Categorie_Produit category : categoryService.read()) {
+                if (category.getNom_categorie().toLowerCase().contains(keyword.toLowerCase()) ||
+                        category.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
+                    filteredList.add(category);
+                }
             }
         }
-
-        return resultats;
+        categorie_tableview.setItems(filteredList);
     }
 
+    private void filterCategorieProduits(String searchText) {
+        // Vérifier si le champ de recherche n'est pas vide
+        if (!searchText.isEmpty()) {
+            // Filtrer la liste des cinémas pour ne garder que ceux dont le nom contient le texte saisi
+            ObservableList<Categorie_Produit> filteredList = FXCollections.observableArrayList();
+            for (Categorie_Produit categorie : categorie_tableview.getItems()) {
+                if (categorie.getNom_categorie().toLowerCase().contains(searchText.toLowerCase())) {
+                    filteredList.add(categorie);
+                }
+            }
+            // Mettre à jour la TableView avec la liste filtrée
+            categorie_tableview.setItems(filteredList);
+        } else {
+            // Si le champ de recherche est vide, afficher tous les cinémas
+            afficher_categorie();
+        }
+    }
+
+    private List<Categorie_Produit> getAllCategories() {
+        CategorieService categorieservice = new CategorieService();
+        List<Categorie_Produit> categorie = categorieservice.read();
+        return categorie;
+    }
+
+    @FXML
+    void filtrer(MouseEvent event) {
+
+        categorie_tableview.setOpacity(0.5);
+        formulaire.setOpacity(0.5);
+        FilterAnchor.setVisible(true);
+
+        // Nettoyer les listes des cases à cocher
+        addressCheckBoxes.clear();
+        statusCheckBoxes.clear();
+        // Récupérer les adresses uniques depuis la base de données
+        List<String> categorie = getCategorie_Produit();
+
+
+        // Créer des VBox pour les adresses
+        VBox addressCheckBoxesVBox = new VBox();
+        Label addressLabel = new Label("Adresse");
+        addressLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
+        addressCheckBoxesVBox.getChildren().add(addressLabel);
+        for (String address : categorie) {
+            CheckBox checkBox = new CheckBox(address);
+            addressCheckBoxesVBox.getChildren().add(checkBox);
+            addressCheckBoxes.add(checkBox);
+        }
+        addressCheckBoxesVBox.setLayoutX(25);
+        addressCheckBoxesVBox.setLayoutY(60);
+
+
+        // Ajouter les VBox dans le FilterAnchor
+        FilterAnchor.getChildren().addAll(addressCheckBoxesVBox);
+        FilterAnchor.setVisible(true);
+    }
+
+
+    public List<String> getCategorie_Produit() {
+        // Récupérer tous les cinémas depuis la base de données
+        List<Categorie_Produit> categories = getAllCategories();
+
+        // Extraire les adresses uniques des cinémas
+        List<String> categorie = categories.stream()
+                .map(Categorie_Produit::getNom_categorie)
+                .distinct()
+                .collect(Collectors.toList());
+
+        return categorie;
+    }
+
+    @FXML
+    public void filtercinema(ActionEvent event) {
+
+        categorieList.setOpacity(1);
+        formulaire.setOpacity(1);
+
+
+        FilterAnchor.setVisible(false);
+
+        categorie_tableview.setVisible(true);
+        formulaire.setVisible(true);
+
+        // Récupérer les adresses sélectionnées
+        List<String> selectedCategories = getSelectedCategories();
+        // Récupérer les statuts sélectionnés
+
+        Categorie_Produit categorieProduit = new Categorie_Produit();
+        // Filtrer les cinémas en fonction des adresses et/ou des statuts sélectionnés
+        List<Categorie_Produit> filteredCategories = getAllCategories().stream()
+                .filter(c -> selectedCategories.contains(c.getNom_categorie()))
+                .collect(Collectors.toList());
+
+        // Mettre à jour le TableView avec les cinémas filtrés
+        ObservableList<Categorie_Produit> filteredList = FXCollections.observableArrayList(filteredCategories);
+        categorie_tableview.setItems(filteredList);
+
+
+    }
+
+    private List<String> getSelectedCategories() {
+        // Récupérer les adresses sélectionnées dans l'AnchorPane de filtrage
+        return addressCheckBoxes.stream()
+                .filter(CheckBox::isSelected)
+                .map(CheckBox::getText)
+                .collect(Collectors.toList());
+    }
+
+    @FXML
+    void cinemaclient(ActionEvent event) {
+        try {
+            // Charger la nouvelle interface PanierProduit.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/CommentaireProduit.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène avec la nouvelle interface
+            Scene scene = new Scene(root);
+
+            // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Créer une nouvelle fenêtre (stage) et y attacher la scène
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("cinema ");
+            stage.show();
+
+            // Fermer la fenêtre actuelle
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace(); // Gérer l'exception d'entrée/sortie
+        }
+
+
+    }
+
+    @FXML
+    void eventClient(ActionEvent event) {
+        try {
+            // Charger la nouvelle interface PanierProduit.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(".fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène avec la nouvelle interface
+            Scene scene = new Scene(root);
+
+            // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Créer une nouvelle fenêtre (stage) et y attacher la scène
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("Event ");
+            stage.show();
+
+            // Fermer la fenêtre actuelle
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace(); // Gérer l'exception d'entrée/sortie
+        }
+
+
+    }
+
+    @FXML
+    void produitClient(ActionEvent event) {
+        try {
+            // Charger la nouvelle interface PanierProduit.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignProduitAdmin.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène avec la nouvelle interface
+            Scene scene = new Scene(root);
+
+            // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Créer une nouvelle fenêtre (stage) et y attacher la scène
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("products ");
+            stage.show();
+
+            // Fermer la fenêtre actuelle
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace(); // Gérer l'exception d'entrée/sortie
+        }
+
+
+    }
+
+    @FXML
+    void profilclient(ActionEvent event) {
+
+
+    }
+
+
+    @FXML
+    void MovieClient(ActionEvent event) {
+        try {
+            // Charger la nouvelle interface PanierProduit.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/filmuser.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène avec la nouvelle interface
+            Scene scene = new Scene(root);
+
+            // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Créer une nouvelle fenêtre (stage) et y attacher la scène
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("movie ");
+            stage.show();
+
+            // Fermer la fenêtre actuelle
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace(); // Gérer l'exception d'entrée/sortie
+        }
+    }
+
+    @FXML
+    void SerieClient(ActionEvent event) {
+        try {
+            // Charger la nouvelle interface PanierProduit.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Serie-view.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène avec la nouvelle interface
+            Scene scene = new Scene(root);
+
+            // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Créer une nouvelle fenêtre (stage) et y attacher la scène
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("series ");
+            stage.show();
+
+            // Fermer la fenêtre actuelle
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace(); // Gérer l'exception d'entrée/sortie
+        }
+
+    }
 
 
 }

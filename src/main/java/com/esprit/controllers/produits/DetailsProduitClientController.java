@@ -12,6 +12,7 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -226,8 +227,8 @@ public class DetailsProduitClientController implements Initializable {
 
 
         Avis avis = new Avis();
-        Produit produit1 = avis.getProduit();
-        double rate = new AvisService().getavergerating(produit1.getId_produit());
+        //Produit produit1 = avis.getProduit();
+        double rate = new AvisService().getavergerating(produit.getId_produit());
         System.out.println(BigDecimal.valueOf(rate).setScale(1, RoundingMode.FLOOR));
 
         // Champ de notation (Rating)
@@ -237,26 +238,32 @@ public class DetailsProduitClientController implements Initializable {
         rating.setMax(5);
         rating.setRating(avis.getNote()); // Vous pouvez ajuster en fonction de la valeur du produit
 
-        Label etoilelabel = new Label(rate+"/5");
+
+
+        String format = String.format("%.1f/5", BigDecimal.valueOf(rate).setScale(1, RoundingMode.FLOOR).doubleValue());
+        Label etoilelabel = new Label(format);
         etoilelabel.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
         etoilelabel.setStyle("-fx-text-fill: #333333;");
         etoilelabel.setLayoutX(410);
         etoilelabel.setLayoutY (230);
 
-        Avis ratingFilm = new AvisService().ratingExiste(produit1.getId_produit(),/*(Client) stage.getUserData()*/1);
-        rating.setRating(ratingFilm != null ? ratingFilm.getNote() : 0);
+        Avis avi = new AvisService().ratingExiste(produit.getId_produit(),/*(Client) stage.getUserData()*/4);
+        rating.setRating(avi != null ? avi.getNote() : 0);
         //Stage stage = (Stage) hyperlink.getScene().getWindow();
-        rating.ratingProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                AvisService ratingFilmService = new AvisService();
-                Avis ratingFilm = ratingFilmService.ratingExiste(produit1.getId_produit(), 1 /*(Client) stage.getUserData()*/);
-                if (ratingFilm != null)
-                    ratingFilmService.delete(ratingFilm);
-                ratingFilmService.create(new Avis(/*(Client) stage.getUserData()*/(Client) new UserService().getUserById(1),t1.intValue(),null,produit1));
-                double rate = new AvisService().getavergerating(produit1.getId_produit());
-                System.out.println(BigDecimal.valueOf(rate).setScale(1, RoundingMode.FLOOR));
-                etoilelabel.setText(rate + "/5");}});
+        rating.ratingProperty().addListener((observableValue, number, t1) -> {
+            AvisService avisService = new AvisService();
+            Avis avi1 = avisService.ratingExiste(produit.getId_produit(), 4 /*(Client) stage.getUserData()*/);
+            if (avi != null)
+                avisService.delete(avi1);
+            avisService.create(new Avis(/*(Client) stage.getUserData()*/(Client) new UserService().getUserById(4),t1.intValue(),produit));
+            double rate1 = new AvisService().getavergerating(produit.getId_produit());
+            // Formater le texte avec une seule valeur après la virgule
+            String formattedRate = String.format("%.1f/5", BigDecimal.valueOf(rate1).setScale(1, RoundingMode.FLOOR).doubleValue());
+
+            System.out.println(formattedRate);
+            etoilelabel.setText(formattedRate);
+
+        });
 
 
 
@@ -555,10 +562,185 @@ public class DetailsProduitClientController implements Initializable {
         }
 
 
+    }
+
+
+
+    @FXML
+    void commentaire(MouseEvent event) {
+
+
+        try {
+            // Charger la nouvelle interface PanierProduit.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/CommentaireProduit.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène avec la nouvelle interface
+            Scene scene = new Scene(root);
+
+            // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Créer une nouvelle fenêtre (stage) et y attacher la scène
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("Commentaire des produits");
+            stage.show();
+
+            // Fermer la fenêtre actuelle
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace(); // Gérer l'exception d'entrée/sortie
+        }
+
+    }
+    @FXML
+    void cinemaclient(ActionEvent event) {
+        try {
+            // Charger la nouvelle interface PanierProduit.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/CommentaireProduit.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène avec la nouvelle interface
+            Scene scene = new Scene(root);
+
+            // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Créer une nouvelle fenêtre (stage) et y attacher la scène
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("cinema ");
+            stage.show();
+
+            // Fermer la fenêtre actuelle
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace(); // Gérer l'exception d'entrée/sortie
+        }
+
+
+    }
+
+    @FXML
+    void eventClient(ActionEvent event) {
+        try {
+            // Charger la nouvelle interface PanierProduit.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AffichageEvenementClient.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène avec la nouvelle interface
+            Scene scene = new Scene(root);
+
+            // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Créer une nouvelle fenêtre (stage) et y attacher la scène
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("Event ");
+            stage.show();
+
+            // Fermer la fenêtre actuelle
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace(); // Gérer l'exception d'entrée/sortie
+        }
+
+
+    }
+
+    @FXML
+    void produitClient(ActionEvent event) {
+        try {
+            // Charger la nouvelle interface PanierProduit.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherProduitClient.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène avec la nouvelle interface
+            Scene scene = new Scene(root);
+
+            // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Créer une nouvelle fenêtre (stage) et y attacher la scène
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("products ");
+            stage.show();
+
+            // Fermer la fenêtre actuelle
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace(); // Gérer l'exception d'entrée/sortie
+        }
+
+
+    }
+
+    @FXML
+    void profilclient(ActionEvent event) {
 
 
 
     }
+
+
+    @FXML
+    void MovieClient(ActionEvent event) {
+        try {
+            // Charger la nouvelle interface PanierProduit.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/filmuser.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène avec la nouvelle interface
+            Scene scene = new Scene(root);
+
+            // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Créer une nouvelle fenêtre (stage) et y attacher la scène
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("movie ");
+            stage.show();
+
+            // Fermer la fenêtre actuelle
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace(); // Gérer l'exception d'entrée/sortie
+        }
+    }
+
+    @FXML
+    void SerieClient(ActionEvent event) {
+        try {
+            // Charger la nouvelle interface PanierProduit.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Series-view.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène avec la nouvelle interface
+            Scene scene = new Scene(root);
+
+            // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Créer une nouvelle fenêtre (stage) et y attacher la scène
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("chat ");
+            stage.show();
+
+            // Fermer la fenêtre actuelle
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace(); // Gérer l'exception d'entrée/sortie
+        }
+
+    }
+
+
+
 
 
 }
