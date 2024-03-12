@@ -108,9 +108,10 @@ public class DesignEvenementAdminController {
         for (Categorie_evenement c : cs.read()) {
             cbCategorie.getItems().add(c.getNom_categorie());
         }
-        SearchBar.textProperty().addListener((observable, oldValue, newValue) -> {
+       /* SearchBar.textProperty().addListener((observable, oldValue, newValue) -> {
             filterCategorieEvenements(newValue.trim());
-        });
+
+        });*/
 
         afficher_evenement();
         initDeleteColumn();
@@ -219,7 +220,7 @@ public class DesignEvenementAdminController {
             }
             // Arrêter l'exécution de la méthode si les champs sont vides
 
-            if (!nomEvenement.matches("[a-zA-Z0-9]*")) {
+            if (!nomEvenement.matches("[a-zA-Z0-9 ]*")) {
                 showAlert("Please fill out the form with no special characters");
                 // Arrêter l'exécution de la méthode si le nom n'est pas valide
             }
@@ -723,6 +724,7 @@ public class DesignEvenementAdminController {
             for (Evenement categorie : tvEvenement.getItems()) {
                 if (categorie.getCategorie().getNom_categorie().toLowerCase().contains(searchText.toLowerCase())) {
                     filteredList.add(categorie);
+
                 }
             }
             // Mettre à jour la TableView avec la liste filtrée
