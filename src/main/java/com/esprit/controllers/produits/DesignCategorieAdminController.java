@@ -287,7 +287,7 @@ public class DesignCategorieAdminController {
 
         // Créer des VBox pour les adresses
         VBox addressCheckBoxesVBox = new VBox();
-        Label addressLabel = new Label("Adresse");
+        Label addressLabel = new Label("Category");
         addressLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
         addressCheckBoxesVBox.getChildren().add(addressLabel);
         for (String address : categorie) {
