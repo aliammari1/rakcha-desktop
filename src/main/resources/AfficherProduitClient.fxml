@@ -2,6 +2,7 @@
 
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
@@ -11,7 +12,7 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="700.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.produits.AfficherProduitClientControllers">
+<AnchorPane fx:id="produitAnchor" prefHeight="700.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.produits.AfficherProduitClientControllers">
    <children>
       <AnchorPane prefHeight="712.0" prefWidth="216.0" styleClass="nav-form" stylesheets="@dashboard.css">
          <children>
@@ -44,18 +45,24 @@
             </ImageView>
          </children>
       </AnchorPane>
-      <TextField fx:id="SearchBar" layoutX="790.0" layoutY="27.0" prefHeight="31.0" prefWidth="200.0" styleClass="search-pane" stylesheets="@dashboard.css" />
-      <ScrollPane fx:id="produitscrollpane" layoutX="249.0" layoutY="146.0" prefHeight="538.0" prefWidth="709.0">
+      <TextField fx:id="SearchBar" layoutX="718.0" layoutY="35.0" prefHeight="31.0" prefWidth="200.0" styleClass="search-pane" stylesheets="@dashboard.css" />
+      <ScrollPane fx:id="produitscrollpane" layoutX="249.0" layoutY="167.0" prefHeight="538.0" prefWidth="725.0">
          <content>
       
             
-            <FlowPane fx:id="produitFlowPane" prefHeight="527.0" prefWidth="723.0" />
+            <FlowPane fx:id="produitFlowPane" prefHeight="523.0" prefWidth="723.0" />
          </content>
       </ScrollPane>
-      <FontAwesomeIconView glyphName="SHOPPING_CART" layoutX="1242.0" layoutY="120.0" onMouseClicked="#panier" size="25" />
-      <FlowPane fx:id="panierFlowPane" layoutX="987.0" layoutY="184.0" prefHeight="500.0" prefWidth="279.0" styleClass="search-pane" stylesheets="@dashboard.css" visible="false" />
-      <FontAwesomeIconView fx:id="idfilter" glyphName="FILTER" layoutX="1218.0" layoutY="119.0" onMouseClicked="#filtrer" size="20" text="" />
-      <AnchorPane fx:id="AnchorComments" layoutX="451.0" layoutY="90.0" prefHeight="470.0" prefWidth="439.0" visible="false">
+      <FontAwesomeIconView glyphName="SHOPPING_CART" layoutX="1220.0" layoutY="121.0" onMouseClicked="#panier" size="25" />
+      <FlowPane fx:id="panierFlowPane" layoutX="980.0" layoutY="157.0" prefHeight="500.0" prefWidth="279.0" styleClass="search-pane" stylesheets="@dashboard.css" visible="false" />
+      <AnchorPane fx:id="FilterAnchor" layoutX="1001.0" layoutY="20.0" prefHeight="231.0" prefWidth="180.0" styleClass="bg-white" stylesheets="@dashboard.css" visible="false">
+         <children>
+            <Button layoutX="131.0" layoutY="122.0" mnemonicParsing="false" onAction="#filtercinema" text="Filter" />
+            <FontAwesomeIconView glyphName="CLOSE" layoutX="147.0" layoutY="19.0" onMouseClicked="#CloseFilter" size="15" />
+         </children>
+      </AnchorPane>
+      <FontAwesomeIconView fx:id="idfilter" glyphName="FILTER" layoutX="1191.0" layoutY="119.0" onMouseClicked="#filtrer" size="20" />
+      <AnchorPane fx:id="AnchorComments" layoutX="373.0" layoutY="90.0" prefHeight="470.0" prefWidth="439.0" visible="false">
          <children>
             <TextArea fx:id="txtAreaComments" layoutX="15.0" layoutY="418.0" prefHeight="43.0" prefWidth="406.0" />
             <ScrollPane fx:id="idcomment" layoutX="15.0" layoutY="38.0" prefHeight="366.0" prefWidth="406.0">
@@ -63,19 +70,18 @@
                   <AnchorPane prefHeight="366.0" prefWidth="408.0" />
                </content>
             </ScrollPane>
-            <FontAwesomeIconView fx:id="forwardMessage" glyphName="FORWARD" layoutX="392.0" layoutY="444.0" size="15" />
+            <FontAwesomeIconView fx:id="forwardMessage" glyphName="FORWARD" layoutX="392.0" layoutY="444.0" onMouseClicked="#AddComment" size="15" />
             <FontAwesomeIconView glyphName="CLOSE" layoutX="400.0" layoutY="19.0" onMouseClicked="#Close" size="15" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="FilterAnchor" layoutX="1002.0" layoutY="21.0" prefHeight="161.0" prefWidth="174.0" styleClass="bg-white" stylesheets="@dashboard.css" visible="false">
+      <AnchorPane fx:id="top3anchorpane" layoutX="987.0" layoutY="256.0" prefHeight="399.0" prefWidth="279.0">
          <children>
-            <Button layoutX="130.0" layoutY="122.0" mnemonicParsing="false" onAction="#filtercinema" text="Filter" />
-            <FontAwesomeIconView glyphName="CLOSE" layoutX="167.0" layoutY="19.0" onMouseClicked="#CloseFilter" size="15" />
-         </children>
-      </AnchorPane>
-      <AnchorPane layoutX="967.0" layoutY="196.0" prefHeight="477.0" prefWidth="287.0">
-         <children>
-            <FlowPane fx:id="topthreeVbox" layoutX="-1.0" prefHeight="477.0" prefWidth="297.0" />
+            <FlowPane fx:id="topthreeVbox" layoutX="10.0" layoutY="83.0" prefHeight="307.0" prefWidth="260.0" />
+            <Label layoutX="19.0" layoutY="22.0" prefHeight="43.0" prefWidth="252.0" text="Top 3 best rating movies :">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
 

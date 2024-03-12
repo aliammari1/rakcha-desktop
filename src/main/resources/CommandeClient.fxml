@@ -43,7 +43,7 @@
             </ImageView>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="paimenet" layoutX="311.0" layoutY="187.0" prefHeight="457.0" prefWidth="537.0" styleClass="search-pane" stylesheets="@dashbord.css">
+      <AnchorPane fx:id="paimenet" layoutX="341.0" layoutY="146.0" prefHeight="457.0" prefWidth="537.0" styleClass="search-pane" stylesheets="@dashbord.css">
          <children>
             <Label layoutX="45.0" layoutY="96.0" text="Phone Number :">
                <font>
@@ -65,9 +65,7 @@
             <TextField fx:id="adresseTextField" layoutX="184.0" layoutY="189.0" />
          </children>
       </AnchorPane>
-      <FontAwesomeIconView fill="#6f6a6a" glyphName="SEARCH" layoutX="806.0" layoutY="57.0" size="13" />
-      <TextField layoutX="825.0" layoutY="40.0" prefHeight="25.0" prefWidth="171.0" styleClass="search-pane" stylesheets="@dashbord.css" />
-      <FontAwesomeIconView glyphName="SHOPPING_CART" layoutX="1228.0" layoutY="160.0" onMouseClicked="#panier" size="25" />
+      <FontAwesomeIconView glyphName="SHOPPING_CART" layoutX="1208.0" layoutY="156.0" onMouseClicked="#panier" size="25" />
       <FlowPane fx:id="prixtotaleFlowPane" layoutX="1032.0" layoutY="342.0" prefHeight="65.0" prefWidth="188.0" stylesheets="@dashbord.css" />
       <Label alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="1011.0" layoutY="301.0" text="Total Price :" textAlignment="CENTER">
          <font>

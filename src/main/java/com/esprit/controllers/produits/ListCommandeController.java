@@ -14,17 +14,23 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 
+import java.io.IOException;
 import java.util.Date;
 
 public class ListCommandeController {
 
-    @FXML
-    private TableColumn<Commande, String> idEtat;
+
+
 
     @FXML
     private TableColumn<Commande, String> idStatu;
@@ -88,7 +94,7 @@ public class ListCommandeController {
         idnumero.setCellValueFactory(new PropertyValueFactory<Commande, Integer>("num_telephone"));
         iddate.setCellValueFactory(new PropertyValueFactory<Commande, Date>("dateCommande"));
         idStatu.setCellValueFactory(new PropertyValueFactory<Commande, String>("statu"));
-        idEtat.setCellValueFactory(new PropertyValueFactory<Commande, String>("etat"));
+
 
 
         // Utiliser une ObservableList pour stocker les éléments
@@ -158,6 +164,38 @@ public class ListCommandeController {
         };
 
         deleteColumn.setCellFactory(cellFactory);
+
+    }
+
+
+
+    @FXML
+    void statCommande(ActionEvent event) {
+
+        try {
+            // Charger la nouvelle interface PanierProduit.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AnalyseCommande.fxml"));
+            Parent root = loader.load();
+
+            // Créer une nouvelle scène avec la nouvelle interface
+            Scene scene = new Scene(root);
+
+            // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Créer une nouvelle fenêtre (stage) et y attacher la scène
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("statisqtisue");
+            stage.setOnHidden(e -> currentStage.show()); // Afficher l'ancienne fenêtre lorsque la nouvelle est fermée
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace(); // Gérer l'exception d'entrée/sortie
+        }
+
+
+
 
     }
 

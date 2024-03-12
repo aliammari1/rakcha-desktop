@@ -2,6 +2,7 @@ package com.esprit.controllers.films;
 
 import com.esprit.models.films.Actor;
 import com.esprit.models.films.Film;
+import com.esprit.models.films.Filmcoment;
 import com.esprit.models.films.RatingFilm;
 import com.esprit.models.users.Client;
 import com.esprit.services.films.*;
@@ -23,6 +24,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -30,11 +32,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import org.controlsfx.control.Rating;
@@ -53,6 +59,9 @@ public class FilmUserController extends Application {
     FlowPane flowpaneFilm;
 
     FlowPane flowPaneactors;
+
+    @FXML
+    private AnchorPane AnchorComments;
     private List<Film> l1 = new ArrayList<>();
     @FXML
     private Rating filmRate;
@@ -70,6 +79,11 @@ public class FilmUserController extends Application {
     private Label labelavregeRate;
     @FXML
     private AnchorPane anchorPaneFilm;
+    @FXML
+    private ScrollPane ScrollPaneComments;
+
+    @FXML
+    private TextField txtAreaComments;
     @FXML
     private AnchorPane Anchore_Pane_filtrage;
     @FXML
@@ -100,6 +114,8 @@ public class FilmUserController extends Application {
     private ComboBox<String> top3combobox;
     @FXML
     private VBox topthreeVbox1;
+
+    private int filmId;
 
     @FXML
     public static List<Film> rechercher(List<Film> liste, String recherche) {
@@ -286,6 +302,7 @@ public class FilmUserController extends Application {
                 anchorPaneFilm.setOpacity(0.26);
                 anchorPaneFilm.setDisable(true);
                 Film film1 = new Film(film);
+                filmId = film.getId();
                 filmNomDetail.setText(film1.getNom());
                 descriptionDETAILfilm.setText(film1.getDescription() + "\nTime:" + film1.getDuree() + "\nYear:" + film1.getAnnederalisation() + "\nCategories: " + new FilmcategoryService().getCategoryNames(film1.getId()) + "\nActors: " + new ActorfilmService().getActorsNames(film1.getId()));
                 imagefilmDetail.setImage(new Image(film1.getImage()));
@@ -297,6 +314,7 @@ public class FilmUserController extends Application {
                 rateFilm.setLayoutY(494);
                 rateFilm.setPrefSize(199, 35);
                 rateFilm.setRating(ratingFilm != null ? ratingFilm.getRate() : 0);
+
 
                 //Stage stage = (Stage) hyperlink.getScene().getWindow();
                 final String text = film1.getNom();// Créer un objet QRCodeWriter pour générer le QR code
@@ -597,6 +615,133 @@ public class FilmUserController extends Application {
             System.out.println(e.getMessage());
         }
     }
+
+    @FXML
+    void addCommentaire() {
+        String message = txtAreaComments.getText();
+        if (message.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Commentaire vide");
+            alert.setContentText("Add Comment");
+            alert.showAndWait();
+        } else {
+            Filmcoment commentaire = new Filmcoment(message, (Client) new UserService().getUserById(4), new FilmService().getFilm(filmId));
+            System.out.println(commentaire + " " + new UserService().getUserById(4));
+            FilmcomentService commentaireCinemaService = new FilmcomentService();
+            commentaireCinemaService.create(commentaire);
+            txtAreaComments.clear();
+        }
+    }
+
+    @FXML
+    void AddComment(MouseEvent event) {
+        addCommentaire();
+        displayAllComments(filmId);
+    }
+
+    @FXML
+    void afficherAnchorComment(MouseEvent event) {
+        AnchorComments.setVisible(true);
+        detalAnchorPane.setOpacity(0.2);
+
+
+    }
+
+    private HBox addCommentToView(Filmcoment commentaire) {
+        // Création du cercle pour l'image de l'utilisateur
+        Circle imageCircle = new Circle(20);
+        imageCircle.setFill(Color.TRANSPARENT);
+        imageCircle.setStroke(Color.BLACK);
+        imageCircle.setStrokeWidth(2);
+
+        // Image de l'utilisateur
+        String imageUrl = commentaire.getUser_id().getPhoto_de_profil();
+        Image userImage;
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            userImage = new Image(imageUrl);
+        } else {
+            // Chargement de l'image par défaut
+            userImage = new Image(getClass().getResourceAsStream("/Logo.png"));
+        }
+
+        ImageView imageView = new ImageView(userImage);
+        imageView.setFitWidth(50);
+        imageView.setFitHeight(50);
+
+        // Positionner l'image au centre du cercle
+        imageView.setTranslateX(2 - imageView.getFitWidth() / 2);
+        imageView.setTranslateY(2 - imageView.getFitHeight() / 2);
+
+        // Ajouter l'image au cercle
+        Group imageGroup = new Group();
+        imageGroup.getChildren().addAll(imageCircle, imageView);
+
+        // Création de la boîte pour l'image et la bordure du cercle
+        HBox imageBox = new HBox();
+        imageBox.getChildren().add(imageGroup);
+
+        // Création du conteneur pour la carte du commentaire
+        HBox cardContainer = new HBox();
+        cardContainer.setStyle("-fx-background-color: white; -fx-padding: 5px ; -fx-border-radius: 8px; -fx-border-color: #000; -fx-background-radius: 8px; ");
+
+        // Nom de l'utilisateur
+        Text userName = new Text(commentaire.getUser_id().getFirstName() + " " + commentaire.getUser_id().getLastName());
+        userName.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-style: bold;");
+
+        // Commentaire
+        Text commentText = new Text(commentaire.getComment());
+        commentText.setStyle("-fx-font-family: 'Arial'; -fx-max-width: 300 ;");
+        commentText.setWrappingWidth(300); // Définir une largeur maximale pour le retour à la ligne automatique
+
+
+        // Création de la boîte pour le texte du commentaire
+        VBox textBox = new VBox();
+
+
+        // Ajouter le nom d'utilisateur et le commentaire à la boîte de texte
+        textBox.getChildren().addAll(userName, commentText);
+
+        // Ajouter la boîte d'image et la boîte de texte à la carte du commentaire
+        cardContainer.getChildren().addAll(textBox);
+
+        // Création du conteneur pour l'image, le cercle et la carte du commentaire
+        HBox contentContainer = new HBox();
+        contentContainer.setPrefHeight(50);
+        contentContainer.setStyle("-fx-background-color: transparent; -fx-padding: 10px"); // Arrière-plan transparent
+        contentContainer.getChildren().addAll(imageBox, cardContainer);
+
+        // Ajouter le conteneur principal au ScrollPane
+        ScrollPaneComments.setContent(contentContainer);
+        return contentContainer;
+    }
+
+    private List<Filmcoment> getAllComment(int filmId) {
+        FilmcomentService commentaireCinemaService = new FilmcomentService();
+        List<Filmcoment> allComments = commentaireCinemaService.read(); // Récupérer tous les commentaires
+        List<Filmcoment> cinemaComments = new ArrayList<>();
+
+        // Filtrer les commentaires pour ne conserver que ceux du cinéma correspondant
+        for (Filmcoment comment : allComments) {
+            if (comment.getFilm_id().getId() == filmId) {
+                cinemaComments.add(comment);
+            }
+        }
+
+        return cinemaComments;
+    }
+
+    private void displayAllComments(int filmId) {
+        List<Filmcoment> comments = getAllComment(filmId);
+        VBox allCommentsContainer = new VBox();
+
+        for (Filmcoment comment : comments) {
+            HBox commentView = addCommentToView(comment);
+            allCommentsContainer.getChildren().add(commentView);
+        }
+
+        ScrollPaneComments.setContent(allCommentsContainer);
+    }
+
 
     @Override
     public void start(Stage stage) throws Exception {
