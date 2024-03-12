@@ -82,9 +82,14 @@
                                       <TableColumn fx:id="Delete_Column" prefWidth="75.0" text="Delete" />
                                   </columns>
                               </TableView>
+                     <AnchorPane fx:id="Anchore_Pane_filtrage1" layoutX="-88.0" layoutY="-95.0" prefHeight="442.0" prefWidth="228.0" styleClass="bg-white" visible="false">
+                        <children>
+                           <Button fx:id="bouttonAnchor_outfilltrer1" layoutX="71.0" layoutY="389.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="86.0" styleClass="sale" text="Filtrer" />
+                        </children>
+                     </AnchorPane>
                           </children>
                       </AnchorPane>
-                      <AnchorPane layoutX="10.0" layoutY="69.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="769.0" prefWidth="442.0" styleClass="bg-white" stylesheets="@styles/filmStyle.css">
+                      <AnchorPane layoutX="14.0" layoutY="58.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="769.0" prefWidth="442.0" styleClass="bg-white" stylesheets="@styles/filmStyle.css">
                           <children>
                               <Label layoutX="6.0" layoutY="438.0" text="annederealisation">
                                   <font>
@@ -141,16 +146,12 @@
                               </HBox>
                           </children>
                       </AnchorPane>
-                        <TextField layoutX="735.0" layoutY="76.0" prefHeight="29.0" prefWidth="158.0" promptText="rechercher" />
+                        <TextField fx:id="recherche_textField" layoutX="735.0" layoutY="76.0" prefHeight="29.0" prefWidth="158.0" promptText="rechercher" />
                         <FontAwesomeIconView fill="#ae2d3c" glyphName="SEARCH" layoutX="865.0" layoutY="97.0" size="19" text="" textAlignment="RIGHT" />
                         <Button layoutX="915.0" layoutY="76.0" mnemonicParsing="false" styleClass="instert-btn" stylesheets="@styles/filmStyle.css" text="chercher" />
+               <Button layoutX="614.0" layoutY="68.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="110.0" styleClass="sale" text="Filtrer" />
                 </children>
             </AnchorPane>
         </center>
     </BorderPane>
-   <AnchorPane fx:id="Anchore_Pane_filtrage1" layoutX="471.0" layoutY="89.0" prefHeight="442.0" prefWidth="228.0" styleClass="bg-white" visible="false">
-      <children>
-         <Button fx:id="bouttonAnchor_outfilltrer1" layoutX="71.0" layoutY="389.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="86.0" styleClass="sale" text="Filtrer" />
-      </children>
-   </AnchorPane>
 </AnchorPane>

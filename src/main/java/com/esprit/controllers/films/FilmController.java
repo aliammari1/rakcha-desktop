@@ -12,6 +12,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -45,6 +46,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class FilmController {
+    private final List<CheckBox> addressCheckBoxes = new ArrayList<>();
+    private final List<CheckBox> yearsCheckBoxes = new ArrayList<>();
 
     Validator validator;
 
@@ -98,6 +101,19 @@ public class FilmController {
     private Button addButton;
     @FXML
     private HBox addHbox;
+    private FilteredList<Film> filteredActors;
+
+
+    @FXML
+    private TextField recherche_textField;
+
+    @FXML
+    private AnchorPane Anchore_Pane_filtrage1;
+    @FXML
+    private Button bouttonAnchor_outfilltrer;
+
+    @FXML
+    private Button bouttonAnchor_outfilltrer1;
 
     @FXML
     void initialize() {
@@ -125,7 +141,31 @@ public class FilmController {
         List<Category> categories = categoryService.read();
         List<String> categoryNames = categories.stream().map(Category::getNom).collect(Collectors.toList());
         Categorychecj_ComboBox.getItems().addAll(categoryNames);
+        filteredActors = new FilteredList<>(filmCategory_tableView1.getItems());
+
+        // Réinitialiser la TableView avec la liste filtrée
+        filmCategory_tableView1.setItems(filteredActors);
+
+        // Appliquer le filtre lorsque le texte de recherche change
+        recherche_textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            searchActor(newValue);
+        });
     }
+
+
+    private void searchActor(String searchText) {
+        filteredActors.setPredicate(actor -> {
+            // Si le champ de recherche est vide, afficher tous les acteurs
+            if (searchText == null || searchText.isEmpty()) {
+                return true;
+            }
+
+            // Vérifier si le nom de l'acteur contient le texte de recherche (en ignorant la casse)
+            String lowerCaseFilter = searchText.toLowerCase();
+            return actor.getNom().toLowerCase().contains(lowerCaseFilter);
+        });
+    }
+
 
     @FXML
     private void showAlert(String message) {
