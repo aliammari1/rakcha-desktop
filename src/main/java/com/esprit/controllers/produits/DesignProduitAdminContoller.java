@@ -641,7 +641,7 @@ public class DesignProduitAdminContoller {
     void filtrer(MouseEvent event) {
 
         Produit_tableview.setOpacity(0.5);
-        formulaire.setOpacity(0.5);
+
         FilterAnchor.setVisible(true);
 
         // Nettoyer les listes des cases à cocher
@@ -676,6 +676,7 @@ public class DesignProduitAdminContoller {
     public List<String> getCategorie_Produit() {
         // Récupérer tous les cinémas depuis la base de données
         List<Produit> categories = getAllCategories();
+
 
 
 

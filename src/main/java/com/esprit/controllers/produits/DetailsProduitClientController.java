@@ -212,10 +212,15 @@ public class DetailsProduitClientController implements Initializable {
 
 
         // Bouton Ajouter au Panier
-        Button addToCartButton = new Button("Ajouter au panier", new FontAwesomeIconView(FontAwesomeIcon.CART_PLUS));
+        Button addToCartButton = new Button("Add to Cart", new FontAwesomeIconView(FontAwesomeIcon.CART_PLUS));
         addToCartButton.setLayoutX(435);
         addToCartButton.setLayoutY(300);
-        addToCartButton.getStyleClass().add("ajouter-panier"); // Style du bouton
+        //addToCartButton.getStyleClass().add("sale"); // Style du bouton
+        addToCartButton.setStyle("-fx-background-color: #dd4f4d;\n" +
+                "    -fx-text-fill: #FFFFFF;\n" +
+                "    -fx-font-size: 12px;\n" +
+                "    -fx-font-weight: bold;\n" +
+                "    -fx-padding: 10px 10px;");
         addToCartButton.setOnAction(
 
 
@@ -382,9 +387,6 @@ public class DetailsProduitClientController implements Initializable {
 
 
 
-
-
-
         // Image du Produit
         ImageView imageView = new ImageView();
         imageView.setLayoutX(50);
@@ -414,7 +416,7 @@ public class DetailsProduitClientController implements Initializable {
         nameLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
         nameLabel.setStyle("-fx-text-fill: #333333;");
         nameLabel.setLayoutX(10);
-        nameLabel.setLayoutY (230);
+        nameLabel.setLayoutY (235);
         nameLabel.setMaxWidth(200); // Ajuster la largeur maximale selon vos besoins
         nameLabel.setWrapText(true); // Activer le retour à la ligne automatique
 
@@ -422,7 +424,7 @@ public class DetailsProduitClientController implements Initializable {
         Label priceLabel = new Label(" " + produit.getPrix() + " DT");
         priceLabel.setFont(Font.font("Arial", FontWeight.BOLD, 15));
         priceLabel.setLayoutX(10);
-        priceLabel.setLayoutY(295);
+        priceLabel.setLayoutY(270);
 
 
 
@@ -430,7 +432,7 @@ public class DetailsProduitClientController implements Initializable {
         Label quantiteLabel = new Label("Quantité : 1 " );
         quantiteLabel.setFont(Font.font("Arial", FontWeight.BOLD, 15));
         quantiteLabel.setLayoutX(30);
-        quantiteLabel.setLayoutY(320);
+        quantiteLabel.setLayoutY(290);
 
 
 
@@ -438,7 +440,7 @@ public class DetailsProduitClientController implements Initializable {
         Label sommeTotaleLabel = new Label("Somme totale : " + produit.getPrix()+ " DT");
         sommeTotaleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 15));
         sommeTotaleLabel.setLayoutX(30);
-        sommeTotaleLabel.setLayoutY(340);
+        sommeTotaleLabel.setLayoutY(320);
 
 
 
@@ -446,13 +448,17 @@ public class DetailsProduitClientController implements Initializable {
         // Bouton Ajouter au Panier
         Button commandebutton = new Button("Order", new FontAwesomeIconView(FontAwesomeIcon.CART_PLUS));
         commandebutton.setLayoutX(50);
-        commandebutton.setLayoutY(370);
+        commandebutton.setLayoutY(350);
         commandebutton.setPrefWidth(120);
         commandebutton.setPrefHeight(35);
-        commandebutton.getStyleClass().add("commande-button"); // Style du bouton
+        commandebutton.setStyle("-fx-background-color: #624970;\n" +
+                " -fx-text-fill: #FCE19A;" +
+                "   -fx-font-size: 12px;\n" +
+                "     -fx-font-weight: bold;\n" +
+                " -fx-background-color: #6f7b94"); // Style du bouton
         commandebutton.setOnAction(
                 event -> {
-                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/PanierProduit.fxml"));
+                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/DesignProduitAdmin.fxml"));
 
                     try {
 
@@ -481,8 +487,13 @@ public class DetailsProduitClientController implements Initializable {
         // Bouton Ajouter au Panier
         Button achatbutton = new Button("continue shopping");
         achatbutton.setLayoutX(50);
-        achatbutton.setLayoutY(420);
-        achatbutton.getStyleClass().add("achat-button"); // Style du bouton
+        achatbutton.setLayoutY(400);
+        achatbutton.setPrefHeight(30);
+        achatbutton.setStyle(" -fx-background-color: #466288;\n" +
+                "    -fx-text-fill: #FCE19A;\n" +
+                "    -fx-font-size: 12px;\n" +
+                "    -fx-font-weight: bold;\n" +
+                "    -fx-padding: 10px 10px;");
         achatbutton.setOnAction(
                 event -> {
                     fermerPanierCard(panierContainer);
@@ -787,9 +798,10 @@ public class DetailsProduitClientController implements Initializable {
         AnchorPane card = new AnchorPane();
         card.setLayoutX(0);
         card.setLayoutY(0);
+        cardContainer.setPrefWidth(255);
 
 
-        card.getStyleClass().add("meilleurfilm");
+        card.getStyleClass().add("meilleurproduit");
         cardContainer.setSpacing(10);
 
         // Image of the product

@@ -12,7 +12,7 @@
 
 <AnchorPane prefHeight="700.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.produits.PanierProduitControllers">
    <children>
-      <AnchorPane layoutY="-9.0" prefHeight="712.0" prefWidth="216.0" styleClass="nav-form" stylesheets="@dashboard.css">
+      <AnchorPane layoutY="-9.0" prefHeight="712.0" prefWidth="216.0" styleClass="nav-form" stylesheets="@styles/produitStyle.css">
          <children>
             <Button layoutY="282.0" mnemonicParsing="false" onAction="#MovieClient" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Movies">
                <font>
@@ -43,9 +43,9 @@
             </ImageView>
          </children>
       </AnchorPane>
-      <ScrollPane layoutX="237.0" layoutY="184.0" prefHeight="490.0" prefWidth="776.0">
+      <ScrollPane hbarPolicy="NEVER" layoutX="237.0" layoutY="184.0" prefHeight="490.0" prefWidth="776.0">
          <content>
-            <FlowPane fx:id="cartFlowPane" prefHeight="488.0" prefWidth="776.0" />
+            <FlowPane fx:id="cartFlowPane" prefHeight="488.0" prefWidth="776.0" styleClass="scroll-pane" stylesheets="@styles/produitStyle.css" />
          </content>
       </ScrollPane>
       <Label layoutX="558.0" layoutY="52.0" text="CART" textFill="#d72222">
@@ -53,7 +53,7 @@
             <Font name="Arial Rounded MT Bold" size="48.0" />
          </font>
       </Label>
-      <AnchorPane layoutX="1046.0" layoutY="276.0" prefHeight="200.0" prefWidth="200.0" stylesheets="@dashboard.css">
+      <AnchorPane layoutX="1046.0" layoutY="276.0" prefHeight="200.0" prefWidth="200.0" styleClass="bg-white" stylesheets="@styles/produitStyle.css">
          <children>
             <FlowPane fx:id="prixtotaleFlowPane" layoutX="105.0" layoutY="25.0" prefHeight="30.0" prefWidth="87.0" stylesheets="@dashboard.css" />
             <Label alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" layoutY="30.0" prefHeight="10.0" prefWidth="87.0" text="Total Price :" textAlignment="CENTER">
@@ -61,9 +61,16 @@
                   <Font name="Tw Cen MT Condensed" size="18.0" />
                </font>
             </Label>
-            <Button layoutX="49.0" layoutY="132.0" mnemonicParsing="false" onAction="#order" prefHeight="30.0" prefWidth="121.0" styleClass="achat-button" stylesheets="@dashboard.css" text="ORDER" />
+            <Button layoutX="49.0" layoutY="132.0" mnemonicParsing="false" onAction="#order" prefHeight="30.0" prefWidth="121.0" styleClass="sale" stylesheets="@styles/produitStyle.css" text="ORDER" />
          </children>
       </AnchorPane>
       <FontAwesomeIconView fx:id="retour" fill="#6b2a2a" glyphName="ARROW_LEFT" layoutX="266.0" layoutY="169.0" onMouseClicked="#afficherProduit" size="20" text="" />
+      <ImageView fitHeight="69.0" fitWidth="62.0" layoutX="242.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Logo.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="304.0" layoutY="39.0" prefHeight="17.0" prefWidth="132.0" text="Loujain Hajlaoui" />
+      <Label layoutX="309.0" layoutY="62.0" prefHeight="17.0" prefWidth="48.0" text="User" />
    </children>
 </AnchorPane>
