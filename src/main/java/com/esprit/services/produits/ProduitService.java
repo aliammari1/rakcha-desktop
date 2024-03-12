@@ -173,7 +173,7 @@ public class ProduitService  implements IService<Produit> {
 
             while (resultSet.next()) {
                 CategorieService cs = new CategorieService();
-                System.out.println("****************id_produit: "+resultSet.getInt("id_produit")+ " " +resultSet.getInt("quantiteP") );
+
                 Produit produit = new Produit(
                         resultSet.getInt("id_produit"),
                         resultSet.getString("nom"),

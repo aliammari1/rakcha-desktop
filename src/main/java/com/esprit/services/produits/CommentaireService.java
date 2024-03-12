@@ -103,7 +103,7 @@ public class CommentaireService implements IService<Commentaire> {
     public List<Commentaire> getCommentsByProduitId(int produitId) {
         List<Commentaire> commentaires = new ArrayList<>();
 
-        String req = "SELECT * FROM commentaireproduit WHERE idProduit = ?";
+        String req = "SELECT * FROM commentaireproduit join produit WHERE commentaireproduit.idProduit = produit.id_produit AND idProduit = ?";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(1, produitId);
