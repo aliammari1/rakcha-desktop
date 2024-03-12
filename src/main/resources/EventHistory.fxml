@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="358.0" prefWidth="395.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.evenements.EventHistoryController">
+    <children>
+        <TableView fx:id="tvHistory" layoutY="50.0" prefHeight="308.0" prefWidth="395.0" stylesheets="@dashboard2.css">
+            <columns>
+                <TableColumn fx:id="tcHistoryName" prefWidth="147.0" text="Event Name" />
+            <TableColumn fx:id="tcHistorydd" prefWidth="103.0" text="Start Date" />
+            <TableColumn fx:id="tcHistorydf" prefWidth="127.0" text="End Date" />
+            </columns>
+        </TableView>
+      <Label layoutX="9.0" layoutY="7.0" text="The events you joined : " textFill="#ab2626">
+         <font>
+            <Font name="Bebas Neue Regular" size="30.0" />
+         </font>
+      </Label>
+    </children>
+</AnchorPane>

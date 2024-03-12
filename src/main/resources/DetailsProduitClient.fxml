@@ -2,7 +2,7 @@
 
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -42,19 +42,27 @@
             </ImageView>
          </children>
       </AnchorPane>
-      <TextField fx:id="SearchBar" layoutX="820.0" layoutY="72.0" styleClass="search-pane" stylesheets="@dashboard.css" />
-      <FlowPane fx:id="detailFlowPane" layoutX="238.0" layoutY="169.0" prefHeight="474.0" prefWidth="717.0" styleClass="flow-pane" stylesheets="@dashboard.css">
+      <FlowPane fx:id="detailFlowPane" layoutX="238.0" layoutY="149.0" prefHeight="494.0" prefWidth="717.0" styleClass="flow-pane" stylesheets="@dashboard.css">
          <children>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" />
          </children></FlowPane>
-      <FontAwesomeIconView fx:id="retour" fill="#6b2a2a" glyphName="ARROW_LEFT" layoutX="252.0" layoutY="159.0" onMouseClicked="#afficherProduit" size="20" text="" />
-      <FontAwesomeIconView fill="#6b2a2a" glyphName="ARROW_RIGHT" layoutX="285.0" layoutY="158.0" size="20" />
-      <AnchorPane fx:id="panierAnchorPane" layoutX="983.0" layoutY="171.0" prefHeight="474.0" prefWidth="273.0">
+      <FontAwesomeIconView fx:id="retour" fill="#6b2a2a" glyphName="ARROW_LEFT" layoutX="253.0" layoutY="136.0" onMouseClicked="#afficherProduit" size="20" text="" />
+      <AnchorPane fx:id="panierAnchorPane" layoutX="983.0" layoutY="171.0" prefHeight="474.0" prefWidth="273.0" visible="false">
          <children>
             <FlowPane fx:id="panierFlowPane" prefHeight="474.0" prefWidth="273.0" styleClass="flow-pane" stylesheets="@dashboard.css" visible="false" />
          </children>
       </AnchorPane>
-      <FontAwesomeIconView glyphName="SHOPPING_CART" layoutX="1217.0" layoutY="137.0" onMouseClicked="#panier" size="25" />
-      <FontAwesomeIconView glyphName="COMMENTING" layoutX="1177.0" layoutY="137.0" onMouseClicked="#commentaire" size="25" />
+      <FontAwesomeIconView glyphName="SHOPPING_CART" layoutX="1210.0" layoutY="125.0" onMouseClicked="#panier" size="25" text="" />
+      <FontAwesomeIconView glyphName="COMMENTING" layoutX="1169.0" layoutY="124.0" onMouseClicked="#commentaire" size="25" />
+      <AnchorPane fx:id="top3anchorpane" layoutX="977.0" layoutY="209.0" prefHeight="399.0" prefWidth="279.0">
+         <children>
+            <FlowPane fx:id="topthreeVbox" layoutX="10.0" layoutY="83.0" prefHeight="307.0" prefWidth="260.0" />
+            <Label layoutX="19.0" layoutY="22.0" prefHeight="43.0" prefWidth="252.0" text="Top 3 best rating movies :">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>
