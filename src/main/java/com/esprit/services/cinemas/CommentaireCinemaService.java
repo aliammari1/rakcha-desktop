@@ -26,12 +26,13 @@ public class CommentaireCinemaService implements IService<CommentaireCinema> {
     @Override
     public void create(CommentaireCinema commentaire) {
 
-        String req = "INSERT into commentairecinema(idClient,commentaire,Sentiment ) values (?,?,?);";
+        String req = "INSERT into commentairecinema(idCinema,idClient,commentaire,Sentiment ) values (?,?,?,?);";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
-            pst.setInt(1, commentaire.getClient().getId() );
-            pst.setString(2, commentaire.getCommentaire() );
-            pst.setString(3, commentaire.getSentiment());
+            pst.setInt(1, commentaire.getCinema().getId_cinema());
+            pst.setInt(2, commentaire.getClient().getId() );
+            pst.setString(3, commentaire.getCommentaire() );
+            pst.setString(4, commentaire.getSentiment());
 
 
             pst.executeUpdate();
@@ -53,6 +54,7 @@ public class CommentaireCinemaService implements IService<CommentaireCinema> {
             while (rs.next()) {
                 commentaire.add(new CommentaireCinema(
                         rs.getInt("id"),
+                        new CinemaService().getCinema(rs.getInt("idcinema")),
                         (Client) new UserService().getUserById(rs.getInt("idclient")),
                         rs.getString("commentaire"), rs.getString("Sentiment")
                 ));
@@ -63,6 +65,10 @@ public class CommentaireCinemaService implements IService<CommentaireCinema> {
 
         return commentaire;
     }
+
+
+
+
 
     @Override
     public void update(CommentaireCinema commentaire) {

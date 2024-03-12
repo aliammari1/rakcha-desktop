@@ -52,7 +52,7 @@
             <FontAwesomeIconView glyphName="FILTER" layoutX="123.0" layoutY="76.0" size="20" />
             </children>
         </AnchorPane>
-      <AnchorPane fx:id="FilterAnchor" layoutX="458.0" layoutY="155.0" prefHeight="317.0" prefWidth="340.0" styleClass="bg-white" stylesheets="@dashboard.css" visible="false">
+      <AnchorPane fx:id="FilterAnchor" layoutX="458.0" layoutY="155.0" prefHeight="317.0" prefWidth="340.0" styleClass="bg-white" stylesheets="@styles/filmStyle.css" visible="false">
          <children>
             <Label layoutX="117.0" layoutY="23.0" prefHeight="43.0" prefWidth="105.0" text="Filter:" textFill="#fce19a">
                <font>

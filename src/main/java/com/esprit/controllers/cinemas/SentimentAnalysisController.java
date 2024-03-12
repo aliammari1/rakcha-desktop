@@ -12,11 +12,7 @@ import java.util.Properties;
 
 public class SentimentAnalysisController {
 
-    @FXML
-    private TextArea inputTextArea;
 
-    @FXML
-    private Label resultLabel;
 
     public String analyzeSentiment(String text) {
         // Configure pipeline properties

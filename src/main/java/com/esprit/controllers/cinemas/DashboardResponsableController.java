@@ -1,12 +1,14 @@
 package com.esprit.controllers.cinemas;
 
 import com.esprit.models.cinemas.Cinema;
+import com.esprit.models.cinemas.CommentaireCinema;
 import com.esprit.models.cinemas.Salle;
 import com.esprit.models.cinemas.Seance;
 import com.esprit.models.films.Film;
 import com.esprit.models.films.Filmcinema;
 import com.esprit.models.users.Responsable_de_cinema;
 import com.esprit.services.cinemas.CinemaService;
+import com.esprit.services.cinemas.CommentaireCinemaService;
 import com.esprit.services.cinemas.SalleService;
 import com.esprit.services.cinemas.SeanceService;
 import com.esprit.services.films.FilmService;
@@ -24,6 +26,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -55,10 +58,7 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class DashboardResponsableController implements Initializable {
@@ -160,6 +160,18 @@ public class DashboardResponsableController implements Initializable {
     @FXML
     private TextArea txtareaStatut;
 
+    @FXML
+    private AnchorPane StatisticsAnchor;
+
+    @FXML
+    private Button showStat;
+
+    @FXML
+    private PieChart pieChart;
+
+
+
+
 
     @FXML
     private void showAlert(String message) {
@@ -218,6 +230,7 @@ public class DashboardResponsableController implements Initializable {
         SessionTableView.setVisible(false);
         addRoomForm.setVisible(false);
         RoomTableView.setVisible(false);
+        showStat.setVisible(true);
 
 
         for (Cinema c : acceptedCinemas) {
@@ -1185,4 +1198,7 @@ public class DashboardResponsableController implements Initializable {
         stage.show();
         currentStage.close();
     }
+
+
+
 }
