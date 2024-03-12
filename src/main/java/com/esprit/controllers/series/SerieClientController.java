@@ -36,7 +36,8 @@ import java.util.Objects;
 
 public class SerieClientController {
     private final ObservableList<String> selectedCategories = FXCollections.observableArrayList();
-
+    @FXML
+    Button watchEpisode;
     @FXML
     private Label resultatLabel;
     @FXML
@@ -48,29 +49,6 @@ public class SerieClientController {
     private List<Serie> listeTop3;
     @FXML
     private TextField recherchefld;
-
-    /*
-        @Override
-        public void initialize(URL url, ResourceBundle resourceBundle) {
-            IServiceSerieImpl ss = new IServiceSerieImpl();
-
-
-            hboxTop3.setSpacing(20); // Set the spacing between VBox instances
-            hboxTop3.setPadding(new Insets(10));
-            List<Serie> listeTop3 = ss.findMostLiked();
-
-            for (Serie serie : listeTop3) {
-                VBox vbox = createSeriesVBox(serie);
-                hboxTop3.getChildren().add(vbox);
-            }
-
-        }
-
-     */
-    @FXML
-    private HBox hboxTop3;
-
-
     /*
     public void afficherliste(List<Serie> series){
         listeSerie.getItems().clear();
@@ -99,6 +77,26 @@ public class SerieClientController {
         });
     }
     */
+    /*
+        @Override
+        public void initialize(URL url, ResourceBundle resourceBundle) {
+            IServiceSerieImpl ss = new IServiceSerieImpl();
+
+
+            hboxTop3.setSpacing(20); // Set the spacing between VBox instances
+            hboxTop3.setPadding(new Insets(10));
+            List<Serie> listeTop3 = ss.findMostLiked();
+
+            for (Serie serie : listeTop3) {
+                VBox vbox = createSeriesVBox(serie);
+                hboxTop3.getChildren().add(vbox);
+            }
+
+        }
+
+     */
+    @FXML
+    private HBox hboxTop3;
 
     //FOCTION RECHERCHE
     public static List<Serie> rechercher(List<Serie> liste, String recherche) {
@@ -111,6 +109,14 @@ public class SerieClientController {
         }
 
         return resultats;
+    }
+
+    @FXML
+    void onWatch(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/EpisodeClient.fxml"));
+        Parent root = loader.load();
+        Stage stage = (Stage) watchEpisode.getScene().getWindow();
+        stage.setScene(new Scene(root));
     }
 
     private VBox createSeriesVBox(Serie serie) {
@@ -433,7 +439,6 @@ public class SerieClientController {
 
 
     }
-
 
     @FXML
     private void initialize() throws SQLException {

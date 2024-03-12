@@ -4,14 +4,17 @@ import com.esprit.models.produits.Categorie_Produit;
 import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class CategorieService  implements IService<Categorie_Produit> {
+public class CategorieService implements IService<Categorie_Produit> {
 
-    private Connection connection;
+    private final Connection connection;
 
     public CategorieService() {
         connection = DataSource.getInstance().getConnection();
@@ -154,7 +157,6 @@ public class CategorieService  implements IService<Categorie_Produit> {
     }
 
 
-
     public List<Categorie_Produit> searchCategoriesByName(String searchKeyword) {
         List<Categorie_Produit> result = new ArrayList<>();
 
@@ -170,7 +172,7 @@ public class CategorieService  implements IService<Categorie_Produit> {
                 String nomCategorie = resultSet.getString("nom_categorie");
                 // Ajoutez d'autres colonnes si nécessaire
 
-                Categorie_Produit categorie = new Categorie_Produit(idCategorie, nomCategorie,null);
+                Categorie_Produit categorie = new Categorie_Produit(idCategorie, nomCategorie, null);
                 // Initialisez d'autres propriétés si nécessaire
 
                 result.add(categorie);

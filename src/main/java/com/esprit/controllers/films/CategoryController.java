@@ -1,6 +1,8 @@
 package com.esprit.controllers.films;
 
+import com.esprit.controllers.ClientSideBarController;
 import com.esprit.models.films.Category;
+import com.esprit.models.users.Client;
 import com.esprit.services.films.CategoryService;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -26,36 +28,29 @@ public class CategoryController {
 
     @FXML
     private TextArea descriptionCategory_textArea;
-
     @FXML
     private TextArea nomCategory_textArea;
-
     @FXML
     private TableView<Category> filmCategory_tableView;
-
     @FXML
     private TableColumn<Category, String> nomCategory_tableColumn;
-
     @FXML
     private TableColumn<Category, String> descrptionCategory_tableColumn;
-
     @FXML
     private TableColumn<Category, Integer> idCategory_tableColumn;
-
     @FXML
     private TableColumn<Category, Button> delete_tableColumn;
-
     @FXML
     private AnchorPane categoryCrudInterface;
     @FXML
     private ComboBox<String> filterCriteriaComboBox;
-
     @FXML
     private StackPane stackPane;
     @FXML
     private Button AjouterCategory_Button;
     @FXML
     private TextField recherche_textField;
+
 
     @FXML
     void initialize() {

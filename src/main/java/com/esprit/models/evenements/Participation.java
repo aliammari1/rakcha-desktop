@@ -1,21 +1,23 @@
 package com.esprit.models.evenements;
 
+import com.esprit.models.users.Client;
+
 public class Participation {
 
     private int id_participation;
     private Evenement event;
 
-    private int userevenement;
+    private Client userevenement;
     private int quantity;
 
-    public Participation(int id_participation, Evenement event, int userevenement, int quantity) {
+    public Participation(int id_participation, Evenement event, Client userevenement, int quantity) {
         this.id_participation = id_participation;
         this.event = event;
         this.userevenement = userevenement;
         this.quantity = quantity;
     }
 
-    public Participation(Evenement event, int userevenement, int quantity) {
+    public Participation(Evenement event, Client userevenement, int quantity) {
         this.event = event;
         this.userevenement = userevenement;
         this.quantity = quantity;
@@ -44,11 +46,11 @@ public class Participation {
         this.event = event;
     }
 
-    public int getUserevenement() {
+    public Client getUserevenement() {
         return userevenement;
     }
 
-    public void setUserevenement(int user) {
+    public void setUserevenement(Client userevenement) {
         this.userevenement = userevenement;
     }
 

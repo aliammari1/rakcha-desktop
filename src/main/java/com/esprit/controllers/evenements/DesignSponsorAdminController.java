@@ -1,6 +1,8 @@
 package com.esprit.controllers.evenements;
 
+import com.esprit.controllers.ClientSideBarController;
 import com.esprit.models.evenements.Sponsor;
+import com.esprit.models.users.Client;
 import com.esprit.services.evenements.SponsorService;
 import com.esprit.utils.DataSource;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -39,34 +41,25 @@ import java.util.List;
 import java.util.Objects;
 
 public class DesignSponsorAdminController {
-
     private final ObservableList<Sponsor> masterData = FXCollections.observableArrayList();
-    private File selectedFile; // pour stocke le fichier image selectionné
 
+    private File selectedFile; // pour stocke le fichier image selectionné
     @FXML
     private Button bAddS;
-
     @FXML
     private FontAwesomeIconView iconLogoS;
-
     @FXML
     private ImageView image;
-
     @FXML
     private TableColumn<Sponsor, ImageView> tcLogo;
-
     @FXML
     private TableColumn<Sponsor, String> tcNomS;
-
     @FXML
     private TextField tfNomS;
-
     @FXML
     private TableView<Sponsor> tvSponsor;
-
     @FXML
     private TableColumn<Sponsor, Button> tcDeleteS;
-
     @FXML
     private TextField tfRechercheS;
 
@@ -87,6 +80,7 @@ public class DesignSponsorAdminController {
 
         return resultats;
     }
+
 
     @FXML
     void initialize() {

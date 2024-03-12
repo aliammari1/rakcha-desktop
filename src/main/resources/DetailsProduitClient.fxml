@@ -1,79 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
-<?import java.net.URL?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-
-<AnchorPane fx:id="anchordetail" prefHeight="700.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.produits.DetailsProduitClientController">
-   <children>
-      <AnchorPane prefHeight="702.0" prefWidth="211.0" styleClass="nav-form" stylesheets="@styles/produitStyle.css">
-         <children>
-            <Button layoutY="282.0" mnemonicParsing="false" onAction="#MovieClient" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Movies">
-               <font>
-                  <Font name="System Italic" size="17.0" />
-               </font>
-            </Button>
-            <FontAwesomeIconView fill="#ebe5e5" glyphName="FILM" layoutX="20.0" layoutY="308.0" size="30" text="" />
-            <Button layoutX="1.0" layoutY="321.0" mnemonicParsing="false" onAction="#produitClient" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Products" />
-            <FontAwesomeIconView fill="#ebe5e5" glyphName="CUBES" layoutX="20.0" layoutY="347.0" size="30" text="" />
-            <FontAwesomeIconView fill="#ebe5e5" glyphName="VIDEO_CAMERA" layoutX="24.0" layoutY="390.0" size="30" text="" />
-            <Button layoutY="364.0" mnemonicParsing="false" onAction="#cinemaclient" prefHeight="30.0" prefWidth="202.0" styleClass="nav-btn" text="Cinema" textAlignment="CENTER" />
-            <FontAwesomeIconView fill="#ebe5e5" glyphName="USER" layoutX="39.0" layoutY="611.0" size="30" text="" />
-            <Button layoutX="74.0" layoutY="584.0" mnemonicParsing="false" onAction="#profilclient" styleClass="nav-btn" text="Account" />
-            <FontAwesomeIconView fill="#ebe5e5" glyphName="SIGN_OUT" layoutX="38.0" layoutY="651.0" size="30" text="" />
-            <Button layoutX="82.0" layoutY="624.0" mnemonicParsing="false" styleClass="nav-btn" text="EXIT" />
-            <FontAwesomeIconView fill="#ebe5e5" glyphName="CALENDAR" layoutX="22.0" layoutY="432.0" size="30" text="" />
-            <Button layoutX="1.0" layoutY="407.0" mnemonicParsing="false" onAction="#eventClient" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Event">
-               <font>
-                  <Font size="13.0" />
-               </font>
-            </Button>
-            <Button layoutX="1.0" layoutY="244.0" mnemonicParsing="false" onAction="#SerieClient" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Series" />
-            <FontAwesomeIconView fill="#ebe5e5" glyphName="TV" layoutX="18.0" layoutY="269.0" size="30" />
-            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="9.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@Logo.png" />
-               </image>
-            </ImageView>
-         </children>
-      </AnchorPane>
-      <FlowPane fx:id="detailFlowPane" layoutX="238.0" layoutY="149.0" prefHeight="494.0" prefWidth="717.0" styleClass="bg-white">
-         <children>
-            <AnchorPane prefHeight="200.0" prefWidth="200.0" />
-         </children>
-         <stylesheets>
-            <URL value="@dashboard.css" />
-            <URL value="@styles/produitStyle.css" />
-         </stylesheets></FlowPane>
-      <FontAwesomeIconView fx:id="retour" fill="#b92d2d" glyphName="ARROW_LEFT" layoutX="253.0" layoutY="136.0" onMouseClicked="#afficherProduit" size="20" text="" />
-      <AnchorPane fx:id="panierAnchorPane" layoutX="983.0" layoutY="171.0" prefHeight="474.0" prefWidth="273.0" styleClass="bg-white" stylesheets="@styles/produitStyle.css" visible="false">
-         <children>
-            <FlowPane fx:id="panierFlowPane" prefHeight="474.0" prefWidth="273.0" styleClass="flow-pane" stylesheets="@dashboard.css" visible="false" />
-         </children>
-      </AnchorPane>
-      <FontAwesomeIconView fill="#b92d2d" glyphName="SHOPPING_CART" layoutX="1210.0" layoutY="125.0" onMouseClicked="#panier" size="25" text="" />
-      <AnchorPane fx:id="top3anchorpane" layoutX="977.0" layoutY="209.0" prefHeight="399.0" prefWidth="279.0" styleClass="bg-white" stylesheets="@styles/produitStyle.css">
-         <children>
-            <FlowPane fx:id="topthreeVbox" layoutX="10.0" layoutY="83.0" prefHeight="307.0" prefWidth="260.0" />
-            <Label layoutX="19.0" layoutY="22.0" prefHeight="43.0" prefWidth="252.0" text="Top 3 best rating movies :">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-         </children>
-      </AnchorPane>
-      <ImageView fitHeight="69.0" fitWidth="62.0" layoutX="222.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@Logo.png" />
-         </image>
-      </ImageView>
-      <Label layoutX="284.0" layoutY="30.0" prefHeight="17.0" prefWidth="132.0" text="Loujain Hajlaoui" />
-      <Label layoutX="289.0" layoutY="53.0" prefHeight="17.0" prefWidth="48.0" text="User" />
-   </children>
+<?import java.net.URL?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="anchordetail" prefHeight="700.0" prefWidth="1280.0"
+            xmlns="http://javafx.com/javafx/21"
+            fx:controller="com.esprit.controllers.produits.DetailsProduitClientController">
+    <children>
+        <fx:include source="clientSideBar.fxml"/>
+        <FlowPane fx:id="detailFlowPane" layoutX="238.0" layoutY="149.0" prefHeight="494.0" prefWidth="717.0"
+                  styleClass="bg-white">
+            <children>
+                <AnchorPane prefHeight="200.0" prefWidth="200.0"/>
+            </children>
+            <stylesheets>
+                <URL value="@styles/dashboard.css"/>
+                <URL value="@styles/produitStyle.css"/>
+            </stylesheets>
+        </FlowPane>
+        <FontAwesomeIconView fx:id="retour" fill="#b92d2d" glyphName="ARROW_LEFT" layoutX="253.0" layoutY="136.0"
+                             onMouseClicked="#afficherProduit" size="20" text=""/>
+        <AnchorPane fx:id="panierAnchorPane" layoutX="983.0" layoutY="171.0" prefHeight="474.0" prefWidth="273.0"
+                    styleClass="bg-white" stylesheets="@styles/produitStyle.css" visible="false">
+            <children>
+                <FlowPane fx:id="panierFlowPane" prefHeight="474.0" prefWidth="273.0" styleClass="flow-pane"
+                          stylesheets="@styles/dashboard.css" visible="false"/>
+            </children>
+        </AnchorPane>
+        <FontAwesomeIconView fill="#b92d2d" glyphName="SHOPPING_CART" layoutX="1210.0" layoutY="125.0"
+                             onMouseClicked="#panier" size="25" text=""/>
+        <AnchorPane fx:id="top3anchorpane" layoutX="977.0" layoutY="209.0" prefHeight="399.0" prefWidth="279.0"
+                    styleClass="bg-white" stylesheets="@styles/produitStyle.css">
+            <children>
+                <FlowPane fx:id="topthreeVbox" layoutX="10.0" layoutY="83.0" prefHeight="307.0" prefWidth="260.0"/>
+                <Label layoutX="19.0" layoutY="22.0" prefHeight="43.0" prefWidth="252.0"
+                       text="Top 3 best rating movies :">
+                    <font>
+                        <Font name="System Bold" size="18.0"/>
+                    </font>
+                </Label>
+            </children>
+        </AnchorPane>
+        <ImageView fitHeight="69.0" fitWidth="62.0" layoutX="222.0" layoutY="14.0" pickOnBounds="true"
+                   preserveRatio="true">
+            <image>
+                <Image url="@Logo.png"/>
+            </image>
+        </ImageView>
+        <Label layoutX="284.0" layoutY="30.0" prefHeight="17.0" prefWidth="132.0" text="Loujain Hajlaoui"/>
+        <Label layoutX="289.0" layoutY="53.0" prefHeight="17.0" prefWidth="48.0" text="User"/>
+    </children>
 </AnchorPane>

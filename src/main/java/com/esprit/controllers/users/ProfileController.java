@@ -35,6 +35,7 @@ public class ProfileController {
     @FXML
     private ImageView photoDeProfilImageView;
 
+
     @FXML
     public void initialize() {
     }

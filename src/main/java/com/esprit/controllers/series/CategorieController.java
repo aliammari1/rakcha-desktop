@@ -1,6 +1,8 @@
 package com.esprit.controllers.series;
 
+import com.esprit.controllers.ClientSideBarController;
 import com.esprit.models.series.Categorie;
+import com.esprit.models.users.Client;
 import com.esprit.services.series.IServiceCategorieImpl;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,20 +22,20 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class CategorieController {
+
     @FXML
     private Label checkdescreption;
-
     @FXML
     private Label checkname;
     @FXML
     private TextField nomF;
-
     @FXML
     private TextField descreptionF;
-
     @FXML
     private TableView<Categorie> tableView;
-    private void ref(){
+
+
+    private void ref() {
         tableView.getItems().clear();
         tableView.getColumns().clear();
         nomF.setText("");
@@ -41,7 +43,7 @@ public class CategorieController {
         //affichege tableau
         IServiceCategorieImpl categorieserv = new IServiceCategorieImpl();
         //TableColumn<Categorie, Integer> idCol = new TableColumn<>("ID");
-       // idCol.setCellValueFactory(new PropertyValueFactory<>("idcategorie"));
+        // idCol.setCellValueFactory(new PropertyValueFactory<>("idcategorie"));
 
         TableColumn<Categorie, String> nomCol = new TableColumn<>("Name");
         nomCol.setCellValueFactory(new PropertyValueFactory<>("nom"));
@@ -60,12 +62,12 @@ public class CategorieController {
                     try {
                         categorieserv.supprimer(categorie.getIdcategorie());
                         tableView.getItems().remove(categorie);
-                        showAlert("Succes","Deleted successfully !");
+                        showAlert("Succes", "Deleted successfully !");
                         ref();
                         tableView.refresh();
                     } catch (SQLException e) {
                         e.printStackTrace();
-                        showAlert("Error",e.getSQLState());
+                        showAlert("Error", e.getSQLState());
                     }
                 });
             }
@@ -84,14 +86,15 @@ public class CategorieController {
         TableColumn<Categorie, Void> modifierCol = new TableColumn<>("Edit");
         modifierCol.setCellFactory(param -> new TableCell<>() {
             private final Button button = new Button("Edit");
-                    private int clickCount =0;
+            private int clickCount = 0;
+
             {
                 button.setOnAction(event -> {
                     clickCount++;
-                    if(clickCount==2){
-                    Categorie categorie = getTableView().getItems().get(getIndex());
-                    modifierCategorie(categorie);
-                    clickCount=0;
+                    if (clickCount == 2) {
+                        Categorie categorie = getTableView().getItems().get(getIndex());
+                        modifierCategorie(categorie);
+                        clickCount = 0;
                     }
                 });
             }
@@ -107,8 +110,8 @@ public class CategorieController {
             }
         });
 
-       // tableView.getColumns().addAll(idCol,nomCol, descriptionCol,modifierCol, supprimerCol);
-        tableView.getColumns().addAll(nomCol, descriptionCol,modifierCol, supprimerCol);
+        // tableView.getColumns().addAll(idCol,nomCol, descriptionCol,modifierCol, supprimerCol);
+        tableView.getColumns().addAll(nomCol, descriptionCol, modifierCol, supprimerCol);
 
         try {
             tableView.getItems().addAll(categorieserv.recuperer());
@@ -117,6 +120,7 @@ public class CategorieController {
             e.printStackTrace();
         }
     }
+
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
@@ -124,14 +128,14 @@ public class CategorieController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
     private void modifierCategorie(Categorie categorie) {
-        IServiceCategorieImpl iServiceCategorie=new IServiceCategorieImpl();
+        IServiceCategorieImpl iServiceCategorie = new IServiceCategorieImpl();
         Dialog<Pair<String, String>> dialog = new Dialog<>();
         dialog.setTitle("Edit Category");
 
         TextField nomFild = new TextField(categorie.getNom());
         TextField desqFild = new TextField(String.valueOf(categorie.getDescription()));
-
 
 
         dialog.getDialogPane().setContent(new VBox(8, new Label("Name:"), nomFild, new Label("Description:"), desqFild));
@@ -161,33 +165,39 @@ public class CategorieController {
 
         });
     }
+
     @FXML
     private void initialize() {
         ref();
     }
-    boolean checkname( ){
-      if(nomF.getText()!=""){
 
-          return true;
-      }else{
-          checkname.setText("Please enter a valid Name");
-          return false;
-      }}
-        boolean checkdescreption( ) {
-            if (descreptionF.getText() !="") {
+    boolean checkname() {
+        if (nomF.getText() != "") {
 
-                return true;
-            } else {
-                checkdescreption.setText("Please enter a valid Description");
-                return false;
-            }
+            return true;
+        } else {
+            checkname.setText("Please enter a valid Name");
+            return false;
         }
+    }
+
+    boolean checkdescreption() {
+        if (descreptionF.getText() != "") {
+
+            return true;
+        } else {
+            checkdescreption.setText("Please enter a valid Description");
+            return false;
+        }
+    }
+
     @FXML
     void ajouteroeuvre(ActionEvent event) {
         IServiceCategorieImpl categorieserv = new IServiceCategorieImpl();
-        Categorie categorie= new Categorie();
+        Categorie categorie = new Categorie();
 
-        checkname() ; checkdescreption();
+        checkname();
+        checkdescreption();
         if (checkname() && checkdescreption()) {
             try {
 
@@ -203,6 +213,7 @@ public class CategorieController {
             }
         }
     }
+
     ///Gestion du menu
     @FXML
     void Ocategories(ActionEvent event) throws IOException {
@@ -212,6 +223,7 @@ public class CategorieController {
         stage.setScene(scene);
         stage.show();
     }
+
     @FXML
     void Oseriess(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Serie-view.fxml")));
@@ -220,6 +232,7 @@ public class CategorieController {
         stage.setScene(scene);
         stage.show();
     }
+
     @FXML
     void Oepisode(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Episode-view.fxml")));
@@ -228,6 +241,7 @@ public class CategorieController {
         stage.setScene(scene);
         stage.show();
     }
+
     @FXML
     public void showStatistics(ActionEvent actionEvent) {
         if (actionEvent != null) {

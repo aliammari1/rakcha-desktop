@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -14,92 +14,37 @@
                 AnchorPane.topAnchor="0.0">
         <top>
             <AnchorPane prefHeight="40.0" prefWidth="1291.0" BorderPane.alignment="CENTER">
-                <children>
-                    <AnchorPane layoutX="578.0" layoutY="-80.0" prefHeight="59.0" prefWidth="1291.0"
-                                styleClass="top-form"
-                                stylesheets="@styles/dashbord.css"
-                                AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                                AnchorPane.topAnchor="0.0">
-                        <children>
-                            <Button layoutX="1221.0" layoutY="14.0" mnemonicParsing="false" prefHeight="27.0"
-                                    prefWidth="56.0" styleClass="close"
-                                    stylesheets="@styles/dashbord.css"
-                                    AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
-                                <graphic>
-                                    <FontAwesomeIconView glyphName="CLOSE"/>
-                                </graphic>
-                            </Button>
-                            <Button layoutX="1163.0" layoutY="15.0" mnemonicParsing="false" prefHeight="28.0"
-                                    prefWidth="58.0" styleClass="minus"
-                                    stylesheets="@styles/dashbord.css"/>
-                            <Label layoutX="53.0" layoutY="15.0" text="Rakcha">
-                                <font>
-                                    <Font name="Microsoft Sans Serif" size="14.0"/>
-                                </font>
-                            </Label>
-                            <ImageView fitHeight="63.0" fitWidth="80.0" layoutX="-10.0" layoutY="-5.0"
-                                       pickOnBounds="true" preserveRatio="true">
-                                <image>
-                                    <Image url="@Logo.png"/>
-                                </image>
-                            </ImageView>
-                            <FontAwesomeIconView glyphName="MINUS" layoutX="1187.0" layoutY="34.0"/>
-                        </children>
-                    </AnchorPane>
-                </children>
+                <AnchorPane layoutX="578.0" layoutY="-80.0" prefHeight="59.0" prefWidth="1291.0"
+                            styleClass="top-form"
+                            stylesheets="@styles/dashbord.css"
+                            AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                            AnchorPane.topAnchor="0.0">
+                    <Button layoutX="1221.0" layoutY="14.0" mnemonicParsing="false" prefHeight="27.0"
+                            prefWidth="56.0" styleClass="close"
+                            stylesheets="@styles/dashbord.css"
+                            AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
+                        <graphic>
+                            <FontAwesomeIconView glyphName="CLOSE"/>
+                        </graphic>
+                    </Button>
+                    <Button layoutX="1163.0" layoutY="15.0" mnemonicParsing="false" prefHeight="28.0"
+                            prefWidth="58.0" styleClass="minus"
+                            stylesheets="@styles/dashbord.css"/>
+                    <Label layoutX="53.0" layoutY="15.0" text="Rakcha">
+                        <font>
+                            <Font name="Microsoft Sans Serif" size="14.0"/>
+                        </font>
+                    </Label>
+                    <ImageView fitHeight="63.0" fitWidth="80.0" layoutX="-10.0" layoutY="-5.0"
+                               pickOnBounds="true" preserveRatio="true">
+                        <Image url="@Logo.png"/>
+                    </ImageView>
+                    <FontAwesomeIconView glyphName="MINUS" layoutX="1187.0" layoutY="34.0"/>
+                </AnchorPane>
             </AnchorPane>
         </top>
         <left>
-            <AnchorPane prefHeight="702.0" prefWidth="235.0" styleClass="nav-form"
-                        stylesheets="@styles/dashbord.css"
-                        BorderPane.alignment="CENTER">
-                <children>
-                    <FontAwesomeIconView fill="#e1cfcf" glyphName="USER" layoutX="88.0" layoutY="83.0" size="80"
-                                         stroke="BLACK" text="" wrappingWidth="60.0"/>
-                    <Label layoutX="82.0" layoutY="96.0" text="Welcome" textAlignment="CENTER" textFill="#e1cfcf">
-                        <font>
-                            <Font size="16.0"/>
-                        </font>
-                    </Label>
-                    <Label layoutX="99.0" layoutY="121.0" text="Admin" textFill="#e1cfcf"/>
-                    <Button alignment="CENTER" layoutX="1.0" layoutY="201.0" mnemonicParsing="false" prefHeight="47.0"
-                            prefWidth="239.0" styleClass="nav-btn"
-                            stylesheets="@styles/dashbord.css"
-                            text="Ajouter films" textAlignment="CENTER"/>
-                    <Button layoutX="1.0" layoutY="298.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="239.0"
-                            styleClass="nav-btn"
-                            stylesheets="@styles/dashbord.css"
-                            text="Ajouter produit"/>
-                    <Button layoutX="1.0" layoutY="247.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="239.0"
-                            styleClass="nav-btn"
-                            stylesheets="@styles/dashbord.css"
-                            text="Ajouter Cinema"/>
-                    <Button layoutY="344.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="241.0"
-                            styleClass="nav-btn"
-                            stylesheets="@styles/dashbord.css"
-                            text="Liste des films"/>
-                    <Button layoutX="20.0" layoutY="603.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="42.0"
-                            styleClass="signout"
-                            stylesheets="@styles/dashbord.css"
-                            onAction="#signOut"/>
-                    <FontAwesomeIconView fill="#fffefe" glyphName="SIGN_OUT" layoutX="31.0" layoutY="631.0" size="20"
-                                         wrappingWidth="19.85714340209961">
-                        <font>
-                            <Font size="65.0"/>
-                        </font>
-                    </FontAwesomeIconView>
-                    <Label layoutX="70.0" layoutY="613.0" text="Sign out" textFill="#e1cfcf">
-                        <font>
-                            <Font size="14.0"/>
-                        </font>
-                    </Label>
-                    <FontAwesomeIconView fill="WHITE" glyphName="PLAY_CIRCLE" layoutX="22.0" layoutY="235.0" size="30"
-                                         wrappingWidth="17.714284896850586"/>
-                    <FontAwesomeIconView fill="WHITE" glyphName="PLUS" layoutX="23.0" layoutY="281.0" size="30"/>
-                    <FontAwesomeIconView fill="WHITE" glyphName="SERVER" layoutX="21.0" layoutY="378.0" size="30"/>
-                    <FontAwesomeIconView fill="WHITE" glyphName="PLUS" layoutX="23.0" layoutY="332.0" size="30"/>
-                </children>
-            </AnchorPane>
+            <fx:include source="adminSideBar.fxml"/>
         </left>
         <center>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">

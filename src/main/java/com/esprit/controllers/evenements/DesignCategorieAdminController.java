@@ -1,6 +1,8 @@
 package com.esprit.controllers.evenements;
 
+import com.esprit.controllers.ClientSideBarController;
 import com.esprit.models.evenements.Categorie_evenement;
+import com.esprit.models.users.Client;
 import com.esprit.services.evenements.CategorieService;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
@@ -27,30 +29,22 @@ import java.util.List;
 
 
 public class DesignCategorieAdminController {
-
     private final ObservableList<Categorie_evenement> masterData = FXCollections.observableArrayList();
 
     @FXML
     private TableView<Categorie_evenement> categorie_tableView;
-
     @FXML
     private TableColumn<Categorie_evenement, String> tcDescriptionC;
-
     @FXML
     private TableColumn<Categorie_evenement, Button> tcDeleteC;
-
     @FXML
     private TextArea tfDescriptionC;
-
     @FXML
     private TableColumn<Categorie_evenement, String> tcNomC;
-
     @FXML
     private TextField tfNomC;
-
     @FXML
     private TextField tfRechercheC;
-
     @FXML
     private Button bgesSeries;
 
@@ -66,6 +60,7 @@ public class DesignCategorieAdminController {
 
         return resultats;
     }
+
 
     @FXML
     void gestionEvenement(ActionEvent event) throws IOException {

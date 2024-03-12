@@ -1,7 +1,9 @@
 package com.esprit.controllers.films;
 
 
+import com.esprit.controllers.ClientSideBarController;
 import com.esprit.models.cinemas.Seance;
+import com.esprit.models.users.Client;
 import com.esprit.services.cinemas.SeanceService;
 import com.esprit.utils.PaymentProcessor;
 import com.stripe.exception.StripeException;
@@ -23,7 +25,6 @@ import java.util.regex.Pattern;
  */
 public class PaymentController {
 
-
     @FXML
     private Label filmLabel_Payment;
     @FXML
@@ -42,7 +43,6 @@ public class PaymentController {
     private Spinner<Integer> cvc;
     @FXML
     private Spinner<Integer> nbrplacepPayment_Spinner;
-
     private float total_pay;
     private Seance seance;
     @FXML
@@ -53,11 +53,11 @@ public class PaymentController {
     private TextField spinnerTextField;
     @FXML
     private Pane anchorpane_payment;
-
     @FXML
     private CheckComboBox<String> checkcomboboxseance_res;
     @FXML
     private ComboBox<String> cinemacombox_res;
+
 
     @FXML
     void initialize() {

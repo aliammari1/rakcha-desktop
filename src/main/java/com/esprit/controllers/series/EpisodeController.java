@@ -1,10 +1,15 @@
 package com.esprit.controllers.series;
 
+import com.esprit.controllers.ClientSideBarController;
 import com.esprit.models.series.Episode;
 import com.esprit.models.series.Serie;
+import com.esprit.models.users.Client;
 import com.esprit.services.series.DTO.EpisodeDto;
-import com.esprit.services.series.IServiceSerieImpl;
 import com.esprit.services.series.IServiceEpisodeImpl;
+import com.esprit.services.series.IServiceSerieImpl;
+import com.twilio.Twilio;
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.type.PhoneNumber;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,9 +22,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-import com.twilio.Twilio;
-import com.twilio.rest.api.v2010.account.Message;
-import com.twilio.type.PhoneNumber;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,6 +31,9 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class EpisodeController {
+    public static final String ACCOUNT_SID = "ACd3d2094ef7f546619e892605940f1631";
+    public static final String AUTH_TOKEN = "8d56f8a04d84ff2393de4ea888f677a1";
+
     @FXML
     private Label numbercheck;
     @FXML
@@ -41,7 +46,6 @@ public class EpisodeController {
     private Label titrecheck;
     @FXML
     private Label videocheck;
-
     @FXML
     private TextField titreF;
     @FXML
@@ -55,15 +59,17 @@ public class EpisodeController {
     private List<Serie> serieList;
     @FXML
     private TableView<EpisodeDto> tableView;
-    private void ref(){
+
+
+    private void ref() {
         tableView.getItems().clear();
         tableView.getColumns().clear();
         serieF.getItems().clear();
         titreF.setText("");
         numeroepisodeF.setText("");
         saisonF.setText("");
-        imgpath="";
-        videopath="";
+        imgpath = "";
+        videopath = "";
         IServiceEpisodeImpl iServiceEpisode = new IServiceEpisodeImpl();
         IServiceSerieImpl iServiceSerie = new IServiceSerieImpl();
         try {
@@ -102,11 +108,11 @@ public class EpisodeController {
                     try {
                         iServiceEpisode.supprimer(episodeDto.getIdserie());
                         tableView.getItems().remove(episodeDto);
-                        showAlert("OK","Deleted successfully !");
+                        showAlert("OK", "Deleted successfully !");
                         tableView.refresh();
                     } catch (SQLException e) {
                         e.printStackTrace();
-                        showAlert("Error",e.getSQLState());
+                        showAlert("Error", e.getSQLState());
 
                     }
                 });
@@ -125,15 +131,17 @@ public class EpisodeController {
         TableColumn<EpisodeDto, Void> modifierCol = new TableColumn<>("Edit");
         modifierCol.setCellFactory(param -> new TableCell<>() {
             private final Button button = new Button("Edit");
-           private int clickCount =0;
+            private int clickCount = 0;
+
             {
                 button.setOnAction(event -> {
                     clickCount++;
-                    if (clickCount==2){
-                    EpisodeDto episode = getTableView().getItems().get(getIndex());
-                    modifierEpisode(episode);
-                    tableView.refresh();
-                    clickCount=0;}
+                    if (clickCount == 2) {
+                        EpisodeDto episode = getTableView().getItems().get(getIndex());
+                        modifierEpisode(episode);
+                        tableView.refresh();
+                        clickCount = 0;
+                    }
                 });
             }
 
@@ -147,7 +155,7 @@ public class EpisodeController {
                 }
             }
         });
-       // tableView.getColumns().addAll(idCol, titreCol, numeroepisodeCol, saisonCol, serieCol, supprimerCol, modifierCol);
+        // tableView.getColumns().addAll(idCol, titreCol, numeroepisodeCol, saisonCol, serieCol, supprimerCol, modifierCol);
         tableView.getColumns().addAll(titreCol, numeroepisodeCol, saisonCol, serieCol, supprimerCol, modifierCol);
 
         // Récupérer les catégories et les ajouter à la TableView
@@ -158,12 +166,13 @@ public class EpisodeController {
             e.printStackTrace();
         }
     }
+
     private void modifierEpisode(EpisodeDto episodeDto) {
         IServiceEpisodeImpl iServiceEpisode = new IServiceEpisodeImpl();
         Dialog<Pair<String, String>> dialog = new Dialog<>();
         dialog.setTitle("Edit Episode ");
-        imgpath=episodeDto.getImage();
-        videopath=episodeDto.getVideo();
+        imgpath = episodeDto.getImage();
+        videopath = episodeDto.getVideo();
         TextField titreFild = new TextField(episodeDto.getTitre());
         TextField numeroepisodeFild = new TextField(String.valueOf(episodeDto.getNumeroepisode()));
         TextField saisonFild = new TextField(String.valueOf(episodeDto.getSaison()));
@@ -188,7 +197,7 @@ public class EpisodeController {
         }
 
 
-        dialog.getDialogPane().setContent(new VBox(10, new Label("Title:"), titreFild, new Label("Number:"), numeroepisodeFild, new Label("Season :"), saisonFild,new Label("Add picture :"), Ajouterimage, new Label("Ajouer Video :"), AJouterVideo, serieComboBox));
+        dialog.getDialogPane().setContent(new VBox(10, new Label("Title:"), titreFild, new Label("Number:"), numeroepisodeFild, new Label("Season :"), saisonFild, new Label("Add picture :"), Ajouterimage, new Label("Ajouer Video :"), AJouterVideo, serieComboBox));
 
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
@@ -217,7 +226,7 @@ public class EpisodeController {
             try {
                 System.out.println(episode);
                 iServiceEpisode.modifier(episode);
-                showAlert("Succes","Modified successfully !");
+                showAlert("Succes", "Modified successfully !");
                 ref();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -271,7 +280,7 @@ public class EpisodeController {
     private boolean isImageFile(File file) {
         try {
             Image image = new Image(file.toURI().toString());
-            return image.isError() ? false : true;
+            return !image.isError();
         } catch (Exception e) {
             return false;
         }
@@ -314,15 +323,18 @@ public class EpisodeController {
             return false;
         }
     }
-    boolean titrecheck( ){
-        if(titreF.getText()!=""){
+
+    boolean titrecheck() {
+        if (titreF.getText() != "") {
 
             return true;
-        }else{
+        } else {
             titrecheck.setText("Please enter a valid Title");
             return false;
-        }}
-    boolean seasoncheck( ) {
+        }
+    }
+
+    boolean seasoncheck() {
         String numero = saisonF.getText();
         if (!numero.isEmpty() && isStringInt(numero)) {
             return true;
@@ -331,8 +343,9 @@ public class EpisodeController {
             return false;
         }
     }
-    boolean picturechek( ) {
-        if (imgpath!="") {
+
+    boolean picturechek() {
+        if (imgpath != "") {
 
             return true;
         } else {
@@ -340,7 +353,8 @@ public class EpisodeController {
             return false;
         }
     }
-    boolean numbercheck( ) {
+
+    boolean numbercheck() {
         String numero = numeroepisodeF.getText();
         if (!numero.isEmpty() && isStringInt(numero)) {
 
@@ -350,8 +364,9 @@ public class EpisodeController {
             return false;
         }
     }
-    boolean videocheck( ) {
-        if (videopath!="") {
+
+    boolean videocheck() {
+        if (videopath != "") {
 
             return true;
         } else {
@@ -359,8 +374,9 @@ public class EpisodeController {
             return false;
         }
     }
-    boolean seriecheck( ) {
-        if (serieF.getValue()!=null) {
+
+    boolean seriecheck() {
+        if (serieF.getValue() != null) {
 
             return true;
         } else {
@@ -368,10 +384,6 @@ public class EpisodeController {
             return false;
         }
     }
-
-
-
-
 
     // Méthode pour envoyer un SMS avec Twilio
     private void sendSMS(String recipientNumber, String messageBody) {
@@ -383,31 +395,30 @@ public class EpisodeController {
         System.out.println("SMS sent successfully: " + message.getSid());
     }
 
-
-
-
-
-
-
-
-
-
-    public static final String ACCOUNT_SID = "ACd3d2094ef7f546619e892605940f1631";
-    public static final String AUTH_TOKEN = "8d56f8a04d84ff2393de4ea888f677a1";
     @FXML
     void ajouterSerie(ActionEvent event) {
         Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
         IServiceEpisodeImpl episodeserv = new IServiceEpisodeImpl();
         Episode episode = new Episode();
-        titrecheck();numbercheck( );seasoncheck( );picturechek( );videocheck( );seriecheck( );
-        if (titrecheck() && numbercheck( ) && seasoncheck( ) && picturechek( ) && videocheck( ) && seriecheck( )){
-        try {
+        titrecheck();
+        numbercheck();
+        seasoncheck();
+        picturechek();
+        videocheck();
+        seriecheck();
+        if (titrecheck() && numbercheck() && seasoncheck() && picturechek() && videocheck() && seriecheck()) {
+            try {
                 episode.setTitre(titreF.getText());
                 episode.setNumeroepisode(Integer.parseInt(numeroepisodeF.getText()));
                 episode.setSaison(Integer.parseInt(saisonF.getText()));
                 episode.setImage(imgpath);
                 episode.setVideo(videopath);
-                titrecheck.setText("");numbercheck.setText("");seasoncheck.setText("");picturechek.setText("");videocheck.setText("");seriecheck.setText("");
+                titrecheck.setText("");
+                numbercheck.setText("");
+                seasoncheck.setText("");
+                picturechek.setText("");
+                videocheck.setText("");
+                seriecheck.setText("");
                 for (Serie s : serieList
                 ) {
                     if (s.getNom() == serieF.getValue()) {
@@ -415,30 +426,29 @@ public class EpisodeController {
                     }
                 }
                 episodeserv.ajouter(episode);
-            // Envoi d'un SMS après avoir ajouté l'épisode avec succès
-            //String message = "A new episode is here : " + episode.getNomSerie();
-            //sendSMS("+21653775010", message);
-            for (Serie s : serieList) {
-                if (Objects.equals(s.getNom(), serieF.getValue())) {
-                    episode.setIdserie(s.getIdserie());
-                    // Envoi d'un SMS après avoir ajouté l'épisode avec succès
-                    String message = " Episode " + episode.getNumeroepisode() + " Season " + episode.getSaison() +  "from your series : " + s.getNom()+ " is now available!";
-                    sendSMS("+21653775010", message);
-                    break; // Sortir de la boucle une fois la série trouvée
+                // Envoi d'un SMS après avoir ajouté l'épisode avec succès
+                //String message = "A new episode is here : " + episode.getNomSerie();
+                //sendSMS("+21653775010", message);
+                for (Serie s : serieList) {
+                    if (Objects.equals(s.getNom(), serieF.getValue())) {
+                        episode.setIdserie(s.getIdserie());
+                        // Envoi d'un SMS après avoir ajouté l'épisode avec succès
+                        String message = " Episode " + episode.getNumeroepisode() + " Season " + episode.getSaison() + "from your series : " + s.getNom() + " is now available!";
+                        sendSMS("+21653775010", message);
+                        break; // Sortir de la boucle une fois la série trouvée
+                    }
                 }
-            }
-
-
 
 
                 tableView.refresh();
                 ref();
-            } catch(Exception e){
+            } catch (Exception e) {
                 showAlert("Error", "An error occurred while saving the episode. : " + e.getMessage());
                 System.out.println(e.getMessage());
             }
         }
     }
+
     @FXML
     void Ocategories(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Categorie-view.fxml")));
@@ -448,6 +458,7 @@ public class EpisodeController {
         stage.show();
 
     }
+
     @FXML
     void Oseries(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Serie-view.fxml")));
@@ -457,6 +468,7 @@ public class EpisodeController {
         stage.show();
 
     }
+
     @FXML
     void Oepisode(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Episode-view.fxml")));

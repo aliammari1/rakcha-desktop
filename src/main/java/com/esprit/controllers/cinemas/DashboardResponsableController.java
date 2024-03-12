@@ -13,7 +13,6 @@ import com.esprit.services.cinemas.SalleService;
 import com.esprit.services.cinemas.SeanceService;
 import com.esprit.services.films.FilmService;
 import com.esprit.services.films.FilmcinemaService;
-import com.esprit.services.users.UserService;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -63,100 +62,70 @@ import java.util.stream.Collectors;
 
 public class DashboardResponsableController implements Initializable {
 
+    Responsable_de_cinema responsableDeCinema;
     @FXML
     private ImageView image;
-
     @FXML
     private TextField tfAdresse;
-
     @FXML
     private TextField tfNom;
-
     @FXML
     private FlowPane cinemaFlowPane;
     @FXML
     private AnchorPane cinemaFormPane;
-
     @FXML
     private AnchorPane sessionFormPane;
-
     @FXML
     private AnchorPane cinemaListPane;
-
     @FXML
     private ComboBox<String> comboCinema;
-
     @FXML
     private ComboBox<String> comboMovie;
-
     @FXML
     private ComboBox<String> comboRoom;
-
     @FXML
     private DatePicker dpDate;
-
     @FXML
     private TextField tfDepartureTime;
-
     @FXML
     private TextField tfEndTime;
-
     @FXML
     private TextField tfPrice;
-
     @FXML
     private TableView<Seance> SessionTableView;
-
     @FXML
     private TableColumn<Seance, Void> colAction;
-
     @FXML
     private TableColumn<Seance, String> colCinema;
-
     @FXML
     private TableColumn<Seance, Date> colDate;
-
     @FXML
     private TableColumn<Seance, Time> colDepartTime;
-
     @FXML
     private TableColumn<Seance, Time> colEndTime;
-
     @FXML
     private TableColumn<Seance, String> colMovie;
-
     @FXML
     private TableColumn<Seance, String> colMovieRoom;
-
     @FXML
     private TableColumn<Seance, Double> colPrice;
-
     @FXML
     private AnchorPane addRoomForm;
-
     @FXML
     private TextField tfNbrPlaces;
-
     @FXML
     private TextField tfNomSalle;
-
     private int cinemaId;
-
     @FXML
     private TableView<Salle> RoomTableView;
-
     @FXML
     private TableColumn<Salle, Void> colActionRoom;
-
     @FXML
     private TableColumn<Salle, String> colNameRoom;
-
     @FXML
     private TableColumn<Salle, Integer> colNbrPlaces;
-
     @FXML
     private AnchorPane facebookAnchor;
-
     @FXML
     private TextArea txtareaStatut;
 
@@ -172,6 +141,9 @@ public class DashboardResponsableController implements Initializable {
 
 
 
+    public void setData(Responsable_de_cinema resp) {
+        this.responsableDeCinema = resp;
+    }
 
     @FXML
     private void showAlert(String message) {
@@ -191,7 +163,7 @@ public class DashboardResponsableController implements Initializable {
 
         String defaultStatut = "En_Attente";
 
-        Cinema cinema = new Cinema(tfNom.getText(), tfAdresse.getText(), (Responsable_de_cinema) new UserService().getUserById(1), image.getImage().getUrl(), defaultStatut);
+        Cinema cinema = new Cinema(tfNom.getText(), tfAdresse.getText(), responsableDeCinema, image.getImage().getUrl(), defaultStatut);
 
         CinemaService cs = new CinemaService();
         cs.create(cinema);
