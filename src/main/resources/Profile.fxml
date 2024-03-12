@@ -84,22 +84,22 @@
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font></Label>
-                              <DatePicker fx:id="dateDeNaissanceDatePicker" layoutX="628.0" layoutY="480.0" prefHeight="34.0" prefWidth="225.0" />
+                              <DatePicker fx:id="dateDeNaissanceDatePicker" layoutX="628.0" layoutY="480.0" prefHeight="34.0" prefWidth="225.0" promptText="birth Date" />
                         <AnchorPane layoutX="179.0" layoutY="14.0" style="-fx-background-radius: 60px;" />
                               <Button layoutX="390.0" layoutY="299.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="97.0" styleClass="sale" stylesheets="@styles/filmStyle.css" text="import" />
                               <Button layoutX="340.0" layoutY="666.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="170.0" styleClass="sale" stylesheets="@styles/filmStyle.css" text="delete" />
                         <TextField fx:id="phoneNumberTextField" layoutX="227.0" layoutY="371.0" prefHeight="34.0" prefWidth="196.0" promptText="phone number" />
-                        <TextField fx:id="emailTextField" layoutX="624.0" layoutY="370.0" prefHeight="34.0" prefWidth="227.0" promptText="Numero de la carte" />
+                        <TextField fx:id="emailTextField" layoutX="624.0" layoutY="370.0" prefHeight="34.0" prefWidth="227.0" promptText="Email" />
                         <TextField fx:id="lastNameTextField" layoutX="225.0" layoutY="425.0" prefHeight="34.0" prefWidth="200.0" promptText="Last Name " />
-                        <TextField fx:id="firstNameTextField" layoutX="625.0" layoutY="423.0" prefHeight="34.0" prefWidth="227.0" promptText="Numero de la carte" />
-                        <TextField fx:id="adresseTextField" layoutX="225.0" layoutY="481.0" prefHeight="34.0" prefWidth="200.0" promptText="Numero de la carte" />
+                        <TextField fx:id="firstNameTextField" layoutX="625.0" layoutY="423.0" prefHeight="34.0" prefWidth="227.0" promptText="Name" />
+                        <TextField fx:id="adresseTextField" layoutX="225.0" layoutY="481.0" prefHeight="34.0" prefWidth="200.0" promptText="Adresse" />
                         <MFXPasswordField fx:id="passwordTextField" layoutX="295.0" layoutY="602.0" prefHeight="22.0" prefWidth="261.0" />
                         <Label layoutX="27.0" layoutY="485.0" prefHeight="27.0" prefWidth="112.0" text="adresse :">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>
                         </Label>
-                        <Label layoutX="452.0" layoutY="426.0" prefHeight="27.0" prefWidth="112.0" text="nom :">
+                        <Label layoutX="462.0" layoutY="426.0" prefHeight="27.0" prefWidth="112.0" text="Name :">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>
@@ -109,7 +109,7 @@
                               <Font name="System Bold" size="18.0" />
                            </font>
                         </Label>
-                        <Label layoutX="451.0" layoutY="373.0" prefHeight="27.0" prefWidth="112.0" text="email :">
+                        <Label layoutX="459.0" layoutY="373.0" prefHeight="27.0" prefWidth="112.0" text="email :">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>
@@ -124,7 +124,7 @@
                               <Image url="@../../../../../../Users/louja/Downloads/271703945_498298928323573_5292415383228406900_n.jpg" />
                            </image>
                         </ImageView>
-                        <Label layoutX="452.0" layoutY="483.0" prefHeight="27.0" prefWidth="170.0" text="date de naissance :">
+                        <Label layoutX="461.0" layoutY="483.0" prefHeight="27.0" prefWidth="143.0" text="Birth date :">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>

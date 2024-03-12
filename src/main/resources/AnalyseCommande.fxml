@@ -29,7 +29,7 @@
                 <NumberAxis side="LEFT" />
             </yAxis>
         </StackedBarChart>
-      <AnchorPane prefHeight="712.0" prefWidth="223.0" styleClass="nav-form" stylesheets="@dashboard.css">
+      <AnchorPane prefHeight="712.0" prefWidth="223.0" styleClass="nav-form" stylesheets="@styles/produitStyle.css">
          <children>
             <Button layoutY="282.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Movies">
                <font>

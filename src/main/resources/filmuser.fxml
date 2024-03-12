@@ -106,14 +106,14 @@
             </Label>
          <ImageView fx:id="qrcode" fitHeight="167.0" fitWidth="198.0" layoutX="706.0" layoutY="556.0" pickOnBounds="true" preserveRatio="true" />
          <FontAwesomeIconView fill="#b94141" glyphName="COMMENT" layoutX="302.0" layoutY="525.0" onMouseClicked="#afficherAnchorComment" size="40" />
-         <AnchorPane fx:id="AnchorComments" layoutX="222.0" layoutY="144.0" prefHeight="535.0" prefWidth="426.0" styleClass="bg-white" visible="false">
+         <AnchorPane fx:id="AnchorComments" layoutX="423.0" layoutY="120.0" prefHeight="535.0" prefWidth="426.0" styleClass="bg-white" visible="false">
             <children>
                <ScrollPane fx:id="ScrollPaneComments" layoutY="37.0" prefHeight="442.0" prefWidth="426.0">
                  <content>
                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
                  </content>
                </ScrollPane>
-               <Button fx:id="closeDetailFilm1" layoutX="374.0" layoutY="2.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="48.0" styleClass="close" stylesheets="@styles/filmStyle.css">
+               <Button fx:id="closeDetailFilm1" layoutX="374.0" layoutY="2.0" mnemonicParsing="false" onAction="#closercommets" prefHeight="35.0" prefWidth="48.0" styleClass="close" stylesheets="@styles/filmStyle.css">
                   <graphic>
                      <FontAwesomeIconView glyphName="CLOSE" styleClass="close" />
                   </graphic>
