@@ -1,40 +1,43 @@
 package com.esprit.controllers.cinemas;
 
+import com.calendarfx.model.CalendarSource;
+import com.calendarfx.view.CalendarView;
 import com.esprit.models.cinemas.Cinema;
+import com.esprit.models.cinemas.CommentaireCinema;
 import com.esprit.models.cinemas.RatingCinema;
 import com.esprit.models.cinemas.Seance;
 import com.esprit.models.users.Client;
 import com.esprit.services.cinemas.CinemaService;
 import com.esprit.services.cinemas.RatingCinemaService;
 import com.esprit.services.cinemas.SeanceService;
+import com.esprit.services.cinemas.CommentaireCinemaService;
 import com.esprit.services.users.UserService;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Text;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
-import java.io.ByteArrayInputStream;
-
 import java.io.IOException;
-import java.sql.Blob;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 import javafx.application.Platform;
@@ -48,6 +51,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
 public class DashboardClientController {
     @FXML
     private FlowPane cinemaFlowPane;
@@ -68,6 +72,18 @@ public class DashboardClientController {
 
     @FXML
     private AnchorPane FilterAnchor;
+
+    @FXML
+    private TextArea txtAreaComments;
+
+    @FXML
+    private ScrollPane ScrollPaneComments;
+
+    @FXML
+    private AnchorPane AnchorComments;
+    private Cinema cinema;
+    private TilePane tilePane;
+
 
     @FXML
     void showListCinema(ActionEvent event) {
@@ -177,8 +193,8 @@ public class DashboardClientController {
         planningButton.setLayoutY(77);
         planningButton.getStyleClass().add("movies-btn");
         planningButton.setUserData(cinema);
-        planningButton.setOnAction(this::showPlanning);
-        card.getChildren().addAll(planningButton);
+        planningButton.setOnAction(event -> showPlanning(cinema));
+        card.getChildren().add(planningButton);
 
         // Ajout du composant de notation (Rating)
         RatingCinemaService ratingService = new RatingCinemaService();
@@ -274,37 +290,53 @@ public class DashboardClientController {
     }
 
 
+    public void showPlanning(Cinema cinema) {
+        listCinemaClient.setVisible(false); // Rendre l'AnchorPane listCinemaClient invisible
+        PlanningPane.setVisible(true); // Rendre l'AnchorPane PlanningPane visible
 
-    private void showPlanning(ActionEvent event) {
+        // Créer un VBox pour contenir à la fois le TilePane du calendrier et les séances correspondantes
+        VBox planningContent = new VBox();
+        planningContent.setSpacing(10);
+
+        // Créer un TilePane pour afficher les jours de la semaine
+        tilePane = new TilePane();
+        tilePane.setPrefColumns(7);
+        tilePane.setPrefRows(1);
+        tilePane.setHgap(5);
+        tilePane.setVgap(5);
+
+        // Ajouter chaque jour de la semaine courante au TilePane
+        LocalDate startDateOfWeek = LocalDate.now().with(DayOfWeek.MONDAY);
+        for (int i = 0; i < 7; i++) {
+            LocalDate date = startDateOfWeek.plusDays(i);
+            Label dayLabel = new Label(date.format(DateTimeFormatter.ofPattern("EEE dd/MM")));
+            dayLabel.setStyle("-fx-background-color: #dddddd; -fx-padding: 10px;");
+            dayLabel.setOnMouseClicked(event -> displaySeancesForDate(date, cinema));
+            tilePane.getChildren().add(dayLabel);
+        }
+
+
+        VBox.setMargin(tilePane, new Insets(0, 0, 0, 115));
+        planningContent.getChildren().add(tilePane);
+
+
+        Separator separator = new Separator(Orientation.HORIZONTAL);
+        separator.setPrefWidth(200);
+        planningContent.getChildren().add(separator);
+
+
         planningFlowPane.getChildren().clear();
-        listCinemaClient.setVisible(false);
-        PlanningPane.setVisible(true);
 
-        // Récupérer le bouton "Show Planning" qui a déclenché l'événement
-        Button planningButton = (Button) event.getSource();
 
-        // Récupérer le cinéma à partir de la propriété userData du bouton
-        Cinema cinema = (Cinema) planningButton.getUserData();
-
-        if (cinema == null) {
-            showAlert("Cinéma non trouvé.");
-            return;
-        }
-
-        // Charger et afficher les séances de la semaine courante pour ce cinéma
-        Map<LocalDate, List<Seance>> weekSeancesMap = loadCurrentWeekPlanning(cinema);
-        if (weekSeancesMap.isEmpty()) {
-            showAlert("Aucune séance programmée pour la semaine courante pour ce cinéma.");
-        } else {
-            // Afficher les séances de chaque jour
-            displayWeekSeances(weekSeancesMap);
-        }
+        planningFlowPane.getChildren().add(planningContent);
+        AnchorPane.setTopAnchor(planningContent, 50.0);
     }
 
 
-    private Map<LocalDate, List<Seance>> loadCurrentWeekPlanning(Cinema cinema) {
-        // Obtenir la date de début de la semaine courante (lundi)
-        LocalDate startDate = LocalDate.now().with(DayOfWeek.MONDAY);
+
+
+
+    private Map<LocalDate, List<Seance>> loadCurrentWeekPlanning(LocalDate startDate, Cinema cinema) {
         // Obtenir la date de fin de la semaine courante (dimanche)
         LocalDate endDate = startDate.plusDays(6);
 
@@ -313,47 +345,37 @@ public class DashboardClientController {
         return seanceService.getSeancesByDateRangeAndCinema(startDate, endDate, cinema);
     }
 
-    private void displayWeekSeances(Map<LocalDate, List<Seance>> weekSeancesMap) {
-        // Parcourir chaque jour de la semaine
-        for (LocalDate date : weekSeancesMap.keySet()) {
-            List<Seance> seancesForDate = weekSeancesMap.getOrDefault(date, Collections.emptyList());
+    private void displaySeancesForDate(LocalDate date, Cinema cinema) {
+        // Charger les séances pour la date spécifiée
+        Map<LocalDate, List<Seance>> weekSeancesMap = loadCurrentWeekPlanning(date, cinema);
+        List<Seance> seancesForDate = weekSeancesMap.getOrDefault(date, Collections.emptyList());
 
-            // Créer un VBox pour chaque jour
-            VBox dayBox = new VBox();
-            dayBox.getChildren().add(new Label("Séances pour " + date));
+        // Vérifier que la liste de séances n'est pas vide avant de la traiter
+        if (!seancesForDate.isEmpty()) {
+            // Créer un VBox pour contenir les cartes de séance correspondant à la date sélectionnée
+            VBox seancesForDateVBox = new VBox();
+            seancesForDateVBox.setSpacing(10);
 
-            // Ajouter les cartes de séance au VBox du jour
+            // Ajouter les cartes de séance au VBox
             for (Seance seance : seancesForDate) {
-                HBox carteSeance = createSeanceCard(seance);
-                dayBox.getChildren().add(carteSeance);
+                HBox seanceCard = createSeanceCard(seance);
+                seancesForDateVBox.getChildren().add(seanceCard);
             }
 
-            // Ajouter le VBox du jour au parent (par exemple, un autre VBox ou un ScrollPane)
-            planningFlowPane.getChildren().add(dayBox);
-        }
-    }
-
-    private Cinema getCinemaFromPlanningButton(Button planningButton) {
-        // Récupérer le parent du bouton (qui est le AnchorPane)
-        AnchorPane card = (AnchorPane) planningButton.getParent();
-
-        // Récupérer le parent de l'AnchorPane (qui est le HBox cardContainer)
-        HBox cardContainer = (HBox) card.getParent();
-
-        // Utiliser la position du cardContainer dans cinemaFlowPane pour trouver la cinéma associée
-        int cinemaIndex = cinemaFlowPane.getChildren().indexOf(cardContainer);
-        if (cinemaIndex != -1) {
-            // Récupérer la cinéma correspondante dans la liste des cinémas acceptés
-            List<Cinema> acceptedCinemasList = new ArrayList<>(loadAcceptedCinemas());
-            if (cinemaIndex < acceptedCinemasList.size()) {
-                return acceptedCinemasList.get(cinemaIndex);
+            // Nettoyer le deuxième enfant de PlanningPane s'il s'agit d'un VBox
+            if (PlanningPane.getChildren().size() > 1 && PlanningPane.getChildren().get(1) instanceof VBox) {
+                VBox existingSeancesVBox = (VBox) PlanningPane.getChildren().get(1);
+                existingSeancesVBox.getChildren().clear(); // Nettoyer le VBox existant
             }
+
+            // Ajouter le VBox des séances correspondant à la date sélectionnée au PlanningPane
+            planningFlowPane.getChildren().add(seancesForDateVBox);
+            AnchorPane.setTopAnchor(seancesForDateVBox, 30.0); // Définir la marge supérieure pour afficher les séances sous le calendrier
+        } else {
+            // Gérer le cas où aucune séance n'est disponible pour la date spécifiée
+            System.out.println("Aucune séance disponible pour la date spécifiée.");
         }
-        return null; // Aucune cinéma trouvée
     }
-
-
-
 
 
 
@@ -381,19 +403,19 @@ public class DashboardClientController {
             // Effacer la FlowPane actuelle pour afficher les nouveaux résultats
             cinemaFlowPane.getChildren().clear();
             createfilmCards(produitsRecherches);
-});
+        });
 
     }
 
-   private void createfilmCards(List<Cinema> Cinemas) {
+    private void createfilmCards(List<Cinema> Cinemas) {
         for (Cinema cinema : Cinemas) {
             HBox cardContainer = createCinemaCard(cinema);
             cinemaFlowPane.getChildren().add(cardContainer);
 
 
-}
+        }
 
-}
+    }
 
     @FXML
     public static List<Cinema> rechercher(List<Cinema> liste, String recherche) {
@@ -579,7 +601,128 @@ public class DashboardClientController {
 
     }
 
+    @FXML
+    void afficherAnchorComment(MouseEvent event) {
 
+        listCinemaClient.setOpacity(0.5);
+        AnchorComments.setVisible(true);
+        ScrollPaneComments.setStyle("-fx-background-color: #fff;");
+        displayAllComments();
+    }
+
+    @FXML
+    void addCommentaire() {
+        String message = txtAreaComments.getText();
+        if (message.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Commentaire vide");
+            alert.setContentText("Add Comment");
+            alert.showAndWait();
+        } else {
+            SentimentAnalysisController sentimentAnalysisController = new SentimentAnalysisController();
+            String sentimentResult = sentimentAnalysisController.analyzeSentiment(message);
+            CommentaireCinema commentaire = new CommentaireCinema((Client) new UserService().getUserById(3) , message, sentimentResult);
+            System.out.println(commentaire + " " +new UserService().getUserById(3));
+            CommentaireCinemaService commentaireCinemaService = new CommentaireCinemaService();
+            commentaireCinemaService.create(commentaire);
+            txtAreaComments.clear();
+        }
+    }
+
+    @FXML
+    void AddComment(MouseEvent event) {
+        addCommentaire();
+        displayAllComments();
+    }
+
+    private List<CommentaireCinema> getAllComment() {
+        CommentaireCinemaService commentaireCinemaService = new CommentaireCinemaService();
+        List<CommentaireCinema> commentairecinema = commentaireCinemaService.read();
+        return commentairecinema;
+    }
+
+    private HBox addCommentToView(CommentaireCinema commentaire) {
+        // Création du cercle pour l'image de l'utilisateur
+        Circle imageCircle = new Circle(20);
+        imageCircle.setFill(Color.TRANSPARENT);
+        imageCircle.setStroke(Color.BLACK);
+        imageCircle.setStrokeWidth(2);
+
+        // Image de l'utilisateur
+        String imageUrl = commentaire.getClient().getPhoto_de_profil();
+        Image userImage;
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            userImage = new Image(imageUrl);
+        } else {
+            // Chargement de l'image par défaut
+            userImage = new Image(getClass().getResourceAsStream("/Logo.png"));
+        }
+
+        // Création de l'image view avec l'image de l'utilisateur
+        ImageView imageView = new ImageView(userImage);
+        imageView.setFitWidth(50); // Ajuster la largeur de l'image
+        imageView.setFitHeight(50); // Ajuster la hauteur de l'image
+
+        // Positionner l'image au centre du cercle
+        imageView.setTranslateX(2 - imageView.getFitWidth() / 2);
+        imageView.setTranslateY(2 - imageView.getFitHeight() / 2);
+
+        // Ajouter l'image au cercle
+        Group imageGroup = new Group();
+        imageGroup.getChildren().addAll(imageCircle, imageView);
+
+        // Création de la boîte pour l'image et la bordure du cercle
+        HBox imageBox = new HBox();
+        imageBox.getChildren().add(imageGroup);
+
+        // Création du conteneur pour la carte du commentaire
+        HBox cardContainer = new HBox();
+        cardContainer.setStyle("-fx-background-color: white; -fx-padding: 5px ; -fx-border-radius: 8px; -fx-border-color: #000; -fx-background-radius: 8px; ");
+
+        // Nom de l'utilisateur
+        Text userName = new Text(commentaire.getClient().getFirstName() + " " + commentaire.getClient().getLastName());
+        userName.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-style: bold;");
+
+        // Commentaire
+        Text commentText = new Text(commentaire.getCommentaire());
+        commentText.setStyle("-fx-font-family: 'Arial'; -fx-max-width: 300 ;");
+        commentText.setWrappingWidth(300); // Définir une largeur maximale pour le retour à la ligne automatique
+
+
+
+        // Création de la boîte pour le texte du commentaire
+        VBox textBox = new VBox();
+
+
+        // Ajouter le nom d'utilisateur et le commentaire à la boîte de texte
+        textBox.getChildren().addAll(userName, commentText);
+
+        // Ajouter la boîte d'image et la boîte de texte à la carte du commentaire
+        cardContainer.getChildren().addAll(textBox);
+
+        // Création du conteneur pour l'image, le cercle et la carte du commentaire
+        HBox contentContainer = new HBox();
+        contentContainer.setPrefHeight(50);
+        contentContainer.setStyle("-fx-background-color: transparent; -fx-padding: 10px"); // Arrière-plan transparent
+        contentContainer.getChildren().addAll(imageBox, cardContainer);
+
+        // Ajouter le conteneur principal au ScrollPane
+        ScrollPaneComments.setContent(contentContainer);
+        return contentContainer;
+    }
+
+
+    private void displayAllComments() {
+        List<CommentaireCinema> comments = getAllComment();
+        VBox allCommentsContainer = new VBox(); // Créer un conteneur vertical pour stocker tous les commentaires
+
+        for (CommentaireCinema comment : comments) {
+            HBox commentView = addCommentToView(comment);
+            allCommentsContainer.getChildren().add(commentView); // Ajouter chaque commentaire au conteneur vertical
+        }
+
+        ScrollPaneComments.setContent(allCommentsContainer); // Définir le conteneur vertical comme contenu du ScrollPane
+    }
 
 
 }
