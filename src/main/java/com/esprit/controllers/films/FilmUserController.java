@@ -59,6 +59,8 @@ public class FilmUserController extends Application {
     FlowPane flowpaneFilm;
 
     FlowPane flowPaneactors;
+    @FXML
+    private Button closeDetailFilm1;
 
     @FXML
     private AnchorPane AnchorComments;
@@ -442,6 +444,7 @@ public class FilmUserController extends Application {
         return anchorPane;
     }
 
+
     public AnchorPane createtopthree(int filmRank) {
         List<RatingFilm> ratingFilmList = new RatingFilmService().getavergeratingSorted();
         AnchorPane anchorPane = new AnchorPane();
@@ -528,6 +531,14 @@ public class FilmUserController extends Application {
         // Ajouter les VBox dans le FilterAnchor
         Anchore_Pane_filtrage.getChildren().addAll(yearsCheckBoxesVBox);
         Anchore_Pane_filtrage.setVisible(true);
+    }
+
+
+    @FXML
+    void closercommets(ActionEvent event) {
+        detalAnchorPane.setOpacity(1);
+        AnchorComments.setVisible(false);
+        detalAnchorPane.setVisible(true);
     }
 
     @FXML
@@ -642,8 +653,6 @@ public class FilmUserController extends Application {
     @FXML
     void afficherAnchorComment(MouseEvent event) {
         AnchorComments.setVisible(true);
-        detalAnchorPane.setOpacity(0.2);
-
 
     }
 
