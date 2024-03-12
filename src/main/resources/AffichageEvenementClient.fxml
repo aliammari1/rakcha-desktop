@@ -46,8 +46,8 @@
                 </ImageView>
             </children>
         </AnchorPane>
-        <FontAwesomeIconView fill="#6f6a6a" glyphName="SEARCH" layoutX="1251.0" layoutY="86.0" size="13" text="" wrappingWidth="21.428571701049805" />
-        <TextField fx:id="tfRechercheEc" layoutX="1274.0" layoutY="66.0" prefHeight="25.0" prefWidth="179.0" promptText="Keywords.." styleClass="search-pane" stylesheets="@dashboard2.css" />
+        <FontAwesomeIconView fill="#6f6a6a" glyphName="SEARCH" layoutX="292.0" layoutY="146.0" size="13" text="" wrappingWidth="21.428571701049805" />
+        <TextField fx:id="tfRechercheEc" layoutX="313.0" layoutY="126.0" prefHeight="25.0" prefWidth="179.0" promptText="Keywords.." styleClass="search-pane" stylesheets="@dashboard2.css" />
         <Label layoutX="1259.0" layoutY="281.0" text="Send Feedback :" textFill="#a13939">
             <font>
                 <Font name="Barlow Condensed Bold Italic" size="30.0" />
@@ -64,5 +64,11 @@
         </Button>
         <ListView fx:id="listeEvents" layoutX="244.0" layoutY="161.0" prefHeight="694.0" prefWidth="974.0" stylesheets="@dashboard2.css" visible="false" />
       <AnchorPane fx:id="anchplanning" layoutX="207.0" layoutY="161.0" prefHeight="694.0" prefWidth="1011.0" visible="false" />
+      <FontAwesomeIconView fx:id="idfilter" glyphName="FILTER" layoutX="521.0" layoutY="152.0" onMouseClicked="#filtrer" size="30" wrappingWidth="21.428571701049805" />
+      <AnchorPane fx:id="FilterAnchor" layoutX="563.0" layoutY="51.0" prefHeight="87.0" prefWidth="200.0" visible="false">
+         <children>
+            <Button layoutX="74.0" layoutY="161.0" mnemonicParsing="false" onAction="#filtercinema" text="Filter" />
+         </children>
+      </AnchorPane>
     </children>
 </AnchorPane>

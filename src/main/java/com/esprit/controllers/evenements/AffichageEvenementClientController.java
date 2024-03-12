@@ -21,9 +21,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.TilePane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.*;
@@ -32,12 +34,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AffichageEvenementClientController {
 
     private final ObservableList<Evenement> masterData = FXCollections.observableArrayList();
     private final ObservableList<Evenement> masterData2 = FXCollections.observableArrayList();
     private final List<Evenement> l1 = new ArrayList<>();
+    private final List<CheckBox> addressCheckBoxes = new ArrayList<>();
+    private final List<CheckBox> statusCheckBoxes = new ArrayList<>();
+    @FXML
+    private AnchorPane FilterAnchor;
     @FXML
     private ListView<Evenement> listeEvents;
     @FXML
@@ -69,8 +76,6 @@ public class AffichageEvenementClientController {
     @FXML
     private TextField tfRechercheEc;
     @FXML
-    private TableView<Evenement> tvEvenement;
-    @FXML
     private FlowPane eventFlowPane;
 
     @FXML
@@ -84,7 +89,9 @@ public class AffichageEvenementClientController {
         for (Evenement e : es.read()) {
             cbeventname.getItems().add(e.getNom());
         }
-
+        /*tfRechercheEc.textProperty().addListener((observable, oldValue, newValue) -> {
+            filterCategorieEvenements(newValue.trim());
+        });*/
 
         afficherliste();
         setupSearchFilter();
@@ -705,6 +712,113 @@ public class AffichageEvenementClientController {
         stage.show();
 
     }
+
+    private void filterCategorieEvenements(String searchText) {
+        // Vérifier si le champ de recherche n'est pas vide
+        if (!searchText.isEmpty()) {
+            // Filtrer la liste des cinémas pour ne garder que ceux dont le nom contient le texte saisi
+            ObservableList<Evenement> filteredList = FXCollections.observableArrayList();
+            for (Evenement categorie : listeEvents.getItems()) {
+                if (categorie.getCategorie().getNom_categorie().toLowerCase().contains(searchText.toLowerCase())) {
+                    filteredList.add(categorie);
+                }
+            }
+            // Mettre à jour la TableView avec la liste filtrée
+            listeEvents.setItems(filteredList);
+        } else {
+            // Si le champ de recherche est vide, afficher tous les cinémas
+            afficherliste();
+        }
+    }
+
+
+    private List<Evenement> getAllCategories() {
+        EvenementService evenementService = new EvenementService();
+        List<Evenement> categorie = evenementService.read();
+        return categorie;
+    }
+
+    @FXML
+    void filtrer(MouseEvent event) {
+
+        listeEvents.setOpacity(0.5);
+        FilterAnchor.setVisible(true);
+
+        // Nettoyer les listes des cases à cocher
+        addressCheckBoxes.clear();
+        statusCheckBoxes.clear();
+        // Récupérer les adresses uniques depuis la base de données
+        List<String> categorie = getCategorie_Evenement();
+
+
+        // Créer des VBox pour les adresses
+        VBox addressCheckBoxesVBox = new VBox();
+        Label addressLabel = new Label("Category");
+        addressLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
+        addressCheckBoxesVBox.getChildren().add(addressLabel);
+        for (String address : categorie) {
+            CheckBox checkBox = new CheckBox(address);
+            addressCheckBoxesVBox.getChildren().add(checkBox);
+            addressCheckBoxes.add(checkBox);
+        }
+        addressCheckBoxesVBox.setLayoutX(25);
+        addressCheckBoxesVBox.setLayoutY(70);
+
+
+        // Ajouter les VBox dans le FilterAnchor
+        FilterAnchor.getChildren().addAll(addressCheckBoxesVBox);
+        FilterAnchor.setVisible(true);
+    }
+
+
+    public List<String> getCategorie_Evenement() {
+        // Récupérer tous les cinémas depuis la base de données
+        List<Evenement> categories = getAllCategories();
+
+        // Extraire les adresses uniques des cinémas
+        List<String> categorie = categories.stream()
+                .map(c -> c.getCategorie().getNom_categorie())
+                .distinct()
+                .collect(Collectors.toList());
+
+        return categorie;
+    }
+
+    @FXML
+    public void filtercinema(ActionEvent event) {
+
+        listeEvents.setOpacity(1);
+
+
+        FilterAnchor.setVisible(false);
+
+        listeEvents.setVisible(true);
+
+        // Récupérer les adresses sélectionnées
+        List<String> selectedCategories = getSelectedCategories();
+        // Récupérer les statuts sélectionnés
+
+        Evenement evenement = new Evenement();
+        // Filtrer les cinémas en fonction des adresses et/ou des statuts sélectionnés
+        List<Evenement> filteredCategories = getAllCategories().stream()
+                .filter(c -> selectedCategories.contains(c.getCategorie().getNom_categorie()))
+                .collect(Collectors.toList());
+
+        // Mettre à jour le TableView avec les cinémas filtrés
+        ObservableList<Evenement> filteredList = FXCollections.observableArrayList(filteredCategories);
+        listeEvents.setItems(filteredList);
+
+
+    }
+
+    private List<String> getSelectedCategories() {
+        // Récupérer les adresses sélectionnées dans l'AnchorPane de filtrage
+        return addressCheckBoxes.stream()
+                .filter(CheckBox::isSelected)
+                .map(CheckBox::getText)
+                .collect(Collectors.toList());
+    }
+
 
 }
 
