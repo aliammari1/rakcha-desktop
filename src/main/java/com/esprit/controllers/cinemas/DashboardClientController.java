@@ -12,12 +12,14 @@ import com.esprit.services.cinemas.RatingCinemaService;
 import com.esprit.services.cinemas.SeanceService;
 import com.esprit.services.cinemas.CommentaireCinemaService;
 import com.esprit.services.users.UserService;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -30,6 +32,8 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
@@ -83,6 +87,8 @@ public class DashboardClientController {
     private AnchorPane AnchorComments;
     private Cinema cinema;
     private TilePane tilePane;
+
+    private int cinemaId;
 
 
     @FXML
@@ -185,16 +191,32 @@ public class DashboardClientController {
         Button moviesButton = new Button("Show Movies");
         moviesButton.setLayoutX(310);
         moviesButton.setLayoutY(35);
-        moviesButton.getStyleClass().add("movies-btn");
+        moviesButton.getStyleClass().add("instert-btn");
         card.getChildren().add(moviesButton);
 
         Button planningButton = new Button("Show Planning");
         planningButton.setLayoutX(302);
         planningButton.setLayoutY(77);
-        planningButton.getStyleClass().add("movies-btn");
+        planningButton.getStyleClass().add("instert-btn");
         planningButton.setUserData(cinema);
         planningButton.setOnAction(event -> showPlanning(cinema));
         card.getChildren().add(planningButton);
+        cardContainer.setOnMouseClicked(event -> geocodeAddress(cinema.getAdresse()));
+
+        FontAwesomeIconView CommentIcon = new FontAwesomeIconView();
+        CommentIcon.setGlyphName("COMMENTING");
+        CommentIcon.setSize("2.5em");
+        CommentIcon.setLayoutX(250);
+        CommentIcon.setLayoutY(35);
+        CommentIcon.setFill(Color.BLACK);
+        card.getChildren().add(CommentIcon);
+
+        CommentIcon.setOnMouseClicked(mouseEvent -> {
+            cinemaId = cinema.getId_cinema();
+            listCinemaClient.setOpacity(0.5);
+            AnchorComments.setVisible(true);
+            displayAllComments(cinemaId);
+        });
 
         // Ajout du composant de notation (Rating)
         RatingCinemaService ratingService = new RatingCinemaService();
@@ -310,13 +332,15 @@ public class DashboardClientController {
         for (int i = 0; i < 7; i++) {
             LocalDate date = startDateOfWeek.plusDays(i);
             Label dayLabel = new Label(date.format(DateTimeFormatter.ofPattern("EEE dd/MM")));
-            dayLabel.setStyle("-fx-background-color: #dddddd; -fx-padding: 10px;");
+            dayLabel.setStyle("-fx-background-color: #ae2d3c; -fx-padding: 10px; -fx-text-fill: white;"); // Rouge avec texte blanc
             dayLabel.setOnMouseClicked(event -> displaySeancesForDate(date, cinema));
+            dayLabel.setFont(Font.font("Arial Rounded MT Bold", FontWeight.BOLD, 14)); // Changer la police en Arial, en gras, taille 14
             tilePane.getChildren().add(dayLabel);
         }
 
 
-        VBox.setMargin(tilePane, new Insets(0, 0, 0, 115));
+
+        VBox.setMargin(tilePane, new Insets(0, 0, 0, 50));
         planningContent.getChildren().add(tilePane);
 
 
@@ -331,10 +355,6 @@ public class DashboardClientController {
         planningFlowPane.getChildren().add(planningContent);
         AnchorPane.setTopAnchor(planningContent, 50.0);
     }
-
-
-
-
 
     private Map<LocalDate, List<Seance>> loadCurrentWeekPlanning(LocalDate startDate, Cinema cinema) {
         // Obtenir la date de fin de la semaine courante (dimanche)
@@ -358,7 +378,7 @@ public class DashboardClientController {
 
             // Ajouter les cartes de séance au VBox
             for (Seance seance : seancesForDate) {
-                HBox seanceCard = createSeanceCard(seance);
+                StackPane seanceCard = createSeanceCard(seance);
                 seancesForDateVBox.getChildren().add(seanceCard);
             }
 
@@ -368,31 +388,67 @@ public class DashboardClientController {
                 existingSeancesVBox.getChildren().clear(); // Nettoyer le VBox existant
             }
 
-            // Ajouter le VBox des séances correspondant à la date sélectionnée au PlanningPane
             planningFlowPane.getChildren().add(seancesForDateVBox);
-            AnchorPane.setTopAnchor(seancesForDateVBox, 30.0); // Définir la marge supérieure pour afficher les séances sous le calendrier
+            AnchorPane.setTopAnchor(seancesForDateVBox, 30.0);
         } else {
-            // Gérer le cas où aucune séance n'est disponible pour la date spécifiée
+
             System.out.println("Aucune séance disponible pour la date spécifiée.");
         }
     }
 
+    private StackPane createSeanceCard(Seance seance) {
+        StackPane cardContainer = new StackPane();
+        cardContainer.setPrefWidth(600);
+        cardContainer.setPrefHeight(100);
+        cardContainer.setStyle("-fx-padding: 10 0 0 150;");
 
-
-    private HBox createSeanceCard(Seance seance) {
         HBox card = new HBox();
-        card.setStyle("-fx-background-color: #ffffff; -fx-border-radius: 10px; -fx-border-color: #000000; -fx-background-radius: 10px; -fx-border-width: 2px;  ");
-        card.setPrefWidth(400);
-        card.setPrefHeight(100);
+        card.setStyle("-fx-background-color: #ffffff; -fx-border-radius: 10px; -fx-border-color: #000000; -fx-background-radius: 10px; -fx-border-width: 2px;");
 
-        Label filmLabel = new Label("Film: " + (seance.getFilmcinema().getId_film() != null ? seance.getFilmcinema().getId_film().getNom() : "Unknown"));
-        Label salleLabel = new Label("Salle: " + (seance.getSalle() != null ? seance.getSalle().getNom_salle() : "Unknown"));
+        ImageView filmImageView = new ImageView();
+        filmImageView.setFitWidth(140);
+        filmImageView.setFitHeight(100);
+        filmImageView.setStyle("-fx-border-color: #000000 ; -fx-border-width: 2px; -fx-border-radius: 5px;");
+
+        try {
+            String logoString = seance.getFilmcinema().getId_film().getImage();
+            Image logoImage = new Image(logoString);
+            filmImageView.setImage(logoImage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        card.getChildren().add(filmImageView);
+
+        VBox labelsContainer = new VBox();
+        labelsContainer.setSpacing(5);
+        labelsContainer.setPadding(new Insets(10));
+
+        Label filmNameLabel = new Label("Film: " + seance.getFilmcinema().getId_film().getNom());
+        filmNameLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 16px;");
+
+        Label salleNameLabel = new Label("Salle: " + seance.getNom_salle());
+        salleNameLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 16px;");
+
         Label timeLabel = new Label("Heure: " + seance.getHD() + " - " + seance.getHF());
-        Label priceLabel = new Label("Prix: " + seance.getPrix());
+        timeLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 16px;");
 
-        card.getChildren().addAll(filmLabel, salleLabel, timeLabel, priceLabel);
-        return card;
+        Label priceLabel = new Label("Prix: " + seance.getPrix());
+        priceLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 16px;");
+
+        labelsContainer.getChildren().addAll(filmNameLabel, salleNameLabel, timeLabel, priceLabel);
+        card.getChildren().add(labelsContainer);
+
+        cardContainer.getChildren().add(card);
+        StackPane.setAlignment(card, Pos.CENTER_RIGHT); // Positionne la carte à droite dans le conteneur StackPane
+
+        return cardContainer;
     }
+
+
+
+
+
+
     private List<Cinema> l1 = new ArrayList<>();
     public void initialize() {
         CinemaService cinemaService = new CinemaService();
@@ -404,6 +460,11 @@ public class DashboardClientController {
             cinemaFlowPane.getChildren().clear();
             createfilmCards(produitsRecherches);
         });
+
+        cinemaFlowPane.getChildren().clear();
+        HashSet<Cinema> acceptedCinemas = loadAcceptedCinemas();
+        listCinemaClient.setVisible(true);
+        PlanningPane.setVisible(false);
 
     }
 
@@ -601,14 +662,7 @@ public class DashboardClientController {
 
     }
 
-    @FXML
-    void afficherAnchorComment(MouseEvent event) {
 
-        listCinemaClient.setOpacity(0.5);
-        AnchorComments.setVisible(true);
-        ScrollPaneComments.setStyle("-fx-background-color: #fff;");
-        displayAllComments();
-    }
 
     @FXML
     void addCommentaire() {
@@ -621,24 +675,33 @@ public class DashboardClientController {
         } else {
             SentimentAnalysisController sentimentAnalysisController = new SentimentAnalysisController();
             String sentimentResult = sentimentAnalysisController.analyzeSentiment(message);
-            CommentaireCinema commentaire = new CommentaireCinema((Client) new UserService().getUserById(3) , message, sentimentResult);
+            CommentaireCinema commentaire = new CommentaireCinema(new CinemaService().getCinema(cinemaId), (Client) new UserService().getUserById(3) , message, sentimentResult);
             System.out.println(commentaire + " " +new UserService().getUserById(3));
             CommentaireCinemaService commentaireCinemaService = new CommentaireCinemaService();
             commentaireCinemaService.create(commentaire);
             txtAreaComments.clear();
         }
-    }
+  }
 
     @FXML
     void AddComment(MouseEvent event) {
-        addCommentaire();
-        displayAllComments();
+         addCommentaire();
+        displayAllComments(cinemaId);
     }
 
-    private List<CommentaireCinema> getAllComment() {
+    private List<CommentaireCinema> getAllComment(int cinemaId) {
         CommentaireCinemaService commentaireCinemaService = new CommentaireCinemaService();
-        List<CommentaireCinema> commentairecinema = commentaireCinemaService.read();
-        return commentairecinema;
+        List<CommentaireCinema> allComments = commentaireCinemaService.read();
+        List<CommentaireCinema> cinemaComments = new ArrayList<>();
+
+
+        for (CommentaireCinema comment : allComments) {
+            if (comment.getCinema().getId_cinema() == cinemaId) {
+                cinemaComments.add(comment);
+            }
+        }
+
+        return cinemaComments;
     }
 
     private HBox addCommentToView(CommentaireCinema commentaire) {
@@ -658,10 +721,9 @@ public class DashboardClientController {
             userImage = new Image(getClass().getResourceAsStream("/Logo.png"));
         }
 
-        // Création de l'image view avec l'image de l'utilisateur
         ImageView imageView = new ImageView(userImage);
-        imageView.setFitWidth(50); // Ajuster la largeur de l'image
-        imageView.setFitHeight(50); // Ajuster la hauteur de l'image
+        imageView.setFitWidth(50);
+        imageView.setFitHeight(50);
 
         // Positionner l'image au centre du cercle
         imageView.setTranslateX(2 - imageView.getFitWidth() / 2);
@@ -712,16 +774,24 @@ public class DashboardClientController {
     }
 
 
-    private void displayAllComments() {
-        List<CommentaireCinema> comments = getAllComment();
-        VBox allCommentsContainer = new VBox(); // Créer un conteneur vertical pour stocker tous les commentaires
+    private void displayAllComments(int cinemaId) {
+        List<CommentaireCinema> comments = getAllComment(cinemaId);
+        VBox allCommentsContainer = new VBox();
 
         for (CommentaireCinema comment : comments) {
             HBox commentView = addCommentToView(comment);
-            allCommentsContainer.getChildren().add(commentView); // Ajouter chaque commentaire au conteneur vertical
+            allCommentsContainer.getChildren().add(commentView);
         }
 
-        ScrollPaneComments.setContent(allCommentsContainer); // Définir le conteneur vertical comme contenu du ScrollPane
+        ScrollPaneComments.setContent(allCommentsContainer);
+    }
+
+    @FXML
+    void closeCommets(MouseEvent event) {
+        listCinemaClient.setOpacity(1);
+        AnchorComments.setVisible(false);
+        listCinemaClient.setVisible(true);
+
     }
 
 
