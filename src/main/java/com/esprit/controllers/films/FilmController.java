@@ -1,7 +1,9 @@
 package com.esprit.controllers.films;
 
+import com.esprit.controllers.ClientSideBarController;
 import com.esprit.models.cinemas.Cinema;
 import com.esprit.models.films.*;
+import com.esprit.models.users.Client;
 import com.esprit.services.cinemas.CinemaService;
 import com.esprit.services.films.*;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -50,7 +52,6 @@ public class FilmController {
     private final List<CheckBox> yearsCheckBoxes = new ArrayList<>();
 
     Validator validator;
-
     @FXML
     private Button ajouterCinema_Button;
     @FXML
@@ -114,6 +115,7 @@ public class FilmController {
 
     @FXML
     private Button bouttonAnchor_outfilltrer1;
+
 
     @FXML
     void initialize() {

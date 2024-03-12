@@ -1,74 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
-
-<AnchorPane prefHeight="855.0" prefWidth="1507.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.evenements.AffichageEvenementClientController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="855.0" prefWidth="1507.0"
+            xmlns="http://javafx.com/javafx/21"
+            fx:controller="com.esprit.controllers.evenements.AffichageEvenementClientController">
     <children>
-        <AnchorPane layoutX="1244.0" layoutY="220.0" prefHeight="399.0" prefWidth="202.0" styleClass="bg-white" stylesheets="@dashboard2.css" />
-        <AnchorPane prefHeight="707.0" prefWidth="208.0" styleClass="nav-form" stylesheets="@dashboard2.css">
-            <children>
-                <Button layoutY="282.0" mnemonicParsing="false" onAction="#showFilms" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Movies">
-                    <font>
-                        <Font name="System Italic" size="17.0" />
-                    </font>
-                </Button>
-                <FontAwesomeIconView fill="#ebe5e5" glyphName="FILM" layoutX="20.0" layoutY="308.0" size="30" text="" />
-                <Button layoutX="1.0" layoutY="321.0" mnemonicParsing="false" onAction="#showProduits" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Products" />
-                <FontAwesomeIconView fill="#ebe5e5" glyphName="CUBES" layoutX="20.0" layoutY="347.0" size="30" text="" />
-                <FontAwesomeIconView fill="#ebe5e5" glyphName="VIDEO_CAMERA" layoutX="24.0" layoutY="390.0" size="30" text="" />
-                <Button layoutY="364.0" mnemonicParsing="false" onAction="#showCinemas" prefHeight="30.0" prefWidth="202.0" styleClass="nav-btn" text="Cinema" textAlignment="CENTER" />
-                <FontAwesomeIconView fill="#ebe5e5" glyphName="USER" layoutX="39.0" layoutY="611.0" size="30" text="" />
-                <Button layoutX="74.0" layoutY="584.0" mnemonicParsing="false" styleClass="nav-btn" text="Account" />
-                <FontAwesomeIconView fill="#ebe5e5" glyphName="SIGN_OUT" layoutX="38.0" layoutY="651.0" size="30" text="" />
-                <Button layoutX="82.0" layoutY="624.0" mnemonicParsing="false" styleClass="nav-btn" text="EXIT" />
-                <FontAwesomeIconView fill="#ebe5e5" glyphName="CALENDAR" layoutX="22.0" layoutY="432.0" size="30" text="" />
-                <Button layoutX="1.0" layoutY="407.0" mnemonicParsing="false" onAction="#showEvents" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Events">
-                    <font>
-                        <Font size="13.0" />
-                    </font>
-                </Button>
-                <Button layoutX="1.0" layoutY="244.0" mnemonicParsing="false" onAction="#showSeries" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Series" />
-                <FontAwesomeIconView fill="#ebe5e5" glyphName="TV" layoutX="18.0" layoutY="269.0" size="30" />
-                <ImageView fitHeight="178.0" fitWidth="215.0" layoutX="12.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../../../../logo.png" />
-                    </image>
-                </ImageView>
-            </children>
-        </AnchorPane>
-        <FontAwesomeIconView fill="#6f6a6a" glyphName="SEARCH" layoutX="292.0" layoutY="146.0" size="13" text="" wrappingWidth="21.428571701049805" />
-        <TextField fx:id="tfRechercheEc" layoutX="313.0" layoutY="126.0" prefHeight="25.0" prefWidth="179.0" promptText="Keywords.." styleClass="search-pane" stylesheets="@dashboard2.css" />
+        <AnchorPane layoutX="1244.0" layoutY="220.0" prefHeight="399.0" prefWidth="202.0" styleClass="bg-white"
+                    stylesheets="@dashboard2.css"/>
+        <fx:include source="clientSideBar.fxml"/>
+        <FontAwesomeIconView fill="#6f6a6a" glyphName="SEARCH" layoutX="292.0" layoutY="146.0" size="13" text=""
+                             wrappingWidth="21.428571701049805"/>
+        <TextField fx:id="tfRechercheEc" layoutX="313.0" layoutY="126.0" prefHeight="25.0" prefWidth="179.0"
+                   promptText="Keywords.." styleClass="search-pane" stylesheets="@dashboard2.css"/>
         <Label layoutX="1259.0" layoutY="281.0" text="Send Feedback :" textFill="#a13939">
             <font>
-                <Font name="Barlow Condensed Bold Italic" size="30.0" />
+                <Font name="Barlow Condensed Bold Italic" size="30.0"/>
             </font>
         </Label>
-        <TextArea fx:id="taComment" layoutX="1262.0" layoutY="384.0" prefHeight="171.0" prefWidth="168.0" styleClass="text-area-red" stylesheets="@dashboard2.css" />
-        <Button fx:id="bSend" layoutX="1305.0" layoutY="574.0" mnemonicParsing="false" onAction="#ajouterFeedback" styleClass="button-client" stylesheets="@dashboard2.css" text="Send" />
-        <ComboBox fx:id="cbeventname" layoutX="1271.0" layoutY="336.0" prefWidth="150.0" promptText="Choose an event.." styleClass="combo-box-red" stylesheets="@dashboard2.css" />
-        <Button fx:id="bHistory" layoutX="1254.0" layoutY="169.0" mnemonicParsing="false" onAction="#showHistory" styleClass="instert-btn" stylesheets="@dashboard2.css" text="My Event History &gt;" />
-        <Button fx:id="bWeather" layoutX="1223.0" layoutY="643.0" mnemonicParsing="false" onAction="#showWeather" styleClass="instert-btn" stylesheets="@dashboard2.css" text="Check Today's Weather &gt;">
+        <TextArea fx:id="taComment" layoutX="1262.0" layoutY="384.0" prefHeight="171.0" prefWidth="168.0"
+                  styleClass="text-area-red" stylesheets="@dashboard2.css"/>
+        <Button fx:id="bSend" layoutX="1305.0" layoutY="574.0" mnemonicParsing="false" onAction="#ajouterFeedback"
+                styleClass="button-client" stylesheets="@dashboard2.css" text="Send"/>
+        <ComboBox fx:id="cbeventname" layoutX="1271.0" layoutY="336.0" prefWidth="150.0" promptText="Choose an event.."
+                  styleClass="combo-box-red" stylesheets="@dashboard2.css"/>
+        <Button fx:id="bHistory" layoutX="1254.0" layoutY="169.0" mnemonicParsing="false" onAction="#showHistory"
+                styleClass="instert-btn" stylesheets="@dashboard2.css" text="My Event History &gt;"/>
+        <Button fx:id="bWeather" layoutX="1223.0" layoutY="643.0" mnemonicParsing="false" onAction="#showWeather"
+                styleClass="instert-btn" stylesheets="@dashboard2.css" text="Check Today's Weather &gt;">
             <font>
-                <Font size="11.0" />
+                <Font size="11.0"/>
             </font>
         </Button>
-        <ListView fx:id="listeEvents" layoutX="244.0" layoutY="161.0" prefHeight="694.0" prefWidth="974.0" stylesheets="@dashboard2.css" visible="false" />
-      <AnchorPane fx:id="anchplanning" layoutX="207.0" layoutY="161.0" prefHeight="694.0" prefWidth="1011.0" visible="false" />
-      <FontAwesomeIconView fx:id="idfilter" glyphName="FILTER" layoutX="521.0" layoutY="152.0" onMouseClicked="#filtrer" size="30" wrappingWidth="21.428571701049805" />
-      <AnchorPane fx:id="FilterAnchor" layoutX="563.0" layoutY="51.0" prefHeight="87.0" prefWidth="200.0" visible="false">
-         <children>
-            <Button layoutX="74.0" layoutY="161.0" mnemonicParsing="false" onAction="#filtercinema" text="Filter" />
-         </children>
-      </AnchorPane>
+        <ListView fx:id="listeEvents" layoutX="244.0" layoutY="161.0" prefHeight="694.0" prefWidth="974.0"
+                  stylesheets="@dashboard2.css" visible="false"/>
+        <AnchorPane fx:id="anchplanning" layoutX="207.0" layoutY="161.0" prefHeight="694.0" prefWidth="1011.0"
+                    visible="false"/>
+        <FontAwesomeIconView fx:id="idfilter" glyphName="FILTER" layoutX="521.0" layoutY="152.0"
+                             onMouseClicked="#filtrer" size="30" wrappingWidth="21.428571701049805"/>
+        <AnchorPane fx:id="FilterAnchor" layoutX="563.0" layoutY="51.0" prefHeight="87.0" prefWidth="200.0"
+                    visible="false">
+            <children>
+                <Button layoutX="74.0" layoutY="161.0" mnemonicParsing="false" onAction="#filtercinema" text="Filter"/>
+            </children>
+        </AnchorPane>
     </children>
 </AnchorPane>

@@ -1,7 +1,9 @@
 package com.esprit.controllers.produits;
 
 
+import com.esprit.controllers.ClientSideBarController;
 import com.esprit.models.produits.Categorie_Produit;
+import com.esprit.models.users.Client;
 import com.esprit.services.produits.CategorieService;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.collections.FXCollections;
@@ -28,9 +30,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class DesignCategorieAdminController {
-
     private final List<CheckBox> addressCheckBoxes = new ArrayList<>();
     private final List<CheckBox> statusCheckBoxes = new ArrayList<>();
+
     @FXML
     private TableView<Categorie_Produit> categorie_tableview;
     @FXML
@@ -53,6 +55,7 @@ public class DesignCategorieAdminController {
     private TableColumn<Categorie_Produit, String> nomC_tableC;
     @FXML
     private TableColumn<Categorie_Produit, String> description_tableC;
+
 
     @FXML
     void GestionProduit(ActionEvent event) throws IOException {

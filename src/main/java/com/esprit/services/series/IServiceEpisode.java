@@ -7,12 +7,15 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface IServiceEpisode<T> {
-   public void ajouter(T t) throws SQLException;
-   public void modifier(T t) throws SQLException;
-   public void supprimer(int id) throws SQLException;
-   public List<EpisodeDto> recuperer() throws SQLException;
-   public List<Episode> recupuerselonSerie(int id) throws SQLException;
+    void ajouter(T t) throws SQLException;
 
+    void modifier(T t) throws SQLException;
+
+    void supprimer(int id) throws SQLException;
+
+    List<EpisodeDto> recuperer() throws SQLException;
+
+    List<Episode> recupuerselonSerie(int id) throws SQLException;
 
 
 }

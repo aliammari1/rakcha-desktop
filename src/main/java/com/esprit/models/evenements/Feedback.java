@@ -1,20 +1,22 @@
 package com.esprit.models.evenements;
 
+import com.esprit.models.users.Client;
+
 public class Feedback {
 
     String commentaire;
     private int IDFeedback;
-    private int userevenement;
+    private Client userevenement;
     private Evenement feedbackevenement;
 
-    public Feedback(int IDFeedback, Evenement feedbackevenement, int userevenement, String commentaire) {
+    public Feedback(int IDFeedback, Evenement feedbackevenement, Client userevenement, String commentaire) {
         this.IDFeedback = IDFeedback;
         this.feedbackevenement = feedbackevenement;
         this.userevenement = userevenement;
         this.commentaire = commentaire;
     }
 
-    public Feedback(Evenement feedbackevenement, int userevenement, String commentaire) {
+    public Feedback(Evenement feedbackevenement, Client userevenement, String commentaire) {
         this.feedbackevenement = feedbackevenement;
         this.userevenement = userevenement;
         this.commentaire = commentaire;
@@ -36,11 +38,11 @@ public class Feedback {
         this.feedbackevenement = feedbackevenement;
     }
 
-    public int getUserevenement() {
+    public Client getUserevenement() {
         return userevenement;
     }
 
-    public void setUserevenement(int userevenement) {
+    public void setUserevenement(Client userevenement) {
         this.userevenement = userevenement;
     }
 

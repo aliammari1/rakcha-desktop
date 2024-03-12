@@ -1,186 +1,180 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.text.Font?>
-
-<AnchorPane prefHeight="700.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.cinemas.DashboardResponsableController">
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="700.0" prefWidth="1280.0"
+            xmlns="http://javafx.com/javafx/21"
+            fx:controller="com.esprit.controllers.cinemas.DashboardResponsableController">
     <children>
-        <AnchorPane prefHeight="750.0" prefWidth="209.0" styleClass="nav-form" stylesheets="@styles/dashboard.css">
-            <children>
-                <Button layoutY="146.0" mnemonicParsing="false" onAction="#showCinemaList" prefHeight="47.0" prefWidth="210.0" styleClass="nav-btn" text="Cinema List">
-                    <font>
-                        <Font name="Arial Rounded MT Bold" size="12.0" />
-                    </font>
-                </Button>
-                <FontAwesomeIconView fill="WHITE" glyphName="VIDEO_CAMERA" layoutX="24.0" layoutY="180.0" size="30" />
-                <Button layoutY="213.0" mnemonicParsing="false" onAction="#AfficherFilmResponsable" prefHeight="47.0" prefWidth="210.0" styleClass="nav-btn" text="Movies" />
-                <FontAwesomeIconView fill="WHITE" glyphName="FILM" layoutX="23.0" layoutY="247.0" size="30" />
-                <Button layoutY="278.0" mnemonicParsing="false" onAction="#showSessionForm" prefHeight="47.0" prefWidth="210.0" styleClass="nav-btn" text="Sessions" />
-                <FontAwesomeIconView fill="WHITE" glyphName="CALENDAR" layoutX="25.0" layoutY="312.0" size="30" />
-                <Button layoutY="450.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="210.0" styleClass="nav-btn" text="Account" />
-                <FontAwesomeIconView fill="#f7f2f2" glyphName="USER" layoutX="28.0" layoutY="485.0" size="30" />
-                <FontAwesomeIconView fill="WHITE" glyphName="SIGN_OUT" layoutX="25.0" layoutY="548.0" size="30" />
-                <Button layoutX="3.0" layoutY="514.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="203.0" styleClass="nav-btn" text="Exit">
-                    <font>
-                        <Font name="Arial Rounded MT Bold" size="12.0" />
-                    </font>
-                </Button>
-           
-            </children>
-        </AnchorPane>
-        <AnchorPane fx:id="cinemaFormPane" layoutX="240.0" layoutY="69.0" prefHeight="630.0" prefWidth="400.0" styleClass="bg-white" stylesheets="@styles/dashboard.css" visible="false">
+        <fx:include source="responsableDeCinemaSideBar.fxml"/>
+        <AnchorPane fx:id="cinemaFormPane" layoutX="240.0" layoutY="69.0" prefHeight="630.0" prefWidth="400.0"
+                    styleClass="bg-white" stylesheets="@styles/dashboard.css" visible="false">
             <children>
                 <Label layoutX="97.0" layoutY="29.0" text="ADD CINEMA" textFill="#fce19a">
                     <font>
-                        <Font name="Arial Rounded MT Bold" size="36.0" />
+                        <Font name="Arial Rounded MT Bold" size="36.0"/>
                     </font>
                 </Label>
                 <Label layoutX="56.0" layoutY="126.0" text="Name:">
                     <font>
-                        <Font name="Arial Rounded MT Bold" size="17.0" />
+                        <Font name="Arial Rounded MT Bold" size="17.0"/>
                     </font>
                 </Label>
                 <Label layoutX="56.0" layoutY="193.0" text="Address:">
                     <font>
-                        <Font name="Arial Rounded MT Bold" size="17.0" />
+                        <Font name="Arial Rounded MT Bold" size="17.0"/>
                     </font>
                 </Label>
                 <Label layoutX="56.0" layoutY="335.0" text="Logo:">
                     <font>
-                        <Font name="Arial Rounded MT Bold" size="17.0" />
+                        <Font name="Arial Rounded MT Bold" size="17.0"/>
                     </font>
                 </Label>
-                <ImageView fx:id="image" fitHeight="150.0" fitWidth="200.0" layoutX="131.0" layoutY="335.0" pickOnBounds="true" preserveRatio="true" styleClass="image-view-red" />
-                <Button layoutX="140.0" layoutY="547.0" mnemonicParsing="false" onAction="#addCinema" prefHeight="47.0" prefWidth="122.0" styleClass="instert-btn" stylesheets="@styles/dashboard.css" text="ADD" />
-                <TextField fx:id="tfNom" layoutX="188.0" layoutY="124.0" styleClass="text-field-red" />
-                <TextField fx:id="tfAdresse" layoutX="189.0" layoutY="191.0" styleClass="text-field-red" />
-                <FontAwesomeIconView fill="#ae2d3c" glyphName="DOWNLOAD" layoutX="66.0" layoutY="420.0" onMouseClicked="#selectImage" size="30" />
+                <ImageView fx:id="image" fitHeight="150.0" fitWidth="200.0" layoutX="131.0" layoutY="335.0"
+                           pickOnBounds="true" preserveRatio="true" styleClass="image-view-red"/>
+                <Button layoutX="140.0" layoutY="547.0" mnemonicParsing="false" onAction="#addCinema" prefHeight="47.0"
+                        prefWidth="122.0" styleClass="instert-btn" stylesheets="@styles/dashboard.css" text="ADD"/>
+                <TextField fx:id="tfNom" layoutX="188.0" layoutY="124.0" styleClass="text-field-red"/>
+                <TextField fx:id="tfAdresse" layoutX="189.0" layoutY="191.0" styleClass="text-field-red"/>
+                <FontAwesomeIconView fill="#ae2d3c" glyphName="DOWNLOAD" layoutX="66.0" layoutY="420.0"
+                                     onMouseClicked="#selectImage" size="30"/>
             </children>
         </AnchorPane>
-        <AnchorPane fx:id="cinemaListPane" layoutX="714.0" layoutY="69.0" prefHeight="630.0" prefWidth="460.0" styleClass="signout" stylesheets="@styles/dashboard.css" visible="false">
-            <FlowPane fx:id="cinemaFlowPane" layoutX="5.0" prefHeight="400.0" prefWidth="450.0" />
+        <AnchorPane fx:id="cinemaListPane" layoutX="714.0" layoutY="69.0" prefHeight="630.0" prefWidth="460.0"
+                    styleClass="signout" stylesheets="@styles/dashboard.css" visible="false">
+            <FlowPane fx:id="cinemaFlowPane" layoutX="5.0" prefHeight="400.0" prefWidth="450.0"/>
         </AnchorPane>
-        <AnchorPane fx:id="sessionFormPane" layoutX="223.0" layoutY="36.0" prefHeight="642.0" prefWidth="390.0" styleClass="bg-white" stylesheets="@styles/dashboard.css" visible="false">
+        <AnchorPane fx:id="sessionFormPane" layoutX="223.0" layoutY="36.0" prefHeight="642.0" prefWidth="390.0"
+                    styleClass="bg-white" stylesheets="@styles/dashboard.css" visible="false">
             <children>
                 <Label layoutX="87.0" layoutY="30.0" text="ADD SESSION" textFill="#fce19a">
                     <font>
-                        <Font name="Arial Rounded MT Bold" size="36.0" />
+                        <Font name="Arial Rounded MT Bold" size="36.0"/>
                     </font>
                 </Label>
                 <Label layoutX="51.0" layoutY="130.0" text="Cinema:">
                     <font>
-                        <Font name="Arial Rounded MT Bold" size="17.0" />
+                        <Font name="Arial Rounded MT Bold" size="17.0"/>
                     </font>
                 </Label>
                 <Label layoutX="51.0" layoutY="180.0" text="Movie:">
                     <font>
-                        <Font name="Arial Rounded MT Bold" size="17.0" />
+                        <Font name="Arial Rounded MT Bold" size="17.0"/>
                     </font>
                 </Label>
                 <Label layoutX="51.0" layoutY="230.0" text="Movie room:">
                     <font>
-                        <Font name="Arial Rounded MT Bold" size="17.0" />
+                        <Font name="Arial Rounded MT Bold" size="17.0"/>
                     </font>
                 </Label>
                 <Label layoutX="51.0" layoutY="280.0" text="Date:">
                     <font>
-                        <Font name="Arial Rounded MT Bold" size="17.0" />
+                        <Font name="Arial Rounded MT Bold" size="17.0"/>
                     </font>
                 </Label>
                 <Label layoutX="51.0" layoutY="330.0" text="departure time:">
                     <font>
-                        <Font name="Arial Rounded MT Bold" size="17.0" />
+                        <Font name="Arial Rounded MT Bold" size="17.0"/>
                     </font>
                 </Label>
                 <Label layoutX="51.0" layoutY="380.0" text="end time:">
                     <font>
-                        <Font name="Arial Rounded MT Bold" size="17.0" />
+                        <Font name="Arial Rounded MT Bold" size="17.0"/>
                     </font>
                 </Label>
                 <Label layoutX="51.0" layoutY="430.0" text="Price:">
                     <font>
-                        <Font name="Arial Rounded MT Bold" size="17.0" />
+                        <Font name="Arial Rounded MT Bold" size="17.0"/>
                     </font>
                 </Label>
-                <ComboBox fx:id="comboCinema" layoutX="213.0" layoutY="128.0" prefHeight="26.0" prefWidth="154.0" styleClass="combo-box-red" />
-                <ComboBox fx:id="comboMovie" layoutX="213.0" layoutY="178.0" prefHeight="26.0" prefWidth="154.0" styleClass="combo-box-red" />
-                <ComboBox fx:id="comboRoom" layoutX="213.0" layoutY="228.0" prefHeight="26.0" prefWidth="154.0" styleClass="combo-box-red" />
-                <DatePicker fx:id="dpDate" layoutX="213.0" layoutY="278.0" prefHeight="26.0" prefWidth="153.0" styleClass="date-picker-red" />
-                <TextField fx:id="tfDepartureTime" layoutX="213.0" layoutY="328.0" prefHeight="26.0" prefWidth="154.0" styleClass="text-field-red" />
-                <TextField fx:id="tfEndTime" layoutX="213.0" layoutY="378.0" prefHeight="26.0" prefWidth="154.0" styleClass="text-field-red" />
-                <TextField fx:id="tfPrice" layoutX="213.0" layoutY="428.0" prefHeight="26.0" prefWidth="154.0" styleClass="text-field-red" />
-                <Button layoutX="130.0" layoutY="555.0" mnemonicParsing="false" onAction="#addSeance" prefHeight="47.0" prefWidth="122.0" styleClass="instert-btn" text="ADD" />
+                <ComboBox fx:id="comboCinema" layoutX="213.0" layoutY="128.0" prefHeight="26.0" prefWidth="154.0"
+                          styleClass="combo-box-red"/>
+                <ComboBox fx:id="comboMovie" layoutX="213.0" layoutY="178.0" prefHeight="26.0" prefWidth="154.0"
+                          styleClass="combo-box-red"/>
+                <ComboBox fx:id="comboRoom" layoutX="213.0" layoutY="228.0" prefHeight="26.0" prefWidth="154.0"
+                          styleClass="combo-box-red"/>
+                <DatePicker fx:id="dpDate" layoutX="213.0" layoutY="278.0" prefHeight="26.0" prefWidth="153.0"
+                            styleClass="date-picker-red"/>
+                <TextField fx:id="tfDepartureTime" layoutX="213.0" layoutY="328.0" prefHeight="26.0" prefWidth="154.0"
+                           styleClass="text-field-red"/>
+                <TextField fx:id="tfEndTime" layoutX="213.0" layoutY="378.0" prefHeight="26.0" prefWidth="154.0"
+                           styleClass="text-field-red"/>
+                <TextField fx:id="tfPrice" layoutX="213.0" layoutY="428.0" prefHeight="26.0" prefWidth="154.0"
+                           styleClass="text-field-red"/>
+                <Button layoutX="130.0" layoutY="555.0" mnemonicParsing="false" onAction="#addSeance" prefHeight="47.0"
+                        prefWidth="122.0" styleClass="instert-btn" text="ADD"/>
             </children>
         </AnchorPane>
-        <TableView fx:id="SessionTableView" layoutX="640.0" layoutY="36.0" prefHeight="362.0" prefWidth="625.0" stylesheets="@styles/dashboard.css" visible="false">
+        <TableView fx:id="SessionTableView" layoutX="640.0" layoutY="36.0" prefHeight="362.0" prefWidth="625.0"
+                   stylesheets="@styles/dashboard.css" visible="false">
             <columns>
-                <TableColumn fx:id="colMovie" prefWidth="64.00006103515625" text="Movie" />
-                <TableColumn fx:id="colCinema" prefWidth="65.5999755859375" text="Cinema" />
-                <TableColumn fx:id="colMovieRoom" prefWidth="88.800048828125" text="Movie Room" />
-                <TableColumn fx:id="colDate" prefWidth="72.79998779296875" text="Date" />
-                <TableColumn fx:id="colDepartTime" prefWidth="120.00006103515625" text="Departure Time" />
-                <TableColumn fx:id="colEndTime" prefWidth="77.5999755859375" text="End Time" />
-                <TableColumn fx:id="colPrice" prefWidth="56.800048828125" text="Price" />
-                <TableColumn fx:id="colAction" prefWidth="77.5999755859375" text="Action" />
+                <TableColumn fx:id="colMovie" prefWidth="64.00006103515625" text="Movie"/>
+                <TableColumn fx:id="colCinema" prefWidth="65.5999755859375" text="Cinema"/>
+                <TableColumn fx:id="colMovieRoom" prefWidth="88.800048828125" text="Movie Room"/>
+                <TableColumn fx:id="colDate" prefWidth="72.79998779296875" text="Date"/>
+                <TableColumn fx:id="colDepartTime" prefWidth="120.00006103515625" text="Departure Time"/>
+                <TableColumn fx:id="colEndTime" prefWidth="77.5999755859375" text="End Time"/>
+                <TableColumn fx:id="colPrice" prefWidth="56.800048828125" text="Price"/>
+                <TableColumn fx:id="colAction" prefWidth="77.5999755859375" text="Action"/>
             </columns>
         </TableView>
-        <AnchorPane fx:id="addRoomForm" layoutX="223.0" layoutY="36.0" prefHeight="642.0" prefWidth="390.0" styleClass="bg-white" stylesheets="@styles/dashboard.css" visible="false">
+        <AnchorPane fx:id="addRoomForm" layoutX="223.0" layoutY="36.0" prefHeight="642.0" prefWidth="390.0"
+                    styleClass="bg-white" stylesheets="@styles/dashboard.css" visible="false">
             <children>
                 <Label layoutX="44.0" layoutY="29.0" text="ADD Movie Room" textFill="#fce19a">
                     <font>
-                        <Font name="Arial Rounded MT Bold" size="36.0" />
+                        <Font name="Arial Rounded MT Bold" size="36.0"/>
                     </font>
                 </Label>
                 <Label layoutX="44.0" layoutY="170.0" text="Name:">
                     <font>
-                        <Font name="Arial Rounded MT Bold" size="17.0" />
+                        <Font name="Arial Rounded MT Bold" size="17.0"/>
                     </font>
                 </Label>
                 <Label layoutX="44.0" layoutY="296.0" text="Number of places:">
                     <font>
-                        <Font name="Arial Rounded MT Bold" size="17.0" />
+                        <Font name="Arial Rounded MT Bold" size="17.0"/>
                     </font>
                 </Label>
-                <TextField fx:id="tfNomSalle" layoutX="204.0" layoutY="165.0" styleClass="text-field-red" />
-                <TextField fx:id="tfNbrPlaces" layoutX="204.0" layoutY="291.0" styleClass="text-field-red" />
-                <Button layoutX="130.0" layoutY="483.0" mnemonicParsing="false" onAction="#AjouterSalle" prefHeight="47.0" prefWidth="122.0" styleClass="instert-btn" text="ADD" />
+                <TextField fx:id="tfNomSalle" layoutX="204.0" layoutY="165.0" styleClass="text-field-red"/>
+                <TextField fx:id="tfNbrPlaces" layoutX="204.0" layoutY="291.0" styleClass="text-field-red"/>
+                <Button layoutX="130.0" layoutY="483.0" mnemonicParsing="false" onAction="#AjouterSalle"
+                        prefHeight="47.0" prefWidth="122.0" styleClass="instert-btn" text="ADD"/>
             </children>
         </AnchorPane>
-        <TableView fx:id="RoomTableView" layoutX="731.0" layoutY="36.0" prefHeight="200.0" prefWidth="460.0" stylesheets="@styles/dashboard.css" visible="false">
+        <TableView fx:id="RoomTableView" layoutX="731.0" layoutY="36.0" prefHeight="200.0" prefWidth="460.0"
+                   stylesheets="@styles/dashboard.css" visible="false">
             <columns>
-                <TableColumn fx:id="colNameRoom" prefWidth="152.0" text="Name" />
-                <TableColumn fx:id="colNbrPlaces" prefWidth="152.0" text="Number of places" />
-                <TableColumn fx:id="colActionRoom" minWidth="0.0" prefWidth="152.0" text="Action" />
+                <TableColumn fx:id="colNameRoom" prefWidth="152.0" text="Name"/>
+                <TableColumn fx:id="colNbrPlaces" prefWidth="152.0" text="Number of places"/>
+                <TableColumn fx:id="colActionRoom" minWidth="0.0" prefWidth="152.0" text="Action"/>
             </columns>
         </TableView>
-        <AnchorPane fx:id="facebookAnchor" layoutX="400.0" layoutY="120.0" prefHeight="376.0" prefWidth="419.0" styleClass="bg-white" stylesheets="@styles/dashboard.css" visible="false">
+        <AnchorPane fx:id="facebookAnchor" layoutX="400.0" layoutY="120.0" prefHeight="376.0" prefWidth="419.0"
+                    styleClass="bg-white" stylesheets="@styles/dashboard.css" visible="false">
             <children>
-                <Label layoutX="49.0" layoutY="21.0" prefHeight="43.0" prefWidth="321.0" text="Facebook Publish" textFill="#fce19a">
+                <Label layoutX="49.0" layoutY="21.0" prefHeight="43.0" prefWidth="321.0" text="Facebook Publish"
+                       textFill="#fce19a">
                     <font>
-                        <Font name="Arial Rounded MT Bold" size="36.0" />
+                        <Font name="Arial Rounded MT Bold" size="36.0"/>
                     </font>
                 </Label>
-                <TextArea fx:id="txtareaStatut" layoutX="171.0" layoutY="74.0" prefHeight="200.0" prefWidth="200.0" />
+                <TextArea fx:id="txtareaStatut" layoutX="171.0" layoutY="74.0" prefHeight="200.0" prefWidth="200.0"/>
                 <Label layoutX="70.0" layoutY="160.0" text="Status:">
                     <font>
-                        <Font name="Arial Rounded MT Bold" size="24.0" />
+                        <Font name="Arial Rounded MT Bold" size="24.0"/>
                     </font>
                 </Label>
-                <Button fx:id="publierStatut" layoutX="297.0" layoutY="313.0" mnemonicParsing="false" onAction="#PublierStatut" styleClass="instert-btn" stylesheets="@styles/dashboard.css" text="Publish" />
-                <Button fx:id="fermerAnchor" layoutX="210.0" layoutY="313.0" mnemonicParsing="false" onAction="#closeAnchor" styleClass="instert-btn" text="Close" />
+                <Button fx:id="publierStatut" layoutX="297.0" layoutY="313.0" mnemonicParsing="false"
+                        onAction="#PublierStatut" styleClass="instert-btn" stylesheets="@styles/dashboard.css"
+                        text="Publish"/>
+                <Button fx:id="fermerAnchor" layoutX="210.0" layoutY="313.0" mnemonicParsing="false"
+                        onAction="#closeAnchor" styleClass="instert-btn" text="Close"/>
             </children>
         </AnchorPane>
-      <AnchorPane fx:id="StatisticsAnchor" layoutX="231.0" layoutY="15.0" prefHeight="721.0" prefWidth="1034.0" />
+        <AnchorPane fx:id="StatisticsAnchor" layoutX="231.0" layoutY="15.0" prefHeight="721.0" prefWidth="1034.0"/>
     </children>
 </AnchorPane>

@@ -4,7 +4,10 @@ package com.esprit.controllers.users;
 ////
 ////
 public class FaceRecognitionController {
-////    // FXML buttons
+//    @FXML
+    //  ClientSideBarController clientSideBarController;
+    // Client client;
+    ////    // FXML buttons
 ////    @FXML
 ////    private Button cameraButton;
 ////    // the FXML area for showing the current frame
@@ -249,6 +252,17 @@ public class FaceRecognitionController {
 //import java.util.ArrayList;
 //
 //public class SampleController {
+//    @FXML
+//    ClientSideBarController clientSideBarController;
+//    Client client;
+//
+//    public void setData(Client client) {
+//        this.client = client;
+//    }
+//
+//    public void setData(Client client) {
+//        this.client = client;
+//    }
 //
 //    //**********************************************************************************************
 //    //Mention The file location path where the face will be saved & retrieved

@@ -5,6 +5,7 @@ import com.esprit.services.series.IServiceCategorieImpl;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -17,7 +18,6 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.util.Duration;
-import javafx.event.ActionEvent;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -202,6 +202,7 @@ public class StatistiqueController implements Initializable {
 
         borderPane.setCenter(pieChart);
     }
+
     private void showBarChart(Map<Categorie, Long> statistics) {
     }
 
@@ -227,8 +228,7 @@ public class StatistiqueController implements Initializable {
     public void handleUpdatePieData(ActionEvent actionEvent) {
         Node node = borderPane.getCenter();
 
-        if (node instanceof PieChart) {
-            PieChart pc = (PieChart) node;
+        if (node instanceof PieChart pc) {
             double value = pc.getData().get(2).getPieValue();
             pc.getData().get(2).setPieValue(value * 1.10);
             createToolTips(pc);

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21"
+            fx:controller="com.esprit.controllers.ClientSideBarController">
+    <AnchorPane prefHeight="855.0" prefWidth="248.0" styleClass="nav-form" stylesheets="@styles/filmStyle.css">
+        <ImageView fitHeight="208.0" fitWidth="239.0" layoutX="14.0" layoutY="9.0" pickOnBounds="true"
+                   preserveRatio="true">
+            <Image url="@Logo.png"/>
+        </ImageView>
+        <Button fx:id="movieButton" layoutY="334.0" mnemonicParsing="false" onAction="#switchToMovies" prefHeight="63.0"
+                prefWidth="248.0" styleClass="nav-btn" stylesheets="@styles/filmStyle.css" text="Movies            "/>
+        <Button fx:id="productButton" layoutY="396.0" mnemonicParsing="false" onAction="#switchToProducts"
+                prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" stylesheets="@styles/filmStyle.css"
+                text="Products         "/>
+        <Button fx:id="cinemaButton" layoutY="458.0" mnemonicParsing="false" onAction="#switchtcinema" prefHeight="63.0"
+                prefWidth="248.0" styleClass="nav-btn" text="Cinema         "/>
+        <FontAwesomeIconView fill="#f2efef" glyphName="FILM" layoutX="14.0" layoutY="377.0" size="30" text=""
+                             wrappingWidth="36.0"/>
+        <Button fx:id="eventButton" layoutY="514.0" mnemonicParsing="false" onAction="#switchToEvent" prefHeight="63.0"
+                prefWidth="248.0" styleClass="nav-btn" text="Event           "/>
+        <FontAwesomeIconView fill="#ebe5e5" glyphName="CUBES" layoutX="13.0" layoutY="438.0" size="30" text=""/>
+        <FontAwesomeIconView fill="#ebe5e5" glyphName="CALENDAR" layoutX="19.0" layoutY="557.0" size="30" text=""/>
+        <FontAwesomeIconView fill="#ebe5e5" glyphName="VIDEO_CAMERA" layoutX="17.0" layoutY="500.0" size="30" text=""/>
+        <Button layoutX="105.0" layoutY="732.0" mnemonicParsing="false" styleClass="nav-btn" text="Account"/>
+        <FontAwesomeIconView fill="#ebe5e5" glyphName="USER" layoutX="61.0" layoutY="758.0" size="30" text=""/>
+        <Button layoutX="117.0" layoutY="774.0" mnemonicParsing="false" styleClass="nav-btn" text="EXIT"/>
+        <FontAwesomeIconView fill="#ebe5e5" glyphName="SIGN_OUT" layoutX="61.0" layoutY="801.0" size="30" text=""/>
+        <Button fx:id="serieButton" layoutY="270.0" mnemonicParsing="false" onAction="#switchToSeries" prefHeight="63.0"
+                prefWidth="248.0" styleClass="nav-btn" stylesheets="@styles/filmStyle.css" text="Series              "
+                textAlignment="CENTER"/>
+        <FontAwesomeIconView fill="#ebe5e5" glyphName="TV" layoutX="15.0" layoutY="312.0" size="30"/>
+    </AnchorPane>
+</AnchorPane>

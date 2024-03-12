@@ -19,7 +19,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="745.0" prefWidth="1291.0" stylesheets="@styles/filmStyle.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.films.CategoryController">
     <children>
-        <BorderPane layoutX="521.0" layoutY="139.0" prefHeight="745.0" prefWidth="1291.0" styleClass="top-form" stylesheets="@styles/filmStyle.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <BorderPane layoutX="521.0" layoutY="139.0" prefHeight="936.0" prefWidth="1632.0" styleClass="top-form" stylesheets="@styles/filmStyle.css" AnchorPane.bottomAnchor="-191.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-341.0" AnchorPane.topAnchor="0.0">
             <top>
                 <AnchorPane prefHeight="40.0" prefWidth="1291.0" BorderPane.alignment="CENTER">
                     <children>
@@ -52,45 +52,7 @@
                 </AnchorPane>
             </top>
             <left>
-                <AnchorPane prefHeight="702.0" prefWidth="235.0" styleClass="nav-form" BorderPane.alignment="CENTER">
-                    <children>
-                        <FontAwesomeIconView fill="#e1cfcf" glyphName="USER" layoutX="88.0" layoutY="83.0" size="80" stroke="BLACK" text="" wrappingWidth="60.0" />
-                        <Label layoutX="82.0" layoutY="96.0" text="Welcome" textAlignment="CENTER" textFill="#e1cfcf">
-                            <font>
-                                <Font size="16.0" />
-                            </font>
-                        </Label>
-                        <Label layoutX="99.0" layoutY="121.0" text="Admin" textFill="#e1cfcf" />
-                        <Button alignment="CENTER" layoutX="1.0" layoutY="201.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="239.0" styleClass="nav-btn" stylesheets="@styles/filmStyle.css" text="Ajouter films" textAlignment="CENTER" />
-                        <Button layoutX="1.0" layoutY="298.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="239.0" styleClass="nav-btn" stylesheets="@styles/filmStyle.css" text="Ajouter produit" />
-                        <Button fx:id="AjouterCategory_Button" layoutX="1.0" layoutY="247.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="239.0" styleClass="nav-btn" stylesheets="@styles/filmStyle.css" text="Ajouter Category" />
-                        <Button layoutY="344.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="241.0" styleClass="nav-btn" stylesheets="@styles/filmStyle.css" text="Liste des films" />
-                        <Button layoutX="20.0" layoutY="603.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="42.0" styleClass="signout">
-                            <stylesheets>
-                                <URL value="@styles/filmStyle.css" />
-                                <URL value="@styles/filmStyle.css" />
-                            </stylesheets>
-                        </Button>
-                        <FontAwesomeIconView fill="#fffefe" glyphName="SIGN_OUT" layoutX="31.0" layoutY="631.0" size="20" wrappingWidth="19.85714340209961">
-                            <font>
-                                <Font size="65.0" />
-                            </font>
-                        </FontAwesomeIconView>
-                        <Label layoutX="70.0" layoutY="613.0" text="Sign out" textFill="#e1cfcf">
-                            <font>
-                                <Font size="14.0" />
-                            </font>
-                        </Label>
-                        <FontAwesomeIconView fill="WHITE" glyphName="PLAY_CIRCLE" layoutX="22.0" layoutY="235.0" size="30" wrappingWidth="17.714284896850586" />
-                        <FontAwesomeIconView fill="WHITE" glyphName="PLUS" layoutX="23.0" layoutY="281.0" size="30" />
-                        <FontAwesomeIconView fill="WHITE" glyphName="SERVER" layoutX="21.0" layoutY="378.0" size="30" />
-                        <FontAwesomeIconView fill="WHITE" glyphName="PLUS" layoutX="23.0" layoutY="332.0" size="30" />
-                    </children>
-                    <stylesheets>
-                        <URL value="@styles/filmStyle.css" />
-                        <URL value="@styles/filmStyle.css" />
-                    </stylesheets>
-                </AnchorPane>
+                <fx:include source="clientSideBar.fxml" />
             </left>
             <center>
                 <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">

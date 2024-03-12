@@ -16,12 +16,13 @@ import java.util.List;
 public class PanierService implements IService<Panier> {
 
 
-    private Connection connection;
+    private final Connection connection;
 
 
     public PanierService() {
         connection = DataSource.getInstance().getConnection();
     }
+
     @Override
     public void create(Panier panier) {
 
@@ -47,15 +48,15 @@ public class PanierService implements IService<Panier> {
 
 
     public List<Panier> readUserPanier(int iduser) throws SQLException {
-        UserService usersService=new UserService();
-        ProduitService produitService=new ProduitService();
+        UserService usersService = new UserService();
+        ProduitService produitService = new ProduitService();
         List<Panier> paniers = new ArrayList<>();
         String req = "SELECT * from panier  WHERE id_client=?";
         PreparedStatement ps = connection.prepareStatement(req);
         ps.setInt(1, iduser);
         ResultSet rs = ps.executeQuery();
-        while (rs.next()){
-            Panier panier=new Panier();
+        while (rs.next()) {
+            Panier panier = new Panier();
             panier.setUser(usersService.getUserById(iduser));
             panier.setProduit(produitService.getProduitById(rs.getInt("id_produit")));
             panier.setQuantity(rs.getInt("quantity"));
@@ -68,7 +69,7 @@ public class PanierService implements IService<Panier> {
     public void update(Panier panier) {
         String req = "UPDATE panier p " +
                 "INNER JOIN produit pro ON pro.id_produit = p.id_produit " +
-                "INNER JOIN users u On u.id=p.id_client"+
+                "INNER JOIN users u On u.id=p.id_client" +
                 "SET c.id_produit = ?, c.quantite = ? ,c.id_client=?" +
                 "WHERE c.idCommandeItem = ?;";
 

@@ -1,9 +1,11 @@
 package com.esprit.controllers.series;
 
 
+import com.esprit.controllers.ClientSideBarController;
 import com.esprit.models.series.Categorie;
 import com.esprit.models.series.Feedback;
 import com.esprit.models.series.Serie;
+import com.esprit.models.users.Client;
 import com.esprit.services.series.DTO.SerieDto;
 import com.esprit.services.series.IServiceCategorieImpl;
 import com.esprit.services.series.IServiceFeedbackImpl;
@@ -40,6 +42,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class SerieController {
+
     ///
     @FXML
     private Label categoriecheck;

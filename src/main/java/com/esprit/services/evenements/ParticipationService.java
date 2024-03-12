@@ -1,6 +1,7 @@
 package com.esprit.services.evenements;
 
 import com.esprit.models.evenements.Participation;
+import com.esprit.models.users.Client;
 import com.esprit.services.IService;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.DataSource;
@@ -27,7 +28,7 @@ public class ParticipationService implements IService<Participation> {
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(1, participation.getEvent().getId());
-            pst.setInt(2, participation.getUserevenement());
+            pst.setInt(2, participation.getUserevenement().getId());
             pst.setInt(3, participation.getQuantity());
             pst.executeUpdate();
             System.out.println("Participation added !");
@@ -44,7 +45,7 @@ public class ParticipationService implements IService<Participation> {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(4, participation.getId_participation());
             pst.setInt(1, participation.getEvent().getId());
-            pst.setInt(2, participation.getUserevenement());
+            pst.setInt(2, participation.getUserevenement().getId());
             pst.setInt(3, participation.getQuantity());
             pst.executeUpdate();
             System.out.println("Participation Updated !");
@@ -80,7 +81,7 @@ public class ParticipationService implements IService<Participation> {
             EvenementService es = new EvenementService();
             UserService us = new UserService();
             while (rs.next()) {
-                participations.add(new Participation(rs.getInt("id_participation"), es.getEvenement(rs.getInt("id_evenement")), rs.getInt("id_user"), rs.getInt("quantity")));
+                participations.add(new Participation(rs.getInt("id_participation"), es.getEvenement(rs.getInt("id_evenement")), (Client) new UserService().getUserById(rs.getInt("id_user")), rs.getInt("quantity")));
 
             }
         } catch (SQLException e) {

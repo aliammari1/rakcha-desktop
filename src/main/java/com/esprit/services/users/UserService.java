@@ -11,7 +11,10 @@ import com.esprit.utils.UserPDF;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -279,33 +282,5 @@ public class UserService implements IService<User> {
             System.out.println(e.getMessage());
         }
         return user;
-    }
-
-    public Client getClientById(int userId) {
-        String query = "SELECT * FROM users WHERE id = ?";
-        try {
-            PreparedStatement statement = con.prepareStatement(query);
-            statement.setInt(1, userId);
-            ResultSet resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String firstName = resultSet.getString("nom");
-                String lastName = resultSet.getString("prenom");
-                int phoneNumber = resultSet.getInt("num_telephone");
-                String password = resultSet.getString("password");
-                String role = resultSet.getString("role");
-                String address = resultSet.getString("adresse");
-                Date birthDate = resultSet.getDate("date_de_naissance");
-                String email = resultSet.getString("email");
-                String photo_de_profil = resultSet.getString("photo_de_profil");
-
-                // Créer et retourner une instance de Client avec les données récupérées
-                return new Client(id, firstName, lastName, phoneNumber, password, role, address, birthDate, email, photo_de_profil);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 }

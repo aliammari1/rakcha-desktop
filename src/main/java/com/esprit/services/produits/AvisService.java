@@ -15,9 +15,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AvisService  implements IService<Avis> {
+public class AvisService implements IService<Avis> {
 
-    private Connection connection;
+    private final Connection connection;
 
     public AvisService() {
         connection = DataSource.getInstance().getConnection();
@@ -28,9 +28,9 @@ public class AvisService  implements IService<Avis> {
         String req = "INSERT into avis(idusers,note,id_produit ) values (?,?, ?);";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
-            pst.setInt(1, avis.getUser().getId() );
-            pst.setInt(2, avis.getNote() );
-            pst.setInt(3,avis.getProduit().getId_produit());
+            pst.setInt(1, avis.getUser().getId());
+            pst.setInt(2, avis.getNote());
+            pst.setInt(3, avis.getProduit().getId_produit());
 
 
             pst.executeUpdate();
@@ -66,8 +66,6 @@ public class AvisService  implements IService<Avis> {
     }
 
 
-
-
     @Override
     public void update(Avis avis) {
 
@@ -75,7 +73,6 @@ public class AvisService  implements IService<Avis> {
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(1, avis.getNote());
-
 
 
             pst.executeUpdate();
@@ -93,7 +90,7 @@ public class AvisService  implements IService<Avis> {
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(1, avis.getUser().getId());
-            pst.setInt(2,avis.getProduit().getId_produit());
+            pst.setInt(2, avis.getProduit().getId_produit());
             pst.executeUpdate();
             System.out.println("avis supprmiée !");
         } catch (SQLException e) {
@@ -124,7 +121,7 @@ public class AvisService  implements IService<Avis> {
             PreparedStatement preparedStatement = connection.prepareStatement(req);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next())
-                avis.add(new Avis( null, (int) resultSet.getDouble("averageRate"),new ProduitService().getProduitById(resultSet.getInt("id_ptoduit"))));
+                avis.add(new Avis(null, (int) resultSet.getDouble("averageRate"), new ProduitService().getProduitById(resultSet.getInt("id_ptoduit"))));
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -140,7 +137,7 @@ public class AvisService  implements IService<Avis> {
             preparedStatement.setInt(2, iduseres);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next())
-                rate=new Avis((Client) new UserService().getUserById(iduseres), (int) resultSet.getDouble("averageRate"),new ProduitService().getProduitById(resultSet.getInt("id_ptoduit")));
+                rate = new Avis((Client) new UserService().getUserById(iduseres), (int) resultSet.getDouble("averageRate"), new ProduitService().getProduitById(resultSet.getInt("id_ptoduit")));
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

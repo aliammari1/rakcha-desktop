@@ -1,5 +1,7 @@
 package com.esprit.controllers.series;
 
+import com.esprit.controllers.ClientSideBarController;
+import com.esprit.models.users.Client;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,6 +13,8 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class HomeController {
+
+
     @FXML
     void Ocategories(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Categorie-view.fxml")));
@@ -20,6 +24,7 @@ public class HomeController {
         stage.show();
 
     }
+
     @FXML
     void Oseries(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Serie-view.fxml")));
@@ -29,6 +34,7 @@ public class HomeController {
         stage.show();
 
     }
+
     @FXML
     void Oepisode(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Episode-view.fxml")));

@@ -3,6 +3,7 @@ package com.esprit.controllers.evenements;
 import com.esprit.models.evenements.Evenement;
 import com.esprit.models.evenements.Feedback;
 import com.esprit.models.evenements.Participation;
+import com.esprit.models.users.Client;
 import com.esprit.services.evenements.EvenementService;
 import com.esprit.services.evenements.FeedbackEvenementService;
 import com.esprit.services.evenements.ParticipationService;
@@ -257,7 +258,8 @@ public class AffichageEvenementClientController {
                                             event2 -> {
                                                 ParticipationService ps = new ParticipationService();
                                                 UserService us = new UserService();
-                                                ps.create(new Participation(item, 0, Integer.parseInt(personstf.getText())));
+                                                Stage stage = (Stage) confirmButton.getScene().getWindow();
+                                                ps.create(new Participation(item, (Client) stage.getUserData(), Integer.parseInt(personstf.getText())));
                                                 SmsService.sendSms("+21622757828", String.format("   Thank you for your reservation : your '%s' tickets for the event : '%s' have been confirmed !", personstf.getText(), item.getNom()));
 
                                                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -435,7 +437,8 @@ public class AffichageEvenementClientController {
         FeedbackEvenementService fs = new FeedbackEvenementService();
         EvenementService es = new EvenementService();
         UserService us = new UserService();
-        Feedback nouveauFeedback = new Feedback(es.getEvenementByNom(nomEvenement), 0, comment);
+        Stage stage = (Stage) taComment.getScene().getWindow();
+        Feedback nouveauFeedback = new Feedback(es.getEvenementByNom(nomEvenement), (Client) stage.getUserData(), comment);
         fs.create(nouveauFeedback);
         SmsService.sendSms("+21622757828", "Thank You ! We appreciate your feedback, may this be the starting point for a better RAKCHA :) ");
 

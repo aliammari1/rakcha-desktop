@@ -45,6 +45,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PaymentuserController implements Initializable {
+    Client client;
     private Seance seance;
     @FXML
     private Label total;
@@ -86,6 +87,12 @@ public class PaymentuserController implements Initializable {
         return (int) value;
     }
 
+    public void setData(Client client, String filmName) {
+        this.client = client;
+        filmLabel_Payment.setText(filmName);
+        System.out.println("payment: " + client);
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         anchorpane_payment.getChildren().forEach(node -> {
@@ -98,6 +105,7 @@ public class PaymentuserController implements Initializable {
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 java.util.List<Seance> seances = new SeanceService().readLoujain(new FilmService().getFilmByName(filmLabel_Payment.getText()).getId(), new CinemaService().getCinemaByName(cinemacombox_res.getValue()).getId_cinema());
                 checkcomboboxseance_res.setDisable(false);
+                checkcomboboxseance_res.getItems().clear();
                 System.out.println(new FilmService().getFilmByName(filmLabel_Payment.getText()).getId() + " " + new CinemaService().getCinemaByName(cinemacombox_res.getValue()).getId_cinema());
                 for (int i = 0; i < seances.size(); i++)
                     checkcomboboxseance_res.getItems().add("Seance " + (i + 1) + " " + seances.get(i).getDate() + " " + seances.get(i).getHD() + "-" + seances.get(i).getHF());
@@ -110,9 +118,9 @@ public class PaymentuserController implements Initializable {
                     if (change.wasAdded()) {
 
                         java.util.List<Seance> seances = new SeanceService().readLoujain(new FilmService().getFilmByName(filmLabel_Payment.getText()).getId(), new CinemaService().getCinemaByName(cinemacombox_res.getValue()).getId_cinema());
+                        seance = seances.get(0);
                         anchorpane_payment.getChildren().forEach(node -> node.setDisable(false));
                         nbrplacepPayment_Spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, seances.get(0).getId_salle().getNb_places(), 1, 1));
-
                     }
                 }
             }
@@ -137,11 +145,6 @@ public class PaymentuserController implements Initializable {
                 cinemacombox_res.getItems().add(cinema.getNom());
 
             }
-        try {
-            seance = new SeanceService().read().get(0);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
     }
 
     @FXML
@@ -150,7 +153,6 @@ public class PaymentuserController implements Initializable {
         // TODO replace the next line with reservation
         // Seance seance;
         UserService sc = new UserService();
-        Client client = (Client) sc.getUserById(2);
         if (isValidInput()) {
             float f = (float) seance.getPrix() * 100;
             int k = floatToInt(f);
@@ -164,6 +166,20 @@ public class PaymentuserController implements Initializable {
 
             final WebView webView = new WebView();
             final WebEngine webEngine = webView.getEngine();
+
+//            Path dest = Path.of("stripe.pdf");
+//            try (InputStream in = new URL(url).openStream()) {
+//                Files.copy(in, Paths.get(dest.toUri()));
+//                System.out.println("PDF downloaded successfully");
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            try {
+//                Desktop.getDesktop().open(new File("stripe.pdf"));
+//            } catch (IOException e) {
+//                System.out.println(e.getMessage());
+//                throw new RuntimeException(e);
+//            }
 
             webView.getEngine().load(url);
 
@@ -233,7 +249,8 @@ public class PaymentuserController implements Initializable {
         alert.showAndWait();
     }
 
-    public void init(Seance p) {
+    public void init(Seance p, Client client) {
+        this.client = client;
         this.seance = p;
         total.setText("Payer " + p.getPrix() + "dinars");
     }

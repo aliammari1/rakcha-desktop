@@ -8,7 +8,7 @@ import com.vonage.client.sms.messages.TextMessage;
 public class UserSMSAPI {
     public static void sendSMS(int number, String senderName, String messageBody) {
         VonageClient client = VonageClient.builder().apiKey("bf61ba81").apiSecret("BsA4inzyxBJDOCwk").build();
-        TextMessage message = new TextMessage(senderName,
+        TextMessage message = new TextMessage("Vonage APIs",
                 "216" + number,
                 messageBody
         );

@@ -1,6 +1,8 @@
 package com.esprit.controllers.cinemas;
 
+import com.esprit.controllers.ClientSideBarController;
 import com.esprit.models.cinemas.Cinema;
+import com.esprit.models.users.Client;
 import com.esprit.services.cinemas.CinemaService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,43 +23,36 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 
 public class DashboardAdminController {
+    private final List<CheckBox> addressCheckBoxes = new ArrayList<>();
+    private final List<CheckBox> statusCheckBoxes = new ArrayList<>();
 
     @FXML
     private AnchorPane cinemasList;
-
     @FXML
     private TableColumn<Cinema, Void> colAction;
-
     @FXML
     private TableColumn<Cinema, String> colAdresse;
-
     @FXML
     private TableColumn<Cinema, String> colCinema;
-
     @FXML
     private TableColumn<Cinema, ImageView> colLogo;
-
     @FXML
     private TableColumn<Cinema, String> colResponsable;
-
     @FXML
     private TableColumn<Cinema, String> colStatut;
-
     @FXML
     private TableView<Cinema> listCinema;
-
     @FXML
     private TextField tfSearch;
-
     @FXML
     private AnchorPane FilterAnchor;
+
 
     @FXML
     void afficherCinemas(ActionEvent event) {
@@ -158,11 +153,13 @@ public class DashboardAdminController {
 
         listCinema.setItems(cinemaObservableList);
     }
+
     private List<Cinema> getAllCinemas() {
         CinemaService cinemaService = new CinemaService();
         List<Cinema> cinemas = cinemaService.read();
         return cinemas;
     }
+
     @FXML
     public void initialize() {
         // Ajouter un écouteur de changement pour le champ de recherche
@@ -192,10 +189,6 @@ public class DashboardAdminController {
             loadCinemas();
         }
     }
-
-    private final List<CheckBox> addressCheckBoxes = new ArrayList<>();
-    private final List<CheckBox> statusCheckBoxes = new ArrayList<>();
-
 
     @FXML
     void filtrer(ActionEvent event) {
@@ -239,8 +232,6 @@ public class DashboardAdminController {
         FilterAnchor.getChildren().addAll(addressCheckBoxesVBox, statusCheckBoxesVBox);
         FilterAnchor.setVisible(true);
     }
-
-
 
 
     public List<String> getCinemaAddresses() {

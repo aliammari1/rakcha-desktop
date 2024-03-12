@@ -1,6 +1,8 @@
 package com.esprit.controllers.films;
 
+import com.esprit.controllers.ClientSideBarController;
 import com.esprit.models.films.Actor;
+import com.esprit.models.users.Client;
 import com.esprit.services.films.ActorService;
 import com.esprit.utils.DataSource;
 import javafx.beans.property.SimpleObjectProperty;
@@ -34,35 +36,27 @@ import java.nio.file.Paths;
 import java.sql.Connection;
 
 public class ActorController {
+
     @FXML
     private TextArea bioAcotr_textArea;
-
     @FXML
     private TableColumn<Actor, Button> DeleteActor_Column1;
     @FXML
     private Label errorBio;
-
     @FXML
     private Label errorNameActor;
-
     @FXML
     private Button AjouterFilm_Button;
-
-
     @FXML
     private TableView<Actor> filmActor_tableView11;
-
     @FXML
     private TableColumn<Actor, Integer> idActor_tableColumn1;
-
     @FXML
     private TableColumn<Actor, String> bioActor_tableColumn1;
     @FXML
     private ImageView imageAcotr_ImageView1;
     @FXML
     private TableColumn<Actor, HBox> imageAcotr_tableColumn1;
-
-
     @FXML
     private TableColumn<Actor, String> nomAcotr_tableColumn1;
     @FXML
@@ -70,6 +64,7 @@ public class ActorController {
     private FilteredList<Actor> filteredActors;
     @FXML
     private TextField recherche_textField;
+
 
     @FXML
     void initialize() {

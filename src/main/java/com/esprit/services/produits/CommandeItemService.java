@@ -1,11 +1,9 @@
 package com.esprit.services.produits;
 
-import com.esprit.models.films.RatingFilm;
 import com.esprit.models.produits.Commande;
 import com.esprit.models.produits.CommandeItem;
 import com.esprit.models.produits.Produit;
 import com.esprit.services.IService;
-import com.esprit.services.films.FilmService;
 import com.esprit.utils.DataSource;
 
 import java.sql.Connection;
@@ -17,7 +15,7 @@ import java.util.List;
 
 public class CommandeItemService implements IService<CommandeItem> {
 
-    private Connection connection;
+    private final Connection connection;
 
 
     public CommandeItemService() {
@@ -50,10 +48,10 @@ public class CommandeItemService implements IService<CommandeItem> {
             PreparedStatement pst = connection.prepareStatement(req);
             ResultSet rs = pst.executeQuery();
             ProduitService ps = new ProduitService();
-            CommandeService cs =new CommandeService();
+            CommandeService cs = new CommandeService();
 
             while (rs.next()) {
-               commandeitem.add(new CommandeItem(rs.getInt("idCommandeItem"), rs.getInt("quantity"),ps.getProduitById(rs.getInt("id_produit")),cs.getCommandeByID(rs.getInt("idCommande"))));
+                commandeitem.add(new CommandeItem(rs.getInt("idCommandeItem"), rs.getInt("quantity"), ps.getProduitById(rs.getInt("id_produit")), cs.getCommandeByID(rs.getInt("idCommande"))));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -62,16 +60,16 @@ public class CommandeItemService implements IService<CommandeItem> {
         return commandeitem;
     }
 
-    public List<CommandeItem> readCommandeItem(int idCommande){
+    public List<CommandeItem> readCommandeItem(int idCommande) {
         List<CommandeItem> commandeitem = new ArrayList<>();
         String req = "Select * FROM commandeitem where idCommande=?";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             ResultSet rs = pst.executeQuery();
             ProduitService ps = new ProduitService();
-            CommandeService cs =new CommandeService();
+            CommandeService cs = new CommandeService();
             while (rs.next()) {
-                commandeitem.add(new CommandeItem(rs.getInt("idCommandeItem"), rs.getInt("quantity"),ps.getProduitById(rs.getInt("id_produit")),cs.getCommandeByID(rs.getInt("idCommande"))));
+                commandeitem.add(new CommandeItem(rs.getInt("idCommandeItem"), rs.getInt("quantity"), ps.getProduitById(rs.getInt("id_produit")), cs.getCommandeByID(rs.getInt("idCommande"))));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -80,24 +78,15 @@ public class CommandeItemService implements IService<CommandeItem> {
     }
 
 
-
-
-
-
-
-
     @Override
     public void update(CommandeItem commandeItem) {
-
 
 
     }
 
 
-
     @Override
     public void delete(CommandeItem commandeItem) {
-
 
 
     }
@@ -125,7 +114,6 @@ public class CommandeItemService implements IService<CommandeItem> {
         }
         return commandeItems;
     }
-
 
 
     public int getTotalQuantityByCategoryAndDate(String nomCategorie, String formattedDate) {
@@ -189,10 +177,10 @@ public class CommandeItemService implements IService<CommandeItem> {
             PreparedStatement pst = connection.prepareStatement(req);
             ResultSet rs = pst.executeQuery();
             ProduitService ps = new ProduitService();
-            CommandeService cs =new CommandeService();
+            CommandeService cs = new CommandeService();
 
             while (rs.next()) {
-                aver.add(new CommandeItem(rs.getInt("idCommandeItem"), rs.getInt("quantity"),ps.getProduitById(rs.getInt("id_produit")),cs.getCommandeByID(rs.getInt("idCommande"))));
+                aver.add(new CommandeItem(rs.getInt("idCommandeItem"), rs.getInt("quantity"), ps.getProduitById(rs.getInt("id_produit")), cs.getCommandeByID(rs.getInt("idCommande"))));
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());

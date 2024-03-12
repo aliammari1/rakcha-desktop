@@ -1,6 +1,8 @@
 package com.esprit.controllers.users;
 
+import com.esprit.controllers.ClientSideBarController;
 import com.esprit.models.users.Admin;
+import com.esprit.models.users.Client;
 import com.esprit.models.users.User;
 import com.esprit.services.users.UserService;
 import javafx.beans.property.SimpleObjectProperty;
@@ -41,6 +43,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class AdminDashboardController {
+
+
     TableColumn<User, String> roleTableColumn;
     TableColumn<User, HBox> photoDeProfilTableColumn;
     TableColumn<User, String> lastNameTableColumn;
@@ -77,6 +81,7 @@ public class AdminDashboardController {
     private ComboBox<String> roleComboBox;
     @FXML
     private TableView<User> userTableView;
+
 
     @FXML
     void initialize() {

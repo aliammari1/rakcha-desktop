@@ -18,13 +18,9 @@ public class Paymentuser {
         params.put("customer", "cus_PgYn51DmhdjzAw");
 
         // Get the client's Payment Page URL
-
         Charge charge = Charge.create(params);
         System.out.println(charge);
         return charge.getReceiptUrl();
-
-
     }
-
 }
 

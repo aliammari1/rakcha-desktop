@@ -1,18 +1,17 @@
 package com.esprit.controllers.cinemas;
 
-import com.calendarfx.model.CalendarSource;
-import com.calendarfx.view.CalendarView;
 import com.esprit.models.cinemas.Cinema;
 import com.esprit.models.cinemas.CommentaireCinema;
 import com.esprit.models.cinemas.RatingCinema;
 import com.esprit.models.cinemas.Seance;
 import com.esprit.models.users.Client;
 import com.esprit.services.cinemas.CinemaService;
+import com.esprit.services.cinemas.CommentaireCinemaService;
 import com.esprit.services.cinemas.RatingCinemaService;
 import com.esprit.services.cinemas.SeanceService;
-import com.esprit.services.cinemas.CommentaireCinemaService;
 import com.esprit.services.users.UserService;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.application.Platform;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -37,59 +36,62 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-
-import java.io.IOException;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
-import java.util.stream.Collectors;
-import javafx.application.Platform;
-import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import org.controlsfx.control.Rating;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class DashboardClientController {
+    private final List<CheckBox> addressCheckBoxes = new ArrayList<>();
+    private final List<CheckBox> namesCheckBoxes = new ArrayList<>();
     @FXML
     private FlowPane cinemaFlowPane;
-
     @FXML
     private AnchorPane listCinemaClient;
-
     @FXML
     private AnchorPane PlanningPane;
-
     @FXML
     private FlowPane planningFlowPane;
-
     @FXML
     private FlowPane parentContainer;
     @FXML
     private TextField searchbar1;
-
     @FXML
     private AnchorPane FilterAnchor;
-
     @FXML
     private TextArea txtAreaComments;
-
     @FXML
     private ScrollPane ScrollPaneComments;
-
     @FXML
     private AnchorPane AnchorComments;
     private Cinema cinema;
     private TilePane tilePane;
-
     private int cinemaId;
+    private List<Cinema> l1 = new ArrayList<>();
 
+    @FXML
+    public static List<Cinema> rechercher(List<Cinema> liste, String recherche) {
+        List<Cinema> resultats = new ArrayList<>();
+
+        for (Cinema element : liste) {
+            if (element.getNom() != null && element.getNom().contains(recherche)) {
+                resultats.add(element);
+            }
+        }
+
+        return resultats;
+    }
 
     @FXML
     void showListCinema(ActionEvent event) {
@@ -238,7 +240,7 @@ public class DashboardClientController {
             int userId = 1; // Supposons que l'ID de l'utilisateur est 1 (variable fixe)
             RatingCinemaService ratingCinemaService = new RatingCinemaService(); // Instanciation du service
             UserService userService = new UserService(); // Instanciation du service UserService
-            Client client = userService.getClientById(userId); // Récupérer le client par son ID à partir du service UserService
+            Client client = (Client) userService.getUserById(userId); // Récupérer le client par son ID à partir du service UserService
             RatingCinema ratingCinema = new RatingCinema(cinema, client, newValue.intValue()); // Création de l'objet RatingCinema avec les valeurs appropriées
             ratingCinemaService.create(ratingCinema); // Enregistrement de la note dans la base de données
         });
@@ -281,6 +283,7 @@ public class DashboardClientController {
             }
         }).start();
     }
+
     private void openMapDialog(double lat, double lon) {
         // Create a new dialog
         Dialog<Void> dialog = new Dialog<>();
@@ -311,7 +314,6 @@ public class DashboardClientController {
         dialog.showAndWait();
     }
 
-
     public void showPlanning(Cinema cinema) {
         listCinemaClient.setVisible(false); // Rendre l'AnchorPane listCinemaClient invisible
         PlanningPane.setVisible(true); // Rendre l'AnchorPane PlanningPane visible
@@ -337,7 +339,6 @@ public class DashboardClientController {
             dayLabel.setFont(Font.font("Arial Rounded MT Bold", FontWeight.BOLD, 14)); // Changer la police en Arial, en gras, taille 14
             tilePane.getChildren().add(dayLabel);
         }
-
 
 
         VBox.setMargin(tilePane, new Insets(0, 0, 0, 50));
@@ -383,8 +384,7 @@ public class DashboardClientController {
             }
 
             // Nettoyer le deuxième enfant de PlanningPane s'il s'agit d'un VBox
-            if (PlanningPane.getChildren().size() > 1 && PlanningPane.getChildren().get(1) instanceof VBox) {
-                VBox existingSeancesVBox = (VBox) PlanningPane.getChildren().get(1);
+            if (PlanningPane.getChildren().size() > 1 && PlanningPane.getChildren().get(1) instanceof VBox existingSeancesVBox) {
                 existingSeancesVBox.getChildren().clear(); // Nettoyer le VBox existant
             }
 
@@ -444,12 +444,6 @@ public class DashboardClientController {
         return cardContainer;
     }
 
-
-
-
-
-
-    private List<Cinema> l1 = new ArrayList<>();
     public void initialize() {
         CinemaService cinemaService = new CinemaService();
         l1 = cinemaService.read();
@@ -478,27 +472,11 @@ public class DashboardClientController {
 
     }
 
-    @FXML
-    public static List<Cinema> rechercher(List<Cinema> liste, String recherche) {
-        List<Cinema> resultats = new ArrayList<>();
-
-        for (Cinema element : liste) {
-            if (element.getNom() != null && element.getNom().contains(recherche)) {
-                resultats.add(element);
-            }
-        }
-
-        return resultats;
-    }
-
     private List<Cinema> getAllCinemas() {
         CinemaService cinemaService = new CinemaService();
         List<Cinema> cinemas = cinemaService.read();
         return cinemas;
     }
-
-    private final List<CheckBox> addressCheckBoxes = new ArrayList<>();
-    private final List<CheckBox> namesCheckBoxes = new ArrayList<>();
 
     @FXML
     void filtrer(ActionEvent event) {
@@ -663,7 +641,6 @@ public class DashboardClientController {
     }
 
 
-
     @FXML
     void addCommentaire() {
         String message = txtAreaComments.getText();
@@ -675,17 +652,17 @@ public class DashboardClientController {
         } else {
             SentimentAnalysisController sentimentAnalysisController = new SentimentAnalysisController();
             String sentimentResult = sentimentAnalysisController.analyzeSentiment(message);
-            CommentaireCinema commentaire = new CommentaireCinema(new CinemaService().getCinema(cinemaId), (Client) new UserService().getUserById(3) , message, sentimentResult);
-            System.out.println(commentaire + " " +new UserService().getUserById(3));
+            CommentaireCinema commentaire = new CommentaireCinema(new CinemaService().getCinema(cinemaId), (Client) new UserService().getUserById(3), message, sentimentResult);
+            System.out.println(commentaire + " " + new UserService().getUserById(3));
             CommentaireCinemaService commentaireCinemaService = new CommentaireCinemaService();
             commentaireCinemaService.create(commentaire);
             txtAreaComments.clear();
         }
-  }
+    }
 
     @FXML
     void AddComment(MouseEvent event) {
-         addCommentaire();
+        addCommentaire();
         displayAllComments(cinemaId);
     }
 
@@ -749,7 +726,6 @@ public class DashboardClientController {
         Text commentText = new Text(commentaire.getCommentaire());
         commentText.setStyle("-fx-font-family: 'Arial'; -fx-max-width: 300 ;");
         commentText.setWrappingWidth(300); // Définir une largeur maximale pour le retour à la ligne automatique
-
 
 
         // Création de la boîte pour le texte du commentaire

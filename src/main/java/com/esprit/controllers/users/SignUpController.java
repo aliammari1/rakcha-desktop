@@ -1,5 +1,6 @@
 package com.esprit.controllers.users;
 
+import com.esprit.controllers.ClientSideBarController;
 import com.esprit.models.users.Client;
 import com.esprit.models.users.Responsable_de_cinema;
 import com.esprit.models.users.User;
@@ -37,30 +38,23 @@ public class SignUpController {
 
     @FXML
     private TextField adresseTextField;
-
     @FXML
     private DatePicker dateDeNaissanceDatePicker;
-
     @FXML
     private TextField emailTextField;
-
     @FXML
     private TextField nomTextField;
-
     @FXML
     private TextField num_telephoneTextField;
-
     @FXML
     private TextField passwordTextField;
-
     @FXML
     private ImageView photoDeProfilImageView;
-
     @FXML
     private TextField prenomTextField;
-
     @FXML
     private ComboBox<String> roleComboBox;
+
 
     @FXML
     void initialize() {
