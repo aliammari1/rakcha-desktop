@@ -130,6 +130,25 @@ public class FilmService implements IService<Film> {
         return filmArrayList;
     }
 
+    public Film getCinema(int id) {
+
+        Film film = null;
+
+        String req = "SELECT * from Film where id = ?";
+        try {
+            PreparedStatement pst = connection.prepareStatement(req);
+            pst.setInt(1, id);
+            ResultSet rs = pst.executeQuery();
+            rs.next();
+            film = new Film(rs.getInt("id"), rs.getString("nom"), rs.getString("image"), rs.getTime("duree"), rs.getString("description"), rs.getInt("annederalisation"));
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return film;
+    }
+
     @Override
     public void update(Film film) {
 
