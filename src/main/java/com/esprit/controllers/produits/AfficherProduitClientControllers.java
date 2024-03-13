@@ -1,11 +1,13 @@
 package com.esprit.controllers.produits;
 
 
-import com.esprit.models.films.RatingFilm;
-import com.esprit.models.produits.*;
+import com.esprit.models.produits.Commentaire;
+import com.esprit.models.produits.Panier;
+import com.esprit.models.produits.Produit;
 import com.esprit.models.users.Client;
-import com.esprit.services.films.RatingFilmService;
-import com.esprit.services.produits.*;
+import com.esprit.services.produits.CommentaireService;
+import com.esprit.services.produits.PanierService;
+import com.esprit.services.produits.ProduitService;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.Chat;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -16,6 +18,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -35,19 +38,15 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.controlsfx.control.Rating;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.net.URL;
 import java.sql.Blob;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -79,7 +78,6 @@ public class AfficherProduitClientControllers implements Initializable {
     private AnchorPane top3anchorpane;
 
 
-
     @FXML
     private FlowPane topthreeVbox;
 
@@ -92,10 +90,8 @@ public class AfficherProduitClientControllers implements Initializable {
 
     @FXML
     private AnchorPane produitAnchor;
-
-
-
-
+    @FXML
+    private ComboBox<String> tricomboBox;
 
 
     @FXML
@@ -130,7 +126,16 @@ public class AfficherProduitClientControllers implements Initializable {
 
 
         });
+        tricomboBox.getItems().addAll("nom", "prix");
+        tricomboBox.setValue("");
+        tricomboBox.getSelectionModel().selectedItemProperty().addListener((observableValue, s, t1) -> {
+            produitFlowPane.getChildren().clear();
+            List<Produit> filmList = new ProduitService().sort(t1);
+            for (Produit film : filmList) {
+                produitFlowPane.getChildren().add(createProduitCard(film));
+            }
 
+        });
 
 
     }
@@ -138,6 +143,7 @@ public class AfficherProduitClientControllers implements Initializable {
     private void loadAcceptedProduits() {
 
         ProduitService produitService = new ProduitService();
+
         List<Produit> produits = produitService.read();
 
         // Charger tous les produits dans produitFlowPane
@@ -150,6 +156,7 @@ public class AfficherProduitClientControllers implements Initializable {
             produitNode.getChildren().add(cardContainer);
 
             produitFlowPane.getChildren().add(produitNode);
+            produitFlowPane.setPadding(new Insets(10, 10, 10, 10));
         }
 
 
@@ -161,6 +168,7 @@ public class AfficherProduitClientControllers implements Initializable {
         VBox cardContainer = new VBox(5);
 
         cardContainer.setStyle("-fx-padding: 20px 0 0  30px;"); // Ajout de remplissage à gauche pour le décalage
+
 
         AnchorPane card = new AnchorPane();
 
@@ -295,7 +303,6 @@ public class AfficherProduitClientControllers implements Initializable {
             panierFlowPane.setVisible(true);
 
 
-
         });
 
 
@@ -319,9 +326,6 @@ public class AfficherProduitClientControllers implements Initializable {
         });
 
 
-
-
-
         card.getChildren().addAll(imageView, nameLabel, descriptionLabel, priceLabel, addToCartButton, chatIcon);
 
         card.setStyle("-fx-background-color:#F6F2F2;\n" +
@@ -332,6 +336,7 @@ public class AfficherProduitClientControllers implements Initializable {
                 "    -fx-border-color: linear-gradient(to top left, #624970, #ae2d3c);/* Couleur de la bordure */\n" +
                 "    -fx-border-width: 2px; /* Largeur de la bordure */\n" +
                 "    -fx-border-radius: 5px; /* Rayon de la bordure pour arrondir les coins */");
+        card.getStyleClass().add("bg-white");
 
 
         cardContainer.getChildren().add(card);
@@ -350,7 +355,7 @@ public class AfficherProduitClientControllers implements Initializable {
         // Affichez la FlowPane du panier et masquez les autres FlowPanes
         panierFlowPane.setVisible(true);
         produitFlowPane.setVisible(true);
-       // topproduitFlowPane.setVisible(false);
+        // topproduitFlowPane.setVisible(false);
         top3anchorpane.setVisible(false);
 
         produitFlowPane.setOpacity(0.2);
@@ -512,7 +517,6 @@ public class AfficherProduitClientControllers implements Initializable {
                     fermerPanierCard(panierContainer);
 
 
-
                 });
 
 
@@ -530,11 +534,7 @@ public class AfficherProduitClientControllers implements Initializable {
             fermerPanierCard(panierContainer);
 
 
-
-
-        } );
-
-
+        });
 
 
         card.getChildren().addAll(cartLabel, closeIcon, imageView, nameLabel, quantiteLabel, sommeTotaleLabel, achatbutton, commandebutton);
@@ -551,7 +551,6 @@ public class AfficherProduitClientControllers implements Initializable {
         produitFlowPane.setOpacity(1);
         top3anchorpane.setVisible(true);
         top3anchorpane.setOpacity(1);
-
 
 
     }
@@ -695,11 +694,6 @@ public class AfficherProduitClientControllers implements Initializable {
                 .map(CheckBox::getText)
                 .collect(Collectors.toList());
     }
-
-
-
-
-
 
 
     @FXML
@@ -917,8 +911,6 @@ public class AfficherProduitClientControllers implements Initializable {
     }
 
 
-
-
     private HBox addCommentToView(Commentaire commentaire) {
         // Création du cercle pour l'image de l'utilisateur
         Circle imageCircle = new Circle(20);
@@ -990,11 +982,6 @@ public class AfficherProduitClientControllers implements Initializable {
     }
 
 
-
-
-
-
-
     public void Close(MouseEvent mouseEvent) {
 
         produitFlowPane.setOpacity(1);
@@ -1014,6 +1001,7 @@ public class AfficherProduitClientControllers implements Initializable {
 
 
     }
+
     public void loadAcceptedTop3() {
 
         ProduitService produitService = new ProduitService();
@@ -1028,11 +1016,11 @@ public class AfficherProduitClientControllers implements Initializable {
 
 
             List<Produit> top3Produits = produits.subList(0, 3);
-            int j =0;
+            int j = 0;
             for (Produit produit : top3Produits) {
                 System.out.println(produit.getId_produit());
                 VBox cardContainer = createtopthree(produit);
-                System.out.println("------------------"+j+(cardContainer.getChildren()));
+                System.out.println("------------------" + j + (cardContainer.getChildren()));
                 topthreeVbox.getChildren().add(cardContainer);
                 j++;
             }
@@ -1042,8 +1030,6 @@ public class AfficherProduitClientControllers implements Initializable {
             System.out.println("Une erreur est survenue lors du chargement des produits");
         }
     }
-
-
 
 
     public VBox createtopthree(Produit produit) {
@@ -1057,7 +1043,6 @@ public class AfficherProduitClientControllers implements Initializable {
         card.setLayoutX(0);
         card.setLayoutY(0);
         card.getStyleClass().add("meilleurproduit");
-
 
 
         cardContainer.setSpacing(10);
@@ -1152,8 +1137,6 @@ public class AfficherProduitClientControllers implements Initializable {
         });
 
 
-
-
         Label priceLabel = new Label(" " + produit.getPrix() + " DT");
         priceLabel.setLayoutX(60);
         priceLabel.setLayoutY(55);
@@ -1162,16 +1145,11 @@ public class AfficherProduitClientControllers implements Initializable {
 
 
         card.getChildren().addAll(nameLabel, priceLabel, imageView);
+
         cardContainer.getChildren().addAll(card); // Add vertical space
 
         return cardContainer;
     }
-
-
-
-
-
-
 
 
 }

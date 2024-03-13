@@ -75,10 +75,14 @@ public class DashboardClientController {
     private ScrollPane ScrollPaneComments;
     @FXML
     private AnchorPane AnchorComments;
+    @FXML
+    private Button closeDetailFilm;
     private Cinema cinema;
     private TilePane tilePane;
     private int cinemaId;
     private List<Cinema> l1 = new ArrayList<>();
+    @FXML
+    private ComboBox<String> tricomboBox;
 
     @FXML
     public static List<Cinema> rechercher(List<Cinema> liste, String recherche) {
@@ -91,6 +95,21 @@ public class DashboardClientController {
         }
 
         return resultats;
+    }
+//     closeDetailFilm.setOnAction(new EventHandler<ActionEvent>() {
+//        @Override
+//        public void handle(ActionEvent event) {
+//            PlanningPane.setVisible(false);
+//            listCinemaClient.setOpacity(1);
+//            listCinemaClient.setDisable(false);
+//        }
+//    });
+
+    @FXML
+    void Planninggclose(ActionEvent event) {
+        PlanningPane.setVisible(false);
+        listCinemaClient.setOpacity(1);
+        listCinemaClient.setVisible(true);
     }
 
     @FXML
@@ -122,6 +141,7 @@ public class DashboardClientController {
 
         return acceptedCinemasSet;
     }
+
 
     @FXML
     private void showAlert(String message) {
@@ -459,8 +479,19 @@ public class DashboardClientController {
         HashSet<Cinema> acceptedCinemas = loadAcceptedCinemas();
         listCinemaClient.setVisible(true);
         PlanningPane.setVisible(false);
+        tricomboBox.getItems().addAll("nom");
+        tricomboBox.setValue("");
+        tricomboBox.getSelectionModel().selectedItemProperty().addListener((observableValue, s, t1) -> {
+            cinemaFlowPane.getChildren().clear();
+            List<Cinema> filmList = new CinemaService().sort(t1);
+            for (Cinema film : filmList) {
+                cinemaFlowPane.getChildren().add(createCinemaCard(film));
+            }
+
+        });
 
     }
+
 
     private void createfilmCards(List<Cinema> Cinemas) {
         for (Cinema cinema : Cinemas) {

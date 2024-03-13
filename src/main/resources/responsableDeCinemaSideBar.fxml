@@ -11,19 +11,21 @@
         <ImageView fitHeight="208.0" fitWidth="239.0" layoutX="14.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
             <Image url="@Logo.png" />
         </ImageView>
-        <Button fx:id="movieButton" layoutY="334.0" mnemonicParsing="false" onAction="#switchToMovies" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" stylesheets="@styles/filmStyle.css" text="           Movies            " />
-        <FontAwesomeIconView fill="#f2efef" glyphName="FILM" layoutX="14.0" layoutY="377.0" size="30" text="" wrappingWidth="36.0" />
-        <Button fx:id="seanceButton" layoutY="534.0" mnemonicParsing="false" onAction="#switchToSeances" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" text="Seances" />
-        <FontAwesomeIconView fill="#ebe5e5" glyphName="Actor" layoutX="18.0" layoutY="438.0" size="30" text="" />
+        <Button fx:id="movieButton" layoutY="311.0" mnemonicParsing="false" onAction="#switchToMovies" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" stylesheets="@styles/filmStyle.css" text="           Movies            " />
+        <FontAwesomeIconView fill="#f2efef" glyphName="FILM" layoutX="19.0" layoutY="353.0" size="30" text="" wrappingWidth="36.0" />
+        <Button fx:id="seanceButton" layoutY="519.0" mnemonicParsing="false" onAction="#switchToSeances" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" text="Seances" />
         <Button layoutX="105.0" layoutY="732.0" mnemonicParsing="false" styleClass="nav-btn" text="Account" />
         <FontAwesomeIconView fill="#ebe5e5" glyphName="USER" layoutX="61.0" layoutY="758.0" size="30" text="" />
         <Button layoutX="117.0" layoutY="774.0" mnemonicParsing="false" styleClass="nav-btn" text="EXIT" />
         <FontAwesomeIconView fill="#ebe5e5" glyphName="SIGN_OUT" layoutX="61.0" layoutY="801.0" size="30" text="" />
-        <Button fx:id="cinemaButton" layoutY="270.0" mnemonicParsing="false" onAction="#switchToCinema" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" stylesheets="@styles/filmStyle.css" text="Cinemas" textAlignment="CENTER" />
-        <FontAwesomeIconView fill="#ebe5e5" glyphName="TV" layoutX="15.0" layoutY="312.0" size="30" />
-      <Button fx:id="actorButton" layoutX="3.0" layoutY="396.0" mnemonicParsing="false" onAction="#switchToActor" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" text="Actors" />
-      <Button fx:id="filmCategorieButton" layoutX="3.0" layoutY="471.0" mnemonicParsing="false" onAction="#switchToFilmCategorie" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" text="Film Categories" />
-      <FontAwesomeIconView fill="#f2efef" glyphName="FILM" layoutX="14.0" layoutY="513.0" size="30" text="" wrappingWidth="36.0" />
-      <FontAwesomeIconView fill="#f2efef" glyphName="FILM" layoutX="14.0" layoutY="576.0" size="30" text="" wrappingWidth="36.0" />
+        <Button fx:id="cinemaButton" layoutY="243.0" mnemonicParsing="false" onAction="#switchToCinema" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" stylesheets="@styles/filmStyle.css" text="Cinemas" textAlignment="CENTER" />
+        <FontAwesomeIconView fill="#ebe5e5" glyphName="TV" layoutX="20.0" layoutY="285.0" size="30" />
+      <Button fx:id="actorButton" layoutY="375.0" mnemonicParsing="false" onAction="#switchToActor" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" text="Actors" />
+      <Button fx:id="filmCategorieButton" layoutX="1.0" layoutY="448.0" mnemonicParsing="false" onAction="#switchToFilmCategorie" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" text="Film Categories" />
+      <FontAwesomeIconView fill="#ebe9e9" glyphName="USERS" layoutX="20.0" layoutY="416.0" size="30" />
+      <FontAwesomeIconView fill="#f5f5f5" glyphName="LIST" layoutX="22.0" layoutY="488.0" size="30" />
+      <FontAwesomeIconView fill="#f5f5f5" glyphName="TICKET" layoutX="21.0" layoutY="562.0" size="35" text="" />
+      <Button fx:id="statestique_button" layoutX="1.0" layoutY="585.0" mnemonicParsing="false" onAction="#switchstatestique" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" text="Statestics" />
+      <FontAwesomeIconView fill="WHITE" glyphName="SPINNER" layoutX="22.0" layoutY="628.0" size="35" />
     </AnchorPane>
 </AnchorPane>

@@ -674,6 +674,31 @@ public class DesignEvenementAdminController {
 
 
     @FXML
+    void gestionSponsor(ActionEvent event) throws IOException {
+
+        // Charger la nouvelle interface ListevenementAdmin.fxml
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignSponsorAdmin.fxml"));
+        Parent root = loader.load();
+
+        // Créer une nouvelle scène avec la nouvelle interface
+        Scene scene = new Scene(root);
+
+        // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        // Créer une nouvelle fenêtre (stage) et y attacher la scène
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Sponsor Management");
+        stage.show();
+
+        // Fermer la fenêtre actuelle
+        currentStage.close();
+
+    }
+
+
+    @FXML
     void generatePDF() {
         EvenementService es = new EvenementService();
         es.generateEventPDF();

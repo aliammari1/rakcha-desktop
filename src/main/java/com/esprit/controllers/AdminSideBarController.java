@@ -45,7 +45,7 @@ public class AdminSideBarController {
     @FXML
     void switchToMovies(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/InterfaceFilm.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ListeCommande.fxml"));
             FilmController seanceController = loader.getController();
             // seanceController.setData(admin);
             Parent root = loader.load();

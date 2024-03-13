@@ -4,19 +4,22 @@ import com.esprit.models.produits.Produit;
 import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class ProduitService  implements IService<Produit> {
+public class ProduitService implements IService<Produit> {
 
-    private Connection connection;
+    private final Connection connection;
 
 
     public ProduitService() {
         connection = DataSource.getInstance().getConnection();
     }
-
 
 
     @Override
@@ -50,9 +53,42 @@ public class ProduitService  implements IService<Produit> {
             int i = 0;
             while (rs.next()) {
 
-                 produits.add(new Produit( rs.getInt("id_produit"), rs.getString("nom"), rs.getInt("prix"), rs.getBlob("image"), rs.getString("description"), cs.getCategorie(rs.getInt("id_categorieProduit")),  rs.getInt("quantiteP")));
+                produits.add(new Produit(rs.getInt("id_produit"), rs.getString("nom"), rs.getInt("prix"), rs.getBlob("image"), rs.getString("description"), cs.getCategorie(rs.getInt("id_categorieProduit")), rs.getInt("quantiteP")));
                 System.out.println(produits.get(i));
                 i++;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return produits;
+    }
+
+    public List<Produit> sort(String sortBy) {
+        // A list of valid column names to prevent SQL injection
+        List<String> validColumns = Arrays.asList("id_produit", "nom", "prix", "description", "categorieProduit", "quantiteP");
+        List<Produit> produits = new ArrayList<>();
+
+        // Check if sortBy is a valid column name
+        if (!validColumns.contains(sortBy)) {
+            throw new IllegalArgumentException("Invalid sort parameter");
+        }
+
+        String req = "SELECT *, id_categorieProduit FROM produit ORDER BY " + sortBy;
+        try (PreparedStatement pst = connection.prepareStatement(req)) {
+            ResultSet rs = pst.executeQuery();
+            CategorieService cs = new CategorieService();
+
+            while (rs.next()) {
+                produits.add(new Produit(
+                        rs.getInt("id_produit"),
+                        rs.getString("nom"),
+                        rs.getInt("prix"),
+                        rs.getBlob("image"),
+                        rs.getString("description"),
+                        cs.getCategorie(rs.getInt("id_categorieProduit")),
+                        rs.getInt("quantiteP")
+                ));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -133,7 +169,6 @@ public class ProduitService  implements IService<Produit> {
     }
 
 
-
     // Vérifier le stock disponible pour un produit donné
     public boolean verifierStockDisponible(int produitId, int quantiteDemandee) {
         Produit produit = getProduitById(produitId); // Utilisez votre méthode existante pour récupérer le produit
@@ -191,8 +226,6 @@ public class ProduitService  implements IService<Produit> {
 
         return produits;
     }
-
-
 
 
 }
