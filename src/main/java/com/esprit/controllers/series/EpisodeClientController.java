@@ -6,33 +6,38 @@ import com.esprit.models.series.Serie;
 import com.esprit.services.series.IServiceEpisode;
 import com.esprit.services.series.IServiceEpisodeImpl;
 import com.esprit.services.series.IServiceFeedbackImpl;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 
 public class EpisodeClientController implements Initializable {
     private final IServiceEpisode iServiceEpisode = new IServiceEpisodeImpl();
     @FXML
     private Button uploadButton;
+    @FXML
+    private FontAwesomeIconView retour;
     @FXML
     private Label uploadSuccessLabel;
     @FXML
@@ -150,6 +155,17 @@ public class EpisodeClientController implements Initializable {
         IServiceFeedbackImpl sf = new IServiceFeedbackImpl();
         sf.ajouter(new Feedback(userId, description, date, idep));
         txtDescriptionFeedBack.clear();
+    }
+
+
+    @FXML
+    public void afficherserie(javafx.scene.input.MouseEvent event) throws IOException {
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/SeriesClient.fxml")));
+        Scene scene = new Scene(root);
+        Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+
     }
 
 
