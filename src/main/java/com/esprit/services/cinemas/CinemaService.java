@@ -84,6 +84,24 @@ public class CinemaService implements IService<Cinema> {
         return cinemas;
     }
 
+    public List<Cinema> sort(String p) {
+        List<Cinema> cinemas = new ArrayList<>();
+
+        String req = "SELECT * from cinema ORDER BY " + p;
+        try {
+            PreparedStatement pst = connection.prepareStatement(req);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                cinemas.add(new Cinema(rs.getInt("id_cinema"), rs.getString("nom"), rs.getString("adresse"), (Responsable_de_cinema) new UserService().getUserById(rs.getInt("responsable")), rs.getString("logo"), rs.getString("Statut")));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return cinemas;
+    }
+
+
     public Cinema getCinema(int cinema_id) {
 
         Cinema cinema = null;

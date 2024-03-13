@@ -117,6 +117,9 @@ public class FilmUserController extends Application {
     @FXML
     private VBox topthreeVbox1;
 
+    @FXML
+    private ComboBox<String> tricomboBox;
+
     private int filmId;
 
     @FXML
@@ -172,8 +175,16 @@ public class FilmUserController extends Application {
 
             }
         });
+        tricomboBox.getItems().addAll("nom", "annederalisation");
+        tricomboBox.setValue("");
+        tricomboBox.getSelectionModel().selectedItemProperty().addListener((observableValue, s, t1) -> {
+            flowpaneFilm.getChildren().clear();
+            List<Film> filmList = new FilmService().sort(t1);
+            for (Film film : filmList) {
+                flowpaneFilm.getChildren().add(createFilmCard(film));
+            }
 
-
+        });
         FilmService filmService1 = new FilmService();
         l1 = filmService1.read();
 
@@ -653,6 +664,7 @@ public class FilmUserController extends Application {
     @FXML
     void afficherAnchorComment(MouseEvent event) {
         AnchorComments.setVisible(true);
+        displayAllComments(filmId);
 
     }
 

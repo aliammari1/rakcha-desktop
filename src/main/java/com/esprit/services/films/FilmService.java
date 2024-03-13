@@ -130,6 +130,25 @@ public class FilmService implements IService<Film> {
         return filmArrayList;
     }
 
+    public List<Film> sort(String p) {
+        List<Film> filmArrayList = new ArrayList<>();
+        String req = "SELECT * from film ORDER BY " + p;
+        try {
+            PreparedStatement pst = connection.prepareStatement(req);
+            ResultSet rs = pst.executeQuery();
+            // int i = 0;
+            while (rs.next()) {
+                filmArrayList.add(new Film(rs.getInt("id"), rs.getString("nom"), rs.getString("image"), rs.getTime("duree"), rs.getString("description"), rs.getInt("annederalisation")));
+                //     System.out.println(filmArrayList.get(i));
+                //       i++;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return filmArrayList;
+    }
+
     public Film getCinema(int id) {
 
         Film film = null;

@@ -1,10 +1,10 @@
 package com.esprit.controllers;
 
+import com.esprit.controllers.cinemas.CinemaStatisticsController;
 import com.esprit.controllers.cinemas.DashboardResponsableController;
 import com.esprit.controllers.films.ActorController;
 import com.esprit.controllers.films.FilmController;
 import com.esprit.controllers.series.CategorieController;
-import com.esprit.models.users.Client;
 import com.esprit.models.users.Responsable_de_cinema;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -28,6 +28,9 @@ public class ResponsableDeCinemaSideBarController {
     @FXML
     private Button seanceButton;
 
+    @FXML
+    private Button statestique_button;
+
 
     @FXML
     void switchToActor(ActionEvent event) {
@@ -37,6 +40,20 @@ public class ResponsableDeCinemaSideBarController {
             //seanceController.setData(resp);
             Parent root = loader.load();
             Stage stage = (Stage) actorButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @FXML
+    void switchstatestique(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/statistiques.fxml"));
+            CinemaStatisticsController seanceController = loader.getController();
+            //seanceController.setData(resp);
+            Parent root = loader.load();
+            Stage stage = (Stage) statestique_button.getScene().getWindow();
             stage.setScene(new Scene(root));
         } catch (Exception e) {
             System.out.println(e.getMessage());

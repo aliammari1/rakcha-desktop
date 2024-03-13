@@ -1,9 +1,7 @@
 package com.esprit.controllers.films;
 
-import com.esprit.controllers.ClientSideBarController;
 import com.esprit.models.cinemas.Cinema;
 import com.esprit.models.films.*;
-import com.esprit.models.users.Client;
 import com.esprit.services.cinemas.CinemaService;
 import com.esprit.services.films.*;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -201,27 +199,65 @@ public class FilmController {
 
     @FXML
     void insertFilm(ActionEvent event) {
-
         try {
+            // Validation des champs requis
+            if (nomFilm_textArea.getText().isEmpty()) {
+                showAlert("Le nom du film est requis.");
+                return;
+            }
+            if (imageFilm_ImageView.getImage() == null) {
+                showAlert("Une image pour le film est requise.");
+                return;
+            }
+            if (dureeFilm_textArea.getText().isEmpty() || !dureeFilm_textArea.getText().matches("\\d{2}:\\d{2}:\\d{2}")) {
+                showAlert("La durée du film est requise au format (HH:MM:SS).");
+                return;
+            }
+            if (descriptionFilm_textArea.getText().isEmpty()) {
+                showAlert("La description du film est requise.");
+                return;
+            }
+            if (annederealisationFilm_textArea.getText().isEmpty() || !annederealisationFilm_textArea.getText().matches("\\d{4}")) {
+                showAlert("L'année de réalisation du film est requise au format (YYYY).");
+                return;
+            }
+            if (Categorychecj_ComboBox.getCheckModel().getCheckedItems().isEmpty()) {
+                showAlert("Au moins une catégorie doit être sélectionnée.");
+                return;
+            }
+            if (Actorcheck_ComboBox1.getCheckModel().getCheckedItems().isEmpty()) {
+                showAlert("Au moins un acteur doit être sélectionné.");
+                return;
+            }
+            if (idcinemaFilm_comboBox.getCheckModel().getCheckedItems().isEmpty()) {
+                showAlert("Au moins un cinéma doit être sélectionné.");
+                return;
+            }
 
-            // Créer l'objet Cinema avec l'image String
+            // Création et insertion des données après validation
             FilmcategoryService fs = new FilmcategoryService();
             fs.create(new Filmcategory(new Category(Categorychecj_ComboBox.getCheckModel().getCheckedItems().stream().collect(Collectors.joining(", ")), ""), new Film(nomFilm_textArea.getText(), imageFilm_ImageView.getImage().getUrl(), Time.valueOf(dureeFilm_textArea.getText()), descriptionFilm_textArea.getText(), Integer.parseInt(annederealisationFilm_textArea.getText()))));
+
             ActorfilmService actorfilmService = new ActorfilmService();
             actorfilmService.create(new Actorfilm(new Actor(Actorcheck_ComboBox1.getCheckModel().getCheckedItems().stream().collect(Collectors.joining(", ")), "", ""), new Film(nomFilm_textArea.getText(), imageFilm_ImageView.getImage().getUrl(), Time.valueOf(dureeFilm_textArea.getText()), descriptionFilm_textArea.getText(), Integer.parseInt(annederealisationFilm_textArea.getText()))));
+
             FilmcinemaService filmcinemaService = new FilmcinemaService();
             filmcinemaService.create(new Filmcinema(new Film(nomFilm_textArea.getText(), imageFilm_ImageView.getImage().getUrl(), Time.valueOf(dureeFilm_textArea.getText()), descriptionFilm_textArea.getText(), Integer.parseInt(annederealisationFilm_textArea.getText())), new Cinema(idcinemaFilm_comboBox.getCheckModel().getCheckedItems().stream().collect(Collectors.joining(", ")), "", null, "", "")));
+
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Film ajoutée");
-            alert.setContentText("Film ajoutée !");
+            alert.setTitle("Film ajouté");
+            alert.setContentText("Le film a été ajouté avec succès !");
             alert.show();
+
             readFilmTable();
             clear();
         } catch (Exception e) {
-            showAlert("Erreur lors de l'ajout du Film : " + e.getMessage());
+            showAlert("Erreur lors de l'ajout du film : " + e.getMessage());
         }
-
     }
+
+    // Méthode pour afficher les alertes
+
 
     public void switchForm(ActionEvent event) {
         if (event.getSource() == AjouterFilm_Button) {

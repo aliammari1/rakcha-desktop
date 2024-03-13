@@ -2,10 +2,10 @@
 
 <?import javafx.scene.chart.*?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="700.0" prefWidth="1280.0"
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="855.0" prefWidth="1507.0"
             xmlns="http://javafx.com/javafx/21" fx:controller="com.esprit.controllers.produits.AnalyseCommande">
     <children>
-        <LineChart fx:id="TauxCommande" layoutX="336.0" layoutY="31.0" prefHeight="285.0" prefWidth="454.0">
+        <LineChart fx:id="TauxCommande" layoutX="313.0" layoutY="145.0" prefHeight="335.0" prefWidth="543.0">
             <xAxis>
                 <CategoryAxis fx:id="xAxis"/>
             </xAxis>
@@ -13,7 +13,7 @@
                 <NumberAxis/>
             </yAxis>
         </LineChart>
-        <StackedBarChart fx:id="TauxCategorie" layoutX="766.0" layoutY="337.0" prefHeight="317.0" prefWidth="454.0">
+        <StackedBarChart fx:id="TauxCategorie" layoutX="880.0" layoutY="442.0" prefHeight="346.0" prefWidth="534.0">
             <xAxis>
                 <CategoryAxis side="BOTTOM" fx:id="xCommandeAxis"/>
             </xAxis>
@@ -21,6 +21,6 @@
                 <NumberAxis side="LEFT"/>
             </yAxis>
         </StackedBarChart>
-        <fx:include source="clientSideBar.fxml"/>
+        <fx:include source="adminSideBar.fxml"/>
     </children>
 </AnchorPane>

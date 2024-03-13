@@ -98,6 +98,7 @@ public class SerieClientController {
     @FXML
     private HBox hboxTop3;
 
+
     //FOCTION RECHERCHE
     public static List<Serie> rechercher(List<Serie> liste, String recherche) {
         List<Serie> resultats = new ArrayList<>();
@@ -442,6 +443,8 @@ public class SerieClientController {
 
     @FXML
     private void initialize() throws SQLException {
+
+        loadSeriesList();
 
         IServiceSerieImpl iServiceSerie = new IServiceSerieImpl();
         IServiceCategorieImpl iServiceCategorie = new IServiceCategorieImpl();
