@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="520.0" prefWidth="929.0" stylesheets="@styles/signup.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.users.MailAdminController">
+    <children>
+        <AnchorPane layoutX="467.0" prefHeight="520.0" prefWidth="468.0" styleClass="nav-form" stylesheets="@styles/filmStyle.css">
+            <children>
+                <Label layoutX="31.0" layoutY="63.0" prefHeight="58.0" prefWidth="437.0" text="Welcome to Rakcha  Mail" textFill="WHITE">
+                    <font>
+                        <Font name="Outfit SemiBold" size="35.0" />
+                    </font>
+                </Label>
+                <ImageView fitHeight="325.0" fitWidth="299.0" layoutX="85.0" layoutY="134.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@Logo.png" />
+                    </image>
+                </ImageView>
+            </children>
+        </AnchorPane>
+        <AnchorPane prefHeight="520.0" prefWidth="461.0">
+            <children>
+                <TextField fx:id="mailTextField" layoutX="88.0" layoutY="247.0" prefHeight="42.0" prefWidth="271.0" promptText="Mail" styleClass="loginTextField">
+                    <font>
+                        <Font name="Outfit Regular" size="15.0" />
+                    </font>
+                    <padding>
+                        <Insets left="20.0" />
+                    </padding>
+                </TextField>
+                <Label layoutX="81.0" layoutY="210.0" prefHeight="30.0" prefWidth="88.0" text="Mail:">
+                    <font>
+                        <Font name="Outfit Medium" size="17.0" />
+                    </font>
+                </Label>
+                <Button fx:id="sendButton" layoutX="88.0" layoutY="416.0" mnemonicParsing="false" onAction="#sendMail" prefHeight="42.0" prefWidth="271.0" styleClass="sale" stylesheets="@styles/filmStyle.css" text="SEND" textFill="WHITE">
+                    <font>
+                        <Font name="Outfit Medium" size="20.0" />
+                    </font>
+                </Button>
+                <Label layoutX="62.0" layoutY="53.0" text="Mail :">
+                    <font>
+                        <Font name="Outfit Bold" size="36.0" />
+                    </font>
+                </Label>
+                <Button layoutX="323.0" layoutY="47.0" mnemonicParsing="false" prefHeight="67.0" prefWidth="81.0" styleClass="sale" stylesheets="@styles/filmStyle.css" />
+                <Label fx:id="emailErrorLabel" layoutX="88.0" layoutY="192.0" prefHeight="18.0" prefWidth="271.0" textFill="RED" />
+                <Label fx:id="passwordErrorLabel" layoutX="88.0" layoutY="289.0" prefHeight="18.0" prefWidth="271.0" textFill="RED" />
+                <FontAwesomeIconView fill="WHITE" glyphName="SEND" layoutX="344.0" layoutY="92.0" size="35" wrappingWidth="29.0" />
+            </children>
+        </AnchorPane>
+    </children>
+</AnchorPane>

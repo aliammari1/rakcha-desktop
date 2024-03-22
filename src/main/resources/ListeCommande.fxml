@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="855.0" prefWidth="1500.0"
+            xmlns="http://javafx.com/javafx/21" fx:controller="com.esprit.controllers.produits.ListCommandeController">
+    <children>
+        <TableView fx:id="commandeTableView" layoutX="406.0" layoutY="188.0" prefHeight="524.0" prefWidth="875.0"
+                   stylesheets="@styles/produitStyle.css">
+            <columns>
+                <TableColumn fx:id="idnom" prefWidth="117.0" text="Nom"/>
+                <TableColumn fx:id="idprenom" prefWidth="124.0" text="Prenom"/>
+                <TableColumn fx:id="idadresse" prefWidth="113.0" text="Adresse"/>
+                <TableColumn fx:id="idnumero" prefWidth="114.0" text="Phone Number"/>
+                <TableColumn fx:id="iddate" prefWidth="99.0" text="Date "/>
+                <TableColumn fx:id="idStatu" prefWidth="154.0" text="Statu"/>
+                <TableColumn fx:id="deleteColumn" prefWidth="144.0" text="Delete"/>
+            </columns>
+        </TableView>
+        <fx:include source="adminSideBar.fxml"/>
+        <Button layoutX="1062.0" layoutY="138.0" mnemonicParsing="false" onAction="#statCommande"
+                styleClass="instert-btn" stylesheets="@styles/produitStyle.css" text="Analyse Commande"/>
+        <TextField fx:id="SearchBar" layoutX="741.0" layoutY="131.0" prefHeight="42.0" prefWidth="248.0"
+                   promptText="Search here ......................">
+            <cursor>
+                <Cursor fx:constant="TEXT"/>
+            </cursor>
+        </TextField>
+        <Button layoutX="945.0" layoutY="139.0" mnemonicParsing="false" style="-fx-background-color: AE2D3C;">
+            <graphic>
+                <FontAwesomeIconView fill="#f5f5f5" glyphName="SEARCH" size="19" text="" textAlignment="RIGHT"/>
+            </graphic>
+        </Button>
+    </children>
+</AnchorPane>

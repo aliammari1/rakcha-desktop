@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="855.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.produits.PanierProduitControllers">
+    <children>
+        <AnchorPane layoutY="-9.0" prefHeight="712.0" prefWidth="216.0" styleClass="nav-form" stylesheets="@styles/produitStyle.css">
+            <children>
+                <Button layoutY="282.0" mnemonicParsing="false" onAction="#MovieClient" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Movies">
+                    <font>
+                        <Font name="System Italic" size="17.0" />
+                    </font>
+                </Button>
+                <FontAwesomeIconView fill="#ebe5e5" glyphName="FILM" layoutX="20.0" layoutY="308.0" size="30" text="" />
+                <Button layoutX="1.0" layoutY="321.0" mnemonicParsing="false" onAction="#produitClient" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Products" />
+                <FontAwesomeIconView fill="#ebe5e5" glyphName="CUBES" layoutX="20.0" layoutY="347.0" size="30" text="" />
+                <FontAwesomeIconView fill="#ebe5e5" glyphName="VIDEO_CAMERA" layoutX="24.0" layoutY="390.0" size="30" text="" />
+                <Button layoutY="364.0" mnemonicParsing="false" onAction="#cinemaclient" prefHeight="30.0" prefWidth="202.0" styleClass="nav-btn" text="Cinema" textAlignment="CENTER" />
+                <FontAwesomeIconView fill="#ebe5e5" glyphName="USER" layoutX="39.0" layoutY="611.0" size="30" text="" />
+                <Button layoutX="74.0" layoutY="584.0" mnemonicParsing="false" onAction="#profilclient" styleClass="nav-btn" text="Account" />
+                <FontAwesomeIconView fill="#ebe5e5" glyphName="SIGN_OUT" layoutX="38.0" layoutY="651.0" size="30" text="" />
+                <Button layoutX="82.0" layoutY="624.0" mnemonicParsing="false" styleClass="nav-btn" text="EXIT" />
+                <FontAwesomeIconView fill="#ebe5e5" glyphName="CALENDAR" layoutX="22.0" layoutY="432.0" size="30" text="" />
+                <Button layoutX="1.0" layoutY="407.0" mnemonicParsing="false" onAction="#eventClient" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Event">
+                    <font>
+                        <Font size="13.0" />
+                    </font>
+                </Button>
+                <Button layoutX="1.0" layoutY="244.0" mnemonicParsing="false" onAction="#SerieClient" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Series" />
+                <FontAwesomeIconView fill="#ebe5e5" glyphName="TV" layoutX="18.0" layoutY="269.0" size="30" />
+                <ImageView fitHeight="161.0" fitWidth="216.0" layoutX="1.0" layoutY="37.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@Logo.png" />
+                    </image>
+                </ImageView>
+            </children>
+        </AnchorPane>
+        <ScrollPane hbarPolicy="NEVER" layoutX="237.0" layoutY="184.0" prefHeight="670.0" prefWidth="776.0">
+            <content>
+                <FlowPane fx:id="cartFlowPane" prefHeight="669.0" prefWidth="776.0" styleClass="scroll-pane" stylesheets="@styles/produitStyle.css" />
+            </content>
+        </ScrollPane>
+        <Label layoutX="689.0" layoutY="43.0" text="CART" textFill="#d72222">
+            <font>
+                <Font name="Arial Rounded MT Bold" size="48.0" />
+            </font>
+        </Label>
+        <AnchorPane layoutX="1099.0" layoutY="322.0" prefHeight="298.0" prefWidth="302.0" styleClass="bg-white" stylesheets="@styles/produitStyle.css">
+            <children>
+                <FlowPane fx:id="prixtotaleFlowPane" layoutX="105.0" layoutY="25.0" prefHeight="30.0" prefWidth="87.0" stylesheets="@styles/dashboard.css" />
+                <Label alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="14.0" layoutY="45.0" prefHeight="10.0" prefWidth="87.0" text="Total Price :" textAlignment="CENTER">
+                    <font>
+                        <Font name="Tw Cen MT Condensed" size="18.0" />
+                    </font>
+                </Label>
+                <Button layoutX="105.0" layoutY="216.0" mnemonicParsing="false" onAction="#order" prefHeight="30.0" prefWidth="121.0" styleClass="sale" stylesheets="@styles/produitStyle.css" text="ORDER" />
+            </children>
+        </AnchorPane>
+        <FontAwesomeIconView fx:id="retour" fill="#6b2a2a" glyphName="ARROW_LEFT" layoutX="242.0" layoutY="172.0" onMouseClicked="#afficherProduit" size="20" text="" />
+        <ImageView fitHeight="69.0" fitWidth="62.0" layoutX="242.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@Logo.png" />
+            </image>
+        </ImageView>
+        <Label layoutX="304.0" layoutY="39.0" prefHeight="17.0" prefWidth="132.0" text="Loujain Hajlaoui" />
+        <Label layoutX="309.0" layoutY="62.0" prefHeight="17.0" prefWidth="48.0" text="User" />
+    </children>
+</AnchorPane>

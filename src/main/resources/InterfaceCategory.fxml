@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="categoryCrudInterface" prefHeight="855.0" prefWidth="1507.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.films.CategoryController">
+
+    <children>
+        <fx:include source="responsableDeCinemaSideBar.fxml" />
+        <AnchorPane layoutX="313.0" layoutY="180.0" prefHeight="576.0" prefWidth="525.0" styleClass="bg-white" stylesheets="@styles/filmStyle.css">
+
+            <children>
+                <Label layoutX="32.0" layoutY="82.0" text="Name of category :">
+                    <font>
+                        <Font size="16.0" />
+                    </font>
+                </Label>
+                <TextArea fx:id="nomCategory_textArea" layoutX="232.0" layoutY="77.0" prefHeight="25.0" prefWidth="200.0" style="-fx-border-color: BLACK;" styleClass="labeltext" stylesheets="@dashbord.css" />
+                <Label layoutX="32.0" layoutY="167.0" text="Description">
+                    <font>
+                        <Font size="16.0" />
+                    </font>
+                </Label>
+                <TextArea fx:id="descriptionCategory_textArea" layoutX="234.0" layoutY="154.0" prefHeight="190.0" prefWidth="200.0" style="-fx-border-color: BLACK;" wrapText="true" />
+                <Button layoutX="202.0" layoutY="460.0" mnemonicParsing="false" onAction="#insertCategory" prefHeight="40.0" prefWidth="172.0" styleClass="sale" stylesheets="@styles/filmStyle.css" text="Insérer" />
+            </children>
+        </AnchorPane>
+        <AnchorPane layoutX="888.0" layoutY="186.0" prefHeight="561.0" prefWidth="593.0" styleClass="bg-white" stylesheets="@styles/filmStyle.css">
+            <children>
+                <ComboBox fx:id="filterCriteriaComboBox" layoutX="69.0" layoutY="34.0" prefHeight="39.0" prefWidth="107.0" styleClass="sale">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Name" />
+                            <String fx:value="Description" />
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+                <TableView fx:id="filmCategory_tableView" layoutX="55.0" layoutY="107.0" prefHeight="406.0" prefWidth="508.0">
+                    <columns>
+                        <TableColumn fx:id="idCategory_tableColumn" prefWidth="93.0" text="Id Catégory" />
+                        <TableColumn fx:id="nomCategory_tableColumn" prefWidth="130.0" text="Nom" />
+                        <TableColumn fx:id="descrptionCategory_tableColumn" prefWidth="281.0" text="Déscription " />
+                    </columns>
+                </TableView>
+                <TextField fx:id="recherche_textField" layoutX="210.0" layoutY="30.0" prefHeight="53.0" prefWidth="172.0" promptText="rechercher" />
+                <FontAwesomeIconView fill="#ae2d3c" glyphName="SEARCH" layoutX="349.0" layoutY="63.0" size="19" text="" textAlignment="RIGHT" />
+                <Button layoutX="411.0" layoutY="30.0" mnemonicParsing="false" prefHeight="53.0" prefWidth="107.0" styleClass="sale" stylesheets="@styles/filmStyle.css" text="Search" />
+            </children>
+        </AnchorPane>
+    </children>
+</AnchorPane>

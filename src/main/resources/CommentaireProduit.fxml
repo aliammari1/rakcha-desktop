@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="700.0" prefWidth="1280.0"
+            xmlns="http://javafx.com/javafx/21"
+            fx:controller="com.esprit.controllers.produits.CommentaireProduitController">
+    <children>
+        <fx:include source="clientSideBar.fxml"/>
+        <AnchorPane layoutX="237.0" layoutY="99.0" prefHeight="357.0" prefWidth="368.0" styleClass="bg-white"
+                    stylesheets="@styles/dashboard.css">
+            <children>
+                <TextArea fx:id="monCommentaitreText" layoutX="51.0" layoutY="31.0" prefHeight="137.0"
+                          prefWidth="266.0"/>
+                <Button layoutX="131.0" layoutY="270.0" mnemonicParsing="false" onAction="#addchat"
+                        styleClass="button-client" stylesheets="@styles/dashboard.css" text="ADD Chat"/>
+            </children>
+        </AnchorPane>
+        <ScrollPane fx:id="produitscrollpane" layoutX="697.0" layoutY="108.0" prefHeight="357.0" prefWidth="391.0">
+            <content>
+                <FlowPane fx:id="CommentaireFlowPane" prefHeight="301.0" prefWidth="390.0"
+                          stylesheets="@styles/dashboard.css"/>
+            </content>
+        </ScrollPane>
+    </children>
+</AnchorPane>

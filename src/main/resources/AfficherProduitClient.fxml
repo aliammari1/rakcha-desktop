@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="produitAnchor" prefHeight="855.0" prefWidth="1507.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.produits.AfficherProduitClientControllers">
+    <children>
+        <fx:include source="clientSideBar.fxml" />
+        <ScrollPane fx:id="produitscrollpane" hbarPolicy="NEVER" layoutX="249.0" layoutY="167.0" prefHeight="689.0" prefWidth="793.0" stylesheets="@styles/filmStyle.css">
+            <content>
+
+
+                <FlowPane fx:id="produitFlowPane" prefHeight="690.0" prefWidth="783.0" />
+            </content>
+        </ScrollPane>
+        <FontAwesomeIconView fill="#b92d2d" glyphName="SHOPPING_CART" layoutX="1056.0" layoutY="75.0" onMouseClicked="#panier" size="40" />
+        <FlowPane fx:id="panierFlowPane" layoutX="1091.0" layoutY="158.0" prefHeight="589.0" prefWidth="350.0" styleClass="bg-white" stylesheets="@styles/produitStyle.css" visible="false" />
+        <AnchorPane fx:id="FilterAnchor" layoutX="876.0" layoutY="90.0" prefHeight="181.0" prefWidth="180.0" styleClass="bg-white" stylesheets="@styles/produitStyle.css" visible="false">
+            <children>
+                <Button layoutX="112.0" layoutY="132.0" mnemonicParsing="false" onAction="#filtercinema" styleClass="sale" stylesheets="@styles/filmStyle.css" text="Filter" />
+                <FontAwesomeIconView glyphName="CLOSE" layoutX="147.0" layoutY="19.0" onMouseClicked="#CloseFilter" size="15" />
+            </children>
+        </AnchorPane>
+        <FontAwesomeIconView fx:id="idfilter" fill="#b92d2d" glyphName="FILTER" layoutX="993.0" layoutY="76.0" onMouseClicked="#filtrer" size="40" />
+        <AnchorPane fx:id="AnchorComments" layoutX="373.0" layoutY="90.0" prefHeight="470.0" prefWidth="439.0" stylesheets="@styles/produitStyle.css" visible="false">
+            <children>
+                <TextArea fx:id="txtAreaComments" layoutX="15.0" layoutY="418.0" prefHeight="43.0" prefWidth="406.0" />
+                <ScrollPane fx:id="idcomment" layoutX="15.0" layoutY="38.0" prefHeight="366.0" prefWidth="406.0">
+                    <content>
+                        <AnchorPane prefHeight="366.0" prefWidth="408.0" />
+                    </content>
+                </ScrollPane>
+                <FontAwesomeIconView fx:id="forwardMessage" glyphName="FORWARD" layoutX="392.0" layoutY="444.0" onMouseClicked="#AddComment" size="15" />
+                <FontAwesomeIconView glyphName="CLOSE" layoutX="400.0" layoutY="19.0" onMouseClicked="#Close" size="15" />
+            </children>
+        </AnchorPane>
+        <AnchorPane fx:id="top3anchorpane" layoutX="1164.0" layoutY="226.0" prefHeight="420.0" prefWidth="304.0" styleClass="bg-white" stylesheets="@styles/produitStyle.css">
+            <children>
+                <FlowPane fx:id="topthreeVbox" layoutX="21.0" layoutY="65.0" prefHeight="331.0" prefWidth="263.0" />
+                <Label layoutX="29.0" layoutY="22.0" prefHeight="43.0" prefWidth="252.0" text="Top 3 best rating products:">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+            </children>
+        </AnchorPane>
+        <TextField fx:id="SearchBar" layoutX="688.0" layoutY="36.0" prefHeight="42.0" prefWidth="248.0" promptText="Search here ......................">
+            <cursor>
+                <Cursor fx:constant="TEXT" />
+            </cursor>
+        </TextField>
+        <Button layoutX="894.0" layoutY="44.0" mnemonicParsing="false" style="-fx-background-color: AE2D3C;">
+            <graphic>
+                <FontAwesomeIconView fill="#f5f5f5" glyphName="SEARCH" size="19" text="" textAlignment="RIGHT" />
+            </graphic>
+        </Button>
+        <ImageView fitHeight="69.0" fitWidth="62.0" layoutX="259.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@Logo.png" />
+            </image>
+        </ImageView>
+        <Label layoutX="315.0" layoutY="22.0" prefHeight="17.0" prefWidth="132.0" text="Loujain Hajlaoui" />
+        <Label layoutX="320.0" layoutY="45.0" prefHeight="17.0" prefWidth="48.0" text="User" />
+      <ComboBox fx:id="tricomboBox" layoutX="523.0" layoutY="33.0" prefHeight="40.0" prefWidth="139.0" styleClass="sale" stylesheets="@styles/filmStyle.css" />
+
+
+    </children>
+</AnchorPane>

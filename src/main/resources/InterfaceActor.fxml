@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="855.0" prefWidth="1507.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.films.ActorController">
+    <fx:include source="responsableDeCinemaSideBar.fxml" />
+    <AnchorPane fx:id="anchorActor_Form" layoutX="253.0" layoutY="104.0" prefHeight="669.0" prefWidth="379.0" styleClass="bg-white" stylesheets="@styles/filmStyle.css">
+        <children>
+            <Label layoutX="16.0" layoutY="412.0">
+                <font>
+                    <Font size="16.0" />
+                </font>
+            </Label>
+            <Button layoutX="150.0" layoutY="581.0" mnemonicParsing="false" onAction="#insertActor" prefHeight="40.0" prefWidth="79.0" styleClass="sale" stylesheets="@styles/filmStyle.css" text="Insérer" />
+            <Button layoutX="25.0" layoutY="581.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="88.0" styleClass="sale" stylesheets="@styles/filmStyle.css" text="Supprimer" />
+            <Button layoutX="245.0" layoutY="581.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="101.0" styleClass="sale" stylesheets="@styles/filmStyle.css" text="Modifier" />
+            <Label layoutX="31.0" layoutY="276.0" text="nom">
+                <font>
+                    <Font size="16.0" />
+                </font>
+            </Label>
+            <TextArea fx:id="nomAcotr_textArea1" layoutX="146.0" layoutY="269.0" prefHeight="13.0" prefWidth="200.0" style="-fx-border-color: BLACK;" styleClass="labeltext" wrapText="true" />
+            <Button layoutX="138.0" layoutY="183.0" mnemonicParsing="false" onAction="#importAcotrImage" prefHeight="40.0" prefWidth="88.0" styleClass="sale" stylesheets="@styles/filmStyle.css" text="importer" />
+            <AnchorPane fx:id="image_view21" layoutX="119.0" layoutY="14.0" prefHeight="136.0" prefWidth="125.0" style="-fx-border-color: black;" styleClass="bg-white" stylesheets="@styles/filmStyle.css">
+                <children>
+                    <ImageView fx:id="imageAcotr_ImageView1" fitHeight="155.0" fitWidth="126.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" />
+                </children>
+            </AnchorPane>
+            <TextArea fx:id="bioAcotr_textArea" layoutX="145.0" layoutY="375.0" prefHeight="122.0" prefWidth="200.0" style="-fx-border-color: BLACK;" wrapText="true" />
+            <Label layoutX="26.0" layoutY="387.0" text="biographie">
+                <font>
+                    <Font size="16.0" />
+                </font>
+            </Label>
+        </children>
+    </AnchorPane>
+    <AnchorPane layoutX="639.0" layoutY="104.0" prefHeight="669.0" prefWidth="889.0" styleClass="bg-white" stylesheets="@styles/filmStyle.css">
+        <children>
+            <TableView fx:id="filmActor_tableView11" layoutX="5.0" layoutY="51.0" prefHeight="579.0" prefWidth="925.0">
+                <columns>
+                    <TableColumn fx:id="idActor_tableColumn1" prefWidth="60.0" text="Id film" />
+                    <TableColumn fx:id="nomAcotr_tableColumn1" prefWidth="171.0" text="Name of actor " />
+                    <TableColumn fx:id="imageAcotr_tableColumn1" prefWidth="217.0" text="image" />
+                    <TableColumn fx:id="bioActor_tableColumn1" prefWidth="273.0" text="BIO" />
+                    <TableColumn fx:id="DeleteActor_Column1" minWidth="0.0" prefWidth="189.0" text="Delete" />
+                </columns>
+            </TableView>
+        </children>
+    </AnchorPane>
+   <TextField fx:id="recherche_textField" layoutX="834.0" layoutY="30.0" prefHeight="42.0" prefWidth="248.0" promptText="Search here ......................">
+      <cursor>
+         <Cursor fx:constant="TEXT" />
+      </cursor>
+   </TextField>
+   <Button layoutX="1040.0" layoutY="38.0" mnemonicParsing="false" style="-fx-background-color: AE2D3C;">
+      <graphic>
+         <FontAwesomeIconView fill="#f5f5f5" glyphName="SEARCH" size="19" text="" textAlignment="RIGHT" />
+      </graphic>
+   </Button>
+      <Button layoutX="1098.0" layoutY="29.0" mnemonicParsing="false" styleClass="sale" stylesheets="@styles/filmStyle.css" text="chercher" />
+</AnchorPane>

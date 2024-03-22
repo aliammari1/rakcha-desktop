@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.lang.String?>
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.media.MediaView?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="743.0" prefWidth="1168.0" styleClass="nav-form" stylesheets="@styles/dashboard.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.series.EpisodeClientController">
+    <children>
+        <Pane layoutY="-1.0" prefHeight="698.0" prefWidth="183.0" styleClass="nav-form" stylesheets="@styles/dashboard.css">
+            <children>
+                <Label alignment="BOTTOM_LEFT" layoutX="14.0" layoutY="172.0" prefHeight="32.0" prefWidth="122.0" styleClass="nav-btn" stylesheets="@styles/dashboard.css" text="Name :" textFill="#fafafa">
+                    <font>
+                        <Font name="Agency FB Bold" size="18.0" />
+                    </font>
+                </Label>
+                <Label alignment="BOTTOM_LEFT" layoutX="12.0" layoutY="245.0" prefHeight="32.0" prefWidth="122.0" styleClass="nav-btn" stylesheets="@styles/dashboard.css" text="Summary :" textFill="#fafafa">
+                    <font>
+                        <Font name="Agency FB" size="18.0" />
+                    </font>
+                </Label>
+                <Label alignment="BOTTOM_LEFT" layoutX="12.0" layoutY="325.0" prefHeight="32.0" prefWidth="122.0" styleClass="nav-btn" stylesheets="@styles/dashboard.css" text="Director :" textFill="#fafafa">
+                    <font>
+                        <Font name="Agency FB" size="18.0" />
+                    </font>
+                </Label>
+                <Label layoutX="15.0" layoutY="426.0" prefHeight="32.0" prefWidth="122.0" styleClass="nav-btn" stylesheets="@styles/dashboard.css" text="Country :" textFill="#fafafa">
+                    <font>
+                        <Font name="Agency FB" size="18.0" />
+                    </font>
+                </Label>
+                <Label fx:id="nomlbl" alignment="CENTER" layoutX="13.0" layoutY="201.0" prefHeight="44.0" prefWidth="136.0" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Label>
+                <Label fx:id="resumelbl" alignment="CENTER" layoutX="8.0" layoutY="281.0" prefHeight="44.0" prefWidth="136.0" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Label>
+                <Label fx:id="rirecteurslbl" alignment="CENTER" layoutX="15.0" layoutY="373.0" prefHeight="44.0" prefWidth="136.0" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Label>
+                <Label fx:id="payslbl" alignment="CENTER" layoutX="15.0" layoutY="458.0" prefHeight="44.0" prefWidth="136.0" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Label>
+                <ImageView fx:id="imgsrie" fitHeight="140.0" fitWidth="142.0" layoutX="10.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true" />
+            </children>
+        </Pane>
+        <ListView fx:id="ListEpisode" layoutX="181.0" prefHeight="743.0" prefWidth="223.0" styleClass="combo-box-red" stylesheets="@styles/dashboard.css" />
+        <Pane layoutX="382.0" layoutY="4.0" prefHeight="482.0" prefWidth="514.0" stylesheets="@styles/dashboard.css">
+            <children>
+                <MediaView fx:id="midiavideo" fitHeight="650.0" fitWidth="700.0" layoutX="54.0" layoutY="93.0" />
+                <Button id="jouerbtn" fx:id="jouerbtn" alignment="CENTER" contentDisplay="CENTER" layoutX="447.0" layoutY="495.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="83.0" stylesheets="@dashbord.css" text="Play" textFill="#e7dede">
+                    <font>
+                        <Font name="Bodoni MT Black" size="12.0" />
+                    </font>
+                    <styleClass>
+                        <String fx:value="nav-form" />
+                        <String fx:value="text-field-red" />
+                    </styleClass>
+                </Button>
+                <Button fx:id="pausebtn" alignment="CENTER" contentDisplay="CENTER" layoutX="547.0" layoutY="494.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="74.0" stylesheets="@dashbord.css" text="Pause" textFill="#e7dddd" textOverrun="WORD_ELLIPSIS">
+                    <font>
+                        <Font name="Bodoni MT Black" size="12.0" />
+                    </font>
+                    <styleClass>
+                        <String fx:value="nav-form" />
+                        <String fx:value="text-field-red" />
+                    </styleClass>
+                </Button>
+                <Button fx:id="arreterbtn" alignment="CENTER" contentDisplay="CENTER" layoutX="636.0" layoutY="494.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="77.0" stylesheets="@dashbord.css" text="Stop" textFill="#efdada">
+                    <font>
+                        <Font name="Bodoni MT Black" size="12.0" />
+                    </font>
+                    <styleClass>
+                        <String fx:value="nav-form" />
+                        <String fx:value="text-field-red" />
+                    </styleClass>
+                </Button>
+                <Label layoutX="34.0" layoutY="-2.0" prefHeight="32.0" prefWidth="720.0" text="Sit back, relax, and enjoy the show with your favorite snacks – happy watching!" textFill="#f7ebeb">
+                    <font>
+                        <Font name="Berlin Sans FB Demi Bold" size="18.0" />
+                    </font>
+                </Label>
+                <Button fx:id="btnSend" layoutX="722.0" layoutY="682.0" mnemonicParsing="false" onAction="#ajouterFeedBack" prefHeight="26.0" prefWidth="56.0" text="Submit" textFill="WHITE">
+                    <font>
+                        <Font name="Berlin Sans FB Demi Bold" size="12.0" />
+                    </font>
+                    <styleClass>
+                        <String fx:value="nav-form" />
+                        <String fx:value="text-field-red" />
+                    </styleClass>
+                    <stylesheets>
+                        <URL value="@styles/dashboard.css" />
+                        <URL value="@dashbord.css" />
+                    </stylesheets>
+                </Button>
+                <TextArea fx:id="txtDescriptionFeedBack" layoutX="161.0" layoutY="587.0" prefHeight="90.0" prefWidth="618.0" promptText="FeedBack ...">
+                    <stylesheets>
+                        <URL value="@styles/dashboard.css" />
+                        <URL value="@dashbord.css" />
+                    </stylesheets>
+                </TextArea>
+                <Label layoutX="37.0" layoutY="553.0" prefHeight="22.0" prefWidth="297.0" text="Please leave your feedback below :" textFill="#f4f4e7">
+                    <font>
+                        <Font name="Berlin Sans FB Demi Bold" size="18.0" />
+                    </font>
+                </Label>
+            <FontAwesomeIconView fx:id="retour" fill="#eedede" glyphName="ARROW_LEFT" layoutX="715.0" layoutY="24.0" onMouseClicked="#afficherserie" wrappingWidth="31.285714149475098" />
+            </children>
+        </Pane>
+    </children>
+</AnchorPane>

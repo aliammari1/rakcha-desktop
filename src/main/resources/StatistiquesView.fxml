@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity"
+            minHeight="-Infinity"
+            minWidth="-Infinity" prefHeight="608.0" prefWidth="910.0" xmlns="http://javafx.com/javafx/21"
+            fx:controller="com.esprit.controllers.series.StatistiqueController">
+    <top>
+        <MenuBar BorderPane.alignment="CENTER">
+            <Menu mnemonicParsing="false" text="File">
+                <MenuItem mnemonicParsing="false" onAction="#handleShowBarChart" text="Show Bar Chart"/>
+                <MenuItem mnemonicParsing="false" onAction="#handleShowPieChart" text="Show Pie Chart"/>
+                <MenuItem mnemonicParsing="false" onAction="#handleClose" text="Close"/>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Edit">
+                <MenuItem mnemonicParsing="false" onAction="#handleUpdatePieData" text="Update Data"/>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Help">
+                <MenuItem mnemonicParsing="false" text="About"/>
+            </Menu>
+        </MenuBar>
+    </top>
+    <center>
+        <VBox alignment="CENTER" prefHeight="382.0" prefWidth="628.0" spacing="10">
+            <!-- Ajoutez le ComboBox ici -->
+            <ComboBox fx:id="statisticsComboBox"/>
+
+            <!-- Reste de votre définition, y compris le PieChart et les autres boutons -->
+            <PieChart fx:id="pieChart"/>
+            <Button onAction="#handleShowBarChart" text="Show Bar Chart"/>
+            <Button onAction="#handleShowPieChart" text="Show Pie Chart"/>
+            <Button onAction="#handleClose" text="Close"/>
+            <Button onAction="#handleUpdatePieData" text="Update Data"/>
+            <!-- Vous pouvez ajouter plus de boutons ou d'éléments ici selon vos besoins -->
+        </VBox>
+    </center>
+</BorderPane>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.net.URL?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="855.0" prefWidth="1507.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.evenements.AffichageEvenementClientController">
+    <children>
+        <AnchorPane layoutX="1244.0" layoutY="220.0" prefHeight="399.0" prefWidth="246.0" styleClass="bg-white" stylesheets="@dashboard2.css">
+         <children>
+              <TextArea fx:id="taComment" layoutX="39.0" layoutY="163.0" prefHeight="171.0" prefWidth="168.0" styleClass="text-area-red" stylesheets="@dashboard2.css" />
+         </children></AnchorPane>
+        <fx:include source="clientSideBar.fxml" />
+        <Label layoutX="1259.0" layoutY="281.0" text="Send Feedback :" textFill="#a13939">
+            <font>
+                <Font name="Barlow Condensed Bold Italic" size="30.0" />
+            </font>
+        </Label>
+        <Button fx:id="bSend" layoutX="1339.0" layoutY="573.0" mnemonicParsing="false" onAction="#ajouterFeedback" styleClass="button-client" stylesheets="@dashboard2.css" text="Send" />
+        <ComboBox fx:id="cbeventname" layoutX="1291.0" layoutY="336.0" prefWidth="150.0" promptText="Choose an event.." styleClass="combo-box-red" stylesheets="@dashboard2.css" />
+        <Button fx:id="bHistory" layoutX="1291.0" layoutY="168.0" mnemonicParsing="false" onAction="#showHistory" styleClass="sale" text="My Event History &gt;">
+         <stylesheets>
+            <URL value="@dashboard2.css" />
+            <URL value="@styles/filmStyle.css" />
+         </stylesheets></Button>
+        <Button fx:id="bWeather" layoutX="1245.0" layoutY="637.0" mnemonicParsing="false" onAction="#showWeather" prefHeight="42.0" prefWidth="246.0" styleClass="sale" text="Check Today's Weather &gt;">
+            <font>
+                <Font size="11.0" />
+            </font>
+         <stylesheets>
+            <URL value="@dashboard2.css" />
+            <URL value="@styles/filmStyle.css" />
+         </stylesheets>
+        </Button>
+        <ListView fx:id="listeEvents" layoutX="244.0" layoutY="161.0" prefHeight="694.0" prefWidth="974.0" stylesheets="@dashboard2.css" visible="false" />
+        <AnchorPane fx:id="anchplanning" layoutX="207.0" layoutY="161.0" prefHeight="694.0" prefWidth="1011.0" visible="false" />
+        <FontAwesomeIconView fx:id="idfilter" fill="#9a4141" glyphName="FILTER" layoutX="793.0" layoutY="79.0" onMouseClicked="#filtrer" size="30" wrappingWidth="21.428571701049805" />
+        <AnchorPane fx:id="FilterAnchor" layoutX="563.0" layoutY="51.0" prefHeight="87.0" prefWidth="200.0" visible="false">
+            <children>
+                <Button layoutX="74.0" layoutY="161.0" mnemonicParsing="false" onAction="#filtercinema" text="Filter" />
+            </children>
+        </AnchorPane>
+      <TextField fx:id="tfRechercheEc" layoutX="840.0" layoutY="48.0" prefHeight="42.0" prefWidth="248.0" promptText="Search here ......................">
+         <cursor>
+            <Cursor fx:constant="TEXT" />
+         </cursor>
+      </TextField>
+      <FontAwesomeIconView fill="#f5f5f5" glyphName="SEARCH" layoutX="-62.0" layoutY="85.0" size="19" text="" textAlignment="RIGHT" />
+      <Button layoutX="1048.0" layoutY="55.0" mnemonicParsing="false" style="-fx-background-color: AE2D3C;">
+         <graphic>
+            <FontAwesomeIconView fill="#f5f5f5" glyphName="SEARCH" size="19" text="" textAlignment="RIGHT" />
+         </graphic>
+      </Button>
+      <ImageView fitHeight="69.0" fitWidth="62.0" layoutX="259.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Logo.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="315.0" layoutY="20.0" prefHeight="17.0" prefWidth="132.0" text="Loujain Hajlaoui" />
+      <Label layoutX="320.0" layoutY="43.0" prefHeight="17.0" prefWidth="48.0" text="User" />
+    </children>
+</AnchorPane>

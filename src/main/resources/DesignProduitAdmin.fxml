@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.lang.String?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="categorieList" prefHeight="855.0" prefWidth="1507.0" stylesheets="@styles/filmStyle.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.produits.DesignProduitAdminContoller">
+    <children>
+        <fx:include source="adminSideBar.fxml" />
+        <AnchorPane layoutX="1280.0" prefHeight="707.0" prefWidth="0.0" styleClass="nav-form" stylesheets="@dashbord.css" />
+        <AnchorPane fx:id="formulaire" layoutX="270.0" layoutY="136.0" prefHeight="680.0" prefWidth="354.0" styleClass="bg-white" stylesheets="@styles/produitStyle.css">
+            <children>
+                <ComboBox fx:id="nomC_comboBox" layoutX="107.0" layoutY="163.0" prefHeight="25.0" prefWidth="105.0" styleClass="combo-box-red" stylesheets="@styles/produitStyle.css" />
+                <Label layoutX="13.0" layoutY="118.0" text="Product :">
+                    <font>
+                        <Font name="Arial Rounded MT Bold" size="16.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="nomP_textFiled" layoutX="103.0" layoutY="115.0" styleClass="text-field-red" />
+                <TextField fx:id="quantiteP_textFiled" layoutX="84.0" layoutY="207.0" styleClass="text-field-red" />
+                <TextArea fx:id="descriptionP_textArea" layoutX="127.0" layoutY="295.0" prefHeight="132.0" prefWidth="153.0" styleClass="text-area-red" />
+                <TextField fx:id="prix_textFiled" layoutX="74.0" layoutY="251.0" styleClass="text-field-red" />
+                <Label layoutX="15.0" layoutY="165.0" text="Category :">
+                    <font>
+                        <Font name="Arial Rounded MT Bold" size="16.0" />
+                    </font>
+                </Label>
+                <Label layoutX="15.0" layoutY="210.0" text="Qantity :">
+                    <font>
+                        <Font name="Arial Rounded MT Bold" size="16.0" />
+                    </font>
+                </Label>
+                <Label layoutX="15.0" layoutY="254.0" text="Price :">
+                    <font>
+                        <Font name="Arial Rounded MT Bold" size="16.0" />
+                    </font>
+                </Label>
+                <Label layoutX="16.0" layoutY="295.0" text="Description :">
+                    <font>
+                        <Font name="Arial Rounded MT Bold" size="16.0" />
+                    </font>
+                </Label>
+                <Label layoutX="15.0" layoutY="460.0" text="Picture :">
+                    <font>
+                        <Font name="Arial Rounded MT Bold" size="16.0" />
+                    </font>
+                </Label>
+                <ImageView fx:id="image" fitHeight="81.0" fitWidth="100.0" layoutX="103.0" layoutY="448.0" pickOnBounds="true" preserveRatio="true" styleClass="image-view-red" />
+                <Button layoutX="90.0" layoutY="545.0" mnemonicParsing="false" onAction="#add_produit" prefHeight="50.0" prefWidth="100.0" stylesheets="@styles/produitStyle.css" text="ADD">
+                    <styleClass>
+                        <String fx:value="instert-btn" />
+                        <String fx:value="sale" />
+                    </styleClass>
+                </Button>
+                <Label contentDisplay="CENTER" layoutX="90.0" layoutY="35.0" prefHeight="42.0" prefWidth="200.0" text="Add Product" textAlignment="CENTER" textFill="#466288">
+                    <font>
+                        <Font name="Arial Narrow Bold Italic" size="36.0" />
+                    </font>
+                </Label>
+                <FontAwesomeIconView fill="#bf1515" glyphName="UPLOAD" layoutX="38.0" layoutY="506.0" onMouseClicked="#selectImage" selectionFill="#2c2a2a" size="20" />
+            </children>
+        </AnchorPane>
+        <AnchorPane layoutX="653.0" layoutY="275.0" prefHeight="472.0" prefWidth="788.0" styleClass="bg-white" stylesheets="@styles/produitStyle.css">
+            <children>
+                <TableView fx:id="Produit_tableview" layoutX="53.0" layoutY="81.0" prefHeight="348.0" prefWidth="696.0" stylesheets="@styles/produitStyle.css">
+                    <columns>
+                        <TableColumn fx:id="nomP_tableC" prefWidth="106.0" text="Product" />
+                        <TableColumn fx:id="nomCP_tableC" prefWidth="108.0" text="Category" />
+                        <TableColumn fx:id="quantiteP_tableC" prefWidth="84.0" text="Qantity" />
+                        <TableColumn fx:id="PrixP_tableC" prefWidth="69.0" text="Price" />
+                        <TableColumn fx:id="descriptionP_tableC" prefWidth="140.0" text="Description" />
+                        <TableColumn fx:id="image_tableC" prefWidth="120.0" text="Picture" />
+                        <TableColumn fx:id="deleteColumn" prefWidth="67.0" text="Delete" />
+
+                    </columns>
+                </TableView>
+                <Label layoutX="361.0" text="Product" textFill="#466288">
+                    <font>
+                        <Font name="Arial Narrow Bold Italic" size="36.0" />
+                    </font>
+                </Label>
+            </children>
+        </AnchorPane>
+        <Button layoutX="1264.0" layoutY="232.0" mnemonicParsing="false" onAction="#GestionCategorie" prefHeight="30.0" prefWidth="168.0" styleClass="instert-btn" stylesheets="@styles/produitStyle.css" text=" Category Management" />
+        <AnchorPane fx:id="FilterAnchor" layoutX="1100.0" layoutY="47.0" prefHeight="186.0" prefWidth="160.0" styleClass="bg-white" stylesheets="@styles/produitStyle.css" visible="false">
+            <children>
+                <Button layoutX="67.0" layoutY="139.0" mnemonicParsing="false" onAction="#filtercinema" prefHeight="42.0" prefWidth="87.0" styleClass="sale" stylesheets="@styles/filmStyle.css" text="Filter" />
+            </children>
+        </AnchorPane>
+        <FontAwesomeIconView fx:id="idfilter" fill="#ae2c2c" glyphName="FILTER" layoutX="1063.0" layoutY="74.0" onMouseClicked="#filtrer" size="30" />
+        <TextField fx:id="SearchBar" layoutX="768.0" layoutY="42.0" prefHeight="42.0" prefWidth="248.0" promptText="Search here ......................">
+            <cursor>
+                <Cursor fx:constant="TEXT" />
+            </cursor>
+        </TextField>
+        <Button layoutX="975.0" layoutY="50.0" mnemonicParsing="false" style="-fx-background-color: AE2D3C;">
+            <graphic>
+                <FontAwesomeIconView fill="#f5f5f5" glyphName="SEARCH" size="19" text="" textAlignment="RIGHT" />
+            </graphic>
+        </Button>
+      <ImageView fitHeight="69.0" fitWidth="62.0" layoutX="258.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Logo.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="314.0" layoutY="20.0" prefHeight="17.0" prefWidth="132.0" text="Loujain Hajlaoui" />
+      <Label layoutX="319.0" layoutY="43.0" prefHeight="17.0" prefWidth="48.0" text="User" />
+
+
+    </children>
+</AnchorPane>

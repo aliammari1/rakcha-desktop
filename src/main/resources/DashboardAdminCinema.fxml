@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.net.URL?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="855.0" prefWidth="1507.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.cinemas.DashboardAdminController">
+    <children>
+        <fx:include source="adminSideBar.fxml" />
+        <AnchorPane fx:id="cinemasList" layoutX="391.0" layoutY="52.0" prefHeight="718.0" prefWidth="1059.0" styleClass="bg-white">
+            <children>
+                <Label layoutX="330.0" layoutY="38.0" text="Cinema List: " textFill="#030303">
+                    <font>
+                        <Font name="Arial Rounded MT Bold" size="48.0" />
+                    </font>
+                </Label>
+                <TableView fx:id="listCinema" layoutX="83.0" layoutY="123.0" prefHeight="550.0" prefWidth="878.0">
+                    <columns>
+                        <TableColumn fx:id="colCinema" prefWidth="92.79998779296875" text="Cinema" />
+                        <TableColumn fx:id="colLogo" prefWidth="151.0" text="Logo" />
+                        <TableColumn fx:id="colAdresse" minWidth="5.60003662109375" prefWidth="124.0" text="Address" />
+                        <TableColumn fx:id="colResponsable" minWidth="0.0" prefWidth="158.0" text="Responsable" />
+                        <TableColumn fx:id="colStatut" prefWidth="158.0" text="Status" />
+                        <TableColumn fx:id="colAction" prefWidth="190.0" text="Action" />
+                    </columns>
+                </TableView>
+                <Button layoutX="109.0" layoutY="51.0" mnemonicParsing="false" onAction="#filtrer" prefHeight="35.0" prefWidth="120.0" styleClass="sale" text="Filter">
+               <stylesheets>
+                  <URL value="@styles/dashboard.css" />
+                  <URL value="@styles/filmStyle.css" />
+               </stylesheets></Button>
+                <FontAwesomeIconView fill="#f5f2f2" glyphName="FILTER" layoutX="123.0" layoutY="76.0" size="20" text="" />
+            <TextField fx:id="tfSearch" layoutX="656.0" layoutY="47.0" prefHeight="42.0" prefWidth="248.0" promptText="Search here ......................">
+               <cursor>
+                  <Cursor fx:constant="TEXT" />
+               </cursor>
+            </TextField>
+            <Button layoutX="857.0" layoutY="54.0" mnemonicParsing="false" style="-fx-background-color: AE2D3C;">
+               <graphic>
+                  <FontAwesomeIconView fill="#f5f5f5" glyphName="SEARCH" size="19" text="" textAlignment="RIGHT" />
+               </graphic>
+            </Button>
+            </children>
+            <stylesheets>
+                <URL value="@styles/filmStyle.css" />
+            </stylesheets>
+        </AnchorPane>
+        <AnchorPane fx:id="FilterAnchor" layoutX="455.0" layoutY="169.0" prefHeight="317.0" prefWidth="340.0" styleClass="bg-white" stylesheets="@styles/filmStyle.css" visible="false">
+            <children>
+                <Label layoutX="117.0" layoutY="23.0" prefHeight="43.0" prefWidth="105.0" text="Filter:" textFill="#111010">
+                    <font>
+                        <Font name="Arial Rounded MT Bold" size="36.0" />
+                    </font>
+                </Label>
+                <Button layoutX="121.0" layoutY="255.0" mnemonicParsing="false" onAction="#filtrercinema" prefHeight="43.0" prefWidth="98.0" styleClass="sale" text="Filtrer">
+                    <stylesheets>
+                        <URL value="@styles/dashboard.css" />
+                        <URL value="@styles/filmStyle.css" />
+                    </stylesheets>
+                </Button>
+            </children>
+        </AnchorPane>
+    </children>
+</AnchorPane>

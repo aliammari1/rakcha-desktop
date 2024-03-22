@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.ResponsableDeCinemaSideBarController">
+    <AnchorPane prefHeight="855.0" prefWidth="248.0" styleClass="nav-form" stylesheets="@styles/filmStyle.css">
+        <ImageView fitHeight="208.0" fitWidth="239.0" layoutX="14.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@Logo.png" />
+        </ImageView>
+        <Button fx:id="movieButton" layoutY="311.0" mnemonicParsing="false" onAction="#switchToMovies" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" stylesheets="@styles/filmStyle.css" text="           Movies            " />
+        <FontAwesomeIconView fill="#f2efef" glyphName="FILM" layoutX="19.0" layoutY="353.0" size="30" text="" wrappingWidth="36.0" />
+        <Button fx:id="seanceButton" layoutY="519.0" mnemonicParsing="false" onAction="#switchToSeances" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" text="Seances" />
+        <Button layoutX="105.0" layoutY="732.0" mnemonicParsing="false" styleClass="nav-btn" text="Account" />
+        <FontAwesomeIconView fill="#ebe5e5" glyphName="USER" layoutX="61.0" layoutY="758.0" size="30" text="" />
+        <Button layoutX="117.0" layoutY="774.0" mnemonicParsing="false" styleClass="nav-btn" text="EXIT" />
+        <FontAwesomeIconView fill="#ebe5e5" glyphName="SIGN_OUT" layoutX="61.0" layoutY="801.0" size="30" text="" />
+        <Button fx:id="cinemaButton" layoutY="243.0" mnemonicParsing="false" onAction="#switchToCinema" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" stylesheets="@styles/filmStyle.css" text="Cinemas" textAlignment="CENTER" />
+        <FontAwesomeIconView fill="#ebe5e5" glyphName="TV" layoutX="20.0" layoutY="285.0" size="30" />
+      <Button fx:id="actorButton" layoutY="375.0" mnemonicParsing="false" onAction="#switchToActor" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" text="Actors" />
+      <Button fx:id="filmCategorieButton" layoutX="1.0" layoutY="448.0" mnemonicParsing="false" onAction="#switchToFilmCategorie" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" text="Film Categories" />
+      <FontAwesomeIconView fill="#ebe9e9" glyphName="USERS" layoutX="20.0" layoutY="416.0" size="30" />
+      <FontAwesomeIconView fill="#f5f5f5" glyphName="LIST" layoutX="22.0" layoutY="488.0" size="30" />
+      <FontAwesomeIconView fill="#f5f5f5" glyphName="TICKET" layoutX="21.0" layoutY="562.0" size="35" text="" />
+      <Button fx:id="statestique_button" layoutX="1.0" layoutY="585.0" mnemonicParsing="false" onAction="#switchstatestique" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" text="Statestics" />
+      <FontAwesomeIconView fill="WHITE" glyphName="SPINNER" layoutX="22.0" layoutY="628.0" size="35" />
+    </AnchorPane>
+</AnchorPane>

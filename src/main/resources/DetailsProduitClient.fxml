@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.net.URL?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="anchordetail" prefHeight="855.0" prefWidth="1507.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.produits.DetailsProduitClientController">
+    <children>
+        <fx:include source="clientSideBar.fxml" />
+        <FlowPane fx:id="detailFlowPane" layoutX="349.0" layoutY="217.0" prefHeight="559.0" prefWidth="764.0" styleClass="bg-white">
+            <children>
+                <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+            </children>
+            <stylesheets>
+                <URL value="@styles/dashboard.css" />
+                <URL value="@styles/produitStyle.css" />
+            </stylesheets>
+        </FlowPane>
+        <FontAwesomeIconView fx:id="retour" fill="#b92d2d" glyphName="ARROW_LEFT" layoutX="340.0" layoutY="188.0" onMouseClicked="#afficherProduit" size="20" text="" />
+        <AnchorPane fx:id="panierAnchorPane" layoutX="1185.0" layoutY="212.0" prefHeight="474.0" prefWidth="273.0" styleClass="bg-white" stylesheets="@styles/produitStyle.css" visible="false">
+            <children>
+                <FlowPane fx:id="panierFlowPane" prefHeight="474.0" prefWidth="273.0" styleClass="flow-pane" stylesheets="@styles/dashboard.css" visible="false" />
+            </children>
+        </AnchorPane>
+        <FontAwesomeIconView fill="#b92d2d" glyphName="SHOPPING_CART" layoutX="1384.0" layoutY="164.0" onMouseClicked="#panier" size="40" text="" />
+        <AnchorPane fx:id="top3anchorpane" layoutX="1181.0" layoutY="264.0" prefHeight="399.0" prefWidth="279.0" styleClass="bg-white" stylesheets="@styles/produitStyle.css">
+            <children>
+                <FlowPane fx:id="topthreeVbox" layoutX="10.0" layoutY="83.0" prefHeight="307.0" prefWidth="260.0" />
+                <Label layoutX="19.0" layoutY="22.0" prefHeight="43.0" prefWidth="252.0" text="Top 3 best rating movies :">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+            </children>
+        </AnchorPane>
+        <ImageView fitHeight="69.0" fitWidth="62.0" layoutX="258.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@Logo.png" />
+            </image>
+        </ImageView>
+        <Label layoutX="320.0" layoutY="26.0" prefHeight="17.0" prefWidth="132.0" text="Loujain Hajlaoui" />
+        <Label layoutX="325.0" layoutY="49.0" prefHeight="17.0" prefWidth="48.0" text="User" />
+    </children>
+</AnchorPane>

@@ -1,0 +1,274 @@
+/* Styles par défaut */
+.top-form {
+    -fx-background-color: #fff;
+    -fx-border-color: #000;
+    -fx-border-width: .2px .2px .4px .2px;
+}
+
+.close, .minus {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
+
+.close:hover {
+    -fx-background-color: #e74141;
+}
+
+.minus:hover {
+    -fx-background-color: #dadada;
+}
+
+/* Media Query pour écrans plus petits */
+@media screen and (max-width: 600px) {
+    .top-form {
+        /* Ajustez les styles pour les écrans plus petits */
+        -fx-border-width: .1px .1px .2px .1px;
+    }
+
+    /* Ajoutez d'autres ajustements en fonction des besoins */
+}
+
+.nav-form {
+    -fx-background-color: linear-gradient(to top right, #624970, #ae2d3c, black);
+}
+
+.nav-btn {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+    -fx-text-fill: #fff;
+    -fx-font-size: 14px;
+}
+
+.nav-btn:hover {
+    -fx-background-color: #ae2d3c;
+}
+
+.signout {
+    -fx-background-color: #ae2d3c;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+}
+
+.signout:hover {
+    -fx-background-color: #d62651;
+}
+
+.bg-white {
+    -fx-background-color: #fff;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, .3), 8, 0, 0, 0);
+    -fx-background-radius: 8px;
+    -fx-border-color: linear-gradient(to top right, #624970, #FCE19A, #ae2d3c); /* Couleur de la bordure rouge */
+    -fx-border-radius: 8px; /* Rayon de la bordure rouge */
+    -fx-border-width: 5px;
+}
+
+.bg-white:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 8, 0, 0, 0);
+}
+
+.instert-btn {
+    -fx-background-color: #ae2d3c;
+    -fx-background-radius: 8px;
+    -fx-text-fill: #FCE19A;
+    -fx-font-size: 18px;
+    -fx-cursor: hand;
+    -fx-font-family: "Arial Rounded MT Bold";
+}
+
+.instert-btn-picture {
+    -fx-background-color: #FCE19A;
+    -fx-background-radius: 8px;
+    -fx-text-fill: #624970;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+    -fx-font-family: "Arial Rounded MT Bold";
+}
+
+.instert-btn:hover {
+    -fx-background-color: #d62651;
+}
+
+.table-view {
+    -fx-background-color: #fff;
+    -fx-size: 15;
+    -fx-border-color: #ae2d3c;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-fill: #fff;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: linear-gradient(to top left, #466288, #ae2d3c);
+    -fx-background-insets: 0 0 0 0;
+    -fx-background-radius: 10px 0px 0px 0px;
+}
+
+.table-view .column-header, .table-view .filler {
+    -fx-background-color: transparent;
+    -fx-size: 50px;
+    -fx-fill: #fff;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #fff;
+}
+
+.text-field-red {
+    -fx-border-color: #800000; /* Couleur bordeaux */
+    -fx-border-radius: 20px; /* Rayon de la bordure arrondie */
+    -fx-background-radius: 20px; /* Rayon du fond arrondi */
+}
+
+.text-area-red {
+    -fx-border-color: #800000; /* Couleur bordeaux */
+    -fx-border-radius: 5px; /* Rayon de la bordure arrondie */
+    -fx-background-radius: 30px; /* Rayon du fond arrondi */
+}
+
+.combo-box-red {
+    -fx-background-color: #fff; /* Couleur de fond */
+    -fx-border-color: #800000; /* Couleur de la bordure */
+    -fx-border-radius: 5px; /* Rayon de la bordure arrondie */
+    -fx-background-radius: 5px; /* Rayon du fond arrondi */
+}
+
+.combo-box-red .arrow {
+    -fx-background-color: #800000; /* Couleur de la flèche déroulante */
+}
+
+.image-view-red {
+    -fx-border-color: #800000; /* Couleur de la bordure */
+    -fx-border-width: 2px; /* Largeur de la bordure */
+    -fx-border-radius: 5px; /* Rayon de la bordure arrondie */
+    -fx-background-radius: 5px; /* Rayon du fond arrondi */
+}
+
+.delete-button {
+    -fx-background-color: #ae2d3c;
+    -fx-background-radius: 8px;
+    -fx-text-fill: #FCE19A;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+    -fx-font-family: "Arial Rounded MT Bold";
+}
+
+.delete-button:hover {
+    -fx-background-color: #d62651;
+}
+
+.navig-button {
+    -fx-background-color: #466288;
+    -fx-background-radius: 10px;
+    -fx-text-fill: #FCE19A;
+    -fx-font-size: 15px;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+    -fx-font-family: "Arial Rounded MT Bold";
+}
+
+.navig-button:hover {
+    -fx-background-color: #466288;
+}
+
+.flow-pane {
+    -fx-border-color: linear-gradient(to top left, #624970, #ae2d3c);;
+    -fx-border-width: 3px; /* Largeur de la bordure (2 pixels dans cet exemple) */
+    -fx-border-style: solid; /* Style de la bordure (ligne solide dans cet exemple) */
+    -fx-border-radius: 5px; /* Rayon de la bordure pour des coins arrondis (facultatif) */
+}
+
+/* Appliquer un espacement intérieur au FlowPane (facultatif) */
+.flow-pane > * {
+    -fx-padding: 10px;
+}
+
+.search-pane {
+    -fx-border-color: linear-gradient(to top left, #466288, #ae2d3c);;
+    -fx-border-width: 3px; /* Largeur de la bordure (2 pixels dans cet exemple) */
+    -fx-border-style: solid; /* Style de la bordure (ligne solide dans cet exemple) */
+    -fx-border-radius: 5px; /* Rayon de la bordure pour des coins arrondis (facultatif) */
+}
+
+.rating-pane {
+    -fx-border-color: #ae2d3c;
+    -fx-border-width: 3px; /* Largeur de la bordure (2 pixels dans cet exemple) */
+    -fx-border-radius: 10px; /* Rayon de la bordure pour des coins arrondis (facultatif) */
+    -fx-background-color: #ae2d3c;
+}
+
+.button-client {
+    -fx-background-color: #466288;
+    -fx-background-radius: 5px;
+    -fx-text-fill: #FCE19A;
+    -fx-font-size: 15px;
+    -fx-cursor: hand;
+    -fx-font-family: "Arial Rounded MT Bold";
+}
+
+.list-view {
+    -fx-background-color: transparent; /* Transparent background */
+    -fx-background: transparent; /* Additional transparency */
+    -fx-background-insets: 0; /* Remove any insets */
+    -fx-padding: 0; /* Remove any padding */
+    -fx-font-family: sans-serif; /* Apply font family */
+}
+
+.list-view .scroll-bar {
+    -fx-padding: 2px; /* Adjust the padding to make the scroll bar smaller */
+}
+
+.list-view .scroll-bar .thumb {
+    -fx-background-color: #B52F3E; /* Initial color for the thumb */
+    -fx-background-radius: 4px; /* Rounded corners for the thumb */
+}
+
+/* Hover effect for the thumb */
+.list-view .scroll-bar .thumb:hover {
+    -fx-background-color: #ff3333; /* Color when hovered */
+}
+
+/* Color gradient for the thumb when pressed */
+.list-view .scroll-bar .thumb:pressed {
+    -fx-background-color: #cc0000; /* Color when pressed */
+}
+
+.list-view .scroll-bar:vertical {
+    -fx-background-color: transparent; /* Transparent background for vertical scroll bar */
+}
+
+.list-view .scroll-bar:horizontal {
+    -fx-background-color: transparent; /* Transparent background for horizontal scroll bar */
+}
+
+.list-view .list-cell {
+    -fx-border-color: #B52F3E; /* Add a black border */
+    -fx-border-width: 0 0 2 0; /* Specify border width, only bottom border */
+    -fx-padding: 15px; /* Apply padding */
+    -fx-background-color: #fff; /* Apply background color */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 0, 0, 0, 1); /* Apply drop shadow */
+    -fx-transition: transform 0.5s; /* Apply transition */
+}
+
+/* Apply styles to the items on hover */
+.list-view .list-cell:hover {
+    -fx-background-color: #AD4554; /* Background color when hovered */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.12), 0, 0, 0, 1); /* Drop shadow when hovered */
+    -fx-scale-x: 1.05; /* Scale effect when hovered */
+    -fx-scale-y: 1.05;
+    -fx-z-index: 5;
+    -fx-text-fill: #fff; /* Text color when hovered */
+}
+
+/* Apply styles to the item text */
+.list-view .list-cell .text {
+    -fx-font-size: 16px; /* Font size */
+    -fx-font-weight: bold; /* Font weight */
+    -fx-fill: #000; /* Text color */
+}
+
+/* Apply styles to the selected item */
+.list-view .list-cell:selected {
+    -fx-background-color: #AD344B; /* Background color when selected */
+    -fx-text-fill: #fff; /* Text color when selected */
+}
+

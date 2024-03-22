@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+<?import org.controlsfx.control.CheckComboBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="855.0" prefWidth="1507.0" stylesheets="@styles/filmStyle.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.films.FilmController">
+    <BorderPane layoutX="521.0" layoutY="139.0" prefHeight="745.0" prefWidth="1291.0" styleClass="top-form" stylesheets="@styles/filmStyle.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <left>
+            <fx:include source="responsableDeCinemaSideBar.fxml" />
+        </left>
+    </BorderPane>
+    <AnchorPane layoutX="646.0" layoutY="178.0" prefHeight="650.0" prefWidth="853.0" styleClass="bg-white" stylesheets="@styles/filmStyle.css">
+        <children>
+            <TableView fx:id="filmCategory_tableView1" layoutX="10.0" layoutY="58.0" prefHeight="579.0" prefWidth="840.0">
+                <columns>
+                    <TableColumn fx:id="idFilm_tableColumn" prefWidth="49.0" text="Id film" />
+                    <TableColumn fx:id="nomFilm_tableColumn" prefWidth="103.0" text="Nom du film" />
+                    <TableColumn fx:id="imageFilm_tableColumn" prefWidth="79.0" text="image" />
+                    <TableColumn fx:id="dureeFilm_tableColumn" prefWidth="60.0" text="duree" />
+                    <TableColumn fx:id="descriptionFilm_tableColumn" prefWidth="171.0" text="description" />
+                    <TableColumn fx:id="annederalisationFilm_tableColumn" prefWidth="88.0" text="annederealisation" />
+                    <TableColumn fx:id="idcategoryFilm_tableColumn" prefWidth="96.0" text="category" />
+                    <TableColumn fx:id="idacteurFilm_tableColumn" prefWidth="83.0" text="id acteur" />
+                    <TableColumn fx:id="idcinemaFilm_tableColumn" prefWidth="64.0" text="id cinema" />
+                    <TableColumn fx:id="Delete_Column" prefWidth="75.0" text="Delete" />
+                </columns>
+            </TableView>
+            <AnchorPane fx:id="Anchore_Pane_filtrage1" layoutX="-88.0" layoutY="-95.0" prefHeight="442.0" prefWidth="228.0" styleClass="bg-white" visible="false">
+                <children>
+                    <Button fx:id="bouttonAnchor_outfilltrer1" layoutX="71.0" layoutY="389.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="86.0" styleClass="sale" text="Filtrer" />
+                </children>
+            </AnchorPane>
+        </children>
+    </AnchorPane>
+    <Button layoutX="1222.0" layoutY="47.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="88.0" styleClass="sale" stylesheets="@styles/filmStyle.css" text="SEARCH" />
+    <Button layoutX="804.0" layoutY="52.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="110.0" styleClass="sale" text="Filter" />
+    <AnchorPane layoutX="256.0" layoutY="65.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="773.0" prefWidth="381.0" styleClass="bg-white" stylesheets="@styles/filmStyle.css">
+        <children>
+            <Label layoutX="31.0" layoutY="437.0" text="year ">
+                <font>
+                    <Font size="16.0" />
+                </font>
+            </Label>
+            <TextArea fx:id="annederealisationFilm_textArea" layoutX="164.0" layoutY="432.0" prefHeight="25.0" prefWidth="200.0" style="-fx-border-color: BLACK;" />
+            <Label layoutX="26.0" layoutY="486.0" text="categroy">
+                <font>
+                    <Font size="16.0" />
+                </font>
+            </Label>
+            <Label layoutX="20.0" layoutY="382.0" text="description">
+                <font>
+                    <Font size="16.0" />
+                </font>
+            </Label>
+            <TextArea fx:id="descriptionFilm_textArea" layoutX="162.0" layoutY="375.0" prefHeight="25.0" prefWidth="200.0" style="-fx-border-color: BLACK;" />
+            <Label layoutX="28.0" layoutY="534.0" text="Actors">
+                <font>
+                    <Font size="16.0" />
+                </font>
+            </Label>
+            <Label layoutX="22.0" layoutY="333.0" text="Time">
+                <font>
+                    <Font size="16.0" />
+                </font>
+            </Label>
+            <TextArea fx:id="dureeFilm_textArea" layoutX="162.0" layoutY="326.0" prefHeight="13.0" prefWidth="200.0" style="-fx-border-color: BLACK;" wrapText="true" />
+            <Label layoutX="21.0" layoutY="282.0" text="Name">
+                <font>
+                    <Font size="16.0" />
+                </font>
+            </Label>
+            <TextArea fx:id="nomFilm_textArea" layoutX="162.0" layoutY="275.0" prefHeight="13.0" prefWidth="200.0" style="-fx-border-color: BLACK;" wrapText="true" />
+            <Button layoutX="161.0" layoutY="199.0" mnemonicParsing="false" onAction="#importFilmImage" prefHeight="40.0" prefWidth="88.0" styleClass="sale" stylesheets="@styles/filmStyle.css" text="Selecet" />
+            <AnchorPane fx:id="image_view" layoutX="138.0" layoutY="14.0" prefHeight="167.0" prefWidth="141.0" styleClass="bg-white" stylesheets="@styles/filmStyle.css">
+                <children>
+                    <ImageView fx:id="imageFilm_ImageView" fitHeight="155.0" fitWidth="126.0" layoutX="8.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true" />
+                </children>
+            </AnchorPane>
+            <Label layoutX="30.0" layoutY="585.0" text="cinema">
+                <font>
+                    <Font size="16.0" />
+                </font>
+            </Label>
+            <CheckComboBox fx:id="idcinemaFilm_comboBox" layoutX="161.0" layoutY="582.0" prefHeight="35.0" prefWidth="202.0" />
+            <CheckComboBox fx:id="Categorychecj_ComboBox" layoutX="162.0" layoutY="480.0" prefHeight="37.0" prefWidth="201.0" />
+            <CheckComboBox fx:id="Actorcheck_ComboBox1" layoutX="162.0" layoutY="528.0" prefHeight="37.0" prefWidth="201.0" />
+            <HBox fx:id="addHbox" layoutX="138.0" layoutY="629.0" prefHeight="42.0" prefWidth="141.0" />
+            <Button fx:id="addButton" layoutX="113.0" layoutY="670.0" mnemonicParsing="false" onAction="#insertFilm" prefHeight="40.0" prefWidth="147.0" styleClass="sale" stylesheets="@styles/filmStyle.css" text="ADD" />
+        </children>
+    </AnchorPane>
+    <TextField fx:id="recherche_textField" layoutX="946.0" layoutY="47.0" prefHeight="42.0" prefWidth="248.0" promptText="Search here ......................">
+        <cursor>
+            <Cursor fx:constant="TEXT" />
+        </cursor>
+    </TextField>
+    <Button layoutX="1151.0" layoutY="55.0" mnemonicParsing="false" style="-fx-background-color: AE2D3C;">
+        <graphic>
+            <FontAwesomeIconView fill="#f5f5f5" glyphName="SEARCH" size="19" text="" textAlignment="RIGHT" />
+        </graphic>
+    </Button>
+</AnchorPane>

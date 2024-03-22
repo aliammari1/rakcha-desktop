@@ -1,0 +1,141 @@
+
+/* Styles par défaut */
+.top-form {
+    -fx-background-color: #fff;
+    -fx-border-color: #000;
+    -fx-border-width: .2px .2px .4px .2px;
+}
+
+.close, .minus {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
+
+.close:hover {
+    -fx-background-color: #e74141;
+}
+
+.minus:hover {
+    -fx-background-color: #dadada;
+}
+
+/* Media Query pour écrans plus petits */
+@media screen and (max-width: 600px) {
+    .top-form {
+        /* Ajustez les styles pour les écrans plus petits */
+        -fx-border-width: .1px .1px .2px .1px;
+    }
+    /* Ajoutez d'autres ajustements en fonction des besoins */
+}
+
+.nav-form {
+    -fx-background-color: linear-gradient(to top right, #624970, #ae2d3c, black);
+}
+
+.nav-btn {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+    -fx-text-fill: #fff;
+    -fx-font-size: 14px;
+}
+
+.nav-btn:hover {
+    -fx-background-color: #ae2d3c;
+}
+
+.signout {
+    -fx-background-color: #ae2d3c;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+}
+
+.signout:hover {
+    -fx-background-color: #d62651;
+}
+
+.bg-white {
+    -fx-background-color: #fff;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, .3), 8, 0, 0, 0);
+    -fx-background-radius: 8px;
+    -fx-border-color: linear-gradient(to top right,  #624970,#FCE19A,#ae2d3c); /* Couleur de la bordure rouge */
+    -fx-border-radius: 8px; /* Rayon de la bordure rouge */
+    -fx-border-width: 6px ;
+}
+
+.bg-white:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 8, 0, 0, 0);
+}
+
+.instert-btn {
+    -fx-background-color: #ae2d3c;
+    -fx-background-radius: 8px;
+    -fx-text-fill: #FCE19A;
+    -fx-font-size: 18px;
+    -fx-cursor: hand;
+    -fx-font-family: "Arial Rounded MT Bold";
+}
+.instert-btn-picture {
+    -fx-background-color:  #FCE19A;
+    -fx-background-radius: 8px;
+    -fx-text-fill: #624970;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+    -fx-font-family: "Arial Rounded MT Bold";
+}
+
+.instert-btn:hover {
+    -fx-background-color: #d62651;
+}
+
+.table-view {
+    -fx-background-color: #fff;
+    -fx-size: 15;
+    -fx-border-color: #ae2d3c;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-fill: #fff;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: linear-gradient(to top left, #1e242e, #ae2d3c);
+    -fx-background-insets: 0 0 0 0;
+    -fx-background-radius: 10px 0px 0px 0px;
+}
+
+.table-view .column-header, .table-view .filler {
+    -fx-background-color: transparent;
+    -fx-size: 50px;
+    -fx-fill: #fff;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #fff;
+}
+.text-field-red {
+    -fx-border-color: #800000; /* Couleur bordeaux */
+    -fx-border-radius: 20px; /* Rayon de la bordure arrondie */
+    -fx-background-radius: 20px; /* Rayon du fond arrondi */
+}
+.text-area-red {
+    -fx-border-color: #800000; /* Couleur bordeaux */
+    -fx-border-radius: 5px; /* Rayon de la bordure arrondie */
+    -fx-background-radius: 30px; /* Rayon du fond arrondi */
+}
+.combo-box-red {
+    -fx-background-color: #fff; /* Couleur de fond */
+    -fx-border-color: #800000; /* Couleur de la bordure */
+    -fx-border-radius: 5px; /* Rayon de la bordure arrondie */
+    -fx-background-radius: 5px; /* Rayon du fond arrondi */
+}
+
+.combo-box-red .arrow {
+    -fx-background-color: #800000; /* Couleur de la flèche déroulante */
+}
+
+.image-view-red {
+    -fx-border-color: #800000; /* Couleur de la bordure */
+    -fx-border-width: 2px; /* Largeur de la bordure */
+    -fx-border-radius: 5px; /* Rayon de la bordure arrondie */
+    -fx-background-radius: 5px; /* Rayon du fond arrondi */
+}
+
