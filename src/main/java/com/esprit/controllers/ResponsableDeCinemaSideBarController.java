@@ -1,7 +1,6 @@
 package com.esprit.controllers;
 
 import com.esprit.controllers.cinemas.CinemaStatisticsController;
-import com.esprit.controllers.cinemas.DashboardResponsableController;
 import com.esprit.controllers.films.ActorController;
 import com.esprit.controllers.films.FilmController;
 import com.esprit.controllers.series.CategorieController;
@@ -13,6 +12,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class ResponsableDeCinemaSideBarController {
 
@@ -42,7 +43,7 @@ public class ResponsableDeCinemaSideBarController {
             Stage stage = (Stage) actorButton.getScene().getWindow();
             stage.setScene(new Scene(root));
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -56,22 +57,18 @@ public class ResponsableDeCinemaSideBarController {
             Stage stage = (Stage) statestique_button.getScene().getWindow();
             stage.setScene(new Scene(root));
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
     @FXML
-    void switchToCinema(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/DashboardResponsableCinema.fxml"));
-            DashboardResponsableController seanceController = loader.getController();
-            seanceController.setData(resp);
-            Parent root = loader.load();
-            Stage stage = (Stage) cinemaButton.getScene().getWindow();
-            stage.setScene(new Scene(root));
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+    void switchToCinema(ActionEvent event) throws IOException {
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/DashboardResponsableCinema.fxml"));
+        Parent root = loader.load();
+        Stage stage = (Stage) cinemaButton.getScene().getWindow();
+        stage.setScene(new Scene(root));
+
     }
 
     @FXML
@@ -84,7 +81,7 @@ public class ResponsableDeCinemaSideBarController {
             Stage stage = (Stage) filmCategorieButton.getScene().getWindow();
             stage.setScene(new Scene(root));
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -98,7 +95,7 @@ public class ResponsableDeCinemaSideBarController {
             Stage stage = (Stage) movieButton.getScene().getWindow();
             stage.setScene(new Scene(root));
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -106,13 +103,11 @@ public class ResponsableDeCinemaSideBarController {
     void switchToSeances(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/DashboardResponsableCinema.fxml"));
-            DashboardResponsableController seanceController = loader.getController();
-            seanceController.setData(resp);
             Parent root = loader.load();
             Stage stage = (Stage) seanceButton.getScene().getWindow();
             stage.setScene(new Scene(root));
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 

@@ -29,7 +29,7 @@ public class SalleService implements IService<Salle> {
             pst.executeUpdate();
             System.out.println("Salle ajoutée !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -44,7 +44,7 @@ public class SalleService implements IService<Salle> {
             pst.executeUpdate();
             System.out.println("Salle modifiée !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -56,7 +56,7 @@ public class SalleService implements IService<Salle> {
             pst.executeUpdate();
             System.out.println("Salle supprmiée !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -71,7 +71,7 @@ public class SalleService implements IService<Salle> {
                 salles.add(new Salle(rs.getInt("id_salle"), rs.getInt("id_cinema"), rs.getInt("nb_places"), rs.getString("nom_salle")));
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return salles;
@@ -90,7 +90,7 @@ public class SalleService implements IService<Salle> {
             salle = new Salle(rs.getInt("id_salle"), rs.getInt("id_cinema"), rs.getInt("nb_places"), rs.getString("nom_salle"));
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return salle;
@@ -109,7 +109,7 @@ public class SalleService implements IService<Salle> {
             salle = new Salle(rs.getInt("id_salle"), rs.getInt("id_cinema"), rs.getInt("nb_places"), rs.getString("nom_salle"));
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return salle;

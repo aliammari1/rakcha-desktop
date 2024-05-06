@@ -1,14 +1,12 @@
 package com.esprit.controllers.cinemas;
 
 import com.esprit.models.cinemas.Cinema;
-import com.esprit.models.cinemas.CommentaireCinema;
 import com.esprit.models.cinemas.Salle;
 import com.esprit.models.cinemas.Seance;
 import com.esprit.models.films.Film;
 import com.esprit.models.films.Filmcinema;
 import com.esprit.models.users.Responsable_de_cinema;
 import com.esprit.services.cinemas.CinemaService;
-import com.esprit.services.cinemas.CommentaireCinemaService;
 import com.esprit.services.cinemas.SalleService;
 import com.esprit.services.cinemas.SeanceService;
 import com.esprit.services.films.FilmService;
@@ -57,7 +55,10 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 public class DashboardResponsableController implements Initializable {
@@ -134,12 +135,17 @@ public class DashboardResponsableController implements Initializable {
 
     @FXML
     private Button showStat;
-
     @FXML
     private PieChart pieChart;
 
-
-
+    @FXML
+    public void showSeance(ActionEvent event) {
+        sessionFormPane.setVisible(true);
+        SessionTableView.setVisible(true);
+        cinemaFormPane.setVisible(false);
+        cinemaFlowPane.setVisible(false);
+        cinemaListPane.setVisible(false);
+    }
 
     public void setData(Responsable_de_cinema resp) {
         this.responsableDeCinema = resp;
@@ -186,7 +192,7 @@ public class DashboardResponsableController implements Initializable {
                 Image selectedImage = new Image(destinationFilePath.toUri().toString());
                 image.setImage(selectedImage);
             } catch (IOException e) {
-                System.out.println(e.getMessage());
+                e.printStackTrace();
             }
         }
     }
@@ -202,7 +208,7 @@ public class DashboardResponsableController implements Initializable {
         SessionTableView.setVisible(false);
         addRoomForm.setVisible(false);
         RoomTableView.setVisible(false);
-        showStat.setVisible(true);
+        //showStat.setVisible(true);
 
 
         for (Cinema c : acceptedCinemas) {
@@ -1170,7 +1176,6 @@ public class DashboardResponsableController implements Initializable {
         stage.show();
         currentStage.close();
     }
-
 
 
 }

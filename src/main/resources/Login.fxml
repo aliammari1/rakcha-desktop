@@ -10,9 +10,11 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.web.WebView?>
 
 <AnchorPane prefHeight="520.0" prefWidth="929.0" stylesheets="@styles/signup.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.users.LoginController">
-    <AnchorPane layoutX="467.0" prefHeight="520.0" prefWidth="468.0" styleClass="leftSideBar">
+   <WebView fx:id="fireAnimationWebView" layoutX="467.0" prefHeight="520.0" prefWidth="469.0" />
+    <AnchorPane layoutX="467.0" opacity="0.14" prefHeight="520.0" prefWidth="468.0" styleClass="leftSideBar">
         <Label layoutX="97.0" layoutY="122.0" prefHeight="58.0" prefWidth="318.0" text="Welcome to Rakcha" textFill="WHITE">
             <font>
                 <Font name="Outfit SemiBold" size="35.0" />
@@ -68,18 +70,18 @@
         </Label>
         <CheckBox id="rememberMe" layoutX="74.0" layoutY="404.0" mnemonicParsing="false" text="Remember Me" />
         <Hyperlink fx:id="forgetPasswordHyperlink" layoutX="266.0" layoutY="401.0" text="Forgot Password" />
-        <Button layoutX="323.0" layoutY="37.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="44.0" styleClass="subLogin">
+        <Button fx:id="googleSIgnInButton" layoutX="323.0" layoutY="37.0" mnemonicParsing="false" onAction="#signInWithGoogle" prefHeight="42.0" prefWidth="44.0" styleClass="subLogin">
             <graphic>
-                <FontAwesomeIconView fill="WHITE" glyphName="TWITTER" size="28" />
+                <FontAwesomeIconView fill="WHITE" glyphName="GOOGLE" size="28" />
             </graphic>
         </Button>
-        <Button layoutX="270.0" layoutY="37.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="44.0" styleClass="subLogin">
+        <Button fx:id="microsoftSignInButton" layoutX="270.0" layoutY="37.0" mnemonicParsing="false" onAction="#signInWithMicrosoft" prefHeight="42.0" prefWidth="44.0" styleClass="subLogin">
             <graphic>
-                <FontAwesomeIconView fill="WHITE" glyphName="FACEBOOK" size="28" text="" wrappingWidth="17.60003626346588" />
+                <FontAwesomeIconView fill="WHITE" glyphName="WINDOWS" size="28" text="M" wrappingWidth="23.60003626346588" />
             </graphic>
         </Button>
         <Label fx:id="emailErrorLabel" layoutX="88.0" layoutY="192.0" prefHeight="18.0" prefWidth="271.0" textFill="RED" />
         <Label fx:id="passwordErrorLabel" layoutX="88.0" layoutY="289.0" prefHeight="18.0" prefWidth="271.0" textFill="RED" />
-      <Hyperlink fx:id="forgetPasswordEmailHyperlink" layoutX="159.0" layoutY="444.0" text="Forgot Password email" />
+        <Hyperlink fx:id="forgetPasswordEmailHyperlink" layoutX="159.0" layoutY="444.0" text="Forgot Password email" />
     </AnchorPane>
 </AnchorPane>

@@ -8,7 +8,6 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Connection;
-import java.sql.SQLException;
 
 public class Chat {
 
@@ -18,12 +17,29 @@ public class Chat {
         connection = DataSource.getInstance().getConnection();
     }
 
+    public static String extractContentFromResponse(String response) {
+        int startMarker = response.indexOf("content") + 11; // Marqueur pour le début du contenu
+        int endMarker = response.indexOf("\"", startMarker); // Marqueur pour la fin du contenu
+        return response.substring(startMarker, endMarker); // Retourner la sous-chaîne contenant uniquement la réponse
+    }
+
+   /* public String badword(String message) {
+        String question = "detecter si le discours de contenu de la publication est haineux ou non si il ya haineux votre reponse doit etre 100% correcte afficher 1 si non afficher 0 just dit 0 ou 1 idont need anything else  " + message ;
+        try {
+            String completion = chatGPT(question);
+            return completion;
+        } catch (RuntimeException e) {
+            // Gérer les erreurs liées à l'API ChatGPT
+            System.err.println("Erreur lors de la détection de mots grossiers : " + e.getMessage());
+            return "-1"; // Retourner une valeur d'erreur spécifique
+        }
+    }*/
 
     public String chatGPT(String message) {
-        String apiKey="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";
+        String apiKey = "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";
         String model = "gpt-3.5-turbo";
-//String url = "https://api.openai.com/v1/chat/completions";
-String url ="https://api.openai.com/v1/chat/completions";
+        //String url = "https://api.openai.com/v1/chat/completions";
+        String url = "https://api.openai.com/v1/chat/completions";
         try {
             // Créer la requête HTTP POST
             URL obj = new URL(url);
@@ -66,38 +82,19 @@ String url ="https://api.openai.com/v1/chat/completions";
             throw new RuntimeException("Erreur lors de l'envoi de la requête à l'API ChatGPT : " + e.getMessage(), e);
 
 
-
         }
     }
 
-   /* public String badword(String message) {
-        String question = "detecter si le discours de contenu de la publication est haineux ou non si il ya haineux votre reponse doit etre 100% correcte afficher 1 si non afficher 0 just dit 0 ou 1 idont need anything else  " + message ;
+    public String badword(String message) {
+        String question = "detecter si le discours de contenu de la publication est haineux ou non si il ya haineux votre reponse doit etre 100% correcte afficher 1 si non afficher 0 just dit 0 ou 1 idont need anything else " + message;
         try {
             String completion = chatGPT(question);
-            return completion;
+            return completion.trim(); // Assurez-vous de supprimer les espaces inutiles autour de la réponse
+
         } catch (RuntimeException e) {
             // Gérer les erreurs liées à l'API ChatGPT
             System.err.println("Erreur lors de la détection de mots grossiers : " + e.getMessage());
             return "-1"; // Retourner une valeur d'erreur spécifique
         }
-    }*/
-
-   public String badword(String message) {
-       String question = "detecter si le discours de contenu de la publication est haineux ou non si il ya haineux votre reponse doit etre 100% correcte afficher 1 si non afficher 0 just dit 0 ou 1 idont need anything else " + message;
-       try {
-           String completion = chatGPT(question);
-           return completion.trim(); // Assurez-vous de supprimer les espaces inutiles autour de la réponse
-
-       } catch (RuntimeException e) {
-           // Gérer les erreurs liées à l'API ChatGPT
-           System.err.println("Erreur lors de la détection de mots grossiers : " + e.getMessage());
-           return "-1"; // Retourner une valeur d'erreur spécifique
-       }
-   }
-
-    public static String extractContentFromResponse(String response) {
-        int startMarker = response.indexOf("content")+11; // Marqueur pour le début du contenu
-        int endMarker = response.indexOf("\"", startMarker); // Marqueur pour la fin du contenu
-        return response.substring(startMarker, endMarker); // Retourner la sous-chaîne contenant uniquement la réponse
     }
 }

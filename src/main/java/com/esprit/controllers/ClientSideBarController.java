@@ -33,7 +33,7 @@ public class ClientSideBarController {
             System.out.println("---------" + stage.getUserData());
             stage.setScene(new Scene(root));
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -46,7 +46,7 @@ public class ClientSideBarController {
             System.out.println("---------" + stage.getUserData());
             stage.setScene(new Scene(root));
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -59,7 +59,7 @@ public class ClientSideBarController {
             System.out.println("---------" + stage.getUserData());
             stage.setScene(new Scene(root));
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -72,7 +72,7 @@ public class ClientSideBarController {
             System.out.println("---------" + stage.getUserData());
             stage.setScene(new Scene(root));
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -85,7 +85,7 @@ public class ClientSideBarController {
             System.out.println("---------" + stage.getUserData());
             stage.setScene(new Scene(root));
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 

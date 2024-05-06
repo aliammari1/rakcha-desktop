@@ -36,7 +36,7 @@ public class AvisService implements IService<Avis> {
             pst.executeUpdate();
             System.out.println("avis ajoutée !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -60,7 +60,7 @@ public class AvisService implements IService<Avis> {
                 avisList.add(avis);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return avisList;
     }
@@ -78,7 +78,7 @@ public class AvisService implements IService<Avis> {
             pst.executeUpdate();
             System.out.println("avis modifiée !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
     }
@@ -94,7 +94,7 @@ public class AvisService implements IService<Avis> {
             pst.executeUpdate();
             System.out.println("avis supprmiée !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
     }
@@ -109,7 +109,7 @@ public class AvisService implements IService<Avis> {
             resultSet.next();
             aver = resultSet.getDouble("averageRate");
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return aver;
     }
@@ -123,7 +123,7 @@ public class AvisService implements IService<Avis> {
             while (resultSet.next())
                 avis.add(new Avis(null, (int) resultSet.getDouble("averageRate"), new ProduitService().getProduitById(resultSet.getInt("id_ptoduit"))));
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return avis;
     }
@@ -139,7 +139,7 @@ public class AvisService implements IService<Avis> {
             if (resultSet.next())
                 rate = new Avis((Client) new UserService().getUserById(iduseres), (int) resultSet.getDouble("averageRate"), new ProduitService().getProduitById(resultSet.getInt("id_ptoduit")));
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return rate;
     }

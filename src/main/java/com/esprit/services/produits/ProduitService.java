@@ -37,7 +37,7 @@ public class ProduitService implements IService<Produit> {
             pst.executeUpdate();
             System.out.println("Produit ajoutée !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
     }
@@ -58,7 +58,7 @@ public class ProduitService implements IService<Produit> {
                 i++;
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return produits;
@@ -91,7 +91,7 @@ public class ProduitService implements IService<Produit> {
                 ));
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return produits;
@@ -117,7 +117,7 @@ public class ProduitService implements IService<Produit> {
             pst.executeUpdate();
             System.out.println("produit modifiée !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
     }
@@ -132,7 +132,7 @@ public class ProduitService implements IService<Produit> {
             pst.executeUpdate();
             System.out.println("produit supprmiée !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
     }
@@ -162,7 +162,7 @@ public class ProduitService implements IService<Produit> {
             }
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return produit;
@@ -192,7 +192,7 @@ public class ProduitService implements IService<Produit> {
                 prixProduit = rs.getDouble("prix");
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return prixProduit;
@@ -221,7 +221,7 @@ public class ProduitService implements IService<Produit> {
                 produits.add(produit);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return produits;

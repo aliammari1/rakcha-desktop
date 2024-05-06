@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.sql.Date;
 
 public class ProfileController {
-
     User user;
     @FXML
     private TextField adresseTextField;

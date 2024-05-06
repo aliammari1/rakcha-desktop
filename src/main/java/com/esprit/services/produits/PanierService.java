@@ -36,7 +36,7 @@ public class PanierService implements IService<Panier> {
             pst.executeUpdate();
             System.out.println("panier remplit !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
     }
@@ -82,7 +82,7 @@ public class PanierService implements IService<Panier> {
             pst.executeUpdate();
             System.out.println("panier modifiée !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
     }
@@ -97,7 +97,7 @@ public class PanierService implements IService<Panier> {
             pst.executeUpdate();
             System.out.println("panier supprmiée !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
 

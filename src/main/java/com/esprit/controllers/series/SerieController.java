@@ -555,7 +555,7 @@ public class SerieController {
 
             } catch (Exception e) {
                 showAlert("Error", "An error occurred while saving the serie: " + e.getMessage());
-                System.out.println(e.getMessage());
+                e.printStackTrace();
 
             }
         }

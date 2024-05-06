@@ -52,7 +52,7 @@ public class ActorfilmService implements IService<Actorfilm> {
                 //       i++;
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return actorfilmArrayList;
@@ -69,7 +69,7 @@ public class ActorfilmService implements IService<Actorfilm> {
         try {
             PreparedStatement statement = connection.prepareStatement(req);
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -84,7 +84,7 @@ public class ActorfilmService implements IService<Actorfilm> {
             statement.setInt(1, film.getId());
             statement.executeUpdate();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         String req = "INSERT INTO actorfilm (idfilm, idactor) VALUES (?,?)";
         try {
@@ -117,7 +117,7 @@ public class ActorfilmService implements IService<Actorfilm> {
             System.out.println(rs.getMetaData());
             s = rs.getString("actorNames");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return s;
     }

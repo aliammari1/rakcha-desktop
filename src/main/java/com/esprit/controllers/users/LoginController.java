@@ -10,11 +10,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutionException;
 
 public class LoginController implements Initializable {
 
@@ -29,6 +31,8 @@ public class LoginController implements Initializable {
 
     @FXML
     private Hyperlink forgetPasswordHyperlink;
+    @FXML
+    private WebView fireAnimationWebView;
 
     @FXML
     private Label passwordErrorLabel;
@@ -41,7 +45,34 @@ public class LoginController implements Initializable {
 
     @FXML
     private Button signUpButton;
+    @FXML
+    private Button googleSIgnInButton;
+    @FXML
+    private Button microsoftSignInButton;
 
+    @FXML
+    void signInWithGoogle(ActionEvent event) throws IOException, ExecutionException, InterruptedException {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/VerifyWithGoogle.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) googleSIgnInButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void signInWithMicrosoft(ActionEvent event) throws IOException, ExecutionException, InterruptedException {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/VerifyWithMicrosoft.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) microsoftSignInButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @FXML
     void login(ActionEvent event) throws IOException {
@@ -53,11 +84,19 @@ public class LoginController implements Initializable {
             Stage stage = (Stage) signInButton.getScene().getWindow();
             stage.setUserData(user);
             if (user.getRole().equals("admin")) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/AdminDashboard.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/ProfileAdmin.fxml"));
                 Parent root = loader.load();
+                ProfileController profileController = loader.getController();
+                profileController.setData(user);
                 stage.setScene(new Scene(root));
-            } else {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/Profile.fxml"));
+            } else if (user.getRole().equals("client")) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/ProfileClient.fxml"));
+                Parent root = loader.load();
+                ProfileController profileController = loader.getController();
+                profileController.setData(user);
+                stage.setScene(new Scene(root));
+            } else if (user.getRole().equals("responsable de cinema")) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/ProfileResp.fxml"));
                 Parent root = loader.load();
                 ProfileController profileController = loader.getController();
                 profileController.setData(user);
@@ -79,6 +118,7 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        fireAnimationWebView.getEngine().load("https://particles.js.org/samples/presets/fire.html");
         forgetPasswordHyperlink.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {

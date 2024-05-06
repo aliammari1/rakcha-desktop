@@ -38,7 +38,7 @@ public class FilmYoutubeTrailer {
             return "https://www.youtube.com/embed/" + videoId;
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return "https://www.youtube.com";
     }

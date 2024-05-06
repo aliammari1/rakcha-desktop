@@ -33,7 +33,7 @@ public class ParticipationService implements IService<Participation> {
             pst.executeUpdate();
             System.out.println("Participation added !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -50,7 +50,7 @@ public class ParticipationService implements IService<Participation> {
             pst.executeUpdate();
             System.out.println("Participation Updated !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
     }
@@ -65,7 +65,7 @@ public class ParticipationService implements IService<Participation> {
             pst.executeUpdate();
             System.out.println("Participation Deleted !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
     }
@@ -85,7 +85,7 @@ public class ParticipationService implements IService<Participation> {
 
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return participations;
@@ -105,7 +105,7 @@ public class ParticipationService implements IService<Participation> {
 
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return participations;
 

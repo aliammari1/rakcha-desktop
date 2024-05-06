@@ -53,7 +53,7 @@ public class CommentaireService implements IService<Commentaire> {
                 commentaire.add(new Commentaire(rs.getInt("idcommentaire"), (Client) new UserService().getUserById(rs.getInt("idClient")), rs.getString("commentaire"), produitsevice.getProduitById(rs.getInt("idProduit")), rs.getDate("datecommantaire")));
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return commentaire;
@@ -94,7 +94,7 @@ public class CommentaireService implements IService<Commentaire> {
                 );
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return commentaire;
@@ -122,7 +122,7 @@ public class CommentaireService implements IService<Commentaire> {
                 commentaires.add(commentaire);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return commentaires;

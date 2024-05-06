@@ -3,6 +3,7 @@ package com.esprit.controllers.evenements;
 
 import com.esprit.models.evenements.weather.ImageHandler;
 import com.esprit.models.evenements.weather.WeatherManager;
+import com.esprit.models.users.Client;
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
@@ -14,6 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.net.URL;
@@ -34,7 +36,9 @@ public class MeteoEventController implements Initializable {
 
     //Constructor to set the initial city to Pune
     public MeteoEventController() {
-        this.citySet = "sfax".toUpperCase();
+        Stage stage = (Stage) invis.getScene().getWindow();
+        Client client = (Client) stage.getUserData();
+        this.citySet = client.getAddress().toUpperCase();
     }
 
     //Event Handler for each button

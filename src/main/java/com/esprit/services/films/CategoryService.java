@@ -90,7 +90,7 @@ public class CategoryService implements IService<Category> {
             rs.next();
             category = new Category(rs.getInt("id"), rs.getString("nom"), rs.getString("description"));
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return category;
     }
@@ -105,7 +105,7 @@ public class CategoryService implements IService<Category> {
             rs.next();
             category = new Category(rs.getInt("id"), rs.getString("nom"), rs.getString("description"));
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return category;
     }

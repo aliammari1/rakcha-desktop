@@ -55,7 +55,7 @@ public class FilmcategoryService implements IService<Filmcategory> {
                 //       i++;
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return filmcategoryArrayList;
@@ -73,7 +73,7 @@ public class FilmcategoryService implements IService<Filmcategory> {
             statement.setInt(1, filmcategory.getFilmId().getId());
             statement.executeUpdate();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         String req = "INSERT INTO filmcategory (film_id, category_id) VALUES (?,?)";
         try {
@@ -101,7 +101,7 @@ public class FilmcategoryService implements IService<Filmcategory> {
             statement.setInt(1, film.getId());
             statement.executeUpdate();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         String req = "INSERT INTO filmcategory (film_id, category_id) VALUES (?,?)";
         try {
@@ -112,7 +112,7 @@ public class FilmcategoryService implements IService<Filmcategory> {
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
@@ -133,7 +133,7 @@ public class FilmcategoryService implements IService<Filmcategory> {
             rs.next();
             s = rs.getString("categoryNames");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return s;
     }

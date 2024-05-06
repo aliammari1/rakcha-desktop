@@ -34,7 +34,7 @@ public class CategorieService implements IService<Categorie_Produit> {
             pst.executeUpdate();
             System.out.println("Categorie ajoutée !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -51,7 +51,7 @@ public class CategorieService implements IService<Categorie_Produit> {
                 categories.add(new Categorie_Produit(rs.getInt("id_categorie"), rs.getString("nom_categorie"), rs.getString("description")));
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return categories;
@@ -69,7 +69,7 @@ public class CategorieService implements IService<Categorie_Produit> {
             pst.executeUpdate();
             System.out.println("categorie modifiée !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
     }
@@ -83,7 +83,7 @@ public class CategorieService implements IService<Categorie_Produit> {
             pst.executeUpdate();
             System.out.println("categorie supprmiée !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -101,7 +101,7 @@ public class CategorieService implements IService<Categorie_Produit> {
             category = new Categorie_Produit(rs.getInt("id_categorie"), rs.getString("nom_categorie"), rs.getString("description"));
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return category;
@@ -120,7 +120,7 @@ public class CategorieService implements IService<Categorie_Produit> {
             category = new Categorie_Produit(rs.getInt("id_categorie"), rs.getString("nom_categorie"), rs.getString("description"));
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return category;

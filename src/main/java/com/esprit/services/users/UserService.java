@@ -33,7 +33,7 @@ public class UserService implements IService<User> {
             preparedStatement.setInt(1, id);
             user = getUserRow(preparedStatement);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return user;
     }
@@ -55,7 +55,7 @@ public class UserService implements IService<User> {
             statement.executeUpdate();
             System.out.println("user was added");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -67,7 +67,7 @@ public class UserService implements IService<User> {
             PreparedStatement statement = this.con.prepareStatement(query);
             return this.getUsers(userList, statement);
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return null;
     }
@@ -91,7 +91,7 @@ public class UserService implements IService<User> {
             statement.executeUpdate();
             System.out.println("user is updated");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -103,7 +103,7 @@ public class UserService implements IService<User> {
             statement.executeUpdate();
             System.out.println("user is deleted");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -123,7 +123,7 @@ public class UserService implements IService<User> {
             PreparedStatement statement = this.con.prepareStatement(query);
             return this.getUsers(userList, statement);
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return null;
     }
@@ -199,7 +199,7 @@ public class UserService implements IService<User> {
             statement.executeUpdate();
             System.out.println("user password is updated");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -216,7 +216,7 @@ public class UserService implements IService<User> {
                 alert.show();
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -279,7 +279,7 @@ public class UserService implements IService<User> {
             statement.setString(2, password);
             user = getUserRow(statement);
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return user;
     }

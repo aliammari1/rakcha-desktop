@@ -165,5 +165,6 @@
             </children>
         </AnchorPane>
         <AnchorPane fx:id="StatisticsAnchor" layoutX="231.0" layoutY="15.0" prefHeight="721.0" prefWidth="1034.0" visible="false" />
+      <Button layoutX="292.0" layoutY="15.0" mnemonicParsing="false" onAction="#showSeance" styleClass="sale" stylesheets="@styles/filmStyle.css" text="Seance" />
     </children>
 </AnchorPane>

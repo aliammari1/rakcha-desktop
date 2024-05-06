@@ -109,7 +109,7 @@ public class ActorController {
                 Image selectedImage = new Image(destinationFilePath.toUri().toString());
                 imageAcotr_ImageView1.setImage(selectedImage);
             } catch (IOException e) {
-                System.out.println(e.getMessage());
+                e.printStackTrace();
             }
         }
     }
@@ -146,7 +146,7 @@ public class ActorController {
                     updateActor(event.getTableView().getItems().get(
                             event.getTablePosition().getRow()));
                 } catch (Exception e) {
-                    System.out.println(e.getMessage());
+                    e.printStackTrace();
                 }
             }
         });
@@ -159,7 +159,7 @@ public class ActorController {
                     updateActor(event.getTableView().getItems().get(
                             event.getTablePosition().getRow()));
                 } catch (Exception e) {
-                    System.out.println(e.getMessage());
+                    e.printStackTrace();
                 }
             }
         });
@@ -260,12 +260,12 @@ public class ActorController {
                                         new ActorService().update(new Actor(null, destinationFilePath.toUri().toString(), null));
                                     }
                                 } catch (Exception e) {
-                                    System.out.println(e.getMessage());
+                                    e.printStackTrace();
                                 }
                             }
                         });
                     } catch (Exception e) {
-                        System.out.println(e.getMessage());
+                        e.printStackTrace();
                     }
                     return new SimpleObjectProperty<HBox>(hBox);
                 }
@@ -274,7 +274,7 @@ public class ActorController {
             ObservableList<Actor> obC = FXCollections.observableArrayList(categoryService.read());
             filmActor_tableView11.setItems(obC);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -299,7 +299,7 @@ public class ActorController {
             Scene scene = new Scene(root, 1280, 700);
             stage.setScene(scene);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 }

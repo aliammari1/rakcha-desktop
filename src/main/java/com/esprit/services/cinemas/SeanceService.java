@@ -34,7 +34,7 @@ public class SeanceService implements IService<Seance> {
             pst.executeUpdate();
             System.out.println("Seance ajoutée !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -59,7 +59,7 @@ public class SeanceService implements IService<Seance> {
             pst.executeUpdate();
             System.out.println("Seance modifiée !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -72,7 +72,7 @@ public class SeanceService implements IService<Seance> {
             pst.executeUpdate();
             System.out.println("Seance supprmiée !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -93,7 +93,7 @@ public class SeanceService implements IService<Seance> {
                 seances.add(new Seance(rs.getInt("id_seance"), ss.getSalle(rs.getInt("id_salle")), rs.getTime("HD"), rs.getTime("HF"), rs.getDate("date"), rs.getInt("prix"), new Filmcinema(fs.getFilm(rs.getInt("id_film")), cs.getCinema(rs.getInt("id_cinema")))));
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return seances;
@@ -118,7 +118,7 @@ public class SeanceService implements IService<Seance> {
                 seances.add(new Seance(rs.getInt("id_seance"), ss.getSalle(rs.getInt("id_salle")), rs.getTime("HD"), rs.getTime("HF"), rs.getDate("date"), rs.getInt("prix"), new Filmcinema(fs.getFilm(rs.getInt("id_film")), cs.getCinema(rs.getInt("id_cinema")))));
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return seances;
@@ -163,7 +163,6 @@ public class SeanceService implements IService<Seance> {
     }
 
 
-
     public List<Seance> getSeancesByDate(LocalDate date) {
         // Exemple de liste de séances fictive
         List<Seance> seances = new ArrayList<>();
@@ -187,7 +186,6 @@ public class SeanceService implements IService<Seance> {
         // Retourner la liste des séances pour la date spécifiée
         return seances;
     }
-
 
 
 }

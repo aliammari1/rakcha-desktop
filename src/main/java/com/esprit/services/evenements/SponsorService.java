@@ -30,7 +30,7 @@ public class SponsorService implements IService<Sponsor> {
             pst.executeUpdate();
             System.out.println("Sponsor ajouté !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -45,7 +45,7 @@ public class SponsorService implements IService<Sponsor> {
             pst.executeUpdate();
             System.out.println("Sponsor modifié !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -58,7 +58,7 @@ public class SponsorService implements IService<Sponsor> {
             pst.executeUpdate();
             System.out.println("Sponsor supprimé !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -74,7 +74,7 @@ public class SponsorService implements IService<Sponsor> {
                 sponsors.add(new Sponsor(rs.getInt("ID"), rs.getString("NomSociete"), rs.getBlob("Logo")));
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return sponsors;
