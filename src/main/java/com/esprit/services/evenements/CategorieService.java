@@ -32,7 +32,7 @@ public class CategorieService implements IService<Categorie_evenement> {
             pst.executeUpdate();
             System.out.println("Categorie ajoutée !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -47,7 +47,7 @@ public class CategorieService implements IService<Categorie_evenement> {
             pst.executeUpdate();
             System.out.println("categorie modifiée !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
     }
@@ -61,7 +61,7 @@ public class CategorieService implements IService<Categorie_evenement> {
             pst.executeUpdate();
             System.out.println("categorie supprimée !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -78,7 +78,7 @@ public class CategorieService implements IService<Categorie_evenement> {
                 categories.add(new Categorie_evenement(rs.getInt("ID"), rs.getString("Nom_Categorie"), rs.getString("Description")));
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return categories;
@@ -97,7 +97,7 @@ public class CategorieService implements IService<Categorie_evenement> {
             category = new Categorie_evenement(rs.getInt("ID"), rs.getString("Nom_Categorie"), rs.getString("Description"));
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return category;
@@ -116,7 +116,7 @@ public class CategorieService implements IService<Categorie_evenement> {
             category = new Categorie_evenement(rs.getInt("id"), rs.getString("nom_categorie"), rs.getString("description"));
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return category;

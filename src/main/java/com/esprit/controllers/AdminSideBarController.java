@@ -1,22 +1,24 @@
 package com.esprit.controllers;
 
-import com.esprit.controllers.cinemas.DashboardAdminController;
-import com.esprit.controllers.evenements.DesignCategorieAdminController;
-import com.esprit.controllers.films.FilmController;
-import com.esprit.controllers.produits.DesignProduitAdminContoller;
-import com.esprit.controllers.series.SerieClientController;
 import com.esprit.models.users.Admin;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
-public class AdminSideBarController {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class AdminSideBarController implements Initializable {
 
     Admin admin;
+    @FXML
+    private WebView webView;
     @FXML
     private Button cinemaButton;
     @FXML
@@ -32,13 +34,13 @@ public class AdminSideBarController {
     void switchToEvent(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignEvenementAdmin.fxml"));
-            DesignCategorieAdminController seanceController = loader.getController();
+            //    DesignCategorieAdminController seanceController = loader.getController();
             //seanceController.setData(admin);
             Parent root = loader.load();
             Stage stage = (Stage) eventButton.getScene().getWindow();
             stage.setScene(new Scene(root));
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -46,13 +48,13 @@ public class AdminSideBarController {
     void switchToMovies(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ListeCommande.fxml"));
-            FilmController seanceController = loader.getController();
+            // FilmController seanceController = loader.getController();
             // seanceController.setData(admin);
             Parent root = loader.load();
             Stage stage = (Stage) movieButton.getScene().getWindow();
             stage.setScene(new Scene(root));
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -60,27 +62,27 @@ public class AdminSideBarController {
     void switchToProducts(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignProduitAdmin.fxml"));
-            DesignProduitAdminContoller seanceController = loader.getController();
+            // DesignProduitAdminContoller seanceController = loader.getController();
             // seanceController.setData(admin);
             Parent root = loader.load();
             Stage stage = (Stage) productButton.getScene().getWindow();
             stage.setScene(new Scene(root));
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
     @FXML
     void switchToSeries(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/SeriesClient.fxml"));
-            SerieClientController seanceController = loader.getController();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Categorie-view.fxml"));
+            //SerieClientController seanceController = loader.getController();
             // seanceController.setData(admin);
             Parent root = loader.load();
             Stage stage = (Stage) serieButton.getScene().getWindow();
             stage.setScene(new Scene(root));
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -89,14 +91,18 @@ public class AdminSideBarController {
     void switchtcinema(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/DashboardAdminCinema.fxml"));
-            DashboardAdminController seanceController = loader.getController();
+            //DashboardAdminController seanceController = loader.getController();
             //  seanceController.setData(admin);
             Parent root = loader.load();
             Stage stage = (Stage) cinemaButton.getScene().getWindow();
             stage.setScene(new Scene(root));
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        webView.getEngine().load("https://particles.js.org/samples/presets/fire.html");
+    }
 }

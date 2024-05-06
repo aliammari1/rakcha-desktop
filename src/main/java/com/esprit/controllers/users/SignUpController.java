@@ -407,7 +407,7 @@ public class SignUpController {
                 Image selectedImage = new Image(destinationFilePath.toUri().toString());
                 photoDeProfilImageView.setImage(selectedImage);
             } catch (IOException e) {
-                System.out.println(e.getMessage());
+                e.printStackTrace();
             }
         }
 

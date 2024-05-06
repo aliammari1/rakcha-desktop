@@ -30,7 +30,7 @@ public class RatingCinemaService implements IService<RatingCinema> {
             statement.executeUpdate();
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -54,7 +54,7 @@ public class RatingCinemaService implements IService<RatingCinema> {
             preparedStatement.setInt(2, ratingCinema.getId_user().getId());
             preparedStatement.executeUpdate();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
 
@@ -70,7 +70,7 @@ public class RatingCinemaService implements IService<RatingCinema> {
                 return resultSet.getDouble("average");
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return 0; // Retourne 0 si aucun résultat n'est trouvé ou s'il y a une exception
     }

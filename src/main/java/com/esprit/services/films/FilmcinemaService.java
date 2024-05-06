@@ -52,7 +52,7 @@ public class FilmcinemaService implements IService<Filmcinema> {
                 actorfilmArrayList.add(new Filmcinema(new Film(rs.getInt("film.id"), rs.getString("film.nom"), rs.getString("image"), rs.getTime("duree"), rs.getString("film.description"), rs.getInt("annederalisation")), new Cinema(rs.getInt("cinema.id_cinema"), rs.getString("cinemaNames"), rs.getString("cinema.adresse"), (Responsable_de_cinema) new UserService().getUserById(rs.getInt("responsable")), rs.getString("cinema.logo"), rs.getString("cinema.Statut"))));
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return actorfilmArrayList;
@@ -79,7 +79,7 @@ public class FilmcinemaService implements IService<Filmcinema> {
             statement.setInt(1, film.getId());
             statement.executeUpdate();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         String req = "INSERT INTO filmcinema (id_film, id_cinema) VALUES (?,?)";
         try {
@@ -105,7 +105,7 @@ public class FilmcinemaService implements IService<Filmcinema> {
             // int i = 0;
             s = rs.next() ? rs.getString("cinemaNames") : "";
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return s;
     }

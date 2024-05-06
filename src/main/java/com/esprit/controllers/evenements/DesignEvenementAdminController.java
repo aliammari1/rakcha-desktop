@@ -108,16 +108,36 @@ public class DesignEvenementAdminController {
         for (Categorie_evenement c : cs.read()) {
             cbCategorie.getItems().add(c.getNom_categorie());
         }
-       /* SearchBar.textProperty().addListener((observable, oldValue, newValue) -> {
-            filterCategorieEvenements(newValue.trim());
+        SearchBar.textProperty().addListener((observable, oldValue, newValue) -> {
+            search(newValue);
+            //filterCategorieEvenements(newValue.trim());
 
-        });*/
+        });
 
         afficher_evenement();
         initDeleteColumn();
-        setupSearchFilter();
+//        setupSearchFilter();
 
 
+    }
+
+    @FXML
+    private void search(String keyword) {
+        EvenementService es = new EvenementService();
+        ObservableList<Evenement> filteredList = FXCollections.observableArrayList();
+        if (keyword == null || keyword.trim().isEmpty()) {
+            filteredList.addAll(es.read());
+        } else {
+            for (Evenement evenement : es.read()) {
+                if (evenement.getNom().toLowerCase().contains(keyword.toLowerCase()) || evenement.getLieu().toLowerCase().contains(keyword.toLowerCase()) ||
+                        evenement.getEtat().toLowerCase().contains(keyword.toLowerCase()) ||
+                        evenement.getDescription().toLowerCase().contains(keyword.toLowerCase()) ||
+                        evenement.getNom_categorieEvenement().toLowerCase().contains(keyword.toLowerCase())) {
+                    filteredList.add(evenement);
+                }
+            }
+        }
+        tvEvenement.setItems(filteredList);
     }
 
     private void initDeleteColumn() {

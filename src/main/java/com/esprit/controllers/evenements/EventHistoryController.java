@@ -1,6 +1,7 @@
 package com.esprit.controllers.evenements;
 
 import com.esprit.models.evenements.Participation;
+import com.esprit.models.users.Client;
 import com.esprit.services.evenements.ParticipationService;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -10,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.sql.Date;
@@ -63,8 +65,9 @@ public class EventHistoryController {
             }
         });
 
+        Stage stage = (Stage) tvHistory.getScene().getWindow();
+        masterData.addAll(ps.generateEventHistory(((Client) stage.getUserData()).getId()));
 
-        masterData.addAll(ps.generateEventHistory(0));
         tvHistory.setItems(masterData);
 
         // Activer la sélection de cellules

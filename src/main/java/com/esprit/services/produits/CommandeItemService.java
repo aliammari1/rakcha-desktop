@@ -35,7 +35,7 @@ public class CommandeItemService implements IService<CommandeItem> {
             pst.executeUpdate();
             System.out.println("panier remplit !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
     }
@@ -54,7 +54,7 @@ public class CommandeItemService implements IService<CommandeItem> {
                 commandeitem.add(new CommandeItem(rs.getInt("idCommandeItem"), rs.getInt("quantity"), ps.getProduitById(rs.getInt("id_produit")), cs.getCommandeByID(rs.getInt("idCommande"))));
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return commandeitem;
@@ -72,7 +72,7 @@ public class CommandeItemService implements IService<CommandeItem> {
                 commandeitem.add(new CommandeItem(rs.getInt("idCommandeItem"), rs.getInt("quantity"), ps.getProduitById(rs.getInt("id_produit")), cs.getCommandeByID(rs.getInt("idCommande"))));
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return commandeitem;
     }
@@ -110,7 +110,7 @@ public class CommandeItemService implements IService<CommandeItem> {
                 ));
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return commandeItems;
     }
@@ -164,7 +164,7 @@ public class CommandeItemService implements IService<CommandeItem> {
                 commandeItems.add(commandeItem);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return commandeItems;
@@ -183,7 +183,7 @@ public class CommandeItemService implements IService<CommandeItem> {
                 aver.add(new CommandeItem(rs.getInt("idCommandeItem"), rs.getInt("quantity"), ps.getProduitById(rs.getInt("id_produit")), cs.getCommandeByID(rs.getInt("idCommande"))));
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return aver;
     }

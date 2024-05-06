@@ -17,7 +17,7 @@ public class EventPDF {
         try {
             PdfWriter.getInstance(document, new FileOutputStream("EvenementsPDF.pdf"));
         } catch (final DocumentException | FileNotFoundException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
 
@@ -53,7 +53,7 @@ public class EventPDF {
         try {
             document.add(table);
         } catch (final DocumentException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
         document.close();

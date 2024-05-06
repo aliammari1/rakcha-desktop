@@ -135,11 +135,13 @@ public class FilmUserController extends Application {
         return resultats;
     }
 
-    @FXML
-    public void switchtopayment(ActionEvent event) throws IOException {
+    public void switchtopayment(String nom) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/Paymentuser.fxml"));
         AnchorPane root = fxmlLoader.load();
         Stage stage = (Stage) reserver_Film.getScene().getWindow();
+        PaymentuserController paymentuserController = fxmlLoader.getController();
+        Client client = (Client) stage.getUserData();
+        paymentuserController.setData(client, nom);
         Scene scene = new Scene(root, 1507, 855);
         stage.setScene(scene);
     }
@@ -252,7 +254,7 @@ public class FilmUserController extends Application {
             if (!film.getImage().isEmpty())
                 imageView.setImage(new Image(film.getImage()));
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
         imageView.setLayoutX(45);
@@ -296,7 +298,7 @@ public class FilmUserController extends Application {
             @Override
             public void handle(ActionEvent event) {
                 try {
-                    switchtopayment(event);
+                    switchtopayment(nomFilm.getText());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -418,7 +420,7 @@ public class FilmUserController extends Application {
                     imageView.setImage(new Image(actor.getImage()));
                 }
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                e.printStackTrace();
                 throw new RuntimeException(e);
             }
 
@@ -470,7 +472,7 @@ public class FilmUserController extends Application {
                 if (!ratingFilm.getId_film().getImage().isEmpty())
                     imageView.setImage(new Image(ratingFilm.getId_film().getImage()));
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                e.printStackTrace();
                 throw new RuntimeException(e);
             }
 
@@ -586,7 +588,7 @@ public class FilmUserController extends Application {
             Scene scene = new Scene(root, 1280, 700);
             stage.setScene(scene);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -598,7 +600,7 @@ public class FilmUserController extends Application {
             Scene scene = new Scene(root, 1280, 700);
             stage.setScene(scene);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -610,7 +612,7 @@ public class FilmUserController extends Application {
             Scene scene = new Scene(root, 1280, 700);
             stage.setScene(scene);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -622,7 +624,7 @@ public class FilmUserController extends Application {
             Scene scene = new Scene(root, 1280, 700);
             stage.setScene(scene);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -634,7 +636,7 @@ public class FilmUserController extends Application {
             Scene scene = new Scene(root, 1280, 700);
             stage.setScene(scene);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 

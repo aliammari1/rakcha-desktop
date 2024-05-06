@@ -162,8 +162,8 @@ public class PaymentuserController implements Initializable {
             alert.setTitle("Paiement");
             alert.setContentText("Paiement effectué avec succès, Votre Commande a été enregistré");
             alert.showAndWait();
-            Stage stage = new Stage();
 
+            Stage stage = new Stage();
             final WebView webView = new WebView();
             final WebEngine webEngine = webView.getEngine();
 
@@ -177,7 +177,7 @@ public class PaymentuserController implements Initializable {
 //            try {
 //                Desktop.getDesktop().open(new File("stripe.pdf"));
 //            } catch (IOException e) {
-//                System.out.println(e.getMessage());
+//                e.printStackTrace();
 //                throw new RuntimeException(e);
 //            }
 
@@ -263,7 +263,7 @@ public class PaymentuserController implements Initializable {
             Scene scene = new Scene(root, 1507, 855);
             stage.setScene(scene);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 

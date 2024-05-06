@@ -306,7 +306,7 @@ public class FilmController {
             filmCategory_tableView1.setItems(obF);
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -583,12 +583,12 @@ public class FilmController {
                                             updateFilm(film);
                                         }
                                     } catch (Exception e) {
-                                        System.out.println(e.getMessage());
+                                        e.printStackTrace();
                                     }
                                 }
                             });
                         } catch (Exception e) {
-                            System.out.println(e.getMessage());
+                            e.printStackTrace();
                         }
                         return new SimpleObjectProperty<HBox>(hBox);
                     }
@@ -713,7 +713,7 @@ public class FilmController {
                     updateFilm(event.getTableView().getItems().get(
                             event.getTablePosition().getRow()));
                 } catch (Exception e) {
-                    System.out.println(e.getMessage());
+                    e.printStackTrace();
                 }
             }
         });
@@ -726,7 +726,7 @@ public class FilmController {
                     updateFilm(event.getTableView().getItems().get(
                             event.getTablePosition().getRow()));
                 } catch (Exception e) {
-                    System.out.println(e.getMessage());
+                    e.printStackTrace();
                 }
             }
         });
@@ -739,7 +739,7 @@ public class FilmController {
                     updateFilm(event.getTableView().getItems().get(
                             event.getTablePosition().getRow()));
                 } catch (Exception e) {
-                    System.out.println(e.getMessage());
+                    e.printStackTrace();
                 }
             }
         });
@@ -752,7 +752,7 @@ public class FilmController {
                     updateFilm(event.getTableView().getItems().get(
                             event.getTablePosition().getRow()));
                 } catch (Exception e) {
-                    System.out.println(e.getMessage());
+                    e.printStackTrace();
                 }
             }
         });
@@ -789,7 +789,7 @@ public class FilmController {
             Scene scene = new Scene(root, 1280, 700);
             stage.setScene(scene);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 }

@@ -33,7 +33,7 @@ public class FilmcomentService implements IService<Filmcoment> {
             pst.executeUpdate();
             System.out.println("commentaire ajoutée !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
 
@@ -59,7 +59,7 @@ public class FilmcomentService implements IService<Filmcoment> {
                 ));
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return commentaire;

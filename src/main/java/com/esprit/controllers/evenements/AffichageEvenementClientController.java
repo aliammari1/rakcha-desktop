@@ -90,16 +90,36 @@ public class AffichageEvenementClientController {
         for (Evenement e : es.read()) {
             cbeventname.getItems().add(e.getNom());
         }
-        /*tfRechercheEc.textProperty().addListener((observable, oldValue, newValue) -> {
-            filterCategorieEvenements(newValue.trim());
-        });*/
+        tfRechercheEc.textProperty().addListener((observable, oldValue, newValue) -> {
+            search(newValue);
+            //filterCategorieEvenements(newValue.trim());
+        });
 
         afficherliste();
-        setupSearchFilter();
+        // setupSearchFilter();
         listeEvents.setVisible(true);
         anchplanning.setVisible(false);
 
 
+    }
+
+    @FXML
+    private void search(String keyword) {
+        EvenementService es = new EvenementService();
+        ObservableList<Evenement> filteredList = FXCollections.observableArrayList();
+        if (keyword == null || keyword.trim().isEmpty()) {
+            filteredList.addAll(es.read());
+        } else {
+            for (Evenement evenement : es.read()) {
+                if (evenement.getNom().toLowerCase().contains(keyword.toLowerCase()) || evenement.getLieu().toLowerCase().contains(keyword.toLowerCase()) ||
+                        evenement.getEtat().toLowerCase().contains(keyword.toLowerCase()) ||
+                        evenement.getDescription().toLowerCase().contains(keyword.toLowerCase()) ||
+                        evenement.getNom_categorieEvenement().toLowerCase().contains(keyword.toLowerCase())) {
+                    filteredList.add(evenement);
+                }
+            }
+        }
+        listeEvents.setItems(filteredList);
     }
 
 

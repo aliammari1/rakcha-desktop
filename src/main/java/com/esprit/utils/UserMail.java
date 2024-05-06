@@ -53,7 +53,7 @@ public class UserMail {
             System.out.println("Sent message successfully....");
 
         } catch (MessagingException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }

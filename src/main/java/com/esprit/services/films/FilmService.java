@@ -124,7 +124,7 @@ public class FilmService implements IService<Film> {
                 //       i++;
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return filmArrayList;
@@ -143,7 +143,7 @@ public class FilmService implements IService<Film> {
                 //       i++;
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return filmArrayList;
@@ -162,7 +162,7 @@ public class FilmService implements IService<Film> {
             film = new Film(rs.getInt("id"), rs.getString("nom"), rs.getString("image"), rs.getTime("duree"), rs.getString("description"), rs.getInt("annederalisation"));
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return film;
@@ -214,7 +214,7 @@ public class FilmService implements IService<Film> {
             film = new Film(rs.getInt("id"), rs.getString("nom"), rs.getString("image"), rs.getTime("duree"), rs.getString("description"), rs.getInt("annederalisation"));
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return film;
@@ -233,7 +233,7 @@ public class FilmService implements IService<Film> {
             film = new Film(rs.getInt("id"), rs.getString("nom"), rs.getString("image"), rs.getTime("duree"), rs.getString("description"), rs.getInt("annederalisation"));
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return film;
@@ -245,7 +245,7 @@ public class FilmService implements IService<Film> {
             FilmYoutubeTrailer filmYoutubeTrailer = new FilmYoutubeTrailer();
             s = filmYoutubeTrailer.watchTrailer(nomFilm);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return s;
     }

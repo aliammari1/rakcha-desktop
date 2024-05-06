@@ -34,7 +34,7 @@ public class CinemaService implements IService<Cinema> {
             pst.executeUpdate();
             System.out.println("Cinéma ajouté !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -51,7 +51,7 @@ public class CinemaService implements IService<Cinema> {
             pst.executeUpdate();
             System.out.println("Cinéma modifiée !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -63,7 +63,7 @@ public class CinemaService implements IService<Cinema> {
             pst.executeUpdate();
             System.out.println("Cinema supprmiée !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -78,7 +78,7 @@ public class CinemaService implements IService<Cinema> {
                 cinemas.add(new Cinema(rs.getInt("id_cinema"), rs.getString("nom"), rs.getString("adresse"), (Responsable_de_cinema) new UserService().getUserById(rs.getInt("responsable")), rs.getString("logo"), rs.getString("Statut")));
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return cinemas;
@@ -95,7 +95,7 @@ public class CinemaService implements IService<Cinema> {
                 cinemas.add(new Cinema(rs.getInt("id_cinema"), rs.getString("nom"), rs.getString("adresse"), (Responsable_de_cinema) new UserService().getUserById(rs.getInt("responsable")), rs.getString("logo"), rs.getString("Statut")));
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return cinemas;
@@ -115,7 +115,7 @@ public class CinemaService implements IService<Cinema> {
             cinema = new Cinema(rs.getInt("id_cinema"), rs.getString("nom"), rs.getString("adresse"), (Responsable_de_cinema) new UserService().getUserById(rs.getInt("responsable")), rs.getString("logo"), rs.getString("Statut"));
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return cinema;
@@ -134,7 +134,7 @@ public class CinemaService implements IService<Cinema> {
             cinema = new Cinema(rs.getInt("id_cinema"), rs.getString("nom"), rs.getString("adresse"), (Responsable_de_cinema) new UserService().getUserById(rs.getInt("responsable")), rs.getString("logo"), rs.getString("Statut"));
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return cinema;

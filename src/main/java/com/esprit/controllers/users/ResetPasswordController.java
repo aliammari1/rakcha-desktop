@@ -30,7 +30,7 @@ public class ResetPasswordController {
                 Stage stage = (Stage) newPass.getScene().getWindow();
                 stage.setScene(new Scene(root));
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                e.printStackTrace();
             }
         }
     }

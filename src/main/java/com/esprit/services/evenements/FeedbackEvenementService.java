@@ -33,7 +33,7 @@ public class FeedbackEvenementService implements IService<Feedback> {
             pst.executeUpdate();
             System.out.println("Feedback added !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -50,7 +50,7 @@ public class FeedbackEvenementService implements IService<Feedback> {
             pst.executeUpdate();
             System.out.println("Feedback Updated !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
     }
@@ -65,7 +65,7 @@ public class FeedbackEvenementService implements IService<Feedback> {
             pst.executeUpdate();
             System.out.println("Feedback Deleted !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
     }
@@ -85,7 +85,7 @@ public class FeedbackEvenementService implements IService<Feedback> {
 
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return feedbacks;

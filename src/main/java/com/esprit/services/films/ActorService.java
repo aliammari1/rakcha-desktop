@@ -48,7 +48,7 @@ public class ActorService implements IService<Actor> {
                 i++;
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return actorArrayList;
@@ -82,7 +82,7 @@ public class ActorService implements IService<Actor> {
             System.out.println("actor: " + actor);
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return actor;
     }

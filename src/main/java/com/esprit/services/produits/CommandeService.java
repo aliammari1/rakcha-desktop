@@ -85,7 +85,7 @@ public class CommandeService implements IService<Commande> {
                 commande.add(c1);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return commande;
@@ -109,7 +109,7 @@ public class CommandeService implements IService<Commande> {
                 commande.add(c1);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return commande;
@@ -135,7 +135,7 @@ public class CommandeService implements IService<Commande> {
 
             System.out.println("commande modifiée !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
     }
@@ -150,7 +150,7 @@ public class CommandeService implements IService<Commande> {
             pst.executeUpdate();
             System.out.println("commande supprmiée !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
     }
@@ -216,7 +216,7 @@ public class CommandeService implements IService<Commande> {
                 produitsAchats.put(idProduit, nombreAchats);
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return produitsAchats;
     }

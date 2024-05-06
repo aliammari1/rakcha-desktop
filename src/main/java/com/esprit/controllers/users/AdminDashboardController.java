@@ -356,7 +356,7 @@ public class AdminDashboardController {
 
             readUserTable();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -407,7 +407,7 @@ public class AdminDashboardController {
             List<User> userList = userService.read();
             userTableView.setItems(FXCollections.observableArrayList(userList));
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -431,7 +431,7 @@ public class AdminDashboardController {
             UserService userService = new UserService();
             userService.create(user);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -478,12 +478,12 @@ public class AdminDashboardController {
                                             photoDeProfilImageView.setImage(image);
                                         }
                                     } catch (Exception e) {
-                                        System.out.println(e.getMessage());
+                                        e.printStackTrace();
                                     }
                                 }
                             });
                         } catch (Exception e) {
-                            System.out.println(e.getMessage());
+                            e.printStackTrace();
                         }
                         return new SimpleObjectProperty<HBox>(hBox);
                     }
@@ -873,7 +873,7 @@ public class AdminDashboardController {
                     update(event.getTableView().getItems().get(
                             event.getTablePosition().getRow()));
                 } catch (Exception e) {
-                    System.out.println(e.getMessage());
+                    e.printStackTrace();
                 }
             }
         });
@@ -886,7 +886,7 @@ public class AdminDashboardController {
                     update(event.getTableView().getItems().get(
                             event.getTablePosition().getRow()));
                 } catch (Exception e) {
-                    System.out.println(e.getMessage());
+                    e.printStackTrace();
                 }
             }
         });
@@ -899,7 +899,7 @@ public class AdminDashboardController {
                     update(event.getTableView().getItems().get(
                             event.getTablePosition().getRow()));
                 } catch (Exception e) {
-                    System.out.println(e.getMessage());
+                    e.printStackTrace();
                 }
             }
         });
@@ -913,7 +913,7 @@ public class AdminDashboardController {
                     update(event.getTableView().getItems().get(
                             event.getTablePosition().getRow()));
                 } catch (Exception e) {
-                    System.out.println(e.getMessage());
+                    e.printStackTrace();
                 }
             }
         });
@@ -926,7 +926,7 @@ public class AdminDashboardController {
                     update(event.getTableView().getItems().get(
                             event.getTablePosition().getRow()));
                 } catch (Exception e) {
-                    System.out.println(e.getMessage());
+                    e.printStackTrace();
                 }
             }
         });
@@ -939,7 +939,7 @@ public class AdminDashboardController {
                     update(event.getTableView().getItems().get(
                             event.getTablePosition().getRow()));
                 } catch (Exception e) {
-                    System.out.println(e.getMessage());
+                    e.printStackTrace();
                 }
             }
         });
@@ -1026,7 +1026,7 @@ public class AdminDashboardController {
                 photoDeProfilImageView.setImage(image);
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -1035,7 +1035,7 @@ public class AdminDashboardController {
             UserService userService = new UserService();
             userService.update(user);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 

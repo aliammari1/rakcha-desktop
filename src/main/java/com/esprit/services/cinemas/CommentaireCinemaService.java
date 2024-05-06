@@ -1,7 +1,6 @@
 package com.esprit.services.cinemas;
 
 import com.esprit.models.cinemas.CommentaireCinema;
-import com.esprit.models.produits.Commentaire;
 import com.esprit.models.users.Client;
 import com.esprit.services.IService;
 import com.esprit.services.users.UserService;
@@ -16,11 +15,11 @@ import java.util.List;
 
 public class CommentaireCinemaService implements IService<CommentaireCinema> {
 
-    private Connection connection;
+    private final Connection connection;
+
     public CommentaireCinemaService() {
         connection = DataSource.getInstance().getConnection();
     }
-
 
 
     @Override
@@ -30,15 +29,15 @@ public class CommentaireCinemaService implements IService<CommentaireCinema> {
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(1, commentaire.getCinema().getId_cinema());
-            pst.setInt(2, commentaire.getClient().getId() );
-            pst.setString(3, commentaire.getCommentaire() );
+            pst.setInt(2, commentaire.getClient().getId());
+            pst.setString(3, commentaire.getCommentaire());
             pst.setString(4, commentaire.getSentiment());
 
 
             pst.executeUpdate();
             System.out.println("commentaire ajoutée !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -60,19 +59,15 @@ public class CommentaireCinemaService implements IService<CommentaireCinema> {
                 ));
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return commentaire;
     }
 
 
-
-
-
     @Override
     public void update(CommentaireCinema commentaire) {
-
 
 
     }
@@ -100,7 +95,7 @@ public class CommentaireCinemaService implements IService<CommentaireCinema> {
 //                );
 //            }
 //        } catch (SQLException e) {
-//            System.out.println(e.getMessage());
+//            e.printStackTrace();
 //        }
 //
 //        return commentaire;

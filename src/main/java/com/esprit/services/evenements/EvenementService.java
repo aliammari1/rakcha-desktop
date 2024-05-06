@@ -37,7 +37,7 @@ public class EvenementService implements IService<Evenement> {
             pst.executeUpdate();
             System.out.println("Event Added !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -58,7 +58,7 @@ public class EvenementService implements IService<Evenement> {
             pst.executeUpdate();
             System.out.println("Event Updated !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -71,7 +71,7 @@ public class EvenementService implements IService<Evenement> {
             pst.executeUpdate();
             System.out.println("Event Deleted !");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -88,7 +88,7 @@ public class EvenementService implements IService<Evenement> {
                 evenements.add(new Evenement(rs.getInt("ID"), rs.getString("nom"), rs.getDate("dateDebut"), rs.getDate("dateFin"), rs.getString("lieu"), cs.getCategorie(rs.getInt("id_categorie")), rs.getString("etat"), rs.getString("description"), rs.getBlob("affiche_event")));
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return evenements;
@@ -108,7 +108,7 @@ public class EvenementService implements IService<Evenement> {
             evenement = new Evenement((rs.getInt("ID")), rs.getString("nom"), rs.getDate("dateDebut"), rs.getDate("dateFin"), rs.getString("lieu"), cs.getCategorie(rs.getInt("id_categorie")), rs.getString("etat"), rs.getString("description"), rs.getBlob("affiche_event"));
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return evenement;
@@ -128,7 +128,7 @@ public class EvenementService implements IService<Evenement> {
             evenement = new Evenement((rs.getInt("ID")), rs.getString("nom"), rs.getDate("dateDebut"), rs.getDate("dateFin"), rs.getString("lieu"), cs.getCategorie(rs.getInt("id_categorie")), rs.getString("etat"), rs.getString("description"), rs.getBlob("affiche_event"));
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return evenement;
@@ -152,7 +152,7 @@ public class EvenementService implements IService<Evenement> {
             }
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return evenement;
@@ -176,7 +176,7 @@ public class EvenementService implements IService<Evenement> {
             PreparedStatement statement = this.connection.prepareStatement(query);
             return this.read();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return null;
     }

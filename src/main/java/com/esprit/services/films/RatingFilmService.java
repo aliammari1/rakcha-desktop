@@ -30,7 +30,7 @@ public class RatingFilmService implements IService<RatingFilm> {
             statement.executeUpdate();
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -54,7 +54,7 @@ public class RatingFilmService implements IService<RatingFilm> {
             preparedStatement.setInt(2, ratingFilm.getId_user().getId());
             preparedStatement.executeUpdate();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
 
@@ -70,7 +70,7 @@ public class RatingFilmService implements IService<RatingFilm> {
             resultSet.next();
             aver = resultSet.getDouble("averageRate");
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return aver;
     }
@@ -84,7 +84,7 @@ public class RatingFilmService implements IService<RatingFilm> {
             while (resultSet.next())
                 aver.add(new RatingFilm(new FilmService().getFilm(resultSet.getInt("id_film")), null, (int) resultSet.getDouble("averageRate")));
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return aver;
     }
@@ -100,7 +100,7 @@ public class RatingFilmService implements IService<RatingFilm> {
             if (resultSet.next())
                 rate = new RatingFilm(new FilmService().getFilm(id_film), (Client) new UserService().getUserById(id_user), resultSet.getInt("rate"));
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return rate;
     }

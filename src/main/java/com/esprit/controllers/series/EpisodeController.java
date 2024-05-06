@@ -444,7 +444,7 @@ public class EpisodeController {
                 ref();
             } catch (Exception e) {
                 showAlert("Error", "An error occurred while saving the episode. : " + e.getMessage());
-                System.out.println(e.getMessage());
+                e.printStackTrace();
             }
         }
     }
