@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
@@ -19,23 +19,23 @@
                         <Font name="System Italic" size="17.0" />
                     </font>
                 </Button>
-                <FontAwesomeIconView fill="#ebe5e5" glyphName="FILM" layoutX="20.0" layoutY="308.0" size="30" text="" />
+                <FontIcon fill="#ebe5e5" iconLiteral="fa-film" layoutX="20.0" layoutY="308.0" text="" />
                 <Button layoutX="1.0" layoutY="321.0" mnemonicParsing="false" onAction="#produitClient" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Products" />
-                <FontAwesomeIconView fill="#ebe5e5" glyphName="CUBES" layoutX="20.0" layoutY="347.0" size="30" text="" />
-                <FontAwesomeIconView fill="#ebe5e5" glyphName="VIDEO_CAMERA" layoutX="24.0" layoutY="390.0" size="30" text="" />
+                <FontIcon fill="#ebe5e5" iconLiteral="fa-cubes" layoutX="20.0" layoutY="347.0" text="" />
+                <FontIcon fill="#ebe5e5" iconLiteral="fa-video-camera" layoutX="24.0" layoutY="390.0" text="" />
                 <Button layoutY="364.0" mnemonicParsing="false" onAction="#cinemaclient" prefHeight="30.0" prefWidth="202.0" styleClass="nav-btn" text="Cinema" textAlignment="CENTER" />
-                <FontAwesomeIconView fill="#ebe5e5" glyphName="USER" layoutX="39.0" layoutY="611.0" size="30" text="" />
+                <FontIcon fill="#ebe5e5" iconLiteral="fa-user" layoutX="39.0" layoutY="611.0" text="" />
                 <Button layoutX="74.0" layoutY="584.0" mnemonicParsing="false" onAction="#profilclient" styleClass="nav-btn" text="Account" />
-                <FontAwesomeIconView fill="#ebe5e5" glyphName="SIGN_OUT" layoutX="38.0" layoutY="651.0" size="30" text="" />
+                <FontIcon fill="#ebe5e5" iconLiteral="fa-sign-out" layoutX="38.0" layoutY="651.0" text="" />
                 <Button layoutX="82.0" layoutY="624.0" mnemonicParsing="false" styleClass="nav-btn" text="EXIT" />
-                <FontAwesomeIconView fill="#ebe5e5" glyphName="CALENDAR" layoutX="22.0" layoutY="432.0" size="30" text="" />
+                <FontIcon fill="#ebe5e5" iconLiteral="fa-calendar" layoutX="22.0" layoutY="432.0" text="" />
                 <Button layoutX="1.0" layoutY="407.0" mnemonicParsing="false" onAction="#eventClient" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Event">
                     <font>
                         <Font size="13.0" />
                     </font>
                 </Button>
                 <Button layoutX="1.0" layoutY="244.0" mnemonicParsing="false" onAction="#SerieClient" prefHeight="30.0" prefWidth="200.0" styleClass="nav-btn" text="Series" />
-                <FontAwesomeIconView fill="#ebe5e5" glyphName="TV" layoutX="18.0" layoutY="269.0" size="30" />
+                <FontIcon fill="#ebe5e5" iconLiteral="fa-tv" layoutX="18.0" layoutY="269.0" />
                 <ImageView fitHeight="161.0" fitWidth="216.0" layoutX="1.0" layoutY="37.0" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@Logo.png" />
@@ -64,7 +64,7 @@
                 <Button layoutX="105.0" layoutY="216.0" mnemonicParsing="false" onAction="#order" prefHeight="30.0" prefWidth="121.0" styleClass="sale" stylesheets="@styles/produitStyle.css" text="ORDER" />
             </children>
         </AnchorPane>
-        <FontAwesomeIconView fx:id="retour" fill="#6b2a2a" glyphName="ARROW_LEFT" layoutX="242.0" layoutY="172.0" onMouseClicked="#afficherProduit" size="20" text="" />
+        <FontIcon fx:id="retour" fill="#6b2a2a" iconLiteral="fa-arrow-left" layoutX="242.0" layoutY="172.0" onMouseClicked="#afficherProduit" text="" />
         <ImageView fitHeight="69.0" fitWidth="62.0" layoutX="242.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@Logo.png" />

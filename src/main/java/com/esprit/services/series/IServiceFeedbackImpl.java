@@ -1,22 +1,18 @@
 package com.esprit.services.series;
-
 import com.esprit.models.series.Feedback;
 import com.esprit.utils.mydatabase;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
 public class IServiceFeedbackImpl implements IServiceFeedback<Feedback> {
-
     public Connection conx;
     public Statement stm;
-
-
     public IServiceFeedbackImpl() {
         conx = mydatabase.getInstance().getConnection();
     }
-
+    /** 
+     * @param a
+     */
     @Override
     public void ajouter(Feedback a) {
         String req =
@@ -35,7 +31,9 @@ public class IServiceFeedbackImpl implements IServiceFeedback<Feedback> {
             System.err.println(e.getMessage());
         }
     }
-
+    /** 
+     * @param a
+     */
     @Override
     public void modifier(Feedback a) {
         try {
@@ -52,7 +50,6 @@ public class IServiceFeedbackImpl implements IServiceFeedback<Feedback> {
             System.err.println(e.getMessage());
         }
     }
-
     @Override
     public void supprimer(int id) throws SQLException {
         String req = "DELETE FROM feedback WHERE id=?";
@@ -61,12 +58,10 @@ public class IServiceFeedbackImpl implements IServiceFeedback<Feedback> {
             pst.setInt(1, id);
             pst.executeUpdate();
             System.out.println("FeedBack suprimée !");
-
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
     }
-
     @Override
     public List<Feedback> Show() {
         List<Feedback> list = new ArrayList<>();

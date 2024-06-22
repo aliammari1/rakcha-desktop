@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
@@ -61,7 +61,7 @@
                 <ComboBox fx:id="cbCategorie" layoutX="128.0" layoutY="255.0" prefWidth="150.0" promptText="choose category" />
                 <TextArea fx:id="taDescription" layoutX="128.0" layoutY="434.0" prefHeight="99.0" prefWidth="151.0" styleClass="text-area-red" />
                 <Button layoutX="121.0" layoutY="640.0" mnemonicParsing="false" onAction="#ajouterEvenement" prefHeight="13.0" prefWidth="69.0" styleClass="instert-btn" stylesheets="@dashboard2.css" text="ADD" />
-                <FontAwesomeIconView fx:id="iconLogoS" fill="#bf1515" glyphName="UPLOAD" layoutX="146.0" layoutY="608.0" onMouseClicked="#selectImage" selectionFill="#2c2a2a" size="20" text="" />
+                <FontIcon fx:id="iconLogoS" fill="#bf1515" iconLiteral="fa-upload" layoutX="146.0" layoutY="608.0" onMouseClicked="#selectImage" selectionFill="#2c2a2a" text="" />
                 <Label layoutX="28.0" layoutY="590.0" stylesheets="@dashboard2.css" text="Poster (PNG) :" textFill="#bc5a5a">
                     <font>
                         <Font name="Montserrat SemiBold" size="14.0" />
@@ -88,7 +88,7 @@
             </children>
         </AnchorPane>
         <TextField fx:id="SearchBar" layoutX="780.0" layoutY="203.0" promptText="Keywords.." styleClass="text-field-red" />
-        <FontAwesomeIconView fill="#6f6a6a" glyphName="SEARCH" layoutX="743.0" layoutY="220.0" size="13" text="" wrappingWidth="21.428571701049805" />
+        <FontIcon fill="#6f6a6a" iconLiteral="fa-search" layoutX="743.0" layoutY="220.0" text="" wrappingWidth="21.428571701049805" />
         <Label layoutX="585.0" layoutY="23.0" text="EVENT MANAGEMENT" textFill="#943232">
             <font>
                 <Font name="Dosis ExtraBold" size="60.0" />
@@ -110,7 +110,7 @@
             </font>
         </Label>
         <Button fx:id="bExcel" layoutX="798.0" layoutY="682.0" mnemonicParsing="false" onAction="#generateExcel" styleClass="instert-btn" text="Generate Excel" />
-        <FontAwesomeIconView fx:id="idfilter" glyphName="FILTER" layoutX="946.0" layoutY="227.0" onMouseClicked="#filtrer" size="30" text="" wrappingWidth="21.428571701049805" />
+        <FontIcon fx:id="idfilter" iconLiteral="fa-filter" layoutX="946.0" layoutY="227.0" onMouseClicked="#filtrer" text="" wrappingWidth="21.428571701049805" />
         <AnchorPane fx:id="FilterAnchor" layoutX="837.0" layoutY="50.0" prefHeight="87.0" prefWidth="200.0" visible="false">
             <children>
                 <Button layoutX="74.0" layoutY="161.0" mnemonicParsing="false" onAction="#filtercinema" text="Filter" />

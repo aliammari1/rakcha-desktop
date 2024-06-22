@@ -1,6 +1,4 @@
 package com.esprit.controllers.users;
-
-import com.esprit.controllers.ClientSideBarController;
 import com.esprit.models.users.Client;
 import com.esprit.models.users.Responsable_de_cinema;
 import com.esprit.models.users.User;
@@ -19,11 +17,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import net.synedra.validatorfx.Validator;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -31,11 +29,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
-
 public class SignUpController {
-
+    @FXML
+    AnchorPane anchorPane;
     @FXML
     private TextField adresseTextField;
     @FXML
@@ -54,8 +53,6 @@ public class SignUpController {
     private TextField prenomTextField;
     @FXML
     private ComboBox<String> roleComboBox;
-
-
     @FXML
     void initialize() {
         Tooltip tooltip = new Tooltip();
@@ -64,32 +61,30 @@ public class SignUpController {
             String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
             if (!emailTextField.getText().matches(emailRegex)) {
                 emailTextField.getStyleClass().removeAll("checked");
-                //emailErrorLabel.setText("this mail format is wrong");
+                // emailErrorLabel.setText("this mail format is wrong");
                 emailTextField.getStyleClass().add("notChecked");
             } else if (userService.checkEmailFound(newValue)) {
                 emailTextField.getStyleClass().removeAll("checked");
                 // emailErrorLabel.setText("this mail address is used");
                 emailTextField.getStyleClass().add("notChecked");
             } else {
-                //emailErrorLabel.setText("");
+                // emailErrorLabel.setText("");
                 emailTextField.getStyleClass().removeAll("notChecked");
                 emailTextField.getStyleClass().add("checked");
             }
         });
-
-        passwordTextField.textProperty().addListener((observable, oldValue, newValue) ->
-        {
+        passwordTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (passwordTextField.getLength() < 8) {
                 passwordTextField.getStyleClass().removeAll("checked");
-                //passwordErrorLabel.setText("the password must contain at least 8 characters");
+                // passwordErrorLabel.setText("the password must contain at least 8
+                // characters");
                 emailTextField.getStyleClass().add("notChecked");
             } else {
-                //passwordErrorLabel.setText("");
+                // passwordErrorLabel.setText("");
                 passwordTextField.getStyleClass().removeAll("notChecked");
                 passwordTextField.getStyleClass().add("checked");
             }
         });
-
         nomTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -100,9 +95,9 @@ public class SignUpController {
                             String userName = c.get("firstName");
                             if (userName != null && !userName.toLowerCase().equals(userName)) {
                                 c.error("Please use only lowercase letters.");
-                            } else if (userName.isEmpty())
+                            } else if (userName.isEmpty()) {
                                 c.error("the string is empty");
-
+                            }
                         })
                         .decorates(nomTextField)
                         .immediate();
@@ -120,25 +115,23 @@ public class SignUpController {
                                     bounds.getMinY() + 30);
                         } else {
                             if (nomTextField.getTooltip() != null) {
-
                                 nomTextField.getTooltip().hide();
                             }
                         }
                     }
                 });
-
                 nomTextField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
                     @Override
                     public void handle(KeyEvent event) {
                         if (event.getCode().equals(KeyCode.ENTER)) {
-                            if (validator.containsErrors())
+                            if (validator.containsErrors()) {
                                 event.consume();
+                            }
                         }
                     }
                 });
             }
         });
-
         prenomTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -149,9 +142,9 @@ public class SignUpController {
                             String userName = c.get("firstName");
                             if (userName != null && !userName.toLowerCase().equals(userName)) {
                                 c.error("Please use only lowercase letters.");
-                            } else if (userName.isEmpty())
+                            } else if (userName.isEmpty()) {
                                 c.error("the string is empty");
-
+                            }
                         })
                         .decorates(prenomTextField)
                         .immediate();
@@ -174,19 +167,18 @@ public class SignUpController {
                         }
                     }
                 });
-
                 prenomTextField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
                     @Override
                     public void handle(KeyEvent event) {
                         if (event.getCode().equals(KeyCode.ENTER)) {
-                            if (validator.containsErrors())
+                            if (validator.containsErrors()) {
                                 event.consume();
+                            }
                         }
                     }
                 });
             }
         });
-
         adresseTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -197,9 +189,9 @@ public class SignUpController {
                             String userName = c.get("firstName");
                             if (userName != null && !userName.toLowerCase().equals(userName)) {
                                 c.error("Please use only lowercase letters.");
-                            } else if (userName.isEmpty())
+                            } else if (userName.isEmpty()) {
                                 c.error("the string is empty");
-
+                            }
                         })
                         .decorates(adresseTextField)
                         .immediate();
@@ -217,25 +209,23 @@ public class SignUpController {
                                     bounds.getMinY() + 30);
                         } else {
                             if (adresseTextField.getTooltip() != null) {
-
                                 adresseTextField.getTooltip().hide();
                             }
                         }
                     }
                 });
-
                 adresseTextField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
                     @Override
                     public void handle(KeyEvent event) {
                         if (event.getCode().equals(KeyCode.ENTER)) {
-                            if (validator.containsErrors())
+                            if (validator.containsErrors()) {
                                 event.consume();
+                            }
                         }
                     }
                 });
             }
         });
-
         emailTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -273,19 +263,18 @@ public class SignUpController {
                         }
                     }
                 });
-
                 emailTextField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
                     @Override
                     public void handle(KeyEvent event) {
                         if (event.getCode().equals(KeyCode.ENTER)) {
-                            if (validator.containsErrors())
+                            if (validator.containsErrors()) {
                                 event.consume();
+                            }
                         }
                     }
                 });
             }
         });
-
         passwordTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -296,9 +285,9 @@ public class SignUpController {
                             String userName = c.get("firstName");
                             if (userName != null && !userName.toLowerCase().equals(userName)) {
                                 c.error("Please use only lowercase letters.");
-                            } else if (userName.isEmpty())
+                            } else if (userName.isEmpty()) {
                                 c.error("the string is empty");
-
+                            }
                         })
                         .decorates(passwordTextField)
                         .immediate();
@@ -316,25 +305,23 @@ public class SignUpController {
                                     bounds.getMinY() + 30);
                         } else {
                             if (passwordTextField.getTooltip() != null) {
-
                                 passwordTextField.getTooltip().hide();
                             }
                         }
                     }
                 });
-
                 passwordTextField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
                     @Override
                     public void handle(KeyEvent event) {
                         if (event.getCode().equals(KeyCode.ENTER)) {
-                            if (validator.containsErrors())
+                            if (validator.containsErrors()) {
                                 event.consume();
+                            }
                         }
                     }
                 });
             }
         });
-
         num_telephoneTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -373,52 +360,84 @@ public class SignUpController {
                         }
                     }
                 });
-
                 num_telephoneTextField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
                     @Override
                     public void handle(KeyEvent event) {
                         if (event.getCode().equals(KeyCode.ENTER)) {
-                            if (validator.containsErrors())
+                            if (validator.containsErrors()) {
                                 event.consume();
+                            }
                         }
                     }
                 });
             }
         });
-
         List<String> roleList = Arrays.asList("client", "responsable de cinema");
-
-        for (String role : roleList)
+        for (String role : roleList) {
             roleComboBox.getItems().add(role);
+        }
     }
-
+    /** 
+     * @param event
+     */
     @FXML
     void importImage(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("PNG", "*.png"),
+                new FileChooser.ExtensionFilter("JPG", "*.jpg")
+        );
         fileChooser.setTitle("Sélectionner une image");
         File selectedFile = fileChooser.showOpenDialog(null);
         if (selectedFile != null) {
             try {
-                String destinationDirectory = "./src/main/resources/pictures/films/";
-                Path destinationPath = Paths.get(destinationDirectory);
+                String destinationDirectory1 = "./src/main/resources/img/users/";
+                String destinationDirectory2 = "C:\\xampp\\htdocs\\Rakcha\\rakcha-web\\public\\img\\users\\";
+                Path destinationPath1 = Paths.get(destinationDirectory1);
+                Path destinationPath2 = Paths.get(destinationDirectory2);
                 String uniqueFileName = System.currentTimeMillis() + "_" + selectedFile.getName();
-                Path destinationFilePath = destinationPath.resolve(uniqueFileName);
-                Files.copy(selectedFile.toPath(), destinationFilePath);
-                Image selectedImage = new Image(destinationFilePath.toUri().toString());
+                Path destinationFilePath1 = destinationPath1.resolve(uniqueFileName);
+                Path destinationFilePath2 = destinationPath2.resolve(uniqueFileName);
+                Files.copy(selectedFile.toPath(), destinationFilePath1);
+                Files.copy(selectedFile.toPath(), destinationFilePath2);
+                Image selectedImage = new Image(destinationFilePath1.toUri().toString());
                 photoDeProfilImageView.setImage(selectedImage);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-
     }
-
+    /** 
+     * @param event
+     * @throws IOException
+     */
     @FXML
     void signup(ActionEvent event) throws IOException {
         String role = roleComboBox.getValue();
         User user = null;
         URI uri = null;
-
+        String nom = nomTextField.getText();
+        String prenom = prenomTextField.getText();
+        String num_telephone = num_telephoneTextField.getText();
+        String password = passwordTextField.getText();
+        String email = emailTextField.getText();
+        LocalDate dateDeNaissance = dateDeNaissanceDatePicker.getValue();
+        if (nom.isEmpty() || prenom.isEmpty() || num_telephone.isEmpty() || password.isEmpty()
+                || role.isEmpty() || email.isEmpty() || dateDeNaissance == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Please fill in all the required fields", ButtonType.CLOSE);
+            alert.show();
+            return;
+        }
+        if (!num_telephone.matches("\\d+")) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid phone number format", ButtonType.CLOSE);
+            alert.show();
+            return;
+        }
+        if (!email.matches("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}")) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid email format", ButtonType.CLOSE);
+            alert.show();
+            return;
+        }
         if (role.equals("responsable de cinema")) {
             user = new Responsable_de_cinema(nomTextField.getText(), prenomTextField.getText(),
                     Integer.parseInt(num_telephoneTextField.getText()), passwordTextField.getText(),

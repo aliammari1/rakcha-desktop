@@ -1,26 +1,23 @@
 package com.esprit.services.films;
-
 import com.esprit.models.films.Category;
 import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 public class CategoryService implements IService<Category> {
     Connection connection;
-
     public CategoryService() {
         connection = DataSource.getInstance().getConnection();
     }
-
+    /** 
+     * @param category
+     */
     @Override
     public void create(Category category) {
-
         String req = "insert into category (nom,description) values (?,?) ";
         try {
             PreparedStatement statement = connection.prepareStatement(req);
@@ -30,9 +27,10 @@ public class CategoryService implements IService<Category> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
     }
-
+    /** 
+     * @return List<Category>
+     */
     @Override
     public List<Category> read() {
         List<Category> categoryArrayList = new ArrayList<>();
@@ -48,11 +46,8 @@ public class CategoryService implements IService<Category> {
         }
         return categoryArrayList;
     }
-
-
     @Override
     public void update(Category category) {
-
         String req = "UPDATE category set nom=?,description=? where id=?";
         try {
             PreparedStatement statement = connection.prepareStatement(req);
@@ -63,10 +58,7 @@ public class CategoryService implements IService<Category> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-
     }
-
     @Override
     public void delete(Category category) {
         String req = "DELETE FROM category where id = ?";
@@ -77,9 +69,7 @@ public class CategoryService implements IService<Category> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
     }
-
     public Category getCategory(int id) {
         Category category = null;
         String req = "SELECT * FROM category where id = ?";
@@ -94,7 +84,6 @@ public class CategoryService implements IService<Category> {
         }
         return category;
     }
-
     public Category getCategoryByNom(String nom) {
         Category category = null;
         String req = "SELECT * FROM category where nom LIKE ?";

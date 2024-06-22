@@ -15,21 +15,27 @@
 <AnchorPane prefHeight="855.0" prefWidth="1507.0" stylesheets="@styles/filmStyle.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.cinemas.DashboardClientController">
     <children>
         <fx:include source="clientSideBar.fxml" />
-        <AnchorPane fx:id="listCinemaClient" layoutX="371.0" layoutY="63.0" prefHeight="740.0" prefWidth="1042.0" styleClass="bg-white" stylesheets="@styles/filmStyle.css">
+        <AnchorPane fx:id="listCinemaClient" layoutX="317.0" layoutY="25.0" prefHeight="793.0" prefWidth="1131.0" styleClass="bg-white" stylesheets="@styles/filmStyle.css">
             <children>
-                <FlowPane fx:id="cinemaFlowPane" layoutX="26.0" layoutY="24.0" prefHeight="662.0" prefWidth="475.0" styleClass="bg-white" />
-                <Button layoutX="641.0" layoutY="325.0" mnemonicParsing="false" onAction="#filtrer" prefHeight="56.0" prefWidth="219.0" styleClass="sale" stylesheets="@styles/filmStyle.css" text="Filter" />
-                <TextField fx:id="searchbar1" layoutX="627.0" layoutY="238.0" prefHeight="42.0" prefWidth="248.0" promptText="Search here ......................">
+                <FlowPane fx:id="cinemaFlowPane" layoutX="39.0" layoutY="83.0" prefHeight="662.0" prefWidth="475.0" styleClass="bg-white" />
+                <Button layoutX="823.0" layoutY="19.0" mnemonicParsing="false" onAction="#filtrer" prefHeight="56.0" prefWidth="219.0" styleClass="sale" stylesheets="@styles/filmStyle.css" text="Filter" />
+                <TextField fx:id="searchbar1" layoutX="517.0" layoutY="25.0" prefHeight="42.0" prefWidth="248.0" promptText="Search here ......................">
                     <cursor>
                         <Cursor fx:constant="TEXT" />
                     </cursor>
                 </TextField>
-                <Button layoutX="832.0" layoutY="246.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="34.0" style="-fx-background-color: AE2D3C;">
+                <Button layoutX="726.0" layoutY="33.0" mnemonicParsing="false" prefHeight="0.0" prefWidth="30.0" style="-fx-background-color: AE2D3C;">
                     <graphic>
                         <FontAwesomeIconView fill="#f5f5f5" glyphName="SEARCH" size="19" text="" textAlignment="RIGHT" wrappingWidth="15.714285850524902" />
                     </graphic>
                 </Button>
-            <ComboBox fx:id="tricomboBox" layoutX="681.0" layoutY="150.0" prefHeight="40.0" prefWidth="139.0" styleClass="sale" />
+                <ComboBox fx:id="tricomboBox" layoutX="277.0" layoutY="21.0" prefHeight="40.0" prefWidth="139.0" styleClass="sale" />
+                <AnchorPane fx:id="Anchortop3" layoutX="648.0" layoutY="178.0" prefHeight="571.0" prefWidth="403.0" styleClass="instert-btn" stylesheets="@styles/filmStyle.css" />
+                <Label layoutX="785.0" layoutY="105.0" text="Top 3">
+                    <font>
+                        <Font name="Arial Rounded MT Bold" size="48.0" />
+                    </font>
+                </Label>
             </children>
         </AnchorPane>
 
@@ -41,11 +47,11 @@
                     </font>
                 </Label>
                 <FlowPane fx:id="planningFlowPane" layoutX="31.0" layoutY="108.0" prefHeight="562.0" prefWidth="796.0" styleClass="table-view" stylesheets="@styles/filmStyle.css" />
-            <Button fx:id="closeDetailFilm" layoutX="798.0" layoutY="7.0" mnemonicParsing="false" onAction="#Planninggclose" prefHeight="35.0" prefWidth="48.0" styleClass="close" stylesheets="@styles/filmStyle.css">
-               <graphic>
-                  <FontAwesomeIconView glyphName="CLOSE" styleClass="close" />
-               </graphic>
-            </Button>
+                <Button fx:id="closeDetailFilm" layoutX="798.0" layoutY="7.0" mnemonicParsing="false" onAction="#Planninggclose" prefHeight="35.0" prefWidth="48.0" styleClass="close" stylesheets="@styles/filmStyle.css">
+                    <graphic>
+                        <FontAwesomeIconView glyphName="CLOSE" styleClass="close" />
+                    </graphic>
+                </Button>
             </children>
         </AnchorPane>
         <AnchorPane fx:id="FilterAnchor" layoutX="556.0" layoutY="136.0" prefHeight="294.0" prefWidth="306.0" styleClass="bg-white" stylesheets="@styles/filmStyle.css" visible="false">

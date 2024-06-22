@@ -1,5 +1,4 @@
 package com.esprit.utils;
-
 import com.github.scribejava.apis.LinkedInApi20;
 import com.github.scribejava.core.builder.ScopeBuilder;
 import com.github.scribejava.core.builder.ServiceBuilder;
@@ -8,20 +7,21 @@ import com.github.scribejava.core.model.OAuthRequest;
 import com.github.scribejava.core.model.Response;
 import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth20Service;
-
 import java.io.IOException;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
-
 public class SignInLinkedin {
-
     private static final String NETWORK_NAME = "LinkedIn";
     private static final String PROTECTED_RESOURCE_URL = "https://api.linkedin.com/v2/me";
     private static final String PROTECTED_EMAIL_RESOURCE_URL
             = "https://api.linkedin.com/v2/emailAddress?q=members&projection=(elements*(handle~))";
-
-
+    /** 
+     * @param args
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws ExecutionException
+     */
     @SuppressWarnings("PMD.SystemPrintln")
     public static void main(String... args) throws IOException, InterruptedException, ExecutionException {
         // Replace these with your client id and secret
@@ -33,10 +33,8 @@ public class SignInLinkedin {
                 .callback("http://example.com/callback")
                 .build(LinkedInApi20.instance());
         final Scanner in = new Scanner(System.in);
-
         System.out.println("=== " + NETWORK_NAME + "'s OAuth Workflow ===");
         System.out.println();
-
         // Obtain the Authorization URL
         System.out.println("Fetching the Authorization URL...");
         final String secretState = "secret" + new Random().nextInt(999_999);
@@ -48,13 +46,11 @@ public class SignInLinkedin {
         System.out.print(">>");
         final String code = in.nextLine();
         System.out.println();
-
         System.out.println("Trading the Authorization Code for an Access Token...");
         final OAuth2AccessToken accessToken = service.getAccessToken(code);
         System.out.println("Got the Access Token!");
         System.out.println("(The raw response looks like this: " + accessToken.getRawResponse() + "')");
         System.out.println();
-
         System.out.println("Now we're going to get the email of the current user...");
         final OAuthRequest emailRequest = new OAuthRequest(Verb.GET, PROTECTED_EMAIL_RESOURCE_URL);
         emailRequest.addHeader("x-li-format", "json");
@@ -66,9 +62,7 @@ public class SignInLinkedin {
             System.out.println(emailResponse.getBody());
         }
         System.out.println();
-
         System.out.println("Now we're going to access a protected profile resource...");
-
         final OAuthRequest request = new OAuthRequest(Verb.GET, PROTECTED_RESOURCE_URL);
         request.addHeader("x-li-format", "json");
         request.addHeader("Accept-Language", "ru-RU");
@@ -78,7 +72,6 @@ public class SignInLinkedin {
             System.out.println(response.getCode());
             System.out.println(response.getBody());
         }
-
         System.out.println();
     }
 }

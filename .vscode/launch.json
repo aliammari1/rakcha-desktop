@@ -1,0 +1,18 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Run with AppMap",
+            "request": "launch",
+            "mainClass": "",
+            "vmArgs": "-javaagent:C:\\Users\\AliAMMARI\\.appmap\\lib\\java\\appmap.jar --module-path D:\\openjfx\\javafx-sdk-21.0.2\\lib --add-modules javafx.controls,javafx.fxml -Dappmap.recording.auto=true"
+        },
+        {
+            "type": "java",
+            "name": "Run with AppMap",
+            "request": "launch",
+            "mainClass": "",
+            "vmArgs": "-javaagent:${userHome}\\.appmap\\lib\\java\\appmap.jar"
+        }
+    ]
+}

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
@@ -61,7 +61,7 @@
                        textFill="RED"/>
                 <Label fx:id="passwordErrorLabel" layoutX="88.0" layoutY="289.0" prefHeight="18.0" prefWidth="271.0"
                        textFill="RED"/>
-                <FontAwesomeIconView fill="WHITE" glyphName="SEND" layoutX="344.0" layoutY="92.0" size="35"
+                <FontIcon fill="WHITE" iconLiteral="fa-send" layoutX="344.0" layoutY="92.0"
                                      wrappingWidth="29.0"/>
                 <Hyperlink fx:id="hyperlink" layoutX="81.0" layoutY="296.0" text="Click Here"/>
             </children>

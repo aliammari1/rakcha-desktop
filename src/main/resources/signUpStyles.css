@@ -1,0 +1,24 @@
+.root {
+    -fx-font-family: "Arial";
+    -fx-background-color: #f0f0f0;
+}
+
+.label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.text-field,
+.combo-box-base {
+    -fx-background-color: #ffffff;
+    -fx-padding: 5px;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 5px;
+}
+
+
+.image-view {
+    -fx-border-color: #cccccc;
+    -fx-border-width: 1px;
+}

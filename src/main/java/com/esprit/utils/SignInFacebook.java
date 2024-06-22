@@ -1,5 +1,4 @@
 package com.esprit.utils;
-
 import com.github.scribejava.apis.FacebookApi;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth2AccessToken;
@@ -7,19 +6,20 @@ import com.github.scribejava.core.model.OAuthRequest;
 import com.github.scribejava.core.model.Response;
 import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth20Service;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
-
 public class SignInFacebook {
-
     private static final String NETWORK_NAME = "Facebook";
     private static final String PROTECTED_RESOURCE_URL = "https://graph.facebook.com/v3.2/me";
-
-
+    /** 
+     * @param args
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws ExecutionException
+     */
     @SuppressWarnings("PMD.SystemPrintln")
     public static void main(String... args) throws IOException, InterruptedException, ExecutionException {
         // Replace these with your client id and secret
@@ -30,12 +30,9 @@ public class SignInFacebook {
                 .apiSecret(clientSecret)
                 .callback("https://aacoder.me")
                 .build(FacebookApi.instance());
-
         final Scanner in = new Scanner(System.in, StandardCharsets.UTF_8);
-
         System.out.println("=== " + NETWORK_NAME + "'s OAuth Workflow ===");
         System.out.println();
-
         // Obtain the Authorization URL
         System.out.println("Fetching the Authorization URL...");
         final String authorizationUrl = service.getAuthorizationUrl(secretState);
@@ -46,7 +43,6 @@ public class SignInFacebook {
         System.out.print(">>");
         final String code = in.nextLine();
         System.out.println();
-
         System.out.println("And paste the state from server here. We have set 'secretState'='" + secretState + "'.");
         System.out.print(">>");
         final String value = in.nextLine();
@@ -58,13 +54,11 @@ public class SignInFacebook {
             System.out.println("Got      = " + value);
             System.out.println();
         }
-
         System.out.println("Trading the Authorization Code for an Access Token...");
         final OAuth2AccessToken accessToken = service.getAccessToken(code);
         System.out.println("Got the Access Token!");
         System.out.println("(The raw response looks like this: " + accessToken.getRawResponse() + "')");
         System.out.println();
-
         // Now let's go and ask for a protected resource!
         System.out.println("Now we're going to access a protected resource...");
         final OAuthRequest request = new OAuthRequest(Verb.GET, PROTECTED_RESOURCE_URL);
@@ -77,6 +71,5 @@ public class SignInFacebook {
         }
         System.out.println();
         System.out.println("Thats it man! Go and build something awesome with ScribeJava! :)");
-
     }
 }

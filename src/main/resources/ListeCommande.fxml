@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -30,7 +30,7 @@
         </TextField>
         <Button layoutX="945.0" layoutY="139.0" mnemonicParsing="false" style="-fx-background-color: AE2D3C;">
             <graphic>
-                <FontAwesomeIconView fill="#f5f5f5" glyphName="SEARCH" size="19" text="" textAlignment="RIGHT"/>
+                <FontIcon fill="#f5f5f5" iconLiteral="fa-search" text="" textAlignment="RIGHT"/>
             </graphic>
         </Button>
     </children>
