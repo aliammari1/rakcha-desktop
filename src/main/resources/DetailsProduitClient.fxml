@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <?import java.net.URL?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
@@ -21,13 +21,13 @@
                 <URL value="@styles/produitStyle.css" />
             </stylesheets>
         </FlowPane>
-        <FontAwesomeIconView fx:id="retour" fill="#b92d2d" glyphName="ARROW_LEFT" layoutX="340.0" layoutY="188.0" onMouseClicked="#afficherProduit" size="20" text="" />
+        <FontIcon fx:id="retour" fill="#b92d2d" iconLiteral="fa-arrow_left" layoutX="340.0" layoutY="188.0" onMouseClicked="#afficherProduit" text="" />
         <AnchorPane fx:id="panierAnchorPane" layoutX="1185.0" layoutY="212.0" prefHeight="474.0" prefWidth="273.0" styleClass="bg-white" stylesheets="@styles/produitStyle.css" visible="false">
             <children>
                 <FlowPane fx:id="panierFlowPane" prefHeight="474.0" prefWidth="273.0" styleClass="flow-pane" stylesheets="@styles/dashboard.css" visible="false" />
             </children>
         </AnchorPane>
-        <FontAwesomeIconView fill="#b92d2d" glyphName="SHOPPING_CART" layoutX="1384.0" layoutY="164.0" onMouseClicked="#panier" size="40" text="" />
+        <FontIcon fill="#b92d2d" iconLiteral="fa-shopping-cart" layoutX="1384.0" layoutY="164.0" onMouseClicked="#panier" text="" />
         <AnchorPane fx:id="top3anchorpane" layoutX="1181.0" layoutY="264.0" prefHeight="399.0" prefWidth="279.0" styleClass="bg-white" stylesheets="@styles/produitStyle.css">
             <children>
                 <FlowPane fx:id="topthreeVbox" layoutX="10.0" layoutY="83.0" prefHeight="307.0" prefWidth="260.0" />

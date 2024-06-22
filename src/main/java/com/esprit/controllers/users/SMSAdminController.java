@@ -1,5 +1,4 @@
 package com.esprit.controllers.users;
-
 import com.esprit.utils.UserSMSAPI;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -13,14 +12,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.Random;
 import java.util.ResourceBundle;
-
 public class SMSAdminController implements Initializable {
-
     int verificationCode = 0;
     @FXML
     private TextField codeTextField;
@@ -32,8 +28,9 @@ public class SMSAdminController implements Initializable {
     private TextField phoneNumberTextfield;
     @FXML
     private Button sendSMS;
-
-
+    /** 
+     * @param event
+     */
     public void sendSMS(ActionEvent event) {
         if (verificationCode == Integer.parseInt(codeTextField.getText())) {
             try {
@@ -44,11 +41,12 @@ public class SMSAdminController implements Initializable {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-
         }
-
     }
-
+    /** 
+     * @param location
+     * @param resources
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         phoneNumberTextfield.textProperty().addListener(new ChangeListener<String>() {

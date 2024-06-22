@@ -25,16 +25,12 @@
     </top>
     <center>
         <VBox alignment="CENTER" prefHeight="382.0" prefWidth="628.0" spacing="10">
-            <!-- Ajoutez le ComboBox ici -->
             <ComboBox fx:id="statisticsComboBox"/>
-
-            <!-- Reste de votre définition, y compris le PieChart et les autres boutons -->
             <PieChart fx:id="pieChart"/>
             <Button onAction="#handleShowBarChart" text="Show Bar Chart"/>
             <Button onAction="#handleShowPieChart" text="Show Pie Chart"/>
             <Button onAction="#handleClose" text="Close"/>
             <Button onAction="#handleUpdatePieData" text="Update Data"/>
-            <!-- Vous pouvez ajouter plus de boutons ou d'éléments ici selon vos besoins -->
         </VBox>
     </center>
 </BorderPane>

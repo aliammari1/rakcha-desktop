@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <?import java.lang.String?>
 <?import javafx.collections.FXCollections?>
 <?import javafx.scene.control.Button?>
@@ -53,7 +53,7 @@
                     </columns>
                 </TableView>
                 <TextField fx:id="recherche_textField" layoutX="210.0" layoutY="30.0" prefHeight="53.0" prefWidth="172.0" promptText="rechercher" />
-                <FontAwesomeIconView fill="#ae2d3c" glyphName="SEARCH" layoutX="349.0" layoutY="63.0" size="19" text="" textAlignment="RIGHT" />
+                <FontIcon fill="#ae2d3c" iconLiteral="fa-search" layoutX="349.0" layoutY="63.0" text="" textAlignment="RIGHT" />
                 <Button layoutX="411.0" layoutY="30.0" mnemonicParsing="false" prefHeight="53.0" prefWidth="107.0" styleClass="sale" stylesheets="@styles/filmStyle.css" text="Search" />
             </children>
         </AnchorPane>

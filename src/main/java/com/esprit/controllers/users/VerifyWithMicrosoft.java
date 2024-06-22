@@ -1,5 +1,4 @@
 package com.esprit.controllers.users;
-
 import com.esprit.utils.SignInMicrosoft;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,15 +10,11 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
 import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
 import java.util.concurrent.ExecutionException;
-
 public class VerifyWithMicrosoft {
-
-
     @FXML
     private TextField authTextField;
     @FXML
@@ -30,14 +25,19 @@ public class VerifyWithMicrosoft {
     private Label passwordErrorLabel;
     @FXML
     private Button sendButton;
-
-
+    /** 
+     * @throws IOException
+     * @throws ExecutionException
+     * @throws InterruptedException
+     */
     @FXML
     void initialize() throws IOException, ExecutionException, InterruptedException {
         String link = SignInMicrosoft.SignInWithMicrosoft();
         Desktop.getDesktop().browse(URI.create(link));
     }
-
+    /** 
+     * @param event
+     */
     @FXML
     void verifyAuthCode(ActionEvent event) {
         try {
@@ -50,5 +50,4 @@ public class VerifyWithMicrosoft {
             System.out.println("the auth is wrong");
         }
     }
-
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <?import java.net.URL?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
@@ -44,7 +44,7 @@
         </Button>
         <ListView fx:id="listeEvents" layoutX="244.0" layoutY="161.0" prefHeight="694.0" prefWidth="974.0" stylesheets="@dashboard2.css" visible="false" />
         <AnchorPane fx:id="anchplanning" layoutX="207.0" layoutY="161.0" prefHeight="694.0" prefWidth="1011.0" visible="false" />
-        <FontAwesomeIconView fx:id="idfilter" fill="#9a4141" glyphName="FILTER" layoutX="793.0" layoutY="79.0" onMouseClicked="#filtrer" size="30" wrappingWidth="21.428571701049805" />
+        <FontIcon fx:id="idfilter" fill="#9a4141" iconLiteral="fa-filter" layoutX="793.0" layoutY="79.0" onMouseClicked="#filtrer" wrappingWidth="21.428571701049805" />
         <AnchorPane fx:id="FilterAnchor" layoutX="563.0" layoutY="51.0" prefHeight="87.0" prefWidth="200.0" visible="false">
             <children>
                 <Button layoutX="74.0" layoutY="161.0" mnemonicParsing="false" onAction="#filtercinema" text="Filter" />
@@ -55,10 +55,10 @@
             <Cursor fx:constant="TEXT" />
          </cursor>
       </TextField>
-      <FontAwesomeIconView fill="#f5f5f5" glyphName="SEARCH" layoutX="-62.0" layoutY="85.0" size="19" text="" textAlignment="RIGHT" />
+      <FontIcon fill="#f5f5f5" iconLiteral="fa-search" layoutX="-62.0" layoutY="85.0" text="" textAlignment="RIGHT" />
       <Button layoutX="1048.0" layoutY="55.0" mnemonicParsing="false" style="-fx-background-color: AE2D3C;">
          <graphic>
-            <FontAwesomeIconView fill="#f5f5f5" glyphName="SEARCH" size="19" text="" textAlignment="RIGHT" />
+            <FontIcon fill="#f5f5f5" iconLiteral="fa-search"  text="" textAlignment="RIGHT" />
          </graphic>
       </Button>
       <ImageView fitHeight="69.0" fitWidth="62.0" layoutX="259.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">

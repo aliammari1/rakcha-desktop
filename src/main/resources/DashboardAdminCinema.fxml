@@ -32,21 +32,21 @@
                     </columns>
                 </TableView>
                 <Button layoutX="109.0" layoutY="51.0" mnemonicParsing="false" onAction="#filtrer" prefHeight="35.0" prefWidth="120.0" styleClass="sale" text="Filter">
-               <stylesheets>
-                  <URL value="@styles/dashboard.css" />
-                  <URL value="@styles/filmStyle.css" />
-               </stylesheets></Button>
+                    <stylesheets>
+                        <URL value="@styles/dashboard.css" />
+                        <URL value="@styles/filmStyle.css" />
+                    </stylesheets></Button>
                 <FontAwesomeIconView fill="#f5f2f2" glyphName="FILTER" layoutX="123.0" layoutY="76.0" size="20" text="" />
-            <TextField fx:id="tfSearch" layoutX="656.0" layoutY="47.0" prefHeight="42.0" prefWidth="248.0" promptText="Search here ......................">
-               <cursor>
-                  <Cursor fx:constant="TEXT" />
-               </cursor>
-            </TextField>
-            <Button layoutX="857.0" layoutY="54.0" mnemonicParsing="false" style="-fx-background-color: AE2D3C;">
-               <graphic>
-                  <FontAwesomeIconView fill="#f5f5f5" glyphName="SEARCH" size="19" text="" textAlignment="RIGHT" />
-               </graphic>
-            </Button>
+                <TextField fx:id="tfSearch" layoutX="656.0" layoutY="47.0" prefHeight="42.0" prefWidth="248.0" promptText="Search here ......................">
+                    <cursor>
+                        <Cursor fx:constant="TEXT" />
+                    </cursor>
+                </TextField>
+                <Button layoutX="857.0" layoutY="54.0" mnemonicParsing="false" style="-fx-background-color: AE2D3C;">
+                    <graphic>
+                        <FontAwesomeIconView fill="#f5f5f5" glyphName="SEARCH" size="19" text="" textAlignment="RIGHT" />
+                    </graphic>
+                </Button>
             </children>
             <stylesheets>
                 <URL value="@styles/filmStyle.css" />

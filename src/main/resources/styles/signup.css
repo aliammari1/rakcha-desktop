@@ -1,5 +1,5 @@
 .leftSideBar {
-    -fx-background-color: #e8626d;
+    -fx-background-color: #e74141;
 }
 
 .loginTextField {
@@ -8,7 +8,7 @@
 
 .loginButton {
     -fx-background-radius: 20px;
-    -fx-background-color: #e8626d;
+    -fx-background-color: #e74141;
 }
 
 #rememberMe:selected .mark {
@@ -16,11 +16,11 @@
 }
 
 #rememberMe:selected .box {
-    -fx-background-color: #e8626d;
+    -fx-background-color: #e74141;
 }
 
 .subLogin {
-    -fx-background-color: #e8626d;
+    -fx-background-color: #e74141;
     -fx-background-radius: 20px;
 }
 

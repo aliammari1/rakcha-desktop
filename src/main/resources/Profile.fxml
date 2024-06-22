@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
-<?import io.github.palexdev.materialfx.controls.MFXPasswordField?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -25,7 +25,7 @@
                                     prefWidth="56.0" styleClass="close" stylesheets="@styles/dashbord.css"
                                     AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
                                 <graphic>
-                                    <FontAwesomeIconView glyphName="CLOSE"/>
+                                    <FontIcon iconLiteral="fa-close"/>
                                 </graphic>
                             </Button>
                             <Button layoutX="1163.0" layoutY="15.0" mnemonicParsing="false" prefHeight="28.0"
@@ -40,14 +40,16 @@
 
                                 <!--                                <Image url="@Logo.png"/>-->
                             </ImageView>
-                            <FontAwesomeIconView glyphName="MINUS" layoutX="1187.0" layoutY="34.0"/>
+                            <FontIcon iconLiteral="fa-minus" layoutX="1187.0" layoutY="34.0"/>
                         </children>
                     </AnchorPane>
                 </children>
             </AnchorPane>
         </top>
         <left>
-            <fx:include source="clientSideBar.fxml"/>
+            <AnchorPane fx:id="leftPane">
+                <fx:include source="clientSideBar.fxml"/>
+            </AnchorPane>
         </left>
         <center>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
@@ -84,7 +86,7 @@
                                            prefWidth="227.0" promptText="Name"/>
                                 <TextField fx:id="adresseTextField" layoutX="225.0" layoutY="481.0" prefHeight="34.0"
                                            prefWidth="200.0" promptText="Adresse"/>
-                                <MFXPasswordField fx:id="passwordTextField" layoutX="295.0" layoutY="602.0"
+                                <PasswordField fx:id="passwordTextField" layoutX="295.0" layoutY="602.0"
                                                   prefHeight="22.0" prefWidth="261.0"/>
                                 <Label layoutX="27.0" layoutY="485.0" prefHeight="27.0" prefWidth="112.0"
                                        text="adresse :">
@@ -118,9 +120,7 @@
                                 </Label>
                                 <ImageView fx:id="photoDeProfilImageView" fitHeight="83.0" fitWidth="347.0"
                                            layoutX="197.0" layoutY="45.0" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                        <Image url="@../../../../../../Users/louja/Downloads/271703945_498298928323573_5292415383228406900_n.jpg"/>
-                                    </image>
+                                    <Image url="@Logo.png"/>
                                 </ImageView>
                                 <Label layoutX="461.0" layoutY="483.0" prefHeight="27.0" prefWidth="143.0"
                                        text="Birth date :">

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <?import java.lang.String?>
 <?import java.net.URL?>
 <?import javafx.scene.control.Button?>
@@ -120,7 +120,7 @@
                         <Font name="Berlin Sans FB Demi Bold" size="18.0" />
                     </font>
                 </Label>
-            <FontAwesomeIconView fx:id="retour" fill="#eedede" glyphName="ARROW_LEFT" layoutX="715.0" layoutY="24.0" onMouseClicked="#afficherserie" wrappingWidth="31.285714149475098" />
+            <FontIcon fx:id="retour" fill="#eedede" iconLiteral="fa-arrow-left" layoutX="715.0" layoutY="24.0" onMouseClicked="#afficherserie" wrappingWidth="31.285714149475098" />
             </children>
         </Pane>
     </children>

@@ -7,28 +7,68 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.users.SignUpController">
-    <children>
-        <Label layoutX="83.0" layoutY="62.0" text="nom" />
-        <TextField fx:id="nomTextField" layoutX="194.0" layoutY="58.0" />
-        <TextField fx:id="prenomTextField" layoutX="194.0" layoutY="99.0" />
-        <Label layoutX="84.0" layoutY="103.0" text="prenom" />
-        <Label layoutX="79.0" layoutY="183.0" text="numero de telephone" />
-        <TextField fx:id="num_telephoneTextField" layoutX="202.0" layoutY="179.0" />
-        <TextField fx:id="passwordTextField" layoutX="203.0" layoutY="224.0" />
-        <Label layoutX="79.0" layoutY="228.0" text="password" />
-        <Label layoutX="78.0" layoutY="278.0" text="role" />
-        <TextField fx:id="adresseTextField" layoutX="204.0" layoutY="322.0" />
-        <Label layoutX="78.0" layoutY="326.0" text="adresse" />
-        <Label layoutX="388.0" layoutY="36.0" text="date de naissance" />
-        <DatePicker fx:id="dateDeNaissanceDatePicker" layoutX="388.0" layoutY="58.0" />
-        <TextField fx:id="emailTextField" layoutX="388.0" layoutY="119.0" prefHeight="26.0" prefWidth="175.0" />
-        <Label layoutX="388.0" layoutY="94.0" text="email" />
-        <Label layoutX="388.0" layoutY="149.0" text="image" />
-        <ImageView fx:id="photoDeProfilImageView" fitHeight="150.0" fitWidth="200.0" layoutX="382.0" layoutY="171.0" pickOnBounds="true" preserveRatio="true" />
-        <Button layoutX="391.0" layoutY="331.0" mnemonicParsing="false" onAction="#importImage" text="import" />
-        <Button layoutX="300.0" layoutY="357.0" mnemonicParsing="false" onAction="#signup" text="Sign Up" />
-        <ComboBox fx:id="roleComboBox" layoutX="204.0" layoutY="274.0" prefWidth="150.0" />
-    </children>
+<AnchorPane fx:id="anchorPane" prefHeight="520.0" prefWidth="929.0" stylesheets="@styles/filmStyle.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.users.SignUpController">
+   <children>
+      <VBox layoutX="267.0" prefHeight="561.0" prefWidth="400.0" spacing="10" style="-fx-padding: 20;" stylesheets="@signUpStyles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="267.0" AnchorPane.rightAnchor="266.0" AnchorPane.topAnchor="0.0">
+         <GridPane hgap="10" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="482.0" prefWidth="360.0" vgap="10">
+            <Label text="nom" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+            <TextField fx:id="nomTextField" prefHeight="26.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+            <Label text="prenom" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+            <TextField fx:id="prenomTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+            <Label text="numero de telephone" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+            <TextField fx:id="num_telephoneTextField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+            <Label text="password" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+            <TextField fx:id="passwordTextField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+            <Label text="role" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+            <ComboBox fx:id="roleComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+            <Label text="addresse" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+            <TextField fx:id="adresseTextField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+
+            <Label text="date de naissance" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+            <DatePicker fx:id="dateDeNaissanceDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+
+            <Label text="email" GridPane.columnIndex="0" GridPane.rowIndex="7" />
+            <TextField fx:id="emailTextField" prefHeight="26.0" prefWidth="175.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+
+            <Label text="image" GridPane.columnIndex="0" GridPane.rowIndex="8" />
+            <ImageView fx:id="photoDeProfilImageView" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <columnConstraints>
+               <ColumnConstraints />
+               <ColumnConstraints />
+            </columnConstraints>
+            <rowConstraints>
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+            </rowConstraints>
+         </GridPane>
+
+         <HBox spacing="10">
+            <Button mnemonicParsing="false" onAction="#importImage" styleClass="sale" stylesheets="@styles/signup.css" text="import">
+               <graphic>
+                  <FontIcon iconLiteral="fa-user" />
+               </graphic>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#signup" styleClass="sale" stylesheets="@styles/signup.css" text="Sign Up" />
+         </HBox>
+      </VBox>
+   </children>
 </AnchorPane>

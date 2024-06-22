@@ -1,7 +1,5 @@
 package com.esprit.utils;
-
 public class FaceRecognition {
-
 //    public static File root;
 //    static LBPHFaceRecognizer faceRecognizer;
 //    static MatVector images;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -13,7 +13,7 @@
 
 <AnchorPane fx:id="categorieList" prefHeight="707.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.produits.DesignCategorieAdminController">
     <children>
-        <fx:include source="clientSideBar.fxml" />
+        <fx:include source="adminSideBar.fxml" />
         <AnchorPane layoutX="1280.0" prefHeight="707.0" prefWidth="0.0" styleClass="nav-form" stylesheets="@styles/dashboard.css" />
         <AnchorPane fx:id="formulaire" layoutX="320.0" layoutY="75.0" prefHeight="499.0" prefWidth="309.0" styleClass="bg-white" stylesheets="@styles/produitStyle.css">
             <children>
@@ -55,7 +55,7 @@
             </children>
         </AnchorPane>
         <Button layoutX="1097.0" layoutY="196.0" mnemonicParsing="false" onAction="#GestionProduit" styleClass="instert-btn" stylesheets="@styles/produitStyle.css" text="Product Management" />
-        <FontAwesomeIconView fx:id="idfilter" fill="#b90909" glyphName="FILTER" layoutX="1205.0" layoutY="70.0" onMouseClicked="#filtrer" size="20" />
+        <FontIcon fx:id="idfilter" fill="#b90909" iconLiteral="fa-filter" layoutX="1205.0" layoutY="70.0" onMouseClicked="#filtrer" />
         <AnchorPane fx:id="FilterAnchor" layoutX="972.0" layoutY="23.0" prefHeight="160.0" prefWidth="202.0" styleClass="bg-white" stylesheets="@styles/produitStyle.css" visible="false">
             <children>
                 <Button layoutX="121.0" layoutY="110.0" mnemonicParsing="false" onAction="#filtercinema" prefHeight="42.0" prefWidth="81.0" styleClass="sale" stylesheets="@styles/produitStyle.css" text="Filter" />
@@ -68,7 +68,7 @@
         </TextField>
         <Button layoutX="773.0" layoutY="41.0" mnemonicParsing="false" style="-fx-background-color: AE2D3C;">
             <graphic>
-                <FontAwesomeIconView fill="#f5f5f5" glyphName="SEARCH" size="19" text="" textAlignment="RIGHT" />
+                <FontIcon fill="#f5f5f5" iconLiteral="fa-search" text="" textAlignment="RIGHT" />
             </graphic>
         </Button>
 
