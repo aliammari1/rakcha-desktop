@@ -1,11 +1,17 @@
 package com.esprit.utils;
+
+import java.util.Arrays;
+import java.util.Collections;
+
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.SearchResult;
+
 public class FilmYoutubeTrailer {
     private final String API_KEY = "AIzaSyABEi2834N8l6Cty8yFCEiGRisZjyXonEM";
-    /** 
+
+    /**
      * @param filmNom
      * @return String
      */
@@ -20,10 +26,10 @@ public class FilmYoutubeTrailer {
                     .setApplicationName("Rakcha")
                     .build();
             System.out.println("the trailer is not watched");
-            YouTube.Search.List search = youtube.search().list("id,snippet");
+            YouTube.Search.List search = youtube.search().list(Arrays.asList("id", "snippet"));
             search.setKey(API_KEY);
             search.setQ(filmNom);
-            search.setType("video");
+            search.setType(Collections.singletonList("video"));
             search.setFields("items(id/videoId)");
             search.setMaxResults(1L);
             SearchResult searchResult = search.execute().getItems().get(0);

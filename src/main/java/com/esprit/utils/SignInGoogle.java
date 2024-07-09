@@ -1,4 +1,14 @@
 package com.esprit.utils;
+
+import java.io.IOException;
+import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.ExecutionException;
+
+import org.asynchttpclient.DefaultAsyncHttpClientConfig;
+
 import com.github.scribejava.apis.GoogleApi20;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.httpclient.HttpClientConfig;
@@ -8,12 +18,7 @@ import com.github.scribejava.core.model.Response;
 import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth20Service;
 import com.github.scribejava.httpclient.ahc.AhcHttpClientConfig;
-import org.asynchttpclient.DefaultAsyncHttpClientConfig;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.concurrent.ExecutionException;
+
 public class SignInGoogle {
         // static final Scanner in = new Scanner(System.in, StandardCharsets.UTF_8);
         static final String clientId = "";
@@ -22,7 +27,8 @@ public class SignInGoogle {
         private static final String NETWORK_NAME = "Google Async";
         private static final String PROTECTED_RESOURCE_URL = "https://www.googleapis.com/oauth2/v3/userinfo";
         static OAuth20Service service;
-        /** 
+
+        /**
          * @return String
          * @throws InterruptedException
          * @throws ExecutionException
@@ -31,9 +37,9 @@ public class SignInGoogle {
         public static String signInWithGoogle() throws InterruptedException, ExecutionException, IOException {
                 final HttpClientConfig clientConfig = new AhcHttpClientConfig(new DefaultAsyncHttpClientConfig.Builder()
                                 .setMaxConnections(5)
-                                .setRequestTimeout(10_000)
-                                .setPooledConnectionIdleTimeout(1_000)
-                                .setReadTimeout(1_000)
+                                .setRequestTimeout(Duration.ofMillis(10_000))
+                                .setPooledConnectionIdleTimeout(Duration.ofMillis(1_000))
+                                .setReadTimeout(Duration.ofMillis(1_000))
                                 .build());
                 service = new ServiceBuilder(clientId)
                                 .apiSecret(clientSecret)
@@ -59,7 +65,8 @@ public class SignInGoogle {
                 System.out.println("Now go and authorize ScribeJava here:");
                 return authorizationUrl;
         }
-        /** 
+
+        /**
          * @param code
          * @return Boolean
          * @throws IOException
