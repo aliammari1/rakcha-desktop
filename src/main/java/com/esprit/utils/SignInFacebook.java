@@ -1,4 +1,5 @@
 package com.esprit.utils;
+
 import com.github.scribejava.apis.FacebookApi;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth2AccessToken;
@@ -11,10 +12,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
+
 public class SignInFacebook {
     private static final String NETWORK_NAME = "Facebook";
     private static final String PROTECTED_RESOURCE_URL = "https://graph.facebook.com/v3.2/me";
-    /** 
+
+    /**
      * @param args
      * @throws IOException
      * @throws InterruptedException
@@ -23,8 +26,8 @@ public class SignInFacebook {
     @SuppressWarnings("PMD.SystemPrintln")
     public static void main(String... args) throws IOException, InterruptedException, ExecutionException {
         // Replace these with your client id and secret
-        final String clientId = "3172803282854611";
-        final String clientSecret = "808d0ff108a8459d656930871a986960";
+        final String clientId = System.getenv("FACEBOOK_CLIENT_ID");
+        final String clientSecret = System.getenv("FACEBOOK_CLIENT_SECRET");
         final String secretState = "secret" + new Random().nextInt(999_999);
         final OAuth20Service service = new ServiceBuilder(clientId)
                 .apiSecret(clientSecret)

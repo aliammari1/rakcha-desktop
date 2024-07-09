@@ -25,8 +25,8 @@ public class SignInLinkedin {
     @SuppressWarnings("PMD.SystemPrintln")
     public static void main(String... args) throws IOException, InterruptedException, ExecutionException {
         // Replace these with your client id and secret
-        final String clientId = "your client id";
-        final String clientSecret = "your client secret";
+        final String clientId = System.getenv("LINKEDIN_CLIENT_ID");
+        final String clientSecret = System.getenv("LINKEDIN_CLIENT_SECRET");
         final OAuth20Service service = new ServiceBuilder(clientId)
                 .apiSecret(clientSecret)
                 .defaultScope(new ScopeBuilder("r_liteprofile", "r_emailaddress")) // replace with desired scope
