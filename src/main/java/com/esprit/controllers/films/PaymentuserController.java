@@ -451,7 +451,6 @@ public class PaymentuserController implements Initializable {
             document.addPage(page);
             PDPageContentStream contentStream = new PDPageContentStream(document, page);
             contentStream.beginText();
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
             contentStream.newLineAtOffset(100, 700);
             contentStream.showText("Receipt for Ticket Purchase");
             contentStream.endText();
