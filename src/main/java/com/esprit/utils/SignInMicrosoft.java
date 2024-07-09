@@ -1,4 +1,5 @@
 package com.esprit.utils;
+
 import com.github.scribejava.apis.LiveApi;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth2AccessToken;
@@ -9,10 +10,12 @@ import com.github.scribejava.core.oauth.OAuth20Service;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
+
 public class SignInMicrosoft {
     private static final String PROTECTED_RESOURCE_URL = "https://apis.live.net/v5.0/me";
     static OAuth20Service service;
-    /** 
+
+    /**
      * @param args
      * @return String
      * @throws IOException
@@ -20,10 +23,11 @@ public class SignInMicrosoft {
      * @throws ExecutionException
      */
     @SuppressWarnings("PMD.SystemPrintln")
-    public static String SignInWithMicrosoft(String... args) throws IOException, InterruptedException, ExecutionException {
+    public static String SignInWithMicrosoft(String... args)
+            throws IOException, InterruptedException, ExecutionException {
         // Replace these with your own api key and secret
-        final String apiKey = "";
-        final String apiSecret = "";
+        final String apiKey = System.getenv("MICROSOFT_CLIENT_ID");
+        final String apiSecret = System.getenv("MICROSOFT_CLIENT_SECRET");
         service = new ServiceBuilder(apiKey)
                 .apiSecret(apiSecret)
                 .defaultScope("wl.basic")
@@ -39,7 +43,8 @@ public class SignInMicrosoft {
         System.out.println("Now go and authorize ScribeJava here:");
         return authorizationUrl;
     }
-    /** 
+
+    /**
      * @param code
      * @throws IOException
      * @throws ExecutionException
@@ -48,7 +53,7 @@ public class SignInMicrosoft {
     public static void verifyAuthUrl(String code) throws IOException, ExecutionException, InterruptedException {
         System.out.println("And paste the authorization code here");
         System.out.print(">>");
-//        final String code = in.nextLine();
+        // final String code = in.nextLine();
         System.out.println();
         System.out.println("Trading the Authorization Code for an Access Token...");
         final OAuth2AccessToken accessToken = service.getAccessToken(code);

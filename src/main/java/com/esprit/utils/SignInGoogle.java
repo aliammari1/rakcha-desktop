@@ -21,8 +21,8 @@ import com.github.scribejava.httpclient.ahc.AhcHttpClientConfig;
 
 public class SignInGoogle {
         // static final Scanner in = new Scanner(System.in, StandardCharsets.UTF_8);
-        static final String clientId = "";
-        static final String clientSecret = "";
+        static final String clientId = System.getenv("GOOGLE_CLIENT_ID");
+        static final String clientSecret = System.getenv("GOOGLE_CLIENT_SECRET");
         static final String secretState = "secret" + new Random().nextInt(999_999);
         private static final String NETWORK_NAME = "Google Async";
         private static final String PROTECTED_RESOURCE_URL = "https://www.googleapis.com/oauth2/v3/userinfo";
