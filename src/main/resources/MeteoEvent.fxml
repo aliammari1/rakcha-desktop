@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.*?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="400.0" prefWidth="600.0" styleClass="instert-btn-picture"
+            stylesheets="@dashboard2.css" xmlns="http://javafx.com/javafx/21"
+            fx:controller="com.esprit.controllers.evenements.MeteoEventController">
+    <children>
+        <ImageView fx:id="img" fitHeight="150.0" fitWidth="200.0" layoutX="24.0" layoutY="104.0" pickOnBounds="true"
+                   preserveRatio="true"/>
+        <Button fx:id="cancel" layoutX="51.0" layoutY="72.0" mnemonicParsing="false" onAction="#handleButtonClicks"
+                opacity="0.0" text="Cancel"/>
+        <Button fx:id="set" layoutX="59.0" layoutY="147.0" mnemonicParsing="false" onAction="#handleButtonClicks"
+                opacity="0.0" text="Set"/>
+        <Button fx:id="change" layoutX="59.0" layoutY="222.0" mnemonicParsing="false" onAction="#handleButtonClicks"
+                opacity="0.0" text="Change"/>
+        <TextField fx:id="cityName" layoutX="213.0" layoutY="330.0">
+            <font>
+                <Font size="20.0"/>
+            </font>
+        </TextField>
+        <TextField fx:id="invis" editable="false" layoutX="111.0" layoutY="339.0" visible="false"/>
+        <Label fx:id="city" layoutX="550.0" layoutY="340.0" opacity="0.0" text="Label"/>
+        <Label fx:id="temperature" layoutX="424.0" layoutY="72.0" text="Label">
+            <font>
+                <Font name="Berlin Sans FB" size="24.0"/>
+            </font>
+        </Label>
+        <Label fx:id="day" layoutX="14.0" layoutY="261.0" text="Label">
+            <font>
+                <Font name="Bodoni MT" size="40.0"/>
+            </font>
+        </Label>
+        <Label fx:id="desc" layoutX="78.0" layoutY="331.0" opacity="0.0" text="Label"/>
+        <Label fx:id="errors" layoutX="550.0" layoutY="331.0" opacity="0.0" text="Label"/>
+        <Label fx:id="windSpeed" layoutX="424.0" layoutY="172.0" text="Label">
+            <font>
+                <Font name="Berlin Sans FB" size="24.0"/>
+            </font>
+        </Label>
+        <Label fx:id="cloudiness" layoutX="424.0" layoutY="272.0" text="Label">
+            <font>
+                <Font name="Berlin Sans FB" size="24.0"/>
+            </font>
+        </Label>
+        <Label fx:id="pressure" layoutX="424.0" layoutY="222.0" text="Label">
+            <font>
+                <Font name="Berlin Sans FB" size="24.0"/>
+            </font>
+        </Label>
+        <Label fx:id="humidity" layoutX="424.0" layoutY="122.0" text="Label">
+            <font>
+                <Font name="Berlin Sans FB" size="24.0"/>
+            </font>
+        </Label>
+        <Label layoutX="250.0" layoutY="70.0" text="Temperature :">
+            <font>
+                <Font name="Barlow Condensed SemiBold" size="24.0"/>
+            </font>
+        </Label>
+        <Label layoutX="250.0" layoutY="120.0" text="Humidity :">
+            <font>
+                <Font name="Barlow Condensed SemiBold" size="24.0"/>
+            </font>
+        </Label>
+        <Label layoutX="250.0" layoutY="170.0" text="WindSpeed :">
+            <font>
+                <Font name="Barlow Condensed SemiBold" size="24.0"/>
+            </font>
+        </Label>
+        <Label layoutX="250.0" layoutY="220.0" text="Pressure :">
+            <font>
+                <Font name="Barlow Condensed SemiBold" size="24.0"/>
+            </font>
+        </Label>
+        <Label layoutX="250.0" layoutY="270.0" text="Cloudiness :">
+            <font>
+                <Font name="Barlow Condensed SemiBold" size="24.0"/>
+            </font>
+        </Label>
+    </children>
+</AnchorPane>

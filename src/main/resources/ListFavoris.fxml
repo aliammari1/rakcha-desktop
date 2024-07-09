@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import java.net.URL?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="743.0" prefWidth="1168.0" styleClass="nav-form"
+            stylesheets="@styles/dashboard.css" xmlns="http://javafx.com/javafx/21"
+            fx:controller="com.esprit.controllers.series.ListFavorisController">
+    <children>
+        <ListView fx:id="listViewFav" layoutX="10.0" layoutY="60.0" onMouseClicked="#loadSeriesFavList"
+                  prefHeight="666.0" prefWidth="1143.0" styleClass="combo-box-red">
+            <stylesheets>
+                <URL value="@styles/dashboard.css"/>
+                <URL value="@dashbord.css"/>
+            </stylesheets>
+        </ListView>
+        <Button layoutX="30.0" layoutY="14.0" mnemonicParsing="false" onAction="#loadSeriesFavList" prefHeight="36.0"
+                prefWidth="204.0" styleClass="nav-form" stylesheets="@styles/dashboard.css"
+                text=" Personal Series Collection" textFill="WHITE">
+            <font>
+                <Font name="Berlin Sans FB Demi Bold" size="14.0"/>
+            </font>
+        </Button>
+    </children>
+</AnchorPane>

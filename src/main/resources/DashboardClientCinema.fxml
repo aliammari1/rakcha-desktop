@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="855.0" prefWidth="1507.0" stylesheets="@styles/filmStyle.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.cinemas.DashboardClientController">
+    <children>
+        <fx:include source="clientSideBar.fxml" />
+        <AnchorPane fx:id="listCinemaClient" layoutX="317.0" layoutY="25.0" prefHeight="793.0" prefWidth="1131.0" styleClass="bg-white" stylesheets="@styles/filmStyle.css">
+            <children>
+                <FlowPane fx:id="cinemaFlowPane" layoutX="39.0" layoutY="83.0" prefHeight="662.0" prefWidth="475.0" styleClass="bg-white" />
+                <Button layoutX="823.0" layoutY="19.0" mnemonicParsing="false" onAction="#filtrer" prefHeight="56.0" prefWidth="219.0" styleClass="sale" stylesheets="@styles/filmStyle.css" text="Filter" />
+                <TextField fx:id="searchbar1" layoutX="517.0" layoutY="25.0" prefHeight="42.0" prefWidth="248.0" promptText="Search here ......................">
+                    <cursor>
+                        <Cursor fx:constant="TEXT" />
+                    </cursor>
+                </TextField>
+                <Button layoutX="726.0" layoutY="33.0" mnemonicParsing="false" prefHeight="0.0" prefWidth="30.0" style="-fx-background-color: AE2D3C;">
+                    <graphic>
+                        <FontAwesomeIconView fill="#f5f5f5" glyphName="SEARCH" size="19" text="" textAlignment="RIGHT" wrappingWidth="15.714285850524902" />
+                    </graphic>
+                </Button>
+                <ComboBox fx:id="tricomboBox" layoutX="277.0" layoutY="21.0" prefHeight="40.0" prefWidth="139.0" styleClass="sale" />
+                <AnchorPane fx:id="Anchortop3" layoutX="648.0" layoutY="178.0" prefHeight="571.0" prefWidth="403.0" styleClass="instert-btn" stylesheets="@styles/filmStyle.css" />
+                <Label layoutX="785.0" layoutY="105.0" text="Top 3">
+                    <font>
+                        <Font name="Arial Rounded MT Bold" size="48.0" />
+                    </font>
+                </Label>
+            </children>
+        </AnchorPane>
+
+        <AnchorPane fx:id="PlanningPane" layoutX="470.0" layoutY="80.0" prefHeight="706.0" prefWidth="857.0" styleClass="bg-white" stylesheets="@styles/dashboard.css" visible="false">
+            <children>
+                <Label layoutX="319.0" layoutY="34.0" text="Planning: " textFill="#282622">
+                    <font>
+                        <Font name="Arial Rounded MT Bold" size="48.0" />
+                    </font>
+                </Label>
+                <FlowPane fx:id="planningFlowPane" layoutX="31.0" layoutY="108.0" prefHeight="562.0" prefWidth="796.0" styleClass="table-view" stylesheets="@styles/filmStyle.css" />
+                <Button fx:id="closeDetailFilm" layoutX="798.0" layoutY="7.0" mnemonicParsing="false" onAction="#Planninggclose" prefHeight="35.0" prefWidth="48.0" styleClass="close" stylesheets="@styles/filmStyle.css">
+                    <graphic>
+                        <FontAwesomeIconView glyphName="CLOSE" styleClass="close" />
+                    </graphic>
+                </Button>
+            </children>
+        </AnchorPane>
+        <AnchorPane fx:id="FilterAnchor" layoutX="556.0" layoutY="136.0" prefHeight="294.0" prefWidth="306.0" styleClass="bg-white" stylesheets="@styles/filmStyle.css" visible="false">
+            <children>
+                <Button layoutX="130.0" layoutY="246.0" mnemonicParsing="false" onAction="#filtrercinema" styleClass="sale" stylesheets="@styles/filmStyle.css" text="Filtrer" />
+            </children>
+        </AnchorPane>
+        <AnchorPane fx:id="AnchorComments" layoutX="372.0" layoutY="86.0" prefHeight="608.0" prefWidth="490.0" styleClass="top-form" stylesheets="@styles/dashboard.css" visible="false">
+            <children>
+                <TextArea fx:id="txtAreaComments" layoutX="17.0" layoutY="551.0" prefHeight="30.0" prefWidth="452.0" />
+                <ScrollPane fx:id="ScrollPaneComments" layoutX="19.0" layoutY="34.0" prefHeight="506.0" prefWidth="452.0">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
+                    </content>
+                </ScrollPane>
+                <FontAwesomeIconView glyphName="CLOSE" layoutX="455.0" layoutY="21.0" onMouseClicked="#closeCommets" size="20" />
+                <FontAwesomeIconView fill="#ab3a3a" glyphName="SEND" layoutX="433.0" layoutY="581.0" onMouseClicked="#AddComment" size="30" />
+            </children>
+        </AnchorPane>
+
+    </children>
+
+</AnchorPane>

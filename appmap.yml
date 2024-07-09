@@ -1,0 +1,17 @@
+# This is the AppMap configuration file.
+# For full documentation of this file for Java programs, see:
+# https://appmap.io/docs/reference/appmap-java.html#configuration
+name: rakcha-desktop
+
+# Your project contains the directory src/main/java. AppMap has
+# auto-detected the following Java packages in this directory:
+packages:
+- path: com.esprit.controllers
+- path: com.esprit.models.cinemas
+- path: com.esprit.models.films
+- path: com.esprit.models.produits
+- path: com.esprit.models.series
+- path: com.esprit.models.users
+- path: com.esprit.services
+- path: com.esprit.tests
+- path: com.esprit.utils

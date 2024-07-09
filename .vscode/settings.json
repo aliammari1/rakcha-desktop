@@ -1,0 +1,21 @@
+{
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.test.config": [
+        {
+            "name": "Test with AppMap",
+            "vmArgs": [
+                "-javaagent:C:\\Users\\AliAMMARI\\.appmap\\lib\\java\\appmap.jar",
+                "--module-path D:\\openjfx\\javafx-sdk-21.0.2\\lib --add-modules javafx.controls,javafx.fxml",
+                "-Dappmap.output.directory=${command:appmap.getAppmapDir}"
+            ]
+        },
+        {
+            "name": "Test with AppMap",
+            "vmArgs": [
+                "-javaagent:${userHome}\\.appmap\\lib\\java\\appmap.jar",
+                "-Dappmap.output.directory=${command:appmap.getAppmapDir}"
+            ]
+        }
+    ],
+}

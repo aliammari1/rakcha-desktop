@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/src/main/java/com/esprit/services/cinemas/CinemaService.java" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/esprit/services/cinemas/CommentaireCinemaService.java" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/esprit/services/cinemas/RatingCinemaService.java" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/esprit/services/cinemas/SalleService.java" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/esprit/services/cinemas/SeanceService.java" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/esprit/services/films/ActorService.java" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/esprit/services/films/ActorfilmService.java" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/esprit/services/films/CategoryService.java" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/esprit/services/films/FilmService.java" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/esprit/services/films/FilmcategoryService.java" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/esprit/services/films/FilmcinemaService.java" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/esprit/services/films/FilmcomentService.java" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/esprit/services/films/RatingFilmService.java" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/esprit/services/films/TicketService.java" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/esprit/services/produits/AvisService.java" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/esprit/services/produits/CategorieService.java" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/esprit/services/produits/CommandeItemService.java" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/esprit/services/produits/CommandeService.java" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/esprit/services/produits/CommentaireService.java" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/esprit/services/produits/PanierService.java" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/esprit/services/produits/ProduitService.java" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/esprit/services/series/IServiceCategorieImpl.java" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/esprit/services/series/IServiceEpisodeImpl.java" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/esprit/services/series/IServiceFavorisImpl.java" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/esprit/services/series/IServiceFeedbackImpl.java" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/esprit/services/series/IServiceSerieImpl.java" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/esprit/services/users/UserService.java" dialect="MySQL" />
+  </component>
+</project>

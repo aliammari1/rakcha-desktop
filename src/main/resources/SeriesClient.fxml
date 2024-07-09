@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="855.0" prefWidth="1507.0" stylesheets="@dashbord.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.series.SerieClientController">
+    <children>
+        <fx:include source="clientSideBar.fxml" />
+        <Pane layoutX="241.0" layoutY="8.0" prefHeight="71.0" prefWidth="947.0" stylesheets="@dashbord.css">
+            <children>
+                <Label layoutX="686.0" layoutY="48.0" />
+                <TextField fx:id="recherchefld" layoutX="47.0" layoutY="23.0" prefHeight="40.0" prefWidth="521.0" promptText=" Search Series By Category " styleClass="image-view-red" stylesheets="@styles/dashboard.css" />
+                <Button fx:id="favBtnList" layoutX="765.0" layoutY="14.0" mnemonicParsing="false" onAction="#AfficherFavList" prefHeight="50.0" prefWidth="157.0" styleClass="sale" text="Favorites " textFill="WHITE">
+                    <font>
+                        <Font name="Berlin Sans FB Demi Bold" size="13.0" />
+                    </font>
+               <stylesheets>
+                  <URL value="@styles/dashboard.css" />
+                  <URL value="@styles/filmStyle.css" />
+               </stylesheets>
+                </Button>
+                <ComboBox fx:id="CamboxCategorie" layoutX="578.0" layoutY="14.0" prefHeight="26.0" prefWidth="178.0" promptText="Select Category" styleClass="sale">
+               <stylesheets>
+                  <URL value="@styles/dashboard.css" />
+                  <URL value="@styles/filmStyle.css" />
+               </stylesheets></ComboBox>
+            </children>
+        </Pane>
+        <HBox fx:id="hboxTop3" layoutX="356.0" layoutY="94.0" prefHeight="100.0" prefWidth="646.0" stylesheets="@styles/dashboard.css" />
+        <ListView fx:id="listeSerie" layoutX="269.0" layoutY="310.0" prefHeight="539.0" prefWidth="1031.0" styleClass="image-view-red" stylesheets="@styles/dashboard.css" />
+          <Text layoutX="284.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="The Best Three Recommandations:" wrappingWidth="371.9999145507813">
+              <font>
+                  <Font name="Berlin Sans FB" size="24.0" />
+              </font>
+          </Text>
+
+    </children>
+</AnchorPane>
