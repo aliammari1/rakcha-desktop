@@ -1,7 +1,10 @@
 package com.esprit.controllers.users;
+
 import com.esprit.models.users.Admin;
 import com.esprit.models.users.User;
+import com.esprit.services.produits.AvisService;
 import com.esprit.services.users.UserService;
+
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -31,6 +34,7 @@ import javafx.util.Callback;
 import javafx.util.converter.DefaultStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import net.synedra.validatorfx.Validator;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -42,7 +46,11 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class AdminDashboardController {
+    private static final Logger LOGGER = Logger.getLogger(AdminDashboardController.class.getName());
     TableColumn<User, String> roleTableColumn;
     TableColumn<User, HBox> photoDeProfilTableColumn;
     TableColumn<User, String> lastNameTableColumn;
@@ -79,9 +87,12 @@ public class AdminDashboardController {
     private ComboBox<String> roleComboBox;
     @FXML
     private TableView<User> userTableView;
+
     /**
-     * Sets up user interface components for a table displaying information about users,
-     * including text fields, combo boxes, and validation listeners to ensure data validity.
+     * Sets up user interface components for a table displaying information about
+     * users,
+     * including text fields, combo boxes, and validation listeners to ensure data
+     * validity.
      */
     @FXML
     void initialize() {
@@ -126,42 +137,53 @@ public class AdminDashboardController {
             }
             readUserTable();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
-    /** 
+
     /**
-     * Adds a listener to a `TextField` that validates the inputted string using a provided
-     * `Predicate<String>`. If the string is invalid, a tooltip with an error message is
+     * /**
+     * Adds a listener to a `TextField` that validates the inputted string using a
+     * provided
+     * `Predicate<String>`. If the string is invalid, a tooltip with an error
+     * message is
      * displayed near the text field.
      * 
-     * @param textField TextField component whose text value will be validated and whose
-     * tooltip will be updated accordingly.
+     * @param textField           TextField component whose text value will be
+     *                            validated and whose
+     *                            tooltip will be updated accordingly.
      * 
-     * @param validationPredicate function that determines whether or not a given string
-     * is valid, and it is used to determine whether an error message should be displayed
-     * when the user types something into the text field.
+     * @param validationPredicate function that determines whether or not a given
+     *                            string
+     *                            is valid, and it is used to determine whether an
+     *                            error message should be displayed
+     *                            when the user types something into the text field.
      * 
-     * @param errorMessage message to be displayed as a tooltip when the user enters an
-     * invalid value in the text field.
+     * @param errorMessage        message to be displayed as a tooltip when the user
+     *                            enters an
+     *                            invalid value in the text field.
      */
     private void addValidationListener(TextField textField, Predicate<String> validationPredicate,
-                                       String errorMessage) {
+            String errorMessage) {
         Tooltip tooltip = new Tooltip();
         textField.textProperty().addListener(new ChangeListener<String>() {
             /**
              * Detects changes to the `textField`'s value and displays an error message in a
              * tooltip if the new value does not meet a validation predicate or is empty.
              * 
-             * @param observable ObservableValue object that emits changes to its value, allowing
-             * the function to detect and respond to those changes.
+             * @param observable ObservableValue object that emits changes to its value,
+             *                   allowing
+             *                   the function to detect and respond to those changes.
              * 
-             * @param oldValue previous value of the observable variable before the change occurred,
-             * which is used to validate the new value and determine if an error message should
-             * be displayed.
+             * @param oldValue   previous value of the observable variable before the change
+             *                   occurred,
+             *                   which is used to validate the new value and determine if an
+             *                   error message should
+             *                   be displayed.
              * 
-             * @param newValue updated value of the `TextField`, which is used to validate and
-             * display an error message if necessary.
+             * @param newValue   updated value of the `TextField`, which is used to validate
+             *                   and
+             *                   display an error message if necessary.
              */
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -193,8 +215,10 @@ public class AdminDashboardController {
             }
         });
     }
+
     /**
-     * Reads data from a User Service and populates the user table view with the retrieved
+     * Reads data from a User Service and populates the user table view with the
+     * retrieved
      * data.
      */
     @FXML
@@ -204,16 +228,20 @@ public class AdminDashboardController {
             List<User> userList = userService.read();
             userTableView.setItems(FXCollections.observableArrayList(userList));
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
-    /** 
+
     /**
-     * Allows users to create a new admin account by providing their first name, last
-     * name, phone number, password, email, and role. It then validates the input and
+     * /**
+     * Allows users to create a new admin account by providing their first name,
+     * last
+     * name, phone number, password, email, and role. It then validates the input
+     * and
      * creates a new admin user using the provided information.
      * 
-     * @param event `addAdmin` action, triggering the execution of the code within the function.
+     * @param event `addAdmin` action, triggering the execution of the code within
+     *              the function.
      */
     @FXML
     void addAdmin(ActionEvent event) {
@@ -234,7 +262,8 @@ public class AdminDashboardController {
                 // Perform input validation
                 if (firstName.isEmpty() || lastName.isEmpty() || phoneNumber.isEmpty() || password.isEmpty() ||
                         role.isEmpty() || email.isEmpty() || dateDeNaissance == null) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR, "Please fill in all the required fields", ButtonType.CLOSE);
+                    Alert alert = new Alert(Alert.AlertType.ERROR, "Please fill in all the required fields",
+                            ButtonType.CLOSE);
                     alert.show();
                     return;
                 }
@@ -246,7 +275,8 @@ public class AdminDashboardController {
                 }
                 // Validate password length
                 if (password.length() < 8) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR, "Password must be at least 8 characters long", ButtonType.CLOSE);
+                    Alert alert = new Alert(Alert.AlertType.ERROR, "Password must be at least 8 characters long",
+                            ButtonType.CLOSE);
                     alert.show();
                     return;
                 }
@@ -272,13 +302,17 @@ public class AdminDashboardController {
             UserService userService = new UserService();
             userService.create(user);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
+
     /**
-     * Sets up cell value factories for each column of a table displaying information
-     * about users. These factories provide the content for each cell, such as a user's
-     * first or last name, phone number, password, role, address, date of birth, email,
+     * Sets up cell value factories for each column of a table displaying
+     * information
+     * about users. These factories provide the content for each cell, such as a
+     * user's
+     * first or last name, phone number, password, role, address, date of birth,
+     * email,
      * and photo profile picture.
      */
     private void setupCellValueFactories() {
@@ -296,8 +330,9 @@ public class AdminDashboardController {
                      * 
                      * @param param value of a table cell, which contains the birth date of a user.
                      * 
-                     * @returns a `SimpleObjectProperty` of a `DatePicker` object initialized with the
-                     * birth date value from the input `User` object, if available.
+                     * @returns a `SimpleObjectProperty` of a `DatePicker` object initialized with
+                     *          the
+                     *          birth date value from the input `User` object, if available.
                      */
                     @Override
                     public ObservableValue<DatePicker> call(TableColumn.CellDataFeatures<User, DatePicker> param) {
@@ -312,18 +347,23 @@ public class AdminDashboardController {
         photoDeProfilTableColumn.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<User, HBox>, ObservableValue<HBox>>() {
                     /**
-                     * Takes a `TableColumn.CellDataFeatures` parameter and generates an `HBox` widget
+                     * Takes a `TableColumn.CellDataFeatures` parameter and generates an `HBox`
+                     * widget
                      * with an image view containing the user's profile picture. The image view is
-                     * customized to fit a specified size, and an event handler is added to handle mouse
-                     * clicks on the image view, opening a file chooser to allow the user to select a new
+                     * customized to fit a specified size, and an event handler is added to handle
+                     * mouse
+                     * clicks on the image view, opening a file chooser to allow the user to select
+                     * a new
                      * profile picture.
                      * 
                      * @param param value of the `User` object being processed, which provides the
-                     * `photo_de_profil` property that is used to display the photo of the profile in the
-                     * `ImageView`.
+                     *              `photo_de_profil` property that is used to display the photo of
+                     *              the profile in the
+                     *              `ImageView`.
                      * 
-                     * @returns an `ObservableValue` of type `HBox`, which contains a single `ImageView`
-                     * component that displays the user's profile picture.
+                     * @returns an `ObservableValue` of type `HBox`, which contains a single
+                     *          `ImageView`
+                     *          component that displays the user's profile picture.
                      */
                     @Override
                     public ObservableValue<HBox> call(TableColumn.CellDataFeatures<User, HBox> param) {
@@ -335,12 +375,15 @@ public class AdminDashboardController {
                             hBox.getChildren().add(imageView);
                             hBox.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
                                 /**
-                                 * Displays a file open dialog box, selects an image file using FileChooser, sets the
-                                 * selected image as the viewable image in the stage, and clears any previous images
+                                 * Displays a file open dialog box, selects an image file using FileChooser,
+                                 * sets the
+                                 * selected image as the viewable image in the stage, and clears any previous
+                                 * images
                                  * in the container.
                                  * 
-                                 * @param event mouse event that triggered the function's execution, providing no
-                                 * further context beyond that.
+                                 * @param event mouse event that triggered the function's execution, providing
+                                 *              no
+                                 *              further context beyond that.
                                  */
                                 @Override
                                 public void handle(MouseEvent event) {
@@ -358,12 +401,12 @@ public class AdminDashboardController {
                                             photoDeProfilImageView.setImage(image);
                                         }
                                     } catch (Exception e) {
-                                        e.printStackTrace();
+                                        LOGGER.log(Level.SEVERE, e.getMessage(), e);
                                     }
                                 }
                             });
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            LOGGER.log(Level.SEVERE, e.getMessage(), e);
                         }
                         return new SimpleObjectProperty<HBox>(hBox);
                     }
@@ -371,26 +414,33 @@ public class AdminDashboardController {
         deleteTableColumn.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<User, Button>, ObservableValue<Button>>() {
                     /**
-                     * Creates a new `Button` element with the text "delete". The button's `onAction`
-                     * event handler is set to delete the corresponding user's ID when clicked, and then
+                     * Creates a new `Button` element with the text "delete". The button's
+                     * `onAction`
+                     * event handler is set to delete the corresponding user's ID when clicked, and
+                     * then
                      * reads the entire user table.
                      * 
-                     * @param param `CellDataFeatures` of a table column, providing the current cell value
-                     * and related data.
+                     * @param param `CellDataFeatures` of a table column, providing the current cell
+                     *              value
+                     *              and related data.
                      * 
-                     * @returns a `SimpleObjectProperty` of a `Button` object with an action to delete
-                     * the corresponding user ID.
+                     * @returns a `SimpleObjectProperty` of a `Button` object with an action to
+                     *          delete
+                     *          the corresponding user ID.
                      */
                     @Override
                     public ObservableValue<Button> call(TableColumn.CellDataFeatures<User, Button> param) {
                         Button button = new Button("delete");
                         button.setOnAction(new EventHandler<ActionEvent>() {
                             /**
-                             * Deletes a record with the specified ID from a data storage and subsequently reloads
+                             * Deletes a record with the specified ID from a data storage and subsequently
+                             * reloads
                              * the user table.
                              * 
-                             * @param event deleting event triggered by the user's action, and it is passed to
-                             * the `handle()` method as an argument to enable the appropriate actions to be taken.
+                             * @param event deleting event triggered by the user's action, and it is passed
+                             *              to
+                             *              the `handle()` method as an argument to enable the appropriate
+                             *              actions to be taken.
                              */
                             @Override
                             public void handle(ActionEvent event) {
@@ -402,9 +452,12 @@ public class AdminDashboardController {
                     }
                 });
     }
+
     /**
-     * Sets up cell factories for the `adresse` and `email` columns of the user table,
-     * which will display a text field for each column. The `cellFactory` method is used
+     * Sets up cell factories for the `adresse` and `email` columns of the user
+     * table,
+     * which will display a text field for each column. The `cellFactory` method is
+     * used
      * to create TableCells that can display text data in a formatted way.
      */
     private void setupCellFactories() {
@@ -413,6 +466,7 @@ public class AdminDashboardController {
             public TableCell<User, String> call(TableColumn<User, String> param) {
                 return new TextFieldTableCell<User, String>(new DefaultStringConverter()) {
                     private Validator validator;
+
                     @Override
                     public void startEdit() {
                         super.startEdit();
@@ -435,7 +489,7 @@ public class AdminDashboardController {
                             textField.textProperty().addListener(new ChangeListener<String>() {
                                 @Override
                                 public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                                    String newValue) {
+                                        String newValue) {
                                     if (validator.containsErrors()) {
                                         tooltip.setText(validator.createStringBinding().getValue());
                                         tooltip.setStyle("-fx-background-color: #f00;");
@@ -469,6 +523,7 @@ public class AdminDashboardController {
             public TableCell<User, String> call(TableColumn<User, String> param) {
                 return new TextFieldTableCell<User, String>(new DefaultStringConverter()) {
                     private Validator validator;
+
                     @Override
                     public void startEdit() {
                         super.startEdit();
@@ -491,7 +546,7 @@ public class AdminDashboardController {
                             textField.textProperty().addListener(new ChangeListener<String>() {
                                 @Override
                                 public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                                    String newValue) {
+                                        String newValue) {
                                     if (validator.containsErrors()) {
                                         tooltip.setText(validator.createStringBinding().getValue());
                                         tooltip.setStyle("-fx-background-color: #f00;");
@@ -525,6 +580,7 @@ public class AdminDashboardController {
             public TableCell<User, Integer> call(TableColumn<User, Integer> param) {
                 return new TextFieldTableCell<User, Integer>(new IntegerStringConverter()) {
                     private Validator validator;
+
                     @Override
                     public void startEdit() {
                         super.startEdit();
@@ -547,7 +603,7 @@ public class AdminDashboardController {
                             textField.textProperty().addListener(new ChangeListener<String>() {
                                 @Override
                                 public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                                    String newValue) {
+                                        String newValue) {
                                     if (validator.containsErrors()) {
                                         tooltip.setText(validator.createStringBinding().getValue());
                                         tooltip.setStyle("-fx-background-color: #f00;");
@@ -581,6 +637,7 @@ public class AdminDashboardController {
             public TableCell<User, String> call(TableColumn<User, String> param) {
                 return new TextFieldTableCell<User, String>(new DefaultStringConverter()) {
                     private Validator validator;
+
                     @Override
                     public void startEdit() {
                         super.startEdit();
@@ -603,7 +660,7 @@ public class AdminDashboardController {
                             textField.textProperty().addListener(new ChangeListener<String>() {
                                 @Override
                                 public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                                    String newValue) {
+                                        String newValue) {
                                     if (validator.containsErrors()) {
                                         tooltip.setText(validator.createStringBinding().getValue());
                                         tooltip.setStyle("-fx-background-color: #f00;");
@@ -639,6 +696,7 @@ public class AdminDashboardController {
             public TableCell<User, String> call(TableColumn<User, String> param) {
                 return new TextFieldTableCell<User, String>(new DefaultStringConverter()) {
                     private Validator validator;
+
                     @Override
                     public void startEdit() {
                         super.startEdit();
@@ -661,7 +719,7 @@ public class AdminDashboardController {
                             textField.textProperty().addListener(new ChangeListener<String>() {
                                 @Override
                                 public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                                    String newValue) {
+                                        String newValue) {
                                     if (validator.containsErrors()) {
                                         tooltip.setText(validator.createStringBinding().getValue());
                                         tooltip.setStyle("-fx-background-color: #f00;");
@@ -695,6 +753,7 @@ public class AdminDashboardController {
             public TableCell<User, String> call(TableColumn<User, String> param) {
                 return new TextFieldTableCell<User, String>(new DefaultStringConverter()) {
                     private Validator validator;
+
                     @Override
                     public void startEdit() {
                         super.startEdit();
@@ -717,7 +776,7 @@ public class AdminDashboardController {
                             textField.textProperty().addListener(new ChangeListener<String>() {
                                 @Override
                                 public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                                    String newValue) {
+                                        String newValue) {
                                     if (validator.containsErrors()) {
                                         tooltip.setText(validator.createStringBinding().getValue());
                                         tooltip.setStyle("-fx-background-color: #f00;");
@@ -747,6 +806,7 @@ public class AdminDashboardController {
             }
         });
     }
+
     private void setupCellOnEditCommit() {
         firstNameTableColumn.setOnEditCommit(new EventHandler<CellEditEvent<User, String>>() {
             @Override
@@ -757,7 +817,7 @@ public class AdminDashboardController {
                     update(event.getTableView().getItems().get(
                             event.getTablePosition().getRow()));
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
             }
         });
@@ -770,7 +830,7 @@ public class AdminDashboardController {
                     update(event.getTableView().getItems().get(
                             event.getTablePosition().getRow()));
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
             }
         });
@@ -783,7 +843,7 @@ public class AdminDashboardController {
                     update(event.getTableView().getItems().get(
                             event.getTablePosition().getRow()));
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
             }
         });
@@ -796,7 +856,7 @@ public class AdminDashboardController {
                     update(event.getTableView().getItems().get(
                             event.getTablePosition().getRow()));
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
             }
         });
@@ -809,7 +869,7 @@ public class AdminDashboardController {
                     update(event.getTableView().getItems().get(
                             event.getTablePosition().getRow()));
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
             }
         });
@@ -822,7 +882,7 @@ public class AdminDashboardController {
                     update(event.getTableView().getItems().get(
                             event.getTablePosition().getRow()));
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
             }
         });
@@ -830,7 +890,7 @@ public class AdminDashboardController {
             @Override
             public void handle(CellEditEvent<User, DatePicker> event) {
                 event.getTableView().getItems().get(
-                                event.getTablePosition().getRow())
+                        event.getTablePosition().getRow())
                         .setBirthDate(Date.valueOf(event.getNewValue().getValue()));
                 update(event.getTableView().getItems().get(
                         event.getTablePosition().getRow()));
@@ -846,6 +906,7 @@ public class AdminDashboardController {
             }
         });
     }
+
     @FXML
     void clearTextFields(ActionEvent event) {
         idTextField.setText("");
@@ -859,6 +920,7 @@ public class AdminDashboardController {
         emailTextField.setText("");
         photoDeProfilImageView.setImage(null);
     }
+
     void delete(int id) {
         // String role = roleComboBox.getValue();
         // User user = null;
@@ -893,13 +955,13 @@ public class AdminDashboardController {
         userService.delete(new User(id, "", "", 0, "", "", "", new Date(0, 0, 0), "", null) {
         });
     }
+
     @FXML
     void importImage(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("PNG", "*.png"),
-                new FileChooser.ExtensionFilter("JPG", "*.jpg")
-        );
+                new FileChooser.ExtensionFilter("JPG", "*.jpg"));
         fileChooser.setTitle("Sélectionner une image");
         File selectedFile = fileChooser.showOpenDialog(null);
         if (selectedFile != null) {
@@ -916,23 +978,26 @@ public class AdminDashboardController {
                 Image selectedImage = new Image(destinationFilePath1.toUri().toString());
                 photoDeProfilImageView.setImage(selectedImage);
             } catch (IOException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
         }
     }
+
     void update(User user) {
         try {
             UserService userService = new UserService();
             userService.update(user);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
+
     @FXML
     void generatePDF() {
         UserService userService = new UserService();
         userService.generateUserPDF();
     }
+
     @FXML
     public void signOut(ActionEvent event) throws IOException {
         Stage stage = (Stage) emailTextField.getScene().getWindow();

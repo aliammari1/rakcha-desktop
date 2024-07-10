@@ -1,14 +1,22 @@
 package com.esprit.utils;
+
+import com.esprit.services.produits.AvisService;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import com.stripe.model.Customer;
 import com.stripe.model.Token;
+
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class PaymentProcessor {
     private static final String STRIPE_API_KEY = "sk_test_51M9YqwA2tc9VjbDkLO3AcupMJW2tJquATnN2jize1vg7O2VZkqDssPzeSEjFviA1rQ076mRxqbKbhsWVZtwUOkjA00y3GKCfsy";
-    /** 
+    private static final Logger LOGGER = Logger.getLogger(PaymentProcessor.class.getName());
+
+    /**
      * @param name
      * @param email
      * @param amount
@@ -32,11 +40,12 @@ public class PaymentProcessor {
             // Check if the charge was successful
             result = charge.getStatus().equals("succeeded");
         } catch (StripeException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return result;
     }
-    /** 
+
+    /**
      * @param name
      * @param email
      * @return Customer
@@ -48,17 +57,19 @@ public class PaymentProcessor {
         customerParams.put("email", email);
         return Customer.create(customerParams);
     }
+
     private static Token createToken(String cardNumber, int expMonth, int expYear, String cvc) throws StripeException {
         Map<String, Object> cardParams = new HashMap<>();
         cardParams.put("number", cardNumber);
         cardParams.put("exp_month", expMonth);
         cardParams.put("exp_year", expYear);
         cardParams.put("cvc", cvc);
-        System.out.println(cardParams);
+        LOGGER.info(cardParams.toString());
         Map<String, Object> tokenParams = new HashMap<>();
         tokenParams.put("card", cardParams);
         return Token.create(tokenParams);
     }
+
     private static Charge chargeCustomer(String customerId, String tokenId, float amount) throws StripeException {
         Map<String, Object> chargeParams = new HashMap<>();
         chargeParams.put("amount", (int) (amount * 100)); // Amount in cents

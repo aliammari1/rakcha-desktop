@@ -1,5 +1,7 @@
 package com.esprit.utils;
+
 import com.esprit.models.users.User;
+import com.esprit.services.produits.AvisService;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -7,12 +9,18 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
 public class UserPDF {
-    /** 
+    private static final Logger LOGGER = Logger.getLogger(UserPDF.class.getName());
+
+    /**
      * @param userData
      */
     public void generate(final List<User> userData) {
@@ -20,7 +28,7 @@ public class UserPDF {
         try {
             PdfWriter.getInstance(document, new FileOutputStream("iTextTable.pdf"));
         } catch (final DocumentException | FileNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
             throw new RuntimeException(e);
         }
         document.open();
@@ -33,12 +41,13 @@ public class UserPDF {
         try {
             document.add(table);
         } catch (final DocumentException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
             throw new RuntimeException(e);
         }
         document.close();
     }
-    /** 
+
+    /**
      * @param table
      * @param attributes
      */
@@ -52,6 +61,7 @@ public class UserPDF {
             table.addCell(header);
         });
     }
+
     private void addRows(final PdfPTable table, final List<User> userData) {
         for (final User user : userData) {
             table.addCell(String.valueOf(user.getId()));
@@ -68,14 +78,14 @@ public class UserPDF {
     // try {
     // path = Paths.get(ClassLoader.getSystemResource("Java_logo.png").toURI());
     // } catch (URISyntaxException e) {
-    // e.printStackTrace();
+    // LOGGER.log(Level.SEVERE, e.getMessage(), e);
     // throw new RuntimeException(e);
     // }
     // Image img = null;
     // try {
     // img = Image.getInstance(path.toAbsolutePath().toString());
     // } catch (BadElementException | IOException e) {
-    // e.printStackTrace();
+    // LOGGER.log(Level.SEVERE, e.getMessage(), e);
     // throw new RuntimeException(e);
     // }
     // img.scalePercent(10);

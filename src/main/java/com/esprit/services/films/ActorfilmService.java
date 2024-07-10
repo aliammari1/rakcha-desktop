@@ -1,21 +1,30 @@
 package com.esprit.services.films;
+
 import com.esprit.models.films.Actor;
 import com.esprit.models.films.Actorfilm;
 import com.esprit.models.films.Film;
 import com.esprit.services.IService;
+import com.esprit.services.produits.AvisService;
 import com.esprit.utils.DataSource;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class ActorfilmService implements IService<Actorfilm> {
     Connection connection;
+    private static final Logger LOGGER = Logger.getLogger(ActorfilmService.class.getName());
+
     public ActorfilmService() {
         connection = DataSource.getInstance().getConnection();
     }
-    /** 
+
+    /**
      * @param actorfilm
      */
     @Override
@@ -26,7 +35,7 @@ public class ActorfilmService implements IService<Actorfilm> {
             String[] actorNames = actor.getNom().split(", ");
             PreparedStatement statement = connection.prepareStatement(req);
             for (String actorname : actorNames) {
-                System.out.println(actorname);
+                LOGGER.info(actorname);
                 statement.setInt(1, FilmService.getFilmLastInsertID());
                 statement.setInt(2, new ActorService().getActorByNom(actorname).getId());
                 statement.executeUpdate();
@@ -35,7 +44,8 @@ public class ActorfilmService implements IService<Actorfilm> {
             throw new RuntimeException(e);
         }
     }
-    /** 
+
+    /**
      * @return List<Actorfilm>
      */
     @Override
@@ -52,14 +62,15 @@ public class ActorfilmService implements IService<Actorfilm> {
                                 rs.getString("actor.biographie")),
                         new Film(rs.getInt("film.id"), rs.getNString("film.nom"), rs.getString("image"),
                                 rs.getTime("duree"), rs.getString("film.description"), rs.getInt("annederalisation"))));
-                // System.out.println(filmArrayList.get(i));
+                // LOGGER.info(filmArrayList.get(i));
                 // i++;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return actorfilmArrayList;
     }
+
     @Override
     public void update(Actorfilm actorfilm) {
         String req = "UPDATE film_actor " +
@@ -71,21 +82,22 @@ public class ActorfilmService implements IService<Actorfilm> {
         try {
             PreparedStatement statement = connection.prepareStatement(req);
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
+
     public void updateActors(Film film, List<String> actorNames) {
         FilmService filmService = new FilmService();
         ActorService actorService = new ActorService();
         filmService.update(film);
-        System.out.println("filmCategory---------------: " + film);
+        LOGGER.info("filmCategory---------------: " + film);
         String reqDelete = "DELETE FROM film_actor WHERE film_id = ?;";
         try {
             PreparedStatement statement = connection.prepareStatement(reqDelete);
             statement.setInt(1, film.getId());
             statement.executeUpdate();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         String req = "INSERT INTO film_actor (film_id, actor_id) VALUES (?,?)";
         try {
@@ -99,9 +111,11 @@ public class ActorfilmService implements IService<Actorfilm> {
             throw new RuntimeException(e);
         }
     }
+
     @Override
     public void delete(Actorfilm actorfilm) {
     }
+
     public String getActorsNames(int id) {
         String s = "";
         String req = "SELECT GROUP_CONCAT(actor.nom SEPARATOR ', ') AS actorNames from film_actor JOIN actor  ON film_actor.actor_id = actor.id JOIN film on film_actor.film_id = film.id where film.id = ? GROUP BY film.id;";
@@ -111,10 +125,9 @@ public class ActorfilmService implements IService<Actorfilm> {
             ResultSet rs = pst.executeQuery();
             // int i = 0;
             rs.next();
-            System.out.println(rs.getMetaData());
             s = rs.getString("actorNames");
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return s;
     }

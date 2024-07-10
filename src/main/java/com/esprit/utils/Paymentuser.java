@@ -1,11 +1,18 @@
 package com.esprit.utils;
+
+import com.esprit.services.produits.AvisService;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
+
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
+
 public class Paymentuser {
-    /** 
+    private static final Logger LOGGER = Logger.getLogger(Paymentuser.class.getName());
+
+    /**
      * @param f
      * @return String
      * @throws StripeException
@@ -18,7 +25,7 @@ public class Paymentuser {
         params.put("customer", "cus_PgYn51DmhdjzAw");
         // Get the client's Payment Page URL
         Charge charge = Charge.create(params);
-        System.out.println(charge);
+        LOGGER.info(charge.toString());
         return charge.getReceiptUrl();
     }
 }

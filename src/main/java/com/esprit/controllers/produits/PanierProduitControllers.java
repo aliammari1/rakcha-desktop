@@ -1,6 +1,8 @@
 package com.esprit.controllers.produits;
+
 import com.esprit.models.produits.*;
 import com.esprit.models.users.Client;
+import com.esprit.services.produits.AvisService;
 import com.esprit.services.produits.CommandeItemService;
 import com.esprit.services.produits.PanierService;
 import com.esprit.services.produits.ProduitService;
@@ -35,7 +37,12 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import org.kordamp.ikonli.javafx.FontIcon;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class PanierProduitControllers implements Initializable {
+    private static final Logger LOGGER = Logger.getLogger(PanierProduitControllers.class.getName());
+
     @FXML
     private FlowPane cartFlowPane;
     @FXML
@@ -44,22 +51,27 @@ public class PanierProduitControllers implements Initializable {
     // Déclarez une structure de données pour stocker les VBox associés aux produits
     private Map<Integer, VBox> produitVBoxMap = new HashMap<>();
     // Mettez à jour le prix total dans SharedData
-    //SharedData sharedData = new SharedData();
+    // SharedData sharedData = new SharedData();
     PanierService panierService = new PanierService();
     Panier panier = new Panier();
     private double prixTotal = 0.0;
     @FXML
     private FontIcon retour;
-    /** 
+
     /**
+     * /**
      * Triggers a task to be executed on the EDT (Event Dispatch Thread) by calling
-     * `Platform.runLater`. The task is an anonymous inner class that calls the method `loadAcceptedPanier`.
+     * `Platform.runLater`. The task is an anonymous inner class that calls the
+     * method `loadAcceptedPanier`.
      * 
-     * @param url URL of the application that requires initialization, and is passed to
-     * the `runLater()` method for further processing.
+     * @param url            URL of the application that requires initialization,
+     *                       and is passed to
+     *                       the `runLater()` method for further processing.
      * 
-     * @param resourceBundle resource bundle that provides localized data for the platform,
-     * and is used to load the accepted panier in the run method.
+     * @param resourceBundle resource bundle that provides localized data for the
+     *                       platform,
+     *                       and is used to load the accepted panier in the run
+     *                       method.
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -73,9 +85,12 @@ public class PanierProduitControllers implements Initializable {
             }
         });
     }
+
     /**
-     * Retrieves a list of products from a service, verifies if each product has already
-     * been added to the cart, and adds it to the cart if not. It also marks the product
+     * Retrieves a list of products from a service, verifies if each product has
+     * already
+     * been added to the cart, and adds it to the cart if not. It also marks the
+     * product
      * as added in a map for future reference.
      */
     private void loadAcceptedPanier() {
@@ -98,13 +113,16 @@ public class PanierProduitControllers implements Initializable {
             }
         }
     }
-    /** 
+
     /**
-     * Creates a new Label element with the total price displayed as a double value, using
+     * /**
+     * Creates a new Label element with the total price displayed as a double value,
+     * using
      * the specified font size, position, and styling options.
      * 
-     * @param prixTotal total price of the product, which is used to create and set the
-     * label's text value.
+     * @param prixTotal total price of the product, which is used to create and set
+     *                  the
+     *                  label's text value.
      * 
      * @returns a label with the price total value displayed in bold font.
      */
@@ -117,17 +135,23 @@ public class PanierProduitControllers implements Initializable {
         prixTotalLabel.setStyle("-fx-text-fill: #d72222;");
         return prixTotalLabel;
     }
+
     /**
-     * Generates a `VBox` container for each product in the shopping cart, with buttons
-     * to decrease or increase the quantity and a label to display the total price. It
+     * Generates a `VBox` container for each product in the shopping cart, with
+     * buttons
+     * to decrease or increase the quantity and a label to display the total price.
+     * It
      * also provides delete confirmation pop-up for removing items from the cart.
      * 
-     * @param Panier panier object that contains the details of the products, quantities,
-     * and total price, which are used to populate the UI elements in the `generateProduitCard()`
-     * function.
+     * @param Panier panier object that contains the details of the products,
+     *               quantities,
+     *               and total price, which are used to populate the UI elements in
+     *               the `generateProduitCard()`
+     *               function.
      * 
-     * @returns a VBox container that displays a product's details and allows users to
-     * select it for their order.
+     * @returns a VBox container that displays a product's details and allows users
+     *          to
+     *          select it for their order.
      */
     private VBox createProduitVBox(Panier Panier) {
         VBox produitVBox = new VBox();
@@ -150,7 +174,7 @@ public class PanierProduitControllers implements Initializable {
                 imageView.setImage(defaultImage);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         // Nom du Produit
         Label nameLabel = new Label(Panier.getProduit().getNom());
@@ -195,11 +219,11 @@ public class PanierProduitControllers implements Initializable {
             // Réagir au changement d'état de la CheckBox (sélectionné ou non)
             if (newValue) {
                 commande.getCommandeItem().add(commandeItem);
-                System.out.println("Produit sélectionné");
+                LOGGER.info("Produit sélectionné");
                 updatePrixTotal();
             } else {
                 commande.getCommandeItem().remove(commandeItem);
-                System.out.println("Produit non sélectionné");
+                LOGGER.info("Produit non sélectionné");
                 updatePrixTotal();
             }
         });
@@ -267,8 +291,10 @@ public class PanierProduitControllers implements Initializable {
         produitVBox.getChildren().add(card);
         return produitVBox;
     }
+
     /**
-     * Clears the current elements from the shopping cart, reloads the accepted items,
+     * Clears the current elements from the shopping cart, reloads the accepted
+     * items,
      * and updates the total price.
      */
     private void refreshUI() {
@@ -280,15 +306,19 @@ public class PanierProduitControllers implements Initializable {
         // Mettre à jour le prix total
         updatePrixTotal();
     }
+
     /**
-     * Decreases the quantity of items in a shopping cart by one unit when the user types
+     * Decreases the quantity of items in a shopping cart by one unit when the user
+     * types
      * a negative value into a text field. The updated quantity is then saved in the
      * panier object and reflected in the cart's total quantity.
      * 
-     * @param quantityTextField quantity to be decreased, which is obtained from the text
-     * field of the same name.
+     * @param quantityTextField quantity to be decreased, which is obtained from the
+     *                          text
+     *                          field of the same name.
      * 
-     * @param panier Panier object whose quantity is being updated by the function.
+     * @param panier            Panier object whose quantity is being updated by the
+     *                          function.
      */
     private void decreaseQuantity(TextField quantityTextField, Panier panier) {
         // Diminuer la quantité
@@ -298,32 +328,41 @@ public class PanierProduitControllers implements Initializable {
             panier.setQuantity(panier.getQuantity() - 1);
         }
     }
+
     /**
-     * Compares the requested quantity with the available quantity of stock for a given
+     * Compares the requested quantity with the available quantity of stock for a
+     * given
      * product and returns true if there is enough stock, otherwise false.
      * 
-     * @param produit product for which the availability of stock is being checked.
+     * @param produit  product for which the availability of stock is being checked.
      * 
-     * @param quantity amount of units of the product that are required or desired by the
-     * user, which is compared with the available stock quantity to determine if the
-     * product is available for purchase.
+     * @param quantity amount of units of the product that are required or desired
+     *                 by the
+     *                 user, which is compared with the available stock quantity to
+     *                 determine if the
+     *                 product is available for purchase.
      * 
-     * @returns a boolean value indicating whether the requested quantity of stock is
-     * available or not.
+     * @returns a boolean value indicating whether the requested quantity of stock
+     *          is
+     *          available or not.
      */
     private boolean isStockAvailable(Produit produit, int quantity) {
         // Comparer la quantité demandée avec la quantité disponible en stock
         return produit.getQuantiteP() >= quantity;
     }
+
     /**
-     * Increases the quantity of an item in a shopping cart by 1, checking if the stock
+     * Increases the quantity of an item in a shopping cart by 1, checking if the
+     * stock
      * is available and displaying an alert if it's not.
      * 
-     * @param quantityTextField quantity of the product to be updated in the panier, as
-     * indicated by its name.
+     * @param quantityTextField quantity of the product to be updated in the panier,
+     *                          as
+     *                          indicated by its name.
      * 
-     * @param panier containing the products that the user wishes to increase the quantity
-     * of.
+     * @param panier            containing the products that the user wishes to
+     *                          increase the quantity
+     *                          of.
      */
     private void increaseQuantity(TextField quantityTextField, Panier panier) {
         int currentQuantity = Integer.parseInt(quantityTextField.getText());
@@ -340,9 +379,12 @@ public class PanierProduitControllers implements Initializable {
             alert.showAndWait();
         }
     }
+
     /**
-     * Updates the total price label based on the items in a given order by multiplying
-     * the product prices by their quantities and storing the result in a shared data
+     * Updates the total price label based on the items in a given order by
+     * multiplying
+     * the product prices by their quantities and storing the result in a shared
+     * data
      * instance, then adding it to the flow pane with a created label.
      */
     private void updatePrixTotal() {
@@ -356,14 +398,18 @@ public class PanierProduitControllers implements Initializable {
         prixtotaleFlowPane.getChildren().clear();
         prixtotaleFlowPane.getChildren().add(prixTotalLabel);
     }
+
     /**
-     * Calculates the total price of a product based on its ID and quantity by multiplying
+     * Calculates the total price of a product based on its ID and quantity by
+     * multiplying
      * the unitaire price fetched from the `ProduitService`.
      * 
      * @param idProduit ID of the product for which the price is being calculated.
      * 
-     * @param quantity number of units of the product to be priced, which is multiplied
-     * by the unit price returned by the `ProduitService` to compute the total price.
+     * @param quantity  number of units of the product to be priced, which is
+     *                  multiplied
+     *                  by the unit price returned by the `ProduitService` to
+     *                  compute the total price.
      * 
      * @returns the total price of a product in units of quantity.
      */
@@ -372,12 +418,14 @@ public class PanierProduitControllers implements Initializable {
         double prixUnitaire = produitService.getPrixProduit(idProduit);
         return quantity * prixUnitaire;
     }
+
     /**
      * Loads a FXML file named `/CommandeClient.fxml` into a Stage, initializes a
      * `CommandeClientController`, and displays the scene on the Stage.
      * 
-     * @param event order action event that triggered the function, providing the necessary
-     * context for the code to operate properly.
+     * @param event order action event that triggered the function, providing the
+     *              necessary
+     *              context for the code to operate properly.
      */
     @FXML
     void order(ActionEvent event) {
@@ -395,20 +443,28 @@ public class PanierProduitControllers implements Initializable {
             throw new RuntimeException(e);
         }
     }
+
     /**
-     * Is a handling function for mouse events. It does not perform any specific action
+     * Is a handling function for mouse events. It does not perform any specific
+     * action
      * or have any distinctive features beyond processing mouse input.
      * 
-     * @param event mouse event that triggered the execution of the `Paiment()` function.
+     * @param event mouse event that triggered the execution of the `Paiment()`
+     *              function.
      */
     public void Paiment(MouseEvent event) {
     }
+
     /**
-     * Loads a new user interface, creates a new stage and attaches it to the existing
-     * stage, replacing the original interface, and finally closes the original stage.
+     * Loads a new user interface, creates a new stage and attaches it to the
+     * existing
+     * stage, replacing the original interface, and finally closes the original
+     * stage.
      * 
-     * @param event ActionEvent object that triggered the `cinemaclient` method, providing
-     * the necessary information to update the FXML layout of the stage.
+     * @param event ActionEvent object that triggered the `cinemaclient` method,
+     *              providing
+     *              the necessary information to update the FXML layout of the
+     *              stage.
      */
     @FXML
     void cinemaclient(ActionEvent event) {
@@ -428,16 +484,20 @@ public class PanierProduitControllers implements Initializable {
             // Fermer la fenêtre actuelle
             currentStage.close();
         } catch (IOException e) {
-            e.printStackTrace(); // Gérer l'exception d'entrée/sortie
+            LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
     }
+
     /**
-     * Loads a new UI fragment (`AffichageEvenementClient.fxml`) and replaces the current
+     * Loads a new UI fragment (`AffichageEvenementClient.fxml`) and replaces the
+     * current
      * scene with it, creating a new stage and closing the original one.
      * 
-     * @param event event object that triggered the function, providing information about
-     * the event, such as its source and details, which can be used to handle the event
-     * appropriately.
+     * @param event event object that triggered the function, providing information
+     *              about
+     *              the event, such as its source and details, which can be used to
+     *              handle the event
+     *              appropriately.
      */
     @FXML
     void eventClient(ActionEvent event) {
@@ -457,16 +517,20 @@ public class PanierProduitControllers implements Initializable {
             // Fermer la fenêtre actuelle
             currentStage.close();
         } catch (IOException e) {
-            e.printStackTrace(); // Gérer l'exception d'entrée/sortie
+            LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
     }
+
     /**
-     * Loads a new FXML interface, creates a new scene and stage, and replaces the current
+     * Loads a new FXML interface, creates a new scene and stage, and replaces the
+     * current
      * stage with the new one, closing the old stage upon execution.
      * 
-     * @param event ActionEvent that triggers the function and provides access to information
-     * about the action that was performed, such as the source of the event and the stage
-     * where the action occurred.
+     * @param event ActionEvent that triggers the function and provides access to
+     *              information
+     *              about the action that was performed, such as the source of the
+     *              event and the stage
+     *              where the action occurred.
      */
     @FXML
     void produitClient(ActionEvent event) {
@@ -486,23 +550,30 @@ public class PanierProduitControllers implements Initializable {
             // Fermer la fenêtre actuelle
             currentStage.close();
         } catch (IOException e) {
-            e.printStackTrace(); // Gérer l'exception d'entrée/sortie
+            LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
     }
+
     /**
-     * Is expected to perform some actions or calculations upon receiving an event call.
+     * Is expected to perform some actions or calculations upon receiving an event
+     * call.
      * 
-     * @param event triggered event that initiated the call to the `profilclient` function.
+     * @param event triggered event that initiated the call to the `profilclient`
+     *              function.
      */
     @FXML
     void profilclient(ActionEvent event) {
     }
+
     /**
-     * Loads a new FXML interface using `FXMLLoader`, creates a new scene and stage, and
+     * Loads a new FXML interface using `FXMLLoader`, creates a new scene and stage,
+     * and
      * replaces the current stage with the new one, closing the previous stage.
      * 
-     * @param event ActionEvent object that triggered the function execution, providing
-     * access to information about the event such as its source and target.
+     * @param event ActionEvent object that triggered the function execution,
+     *              providing
+     *              access to information about the event such as its source and
+     *              target.
      */
     @FXML
     void MovieClient(ActionEvent event) {
@@ -522,15 +593,18 @@ public class PanierProduitControllers implements Initializable {
             // Fermer la fenêtre actuelle
             currentStage.close();
         } catch (IOException e) {
-            e.printStackTrace(); // Gérer l'exception d'entrée/sortie
+            LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
     }
+
     /**
-     * Charges a new FXML file, creates a new scene, and attaches it to a new stage. It
+     * Charges a new FXML file, creates a new scene, and attaches it to a new stage.
+     * It
      * also closes the current stage and shows the new stage.
      * 
-     * @param event ActionEvent that triggers the `SerieClient()` method and provides
-     * information about the source of the event.
+     * @param event ActionEvent that triggers the `SerieClient()` method and
+     *              provides
+     *              information about the source of the event.
      */
     @FXML
     void SerieClient(ActionEvent event) {
@@ -550,15 +624,18 @@ public class PanierProduitControllers implements Initializable {
             // Fermer la fenêtre actuelle
             currentStage.close();
         } catch (IOException e) {
-            e.printStackTrace(); // Gérer l'exception d'entrée/sortie
+            LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
     }
+
     /**
-     * Loads an FXML file and displays it in a new stage, blocking the current stage and
+     * Loads an FXML file and displays it in a new stage, blocking the current stage
+     * and
      * setting the new stage as the owner.
      * 
-     * @param mouseEvent mouse event that triggered the execution of the `afficherProduit()`
-     * method.
+     * @param mouseEvent mouse event that triggered the execution of the
+     *                   `afficherProduit()`
+     *                   method.
      */
     public void afficherProduit(MouseEvent mouseEvent) {
         // Obtenir la fenêtre précédente
@@ -581,7 +658,7 @@ public class PanierProduitControllers implements Initializable {
             Stage currentStage = (Stage) retour.getScene().getWindow();
             currentStage.close();
         } catch (Exception e) {
-            e.printStackTrace(); // Gérer l'exception selon vos besoins
+            LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception selon vos besoins
         }
     }
 }

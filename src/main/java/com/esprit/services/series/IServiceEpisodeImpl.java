@@ -1,27 +1,38 @@
 package com.esprit.services.series;
+
 import com.esprit.models.series.Episode;
+import com.esprit.services.produits.AvisService;
 import com.esprit.services.series.DTO.EpisodeDto;
-import com.esprit.utils.mydatabase;
+import com.esprit.utils.DataSource;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
+
 public class IServiceEpisodeImpl implements IServiceEpisode<Episode> {
     private final Connection connection;
+    private static final Logger LOGGER = Logger.getLogger(IServiceEpisodeImpl.class.getName());
+
     public IServiceEpisodeImpl() {
-        connection = mydatabase.getInstance().getConnection();
+        connection = DataSource.getInstance().getConnection();
     }
-    /** 
+
+    /**
      * @param episode
      * @throws SQLException
      */
     @Override
     public void ajouter(Episode episode) throws SQLException {
-        String req = "INSERT INTO episodes (titre,numeroepisode,saison,image,video,idserie) VALUES('" + episode.getTitre() + "'," + episode.getNumeroepisode() + ",'" + episode.getSaison() + "','" + episode.getImage() + "','" + episode.getVideo() + "','" + episode.getIdserie() + "')";
+        String req = "INSERT INTO episodes (titre,numeroepisode,saison,image,video,idserie) VALUES('"
+                + episode.getTitre() + "'," + episode.getNumeroepisode() + ",'" + episode.getSaison() + "','"
+                + episode.getImage() + "','" + episode.getVideo() + "','" + episode.getIdserie() + "')";
         Statement st = connection.createStatement();
         st.executeUpdate(req);
-        System.out.println("episode ajoutee avec succes");
+        LOGGER.info("episode ajoutee avec succes");
     }
-    /** 
+
+    /**
      * @param episode
      * @throws SQLException
      */
@@ -37,16 +48,18 @@ public class IServiceEpisodeImpl implements IServiceEpisode<Episode> {
         st.setInt(6, episode.getIdserie());
         st.setInt(7, episode.getIdepisode());
         st.executeUpdate();
-        System.out.println("episode modifier avec succes");
+        LOGGER.info("episode modifier avec succes");
     }
+
     @Override
     public void supprimer(int id) throws SQLException {
         String req = "DELETE FROM episodes WHERE idepisode = ?";
         PreparedStatement ps = connection.prepareStatement(req);
         ps.setInt(1, id);
         ps.executeUpdate();
-        System.out.println("episode supprimee avec succes");
+        LOGGER.info("episode supprimee avec succes");
     }
+
     @Override
     public List<EpisodeDto> recuperer() throws SQLException {
         List<EpisodeDto> episodeDtos = new ArrayList<>();
@@ -73,6 +86,7 @@ public class IServiceEpisodeImpl implements IServiceEpisode<Episode> {
         }
         return episodeDtos;
     }
+
     @Override
     public List<Episode> recupuerselonSerie(int id) throws SQLException {
         List<Episode> episodes = new ArrayList<>();

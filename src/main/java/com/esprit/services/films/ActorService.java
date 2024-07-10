@@ -1,19 +1,28 @@
 package com.esprit.services.films;
+
 import com.esprit.models.films.Actor;
 import com.esprit.services.IService;
+import com.esprit.services.produits.AvisService;
 import com.esprit.utils.DataSource;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class ActorService implements IService<Actor> {
     Connection connection;
+    private static final Logger LOGGER = Logger.getLogger(ActorService.class.getName());
+
     public ActorService() {
         connection = DataSource.getInstance().getConnection();
     }
-    /** 
+
+    /**
      * @param actor
      */
     @Override
@@ -29,7 +38,8 @@ public class ActorService implements IService<Actor> {
             throw new RuntimeException(e);
         }
     }
-    /** 
+
+    /**
      * @return List<Actor>
      */
     @Override
@@ -43,14 +53,15 @@ public class ActorService implements IService<Actor> {
             while (rs.next()) {
                 actorArrayList.add(new Actor(rs.getInt("id"), rs.getString("nom"), rs.getString("image"),
                         rs.getString("biographie")));
-                System.out.println(actorArrayList.get(i));
+                LOGGER.info(actorArrayList.get(i).toString());
                 i++;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return actorArrayList;
     }
+
     @Override
     public void update(Actor actor) {
         String req = "UPDATE actor set nom=?,image=?,biographie=? where id=?;";
@@ -65,6 +76,7 @@ public class ActorService implements IService<Actor> {
             throw new RuntimeException(e);
         }
     }
+
     public Actor getActorByNom(String nom) {
         Actor actor = null;
         String req = "SELECT * FROM actor where nom LIKE ?";
@@ -74,12 +86,13 @@ public class ActorService implements IService<Actor> {
             ResultSet rs = statement.executeQuery();
             rs.next();
             actor = new Actor(rs.getInt("id"), rs.getString("nom"), rs.getString("image"), rs.getString("biographie"));
-            System.out.println("actor: " + actor);
+            LOGGER.info("actor: " + actor);
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return actor;
     }
+
     @Override
     public void delete(Actor actor) {
         String req = " DELETE  FROM actor where id = ?";
@@ -91,6 +104,7 @@ public class ActorService implements IService<Actor> {
             throw new RuntimeException(e);
         }
     }
+
     public Actor getActorByPlacement(int actorPlacement) {
         String req = "SELECT a.*, COUNT(af.film_id) AS NumberOfAppearances " +
                 "FROM actor a " +

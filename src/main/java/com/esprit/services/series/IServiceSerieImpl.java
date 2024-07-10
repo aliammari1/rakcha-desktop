@@ -1,19 +1,28 @@
 package com.esprit.services.series;
+
 import com.esprit.models.series.Serie;
+import com.esprit.services.produits.AvisService;
 import com.esprit.services.series.DTO.SerieDto;
-import com.esprit.utils.mydatabase;
+import com.esprit.utils.DataSource;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class IServiceSerieImpl implements IServiceSerie<Serie> {
     private final Connection connection;
     private List<Serie> seriesList; // Assurez-vous d'initialiser cette liste
+    private static final Logger LOGGER = Logger.getLogger(IServiceSerieImpl.class.getName());
+
     public IServiceSerieImpl() {
-        connection = mydatabase.getInstance().getConnection();
+        connection = DataSource.getInstance().getConnection();
     }
-    /** 
+
+    /**
      * @param serie
      * @throws SQLException
      */
@@ -34,7 +43,8 @@ public class IServiceSerieImpl implements IServiceSerie<Serie> {
         ps.executeUpdate();
         ps.close();
     }
-    /** 
+
+    /**
      * @param serie
      * @throws SQLException
      */
@@ -52,16 +62,18 @@ public class IServiceSerieImpl implements IServiceSerie<Serie> {
         st.setInt(8, serie.getIdcategorie());
         st.setInt(9, serie.getIdserie());
         st.executeUpdate();
-        System.out.println("serie modifier avec succes");
+        LOGGER.info("serie modifier avec succes");
     }
+
     @Override
     public void supprimer(int id) throws SQLException {
         String req = "DELETE FROM series WHERE idserie = ?";
         PreparedStatement ps = connection.prepareStatement(req);
         ps.setInt(1, id);
         ps.executeUpdate();
-        System.out.println("serie supprimee avec succes");
+        LOGGER.info("serie supprimee avec succes");
     }
+
     @Override
     public List<SerieDto> recuperer() throws SQLException {
         List<SerieDto> serieDto = new ArrayList<>();
@@ -83,7 +95,7 @@ public class IServiceSerieImpl implements IServiceSerie<Serie> {
             s.setIdcategorie(rs.getInt("idcategorie"));
             String req2 = "SELECT categories.nom FROM categories WHERE idcategorie = ? ";
             PreparedStatement ps = connection.prepareStatement(req2);
-            System.out.println(s.getIdcategorie());
+            LOGGER.info(String.valueOf(s.getIdcategorie()));
             ps.setInt(1, s.getIdcategorie());
             ResultSet rs2 = ps.executeQuery();
             while (rs2.next()) {
@@ -93,6 +105,7 @@ public class IServiceSerieImpl implements IServiceSerie<Serie> {
         }
         return serieDto;
     }
+
     @Override
     public List<Serie> recuperers() throws SQLException {
         List<Serie> series = new ArrayList<>();
@@ -116,6 +129,7 @@ public class IServiceSerieImpl implements IServiceSerie<Serie> {
         }
         return series;
     }
+
     @Override
     public List<Serie> recuperes(int id) throws SQLException {
         List<Serie> series = new ArrayList<>();
@@ -140,6 +154,7 @@ public class IServiceSerieImpl implements IServiceSerie<Serie> {
         }
         return series;
     }
+
     public void ajouterLike(Serie serie) throws SQLException {
         String req = "UPDATE series set liked = ?,nbLikes = ? where idserie = ?;";
         PreparedStatement ps = connection.prepareStatement(req);
@@ -149,6 +164,7 @@ public class IServiceSerieImpl implements IServiceSerie<Serie> {
         ps.executeUpdate();
         ps.close();
     }
+
     public void removeLike(Serie serie) throws SQLException {
         String req = "UPDATE series set liked = ?,nbLikes = ? where idserie = ?;";
         PreparedStatement ps = connection.prepareStatement(req);
@@ -158,6 +174,7 @@ public class IServiceSerieImpl implements IServiceSerie<Serie> {
         ps.executeUpdate();
         ps.close();
     }
+
     public void ajouterDislike(Serie serie) throws SQLException {
         String req = "UPDATE series set disliked = ?,nbDislikes = ? where idserie = ?;";
         PreparedStatement ps = connection.prepareStatement(req);
@@ -167,6 +184,7 @@ public class IServiceSerieImpl implements IServiceSerie<Serie> {
         ps.executeUpdate();
         ps.close();
     }
+
     public void removeDislike(Serie serie) throws SQLException {
         String req = "UPDATE series set disliked = ?,nbDislikes = ? where idserie = ?;";
         PreparedStatement ps = connection.prepareStatement(req);
@@ -176,6 +194,7 @@ public class IServiceSerieImpl implements IServiceSerie<Serie> {
         ps.executeUpdate();
         ps.close();
     }
+
     public List<Serie> findMostLiked() {
         List<Serie> series = new ArrayList<>();
         String sql = "SELECT * FROM series ORDER BY nbLikes DESC LIMIT 3";
@@ -198,10 +217,11 @@ public class IServiceSerieImpl implements IServiceSerie<Serie> {
                 series.add(serie);
             }
         } catch (SQLException e) {
-            e.printStackTrace(); // Handle the exception appropriately in your application
+            LOGGER.log(Level.SEVERE, e.getMessage(), e); // Handle the exception appropriately in your application
         }
         return series;
     }
+
     ///
     public Map<Serie, Integer> getLikesStatistics() {
         Map<Serie, Integer> likesStatistics = new HashMap<>();
@@ -216,10 +236,11 @@ public class IServiceSerieImpl implements IServiceSerie<Serie> {
                 likesStatistics.put(serie, nbLikes);
             }
         } catch (SQLException e) {
-            e.printStackTrace(); // Handle the exception appropriately in your application
+            LOGGER.log(Level.SEVERE, e.getMessage(), e); // Handle the exception appropriately in your application
         }
         return likesStatistics;
     }
+
     public Serie getByIdSerie(int serieId) throws SQLException {
         Serie serie = null;
         String query = "SELECT * FROM series WHERE idserie = ?";

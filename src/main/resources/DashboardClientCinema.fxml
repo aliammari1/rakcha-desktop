@@ -12,7 +12,9 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="855.0" prefWidth="1507.0" stylesheets="@styles/filmStyle.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.cinemas.DashboardClientController">
+<AnchorPane prefHeight="855.0" prefWidth="1507.0" stylesheets="@styles/filmStyle.css"
+    xmlns="http://javafx.com/javafx/21"
+    xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.cinemas.DashboardClientController">
     <children>
         <fx:include source="clientSideBar.fxml" />
         <AnchorPane fx:id="listCinemaClient" layoutX="317.0" layoutY="25.0" prefHeight="793.0" prefWidth="1131.0" styleClass="bg-white" stylesheets="@styles/filmStyle.css">
@@ -54,7 +56,7 @@
                 </Button>
             </children>
         </AnchorPane>
-        <AnchorPane fx:id="FilterAnchor" layoutX="556.0" layoutY="136.0" prefHeight="294.0" prefWidth="306.0" styleClass="bg-white" stylesheets="@styles/filmStyle.css" visible="false">
+        <AnchorPane fx:id="filterAnchor" layoutX="556.0" layoutY="136.0" prefHeight="294.0" prefWidth="306.0" styleClass="bg-white" stylesheets="@styles/filmStyle.css" visible="false">
             <children>
                 <Button layoutX="130.0" layoutY="246.0" mnemonicParsing="false" onAction="#filtrercinema" styleClass="sale" stylesheets="@styles/filmStyle.css" text="Filtrer" />
             </children>

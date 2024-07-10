@@ -1,13 +1,17 @@
 package com.esprit.controllers.series;
+
 import com.esprit.models.series.Episode;
 import com.esprit.models.series.Feedback;
 import com.esprit.models.series.Serie;
 import com.esprit.models.users.Client;
 import com.esprit.models.users.User;
+import com.esprit.services.produits.AvisService;
 import com.esprit.services.series.IServiceEpisode;
 import com.esprit.services.series.IServiceEpisodeImpl;
 import com.esprit.services.series.IServiceFeedbackImpl;
+
 import org.kordamp.ikonli.javafx.FontIcon;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,6 +25,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -30,13 +35,21 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
- * Provides functionality for uploading and viewing episodes of a series, as well as
- * adding feedback to the series. It also initializes a list of episodes and displays
- * them in a ListView. Additionally, it provides methods for playing, pausing, and
+ * Provides functionality for uploading and viewing episodes of a series, as
+ * well as
+ * adding feedback to the series. It also initializes a list of episodes and
+ * displays
+ * them in a ListView. Additionally, it provides methods for playing, pausing,
+ * and
  * stopping media players for each episode.
  */
 public class EpisodeClientController implements Initializable {
+    private static final Logger LOGGER = Logger.getLogger(EpisodeClientController.class.getName());
+
     private final IServiceEpisode iServiceEpisode = new IServiceEpisodeImpl();
     @FXML
     private Button uploadButton;
@@ -71,22 +84,28 @@ public class EpisodeClientController implements Initializable {
     private Serie selectedSerie;
     private int idep;
     private List<Episode> episodes = new ArrayList<>();
+
     /**
-     * Sets up the user interface for a media player, initializing buttons and setting
-     * listeners for media playback. It also retrieves episode information from a database
+     * Sets up the user interface for a media player, initializing buttons and
+     * setting
+     * listeners for media playback. It also retrieves episode information from a
+     * database
      * and displays it in a list view.
      * 
-     * @param selectedSerie selected series for which the functions initializes the image
-     * and video components.
+     * @param selectedSerie selected series for which the functions initializes the
+     *                      image
+     *                      and video components.
      * 
-     * 	- `getImage()`: String representing the image file path
-     * 	- `getNom()`: String representing the series name
-     * 	- `getResume()`: String representing the series summary
-     * 	- `getDirecteur()`: String representing the director's name
-     * 	- `getPays()`: String representing the country of origin
+     *                      - `getImage()`: String representing the image file path
+     *                      - `getNom()`: String representing the series name
+     *                      - `getResume()`: String representing the series summary
+     *                      - `getDirecteur()`: String representing the director's
+     *                      name
+     *                      - `getPays()`: String representing the country of origin
      * 
-     * These properties are used to display the series information in various parts of
-     * the user interface.
+     *                      These properties are used to display the series
+     *                      information in various parts of
+     *                      the user interface.
      */
     public void initialize(Serie selectedSerie) {
         this.selectedSerie = selectedSerie;
@@ -111,21 +130,29 @@ public class EpisodeClientController implements Initializable {
         ListEpisode.getItems().addAll(episodes);
         ListEpisode.setCellFactory(param -> new ListCell<Episode>() {
             /**
-             * Updates an episode object's text and image based on whether the object is empty
-             * or not, and sets the style of the text to bold Arial font with a specific size and
+             * Updates an episode object's text and image based on whether the object is
+             * empty
+             * or not, and sets the style of the text to bold Arial font with a specific
+             * size and
              * weight.
              * 
-             * @param item episode object being updated, which contains information such as title,
-             * number, season, and image path, that is used to set the text and graphic properties
-             * of the `ImageView`.
+             * @param item  episode object being updated, which contains information such as
+             *              title,
+             *              number, season, and image path, that is used to set the text and
+             *              graphic properties
+             *              of the `ImageView`.
              * 
-             * 	- `item`: The episode object containing information such as title, number, season,
-             * and image.
-             * 	- `empty`: A boolean indicating whether the `item` is empty or not.
-             * 	- `img`: The image associated with the `item`, represented as a string.
+             *              - `item`: The episode object containing information such as
+             *              title, number, season,
+             *              and image.
+             *              - `empty`: A boolean indicating whether the `item` is empty or
+             *              not.
+             *              - `img`: The image associated with the `item`, represented as a
+             *              string.
              * 
-             * @param empty emptiness of the `Episode` object, and determines whether to set the
-             * `text` property to null or not.
+             * @param empty emptiness of the `Episode` object, and determines whether to set
+             *              the
+             *              `text` property to null or not.
              */
             @Override
             protected void updateItem(Episode item, boolean empty) {
@@ -166,29 +193,36 @@ public class EpisodeClientController implements Initializable {
             }
         });
     }
+
     /**
      * Is called when an instance of a class is created and initializes an object's
-     * resources, such as loading data from a URL or database, by calling the appropriate
+     * resources, such as loading data from a URL or database, by calling the
+     * appropriate
      * methods.
      * 
-     * @param url URL of the web application being initialized.
+     * @param url            URL of the web application being initialized.
      * 
-     * @param resourceBundle resource bundle that contains localized data for the component
-     * being initialized.
+     * @param resourceBundle resource bundle that contains localized data for the
+     *                       component
+     *                       being initialized.
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
     }
+
     /**
      * Takes a `txtDescriptionFeedBack` text input and adds it to an instance of
-     * `IServiceFeedbackImpl`. The date is calculated using the `LocalDate.now()` method,
+     * `IServiceFeedbackImpl`. The date is calculated using the `LocalDate.now()`
+     * method,
      * and the `idep` parameter is included in the feedback object.
      * 
-     * @param event user's action of clicking the "Add Feedback" button and triggers the
-     * execution of the function.
+     * @param event user's action of clicking the "Add Feedback" button and triggers
+     *              the
+     *              execution of the function.
      * 
-     * 	- `txtDescriptionFeedBack`: The text field where the user has entered the feedback
-     * description.
+     *              - `txtDescriptionFeedBack`: The text field where the user has
+     *              entered the feedback
+     *              description.
      */
     @FXML
     void ajouterFeedBack(ActionEvent event) {
@@ -200,22 +234,26 @@ public class EpisodeClientController implements Initializable {
             Instant instant = zonedDateTime.toInstant();
             date = Date.from(instant);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         IServiceFeedbackImpl sf = new IServiceFeedbackImpl();
         Client client = (Client) txtDescriptionFeedBack.getScene().getWindow().getUserData();
         sf.ajouter(new Feedback(client.getId(), description, date, idep));
         txtDescriptionFeedBack.clear();
     }
+
     /**
-     * Loads a FXML file, creates a scene, and displays it on a stage, when a mouse event
+     * Loads a FXML file, creates a scene, and displays it on a stage, when a mouse
+     * event
      * occurs.
      * 
-     * @param event mouse event that triggered the function execution, providing information
-     * about the location and type of the event on the user interface.
+     * @param event mouse event that triggered the function execution, providing
+     *              information
+     *              about the location and type of the event on the user interface.
      * 
-     * 	- `event`: A `javafx.scene.input.MouseEvent` object representing the mouse event
-     * that triggered the function.
+     *              - `event`: A `javafx.scene.input.MouseEvent` object representing
+     *              the mouse event
+     *              that triggered the function.
      */
     @FXML
     public void afficherserie(javafx.scene.input.MouseEvent event) throws IOException {

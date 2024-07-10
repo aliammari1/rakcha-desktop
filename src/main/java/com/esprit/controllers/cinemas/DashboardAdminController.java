@@ -1,4 +1,5 @@
 package com.esprit.controllers.cinemas;
+
 import com.esprit.models.cinemas.Cinema;
 import com.esprit.services.cinemas.CinemaService;
 import javafx.collections.FXCollections;
@@ -17,16 +18,19 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 /**
  * Is responsible for handling user interactions related to admin dashboards for
- * various applications. It provides functionality to filter and display data from
- * the Cinema, Addresses, Statuses, Events, Movies, and Series modules based on user
- * selections. The controller also handles button clicks to display different views
+ * various applications. It provides functionality to filter and display data
+ * from
+ * the Cinema, Addresses, Statuses, Events, Movies, and Series modules based on
+ * user
+ * selections. The controller also handles button clicks to display different
+ * views
  * for each module.
  */
 public class DashboardAdminController {
@@ -51,10 +55,13 @@ public class DashboardAdminController {
     @FXML
     private TextField tfSearch;
     @FXML
-    private AnchorPane FilterAnchor;
+    private AnchorPane filterAnchor;
+
     /**
-     * Configures a table to display cinemas, including their name, address, and responsible
-     * person. It also sets up buttons for accepting or refusing cinemas, and a button
+     * Configures a table to display cinemas, including their name, address, and
+     * responsible
+     * person. It also sets up buttons for accepting or refusing cinemas, and a
+     * button
      * to show movies.
      */
     @FXML
@@ -84,96 +91,114 @@ public class DashboardAdminController {
         });
         colStatut.setCellValueFactory(new PropertyValueFactory<>("Statut"));
         // Configurer la cellule de la colonne Action
-        colAction.setCellFactory(new Callback<TableColumn<Cinema, Void>, TableCell<Cinema, Void>>() {
+        colAction.setCellFactory((TableColumn<Cinema, Void> param) -> new TableCell<Cinema, Void>() {
+            private final Button acceptButton;
+            private final Button refuseButton;
+            private final Button showMoviesButton;
+            {
+                acceptButton = new Button("Accepter");
+                refuseButton = new Button("Refuser");
+                showMoviesButton = new Button("Show Movies");
+
+                acceptButton.getStyleClass().add("delete-btn");
+                acceptButton.setOnAction(event -> {
+                    Cinema cinema = getTableView().getItems().get(getIndex());
+                    // Mettre à jour le statut du cinéma en "Accepted"
+                    cinema.setStatut("Accepted");
+                    // Mettre à jour le statut dans la base de données
+                    CinemaService cinemaService = new CinemaService();
+                    cinemaService.update(cinema);
+                    // Rafraîchir la TableView pour refléter les changements
+                    getTableView().refresh();
+                });
+                refuseButton.getStyleClass().add("delete-btn");
+                refuseButton.setOnAction(event -> {
+                    Cinema cinema = getTableView().getItems().get(getIndex());
+                    CinemaService cinemaService = new CinemaService();
+                    cinemaService.delete(cinema);
+                    getTableView().getItems().remove(cinema);
+                });
+                showMoviesButton.getStyleClass().add("delete-btn");
+                showMoviesButton.setOnAction(event -> {
+                });
+            }
+
             /**
-             * Generates a `TableCell` that displays buttons for accepting or refusing a movie.
-             * When a button is pressed, it updates the cinema's status and refreshes the table
-             * view to reflect the change.
-             * 
-             * @param param `TableColumn<Cinema, Void>` object that triggers the function, providing
-             * the necessary information for the cell to render properly.
-             * 
-             * 	- `param`: A `TableColumn` object that represents the column being edited.
-             * 	- `getIndex()`: Returns the row index of the item being edited in the table.
-             * 
-             * @returns a `TableCell` object that displays buttons for accepting or refusing
-             * movies based on the cinema's status.
-             * 
-             * 	- The returned output is an instance of `TableCell`, which represents a cell in
-             * a table.
-             * 	- The cell contains three buttons: "Accepter", "Refuser", and "Show Movies".
-             * 	- The buttons are created using the `Button` class and are added to the cell's
-             * graphic using the `setGraphic` method.
-             * 	- The `acceptButton`, `refuseButton`, and `showMoviesButton` are private fields
-             * in the `TableCell` class that correspond to the buttons added to the cell.
+             * Updates the graphic displayed by an item in a table based on its empty status
+             * and
+             * the status of the associated cinema.
+             *
+             * @param item  item being updated in the `TableView`, which is passed to the
+             *              superclass's
+             *              `updateItem` method for further processing before displaying the
+             *              appropriate button
+             *              or buttons.
+             *
+             *              - `item`: A Void object representing an item to be updated.
+             *              - `empty`: A boolean indicating whether the item is empty or
+             *              not.
+             *
+             * @param empty whether the line is empty or not, and controls the display of
+             *              buttons
+             *              for accepting or refusing the movie.
              */
             @Override
-            public TableCell<Cinema, Void> call(TableColumn<Cinema, Void> param) {
-                return new TableCell<Cinema, Void>() {
-                    private final Button acceptButton = new Button("Accepter");
-                    private final Button refuseButton = new Button("Refuser");
-                    private final Button showMoviesButton = new Button("Show Movies");
-                    {
-                        acceptButton.getStyleClass().add("delete-btn");
-                        acceptButton.setOnAction(event -> {
-                            Cinema cinema = getTableView().getItems().get(getIndex());
-                            // Mettre à jour le statut du cinéma en "Accepted"
-                            cinema.setStatut("Accepted");
-                            // Mettre à jour le statut dans la base de données
-                            CinemaService cinemaService = new CinemaService();
-                            cinemaService.update(cinema);
-                            // Rafraîchir la TableView pour refléter les changements
-                            getTableView().refresh();
-                        });
-                        refuseButton.getStyleClass().add("delete-btn");
-                        refuseButton.setOnAction(event -> {
-                            Cinema cinema = getTableView().getItems().get(getIndex());
-                            CinemaService cinemaService = new CinemaService();
-                            cinemaService.delete(cinema);
-                            getTableView().getItems().remove(cinema);
-                        });
-                        showMoviesButton.getStyleClass().add("delete-btn");
-                        showMoviesButton.setOnAction(event -> {
-                        });
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    // Récupérer le cinéma associé à cette ligne
+                    Cinema cinema = getTableView().getItems().get(getIndex());
+                    if (cinema.getStatut().equals("Accepted")) {
+                        // Afficher le bouton "Show Movies" si le statut est "Accepted"
+                        setGraphic(showMoviesButton);
+                    } else {
+                        // Afficher les boutons "Accepter" et "Refuser" si le statut est "En attente"
+                        setGraphic(new HBox(acceptButton, refuseButton));
                     }
-                    /**
-                     * Updates the graphic displayed by an item in a table based on its empty status and
-                     * the status of the associated cinema.
-                     * 
-                     * @param item item being updated in the `TableView`, which is passed to the superclass's
-                     * `updateItem` method for further processing before displaying the appropriate button
-                     * or buttons.
-                     * 
-                     * 	- `item`: A Void object representing an item to be updated.
-                     * 	- `empty`: A boolean indicating whether the item is empty or not.
-                     * 
-                     * @param empty whether the line is empty or not, and controls the display of buttons
-                     * for accepting or refusing the movie.
-                     */
-                    @Override
-                    protected void updateItem(Void item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty) {
-                            setGraphic(null);
-                        } else {
-                            // Récupérer le cinéma associé à cette ligne
-                            Cinema cinema = getTableView().getItems().get(getIndex());
-                            if (cinema.getStatut().equals("Accepted")) {
-                                // Afficher le bouton "Show Movies" si le statut est "Accepted"
-                                setGraphic(showMoviesButton);
-                            } else {
-                                // Afficher les boutons "Accepter" et "Refuser" si le statut est "En attente"
-                                setGraphic(new HBox(acceptButton, refuseButton));
-                            }
-                        }
-                    }
-                };
+                }
             }
-        });
+        }
+        /**
+         * Generates a `TableCell` that displays buttons for accepting or refusing a
+         * movie.
+         * When a button is pressed, it updates the cinema's status and refreshes the
+         * table
+         * view to reflect the change.
+         *
+         * @param param `TableColumn<Cinema, Void>` object that triggers the function,
+         *              providing
+         *              the necessary information for the cell to render properly.
+         *
+         *              - `param`: A `TableColumn` object that represents the column
+         *              being edited.
+         *              - `getIndex()`: Returns the row index of the item being edited
+         *              in the table.
+         *
+         * @returns a `TableCell` object that displays buttons for accepting or refusing
+         *          movies based on the cinema's status.
+         *
+         *          - The returned output is an instance of `TableCell`, which
+         *          represents a cell in
+         *          a table.
+         *          - The cell contains three buttons: "Accepter", "Refuser", and "Show
+         *          Movies".
+         *          - The buttons are created using the `Button` class and are added to
+         *          the cell's
+         *          graphic using the `setGraphic` method.
+         *          - The `acceptButton`, `refuseButton`, and `showMoviesButton` are
+         *          private fields
+         *          in the `TableCell` class that correspond to the buttons added to the
+         *          cell.
+         */
+        );
         loadCinemas();
     }
+
     /**
-     * Creates an observable list of cinemas by reading them from a service and setting
+     * Creates an observable list of cinemas by reading them from a service and
+     * setting
      * it as the items of a `ListBox`.
      */
     private void loadCinemas() {
@@ -182,8 +207,10 @@ public class DashboardAdminController {
         ObservableList<Cinema> cinemaObservableList = FXCollections.observableArrayList(cinemas);
         listCinema.setItems(cinemaObservableList);
     }
+
     /**
-     * Retrieves a list of cinemas through the use of the `CinemaService`. The list is
+     * Retrieves a list of cinemas through the use of the `CinemaService`. The list
+     * is
      * then returned.
      * 
      * @returns a list of Cinema objects retrieved from the Cinema Service.
@@ -193,32 +220,39 @@ public class DashboardAdminController {
         List<Cinema> cinemas = cinemaService.read();
         return cinemas;
     }
+
     /**
      * Adds a listener to the `tfSearch` text field to filter and update the list of
-     * cinemas when the user types in it, loads all cinemas initially, and displays them.
+     * cinemas when the user types in it, loads all cinemas initially, and displays
+     * them.
      */
     @FXML
     public void initialize() {
         // Ajouter un écouteur de changement pour le champ de recherche
         tfSearch.textProperty().addListener((observable, oldValue, newValue) -> {
-            // Filtrer la liste des cinémas en fonction du nouveau texte saisi dans le champ de recherche
+            // Filtrer la liste des cinémas en fonction du nouveau texte saisi dans le champ
+            // de recherche
             filterCinemas(newValue.trim());
         });
         // Charger tous les cinémas initialement
         loadCinemas();
         afficherCinemas();
     }
+
     /**
-     * Filters a list of cinemas based on a search query, updating the displayed list in
+     * Filters a list of cinemas based on a search query, updating the displayed
+     * list in
      * a TableView.
      * 
-     * @param searchText search term used to filter the list of cinemas displayed on the
-     * screen.
+     * @param searchText search term used to filter the list of cinemas displayed on
+     *                   the
+     *                   screen.
      */
     private void filterCinemas(String searchText) {
         // Vérifier si le champ de recherche n'est pas vide
         if (!searchText.isEmpty()) {
-            // Filtrer la liste des cinémas pour ne garder que ceux dont le nom contient le texte saisi
+            // Filtrer la liste des cinémas pour ne garder que ceux dont le nom contient le
+            // texte saisi
             ObservableList<Cinema> filteredList = FXCollections.observableArrayList();
             for (Cinema cinema : listCinema.getItems()) {
                 if (cinema.getNom().toLowerCase().contains(searchText.toLowerCase())) {
@@ -232,22 +266,28 @@ public class DashboardAdminController {
             loadCinemas();
         }
     }
+
     /**
-     * Updates the opacity of a container and makes a filter anchor visible, then clears
-     * the lists of check boxes for addresses and statuses, retrieves unique addresses
-     * and statuses from the database, creates VBoxes for each address and status, adds
+     * Updates the opacity of a container and makes a filter anchor visible, then
+     * clears
+     * the lists of check boxes for addresses and statuses, retrieves unique
+     * addresses
+     * and statuses from the database, creates VBoxes for each address and status,
+     * adds
      * them to the filter anchor, and sets the filter anchor's visibility to true.
      * 
-     * @param event ActionEvent that triggered the filtrer method, providing the necessary
-     * information to update the UI components accordingly.
+     * @param event ActionEvent that triggered the filtrer method, providing the
+     *              necessary
+     *              information to update the UI components accordingly.
      * 
-     * 	- `event`: an ActionEvent object representing the user's action that triggered
-     * the function execution.
+     *              - `event`: an ActionEvent object representing the user's action
+     *              that triggered
+     *              the function execution.
      */
     @FXML
     void filtrer(ActionEvent event) {
         cinemasList.setOpacity(0.5);
-        FilterAnchor.setVisible(true);
+        filterAnchor.setVisible(true);
         // Nettoyer les listes des cases à cocher
         addressCheckBoxes.clear();
         statusCheckBoxes.clear();
@@ -279,20 +319,25 @@ public class DashboardAdminController {
         }
         statusCheckBoxesVBox.setLayoutX(25);
         statusCheckBoxesVBox.setLayoutY(120);
-        // Ajouter les VBox dans le FilterAnchor
-        FilterAnchor.getChildren().addAll(addressCheckBoxesVBox, statusCheckBoxesVBox);
-        FilterAnchor.setVisible(true);
+        // Ajouter les VBox dans le filterAnchor
+        filterAnchor.getChildren().addAll(addressCheckBoxesVBox, statusCheckBoxesVBox);
+        filterAnchor.setVisible(true);
     }
+
     /**
-     * Retrieves a list of cinema addresses from a database and extracts unique addresses
+     * Retrieves a list of cinema addresses from a database and extracts unique
+     * addresses
      * from the list of cinemas using Stream API.
      * 
      * @returns a list of unique cinema addresses obtained from the database.
      * 
-     * 	- The output is a list of strings representing the unique addresses of cinemas.
-     * 	- The list is generated by streaming the `cinemas` collection using `map()` and
-     * `distinct()` methods to extract the addresses.
-     * 	- The `collect()` method is used to collect the distinct addresses into a list.
+     *          - The output is a list of strings representing the unique addresses
+     *          of cinemas.
+     *          - The list is generated by streaming the `cinemas` collection using
+     *          `map()` and
+     *          `distinct()` methods to extract the addresses.
+     *          - The `collect()` method is used to collect the distinct addresses
+     *          into a list.
      */
     public List<String> getCinemaAddresses() {
         // Récupérer tous les cinémas depuis la base de données
@@ -304,14 +349,17 @@ public class DashboardAdminController {
                 .collect(Collectors.toList());
         return addresses;
     }
+
     /**
-     * Creates a list of predefined cinema statuses, including "Pending" and "Accepted",
+     * Creates a list of predefined cinema statuses, including "Pending" and
+     * "Accepted",
      * and returns it.
      * 
      * @returns a list of predefined cinema statuses: "Pending" and "Accepted".
      * 
-     * 	- The list contains 2 pre-defined statuses: "Pending" and "Accepted".
-     * 	- Each status is a unique string in the list.
+     *          - The list contains 2 pre-defined statuses: "Pending" and
+     *          "Accepted".
+     *          - Each status is a unique string in the list.
      */
     public List<String> getCinemaStatuses() {
         // Créer une liste de statuts pré-définis
@@ -320,21 +368,26 @@ public class DashboardAdminController {
         statuses.add("Accepted");
         return statuses;
     }
+
     /**
-     * Filters a list of cinemas based on selected addresses and/or statuses, and updates
+     * Filters a list of cinemas based on selected addresses and/or statuses, and
+     * updates
      * the TableView with the filtered list.
      * 
-     * @param event occurrence of an action event, such as a button press or key stroke,
-     * that triggers the execution of the `filtrercinema` method.
+     * @param event occurrence of an action event, such as a button press or key
+     *              stroke,
+     *              that triggers the execution of the `filtrercinema` method.
      * 
-     * 	- `Event`: This represents an event object that triggered the function to be executed.
-     * 	- `ActionEvent`: This is a specific type of event object that indicates that a
-     * button or other control was pressed.
+     *              - `Event`: This represents an event object that triggered the
+     *              function to be executed.
+     *              - `ActionEvent`: This is a specific type of event object that
+     *              indicates that a
+     *              button or other control was pressed.
      */
     @FXML
     void filtrercinema(ActionEvent event) {
         cinemasList.setOpacity(1);
-        FilterAnchor.setVisible(false);
+        filterAnchor.setVisible(false);
         // Récupérer les adresses sélectionnées
         List<String> selectedAddresses = getSelectedAddresses();
         // Récupérer les statuts sélectionnés
@@ -348,20 +401,27 @@ public class DashboardAdminController {
         ObservableList<Cinema> filteredList = FXCollections.observableArrayList(filteredCinemas);
         listCinema.setItems(filteredList);
     }
+
     /**
-     * Streamlines the selected addresses from an `AnchorPane` of filtering, applies a
-     * filter to only include selected checkboxes, and collects the results into a list
+     * Streamlines the selected addresses from an `AnchorPane` of filtering, applies
+     * a
+     * filter to only include selected checkboxes, and collects the results into a
+     * list
      * of strings.
      * 
      * @returns a list of selected addresses represented as strings.
      * 
-     * 1/ The output is a list of strings (`List<String>`), indicating that each selected
-     * address is represented as a string.
-     * 2/ The list is generated using the `stream()`, `filter()`, and `map()` methods of
-     * the `Optional` class, which suggests that the function returns a stream of filtered
-     * and transformed elements.
-     * 3/ The `collect()` method is used to collect the filtered and transformed elements
-     * into a list, which is then returned as the output.
+     *          1/ The output is a list of strings (`List<String>`), indicating that
+     *          each selected
+     *          address is represented as a string.
+     *          2/ The list is generated using the `stream()`, `filter()`, and
+     *          `map()` methods of
+     *          the `Optional` class, which suggests that the function returns a
+     *          stream of filtered
+     *          and transformed elements.
+     *          3/ The `collect()` method is used to collect the filtered and
+     *          transformed elements
+     *          into a list, which is then returned as the output.
      */
     private List<String> getSelectedAddresses() {
         // Récupérer les adresses sélectionnées dans l'AnchorPane de filtrage
@@ -370,16 +430,21 @@ public class DashboardAdminController {
                 .map(CheckBox::getText)
                 .collect(Collectors.toList());
     }
+
     /**
-     * Retrieves the selected statuses from an `AnchorPane` of filtering by streaming the
-     * checked checkboxes, filtering the non-checked ones, and collecting the selected
+     * Retrieves the selected statuses from an `AnchorPane` of filtering by
+     * streaming the
+     * checked checkboxes, filtering the non-checked ones, and collecting the
+     * selected
      * statuses as a list.
      * 
      * @returns a list of selected statuses represented as strings.
      * 
-     * 	- The list contains only selected statuses as determined by the `isSelected`
-     * method of the `CheckBox` class.
-     * 	- Each element in the list is a string representing the text of the selected status.
+     *          - The list contains only selected statuses as determined by the
+     *          `isSelected`
+     *          method of the `CheckBox` class.
+     *          - Each element in the list is a string representing the text of the
+     *          selected status.
      */
     private List<String> getSelectedStatuses() {
         // Récupérer les statuts sélectionnés dans l'AnchorPane de filtrage
@@ -388,14 +453,18 @@ public class DashboardAdminController {
                 .map(CheckBox::getText)
                 .collect(Collectors.toList());
     }
+
     /**
-     * Loads an fxml file and displays a stage with a scene, changing the current stage
+     * Loads an fxml file and displays a stage with a scene, changing the current
+     * stage
      * to the new one.
      * 
-     * @param event event that triggered the function and provides access to its related
-     * data, allowing the code inside the function to interact with it.
+     * @param event event that triggered the function and provides access to its
+     *              related
+     *              data, allowing the code inside the function to interact with it.
      * 
-     * 	- `event`: An `ActionEvent` object representing an action performed on the application.
+     *              - `event`: An `ActionEvent` object representing an action
+     *              performed on the application.
      */
     @FXML
     void afficherEventsAdmin(ActionEvent event) throws IOException {
@@ -409,15 +478,19 @@ public class DashboardAdminController {
         stage.show();
         currentStage.close();
     }
+
     /**
-     * Loads an FXML file, creates a stage and window for film management, and replaces
+     * Loads an FXML file, creates a stage and window for film management, and
+     * replaces
      * the current stage with the new one.
      * 
-     * @param event event that triggered the function execution, specifically an `ActionEvent`
-     * related to the loading of the FXML file.
+     * @param event event that triggered the function execution, specifically an
+     *              `ActionEvent`
+     *              related to the loading of the FXML file.
      * 
-     * Event: An event object that represents a user-initiated action or event, such as
-     * a button click or a key press.
+     *              Event: An event object that represents a user-initiated action
+     *              or event, such as
+     *              a button click or a key press.
      */
     @FXML
     void afficherMovieAdmin(ActionEvent event) throws IOException {
@@ -431,16 +504,20 @@ public class DashboardAdminController {
         stage.show();
         currentStage.close();
     }
+
     /**
-     * Loads a FXML file, creates a stage and window for a series management interface,
+     * Loads a FXML file, creates a stage and window for a series management
+     * interface,
      * and replaces the current stage with the new one.
      * 
      * @param event event that triggered the execution of the `afficherserieAdmin()`
-     * function, which is an action event generated by a user's click on a button or other
-     * element in the FXML file.
+     *              function, which is an action event generated by a user's click
+     *              on a button or other
+     *              element in the FXML file.
      * 
-     * 	- `event` is an `ActionEvent`, indicating that the method was called as a result
-     * of user action.
+     *              - `event` is an `ActionEvent`, indicating that the method was
+     *              called as a result
+     *              of user action.
      */
     @FXML
     void afficherserieAdmin(ActionEvent event) throws IOException {
@@ -454,15 +531,19 @@ public class DashboardAdminController {
         stage.show();
         currentStage.close();
     }
+
     /**
-     * Loads an fxml file, creates a scene and stage, and replaces the current stage with
+     * Loads an fxml file, creates a scene and stage, and replaces the current stage
+     * with
      * the new one.
      * 
-     * @param event ActionEvent object that triggered the execution of the `AfficherProduitAdmin()`
-     * method.
+     * @param event ActionEvent object that triggered the execution of the
+     *              `AfficherProduitAdmin()`
+     *              method.
      * 
-     * 	- `event`: An `ActionEvent` object representing a user action that triggered the
-     * function to execute.
+     *              - `event`: An `ActionEvent` object representing a user action
+     *              that triggered the
+     *              function to execute.
      */
     @FXML
     void AfficherProduitAdmin(ActionEvent event) throws IOException {

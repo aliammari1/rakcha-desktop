@@ -1,4 +1,5 @@
 package com.esprit.services.produits;
+
 import com.esprit.models.produits.Produit;
 import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
@@ -9,19 +10,25 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class ProduitService implements IService<Produit> {
     private final Connection connection;
+    private static final Logger LOGGER = Logger.getLogger(ProduitService.class.getName());
+
     public ProduitService() {
         connection = DataSource.getInstance().getConnection();
     }
-    /** 
+
+    /**
      * @param produit
      */
     @Override
     public void create(Produit produit) {
         String req = "INSERT into produit(nom, prix,image,description,quantiteP,id_categorieProduit) values (?, ?,?,?,?,?)  ;";
         try {
-            System.out.println("peoduit: " + produit);
+            LOGGER.info("peoduit: " + produit);
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setString(1, produit.getNom());
             pst.setInt(2, produit.getPrix());
@@ -30,12 +37,13 @@ public class ProduitService implements IService<Produit> {
             pst.setInt(5, produit.getQuantiteP());
             pst.setInt(6, produit.getCategorie().getId_categorie());
             pst.executeUpdate();
-            System.out.println("Produit ajoutée !");
+            LOGGER.info("Produit ajoutée !");
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
-    /** 
+
+    /**
      * @return List<Produit>
      */
     @Override
@@ -51,14 +59,15 @@ public class ProduitService implements IService<Produit> {
                 produits.add(new Produit(rs.getInt("id_produit"), rs.getString("nom"), rs.getInt("prix"),
                         rs.getString("image"), rs.getString("description"),
                         cs.getCategorie(rs.getInt("id_categorieProduit")), rs.getInt("quantiteP")));
-                System.out.println(produits.get(i));
+                LOGGER.info(produits.get(i).toString());
                 i++;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return produits;
     }
+
     public List<Produit> sort(String sortBy) {
         // A list of valid column names to prevent SQL injection
         List<String> validColumns = Arrays.asList("id_produit", "nom", "prix", "description", "categorieProduit",
@@ -83,10 +92,11 @@ public class ProduitService implements IService<Produit> {
                         rs.getInt("quantiteP")));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return produits;
     }
+
     @Override
     public void update(Produit produit) {
         String req = "UPDATE produit p " +
@@ -104,11 +114,12 @@ public class ProduitService implements IService<Produit> {
             pst.setInt(6, produit.getQuantiteP());
             pst.setInt(1, produit.getCategorie().getId_categorie());
             pst.executeUpdate();
-            System.out.println("produit modifiée !");
+            LOGGER.info("produit modifiée !");
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
+
     @Override
     public void delete(Produit produit) {
         String req = "DELETE from produit where id_produit = ?;";
@@ -116,11 +127,12 @@ public class ProduitService implements IService<Produit> {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(1, produit.getId_produit());
             pst.executeUpdate();
-            System.out.println("produit supprmiée !");
+            LOGGER.info("produit supprmiée !");
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
+
     public Produit getProduitById(int produitId) {
         Produit produit = null;
         String req = "SELECT produit.*, categorie_produit.nom_categorie FROM produit JOIN categorie_produit ON produit.id_categorieProduit = categorie_produit.id_categorie WHERE id_produit = ?";
@@ -140,10 +152,11 @@ public class ProduitService implements IService<Produit> {
                         rs.getInt("quantiteP"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return produit;
     }
+
     // Vérifier le stock disponible pour un produit donné
     public boolean verifierStockDisponible(int produitId, int quantiteDemandee) {
         Produit produit = getProduitById(produitId); // Utilisez votre méthode existante pour récupérer le produit
@@ -153,6 +166,7 @@ public class ProduitService implements IService<Produit> {
             return false; // Le produit n'existe pas
         }
     }
+
     public double getPrixProduit(int idProduit) {
         String req = "SELECT prix FROM produit WHERE id_produit = ?";
         double prixProduit = 0;
@@ -164,15 +178,16 @@ public class ProduitService implements IService<Produit> {
                 prixProduit = rs.getDouble("prix");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return prixProduit;
     }
+
     public List<Produit> getProduitsOrderByQuantityAndStatus() {
         List<Produit> produits = new ArrayList<>();
         String req = "SELECT p.*, ci.*, c.*, SUM(ci.quantity) AS total_quantity FROM produit p JOIN commandeitem ci ON p.id_produit = ci.id_produit JOIN commande c ON ci.idCommande = c.idCommande WHERE c.statu = 'payee' GROUP BY p.id_produit ORDER BY total_quantity DESC;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(req);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
+                ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
                 CategorieService cs = new CategorieService();
                 Produit produit = new Produit(
@@ -186,7 +201,7 @@ public class ProduitService implements IService<Produit> {
                 produits.add(produit);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return produits;
     }

@@ -1,20 +1,29 @@
 package com.esprit.services.films;
+
 import com.esprit.models.films.RatingFilm;
 import com.esprit.models.users.Client;
 import com.esprit.services.IService;
+import com.esprit.services.produits.AvisService;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.DataSource;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class RatingFilmService implements IService<RatingFilm> {
     Connection connection;
+    private static final Logger LOGGER = Logger.getLogger(RatingFilmService.class.getName());
+
     public RatingFilmService() {
         connection = DataSource.getInstance().getConnection();
     }
-    /** 
+
+    /**
      * @param ratingfilm
      */
     @Override
@@ -27,10 +36,11 @@ public class RatingFilmService implements IService<RatingFilm> {
             statement.setInt(3, ratingfilm.getRate());
             statement.executeUpdate();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
-    /** 
+
+    /**
      * @return List<RatingFilm>
      */
     @Override
@@ -38,9 +48,11 @@ public class RatingFilmService implements IService<RatingFilm> {
         String req = "SELECT * FROM ratingfilm ";
         return null;
     }
+
     @Override
     public void update(RatingFilm ratingFilm) {
     }
+
     @Override
     public void delete(RatingFilm ratingFilm) {
         String req = "DELETE FROM ratingfilm WHERE id_film=? AND id_user=?";
@@ -50,9 +62,10 @@ public class RatingFilmService implements IService<RatingFilm> {
             preparedStatement.setInt(2, ratingFilm.getId_user().getId());
             preparedStatement.executeUpdate();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
+
     public double getavergerating(int id_film) {
         String req = "SELECT AVG(rate) AS averageRate FROM ratingfilm WHERE id_film =? ";
         double aver = 0.0;
@@ -63,10 +76,11 @@ public class RatingFilmService implements IService<RatingFilm> {
             resultSet.next();
             aver = resultSet.getDouble("averageRate");
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return aver;
     }
+
     public List<RatingFilm> getavergeratingSorted() {
         String req = "SELECT id_film, AVG(rate) AS averageRate FROM ratingfilm GROUP BY id_film  ORDER BY averageRate DESC ";
         List<RatingFilm> aver = new ArrayList<>();
@@ -77,10 +91,11 @@ public class RatingFilmService implements IService<RatingFilm> {
                 aver.add(new RatingFilm(new FilmService().getFilm(resultSet.getInt("id_film")), null,
                         (int) resultSet.getDouble("averageRate")));
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return aver;
     }
+
     public RatingFilm ratingExiste(int id_film, int id_user) {
         String req = "SELECT *  FROM ratingfilm WHERE id_film =? AND id_user=? ";
         RatingFilm rate = null;
@@ -93,7 +108,7 @@ public class RatingFilmService implements IService<RatingFilm> {
                 rate = new RatingFilm(new FilmService().getFilm(id_film),
                         (Client) new UserService().getUserById(id_user), resultSet.getInt("rate"));
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return rate;
     }

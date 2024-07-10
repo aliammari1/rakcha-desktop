@@ -1,4 +1,5 @@
 package com.esprit.services.produits;
+
 import com.esprit.models.produits.Panier;
 import com.esprit.services.IService;
 import com.esprit.services.users.UserService;
@@ -9,12 +10,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class PanierService implements IService<Panier> {
     private final Connection connection;
+    private static final Logger LOGGER = Logger.getLogger(PanierService.class.getName());
+
     public PanierService() {
         connection = DataSource.getInstance().getConnection();
     }
-    /** 
+
+    /**
      * @param panier
      */
     @Override
@@ -26,18 +33,20 @@ public class PanierService implements IService<Panier> {
             pst.setInt(2, panier.getQuantity());
             pst.setInt(3, panier.getUser().getId());
             pst.executeUpdate();
-            System.out.println("panier remplit !");
+            LOGGER.info("panier remplit !");
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
-    /** 
+
+    /**
      * @return List<Panier>
      */
     @Override
     public List<Panier> read() {
         return null;
     }
+
     public List<Panier> readUserPanier(int iduser) throws SQLException {
         UserService usersService = new UserService();
         ProduitService produitService = new ProduitService();
@@ -55,13 +64,14 @@ public class PanierService implements IService<Panier> {
         }
         return paniers;
     }
+
     @Override
     public void update(Panier panier) {
         String req = "UPDATE panier p " +
-            "INNER JOIN produit pro ON pro.id_produit = p.id_produit " +
-            "INNER JOIN users u ON u.id = p.idClient " +
-            "SET p.id_produit = ?, p.quantite = ?, p.idClient = ? " +
-            "WHERE p.idpanier = ?;";
+                "INNER JOIN produit pro ON pro.id_produit = p.id_produit " +
+                "INNER JOIN users u ON u.id = p.idClient " +
+                "SET p.id_produit = ?, p.quantite = ?, p.idClient = ? " +
+                "WHERE p.idpanier = ?;";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(4, panier.getIdPanier());
@@ -69,11 +79,12 @@ public class PanierService implements IService<Panier> {
             pst.setInt(2, panier.getQuantity());
             pst.setInt(1, panier.getProduit().getId_produit());
             pst.executeUpdate();
-            System.out.println("panier modifiée !");
+            LOGGER.info("panier modifiée !");
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
+
     @Override
     public void delete(Panier panier) {
         String req = "DELETE from panier where id_produit = ? and idClient=?;";
@@ -82,9 +93,9 @@ public class PanierService implements IService<Panier> {
             pst.setInt(1, panier.getProduit().getId_produit());
             pst.setInt(2, panier.getUser().getId());
             pst.executeUpdate();
-            System.out.println("panier supprmiée !");
+            LOGGER.info("panier supprmiée !");
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 }

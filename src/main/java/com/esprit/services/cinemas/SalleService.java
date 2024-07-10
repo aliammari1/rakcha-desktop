@@ -1,19 +1,28 @@
 package com.esprit.services.cinemas;
+
 import com.esprit.models.cinemas.Salle;
 import com.esprit.services.IService;
+import com.esprit.services.produits.AvisService;
 import com.esprit.utils.DataSource;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class SalleService implements IService<Salle> {
     private final Connection connection;
+    private static final Logger LOGGER = Logger.getLogger(SalleService.class.getName());
+
     public SalleService() {
         connection = DataSource.getInstance().getConnection();
     }
-    /** 
+
+    /**
      * @param salle
      */
     public void create(Salle salle) {
@@ -24,12 +33,13 @@ public class SalleService implements IService<Salle> {
             pst.setInt(2, salle.getNb_places());
             pst.setString(3, salle.getNom_salle());
             pst.executeUpdate();
-            System.out.println("Salle ajoutée !");
+            LOGGER.info("Salle ajoutée !");
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
-    /** 
+
+    /**
      * @param salle
      */
     public void update(Salle salle) {
@@ -41,22 +51,24 @@ public class SalleService implements IService<Salle> {
             pst.setInt(2, salle.getNb_places());
             pst.setString(3, salle.getNom_salle());
             pst.executeUpdate();
-            System.out.println("Salle modifiée !");
+            LOGGER.info("Salle modifiée !");
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
+
     public void delete(Salle salle) {
         String req = "DELETE from salle where id_salle= ?;";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(1, salle.getId_salle());
             pst.executeUpdate();
-            System.out.println("Salle supprmiée !");
+            LOGGER.info("Salle supprmiée !");
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
+
     public List<Salle> read() {
         List<Salle> salles = new ArrayList<>();
         String req = "SELECT * from salle";
@@ -68,10 +80,11 @@ public class SalleService implements IService<Salle> {
                         rs.getString("nom_salle")));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return salles;
     }
+
     public Salle getSalle(int salle_id) {
         Salle salle = null;
         String req = "SELECT * from salle where id_salle = ?";
@@ -83,10 +96,11 @@ public class SalleService implements IService<Salle> {
             salle = new Salle(rs.getInt("id_salle"), rs.getInt("id_cinema"), rs.getInt("nb_places"),
                     rs.getString("nom_salle"));
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return salle;
     }
+
     public Salle getSalleByName(String nom_salle) {
         Salle salle = null;
         String req = "SELECT * from salle where nom_salle = ?";
@@ -98,10 +112,11 @@ public class SalleService implements IService<Salle> {
             salle = new Salle(rs.getInt("id_salle"), rs.getInt("id_cinema"), rs.getInt("nb_places"),
                     rs.getString("nom_salle"));
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return salle;
     }
+
     public List<Salle> readRoomsForCinema(int cinemaId) {
         List<Salle> roomsForCinema = new ArrayList<>();
         String query = "SELECT * FROM salle WHERE id_cinema = ?";
@@ -114,7 +129,7 @@ public class SalleService implements IService<Salle> {
                 roomsForCinema.add(salle);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return roomsForCinema;
     }

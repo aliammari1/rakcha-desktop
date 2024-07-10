@@ -1,8 +1,11 @@
 package com.esprit.controllers.users;
+
 import com.esprit.models.users.User;
+import com.esprit.services.produits.AvisService;
 import com.esprit.services.users.UserService;
 import com.github.plushaze.traynotification.notification.Notifications;
 import com.github.plushaze.traynotification.notification.TrayNotification;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -14,11 +17,16 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class LoginController implements Initializable {
+    private static final Logger LOGGER = Logger.getLogger(LoginController.class.getName());
     @FXML
     private AnchorPane anchorPane;
     @FXML
@@ -43,7 +51,8 @@ public class LoginController implements Initializable {
     private Button microsoftSignInButton;
     @FXML
     private AnchorPane loginAnchorPane;
-    /** 
+
+    /**
      * @param event
      * @throws IOException
      * @throws ExecutionException
@@ -57,10 +66,11 @@ public class LoginController implements Initializable {
             Stage stage = (Stage) googleSIgnInButton.getScene().getWindow();
             stage.setScene(new Scene(root));
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
-    /** 
+
+    /**
      * @param event
      * @throws IOException
      * @throws ExecutionException
@@ -74,9 +84,10 @@ public class LoginController implements Initializable {
             Stage stage = (Stage) microsoftSignInButton.getScene().getWindow();
             stage.setScene(new Scene(root));
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
+
     @FXML
     void login(ActionEvent event) throws IOException {
         UserService userService = new UserService();
@@ -109,6 +120,7 @@ public class LoginController implements Initializable {
             alert.show();
         }
     }
+
     @FXML
     void switchToSignUp(ActionEvent event) throws IOException {
         Stage stage = (Stage) signUpButton.getScene().getWindow();
@@ -116,6 +128,7 @@ public class LoginController implements Initializable {
         Parent root = loader.load();
         stage.setScene(new Scene(root));
     }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         forgetPasswordHyperlink.setOnAction(new EventHandler<ActionEvent>() {

@@ -13,7 +13,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="855.0" prefWidth="1507.0" styleClass="top-form" stylesheets="@dashboard2.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.evenements.DesignEvenementAdminController">
+<AnchorPane prefHeight="855.0" prefWidth="1507.0" styleClass="top-form" stylesheets="@dashboard2.css"
+    xmlns="http://javafx.com/javafx/21"
+    xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.evenements.DesignEvenementAdminController">
     <children>
         <fx:include source="adminSideBar.fxml" />
         <AnchorPane layoutX="286.0" layoutY="104.0" prefHeight="700.0" prefWidth="310.0" styleClass="bg-white" stylesheets="@dashboard2.css">
@@ -111,15 +113,15 @@
         </Label>
         <Button fx:id="bExcel" layoutX="798.0" layoutY="682.0" mnemonicParsing="false" onAction="#generateExcel" styleClass="instert-btn" text="Generate Excel" />
         <FontIcon fx:id="idfilter" iconLiteral="fa-filter" layoutX="946.0" layoutY="227.0" onMouseClicked="#filtrer" text="" wrappingWidth="21.428571701049805" />
-        <AnchorPane fx:id="FilterAnchor" layoutX="837.0" layoutY="50.0" prefHeight="87.0" prefWidth="200.0" visible="false">
+        <AnchorPane fx:id="filterAnchor" layoutX="837.0" layoutY="50.0" prefHeight="87.0" prefWidth="200.0" visible="false">
             <children>
                 <Button layoutX="74.0" layoutY="161.0" mnemonicParsing="false" onAction="#filtercinema" text="Filter" />
             </children>
         </AnchorPane>
-      <Button fx:id="bCM1" layoutX="1221.0" layoutY="223.0" mnemonicParsing="false" onAction="#gestionSponsor" prefHeight="18.0" prefWidth="200.0" styleClass="button-client" text="Sponsor Management &gt;" textFill="#a83333">
-         <font>
-            <Font size="8.0" />
-         </font>
-      </Button>
+        <Button fx:id="bCM1" layoutX="1221.0" layoutY="223.0" mnemonicParsing="false" onAction="#gestionSponsor" prefHeight="18.0" prefWidth="200.0" styleClass="button-client" text="Sponsor Management &gt;" textFill="#a83333">
+            <font>
+                <Font size="8.0" />
+            </font>
+        </Button>
     </children>
 </AnchorPane>

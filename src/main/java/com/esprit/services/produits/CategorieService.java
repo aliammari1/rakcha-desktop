@@ -1,4 +1,5 @@
 package com.esprit.services.produits;
+
 import com.esprit.models.produits.Categorie_Produit;
 import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
@@ -8,12 +9,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class CategorieService implements IService<Categorie_Produit> {
     private final Connection connection;
+    private static final Logger LOGGER = Logger.getLogger(CategorieService.class.getName());
+
     public CategorieService() {
         connection = DataSource.getInstance().getConnection();
     }
-    /** 
+
+    /**
      * @param categorieProduit
      */
     @Override
@@ -24,12 +31,13 @@ public class CategorieService implements IService<Categorie_Produit> {
             pst.setString(1, categorieProduit.getNom_categorie());
             pst.setString(2, categorieProduit.getDescription());
             pst.executeUpdate();
-            System.out.println("Categorie ajoutée !");
+            LOGGER.info("Categorie ajoutée !");
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
-    /** 
+
+    /**
      * @return List<Categorie_Produit>
      */
     @Override
@@ -44,10 +52,11 @@ public class CategorieService implements IService<Categorie_Produit> {
                         rs.getString("description")));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return categories;
     }
+
     @Override
     public void update(Categorie_Produit categorieProduit) {
         String req = "UPDATE categorie_produit set nom_categorie = ?,  description = ? where id_categorie=?";
@@ -57,11 +66,12 @@ public class CategorieService implements IService<Categorie_Produit> {
             pst.setString(2, categorieProduit.getDescription());
             pst.setInt(3, categorieProduit.getId_categorie());
             pst.executeUpdate();
-            System.out.println("categorie modifiée !");
+            LOGGER.info("categorie modifiée !");
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
+
     @Override
     public void delete(Categorie_Produit categorieProduit) {
         String req = "DELETE from categorie_produit where id_categorie = ?;";
@@ -69,11 +79,12 @@ public class CategorieService implements IService<Categorie_Produit> {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(1, categorieProduit.getId_categorie());
             pst.executeUpdate();
-            System.out.println("categorie supprmiée !");
+            LOGGER.info("categorie supprmiée !");
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
+
     public Categorie_Produit getCategorie(int categorie_id) {
         Categorie_Produit category = null;
         String req = "SELECT * from categorie_produit where id_categorie = ?";
@@ -85,10 +96,11 @@ public class CategorieService implements IService<Categorie_Produit> {
             category = new Categorie_Produit(rs.getInt("id_categorie"), rs.getString("nom_categorie"),
                     rs.getString("description"));
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return category;
     }
+
     public Categorie_Produit getCategorieByNom(String categorie_nom) {
         Categorie_Produit category = null;
         String req = "SELECT * from categorie_produit where nom_categorie = ?";
@@ -100,10 +112,11 @@ public class CategorieService implements IService<Categorie_Produit> {
             category = new Categorie_Produit(rs.getInt("id_categorie"), rs.getString("nom_categorie"),
                     rs.getString("description"));
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return category;
     }
+
     // Ajoutez cette méthode pour récupérer tous les noms de catégories
     public List<String> getAllCategoriesNames() {
         List<String> categorieNames = new ArrayList<>();
@@ -116,6 +129,7 @@ public class CategorieService implements IService<Categorie_Produit> {
         }
         return categorieNames;
     }
+
     public List<String> getAllCategories() {
         List<String> categorieNames = new ArrayList<>();
         // Remplacez "getAllCategories()" par la méthode réelle qui récupère toutes les
@@ -127,6 +141,7 @@ public class CategorieService implements IService<Categorie_Produit> {
         }
         return categorieNames;
     }
+
     public List<Categorie_Produit> searchCategoriesByName(String searchKeyword) {
         List<Categorie_Produit> result = new ArrayList<>();
         try {
@@ -145,7 +160,7 @@ public class CategorieService implements IService<Categorie_Produit> {
             statement.close();
             resultSet.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return result;
     }

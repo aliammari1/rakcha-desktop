@@ -1,10 +1,19 @@
 package com.esprit.utils;
+
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+
+import com.esprit.services.produits.AvisService;
+
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class UserMail {
-    /** 
+    private static final Logger LOGGER = Logger.getLogger(UserMail.class.getName());
+
+    /**
      * @param Recipient
      * @param messageToSend
      */
@@ -43,9 +52,9 @@ public class UserMail {
             message.setText(messageToSend);
             // Send message
             Transport.send(message);
-            System.out.println("Sent message successfully....");
+            LOGGER.info("Sent message successfully....");
         } catch (MessagingException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
             throw new RuntimeException(e);
         }
     }
