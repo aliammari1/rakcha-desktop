@@ -1,19 +1,28 @@
 package com.esprit.services.films;
+
 import com.esprit.models.films.Category;
 import com.esprit.services.IService;
+import com.esprit.services.produits.AvisService;
 import com.esprit.utils.DataSource;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class CategoryService implements IService<Category> {
     Connection connection;
+    private static final Logger LOGGER = Logger.getLogger(CategoryService.class.getName());
+
     public CategoryService() {
         connection = DataSource.getInstance().getConnection();
     }
-    /** 
+
+    /**
      * @param category
      */
     @Override
@@ -28,7 +37,8 @@ public class CategoryService implements IService<Category> {
             throw new RuntimeException(e);
         }
     }
-    /** 
+
+    /**
      * @return List<Category>
      */
     @Override
@@ -46,6 +56,7 @@ public class CategoryService implements IService<Category> {
         }
         return categoryArrayList;
     }
+
     @Override
     public void update(Category category) {
         String req = "UPDATE category set nom=?,description=? where id=?";
@@ -59,6 +70,7 @@ public class CategoryService implements IService<Category> {
             throw new RuntimeException(e);
         }
     }
+
     @Override
     public void delete(Category category) {
         String req = "DELETE FROM category where id = ?";
@@ -70,6 +82,7 @@ public class CategoryService implements IService<Category> {
             throw new RuntimeException(e);
         }
     }
+
     public Category getCategory(int id) {
         Category category = null;
         String req = "SELECT * FROM category where id = ?";
@@ -80,10 +93,11 @@ public class CategoryService implements IService<Category> {
             rs.next();
             category = new Category(rs.getInt("id"), rs.getString("nom"), rs.getString("description"));
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return category;
     }
+
     public Category getCategoryByNom(String nom) {
         Category category = null;
         String req = "SELECT * FROM category where nom LIKE ?";
@@ -94,7 +108,7 @@ public class CategoryService implements IService<Category> {
             rs.next();
             category = new Category(rs.getInt("id"), rs.getString("nom"), rs.getString("description"));
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return category;
     }

@@ -1,4 +1,5 @@
 package com.esprit.utils;
+
 public class FaceDetector implements Runnable {
     @Override
     public void run() {
@@ -179,7 +180,7 @@ public class FaceDetector implements Runnable {
     //
     // } catch (Exception e) {
     //
-    // e.printStackTrace();
+    // LOGGER.log(Level.SEVERE, e.getMessage(), e);
     // }
     // }
     //
@@ -193,7 +194,7 @@ public class FaceDetector implements Runnable {
     // }
     // } catch (Exception e) {
     //
-    // e.printStackTrace();
+    // LOGGER.log(Level.SEVERE, e.getMessage(), e);
     // }
     //
     // }
@@ -205,7 +206,7 @@ public class FaceDetector implements Runnable {
     // ImageIO.write(image, "PNG", os);
     // } catch (IOException e) {
     //
-    // e.printStackTrace();
+    // LOGGER.log(Level.SEVERE, e.getMessage(), e);
     // }
     // }
     //
@@ -292,7 +293,7 @@ public class FaceDetector implements Runnable {
     //
     // } catch (Exception e) {
     //
-    // e.printStackTrace();
+    // LOGGER.log(Level.SEVERE, e.getMessage(), e);
     // }
     //
     // }).start();
@@ -322,13 +323,13 @@ public class FaceDetector implements Runnable {
     // grabber.stop();
     // } catch (org.bytedeco.javacv.FrameGrabber.Exception e) {
     //
-    // e.printStackTrace();
+    // LOGGER.log(Level.SEVERE, e.getMessage(), e);
     // }
     // try {
     // grabber.release();
     // } catch (org.bytedeco.javacv.FrameGrabber.Exception e) {
     //
-    // e.printStackTrace();
+    // LOGGER.log(Level.SEVERE, e.getMessage(), e);
     // }
     // grabber = null;
     // }

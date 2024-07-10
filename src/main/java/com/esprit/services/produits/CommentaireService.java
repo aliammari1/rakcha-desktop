@@ -1,4 +1,5 @@
 package com.esprit.services.produits;
+
 import com.esprit.models.produits.Commentaire;
 import com.esprit.models.users.Client;
 import com.esprit.services.IService;
@@ -7,12 +8,18 @@ import com.esprit.utils.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class CommentaireService implements IService<Commentaire> {
     private final Connection connection;
+    private static final Logger LOGGER = Logger.getLogger(CommentaireService.class.getName());
+
     public CommentaireService() {
         connection = DataSource.getInstance().getConnection();
     }
-    /** 
+
+    /**
      * @param commentaire
      */
     @Override
@@ -23,12 +30,13 @@ public class CommentaireService implements IService<Commentaire> {
             pst.setString(2, commentaire.getCommentaire());
             pst.setInt(3, commentaire.getProduit().getId_produit());
             pst.executeUpdate();
-            System.out.println("Commentaire ajouté !");
+            LOGGER.info("Commentaire ajouté !");
         } catch (SQLException e) {
-            System.out.println("Erreur lors de l'ajout du commentaire : " + e.getMessage());
+            LOGGER.info("Erreur lors de l'ajout du commentaire : " + e.getMessage());
         }
     }
-    /** 
+
+    /**
      * @return List<Commentaire>
      */
     @Override
@@ -45,16 +53,19 @@ public class CommentaireService implements IService<Commentaire> {
                         produitsevice.getProduitById(rs.getInt("id_produit"))));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return commentaire;
     }
+
     @Override
     public void update(Commentaire commentaire) {
     }
+
     @Override
     public void delete(Commentaire commentaire) {
     }
+
     public Commentaire readByClientId(int clientId) {
         Commentaire commentaire = null;
         String req = "SELECT * FROM commentaire_produit WHERE id_client_id = ? LIMIT 1";
@@ -71,10 +82,11 @@ public class CommentaireService implements IService<Commentaire> {
                         produitsevice.getProduitById(rs.getInt("idProduit")));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return commentaire;
     }
+
     public List<Commentaire> getCommentsByProduitId(int produitId) {
         List<Commentaire> commentaires = new ArrayList<>();
         String req = "SELECT * FROM commentaire_produit join produit WHERE commentaire_produit.id_produit = produit.id_produit AND id_produit = ?";
@@ -92,7 +104,7 @@ public class CommentaireService implements IService<Commentaire> {
                 commentaires.add(commentaire);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return commentaires;
     }

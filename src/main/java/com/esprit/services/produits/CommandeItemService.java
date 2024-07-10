@@ -1,4 +1,5 @@
 package com.esprit.services.produits;
+
 import com.esprit.models.produits.Commande;
 import com.esprit.models.produits.CommandeItem;
 import com.esprit.models.produits.Produit;
@@ -10,12 +11,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class CommandeItemService implements IService<CommandeItem> {
     private final Connection connection;
+    private static final Logger LOGGER = Logger.getLogger(CommandeItemService.class.getName());
+
     public CommandeItemService() {
         connection = DataSource.getInstance().getConnection();
     }
-    /** 
+
+    /**
      * @param commandeItem
      */
     @Override
@@ -27,12 +34,13 @@ public class CommandeItemService implements IService<CommandeItem> {
             pst.setInt(1, commandeItem.getProduit().getId_produit());
             pst.setInt(3, commandeItem.getCommande().getIdCommande());
             pst.executeUpdate();
-            System.out.println("panier remplit !");
+            LOGGER.info("panier remplit !");
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
-    /** 
+
+    /**
      * @return List<CommandeItem>
      */
     @Override
@@ -49,10 +57,11 @@ public class CommandeItemService implements IService<CommandeItem> {
                         ps.getProduitById(rs.getInt("id_produit")), cs.getCommandeByID(rs.getInt("idCommande"))));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return commandeitem;
     }
+
     public List<CommandeItem> readCommandeItem(int idCommande) {
         List<CommandeItem> commandeitem = new ArrayList<>();
         String req = "Select * FROM commandeitem where idCommande=?";
@@ -66,16 +75,19 @@ public class CommandeItemService implements IService<CommandeItem> {
                         ps.getProduitById(rs.getInt("id_produit")), cs.getCommandeByID(rs.getInt("idCommande"))));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return commandeitem;
     }
+
     @Override
     public void update(CommandeItem commandeItem) {
     }
+
     @Override
     public void delete(CommandeItem commandeItem) {
     }
+
     public List<CommandeItem> getCommandeItemsByCommande(int idCommande) {
         List<CommandeItem> commandeItems = new ArrayList<>();
         String req = "SELECT * FROM commandeitem WHERE idCommande = ?";
@@ -93,10 +105,11 @@ public class CommandeItemService implements IService<CommandeItem> {
                         cs.getCommandeByID(rs.getInt("idCommande"))));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return commandeItems;
     }
+
     public int getTotalQuantityByCategoryAndDate(String nomCategorie, String formattedDate) {
         int totalQuantity = 0;
         String req = "SELECT SUM(ci.quantity) AS totalQuantity " +
@@ -114,10 +127,11 @@ public class CommandeItemService implements IService<CommandeItem> {
                 totalQuantity = rs.getInt("totalQuantity");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return totalQuantity;
     }
+
     public List<CommandeItem> getItemsByCommande(int idCommande) {
         List<CommandeItem> commandeItems = new ArrayList<>();
         String req = "SELECT * FROM commandeitem WHERE idCommande = ?";
@@ -138,10 +152,11 @@ public class CommandeItemService implements IService<CommandeItem> {
                 commandeItems.add(commandeItem);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return commandeItems;
     }
+
     public List<CommandeItem> getavergeratingSorted() {
         String req = "SELECT id_produit, quantity FROM commandeitem WHERE statu LIKE 'payee' GROUP BY id_produit ORDER BY quantity DESC";
         List<CommandeItem> aver = new ArrayList<>();
@@ -155,7 +170,7 @@ public class CommandeItemService implements IService<CommandeItem> {
                         ps.getProduitById(rs.getInt("id_produit")), cs.getCommandeByID(rs.getInt("idCommande"))));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return aver;
     }

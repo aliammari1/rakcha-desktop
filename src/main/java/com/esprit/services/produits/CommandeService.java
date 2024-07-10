@@ -1,4 +1,5 @@
 package com.esprit.services.produits;
+
 import com.esprit.models.produits.Commande;
 import com.esprit.models.users.Client;
 import com.esprit.services.IService;
@@ -9,12 +10,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class CommandeService implements IService<Commande> {
     private final Connection connection;
+    private static final Logger LOGGER = Logger.getLogger(CommandeService.class.getName());
+
     public CommandeService() {
         connection = DataSource.getInstance().getConnection();
     }
-    /** 
+
+    /**
      * @param commande
      */
     @Override
@@ -29,12 +36,13 @@ public class CommandeService implements IService<Commande> {
             pst.setInt(4, commande.getNum_telephone());
             pst.setString(5, commande.getAdresse());
             pst.executeUpdate();
-            System.out.println("commande remplit !");
+            LOGGER.info("commande remplit !");
         } catch (SQLException e) {
-            System.out.println("commande nom remplit ");
+            LOGGER.info("commande nom remplit ");
         }
     }
-    /** 
+
+    /**
      * @param commande
      * @return int
      * @throws SQLException
@@ -55,6 +63,7 @@ public class CommandeService implements IService<Commande> {
         }
         return commandeId;
     }
+
     @Override
     public List<Commande> read() {
         CommandeItemService commandeItemService = new CommandeItemService();
@@ -73,10 +82,11 @@ public class CommandeService implements IService<Commande> {
                 commande.add(c1);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return commande;
     }
+
     public List<Commande> readClient() {
         CommandeItemService commandeItemService = new CommandeItemService();
         List<Commande> commande = new ArrayList<>();
@@ -94,10 +104,11 @@ public class CommandeService implements IService<Commande> {
                 commande.add(c1);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return commande;
     }
+
     @Override
     public void update(Commande commande) {
         String req = "UPDATE commande c"
@@ -112,11 +123,12 @@ public class CommandeService implements IService<Commande> {
             pst.setInt(3, commande.getNum_telephone());
             pst.setString(4, commande.getAdresse());
             pst.setInt(5, commande.getIdCommande());
-            System.out.println("commande modifiée !");
+            LOGGER.info("commande modifiée !");
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
+
     @Override
     public void delete(Commande commande) {
         String req = "DELETE from commande where idCommande = ?;";
@@ -124,11 +136,12 @@ public class CommandeService implements IService<Commande> {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(1, commande.getIdCommande());
             pst.executeUpdate();
-            System.out.println("commande supprmiée !");
+            LOGGER.info("commande supprmiée !");
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
+
     public Commande getCommandeByID(int idCommande) throws SQLException {
         UserService usersService = new UserService();
         Commande commande = new Commande();
@@ -145,6 +158,7 @@ public class CommandeService implements IService<Commande> {
         }
         return commande;
     }
+
     public List<Commande> getCommandesPayees() {
         List<Commande> commandesPayees = new ArrayList<>();
         String req = "SELECT * FROM commande WHERE statu like 'payee'";
@@ -165,10 +179,11 @@ public class CommandeService implements IService<Commande> {
                 commandesPayees.add(commande);
             }
         } catch (SQLException e) {
-            System.out.println("Erreur lors de la récupération des commandes payees : " + e.getMessage());
+            LOGGER.info("Erreur lors de la récupération des commandes payees : " + e.getMessage());
         }
         return commandesPayees;
     }
+
     // Compter le nombre d'achats d'un produit donné
     public Map<Integer, Integer> getTop3ProduitsAchetes() {
         String req = "SELECT ci.id_produit, SUM(ci.quantity) AS nombreAchats FROM commandeitem ci JOIN commande c ON ci.idCommande = c.idCommande WHERE c.statu = 'payee' GROUP BY ci.id_produit ORDER BY nombreAchats DESC LIMIT 3";
@@ -182,7 +197,7 @@ public class CommandeService implements IService<Commande> {
                 produitsAchats.put(idProduit, nombreAchats);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return produitsAchats;
     }

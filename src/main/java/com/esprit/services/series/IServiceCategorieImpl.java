@@ -1,18 +1,28 @@
 package com.esprit.services.series;
+
 import com.esprit.models.series.Categorie;
-import com.esprit.utils.mydatabase;
+import com.esprit.services.produits.AvisService;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.esprit.utils.DataSource;
+
 public class IServiceCategorieImpl implements IServiceCategorie<Categorie> {
     private static List<Categorie> categories;
     private final Connection connection;
+    private static final Logger LOGGER = Logger.getLogger(IServiceCategorieImpl.class.getName());
+
     public IServiceCategorieImpl() {
-        connection = mydatabase.getInstance().getConnection();
+        connection = DataSource.getInstance().getConnection();
     }
-    /** 
+
+    /**
      * @param categorie
      * @throws SQLException
      */
@@ -22,9 +32,10 @@ public class IServiceCategorieImpl implements IServiceCategorie<Categorie> {
                 + categorie.getDescription() + "')";
         Statement st = connection.createStatement();
         st.executeUpdate(req);
-        System.out.println("Categorie ajoutee avec succes");
+        LOGGER.info("Categorie ajoutee avec succes");
     }
-    /** 
+
+    /**
      * @param categorie
      * @throws SQLException
      */
@@ -36,16 +47,18 @@ public class IServiceCategorieImpl implements IServiceCategorie<Categorie> {
         os.setString(2, categorie.getDescription());
         os.setInt(3, categorie.getIdcategorie());
         os.executeUpdate();
-        System.out.println("Categorie modifiee avec succes");
+        LOGGER.info("Categorie modifiee avec succes");
     }
+
     @Override
     public void supprimer(int id) throws SQLException {
         String req = "DELETE FROM categories WHERE idcategorie = ?";
         PreparedStatement os = connection.prepareStatement(req);
         os.setInt(1, id);
         os.executeUpdate();
-        System.out.println("Categorie supprimee avec succes");
+        LOGGER.info("Categorie supprimee avec succes");
     }
+
     @Override
     public List<Categorie> recuperer() throws SQLException {
         List<Categorie> categories = new ArrayList<>();
@@ -59,9 +72,10 @@ public class IServiceCategorieImpl implements IServiceCategorie<Categorie> {
             categorie.setDescription(rs.getString("description"));
             categories.add(categorie);
         }
-        System.out.println(categories);
+        LOGGER.info(categories.toString());
         return categories;
     }
+
     public Map<Categorie, Long> getCategoriesStatistics() {
         Map<Categorie, Long> statistics = new HashMap<>();
         try {
@@ -80,7 +94,7 @@ public class IServiceCategorieImpl implements IServiceCategorie<Categorie> {
                 statistics.put(categorie, seriesCount);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return statistics;
     }

@@ -1,24 +1,32 @@
 package com.esprit.services.series;
+
 import com.esprit.models.series.Feedback;
-import com.esprit.utils.mydatabase;
+import com.esprit.services.produits.AvisService;
+import com.esprit.utils.DataSource;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class IServiceFeedbackImpl implements IServiceFeedback<Feedback> {
     public Connection conx;
     public Statement stm;
+    private static final Logger LOGGER = Logger.getLogger(IServiceFeedbackImpl.class.getName());
+
     public IServiceFeedbackImpl() {
-        conx = mydatabase.getInstance().getConnection();
+        conx = DataSource.getInstance().getConnection();
     }
-    /** 
+
+    /**
      * @param a
      */
     @Override
     public void ajouter(Feedback a) {
-        String req =
-                "INSERT INTO feedback"
-                        + "(id_user,description,date,id_episode)"
-                        + "VALUES(?,?,?,?)";
+        String req = "INSERT INTO feedback"
+                + "(id_user,description,date,id_episode)"
+                + "VALUES(?,?,?,?)";
         try {
             PreparedStatement ps = conx.prepareStatement(req);
             ps.setInt(1, a.getId_user());
@@ -26,12 +34,14 @@ public class IServiceFeedbackImpl implements IServiceFeedback<Feedback> {
             ps.setDate(3, new java.sql.Date(a.getDate().getTime()));
             ps.setInt(4, a.getId_episode());
             ps.executeUpdate();
-            System.out.println("FeedBack Ajoutée !!");
+            LOGGER.info("FeedBack Ajoutée !!");
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            ;
         }
     }
-    /** 
+
+    /**
      * @param a
      */
     @Override
@@ -45,11 +55,13 @@ public class IServiceFeedbackImpl implements IServiceFeedback<Feedback> {
             pst.setDate(3, new java.sql.Date(a.getDate().getTime()));
             pst.setInt(4, a.getId_episode());
             pst.executeUpdate();
-            System.out.println("FeedBack Modifiée !");
+            LOGGER.info("FeedBack Modifiée !");
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            ;
         }
     }
+
     @Override
     public void supprimer(int id) throws SQLException {
         String req = "DELETE FROM feedback WHERE id=?";
@@ -57,11 +69,13 @@ public class IServiceFeedbackImpl implements IServiceFeedback<Feedback> {
             PreparedStatement pst = conx.prepareStatement(req);
             pst.setInt(1, id);
             pst.executeUpdate();
-            System.out.println("FeedBack suprimée !");
+            LOGGER.info("FeedBack suprimée !");
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            ;
         }
     }
+
     @Override
     public List<Feedback> Show() {
         List<Feedback> list = new ArrayList<>();
@@ -74,7 +88,8 @@ public class IServiceFeedbackImpl implements IServiceFeedback<Feedback> {
                         rs.getString("description"), rs.getDate("date"), rs.getInt("id_episode")));
             }
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            ;
         }
         return list;
     }

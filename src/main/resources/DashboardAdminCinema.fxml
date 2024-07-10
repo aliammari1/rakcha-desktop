@@ -11,7 +11,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="855.0" prefWidth="1507.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.cinemas.DashboardAdminController">
+<AnchorPane prefHeight="855.0" prefWidth="1507.0"
+    xmlns="http://javafx.com/javafx/21"
+    xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.cinemas.DashboardAdminController">
     <children>
         <fx:include source="adminSideBar.fxml" />
         <AnchorPane fx:id="cinemasList" layoutX="391.0" layoutY="52.0" prefHeight="718.0" prefWidth="1059.0" styleClass="bg-white">
@@ -35,7 +37,8 @@
                     <stylesheets>
                         <URL value="@styles/dashboard.css" />
                         <URL value="@styles/filmStyle.css" />
-                    </stylesheets></Button>
+                    </stylesheets>
+                </Button>
                 <FontAwesomeIconView fill="#f5f2f2" glyphName="FILTER" layoutX="123.0" layoutY="76.0" size="20" text="" />
                 <TextField fx:id="tfSearch" layoutX="656.0" layoutY="47.0" prefHeight="42.0" prefWidth="248.0" promptText="Search here ......................">
                     <cursor>
@@ -52,7 +55,7 @@
                 <URL value="@styles/filmStyle.css" />
             </stylesheets>
         </AnchorPane>
-        <AnchorPane fx:id="FilterAnchor" layoutX="455.0" layoutY="169.0" prefHeight="317.0" prefWidth="340.0" styleClass="bg-white" stylesheets="@styles/filmStyle.css" visible="false">
+        <AnchorPane fx:id="filterAnchor" layoutX="455.0" layoutY="169.0" prefHeight="317.0" prefWidth="340.0" styleClass="bg-white" stylesheets="@styles/filmStyle.css" visible="false">
             <children>
                 <Label layoutX="117.0" layoutY="23.0" prefHeight="43.0" prefWidth="105.0" text="Filter:" textFill="#111010">
                     <font>

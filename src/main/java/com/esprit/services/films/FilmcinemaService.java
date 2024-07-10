@@ -1,24 +1,33 @@
 package com.esprit.services.films;
+
 import com.esprit.models.cinemas.Cinema;
 import com.esprit.models.films.Film;
 import com.esprit.models.films.Filmcinema;
 import com.esprit.models.users.Responsable_de_cinema;
 import com.esprit.services.IService;
 import com.esprit.services.cinemas.CinemaService;
+import com.esprit.services.produits.AvisService;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.DataSource;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class FilmcinemaService implements IService<Filmcinema> {
     Connection connection;
+    private static final Logger LOGGER = Logger.getLogger(FilmcinemaService.class.getName());
+
     public FilmcinemaService() {
         connection = DataSource.getInstance().getConnection();
     }
-    /** 
+
+    /**
      * @param filmcinema
      */
     @Override
@@ -29,7 +38,7 @@ public class FilmcinemaService implements IService<Filmcinema> {
             String[] cinemanames = cinema.getNom().split(", ");
             PreparedStatement statement = connection.prepareStatement(req);
             for (String cinemaname : cinemanames) {
-                System.out.println(cinemaname);
+                LOGGER.info(cinemaname);
                 statement.setInt(1, FilmService.getFilmLastInsertID());
                 statement.setInt(2, new CinemaService().getCinemaByName(cinemaname).getId_cinema());
                 statement.executeUpdate();
@@ -38,7 +47,8 @@ public class FilmcinemaService implements IService<Filmcinema> {
             throw new RuntimeException(e);
         }
     }
-    /** 
+
+    /**
      * @return List<Filmcinema>
      */
     @Override
@@ -58,28 +68,31 @@ public class FilmcinemaService implements IService<Filmcinema> {
                                 rs.getString("cinema.logo"), rs.getString("cinema.Statut"))));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return actorfilmArrayList;
     }
+
     @Override
     public void update(Filmcinema filmcinema) {
     }
+
     @Override
     public void delete(Filmcinema filmcinema) {
     }
+
     public void updatecinemas(Film film, List<String> cinemaNames) {
         FilmService filmService = new FilmService();
         CinemaService cinemaService = new CinemaService();
         filmService.update(film);
-        System.out.println("filmcinema............: " + film);
+        LOGGER.info("filmcinema............: " + film);
         String reqDelete = "DELETE FROM film_cinema WHERE film_id = ?;";
         try {
             PreparedStatement statement = connection.prepareStatement(reqDelete);
             statement.setInt(1, film.getId());
             statement.executeUpdate();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         String req = "INSERT INTO film_cinema (film_id, cinema_id) VALUES (?,?)";
         try {
@@ -93,6 +106,7 @@ public class FilmcinemaService implements IService<Filmcinema> {
             throw new RuntimeException(e);
         }
     }
+
     public String getcinemaNames(int id) {
         String s = "";
         String req = "SELECT GROUP_CONCAT(cinema.nom SEPARATOR ', ') AS cinemaNames from film_cinema JOIN cinema  ON film_cinema.cinema_id = cinema.id_cinema JOIN film on film_cinema.film_id = film.id where film.id = ? GROUP BY film.id;";
@@ -103,10 +117,11 @@ public class FilmcinemaService implements IService<Filmcinema> {
             // int i = 0;
             s = rs.next() ? rs.getString("cinemaNames") : "";
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return s;
     }
+
     public List<Film> readMoviesForCinema(int cinemaId) {
         List<Film> moviesForCinema = new ArrayList<>();
         String query = "SELECT film.*,cinema.* from film_cinema  JOIN cinema  ON film_cinema.cinema_id = cinema.id_cinema  JOIN film on film_cinema.film_id = film.id where cinema.id_cinema = ? GROUP BY film.id;";
@@ -119,7 +134,7 @@ public class FilmcinemaService implements IService<Filmcinema> {
                 moviesForCinema.add(film);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return moviesForCinema;
     }

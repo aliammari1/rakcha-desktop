@@ -1,8 +1,11 @@
 package com.esprit.controllers.series;
+
 import com.esprit.models.series.Favoris;
 import com.esprit.models.series.Serie;
+import com.esprit.services.produits.AvisService;
 import com.esprit.services.series.IServiceFavorisImpl;
 import com.esprit.services.series.IServiceSerieImpl;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -18,6 +21,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -25,32 +29,45 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
+
 /**
- * Is responsible for handling user actions related to favorite series. It displays
- * a list of series in an AnchorPane and provides buttons to watch, dislike, and add
- * to favorites. The controller also loads the favorite series list from the database
+ * Is responsible for handling user actions related to favorite series. It
+ * displays
+ * a list of series in an AnchorPane and provides buttons to watch, dislike, and
+ * add
+ * to favorites. The controller also loads the favorite series list from the
+ * database
  * using the IServiceSerieImpl and IServiceFavorisImpl interfaces.
  */
 public class ListFavorisController implements Initializable {
     private final int idSession = 1;
     @FXML
     private ListView<Serie> listViewFav;
+    private static final Logger LOGGER = Logger.getLogger(ListFavorisController.class.getName());
+
     /**
-     * Initializes a series fav list by loading it from a database using a SQLException-catching
+     * Initializes a series fav list by loading it from a database using a
+     * SQLException-catching
      * mechanism if an error occurs.
      * 
-     * @param url URL of the web page from which the user's favorite series should be loaded.
+     * @param url            URL of the web page from which the user's favorite
+     *                       series should be loaded.
      * 
-     * 	- `URL`: represents a web address or a URL, which provides access to a specific
-     * resource or service on the internet.
+     *                       - `URL`: represents a web address or a URL, which
+     *                       provides access to a specific
+     *                       resource or service on the internet.
      * 
-     * @param resourceBundle localized data for the application, which is used to load
-     * the series favor list.
+     * @param resourceBundle localized data for the application, which is used to
+     *                       load
+     *                       the series favor list.
      * 
-     * 	- `URL`: represents the URL of the web page that contains the series favorites
-     * list data
-     * 	- `ResourceBundle`: is a collection of culturally-specific data, including messages,
-     * labels, and other information.
+     *                       - `URL`: represents the URL of the web page that
+     *                       contains the series favorites
+     *                       list data
+     *                       - `ResourceBundle`: is a collection of
+     *                       culturally-specific data, including messages,
+     *                       labels, and other information.
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -60,49 +77,68 @@ public class ListFavorisController implements Initializable {
             throw new RuntimeException(e);
         }
     }
+
     /**
-     * Displays a list of series with buttons for liking, disliking, and watching each
-     * series. When a button is clicked, the corresponding action is performed on the
+     * Displays a list of series with buttons for liking, disliking, and watching
+     * each
+     * series. When a button is clicked, the corresponding action is performed on
+     * the
      * series data model.
      * 
-     * @param series 2D array of series data that will be displayed in the list view, and
-     * it is used to populate the list view with the appropriate series items.
+     * @param series 2D array of series data that will be displayed in the list
+     *               view, and
+     *               it is used to populate the list view with the appropriate
+     *               series items.
      * 
-     * 	- `id`: an integer representing the unique identifier of the series.
-     * 	- `nom`: a string representing the name of the series.
-     * 	- `genre`: a string representing the genre of the series (e.g., "drama", "comedy",
-     * etc.).
-     * 	- `description`: a string representing a brief description of the series.
-     * 	- `poster`: a URL or image path representing the poster image for the series.
-     * 	- `nbEpisodes`: an integer representing the number of episodes in the series.
+     *               - `id`: an integer representing the unique identifier of the
+     *               series.
+     *               - `nom`: a string representing the name of the series.
+     *               - `genre`: a string representing the genre of the series (e.g.,
+     *               "drama", "comedy",
+     *               etc.).
+     *               - `description`: a string representing a brief description of
+     *               the series.
+     *               - `poster`: a URL or image path representing the poster image
+     *               for the series.
+     *               - `nbEpisodes`: an integer representing the number of episodes
+     *               in the series.
      */
     public void afficherliste(List<Serie> series) {
         listViewFav.getItems().clear();
         listViewFav.setCellFactory(param -> new ListCell<Serie>() {
             /**
-             * Updates an item's information based on user interactions with like and dislike
-             * buttons, favorites button, and a watch button. It retrieves data from a database
-             * and updates the item's likes and dislikes counts, favorites count, and watch status
+             * Updates an item's information based on user interactions with like and
+             * dislike
+             * buttons, favorites button, and a watch button. It retrieves data from a
+             * database
+             * and updates the item's likes and dislikes counts, favorites count, and watch
+             * status
              * accordingly.
              * 
-             * @param item current episode being displayed, and it is used to access its properties
-             * such as title, image, likes count, dislikes count, and favorite status, which are
-             * then displayed on the user interface.
+             * @param item  current episode being displayed, and it is used to access its
+             *              properties
+             *              such as title, image, likes count, dislikes count, and favorite
+             *              status, which are
+             *              then displayed on the user interface.
              * 
-             * 	- `id serie`: The id of the series to which the item belongs.
-             * 	- `name`: The name of the episode.
-             * 	- `summary`: A brief summary of the episode.
-             * 	- `director`: The director of the episode.
-             * 	- `country`: The country where the episode was produced.
-             * 	- `likes`: The number of likes received by the episode.
-             * 	- `dislikes`: The number of dislikes received by the episode.
-             * 	- `clickDislikes`: The number of times the dislike button has been clicked.
-             * 	- `NbDislikes`: The total number of dislikes received by the episode.
-             * 	- `clickFavoris`: The number of times the favorite button has been clicked.
-             * 	- `NbFavoris`: The total number of favorites for the episode.
+             *              - `id serie`: The id of the series to which the item belongs.
+             *              - `name`: The name of the episode.
+             *              - `summary`: A brief summary of the episode.
+             *              - `director`: The director of the episode.
+             *              - `country`: The country where the episode was produced.
+             *              - `likes`: The number of likes received by the episode.
+             *              - `dislikes`: The number of dislikes received by the episode.
+             *              - `clickDislikes`: The number of times the dislike button has
+             *              been clicked.
+             *              - `NbDislikes`: The total number of dislikes received by the
+             *              episode.
+             *              - `clickFavoris`: The number of times the favorite button has
+             *              been clicked.
+             *              - `NbFavoris`: The total number of favorites for the episode.
              * 
-             * @param empty empty stage, which is used to display the watch episode button when
-             * the user clicks on it.
+             * @param empty empty stage, which is used to display the watch episode button
+             *              when
+             *              the user clicks on it.
              */
             @Override
             protected void updateItem(Serie item, boolean empty) {
@@ -185,23 +221,29 @@ public class ListFavorisController implements Initializable {
                     /* Button Like + Dislike's Functions */
                     likeButton.setOnAction(new EventHandler<ActionEvent>() {
                         /**
-                         * Increments or decrements the number of likes for a given item based on its current
-                         * like count and parity, and updates the liked status of the item in the database.
+                         * Increments or decrements the number of likes for a given item based on its
+                         * current
+                         * like count and parity, and updates the liked status of the item in the
+                         * database.
                          * 
-                         * @param event ActionEvent object that triggered the function, providing the context
-                         * and event information for the handling of likes and dislikes.
+                         * @param event ActionEvent object that triggered the function, providing the
+                         *              context
+                         *              and event information for the handling of likes and dislikes.
                          * 
-                         * 	- `item`: an instance of the `Item` class representing the item that triggered
-                         * the event
-                         * 	- `likes`: the total number of likes for the item
+                         *              - `item`: an instance of the `Item` class representing the item
+                         *              that triggered
+                         *              the event
+                         *              - `likes`: the total number of likes for the item
                          * 
-                         * These properties are used in the function to increment the number of likes and
-                         * print it, as well as to check if the item has been liked or disliked.
+                         *              These properties are used in the function to increment the
+                         *              number of likes and
+                         *              print it, as well as to check if the item has been liked or
+                         *              disliked.
                          */
                         @Override
                         public void handle(ActionEvent event) {
                             item.setClickLikes(item.getClickLikes() + 1);
-                            System.out.println(item.getClickLikes());
+                            LOGGER.info(String.valueOf(item.getClickLikes()));
                             IServiceSerieImpl ss = new IServiceSerieImpl();
                             try {
                                 if ((item.getClickLikes() == 0) || (item.getClickLikes() % 2 != 0)) {
@@ -226,20 +268,25 @@ public class ListFavorisController implements Initializable {
                     });
                     dislikeButton.setOnAction(new EventHandler<ActionEvent>() {
                         /**
-                         * Updates the number of dislikes for an item based on a condition, adds or removes
+                         * Updates the number of dislikes for an item based on a condition, adds or
+                         * removes
                          * the item from a list, and disables the like button accordingly.
                          * 
-                         * @param event event generated by the click of a button, which triggers the execution
-                         * of the `handle()` method and the updating of the item's dislike count.
+                         * @param event event generated by the click of a button, which triggers the
+                         *              execution
+                         *              of the `handle()` method and the updating of the item's dislike
+                         *              count.
                          * 
-                         * 	- `event` represents an action event that triggers the function's execution.
-                         * 	- `item` is the object on which the action was performed, containing information
-                         * such as click count and likes/dislikes counter.
+                         *              - `event` represents an action event that triggers the
+                         *              function's execution.
+                         *              - `item` is the object on which the action was performed,
+                         *              containing information
+                         *              such as click count and likes/dislikes counter.
                          */
                         @Override
                         public void handle(ActionEvent event) {
                             item.setClickDislikes(item.getClickDislikes() + 1);
-                            System.out.println(item.getClickDislikes());
+                            LOGGER.info(String.valueOf(item.getClickDislikes()));
                             IServiceSerieImpl ss = new IServiceSerieImpl();
                             try {
                                 if ((item.getClickDislikes() == 0) || (item.getClickDislikes() % 2 != 0)) {
@@ -264,14 +311,17 @@ public class ListFavorisController implements Initializable {
                     });
                     favButton.setOnAction(new EventHandler<ActionEvent>() {
                         /**
-                         * Updates a `Favoris` object with an id_user and id_serie, adds or removes it from
+                         * Updates a `Favoris` object with an id_user and id_serie, adds or removes it
+                         * from
                          * a database based on a condition, and prints the updated value to the console.
                          * 
-                         * @param event ActionEvent object that triggered the function execution, providing
-                         * the necessary information to handle the corresponding action.
+                         * @param event ActionEvent object that triggered the function execution,
+                         *              providing
+                         *              the necessary information to handle the corresponding action.
                          * 
-                         * 	- `event`: an instance of `ActionEvent`, representing an action event triggered
-                         * by a user interaction with the application.
+                         *              - `event`: an instance of `ActionEvent`, representing an action
+                         *              event triggered
+                         *              by a user interaction with the application.
                          */
                         @Override
                         public void handle(ActionEvent event) {
@@ -280,14 +330,14 @@ public class ListFavorisController implements Initializable {
                             IServiceFavorisImpl sf = new IServiceFavorisImpl();
                             Favoris f = new Favoris(id_user, id_serie);
                             item.setClickFavoris(item.getClickFavoris() + 1);
-                            System.out.println(item.getClickFavoris());
+                            LOGGER.info(String.valueOf(item.getClickFavoris()));
                             try {
                                 if ((item.getClickFavoris() == 0) || (item.getClickFavoris() % 2 != 0)) {
                                     sf.ajouter(f);
                                 } else {
                                     Favoris fav = sf.getByIdUserAndIdSerie(id_user, id_serie);
                                     sf.supprimer(fav.getId());
-                                    System.out.println(fav.getId());
+                                    LOGGER.info(String.valueOf(fav.getId()));
                                 }
                             } catch (SQLException e) {
                                 throw new RuntimeException(e);
@@ -347,10 +397,14 @@ public class ListFavorisController implements Initializable {
         });
         listViewFav.getItems().addAll(series);
     }
+
     /**
-     * Retrieves a list of series from a database based on the current session ID, and
-     * then loops through the list of favorite series to retrieve the corresponding series
-     * object from a separate service implementation, finally displaying the combined
+     * Retrieves a list of series from a database based on the current session ID,
+     * and
+     * then loops through the list of favorite series to retrieve the corresponding
+     * series
+     * object from a separate service implementation, finally displaying the
+     * combined
      * list of series in the UI.
      */
     @FXML

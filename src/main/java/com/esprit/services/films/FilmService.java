@@ -1,10 +1,14 @@
 package com.esprit.services.films;
+
 import com.esprit.models.films.Film;
 import com.esprit.services.IService;
+import com.esprit.services.produits.AvisService;
 import com.esprit.utils.DataSource;
 import com.esprit.utils.FilmYoutubeTrailer;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -17,19 +21,26 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class FilmService implements IService<Film> {
     static private int filmLastInsertID;
     Connection connection;
+    private static final Logger LOGGER = Logger.getLogger(FilmService.class.getName());
+
     public FilmService() {
         connection = DataSource.getInstance().getConnection();
     }
-    /** 
+
+    /**
      * @return int
      */
     public static int getFilmLastInsertID() {
         return filmLastInsertID;
     }
-    /** 
+
+    /**
      * @param query
      * @return String
      */
@@ -38,18 +49,18 @@ public class FilmService implements IService<Film> {
             String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
             String scriptUrl = "https://script.google.com/macros/s/AKfycbyeuvvPJ2jljewXKStVhiOrzvhMPkAEj5xT_cun3IRWc9XEF4F64d-jimDvK198haZk/exec?query="
                     + encodedQuery;
-            System.out.println(scriptUrl);
+            LOGGER.info(scriptUrl);
             // Send the request
             URL url = new URL(scriptUrl);
             int statusCode = 403;
             HttpURLConnection conn = null;
             do {
-                System.out.println("Code=" + statusCode);
+                LOGGER.info("Code=" + statusCode);
                 // Send the request
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 statusCode = conn.getInputStream().read();
-                System.out.println("Status Code: " + conn.getResponseCode());
+                LOGGER.info("Status Code: " + conn.getResponseCode());
             } while (statusCode != 123);
             // Read the response
             BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -61,23 +72,24 @@ public class FilmService implements IService<Film> {
             String response = "{" + responseBuilder + "}";
             reader.close();
             // Parse the JSON response
-            System.out.println(response);
+            LOGGER.info(response);
             JSONObject jsonResponse = new JSONObject(response);
             JSONArray results = jsonResponse.getJSONArray("results");
             // Extract the IMDb URL of the first result
             if (results.length() > 0) {
                 JSONObject firstResult = results.getJSONObject(0);
                 String imdbUrl = firstResult.getString("imdb");
-                System.out.println("IMDb URL of the first result: " + imdbUrl);
+                LOGGER.info("IMDb URL of the first result: " + imdbUrl);
                 return (imdbUrl);
             } else {
-                System.out.println("No results found.");
+                LOGGER.info("No results found.");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return "imdb.com";
     }
+
     @Override
     public void create(Film film) {
         String req = "insert into film (nom,image,duree,description,annederalisation) values (?,?,?,?,?) ";
@@ -94,12 +106,13 @@ public class FilmService implements IService<Film> {
             ResultSet rs = selectPs.executeQuery();
             if (rs.next()) {
                 filmLastInsertID = rs.getInt(1);
-                System.out.println(filmLastInsertID);
+                LOGGER.info(String.valueOf(filmLastInsertID));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
+
     @Override
     public List<Film> read() {
         List<Film> filmArrayList = new ArrayList<>();
@@ -111,14 +124,15 @@ public class FilmService implements IService<Film> {
             while (rs.next()) {
                 filmArrayList.add(new Film(rs.getInt("id"), rs.getString("nom"), rs.getString("image"),
                         rs.getTime("duree"), rs.getString("description"), rs.getInt("annederalisation")));
-                // System.out.println(filmArrayList.get(i));
+                // LOGGER.info(filmArrayList.get(i));
                 // i++;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return filmArrayList;
     }
+
     public List<Film> sort(String p) {
         List<Film> filmArrayList = new ArrayList<>();
         String req = "SELECT * from film ORDER BY " + p;
@@ -129,14 +143,15 @@ public class FilmService implements IService<Film> {
             while (rs.next()) {
                 filmArrayList.add(new Film(rs.getInt("id"), rs.getString("nom"), rs.getString("image"),
                         rs.getTime("duree"), rs.getString("description"), rs.getInt("annederalisation")));
-                // System.out.println(filmArrayList.get(i));
+                // LOGGER.info(filmArrayList.get(i));
                 // i++;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return filmArrayList;
     }
+
     public Film getCinema(int id) {
         Film film = null;
         String req = "SELECT * from Film where id = ?";
@@ -148,15 +163,16 @@ public class FilmService implements IService<Film> {
             film = new Film(rs.getInt("id"), rs.getString("nom"), rs.getString("image"), rs.getTime("duree"),
                     rs.getString("description"), rs.getInt("annederalisation"));
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return film;
     }
+
     @Override
     public void update(Film film) {
         String req = "UPDATE film set nom=?,image=?,duree=?,description=?,annederalisation=? where id=?;";
         try {
-            System.out.println("uodate: " + film);
+            LOGGER.info("uodate: " + film);
             PreparedStatement statement = connection.prepareStatement(req);
             statement.setString(1, film.getNom());
             statement.setString(2, film.getImage());
@@ -169,6 +185,7 @@ public class FilmService implements IService<Film> {
             throw new RuntimeException(e);
         }
     }
+
     @Override
     public void delete(Film film) {
         String req = "DELETE FROM film where id = ?";
@@ -180,6 +197,7 @@ public class FilmService implements IService<Film> {
             throw new RuntimeException(e);
         }
     }
+
     public Film getFilm(int film_id) {
         Film film = null;
         String req = "SELECT * from film where id = ?";
@@ -191,10 +209,11 @@ public class FilmService implements IService<Film> {
             film = new Film(rs.getInt("id"), rs.getString("nom"), rs.getString("image"), rs.getTime("duree"),
                     rs.getString("description"), rs.getInt("annederalisation"));
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return film;
     }
+
     public Film getFilmByName(String nom_film) {
         Film film = null;
         String req = "SELECT * from film where nom = ?";
@@ -206,17 +225,18 @@ public class FilmService implements IService<Film> {
             film = new Film(rs.getInt("id"), rs.getString("nom"), rs.getString("image"), rs.getTime("duree"),
                     rs.getString("description"), rs.getInt("annederalisation"));
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return film;
     }
+
     public String getTrailerFilm(String nomFilm) {
         String s = "";
         try {
             FilmYoutubeTrailer filmYoutubeTrailer = new FilmYoutubeTrailer();
             s = filmYoutubeTrailer.watchTrailer(nomFilm);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return s;
     }

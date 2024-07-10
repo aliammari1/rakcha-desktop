@@ -6,9 +6,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.asynchttpclient.DefaultAsyncHttpClientConfig;
 
+import com.esprit.services.produits.AvisService;
 import com.github.scribejava.apis.GoogleApi20;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.httpclient.HttpClientConfig;
@@ -27,6 +30,7 @@ public class SignInGoogle {
         private static final String NETWORK_NAME = "Google Async";
         private static final String PROTECTED_RESOURCE_URL = "https://www.googleapis.com/oauth2/v3/userinfo";
         static OAuth20Service service;
+        private static final Logger LOGGER = Logger.getLogger(SignInGoogle.class.getName());
 
         /**
          * @return String
@@ -47,10 +51,9 @@ public class SignInGoogle {
                                 .callback("urn:ietf:wg:oauth:2.0:oob")
                                 .httpClientConfig(clientConfig)
                                 .build(GoogleApi20.instance());
-                System.out.println("=== " + NETWORK_NAME + "'s OAuth Workflow ===");
-                System.out.println();
+                LOGGER.info("=== " + NETWORK_NAME + "'s OAuth Workflow ===");
                 // Obtain the Authorization URL
-                System.out.println("Fetching the Authorization URL...");
+                LOGGER.info("Fetching the Authorization URL...");
                 // pass access_type=offline to get refresh token
                 // https://developers.google.com/identity/protocols/OAuth2WebServer#preparing-to-start-the-oauth-20-flow
                 final Map<String, String> additionalParams = new HashMap<>();
@@ -61,8 +64,8 @@ public class SignInGoogle {
                                 .state(secretState)
                                 .additionalParams(additionalParams)
                                 .build();
-                System.out.println("Got the Authorization URL!");
-                System.out.println("Now go and authorize ScribeJava here:");
+                LOGGER.info("Got the Authorization URL!");
+                LOGGER.info("Now go and authorize ScribeJava here:");
                 return authorizationUrl;
         }
 
@@ -75,38 +78,35 @@ public class SignInGoogle {
          */
         public static Boolean verifyAuthUrl(String code) throws IOException, ExecutionException, InterruptedException {
                 try {
-                        System.out.println();
-                        System.out.println("And paste the state from server here. We have set 'secretState'='"
+                        LOGGER.info("And paste the state from server here. We have set 'secretState'='"
                                         + secretState + "'.");
                         System.out.print(">>");
                         // final String value = in.nextLine();
                         // if (secretState.equals(value)) {
-                        // System.out.println("State value does match!");
+                        // LOGGER.info("State value does match!");
                         // } else {
-                        // System.out.println("Ooops, state value does not match!");
-                        // System.out.println("Expected = " + secretState);
-                        // System.out.println("Got = " + value);
-                        // System.out.println();
+                        // LOGGER.info("Ooops, state value does not match!");
+                        // LOGGER.info("Expected = " + secretState);
+                        // LOGGER.info("Got = " + value);
+                        // LOGGER.info();
                         // }
-                        System.out.println("Trading the Authorization Code for an Access Token...");
+                        LOGGER.info("Trading the Authorization Code for an Access Token...");
                         OAuth2AccessToken accessToken = service.getAccessToken(String.valueOf(code));
-                        System.out.println("Got the Access Token!");
-                        System.out.println("(The raw response looks like this: " + accessToken.getRawResponse()
+                        LOGGER.info("Got the Access Token!");
+                        LOGGER.info("(The raw response looks like this: " + accessToken.getRawResponse()
                                         + "')");
-                        System.out.println("Refreshing the Access Token...");
+                        LOGGER.info("Refreshing the Access Token...");
                         accessToken = service.refreshAccessToken(accessToken.getRefreshToken());
-                        System.out.println("Refreshed the Access Token!");
-                        System.out.println("(The raw response looks like this: " + accessToken.getRawResponse()
+                        LOGGER.info("Refreshed the Access Token!");
+                        LOGGER.info("(The raw response looks like this: " + accessToken.getRawResponse()
                                         + "')");
-                        System.out.println();
                         // Now let's go and ask for a protected resource!
-                        System.out.println("Now we're going to access a protected resource...");
+                        LOGGER.info("Now we're going to access a protected resource...");
                         // while (true) {
-                        System.out.println(
+                        LOGGER.info(
                                         "Paste fieldnames to fetch (leave empty to get profile, 'exit' to stop example)");
                         System.out.print(">>");
                         // final String query = in.nextLine();
-                        System.out.println();
                         final String requestUrl;
                         // if ("exit".equals(query)) {
                         // break;
@@ -117,16 +117,14 @@ public class SignInGoogle {
                         // }
                         final OAuthRequest request = new OAuthRequest(Verb.GET, requestUrl);
                         service.signRequest(accessToken, request);
-                        System.out.println();
                         try (Response response = service.execute(request)) {
-                                System.out.println("the login information: ");
-                                System.out.println(response.getCode());
-                                System.out.println(response.getBody());
+                                LOGGER.info("the login information: ");
+                                LOGGER.info(String.valueOf(response.getCode()));
+                                LOGGER.info(response.getBody());
                         }
-                        System.out.println();
                         // }
                 } catch (Exception e) {
-                        e.printStackTrace();
+                        LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
                 return false;
         }

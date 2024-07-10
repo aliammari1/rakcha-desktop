@@ -1,4 +1,5 @@
 package com.esprit.controllers.users;
+
 //
 ////
 ////
@@ -75,7 +76,7 @@ public class FaceRecognitionController {
     //// this.cameraButton.setText("Stop Camera");
     //// } else {
     //// // log the error
-    //// System.err.println("Failed to open the camera connection...");
+    //// LOGGER.info("Failed to open the camera connection...");
     //// }
     //// } else {
     //// // the camera is not active at this point
@@ -92,7 +93,7 @@ public class FaceRecognitionController {
     //// this.timer.awaitTermination(33, TimeUnit.MILLISECONDS);
     //// } catch (InterruptedException e) {
     //// // log the exception
-    //// System.err.println("Exception in stopping the frame capture, trying to
+    //// LOGGER.info("Exception in stopping the frame capture, trying to
     // release the camera now... " + e);
     //// }
     ////
@@ -130,7 +131,7 @@ public class FaceRecognitionController {
     ////
     //// } catch (Exception e) {
     //// // log the (full) error
-    //// System.err.println("ERROR: " + e);
+    //// LOGGER.info("ERROR: " + e);
     //// }
     //// }
     ////
@@ -169,8 +170,8 @@ public class FaceRecognitionController {
     //// for (int i = 0; i < facesArray.length; i++) {
     //// Imgproc.rectangle(frame, facesArray[i].tl(), facesArray[i].br(), new
     // Scalar(7, 255, 90), 4);
-    //// System.out.println(facesArray[i].tl());
-    //// System.out.println(facesArray[i].br());
+    //// LOGGER.info(facesArray[i].tl());
+    //// LOGGER.info(facesArray[i].br());
     //// }
     ////
     ////
@@ -653,7 +654,7 @@ public class FaceRecognitionController {
     //
     // } catch (FontFormatException e) {
     //
-    // e.printStackTrace();
+    // LOGGER.log(Level.SEVERE, e.getMessage(), e);
     // }
     //
     // }
@@ -747,7 +748,7 @@ public class FaceRecognitionController {
     // imageView1.setCache(true);
     //
     // } catch (FileNotFoundException e) {
-    // e.printStackTrace();
+    // LOGGER.log(Level.SEVERE, e.getMessage(), e);
     // }
     //
     // return imageView1;
