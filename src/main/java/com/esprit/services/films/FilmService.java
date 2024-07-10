@@ -135,7 +135,7 @@ public class FilmService implements IService<Film> {
 
     public List<Film> sort(String p) {
         List<Film> filmArrayList = new ArrayList<>();
-        String req = "SELECT * from film ORDER BY " + p;
+        String req = String.format("SELECT * from film ORDER BY %s", p);
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             ResultSet rs = pst.executeQuery();

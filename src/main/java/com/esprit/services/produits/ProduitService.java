@@ -77,7 +77,7 @@ public class ProduitService implements IService<Produit> {
         if (!validColumns.contains(sortBy)) {
             throw new IllegalArgumentException("Invalid sort parameter");
         }
-        String req = "SELECT *, id_categorieProduit FROM produit ORDER BY " + sortBy;
+        String req = String.format("SELECT *, id_categorieProduit FROM produit ORDER BY %s", sortBy);
         try (PreparedStatement pst = connection.prepareStatement(req)) {
             ResultSet rs = pst.executeQuery();
             CategorieService cs = new CategorieService();

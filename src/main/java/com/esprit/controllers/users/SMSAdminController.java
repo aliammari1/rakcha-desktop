@@ -1,5 +1,7 @@
 package com.esprit.controllers.users;
+
 import com.esprit.utils.UserSMSAPI;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -12,10 +14,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.net.URL;
+import java.security.SecureRandom;
 import java.util.Random;
 import java.util.ResourceBundle;
+
 public class SMSAdminController implements Initializable {
     int verificationCode = 0;
     @FXML
@@ -28,7 +33,8 @@ public class SMSAdminController implements Initializable {
     private TextField phoneNumberTextfield;
     @FXML
     private Button sendSMS;
-    /** 
+
+    /**
      * @param event
      */
     public void sendSMS(ActionEvent event) {
@@ -43,21 +49,21 @@ public class SMSAdminController implements Initializable {
             }
         }
     }
-    /** 
+
+    /**
      * @param location
      * @param resources
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        phoneNumberTextfield.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (newValue.trim().length() == 8) {
-                    Random random = new Random();
-                    verificationCode = random.nextInt(999999 - 100000) + 100000;
-                    UserSMSAPI.sendSMS(Integer.parseInt(phoneNumberTextfield.getText()), "Rakcha Admin", "your code is " + verificationCode);
-                }
-            }
-        });
+        phoneNumberTextfield.textProperty()
+                .addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+                    if (newValue.trim().length() == 8) {
+                        SecureRandom random = new SecureRandom();
+                        verificationCode = random.nextInt(999999 - 100000) + 100000;
+                        UserSMSAPI.sendSMS(Integer.parseInt(phoneNumberTextfield.getText()), "Rakcha Admin",
+                                "your code is " + verificationCode);
+                    }
+                });
     }
 }

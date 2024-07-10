@@ -18,7 +18,7 @@ public class Paymentuser {
      * @throws StripeException
      */
     public static String pay(int f) throws StripeException {
-        Stripe.apiKey = "sk_test_51M9YqwA2tc9VjbDkLO3AcupMJW2tJquATnN2jize1vg7O2VZkqDssPzeSEjFviA1rQ076mRxqbKbhsWVZtwUOkjA00y3GKCfsy";
+        Stripe.apiKey = System.getenv("STRIPE_API_KEY");
         Map<String, Object> params = new HashMap<>();
         params.put("amount", f);
         params.put("currency", "usd");

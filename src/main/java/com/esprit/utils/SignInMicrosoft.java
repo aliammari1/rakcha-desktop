@@ -55,7 +55,7 @@ public class SignInMicrosoft {
      */
     public static void verifyAuthUrl(String code) throws IOException, ExecutionException, InterruptedException {
         LOGGER.info("And paste the authorization code here");
-        System.out.print(">>");
+        LOGGER.info(">>");
         // final String code = in.nextLine();
         LOGGER.info("Trading the Authorization Code for an Access Token...");
         final OAuth2AccessToken accessToken = service.getAccessToken(code);

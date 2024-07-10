@@ -28,10 +28,11 @@ public class IServiceCategorieImpl implements IServiceCategorie<Categorie> {
      */
     @Override
     public void ajouter(Categorie categorie) throws SQLException {
-        String req = "INSERT INTO categories (nom, description) VALUES ('" + categorie.getNom() + "','"
-                + categorie.getDescription() + "')";
-        Statement st = connection.createStatement();
-        st.executeUpdate(req);
+        String req = "INSERT INTO categories (nom, description) VALUES (?, ?)";
+        PreparedStatement st = connection.prepareStatement(req);
+        st.setString(1, categorie.getNom());
+        st.setString(2, categorie.getDescription());
+        st.executeUpdate();
         LOGGER.info("Categorie ajoutee avec succes");
     }
 

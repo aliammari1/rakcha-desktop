@@ -10,9 +10,9 @@ import com.esprit.services.produits.AvisService;
 
 public class DataSource {
     private static DataSource instance;
-    private final String URL = "jdbc:mysql://mysql-rakcha.alwaysdata.net:3306/rakcha_db";
-    private final String USER = "rakcha";
-    private final String PASSWORD = "rakchaRootPass";
+    private final String URL = System.getenv("DB_URL");
+    private final String USER = System.getenv("DB_USER");
+    private final String PASSWORD = System.getenv("DB_PASSWORD");
     private Connection connection;
     private static final Logger LOGGER = Logger.getLogger(DataSource.class.getName());
 

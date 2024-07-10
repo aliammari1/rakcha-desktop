@@ -157,7 +157,7 @@ public class UserService implements IService<User> {
     public List<User> sort(String Option) {
         try {
             List<User> userList = new ArrayList<>();
-            String query = "SELECT * FROM users ORDER BY " + Option;
+            String query = String.format("SELECT * FROM users ORDER BY %s", Option);
             PreparedStatement statement = this.con.prepareStatement(query);
             return this.getUsers(userList, statement);
         } catch (SQLException e) {
