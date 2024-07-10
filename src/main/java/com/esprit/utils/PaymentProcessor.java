@@ -13,7 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class PaymentProcessor {
-    private static final String STRIPE_API_KEY = "sk_test_51M9YqwA2tc9VjbDkLO3AcupMJW2tJquATnN2jize1vg7O2VZkqDssPzeSEjFviA1rQ076mRxqbKbhsWVZtwUOkjA00y3GKCfsy";
+    private static final String STRIPE_API_KEY = System.getenv("STRIPE_API_KEY");
     private static final Logger LOGGER = Logger.getLogger(PaymentProcessor.class.getName());
 
     /**

@@ -6,12 +6,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.asynchttpclient.DefaultAsyncHttpClientConfig;
 
-import com.esprit.services.produits.AvisService;
 import com.github.scribejava.apis.GoogleApi20;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.httpclient.HttpClientConfig;
@@ -21,12 +21,13 @@ import com.github.scribejava.core.model.Response;
 import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth20Service;
 import com.github.scribejava.httpclient.ahc.AhcHttpClientConfig;
+import java.security.SecureRandom;
 
 public class SignInGoogle {
-        // static final Scanner in = new Scanner(System.in, StandardCharsets.UTF_8);
-        static final String clientId = System.getenv("GOOGLE_CLIENT_ID");
-        static final String clientSecret = System.getenv("GOOGLE_CLIENT_SECRET");
-        static final String secretState = "secret" + new Random().nextInt(999_999);
+        static final String GOOGLE_CLIENT_ID = System.getenv("GOOGLE_CLIENT_ID");
+        static final String GOOGLE_CLIENT_SECRET = System.getenv("GOOGLE_CLIENT_SECRET");
+        private static final SecureRandom RANDOM = new SecureRandom();
+        static final String SECRET_STATE = "secret" + RANDOM.nextInt(999_999);
         private static final String NETWORK_NAME = "Google Async";
         private static final String PROTECTED_RESOURCE_URL = "https://www.googleapis.com/oauth2/v3/userinfo";
         static OAuth20Service service;
@@ -45,8 +46,8 @@ public class SignInGoogle {
                                 .setPooledConnectionIdleTimeout(Duration.ofMillis(1_000))
                                 .setReadTimeout(Duration.ofMillis(1_000))
                                 .build());
-                service = new ServiceBuilder(clientId)
-                                .apiSecret(clientSecret)
+                service = new ServiceBuilder(GOOGLE_CLIENT_ID)
+                                .apiSecret(GOOGLE_CLIENT_SECRET)
                                 .defaultScope("profile") // replace with desired scope
                                 .callback("urn:ietf:wg:oauth:2.0:oob")
                                 .httpClientConfig(clientConfig)
@@ -61,7 +62,7 @@ public class SignInGoogle {
                 // force to reget refresh token (if user are asked not the first time)
                 additionalParams.put("prompt", "consent");
                 final String authorizationUrl = service.createAuthorizationUrlBuilder()
-                                .state(secretState)
+                                .state(SECRET_STATE)
                                 .additionalParams(additionalParams)
                                 .build();
                 LOGGER.info("Got the Authorization URL!");
@@ -79,8 +80,8 @@ public class SignInGoogle {
         public static Boolean verifyAuthUrl(String code) throws IOException, ExecutionException, InterruptedException {
                 try {
                         LOGGER.info("And paste the state from server here. We have set 'secretState'='"
-                                        + secretState + "'.");
-                        System.out.print(">>");
+                                        + SECRET_STATE + "'.");
+                        LOGGER.info(">>");
                         // final String value = in.nextLine();
                         // if (secretState.equals(value)) {
                         // LOGGER.info("State value does match!");
@@ -105,7 +106,7 @@ public class SignInGoogle {
                         // while (true) {
                         LOGGER.info(
                                         "Paste fieldnames to fetch (leave empty to get profile, 'exit' to stop example)");
-                        System.out.print(">>");
+                        LOGGER.info(">>");
                         // final String query = in.nextLine();
                         final String requestUrl;
                         // if ("exit".equals(query)) {

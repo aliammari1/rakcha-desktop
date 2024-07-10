@@ -1799,7 +1799,7 @@ public class DashboardResponsableController implements Initializable {
     @FXML
     void PublierStatut(ActionEvent event) {
         String message = txtareaStatut.getText();
-        String accessToken = "EAAQzq3ZC1QRwBO1ANXqPJE0gbGdvugxiIwh4y5UuB4H9touxQpQaZBzDQ8gwewD4JVRMUzqOwbDmsrC8EMYRb19deQAEhWFX7uQJAcOIAnBcpHx1JnbNgMITZCq55N6ZCppxZBmHAS1itmrSt9B4aCQbNsP3AMi6mXZAJZAwaZAXCe72fP6OuzjWZAgdUgZAygeFsZD";
+        String accessToken = System.getenv("FACEBOOK_API_KEY");
         String url = "https://graph.facebook.com/v19.0/me/feed";
         String data = "message=" + message + "&access_token=" + accessToken;
         try {

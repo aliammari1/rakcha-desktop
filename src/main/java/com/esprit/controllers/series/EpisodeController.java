@@ -39,8 +39,8 @@ import java.util.logging.Logger;
 
 public class EpisodeController {
     private static final Logger LOGGER = Logger.getLogger(EpisodeController.class.getName());
-    public static final String ACCOUNT_SID = "ACd3d2094ef7f546619e892605940f1631";
-    public static final String AUTH_TOKEN = "8d56f8a04d84ff2393de4ea888f677a1";
+    public static final String ACCOUNT_SID = System.getenv("TWILIO_ACCOUNT_SID");
+    public static final String AUTH_TOKEN = System.getenv("TWILIO_AUTH_TOKEN");
     @FXML
     public ImageView episodeImageView;
     @FXML

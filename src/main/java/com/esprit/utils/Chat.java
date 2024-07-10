@@ -50,8 +50,8 @@ public class Chat {
      * }
      */
     public String chatGPT(String message) {
-        String apiKey = "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";
-        String model = "gpt-3.5-turbo";
+        String apiKey = System.getenv("OPENAI_API_KEY");
+        String model = System.getenv("OPENAI_MODEL");
         // String url = "https://api.openai.com/v1/chat/completions";
         String url = "https://api.openai.com/v1/chat/completions";
         try {

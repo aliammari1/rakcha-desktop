@@ -1,10 +1,14 @@
 package com.esprit.controllers.users;
+import java.security.SecureRandom;
+
 import com.esprit.utils.UserMail;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+
 import java.util.Random;
 public class MailAdminController {
     @FXML
@@ -20,7 +24,7 @@ public class MailAdminController {
      */
     @FXML
     void sendMail(ActionEvent event) {
-        Random random = new Random();
+        SecureRandom random = new SecureRandom();
         int verificationCode = random.nextInt(999999 - 100000) + 100000;
         UserMail.send(mailTextField.getText(), "the mail verification code is " + verificationCode);
     }

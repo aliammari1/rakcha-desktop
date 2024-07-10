@@ -94,7 +94,7 @@ public class CinemaService implements IService<Cinema> {
 
     public List<Cinema> sort(String p) {
         List<Cinema> cinemas = new ArrayList<>();
-        String req = "SELECT * from cinema ORDER BY " + p;
+        String req = String.format("SELECT * from cinema ORDER BY %s", p);
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             ResultSet rs = pst.executeQuery();
