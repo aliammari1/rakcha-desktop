@@ -39,7 +39,7 @@ CREATE TABLE `actor` (
 --
 
 INSERT INTO `actor` (`id`, `nom`, `image`, `biographie`) VALUES
-(1, 'RyuKyungsoo', '/img/actors/30425.jpg', 'Traduit de l\'anglais-Ryu Kyung-soo est un acteur sud-coréen. Il est connu pour ses rôles dans les séries dramatiques Confession et Itaewon Class'),
+(1, 'RyuKyungsoo', '/img/actors/30425.jpg', 'Traduit de l''anglais-Ryu Kyung-soo est un acteur sud-coréen. Il est connu pour ses rôles dans les séries dramatiques Confession et Itaewon Class'),
 (2, 'Tom Holland', '/img/actors/97434.jpg', 'Thomas Stanley Holland, dit Tom Holland, né le 1ᵉʳ juin 1996 à Kingston upon Thames'),
 (3, 'Zendaya', '/img/actors/3033.jpg', 'Zendaya Coleman, dite simplement Zendaya, est une actrice, productrice, mannequin,'),
 (4, 'Tobey Maguire', '/img/actors/40317.jpg', 'Tobey Maguire, de son vrai nom Tobias Vincent Maguire, né le 27 juin 1975 à Santa Monica'),
@@ -48,7 +48,6 @@ INSERT INTO `actor` (`id`, `nom`, `image`, `biographie`) VALUES
 (7, 'Chris Evans', '/img/actors/43656.jpg', 'Christopher Robert Evans est un acteur américain, né le 13 juin 1981 à Boston'),
 (8, 'Cillian Murphy', '/img/actors/85261.jpg', 'Cillian Murphy, né le 25 mai 1976 à Douglas, est un acteur et musicien irlandais.'),
 (9, 'Tom Hardy', '/img/actors/23056.jpg', 'Edward Hardy, dit Tom Hardy, né le 15 septembre 1977 à Hammersmith en Angleterre, est un acteur et producteur britannique');
-
 -- --------------------------------------------------------
 
 --
@@ -134,10 +133,10 @@ CREATE TABLE `categorie_produit` (
 --
 
 INSERT INTO `categorie_produit` (`id_categorie`, `nom_categorie`, `description`) VALUES
-(2, 'POSTER', 'Transform your walls into a movie buff\'s dream gallery with our unique cinematic paintings'),
+(2, 'POSTER', 'Transform your walls into a movie buff''s dream gallery with our unique cinematic paintings'),
 (3, 'Sculptures', 'Sculptures are three-dimensional works of art to represent shapes, figures or artistic objects.'),
 (4, 'Books', 'Immerse yourself in the magical world of cinema with our collection of captivating books'),
-(8, 'Tableau', 'tabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb');
+(8, 'Tableau', 'Enhance your space with our diverse range of artistic tableaux.');
 
 -- --------------------------------------------------------
 
@@ -192,10 +191,10 @@ CREATE TABLE `cinema` (
 --
 
 INSERT INTO `cinema` (`id_cinema`, `nom`, `adresse`, `responsable`, `logo`, `Statut`) VALUES
-(13, 'Cinema l\'étoile', 'Tunis', 104, 'img/cinemas/etoile.png-6634a60d82254.png', 'Accepted'),
+(13, 'Cinema l''étoile', 'Tunis', 104, 'img/cinemas/etoile.png-6634a60d82254.png', 'Accepted'),
 (14, 'cinemaAli', 'Tunis', 104, 'img/cinemas/pathe.png-6634a9490827b.png', 'Accepted'),
 (15, 'veo', 'Tunis', 104, 'img/cinemas/veo_cinema.png-66384172ce206.png', 'Accepted'),
-(16, 'L\'AGORA', 'Sousse', 104, 'img/cinemas/agora-logo.png-6638419a730b9.png', 'Pending'),
+(16, 'L''AGORA', 'Sousse', 104, 'img/cinemas/agora-logo.png-6638419a730b9.png', 'Pending'),
 (18, 'ABC Cinema', 'Monastir', 104, 'img/cinemas/5db23739-d572-4b26-9031-996a1e6b49a4.jpeg-663841e1de710.jpg', 'Pending'),
 (19, 'palace', 'monastir, rue habib bourguiba', 104, 'img/cinemas/palace.jpeg-6638427a8c005.jpg', 'Pending'),
 (20, 'Coliser', 'Tunis', 104, 'img/cinemas/coliser.jpeg-6638429673906.jpg', 'Pending'),
@@ -427,11 +426,10 @@ CREATE TABLE `feedback` (
 
 INSERT INTO `feedback` (`id`, `id_user`, `description`, `date`, `id_episode`) VALUES
 (1, 1, 'ahla nourhene', '2019-01-01', 2),
-(2, 108, 'j\'ai aimé', '2019-01-01', 4),
-(3, 108, 'j\'ai pas aimé', '2019-01-01', 4),
+(2, 108, 'j''ai aimé', '2019-01-01', 4),
+(3, 108, 'j''ai pas aimé', '2019-01-01', 4),
 (4, 108, 'Excellent !!', '2019-01-01', 4),
-(5, 108, 'j\'adore', '2019-01-01', 4);
-
+(5, 108, 'j''adore', '2019-01-01', 4);
 -- --------------------------------------------------------
 
 --
@@ -467,15 +465,14 @@ CREATE TABLE `film` (
 
 INSERT INTO `film` (`id`, `nom`, `image`, `duree`, `description`, `annederalisation`, `isBookmarked`) VALUES
 (6, 'Spider', '/img/films/90101.jpg', '02:10:45', 'description ddd', 2008, 0),
-(7, 'SpiderMan No Way Home', '/img/films/61459.jpg', '02:28:30', 'Avec l\'identité de Spiderman désormais révélée, celui-ci est démasqué', 2021, 1),
-(8, 'Avengers  Infinity War', '/img/films/6794.jpg', '02:29:41', 'Alors que les Avengers et leurs alliés ont continué de protéger le monde face à des menaces bien trop grande', 2018, 1),
-(9, 'Oppenheimer', '/img/films/46637.jpg', '03:00:48', 'En 1942, convaincus que l\'Allemagne nazie est en train de développer une arme nucléaire', 2024, 1),
-(10, 'Venom Let There Be Carnage', '/img/films/62047.jpg', '01:37:42', 'Après leur triomphe sur Riot, Eddie Brock et son parasite extraterrestre se sont mis d\'accord sur quelques règles de conduite', 2021, 0),
-(11, 'LIdee detre avec toi', '/img/films/79595.jpg', '01:55:36', 'Lorsque Solène, une mère célibataire de 40 ans, doit chaperonner le voyage de sa fille adolescente au festival de musique de Coachella,', 2024, 0),
-(12, 'Dachra', '/img/films/39862.jpg', '01:32:56', 'Dachra est un film d\'horreur tunisien écrit et réalisé par Abdelhamid Bouchnak et sorti en 2018', 2018, 0),
-(13, 'Titanic', '/img/films/43943.jpg', '03:23:40', 'Southampton, 10 avril 1912. Le paquebot le plus grand et le plus moderne du monde, réputé pour son insubmersibilité, le « Titanic »', 2008, 0),
-(14, 'En eaux tres troubles', '/img/films/82547.jpg', '01:58:15', 'Une équipe de chercheurs en pleine opération d\'extraction minière illégale dans l\'océan se retrouve en péril.', 2023, 0);
-
+(7, 'Spider-Man: No Way Home', '/img/films/61459.jpg', '02:28:30', 'Avec l''identité de Spider-Man désormais révélée, celui-ci est démasqué', 2021, 1),
+(8, 'Avengers: Infinity War', '/img/films/6794.jpg', '02:29:41', 'Alors que les Avengers et leurs alliés ont continué de protéger le monde face à des menaces bien trop grande', 2018, 1),
+(9, 'Oppenheimer', '/img/films/46637.jpg', '03:00:48', 'En 1942, convaincus que l''Allemagne nazie est en train de développer une arme nucléaire', 2024, 1),
+(10, 'Venom: Let There Be Carnage', '/img/films/62047.jpg', '01:37:42', 'Après leur triomphe sur Riot, Eddie Brock et son parasite extraterrestre se sont mis d''accord sur quelques règles de conduite', 2021, 0),
+(11, 'L''Idée d''être avec toi', '/img/films/79595.jpg', '01:55:36', 'Lorsque Solène, une mère célibataire de 40 ans, doit chaperonner le voyage de sa fille adolescente au festival de musique de Coachella,', 2024, 0),
+(12, 'Dachra', '/img/films/39862.jpg', '01:32:56', 'Dachra est un film d''horreur tunisien écrit et réalisé par Abdelhamid Bouchnak et sorti en 2018', 2018, 0),
+(13, 'Titanic', '/img/films/43943.jpg', '03:23:40', 'Southampton, 10 avril 1912. Le paquebot le plus grand et le plus moderne du monde, réputé pour son insubmersibilité, le « Titanic »', 1997, 0),
+(14, 'En eaux très troubles', '/img/films/82547.jpg', '01:58:15', 'Une équipe de chercheurs en pleine opération d''extraction minière illégale dans l''océan se retrouve en péril.', 2023, 0);
 -- --------------------------------------------------------
 
 --
@@ -1139,7 +1136,7 @@ INSERT INTO `series` (`idserie`, `nom`, `resume`, `directeur`, `pays`, `image`, 
 (7, 'You', 'he show explores themes of privacy, social media', 'Greg Berlanti', 'United States', 'img/series/you-6636107863249.webp', 0, 0, 0, 0, 1),
 (8, 'Lucifer', 'blends elements of crime procedural and fantasy', 'Baran bo Odar', 'United States', 'img/series/lucifer-663610fac8633.jpg', 0, 0, 0, 0, 1),
 (9, 'Skam France', 'five high-school girls who learn about friendship', 'Julie Andem', 'French', 'img/series/images_2-663611407eedd.jpg', 0, 0, 0, 0, 1),
-(11, 'Fraiser', 'Frasier\" revolves around Frasier\'s  pretentiousnes', 'David Lee.', 'United States.', 'img/series/1697025-663611d3c4350.webp', 0, 0, 0, 0, 3),
+(11, 'Fraiser', 'Frasier\" revolves around Frasier''s pretentiousnes', 'David Lee.', 'United States.', 'img/series/1697025-663611d3c4350.webp', 0, 0, 0, 0, 3),
 (12, 'Glitch', 'The series follows local police officer James', 'Tony Krawitz', 'Australia', 'img/series/glitch_tv_show_australian_series_netflix-6636122661186.jpg', 0, 0, 0, 0, 3),
 (13, 'Emily in Paris', 'an American college graduate and moves to paris', 'Andrew Fleming', 'United States', 'img/series/season-1-663614ad62916.jpg', 0, 0, 0, 0, 4);
 
