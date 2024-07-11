@@ -6,20 +6,18 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.esprit.services.produits.AvisService;
-
 public class DataSource {
     private static DataSource instance;
-    private final String URL = System.getenv("DB_URL");
-    private final String USER = System.getenv("DB_USER");
-    private final String PASSWORD = System.getenv("DB_PASSWORD");
+    private final String URL = "jdbc:mysql://localhost:3306/rakcha";
+    private final String USER = "root";
+    private final String PASSWORD = "root";
     private Connection connection;
     private static final Logger LOGGER = Logger.getLogger(DataSource.class.getName());
 
     private DataSource() {
         try {
             connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            LOGGER.info("Connection a été établie");
+            LOGGER.info("Connection has been established");
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }

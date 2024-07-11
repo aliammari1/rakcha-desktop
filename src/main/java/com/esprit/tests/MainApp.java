@@ -1,4 +1,8 @@
 package com.esprit.tests;
+import java.sql.Connection;
+
+import com.esprit.utils.DataSource;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,6 +21,10 @@ public class MainApp extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
+        Connection connection = DataSource.getInstance().getConnection();
+        if (connection == null) {
+            System.exit(1);
+        }
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root);
