@@ -401,7 +401,7 @@ public class SignUpController {
         if (selectedFile != null) {
             try {
                 String destinationDirectory1 = "./src/main/resources/img/users/";
-                String destinationDirectory2 = "C:\\xampp\\htdocs\\Rakcha\\rakcha-web\\public\\img\\users\\";
+                String destinationDirectory2 = "../rakcha-web/public/img/users/";
                 Path destinationPath1 = Paths.get(destinationDirectory1);
                 Path destinationPath2 = Paths.get(destinationDirectory2);
                 String uniqueFileName = System.currentTimeMillis() + "_" + selectedFile.getName();
