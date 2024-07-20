@@ -1,6 +1,9 @@
 package com.esprit.models.produits;
+
 import com.esprit.models.users.User;
+
 import java.util.Objects;
+
 /**
  * Is used to represent a shopping cart containing various products and users. It has
  * several fields such as idpanier, quantity, produit, and users, which can be accessed
@@ -12,11 +15,13 @@ public class Panier {
     private int quantity;
     private Produit produit;
     private User users;
+
     /**
      * Default constructor for the Panier class.
      */
     public Panier() {
     }
+
     /**
      * Constructor for the Panier class with all parameters.
      *
@@ -31,6 +36,7 @@ public class Panier {
         this.produit = produit;
         this.users = users;
     }
+
     /**
      * Constructor for the Panier class without the ID parameter.
      *
@@ -43,6 +49,7 @@ public class Panier {
         this.produit = produit;
         this.users = users;
     }
+
     /**
      * Get the ID of the panier.
      *
@@ -51,6 +58,7 @@ public class Panier {
     public int getIdPanier() {
         return idpanier;
     }
+
     /**
      * Set the ID of the panier.
      *
@@ -59,6 +67,7 @@ public class Panier {
     public void setIdPanier(int idPanier) {
         this.idpanier = idPanier;
     }
+
     /**
      * Get the quantity of the produit in the panier.
      *
@@ -67,6 +76,7 @@ public class Panier {
     public int getQuantity() {
         return quantity;
     }
+
     /**
      * Set the quantity of the produit in the panier.
      *
@@ -75,6 +85,7 @@ public class Panier {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
     /**
      * Get the produit associated with the panier.
      *
@@ -83,6 +94,7 @@ public class Panier {
     public Produit getProduit() {
         return produit;
     }
+
     /**
      * Set the produit associated with the panier.
      *
@@ -91,6 +103,7 @@ public class Panier {
     public void setProduit(Produit produit) {
         this.produit = produit;
     }
+
     /**
      * Get the user associated with the panier.
      *
@@ -99,6 +112,7 @@ public class Panier {
     public User getUser() {
         return users;
     }
+
     /**
      * Set the user associated with the panier.
      *
@@ -107,6 +121,7 @@ public class Panier {
     public void setUser(User users) {
         this.users = users;
     }
+
     /**
      * Returns a string representation of the Panier object.
      *
@@ -114,11 +129,11 @@ public class Panier {
      */
     @Override
     public String toString() {
-        return "Panier{" +
-                "idpanier=" + idpanier +
-                ", quantity=" + quantity +
-                ", produit=" + produit +
-                ", users=" + users +
-                '}';
+        return "Panier{"
+                + "idpanier=" + idpanier
+                + ", quantity=" + quantity
+                + ", produit=" + produit
+                + ", users=" + users
+                + '}';
     }
 }

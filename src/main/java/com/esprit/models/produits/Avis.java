@@ -1,5 +1,7 @@
 package com.esprit.models.produits;
+
 import com.esprit.models.users.Client;
+
 /**
  * The Avis class represents a user's review of a product.
  */
@@ -7,8 +9,10 @@ public class Avis {
     private Client user;
     private int note;
     private Produit produit;
+
     public Avis() {
     }
+
     /**
      * Constructs a new Avis object with the specified user, note, and produit.
      *
@@ -21,6 +25,7 @@ public class Avis {
         this.note = note;
         this.produit = produit;
     }
+
     /**
      * Returns the client who gave the avis.
      *
@@ -29,6 +34,7 @@ public class Avis {
     public Client getUser() {
         return user;
     }
+
     /**
      * Sets the client who gave the avis.
      *
@@ -37,6 +43,7 @@ public class Avis {
     public void setUser(Client user) {
         this.user = user;
     }
+
     /**
      * Returns the note given by the client.
      *
@@ -45,6 +52,7 @@ public class Avis {
     public int getNote() {
         return note;
     }
+
     /**
      * Sets the note given by the client.
      *
@@ -53,6 +61,7 @@ public class Avis {
     public void setNote(int note) {
         this.note = note;
     }
+
     /**
      * Returns the produit associated with the avis.
      *
@@ -61,6 +70,7 @@ public class Avis {
     public Produit getProduit() {
         return produit;
     }
+
     /**
      * Sets the produit associated with the avis.
      *
@@ -69,12 +79,13 @@ public class Avis {
     public void setProduit(Produit produit) {
         this.produit = produit;
     }
+
     @Override
     public String toString() {
-        return "Avis{" +
-                "user=" + user +
-                ", note=" + note +
-                ", produit=" + produit +
-                '}';
+        return "Avis{"
+                + "user=" + user
+                + ", note=" + note
+                + ", produit=" + produit
+                + '}';
     }
 }

@@ -1,12 +1,11 @@
 package com.esprit.utils;
 
-import java.util.logging.Logger;
-
-import com.esprit.services.produits.AvisService;
 import com.vonage.client.VonageClient;
 import com.vonage.client.sms.MessageStatus;
 import com.vonage.client.sms.SmsSubmissionResponse;
 import com.vonage.client.sms.messages.TextMessage;
+
+import java.util.logging.Logger;
 
 public class UserSMSAPI {
     private static final Logger LOGGER = Logger.getLogger(UserSMSAPI.class.getName());
@@ -27,5 +26,8 @@ public class UserSMSAPI {
         } else {
             LOGGER.info("Message failed with error: " + response.getMessages().get(0).getErrorText());
         }
+    }
+
+    private UserSMSAPI() {
     }
 }

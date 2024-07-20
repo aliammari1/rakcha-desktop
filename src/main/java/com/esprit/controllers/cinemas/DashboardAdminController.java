@@ -2,6 +2,8 @@ package com.esprit.controllers.cinemas;
 
 import com.esprit.models.cinemas.Cinema;
 import com.esprit.services.cinemas.CinemaService;
+
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,6 +20,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -87,48 +90,48 @@ public class DashboardAdminController {
                 Image defaultImage = new Image(getClass().getResourceAsStream("/Logo.png"));
                 imageView.setImage(defaultImage);
             }
-            return new javafx.beans.property.SimpleObjectProperty<>(imageView);
+            return new SimpleObjectProperty<>(imageView);
         });
         colStatut.setCellValueFactory(new PropertyValueFactory<>("Statut"));
         // Configurer la cellule de la colonne Action
         colAction.setCellFactory((TableColumn<Cinema, Void> param) -> new TableCell<Cinema, Void>() {
-            private final Button acceptButton;
-            private final Button refuseButton;
-            private final Button showMoviesButton;
-            {
-                acceptButton = new Button("Accepter");
-                refuseButton = new Button("Refuser");
-                showMoviesButton = new Button("Show Movies");
+                    private final Button acceptButton;
+                    private final Button refuseButton;
+                    private final Button showMoviesButton;
+                    {
+                        acceptButton = new Button("Accepter");
+                        refuseButton = new Button("Refuser");
+                        showMoviesButton = new Button("Show Movies");
 
-                acceptButton.getStyleClass().add("delete-btn");
-                acceptButton.setOnAction(event -> {
-                    Cinema cinema = getTableView().getItems().get(getIndex());
-                    // Mettre à jour le statut du cinéma en "Accepted"
-                    cinema.setStatut("Accepted");
-                    // Mettre à jour le statut dans la base de données
-                    CinemaService cinemaService = new CinemaService();
-                    cinemaService.update(cinema);
-                    // Rafraîchir la TableView pour refléter les changements
-                    getTableView().refresh();
-                });
-                refuseButton.getStyleClass().add("delete-btn");
-                refuseButton.setOnAction(event -> {
-                    Cinema cinema = getTableView().getItems().get(getIndex());
-                    CinemaService cinemaService = new CinemaService();
-                    cinemaService.delete(cinema);
-                    getTableView().getItems().remove(cinema);
-                });
-                showMoviesButton.getStyleClass().add("delete-btn");
-                showMoviesButton.setOnAction(event -> {
-                });
-            }
+                        acceptButton.getStyleClass().add("delete-btn");
+                        acceptButton.setOnAction(event -> {
+                            Cinema cinema = getTableView().getItems().get(getIndex());
+                            // Mettre à jour le statut du cinéma en "Accepted"
+                            cinema.setStatut("Accepted");
+                            // Mettre à jour le statut dans la base de données
+                            CinemaService cinemaService = new CinemaService();
+                            cinemaService.update(cinema);
+                            // Rafraîchir la TableView pour refléter les changements
+                            getTableView().refresh();
+                        });
+                        refuseButton.getStyleClass().add("delete-btn");
+                        refuseButton.setOnAction(event -> {
+                            Cinema cinema = getTableView().getItems().get(getIndex());
+                            CinemaService cinemaService = new CinemaService();
+                            cinemaService.delete(cinema);
+                            getTableView().getItems().remove(cinema);
+                        });
+                        showMoviesButton.getStyleClass().add("delete-btn");
+                        showMoviesButton.setOnAction(event -> {
+                        });
+                    }
 
-            /**
-             * Updates the graphic displayed by an item in a table based on its empty status
-             * and
-             * the status of the associated cinema.
-             *
-             * @param item  item being updated in the `TableView`, which is passed to the
+                    /**
+                     * Updates the graphic displayed by an item in a table based on its empty status
+                     * and
+                     * the status of the associated cinema.
+                     *
+                     * @param item  item being updated in the `TableView`, which is passed to the
              *              superclass's
              *              `updateItem` method for further processing before displaying the
              *              appropriate button
@@ -137,29 +140,29 @@ public class DashboardAdminController {
              *              - `item`: A Void object representing an item to be updated.
              *              - `empty`: A boolean indicating whether the item is empty or
              *              not.
-             *
-             * @param empty whether the line is empty or not, and controls the display of
+                     *
+                     * @param empty whether the line is empty or not, and controls the display of
              *              buttons
              *              for accepting or refusing the movie.
-             */
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    // Récupérer le cinéma associé à cette ligne
-                    Cinema cinema = getTableView().getItems().get(getIndex());
-                    if (cinema.getStatut().equals("Accepted")) {
-                        // Afficher le bouton "Show Movies" si le statut est "Accepted"
-                        setGraphic(showMoviesButton);
-                    } else {
-                        // Afficher les boutons "Accepter" et "Refuser" si le statut est "En attente"
-                        setGraphic(new HBox(acceptButton, refuseButton));
+                     */
+                    @Override
+                    protected void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            // Récupérer le cinéma associé à cette ligne
+                            Cinema cinema = getTableView().getItems().get(getIndex());
+                            if ("Accepted".equals(cinema.getStatut())) {
+                                // Afficher le bouton "Show Movies" si le statut est "Accepted"
+                                setGraphic(showMoviesButton);
+                            } else {
+                                // Afficher les boutons "Accepter" et "Refuser" si le statut est "En attente"
+                                setGraphic(new HBox(acceptButton, refuseButton));
+                            }
+                        }
                     }
                 }
-            }
-        }
         /**
          * Generates a `TableCell` that displays buttons for accepting or refusing a
          * movie.
@@ -217,8 +220,7 @@ public class DashboardAdminController {
      */
     private List<Cinema> getAllCinemas() {
         CinemaService cinemaService = new CinemaService();
-        List<Cinema> cinemas = cinemaService.read();
-        return cinemas;
+        return cinemaService.read();
     }
 
     /**
@@ -343,11 +345,10 @@ public class DashboardAdminController {
         // Récupérer tous les cinémas depuis la base de données
         List<Cinema> cinemas = getAllCinemas();
         // Extraire les adresses uniques des cinémas
-        List<String> addresses = cinemas.stream()
+        return cinemas.stream()
                 .map(Cinema::getAdresse)
                 .distinct()
                 .collect(Collectors.toList());
-        return addresses;
     }
 
     /**

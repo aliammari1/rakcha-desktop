@@ -1,12 +1,15 @@
 package com.esprit.controllers.series;
+
 import com.esprit.controllers.ClientSideBarController;
 import com.esprit.models.series.Categorie;
 import com.esprit.models.users.Client;
 import com.esprit.services.series.IServiceCategorieImpl;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -16,11 +19,13 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
 /**
  * Is responsible for handling user interactions related to categories, such as
  * displaying category information and handling menu events. The controller uses an
@@ -36,6 +41,7 @@ public class CategoriesClientController {
     int id = 1;
     @FXML
     private TilePane tilepane;
+
     /**
      * Clears the children of a `tilepane`, retrieves a list of categories from an
      * `IServiceCategorieImpl`, loops through the list and adds a `VBox` for each category,
@@ -68,6 +74,7 @@ public class CategoriesClientController {
             tilepane.getChildren().addAll(oeuvreBox, espaceHorizontal);
         }
     }
+
     /**
      * Displays a message upon launching the application using FXML.
      */
@@ -75,6 +82,7 @@ public class CategoriesClientController {
     private void initialize() {
         afficher();
     }
+
     /** 
      * @param event
      * @throws IOException
@@ -94,10 +102,11 @@ public class CategoriesClientController {
     void Ocategories(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/CategorieClient.fxml")));
         Scene scene = new Scene(root);
-        Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
     }
+
     /**
      * Loads a FXML file, creates a scene and stages it.
      * 
@@ -111,10 +120,11 @@ public class CategoriesClientController {
     void Oseries(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/SeriesClient.fxml")));
         Scene scene = new Scene(root);
-        Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
     }
+
     /**
      * Loads an FXML file, creates a scene and stages it in a window.
      * 
@@ -132,7 +142,7 @@ public class CategoriesClientController {
     void Oepisode(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/EpisodeClient.fxml")));
         Scene scene = new Scene(root);
-        Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
     }

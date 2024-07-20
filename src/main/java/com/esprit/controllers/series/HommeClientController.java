@@ -1,14 +1,19 @@
 package com.esprit.controllers.series;
+
 import com.esprit.controllers.ClientSideBarController;
 import com.esprit.models.users.Client;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.util.Objects;
+
 /**
  * Manages menu options for clients, including category, series, and episode management
  * through FXML loading.
@@ -39,10 +44,11 @@ public class HommeClientController {
     void Ocategories(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/CategorieClient.fxml")));
         Scene scene = new Scene(root);
-        Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
     }
+
     /**
      * Loads an FXML file, creates a scene from it, and displays it on the primary stage
      * using the `show()` method.
@@ -57,10 +63,11 @@ public class HommeClientController {
     void Oseries(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/SeriesClient.fxml")));
         Scene scene = new Scene(root);
-        Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
     }
+
     /**
      * Loads an FXML file, creates a scene and sets it as the scene of a stage. The stage
      * is then shown.
@@ -77,7 +84,7 @@ public class HommeClientController {
     void Oepisode(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/EpisodeClient.fxml")));
         Scene scene = new Scene(root);
-        Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
     }

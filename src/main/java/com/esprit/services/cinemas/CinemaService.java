@@ -27,6 +27,7 @@ public class CinemaService implements IService<Cinema> {
     /**
      * @param cinema
      */
+    @Override
     public void create(Cinema cinema) {
         String req = "INSERT into cinema(nom, adresse, responsable, logo, Statut) values (?, ?, ?, ?, ?);";
         try {
@@ -47,6 +48,7 @@ public class CinemaService implements IService<Cinema> {
     /**
      * @param cinema
      */
+    @Override
     public void update(Cinema cinema) {
         String req = "UPDATE cinema set nom = ?, adresse = ?, logo = ?, Statut = ? where id_cinema = ?;";
         try {
@@ -63,6 +65,7 @@ public class CinemaService implements IService<Cinema> {
         }
     }
 
+    @Override
     public void delete(Cinema cinema) {
         String req = "DELETE from cinema where id_cinema= ?;";
         try {
@@ -75,6 +78,7 @@ public class CinemaService implements IService<Cinema> {
         }
     }
 
+    @Override
     public List<Cinema> read() {
         List<Cinema> cinemas = new ArrayList<>();
         String req = "SELECT * from cinema";
@@ -94,7 +98,7 @@ public class CinemaService implements IService<Cinema> {
 
     public List<Cinema> sort(String p) {
         List<Cinema> cinemas = new ArrayList<>();
-        String req = String.format("SELECT * from cinema ORDER BY %s", p);
+        String req = "SELECT * from cinema ORDER BY %s".formatted(p);
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             ResultSet rs = pst.executeQuery();

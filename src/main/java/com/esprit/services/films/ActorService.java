@@ -106,12 +106,14 @@ public class ActorService implements IService<Actor> {
     }
 
     public Actor getActorByPlacement(int actorPlacement) {
-        String req = "SELECT a.*, COUNT(af.film_id) AS NumberOfAppearances " +
-                "FROM actor a " +
-                "JOIN film_actor af ON a.id = af.actor_id " +
-                "GROUP BY a.id, a.nom " +
-                "ORDER BY NumberOfAppearances DESC " +
-                "LIMIT ?, 1;"; // Use parameter placeholder for the limit
+        String req = """
+                SELECT a.*, COUNT(af.film_id) AS NumberOfAppearances \
+                FROM actor a \
+                JOIN film_actor af ON a.id = af.actor_id \
+                GROUP BY a.id, a.nom \
+                ORDER BY NumberOfAppearances DESC \
+                LIMIT ?, 1;\
+                """; // Use parameter placeholder for the limit
         try {
             PreparedStatement statement = connection.prepareStatement(req);
             statement.setInt(1, actorPlacement - 1); // Placement starts from 1 but index starts from 0
@@ -123,8 +125,8 @@ public class ActorService implements IService<Actor> {
                 int numberOfAppearances = rs.getInt("NumberOfAppearances");
                 String bio = rs.getString("biographie");
                 return new Actor(id, nom, img, bio, numberOfAppearances); // Assuming Actor class has a constructor that
-                                                                          // accepts id, nom, img, and
-                                                                          // numberOfAppearances
+                // accepts id, nom, img, and
+                // numberOfAppearances
             }
             rs.close();
             statement.close();

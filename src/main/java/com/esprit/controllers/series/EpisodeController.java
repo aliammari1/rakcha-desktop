@@ -2,17 +2,18 @@ package com.esprit.controllers.series;
 
 import com.esprit.models.series.Episode;
 import com.esprit.models.series.Serie;
-import com.esprit.services.series.DTO.EpisodeDto;
 import com.esprit.services.produits.AvisService;
+import com.esprit.services.series.DTO.EpisodeDto;
 import com.esprit.services.series.IServiceEpisodeImpl;
 import com.esprit.services.series.IServiceSerieImpl;
+
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -444,7 +445,7 @@ public class EpisodeController {
     private boolean isVideoFile(File file) {
         String fileName = file.getName();
         String extension = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
-        return extension.equals("mp4") || extension.equals("avi") || extension.equals("mkv");
+        return "mp4".equals(extension) || "avi".equals(extension) || "mkv".equals(extension);
     }
 
     /////
@@ -674,7 +675,7 @@ public class EpisodeController {
     void Ocategories(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Categorie-view.fxml")));
         Scene scene = new Scene(root);
-        Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
     }
@@ -692,7 +693,7 @@ public class EpisodeController {
     void Oseries(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Serie-view.fxml")));
         Scene scene = new Scene(root);
-        Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
     }
@@ -709,7 +710,7 @@ public class EpisodeController {
     void Oepisode(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Episode-view.fxml")));
         Scene scene = new Scene(root);
-        Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
     }

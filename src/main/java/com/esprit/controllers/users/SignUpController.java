@@ -448,12 +448,12 @@ public class SignUpController {
             alert.show();
             return;
         }
-        if (role.equals("responsable de cinema")) {
+        if ("responsable de cinema".equals(role)) {
             user = new Responsable_de_cinema(nomTextField.getText(), prenomTextField.getText(),
                     Integer.parseInt(num_telephoneTextField.getText()), passwordTextField.getText(),
                     roleComboBox.getValue(), emailTextField.getText(),
                     Date.valueOf(dateDeNaissanceDatePicker.getValue()), emailTextField.getText(), "");
-        } else if (role.equals("client")) {
+        } else if ("client".equals(role)) {
             user = new Client(nomTextField.getText(), prenomTextField.getText(),
                     Integer.parseInt(num_telephoneTextField.getText()), passwordTextField.getText(),
                     roleComboBox.getValue(), emailTextField.getText(),

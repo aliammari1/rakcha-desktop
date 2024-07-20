@@ -1,11 +1,10 @@
 package com.esprit.utils;
 
+import com.esprit.services.produits.AvisService;
+
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-
-import com.esprit.services.produits.AvisService;
-
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,7 +32,7 @@ public class UserMail {
         props.put("mail.smtp.ssl.protocols", "TLSv1.2");
         // Get the Session object.
         Session session = Session.getInstance(props,
-                new javax.mail.Authenticator() {
+                new Authenticator() {
                     public PasswordAuthentication getPasswordAuthentication() {
                         return new PasswordAuthentication(username, password);
                     }
@@ -57,5 +56,8 @@ public class UserMail {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
             throw new RuntimeException(e);
         }
+    }
+
+    private UserMail() {
     }
 }

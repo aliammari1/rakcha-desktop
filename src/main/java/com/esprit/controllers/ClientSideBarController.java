@@ -1,10 +1,5 @@
 package com.esprit.controllers;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.esprit.services.produits.AvisService;
 
 import javafx.event.ActionEvent;
@@ -15,6 +10,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Is responsible for handling button clicks and navigating between different
@@ -73,7 +73,7 @@ public class ClientSideBarController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/filmuser.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) movieButton.getScene().getWindow();
-            LOGGER.info("---------" + stage.getUserData());
+            LOGGER.log(Level.INFO, "---------{0}", stage.getUserData());
             stage.setScene(new Scene(root));
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);

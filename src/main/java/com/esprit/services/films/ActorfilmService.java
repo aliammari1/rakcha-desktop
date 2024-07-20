@@ -73,12 +73,14 @@ public class ActorfilmService implements IService<Actorfilm> {
 
     @Override
     public void update(Actorfilm actorfilm) {
-        String req = "UPDATE film_actor " +
-                "INNER JOIN actor ON film_actor.actor_id = actor.id " +
-                "INNER JOIN film ON film_actor.film_id = film.id " +
-                "SET film_actor.film_id = ?, " +
-                "    actor.nom = ? " +
-                "WHERE actor.id = ? AND film.id = ?;";
+        String req = """
+                UPDATE film_actor \
+                INNER JOIN actor ON film_actor.actor_id = actor.id \
+                INNER JOIN film ON film_actor.film_id = film.id \
+                SET film_actor.film_id = ?, \
+                    actor.nom = ? \
+                WHERE actor.id = ? AND film.id = ?;\
+                """;
         try {
             PreparedStatement statement = connection.prepareStatement(req);
         } catch (SQLException e) {

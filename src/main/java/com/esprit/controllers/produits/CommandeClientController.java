@@ -11,10 +11,10 @@ import com.esprit.services.produits.CommandeItemService;
 import com.esprit.services.produits.CommandeService;
 import com.esprit.services.produits.ProduitService;
 import com.esprit.services.users.UserService;
+
 import com.paypal.api.payments.*;
 import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
-
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -33,7 +33,6 @@ import javafx.scene.web.WebView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 
@@ -43,6 +42,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -199,7 +199,7 @@ public class CommandeClientController implements Initializable {
         commande.setNum_telephone(Integer.parseInt(numTelephoneTextField.getText()));
         commande.setIdClient((Client) connectedUser);
         LocalDate date1 = LocalDate.now();
-        commande.setDateCommande(java.sql.Date.valueOf(date1));
+        commande.setDateCommande(Date.valueOf(date1));
         try {
             idcommande = commandeService.createcommande(commande);
             commande.setIdCommande(idcommande);
@@ -273,7 +273,7 @@ public class CommandeClientController implements Initializable {
         produit.setQuantiteP(produit.getQuantiteP() - quantity);
         ProduitService produitService = new ProduitService();
         produitService.update(produit); // Assurez-vous que votre service de produit dispose d'une méthode de mise à
-                                        // jour
+        // jour
     }
 
     /**
@@ -356,7 +356,7 @@ public class CommandeClientController implements Initializable {
         try {
             Payment createdPayment = payment.create(apiContext);
             for (Links link : createdPayment.getLinks()) {
-                if (link.getRel().equalsIgnoreCase("approval_url")) {
+                if ("approval_url".equalsIgnoreCase(link.getRel())) {
                     LOGGER.info(link.getHref());
                     redirectToPayPal(link.getHref());
                     break;
@@ -462,7 +462,7 @@ public class CommandeClientController implements Initializable {
         paymentExecution.setPayerId(payerId);
         try {
             Payment executedPayment = payment.execute(apiContext, paymentExecution);
-            if (executedPayment.getState().equals("approved")) {
+            if ("approved".equals(executedPayment.getState())) {
                 commande.setStatu("Payee");
                 commandeService.update(commande);
             }

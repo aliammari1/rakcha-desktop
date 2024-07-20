@@ -11,8 +11,8 @@ import com.esprit.services.films.TicketService;
 import com.esprit.services.produits.AvisService;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.Paymentuser;
-import com.stripe.exception.StripeException;
 
+import com.stripe.exception.StripeException;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
@@ -21,20 +21,20 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
-
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+
 import org.controlsfx.control.CheckComboBox;
 
 import java.awt.*;
@@ -221,16 +221,17 @@ public class PaymentuserController implements Initializable {
              */
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                java.util.List<Seance> seances = new SeanceService().readLoujain(
+                List<Seance> seances = new SeanceService().readLoujain(
                         new FilmService().getFilmByName(filmLabel_Payment.getText()).getId(),
                         new CinemaService().getCinemaByName(cinemacombox_res.getValue()).getId_cinema());
                 checkcomboboxseance_res.setDisable(false);
                 checkcomboboxseance_res.getItems().clear();
                 LOGGER.info(new FilmService().getFilmByName(filmLabel_Payment.getText()).getId() + " "
                         + new CinemaService().getCinemaByName(cinemacombox_res.getValue()).getId_cinema());
-                for (int i = 0; i < seances.size(); i++)
+                for (int i = 0; i < seances.size(); i++) {
                     checkcomboboxseance_res.getItems().add("Seance " + (i + 1) + " " + seances.get(i).getDate() + " "
                             + seances.get(i).getHD() + "-" + seances.get(i).getHF());
+                }
             }
         });
         checkcomboboxseance_res.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
@@ -257,7 +258,7 @@ public class PaymentuserController implements Initializable {
             public void onChanged(Change<? extends String> change) {
                 while (change.next()) {
                     if (change.wasAdded()) {
-                        java.util.List<Seance> seances = new SeanceService().readLoujain(
+                        List<Seance> seances = new SeanceService().readLoujain(
                                 new FilmService().getFilmByName(filmLabel_Payment.getText()).getId(),
                                 new CinemaService().getCinemaByName(cinemacombox_res.getValue()).getId_cinema());
                         seance = seances.get(0);
@@ -318,10 +319,11 @@ public class PaymentuserController implements Initializable {
         });
         CinemaService cinemaService = new CinemaService();
         List<Cinema> cinemaList = cinemaService.read();
-        if (cinemaList != null)
+        if (cinemaList != null) {
             for (Cinema cinema : cinemaList) {
                 cinemacombox_res.getItems().add(cinema.getNom());
             }
+        }
     }
 
     /**
@@ -379,8 +381,9 @@ public class PaymentuserController implements Initializable {
         }
         // int clientId=GuiLoginController.user.getId();
         int clientId = client.getId();
-        if (clientId == 0)
+        if (clientId == 0) {
             clientId = 1;
+        }
         // Creating a product order
         Ticket ticket = new Ticket();
         ticket.setPrix(ticket.getPrix() * ticket.getNbrdeplace()); // Replace with actual product price

@@ -1,5 +1,7 @@
 package com.esprit.models.cinemas;
+
 import com.esprit.models.users.Responsable_de_cinema;
+
 /**
  * Represents a cinema.
  */
@@ -10,6 +12,7 @@ public class Cinema {
     private String adresse;
     private String logo;
     private String Statut;
+
     /**
      * Constructs a Cinema object with the specified parameters.
      *
@@ -28,6 +31,7 @@ public class Cinema {
         this.logo = logo;
         Statut = statut;
     }
+
     /**
      * Constructs a Cinema object with the specified parameters.
      *
@@ -44,6 +48,7 @@ public class Cinema {
         this.logo = logo;
         Statut = statut;
     }
+
     /**
      * Returns the ID of the cinema.
      *
@@ -52,6 +57,7 @@ public class Cinema {
     public int getId_cinema() {
         return id_cinema;
     }
+
     /**
      * Sets the ID of the cinema.
      *
@@ -60,6 +66,7 @@ public class Cinema {
     public void setId_cinema(int id_cinema) {
         this.id_cinema = id_cinema;
     }
+
     /**
      * Returns the name of the cinema.
      *
@@ -68,6 +75,7 @@ public class Cinema {
     public String getNom() {
         return nom;
     }
+
     /**
      * Sets the name of the cinema.
      *
@@ -76,6 +84,7 @@ public class Cinema {
     public void setNom(String nom) {
         this.nom = nom;
     }
+
     /**
      * Returns the address of the cinema.
      *
@@ -84,6 +93,7 @@ public class Cinema {
     public String getAdresse() {
         return adresse;
     }
+
     /**
      * Sets the address of the cinema.
      *
@@ -92,6 +102,7 @@ public class Cinema {
     public void setAdresse(String adresse) {
         this.adresse = adresse;
     }
+
     /**
      * Returns the responsible person for the cinema.
      *
@@ -100,6 +111,7 @@ public class Cinema {
     public Responsable_de_cinema getResponsable() {
         return responsable;
     }
+
     /**
      * Returns the logo of the cinema.
      *
@@ -108,6 +120,7 @@ public class Cinema {
     public String getLogo() {
         return logo;
     }
+
     /**
      * Sets the logo of the cinema.
      *
@@ -116,6 +129,7 @@ public class Cinema {
     public void setLogo(String logo) {
         this.logo = logo;
     }
+
     /**
      * Returns the status of the cinema.
      *
@@ -124,6 +138,7 @@ public class Cinema {
     public String getStatut() {
         return Statut;
     }
+
     /**
      * Sets the status of the cinema.
      *
@@ -132,6 +147,7 @@ public class Cinema {
     public void setStatut(String statut) {
         Statut = statut;
     }
+
     /**
      * Returns a string representation of the Cinema object.
      *
@@ -139,13 +155,13 @@ public class Cinema {
      */
     @Override
     public String toString() {
-        return "Cinema{" +
-                "id_cinema=" + id_cinema +
-                ", nom='" + nom + '\'' +
-                ", adresse='" + adresse + '\'' +
-                ", responsable='" + responsable + '\'' +
-                ", logo=" + logo +
-                ", Statut='" + Statut + '\'' +
-                '}';
+        return "Cinema{"
+                + "id_cinema=" + id_cinema
+                + ", nom='" + nom + '\''
+                + ", adresse='" + adresse + '\''
+                + ", responsable='" + responsable + '\''
+                + ", logo=" + logo
+                + ", Statut='" + Statut + '\''
+                + '}';
     }
 }

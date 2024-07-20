@@ -6,8 +6,8 @@ import com.esprit.models.users.Client;
 import com.esprit.services.produits.AvisService;
 import com.esprit.services.produits.CategorieService;
 
-import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.fontawesome5.*;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -183,7 +183,7 @@ public class DesignCategorieAdminController {
              */
             @Override
             public TableCell<Categorie_Produit, Void> call(final TableColumn<Categorie_Produit, Void> param) {
-                final TableCell<Categorie_Produit, Void> cell = new TableCell<>() {
+                return new TableCell<>() {
                     private final Button btnDelete = new Button("Delete");
                     {
                         btnDelete.getStyleClass().add("delete-button");
@@ -220,7 +220,6 @@ public class DesignCategorieAdminController {
                         }
                     }
                 };
-                return cell;
             }
         };
         deleteColumn.setCellFactory(cellFactory);
@@ -306,8 +305,8 @@ public class DesignCategorieAdminController {
             filteredList.addAll(categoryService.read());
         } else {
             for (Categorie_Produit category : categoryService.read()) {
-                if (category.getNom_categorie().toLowerCase().contains(keyword.toLowerCase()) ||
-                        category.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
+                if (category.getNom_categorie().toLowerCase().contains(keyword.toLowerCase())
+                        || category.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
                     filteredList.add(category);
                 }
             }
@@ -353,8 +352,7 @@ public class DesignCategorieAdminController {
      */
     private List<Categorie_Produit> getAllCategories() {
         CategorieService categorieservice = new CategorieService();
-        List<Categorie_Produit> categorie = categorieservice.read();
-        return categorie;
+        return categorieservice.read();
     }
 
     /**
@@ -406,11 +404,10 @@ public class DesignCategorieAdminController {
         // Récupérer tous les cinémas depuis la base de données
         List<Categorie_Produit> categories = getAllCategories();
         // Extraire les adresses uniques des cinémas
-        List<String> categorie = categories.stream()
+        return categories.stream()
                 .map(Categorie_Produit::getNom_categorie)
                 .distinct()
                 .collect(Collectors.toList());
-        return categorie;
     }
 
     /**

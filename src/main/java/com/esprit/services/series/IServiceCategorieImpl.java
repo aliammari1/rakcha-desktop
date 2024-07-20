@@ -2,6 +2,7 @@ package com.esprit.services.series;
 
 import com.esprit.models.series.Categorie;
 import com.esprit.services.produits.AvisService;
+import com.esprit.utils.DataSource;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,8 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.esprit.utils.DataSource;
 
 public class IServiceCategorieImpl implements IServiceCategorie<Categorie> {
     private static List<Categorie> categories;
@@ -77,13 +76,16 @@ public class IServiceCategorieImpl implements IServiceCategorie<Categorie> {
         return categories;
     }
 
+    @Override
     public Map<Categorie, Long> getCategoriesStatistics() {
         Map<Categorie, Long> statistics = new HashMap<>();
         try {
-            String query = "SELECT categories.*, COUNT(series.idserie) as series_count " +
-                    "FROM categories " +
-                    "LEFT JOIN series ON categories.idcategorie = series.idcategorie " +
-                    "GROUP BY categories.idcategorie";
+            String query = """
+                    SELECT categories.*, COUNT(series.idserie) as series_count \
+                    FROM categories \
+                    LEFT JOIN series ON categories.idcategorie = series.idcategorie \
+                    GROUP BY categories.idcategorie\
+                    """;
             PreparedStatement statement = connection.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {

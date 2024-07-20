@@ -223,10 +223,10 @@ public class FilmUserController extends Application {
         top3combobox.getItems().addAll("Top 3 Films", "Top 3 Actors");
         top3combobox.setValue("Top 3 Films");
         top3combobox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.equals("Top 3 Films")) {
+            if ("Top 3 Films".equals(newValue)) {
                 topthreeVbox1.setVisible(false);
                 topthreeVbox.setVisible(true);
-            } else if (newValue.equals("Top 3 Actors")) {
+            } else if ("Top 3 Actors".equals(newValue)) {
                 ObservableList<Node> topthreevboxactorsChildren = topthreeVbox1.getChildren();
                 topthreevboxactorsChildren.clear();
                 topthreeVbox.setVisible(false);
@@ -263,7 +263,7 @@ public class FilmUserController extends Application {
         // String trailerURL = filmService.getTrailerFilm("garfield");
         flowpaneFilm.setHgap(10);
         flowpaneFilm.setVgap(10);
-        closeDetailFilm.setOnAction(new EventHandler<ActionEvent>() {
+        closeDetailFilm.setOnAction(new EventHandler<>() {
             /**
              * Sets the visibility of an `AnchorPane` element to false, sets the opacity of
              * another
@@ -310,11 +310,11 @@ public class FilmUserController extends Application {
         for (Node node : flowpaneFilm.getChildren()) {
             AnchorPane filmCard = (AnchorPane) node;
             Label nomFilm = (Label) filmCard.lookup(".nomFilm"); // Supposons que le nom du film soit représenté par une
-                                                                 // classe CSS ".nomFilm"
+            // classe CSS ".nomFilm"
             if (nomFilm != null) {
                 boolean isVisible = nomFilm.getText().toLowerCase().contains(keyword); // Vérifie si le nom du film
-                                                                                       // contient le mot-clé de
-                                                                                       // recherche
+                // contient le mot-clé de
+                // recherche
                 filmCard.setVisible(isVisible); // Définit la visibilité de la carte en fonction du résultat du filtrage
                 filmCard.setManaged(isVisible); // Définit la gestion de la carte en fonction du résultat du filtrage
             }
@@ -413,7 +413,7 @@ public class FilmUserController extends Application {
         button.setLayoutY(278);
         button.setPrefSize(172, 42);
         button.getStyleClass().addAll("sale");
-        button.setOnAction(new EventHandler<ActionEvent>() {
+        button.setOnAction(new EventHandler<>() {
             /**
              * Is handling an `ActionEvent` and performs a payment related task by calling
              * `switchtopayment()` method, which takes a film title as input, and catches
@@ -442,7 +442,7 @@ public class FilmUserController extends Application {
         Hyperlink hyperlink = new Hyperlink("Details");
         hyperlink.setLayoutX(89);
         hyperlink.setLayoutY(251);
-        hyperlink.setOnAction(new EventHandler<ActionEvent>() {
+        hyperlink.setOnAction(new EventHandler<>() {
             /**
              * Generates a QR code for a movie's IMDB page, displays it in an image view,
              * and
@@ -502,7 +502,7 @@ public class FilmUserController extends Application {
                     // Open the URL in the default system browser
                     hostServices.showDocument(url);
                 }); // HBox qrCodeImgModel = (HBox) ((Node)
-                    // event.getSource()).getScene().lookup("#qrCodeImgModel");
+                // event.getSource()).getScene().lookup("#qrCodeImgModel");
                 qrcode.setVisible(true);
                 rateFilm.ratingProperty().addListener(new ChangeListener<Number>() {
                     /**
@@ -546,10 +546,11 @@ public class FilmUserController extends Application {
                                                                                                 * stage.getUserData()
                                                                                                 */);
                         LOGGER.info("---------   " + film1.getId());
-                        if (ratingFilm != null)
+                        if (ratingFilm != null) {
                             ratingFilmService.delete(ratingFilm);
+                        }
                         ratingFilmService.create(new RatingFilm(film1,
-                                /* (Client) stage.getUserData() */(Client) new UserService().getUserById(2),
+                                        /* (Client) stage.getUserData() */(Client) new UserService().getUserById(2),
                                 t1.intValue()));
                         double rate = new RatingFilmService().getavergerating(film1.getId());
                         labelavregeRate.setText(rate + "/5");
@@ -560,7 +561,7 @@ public class FilmUserController extends Application {
                         }
                     }
                 });
-                trailer_Button.setOnAction(new EventHandler<ActionEvent>() {
+                trailer_Button.setOnAction(new EventHandler<>() {
                     /**
                      * Enables all disabled elements in an anchor pane, loads a web view with a
                      * trailer

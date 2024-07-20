@@ -1,18 +1,5 @@
 package com.esprit.controllers.produits;
 
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.net.URL;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import org.controlsfx.control.Rating;
-import org.kordamp.ikonli.javafx.FontIcon;
-
 import com.esprit.models.produits.Avis;
 import com.esprit.models.produits.Panier;
 import com.esprit.models.produits.Produit;
@@ -21,6 +8,8 @@ import com.esprit.services.produits.AvisService;
 import com.esprit.services.produits.PanierService;
 import com.esprit.services.produits.ProduitService;
 import com.esprit.services.users.UserService;
+
+import org.kordamp.ikonli.javafx.FontIcon;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -46,6 +35,18 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+
+import org.controlsfx.control.Rating;
+
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.net.URL;
+import java.util.List;
+import java.util.Optional;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Is used to display details of a product when the user clicks on its name in
@@ -78,7 +79,7 @@ public class DetailsProduitClientController implements Initializable {
     private AnchorPane top3anchorpane;
     @FXML
     private FlowPane topthreeVbox;
-    private int quantiteSelectionnee = 1; // Initialiser à 1 par défaut
+    private final int quantiteSelectionnee = 1; // Initialiser à 1 par défaut
     PanierService panierService = new PanierService();
     Panier panier = new Panier();
 
@@ -275,11 +276,13 @@ public class DetailsProduitClientController implements Initializable {
         addToCartButton.setLayoutX(435);
         addToCartButton.setLayoutY(300);
         // addToCartButton.getStyleClass().add("sale"); // Style du bouton
-        addToCartButton.setStyle("-fx-background-color: #dd4f4d;\n"
-                + "    -fx-text-fill: #FFFFFF;\n"
-                + "    -fx-font-size: 12px;\n"
-                + "    -fx-font-weight: bold;\n"
-                + "    -fx-padding: 10px 10px;");
+        addToCartButton.setStyle("""
+                -fx-background-color: #dd4f4d;
+                    -fx-text-fill: #FFFFFF;
+                    -fx-font-size: 12px;
+                    -fx-font-weight: bold;
+                    -fx-padding: 10px 10px;\
+                """);
         addToCartButton.setOnAction(
                 event -> {
                     int produitId = produit.getId_produit();
@@ -299,7 +302,7 @@ public class DetailsProduitClientController implements Initializable {
         rating.setLayoutY(390);
         rating.setMax(5);
         rating.setRating(avis.getNote()); // Vous pouvez ajuster en fonction de la valeur du produit
-        String format = String.format("%.1f/5", BigDecimal.valueOf(rate).setScale(1, RoundingMode.FLOOR).doubleValue());
+        String format = "%.1f/5".formatted(BigDecimal.valueOf(rate).setScale(1, RoundingMode.FLOOR).doubleValue());
         Label etoilelabel = new Label(format);
         etoilelabel.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
         etoilelabel.setStyle("-fx-text-fill: #333333;");
@@ -324,7 +327,7 @@ public class DetailsProduitClientController implements Initializable {
                     t1.intValue(), produit));
             double rate1 = new AvisService().getavergerating(produit.getId_produit());
             // Formater le texte avec une seule valeur après la virgule
-            String formattedRate = String.format("%.1f/5",
+            String formattedRate = "%.1f/5".formatted(
                     BigDecimal.valueOf(rate1).setScale(1, RoundingMode.FLOOR).doubleValue());
             LOGGER.info(formattedRate);
             etoilelabel.setText(formattedRate);
@@ -515,11 +518,13 @@ public class DetailsProduitClientController implements Initializable {
         commandebutton.setLayoutY(350);
         commandebutton.setPrefWidth(120);
         commandebutton.setPrefHeight(35);
-        commandebutton.setStyle("-fx-background-color: #624970;\n"
-                + " -fx-text-fill: #FCE19A;"
-                + "   -fx-font-size: 12px;\n"
-                + "     -fx-font-weight: bold;\n"
-                + " -fx-background-color: #6f7b94"); // Style du bouton
+        commandebutton.setStyle("""
+                -fx-background-color: #624970;
+                 -fx-text-fill: #FCE19A;\
+                   -fx-font-size: 12px;
+                     -fx-font-weight: bold;
+                 -fx-background-color: #6f7b94\
+                """); // Style du bouton
         commandebutton.setOnAction(
                 event -> {
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/DesignProduitAdmin.fxml"));
@@ -537,7 +542,7 @@ public class DetailsProduitClientController implements Initializable {
                         currentStage.close();
                     } catch (IOException e) {
                         LOGGER.log(Level.SEVERE, e.getMessage(), e); // Affiche l'erreur dans la console (vous pourriez
-                                                                     // le
+                        // le
                         // remplacer par une boîte de dialogue)
                         LOGGER.info("Erreur lors du chargement du fichier FXML : " + e.getMessage());
                     }
@@ -547,11 +552,13 @@ public class DetailsProduitClientController implements Initializable {
         achatbutton.setLayoutX(50);
         achatbutton.setLayoutY(400);
         achatbutton.setPrefHeight(30);
-        achatbutton.setStyle(" -fx-background-color: #466288;\n"
-                + "    -fx-text-fill: #FCE19A;\n"
-                + "    -fx-font-size: 12px;\n"
-                + "    -fx-font-weight: bold;\n"
-                + "    -fx-padding: 10px 10px;");
+        achatbutton.setStyle("""
+                 -fx-background-color: #466288;
+                    -fx-text-fill: #FCE19A;
+                    -fx-font-size: 12px;
+                    -fx-font-weight: bold;
+                    -fx-padding: 10px 10px;\
+                """);
         achatbutton.setOnAction(
                 event -> {
                     fermerPanierCard(panierContainer);
@@ -924,7 +931,7 @@ public class DetailsProduitClientController implements Initializable {
             for (Produit produit : top3Produits) {
                 LOGGER.info(String.valueOf(produit.getId_produit()));
                 VBox cardContainer = createtopthree(produit);
-                LOGGER.info("------------------" + j + (cardContainer.getChildren()));
+                LOGGER.log(Level.INFO, "------------------{0}{1}", new Object[]{j, cardContainer.getChildren()});
                 topthreeVbox.getChildren().add(cardContainer);
                 j++;
             }

@@ -1,5 +1,7 @@
 package com.esprit.models.cinemas;
+
 import com.esprit.models.users.Client;
+
 /**
  * Represents a comment on a cinema.
  */
@@ -9,6 +11,7 @@ public class CommentaireCinema {
     private Client client;
     private String commentaire;
     private String sentiment;
+
     /**
      * Constructs a CommentaireCinema object with the specified parameters.
      *
@@ -25,6 +28,7 @@ public class CommentaireCinema {
         this.commentaire = commentaire;
         this.sentiment = sentiment;
     }
+
     /**
      * Constructs a CommentaireCinema object with the specified parameters.
      *
@@ -39,6 +43,7 @@ public class CommentaireCinema {
         this.commentaire = commentaire;
         this.sentiment = sentiment;
     }
+
     /**
      * Returns the ID of the comment.
      *
@@ -47,6 +52,7 @@ public class CommentaireCinema {
     public int getIdcommentaire() {
         return idcommentaire;
     }
+
     /**
      * Sets the ID of the comment.
      *
@@ -55,6 +61,7 @@ public class CommentaireCinema {
     public void setIdcommentaire(int idcommentaire) {
         this.idcommentaire = idcommentaire;
     }
+
     /**
      * Returns the cinema associated with the comment.
      *
@@ -63,6 +70,7 @@ public class CommentaireCinema {
     public Cinema getCinema() {
         return cinema;
     }
+
     /**
      * Sets the cinema associated with the comment.
      *
@@ -71,6 +79,7 @@ public class CommentaireCinema {
     public void setCinema(Cinema cinema) {
         this.cinema = cinema;
     }
+
     /**
      * Returns the client who made the comment.
      *
@@ -79,6 +88,7 @@ public class CommentaireCinema {
     public Client getClient() {
         return client;
     }
+
     /**
      * Sets the client who made the comment.
      *
@@ -87,6 +97,7 @@ public class CommentaireCinema {
     public void setClient(Client client) {
         this.client = client;
     }
+
     /**
      * Returns the comment text.
      *
@@ -95,6 +106,7 @@ public class CommentaireCinema {
     public String getCommentaire() {
         return commentaire;
     }
+
     /**
      * Sets the comment text.
      *
@@ -103,6 +115,7 @@ public class CommentaireCinema {
     public void setCommentaire(String commentaire) {
         this.commentaire = commentaire;
     }
+
     /**
      * Returns the sentiment of the comment.
      *
@@ -111,6 +124,7 @@ public class CommentaireCinema {
     public String getSentiment() {
         return sentiment;
     }
+
     /**
      * Sets the sentiment of the comment.
      *
@@ -119,6 +133,7 @@ public class CommentaireCinema {
     public void setSentiment(String sentiment) {
         this.sentiment = sentiment;
     }
+
     /**
      * Returns a string representation of the CommentaireCinema object.
      *
@@ -126,12 +141,12 @@ public class CommentaireCinema {
      */
     @Override
     public String toString() {
-        return "CommentaireCinema{" +
-                "idcommentaire=" + idcommentaire +
-                ", cinema=" + cinema +
-                ", client=" + client +
-                ", commentaire='" + commentaire + '\'' +
-                ", sentiment='" + sentiment + '\'' +
-                '}';
+        return "CommentaireCinema{"
+                + "idcommentaire=" + idcommentaire
+                + ", cinema=" + cinema
+                + ", client=" + client
+                + ", commentaire='" + commentaire + '\''
+                + ", sentiment='" + sentiment + '\''
+                + '}';
     }
 }

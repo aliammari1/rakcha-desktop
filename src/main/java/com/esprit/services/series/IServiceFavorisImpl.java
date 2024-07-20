@@ -24,9 +24,11 @@ public class IServiceFavorisImpl implements IServiceFavoris<Favoris> {
      */
     @Override
     public void ajouter(Favoris a) {
-        String req = "INSERT INTO favoris"
-                + "(id_user,id_serie)"
-                + "VALUES(?,?)";
+        String req = """
+                INSERT INTO favoris\
+                (id_user,id_serie)\
+                VALUES(?,?)\
+                """;
         try {
             PreparedStatement ps = conx.prepareStatement(req);
             ps.setInt(1, a.getId_user());
@@ -35,7 +37,6 @@ public class IServiceFavorisImpl implements IServiceFavoris<Favoris> {
             LOGGER.info("Favoris Ajoutée !!");
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
-            ;
         }
     }
 
@@ -54,7 +55,6 @@ public class IServiceFavorisImpl implements IServiceFavoris<Favoris> {
             LOGGER.info("Favoris Modifiée !");
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
-            ;
         }
     }
 
@@ -68,7 +68,6 @@ public class IServiceFavorisImpl implements IServiceFavoris<Favoris> {
             LOGGER.info("Favoris suprimée !");
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
-            ;
         }
     }
 
@@ -85,7 +84,6 @@ public class IServiceFavorisImpl implements IServiceFavoris<Favoris> {
             }
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
-            ;
         }
         return list;
     }
@@ -123,7 +121,6 @@ public class IServiceFavorisImpl implements IServiceFavoris<Favoris> {
             }
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
-            ;
         }
         return list;
     }

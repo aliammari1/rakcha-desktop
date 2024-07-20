@@ -22,7 +22,7 @@ import java.util.Random;
 import java.util.ResourceBundle;
 
 public class SMSAdminController implements Initializable {
-    int verificationCode = 0;
+    int verificationCode;
     @FXML
     private TextField codeTextField;
     @FXML

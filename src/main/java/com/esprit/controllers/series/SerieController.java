@@ -3,16 +3,16 @@ package com.esprit.controllers.series;
 import com.esprit.models.series.Categorie;
 import com.esprit.models.series.Feedback;
 import com.esprit.models.series.Serie;
-import com.esprit.services.series.DTO.SerieDto;
 import com.esprit.services.produits.AvisService;
+import com.esprit.services.series.DTO.SerieDto;
 import com.esprit.services.series.IServiceCategorieImpl;
 import com.esprit.services.series.IServiceFeedbackImpl;
 import com.esprit.services.series.IServiceSerieImpl;
+
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,7 +27,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
@@ -45,8 +44,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class SerieController {
     private static final Logger LOGGER = Logger.getLogger(SerieController.class.getName());
@@ -724,11 +723,11 @@ public class SerieController {
                 String recipientEmail = "nourhene.ftaymia@esprit.tn"; // Remplacez par l'adresse e-mail réelle du
                 // destinataire
                 String subject = "Exciting News! New Series Alert 🚀";
-                String message = "Dear Viewer,\n\nWe are thrilled to announce a new series on our platform!\n\n" +
-                        "Title: " + serie.getNom() + "\n" +
-                        "Description: " + serie.getResume() + "\n\n" +
-                        "Get ready for an incredible viewing experience. Enjoy the show!\n\n" +
-                        "Best regards.\n";
+                String message = "Dear Viewer,\n\nWe are thrilled to announce a new series on our platform!\n\n"
+                        + "Title: " + serie.getNom() + "\n"
+                        + "Description: " + serie.getResume() + "\n\n"
+                        + "Get ready for an incredible viewing experience. Enjoy the show!\n\n"
+                        + "Best regards.\n";
                 String newSerieTitle = serie.getNom();
                 String newSerieDescription = serie.getResume(); // Vous pouvez personnaliser cela
                 sendEmail(recipientEmail, newSerieTitle, message);
@@ -770,7 +769,7 @@ public class SerieController {
     void Oepisodes(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Episode-view.fxml")));
         Scene scene = new Scene(root);
-        Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
     }
@@ -790,7 +789,7 @@ public class SerieController {
     void Oseries(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Serie-view.fxml")));
         Scene scene = new Scene(root);
-        Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
     }
@@ -808,7 +807,7 @@ public class SerieController {
     void Oepisode(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Episode-view.fxml")));
         Scene scene = new Scene(root);
-        Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
     }

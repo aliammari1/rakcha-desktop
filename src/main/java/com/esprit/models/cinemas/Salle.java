@@ -1,4 +1,5 @@
 package com.esprit.models.cinemas;
+
 /**
  * Is used to represent a salle within a cinema. It has several fields and methods
  * that allow for the manipulation of these values. The class has four fields: id_salle,
@@ -11,6 +12,7 @@ public class Salle {
     private int id_cinema;
     private int nb_places;
     private String nom_salle;
+
     /**
      * Constructs a new Salle object with the specified id_salle, id_cinema, nb_places, and nom_salle.
      *
@@ -25,6 +27,7 @@ public class Salle {
         this.nb_places = nb_places;
         this.nom_salle = nom_salle;
     }
+
     /**
      * Constructs a new Salle object with the specified id_cinema, nb_places, and nom_salle.
      *
@@ -37,6 +40,7 @@ public class Salle {
         this.nb_places = nb_places;
         this.nom_salle = nom_salle;
     }
+
     /**
      * Returns the id of the salle.
      *
@@ -45,6 +49,7 @@ public class Salle {
     public int getId_salle() {
         return id_salle;
     }
+
     /**
      * Sets the id of the salle.
      *
@@ -53,6 +58,7 @@ public class Salle {
     public void setId_salle(int id_salle) {
         this.id_salle = id_salle;
     }
+
     /**
      * Returns the id of the cinema.
      *
@@ -61,6 +67,7 @@ public class Salle {
     public int getId_cinema() {
         return id_cinema;
     }
+
     /**
      * Sets the id of the cinema.
      *
@@ -69,6 +76,7 @@ public class Salle {
     public void setId_cinema(int id_cinema) {
         this.id_cinema = id_cinema;
     }
+
     /**
      * Returns the number of places in the salle.
      *
@@ -77,6 +85,7 @@ public class Salle {
     public int getNb_places() {
         return nb_places;
     }
+
     /**
      * Sets the number of places in the salle.
      *
@@ -85,6 +94,7 @@ public class Salle {
     public void setNb_places(int nb_places) {
         this.nb_places = nb_places;
     }
+
     /**
      * Returns the name of the salle.
      *
@@ -93,6 +103,7 @@ public class Salle {
     public String getNom_salle() {
         return nom_salle;
     }
+
     /**
      * Sets the name of the salle.
      *
@@ -101,6 +112,7 @@ public class Salle {
     public void setNom_salle(String nom_salle) {
         this.nom_salle = nom_salle;
     }
+
     /**
      * Returns a string representation of the Salle object.
      *
@@ -108,11 +120,11 @@ public class Salle {
      */
     @Override
     public String toString() {
-        return "Salle{" +
-                "id_salle=" + id_salle +
-                ", id_cinema=" + id_cinema +
-                ", nb_places=" + nb_places +
-                ", nom_salle=" + nom_salle +
-                '}';
+        return "Salle{"
+                + "id_salle=" + id_salle
+                + ", id_cinema=" + id_cinema
+                + ", nb_places=" + nb_places
+                + ", nom_salle=" + nom_salle
+                + '}';
     }
 }

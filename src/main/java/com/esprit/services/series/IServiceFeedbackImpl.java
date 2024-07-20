@@ -24,20 +24,21 @@ public class IServiceFeedbackImpl implements IServiceFeedback<Feedback> {
      */
     @Override
     public void ajouter(Feedback a) {
-        String req = "INSERT INTO feedback"
-                + "(id_user,description,date,id_episode)"
-                + "VALUES(?,?,?,?)";
+        String req = """
+                INSERT INTO feedback\
+                (id_user,description,date,id_episode)\
+                VALUES(?,?,?,?)\
+                """;
         try {
             PreparedStatement ps = conx.prepareStatement(req);
             ps.setInt(1, a.getId_user());
             ps.setString(2, a.getDescription());
-            ps.setDate(3, new java.sql.Date(a.getDate().getTime()));
+            ps.setDate(3, new Date(a.getDate().getTime()));
             ps.setInt(4, a.getId_episode());
             ps.executeUpdate();
             LOGGER.info("FeedBack Ajoutée !!");
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
-            ;
         }
     }
 
@@ -52,13 +53,12 @@ public class IServiceFeedbackImpl implements IServiceFeedback<Feedback> {
             pst.setInt(5, a.getId());
             pst.setInt(1, a.getId_user());
             pst.setString(2, a.getDescription());
-            pst.setDate(3, new java.sql.Date(a.getDate().getTime()));
+            pst.setDate(3, new Date(a.getDate().getTime()));
             pst.setInt(4, a.getId_episode());
             pst.executeUpdate();
             LOGGER.info("FeedBack Modifiée !");
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
-            ;
         }
     }
 
@@ -72,7 +72,6 @@ public class IServiceFeedbackImpl implements IServiceFeedback<Feedback> {
             LOGGER.info("FeedBack suprimée !");
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
-            ;
         }
     }
 
@@ -89,7 +88,6 @@ public class IServiceFeedbackImpl implements IServiceFeedback<Feedback> {
             }
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
-            ;
         }
         return list;
     }

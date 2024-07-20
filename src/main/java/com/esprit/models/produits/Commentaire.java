@@ -1,6 +1,9 @@
 package com.esprit.models.produits;
+
 import com.esprit.models.users.Client;
+
 import java.util.Date;
+
 /**
  * The Commentaire class represents a comment made by a client on a product.
  */
@@ -9,11 +12,13 @@ public class Commentaire {
     private Client client;
     private String commentaire;
     private Produit produit;
+
     /**
      * Default constructor for Commentaire class.
      */
     public Commentaire() {
     }
+
     /**
      * Parameterized constructor for Commentaire class.
      * 
@@ -26,6 +31,7 @@ public class Commentaire {
         this.commentaire = commentaire;
         this.produit = produit;
     }
+
     /**
      * Parameterized constructor for Commentaire class.
      * 
@@ -40,6 +46,7 @@ public class Commentaire {
         this.commentaire = commentaire;
         this.produit = produit;
     }
+
     /**
      * Get the ID of the comment.
      * 
@@ -48,6 +55,7 @@ public class Commentaire {
     public int getIdCommentaire() {
         return idcommentaire;
     }
+
     /**
      * Set the ID of the comment.
      * 
@@ -56,6 +64,7 @@ public class Commentaire {
     public void setIdCommentaire(int idCommentaire) {
         this.idcommentaire = idCommentaire;
     }
+
     /**
      * Get the client who made the comment.
      * 
@@ -64,6 +73,7 @@ public class Commentaire {
     public Client getClient() {
         return client;
     }
+
     /**
      * Set the client who made the comment.
      * 
@@ -72,6 +82,7 @@ public class Commentaire {
     public void setClient(Client client) {
         this.client = client;
     }
+
     /**
      * Get the comment text.
      * 
@@ -80,6 +91,7 @@ public class Commentaire {
     public String getCommentaire() {
         return commentaire;
     }
+
     /**
      * Set the comment text.
      * 
@@ -88,6 +100,7 @@ public class Commentaire {
     public void setCommentaire(String commentaire) {
         this.commentaire = commentaire;
     }
+
     /**
      * Get the product associated with the comment.
      * 
@@ -96,6 +109,7 @@ public class Commentaire {
     public Produit getProduit() {
         return produit;
     }
+
     /**
      * Set the product associated with the comment.
      * 
@@ -104,6 +118,7 @@ public class Commentaire {
     public void setProduit(Produit produit) {
         this.produit = produit;
     }
+
     /**
      * Returns a string representation of the Commentaire object.
      * 
@@ -111,11 +126,11 @@ public class Commentaire {
      */
     @Override
     public String toString() {
-        return "Commentaire{" +
-                "idcommentaire=" + idcommentaire +
-                ", client=" + client +
-                ", commentaire='" + commentaire + '\'' +
-                ", produit=" + produit +
-                '}';
+        return "Commentaire{"
+                + "idcommentaire=" + idcommentaire
+                + ", client=" + client
+                + ", commentaire='" + commentaire + '\''
+                + ", produit=" + produit
+                + '}';
     }
 }

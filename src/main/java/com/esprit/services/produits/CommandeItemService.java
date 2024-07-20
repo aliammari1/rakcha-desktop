@@ -5,6 +5,7 @@ import com.esprit.models.produits.CommandeItem;
 import com.esprit.models.produits.Produit;
 import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -67,6 +68,7 @@ public class CommandeItemService implements IService<CommandeItem> {
         String req = "Select * FROM commandeitem where idCommande=?";
         try {
             PreparedStatement pst = connection.prepareStatement(req);
+            pst.setInt(1, idCommande);
             ResultSet rs = pst.executeQuery();
             ProduitService ps = new ProduitService();
             CommandeService cs = new CommandeService();
@@ -112,12 +114,14 @@ public class CommandeItemService implements IService<CommandeItem> {
 
     public int getTotalQuantityByCategoryAndDate(String nomCategorie, String formattedDate) {
         int totalQuantity = 0;
-        String req = "SELECT SUM(ci.quantity) AS totalQuantity " +
-                "FROM commandeitem ci " +
-                "JOIN produit p ON ci.id_produit = p.id_produit " +
-                "JOIN categorie_produit cp ON p.id_categorieProduit = cp.id_categorie " +
-                "JOIN commande c ON ci.idCommande = c.idCommande " +
-                "WHERE cp.nom_categorie = ? AND DATE(c.dateCommande) = ?";
+        String req = """
+                SELECT SUM(ci.quantity) AS totalQuantity \
+                FROM commandeitem ci \
+                JOIN produit p ON ci.id_produit = p.id_produit \
+                JOIN categorie_produit cp ON p.id_categorieProduit = cp.id_categorie \
+                JOIN commande c ON ci.idCommande = c.idCommande \
+                WHERE cp.nom_categorie = ? AND DATE(c.dateCommande) = ?\
+                """;
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setString(1, nomCategorie);

@@ -371,7 +371,7 @@ public class DashboardResponsableController implements Initializable {
         CinemaService cinemaService = new CinemaService();
         List<Cinema> cinemas = cinemaService.read();
         List<Cinema> acceptedCinemasList = cinemas.stream()
-                .filter(cinema -> cinema.getStatut().equals("Accepted"))
+                .filter(cinema -> "Accepted".equals(cinema.getStatut()))
                 .collect(Collectors.toList());
         if (acceptedCinemasList.isEmpty()) {
             showAlert("No accepted cinemas are available.");
@@ -406,13 +406,12 @@ public class DashboardResponsableController implements Initializable {
         CinemaService cinemaService = new CinemaService();
         List<Cinema> cinemas = cinemaService.read();
         List<Cinema> acceptedCinemasList = cinemas.stream()
-                .filter(cinema -> cinema.getStatut().equals("Accepted"))
+                .filter(cinema -> "Accepted".equals(cinema.getStatut()))
                 .collect(Collectors.toList());
         if (acceptedCinemasList.isEmpty()) {
             showAlert("No accepted cinemas are available.");
         }
-        HashSet<Cinema> acceptedCinemasSet = new HashSet<>(acceptedCinemasList);
-        return acceptedCinemasSet;
+        return new HashSet<>(acceptedCinemasList);
     }
 
     /**

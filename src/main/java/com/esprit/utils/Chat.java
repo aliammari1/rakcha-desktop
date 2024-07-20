@@ -1,5 +1,7 @@
 package com.esprit.utils;
 
+import com.esprit.services.produits.AvisService;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -8,8 +10,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Connection;
 import java.util.logging.Logger;
-
-import com.esprit.services.produits.AvisService;
 
 public class Chat {
     Connection connection;

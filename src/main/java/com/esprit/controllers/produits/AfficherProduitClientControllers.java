@@ -11,6 +11,8 @@ import com.esprit.services.produits.ProduitService;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.Chat;
 
+import org.kordamp.ikonli.javafx.FontIcon;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -38,15 +40,13 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import org.kordamp.ikonli.javafx.FontIcon;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
@@ -59,7 +59,7 @@ public class AfficherProduitClientControllers implements Initializable {
     private static final Logger LOGGER = Logger.getLogger(AfficherProduitClientControllers.class.getName());
     private final List<CheckBox> addressCheckBoxes = new ArrayList<>();
     private final List<CheckBox> statusCheckBoxes = new ArrayList<>();
-    private final List<Produit> panierList = new ArrayList<Produit>();
+    private final List<Produit> panierList = new ArrayList<>();
     private final Chat chat = new Chat();
     @FXML
     public FlowPane panierFlowPane;
@@ -156,6 +156,7 @@ public class AfficherProduitClientControllers implements Initializable {
      *                  key-value pairs of resources
      *                  used in the application.
      */
+    @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadAcceptedProduits();
         displayAllComments(produitId);
@@ -372,14 +373,16 @@ public class AfficherProduitClientControllers implements Initializable {
             idcomment.setStyle("-fx-background-color: #fff;");
         });
         card.getChildren().addAll(imageView, nameLabel, descriptionLabel, priceLabel, addToCartButton, chatIcon);
-        card.setStyle("-fx-background-color:#F6F2F2;\n" +
-                " -fx-text-fill: #FFFFFF;\n" +
-                "    -fx-font-size: 12px;\n" +
-                "    -fx-font-weight: bold;\n" +
-                "    -fx-padding: 10px;\n" +
-                "    -fx-border-color: linear-gradient(to top left, #624970, #ae2d3c);/* Couleur de la bordure */\n" +
-                "    -fx-border-width: 2px; /* Largeur de la bordure */\n" +
-                "    -fx-border-radius: 5px; /* Rayon de la bordure pour arrondir les coins */");
+        card.setStyle("""
+                -fx-background-color:#F6F2F2;
+                 -fx-text-fill: #FFFFFF;
+                    -fx-font-size: 12px;
+                    -fx-font-weight: bold;
+                    -fx-padding: 10px;
+                    -fx-border-color: linear-gradient(to top left, #624970, #ae2d3c);/* Couleur de la bordure */
+                    -fx-border-width: 2px; /* Largeur de la bordure */
+                    -fx-border-radius: 5px; /* Rayon de la bordure pour arrondir les coins */\
+                """);
         card.getStyleClass().add("bg-white");
         cardContainer.getChildren().add(card);
         return cardContainer;
@@ -572,11 +575,13 @@ public class AfficherProduitClientControllers implements Initializable {
         commandebutton.setLayoutY(300);
         commandebutton.setPrefWidth(120);
         commandebutton.setPrefHeight(50);
-        commandebutton.setStyle("-fx-background-color: #624970;\n" +
-                " -fx-text-fill: #FCE19A;" +
-                "   -fx-font-size: 12px;\n" +
-                "     -fx-font-weight: bold;\n" +
-                " -fx-background-color: #6f7b94");
+        commandebutton.setStyle("""
+                -fx-background-color: #624970;
+                 -fx-text-fill: #FCE19A;\
+                   -fx-font-size: 12px;
+                     -fx-font-weight: bold;
+                 -fx-background-color: #6f7b94\
+                """);
         commandebutton.setOnAction(
                 event -> {
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/PanierProduit.fxml"));
@@ -593,7 +598,7 @@ public class AfficherProduitClientControllers implements Initializable {
                         // Fermer la fenêtre actuelle
                     } catch (IOException e) {
                         LOGGER.log(Level.SEVERE, e.getMessage(), e); // Affiche l'erreur dans la console (vous pourriez
-                                                                     // le
+                        // le
                         // remplacer par une boîte de dialogue)
                         LOGGER.info("Erreur lors du chargement du fichier FXML : " + e.getMessage());
                     }
@@ -603,11 +608,13 @@ public class AfficherProduitClientControllers implements Initializable {
         achatbutton.setLayoutX(50);
         achatbutton.setLayoutY(370);
         achatbutton.setPrefHeight(50);
-        achatbutton.setStyle(" -fx-background-color: #466288;\n" +
-                "    -fx-text-fill: #FCE19A;\n" +
-                "    -fx-font-size: 12px;\n" +
-                "    -fx-font-weight: bold;\n" +
-                "    -fx-padding: 10px 10px;"); // Style du bouton
+        achatbutton.setStyle("""
+                 -fx-background-color: #466288;
+                    -fx-text-fill: #FCE19A;
+                    -fx-font-size: 12px;
+                    -fx-font-weight: bold;
+                    -fx-padding: 10px 10px;\
+                """); // Style du bouton
         achatbutton.setOnAction(
                 event -> {
                     fermerPanierCard(panierContainer);
@@ -721,8 +728,7 @@ public class AfficherProduitClientControllers implements Initializable {
      */
     private List<Produit> getAllCategories() {
         ProduitService categorieservice = new ProduitService();
-        List<Produit> categorie = categorieservice.read();
-        return categorie;
+        return categorieservice.read();
     }
 
     /**
@@ -794,11 +800,10 @@ public class AfficherProduitClientControllers implements Initializable {
     public List<String> getCategorie_Produit() {
         // Récupérer tous les cinémas depuis la base de données
         List<Produit> categories = getAllCategories();
-        List<String> categorie = categories.stream()
+        return categories.stream()
                 .map(c -> c.getCategorie().getNom_categorie())
                 .distinct()
                 .collect(Collectors.toList());
-        return categorie;
     }
 
     /**
@@ -1107,7 +1112,7 @@ public class AfficherProduitClientControllers implements Initializable {
         String badwordDetection = chat.badword(userMessage);
         LOGGER.info("Badword Detection Result: " + badwordDetection);
         ProduitService produitService = new ProduitService();
-        if (badwordDetection.equals("1")) {
+        if ("1".equals(badwordDetection)) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Commentaire non valide");
             alert.setContentText("Votre commentaire contient des gros mots et ne peut pas être publié.");

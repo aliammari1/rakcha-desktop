@@ -1,16 +1,14 @@
 package com.esprit.utils;
 
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.services.youtube.YouTube;
+import com.google.api.services.youtube.model.SearchResult;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.esprit.services.produits.AvisService;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.services.youtube.YouTube;
-import com.google.api.services.youtube.model.SearchResult;
-import com.google.api.client.json.gson.GsonFactory;
 
 public class FilmYoutubeTrailer {
     private final String API_KEY = System.getenv("YOUTUBE_API_KEY");

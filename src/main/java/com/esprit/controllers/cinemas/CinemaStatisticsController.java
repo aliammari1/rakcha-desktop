@@ -1,13 +1,15 @@
 package com.esprit.controllers.cinemas;
 
 import com.esprit.models.cinemas.CommentaireCinema;
-import com.esprit.services.cinemas.CommentaireCinemaService;
 import com.esprit.services.cinemas.CinemaService;
+import com.esprit.services.cinemas.CommentaireCinemaService;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

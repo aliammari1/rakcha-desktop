@@ -205,6 +205,7 @@ public class StatistiqueController implements Initializable {
      *                       in the code snippet provided,
      *                       but it is implied based on the context of the function.
      */
+    @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Initialiser le ComboBox ici
         ObservableList<String> statisticsOptions = FXCollections.observableArrayList("Statistiques of categorie");

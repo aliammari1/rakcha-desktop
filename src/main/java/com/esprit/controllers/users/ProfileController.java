@@ -1,8 +1,8 @@
 package com.esprit.controllers.users;
-import java.io.IOException;
-import java.sql.Date;
+
 import com.esprit.models.users.User;
 import com.esprit.services.users.UserService;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,8 +13,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.sql.Date;
+
 public class ProfileController {
     @FXML
     public AnchorPane leftPane;
@@ -37,9 +42,12 @@ public class ProfileController {
     private ImageView photoDeProfilImageView;
     @FXML
     private Circle imageCircle;
+
     @FXML
     public void initialize() {
+
     }
+
     /** 
      * @param user
      */
@@ -65,9 +73,10 @@ public class ProfileController {
             dateDeNaissanceDatePicker.setValue(user.getBirthDate().toLocalDate());
         }
         if (user.getPhoto_de_profil() != null) {
-            photoDeProfilImageView.setImage(new Image(user.getPhoto_de_profil()));
+            imageCircle.setFill(new ImagePattern(new Image(user.getPhoto_de_profil())));
         }
     }
+
     /** 
      * @param event
      * @throws IOException
@@ -82,6 +91,7 @@ public class ProfileController {
         Parent root = loader.load();
         stage.setScene(new Scene(root));
     }
+
     @FXML
     public void modifyAccount(ActionEvent event) {
         Stage stage = (Stage) firstNameTextField.getScene().getWindow();
@@ -97,6 +107,7 @@ public class ProfileController {
         UserService userService = new UserService();
         userService.update(user);
     }
+
     @FXML
     public void signOut(ActionEvent event) throws IOException {
         Stage stage = (Stage) emailTextField.getScene().getWindow();
@@ -104,6 +115,7 @@ public class ProfileController {
         Parent root = loader.load();
         stage.setScene(new Scene(root));
     }
+
     public void setLeftPane(AnchorPane leftPane) {
         this.leftPane.getChildren().clear();
         this.leftPane.getChildren().add(leftPane);

@@ -18,6 +18,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -358,25 +359,25 @@ public class SerieClientController {
                     Label nameLabel = new Label("Name: " + item.getNom());
                     nameLabel.setStyle(
                             "-fx-font-family: 'Helvetica'; -fx-font-size: 18.0px; -fx-font-weight: bold; -fx-text-fill: #333333;"); // Couleur
-                                                                                                                                    // de
-                                                                                                                                    // texte
-                                                                                                                                    // sombre
+                    // de
+                    // texte
+                    // sombre
                     Label directorLabel = new Label("Director: " + item.getDirecteur());
                     directorLabel.setStyle(
                             "-fx-font-family: 'Helvetica'; -fx-font-size: 14.0px; -fx-font-weight: normal; -fx-text-fill: #666666;"); // Couleur
-                                                                                                                                      // de
-                                                                                                                                      // texte
-                                                                                                                                      // sombre
-                                                                                                                                      // plus
-                                                                                                                                      // claire
+                    // de
+                    // texte
+                    // sombre
+                    // plus
+                    // claire
                     Label countryLabel = new Label("Country: " + item.getPays());
                     countryLabel.setStyle(
                             "-fx-font-family: 'Helvetica'; -fx-font-size: 14.0px; -fx-font-weight: normal; -fx-text-fill: #666666;"); // Couleur
-                                                                                                                                      // de
-                                                                                                                                      // texte
-                                                                                                                                      // sombre
-                                                                                                                                      // plus
-                                                                                                                                      // claire
+                    // de
+                    // texte
+                    // sombre
+                    // plus
+                    // claire
                     // Label summaryLabel = new Label("Summary: " + item.getResume());
                     // Label directorLabel = new Label("Director: " + item.getDirecteur());
                     // Label countryLabel = new Label("Country: " + item.getPays());
@@ -387,11 +388,11 @@ public class SerieClientController {
                     Label likesLabel = new Label("Likes: " + item.getNbLikes());
                     likesLabel.setStyle(
                             "-fx-font-family: 'Helvetica'; -fx-font-size: 14.0px; -fx-font-weight: normal; -fx-text-fill: #666666;"); // Couleur
-                                                                                                                                      // de
-                                                                                                                                      // texte
-                                                                                                                                      // sombre
-                                                                                                                                      // plus
-                                                                                                                                      // claire
+                    // de
+                    // texte
+                    // sombre
+                    // plus
+                    // claire
                     // Ajoutez d'autres composants selon vos besoins
                     // Positionnez les composants dans l'AnchorPane
                     AnchorPane.setTopAnchor(imageView, 10.0);
@@ -566,22 +567,24 @@ public class SerieClientController {
                     iconImageViewWatch.setFitWidth(10.0);
                     iconImageViewWatch.setFitHeight(10.0);
                     Button watchButton = new Button("Watch", iconImageViewWatch);
-                    watchButton.setStyle("-fx-background-color: #ae2d3c; " +
-                            "-fx-background-radius: 8px; " +
-                            "-fx-text-fill: #FCE19A; " +
-                            "-fx-font-size: 16px; " +
-                            "-fx-font-family: 'Arial Rounded MT Bold'; " +
-                            "-fx-cursor: hand;"); // Set the layout constraints for the Watch Button in the AnchorPane
+                    watchButton.setStyle("""
+                            -fx-background-color: #ae2d3c; \
+                            -fx-background-radius: 8px; \
+                            -fx-text-fill: #FCE19A; \
+                            -fx-font-size: 16px; \
+                            -fx-font-family: 'Arial Rounded MT Bold'; \
+                            -fx-cursor: hand;\
+                            """); // Set the layout constraints for the Watch Button in the AnchorPane
                     AnchorPane.setTopAnchor(watchButton, 150.0);
                     AnchorPane.setLeftAnchor(watchButton, 180.0);
                     Label dislikesLabel = new Label("DisLikes: " + item.getNbDislikes());
                     dislikesLabel.setStyle(
                             "-fx-font-family: 'Helvetica'; -fx-font-size: 14.0px; -fx-font-weight: normal; -fx-text-fill: #666666;"); // Couleur
-                                                                                                                                      // de
-                                                                                                                                      // texte
-                                                                                                                                      // sombre
-                                                                                                                                      // plus
-                                                                                                                                      // claire
+                    // de
+                    // texte
+                    // sombre
+                    // plus
+                    // claire
                     AnchorPane.setTopAnchor(dislikesLabel, 120.0);
                     AnchorPane.setLeftAnchor(dislikesLabel, 180.0);
                     // Ajoutez les composants à l'AnchorPane
@@ -727,7 +730,7 @@ public class SerieClientController {
     void Ocategories(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/CategorieClient.fxml")));
         Scene scene = new Scene(root);
-        Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
     }
@@ -752,7 +755,7 @@ public class SerieClientController {
     void Oseries(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/SeriesClient.fxml")));
         Scene scene = new Scene(root);
-        Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
     }
@@ -781,7 +784,7 @@ public class SerieClientController {
     void Oepisode(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/EpisodeClient.fxml")));
         Scene scene = new Scene(root);
-        Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
     }

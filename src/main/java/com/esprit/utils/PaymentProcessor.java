@@ -1,6 +1,7 @@
 package com.esprit.utils;
 
 import com.esprit.services.produits.AvisService;
+
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
@@ -38,7 +39,7 @@ public class PaymentProcessor {
             // Charge the customer
             Charge charge = chargeCustomer(customer.getId(), token.getId(), amount);
             // Check if the charge was successful
-            result = charge.getStatus().equals("succeeded");
+            result = "succeeded".equals(charge.getStatus());
         } catch (StripeException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
@@ -77,5 +78,8 @@ public class PaymentProcessor {
         chargeParams.put("customer", customerId);
         chargeParams.put("source", tokenId);
         return Charge.create(chargeParams);
+    }
+
+    private PaymentProcessor() {
     }
 }

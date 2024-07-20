@@ -1,12 +1,16 @@
 package com.esprit.controllers.cinemas;
+
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.sentiment.SentimentCoreAnnotations;
+import edu.stanford.nlp.util.CoreMap;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+
 import java.util.Properties;
+
 /**
  * Is designed to analyze text sentiment using Stanford CoreNLP pipeline. It takes a
  * text input and returns a sentiment result as a string. The class configures the
@@ -35,7 +39,7 @@ public class SentimentAnalysisController {
         pipeline.annotate(annotation);
         // Extract sentiment annotations
         StringBuilder sentimentResult = new StringBuilder();
-        for (edu.stanford.nlp.util.CoreMap sentence : annotation.get(CoreAnnotations.SentencesAnnotation.class)) {
+        for (CoreMap sentence : annotation.get(CoreAnnotations.SentencesAnnotation.class)) {
             String sentiment = sentence.get(SentimentCoreAnnotations.SentimentClass.class);
             sentimentResult.append(sentiment).append("\n");
         }

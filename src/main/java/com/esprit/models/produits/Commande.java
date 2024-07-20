@@ -1,7 +1,10 @@
 package com.esprit.models.produits;
+
 import com.esprit.models.users.Client;
 import com.esprit.models.users.User;
+
 import com.itextpdf.text.pdf.qrcode.QRCodeWriter;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -9,6 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 /**
  * The Commande class represents a command made by a client.
  */
@@ -20,11 +24,13 @@ public class Commande {
     private List<CommandeItem> commandeItem = new ArrayList<>();
     private int num_telephone;
     private String adresse;
+
     /**
      * Default constructor for the Commande class.
      */
     public Commande() {
     }
+
     /**
      * Parameterized constructor for the Commande class.
      *
@@ -41,6 +47,7 @@ public class Commande {
         this.num_telephone = num_telephone;
         this.adresse = adresse;
     }
+
     /**
      * Parameterized constructor for the Commande class.
      *
@@ -59,6 +66,7 @@ public class Commande {
         this.num_telephone = num_telephone;
         this.adresse = adresse;
     }
+
     /**
      * Get the ID of the command.
      *
@@ -67,6 +75,7 @@ public class Commande {
     public int getIdCommande() {
         return idCommande;
     }
+
     /**
      * Set the ID of the command.
      *
@@ -75,6 +84,7 @@ public class Commande {
     public void setIdCommande(int idCommande) {
         this.idCommande = idCommande;
     }
+
     /**
      * Get the date of the command.
      *
@@ -83,6 +93,7 @@ public class Commande {
     public Date getDateCommande() {
         return dateCommande;
     }
+
     /**
      * Set the date of the command.
      *
@@ -91,6 +102,7 @@ public class Commande {
     public void setDateCommande(Date dateCommande) {
         this.dateCommande = dateCommande;
     }
+
     /**
      * Get the status of the command.
      *
@@ -99,6 +111,7 @@ public class Commande {
     public String getStatu() {
         return statu;
     }
+
     /**
      * Set the status of the command.
      *
@@ -107,6 +120,7 @@ public class Commande {
     public void setStatu(String statu) {
         this.statu = statu;
     }
+
     /**
      * Get the client associated with the command.
      *
@@ -115,6 +129,7 @@ public class Commande {
     public Client getIdClient() {
         return idClient;
     }
+
     /**
      * Set the client associated with the command.
      *
@@ -123,6 +138,7 @@ public class Commande {
     public void setIdClient(Client idClient) {
         this.idClient = idClient;
     }
+
     /**
      * Get the list of items in the command.
      *
@@ -131,6 +147,7 @@ public class Commande {
     public List<CommandeItem> getCommandeItem() {
         return commandeItem;
     }
+
     /**
      * Set the list of items in the command.
      *
@@ -139,6 +156,7 @@ public class Commande {
     public void setCommandeItem(List<CommandeItem> commandeItem) {
         this.commandeItem = commandeItem;
     }
+
     /**
      * Get the telephone number associated with the command.
      *
@@ -147,6 +165,7 @@ public class Commande {
     public int getNum_telephone() {
         return num_telephone;
     }
+
     /**
      * Set the telephone number associated with the command.
      *
@@ -155,6 +174,7 @@ public class Commande {
     public void setNum_telephone(int num_telephone) {
         this.num_telephone = num_telephone;
     }
+
     /**
      * Get the address associated with the command.
      *
@@ -163,6 +183,7 @@ public class Commande {
     public String getAdresse() {
         return adresse;
     }
+
     /**
      * Set the address associated with the command.
      *
@@ -171,6 +192,7 @@ public class Commande {
     public void setAdresse(String adresse) {
         this.adresse = adresse;
     }
+
     /**
      * Get a string representation of the Commande object.
      *
@@ -178,14 +200,14 @@ public class Commande {
      */
     @Override
     public String toString() {
-        return "Commande{" +
-                "idCommande=" + idCommande +
-                ", dateCommande=" + dateCommande +
-                ", statu='" + statu + '\'' +
-                ", idClient=" + idClient +
-                ", commandeItem=" + commandeItem +
-                ", num_telephone=" + num_telephone +
-                ", adresse='" + adresse + '\'' +
-                '}';
+        return "Commande{"
+                + "idCommande=" + idCommande
+                + ", dateCommande=" + dateCommande
+                + ", statu='" + statu + '\''
+                + ", idClient=" + idClient
+                + ", commandeItem=" + commandeItem
+                + ", num_telephone=" + num_telephone
+                + ", adresse='" + adresse + '\''
+                + '}';
     }
 }

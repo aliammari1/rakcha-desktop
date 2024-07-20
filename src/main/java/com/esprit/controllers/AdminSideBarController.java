@@ -1,12 +1,6 @@
 package com.esprit.controllers;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.esprit.models.users.Admin;
-import com.esprit.services.produits.AvisService;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,6 +11,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Manages the navigation between different views in an application for an

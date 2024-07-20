@@ -120,11 +120,13 @@ public class RatingCinemaService implements IService<RatingCinema> {
 
     public List<Cinema> getTopRatedCinemas() {
         List<Cinema> topRatedCinemas = new ArrayList<>();
-        String req = "SELECT id_cinema, AVG(rate) AS average_rating "
-                + "FROM ratingcinema "
-                + "GROUP BY id_cinema "
-                + "ORDER BY average_rating DESC "
-                + "LIMIT 3"; // Sélectionne les 3 premiers cinémas les mieux notés
+        String req = """
+                SELECT id_cinema, AVG(rate) AS average_rating \
+                FROM ratingcinema \
+                GROUP BY id_cinema \
+                ORDER BY average_rating DESC \
+                LIMIT 3\
+                """; // Sélectionne les 3 premiers cinémas les mieux notés
         try {
             PreparedStatement statement = connection.prepareStatement(req);
             ResultSet resultSet = statement.executeQuery();

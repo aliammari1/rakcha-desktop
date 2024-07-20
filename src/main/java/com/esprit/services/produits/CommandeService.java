@@ -5,6 +5,7 @@ import com.esprit.models.users.Client;
 import com.esprit.services.IService;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.DataSource;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -111,11 +112,13 @@ public class CommandeService implements IService<Commande> {
 
     @Override
     public void update(Commande commande) {
-        String req = "UPDATE commande c"
-                + " JOIN commandeitem ci ON c.idCommande = ci.idCommande "
-                + "JOIN users cl ON c.idClient = cl.id "
-                + "SET c.dateCommande = ?, c.statu = ?, c.num_telephone=? , c.adresse=? "
-                + " WHERE c.idCommande = ? ";
+        String req = """
+                UPDATE commande c\
+                 JOIN commandeitem ci ON c.idCommande = ci.idCommande \
+                JOIN users cl ON c.idClient = cl.id \
+                SET c.dateCommande = ?, c.statu = ?, c.num_telephone=? , c.adresse=? \
+                 WHERE c.idCommande = ? \
+                """;
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setDate(1, (Date) commande.getDateCommande());

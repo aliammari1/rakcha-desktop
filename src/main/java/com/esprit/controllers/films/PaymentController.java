@@ -6,8 +6,8 @@ import com.esprit.models.users.Client;
 import com.esprit.services.cinemas.SeanceService;
 import com.esprit.services.produits.AvisService;
 import com.esprit.utils.PaymentProcessor;
-import com.stripe.exception.StripeException;
 
+import com.stripe.exception.StripeException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -277,8 +277,7 @@ public class PaymentController {
      */
     private boolean check_cvc(int value) {
         String cvc_txt = String.valueOf(value);
-        boolean valid = cvc_txt.length() == 3;
-        return valid;
+        return cvc_txt.length() == 3;
     }
 
     /**

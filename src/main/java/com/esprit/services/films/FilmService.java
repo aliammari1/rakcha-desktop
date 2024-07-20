@@ -80,7 +80,7 @@ public class FilmService implements IService<Film> {
                 JSONObject firstResult = results.getJSONObject(0);
                 String imdbUrl = firstResult.getString("imdb");
                 LOGGER.info("IMDb URL of the first result: " + imdbUrl);
-                return (imdbUrl);
+                return imdbUrl;
             } else {
                 LOGGER.info("No results found.");
             }
@@ -135,7 +135,7 @@ public class FilmService implements IService<Film> {
 
     public List<Film> sort(String p) {
         List<Film> filmArrayList = new ArrayList<>();
-        String req = String.format("SELECT * from film ORDER BY %s", p);
+        String req = "SELECT * from film ORDER BY %s".formatted(p);
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             ResultSet rs = pst.executeQuery();

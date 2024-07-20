@@ -100,7 +100,7 @@ public class CommentaireProduitController implements Initializable {
             LOGGER.info("Badword Detection Result: " + badwordDetection);
             ProduitService produitService = new ProduitService();
             Produit produit = new Produit();
-            if (badwordDetection.equals("1")) {
+            if ("1".equals(badwordDetection)) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Commentaire non valide");
                 alert.setContentText("Votre commentaire contient des gros mots et ne peut pas être publié.");
@@ -134,6 +134,7 @@ public class CommentaireProduitController implements Initializable {
      *                  `loadAcceptedCommentaire()` method to access
      *                  translated strings and other resources.
      */
+    @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadAcceptedCommentaire();
     }
