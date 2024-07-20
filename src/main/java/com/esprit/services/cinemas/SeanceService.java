@@ -26,6 +26,7 @@ public class SeanceService implements IService<Seance> {
     /**
      * @param seance
      */
+    @Override
     public void create(Seance seance) {
         String req = "INSERT into seance(id_film, id_salle, HD, HF, date, id_cinema, prix) values (?, ?, ?, ?, ?, ?, ?);";
         try {
@@ -47,14 +48,17 @@ public class SeanceService implements IService<Seance> {
     /**
      * @param seance
      */
+    @Override
     public void update(Seance seance) {
-        String req = "UPDATE seance " +
-                "JOIN cinema ON seance.id_cinema = cinema.id_cinema " +
-                "JOIN film ON seance.id_film = film.id " +
-                "JOIN salle ON seance.id_salle = salle.id_salle " +
-                "SET seance.id_film = ?, seance.id_salle = ?, seance.HD = ?, seance.HF = ?, seance.date = ?, " +
-                "seance.id_cinema = ?, seance.prix = ? " +
-                "WHERE seance.id_seance = ?;";
+        String req = """
+                UPDATE seance \
+                JOIN cinema ON seance.id_cinema = cinema.id_cinema \
+                JOIN film ON seance.id_film = film.id \
+                JOIN salle ON seance.id_salle = salle.id_salle \
+                SET seance.id_film = ?, seance.id_salle = ?, seance.HD = ?, seance.HF = ?, seance.date = ?, \
+                seance.id_cinema = ?, seance.prix = ? \
+                WHERE seance.id_seance = ?;\
+                """;
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(1, seance.getFilmcinema().getId_film().getId());
@@ -72,6 +76,7 @@ public class SeanceService implements IService<Seance> {
         }
     }
 
+    @Override
     public void delete(Seance seance) {
         String req = "DELETE from seance where id_seance= ?;";
         try {
@@ -107,13 +112,16 @@ public class SeanceService implements IService<Seance> {
         return seances;
     }
 
+    @Override
     public List<Seance> read() {
         List<Seance> seances = new ArrayList<>();
-        String req = "SELECT seance.*, cinema.*, film.*, salle.* " +
-                "FROM seance " +
-                "JOIN cinema ON seance.id_cinema = cinema.id_cinema " +
-                "JOIN film ON seance.id_film = film.id " +
-                "JOIN salle ON seance.id_salle = salle.id_salle";
+        String req = """
+                SELECT seance.*, cinema.*, film.*, salle.* \
+                FROM seance \
+                JOIN cinema ON seance.id_cinema = cinema.id_cinema \
+                JOIN film ON seance.id_film = film.id \
+                JOIN salle ON seance.id_salle = salle.id_salle\
+                """;
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             ResultSet rs = pst.executeQuery();
@@ -157,7 +165,7 @@ public class SeanceService implements IService<Seance> {
             // Parcourir les résultats de la requête et créer des objets Seance
             while (rs.next()) {
                 LocalDate seanceDate = rs.getDate("date").toLocalDate(); // Convertir java.sql.Date en
-                                                                         // java.time.LocalDate
+                // java.time.LocalDate
                 List<Seance> seancesForDate = seancesByDate.getOrDefault(seanceDate, new ArrayList<>());
                 seancesForDate.add(new Seance(rs.getInt("id_seance"), ss.getSalle(rs.getInt("id_salle")),
                         rs.getTime("HD"), rs.getTime("HF"), seanceDate, rs.getInt("prix"),

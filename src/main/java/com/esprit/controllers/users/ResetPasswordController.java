@@ -1,8 +1,5 @@
 package com.esprit.controllers.users;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.esprit.services.produits.AvisService;
 
 import javafx.event.ActionEvent;
@@ -13,6 +10,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ResetPasswordController {
     private static final Logger LOGGER = Logger.getLogger(ResetPasswordController.class.getName());

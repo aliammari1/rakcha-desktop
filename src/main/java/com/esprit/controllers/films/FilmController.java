@@ -504,8 +504,9 @@ public class FilmController {
                                         textField.setTooltip(tooltip);
                                         textField.getTooltip().show(window, bounds.getMinX(), bounds.getMinY() - 30);
                                     } else {
-                                        if (textField.getTooltip() != null)
+                                        if (textField.getTooltip() != null) {
                                             textField.getTooltip().hide();
+                                        }
                                     }
                                 }
                             });
@@ -715,8 +716,9 @@ public class FilmController {
                                         textField.setTooltip(tooltip);
                                         textField.getTooltip().show(window, bounds.getMinX(), bounds.getMinY() - 30);
                                     } else {
-                                        if (textField.getTooltip() != null)
+                                        if (textField.getTooltip() != null) {
                                             textField.getTooltip().hide();
+                                        }
                                     }
                                 }
                             });
@@ -801,8 +803,9 @@ public class FilmController {
                                         textField.setTooltip(tooltip);
                                         textField.getTooltip().show(window, bounds.getMinX(), bounds.getMinY() - 30);
                                     } else {
-                                        if (textField.getTooltip() != null)
+                                        if (textField.getTooltip() != null) {
                                             textField.getTooltip().hide();
+                                        }
                                     }
                                 }
                             });

@@ -1,6 +1,7 @@
 package com.esprit.utils;
 
 import com.esprit.services.produits.AvisService;
+
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
@@ -27,5 +28,8 @@ public class Paymentuser {
         Charge charge = Charge.create(params);
         LOGGER.info(charge.toString());
         return charge.getReceiptUrl();
+    }
+
+    private Paymentuser() {
     }
 }

@@ -17,7 +17,6 @@ import javafx.geometry.Bounds;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -249,7 +248,7 @@ public class AdminDashboardController {
             String role = roleComboBox.getValue();
             User user = null;
             URI uri = null;
-            if (role.equals("admin")) {
+            if ("admin".equals(role)) {
                 String fullPath = photoDeProfilImageView.getImage().getUrl();
                 String requiredPath = fullPath.substring(fullPath.indexOf("/img/users/"));
                 uri = new URI(requiredPath);
@@ -260,8 +259,8 @@ public class AdminDashboardController {
                 String email = emailTextField.getText();
                 LocalDate dateDeNaissance = dateDeNaissanceDatePicker.getValue();
                 // Perform input validation
-                if (firstName.isEmpty() || lastName.isEmpty() || phoneNumber.isEmpty() || password.isEmpty() ||
-                        role.isEmpty() || email.isEmpty() || dateDeNaissance == null) {
+                if (firstName.isEmpty() || lastName.isEmpty() || phoneNumber.isEmpty() || password.isEmpty()
+                        || role.isEmpty() || email.isEmpty() || dateDeNaissance == null) {
                     Alert alert = new Alert(Alert.AlertType.ERROR, "Please fill in all the required fields",
                             ButtonType.CLOSE);
                     alert.show();
@@ -808,9 +807,9 @@ public class AdminDashboardController {
     }
 
     private void setupCellOnEditCommit() {
-        firstNameTableColumn.setOnEditCommit(new EventHandler<CellEditEvent<User, String>>() {
+        firstNameTableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
             @Override
-            public void handle(CellEditEvent<User, String> event) {
+            public void handle(TableColumn.CellEditEvent<User, String> event) {
                 try {
                     event.getTableView().getItems().get(
                             event.getTablePosition().getRow()).setFirstName(event.getNewValue());
@@ -821,9 +820,9 @@ public class AdminDashboardController {
                 }
             }
         });
-        lastNameTableColumn.setOnEditCommit(new EventHandler<CellEditEvent<User, String>>() {
+        lastNameTableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
             @Override
-            public void handle(CellEditEvent<User, String> event) {
+            public void handle(TableColumn.CellEditEvent<User, String> event) {
                 try {
                     event.getTableView().getItems().get(
                             event.getTablePosition().getRow()).setLastName(event.getNewValue());
@@ -836,7 +835,7 @@ public class AdminDashboardController {
         });
         numTelTableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<User, Integer>>() {
             @Override
-            public void handle(CellEditEvent<User, Integer> event) {
+            public void handle(TableColumn.CellEditEvent<User, Integer> event) {
                 try {
                     event.getTableView().getItems().get(
                             event.getTablePosition().getRow()).setPhoneNumber(event.getNewValue());
@@ -847,9 +846,9 @@ public class AdminDashboardController {
                 }
             }
         });
-        passwordTableColumn.setOnEditStart(new EventHandler<CellEditEvent<User, String>>() {
+        passwordTableColumn.setOnEditStart(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
             @Override
-            public void handle(CellEditEvent<User, String> event) {
+            public void handle(TableColumn.CellEditEvent<User, String> event) {
                 try {
                     event.getTableView().getItems().get(
                             event.getTablePosition().getRow()).setPassword(event.getNewValue());
@@ -860,9 +859,9 @@ public class AdminDashboardController {
                 }
             }
         });
-        roleTableColumn.setOnEditStart(new EventHandler<CellEditEvent<User, String>>() {
+        roleTableColumn.setOnEditStart(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
             @Override
-            public void handle(CellEditEvent<User, String> event) {
+            public void handle(TableColumn.CellEditEvent<User, String> event) {
                 try {
                     event.getTableView().getItems().get(
                             event.getTablePosition().getRow()).setRole(event.getNewValue());
@@ -873,9 +872,9 @@ public class AdminDashboardController {
                 }
             }
         });
-        adresseTableColumn.setOnEditStart(new EventHandler<CellEditEvent<User, String>>() {
+        adresseTableColumn.setOnEditStart(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
             @Override
-            public void handle(CellEditEvent<User, String> event) {
+            public void handle(TableColumn.CellEditEvent<User, String> event) {
                 try {
                     event.getTableView().getItems().get(
                             event.getTablePosition().getRow()).setAddress(event.getNewValue());
@@ -886,9 +885,9 @@ public class AdminDashboardController {
                 }
             }
         });
-        dateDeNaissanceTableColumn.setOnEditStart(new EventHandler<CellEditEvent<User, DatePicker>>() {
+        dateDeNaissanceTableColumn.setOnEditStart(new EventHandler<TableColumn.CellEditEvent<User, DatePicker>>() {
             @Override
-            public void handle(CellEditEvent<User, DatePicker> event) {
+            public void handle(TableColumn.CellEditEvent<User, DatePicker> event) {
                 event.getTableView().getItems().get(
                         event.getTablePosition().getRow())
                         .setBirthDate(Date.valueOf(event.getNewValue().getValue()));
@@ -896,9 +895,9 @@ public class AdminDashboardController {
                         event.getTablePosition().getRow()));
             }
         });
-        emailTableColumn.setOnEditStart(new EventHandler<CellEditEvent<User, String>>() {
+        emailTableColumn.setOnEditStart(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
             @Override
-            public void handle(CellEditEvent<User, String> event) {
+            public void handle(TableColumn.CellEditEvent<User, String> event) {
                 event.getTableView().getItems().get(
                         event.getTablePosition().getRow()).setEmail(event.getNewValue());
                 update(event.getTableView().getItems().get(

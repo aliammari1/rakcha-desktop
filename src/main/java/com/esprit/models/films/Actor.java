@@ -1,4 +1,5 @@
 package com.esprit.models.films;
+
 /**
  * The Actor class represents an actor in a film.
  */
@@ -8,6 +9,7 @@ public class Actor {
     private String nom;
     private String image;
     private int numberOfAppearances;
+
     /**
      * Constructs an Actor object with the specified id, name, image, and biography.
      *
@@ -22,6 +24,7 @@ public class Actor {
         this.image = image;
         this.biographie = biographie;
     }
+
     /**
      * Constructs an Actor object with the specified name, image, and biography.
      *
@@ -34,6 +37,7 @@ public class Actor {
         this.image = image;
         this.biographie = biographie;
     }
+
     /**
      * Constructs an Actor object with the specified id.
      *
@@ -45,6 +49,7 @@ public class Actor {
         this.image = null;
         this.biographie = null;
     }
+
     /**
      * Constructs an Actor object with the specified id, name, image, biography, and number of appearances.
      *
@@ -61,6 +66,7 @@ public class Actor {
         this.image = img;
         this.numberOfAppearances = numberOfAppearances;
     }
+
     /**
      * Returns the number of appearances of the actor.
      *
@@ -69,6 +75,7 @@ public class Actor {
     public int getNumberOfAppearances() {
         return numberOfAppearances;
     }
+
     /**
      * Sets the number of appearances of the actor.
      *
@@ -77,6 +84,7 @@ public class Actor {
     public void setNumberOfAppearances(int numberOfAppearances) {
         this.numberOfAppearances = numberOfAppearances;
     }
+
     /**
      * Returns the id of the actor.
      *
@@ -85,6 +93,7 @@ public class Actor {
     public int getId() {
         return id;
     }
+
     /**
      * Sets the id of the actor.
      *
@@ -93,6 +102,7 @@ public class Actor {
     public void setId(int id) {
         this.id = id;
     }
+
     /**
      * Returns the name of the actor.
      *
@@ -101,6 +111,7 @@ public class Actor {
     public String getNom() {
         return nom;
     }
+
     /**
      * Sets the name of the actor.
      *
@@ -109,6 +120,7 @@ public class Actor {
     public void setNom(String nom) {
         this.nom = nom;
     }
+
     /**
      * Returns the image URL of the actor.
      *
@@ -117,6 +129,7 @@ public class Actor {
     public String getImage() {
         return image;
     }
+
     /**
      * Sets the image URL of the actor.
      *
@@ -125,6 +138,7 @@ public class Actor {
     public void setImage(String image) {
         this.image = image;
     }
+
     /**
      * Returns the biography of the actor.
      *
@@ -133,6 +147,7 @@ public class Actor {
     public String getBiographie() {
         return biographie;
     }
+
     /**
      * Sets the biography of the actor.
      *
@@ -141,6 +156,7 @@ public class Actor {
     public void setBiographie(String biographie) {
         this.biographie = biographie;
     }
+
     /**
      * Returns a string representation of the Actor object.
      *
@@ -148,11 +164,11 @@ public class Actor {
      */
     @Override
     public String toString() {
-        return "Actor{" +
-                "id=" + id +
-                ", nom='" + nom + '\'' +
-                ", image=" + image +
-                ", biographie='" + biographie + '\'' +
-                '}';
+        return "Actor{"
+                + "id=" + id
+                + ", nom='" + nom + '\''
+                + ", image=" + image
+                + ", biographie='" + biographie + '\''
+                + '}';
     }
 }

@@ -3,6 +3,7 @@ package com.esprit.services.produits;
 import com.esprit.models.produits.Produit;
 import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -77,7 +78,7 @@ public class ProduitService implements IService<Produit> {
         if (!validColumns.contains(sortBy)) {
             throw new IllegalArgumentException("Invalid sort parameter");
         }
-        String req = String.format("SELECT *, id_categorieProduit FROM produit ORDER BY %s", sortBy);
+        String req = "SELECT *, id_categorieProduit FROM produit ORDER BY %s".formatted(sortBy);
         try (PreparedStatement pst = connection.prepareStatement(req)) {
             ResultSet rs = pst.executeQuery();
             CategorieService cs = new CategorieService();
@@ -99,11 +100,12 @@ public class ProduitService implements IService<Produit> {
 
     @Override
     public void update(Produit produit) {
-        String req = "UPDATE produit p " +
-                "INNER JOIN categorie_produit c ON p.id_categorieProduit = c.id_categorie " +
-                "SET p.id_categorieProduit = ?, p.nom = ?, p.prix = ?, p.description = ?, p.image = ?, p.quantiteP = ? "
-                +
-                "WHERE p.id_produit = ?;";
+        String req = """
+                UPDATE produit p \
+                INNER JOIN categorie_produit c ON p.id_categorieProduit = c.id_categorie \
+                SET p.id_categorieProduit = ?, p.nom = ?, p.prix = ?, p.description = ?, p.image = ?, p.quantiteP = ? \
+                WHERE p.id_produit = ?;\
+                """;
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(7, produit.getId_produit());
@@ -185,7 +187,15 @@ public class ProduitService implements IService<Produit> {
 
     public List<Produit> getProduitsOrderByQuantityAndStatus() {
         List<Produit> produits = new ArrayList<>();
-        String req = "SELECT p.*, ci.*, c.*, SUM(ci.quantity) AS total_quantity FROM produit p JOIN commandeitem ci ON p.id_produit = ci.id_produit JOIN commande c ON ci.idCommande = c.idCommande WHERE c.statu = 'payee' GROUP BY p.id_produit ORDER BY total_quantity DESC;";
+        String req = """
+                SELECT p.id_produit, p.nom, p.prix, p.image, p.description, p.id_categorieProduit, SUM(ci.quantity) AS total_quantity \
+                FROM produit p \
+                JOIN commandeitem ci ON p.id_produit = ci.id_produit \
+                JOIN commande c ON ci.idCommande = c.idCommande \
+                WHERE c.statu = 'payee' \
+                GROUP BY p.id_produit, p.nom, p.prix, p.image, p.description, p.id_categorieProduit \
+                ORDER BY total_quantity DESC;\
+                """;
         try (PreparedStatement preparedStatement = connection.prepareStatement(req);
                 ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
@@ -197,7 +207,7 @@ public class ProduitService implements IService<Produit> {
                         resultSet.getString("image"),
                         resultSet.getString("description"),
                         cs.getCategorie(resultSet.getInt("id_categorieProduit")),
-                        resultSet.getInt("quantiteP"));
+                        resultSet.getInt("total_quantity")); // Assuming quantiteP should be total_quantity
                 produits.add(produit);
             }
         } catch (SQLException e) {

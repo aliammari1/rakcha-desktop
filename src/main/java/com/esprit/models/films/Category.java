@@ -1,4 +1,5 @@
 package com.esprit.models.films;
+
 /**
  * Represents a category of films.
  */
@@ -6,6 +7,7 @@ public class Category {
     private String nom;
     private int id;
     private String description;
+
     /**
      * Constructs a Category object with the given name and description.
      *
@@ -16,6 +18,7 @@ public class Category {
         this.nom = nom;
         this.description = description;
     }
+
     /**
      * Constructs a Category object with the given id, name, and description.
      *
@@ -28,6 +31,7 @@ public class Category {
         this.nom = nom;
         this.description = description;
     }
+
     /**
      * Returns the name of the category.
      *
@@ -36,6 +40,7 @@ public class Category {
     public String getNom() {
         return nom;
     }
+
     /**
      * Sets the name of the category.
      *
@@ -44,6 +49,7 @@ public class Category {
     public void setNom(String nom) {
         this.nom = nom;
     }
+
     /**
      * Returns the id of the category.
      *
@@ -52,6 +58,7 @@ public class Category {
     public int getId() {
         return id;
     }
+
     /**
      * Sets the id of the category.
      *
@@ -60,6 +67,7 @@ public class Category {
     public void setId(int id) {
         this.id = id;
     }
+
     /**
      * Returns the description of the category.
      *
@@ -68,6 +76,7 @@ public class Category {
     public String getDescription() {
         return description;
     }
+
     /**
      * Sets the description of the category.
      *
@@ -76,6 +85,7 @@ public class Category {
     public void setDescription(String description) {
         this.description = description;
     }
+
     /**
      * Returns a string representation of the Category object.
      *
@@ -83,10 +93,10 @@ public class Category {
      */
     @Override
     public String toString() {
-        return "Category{" +
-                "nom='" + nom + '\'' +
-                ", id=" + id +
-                ", description='" + description + '\'' +
-                '}';
+        return "Category{"
+                + "nom='" + nom + '\''
+                + ", id=" + id
+                + ", description='" + description + '\''
+                + '}';
     }
 }

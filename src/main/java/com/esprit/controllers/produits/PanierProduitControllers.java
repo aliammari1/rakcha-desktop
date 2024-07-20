@@ -6,11 +6,12 @@ import com.esprit.services.produits.AvisService;
 import com.esprit.services.produits.CommandeItemService;
 import com.esprit.services.produits.PanierService;
 import com.esprit.services.produits.ProduitService;
+
+import org.kordamp.ikonli.javafx.FontIcon;
+
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.application.Platform;
-import org.kordamp.ikonli.javafx.FontIcon;
-import javafx.scene.image.Image;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,6 +20,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -26,17 +28,17 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.Window;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.*;
-import javafx.scene.text.FontWeight;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.Window;
-import org.kordamp.ikonli.javafx.FontIcon;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -49,7 +51,7 @@ public class PanierProduitControllers implements Initializable {
     private FlowPane prixtotaleFlowPane;
     Commande commande = new Commande();
     // Déclarez une structure de données pour stocker les VBox associés aux produits
-    private Map<Integer, VBox> produitVBoxMap = new HashMap<>();
+    private final Map<Integer, VBox> produitVBoxMap = new HashMap<>();
     // Mettez à jour le prix total dans SharedData
     // SharedData sharedData = new SharedData();
     PanierService panierService = new PanierService();
@@ -276,14 +278,16 @@ public class PanierProduitControllers implements Initializable {
                 }
             }
         });
-        card.setStyle("-fx-background-color:#F6F2F2;\n"
-                + " -fx-text-fill: #FFFFFF;\n"
-                + "    -fx-font-size: 12px;\n"
-                + "    -fx-font-weight: bold;\n"
-                + "    -fx-padding: 10px;\n"
-                + "    -fx-border-color:  #ae2d3c;/* Couleur de la bordure */\n"
-                + "    -fx-border-width: 2px; /* Largeur de la bordure */\n"
-                + "    -fx-border-radius: 5px; /* Rayon de la bordure pour arrondir les coins */");
+        card.setStyle("""
+                -fx-background-color:#F6F2F2;
+                 -fx-text-fill: #FFFFFF;
+                    -fx-font-size: 12px;
+                    -fx-font-weight: bold;
+                    -fx-padding: 10px;
+                    -fx-border-color:  #ae2d3c;/* Couleur de la bordure */
+                    -fx-border-width: 2px; /* Largeur de la bordure */
+                    -fx-border-radius: 5px; /* Rayon de la bordure pour arrondir les coins */\
+                """);
         // Ajouter tous les éléments au VBox
         card.getChildren().addAll(imageView, nameLabel, priceLabel, decreaseIcon, quantityTextField, increaseIcon,
                 sommeTotaleLabel, checkBox, deleteIcon);

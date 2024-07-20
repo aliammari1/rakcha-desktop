@@ -1,5 +1,4 @@
 package com.esprit.controllers.users;
-import java.security.SecureRandom;
 
 import com.esprit.utils.UserMail;
 
@@ -8,6 +7,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+
+import java.security.SecureRandom;
 
 public class MailAdminController {
     @FXML
@@ -18,6 +19,7 @@ public class MailAdminController {
     private Label passwordErrorLabel;
     @FXML
     private Button sendButton;
+
     /** 
      * @param event
      */

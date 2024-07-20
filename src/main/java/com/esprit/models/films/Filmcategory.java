@@ -1,10 +1,12 @@
 package com.esprit.models.films;
+
 /**
  * Represents a film category.
  */
 public class Filmcategory {
     private Category categoryId;
     private Film filmId;
+
     /**
      * Constructs a new Filmcategory object with the specified category and film.
      *
@@ -15,6 +17,7 @@ public class Filmcategory {
         this.categoryId = categoryId;
         this.filmId = filmId;
     }
+
     /**
      * Gets the category of the film.
      *
@@ -23,6 +26,7 @@ public class Filmcategory {
     public Category getCategoryId() {
         return categoryId;
     }
+
     /**
      * Sets the category of the film.
      *
@@ -31,6 +35,7 @@ public class Filmcategory {
     public void setCategoryId(Category categoryId) {
         this.categoryId = categoryId;
     }
+
     /**
      * Gets the film.
      *
@@ -39,6 +44,7 @@ public class Filmcategory {
     public Film getFilmId() {
         return filmId;
     }
+
     /**
      * Sets the film.
      *
@@ -47,6 +53,7 @@ public class Filmcategory {
     public void setFilmId(Film filmId) {
         this.filmId = filmId;
     }
+
     /**
      * Returns a string representation of the Filmcategory object.
      *
@@ -54,9 +61,9 @@ public class Filmcategory {
      */
     @Override
     public String toString() {
-        return "Filmcategory{" +
-                "categoryId=" + categoryId +
-                ", filmId=" + filmId +
-                '}';
+        return "Filmcategory{"
+                + "categoryId=" + categoryId
+                + ", filmId=" + filmId
+                + '}';
     }
 }

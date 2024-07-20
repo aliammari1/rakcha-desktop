@@ -1,6 +1,8 @@
 package com.esprit.controllers.cinemas;
+
 import com.esprit.models.cinemas.Cinema;
 import com.esprit.services.cinemas.CinemaService;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,10 +15,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
 /**
  * Is used to modify the details of a cinema object in a GUI application using JavaFX.
  * It has fields for entering cinema name, address, and logo, and methods for updating
@@ -32,6 +36,7 @@ public class ModifierCinemaController implements Initializable {
     private ImageView tfLogo;
     private Cinema cinema;
     private File selectedFile;
+
     /**
      * Is called when an instance of a class is created and initializes its resources by
      * performing no-op actions.
@@ -45,6 +50,7 @@ public class ModifierCinemaController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
     }
+
     /**
      * Sets text fields and displays an image based on input cinema object's properties:
      * nom, adresse, logo.
@@ -64,6 +70,7 @@ public class ModifierCinemaController implements Initializable {
         Image image = new Image(logo);
         tfLogo.setImage(image);
     }
+
     /**
      * Allows users to edit the details of a cinema, including its name and address. It
      * updates the cinema's information in the database and displays an alert message
@@ -110,6 +117,7 @@ public class ModifierCinemaController implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
+
     /**
      * Is used to select an image file from a file chooser and set it as the logo for the
      * FXML stage.
@@ -129,6 +137,7 @@ public class ModifierCinemaController implements Initializable {
             tfLogo.setImage(selectedImage);
         }
     }
+
     /**
      * Creates an Alert dialog with an information message.
      * 

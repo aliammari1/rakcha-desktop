@@ -1,4 +1,12 @@
 package com.esprit.controllers.produits;
+
+import com.esprit.models.produits.Categorie_Produit;
+import com.esprit.models.produits.Commande;
+import com.esprit.models.produits.CommandeItem;
+import com.esprit.services.produits.CategorieService;
+import com.esprit.services.produits.CommandeItemService;
+import com.esprit.services.produits.CommandeService;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -8,15 +16,11 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.XYChart;
+
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import com.esprit.models.produits.Commande;
-import com.esprit.models.produits.CommandeItem;
-import com.esprit.models.produits.Categorie_Produit;
-import com.esprit.services.produits.CommandeService;
-import com.esprit.services.produits.CommandeItemService;
-import com.esprit.services.produits.CategorieService;
+
 /**
  * Is used to analyze the number of orders placed by date and categorize them based
  * on the products purchased. It updates two graphical representations: TauxCommande
@@ -34,6 +38,7 @@ public class AnalyseCommande implements Initializable {
     private CategoryAxis xAxis;
     @FXML
     private CategoryAxis xCommandeAxis;
+
     /**
      * Is responsible for calling the initialization logic, which in turn updates the graphs.
      * 
@@ -48,6 +53,7 @@ public class AnalyseCommande implements Initializable {
         // Appeler la logique d'initialisation
         updateGraphs();
     }
+
     /**
      * Updates a bar graph and a stacked bar chart with the number of orders, payments,
      * and categories purchased by date. It retrieves data from a database and calculates

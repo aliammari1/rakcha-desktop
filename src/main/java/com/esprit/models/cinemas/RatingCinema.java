@@ -1,5 +1,7 @@
 package com.esprit.models.cinemas;
+
 import com.esprit.models.users.Client;
+
 /**
  * Represents a rating for a cinema given by a user.
  */
@@ -7,6 +9,7 @@ public class RatingCinema {
     public Cinema id_cinema;
     public Client id_user;
     public int rate;
+
     /**
      * Constructs a new RatingCinema object with the specified cinema, user, and rating.
      *
@@ -19,6 +22,7 @@ public class RatingCinema {
         this.id_user = id_user;
         this.rate = rate;
     }
+
     /**
      * Gets the cinema being rated.
      *
@@ -27,6 +31,7 @@ public class RatingCinema {
     public Cinema getId_cinema() {
         return id_cinema;
     }
+
     /**
      * Sets the cinema being rated.
      *
@@ -35,6 +40,7 @@ public class RatingCinema {
     public void setId_cinema(Cinema id_cinema) {
         this.id_cinema = id_cinema;
     }
+
     /**
      * Gets the user who is giving the rating.
      *
@@ -43,6 +49,7 @@ public class RatingCinema {
     public Client getId_user() {
         return id_user;
     }
+
     /**
      * Sets the user who is giving the rating.
      *
@@ -51,6 +58,7 @@ public class RatingCinema {
     public void setId_user(Client id_user) {
         this.id_user = id_user;
     }
+
     /**
      * Gets the rating given by the user.
      *
@@ -59,6 +67,7 @@ public class RatingCinema {
     public int getRate() {
         return rate;
     }
+
     /**
      * Sets the rating given by the user.
      *
@@ -67,6 +76,7 @@ public class RatingCinema {
     public void setRate(int rate) {
         this.rate = rate;
     }
+
     /**
      * Returns a string representation of the RatingCinema object.
      *
@@ -74,10 +84,10 @@ public class RatingCinema {
      */
     @Override
     public String toString() {
-        return "RatingCinema{" +
-                "id_cinema=" + id_cinema +
-                ", id_user=" + id_user +
-                ", rate=" + rate +
-                '}';
+        return "RatingCinema{"
+                + "id_cinema=" + id_cinema
+                + ", id_user=" + id_user
+                + ", rate=" + rate
+                + '}';
     }
 }

@@ -39,10 +39,10 @@ import javafx.scene.text.Text;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
-
-import org.controlsfx.control.Rating;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import org.controlsfx.control.Rating;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -218,7 +218,7 @@ public class DashboardClientController {
         CinemaService cinemaService = new CinemaService();
         List<Cinema> cinemas = cinemaService.read();
         List<Cinema> acceptedCinemasList = cinemas.stream()
-                .filter(cinema -> cinema.getStatut().equals("Accepted"))
+                .filter(cinema -> "Accepted".equals(cinema.getStatut()))
                 .collect(Collectors.toList());
         if (acceptedCinemasList.isEmpty()) {
             showAlert("Aucun cinéma accepté n'est disponible.");
@@ -552,7 +552,7 @@ public class DashboardClientController {
         dialog.showAndWait();
     }
 
-    private List<VBox> seancesVBoxList = new ArrayList<>(); // Liste pour stocker les conteneurs de séances
+    private final List<VBox> seancesVBoxList = new ArrayList<>(); // Liste pour stocker les conteneurs de séances
 
     /**
      * Displays a planning page for a cinema, consisting of 7 days of the week, each
@@ -571,7 +571,7 @@ public class DashboardClientController {
      *               week in a tile
      *               format (created and added to `planningContent`).
      */
-    public void showPlanning(Cinema cinema) {
+public void showPlanning(Cinema cinema) {
         listCinemaClient.setVisible(false);
         PlanningPane.setVisible(true);
         VBox planningContent = new VBox();
@@ -856,8 +856,7 @@ public class DashboardClientController {
      */
     private List<Cinema> getAllCinemas() {
         CinemaService cinemaService = new CinemaService();
-        List<Cinema> cinemas = cinemaService.read();
-        return cinemas;
+        return cinemaService.read();
     }
 
     /**

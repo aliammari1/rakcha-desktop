@@ -1,5 +1,7 @@
 package com.esprit.models.produits;
+
 import java.util.Objects;
+
 /**
  * Represents an item in a command.
  */
@@ -8,11 +10,13 @@ public class CommandeItem {
     private int quantity;
     private Produit produit;
     private Commande commande;
+
     /**
      * Default constructor.
      */
     public CommandeItem() {
     }
+
     /**
      * Parameterized constructor.
      * 
@@ -27,6 +31,7 @@ public class CommandeItem {
         this.produit = produit;
         this.commande = commande;
     }
+
     /**
      * Parameterized constructor.
      * 
@@ -39,6 +44,7 @@ public class CommandeItem {
         this.produit = produit;
         this.commande = commande;
     }
+
     /**
      * Get the ID of the command item.
      * 
@@ -47,6 +53,7 @@ public class CommandeItem {
     public int getIdCommandeItem() {
         return idCommandeItem;
     }
+
     /**
      * Set the ID of the command item.
      * 
@@ -55,6 +62,7 @@ public class CommandeItem {
     public void setIdCommandeItem(int idCommandeItem) {
         this.idCommandeItem = idCommandeItem;
     }
+
     /**
      * Get the quantity of the item.
      * 
@@ -63,6 +71,7 @@ public class CommandeItem {
     public int getQuantity() {
         return quantity;
     }
+
     /**
      * Set the quantity of the item.
      * 
@@ -71,6 +80,7 @@ public class CommandeItem {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
     /**
      * Get the product associated with the item.
      * 
@@ -79,6 +89,7 @@ public class CommandeItem {
     public Produit getProduit() {
         return produit;
     }
+
     /**
      * Set the product associated with the item.
      * 
@@ -87,6 +98,7 @@ public class CommandeItem {
     public void setProduit(Produit produit) {
         this.produit = produit;
     }
+
     /**
      * Get the command associated with the item.
      * 
@@ -95,6 +107,7 @@ public class CommandeItem {
     public Commande getCommande() {
         return commande;
     }
+
     /**
      * Set the command associated with the item.
      * 
@@ -103,6 +116,7 @@ public class CommandeItem {
     public void setCommande(Commande commande) {
         this.commande = commande;
     }
+
     /**
      * Returns a string representation of the CommandeItem object.
      * 
@@ -110,11 +124,11 @@ public class CommandeItem {
      */
     @Override
     public String toString() {
-        return "CommandeItem{" +
-                "idCommandeItem=" + idCommandeItem +
-                ", quantity=" + quantity +
-                ", produit=" + produit +
-                ", commande=" + commande +
-                '}';
+        return "CommandeItem{"
+                + "idCommandeItem=" + idCommandeItem
+                + ", quantity=" + quantity
+                + ", produit=" + produit
+                + ", commande=" + commande
+                + '}';
     }
 }

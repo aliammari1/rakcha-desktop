@@ -164,9 +164,9 @@ public class ListFavorisController implements Initializable {
                     Label nameLabel = new Label("Name: " + item.getNom());
                     nameLabel.setStyle(
                             "-fx-font-family: 'Helvetica'; -fx-font-size: 18.0px; -fx-font-weight: bold; -fx-text-fill: #333333;"); // Couleur
-                                                                                                                                    // de
-                                                                                                                                    // texte
-                                                                                                                                    // sombre
+                    // de
+                    // texte
+                    // sombre
                     // Label summaryLabel = new Label("Summary: " + item.getResume());
                     // Label directorLabel = new Label("Director: " + item.getDirecteur());
                     // Label countryLabel = new Label("Country: " + item.getPays());
@@ -177,11 +177,11 @@ public class ListFavorisController implements Initializable {
                     Label likesLabel = new Label("Likes: " + item.getNbLikes());
                     likesLabel.setStyle(
                             "-fx-font-family: 'Helvetica'; -fx-font-size: 14.0px; -fx-font-weight: normal; -fx-text-fill: #666666;"); // Couleur
-                                                                                                                                      // de
-                                                                                                                                      // texte
-                                                                                                                                      // sombre
-                                                                                                                                      // plus
-                                                                                                                                      // claire
+                    // de
+                    // texte
+                    // sombre
+                    // plus
+                    // claire
                     // Ajoutez d'autres composants selon vos besoins
                     // Positionnez les composants dans l'AnchorPane
                     AnchorPane.setTopAnchor(imageView, 10.0);
@@ -350,22 +350,24 @@ public class ListFavorisController implements Initializable {
                     iconImageViewWatch.setFitWidth(10.0);
                     iconImageViewWatch.setFitHeight(10.0);
                     Button watchButton = new Button("Watch", iconImageViewWatch);
-                    watchButton.setStyle("-fx-background-color: #ae2d3c; " +
-                            "-fx-background-radius: 8px; " +
-                            "-fx-text-fill: #FCE19A; " +
-                            "-fx-font-size: 16px; " +
-                            "-fx-font-family: 'Arial Rounded MT Bold'; " +
-                            "-fx-cursor: hand;"); // Set the layout constraints for the Watch Button in the AnchorPane
+                    watchButton.setStyle("""
+                            -fx-background-color: #ae2d3c; \
+                            -fx-background-radius: 8px; \
+                            -fx-text-fill: #FCE19A; \
+                            -fx-font-size: 16px; \
+                            -fx-font-family: 'Arial Rounded MT Bold'; \
+                            -fx-cursor: hand;\
+                            """); // Set the layout constraints for the Watch Button in the AnchorPane
                     AnchorPane.setTopAnchor(watchButton, 120.0);
                     AnchorPane.setLeftAnchor(watchButton, 180.0);
                     Label dislikesLabel = new Label("DisLikes: " + item.getNbDislikes());
                     dislikesLabel.setStyle(
                             "-fx-font-family: 'Helvetica'; -fx-font-size: 14.0px; -fx-font-weight: normal; -fx-text-fill: #666666;"); // Couleur
-                                                                                                                                      // de
-                                                                                                                                      // texte
-                                                                                                                                      // sombre
-                                                                                                                                      // plus
-                                                                                                                                      // claire
+                    // de
+                    // texte
+                    // sombre
+                    // plus
+                    // claire
                     AnchorPane.setTopAnchor(dislikesLabel, 80.0);
                     AnchorPane.setLeftAnchor(dislikesLabel, 180.0);
                     // Ajoutez les composants à l'AnchorPane

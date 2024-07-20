@@ -1,8 +1,11 @@
 package com.esprit.models.cinemas;
+
 import com.esprit.models.films.Filmcinema;
+
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
+
 /**
  * Represents a movie session in a cinema.
  */
@@ -14,6 +17,7 @@ public class Seance {
     private Time HF;
     private Date date;
     private double prix;
+
     /**
      * Constructs a Seance object with the specified parameters.
      *
@@ -34,6 +38,7 @@ public class Seance {
         this.date = date;
         this.prix = prix;
     }
+
     /**
      * Constructs a Seance object with the specified parameters.
      *
@@ -52,6 +57,7 @@ public class Seance {
         this.date = date;
         this.prix = prix;
     }
+
     /**
      * Constructs a Seance object with the specified parameters.
      *
@@ -72,6 +78,7 @@ public class Seance {
         this.date = Date.valueOf(date);
         this.prix = prix;
     }
+
     /**
      * Returns the filmcinema associated with the seance.
      *
@@ -80,6 +87,7 @@ public class Seance {
     public Filmcinema getFilmcinema() {
         return filmcinema;
     }
+
     /**
      * Sets the filmcinema associated with the seance.
      *
@@ -88,6 +96,7 @@ public class Seance {
     public void setFilmcinema(Filmcinema filmcinema) {
         this.filmcinema = filmcinema;
     }
+
     // Other getter and setter methods...
     /**
      * Returns a string representation of the Seance object.
@@ -96,15 +105,16 @@ public class Seance {
      */
     @Override
     public String toString() {
-        return "Seance{" +
-                "id_seance=" + id_seance +
-                ", salle=" + salle +
-                ", HD=" + HD +
-                ", HF=" + HF +
-                ", date=" + date +
-                ", prix=" + prix +
-                '}';
+        return "Seance{"
+                + "id_seance=" + id_seance
+                + ", salle=" + salle
+                + ", HD=" + HD
+                + ", HF=" + HF
+                + ", date=" + date
+                + ", prix=" + prix
+                + '}';
     }
+
     /**
      * Returns the salle ID associated with the seance.
      *
@@ -113,6 +123,7 @@ public class Seance {
     public Salle getId_salle() {
         return salle;
     }
+
     /**
      * Returns the name of the salle associated with the seance.
      *
@@ -121,36 +132,47 @@ public class Seance {
     public String getNom_salle() {
         return salle.getNom_salle();
     }
+
     public Salle getSalle() {
         return salle;
     }
+
     public Time getHD() {
         return HD;
     }
+
     public Time getHF() {
         return HF;
     }
+
     public Date getDate() {
         return date;
     }
+
     public double getPrix() {
         return prix;
     }
+
     public int getId_seance() {
         return id_seance;
     }
+
     public void setSalle(Salle salle) {
         this.salle = salle;
     }
+
     public void setHD(Time HD) {
         this.HD = HD;
     }
+
     public void setHF(Time HF) {
         this.HF = HF;
     }
+
     public void setDate(Date date) {
         this.date = date;
     }
+
     public void setPrix(double prix) {
         this.prix = prix;
     }

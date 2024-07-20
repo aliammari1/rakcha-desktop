@@ -117,9 +117,10 @@ public class AvisService implements IService<Avis> {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(req);
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next())
+            while (resultSet.next()) {
                 avis.add(new Avis(null, (int) resultSet.getDouble("averageRate"),
                         new ProduitService().getProduitById(resultSet.getInt("id_ptoduit"))));
+            }
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
@@ -134,10 +135,11 @@ public class AvisService implements IService<Avis> {
             preparedStatement.setInt(1, id_produit);
             preparedStatement.setInt(2, iduseres);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next())
+            if (resultSet.next()) {
                 rate = new Avis((Client) new UserService().getUserById(iduseres),
                         (int) resultSet.getDouble("averageRate"),
                         new ProduitService().getProduitById(resultSet.getInt("id_ptoduit")));
+            }
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }

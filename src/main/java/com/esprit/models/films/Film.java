@@ -1,5 +1,7 @@
 package com.esprit.models.films;
+
 import java.sql.Time;
+
 /**
  * Represents a film.
  */
@@ -11,6 +13,7 @@ public class Film {
     private Time duree;
     private String description;
     private int annederalisation;
+
     /**
      * Constructs a new Film object by copying the attributes of another Film object.
      *
@@ -24,6 +27,7 @@ public class Film {
         this.description = f.description;
         this.annederalisation = f.annederalisation;
     }
+
     /**
      * Constructs a new Film object with the specified attributes.
      *
@@ -42,6 +46,7 @@ public class Film {
         this.description = description;
         this.annederalisation = annederalisation;
     }
+
     /**
      * Constructs a new Film object with the specified attributes.
      *
@@ -58,6 +63,7 @@ public class Film {
         this.description = description;
         this.annederalisation = annederalisation;
     }
+
     /**
      * Constructs a new Film object with the specified ID.
      *
@@ -71,6 +77,7 @@ public class Film {
         this.description = null;
         this.annederalisation = 0;
     }
+
     /**
      * Retrieves the name of the film.
      *
@@ -79,6 +86,7 @@ public class Film {
     public String getNom() {
         return nom;
     }
+
     /**
      * Sets the name of the film.
      *
@@ -87,6 +95,7 @@ public class Film {
     public void setNom(String nom) {
         this.nom = nom;
     }
+
     /**
      * Retrieves the ID of the film.
      *
@@ -95,6 +104,7 @@ public class Film {
     public int getId() {
         return id;
     }
+
     /**
      * Sets the ID of the film.
      *
@@ -103,6 +113,7 @@ public class Film {
     public void setId(int id) {
         this.id = id;
     }
+
     /**
      * Retrieves the image URL of the film.
      *
@@ -111,6 +122,7 @@ public class Film {
     public String getImage() {
         return image;
     }
+
     /**
      * Sets the image URL of the film.
      *
@@ -119,6 +131,7 @@ public class Film {
     public void setImage(String image) {
         this.image = image;
     }
+
     /**
      * Retrieves the duration of the film.
      *
@@ -127,6 +140,7 @@ public class Film {
     public Time getDuree() {
         return duree;
     }
+
     /**
      * Sets the duration of the film.
      *
@@ -135,6 +149,7 @@ public class Film {
     public void setDuree(Time duree) {
         this.duree = duree;
     }
+
     /**
      * Sets the category name of the film.
      *
@@ -143,6 +158,7 @@ public class Film {
     public void setCategoryNom(String categoryNom) {
         this.categoryNom = categoryNom;
     }
+
     /**
      * Retrieves the description of the film.
      *
@@ -151,6 +167,7 @@ public class Film {
     public String getDescription() {
         return description;
     }
+
     /**
      * Sets the description of the film.
      *
@@ -159,6 +176,7 @@ public class Film {
     public void setDescription(String description) {
         this.description = description;
     }
+
     /**
      * Retrieves the year of release of the film.
      *
@@ -167,6 +185,7 @@ public class Film {
     public int getAnnederalisation() {
         return annederalisation;
     }
+
     /**
      * Sets the year of release of the film.
      *
@@ -175,6 +194,7 @@ public class Film {
     public void setAnnederalisation(int annederalisation) {
         this.annederalisation = annederalisation;
     }
+
     /**
      * Returns a string representation of the Film object.
      *
@@ -182,13 +202,13 @@ public class Film {
      */
     @Override
     public String toString() {
-        return "Film{" +
-                "nom='" + nom + '\'' +
-                ", id=" + id +
-                ", image=" + image +
-                ", duree=" + duree +
-                ", description='" + description + '\'' +
-                ", annederalisation=" + annederalisation +
-                '}';
+        return "Film{"
+                + "nom='" + nom + '\''
+                + ", id=" + id
+                + ", image=" + image
+                + ", duree=" + duree
+                + ", description='" + description + '\''
+                + ", annederalisation=" + annederalisation
+                + '}';
     }
 }

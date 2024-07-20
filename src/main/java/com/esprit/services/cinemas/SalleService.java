@@ -25,6 +25,7 @@ public class SalleService implements IService<Salle> {
     /**
      * @param salle
      */
+    @Override
     public void create(Salle salle) {
         String req = "INSERT into salle(id_cinema, nb_places, nom_salle) values (?, ?, ?);";
         try {
@@ -42,6 +43,7 @@ public class SalleService implements IService<Salle> {
     /**
      * @param salle
      */
+    @Override
     public void update(Salle salle) {
         String req = "UPDATE salle set id_cinema = ?, nb_places = ?, nom_salle = ? where id_salle = ?;";
         try {
@@ -57,6 +59,7 @@ public class SalleService implements IService<Salle> {
         }
     }
 
+    @Override
     public void delete(Salle salle) {
         String req = "DELETE from salle where id_salle= ?;";
         try {
@@ -69,6 +72,7 @@ public class SalleService implements IService<Salle> {
         }
     }
 
+    @Override
     public List<Salle> read() {
         List<Salle> salles = new ArrayList<>();
         String req = "SELECT * from salle";

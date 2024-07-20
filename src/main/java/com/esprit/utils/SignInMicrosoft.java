@@ -1,6 +1,7 @@
 package com.esprit.utils;
 
 import com.esprit.services.produits.AvisService;
+
 import com.github.scribejava.apis.LiveApi;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth2AccessToken;
@@ -71,5 +72,8 @@ public class SignInMicrosoft {
             LOGGER.info(response.getBody());
         }
         LOGGER.info("Thats it man! Go and build something awesome with ScribeJava! :)");
+    }
+
+    private SignInMicrosoft() {
     }
 }

@@ -3,9 +3,9 @@ package com.esprit.controllers.users;
 import com.esprit.models.users.User;
 import com.esprit.services.produits.AvisService;
 import com.esprit.services.users.UserService;
+
 import com.github.plushaze.traynotification.notification.Notifications;
 import com.github.plushaze.traynotification.notification.TrayNotification;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -103,11 +103,11 @@ public class LoginController implements Initializable {
             Parent root = loader.load();
             FXMLLoader loaderSideBar = null;
             ProfileController profileController = loader.getController();
-            if (user.getRole().equals("admin")) {
+            if ("admin".equals(user.getRole())) {
                 loaderSideBar = new FXMLLoader(getClass().getResource("/adminSideBar.fxml"));
-            } else if (user.getRole().equals("client")) {
+            } else if ("client".equals(user.getRole())) {
                 loaderSideBar = new FXMLLoader(getClass().getResource("/clientSideBar.fxml"));
-            } else if (user.getRole().equals("responsable de cinema")) {
+            } else if ("responsable de cinema".equals(user.getRole())) {
                 loaderSideBar = new FXMLLoader(getClass().getResource("/responsableDeCinemaSideBar.fxml"));
             }
             if (loaderSideBar != null) {
@@ -131,7 +131,7 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        forgetPasswordHyperlink.setOnAction(new EventHandler<ActionEvent>() {
+        forgetPasswordHyperlink.setOnAction(new EventHandler<>() {
             @Override
             public void handle(ActionEvent event) {
                 try {
@@ -144,7 +144,7 @@ public class LoginController implements Initializable {
                 }
             }
         });
-        forgetPasswordEmailHyperlink.setOnAction(new EventHandler<ActionEvent>() {
+        forgetPasswordEmailHyperlink.setOnAction(new EventHandler<>() {
             @Override
             public void handle(ActionEvent event) {
                 try {

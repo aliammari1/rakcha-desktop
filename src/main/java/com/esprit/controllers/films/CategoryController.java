@@ -1,8 +1,5 @@
 package com.esprit.controllers.films;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.esprit.controllers.ClientSideBarController;
 import com.esprit.models.films.Category;
 import com.esprit.models.users.Client;
@@ -28,6 +25,9 @@ import javafx.stage.Window;
 import javafx.util.Callback;
 import javafx.util.converter.DefaultStringConverter;
 import net.synedra.validatorfx.Validator;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Is responsible for handling user interactions with the category table. It
@@ -105,8 +105,8 @@ public class CategoryController {
             filteredList.addAll(categoryService.read());
         } else {
             for (Category category : categoryService.read()) {
-                if (category.getNom().toLowerCase().contains(keyword.toLowerCase()) ||
-                        category.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
+                if (category.getNom().toLowerCase().contains(keyword.toLowerCase())
+                        || category.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
                     filteredList.add(category);
                 }
             }
@@ -228,7 +228,7 @@ public class CategoryController {
      */
     private void setupCellFactory() {
         idCategory_tableColumn.setVisible(false);
-        Callback<TableColumn<Category, String>, TableCell<Category, String>> stringCellFactory = new Callback<TableColumn<Category, String>, TableCell<Category, String>>() {
+        Callback<TableColumn<Category, String>, TableCell<Category, String>> stringCellFactory = new Callback<>() {
             /**
              * Generates a `TextFieldTableCell` that provides text validation. When the user
              * starts editing the cell, the validator checks for input errors and displays
@@ -264,7 +264,7 @@ public class CategoryController {
              */
             @Override
             public TableCell<Category, String> call(TableColumn<Category, String> param) {
-                return new TextFieldTableCell<Category, String>(new DefaultStringConverter()) {
+                return new TextFieldTableCell<>(new DefaultStringConverter()) {
                     private Validator validator;
 
                     /**
@@ -332,8 +332,9 @@ public class CategoryController {
                                         textField.setTooltip(tooltip);
                                         textField.getTooltip().show(window, bounds.getMinX(), bounds.getMinY() - 30);
                                     } else {
-                                        if (textField.getTooltip() != null)
+                                        if (textField.getTooltip() != null) {
                                             textField.getTooltip().hide();
+                                        }
                                     }
                                 }
                             });

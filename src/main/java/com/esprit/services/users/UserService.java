@@ -1,16 +1,5 @@
 package com.esprit.services.users;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import org.mindrot.jbcrypt.BCrypt;
-
 import com.esprit.models.users.Admin;
 import com.esprit.models.users.Client;
 import com.esprit.models.users.Responsable_de_cinema;
@@ -23,6 +12,16 @@ import com.esprit.utils.UserPDF;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import org.mindrot.jbcrypt.BCrypt;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class UserService implements IService<User> {
     Connection con;
@@ -83,11 +82,11 @@ public class UserService implements IService<User> {
             statement.setString(8, user.getEmail());
             statement.setString(9, user.getPhoto_de_profil());
             statement.setBoolean(10, true);
-            if (user.getRole().equals("admin")) {
+            if ("admin".equals(user.getRole())) {
                 statement.setString(11, "[\"ROLE_ADMIN\"]");
-            } else if (user.getRole().equals("client")) {
+            } else if ("client".equals(user.getRole())) {
                 statement.setString(11, "[\"ROLE_CLIENT\"]");
-            } else if (user.getRole().equals("responsable de cinema")) {
+            } else if ("responsable de cinema".equals(user.getRole())) {
                 statement.setString(11, "[\"ROLE_RESPONSABLE_DE_CINEMA\"]");
             }
             statement.executeUpdate();
@@ -157,7 +156,7 @@ public class UserService implements IService<User> {
     public List<User> sort(String Option) {
         try {
             List<User> userList = new ArrayList<>();
-            String query = String.format("SELECT * FROM users ORDER BY %s", Option);
+            String query = "SELECT * FROM users ORDER BY %s".formatted(Option);
             PreparedStatement statement = this.con.prepareStatement(query);
             return this.getUsers(userList, statement);
         } catch (SQLException e) {

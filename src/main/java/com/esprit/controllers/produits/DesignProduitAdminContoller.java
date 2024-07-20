@@ -7,6 +7,7 @@ import com.esprit.services.produits.CategorieService;
 import com.esprit.services.produits.ProduitService;
 import com.esprit.utils.DataSource;
 
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -234,8 +235,8 @@ public class DesignProduitAdminContoller {
                     CategorieService cs = new CategorieService();
                     Produit nouveauProduit = new Produit(nomProduit, prix, uri.getPath(), descriptionProduit,
                             cs.getCategorieByNom(nomCategorie), quantite);
-                    LOGGER.info(nomProduit + " " + prix + " " + uri.getPath() + " " + descriptionProduit + " " +
-                            cs.getCategorieByNom(nomCategorie) + " " + quantite);
+                    LOGGER.info(nomProduit + " " + prix + " " + uri.getPath() + " " + descriptionProduit + " "
+                            + cs.getCategorieByNom(nomCategorie) + " " + quantite);
                     LOGGER.info("nouveauProduit: --------------- " + nouveauProduit);
                     ps.create(nouveauProduit);
                     // Ajouter le nouveau produit à la liste existante
@@ -440,7 +441,7 @@ public class DesignProduitAdminContoller {
             } catch (Exception e) {
                 LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
-            return new javafx.beans.property.SimpleObjectProperty<>(imageView);
+            return new SimpleObjectProperty<>(imageView);
         });
         // Configurer l'événement de clic pour changer l'image
         image_tableC.setCellFactory(col -> new TableCell<Produit, ImageView>() {
@@ -558,7 +559,7 @@ public class DesignProduitAdminContoller {
              */
             @Override
             public TableCell<Produit, Void> call(final TableColumn<Produit, Void> param) {
-                final TableCell<Produit, Void> cell = new TableCell<>() {
+                return new TableCell<>() {
                     private final Button btnDelete = new Button("Delete");
                     {
                         btnDelete.getStyleClass().add("delete-button");
@@ -603,7 +604,6 @@ public class DesignProduitAdminContoller {
                         }
                     }
                 };
-                return cell;
             }
         };
         deleteColumn.setCellFactory(cellFactory);
@@ -691,9 +691,9 @@ public class DesignProduitAdminContoller {
             filteredList.addAll(produitservice.read());
         } else {
             for (Produit produit : produitservice.read()) {
-                if (produit.getNom().toLowerCase().contains(keyword.toLowerCase()) ||
-                        produit.getDescription().toLowerCase().contains(keyword.toLowerCase()) ||
-                        produit.getNom_categorie().toLowerCase().contains(keyword.toLowerCase())) {
+                if (produit.getNom().toLowerCase().contains(keyword.toLowerCase())
+                        || produit.getDescription().toLowerCase().contains(keyword.toLowerCase())
+                        || produit.getNom_categorie().toLowerCase().contains(keyword.toLowerCase())) {
                     filteredList.add(produit);
                 }
             }
@@ -739,8 +739,7 @@ public class DesignProduitAdminContoller {
      */
     private List<Produit> getAllCategories() {
         ProduitService categorieservice = new ProduitService();
-        List<Produit> categorie = categorieservice.read();
-        return categorie;
+        return categorieservice.read();
     }
 
     /**
@@ -811,11 +810,10 @@ public class DesignProduitAdminContoller {
     public List<String> getCategorie_Produit() {
         // Récupérer tous les cinémas depuis la base de données
         List<Produit> categories = getAllCategories();
-        List<String> categorie = categories.stream()
+        return categories.stream()
                 .map(c -> c.getCategorie().getNom_categorie())
                 .distinct()
                 .collect(Collectors.toList());
-        return categorie;
     }
 
     /**

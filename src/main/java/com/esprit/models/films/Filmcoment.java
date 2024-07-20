@@ -1,5 +1,7 @@
 package com.esprit.models.films;
+
 import com.esprit.models.users.Client;
+
 /**
  * Represents a film comment.
  */
@@ -8,6 +10,7 @@ public class Filmcoment {
     private String comment;
     private Client user_id;
     private Film film_id;
+
     /**
      * Constructs a Filmcoment object with the specified id, comment, user_id, and film_id.
      *
@@ -22,6 +25,7 @@ public class Filmcoment {
         this.user_id = user_id;
         this.film_id = film_id;
     }
+
     /**
      * Constructs a Filmcoment object with the specified comment, user_id, and film_id.
      *
@@ -34,6 +38,7 @@ public class Filmcoment {
         this.user_id = user_id;
         this.film_id = film_id;
     }
+
     /**
      * Returns the id of the comment.
      *
@@ -42,6 +47,7 @@ public class Filmcoment {
     public int getId() {
         return id;
     }
+
     /**
      * Sets the id of the comment.
      *
@@ -50,6 +56,7 @@ public class Filmcoment {
     public void setId(int id) {
         this.id = id;
     }
+
     /**
      * Returns the comment text.
      *
@@ -58,6 +65,7 @@ public class Filmcoment {
     public String getComment() {
         return comment;
     }
+
     /**
      * Sets the comment text.
      *
@@ -66,6 +74,7 @@ public class Filmcoment {
     public void setComment(String comment) {
         this.comment = comment;
     }
+
     /**
      * Returns the user who made the comment.
      *
@@ -74,6 +83,7 @@ public class Filmcoment {
     public Client getUser_id() {
         return user_id;
     }
+
     /**
      * Sets the user who made the comment.
      *
@@ -82,6 +92,7 @@ public class Filmcoment {
     public void setUser_id(Client user_id) {
         this.user_id = user_id;
     }
+
     /**
      * Returns the film to which the comment belongs.
      *
@@ -90,6 +101,7 @@ public class Filmcoment {
     public Film getFilm_id() {
         return film_id;
     }
+
     /**
      * Sets the film to which the comment belongs.
      *
@@ -98,6 +110,7 @@ public class Filmcoment {
     public void setFilm_id(Film film_id) {
         this.film_id = film_id;
     }
+
     /**
      * Returns a string representation of the Filmcoment object.
      *
@@ -105,11 +118,11 @@ public class Filmcoment {
      */
     @Override
     public String toString() {
-        return "Filmcoment{" +
-                "id=" + id +
-                ", comment='" + comment + '\'' +
-                ", user_id=" + user_id +
-                ", film_id=" + film_id +
-                '}';
+        return "Filmcoment{"
+                + "id=" + id
+                + ", comment='" + comment + '\''
+                + ", user_id=" + user_id
+                + ", film_id=" + film_id
+                + '}';
     }
 }

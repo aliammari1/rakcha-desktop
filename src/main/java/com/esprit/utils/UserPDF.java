@@ -2,6 +2,7 @@ package com.esprit.utils;
 
 import com.esprit.models.users.User;
 import com.esprit.services.produits.AvisService;
+
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -14,8 +15,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class UserPDF {
     private static final Logger LOGGER = Logger.getLogger(UserPDF.class.getName());
@@ -33,7 +34,7 @@ public class UserPDF {
         }
         document.open();
         List<String> attributes = Arrays.asList("id", "nom", "prenom", "num_telephone", "email", "role");
-        final float[] widths = { 50, 50, 50, 80, 50, 50 };
+        final float[] widths = {50, 50, 50, 80, 50, 50};
         final PdfPTable table = new PdfPTable(widths);
         this.addTableHeader(table, attributes);
         this.addRows(table, userData);

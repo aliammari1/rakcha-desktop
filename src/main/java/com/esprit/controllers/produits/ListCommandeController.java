@@ -5,8 +5,8 @@ import com.esprit.models.produits.Commande;
 import com.esprit.models.users.Client;
 import com.esprit.services.produits.AvisService;
 import com.esprit.services.produits.CommandeService;
-import com.esprit.services.produits.CommandeService;
 import com.esprit.services.users.UserService;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,6 +20,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+
 import java.io.IOException;
 import java.util.Date;
 import java.util.logging.Level;
@@ -129,10 +130,10 @@ public class ListCommandeController {
             filteredList.addAll(commandeservice.read());
         } else {
             for (Commande commande : commandeservice.read()) {
-                if (commande.getAdresse().toLowerCase().contains(keyword.toLowerCase()) ||
-                        commande.getIdClient().getLastName().toLowerCase().contains(keyword.toLowerCase()) ||
-                        commande.getIdClient().getFirstName().toLowerCase().contains(keyword.toLowerCase()) ||
-                        commande.getStatu().toLowerCase().contains(keyword.toLowerCase())) {
+                if (commande.getAdresse().toLowerCase().contains(keyword.toLowerCase())
+                        || commande.getIdClient().getLastName().toLowerCase().contains(keyword.toLowerCase())
+                        || commande.getIdClient().getFirstName().toLowerCase().contains(keyword.toLowerCase())
+                        || commande.getStatu().toLowerCase().contains(keyword.toLowerCase())) {
                     filteredList.add(commande);
                 }
             }
@@ -176,7 +177,7 @@ public class ListCommandeController {
              */
             @Override
             public TableCell<Commande, Void> call(final TableColumn<Commande, Void> param) {
-                final TableCell<Commande, Void> cell = new TableCell<>() {
+                return new TableCell<>() {
                     private final Button btnDelete = new Button("Delete");
                     {
                         btnDelete.getStyleClass().add("delete-button");
@@ -220,7 +221,6 @@ public class ListCommandeController {
                         }
                     }
                 };
-                return cell;
             }
         };
         deleteColumn.setCellFactory(cellFactory);

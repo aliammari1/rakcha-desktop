@@ -4,6 +4,7 @@ import com.esprit.models.produits.Panier;
 import com.esprit.services.IService;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.DataSource;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -67,11 +68,13 @@ public class PanierService implements IService<Panier> {
 
     @Override
     public void update(Panier panier) {
-        String req = "UPDATE panier p " +
-                "INNER JOIN produit pro ON pro.id_produit = p.id_produit " +
-                "INNER JOIN users u ON u.id = p.idClient " +
-                "SET p.id_produit = ?, p.quantite = ?, p.idClient = ? " +
-                "WHERE p.idpanier = ?;";
+        String req = """
+                UPDATE panier p \
+                INNER JOIN produit pro ON pro.id_produit = p.id_produit \
+                INNER JOIN users u ON u.id = p.idClient \
+                SET p.id_produit = ?, p.quantite = ?, p.idClient = ? \
+                WHERE p.idpanier = ?;\
+                """;
         try {
             PreparedStatement pst = connection.prepareStatement(req);
             pst.setInt(4, panier.getIdPanier());
