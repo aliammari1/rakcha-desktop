@@ -2,8 +2,6 @@ package com.esprit.models.produits;
 
 import com.esprit.models.users.User;
 
-import java.util.Objects;
-
 /**
  * Is used to represent a shopping cart containing various products and users. It has
  * several fields such as idpanier, quantity, produit, and users, which can be accessed
@@ -30,7 +28,7 @@ public class Panier {
      * @param quantity The quantity of the produit in the panier.
      * @param users    The user associated with the panier.
      */
-    public Panier(int idpanier, Produit produit, int quantity, User users) {
+    public Panier(final int idpanier, final Produit produit, final int quantity, final User users) {
         this.idpanier = idpanier;
         this.quantity = quantity;
         this.produit = produit;
@@ -44,7 +42,7 @@ public class Panier {
      * @param quantity The quantity of the produit in the panier.
      * @param users    The user associated with the panier.
      */
-    public Panier(Produit produit, int quantity, User users) {
+    public Panier(final Produit produit, final int quantity, final User users) {
         this.quantity = quantity;
         this.produit = produit;
         this.users = users;
@@ -56,7 +54,7 @@ public class Panier {
      * @return The ID of the panier.
      */
     public int getIdPanier() {
-        return idpanier;
+        return this.idpanier;
     }
 
     /**
@@ -64,8 +62,8 @@ public class Panier {
      *
      * @param idPanier The ID of the panier.
      */
-    public void setIdPanier(int idPanier) {
-        this.idpanier = idPanier;
+    public void setIdPanier(final int idPanier) {
+        idpanier = idPanier;
     }
 
     /**
@@ -74,7 +72,7 @@ public class Panier {
      * @return The quantity of the produit in the panier.
      */
     public int getQuantity() {
-        return quantity;
+        return this.quantity;
     }
 
     /**
@@ -82,7 +80,7 @@ public class Panier {
      *
      * @param quantity The quantity of the produit in the panier.
      */
-    public void setQuantity(int quantity) {
+    public void setQuantity(final int quantity) {
         this.quantity = quantity;
     }
 
@@ -92,7 +90,7 @@ public class Panier {
      * @return The produit associated with the panier.
      */
     public Produit getProduit() {
-        return produit;
+        return this.produit;
     }
 
     /**
@@ -100,7 +98,7 @@ public class Panier {
      *
      * @param produit The produit associated with the panier.
      */
-    public void setProduit(Produit produit) {
+    public void setProduit(final Produit produit) {
         this.produit = produit;
     }
 
@@ -110,7 +108,7 @@ public class Panier {
      * @return The user associated with the panier.
      */
     public User getUser() {
-        return users;
+        return this.users;
     }
 
     /**
@@ -118,7 +116,7 @@ public class Panier {
      *
      * @param users The user associated with the panier.
      */
-    public void setUser(User users) {
+    public void setUser(final User users) {
         this.users = users;
     }
 
@@ -130,10 +128,10 @@ public class Panier {
     @Override
     public String toString() {
         return "Panier{"
-                + "idpanier=" + idpanier
-                + ", quantity=" + quantity
-                + ", produit=" + produit
-                + ", users=" + users
+                + "idpanier=" + this.idpanier
+                + ", quantity=" + this.quantity
+                + ", produit=" + this.produit
+                + ", users=" + this.users
                 + '}';
     }
 }

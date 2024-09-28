@@ -3,7 +3,6 @@ package com.esprit.services.cinemas;
 import com.esprit.models.cinemas.CommentaireCinema;
 import com.esprit.models.users.Client;
 import com.esprit.services.IService;
-import com.esprit.services.produits.AvisService;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.DataSource;
 
@@ -17,29 +16,29 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class CommentaireCinemaService implements IService<CommentaireCinema> {
-    private final Connection connection;
     private static final Logger LOGGER = Logger.getLogger(CommentaireCinemaService.class.getName());
+    private final Connection connection;
 
     public CommentaireCinemaService() {
-        connection = DataSource.getInstance().getConnection();
+        this.connection = DataSource.getInstance().getConnection();
     }
 
     /**
      * @param commentaire
      */
     @Override
-    public void create(CommentaireCinema commentaire) {
-        String req = "INSERT into commentairecinema(idCinema,idClient,commentaire,Sentiment ) values (?,?,?,?);";
+    public void create(final CommentaireCinema commentaire) {
+        final String req = "INSERT into commentairecinema(idCinema,idClient,commentaire,Sentiment ) values (?,?,?,?);";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
+            final PreparedStatement pst = this.connection.prepareStatement(req);
             pst.setInt(1, commentaire.getCinema().getId_cinema());
             pst.setInt(2, commentaire.getClient().getId());
             pst.setString(3, commentaire.getCommentaire());
             pst.setString(4, commentaire.getSentiment());
             pst.executeUpdate();
-            LOGGER.info("commentaire ajoutée !");
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            CommentaireCinemaService.LOGGER.info("commentaire ajoutée !");
+        } catch (final SQLException e) {
+            CommentaireCinemaService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -48,11 +47,11 @@ public class CommentaireCinemaService implements IService<CommentaireCinema> {
      */
     @Override
     public List<CommentaireCinema> read() {
-        List<CommentaireCinema> commentaire = new ArrayList<>();
-        String req = "SELECT * FROM commentairecinema";
+        final List<CommentaireCinema> commentaire = new ArrayList<>();
+        final String req = "SELECT * FROM commentairecinema";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
-            ResultSet rs = pst.executeQuery();
+            final PreparedStatement pst = this.connection.prepareStatement(req);
+            final ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 commentaire.add(new CommentaireCinema(
                         rs.getInt("id"),
@@ -60,18 +59,18 @@ public class CommentaireCinemaService implements IService<CommentaireCinema> {
                         (Client) new UserService().getUserById(rs.getInt("idclient")),
                         rs.getString("commentaire"), rs.getString("Sentiment")));
             }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            CommentaireCinemaService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return commentaire;
     }
 
     @Override
-    public void update(CommentaireCinema commentaire) {
+    public void update(final CommentaireCinema commentaire) {
     }
 
     @Override
-    public void delete(CommentaireCinema commentaire) {
+    public void delete(final CommentaireCinema commentaire) {
     }
     // public Commentaire readByClientId(int clientId) {
     // Commentaire commentaire = null;

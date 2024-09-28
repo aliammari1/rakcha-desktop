@@ -12,10 +12,10 @@ public class Filmcinema {
     /**
      * Constructs a new Filmcinema object with the specified film and cinema.
      *
-     * @param id_film The film associated with the cinema.
+     * @param id_film   The film associated with the cinema.
      * @param id_cinema The cinema associated with the film.
      */
-    public Filmcinema(Film id_film, Cinema id_cinema) {
+    public Filmcinema(final Film id_film, final Cinema id_cinema) {
         this.id_film = id_film;
         this.id_cinema = id_cinema;
     }
@@ -26,7 +26,7 @@ public class Filmcinema {
      * @return The film associated with the cinema.
      */
     public Film getId_film() {
-        return id_film;
+        return this.id_film;
     }
 
     /**
@@ -34,7 +34,7 @@ public class Filmcinema {
      *
      * @param id_film The film to be associated with the cinema.
      */
-    public void setId_film(Film id_film) {
+    public void setId_film(final Film id_film) {
         this.id_film = id_film;
     }
 
@@ -44,7 +44,7 @@ public class Filmcinema {
      * @return The cinema associated with the film.
      */
     public Cinema getId_cinema() {
-        return id_cinema;
+        return this.id_cinema;
     }
 
     /**
@@ -52,7 +52,7 @@ public class Filmcinema {
      *
      * @param id_cinema The cinema to be associated with the film.
      */
-    public void setId_cinema(Cinema id_cinema) {
+    public void setId_cinema(final Cinema id_cinema) {
         this.id_cinema = id_cinema;
     }
 
@@ -64,8 +64,8 @@ public class Filmcinema {
     @Override
     public String toString() {
         return "Filmcinema{"
-                + "id_film=" + id_film
-                + ", id_cinema=" + id_cinema
+                + "id_film=" + this.id_film
+                + ", id_cinema=" + this.id_cinema
                 + '}';
     }
 }

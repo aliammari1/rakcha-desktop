@@ -14,7 +14,7 @@ public class Category {
      * @param nom         the name of the category
      * @param description the description of the category
      */
-    public Category(String nom, String description) {
+    public Category(final String nom, final String description) {
         this.nom = nom;
         this.description = description;
     }
@@ -26,7 +26,7 @@ public class Category {
      * @param nom         the name of the category
      * @param description the description of the category
      */
-    public Category(int id, String nom, String description) {
+    public Category(final int id, final String nom, final String description) {
         this.id = id;
         this.nom = nom;
         this.description = description;
@@ -38,7 +38,7 @@ public class Category {
      * @return the name of the category
      */
     public String getNom() {
-        return nom;
+        return this.nom;
     }
 
     /**
@@ -46,7 +46,7 @@ public class Category {
      *
      * @param nom the name of the category
      */
-    public void setNom(String nom) {
+    public void setNom(final String nom) {
         this.nom = nom;
     }
 
@@ -56,7 +56,7 @@ public class Category {
      * @return the id of the category
      */
     public int getId() {
-        return id;
+        return this.id;
     }
 
     /**
@@ -64,7 +64,7 @@ public class Category {
      *
      * @param id the id of the category
      */
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 
@@ -74,7 +74,7 @@ public class Category {
      * @return the description of the category
      */
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     /**
@@ -82,7 +82,7 @@ public class Category {
      *
      * @param description the description of the category
      */
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -94,9 +94,9 @@ public class Category {
     @Override
     public String toString() {
         return "Category{"
-                + "nom='" + nom + '\''
-                + ", id=" + id
-                + ", description='" + description + '\''
+                + "nom='" + this.nom + '\''
+                + ", id=" + this.id
+                + ", description='" + this.description + '\''
                 + '}';
     }
 }

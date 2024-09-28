@@ -14,8 +14,8 @@ public abstract class User {
     private String email;
     private String photo_de_profil;
 
-    public User(String firstName, String lastName, int phoneNumber, String password, String role, String address,
-            Date birthDate, String email, String photo_de_profil) {
+    protected User(final String firstName, final String lastName, final int phoneNumber, final String password, final String role, final String address,
+                   final Date birthDate, final String email, final String photo_de_profil) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
@@ -27,7 +27,7 @@ public abstract class User {
         this.photo_de_profil = photo_de_profil;
     }
 
-    public User(int id, String firstName, String lastName, int phoneNumber, String password, String role, String address, Date birthDate, String email, String photo_de_profil) {
+    protected User(final int id, final String firstName, final String lastName, final int phoneNumber, final String password, final String role, final String address, final Date birthDate, final String email, final String photo_de_profil) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -40,104 +40,104 @@ public abstract class User {
         this.photo_de_profil = photo_de_profil;
     }
 
-    /** 
+    /**
      * @return int
      */
     public int getId() {
-        return id;
+        return this.id;
     }
 
-    /** 
+    /**
      * @param id
      */
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 
     public String getFirstName() {
-        return firstName;
+        return this.firstName;
     }
 
-    public void setFirstName(String firstName) {
+    public void setFirstName(final String firstName) {
         this.firstName = firstName;
     }
 
     public String getLastName() {
-        return lastName;
+        return this.lastName;
     }
 
-    public void setLastName(String lastName) {
+    public void setLastName(final String lastName) {
         this.lastName = lastName;
     }
 
     public int getPhoneNumber() {
-        return phoneNumber;
+        return this.phoneNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(final int phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
     public String getPassword() {
-        return password;
+        return this.password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(final String password) {
         this.password = password;
     }
 
     public String getRole() {
-        return role;
+        return this.role;
     }
 
-    public void setRole(String role) {
+    public void setRole(final String role) {
         this.role = role;
     }
 
     public String getAddress() {
-        return address;
+        return this.address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(final String address) {
         this.address = address;
     }
 
     public Date getBirthDate() {
-        return birthDate;
+        return this.birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(final Date birthDate) {
         this.birthDate = birthDate;
     }
 
     public String getEmail() {
-        return email;
+        return this.email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(final String email) {
         this.email = email;
     }
 
     public String getPhoto_de_profil() {
-        return photo_de_profil;
+        return this.photo_de_profil;
     }
 
-    public void setPhoto_de_profil(String photo_de_profil) {
+    public void setPhoto_de_profil(final String photo_de_profil) {
         this.photo_de_profil = photo_de_profil;
     }
 
     @Override
     public String toString() {
         return
-                "id=" + id
-                        + ", firstName='" + firstName + '\''
-                        + ", lastName='" + lastName + '\''
-                        + ", phoneNumber=" + phoneNumber
-                        + ", password='" + password + '\''
-                        + ", role='" + role + '\''
-                        + ", address='" + address + '\''
-                        + ", birthDate=" + birthDate
-                        + ", email='" + email + '\''
-                        + ", photo_de_profil='" + photo_de_profil;
+                "id=" + this.id
+                        + ", firstName='" + this.firstName + '\''
+                        + ", lastName='" + this.lastName + '\''
+                        + ", phoneNumber=" + this.phoneNumber
+                        + ", password='" + this.password + '\''
+                        + ", role='" + this.role + '\''
+                        + ", address='" + this.address + '\''
+                        + ", birthDate=" + this.birthDate
+                        + ", email='" + this.email + '\''
+                        + ", photo_de_profil='" + this.photo_de_profil;
     }
 }

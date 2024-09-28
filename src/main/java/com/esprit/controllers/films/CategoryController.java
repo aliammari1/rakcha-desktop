@@ -1,11 +1,7 @@
 package com.esprit.controllers.films;
 
-import com.esprit.controllers.ClientSideBarController;
 import com.esprit.models.films.Category;
-import com.esprit.models.users.Client;
 import com.esprit.services.films.CategoryService;
-import com.esprit.services.produits.AvisService;
-
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
@@ -79,39 +75,39 @@ public class CategoryController {
      */
     @FXML
     void initialize() {
-        delete_tableColumn = new TableColumn<>("delete");
-        filmCategory_tableView.getColumns().add(delete_tableColumn);
-        filmCategory_tableView.setEditable(true);
-        setupCellFactory();
-        setupCellValueFactory();
-        setupCellOnEditCommit();
-        readCategoryTable();
-        filterCriteriaComboBox.setItems(FXCollections.observableArrayList("Name", "Description"));
+        this.delete_tableColumn = new TableColumn<>("delete");
+        this.filmCategory_tableView.getColumns().add(this.delete_tableColumn);
+        this.filmCategory_tableView.setEditable(true);
+        this.setupCellFactory();
+        this.setupCellValueFactory();
+        this.setupCellOnEditCommit();
+        this.readCategoryTable();
+        this.filterCriteriaComboBox.setItems(FXCollections.observableArrayList("Name", "Description"));
     }
 
     /**
      * Filters and displays a list of categories based on a search query provided as
      * an
      * argument.
-     * 
+     *
      * @param keyword search query used to filter and display only relevant
      *                categories
      *                in the `filmCategory_tableView`.
      */
-    private void search(String keyword) {
-        CategoryService categoryService = new CategoryService();
-        ObservableList<Category> filteredList = FXCollections.observableArrayList();
-        if (keyword == null || keyword.trim().isEmpty()) {
+    private void search(final String keyword) {
+        final CategoryService categoryService = new CategoryService();
+        final ObservableList<Category> filteredList = FXCollections.observableArrayList();
+        if (null == keyword || keyword.trim().isEmpty()) {
             filteredList.addAll(categoryService.read());
         } else {
-            for (Category category : categoryService.read()) {
+            for (final Category category : categoryService.read()) {
                 if (category.getNom().toLowerCase().contains(keyword.toLowerCase())
                         || category.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
                     filteredList.add(category);
                 }
             }
         }
-        filmCategory_tableView.setItems(filteredList);
+        this.filmCategory_tableView.setItems(filteredList);
     }
 
     /**
@@ -122,27 +118,27 @@ public class CategoryController {
      * to insert the category into the database, displays an alert message
      * confirming the
      * operation, and then refreshes the table displaying the categories.
-     * 
+     *
      * @param event user-generated action that triggered the function execution,
      *              allowing
      *              the code to respond accordingly.
-     * 
+     *              <p>
      *              Event type: `ActionEvent`
      *              Target object: `nomCategory_textArea` and
      *              `descriptionCategory_textArea`
      *              Context: Callback function for button press
      */
     @FXML
-    void insertCategory(ActionEvent event) {
-        CategoryService categoryService = new CategoryService();
-        Category category = new Category(nomCategory_textArea.getText(), descriptionCategory_textArea.getText());
+    void insertCategory(final ActionEvent event) {
+        final CategoryService categoryService = new CategoryService();
+        final Category category = new Category(this.nomCategory_textArea.getText(), this.descriptionCategory_textArea.getText());
         categoryService.create(category);
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setContentText("l'insertion est terminer");
         alert.setHeaderText("categorie");
         alert.setHeaderText("categorie");
         alert.show();
-        readCategoryTable();
+        this.readCategoryTable();
     }
 
     /**
@@ -151,24 +147,24 @@ public class CategoryController {
      */
     void readCategoryTable() {
         try {
-            CategoryService categoryService = new CategoryService();
-            ObservableList<Category> obC = FXCollections.observableArrayList(categoryService.read());
-            filmCategory_tableView.setItems(obC);
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            final CategoryService categoryService = new CategoryService();
+            final ObservableList<Category> obC = FXCollections.observableArrayList(categoryService.read());
+            this.filmCategory_tableView.setItems(obC);
+        } catch (final Exception e) {
+            CategoryController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
     /**
      * Sets the visibility of an interface based on the source of the event.
-     * 
+     *
      * @param event ActionEvent object that triggered the method, providing
      *              information
      *              about the source of the event and its state.
      */
-    public void switchForm(ActionEvent event) {
-        if (event.getSource() == AjouterCategory_Button) {
-            categoryCrudInterface.setVisible(true);
+    public void switchForm(final ActionEvent event) {
+        if (event.getSource() == this.AjouterCategory_Button) {
+            this.categoryCrudInterface.setVisible(true);
         }
     }
 
@@ -176,21 +172,21 @@ public class CategoryController {
      * Deletes a category with the given ID using `CategoryService`. If successful,
      * it
      * displays an alert message and updates the category table.
-     * 
+     *
      * @param id identity of the category to be deleted.
      */
-    void deleteCategory(int id) {
+    void deleteCategory(final int id) {
         try {
-            CategoryService categoryService = new CategoryService();
+            final CategoryService categoryService = new CategoryService();
             categoryService.delete(categoryService.getCategory(id));
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setContentText("la suppression est terminer");
             alert.setHeaderText("categorie");
             alert.setHeaderText("categorie");
             alert.show();
-            readCategoryTable();
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            this.readCategoryTable();
+        } catch (final Exception e) {
+            CategoryController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -200,22 +196,22 @@ public class CategoryController {
      * confirm the update, and then calls the `readCategoryTable()` function to
      * refresh
      * the category table.
-     * 
+     *
      * @param category category object to be updated.
-     * 
+     *                 <p>
      *                 - `Category category`: Represents a single category to be
      *                 updated. Its main
      *                 properties include its name and any relevant subcategories.
      */
-    void updateCategory(Category category) {
-        CategoryService categoryService = new CategoryService();
+    void updateCategory(final Category category) {
+        final CategoryService categoryService = new CategoryService();
         categoryService.update(category);
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setContentText("le mis à jour est terminer");
         alert.setHeaderText("categorie");
         alert.setHeaderText("categorie");
         alert.show();
-        readCategoryTable();
+        this.readCategoryTable();
     }
 
     /**
@@ -227,25 +223,25 @@ public class CategoryController {
      * user types invalid input.
      */
     private void setupCellFactory() {
-        idCategory_tableColumn.setVisible(false);
-        Callback<TableColumn<Category, String>, TableCell<Category, String>> stringCellFactory = new Callback<>() {
+        this.idCategory_tableColumn.setVisible(false);
+        final Callback<TableColumn<Category, String>, TableCell<Category, String>> stringCellFactory = new Callback<>() {
             /**
              * Generates a `TextFieldTableCell` that provides text validation. When the user
              * starts editing the cell, the validator checks for input errors and displays
              * them
              * as a tooltip.
-             * 
+             *
              * @param param TableColumn object that provides the editing functionality for
              *              the cell.
-             * 
+             *
              *              - `param`: A `TableColumn<Category, String>` object,
              *              representing the column to
              *              be edited.
-             * 
+             *
              * @returns a `TableCell` object that displays an editable text field with
              *          validation
              *          rules.
-             * 
+             *
              *          - `TableCell<Category, String>`: This is the type of the output,
              *          indicating that
              *          it is a cell in a table with a category parameter and a string
@@ -263,7 +259,7 @@ public class CategoryController {
              *          tooltip correctly.
              */
             @Override
-            public TableCell<Category, String> call(TableColumn<Category, String> param) {
+            public TableCell<Category, String> call(final TableColumn<Category, String> param) {
                 return new TextFieldTableCell<>(new DefaultStringConverter()) {
                     private Validator validator;
 
@@ -279,14 +275,14 @@ public class CategoryController {
                     @Override
                     public void startEdit() {
                         super.startEdit();
-                        TextField textField = (TextField) getGraphic();
-                        if (textField != null && validator == null) {
-                            validator = new Validator();
-                            validator.createCheck()
+                        final TextField textField = (TextField) this.getGraphic();
+                        if (null != textField && null == validator) {
+                            this.validator = new Validator();
+                            this.validator.createCheck()
                                     .dependsOn("text", textField.textProperty())
                                     .withMethod(c -> {
-                                        String input = c.get("text");
-                                        if (input == null || input.trim().isEmpty()) {
+                                        final String input = c.get("text");
+                                        if (null == input || input.trim().isEmpty()) {
                                             c.error("Input cannot be empty.");
                                         } else if (!Character.isUpperCase(input.charAt(0))) {
                                             c.error("Please start with an uppercase letter.");
@@ -294,45 +290,45 @@ public class CategoryController {
                                     })
                                     .decorates(textField)
                                     .immediate();
-                            Window window = this.getScene().getWindow();
-                            Tooltip tooltip = new Tooltip();
-                            Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
+                            final Window window = getScene().getWindow();
+                            final Tooltip tooltip = new Tooltip();
+                            final Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
                             textField.textProperty().addListener(new ChangeListener<String>() {
                                 /**
                                  * Is called whenever the value of an observable changes. It checks if there are
                                  * any
                                  * validation errors and displays a tooltip with the error message if present.
-                                 * 
+                                 *
                                  * @param observable ObservableValue object that is being observed for changes,
                                  *                   and
                                  *                   it provides the old and new values of the observed value in
                                  *                   the method call.
-                                 * 
+                                 *
                                  *                   - `observable`: An observable value that can hold a String
                                  *                   value.
                                  *                   - `oldValue`: The previous value of the observable.
                                  *                   - `newValue`: The current value of the observable.
-                                 * 
+                                 *
                                  * @param oldValue   previous value of the observable property before the change
                                  *                   occurred,
                                  *                   which is used to check if the new value is valid or not.
-                                 * 
+                                 *
                                  * @param newValue   updated value of the observable field, which is used to
                                  *                   determine
                                  *                   if any validation errors exist and to update the tooltip
                                  *                   text accordingly.
                                  */
                                 @Override
-                                public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                        String newValue) {
-                                    LOGGER.info(String.valueOf(validator.containsErrors()));
+                                public void changed(final ObservableValue<? extends String> observable, final String oldValue,
+                                                    final String newValue) {
+                                    CategoryController.LOGGER.info(String.valueOf(validator.containsErrors()));
                                     if (validator.containsErrors()) {
                                         tooltip.setText(validator.createStringBinding().getValue());
                                         tooltip.setStyle("-fx-background-color: #f00;");
                                         textField.setTooltip(tooltip);
                                         textField.getTooltip().show(window, bounds.getMinX(), bounds.getMinY() - 30);
                                     } else {
-                                        if (textField.getTooltip() != null) {
+                                        if (null != textField.getTooltip()) {
                                             textField.getTooltip().hide();
                                         }
                                     }
@@ -343,8 +339,8 @@ public class CategoryController {
                 };
             }
         };
-        nomCategory_tableColumn.setCellFactory(stringCellFactory);
-        descrptionCategory_tableColumn.setCellFactory(stringCellFactory);
+        this.nomCategory_tableColumn.setCellFactory(stringCellFactory);
+        this.descrptionCategory_tableColumn.setCellFactory(stringCellFactory);
     }
 
     /**
@@ -355,46 +351,46 @@ public class CategoryController {
      * category respectively.
      */
     private void setupCellValueFactory() {
-        idCategory_tableColumn.setCellValueFactory(new PropertyValueFactory<Category, Integer>("id"));
-        descrptionCategory_tableColumn.setCellValueFactory(
+        this.idCategory_tableColumn.setCellValueFactory(new PropertyValueFactory<Category, Integer>("id"));
+        this.descrptionCategory_tableColumn.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<Category, String>, ObservableValue<String>>() {
                     /**
                      * Generates an observable value of a string property based on the value of a
                      * `Category`
                      * object and returns it.
-                     * 
+                     *
                      * @param param cell value of a table column, and provides access to its
                      *              corresponding
                      *              description property.
-                     * 
+                     *
                      * @returns a `SimpleStringProperty` containing the description of the input
                      *          value.
                      */
                     @Override
-                    public ObservableValue<String> call(TableColumn.CellDataFeatures<Category, String> param) {
+                    public ObservableValue<String> call(final TableColumn.CellDataFeatures<Category, String> param) {
                         return new SimpleStringProperty(param.getValue().getDescription());
                     }
                 });
-        nomCategory_tableColumn.setCellValueFactory(
+        this.nomCategory_tableColumn.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<Category, String>, ObservableValue<String>>() {
                     /**
                      * Generates a `SimpleStringProperty` instance from a `Category` object's
                      * `getNom()`
                      * method result and returns it.
-                     * 
+                     *
                      * @param filmcategoryStringCellDataFeatures cell data features of a table
                      *                                           column,
                      *                                           specifically the string value of
                      *                                           the category field.
-                     * 
+                     *
                      *                                           - `Value`: The current value of the
                      *                                           cell data feature, which is a
                      *                                           string representing
                      *                                           the nominal value of a category.
-                     * 
+                     *
                      * @returns a `SimpleStringProperty` containing the nominated value of the `
                      *          filmcategoryStringCellDataFeatures` parameter.
-                     * 
+                     *
                      *          - The output is an instance of `SimpleStringProperty`, which
                      *          represents a simple
                      *          string value.
@@ -405,32 +401,32 @@ public class CategoryController {
                      */
                     @Override
                     public ObservableValue<String> call(
-                            TableColumn.CellDataFeatures<Category, String> filmcategoryStringCellDataFeatures) {
+                            final TableColumn.CellDataFeatures<Category, String> filmcategoryStringCellDataFeatures) {
                         return new SimpleStringProperty(filmcategoryStringCellDataFeatures.getValue().getNom());
                     }
                 });
-        delete_tableColumn.setCellValueFactory(
+        this.delete_tableColumn.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<Category, Button>, ObservableValue<Button>>() {
                     /**
                      * Creates a `Button` element with an `onAction` event handler that calls the
                      * `deleteCategory` function when clicked, passing the category ID as an
                      * argument.
                      * The function returns a `SimpleObjectProperty` of the created button.
-                     * 
+                     *
                      * @param param current cell value of the table column, which is of type
                      *              `Category`,
                      *              and provides access to its `Id` attribute.
-                     * 
+                     *
                      *              - `param.getValue()`: returns the value of the category being
                      *              processed, which
                      *              is of type `Category`.
                      *              - `param.getId()`: returns the ID of the category being
                      *              processed.
-                     * 
+                     *
                      * @returns a `SimpleObjectProperty` of a `Button` object with an action to
                      *          delete a
                      *          category.
-                     * 
+                     *
                      *          - The output is an instance of `SimpleObjectProperty`, which
                      *          represents a single
                      *          object that can be used to display or manipulate the object in a UI
@@ -442,17 +438,17 @@ public class CategoryController {
                      *          that handles the button's action when clicked.
                      */
                     @Override
-                    public ObservableValue<Button> call(TableColumn.CellDataFeatures<Category, Button> param) {
-                        Button button = new Button("delete");
+                    public ObservableValue<Button> call(final TableColumn.CellDataFeatures<Category, Button> param) {
+                        final Button button = new Button("delete");
                         button.setOnAction(new EventHandler<ActionEvent>() {
                             /**
                              * Deletes a category based on its ID.
-                             * 
+                             *
                              * @param event deletion of a category, which is triggered by the user's action.
                              */
                             @Override
-                            public void handle(ActionEvent event) {
-                                deleteCategory(param.getValue().getId());
+                            public void handle(final ActionEvent event) {
+                                CategoryController.this.deleteCategory(param.getValue().getId());
                             }
                         });
                         return new SimpleObjectProperty<Button>(button);
@@ -466,16 +462,16 @@ public class CategoryController {
      * of a `Category` object when committed.
      */
     private void setupCellOnEditCommit() {
-        nomCategory_tableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Category, String>>() {
+        this.nomCategory_tableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Category, String>>() {
             /**
              * Updates the value of a cell in a table column when the user edits it, and
              * also
              * updates the corresponding category object.
-             * 
+             *
              * @param event `TableColumn.CellEditEvent` that triggered the function's
              *              execution,
              *              providing the edited cell value and its position in the table.
-             * 
+             *
              *              - `event.getTableView()` returns the table view object
              *              associated with the event.
              *              - `event.getTablePosition().getRow()` returns the row index of
@@ -484,29 +480,29 @@ public class CategoryController {
              *              cell.
              */
             @Override
-            public void handle(TableColumn.CellEditEvent<Category, String> event) {
+            public void handle(final TableColumn.CellEditEvent<Category, String> event) {
                 try {
                     event.getTableView().getItems().get(
                             event.getTablePosition().getRow()).setNom(event.getNewValue());
-                    updateCategory(event.getTableView().getItems().get(
+                    CategoryController.this.updateCategory(event.getTableView().getItems().get(
                             event.getTablePosition().getRow()));
-                } catch (Exception e) {
-                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                } catch (final Exception e) {
+                    CategoryController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
             }
         });
-        descrptionCategory_tableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Category, String>>() {
+        this.descrptionCategory_tableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Category, String>>() {
             /**
              * Is called when a cell in a table is edited, and it updates the description of
              * the
              * corresponding category item in the table view, and also updates the category
              * object
              * itself.
-             * 
+             *
              * @param event CellEditEvent object that contains information about the edited
              *              cell,
              *              including the new value and the row index of the edited cell.
-             * 
+             *
              *              - `TableColumn.CellEditEvent<Category, String> event`: This
              *              represents an event
              *              that occurs when a cell in a table is being edited. The event
@@ -514,14 +510,14 @@ public class CategoryController {
              *              about the edited cell and its position in the table.
              */
             @Override
-            public void handle(TableColumn.CellEditEvent<Category, String> event) {
+            public void handle(final TableColumn.CellEditEvent<Category, String> event) {
                 try {
                     event.getTableView().getItems().get(
                             event.getTablePosition().getRow()).setDescription(event.getNewValue());
-                    updateCategory(event.getTableView().getItems().get(
+                    CategoryController.this.updateCategory(event.getTableView().getItems().get(
                             event.getTablePosition().getRow()));
-                } catch (Exception e) {
-                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                } catch (final Exception e) {
+                    CategoryController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
             }
         });

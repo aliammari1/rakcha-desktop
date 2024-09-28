@@ -13,26 +13,26 @@ public class TicketService implements IService<Ticket> {
     Connection connection;
 
     public TicketService() {
-        connection = DataSource.getInstance().getConnection();
+        this.connection = DataSource.getInstance().getConnection();
     }
 
-    /** 
+    /**
      * @param ticket
      */
     @Override
-    public void create(Ticket ticket) {
-        String req = "insert into ticket (id_user,id_seance) values (?,?) ";
+    public void create(final Ticket ticket) {
+        final String req = "insert into ticket (id_user,id_seance) values (?,?) ";
         try {
-            PreparedStatement statement = connection.prepareStatement(req);
+            final PreparedStatement statement = this.connection.prepareStatement(req);
             statement.setInt(1, ticket.getId_user().getId());
             statement.setInt(2, ticket.getId_seance().getId_seance());
             statement.executeUpdate();
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    /** 
+    /**
      * @return List<Ticket>
      */
     @Override
@@ -41,10 +41,10 @@ public class TicketService implements IService<Ticket> {
     }
 
     @Override
-    public void update(Ticket ticket) {
+    public void update(final Ticket ticket) {
     }
 
     @Override
-    public void delete(Ticket ticket) {
+    public void delete(final Ticket ticket) {
     }
 }

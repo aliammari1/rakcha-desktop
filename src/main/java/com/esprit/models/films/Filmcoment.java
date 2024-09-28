@@ -14,12 +14,12 @@ public class Filmcoment {
     /**
      * Constructs a Filmcoment object with the specified id, comment, user_id, and film_id.
      *
-     * @param id       the id of the comment
-     * @param comment  the comment text
-     * @param user_id  the user who made the comment
-     * @param film_id  the film to which the comment belongs
+     * @param id      the id of the comment
+     * @param comment the comment text
+     * @param user_id the user who made the comment
+     * @param film_id the film to which the comment belongs
      */
-    public Filmcoment(int id, String comment, Client user_id, Film film_id) {
+    public Filmcoment(final int id, final String comment, final Client user_id, final Film film_id) {
         this.id = id;
         this.comment = comment;
         this.user_id = user_id;
@@ -29,11 +29,11 @@ public class Filmcoment {
     /**
      * Constructs a Filmcoment object with the specified comment, user_id, and film_id.
      *
-     * @param comment  the comment text
-     * @param user_id  the user who made the comment
-     * @param film_id  the film to which the comment belongs
+     * @param comment the comment text
+     * @param user_id the user who made the comment
+     * @param film_id the film to which the comment belongs
      */
-    public Filmcoment(String comment, Client user_id, Film film_id) {
+    public Filmcoment(final String comment, final Client user_id, final Film film_id) {
         this.comment = comment;
         this.user_id = user_id;
         this.film_id = film_id;
@@ -45,7 +45,7 @@ public class Filmcoment {
      * @return the id of the comment
      */
     public int getId() {
-        return id;
+        return this.id;
     }
 
     /**
@@ -53,7 +53,7 @@ public class Filmcoment {
      *
      * @param id the id of the comment
      */
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 
@@ -63,7 +63,7 @@ public class Filmcoment {
      * @return the comment text
      */
     public String getComment() {
-        return comment;
+        return this.comment;
     }
 
     /**
@@ -71,7 +71,7 @@ public class Filmcoment {
      *
      * @param comment the comment text
      */
-    public void setComment(String comment) {
+    public void setComment(final String comment) {
         this.comment = comment;
     }
 
@@ -81,7 +81,7 @@ public class Filmcoment {
      * @return the user who made the comment
      */
     public Client getUser_id() {
-        return user_id;
+        return this.user_id;
     }
 
     /**
@@ -89,7 +89,7 @@ public class Filmcoment {
      *
      * @param user_id the user who made the comment
      */
-    public void setUser_id(Client user_id) {
+    public void setUser_id(final Client user_id) {
         this.user_id = user_id;
     }
 
@@ -99,7 +99,7 @@ public class Filmcoment {
      * @return the film to which the comment belongs
      */
     public Film getFilm_id() {
-        return film_id;
+        return this.film_id;
     }
 
     /**
@@ -107,7 +107,7 @@ public class Filmcoment {
      *
      * @param film_id the film to which the comment belongs
      */
-    public void setFilm_id(Film film_id) {
+    public void setFilm_id(final Film film_id) {
         this.film_id = film_id;
     }
 
@@ -119,10 +119,10 @@ public class Filmcoment {
     @Override
     public String toString() {
         return "Filmcoment{"
-                + "id=" + id
-                + ", comment='" + comment + '\''
-                + ", user_id=" + user_id
-                + ", film_id=" + film_id
+                + "id=" + this.id
+                + ", comment='" + this.comment + '\''
+                + ", user_id=" + this.user_id
+                + ", film_id=" + this.film_id
                 + '}';
     }
 }

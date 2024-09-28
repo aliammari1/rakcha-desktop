@@ -13,7 +13,7 @@ public class Actorfilm {
      * @param idactor the actor associated with the film
      * @param idfilm  the film associated with the actor
      */
-    public Actorfilm(Actor idactor, Film idfilm) {
+    public Actorfilm(final Actor idactor, final Film idfilm) {
         this.idactor = idactor;
         this.idfilm = idfilm;
     }
@@ -24,7 +24,7 @@ public class Actorfilm {
      * @return the actor associated with the film
      */
     public Actor getIdactor() {
-        return idactor;
+        return this.idactor;
     }
 
     /**
@@ -32,7 +32,7 @@ public class Actorfilm {
      *
      * @param idactor the actor to be set
      */
-    public void setIdactor(Actor idactor) {
+    public void setIdactor(final Actor idactor) {
         this.idactor = idactor;
     }
 
@@ -42,7 +42,7 @@ public class Actorfilm {
      * @return the film associated with the actor
      */
     public Film getIdfilm() {
-        return idfilm;
+        return this.idfilm;
     }
 
     /**
@@ -50,7 +50,7 @@ public class Actorfilm {
      *
      * @param idfilm the film to be set
      */
-    public void setIdfilm(Film idfilm) {
+    public void setIdfilm(final Film idfilm) {
         this.idfilm = idfilm;
     }
 
@@ -62,8 +62,8 @@ public class Actorfilm {
     @Override
     public String toString() {
         return "Actorfilm{"
-                + "idactor=" + idactor
-                + ", idfilm=" + idfilm
+                + "idactor=" + this.idactor
+                + ", idfilm=" + this.idfilm
                 + '}';
     }
 }

@@ -1,14 +1,7 @@
 package com.esprit.controllers.produits;
 
-import com.esprit.controllers.ClientSideBarController;
 import com.esprit.models.produits.Categorie_Produit;
-import com.esprit.models.users.Client;
-import com.esprit.services.produits.AvisService;
 import com.esprit.services.produits.CategorieService;
-
-import org.kordamp.ikonli.fontawesome5.*;
-import org.kordamp.ikonli.javafx.FontIcon;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -26,6 +19,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -68,7 +62,7 @@ public class DesignCategorieAdminController {
      * with it, obtains the current stage from the event, and then opens a new stage
      * with
      * the new scene, closing the previous one.
-     * 
+     *
      * @param event ActionEvent object that triggered the method call, providing
      *              information
      *              about the action that was performed, such as the source of the
@@ -76,16 +70,16 @@ public class DesignCategorieAdminController {
      *              associated data.
      */
     @FXML
-    void GestionProduit(ActionEvent event) throws IOException {
+    void GestionProduit(final ActionEvent event) throws IOException {
         // Charger la nouvelle interface ListproduitAdmin.fxml
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignProduitAdmin.fxml"));
-        Parent root = loader.load();
+        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/DesignProduitAdmin.fxml"));
+        final Parent root = loader.load();
         // Créer une nouvelle scène avec la nouvelle interface
-        Scene scene = new Scene(root);
+        final Scene scene = new Scene(root);
         // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
-        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        final Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         // Créer une nouvelle fenêtre (stage) et y attacher la scène
-        Stage stage = new Stage();
+        final Stage stage = new Stage();
         stage.setScene(scene);
         stage.setTitle("Gestion des categories");
         stage.show();
@@ -102,12 +96,12 @@ public class DesignCategorieAdminController {
      */
     @FXML
     void initialize() {
-        SearchBar.textProperty().addListener((observable, oldValue, newValue) -> {
-            search(newValue);
-            filterCategorieProduits(newValue.trim());
+        this.SearchBar.textProperty().addListener((observable, oldValue, newValue) -> {
+            this.search(newValue);
+            this.filterCategorieProduits(newValue.trim());
         });
-        afficher_categorie();
-        initDeleteColumn();
+        this.afficher_categorie();
+        this.initDeleteColumn();
     }
 
     /**
@@ -115,7 +109,7 @@ public class DesignCategorieAdminController {
      * Enables user input to create a new category and add it to the existing list
      * in the
      * `Categorie_Produit` class.
-     * 
+     *
      * @param event user action that triggered the method, and it is used to
      *              determine
      *              the specific action taken by the user, such as clicking on the
@@ -123,35 +117,35 @@ public class DesignCategorieAdminController {
      *              catégorie" button.
      */
     @FXML
-    void ajouter_categorie(ActionEvent event) {
+    void ajouter_categorie(final ActionEvent event) {
         // Récupérer les valeurs des champs de saisie
-        String nomCategorie = nomC_textFile.getText().trim();
-        String descriptionCategorie = descriptionC_textArea.getText().trim();
+        final String nomCategorie = this.nomC_textFile.getText().trim();
+        final String descriptionCategorie = this.descriptionC_textArea.getText().trim();
         // Vérifier si les champs sont vides
         if (nomCategorie.isEmpty() || descriptionCategorie.isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
+            final Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erreur de saisie");
             alert.setContentText("Veuillez remplir tous les champs.");
             alert.show();
             return; // Arrêter l'exécution de la méthode si les champs sont vides
         }
         // Vérifier si la description a au moins 20 caractères
-        if (descriptionCategorie.length() < 20) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
+        if (20 > descriptionCategorie.length()) {
+            final Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erreur de saisie");
             alert.setContentText("La description doit contenir au moins 20 caractères.");
             alert.show();
             return; // Arrêter l'exécution de la méthode si les champs sont vides
         }
         // Créer l'objet Categorie
-        CategorieService cs = new CategorieService();
-        Categorie_Produit nouvelleCategorieProduit = new Categorie_Produit(nomCategorie, descriptionCategorie);
+        final CategorieService cs = new CategorieService();
+        final Categorie_Produit nouvelleCategorieProduit = new Categorie_Produit(nomCategorie, descriptionCategorie);
         // Ajouter le nouveau categorie à la liste existante
         cs.create(nouvelleCategorieProduit);
-        categorie_tableview.getItems().add(nouvelleCategorieProduit);
+        this.categorie_tableview.getItems().add(nouvelleCategorieProduit);
         // Rafraîchir la TableView
-        categorie_tableview.refresh();
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        this.categorie_tableview.refresh();
+        final Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Categorie ajouté");
         alert.setContentText("Categorie ajouté !");
         alert.show();
@@ -165,7 +159,7 @@ public class DesignCategorieAdminController {
      * when clicked.
      */
     private void initDeleteColumn() {
-        Callback<TableColumn<Categorie_Produit, Void>, TableCell<Categorie_Produit, Void>> cellFactory = new Callback<>() {
+        final Callback<TableColumn<Categorie_Produit, Void>, TableCell<Categorie_Produit, Void>> cellFactory = new Callback<>() {
             /**
              * Creates a new `TableCell` instance and sets its graphic to a `Button` element
              * with
@@ -174,25 +168,26 @@ public class DesignCategorieAdminController {
              * method on a `CategorieService` instance, deleting the corresponding
              * `Categorie_Produit`
              * item from the table view.
-             * 
+             *
              * @param param TableColumn object that is used to define the appearance and
              *              behavior
              *              of the table cells in the table view.
-             * 
+             *
              * @returns a `TableCell` object that contains a button with a delete action.
              */
             @Override
-            public TableCell<Categorie_Produit, Void> call(final TableColumn<Categorie_Produit, Void> param) {
+            public TableCell<Categorie_Produit, Void> call(TableColumn<Categorie_Produit, Void> param) {
                 return new TableCell<>() {
                     private final Button btnDelete = new Button("Delete");
+
                     {
-                        btnDelete.getStyleClass().add("delete-button");
-                        btnDelete.setOnAction((ActionEvent event) -> {
-                            Categorie_Produit categorieProduit = getTableView().getItems().get(getIndex());
-                            CategorieService cs = new CategorieService();
+                        this.btnDelete.getStyleClass().add("delete-button");
+                        this.btnDelete.setOnAction((final ActionEvent event) -> {
+                            final Categorie_Produit categorieProduit = this.getTableView().getItems().get(this.getIndex());
+                            final CategorieService cs = new CategorieService();
                             cs.delete(categorieProduit);
-                            categorie_tableview.getItems().remove(categorieProduit);
-                            categorie_tableview.refresh();
+                            DesignCategorieAdminController.this.categorie_tableview.getItems().remove(categorieProduit);
+                            DesignCategorieAdminController.this.categorie_tableview.refresh();
                         });
                     }
 
@@ -201,28 +196,28 @@ public class DesignCategorieAdminController {
                      * status.
                      * When the item is empty, the graphic is set to null; otherwise, it is set to a
                      * button representing deletion.
-                     * 
+                     *
                      * @param item  Void item that is being updated, and its value is passed to the
                      *              parent
                      *              class's `updateItem()` method for further processing.
-                     * 
+                     *
                      * @param empty whether or not the `item` is empty, and its value is used to
                      *              control
                      *              the display of the graphic element `btnDelete`.
                      */
                     @Override
-                    protected void updateItem(Void item, boolean empty) {
+                    protected void updateItem(final Void item, final boolean empty) {
                         super.updateItem(item, empty);
                         if (empty) {
-                            setGraphic(null);
+                            this.setGraphic(null);
                         } else {
-                            setGraphic(btnDelete);
+                            this.setGraphic(this.btnDelete);
                         }
                     }
                 };
             }
         };
-        deleteColumn.setCellFactory(cellFactory);
+        this.deleteColumn.setCellFactory(cellFactory);
         // categorie_tableview.getColumns().add(deleteColumn);
     }
 
@@ -230,19 +225,19 @@ public class DesignCategorieAdminController {
      * Modifies the attributes of a `CategorieProduit` object and stores the changes
      * in
      * the database using the `CategorieService`.
-     * 
+     *
      * @param categorieProduit categorization information for a product, which is
      *                         used
      *                         to update the corresponding record in the database
      *                         using the `CategorieService`.
      */
     @FXML
-    void modifier_categorie(Categorie_Produit categorieProduit) {
-        String nouveauNom = categorieProduit.getNom_categorie();
-        String nouvelleDescription = categorieProduit.getDescription();
+    void modifier_categorie(final Categorie_Produit categorieProduit) {
+        final String nouveauNom = categorieProduit.getNom_categorie();
+        final String nouvelleDescription = categorieProduit.getDescription();
         // Enregistrez les modifications dans la base de données en utilisant un service
         // approprié
-        CategorieService ps = new CategorieService();
+        final CategorieService ps = new CategorieService();
         ps.update(categorieProduit);
     }
 
@@ -253,39 +248,39 @@ public class DesignCategorieAdminController {
      */
     @FXML
     void afficher_categorie() {
-        nomC_tableC.setCellValueFactory(new PropertyValueFactory<Categorie_Produit, String>("nom_categorie"));
-        nomC_tableC.setCellFactory(TextFieldTableCell.forTableColumn());
-        nomC_tableC.setOnEditCommit(event -> {
-            Categorie_Produit categorieProduit = event.getRowValue();
+        this.nomC_tableC.setCellValueFactory(new PropertyValueFactory<Categorie_Produit, String>("nom_categorie"));
+        this.nomC_tableC.setCellFactory(TextFieldTableCell.forTableColumn());
+        this.nomC_tableC.setOnEditCommit(event -> {
+            final Categorie_Produit categorieProduit = event.getRowValue();
             categorieProduit.setNom_categorie(event.getNewValue());
-            modifier_categorie(categorieProduit);
+            this.modifier_categorie(categorieProduit);
         });
-        description_tableC.setCellValueFactory(new PropertyValueFactory<Categorie_Produit, String>("description"));
-        description_tableC.setCellFactory(TextFieldTableCell.forTableColumn());
-        description_tableC.setOnEditCommit(event -> {
-            Categorie_Produit categorieProduit = event.getRowValue();
+        this.description_tableC.setCellValueFactory(new PropertyValueFactory<Categorie_Produit, String>("description"));
+        this.description_tableC.setCellFactory(TextFieldTableCell.forTableColumn());
+        this.description_tableC.setOnEditCommit(event -> {
+            final Categorie_Produit categorieProduit = event.getRowValue();
             categorieProduit.setDescription(event.getNewValue());
-            modifier_categorie(categorieProduit);
+            this.modifier_categorie(categorieProduit);
         });
         // Activer l'édition en cliquant sur une ligne
-        categorie_tableview.setEditable(true);
+        this.categorie_tableview.setEditable(true);
         // Gérer la modification du texte dans une cellule et le valider en appuyant sur
         // Enter
-        categorie_tableview.setOnKeyPressed(event -> {
-            if (event.getCode().equals(KeyCode.ENTER)) {
-                Categorie_Produit selectedCategorieProduit = categorie_tableview.getSelectionModel().getSelectedItem();
-                if (selectedCategorieProduit != null) {
-                    modifier_categorie(selectedCategorieProduit);
+        this.categorie_tableview.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                final Categorie_Produit selectedCategorieProduit = this.categorie_tableview.getSelectionModel().getSelectedItem();
+                if (null != selectedCategorieProduit) {
+                    this.modifier_categorie(selectedCategorieProduit);
                 }
             }
         });
         // Utiliser une ObservableList pour stocker les éléments
-        ObservableList<Categorie_Produit> list = FXCollections.observableArrayList();
-        CategorieService cs = new CategorieService();
+        final ObservableList<Categorie_Produit> list = FXCollections.observableArrayList();
+        final CategorieService cs = new CategorieService();
         list.addAll(cs.read());
-        categorie_tableview.setItems(list);
+        this.categorie_tableview.setItems(list);
         // Activer la sélection de cellules
-        categorie_tableview.getSelectionModel().setCellSelectionEnabled(true);
+        this.categorie_tableview.getSelectionModel().setCellSelectionEnabled(true);
     }
 
     /**
@@ -293,25 +288,25 @@ public class DesignCategorieAdminController {
      * categories,
      * adding them to an observable list which is then set as the table view's
      * items.
-     * 
+     *
      * @param keyword search term that filters the data displayed in the
      *                `categorie_tableview`.
      */
     @FXML
-    private void search(String keyword) {
-        CategorieService categoryService = new CategorieService();
-        ObservableList<Categorie_Produit> filteredList = FXCollections.observableArrayList();
-        if (keyword == null || keyword.trim().isEmpty()) {
+    private void search(final String keyword) {
+        final CategorieService categoryService = new CategorieService();
+        final ObservableList<Categorie_Produit> filteredList = FXCollections.observableArrayList();
+        if (null == keyword || keyword.trim().isEmpty()) {
             filteredList.addAll(categoryService.read());
         } else {
-            for (Categorie_Produit category : categoryService.read()) {
+            for (final Categorie_Produit category : categoryService.read()) {
                 if (category.getNom_categorie().toLowerCase().contains(keyword.toLowerCase())
                         || category.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
                     filteredList.add(category);
                 }
             }
         }
-        categorie_tableview.setItems(filteredList);
+        this.categorie_tableview.setItems(filteredList);
     }
 
     /**
@@ -319,25 +314,25 @@ public class DesignCategorieAdminController {
      * `Categorie_Produit`
      * objects in the `categorie_tableview` based on the search text. It updates the
      * `categorie_tableview` with the filtered list.
-     * 
+     *
      * @param searchText search term used to filter the list of cinemas.
      */
-    private void filterCategorieProduits(String searchText) {
+    private void filterCategorieProduits(final String searchText) {
         // Vérifier si le champ de recherche n'est pas vide
         if (!searchText.isEmpty()) {
             // Filtrer la liste des cinémas pour ne garder que ceux dont le nom contient le
             // texte saisi
-            ObservableList<Categorie_Produit> filteredList = FXCollections.observableArrayList();
-            for (Categorie_Produit categorie : categorie_tableview.getItems()) {
+            final ObservableList<Categorie_Produit> filteredList = FXCollections.observableArrayList();
+            for (final Categorie_Produit categorie : this.categorie_tableview.getItems()) {
                 if (categorie.getNom_categorie().toLowerCase().contains(searchText.toLowerCase())) {
                     filteredList.add(categorie);
                 }
             }
             // Mettre à jour la TableView avec la liste filtrée
-            categorie_tableview.setItems(filteredList);
+            this.categorie_tableview.setItems(filteredList);
         } else {
             // Si le champ de recherche est vide, afficher tous les cinémas
-            afficher_categorie();
+            this.afficher_categorie();
         }
     }
 
@@ -345,13 +340,13 @@ public class DesignCategorieAdminController {
      * Retrieves all categories from the database through the `CategorieService`. It
      * returns a list of `Categorie_Produit` objects representing the retrieved
      * categories.
-     * 
+     *
      * @returns a list of `Categorie_Produit` objects containing all categories for
-     *          which
-     *          category data is available.
+     * which
+     * category data is available.
      */
     private List<Categorie_Produit> getAllCategories() {
-        CategorieService categorieservice = new CategorieService();
+        final CategorieService categorieservice = new CategorieService();
         return categorieservice.read();
     }
 
@@ -362,47 +357,47 @@ public class DesignCategorieAdminController {
      * before recurring addresses from a database and displaying them in a new VBox
      * added
      * to the filter anchor.
-     * 
+     *
      * @param event mouse event that triggered the function execution and is not
      *              used in
      *              this specific code snippet.
      */
     @FXML
-    void filtrer(MouseEvent event) {
-        categorie_tableview.setOpacity(0.5);
-        filterAnchor.setVisible(true);
+    void filtrer(final MouseEvent event) {
+        this.categorie_tableview.setOpacity(0.5);
+        this.filterAnchor.setVisible(true);
         // Nettoyer les listes des cases à cocher
-        addressCheckBoxes.clear();
-        statusCheckBoxes.clear();
+        this.addressCheckBoxes.clear();
+        this.statusCheckBoxes.clear();
         // Récupérer les adresses uniques depuis la base de données
-        List<String> categorie = getCategorie_Produit();
+        final List<String> categorie = this.getCategorie_Produit();
         // Créer des VBox pour les adresses
-        VBox addressCheckBoxesVBox = new VBox();
-        Label addressLabel = new Label("Category");
+        final VBox addressCheckBoxesVBox = new VBox();
+        final Label addressLabel = new Label("Category");
         addressLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
         addressCheckBoxesVBox.getChildren().add(addressLabel);
-        for (String address : categorie) {
-            CheckBox checkBox = new CheckBox(address);
+        for (final String address : categorie) {
+            final CheckBox checkBox = new CheckBox(address);
             addressCheckBoxesVBox.getChildren().add(checkBox);
-            addressCheckBoxes.add(checkBox);
+            this.addressCheckBoxes.add(checkBox);
         }
         addressCheckBoxesVBox.setLayoutX(25);
         addressCheckBoxesVBox.setLayoutY(60);
         // Ajouter les VBox dans le filterAnchor
-        filterAnchor.getChildren().addAll(addressCheckBoxesVBox);
-        filterAnchor.setVisible(true);
+        this.filterAnchor.getChildren().addAll(addressCheckBoxesVBox);
+        this.filterAnchor.setVisible(true);
     }
 
     /**
      * Retrieves a list of unique movie theater addresses from the database based on
      * their
      * names.
-     * 
+     *
      * @returns a list of unique cinema addresses.
      */
     public List<String> getCategorie_Produit() {
         // Récupérer tous les cinémas depuis la base de données
-        List<Categorie_Produit> categories = getAllCategories();
+        final List<Categorie_Produit> categories = this.getAllCategories();
         // Extraire les adresses uniques des cinémas
         return categories.stream()
                 .map(Categorie_Produit::getNom_categorie)
@@ -418,44 +413,44 @@ public class DesignCategorieAdminController {
      * streams them into a list of all cinemas, filters the cinemas based on the
      * retrieved
      * information, and updates the tableview with the filtered list.
-     * 
+     *
      * @param event ActionEvent that triggered the function, and it is not used or
      *              referred
      *              to within the provided code snippet.
      */
     @FXML
-    public void filtercinema(ActionEvent event) {
-        categorieList.setOpacity(1);
-        formulaire.setOpacity(1);
-        categorieList.setVisible(true);
-        categorie_tableview.setOpacity(1);
-        filterAnchor.setVisible(false);
-        categorie_tableview.setVisible(true);
-        formulaire.setVisible(true);
+    public void filtercinema(final ActionEvent event) {
+        this.categorieList.setOpacity(1);
+        this.formulaire.setOpacity(1);
+        this.categorieList.setVisible(true);
+        this.categorie_tableview.setOpacity(1);
+        this.filterAnchor.setVisible(false);
+        this.categorie_tableview.setVisible(true);
+        this.formulaire.setVisible(true);
         // Récupérer les adresses sélectionnées
-        List<String> selectedCategories = getSelectedCategories();
+        final List<String> selectedCategories = this.getSelectedCategories();
         // Récupérer les statuts sélectionnés
-        Categorie_Produit categorieProduit = new Categorie_Produit();
+        final Categorie_Produit categorieProduit = new Categorie_Produit();
         // Filtrer les cinémas en fonction des adresses et/ou des statuts sélectionnés
-        List<Categorie_Produit> filteredCategories = getAllCategories().stream()
+        final List<Categorie_Produit> filteredCategories = this.getAllCategories().stream()
                 .filter(c -> selectedCategories.contains(c.getNom_categorie()))
                 .collect(Collectors.toList());
         // Mettre à jour le TableView avec les cinémas filtrés
-        ObservableList<Categorie_Produit> filteredList = FXCollections.observableArrayList(filteredCategories);
-        categorie_tableview.setItems(filteredList);
+        final ObservableList<Categorie_Produit> filteredList = FXCollections.observableArrayList(filteredCategories);
+        this.categorie_tableview.setItems(filteredList);
     }
 
     /**
      * Streamlines and filters the selected addresses within an AnchorPane
      * component,
      * returning a list of selected categories as strings.
-     * 
+     *
      * @returns a list of selected addresses from an AnchorPane of filtering
-     *          controls.
+     * controls.
      */
     private List<String> getSelectedCategories() {
         // Récupérer les adresses sélectionnées dans l'AnchorPane de filtrage
-        return addressCheckBoxes.stream()
+        return this.addressCheckBoxes.stream()
                 .filter(CheckBox::isSelected)
                 .map(CheckBox::getText)
                 .collect(Collectors.toList());
@@ -467,30 +462,30 @@ public class DesignCategorieAdminController {
      * a new scene from it, and attaches it to a new stage. It then closes the
      * current
      * stage and shows the new one.
-     * 
+     *
      * @param event ActionEvent that triggered the function, providing information
      *              about
      *              the source of the event and the event itself.
      */
     @FXML
-    void cinemaclient(ActionEvent event) {
+    void cinemaclient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/CommentaireProduit.fxml"));
-            Parent root = loader.load();
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/CommentaireProduit.fxml"));
+            final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
-            Scene scene = new Scene(root);
+            final Scene scene = new Scene(root);
             // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
-            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            final Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             // Créer une nouvelle fenêtre (stage) et y attacher la scène
-            Stage stage = new Stage();
+            final Stage stage = new Stage();
             stage.setScene(scene);
             stage.setTitle("cinema ");
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
+        } catch (final IOException e) {
+            DesignCategorieAdminController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
     }
 
@@ -498,31 +493,31 @@ public class DesignCategorieAdminController {
      * Loads a new FXML file, creates a new scene, and attaches it to a new stage
      * when
      * an event is triggered. It then closes the current stage.
-     * 
+     *
      * @param event ActionEvent that triggered the event handling method, providing
      *              access
      *              to information about the action that occurred and the underlying
      *              source node.
      */
     @FXML
-    void eventClient(ActionEvent event) {
+    void eventClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(".fxml"));
-            Parent root = loader.load();
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource(".fxml"));
+            final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
-            Scene scene = new Scene(root);
+            final Scene scene = new Scene(root);
             // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
-            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            final Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             // Créer une nouvelle fenêtre (stage) et y attacher la scène
-            Stage stage = new Stage();
+            final Stage stage = new Stage();
             stage.setScene(scene);
             stage.setTitle("Event ");
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
+        } catch (final IOException e) {
+            DesignCategorieAdminController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
     }
 
@@ -530,31 +525,31 @@ public class DesignCategorieAdminController {
      * Loads a new FXML file, creates a new scene and attaches it to a new stage,
      * replacing
      * the current stage.
-     * 
+     *
      * @param event ActionEvent object that triggers the fonction and provides
      *              access to
      *              information about the event, such as the source of the event and
      *              the event's type.
      */
     @FXML
-    void produitClient(ActionEvent event) {
+    void produitClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/DesignProduitAdmin.fxml"));
-            Parent root = loader.load();
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/DesignProduitAdmin.fxml"));
+            final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
-            Scene scene = new Scene(root);
+            final Scene scene = new Scene(root);
             // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
-            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            final Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             // Créer une nouvelle fenêtre (stage) et y attacher la scène
-            Stage stage = new Stage();
+            final Stage stage = new Stage();
             stage.setScene(scene);
             stage.setTitle("products ");
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
+        } catch (final IOException e) {
+            DesignCategorieAdminController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
     }
 
@@ -562,41 +557,41 @@ public class DesignCategorieAdminController {
      * Likely performs some client-side profiling tasks, such as collecting and
      * analyzing
      * data on performance metrics for a given application or user session.
-     * 
+     *
      * @param event event that triggered the execution of the `profilclient` method.
      */
     @FXML
-    void profilclient(ActionEvent event) {
+    void profilclient(final ActionEvent event) {
     }
 
     /**
      * Charges a new UI file, creates a new scene, and attaches it to a new stage.
      * It
      * then closes the current stage and displays the new one.
-     * 
+     *
      * @param event action event that triggers the function and provides access to
      *              the
      *              source node of the event, which is used to load the FXML file.
      */
     @FXML
-    void MovieClient(ActionEvent event) {
+    void MovieClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/filmuser.fxml"));
-            Parent root = loader.load();
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/filmuser.fxml"));
+            final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
-            Scene scene = new Scene(root);
+            final Scene scene = new Scene(root);
             // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
-            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            final Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             // Créer une nouvelle fenêtre (stage) et y attacher la scène
-            Stage stage = new Stage();
+            final Stage stage = new Stage();
             stage.setScene(scene);
             stage.setTitle("movie ");
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
+        } catch (final IOException e) {
+            DesignCategorieAdminController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
     }
 
@@ -606,31 +601,31 @@ public class DesignCategorieAdminController {
      * stage with the new interface and attaches it to the current stage, closing
      * the
      * original stage upon attachment.
-     * 
+     *
      * @param event ActionEvent object that triggers the method, providing access to
      *              information about the action that triggered the method call,
      *              such as the source
      *              of the action and any related data.
      */
     @FXML
-    void SerieClient(ActionEvent event) {
+    void SerieClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Serie-view.fxml"));
-            Parent root = loader.load();
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/Serie-view.fxml"));
+            final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
-            Scene scene = new Scene(root);
+            final Scene scene = new Scene(root);
             // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
-            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            final Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             // Créer une nouvelle fenêtre (stage) et y attacher la scène
-            Stage stage = new Stage();
+            final Stage stage = new Stage();
             stage.setScene(scene);
             stage.setTitle("series ");
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
+        } catch (final IOException e) {
+            DesignCategorieAdminController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
     }
 }

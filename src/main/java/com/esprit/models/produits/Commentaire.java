@@ -2,8 +2,6 @@ package com.esprit.models.produits;
 
 import com.esprit.models.users.Client;
 
-import java.util.Date;
-
 /**
  * The Commentaire class represents a comment made by a client on a product.
  */
@@ -21,12 +19,12 @@ public class Commentaire {
 
     /**
      * Parameterized constructor for Commentaire class.
-     * 
+     *
      * @param client      The client who made the comment.
      * @param commentaire The comment text.
      * @param produit     The product associated with the comment.
      */
-    public Commentaire(Client client, String commentaire, Produit produit) {
+    public Commentaire(final Client client, final String commentaire, final Produit produit) {
         this.client = client;
         this.commentaire = commentaire;
         this.produit = produit;
@@ -34,13 +32,13 @@ public class Commentaire {
 
     /**
      * Parameterized constructor for Commentaire class.
-     * 
+     *
      * @param idcommentaire The ID of the comment.
      * @param client        The client who made the comment.
      * @param commentaire   The comment text.
      * @param produit       The product associated with the comment.
      */
-    public Commentaire(int idcommentaire, Client client, String commentaire, Produit produit) {
+    public Commentaire(final int idcommentaire, final Client client, final String commentaire, final Produit produit) {
         this.idcommentaire = idcommentaire;
         this.client = client;
         this.commentaire = commentaire;
@@ -49,88 +47,88 @@ public class Commentaire {
 
     /**
      * Get the ID of the comment.
-     * 
+     *
      * @return The ID of the comment.
      */
     public int getIdCommentaire() {
-        return idcommentaire;
+        return this.idcommentaire;
     }
 
     /**
      * Set the ID of the comment.
-     * 
+     *
      * @param idCommentaire The ID of the comment.
      */
-    public void setIdCommentaire(int idCommentaire) {
-        this.idcommentaire = idCommentaire;
+    public void setIdCommentaire(final int idCommentaire) {
+        idcommentaire = idCommentaire;
     }
 
     /**
      * Get the client who made the comment.
-     * 
+     *
      * @return The client who made the comment.
      */
     public Client getClient() {
-        return client;
+        return this.client;
     }
 
     /**
      * Set the client who made the comment.
-     * 
+     *
      * @param client The client who made the comment.
      */
-    public void setClient(Client client) {
+    public void setClient(final Client client) {
         this.client = client;
     }
 
     /**
      * Get the comment text.
-     * 
+     *
      * @return The comment text.
      */
     public String getCommentaire() {
-        return commentaire;
+        return this.commentaire;
     }
 
     /**
      * Set the comment text.
-     * 
+     *
      * @param commentaire The comment text.
      */
-    public void setCommentaire(String commentaire) {
+    public void setCommentaire(final String commentaire) {
         this.commentaire = commentaire;
     }
 
     /**
      * Get the product associated with the comment.
-     * 
+     *
      * @return The product associated with the comment.
      */
     public Produit getProduit() {
-        return produit;
+        return this.produit;
     }
 
     /**
      * Set the product associated with the comment.
-     * 
+     *
      * @param produit The product associated with the comment.
      */
-    public void setProduit(Produit produit) {
+    public void setProduit(final Produit produit) {
         this.produit = produit;
     }
 
     /**
      * Returns a string representation of the Commentaire object.
-     * 
+     *
      * @return A string representation of the Commentaire object.
      */
     @Override
     public String toString() {
         return "Commentaire{"
-                + "idcommentaire=" + idcommentaire
-                + ", client=" + client
-                + ", commentaire='" + commentaire + '\''
-                + ", produit=" + produit
+                + "idcommentaire=" + this.idcommentaire
+                + ", client=" + this.client
+                + ", commentaire='" + this.commentaire + '\''
+                + ", produit=" + this.produit
                 + '}';
     }
 }

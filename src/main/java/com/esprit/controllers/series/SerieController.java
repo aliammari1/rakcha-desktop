@@ -3,12 +3,10 @@ package com.esprit.controllers.series;
 import com.esprit.models.series.Categorie;
 import com.esprit.models.series.Feedback;
 import com.esprit.models.series.Serie;
-import com.esprit.services.produits.AvisService;
 import com.esprit.services.series.DTO.SerieDto;
 import com.esprit.services.series.IServiceCategorieImpl;
 import com.esprit.services.series.IServiceFeedbackImpl;
 import com.esprit.services.series.IServiceSerieImpl;
-
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -91,52 +89,53 @@ public class SerieController {
      * 6/ Updates the graphic of each cell based on its state (empty or not).
      */
     private void ref() {
-        tableView.getItems().clear();
-        tableView.getColumns().clear();
-        categorieF.getItems().clear();
-        nomF.setText("");
-        resumeF.setText("");
-        directeurF.setText("");
-        paysF.setText("");
-        imgpath = "";
-        IServiceCategorieImpl categorieserv = new IServiceCategorieImpl();
-        IServiceSerieImpl iServiceSerie = new IServiceSerieImpl();
+        this.tableView.getItems().clear();
+        this.tableView.getColumns().clear();
+        this.categorieF.getItems().clear();
+        this.nomF.setText("");
+        this.resumeF.setText("");
+        this.directeurF.setText("");
+        this.paysF.setText("");
+        this.imgpath = "";
+        final IServiceCategorieImpl categorieserv = new IServiceCategorieImpl();
+        final IServiceSerieImpl iServiceSerie = new IServiceSerieImpl();
         try {
-            categorieList = categorieserv.recuperer();
-            for (Categorie c : categorieList) {
-                categorieF.getItems().add(c.getNom());
+            this.categorieList = categorieserv.recuperer();
+            for (final Categorie c : this.categorieList) {
+                this.categorieF.getItems().add(c.getNom());
             }
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             throw new RuntimeException(e);
         }
         ///// affichage du tableau
-        IServiceSerieImpl serviceSerie = new IServiceSerieImpl();
+        final IServiceSerieImpl serviceSerie = new IServiceSerieImpl();
         // TableColumn<SerieDto, Integer> idCol = new TableColumn<>("ID");
         // idCol.setCellValueFactory(new PropertyValueFactory<>("idserie"));
-        TableColumn<SerieDto, String> nomCol = new TableColumn<>("Name");
+        final TableColumn<SerieDto, String> nomCol = new TableColumn<>("Name");
         nomCol.setCellValueFactory(new PropertyValueFactory<>("nom"));
-        TableColumn<SerieDto, String> resumeCol = new TableColumn<>("Summary");
+        final TableColumn<SerieDto, String> resumeCol = new TableColumn<>("Summary");
         resumeCol.setCellValueFactory(new PropertyValueFactory<>("resume"));
-        TableColumn<SerieDto, String> directeurCol = new TableColumn<>("Director");
+        final TableColumn<SerieDto, String> directeurCol = new TableColumn<>("Director");
         directeurCol.setCellValueFactory(new PropertyValueFactory<>("directeur"));
-        TableColumn<SerieDto, String> paysCol = new TableColumn<>("Country");
+        final TableColumn<SerieDto, String> paysCol = new TableColumn<>("Country");
         paysCol.setCellValueFactory(new PropertyValueFactory<>("pays"));
-        TableColumn<SerieDto, String> categorieCol = new TableColumn<>("Category");
+        final TableColumn<SerieDto, String> categorieCol = new TableColumn<>("Category");
         categorieCol.setCellValueFactory(new PropertyValueFactory<>("nomCategories"));
-        TableColumn<SerieDto, Void> supprimerCol = new TableColumn<>("Delete");
+        final TableColumn<SerieDto, Void> supprimerCol = new TableColumn<>("Delete");
         supprimerCol.setCellFactory(param -> new TableCell<>() {
             private final Button button = new Button("delete");
+
             {
-                button.setOnAction(event -> {
-                    SerieDto serieDto = getTableView().getItems().get(getIndex());
+                this.button.setOnAction(event -> {
+                    final SerieDto serieDto = this.getTableView().getItems().get(this.getIndex());
                     try {
                         iServiceSerie.supprimer(serieDto.getIdserie());
-                        tableView.getItems().remove(serieDto);
-                        tableView.refresh();
-                        showAlert("Succes", "Deleted Successfully!");
-                    } catch (SQLException e) {
-                        LOGGER.log(Level.SEVERE, e.getMessage(), e);
-                        showAlert("Succes", "Deleted Successfully!");
+                        SerieController.this.tableView.getItems().remove(serieDto);
+                        SerieController.this.tableView.refresh();
+                        SerieController.this.showAlert("Succes", "Deleted Successfully!");
+                    } catch (final SQLException e) {
+                        SerieController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                        SerieController.this.showAlert("Succes", "Deleted Successfully!");
                     }
                 });
             }
@@ -146,37 +145,38 @@ public class SerieController {
              * graphics
              * component to either null or an provided button component upon empty/non-empty
              * status.
-             * 
+             *
              * @param item  widget being updated, and it is passed to the super method
              *              `updateItem()`
              *              along with the `empty` parameter for further processing.
-             * 
+             *
              * @param empty ether the item being updated is empty or not, and accordingly
              *              sets
              *              the graphic of the button to null or the button itself when it
              *              is not empty.
              */
             @Override
-            protected void updateItem(Void item, boolean empty) {
+            protected void updateItem(final Void item, final boolean empty) {
                 super.updateItem(item, empty);
                 if (empty) {
-                    setGraphic(null);
+                    this.setGraphic(null);
                 } else {
-                    setGraphic(button);
+                    this.setGraphic(this.button);
                 }
             }
         });
-        TableColumn<SerieDto, Void> modifierCol = new TableColumn<>("Edit");
+        final TableColumn<SerieDto, Void> modifierCol = new TableColumn<>("Edit");
         modifierCol.setCellFactory(param -> new TableCell<>() {
             private final Button button = new Button("Edit");
-            private int clickCount = 0;
+            private int clickCount;
+
             {
-                button.setOnAction(event -> {
-                    clickCount++;
-                    if (clickCount == 2) {
-                        SerieDto serie = getTableView().getItems().get(getIndex());
-                        modifierSerie(serie);
-                        clickCount = 0;
+                this.button.setOnAction(event -> {
+                    this.clickCount++;
+                    if (2 == clickCount) {
+                        final SerieDto serie = this.getTableView().getItems().get(this.getIndex());
+                        SerieController.this.modifierSerie(serie);
+                        this.clickCount = 0;
                     }
                 });
             }
@@ -185,35 +185,35 @@ public class SerieController {
              * Updates a widget's graphics based on an item's `empty` status, setting the
              * graphic
              * to `null` if the item is empty and `button` otherwise.
-             * 
+             *
              * @param item  element being updated, which can be null or the `button` object
              *              depending
              *              on whether it is being updated or not.
-             * 
+             *
              * @param empty status of the item being updated, and its value determines
              *              whether
              *              or not to set the graphic of the button to null or the specified
              *              button graphics.
              */
             @Override
-            protected void updateItem(Void item, boolean empty) {
+            protected void updateItem(final Void item, final boolean empty) {
                 super.updateItem(item, empty);
                 if (empty) {
-                    setGraphic(null);
+                    this.setGraphic(null);
                 } else {
-                    setGraphic(button);
+                    this.setGraphic(this.button);
                 }
             }
         });
         // tableView.getColumns().addAll(idCol,nomCol,
         // resumeCol,directeurCol,paysCol,categorieCol,supprimerCol,modifierCol);
-        tableView.getColumns().addAll(nomCol, resumeCol, directeurCol, paysCol, categorieCol, supprimerCol,
+        this.tableView.getColumns().addAll(nomCol, resumeCol, directeurCol, paysCol, categorieCol, supprimerCol,
                 modifierCol);
         // Récupérer les catégories et les ajouter à la TableView
         try {
-            tableView.getItems().addAll(serviceSerie.recuperer());
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            this.tableView.getItems().addAll(serviceSerie.recuperer());
+        } catch (final SQLException e) {
+            SerieController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -222,76 +222,76 @@ public class SerieController {
      * Generates a PDF document containing a table with columns for description,
      * date,
      * and episode number, based on feedback data.
-     * 
+     *
      * @param event An action event that triggers the function execution, providing
      *              the
      *              user's feedback selection.
      */
     @FXML
-    private void exportPdf(ActionEvent event) {
+    private void exportPdf(final ActionEvent event) {
         // Afficher la boîte de dialogue de sélection de fichier
-        FileChooser fileChooser = new FileChooser();
+        final FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Enregistrer le fichier PDF");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichiers PDF", "*.pdf"));
-        File selectedFile = fileChooser.showSaveDialog(((Node) event.getSource()).getScene().getWindow());
-        if (selectedFile != null) {
-            IServiceFeedbackImpl sf = new IServiceFeedbackImpl();
-            List<Feedback> feedbackList = sf.Show();
+        final File selectedFile = fileChooser.showSaveDialog(((Node) event.getSource()).getScene().getWindow());
+        if (null != selectedFile) {
+            final IServiceFeedbackImpl sf = new IServiceFeedbackImpl();
+            final List<Feedback> feedbackList = sf.Show();
             try {
                 // Créer le document PDF
-                Document document = new Document();
+                final Document document = new Document();
                 PdfWriter.getInstance(document, new FileOutputStream(selectedFile));
                 document.open();
                 // Créer une police personnalisée pour la date
-                Font fontDate = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
-                BaseColor color = new BaseColor(114, 0, 0); // Rouge: 114, Vert: 0, Bleu: 0
+                final Font fontDate = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
+                final BaseColor color = new BaseColor(114, 0, 0); // Rouge: 114, Vert: 0, Bleu: 0
                 fontDate.setColor(color); // Définir la couleur de la police
                 // Créer un paragraphe avec le lieu
-                Paragraph tunis = new Paragraph("Ariana", fontDate);
+                final Paragraph tunis = new Paragraph("Ariana", fontDate);
                 tunis.setIndentationLeft(455); // Définir la position horizontale
                 tunis.setSpacingBefore(-30); // Définir la position verticale
                 // Ajouter le paragraphe au document
                 document.add(tunis);
                 // Obtenir la date d'aujourd'hui
-                LocalDate today = LocalDate.now();
+                final LocalDate today = LocalDate.now();
                 // Créer un paragraphe avec la date
-                Paragraph date = new Paragraph(today.toString(), fontDate);
+                final Paragraph date = new Paragraph(today.toString(), fontDate);
                 date.setIndentationLeft(437); // Définir la position horizontale
                 date.setSpacingBefore(1); // Définir la position verticale
                 // Ajouter le paragraphe au document
                 document.add(date);
                 // Créer une police personnalisée
-                Font font = new Font(Font.FontFamily.TIMES_ROMAN, 32, Font.BOLD);
-                BaseColor titleColor = new BaseColor(114, 0, 0); //
+                final Font font = new Font(Font.FontFamily.TIMES_ROMAN, 32, Font.BOLD);
+                final BaseColor titleColor = new BaseColor(114, 0, 0); //
                 font.setColor(titleColor);
                 // Ajouter le contenu au document
-                Paragraph title = new Paragraph("FeedBack List", font);
+                final Paragraph title = new Paragraph("FeedBack List", font);
                 title.setAlignment(Element.ALIGN_CENTER);
                 title.setSpacingBefore(50); // Ajouter une marge avant le titre pour l'éloigner de l'image
                 title.setSpacingAfter(20);
                 document.add(title);
-                PdfPTable table = new PdfPTable(3);
+                final PdfPTable table = new PdfPTable(3);
                 table.setWidthPercentage(100);
-                table.setSpacingBefore(30f);
-                table.setSpacingAfter(30f);
+                table.setSpacingBefore(30.0f);
+                table.setSpacingAfter(30.0f);
                 // Ajouter les en-têtes de colonnes
-                Font hrFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
-                BaseColor hrColor = new BaseColor(255, 255, 255); //
+                final Font hrFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
+                final BaseColor hrColor = new BaseColor(255, 255, 255); //
                 hrFont.setColor(hrColor);
-                PdfPCell cell1 = new PdfPCell(new Paragraph("Description", hrFont));
-                BaseColor bgColor = new BaseColor(114, 0, 0);
+                final PdfPCell cell1 = new PdfPCell(new Paragraph("Description", hrFont));
+                final BaseColor bgColor = new BaseColor(114, 0, 0);
                 cell1.setBackgroundColor(bgColor);
                 cell1.setBorderColor(titleColor);
                 cell1.setPaddingTop(20);
                 cell1.setPaddingBottom(20);
                 cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
-                PdfPCell cell2 = new PdfPCell(new Paragraph("Date", hrFont));
+                final PdfPCell cell2 = new PdfPCell(new Paragraph("Date", hrFont));
                 cell2.setBackgroundColor(bgColor);
                 cell2.setBorderColor(titleColor);
                 cell2.setPaddingTop(20);
                 cell2.setPaddingBottom(20);
                 cell2.setHorizontalAlignment(Element.ALIGN_CENTER);
-                PdfPCell cell3 = new PdfPCell(new Paragraph("Episode", hrFont));
+                final PdfPCell cell3 = new PdfPCell(new Paragraph("Episode", hrFont));
                 cell3.setBackgroundColor(bgColor);
                 cell3.setBorderColor(titleColor);
                 cell3.setPaddingTop(20);
@@ -300,23 +300,23 @@ public class SerieController {
                 table.addCell(cell1);
                 table.addCell(cell2);
                 table.addCell(cell3);
-                Font hdFont = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.NORMAL);
-                BaseColor hdColor = new BaseColor(255, 255, 255); //
+                final Font hdFont = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.NORMAL);
+                final BaseColor hdColor = new BaseColor(255, 255, 255); //
                 hrFont.setColor(hdColor);
-                for (Feedback fee : feedbackList) {
-                    PdfPCell cellR1 = new PdfPCell(new Paragraph(String.valueOf(fee.getDescription()), hdFont));
+                for (final Feedback fee : feedbackList) {
+                    final PdfPCell cellR1 = new PdfPCell(new Paragraph(String.valueOf(fee.getDescription()), hdFont));
                     cellR1.setBorderColor(titleColor);
                     cellR1.setPaddingTop(10);
                     cellR1.setPaddingBottom(10);
                     cellR1.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cellR1);
-                    PdfPCell cellR2 = new PdfPCell(new Paragraph(String.valueOf(fee.getDate()), hdFont));
+                    final PdfPCell cellR2 = new PdfPCell(new Paragraph(String.valueOf(fee.getDate()), hdFont));
                     cellR2.setBorderColor(titleColor);
                     cellR2.setPaddingTop(10);
                     cellR2.setPaddingBottom(10);
                     cellR2.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cellR2);
-                    PdfPCell cellR3 = new PdfPCell(new Paragraph(String.valueOf(fee.getId_episode()), hdFont));
+                    final PdfPCell cellR3 = new PdfPCell(new Paragraph(String.valueOf(fee.getId_episode()), hdFont));
                     cellR3.setBorderColor(titleColor);
                     cellR3.setPaddingTop(10);
                     cellR3.setPaddingBottom(10);
@@ -326,9 +326,9 @@ public class SerieController {
                 table.setSpacingBefore(20);
                 document.add(table);
                 document.close();
-                LOGGER.info("Le Poster a été généré avec succès.");
-            } catch (Exception e) {
-                LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                SerieController.LOGGER.info("Le Poster a été généré avec succès.");
+            } catch (final Exception e) {
+                SerieController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
         }
     }
@@ -340,29 +340,29 @@ public class SerieController {
      * the values of name, summary, director, country, add image, and categories,
      * and
      * then updating the serie with the new information.
-     * 
+     *
      * @param serieDto data for a serie that is being modified, which includes the
      *                 serie's
      *                 ID, name, summary, director, country, and image, as well as
      *                 its category(ies).
      */
-    private void modifierSerie(SerieDto serieDto) {
-        IServiceSerieImpl iServiceSerie = new IServiceSerieImpl();
-        Dialog<Pair<String, String>> dialog = new Dialog<>();
+    private void modifierSerie(final SerieDto serieDto) {
+        final IServiceSerieImpl iServiceSerie = new IServiceSerieImpl();
+        final Dialog<Pair<String, String>> dialog = new Dialog<>();
         dialog.setTitle("Edit Serie ");
-        TextField nomFild = new TextField(serieDto.getNom());
-        TextField resumeFild = new TextField(serieDto.getResume());
-        TextField directeurFild = new TextField(serieDto.getDirecteur());
-        TextField paysFild = new TextField(serieDto.getPays());
-        ComboBox<String> categorieComboBox = new ComboBox<>();
-        for (Categorie c : categorieList) {
+        final TextField nomFild = new TextField(serieDto.getNom());
+        final TextField resumeFild = new TextField(serieDto.getResume());
+        final TextField directeurFild = new TextField(serieDto.getDirecteur());
+        final TextField paysFild = new TextField(serieDto.getPays());
+        final ComboBox<String> categorieComboBox = new ComboBox<>();
+        for (final Categorie c : this.categorieList) {
             categorieComboBox.getItems().add(c.getNom());
         }
         categorieComboBox.setValue(serieDto.getNomCategories());
-        Button Ajouterimage = new Button("ADD");
+        final Button Ajouterimage = new Button("ADD");
         {
             Ajouterimage.setOnAction(event -> {
-                addimg(event);
+                this.addimg(event);
             });
         }
         dialog.getDialogPane()
@@ -376,25 +376,25 @@ public class SerieController {
             }
             return null;
         });
-        Optional<Pair<String, String>> result = dialog.showAndWait();
-        Serie serie = new Serie();
+        final Optional<Pair<String, String>> result = dialog.showAndWait();
+        final Serie serie = new Serie();
         result.ifPresent(pair -> {
             serie.setIdserie(serieDto.getIdserie());
             serie.setNom(nomFild.getText());
             serie.setResume(resumeFild.getText());
             serie.setDirecteur(directeurFild.getText());
             serie.setPays(paysFild.getText());
-            serie.setImage(imgpath);
-            for (Categorie c : categorieList) {
+            serie.setImage(this.imgpath);
+            for (final Categorie c : this.categorieList) {
                 if (Objects.equals(c.getNom(), categorieComboBox.getValue())) {
                     serie.setIdcategorie(c.getIdcategorie());
                 }
             }
             try {
                 iServiceSerie.modifier(serie);
-                showAlert("Succes", "Successfully modified!");
-                ref();
-            } catch (SQLException e) {
+                this.showAlert("Succes", "Successfully modified!");
+                this.ref();
+            } catch (final SQLException e) {
                 throw new RuntimeException(e);
             }
         });
@@ -405,23 +405,22 @@ public class SerieController {
      */
     @FXML
     private void initialize() {
-        ref();
+        this.ref();
     }
 
     /**
      * Creates an alert box with a title and message and displays it using the
      * `showAndWait()`
      * method.
-     * 
+     *
      * @param title   title of an alert message shown by the `showAlert` method,
      *                which is
      *                displayed in a title bar at the top of the window.
-     * 
      * @param message message to be displayed in the Alert dialog box.
      */
     @FXML
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    private void showAlert(final String title, final String message) {
+        final Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
@@ -434,7 +433,7 @@ public class SerieController {
      * a variable called `imgpath`. If an invalid file is selected, an error message
      * is
      * displayed.
-     * 
+     *
      * @param event selection event triggered by the user selecting an image file
      *              using
      *              the FileChooser, and it provides the path of the selected file
@@ -442,20 +441,20 @@ public class SerieController {
      *              method for processing.
      */
     @FXML
-    void addimg(ActionEvent event) {
-        FileChooser fileChooser = new FileChooser();
+    void addimg(final ActionEvent event) {
+        final FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose an Image");
         // Set file extension filter to only allow image files
-        FileChooser.ExtensionFilter imageFilter = new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg",
+        final FileChooser.ExtensionFilter imageFilter = new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg",
                 "*.gif");
         fileChooser.getExtensionFilters().add(imageFilter);
-        File selectedFile = fileChooser.showOpenDialog(new Stage());
-        if (selectedFile != null && isImageFile(selectedFile)) {
-            imgpath = selectedFile.getAbsolutePath().replace("\\", "/");
-            LOGGER.info("File path stored: " + imgpath);
-            Image image = new Image(selectedFile.toURI().toString());
+        final File selectedFile = fileChooser.showOpenDialog(new Stage());
+        if (null != selectedFile && this.isImageFile(selectedFile)) {
+            this.imgpath = selectedFile.getAbsolutePath().replace("\\", "/");
+            SerieController.LOGGER.info("File path stored: " + this.imgpath);
+            final Image image = new Image(selectedFile.toURI().toString());
         } else {
-            LOGGER.info("Please select a valid image file.");
+            SerieController.LOGGER.info("Please select a valid image file.");
         }
     }
 
@@ -463,47 +462,49 @@ public class SerieController {
      * Allows the user to select an image file, then saves it in two different
      * locations
      * and sets the image as the `serieImageView` field.
-     * 
+     *
      * @param event open file dialog event that triggers the function to execute.
      */
     @FXML
-    void importImage(ActionEvent event) {
-        FileChooser fileChooser = new FileChooser();
+    void importImage(final ActionEvent event) {
+        final FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("PNG", "*.png"),
                 new FileChooser.ExtensionFilter("JPG", "*.jpg"));
         fileChooser.setTitle("Sélectionner une image");
-        File selectedFile = fileChooser.showOpenDialog(null);
-        if (selectedFile != null) {
+        final File selectedFile = fileChooser.showOpenDialog(null);
+        if (null != selectedFile) {
             try {
-                String destinationDirectory1 = "./src/main/resources/img/series/";
-                String destinationDirectory2 = "C:\\xampp\\htdocs\\Rakcha\\rakcha-web\\public\\img\\series\\";
-                Path destinationPath1 = Paths.get(destinationDirectory1);
-                Path destinationPath2 = Paths.get(destinationDirectory2);
-                String uniqueFileName = System.currentTimeMillis() + "_" + selectedFile.getName();
-                Path destinationFilePath1 = destinationPath1.resolve(uniqueFileName);
-                Path destinationFilePath2 = destinationPath2.resolve(uniqueFileName);
+                final String destinationDirectory1 = "./src/main/resources/img/series/";
+                final String destinationDirectory2 = "C:\\xampp\\htdocs\\Rakcha\\rakcha-web\\public\\img\\series\\";
+                final Path destinationPath1 = Paths.get(destinationDirectory1);
+                final Path destinationPath2 = Paths.get(destinationDirectory2);
+                final String uniqueFileName = System.currentTimeMillis() + "_" + selectedFile.getName();
+                final Path destinationFilePath1 = destinationPath1.resolve(uniqueFileName);
+                final Path destinationFilePath2 = destinationPath2.resolve(uniqueFileName);
                 Files.copy(selectedFile.toPath(), destinationFilePath1);
                 Files.copy(selectedFile.toPath(), destinationFilePath2);
-                Image selectedImage = new Image(destinationFilePath1.toUri().toString());
-                serieImageView.setImage(selectedImage);
-            } catch (IOException e) {
-                LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                final Image selectedImage = new Image(destinationFilePath1.toUri().toString());
+                this.serieImageView.setImage(selectedImage);
+            } catch (final IOException e) {
+                SerieController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
         }
     }
 
     // Method to retrieve the stored file path
+
     /**
      * Retrieves the image path.
-     * 
+     *
      * @returns a string representing the path to an image file.
      */
     public String getFilePath() {
-        return imgpath;
+        return this.imgpath;
     }
 
     // Method to check if the selected file is an image file
+
     /**
      * Takes a `File` object as input and returns a `Boolean` value indicating
      * whether
@@ -511,35 +512,35 @@ public class SerieController {
      * `Image`
      * object from the file's URI string, and returning `true` if the creation was
      * successful and `false` otherwise.
-     * 
+     *
      * @param file File to be tested for being an image file.
-     * 
      * @returns a boolean value indicating whether the provided file is an image
-     *          file or
-     *          not.
+     * file or
+     * not.
      */
-    private boolean isImageFile(File file) {
+    private boolean isImageFile(final File file) {
         try {
-            Image image = new Image(file.toURI().toString());
+            final Image image = new Image(file.toURI().toString());
             return !image.isError();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             return false;
         }
     }
 
     ////////////
+
     /**
      * Checks if the user's entered name is empty, and returns `true` otherwise it
      * sets
      * the text to "Please enter a valid Name" and returns `false`.
-     * 
+     *
      * @returns a boolean value indicating whether the input name is valid or not.
      */
     boolean nomcheck() {
-        if (!Objects.equals(nomF.getText(), "")) {
+        if (!Objects.equals(this.nomF.getText(), "")) {
             return true;
         } else {
-            nomcheck.setText("Please enter a valid Name");
+            this.nomcheck.setText("Please enter a valid Name");
             return false;
         }
     }
@@ -548,17 +549,17 @@ public class SerieController {
      * Verifies if a category has been selected and returns `true` if it has,
      * otherwise
      * it displays an error message and returns `false`.
-     * 
+     *
      * @returns `true` if a value is provided for `categorieF.getValue()`, otherwise
-     *          it
-     *          returns `false` and sets the `categoriecheck` text to "Please select
-     *          a Category".
+     * it
+     * returns `false` and sets the `categoriecheck` text to "Please select
+     * a Category".
      */
     boolean categoriecheck() {
-        if (categorieF.getValue() != null) {
+        if (null != categorieF.getValue()) {
             return true;
         } else {
-            categoriecheck.setText("Please select a Category");
+            this.categoriecheck.setText("Please select a Category");
             return false;
         }
     }
@@ -567,15 +568,15 @@ public class SerieController {
      * Verifies if a director's name is provided and returns `true` if it is valid,
      * else
      * it sets an error message and returns `false`.
-     * 
+     *
      * @returns a boolean value indicating whether a valid director has been
-     *          entered.
+     * entered.
      */
     boolean directeurcheck() {
-        if (directeurF.getText() != "") {
+        if ("" != directeurF.getText()) {
             return true;
         } else {
-            directeurcheck.setText("Please enter a valid Director");
+            this.directeurcheck.setText("Please enter a valid Director");
             return false;
         }
     }
@@ -586,15 +587,15 @@ public class SerieController {
      * to an empty string. If it is not empty, the function returns true, otherwise
      * it
      * displays an error message and returns false.
-     * 
+     *
      * @returns a boolean value indicating whether a valid country was entered or
-     *          not.
+     * not.
      */
     boolean payscheck() {
-        if (paysF.getText() != "") {
+        if ("" != paysF.getText()) {
             return true;
         } else {
-            payscheck.setText("Please enter a valid Country");
+            this.payscheck.setText("Please enter a valid Country");
             return false;
         }
     }
@@ -605,14 +606,14 @@ public class SerieController {
      * field is not empty, it returns `true`. Otherwise, it sets the text of the
      * `resumecheck`
      * label to "Please enter a valid Summary" and returns `false`.
-     * 
+     *
      * @returns a boolean value indicating whether a summary is provided.
      */
     boolean resumecheck() {
-        if (resumeF.getText() != "") {
+        if ("" != resumeF.getText()) {
             return true;
         } else {
-            resumecheck.setText("Please enter a valid Summary");
+            this.resumecheck.setText("Please enter a valid Summary");
             return false;
         }
     }
@@ -621,38 +622,37 @@ public class SerieController {
      * Checks if an input image path is provided, returning `true` if valid and
      * "Please
      * select a Picture" otherwise.
-     * 
+     *
      * @returns "Please select a Picture".
      */
     boolean imagechek() {
-        if (!Objects.equals(imgpath, "")) {
+        if (!Objects.equals(this.imgpath, "")) {
             return true;
         } else {
-            imagechek.setText("Please select a Picture");
+            this.imagechek.setText("Please select a Picture");
             return false;
         }
     }
 
     //////////////////////
+
     /**
      * Sends an HTML-formatted email to a recipient via Gmail's SMTP service, using
      * authentication and STARTTLS protocol for encryption.
-     * 
+     *
      * @param recipientEmail email address of the intended recipient of the email
      *                       message
      *                       being sent.
-     * 
      * @param subject        subject of the email to be sent, which is used as the
      *                       email's title
      *                       in the recipient's inbox.
-     * 
      * @param message        message that will be sent through the email, and it is
      *                       passed as a
      *                       string to the `setMsg()` method of the `Email` class.
      */
-    public void sendEmail(String recipientEmail, String subject, String message) {
+    public void sendEmail(final String recipientEmail, final String subject, final String message) {
         try {
-            Email email = new HtmlEmail();
+            final Email email = new HtmlEmail();
             email.setHostName("smtp.gmail.com");
             email.setSmtpPort(587); // Port SMTP
             email.setStartTLSEnabled(true); // Utiliser STARTTLS
@@ -663,10 +663,10 @@ public class SerieController {
             email.setMsg(message);
             email.addTo(recipientEmail);
             email.send();
-            LOGGER.info("Email sent successfully.");
-        } catch (EmailException e) {
-            LOGGER.info("Error sending email: " + e.getMessage());
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            SerieController.LOGGER.info("Email sent successfully.");
+        } catch (final EmailException e) {
+            SerieController.LOGGER.info("Error sending email: " + e.getMessage());
+            SerieController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -680,7 +680,7 @@ public class SerieController {
      * an email notification to a predefined recipient with details about the newly
      * added
      * serie.
-     * 
+     *
      * @param event ClickEvent that triggers the execution of the `ajouterSerie()`
      *              method
      *              and provides information about the event, such as the button or
@@ -688,53 +688,53 @@ public class SerieController {
      *              clicked.
      */
     @FXML
-    void ajouterSerie(ActionEvent event) {
-        IServiceSerieImpl serieserv = new IServiceSerieImpl();
-        Serie serie = new Serie();
-        nomcheck();
-        categoriecheck();
-        directeurcheck();
-        payscheck();
-        resumecheck();
-        if (nomcheck() && categoriecheck() && directeurcheck() && payscheck() && resumecheck()) {
+    void ajouterSerie(final ActionEvent event) {
+        final IServiceSerieImpl serieserv = new IServiceSerieImpl();
+        final Serie serie = new Serie();
+        this.nomcheck();
+        this.categoriecheck();
+        this.directeurcheck();
+        this.payscheck();
+        this.resumecheck();
+        if (this.nomcheck() && this.categoriecheck() && this.directeurcheck() && this.payscheck() && this.resumecheck()) {
             try {
-                String fullPath = serieImageView.getImage().getUrl();
-                String requiredPath = fullPath.substring(fullPath.indexOf("/img/series/"));
-                URI uri = new URI(requiredPath);
-                serie.setNom(nomF.getText());
-                serie.setResume(resumeF.getText());
-                serie.setDirecteur(directeurF.getText());
-                serie.setPays(paysF.getText());
+                final String fullPath = this.serieImageView.getImage().getUrl();
+                final String requiredPath = fullPath.substring(fullPath.indexOf("/img/series/"));
+                final URI uri = new URI(requiredPath);
+                serie.setNom(this.nomF.getText());
+                serie.setResume(this.resumeF.getText());
+                serie.setDirecteur(this.directeurF.getText());
+                serie.setPays(this.paysF.getText());
                 serie.setImage(uri.getPath());
-                for (Categorie c : categorieList) {
-                    if (Objects.equals(c.getNom(), categorieF.getValue())) {
+                for (final Categorie c : this.categorieList) {
+                    if (Objects.equals(c.getNom(), this.categorieF.getValue())) {
                         serie.setIdcategorie(c.getIdcategorie());
                     }
                 }
                 serieserv.ajouter(serie);
-                showAlert("successfully", "The serie has been successfully saved");
-                nomcheck.setText("");
-                categoriecheck.setText("");
-                directeurcheck.setText("");
-                payscheck.setText("");
-                resumecheck.setText("");
-                imagechek.setText("");
+                this.showAlert("successfully", "The serie has been successfully saved");
+                this.nomcheck.setText("");
+                this.categoriecheck.setText("");
+                this.directeurcheck.setText("");
+                this.payscheck.setText("");
+                this.resumecheck.setText("");
+                this.imagechek.setText("");
                 // Envoyer un e-mail de notification
-                String recipientEmail = "nourhene.ftaymia@esprit.tn"; // Remplacez par l'adresse e-mail réelle du
+                final String recipientEmail = "nourhene.ftaymia@esprit.tn"; // Remplacez par l'adresse e-mail réelle du
                 // destinataire
-                String subject = "Exciting News! New Series Alert 🚀";
-                String message = "Dear Viewer,\n\nWe are thrilled to announce a new series on our platform!\n\n"
+                final String subject = "Exciting News! New Series Alert 🚀";
+                final String message = "Dear Viewer,\n\nWe are thrilled to announce a new series on our platform!\n\n"
                         + "Title: " + serie.getNom() + "\n"
                         + "Description: " + serie.getResume() + "\n\n"
                         + "Get ready for an incredible viewing experience. Enjoy the show!\n\n"
                         + "Best regards.\n";
-                String newSerieTitle = serie.getNom();
-                String newSerieDescription = serie.getResume(); // Vous pouvez personnaliser cela
-                sendEmail(recipientEmail, newSerieTitle, message);
-                ref();
-            } catch (Exception e) {
-                showAlert("Error", "An error occurred while saving the serie: " + e.getMessage());
-                LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                final String newSerieTitle = serie.getNom();
+                final String newSerieDescription = serie.getResume(); // Vous pouvez personnaliser cela
+                this.sendEmail(recipientEmail, newSerieTitle, message);
+                this.ref();
+            } catch (final Exception e) {
+                this.showAlert("Error", "An error occurred while saving the serie: " + e.getMessage());
+                SerieController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
         }
         ///
@@ -756,9 +756,10 @@ public class SerieController {
     }
 
     // Gestion du menu
+
     /**
      * Loads an FXML file, creates a scene, and displays it on a Stage.
-     * 
+     *
      * @param event action event that triggered the execution of the `Oepisodes()`
      *              method,
      *              providing the source of the event as an object that can be
@@ -766,10 +767,10 @@ public class SerieController {
      *              within the method.
      */
     @FXML
-    void Oepisodes(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Episode-view.fxml")));
-        Scene scene = new Scene(root);
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    void Oepisodes(final ActionEvent event) throws IOException {
+        final Parent root = FXMLLoader.load(Objects.requireNonNull(this.getClass().getResource("/Episode-view.fxml")));
+        final Scene scene = new Scene(root);
+        final Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
     }
@@ -778,7 +779,7 @@ public class SerieController {
      * Loads a FXML file named `"Serie-view.fxml"` and displays it on a Stage,
      * creating
      * a new Scene and setting it as the scene of the Stage.
-     * 
+     *
      * @param event An action event object that triggers the `Oseries` method and
      *              provides
      *              information about the event, such as the source of the event and
@@ -786,10 +787,10 @@ public class SerieController {
      *              stage.
      */
     @FXML
-    void Oseries(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Serie-view.fxml")));
-        Scene scene = new Scene(root);
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    void Oseries(final ActionEvent event) throws IOException {
+        final Parent root = FXMLLoader.load(Objects.requireNonNull(this.getClass().getResource("/Serie-view.fxml")));
+        final Scene scene = new Scene(root);
+        final Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
     }
@@ -798,63 +799,63 @@ public class SerieController {
      * Loads an FXML file, creates a scene from it, and displays the scene on the
      * primary
      * Stage.
-     * 
+     *
      * @param event ActionEvent object that triggers the function, providing
      *              information
      *              about the source of the event and any related data.
      */
     @FXML
-    void Oepisode(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/Episode-view.fxml")));
-        Scene scene = new Scene(root);
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    void Oepisode(final ActionEvent event) throws IOException {
+        final Parent root = FXMLLoader.load(Objects.requireNonNull(this.getClass().getResource("/Episode-view.fxml")));
+        final Scene scene = new Scene(root);
+        final Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
     }
 
     /**
      * Displays a list of movies to the user.
-     * 
+     *
      * @param actionEvent occurrence of an event that triggered the function call.
      */
-    public void showmovies(ActionEvent actionEvent) {
+    public void showmovies(final ActionEvent actionEvent) {
     }
 
     /**
      * Likely displays a list or inventory of products.
-     * 
+     *
      * @param actionEvent occurrence of an event that triggers the execution of the
      *                    `showProducts` method.
      */
-    public void showproducts(ActionEvent actionEvent) {
+    public void showproducts(final ActionEvent actionEvent) {
     }
 
     /**
      * Is called when the `ActionEvent` occurs, and it does not provide any
      * information
      * about what it does beyond the fact that it exists.
-     * 
+     *
      * @param actionEvent event that triggered the execution of the `show cinema`
      *                    function.
      */
-    public void showcinema(ActionEvent actionEvent) {
+    public void showcinema(final ActionEvent actionEvent) {
     }
 
     /**
      * Handles an `ActionEvent`.
-     * 
+     *
      * @param actionEvent event that triggered the function call.
      */
-    public void showevent(ActionEvent actionEvent) {
+    public void showevent(final ActionEvent actionEvent) {
     }
 
     /**
      * Likely displays a series of data or elements in a graphical interface.
-     * 
+     *
      * @param actionEvent event that triggered the call to the `showSeries`
      *                    function.
      */
-    public void showseries(ActionEvent actionEvent) {
+    public void showseries(final ActionEvent actionEvent) {
     }
 }
 /*

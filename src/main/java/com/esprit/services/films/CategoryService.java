@@ -2,7 +2,6 @@ package com.esprit.services.films;
 
 import com.esprit.models.films.Category;
 import com.esprit.services.IService;
-import com.esprit.services.produits.AvisService;
 import com.esprit.utils.DataSource;
 
 import java.sql.Connection;
@@ -15,25 +14,25 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class CategoryService implements IService<Category> {
-    Connection connection;
     private static final Logger LOGGER = Logger.getLogger(CategoryService.class.getName());
+    Connection connection;
 
     public CategoryService() {
-        connection = DataSource.getInstance().getConnection();
+        this.connection = DataSource.getInstance().getConnection();
     }
 
     /**
      * @param category
      */
     @Override
-    public void create(Category category) {
-        String req = "insert into category (nom,description) values (?,?) ";
+    public void create(final Category category) {
+        final String req = "insert into category (nom,description) values (?,?) ";
         try {
-            PreparedStatement statement = connection.prepareStatement(req);
+            final PreparedStatement statement = this.connection.prepareStatement(req);
             statement.setString(1, category.getNom());
             statement.setString(2, category.getDescription());
             statement.executeUpdate();
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             throw new RuntimeException(e);
         }
     }
@@ -43,72 +42,72 @@ public class CategoryService implements IService<Category> {
      */
     @Override
     public List<Category> read() {
-        List<Category> categoryArrayList = new ArrayList<>();
-        String req = "SELECT * FROM category";
+        final List<Category> categoryArrayList = new ArrayList<>();
+        final String req = "SELECT * FROM category";
         try {
-            PreparedStatement statement = connection.prepareStatement(req);
-            ResultSet rs = statement.executeQuery();
+            final PreparedStatement statement = this.connection.prepareStatement(req);
+            final ResultSet rs = statement.executeQuery();
             while (rs.next()) {
                 categoryArrayList.add(new Category(rs.getInt("id"), rs.getString("nom"), rs.getString("description")));
             }
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             throw new RuntimeException(e);
         }
         return categoryArrayList;
     }
 
     @Override
-    public void update(Category category) {
-        String req = "UPDATE category set nom=?,description=? where id=?";
+    public void update(final Category category) {
+        final String req = "UPDATE category set nom=?,description=? where id=?";
         try {
-            PreparedStatement statement = connection.prepareStatement(req);
+            final PreparedStatement statement = this.connection.prepareStatement(req);
             statement.setString(1, category.getNom());
             statement.setString(2, category.getDescription());
             statement.setInt(3, category.getId());
             statement.executeUpdate();
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void delete(Category category) {
-        String req = "DELETE FROM category where id = ?";
+    public void delete(final Category category) {
+        final String req = "DELETE FROM category where id = ?";
         try {
-            PreparedStatement statement = connection.prepareStatement(req);
+            final PreparedStatement statement = this.connection.prepareStatement(req);
             statement.setInt(1, category.getId());
             statement.executeUpdate();
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public Category getCategory(int id) {
+    public Category getCategory(final int id) {
         Category category = null;
-        String req = "SELECT * FROM category where id = ?";
+        final String req = "SELECT * FROM category where id = ?";
         try {
-            PreparedStatement statement = connection.prepareStatement(req);
+            final PreparedStatement statement = this.connection.prepareStatement(req);
             statement.setInt(1, id);
-            ResultSet rs = statement.executeQuery();
+            final ResultSet rs = statement.executeQuery();
             rs.next();
             category = new Category(rs.getInt("id"), rs.getString("nom"), rs.getString("description"));
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            CategoryService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return category;
     }
 
-    public Category getCategoryByNom(String nom) {
+    public Category getCategoryByNom(final String nom) {
         Category category = null;
-        String req = "SELECT * FROM category where nom LIKE ?";
+        final String req = "SELECT * FROM category where nom LIKE ?";
         try {
-            PreparedStatement statement = connection.prepareStatement(req);
+            final PreparedStatement statement = this.connection.prepareStatement(req);
             statement.setString(1, nom);
-            ResultSet rs = statement.executeQuery();
+            final ResultSet rs = statement.executeQuery();
             rs.next();
             category = new Category(rs.getInt("id"), rs.getString("nom"), rs.getString("description"));
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            CategoryService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return category;
     }

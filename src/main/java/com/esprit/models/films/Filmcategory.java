@@ -13,7 +13,7 @@ public class Filmcategory {
      * @param categoryId The category of the film.
      * @param filmId     The film.
      */
-    public Filmcategory(Category categoryId, Film filmId) {
+    public Filmcategory(final Category categoryId, final Film filmId) {
         this.categoryId = categoryId;
         this.filmId = filmId;
     }
@@ -24,7 +24,7 @@ public class Filmcategory {
      * @return The category of the film.
      */
     public Category getCategoryId() {
-        return categoryId;
+        return this.categoryId;
     }
 
     /**
@@ -32,7 +32,7 @@ public class Filmcategory {
      *
      * @param categoryId The category of the film.
      */
-    public void setCategoryId(Category categoryId) {
+    public void setCategoryId(final Category categoryId) {
         this.categoryId = categoryId;
     }
 
@@ -42,7 +42,7 @@ public class Filmcategory {
      * @return The film.
      */
     public Film getFilmId() {
-        return filmId;
+        return this.filmId;
     }
 
     /**
@@ -50,7 +50,7 @@ public class Filmcategory {
      *
      * @param filmId The film.
      */
-    public void setFilmId(Film filmId) {
+    public void setFilmId(final Film filmId) {
         this.filmId = filmId;
     }
 
@@ -62,8 +62,8 @@ public class Filmcategory {
     @Override
     public String toString() {
         return "Filmcategory{"
-                + "categoryId=" + categoryId
-                + ", filmId=" + filmId
+                + "categoryId=" + this.categoryId
+                + ", filmId=" + this.filmId
                 + '}';
     }
 }

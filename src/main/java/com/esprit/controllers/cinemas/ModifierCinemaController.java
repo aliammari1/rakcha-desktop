@@ -2,7 +2,6 @@ package com.esprit.controllers.cinemas;
 
 import com.esprit.models.cinemas.Cinema;
 import com.esprit.services.cinemas.CinemaService;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -40,12 +39,11 @@ public class ModifierCinemaController implements Initializable {
     /**
      * Is called when an instance of a class is created and initializes its resources by
      * performing no-op actions.
-     * 
-     * @param location URL of the web application's root document, which is used to locate
-     * the necessary resources for its proper operation.
-     * 
+     *
+     * @param location  URL of the web application's root document, which is used to locate
+     *                  the necessary resources for its proper operation.
      * @param resources ResourceBundle that contains keys for localization of the
-     * application's user interface and other textual content.
+     *                  application's user interface and other textual content.
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -54,13 +52,13 @@ public class ModifierCinemaController implements Initializable {
     /**
      * Sets text fields and displays an image based on input cinema object's properties:
      * nom, adresse, logo.
-     * 
+     *
      * @param cinema Cinema object that contains the name, address, and logo of the cinema,
-     * which are then set as text values for the `tfNom`, `tfAdresse`, and `tfLogo` fields,
-     * respectively, within the function's body.
-     * 
-     * 	- `cinema`: A `Cinema` object representing a movie theater with name, address,
-     * and logo.
+     *               which are then set as text values for the `tfNom`, `tfAdresse`, and `tfLogo` fields,
+     *               respectively, within the function's body.
+     *               <p>
+     *               - `cinema`: A `Cinema` object representing a movie theater with name, address,
+     *               and logo.
      */
     public void initData(Cinema cinema) {
         this.cinema = cinema;
@@ -75,15 +73,15 @@ public class ModifierCinemaController implements Initializable {
      * Allows users to edit the details of a cinema, including its name and address. It
      * updates the cinema's information in the database and displays an alert message
      * upon successful completion.
-     * 
+     *
      * @param event ActionEvent object that triggered the method execution, providing the
-     * source of the event and any related data.
-     * 
-     * 	- `event` is an instance of `ActionEvent`, which represents a user action related
-     * to a UI component.
-     * 	- The `event` object contains information about the action that triggered the
-     * function, such as the source of the action (e.g., a button or a menu item) and the
-     * state of the component at the time of the action.
+     *              source of the event and any related data.
+     *              <p>
+     *              - `event` is an instance of `ActionEvent`, which represents a user action related
+     *              to a UI component.
+     *              - The `event` object contains information about the action that triggered the
+     *              function, such as the source of the action (e.g., a button or a menu item) and the
+     *              state of the component at the time of the action.
      */
     @FXML
     void modifier(ActionEvent event) throws IOException {
@@ -108,12 +106,12 @@ public class ModifierCinemaController implements Initializable {
         cinemaService.update(cinema);
         showAlert("Les modifications ont été enregistrées avec succès.");
         // Charger la nouvelle interface ListCinemaAdmin.fxml
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ListCinemaResponsable.fxml"));
-        Parent root = loader.load();
+        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ListCinemaResponsable.fxml"));
+        final Parent root = loader.load();
         // Créer une nouvelle scène avec la nouvelle interface
-        Scene scene = new Scene(root);
+        final Scene scene = new Scene(root);
         // Créer une nouvelle fenêtre (stage) et y attacher la scène
-        Stage stage = new Stage();
+        final Stage stage = new Stage();
         stage.setScene(scene);
         stage.show();
     }
@@ -121,32 +119,32 @@ public class ModifierCinemaController implements Initializable {
     /**
      * Is used to select an image file from a file chooser and set it as the logo for the
      * FXML stage.
-     * 
+     *
      * @param event selection event that triggered the function execution.
-     * 
-     * 	- Event type: `ActionEvent`
-     * 	- Target: `null` (no specific component is associated with the event)
+     *              <p>
+     *              - Event type: `ActionEvent`
+     *              - Target: `null` (no specific component is associated with the event)
      */
     @FXML
-    void select(ActionEvent event) {
-        FileChooser fileChooser = new FileChooser();
+    void select(final ActionEvent event) {
+        final FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Sélectionner une image");
-        selectedFile = fileChooser.showOpenDialog(null);
-        if (selectedFile != null) {
-            Image selectedImage = new Image(selectedFile.toURI().toString());
-            tfLogo.setImage(selectedImage);
+        this.selectedFile = fileChooser.showOpenDialog(null);
+        if (null != selectedFile) {
+            final Image selectedImage = new Image(this.selectedFile.toURI().toString());
+            this.tfLogo.setImage(selectedImage);
         }
     }
 
     /**
      * Creates an Alert dialog with an information message.
-     * 
+     *
      * @param message text to be displayed as an information message when the `showAlert()`
-     * method is called.
+     *                method is called.
      */
     @FXML
-    private void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    private void showAlert(final String message) {
+        final Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Information");
         alert.setHeaderText(null);
         alert.setContentText(message);

@@ -1,9 +1,7 @@
 package com.esprit.controllers.users;
 
 import com.esprit.models.users.User;
-import com.esprit.services.produits.AvisService;
 import com.esprit.services.users.UserService;
-
 import com.github.plushaze.traynotification.notification.Notifications;
 import com.github.plushaze.traynotification.notification.TrayNotification;
 import javafx.event.ActionEvent;
@@ -59,14 +57,14 @@ public class LoginController implements Initializable {
      * @throws InterruptedException
      */
     @FXML
-    void signInWithGoogle(ActionEvent event) throws IOException, ExecutionException, InterruptedException {
+    void signInWithGoogle(final ActionEvent event) throws IOException, ExecutionException, InterruptedException {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/VerifyWithGoogle.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) googleSIgnInButton.getScene().getWindow();
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/VerifyWithGoogle.fxml"));
+            final Parent root = loader.load();
+            final Stage stage = (Stage) this.googleSIgnInButton.getScene().getWindow();
             stage.setScene(new Scene(root));
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final Exception e) {
+            LoginController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -77,82 +75,82 @@ public class LoginController implements Initializable {
      * @throws InterruptedException
      */
     @FXML
-    void signInWithMicrosoft(ActionEvent event) throws IOException, ExecutionException, InterruptedException {
+    void signInWithMicrosoft(final ActionEvent event) throws IOException, ExecutionException, InterruptedException {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/VerifyWithMicrosoft.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) microsoftSignInButton.getScene().getWindow();
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/VerifyWithMicrosoft.fxml"));
+            final Parent root = loader.load();
+            final Stage stage = (Stage) this.microsoftSignInButton.getScene().getWindow();
             stage.setScene(new Scene(root));
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final Exception e) {
+            LoginController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
     @FXML
-    void login(ActionEvent event) throws IOException {
-        UserService userService = new UserService();
-        User user = userService.login(emailTextField.getText(), passwordTextField.getText());
-        if (user != null) {
-            TrayNotification trayNotification = new TrayNotification("users", "the user found", Notifications.SUCCESS);
+    void login(final ActionEvent event) throws IOException {
+        final UserService userService = new UserService();
+        final User user = userService.login(this.emailTextField.getText(), this.passwordTextField.getText());
+        if (null != user) {
+            final TrayNotification trayNotification = new TrayNotification("users", "the user found", Notifications.SUCCESS);
             trayNotification.showAndDismiss(new Duration(3000));
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "the user was found", ButtonType.CLOSE);
+            final Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "the user was found", ButtonType.CLOSE);
             alert.show();
-            Stage stage = (Stage) signInButton.getScene().getWindow();
+            final Stage stage = (Stage) this.signInButton.getScene().getWindow();
             stage.setUserData(user);
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Profile.fxml"));
-            Parent root = loader.load();
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/Profile.fxml"));
+            final Parent root = loader.load();
             FXMLLoader loaderSideBar = null;
-            ProfileController profileController = loader.getController();
+            final ProfileController profileController = loader.getController();
             if ("admin".equals(user.getRole())) {
-                loaderSideBar = new FXMLLoader(getClass().getResource("/adminSideBar.fxml"));
+                loaderSideBar = new FXMLLoader(this.getClass().getResource("/adminSideBar.fxml"));
             } else if ("client".equals(user.getRole())) {
-                loaderSideBar = new FXMLLoader(getClass().getResource("/clientSideBar.fxml"));
+                loaderSideBar = new FXMLLoader(this.getClass().getResource("/clientSideBar.fxml"));
             } else if ("responsable de cinema".equals(user.getRole())) {
-                loaderSideBar = new FXMLLoader(getClass().getResource("/responsableDeCinemaSideBar.fxml"));
+                loaderSideBar = new FXMLLoader(this.getClass().getResource("/responsableDeCinemaSideBar.fxml"));
             }
-            if (loaderSideBar != null) {
+            if (null != loaderSideBar) {
                 profileController.setLeftPane(loaderSideBar.load());
             }
             profileController.setData(user);
             stage.setScene(new Scene(root));
         } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "the user was not found", ButtonType.CLOSE);
+            final Alert alert = new Alert(Alert.AlertType.ERROR, "the user was not found", ButtonType.CLOSE);
             alert.show();
         }
     }
 
     @FXML
-    void switchToSignUp(ActionEvent event) throws IOException {
-        Stage stage = (Stage) signUpButton.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/SignUp.fxml"));
-        Parent root = loader.load();
+    void switchToSignUp(final ActionEvent event) throws IOException {
+        final Stage stage = (Stage) this.signUpButton.getScene().getWindow();
+        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/SignUp.fxml"));
+        final Parent root = loader.load();
         stage.setScene(new Scene(root));
     }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        forgetPasswordHyperlink.setOnAction(new EventHandler<>() {
+    public void initialize(final URL location, final ResourceBundle resources) {
+        this.forgetPasswordHyperlink.setOnAction(new EventHandler<>() {
             @Override
-            public void handle(ActionEvent event) {
+            public void handle(final ActionEvent event) {
                 try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/smsadmin.fxml"));
-                    Parent root = loader.load();
-                    Stage stage = (Stage) forgetPasswordHyperlink.getScene().getWindow();
+                    final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/smsadmin.fxml"));
+                    final Parent root = loader.load();
+                    final Stage stage = (Stage) LoginController.this.forgetPasswordHyperlink.getScene().getWindow();
                     stage.setScene(new Scene(root));
-                } catch (IOException e) {
+                } catch (final IOException e) {
                     throw new RuntimeException(e);
                 }
             }
         });
-        forgetPasswordEmailHyperlink.setOnAction(new EventHandler<>() {
+        this.forgetPasswordEmailHyperlink.setOnAction(new EventHandler<>() {
             @Override
-            public void handle(ActionEvent event) {
+            public void handle(final ActionEvent event) {
                 try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/maillogin.fxml"));
-                    Parent root = loader.load();
-                    Stage stage = (Stage) forgetPasswordEmailHyperlink.getScene().getWindow();
+                    final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/maillogin.fxml"));
+                    final Parent root = loader.load();
+                    final Stage stage = (Stage) LoginController.this.forgetPasswordEmailHyperlink.getScene().getWindow();
                     stage.setScene(new Scene(root));
-                } catch (IOException e) {
+                } catch (final IOException e) {
                     throw new RuntimeException(e);
                 }
             }

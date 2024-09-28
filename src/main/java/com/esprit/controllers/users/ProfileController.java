@@ -2,7 +2,6 @@ package com.esprit.controllers.users;
 
 import com.esprit.models.users.User;
 import com.esprit.services.users.UserService;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -48,75 +47,75 @@ public class ProfileController {
 
     }
 
-    /** 
+    /**
      * @param user
      */
     @FXML
-    public void setData(User user) {
+    public void setData(final User user) {
         this.user = user;
-        if (user.getFirstName() != null) {
-            firstNameTextField.setText(user.getFirstName());
+        if (null != user.getFirstName()) {
+            this.firstNameTextField.setText(user.getFirstName());
         }
-        if (user.getLastName() != null) {
-            lastNameTextField.setText(user.getLastName());
+        if (null != user.getLastName()) {
+            this.lastNameTextField.setText(user.getLastName());
         }
-        if (user.getAddress() != null) {
-            adresseTextField.setText(user.getAddress());
+        if (null != user.getAddress()) {
+            this.adresseTextField.setText(user.getAddress());
         }
-        if (user.getEmail() != null) {
-            emailTextField.setText(user.getEmail());
+        if (null != user.getEmail()) {
+            this.emailTextField.setText(user.getEmail());
         }
-        if (user.getPhoneNumber() != 0) {
-            phoneNumberTextField.setText(String.valueOf(user.getPhoneNumber()));
+        if (0 != user.getPhoneNumber()) {
+            this.phoneNumberTextField.setText(String.valueOf(user.getPhoneNumber()));
         }
-        if (user.getBirthDate() != null) {
-            dateDeNaissanceDatePicker.setValue(user.getBirthDate().toLocalDate());
+        if (null != user.getBirthDate()) {
+            this.dateDeNaissanceDatePicker.setValue(user.getBirthDate().toLocalDate());
         }
-        if (user.getPhoto_de_profil() != null) {
-            imageCircle.setFill(new ImagePattern(new Image(user.getPhoto_de_profil())));
+        if (null != user.getPhoto_de_profil()) {
+            this.imageCircle.setFill(new ImagePattern(new Image(user.getPhoto_de_profil())));
         }
     }
 
-    /** 
+    /**
      * @param event
      * @throws IOException
      */
     @FXML
-    public void deleteAccount(ActionEvent event) throws IOException {
-        Stage stage = (Stage) firstNameTextField.getScene().getWindow();
-        User user = (User) stage.getUserData();
-        UserService userService = new UserService();
+    public void deleteAccount(final ActionEvent event) throws IOException {
+        final Stage stage = (Stage) this.firstNameTextField.getScene().getWindow();
+        final User user = (User) stage.getUserData();
+        final UserService userService = new UserService();
         userService.delete(user);
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/SignUp.fxml"));
-        Parent root = loader.load();
+        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/SignUp.fxml"));
+        final Parent root = loader.load();
         stage.setScene(new Scene(root));
     }
 
     @FXML
-    public void modifyAccount(ActionEvent event) {
-        Stage stage = (Stage) firstNameTextField.getScene().getWindow();
-        User user = (User) stage.getUserData();
-        user.setFirstName(firstNameTextField.getText());
-        user.setLastName(lastNameTextField.getText());
-        user.setAddress(adresseTextField.getText());
-        user.setEmail(emailTextField.getText());
-        user.setPassword(passwordTextField.getText());
-        user.setBirthDate(Date.valueOf(dateDeNaissanceDatePicker.getValue()));
-        user.setPhoneNumber(Integer.parseInt(phoneNumberTextField.getText()));
+    public void modifyAccount(final ActionEvent event) {
+        final Stage stage = (Stage) this.firstNameTextField.getScene().getWindow();
+        final User user = (User) stage.getUserData();
+        user.setFirstName(this.firstNameTextField.getText());
+        user.setLastName(this.lastNameTextField.getText());
+        user.setAddress(this.adresseTextField.getText());
+        user.setEmail(this.emailTextField.getText());
+        user.setPassword(this.passwordTextField.getText());
+        user.setBirthDate(Date.valueOf(this.dateDeNaissanceDatePicker.getValue()));
+        user.setPhoneNumber(Integer.parseInt(this.phoneNumberTextField.getText()));
         stage.setUserData(user);
-        UserService userService = new UserService();
+        final UserService userService = new UserService();
         userService.update(user);
     }
 
     @FXML
-    public void signOut(ActionEvent event) throws IOException {
-        Stage stage = (Stage) emailTextField.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/SignUp.fxml"));
-        Parent root = loader.load();
+    public void signOut(final ActionEvent event) throws IOException {
+        final Stage stage = (Stage) this.emailTextField.getScene().getWindow();
+        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/SignUp.fxml"));
+        final Parent root = loader.load();
         stage.setScene(new Scene(root));
     }
 
-    public void setLeftPane(AnchorPane leftPane) {
+    public void setLeftPane(final AnchorPane leftPane) {
         this.leftPane.getChildren().clear();
         this.leftPane.getChildren().add(leftPane);
     }

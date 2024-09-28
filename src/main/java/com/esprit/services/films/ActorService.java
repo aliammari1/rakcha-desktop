@@ -2,7 +2,6 @@ package com.esprit.services.films;
 
 import com.esprit.models.films.Actor;
 import com.esprit.services.IService;
-import com.esprit.services.produits.AvisService;
 import com.esprit.utils.DataSource;
 
 import java.sql.Connection;
@@ -15,26 +14,26 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ActorService implements IService<Actor> {
-    Connection connection;
     private static final Logger LOGGER = Logger.getLogger(ActorService.class.getName());
+    Connection connection;
 
     public ActorService() {
-        connection = DataSource.getInstance().getConnection();
+        this.connection = DataSource.getInstance().getConnection();
     }
 
     /**
      * @param actor
      */
     @Override
-    public void create(Actor actor) {
-        String req = "insert into actor (nom,image,biographie) values (?,?,?) ";
+    public void create(final Actor actor) {
+        final String req = "insert into actor (nom,image,biographie) values (?,?,?) ";
         try {
-            PreparedStatement statement = connection.prepareStatement(req);
+            final PreparedStatement statement = this.connection.prepareStatement(req);
             statement.setString(1, actor.getNom());
             statement.setString(2, actor.getImage());
             statement.setString(3, actor.getBiographie());
             statement.executeUpdate();
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             throw new RuntimeException(e);
         }
     }
@@ -44,69 +43,69 @@ public class ActorService implements IService<Actor> {
      */
     @Override
     public List<Actor> read() {
-        List<Actor> actorArrayList = new ArrayList<>();
-        String req = "SELECT * from actor";
+        final List<Actor> actorArrayList = new ArrayList<>();
+        final String req = "SELECT * from actor";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
-            ResultSet rs = pst.executeQuery();
+            final PreparedStatement pst = this.connection.prepareStatement(req);
+            final ResultSet rs = pst.executeQuery();
             int i = 0;
             while (rs.next()) {
                 actorArrayList.add(new Actor(rs.getInt("id"), rs.getString("nom"), rs.getString("image"),
                         rs.getString("biographie")));
-                LOGGER.info(actorArrayList.get(i).toString());
+                ActorService.LOGGER.info(actorArrayList.get(i).toString());
                 i++;
             }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            ActorService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return actorArrayList;
     }
 
     @Override
-    public void update(Actor actor) {
-        String req = "UPDATE actor set nom=?,image=?,biographie=? where id=?;";
+    public void update(final Actor actor) {
+        final String req = "UPDATE actor set nom=?,image=?,biographie=? where id=?;";
         try {
-            PreparedStatement statement = connection.prepareStatement(req);
+            final PreparedStatement statement = this.connection.prepareStatement(req);
             statement.setString(1, actor.getNom());
             statement.setString(2, actor.getImage());
             statement.setString(3, actor.getBiographie());
             statement.setInt(4, actor.getId());
             statement.executeUpdate();
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public Actor getActorByNom(String nom) {
+    public Actor getActorByNom(final String nom) {
         Actor actor = null;
-        String req = "SELECT * FROM actor where nom LIKE ?";
+        final String req = "SELECT * FROM actor where nom LIKE ?";
         try {
-            PreparedStatement statement = connection.prepareStatement(req);
+            final PreparedStatement statement = this.connection.prepareStatement(req);
             statement.setString(1, nom);
-            ResultSet rs = statement.executeQuery();
+            final ResultSet rs = statement.executeQuery();
             rs.next();
             actor = new Actor(rs.getInt("id"), rs.getString("nom"), rs.getString("image"), rs.getString("biographie"));
-            LOGGER.info("actor: " + actor);
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            ActorService.LOGGER.info("actor: " + actor);
+        } catch (final SQLException e) {
+            ActorService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return actor;
     }
 
     @Override
-    public void delete(Actor actor) {
-        String req = " DELETE  FROM actor where id = ?";
+    public void delete(final Actor actor) {
+        final String req = " DELETE  FROM actor where id = ?";
         try {
-            PreparedStatement statement = connection.prepareStatement(req);
+            final PreparedStatement statement = this.connection.prepareStatement(req);
             statement.setInt(1, actor.getId());
             statement.executeUpdate();
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public Actor getActorByPlacement(int actorPlacement) {
-        String req = """
+    public Actor getActorByPlacement(final int actorPlacement) {
+        final String req = """
                 SELECT a.*, COUNT(af.film_id) AS NumberOfAppearances \
                 FROM actor a \
                 JOIN film_actor af ON a.id = af.actor_id \
@@ -115,22 +114,22 @@ public class ActorService implements IService<Actor> {
                 LIMIT ?, 1;\
                 """; // Use parameter placeholder for the limit
         try {
-            PreparedStatement statement = connection.prepareStatement(req);
+            final PreparedStatement statement = this.connection.prepareStatement(req);
             statement.setInt(1, actorPlacement - 1); // Placement starts from 1 but index starts from 0
-            ResultSet rs = statement.executeQuery();
+            final ResultSet rs = statement.executeQuery();
             if (rs.next()) {
-                int id = rs.getInt("id");
-                String img = rs.getString("image");
-                String nom = rs.getString("nom");
-                int numberOfAppearances = rs.getInt("NumberOfAppearances");
-                String bio = rs.getString("biographie");
+                final int id = rs.getInt("id");
+                final String img = rs.getString("image");
+                final String nom = rs.getString("nom");
+                final int numberOfAppearances = rs.getInt("NumberOfAppearances");
+                final String bio = rs.getString("biographie");
                 return new Actor(id, nom, img, bio, numberOfAppearances); // Assuming Actor class has a constructor that
                 // accepts id, nom, img, and
                 // numberOfAppearances
             }
             rs.close();
             statement.close();
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             throw new RuntimeException(e);
         }
         return null; // Return null if no actor found at the specified placement

@@ -6,7 +6,6 @@ import com.esprit.models.films.Filmcinema;
 import com.esprit.models.users.Responsable_de_cinema;
 import com.esprit.services.IService;
 import com.esprit.services.cinemas.CinemaService;
-import com.esprit.services.produits.AvisService;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.DataSource;
 
@@ -20,30 +19,30 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class FilmcinemaService implements IService<Filmcinema> {
-    Connection connection;
     private static final Logger LOGGER = Logger.getLogger(FilmcinemaService.class.getName());
+    Connection connection;
 
     public FilmcinemaService() {
-        connection = DataSource.getInstance().getConnection();
+        this.connection = DataSource.getInstance().getConnection();
     }
 
     /**
      * @param filmcinema
      */
     @Override
-    public void create(Filmcinema filmcinema) {
-        String req = "INSERT INTO film_cinema (film_id,cinema_id) VALUES (?,?)";
+    public void create(final Filmcinema filmcinema) {
+        final String req = "INSERT INTO film_cinema (film_id,cinema_id) VALUES (?,?)";
         try {
-            Cinema cinema = filmcinema.getId_cinema();
-            String[] cinemanames = cinema.getNom().split(", ");
-            PreparedStatement statement = connection.prepareStatement(req);
-            for (String cinemaname : cinemanames) {
-                LOGGER.info(cinemaname);
+            final Cinema cinema = filmcinema.getId_cinema();
+            final String[] cinemanames = cinema.getNom().split(", ");
+            final PreparedStatement statement = this.connection.prepareStatement(req);
+            for (final String cinemaname : cinemanames) {
+                FilmcinemaService.LOGGER.info(cinemaname);
                 statement.setInt(1, FilmService.getFilmLastInsertID());
                 statement.setInt(2, new CinemaService().getCinemaByName(cinemaname).getId_cinema());
                 statement.executeUpdate();
             }
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             throw new RuntimeException(e);
         }
     }
@@ -53,11 +52,11 @@ public class FilmcinemaService implements IService<Filmcinema> {
      */
     @Override
     public List<Filmcinema> read() {
-        List<Filmcinema> actorfilmArrayList = new ArrayList<>();
-        String req = "SELECT film.*,cinema.*, GROUP_CONCAT(cinema.nom SEPARATOR ', ') AS cinemaNames from film_cinema JOIN cinema  ON film_cinema.cinema_id = cinema.id_cinema JOIN film on film_cinema.film_id = film.id GROUP BY film.id;";
+        final List<Filmcinema> actorfilmArrayList = new ArrayList<>();
+        final String req = "SELECT film.*,cinema.*, GROUP_CONCAT(cinema.nom SEPARATOR ', ') AS cinemaNames from film_cinema JOIN cinema  ON film_cinema.cinema_id = cinema.id_cinema JOIN film on film_cinema.film_id = film.id GROUP BY film.id;";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
-            ResultSet rs = pst.executeQuery();
+            final PreparedStatement pst = this.connection.prepareStatement(req);
+            final ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 actorfilmArrayList.add(new Filmcinema(
                         new Film(rs.getInt("film.id"), rs.getString("film.nom"), rs.getString("image"),
@@ -67,74 +66,74 @@ public class FilmcinemaService implements IService<Filmcinema> {
                                 (Responsable_de_cinema) new UserService().getUserById(rs.getInt("responsable")),
                                 rs.getString("cinema.logo"), rs.getString("cinema.Statut"))));
             }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            FilmcinemaService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return actorfilmArrayList;
     }
 
     @Override
-    public void update(Filmcinema filmcinema) {
+    public void update(final Filmcinema filmcinema) {
     }
 
     @Override
-    public void delete(Filmcinema filmcinema) {
+    public void delete(final Filmcinema filmcinema) {
     }
 
-    public void updatecinemas(Film film, List<String> cinemaNames) {
-        FilmService filmService = new FilmService();
-        CinemaService cinemaService = new CinemaService();
+    public void updatecinemas(final Film film, final List<String> cinemaNames) {
+        final FilmService filmService = new FilmService();
+        final CinemaService cinemaService = new CinemaService();
         filmService.update(film);
-        LOGGER.info("filmcinema............: " + film);
-        String reqDelete = "DELETE FROM film_cinema WHERE film_id = ?;";
+        FilmcinemaService.LOGGER.info("filmcinema............: " + film);
+        final String reqDelete = "DELETE FROM film_cinema WHERE film_id = ?;";
         try {
-            PreparedStatement statement = connection.prepareStatement(reqDelete);
+            final PreparedStatement statement = this.connection.prepareStatement(reqDelete);
             statement.setInt(1, film.getId());
             statement.executeUpdate();
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final Exception e) {
+            FilmcinemaService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
-        String req = "INSERT INTO film_cinema (film_id, cinema_id) VALUES (?,?)";
+        final String req = "INSERT INTO film_cinema (film_id, cinema_id) VALUES (?,?)";
         try {
-            PreparedStatement statement = connection.prepareStatement(req);
+            final PreparedStatement statement = this.connection.prepareStatement(req);
             statement.setInt(1, film.getId());
-            for (String cinemaname : cinemaNames) {
+            for (final String cinemaname : cinemaNames) {
                 statement.setInt(2, cinemaService.getCinemaByName(cinemaname).getId_cinema());
                 statement.executeUpdate();
             }
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public String getcinemaNames(int id) {
+    public String getcinemaNames(final int id) {
         String s = "";
-        String req = "SELECT GROUP_CONCAT(cinema.nom SEPARATOR ', ') AS cinemaNames from film_cinema JOIN cinema  ON film_cinema.cinema_id = cinema.id_cinema JOIN film on film_cinema.film_id = film.id where film.id = ? GROUP BY film.id;";
+        final String req = "SELECT GROUP_CONCAT(cinema.nom SEPARATOR ', ') AS cinemaNames from film_cinema JOIN cinema  ON film_cinema.cinema_id = cinema.id_cinema JOIN film on film_cinema.film_id = film.id where film.id = ? GROUP BY film.id;";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
+            final PreparedStatement pst = this.connection.prepareStatement(req);
             pst.setInt(1, id);
-            ResultSet rs = pst.executeQuery();
+            final ResultSet rs = pst.executeQuery();
             // int i = 0;
             s = rs.next() ? rs.getString("cinemaNames") : "";
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            FilmcinemaService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return s;
     }
 
-    public List<Film> readMoviesForCinema(int cinemaId) {
-        List<Film> moviesForCinema = new ArrayList<>();
-        String query = "SELECT film.*,cinema.* from film_cinema  JOIN cinema  ON film_cinema.cinema_id = cinema.id_cinema  JOIN film on film_cinema.film_id = film.id where cinema.id_cinema = ? GROUP BY film.id;";
-        try (PreparedStatement pst = connection.prepareStatement(query)) {
+    public List<Film> readMoviesForCinema(final int cinemaId) {
+        final List<Film> moviesForCinema = new ArrayList<>();
+        final String query = "SELECT film.*,cinema.* from film_cinema  JOIN cinema  ON film_cinema.cinema_id = cinema.id_cinema  JOIN film on film_cinema.film_id = film.id where cinema.id_cinema = ? GROUP BY film.id;";
+        try (final PreparedStatement pst = this.connection.prepareStatement(query)) {
             pst.setInt(1, cinemaId);
-            ResultSet rs = pst.executeQuery();
+            final ResultSet rs = pst.executeQuery();
             while (rs.next()) {
-                Film film = new Film(rs.getInt("id"), rs.getString("nom"), rs.getString("image"), rs.getTime("duree"),
+                final Film film = new Film(rs.getInt("id"), rs.getString("nom"), rs.getString("image"), rs.getTime("duree"),
                         rs.getString("description"), rs.getInt("annederalisation"));
                 moviesForCinema.add(film);
             }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            FilmcinemaService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return moviesForCinema;
     }

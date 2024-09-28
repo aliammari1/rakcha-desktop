@@ -15,28 +15,28 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class PanierService implements IService<Panier> {
-    private final Connection connection;
     private static final Logger LOGGER = Logger.getLogger(PanierService.class.getName());
+    private final Connection connection;
 
     public PanierService() {
-        connection = DataSource.getInstance().getConnection();
+        this.connection = DataSource.getInstance().getConnection();
     }
 
     /**
      * @param panier
      */
     @Override
-    public void create(Panier panier) {
-        String req = "INSERT into panier(id_produit,quantite,idClient) values (?, ?,?)  ;";
+    public void create(final Panier panier) {
+        final String req = "INSERT into panier(id_produit,quantite,idClient) values (?, ?,?)  ;";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
+            final PreparedStatement pst = this.connection.prepareStatement(req);
             pst.setInt(1, panier.getProduit().getId_produit());
             pst.setInt(2, panier.getQuantity());
             pst.setInt(3, panier.getUser().getId());
             pst.executeUpdate();
-            LOGGER.info("panier remplit !");
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            PanierService.LOGGER.info("panier remplit !");
+        } catch (final SQLException e) {
+            PanierService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -48,16 +48,16 @@ public class PanierService implements IService<Panier> {
         return null;
     }
 
-    public List<Panier> readUserPanier(int iduser) throws SQLException {
-        UserService usersService = new UserService();
-        ProduitService produitService = new ProduitService();
-        List<Panier> paniers = new ArrayList<>();
-        String req = "SELECT * from panier  WHERE idClient=?";
-        PreparedStatement ps = connection.prepareStatement(req);
+    public List<Panier> readUserPanier(final int iduser) throws SQLException {
+        final UserService usersService = new UserService();
+        final ProduitService produitService = new ProduitService();
+        final List<Panier> paniers = new ArrayList<>();
+        final String req = "SELECT * from panier  WHERE idClient=?";
+        final PreparedStatement ps = this.connection.prepareStatement(req);
         ps.setInt(1, iduser);
-        ResultSet rs = ps.executeQuery();
+        final ResultSet rs = ps.executeQuery();
         while (rs.next()) {
-            Panier panier = new Panier();
+            final Panier panier = new Panier();
             panier.setUser(usersService.getUserById(iduser));
             panier.setProduit(produitService.getProduitById(rs.getInt("id_produit")));
             panier.setQuantity(rs.getInt("quantite"));
@@ -67,8 +67,8 @@ public class PanierService implements IService<Panier> {
     }
 
     @Override
-    public void update(Panier panier) {
-        String req = """
+    public void update(final Panier panier) {
+        final String req = """
                 UPDATE panier p \
                 INNER JOIN produit pro ON pro.id_produit = p.id_produit \
                 INNER JOIN users u ON u.id = p.idClient \
@@ -76,29 +76,29 @@ public class PanierService implements IService<Panier> {
                 WHERE p.idpanier = ?;\
                 """;
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
+            final PreparedStatement pst = this.connection.prepareStatement(req);
             pst.setInt(4, panier.getIdPanier());
             pst.setInt(3, panier.getUser().getId());
             pst.setInt(2, panier.getQuantity());
             pst.setInt(1, panier.getProduit().getId_produit());
             pst.executeUpdate();
-            LOGGER.info("panier modifiée !");
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            PanierService.LOGGER.info("panier modifiée !");
+        } catch (final SQLException e) {
+            PanierService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
     @Override
-    public void delete(Panier panier) {
-        String req = "DELETE from panier where id_produit = ? and idClient=?;";
+    public void delete(final Panier panier) {
+        final String req = "DELETE from panier where id_produit = ? and idClient=?;";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
+            final PreparedStatement pst = this.connection.prepareStatement(req);
             pst.setInt(1, panier.getProduit().getId_produit());
             pst.setInt(2, panier.getUser().getId());
             pst.executeUpdate();
-            LOGGER.info("panier supprmiée !");
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            PanierService.LOGGER.info("panier supprmiée !");
+        } catch (final SQLException e) {
+            PanierService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 }

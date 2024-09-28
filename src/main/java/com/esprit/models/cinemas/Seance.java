@@ -21,15 +21,15 @@ public class Seance {
     /**
      * Constructs a Seance object with the specified parameters.
      *
-     * @param id_seance   the ID of the seance
-     * @param salle       the salle where the seance takes place
-     * @param HD          the start time of the seance
-     * @param HF          the end time of the seance
-     * @param date        the date of the seance
-     * @param prix        the price of the seance
-     * @param filmcinema  the filmcinema associated with the seance
+     * @param id_seance  the ID of the seance
+     * @param salle      the salle where the seance takes place
+     * @param HD         the start time of the seance
+     * @param HF         the end time of the seance
+     * @param date       the date of the seance
+     * @param prix       the price of the seance
+     * @param filmcinema the filmcinema associated with the seance
      */
-    public Seance(int id_seance, Salle salle, Time HD, Time HF, Date date, double prix, Filmcinema filmcinema) {
+    public Seance(final int id_seance, final Salle salle, final Time HD, final Time HF, final Date date, final double prix, final Filmcinema filmcinema) {
         this.id_seance = id_seance;
         this.filmcinema = filmcinema;
         this.salle = salle;
@@ -42,14 +42,14 @@ public class Seance {
     /**
      * Constructs a Seance object with the specified parameters.
      *
-     * @param salle       the salle where the seance takes place
-     * @param HD          the start time of the seance
-     * @param HF          the end time of the seance
-     * @param date        the date of the seance
-     * @param prix        the price of the seance
-     * @param filmcinema  the filmcinema associated with the seance
+     * @param salle      the salle where the seance takes place
+     * @param HD         the start time of the seance
+     * @param HF         the end time of the seance
+     * @param date       the date of the seance
+     * @param prix       the price of the seance
+     * @param filmcinema the filmcinema associated with the seance
      */
-    public Seance(Salle salle, Time HD, Time HF, Date date, double prix, Filmcinema filmcinema) {
+    public Seance(final Salle salle, final Time HD, final Time HF, final Date date, final double prix, final Filmcinema filmcinema) {
         this.filmcinema = filmcinema;
         this.salle = salle;
         this.HD = HD;
@@ -61,17 +61,17 @@ public class Seance {
     /**
      * Constructs a Seance object with the specified parameters.
      *
-     * @param idSeance    the ID of the seance
-     * @param salle       the salle where the seance takes place
-     * @param HD          the start time of the seance
-     * @param HF          the end time of the seance
-     * @param date        the date of the seance
-     * @param prix        the price of the seance
-     * @param filmcinema  the filmcinema associated with the seance
+     * @param idSeance   the ID of the seance
+     * @param salle      the salle where the seance takes place
+     * @param HD         the start time of the seance
+     * @param HF         the end time of the seance
+     * @param date       the date of the seance
+     * @param prix       the price of the seance
+     * @param filmcinema the filmcinema associated with the seance
      */
-    public Seance(int idSeance, Salle salle, Time HD, Time HF, LocalDate date, int prix, Filmcinema filmcinema) {
+    public Seance(final int idSeance, final Salle salle, final Time HD, final Time HF, final LocalDate date, final int prix, final Filmcinema filmcinema) {
         this.filmcinema = filmcinema;
-        this.id_seance = id_seance;
+        id_seance = this.id_seance;
         this.salle = salle;
         this.HD = HD;
         this.HF = HF;
@@ -85,7 +85,7 @@ public class Seance {
      * @return the filmcinema associated with the seance
      */
     public Filmcinema getFilmcinema() {
-        return filmcinema;
+        return this.filmcinema;
     }
 
     /**
@@ -93,11 +93,12 @@ public class Seance {
      *
      * @param filmcinema the filmcinema to be set
      */
-    public void setFilmcinema(Filmcinema filmcinema) {
+    public void setFilmcinema(final Filmcinema filmcinema) {
         this.filmcinema = filmcinema;
     }
 
     // Other getter and setter methods...
+
     /**
      * Returns a string representation of the Seance object.
      *
@@ -106,12 +107,12 @@ public class Seance {
     @Override
     public String toString() {
         return "Seance{"
-                + "id_seance=" + id_seance
-                + ", salle=" + salle
-                + ", HD=" + HD
-                + ", HF=" + HF
-                + ", date=" + date
-                + ", prix=" + prix
+                + "id_seance=" + this.id_seance
+                + ", salle=" + this.salle
+                + ", HD=" + this.HD
+                + ", HF=" + this.HF
+                + ", date=" + this.date
+                + ", prix=" + this.prix
                 + '}';
     }
 
@@ -121,7 +122,7 @@ public class Seance {
      * @return the salle ID associated with the seance
      */
     public Salle getId_salle() {
-        return salle;
+        return this.salle;
     }
 
     /**
@@ -130,50 +131,50 @@ public class Seance {
      * @return the name of the salle associated with the seance
      */
     public String getNom_salle() {
-        return salle.getNom_salle();
+        return this.salle.getNom_salle();
     }
 
     public Salle getSalle() {
-        return salle;
+        return this.salle;
     }
 
-    public Time getHD() {
-        return HD;
-    }
-
-    public Time getHF() {
-        return HF;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public double getPrix() {
-        return prix;
-    }
-
-    public int getId_seance() {
-        return id_seance;
-    }
-
-    public void setSalle(Salle salle) {
+    public void setSalle(final Salle salle) {
         this.salle = salle;
     }
 
-    public void setHD(Time HD) {
+    public Time getHD() {
+        return this.HD;
+    }
+
+    public void setHD(final Time HD) {
         this.HD = HD;
     }
 
-    public void setHF(Time HF) {
+    public Time getHF() {
+        return this.HF;
+    }
+
+    public void setHF(final Time HF) {
         this.HF = HF;
     }
 
-    public void setDate(Date date) {
+    public Date getDate() {
+        return this.date;
+    }
+
+    public void setDate(final Date date) {
         this.date = date;
     }
 
-    public void setPrix(double prix) {
+    public double getPrix() {
+        return this.prix;
+    }
+
+    public void setPrix(final double prix) {
         this.prix = prix;
+    }
+
+    public int getId_seance() {
+        return this.id_seance;
     }
 }

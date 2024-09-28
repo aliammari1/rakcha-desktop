@@ -3,7 +3,6 @@ package com.esprit.services.films;
 import com.esprit.models.films.Filmcoment;
 import com.esprit.models.users.Client;
 import com.esprit.services.IService;
-import com.esprit.services.produits.AvisService;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.DataSource;
 
@@ -17,28 +16,28 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class FilmcomentService implements IService<Filmcoment> {
-    private final Connection connection;
     private static final Logger LOGGER = Logger.getLogger(FilmcomentService.class.getName());
+    private final Connection connection;
 
     public FilmcomentService() {
-        connection = DataSource.getInstance().getConnection();
+        this.connection = DataSource.getInstance().getConnection();
     }
 
     /**
      * @param filmcoment
      */
     @Override
-    public void create(Filmcoment filmcoment) {
-        String req = "INSERT into filmcoment(comment,user_id,film_id ) values (?,?,?);";
+    public void create(final Filmcoment filmcoment) {
+        final String req = "INSERT into filmcoment(comment,user_id,film_id ) values (?,?,?);";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
+            final PreparedStatement pst = this.connection.prepareStatement(req);
             pst.setString(1, filmcoment.getComment());
             pst.setInt(2, filmcoment.getUser_id().getId());
             pst.setInt(3, filmcoment.getFilm_id().getId());
             pst.executeUpdate();
-            LOGGER.info("commentaire ajoutée !");
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            FilmcomentService.LOGGER.info("commentaire ajoutée !");
+        } catch (final SQLException e) {
+            FilmcomentService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -47,11 +46,11 @@ public class FilmcomentService implements IService<Filmcoment> {
      */
     @Override
     public List<Filmcoment> read() {
-        List<Filmcoment> commentaire = new ArrayList<>();
-        String req = "SELECT * FROM filmcoment";
+        final List<Filmcoment> commentaire = new ArrayList<>();
+        final String req = "SELECT * FROM filmcoment";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
-            ResultSet rs = pst.executeQuery();
+            final PreparedStatement pst = this.connection.prepareStatement(req);
+            final ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 commentaire.add(new Filmcoment(
                         rs.getInt("id"),
@@ -59,17 +58,17 @@ public class FilmcomentService implements IService<Filmcoment> {
                         (Client) new UserService().getUserById(rs.getInt("user_id")),
                         new FilmService().getFilm(rs.getInt("film_id"))));
             }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            FilmcomentService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return commentaire;
     }
 
     @Override
-    public void update(Filmcoment filmcoment) {
+    public void update(final Filmcoment filmcoment) {
     }
 
     @Override
-    public void delete(Filmcoment filmcoment) {
+    public void delete(final Filmcoment filmcoment) {
     }
 }

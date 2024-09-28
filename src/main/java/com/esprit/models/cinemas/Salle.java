@@ -16,12 +16,12 @@ public class Salle {
     /**
      * Constructs a new Salle object with the specified id_salle, id_cinema, nb_places, and nom_salle.
      *
-     * @param id_salle   the id of the salle
-     * @param id_cinema  the id of the cinema
-     * @param nb_places  the number of places in the salle
-     * @param nom_salle  the name of the salle
+     * @param id_salle  the id of the salle
+     * @param id_cinema the id of the cinema
+     * @param nb_places the number of places in the salle
+     * @param nom_salle the name of the salle
      */
-    public Salle(int id_salle, int id_cinema, int nb_places, String nom_salle) {
+    public Salle(final int id_salle, final int id_cinema, final int nb_places, final String nom_salle) {
         this.id_salle = id_salle;
         this.id_cinema = id_cinema;
         this.nb_places = nb_places;
@@ -31,11 +31,11 @@ public class Salle {
     /**
      * Constructs a new Salle object with the specified id_cinema, nb_places, and nom_salle.
      *
-     * @param id_cinema  the id of the cinema
-     * @param nb_places  the number of places in the salle
-     * @param nom_salle  the name of the salle
+     * @param id_cinema the id of the cinema
+     * @param nb_places the number of places in the salle
+     * @param nom_salle the name of the salle
      */
-    public Salle(int id_cinema, int nb_places, String nom_salle) {
+    public Salle(final int id_cinema, final int nb_places, final String nom_salle) {
         this.id_cinema = id_cinema;
         this.nb_places = nb_places;
         this.nom_salle = nom_salle;
@@ -47,7 +47,7 @@ public class Salle {
      * @return the id of the salle
      */
     public int getId_salle() {
-        return id_salle;
+        return this.id_salle;
     }
 
     /**
@@ -55,7 +55,7 @@ public class Salle {
      *
      * @param id_salle the id of the salle
      */
-    public void setId_salle(int id_salle) {
+    public void setId_salle(final int id_salle) {
         this.id_salle = id_salle;
     }
 
@@ -65,7 +65,7 @@ public class Salle {
      * @return the id of the cinema
      */
     public int getId_cinema() {
-        return id_cinema;
+        return this.id_cinema;
     }
 
     /**
@@ -73,7 +73,7 @@ public class Salle {
      *
      * @param id_cinema the id of the cinema
      */
-    public void setId_cinema(int id_cinema) {
+    public void setId_cinema(final int id_cinema) {
         this.id_cinema = id_cinema;
     }
 
@@ -83,7 +83,7 @@ public class Salle {
      * @return the number of places in the salle
      */
     public int getNb_places() {
-        return nb_places;
+        return this.nb_places;
     }
 
     /**
@@ -91,7 +91,7 @@ public class Salle {
      *
      * @param nb_places the number of places in the salle
      */
-    public void setNb_places(int nb_places) {
+    public void setNb_places(final int nb_places) {
         this.nb_places = nb_places;
     }
 
@@ -101,7 +101,7 @@ public class Salle {
      * @return the name of the salle
      */
     public String getNom_salle() {
-        return nom_salle;
+        return this.nom_salle;
     }
 
     /**
@@ -109,7 +109,7 @@ public class Salle {
      *
      * @param nom_salle the name of the salle
      */
-    public void setNom_salle(String nom_salle) {
+    public void setNom_salle(final String nom_salle) {
         this.nom_salle = nom_salle;
     }
 
@@ -121,10 +121,10 @@ public class Salle {
     @Override
     public String toString() {
         return "Salle{"
-                + "id_salle=" + id_salle
-                + ", id_cinema=" + id_cinema
-                + ", nb_places=" + nb_places
-                + ", nom_salle=" + nom_salle
+                + "id_salle=" + this.id_salle
+                + ", id_cinema=" + this.id_cinema
+                + ", nb_places=" + this.nb_places
+                + ", nom_salle=" + this.nom_salle
                 + '}';
     }
 }

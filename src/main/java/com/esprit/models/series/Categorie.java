@@ -8,38 +8,38 @@ public class Categorie {
     public Categorie() {
     }
 
-    public Categorie(String nom, String description) {
+    public Categorie(final String nom, final String description) {
         this.nom = nom;
         this.description = description;
     }
 
-    /** 
+    /**
      * @return int
      */
     public int getIdcategorie() {
-        return idcategorie;
+        return this.idcategorie;
     }
 
-    /** 
+    /**
      * @param idcategorie
      */
-    public void setIdcategorie(int idcategorie) {
+    public void setIdcategorie(final int idcategorie) {
         this.idcategorie = idcategorie;
     }
 
     public String getNom() {
-        return nom;
+        return this.nom;
     }
 
-    public void setNom(String nom) {
+    public void setNom(final String nom) {
         this.nom = nom;
     }
 
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 }

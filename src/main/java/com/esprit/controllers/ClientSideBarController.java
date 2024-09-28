@@ -1,7 +1,5 @@
 package com.esprit.controllers;
 
-import com.esprit.services.produits.AvisService;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -45,38 +43,38 @@ public class ClientSideBarController implements Initializable {
     /**
      * Handles an `ActionEvent` and performs a specific action based on the event
      * type.
-     * 
+     *
      * @param event event that triggered the function execution, providing the
      *              necessary
      *              information for the function to perform its intended action.
      */
     @FXML
-    void switchToEvent(ActionEvent event) {
+    void switchToEvent(final ActionEvent event) {
     }
 
     /**
      * Loads a new FXML file "filmuser.fxml" into the stage using the `FXMLLoader`
      * class,
      * replacing the current scene with the newly loaded one.
-     * 
+     *
      * @param event user's action that triggered the function, and it is of type
      *              `ActionEvent`.
-     * 
+     *              <p>
      *              - It is an `ActionEvent`, indicating that the event occurred due
      *              to user action.
      *              - The event target is the `movieButton`, indicating the button
      *              that was clicked.
      */
     @FXML
-    void switchToMovies(ActionEvent event) {
+    void switchToMovies(final ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/filmuser.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) movieButton.getScene().getWindow();
-            LOGGER.log(Level.INFO, "---------{0}", stage.getUserData());
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/filmuser.fxml"));
+            final Parent root = loader.load();
+            final Stage stage = (Stage) this.movieButton.getScene().getWindow();
+            ClientSideBarController.LOGGER.log(Level.INFO, "---------{0}", stage.getUserData());
             stage.setScene(new Scene(root));
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final Exception e) {
+            ClientSideBarController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -84,23 +82,23 @@ public class ClientSideBarController implements Initializable {
      * Loads an FXML file named `AfficherProduitClient.fxml`, and sets the scene of
      * a
      * Stage to the loaded root element, replacing the previous content.
-     * 
+     *
      * @param event occurrence of a button press, which triggers the execution of
      *              the
      *              `switchToProducts()` method.
-     * 
+     *              <p>
      *              Event: An action event that triggered the function execution.
      */
     @FXML
-    void switchToProducts(ActionEvent event) {
+    void switchToProducts(final ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherProduitClient.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) productButton.getScene().getWindow();
-            LOGGER.info("---------" + stage.getUserData());
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/AfficherProduitClient.fxml"));
+            final Parent root = loader.load();
+            final Stage stage = (Stage) this.productButton.getScene().getWindow();
+            ClientSideBarController.LOGGER.info("---------" + stage.getUserData());
             stage.setScene(new Scene(root));
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final Exception e) {
+            ClientSideBarController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -109,11 +107,11 @@ public class ClientSideBarController implements Initializable {
      * triggered, replacing the current stage with a new scene containing the loaded
      * root
      * node.
-     * 
+     *
      * @param event `ActionEvent` that triggered the `switchToSeries()` method,
      *              providing
      *              the source of the event that initiated the method's execution.
-     * 
+     *              <p>
      *              - Type: `ActionEvent` (represents an action event occurring on a
      *              JavaFX component)
      *              - Source: Reference to the component that generated the event
@@ -121,37 +119,37 @@ public class ClientSideBarController implements Initializable {
      *              or menu item)
      */
     @FXML
-    void switchToSeries(ActionEvent event) {
+    void switchToSeries(final ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/SeriesClient.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) serieButton.getScene().getWindow();
-            LOGGER.info("---------" + stage.getUserData());
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/SeriesClient.fxml"));
+            final Parent root = loader.load();
+            final Stage stage = (Stage) this.serieButton.getScene().getWindow();
+            ClientSideBarController.LOGGER.info("---------" + stage.getUserData());
             stage.setScene(new Scene(root));
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final Exception e) {
+            ClientSideBarController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
     /**
      * Loads a new scene from an FXML file when the "Cinema" button is clicked.
-     * 
+     *
      * @param event event that triggered the `switchtcinema` function, which is an
      *              ActionEvent in this case.
-     * 
+     *              <p>
      *              - `event`: an `ActionEvent` object representing a user-initiated
      *              event.
      */
     @FXML
-    void switchtcinema(ActionEvent event) {
+    void switchtcinema(final ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/DashboardClientCinema.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) cinemaButton.getScene().getWindow();
-            LOGGER.info("---------" + stage.getUserData());
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/DashboardClientCinema.fxml"));
+            final Parent root = loader.load();
+            final Stage stage = (Stage) this.cinemaButton.getScene().getWindow();
+            ClientSideBarController.LOGGER.info("---------" + stage.getUserData());
             stage.setScene(new Scene(root));
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final Exception e) {
+            ClientSideBarController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -159,24 +157,24 @@ public class ClientSideBarController implements Initializable {
      * Loads a new FXML file, replaces the current stage's scene with it, and sets
      * the
      * stage's user data to null.
-     * 
+     *
      * @param event click event on the logout button that triggered the function
      *              execution.
-     * 
+     *              <p>
      *              - `event`: An instance of the `ActionEvent` class, representing
      *              a user action
      *              (such as button press) that triggered the function execution.
      */
     @FXML
-    void switchToLogout(ActionEvent event) {
+    void switchToLogout(final ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) logoutButton.getScene().getWindow();
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/Login.fxml"));
+            final Parent root = loader.load();
+            final Stage stage = (Stage) this.logoutButton.getScene().getWindow();
             stage.setUserData(null);
             stage.setScene(new Scene(root));
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final Exception e) {
+            ClientSideBarController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -184,23 +182,23 @@ public class ClientSideBarController implements Initializable {
      * Loads a new scene containing a `Parent` element with the FXML file
      * `"Profile.fxml"`
      * when the `profileButton` is clicked.
-     * 
+     *
      * @param event click event that triggered the function execution.
-     * 
+     *              <p>
      *              - Event type: `ActionEvent` indicating that the event was
      *              triggered by a user
      *              action on the associated control (in this case, the
      *              `profileButton`).
      */
     @FXML
-    void switchToProfile(ActionEvent event) {
+    void switchToProfile(final ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Profile.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) profileButton.getScene().getWindow();
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/Profile.fxml"));
+            final Parent root = loader.load();
+            final Stage stage = (Stage) this.profileButton.getScene().getWindow();
             stage.setScene(new Scene(root));
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final Exception e) {
+            ClientSideBarController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -209,15 +207,14 @@ public class ClientSideBarController implements Initializable {
      * state
      * by calling its superclass's `initialize` method and performing any additional
      * initialization logic specified in the method body.
-     * 
+     *
      * @param location  URL of the web application's root directory.
-     * 
      * @param resources resource bundle for the application, providing localized
      *                  strings
      *                  and other resources for the user interface and
      *                  functionality.
      */
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize(final URL location, final ResourceBundle resources) {
     }
 }

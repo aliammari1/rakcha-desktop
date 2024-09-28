@@ -1,7 +1,5 @@
 package com.esprit.utils;
 
-import com.esprit.services.produits.AvisService;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -20,48 +18,48 @@ public class imdbAPI {
     /**
      * @param args
      */
-    public static void main(String[] args) {
-        String query = "spiderwoman";
+    public static void main(final String[] args) {
+        final String query = "spiderwoman";
         try {
-            String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
-            String scriptUrl = "https://script.google.com/macros/s/AKfycbyeuvvPJ2jljewXKStVhiOrzvhMPkAEj5xT_cun3IRWc9XEF4F64d-jimDvK198haZk/exec?query="
+            final String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
+            final String scriptUrl = "https://script.google.com/macros/s/AKfycbyeuvvPJ2jljewXKStVhiOrzvhMPkAEj5xT_cun3IRWc9XEF4F64d-jimDvK198haZk/exec?query="
                     + encodedQuery;
-            LOGGER.info(scriptUrl);
+            imdbAPI.LOGGER.info(scriptUrl);
             // Send the request
-            URL url = new URL(scriptUrl);
+            final URL url = new URL(scriptUrl);
             int statusCode = 403;
             HttpURLConnection conn = null;
             do {
-                LOGGER.info("Code=" + statusCode);
+                imdbAPI.LOGGER.info("Code=" + statusCode);
                 // Send the request
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 statusCode = conn.getInputStream().read();
-                LOGGER.info("Status Code: " + conn.getResponseCode());
-            } while (statusCode != 123);
+                imdbAPI.LOGGER.info("Status Code: " + conn.getResponseCode());
+            } while (123 != statusCode);
             // Read the response
-            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            StringBuilder responseBuilder = new StringBuilder();
+            final BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
+            final StringBuilder responseBuilder = new StringBuilder();
             String line;
-            while ((line = reader.readLine()) != null) {
+            while (null != (line = reader.readLine())) {
                 responseBuilder.append(line);
             }
-            String response = "{" + responseBuilder + "}";
+            final String response = "{" + responseBuilder + "}";
             reader.close();
             // Parse the JSON response
-            LOGGER.info(response);
-            JSONObject jsonResponse = new JSONObject(response);
-            JSONArray results = jsonResponse.getJSONArray("results");
+            imdbAPI.LOGGER.info(response);
+            final JSONObject jsonResponse = new JSONObject(response);
+            final JSONArray results = jsonResponse.getJSONArray("results");
             // Extract the IMDb URL of the first result
-            if (results.length() > 0) {
-                JSONObject firstResult = results.getJSONObject(0);
-                String imdbUrl = firstResult.getString("imdb");
-                LOGGER.info("IMDb URL of the first result: " + imdbUrl);
+            if (0 < results.length()) {
+                final JSONObject firstResult = results.getJSONObject(0);
+                final String imdbUrl = firstResult.getString("imdb");
+                imdbAPI.LOGGER.info("IMDb URL of the first result: " + imdbUrl);
             } else {
-                LOGGER.info("No results found.");
+                imdbAPI.LOGGER.info("No results found.");
             }
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final Exception e) {
+            imdbAPI.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 }

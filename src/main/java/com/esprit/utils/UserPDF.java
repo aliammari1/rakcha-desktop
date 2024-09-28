@@ -1,8 +1,6 @@
 package com.esprit.utils;
 
 import com.esprit.models.users.User;
-import com.esprit.services.produits.AvisService;
-
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -24,25 +22,25 @@ public class UserPDF {
     /**
      * @param userData
      */
-    public void generate(final List<User> userData) {
-        final Document document = new Document();
+    public void generate(List<User> userData) {
+        Document document = new Document();
         try {
             PdfWriter.getInstance(document, new FileOutputStream("iTextTable.pdf"));
-        } catch (final DocumentException | FileNotFoundException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (DocumentException | FileNotFoundException e) {
+            UserPDF.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             throw new RuntimeException(e);
         }
         document.open();
-        List<String> attributes = Arrays.asList("id", "nom", "prenom", "num_telephone", "email", "role");
-        final float[] widths = {50, 50, 50, 80, 50, 50};
-        final PdfPTable table = new PdfPTable(widths);
-        this.addTableHeader(table, attributes);
-        this.addRows(table, userData);
+        final List<String> attributes = Arrays.asList("id", "nom", "prenom", "num_telephone", "email", "role");
+        float[] widths = {50, 50, 50, 80, 50, 50};
+        PdfPTable table = new PdfPTable(widths);
+        addTableHeader(table, attributes);
+        addRows(table, userData);
         // addCustomRows(table);
         try {
             document.add(table);
-        } catch (final DocumentException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (DocumentException e) {
+            UserPDF.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             throw new RuntimeException(e);
         }
         document.close();
@@ -52,9 +50,9 @@ public class UserPDF {
      * @param table
      * @param attributes
      */
-    private void addTableHeader(final PdfPTable table, final List<String> attributes) {
+    private void addTableHeader(PdfPTable table, List<String> attributes) {
         attributes.forEach(columnTitle -> {
-            final PdfPCell header = new PdfPCell();
+            PdfPCell header = new PdfPCell();
             header.setBackgroundColor(BaseColor.LIGHT_GRAY);
             header.setBorderWidth(2);
             header.setIndent(10);
@@ -63,8 +61,8 @@ public class UserPDF {
         });
     }
 
-    private void addRows(final PdfPTable table, final List<User> userData) {
-        for (final User user : userData) {
+    private void addRows(PdfPTable table, List<User> userData) {
+        for (User user : userData) {
             table.addCell(String.valueOf(user.getId()));
             table.addCell(user.getFirstName());
             table.addCell(user.getLastName());

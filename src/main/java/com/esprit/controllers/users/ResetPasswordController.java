@@ -1,7 +1,5 @@
 package com.esprit.controllers.users;
 
-import com.esprit.services.produits.AvisService;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -28,16 +26,16 @@ public class ResetPasswordController {
      * @param event
      */
     @FXML
-    void resetPassword(ActionEvent event) {
-        if (newPass.getText().equals(pass.getText())) {
+    void resetPassword(final ActionEvent event) {
+        if (this.newPass.getText().equals(this.pass.getText())) {
             try {
                 // new UserService().forgetPassword();
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
-                Parent root = loader.load();
-                Stage stage = (Stage) newPass.getScene().getWindow();
+                final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/Login.fxml"));
+                final Parent root = loader.load();
+                final Stage stage = (Stage) this.newPass.getScene().getWindow();
                 stage.setScene(new Scene(root));
-            } catch (Exception e) {
-                LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            } catch (final Exception e) {
+                ResetPasswordController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
         }
     }

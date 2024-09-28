@@ -5,11 +5,9 @@ import com.esprit.models.users.Client;
 import com.esprit.models.users.Responsable_de_cinema;
 import com.esprit.models.users.User;
 import com.esprit.services.IService;
-import com.esprit.services.produits.AvisService;
 import com.esprit.utils.DataSource;
 import com.esprit.utils.UserMail;
 import com.esprit.utils.UserPDF;
-
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import org.mindrot.jbcrypt.BCrypt;
@@ -24,26 +22,26 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class UserService implements IService<User> {
-    Connection con;
     private static final Logger LOGGER = Logger.getLogger(UserService.class.getName());
+    Connection con;
 
     public UserService() {
-        this.con = DataSource.getInstance().getConnection();
+        con = DataSource.getInstance().getConnection();
     }
 
     /**
      * @param id
      * @return User
      */
-    public User getUserById(int id) {
-        String req = "select * from users where id = ?";
+    public User getUserById(final int id) {
+        final String req = "select * from users where id = ?";
         User user = null;
         try {
-            PreparedStatement preparedStatement = con.prepareStatement(req);
+            final PreparedStatement preparedStatement = this.con.prepareStatement(req);
             preparedStatement.setInt(1, id);
-            user = getUserRow(preparedStatement);
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            user = this.getUserRow(preparedStatement);
+        } catch (final Exception e) {
+            UserService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return user;
     }
@@ -52,23 +50,23 @@ public class UserService implements IService<User> {
      * @param email
      * @return User
      */
-    private User getUserByEmail(String email) {
-        String req = "select * from users where email = ?";
+    private User getUserByEmail(final String email) {
+        final String req = "select * from users where email = ?";
         User user = null;
         try {
-            PreparedStatement preparedStatement = con.prepareStatement(req);
+            final PreparedStatement preparedStatement = this.con.prepareStatement(req);
             preparedStatement.setString(1, email);
-            user = getUserRow(preparedStatement);
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            user = this.getUserRow(preparedStatement);
+        } catch (final Exception e) {
+            UserService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return user;
     }
 
     @Override
-    public void create(User user) {
+    public void create(final User user) {
         try {
-            PreparedStatement statement = this.con.prepareStatement(
+            final PreparedStatement statement = con.prepareStatement(
                     "INSERT INTO users (nom,prenom,num_telephone,password,role,adresse,date_de_naissance,email,photo_de_profil,is_verified,roles) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
             statement.setString(1, user.getFirstName());
             statement.setString(2, user.getLastName());
@@ -90,31 +88,31 @@ public class UserService implements IService<User> {
                 statement.setString(11, "[\"ROLE_RESPONSABLE_DE_CINEMA\"]");
             }
             statement.executeUpdate();
-            LOGGER.info("user was added");
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            UserService.LOGGER.info("user was added");
+        } catch (final SQLException e) {
+            UserService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
     @Override
     public List<User> read() {
         try {
-            List<User> userList = new ArrayList<>();
-            String query = "SELECT * FROM users";
-            PreparedStatement statement = this.con.prepareStatement(query);
-            return this.getUsers(userList, statement);
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            final List<User> userList = new ArrayList<>();
+            final String query = "SELECT * FROM users";
+            final PreparedStatement statement = con.prepareStatement(query);
+            return getUsers(userList, statement);
+        } catch (final SQLException e) {
+            UserService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return null;
     }
 
     @Override
-    public void update(User user) {
+    public void update(final User user) {
         try {
-            PreparedStatement statement = this.con.prepareStatement(
+            final PreparedStatement statement = con.prepareStatement(
                     "UPDATE users SET  nom=?,prenom=?,num_telephone=?,password=?,role=?,adresse=?,date_de_naissance=?,email=?,photo_de_profil=? WHERE id=?");
-            LOGGER.info(user.toString());
+            UserService.LOGGER.info(user.toString());
             statement.setString(1, user.getFirstName());
             statement.setString(2, user.getLastName());
             statement.setInt(3, user.getPhoneNumber());
@@ -126,49 +124,49 @@ public class UserService implements IService<User> {
             statement.setString(9, user.getPhoto_de_profil());
             statement.setInt(10, user.getId());
             statement.executeUpdate();
-            LOGGER.info("user is updated");
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            UserService.LOGGER.info("user is updated");
+        } catch (final SQLException e) {
+            UserService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
     @Override
-    public void delete(User user) {
+    public void delete(final User user) {
         try {
-            PreparedStatement statement = this.con.prepareStatement("DELETE FROM users WHERE id = ?");
+            final PreparedStatement statement = con.prepareStatement("DELETE FROM users WHERE id = ?");
             statement.setInt(1, user.getId());
             statement.executeUpdate();
-            LOGGER.info("user is deleted");
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            UserService.LOGGER.info("user is deleted");
+        } catch (final SQLException e) {
+            UserService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
-    public void sendMail(String Recipient, String messageToSend) {
+    public void sendMail(final String Recipient, final String messageToSend) {
         UserMail.send(Recipient, messageToSend);
     }
 
     public void generateUserPDF() {
-        UserPDF userPDF = new UserPDF();
-        userPDF.generate(this.sort("role"));
+        final UserPDF userPDF = new UserPDF();
+        userPDF.generate(sort("role"));
     }
 
-    public List<User> sort(String Option) {
+    public List<User> sort(final String Option) {
         try {
-            List<User> userList = new ArrayList<>();
-            String query = "SELECT * FROM users ORDER BY %s".formatted(Option);
-            PreparedStatement statement = this.con.prepareStatement(query);
-            return this.getUsers(userList, statement);
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            final List<User> userList = new ArrayList<>();
+            final String query = "SELECT * FROM users ORDER BY %s".formatted(Option);
+            final PreparedStatement statement = con.prepareStatement(query);
+            return getUsers(userList, statement);
+        } catch (final SQLException e) {
+            UserService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return null;
     }
 
-    private List<User> getUsers(List<User> userList, PreparedStatement statement) throws SQLException {
-        ResultSet resultSet = statement.executeQuery();
+    private List<User> getUsers(final List<User> userList, final PreparedStatement statement) throws SQLException {
+        final ResultSet resultSet = statement.executeQuery();
         while (resultSet.next()) {
-            String role = resultSet.getString("role");
+            final String role = resultSet.getString("role");
             userList.add(
                     switch (role) {
                         case "admin":
@@ -214,54 +212,54 @@ public class UserService implements IService<User> {
         return userList;
     }
 
-    public boolean checkEmailFound(String email) {
-        String req = "select email from users where email LIKE ?";
+    public boolean checkEmailFound(final String email) {
+        final String req = "select email from users where email LIKE ?";
         boolean check = false;
         try {
-            PreparedStatement statement = con.prepareStatement(req);
+            final PreparedStatement statement = this.con.prepareStatement(req);
             statement.setString(1, email);
-            ResultSet resultSet = statement.executeQuery();
+            final ResultSet resultSet = statement.executeQuery();
             check = resultSet.next();
-        } catch (Exception e) {
-            LOGGER.info("checkEmailFound: " + e.getMessage());
+        } catch (final Exception e) {
+            UserService.LOGGER.info("checkEmailFound: " + e.getMessage());
         }
         return check;
     }
 
-    public void updatePassword(String email, String NewPassword) {
+    public void updatePassword(final String email, final String NewPassword) {
         try {
-            PreparedStatement statement = this.con.prepareStatement("UPDATE users SET password=? where email=? ");
+            final PreparedStatement statement = con.prepareStatement("UPDATE users SET password=? where email=? ");
             statement.setString(1, NewPassword);
             statement.setString(2, email);
             statement.executeUpdate();
-            LOGGER.info("user password is updated");
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            UserService.LOGGER.info("user password is updated");
+        } catch (final SQLException e) {
+            UserService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
-    public void forgetPassword(String email, String Password) {
-        String query = "select * from users where email LIKE ?";
+    public void forgetPassword(final String email, final String Password) {
+        final String query = "select * from users where email LIKE ?";
         try {
-            PreparedStatement preparedStatement = this.con.prepareStatement(query);
+            final PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setString(1, email);
-            User user = getUserRow(preparedStatement);
-            if (user != null) {
-                sendMail(user.getEmail(), "you forget your password dumbhead hhhh");
+            final User user = this.getUserRow(preparedStatement);
+            if (null != user) {
+                this.sendMail(user.getEmail(), "you forget your password dumbhead hhhh");
             } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "the user was not found", ButtonType.CLOSE);
+                final Alert alert = new Alert(Alert.AlertType.ERROR, "the user was not found", ButtonType.CLOSE);
                 alert.show();
             }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            UserService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
-    private User getUserRow(PreparedStatement preparedStatement) throws SQLException {
-        ResultSet resultSet = preparedStatement.executeQuery();
+    private User getUserRow(final PreparedStatement preparedStatement) throws SQLException {
+        final ResultSet resultSet = preparedStatement.executeQuery();
         if (resultSet.next()) {
-            String role = resultSet.getString("role");
-            LOGGER.info(role);
+            final String role = resultSet.getString("role");
+            UserService.LOGGER.info(role);
             return switch (role.trim()) {
                 case "admin":
                     yield new Admin(
@@ -306,31 +304,31 @@ public class UserService implements IService<User> {
         return null;
     }
 
-    public User login(String email, String password) {
-        User user = getUserByEmail(email);
-        if (user == null) {
+    public User login(final String email, final String password) {
+        User user = this.getUserByEmail(email);
+        if (null == user) {
             return null;
         }
         try {
-            String query = "select * from users where (email LIKE ?) and (password LIKE ?)";
-            PreparedStatement statement = this.con.prepareStatement(query);
+            final String query = "select * from users where (email LIKE ?) and (password LIKE ?)";
+            final PreparedStatement statement = con.prepareStatement(query);
             statement.setString(1, email);
             statement.setString(2, user.getPassword());
-            user = getUserRow(statement);
+            user = this.getUserRow(statement);
             String storedHash = user.getPassword();
             storedHash = storedHash.replaceFirst("\\$2y\\$", "\\$2a\\$");
-            if (storedHash == null || !storedHash.startsWith("$2a$")) {
-                LOGGER.info("Invalid stored hash");
+            if (null == storedHash || !storedHash.startsWith("$2a$")) {
+                UserService.LOGGER.info("Invalid stored hash");
                 return null;
             }
             if (BCrypt.checkpw(password, storedHash)) {
-                LOGGER.info("Password matches");
+                UserService.LOGGER.info("Password matches");
             } else {
-                LOGGER.info("Password does not match");
+                UserService.LOGGER.info("Password does not match");
                 return null;
             }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            UserService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return user;
     }

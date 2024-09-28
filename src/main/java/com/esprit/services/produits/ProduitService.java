@@ -15,22 +15,22 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ProduitService implements IService<Produit> {
-    private final Connection connection;
     private static final Logger LOGGER = Logger.getLogger(ProduitService.class.getName());
+    private final Connection connection;
 
     public ProduitService() {
-        connection = DataSource.getInstance().getConnection();
+        this.connection = DataSource.getInstance().getConnection();
     }
 
     /**
      * @param produit
      */
     @Override
-    public void create(Produit produit) {
-        String req = "INSERT into produit(nom, prix,image,description,quantiteP,id_categorieProduit) values (?, ?,?,?,?,?)  ;";
+    public void create(final Produit produit) {
+        final String req = "INSERT into produit(nom, prix,image,description,quantiteP,id_categorieProduit) values (?, ?,?,?,?,?)  ;";
         try {
-            LOGGER.info("peoduit: " + produit);
-            PreparedStatement pst = connection.prepareStatement(req);
+            ProduitService.LOGGER.info("peoduit: " + produit);
+            final PreparedStatement pst = this.connection.prepareStatement(req);
             pst.setString(1, produit.getNom());
             pst.setInt(2, produit.getPrix());
             pst.setString(3, produit.getImage());
@@ -38,9 +38,9 @@ public class ProduitService implements IService<Produit> {
             pst.setInt(5, produit.getQuantiteP());
             pst.setInt(6, produit.getCategorie().getId_categorie());
             pst.executeUpdate();
-            LOGGER.info("Produit ajoutée !");
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            ProduitService.LOGGER.info("Produit ajoutée !");
+        } catch (final SQLException e) {
+            ProduitService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -49,39 +49,39 @@ public class ProduitService implements IService<Produit> {
      */
     @Override
     public List<Produit> read() {
-        List<Produit> produits = new ArrayList<>();
-        String req = "SELECT  produit.* , categorie_produit.nom_categorie from produit  JOIN categorie_produit  ON produit.id_categorieProduit = categorie_produit.id_categorie";
+        final List<Produit> produits = new ArrayList<>();
+        final String req = "SELECT  produit.* , categorie_produit.nom_categorie from produit  JOIN categorie_produit  ON produit.id_categorieProduit = categorie_produit.id_categorie";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
-            ResultSet rs = pst.executeQuery();
-            CategorieService cs = new CategorieService();
+            final PreparedStatement pst = this.connection.prepareStatement(req);
+            final ResultSet rs = pst.executeQuery();
+            final CategorieService cs = new CategorieService();
             int i = 0;
             while (rs.next()) {
                 produits.add(new Produit(rs.getInt("id_produit"), rs.getString("nom"), rs.getInt("prix"),
                         rs.getString("image"), rs.getString("description"),
                         cs.getCategorie(rs.getInt("id_categorieProduit")), rs.getInt("quantiteP")));
-                LOGGER.info(produits.get(i).toString());
+                ProduitService.LOGGER.info(produits.get(i).toString());
                 i++;
             }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            ProduitService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return produits;
     }
 
-    public List<Produit> sort(String sortBy) {
+    public List<Produit> sort(final String sortBy) {
         // A list of valid column names to prevent SQL injection
-        List<String> validColumns = Arrays.asList("id_produit", "nom", "prix", "description", "categorieProduit",
+        final List<String> validColumns = Arrays.asList("id_produit", "nom", "prix", "description", "categorieProduit",
                 "quantiteP");
-        List<Produit> produits = new ArrayList<>();
+        final List<Produit> produits = new ArrayList<>();
         // Check if sortBy is a valid column name
         if (!validColumns.contains(sortBy)) {
             throw new IllegalArgumentException("Invalid sort parameter");
         }
-        String req = "SELECT *, id_categorieProduit FROM produit ORDER BY %s".formatted(sortBy);
-        try (PreparedStatement pst = connection.prepareStatement(req)) {
-            ResultSet rs = pst.executeQuery();
-            CategorieService cs = new CategorieService();
+        final String req = "SELECT *, id_categorieProduit FROM produit ORDER BY %s".formatted(sortBy);
+        try (final PreparedStatement pst = this.connection.prepareStatement(req)) {
+            final ResultSet rs = pst.executeQuery();
+            final CategorieService cs = new CategorieService();
             while (rs.next()) {
                 produits.add(new Produit(
                         rs.getInt("id_produit"),
@@ -92,22 +92,22 @@ public class ProduitService implements IService<Produit> {
                         cs.getCategorie(rs.getInt("id_categorieProduit")),
                         rs.getInt("quantiteP")));
             }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            ProduitService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return produits;
     }
 
     @Override
-    public void update(Produit produit) {
-        String req = """
+    public void update(final Produit produit) {
+        final String req = """
                 UPDATE produit p \
                 INNER JOIN categorie_produit c ON p.id_categorieProduit = c.id_categorie \
                 SET p.id_categorieProduit = ?, p.nom = ?, p.prix = ?, p.description = ?, p.image = ?, p.quantiteP = ? \
                 WHERE p.id_produit = ?;\
                 """;
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
+            final PreparedStatement pst = this.connection.prepareStatement(req);
             pst.setInt(7, produit.getId_produit());
             pst.setString(2, produit.getNom());
             pst.setInt(3, produit.getPrix());
@@ -116,34 +116,34 @@ public class ProduitService implements IService<Produit> {
             pst.setInt(6, produit.getQuantiteP());
             pst.setInt(1, produit.getCategorie().getId_categorie());
             pst.executeUpdate();
-            LOGGER.info("produit modifiée !");
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            ProduitService.LOGGER.info("produit modifiée !");
+        } catch (final SQLException e) {
+            ProduitService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
     @Override
-    public void delete(Produit produit) {
-        String req = "DELETE from produit where id_produit = ?;";
+    public void delete(final Produit produit) {
+        final String req = "DELETE from produit where id_produit = ?;";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
+            final PreparedStatement pst = this.connection.prepareStatement(req);
             pst.setInt(1, produit.getId_produit());
             pst.executeUpdate();
-            LOGGER.info("produit supprmiée !");
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            ProduitService.LOGGER.info("produit supprmiée !");
+        } catch (final SQLException e) {
+            ProduitService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
-    public Produit getProduitById(int produitId) {
+    public Produit getProduitById(final int produitId) {
         Produit produit = null;
-        String req = "SELECT produit.*, categorie_produit.nom_categorie FROM produit JOIN categorie_produit ON produit.id_categorieProduit = categorie_produit.id_categorie WHERE id_produit = ?";
+        final String req = "SELECT produit.*, categorie_produit.nom_categorie FROM produit JOIN categorie_produit ON produit.id_categorieProduit = categorie_produit.id_categorie WHERE id_produit = ?";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
+            final PreparedStatement pst = this.connection.prepareStatement(req);
             pst.setInt(1, produitId);
-            ResultSet rs = pst.executeQuery();
+            final ResultSet rs = pst.executeQuery();
             if (rs.next()) {
-                CategorieService cs = new CategorieService();
+                final CategorieService cs = new CategorieService();
                 produit = new Produit(
                         rs.getInt("id_produit"),
                         rs.getString("nom"),
@@ -153,41 +153,41 @@ public class ProduitService implements IService<Produit> {
                         cs.getCategorie(rs.getInt("id_categorieProduit")),
                         rs.getInt("quantiteP"));
             }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            ProduitService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return produit;
     }
 
     // Vérifier le stock disponible pour un produit donné
-    public boolean verifierStockDisponible(int produitId, int quantiteDemandee) {
-        Produit produit = getProduitById(produitId); // Utilisez votre méthode existante pour récupérer le produit
-        if (produit != null) {
+    public boolean verifierStockDisponible(final int produitId, final int quantiteDemandee) {
+        final Produit produit = this.getProduitById(produitId); // Utilisez votre méthode existante pour récupérer le produit
+        if (null != produit) {
             return produit.getQuantiteP() >= quantiteDemandee;
         } else {
             return false; // Le produit n'existe pas
         }
     }
 
-    public double getPrixProduit(int idProduit) {
-        String req = "SELECT prix FROM produit WHERE id_produit = ?";
+    public double getPrixProduit(final int idProduit) {
+        final String req = "SELECT prix FROM produit WHERE id_produit = ?";
         double prixProduit = 0;
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
+            final PreparedStatement pst = this.connection.prepareStatement(req);
             pst.setInt(1, idProduit);
-            ResultSet rs = pst.executeQuery();
+            final ResultSet rs = pst.executeQuery();
             if (rs.next()) {
                 prixProduit = rs.getDouble("prix");
             }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            ProduitService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return prixProduit;
     }
 
     public List<Produit> getProduitsOrderByQuantityAndStatus() {
-        List<Produit> produits = new ArrayList<>();
-        String req = """
+        final List<Produit> produits = new ArrayList<>();
+        final String req = """
                 SELECT p.id_produit, p.nom, p.prix, p.image, p.description, p.id_categorieProduit, SUM(ci.quantity) AS total_quantity \
                 FROM produit p \
                 JOIN commandeitem ci ON p.id_produit = ci.id_produit \
@@ -196,11 +196,11 @@ public class ProduitService implements IService<Produit> {
                 GROUP BY p.id_produit, p.nom, p.prix, p.image, p.description, p.id_categorieProduit \
                 ORDER BY total_quantity DESC;\
                 """;
-        try (PreparedStatement preparedStatement = connection.prepareStatement(req);
-                ResultSet resultSet = preparedStatement.executeQuery()) {
+        try (final PreparedStatement preparedStatement = this.connection.prepareStatement(req);
+             final ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
-                CategorieService cs = new CategorieService();
-                Produit produit = new Produit(
+                final CategorieService cs = new CategorieService();
+                final Produit produit = new Produit(
                         resultSet.getInt("id_produit"),
                         resultSet.getString("nom"),
                         resultSet.getInt("prix"),
@@ -210,8 +210,8 @@ public class ProduitService implements IService<Produit> {
                         resultSet.getInt("total_quantity")); // Assuming quantiteP should be total_quantity
                 produits.add(produit);
             }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            ProduitService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return produits;
     }

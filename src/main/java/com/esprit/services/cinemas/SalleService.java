@@ -2,7 +2,6 @@ package com.esprit.services.cinemas;
 
 import com.esprit.models.cinemas.Salle;
 import com.esprit.services.IService;
-import com.esprit.services.produits.AvisService;
 import com.esprit.utils.DataSource;
 
 import java.sql.Connection;
@@ -15,28 +14,28 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class SalleService implements IService<Salle> {
-    private final Connection connection;
     private static final Logger LOGGER = Logger.getLogger(SalleService.class.getName());
+    private final Connection connection;
 
     public SalleService() {
-        connection = DataSource.getInstance().getConnection();
+        this.connection = DataSource.getInstance().getConnection();
     }
 
     /**
      * @param salle
      */
     @Override
-    public void create(Salle salle) {
-        String req = "INSERT into salle(id_cinema, nb_places, nom_salle) values (?, ?, ?);";
+    public void create(final Salle salle) {
+        final String req = "INSERT into salle(id_cinema, nb_places, nom_salle) values (?, ?, ?);";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
+            final PreparedStatement pst = this.connection.prepareStatement(req);
             pst.setInt(1, salle.getId_cinema());
             pst.setInt(2, salle.getNb_places());
             pst.setString(3, salle.getNom_salle());
             pst.executeUpdate();
-            LOGGER.info("Salle ajoutée !");
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            SalleService.LOGGER.info("Salle ajoutée !");
+        } catch (final SQLException e) {
+            SalleService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -44,96 +43,96 @@ public class SalleService implements IService<Salle> {
      * @param salle
      */
     @Override
-    public void update(Salle salle) {
-        String req = "UPDATE salle set id_cinema = ?, nb_places = ?, nom_salle = ? where id_salle = ?;";
+    public void update(final Salle salle) {
+        final String req = "UPDATE salle set id_cinema = ?, nb_places = ?, nom_salle = ? where id_salle = ?;";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
+            final PreparedStatement pst = this.connection.prepareStatement(req);
             pst.setInt(4, salle.getId_salle());
             pst.setInt(1, salle.getId_cinema());
             pst.setInt(2, salle.getNb_places());
             pst.setString(3, salle.getNom_salle());
             pst.executeUpdate();
-            LOGGER.info("Salle modifiée !");
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            SalleService.LOGGER.info("Salle modifiée !");
+        } catch (final SQLException e) {
+            SalleService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
     @Override
-    public void delete(Salle salle) {
-        String req = "DELETE from salle where id_salle= ?;";
+    public void delete(final Salle salle) {
+        final String req = "DELETE from salle where id_salle= ?;";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
+            final PreparedStatement pst = this.connection.prepareStatement(req);
             pst.setInt(1, salle.getId_salle());
             pst.executeUpdate();
-            LOGGER.info("Salle supprmiée !");
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            SalleService.LOGGER.info("Salle supprmiée !");
+        } catch (final SQLException e) {
+            SalleService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
     @Override
     public List<Salle> read() {
-        List<Salle> salles = new ArrayList<>();
-        String req = "SELECT * from salle";
+        final List<Salle> salles = new ArrayList<>();
+        final String req = "SELECT * from salle";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
-            ResultSet rs = pst.executeQuery();
+            final PreparedStatement pst = this.connection.prepareStatement(req);
+            final ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 salles.add(new Salle(rs.getInt("id_salle"), rs.getInt("id_cinema"), rs.getInt("nb_places"),
                         rs.getString("nom_salle")));
             }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            SalleService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return salles;
     }
 
-    public Salle getSalle(int salle_id) {
+    public Salle getSalle(final int salle_id) {
         Salle salle = null;
-        String req = "SELECT * from salle where id_salle = ?";
+        final String req = "SELECT * from salle where id_salle = ?";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
+            final PreparedStatement pst = this.connection.prepareStatement(req);
             pst.setInt(1, salle_id);
-            ResultSet rs = pst.executeQuery();
+            final ResultSet rs = pst.executeQuery();
             rs.next();
             salle = new Salle(rs.getInt("id_salle"), rs.getInt("id_cinema"), rs.getInt("nb_places"),
                     rs.getString("nom_salle"));
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            SalleService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return salle;
     }
 
-    public Salle getSalleByName(String nom_salle) {
+    public Salle getSalleByName(final String nom_salle) {
         Salle salle = null;
-        String req = "SELECT * from salle where nom_salle = ?";
+        final String req = "SELECT * from salle where nom_salle = ?";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
+            final PreparedStatement pst = this.connection.prepareStatement(req);
             pst.setString(1, nom_salle);
-            ResultSet rs = pst.executeQuery();
+            final ResultSet rs = pst.executeQuery();
             rs.next();
             salle = new Salle(rs.getInt("id_salle"), rs.getInt("id_cinema"), rs.getInt("nb_places"),
                     rs.getString("nom_salle"));
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            SalleService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return salle;
     }
 
-    public List<Salle> readRoomsForCinema(int cinemaId) {
-        List<Salle> roomsForCinema = new ArrayList<>();
-        String query = "SELECT * FROM salle WHERE id_cinema = ?";
-        try (PreparedStatement pst = connection.prepareStatement(query)) {
+    public List<Salle> readRoomsForCinema(final int cinemaId) {
+        final List<Salle> roomsForCinema = new ArrayList<>();
+        final String query = "SELECT * FROM salle WHERE id_cinema = ?";
+        try (final PreparedStatement pst = this.connection.prepareStatement(query)) {
             pst.setInt(1, cinemaId);
-            ResultSet rs = pst.executeQuery();
+            final ResultSet rs = pst.executeQuery();
             while (rs.next()) {
-                Salle salle = new Salle(rs.getInt("id_salle"), rs.getInt("id_cinema"), rs.getInt("nb_places"),
+                final Salle salle = new Salle(rs.getInt("id_salle"), rs.getInt("id_cinema"), rs.getInt("nb_places"),
                         rs.getString("nom_salle"));
                 roomsForCinema.add(salle);
             }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            SalleService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return roomsForCinema;
     }

@@ -1,7 +1,6 @@
 package com.esprit.services.series;
 
 import com.esprit.models.series.Serie;
-import com.esprit.services.produits.AvisService;
 import com.esprit.services.series.DTO.SerieDto;
 import com.esprit.utils.DataSource;
 
@@ -14,12 +13,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class IServiceSerieImpl implements IServiceSerie<Serie> {
+    private static final Logger LOGGER = Logger.getLogger(IServiceSerieImpl.class.getName());
     private final Connection connection;
     private List<Serie> seriesList; // Assurez-vous d'initialiser cette liste
-    private static final Logger LOGGER = Logger.getLogger(IServiceSerieImpl.class.getName());
 
     public IServiceSerieImpl() {
-        connection = DataSource.getInstance().getConnection();
+        this.connection = DataSource.getInstance().getConnection();
     }
 
     /**
@@ -27,9 +26,9 @@ public class IServiceSerieImpl implements IServiceSerie<Serie> {
      * @throws SQLException
      */
     @Override
-    public void ajouter(Serie serie) throws SQLException {
-        String req = "INSERT INTO series (nom, resume, directeur, pays, image, liked, nbLikes ,disliked, nbDislikes,idcategorie) VALUES (?, ?, ?, ?,?,?, ?,?, ?, ?)";
-        PreparedStatement ps = connection.prepareStatement(req);
+    public void ajouter(final Serie serie) throws SQLException {
+        final String req = "INSERT INTO series (nom, resume, directeur, pays, image, liked, nbLikes ,disliked, nbDislikes,idcategorie) VALUES (?, ?, ?, ?,?,?, ?,?, ?, ?)";
+        final PreparedStatement ps = this.connection.prepareStatement(req);
         ps.setString(1, serie.getNom());
         ps.setString(2, serie.getResume());
         ps.setString(3, serie.getDirecteur());
@@ -49,9 +48,9 @@ public class IServiceSerieImpl implements IServiceSerie<Serie> {
      * @throws SQLException
      */
     @Override
-    public void modifier(Serie serie) throws SQLException {
-        String req = "UPDATE series set nom = ?, resume = ?,directeur = ?, pays = ?,image = ?,liked = ?,nbLikes = ? ,idcategorie = ? where idserie = ?;";
-        PreparedStatement st = connection.prepareStatement(req);
+    public void modifier(final Serie serie) throws SQLException {
+        final String req = "UPDATE series set nom = ?, resume = ?,directeur = ?, pays = ?,image = ?,liked = ?,nbLikes = ? ,idcategorie = ? where idserie = ?;";
+        final PreparedStatement st = this.connection.prepareStatement(req);
         st.setString(1, serie.getNom());
         st.setString(2, serie.getResume());
         st.setString(3, serie.getDirecteur());
@@ -62,26 +61,26 @@ public class IServiceSerieImpl implements IServiceSerie<Serie> {
         st.setInt(8, serie.getIdcategorie());
         st.setInt(9, serie.getIdserie());
         st.executeUpdate();
-        LOGGER.info("serie modifier avec succes");
+        IServiceSerieImpl.LOGGER.info("serie modifier avec succes");
     }
 
     @Override
-    public void supprimer(int id) throws SQLException {
-        String req = "DELETE FROM series WHERE idserie = ?";
-        PreparedStatement ps = connection.prepareStatement(req);
+    public void supprimer(final int id) throws SQLException {
+        final String req = "DELETE FROM series WHERE idserie = ?";
+        final PreparedStatement ps = this.connection.prepareStatement(req);
         ps.setInt(1, id);
         ps.executeUpdate();
-        LOGGER.info("serie supprimee avec succes");
+        IServiceSerieImpl.LOGGER.info("serie supprimee avec succes");
     }
 
     @Override
     public List<SerieDto> recuperer() throws SQLException {
-        List<SerieDto> serieDto = new ArrayList<>();
-        String req = "SELECT * FROM series ";
-        Statement st = connection.createStatement();
-        ResultSet rs = st.executeQuery(req);
+        final List<SerieDto> serieDto = new ArrayList<>();
+        final String req = "SELECT * FROM series ";
+        final Statement st = this.connection.createStatement();
+        final ResultSet rs = st.executeQuery(req);
         while (rs.next()) {
-            SerieDto s = new SerieDto();
+            final SerieDto s = new SerieDto();
             s.setIdserie(rs.getInt("idserie"));
             s.setNom(rs.getString("nom"));
             s.setResume(rs.getString("resume"));
@@ -93,11 +92,11 @@ public class IServiceSerieImpl implements IServiceSerie<Serie> {
             s.setLiked(rs.getInt("disliked"));
             s.setNbLikes(rs.getInt("nbDislikes"));
             s.setIdcategorie(rs.getInt("idcategorie"));
-            String req2 = "SELECT categories.nom FROM categories WHERE idcategorie = ? ";
-            PreparedStatement ps = connection.prepareStatement(req2);
-            LOGGER.info(String.valueOf(s.getIdcategorie()));
+            final String req2 = "SELECT categories.nom FROM categories WHERE idcategorie = ? ";
+            final PreparedStatement ps = this.connection.prepareStatement(req2);
+            IServiceSerieImpl.LOGGER.info(String.valueOf(s.getIdcategorie()));
             ps.setInt(1, s.getIdcategorie());
-            ResultSet rs2 = ps.executeQuery();
+            final ResultSet rs2 = ps.executeQuery();
             while (rs2.next()) {
                 s.setNomCategories(rs2.getString("nom"));
             }
@@ -108,12 +107,12 @@ public class IServiceSerieImpl implements IServiceSerie<Serie> {
 
     @Override
     public List<Serie> recuperers() throws SQLException {
-        List<Serie> series = new ArrayList<>();
-        String req = "SELECT * FROM series";
-        Statement st = connection.createStatement();
-        ResultSet rs = st.executeQuery(req);
+        final List<Serie> series = new ArrayList<>();
+        final String req = "SELECT * FROM series";
+        final Statement st = this.connection.createStatement();
+        final ResultSet rs = st.executeQuery(req);
         while (rs.next()) {
-            Serie serie = new Serie();
+            final Serie serie = new Serie();
             serie.setIdserie(rs.getInt("idserie"));
             serie.setNom(rs.getString("nom"));
             serie.setResume(rs.getString("resume"));
@@ -131,14 +130,14 @@ public class IServiceSerieImpl implements IServiceSerie<Serie> {
     }
 
     @Override
-    public List<Serie> recuperes(int id) throws SQLException {
-        List<Serie> series = new ArrayList<>();
-        String req = "SELECT * FROM series Where idcategorie=?";
-        PreparedStatement ps = connection.prepareStatement(req);
+    public List<Serie> recuperes(final int id) throws SQLException {
+        final List<Serie> series = new ArrayList<>();
+        final String req = "SELECT * FROM series Where idcategorie=?";
+        final PreparedStatement ps = this.connection.prepareStatement(req);
         ps.setInt(1, id);
-        ResultSet rs = ps.executeQuery();
+        final ResultSet rs = ps.executeQuery();
         while (rs.next()) {
-            Serie serie = new Serie();
+            final Serie serie = new Serie();
             serie.setIdserie(rs.getInt("idserie"));
             serie.setNom(rs.getString("nom"));
             serie.setResume(rs.getString("resume"));
@@ -155,9 +154,9 @@ public class IServiceSerieImpl implements IServiceSerie<Serie> {
         return series;
     }
 
-    public void ajouterLike(Serie serie) throws SQLException {
-        String req = "UPDATE series set liked = ?,nbLikes = ? where idserie = ?;";
-        PreparedStatement ps = connection.prepareStatement(req);
+    public void ajouterLike(final Serie serie) throws SQLException {
+        final String req = "UPDATE series set liked = ?,nbLikes = ? where idserie = ?;";
+        final PreparedStatement ps = this.connection.prepareStatement(req);
         ps.setInt(1, 1);
         ps.setInt(2, serie.getNbLikes());
         ps.setInt(3, serie.getIdserie());
@@ -165,9 +164,9 @@ public class IServiceSerieImpl implements IServiceSerie<Serie> {
         ps.close();
     }
 
-    public void removeLike(Serie serie) throws SQLException {
-        String req = "UPDATE series set liked = ?,nbLikes = ? where idserie = ?;";
-        PreparedStatement ps = connection.prepareStatement(req);
+    public void removeLike(final Serie serie) throws SQLException {
+        final String req = "UPDATE series set liked = ?,nbLikes = ? where idserie = ?;";
+        final PreparedStatement ps = this.connection.prepareStatement(req);
         ps.setInt(1, serie.getLiked());
         ps.setInt(2, serie.getNbLikes());
         ps.setInt(3, serie.getIdserie());
@@ -175,9 +174,9 @@ public class IServiceSerieImpl implements IServiceSerie<Serie> {
         ps.close();
     }
 
-    public void ajouterDislike(Serie serie) throws SQLException {
-        String req = "UPDATE series set disliked = ?,nbDislikes = ? where idserie = ?;";
-        PreparedStatement ps = connection.prepareStatement(req);
+    public void ajouterDislike(final Serie serie) throws SQLException {
+        final String req = "UPDATE series set disliked = ?,nbDislikes = ? where idserie = ?;";
+        final PreparedStatement ps = this.connection.prepareStatement(req);
         ps.setInt(1, 1);
         ps.setInt(2, serie.getNbDislikes());
         ps.setInt(3, serie.getIdserie());
@@ -185,9 +184,9 @@ public class IServiceSerieImpl implements IServiceSerie<Serie> {
         ps.close();
     }
 
-    public void removeDislike(Serie serie) throws SQLException {
-        String req = "UPDATE series set disliked = ?,nbDislikes = ? where idserie = ?;";
-        PreparedStatement ps = connection.prepareStatement(req);
+    public void removeDislike(final Serie serie) throws SQLException {
+        final String req = "UPDATE series set disliked = ?,nbDislikes = ? where idserie = ?;";
+        final PreparedStatement ps = this.connection.prepareStatement(req);
         ps.setInt(1, serie.getDisliked());
         ps.setInt(2, serie.getNbDislikes());
         ps.setInt(3, serie.getIdserie());
@@ -196,13 +195,13 @@ public class IServiceSerieImpl implements IServiceSerie<Serie> {
     }
 
     public List<Serie> findMostLiked() {
-        List<Serie> series = new ArrayList<>();
-        String sql = "SELECT * FROM series ORDER BY nbLikes DESC LIMIT 3";
+        final List<Serie> series = new ArrayList<>();
+        final String sql = "SELECT * FROM series ORDER BY nbLikes DESC LIMIT 3";
         try {
-            Statement st = connection.createStatement();
-            ResultSet rs = st.executeQuery(sql);
+            final Statement st = this.connection.createStatement();
+            final ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
-                Serie serie = new Serie();
+                final Serie serie = new Serie();
                 serie.setIdserie(rs.getInt("idserie"));
                 serie.setNom(rs.getString("nom"));
                 serie.setResume(rs.getString("resume"));
@@ -216,37 +215,37 @@ public class IServiceSerieImpl implements IServiceSerie<Serie> {
                 serie.setIdcategorie(rs.getInt("idcategorie"));
                 series.add(serie);
             }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e); // Handle the exception appropriately in your application
+        } catch (final SQLException e) {
+            IServiceSerieImpl.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Handle the exception appropriately in your application
         }
         return series;
     }
 
     ///
     public Map<Serie, Integer> getLikesStatistics() {
-        Map<Serie, Integer> likesStatistics = new HashMap<>();
+        final Map<Serie, Integer> likesStatistics = new HashMap<>();
         try {
-            String query = "SELECT idserie, nbLikes FROM series";
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(query);
+            final String query = "SELECT idserie, nbLikes FROM series";
+            final Statement statement = this.connection.createStatement();
+            final ResultSet resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
-                Serie serie = new Serie();
+                final Serie serie = new Serie();
                 serie.setIdserie(resultSet.getInt("idserie"));
-                int nbLikes = resultSet.getInt("nbLikes");
+                final int nbLikes = resultSet.getInt("nbLikes");
                 likesStatistics.put(serie, nbLikes);
             }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e); // Handle the exception appropriately in your application
+        } catch (final SQLException e) {
+            IServiceSerieImpl.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Handle the exception appropriately in your application
         }
         return likesStatistics;
     }
 
-    public Serie getByIdSerie(int serieId) throws SQLException {
+    public Serie getByIdSerie(final int serieId) throws SQLException {
         Serie serie = null;
-        String query = "SELECT * FROM series WHERE idserie = ?";
-        try (PreparedStatement ps = connection.prepareStatement(query)) {
+        final String query = "SELECT * FROM series WHERE idserie = ?";
+        try (final PreparedStatement ps = this.connection.prepareStatement(query)) {
             ps.setInt(1, serieId);
-            try (ResultSet rs = ps.executeQuery()) {
+            try (final ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     // Assuming Serie is a class representing your series data
                     serie = new Serie();

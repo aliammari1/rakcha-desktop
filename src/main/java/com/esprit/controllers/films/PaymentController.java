@@ -1,18 +1,13 @@
 package com.esprit.controllers.films;
 
-import com.esprit.controllers.ClientSideBarController;
 import com.esprit.models.cinemas.Seance;
-import com.esprit.models.users.Client;
 import com.esprit.services.cinemas.SeanceService;
-import com.esprit.services.produits.AvisService;
 import com.esprit.utils.PaymentProcessor;
-
 import com.stripe.exception.StripeException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
-
 import org.controlsfx.control.CheckComboBox;
 
 import java.time.LocalDate;
@@ -76,15 +71,15 @@ public class PaymentController {
      */
     @FXML
     void initialize() {
-        SpinnerValueFactory<Integer> valueFactory_month = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 12, 1,
+        final SpinnerValueFactory<Integer> valueFactory_month = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 12, 1,
                 1);// (min,max,startvalue,incrementValue)
-        SpinnerValueFactory<Integer> valueFactory_year = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 9999999,
+        final SpinnerValueFactory<Integer> valueFactory_year = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 9999999,
                 1, 1);// (min,max,startvalue,incrementValue)
-        SpinnerValueFactory<Integer> valueFactory_cvc = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 999, 1,
+        final SpinnerValueFactory<Integer> valueFactory_cvc = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 999, 1,
                 1);// (min,max,startvalue,incrementValue)
-        MM.setValueFactory(valueFactory_month);
-        YY.setValueFactory(valueFactory_year);
-        cvc.setValueFactory(valueFactory_cvc);
+        this.MM.setValueFactory(valueFactory_month);
+        this.YY.setValueFactory(valueFactory_year);
+        this.cvc.setValueFactory(valueFactory_cvc);
     }
 
     /**
@@ -93,11 +88,11 @@ public class PaymentController {
      * and cvc based on the `Seance` object's `prix` field and sets the text of a
      * text
      * field with the total amount.
-     * 
+     *
      * @param s Seance object passed into the function, which is used to set the
      *          values
      *          of various fields within the `Seance` object.
-     * 
+     *          <p>
      *          - `seance`: represents an object of the Seance class, containing
      *          information about
      *          a seance.
@@ -110,29 +105,29 @@ public class PaymentController {
      *          the number of
      *          seats available in the seance.
      */
-    public void setData(Seance s) {
-        this.seance = s;
-        SeanceService sc = new SeanceService();
+    public void setData(final Seance s) {
+        seance = s;
+        final SeanceService sc = new SeanceService();
         // Terrain t = ts.diplay(r.getTerrain_id());
-        total_pay = (float) s.getPrix();
-        int mm = LocalDate.now().getMonthValue();
-        int yy = LocalDate.now().getYear();
-        SpinnerValueFactory<Integer> valueFactory_month = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 12, mm,
+        this.total_pay = (float) s.getPrix();
+        final int mm = LocalDate.now().getMonthValue();
+        final int yy = LocalDate.now().getYear();
+        final SpinnerValueFactory<Integer> valueFactory_month = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 12, mm,
                 1);// (min,max,startvalue,incrementValue)
-        SpinnerValueFactory<Integer> valueFactory_year = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 9999999,
+        final SpinnerValueFactory<Integer> valueFactory_year = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 9999999,
                 yy, 1);// (min,max,startvalue,incrementValue)
-        SpinnerValueFactory<Integer> valueFactory_cvc = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 999, 1,
+        final SpinnerValueFactory<Integer> valueFactory_cvc = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 999, 1,
                 1);// (min,max,startvalue,incrementValue)
-        MM.setValueFactory(valueFactory_month);
-        YY.setValueFactory(valueFactory_year);
-        cvc.setValueFactory(valueFactory_cvc);
+        this.MM.setValueFactory(valueFactory_month);
+        this.YY.setValueFactory(valueFactory_year);
+        this.cvc.setValueFactory(valueFactory_cvc);
         // String total_txt = "Total : " + +" Dt.";
         // total.setText(total_txt);
-        spinnerTextField = cvc.getEditor();
-        spinnerTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+        this.spinnerTextField = this.cvc.getEditor();
+        this.spinnerTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             try {
-                cvc.getValueFactory().setValue(Integer.parseInt(newValue));
-            } catch (NumberFormatException e) {
+                this.cvc.getValueFactory().setValue(Integer.parseInt(newValue));
+            } catch (final NumberFormatException e) {
                 // Handle invalid input
             }
         });
@@ -143,15 +138,15 @@ public class PaymentController {
      * processor.
      * If the payment is successful, it displays an information alert; otherwise, it
      * displays an error alert.
-     * 
+     *
      * @param event payment action that triggered the function execution, and it is
      *              used
      *              to identify the specific payment method being processed.
-     * 
+     *              <p>
      *              - `LOGGER.info(cvc.getValue());`: This line prints the value of
      *              the `CVC`
      *              field.
-     * 
+     *              <p>
      *              `event` is an instance of the `ActionEvent` class, which
      *              represents a user event
      *              related to a button press or other action in the JavaFX
@@ -162,87 +157,87 @@ public class PaymentController {
      *              to the event.
      */
     @FXML
-    private void payment(ActionEvent event) throws StripeException {
-        LOGGER.info(String.valueOf(cvc.getValue()));
-        if (client_name.getText().isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
+    private void payment(final ActionEvent event) throws StripeException {
+        PaymentController.LOGGER.info(String.valueOf(this.cvc.getValue()));
+        if (this.client_name.getText().isEmpty()) {
+            final Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("You need to input your Name");
             alert.setTitle("Problem");
             alert.setHeaderText(null);
             alert.showAndWait();
-            client_name.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
+            this.client_name.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             // new animatefx.animation.Shake(client_name).play();
-        } else if (email.getText().isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
+        } else if (this.email.getText().isEmpty()) {
+            final Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("You need to input your Email");
             alert.setTitle("Problem");
             alert.setHeaderText(null);
             alert.showAndWait();
-            email.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
+            this.email.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             // new animatefx.animation.Shake(email).play();
-        } else if (!isValidEmail(email.getText())) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
+        } else if (!this.isValidEmail(this.email.getText())) {
+            final Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Please enter a valid Email address.");
             alert.setTitle("Problem");
             alert.setHeaderText(null);
             alert.showAndWait();
-            email.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
+            this.email.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             // new animatefx.animation.Shake(email).play();
-        } else if (num_card.getText().isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
+        } else if (this.num_card.getText().isEmpty()) {
+            final Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("You need to input your Card Number");
             alert.setTitle("Problem");
             alert.setHeaderText(null);
             alert.showAndWait();
-            num_card.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
+            this.num_card.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             // new animatefx.animation.Shake(num_card).play();
-        } else if (!check_cvc(cvc.getValue())) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
+        } else if (!this.check_cvc(this.cvc.getValue())) {
+            final Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("The CVC number should contain three digits");
             alert.setTitle("Problem");
             alert.setHeaderText(null);
             alert.showAndWait();
-            cvc.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
+            this.cvc.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             // new animatefx.animation.Shake(cvc).play();
-        } else if (!check_expDate(YY.getValue(), MM.getValue())) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
+        } else if (!this.check_expDate(this.YY.getValue(), this.MM.getValue())) {
+            final Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Please enter a valid expiration date");
             alert.setTitle("Problem");
             alert.setHeaderText(null);
             alert.showAndWait();
-            MM.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
-            YY.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
+            this.MM.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
+            this.YY.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             // new animatefx.animation.Shake(MM).play();
             // new animatefx.animation.Shake(YY).play();
         } else {
-            client_name.setStyle(null);
-            email.setStyle(null);
-            num_card.setStyle(null);
-            cvc.setStyle(null);
-            MM.setStyle(null);
-            YY.setStyle(null);
-            boolean isValid = check_card_num(num_card.getText());
+            this.client_name.setStyle(null);
+            this.email.setStyle(null);
+            this.num_card.setStyle(null);
+            this.cvc.setStyle(null);
+            this.MM.setStyle(null);
+            this.YY.setStyle(null);
+            final boolean isValid = this.check_card_num(this.num_card.getText());
             if (!isValid) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
+                final Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setContentText("Please enter a valid Card number");
                 alert.setTitle("Problem");
                 alert.setHeaderText(null);
                 alert.showAndWait();
-                num_card.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
+                this.num_card.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
                 // new animatefx.animation.Shake(num_card).play();
             } else {
-                num_card.setStyle(null);
-                String name = client_name.getText();
-                String email_txt = email.getText();
-                String num = num_card.getText();
-                int yy = YY.getValue();
-                int mm = MM.getValue();
-                String cvc_num = String.valueOf(cvc.getValue());
-                boolean payment_result = PaymentProcessor.processPayment(name, email_txt,
-                        Integer.parseInt(total.getText().replaceAll("\\D+", "")), num, mm, yy, cvc_num);
-                LOGGER.info("the payment is done: " + payment_result);
+                this.num_card.setStyle(null);
+                final String name = this.client_name.getText();
+                final String email_txt = this.email.getText();
+                final String num = this.num_card.getText();
+                final int yy = this.YY.getValue();
+                final int mm = this.MM.getValue();
+                final String cvc_num = String.valueOf(this.cvc.getValue());
+                final boolean payment_result = PaymentProcessor.processPayment(name, email_txt,
+                        Integer.parseInt(this.total.getText().replaceAll("\\D+", "")), num, mm, yy, cvc_num);
+                PaymentController.LOGGER.info("the payment is done: " + payment_result);
                 if (payment_result) {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    final Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Success");
                     alert.setContentText("Successful Payment.");
                     alert.setHeaderText(null);
@@ -252,7 +247,7 @@ public class PaymentController {
                     // rs.updateEntity(this.reservation);
                     // redirect_to_successPage();
                 } else {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    final Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setContentText("Payment Failed.");
                     alert.setTitle("Problem");
                     alert.setHeaderText(null);
@@ -269,15 +264,14 @@ public class PaymentController {
      * number (CVC) by checking its length. If the length is equal to 3, the
      * function
      * returns `true`, otherwise it returns `false`.
-     * 
+     *
      * @param value 3-digit credit card number to be checked for length.
-     * 
      * @returns a boolean value indicating whether the input string has a length of
-     *          3.
+     * 3.
      */
-    private boolean check_cvc(int value) {
-        String cvc_txt = String.valueOf(value);
-        return cvc_txt.length() == 3;
+    private boolean check_cvc(final int value) {
+        final String cvc_txt = String.valueOf(value);
+        return 3 == cvc_txt.length();
     }
 
     /**
@@ -286,18 +280,16 @@ public class PaymentController {
      * those parameters is after the current date, and returns `true` if it is, or
      * `false`
      * otherwise.
-     * 
+     *
      * @param value_y  4-digit year value in the expiration date.
-     * 
      * @param value_mm month of the date to be checked, which is used to determine
      *                 if the
      *                 date is valid.
-     * 
      * @returns a boolean value indicating whether the given date is valid.
      */
-    private boolean check_expDate(int value_y, int value_mm) {
+    private boolean check_expDate(final int value_y, final int value_mm) {
         boolean valid = false;
-        LocalDate date = LocalDate.now();
+        final LocalDate date = LocalDate.now();
         if ((value_y >= date.getYear()) && (value_mm >= date.getMonthValue())) {
             valid = true;
         }
@@ -310,28 +302,27 @@ public class PaymentController {
      * it against a regular expression pattern. It returns `true` if the pattern
      * matches
      * and `false` otherwise.
-     * 
+     *
      * @param cardNumber 13-19 digit credit card number to be checked against the
      *                   regular
      *                   expression pattern for validation.
-     * 
      * @returns a boolean value indicating whether the provided credit card number
-     *          matches
-     *          the specified pattern.
+     * matches
+     * the specified pattern.
      */
     private boolean check_card_num(String cardNumber) {
         // Trim the input string to remove any leading or trailing whitespace
         cardNumber = cardNumber.trim();
         // Step 1: Check length
-        int length = cardNumber.length();
-        if (length < 13 || length > 19) {
+        final int length = cardNumber.length();
+        if (13 > length || 19 < length) {
             return false;
         }
-        String regex = "^(?:(?:4[0-9]{12}(?:[0-9]{3})?)|(?:5[1-5][0-9]{14})|(?:6(?:011|5[0-9][0-9])[0-9]{12})|(?:3[47][0-9]{13})|(?:3(?:0[0-5]|[68][0-9])[0-9]{11})|(?:((?:2131|1800|35[0-9]{3})[0-9]{11})))$";
+        final String regex = "^(?:(?:4[0-9]{12}(?:[0-9]{3})?)|(?:5[1-5][0-9]{14})|(?:6(?:011|5[0-9][0-9])[0-9]{12})|(?:3[47][0-9]{13})|(?:3(?:0[0-5]|[68][0-9])[0-9]{11})|(?:((?:2131|1800|35[0-9]{3})[0-9]{11})))$";
         // Create a Pattern object with the regular expression
-        Pattern pattern = Pattern.compile(regex);
+        final Pattern pattern = Pattern.compile(regex);
         // Match the pattern against the credit card number
-        Matcher matcher = pattern.matcher(cardNumber);
+        final Matcher matcher = pattern.matcher(cardNumber);
         // Return true if the pattern matches, false otherwise
         return matcher.matches();
     }
@@ -340,22 +331,21 @@ public class PaymentController {
      * Checks whether a given email address is valid by matching it against a
      * regular
      * expression pattern that matches most standard email addresses.
-     * 
+     *
      * @param email email address to be checked for validity.
-     * 
      * @returns a boolean value indicating whether the provided email address is
-     *          valid
-     *          or not.
+     * valid
+     * or not.
      */
     public boolean isValidEmail(String email) {
         // Trim the input string to remove any leading or trailing whitespace
         email = email.trim();
         // Regular expression pattern to match an email address
-        String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+        final String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
         // Compile the pattern
-        Pattern pattern = Pattern.compile(regex);
+        final Pattern pattern = Pattern.compile(regex);
         // Match the pattern against the email address
-        Matcher matcher = pattern.matcher(email);
+        final Matcher matcher = pattern.matcher(email);
         // Return true if the pattern matches, false otherwise
         return matcher.matches();
     }
@@ -381,6 +371,7 @@ public class PaymentController {
     }
 
     //
+
     /**
      * Redirects the user to a "Fail Page" by loading an FXML file, updating the
      * controller
@@ -403,21 +394,22 @@ public class PaymentController {
     }
 
     //
+
     /**
      * Redirects the user to a new scene containing a reservation view client. It
      * loads
      * the reservation view client fxml file, sets the controller data with the
      * client
      * ID, and displays the stage in a new window.
-     * 
+     *
      * @param event triggering of an action, specifically the click on the "Back"
      *              button,
      *              which calls the `redirectToListReservation()` method.
-     * 
+     *              <p>
      *              - `event` is an instance of the `ActionEvent` class.
      */
     @FXML
-    private void redirectToListReservation(ActionEvent event) {
+    private void redirectToListReservation(final ActionEvent event) {
         // try {
         // FXMLLoader loader = new
         // FXMLLoader(getClass().getResource("../gui/reservation/Reservation_view_client.fxml"));
