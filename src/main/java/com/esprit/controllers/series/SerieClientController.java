@@ -4,12 +4,10 @@ import com.esprit.models.series.Categorie;
 import com.esprit.models.series.Favoris;
 import com.esprit.models.series.Serie;
 import com.esprit.models.users.Client;
-import com.esprit.services.produits.AvisService;
 import com.esprit.services.series.IServiceCategorieImpl;
 import com.esprit.services.series.IServiceFavorisImpl;
 import com.esprit.services.series.IServiceSerie;
 import com.esprit.services.series.IServiceSerieImpl;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -50,8 +48,8 @@ import java.util.logging.Logger;
  * episodes, and series.
  */
 public class SerieClientController {
-    private final ObservableList<String> selectedCategories = FXCollections.observableArrayList();
     private static final Logger LOGGER = Logger.getLogger(SerieClientController.class.getName());
+    private final ObservableList<String> selectedCategories = FXCollections.observableArrayList();
     @FXML
     Button watchEpisode;
     @FXML
@@ -68,10 +66,10 @@ public class SerieClientController {
     /*
      * public void afficherliste(List<Serie> series){
      * listeSerie.getItems().clear();
-     * 
+     *
      * listeSerie.getItems().addAll(series);
      * listeSerie.setCellFactory(param -> new ListCell<Serie>() {
-     * 
+     *
      * @Override
      * protected void updateItem(Serie item, boolean empty) {
      * super.updateItem(item, empty);
@@ -99,19 +97,19 @@ public class SerieClientController {
      * @Override
      * public void initialize(URL url, ResourceBundle resourceBundle) {
      * IServiceSerieImpl ss = new IServiceSerieImpl();
-     * 
-     * 
+     *
+     *
      * hboxTop3.setSpacing(20); // Set the spacing between VBox instances
      * hboxTop3.setPadding(new Insets(10));
      * List<Serie> listeTop3 = ss.findMostLiked();
-     * 
+     *
      * for (Serie serie : listeTop3) {
      * VBox vbox = createSeriesVBox(serie);
      * hboxTop3.getChildren().add(vbox);
      * }
-     * 
+     *
      * }
-     * 
+     *
      */
     @FXML
     private HBox hboxTop3;
@@ -122,34 +120,33 @@ public class SerieClientController {
      * @return List<Serie>
      */
     // FOCTION RECHERCHE
+
     /**
      * Searches for Series in a list based on a specified search term and returns a
      * list
      * of matching Series.
-     * 
+     *
      * @param liste     list of series that is searched for matches in the
      *                  `recherche` string.
-     * 
+     *                  <p>
      *                  - `liste` is a list of `Serie` objects.
-     * 
      * @param recherche search query, which is used to filter the list of series and
      *                  return only the matches.
-     * 
      * @returns a list of `Serie` objects that match the given search query.
-     * 
-     *          - The output is a list of `Serie` objects, which represents the list
-     *          of series
-     *          that match the search query.
-     *          - Each element in the list contains the `Nom` attribute, which
-     *          contains the name
-     *          of the series.
-     *          - If the `Nom` attribute matches the search query, the element is
-     *          included in the
-     *          output list.
+     * <p>
+     * - The output is a list of `Serie` objects, which represents the list
+     * of series
+     * that match the search query.
+     * - Each element in the list contains the `Nom` attribute, which
+     * contains the name
+     * of the series.
+     * - If the `Nom` attribute matches the search query, the element is
+     * included in the
+     * output list.
      */
-    public static List<Serie> rechercher(List<Serie> liste, String recherche) {
-        List<Serie> resultats = new ArrayList<>();
-        for (Serie element : liste) {
+    public static List<Serie> rechercher(final List<Serie> liste, final String recherche) {
+        final List<Serie> resultats = new ArrayList<>();
+        for (final Serie element : liste) {
             if (element.getNom().contains(recherche)) {
                 resultats.add(element);
             }
@@ -160,20 +157,20 @@ public class SerieClientController {
     /**
      * Loads an FXML file, `EpisodeClient.fxml`, and creates a new stage with its
      * scene.
-     * 
+     *
      * @param event event that triggered the function, specifically an action event
      *              related
      *              to the `watchEpisode` button.
-     * 
+     *              <p>
      *              Event: ActionEvent
-     * 
+     *              <p>
      *              - Target: The object that triggered the event (not shown)
      */
     @FXML
-    void onWatch(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/EpisodeClient.fxml"));
-        Parent root = loader.load();
-        Stage stage = (Stage) watchEpisode.getScene().getWindow();
+    void onWatch(final ActionEvent event) throws IOException {
+        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/EpisodeClient.fxml"));
+        final Parent root = loader.load();
+        final Stage stage = (Stage) this.watchEpisode.getScene().getWindow();
         stage.setScene(new Scene(root));
     }
 
@@ -187,51 +184,50 @@ public class SerieClientController {
      * the series' image, a Label with the series' name, and another Label with the
      * number
      * of likes. The function then styles the Box and returns it.
-     * 
+     *
      * @param serie data structure containing information about a specific series,
      *              which
      *              is used to create a graphical representation of the series
      *              within the `VBox`.
-     * 
+     *              <p>
      *              - `nom`: The name of the series.
      *              - `image`: The path to the image associated with the series.
      *              - `nbLikes`: The number of likes for the series.
-     * 
      * @returns a vertical box container with a centered label, an image view, and a
-     *          label
-     *          displaying the number of likes.
-     * 
-     *          1/ `vbox`: A `VBox` object that contains the series information and
-     *          image.
-     *          2/ `spacing`: The spacing between the children in the `VBox`.
-     *          3/ `alignment`: The alignment of the children in the `VBox`.
-     *          4/ `padding`: The padding around the children in the `VBox`.
-     *          5/ `minSize`: The minimum size of the `VBox`.
-     *          6/ `children`: A list of `Node` objects, including a `Label`, an
-     *          `ImageView`, and
-     *          another `Label`, which contain the series information and image.
+     * label
+     * displaying the number of likes.
+     * <p>
+     * 1/ `vbox`: A `VBox` object that contains the series information and
+     * image.
+     * 2/ `spacing`: The spacing between the children in the `VBox`.
+     * 3/ `alignment`: The alignment of the children in the `VBox`.
+     * 4/ `padding`: The padding around the children in the `VBox`.
+     * 5/ `minSize`: The minimum size of the `VBox`.
+     * 6/ `children`: A list of `Node` objects, including a `Label`, an
+     * `ImageView`, and
+     * another `Label`, which contain the series information and image.
      */
-    private VBox createSeriesVBox(Serie serie) {
-        VBox vbox = new VBox();
+    private VBox createSeriesVBox(final Serie serie) {
+        final VBox vbox = new VBox();
         vbox.setSpacing(8);
         vbox.setAlignment(Pos.CENTER);
         vbox.setPadding(new Insets(8));
         vbox.setMinSize(250, 210);
         // Créez d'abord le Label avec le nom
-        Label titleLabel = new Label(serie.getNom());
+        final Label titleLabel = new Label(serie.getNom());
         titleLabel.setStyle(
                 "-fx-font-family: 'Helvetica'; -fx-font-size: 18.0px; -fx-font-weight: bold; -fx-text-fill: #FCE19A;");
         titleLabel.setAlignment(Pos.CENTER);
         // Ensuite, ajoutez l'ImageView avec l'image
-        ImageView imageView = new ImageView();
+        final ImageView imageView = new ImageView();
         imageView.setFitWidth(240);
         imageView.setFitHeight(140);
         // Chargez l'image depuis le fichier
-        File file = new File(serie.getImage());
-        Image image = new Image(file.toURI().toString());
+        final File file = new File(serie.getImage());
+        final Image image = new Image(file.toURI().toString());
         imageView.setImage(image);
         // Créer le Label pour afficher le nombre de likes
-        Label likesLabel = new Label("Likes: " + serie.getNbLikes());
+        final Label likesLabel = new Label("Likes: " + serie.getNbLikes());
         likesLabel.setStyle("-fx-font-family: 'Helvetica'; -fx-font-size: 14.0px; -fx-text-fill: #FCE19A;");
         likesLabel.setAlignment(Pos.CENTER);
         // Ajoutez d'abord le Label, puis l'ImageView à la liste des enfants
@@ -247,8 +243,8 @@ public class SerieClientController {
      * interface.
      */
     public void afficher() throws SQLException {
-        IServiceCategorieImpl iServiceCategorie = new IServiceCategorieImpl();
-        categorieList = iServiceCategorie.recuperer();
+        final IServiceCategorieImpl iServiceCategorie = new IServiceCategorieImpl();
+        this.categorieList = iServiceCategorie.recuperer();
     }
 
     /**
@@ -257,13 +253,13 @@ public class SerieClientController {
      * comparison method that ignores case and returns an integer value indicating
      * the
      * result of the comparison.
-     * 
+     *
      * @param series list of series to be sorted, which is passed through the
      *               `Collections.sort()` method using a custom comparison algorithm
      *               based on the
      *               nomenclature of each series.
      */
-    private void trierParNom(List<Serie> series) {
+    private void trierParNom(final List<Serie> series) {
         Collections.sort(series, (serie1, serie2) -> serie1.getNom().compareToIgnoreCase(serie2.getNom()));
     }
 
@@ -271,14 +267,14 @@ public class SerieClientController {
      * Displays a list of series from an API, along with buttons to watch or dislike
      * each
      * series, and a separator line after every element except the last one.
-     * 
+     *
      * @param series list of series that will be displayed in the client's profile,
      *               and
      *               it is used to populate the `listeSerie` observable list which
      *               is then passed as
      *               an argument to the `FXMLLoader` constructor to load the FXML
      *               file.
-     * 
+     *               <p>
      *               - `id_serie`: an integer representing the ID of the series.
      *               - `name`: a string representing the name of the series.
      *               - `description`: a string representing the description of the
@@ -297,23 +293,23 @@ public class SerieClientController {
      *               - `nb_dislikes`: an integer representing the number of dislikes
      *               for the series.
      */
-    public void afficherliste(List<Serie> series) {
-        listeSerie.getItems().clear();
-        listeSerie.setCellFactory(param -> new ListCell<Serie>() {
+    public void afficherliste(final List<Serie> series) {
+        this.listeSerie.getItems().clear();
+        this.listeSerie.setCellFactory(param -> new ListCell<Serie>() {
             /**
              * Updates the UI components displaying information about a movie, including its
              * image, name, director, country, likes, and dislikes. It also adds a "Watch"
              * button
              * to watch the movie and a "Dislike" button to remove it from the favorite
              * list.
-             * 
+             *
              * @param item  `Episode` object that will be used to display its details and
              *              likes/dislikes count on the stage, and it is passed as a
              *              parameter to the `initView()`
              *              method to facilitate the retrieval of the necessary data from
              *              the `EpisodeClientController`
              *              controller.
-             * 
+             *
              *              - `id`: the unique identifier for the episode
              *              - `name`: the name of the episode
              *              - `director`: the director of the episode
@@ -327,7 +323,7 @@ public class SerieClientController {
              *              - `favButton`: a button to add the episode to the user's
              *              favorites
              *              - `watchButton`: a button to watch the episode.
-             * 
+             *
              * @param empty AnchorPanes' graphic element, which is set to an empty
              *              `AnchorPane`
              *              when the function is called with no arguments, causing the
@@ -336,33 +332,33 @@ public class SerieClientController {
              *              content.
              */
             @Override
-            protected void updateItem(Serie item, boolean empty) {
+            protected void updateItem(final Serie item, final boolean empty) {
                 super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setGraphic(null);
+                if (empty || null == item) {
+                    this.setGraphic(null);
                 } else {
                     // Créez un AnchorPane pour chaque série
-                    AnchorPane anchorPane = new AnchorPane();
+                    final AnchorPane anchorPane = new AnchorPane();
                     anchorPane.setPrefSize(400, 200); // Définissez la taille souhaitée
                     // Ajoutez une ImageView pour afficher l'image
-                    ImageView imageView = new ImageView();
+                    final ImageView imageView = new ImageView();
                     // imageView.setFitWidth(150);
                     // imageView.setFitHeight(150);
                     imageView.setFitWidth(150);
                     imageView.setFitWidth(150);
                     imageView.setPreserveRatio(true);
                     // Chargez l'image depuis le fichier
-                    File file = new File(item.getImage());
-                    Image image = new Image(file.toURI().toString());
+                    final File file = new File(item.getImage());
+                    final Image image = new Image(file.toURI().toString());
                     imageView.setImage(image);
                     // Ajoutez des composants à l'AnchorPane (toutes les informations de la série)
-                    Label nameLabel = new Label("Name: " + item.getNom());
+                    final Label nameLabel = new Label("Name: " + item.getNom());
                     nameLabel.setStyle(
                             "-fx-font-family: 'Helvetica'; -fx-font-size: 18.0px; -fx-font-weight: bold; -fx-text-fill: #333333;"); // Couleur
                     // de
                     // texte
                     // sombre
-                    Label directorLabel = new Label("Director: " + item.getDirecteur());
+                    final Label directorLabel = new Label("Director: " + item.getDirecteur());
                     directorLabel.setStyle(
                             "-fx-font-family: 'Helvetica'; -fx-font-size: 14.0px; -fx-font-weight: normal; -fx-text-fill: #666666;"); // Couleur
                     // de
@@ -370,7 +366,7 @@ public class SerieClientController {
                     // sombre
                     // plus
                     // claire
-                    Label countryLabel = new Label("Country: " + item.getPays());
+                    final Label countryLabel = new Label("Country: " + item.getPays());
                     countryLabel.setStyle(
                             "-fx-font-family: 'Helvetica'; -fx-font-size: 14.0px; -fx-font-weight: normal; -fx-text-fill: #666666;"); // Couleur
                     // de
@@ -381,11 +377,11 @@ public class SerieClientController {
                     // Label summaryLabel = new Label("Summary: " + item.getResume());
                     // Label directorLabel = new Label("Director: " + item.getDirecteur());
                     // Label countryLabel = new Label("Country: " + item.getPays());
-                    Image iconHeart = new Image("img/films/heart.png");
-                    ImageView HeartImageView = new ImageView(iconHeart);
+                    final Image iconHeart = new Image("img/films/heart.png");
+                    final ImageView HeartImageView = new ImageView(iconHeart);
                     HeartImageView.setFitWidth(10.0);
                     HeartImageView.setFitHeight(10.0);
-                    Label likesLabel = new Label("Likes: " + item.getNbLikes());
+                    final Label likesLabel = new Label("Likes: " + item.getNbLikes());
                     likesLabel.setStyle(
                             "-fx-font-family: 'Helvetica'; -fx-font-size: 14.0px; -fx-font-weight: normal; -fx-text-fill: #666666;"); // Couleur
                     // de
@@ -409,27 +405,27 @@ public class SerieClientController {
                     AnchorPane.setLeftAnchor(HeartImageView, 230.0);
                     // Positionnez d'autres composants selon vos besoins
                     /* Button Like + Dislike Declaration */
-                    Image iconImage2 = new Image("img/films/dislike.png");
-                    ImageView iconImageView2 = new ImageView(iconImage2);
+                    final Image iconImage2 = new Image("img/films/dislike.png");
+                    final ImageView iconImageView2 = new ImageView(iconImage2);
                     iconImageView2.setFitWidth(20.0);
                     iconImageView2.setFitHeight(20.0);
-                    Button dislikeButton = new Button("", iconImageView2);
+                    final Button dislikeButton = new Button("", iconImageView2);
                     // Set the layout constraints for the Button in the AnchorPane
                     AnchorPane.setTopAnchor(dislikeButton, 10.0);
                     AnchorPane.setRightAnchor(dislikeButton, 50.0);
-                    Image iconImage = new Image("img/films/like.png");
-                    ImageView iconImageView = new ImageView(iconImage);
+                    final Image iconImage = new Image("img/films/like.png");
+                    final ImageView iconImageView = new ImageView(iconImage);
                     iconImageView.setFitWidth(20.0);
                     iconImageView.setFitHeight(20.0);
-                    Button likeButton = new Button("", iconImageView);
+                    final Button likeButton = new Button("", iconImageView);
                     // Set the layout constraints for the Button in the AnchorPane
                     AnchorPane.setTopAnchor(likeButton, 10.0);
                     AnchorPane.setRightAnchor(likeButton, 10.0);
-                    Image iconFav = new Image("img/films/favoris.png");
-                    ImageView iconImageViewFav = new ImageView(iconFav);
+                    final Image iconFav = new Image("img/films/favoris.png");
+                    final ImageView iconImageViewFav = new ImageView(iconFav);
                     iconImageViewFav.setFitWidth(20.0);
                     iconImageViewFav.setFitHeight(20.0);
-                    Button favButton = new Button("", iconImageViewFav);
+                    final Button favButton = new Button("", iconImageViewFav);
                     // Set the layout constraints for the Button in the AnchorPane
                     AnchorPane.setTopAnchor(favButton, 10.0);
                     AnchorPane.setRightAnchor(favButton, 90.0);
@@ -441,30 +437,30 @@ public class SerieClientController {
                          * liked status, and enables or disables the dislike button based on the item's
                          * liked
                          * status.
-                         * 
+                         *
                          * @param event action event triggered by a user's click on the like button, and
                          *              it
                          *              is passed to the function as an argument to enable the updating
                          *              of the item's likes
                          *              count.
-                         * 
+                         *
                          *              - `item`: the current item being processed.
                          *              - `clickLikes`: the number of clicks on the item.
                          *              - `NbLikes`: the total number of likes for the item.
                          */
                         @Override
-                        public void handle(ActionEvent event) {
+                        public void handle(final ActionEvent event) {
                             item.setClickLikes(item.getClickLikes() + 1);
-                            LOGGER.info(String.valueOf(item.getClickLikes()));
-                            IServiceSerieImpl ss = new IServiceSerieImpl();
+                            SerieClientController.LOGGER.info(String.valueOf(item.getClickLikes()));
+                            final IServiceSerieImpl ss = new IServiceSerieImpl();
                             try {
-                                if ((item.getClickLikes() == 0) || (item.getClickLikes() % 2 != 0)) {
+                                if ((0 == item.getClickLikes()) || (0 != item.getClickLikes() % 2)) {
                                     item.setNbLikes(item.getNbLikes() + 1);
                                     ss.ajouterLike(item);
                                     dislikeButton.setDisable(true);
                                 } else {
                                     item.setNbLikes(item.getNbLikes() - 1);
-                                    if (item.getNbLikes() == 0) {
+                                    if (0 == item.getNbLikes()) {
                                         item.setLiked(0);
                                         ss.removeLike(item);
                                         dislikeButton.setDisable(false);
@@ -473,7 +469,7 @@ public class SerieClientController {
                                         dislikeButton.setDisable(true);
                                     }
                                 }
-                            } catch (SQLException e) {
+                            } catch (final SQLException e) {
                                 throw new RuntimeException(e);
                             }
                         }
@@ -485,29 +481,29 @@ public class SerieClientController {
                          * updates the item's liked status accordingly. It also calls a service method
                          * to add
                          * or remove a dislike from the item in the database.
-                         * 
+                         *
                          * @param event event that triggered the function, and it is used to increment
                          *              the
                          *              number of clicks on an item and print its current click dislike
                          *              count.
-                         * 
+                         *
                          *              - `item`: The current item being processed, which contains
                          *              information such as
                          *              its ID and click dislikes count.
                          */
                         @Override
-                        public void handle(ActionEvent event) {
+                        public void handle(final ActionEvent event) {
                             item.setClickDislikes(item.getClickDislikes() + 1);
-                            LOGGER.info(String.valueOf(item.getClickDislikes()));
-                            IServiceSerieImpl ss = new IServiceSerieImpl();
+                            SerieClientController.LOGGER.info(String.valueOf(item.getClickDislikes()));
+                            final IServiceSerieImpl ss = new IServiceSerieImpl();
                             try {
-                                if ((item.getClickDislikes() == 0) || (item.getClickDislikes() % 2 != 0)) {
+                                if ((0 == item.getClickDislikes()) || (0 != item.getClickDislikes() % 2)) {
                                     item.setNbDislikes(item.getNbDislikes() + 1);
                                     ss.ajouterDislike(item);
                                     likeButton.setDisable(true);
                                 } else {
                                     item.setNbDislikes(item.getNbDislikes() - 1);
-                                    if (item.getNbDislikes() == 0) {
+                                    if (0 == item.getNbDislikes()) {
                                         item.setDisliked(0);
                                         ss.removeDislike(item);
                                         likeButton.setDisable(false);
@@ -516,7 +512,7 @@ public class SerieClientController {
                                         likeButton.setDisable(true);
                                     }
                                 }
-                            } catch (SQLException e) {
+                            } catch (final SQLException e) {
                                 throw new RuntimeException(e);
                             }
                         }
@@ -531,9 +527,9 @@ public class SerieClientController {
                          * `IServiceFavoris`
                          * interface. The function also handles the favorite count and prints it to the
                          * console.
-                         * 
+                         *
                          * @param event ActionEvent object that triggered the handling of the method.
-                         * 
+                         *
                          *              - `favButton`: The button that triggered the event, which
                          *              represents a client.
                          *              - `item`: The object passed as an argument to the function,
@@ -541,32 +537,32 @@ public class SerieClientController {
                          *              about the favorite.
                          */
                         @Override
-                        public void handle(ActionEvent event) {
-                            Client client = (Client) favButton.getScene().getWindow().getUserData();
-                            int id_serie = item.getIdserie();
-                            IServiceFavorisImpl sf = new IServiceFavorisImpl();
-                            Favoris f = new Favoris(client.getId(), id_serie);
+                        public void handle(final ActionEvent event) {
+                            final Client client = (Client) favButton.getScene().getWindow().getUserData();
+                            final int id_serie = item.getIdserie();
+                            final IServiceFavorisImpl sf = new IServiceFavorisImpl();
+                            final Favoris f = new Favoris(client.getId(), id_serie);
                             item.setClickFavoris(item.getClickFavoris() + 1);
-                            LOGGER.info(String.valueOf(item.getClickFavoris()));
+                            SerieClientController.LOGGER.info(String.valueOf(item.getClickFavoris()));
                             try {
-                                if ((item.getClickFavoris() == 0) || (item.getClickFavoris() % 2 != 0)) {
+                                if ((0 == item.getClickFavoris()) || (0 != item.getClickFavoris() % 2)) {
                                     sf.ajouter(f);
                                 } else {
-                                    Favoris fav = sf.getByIdUserAndIdSerie(client.getId(), id_serie);
+                                    final Favoris fav = sf.getByIdUserAndIdSerie(client.getId(), id_serie);
                                     sf.supprimer(fav.getId());
-                                    LOGGER.info(String.valueOf(fav.getId()));
+                                    SerieClientController.LOGGER.info(String.valueOf(fav.getId()));
                                 }
-                            } catch (SQLException e) {
+                            } catch (final SQLException e) {
                                 throw new RuntimeException(e);
                             }
                         }
                     });
                     /* Button Watch Episode Declaration */
-                    Image iconImageWatch = new Image("img/films/watch.png");
-                    ImageView iconImageViewWatch = new ImageView(iconImageWatch);
+                    final Image iconImageWatch = new Image("img/films/watch.png");
+                    final ImageView iconImageViewWatch = new ImageView(iconImageWatch);
                     iconImageViewWatch.setFitWidth(10.0);
                     iconImageViewWatch.setFitHeight(10.0);
-                    Button watchButton = new Button("Watch", iconImageViewWatch);
+                    final Button watchButton = new Button("Watch", iconImageViewWatch);
                     watchButton.setStyle("""
                             -fx-background-color: #ae2d3c; \
                             -fx-background-radius: 8px; \
@@ -577,7 +573,7 @@ public class SerieClientController {
                             """); // Set the layout constraints for the Watch Button in the AnchorPane
                     AnchorPane.setTopAnchor(watchButton, 150.0);
                     AnchorPane.setLeftAnchor(watchButton, 180.0);
-                    Label dislikesLabel = new Label("DisLikes: " + item.getNbDislikes());
+                    final Label dislikesLabel = new Label("DisLikes: " + item.getNbDislikes());
                     dislikesLabel.setStyle(
                             "-fx-font-family: 'Helvetica'; -fx-font-size: 14.0px; -fx-font-weight: normal; -fx-text-fill: #666666;"); // Couleur
                     // de
@@ -595,56 +591,56 @@ public class SerieClientController {
                             HeartImageView, likeButton, dislikeButton, favButton, watchButton, dislikesLabel);
                     // Ajoutez d'autres composants selon vos besoins
                     // Définissez l'AnchorPane en tant que graphique pour la cellule
-                    setGraphic(anchorPane);
+                    this.setGraphic(anchorPane);
                     watchButton.setOnAction(event -> {
-                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/EpisodeClient.fxml"));
-                        Stage stage = (Stage) watchButton.getScene().getWindow();
+                        final FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/EpisodeClient.fxml"));
+                        final Stage stage = (Stage) watchButton.getScene().getWindow();
                         try {
-                            Parent root = fxmlLoader.load();
-                            EpisodeClientController controller = fxmlLoader.getController();
+                            final Parent root = fxmlLoader.load();
+                            final EpisodeClientController controller = fxmlLoader.getController();
                             controller.initialize(item);
-                            Scene scene = new Scene(root);
+                            final Scene scene = new Scene(root);
                             stage.setTitle("");
                             stage.setScene(scene);
                             stage.show();
-                        } catch (IOException e) {
+                        } catch (final IOException e) {
                             throw new RuntimeException(e);
                         }
                         // Ajoutez un séparateur après chaque élément sauf le dernier
-                        Separator separator = new Separator();
+                        final Separator separator = new Separator();
                         separator.setPrefWidth(400); // Ajustez la largeur selon vos besoins
                         separator.setStyle("-fx-border-color: #ae2d3c; -fx-border-width: 2px;");
-                        VBox vBoxWithSeparator = new VBox(anchorPane, separator);
-                        setGraphic(vBoxWithSeparator);
+                        final VBox vBoxWithSeparator = new VBox(anchorPane, separator);
+                        this.setGraphic(vBoxWithSeparator);
                     });
                 }
             }
         });
-        listeSerie.getItems().addAll(series);
+        this.listeSerie.getItems().addAll(series);
     }
 
     /**
      * Loads a FXML file named `ListFavoris.fxml`, creates a new stage with the
      * loaded
      * scene, and displays it in the stage.
-     * 
+     *
      * @param event event of the button click that triggered the function execution.
-     * 
+     *              <p>
      *              - Event type: `ActionEvent`
      *              - Target object: none (the function is called directly without
      *              any target object)
      */
     @FXML
-    void AfficherFavList(ActionEvent event) {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ListFavoris.fxml"));
-        Stage stage = new Stage();
+    void AfficherFavList(final ActionEvent event) {
+        final FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/ListFavoris.fxml"));
+        final Stage stage = new Stage();
         try {
-            Parent root = fxmlLoader.load();
-            Scene scene = new Scene(root);
+            final Parent root = fxmlLoader.load();
+            final Scene scene = new Scene(root);
             stage.setTitle("Your Favorits");
             stage.setScene(scene);
             stage.show();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -660,25 +656,25 @@ public class SerieClientController {
      */
     @FXML
     private void initialize() throws SQLException {
-        loadSeriesList();
-        IServiceSerieImpl iServiceSerie = new IServiceSerieImpl();
-        IServiceCategorieImpl iServiceCategorie = new IServiceCategorieImpl();
-        List<Categorie> categorieList = iServiceCategorie.recuperer();
-        ObservableList<String> categorieNames = FXCollections.observableArrayList();
-        for (Categorie categorie : categorieList) {
+        this.loadSeriesList();
+        final IServiceSerieImpl iServiceSerie = new IServiceSerieImpl();
+        final IServiceCategorieImpl iServiceCategorie = new IServiceCategorieImpl();
+        final List<Categorie> categorieList = iServiceCategorie.recuperer();
+        final ObservableList<String> categorieNames = FXCollections.observableArrayList();
+        for (final Categorie categorie : categorieList) {
             categorieNames.add(categorie.getNom());
         }
-        CamboxCategorie.setItems(categorieNames);
-        CamboxCategorie.setOnAction(event -> {
-            String selectedCategorie = CamboxCategorie.getValue();
-            if (!selectedCategories.contains(selectedCategorie)) {
-                for (Categorie c : categorieList) {
+        this.CamboxCategorie.setItems(categorieNames);
+        this.CamboxCategorie.setOnAction(event -> {
+            final String selectedCategorie = this.CamboxCategorie.getValue();
+            if (!this.selectedCategories.contains(selectedCategorie)) {
+                for (final Categorie c : categorieList) {
                     if (c.getNom() == selectedCategorie) {
                         try {
-                            listerecherche = iServiceSerie.recuperes(c.getIdcategorie());
-                            trierParNom(listerecherche); // Tri des séries par nom
-                            afficherliste(listerecherche);
-                        } catch (SQLException e) {
+                            this.listerecherche = iServiceSerie.recuperes(c.getIdcategorie());
+                            this.trierParNom(this.listerecherche); // Tri des séries par nom
+                            this.afficherliste(this.listerecherche);
+                        } catch (final SQLException e) {
                             throw new RuntimeException(e);
                         }
                     }
@@ -686,26 +682,26 @@ public class SerieClientController {
             }
         });
         /// fonction recherche sur textfiled
-        recherchefld.textProperty().addListener((observable, oldValue, newValue) -> {
-            List<Serie> series;
-            series = rechercher(listerecherche, newValue);
-            afficherliste(series);
+        this.recherchefld.textProperty().addListener((observable, oldValue, newValue) -> {
+            final List<Serie> series;
+            series = SerieClientController.rechercher(this.listerecherche, newValue);
+            this.afficherliste(series);
         });
-        listeSerie.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.intValue() >= 0) {
-                Serie selectedSerie = listeSerie.getItems().get(newValue.intValue());
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/EpisodeClient.fxml"));
-                LOGGER.info("serieee " + listeSerie.getScene().getWindow().getUserData());
-                Stage stage = (Stage) listeSerie.getScene().getWindow();
+        this.listeSerie.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
+            if (0 <= newValue.intValue()) {
+                final Serie selectedSerie = this.listeSerie.getItems().get(newValue.intValue());
+                final FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/EpisodeClient.fxml"));
+                SerieClientController.LOGGER.info("serieee " + this.listeSerie.getScene().getWindow().getUserData());
+                final Stage stage = (Stage) this.listeSerie.getScene().getWindow();
                 try {
-                    Parent root = fxmlLoader.load();
-                    EpisodeClientController controller = fxmlLoader.getController();
+                    final Parent root = fxmlLoader.load();
+                    final EpisodeClientController controller = fxmlLoader.getController();
                     controller.initialize(selectedSerie);
-                    Scene scene = new Scene(root);
+                    final Scene scene = new Scene(root);
                     stage.setTitle("");
                     stage.setScene(scene);
                     stage.show();
-                } catch (IOException e) {
+                } catch (final IOException e) {
                     throw new RuntimeException(e);
                 }
             }
@@ -717,20 +713,20 @@ public class SerieClientController {
      * Loads and displays a FXML file named "CategorieClient.fxml" using the
      * `FXMLLoader`
      * class.
-     * 
+     *
      * @param event event that triggered the function execution, which in this case
      *              is a
      *              button click event.
-     * 
+     *              <p>
      *              - `event`: An `ActionEvent` object representing a user action
      *              that triggered the
      *              function to execute.
      */
     @FXML
-    void Ocategories(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/CategorieClient.fxml")));
-        Scene scene = new Scene(root);
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    void Ocategories(final ActionEvent event) throws IOException {
+        final Parent root = FXMLLoader.load(Objects.requireNonNull(this.getClass().getResource("/CategorieClient.fxml")));
+        final Scene scene = new Scene(root);
+        final Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
     }
@@ -739,11 +735,11 @@ public class SerieClientController {
      * Loads a FXML file, creates a scene and sets it as the scene of a stage,
      * showing
      * the stage.
-     * 
+     *
      * @param event event that triggered the function execution, which in this case
      *              is a
      *              button click.
-     * 
+     *              <p>
      *              - `event` represents an action event generated by the user's
      *              interaction with the
      *              application.
@@ -752,10 +748,10 @@ public class SerieClientController {
      *              other control in the user interface.
      */
     @FXML
-    void Oseries(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/SeriesClient.fxml")));
-        Scene scene = new Scene(root);
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    void Oseries(final ActionEvent event) throws IOException {
+        final Parent root = FXMLLoader.load(Objects.requireNonNull(this.getClass().getResource("/SeriesClient.fxml")));
+        final Scene scene = new Scene(root);
+        final Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
     }
@@ -764,27 +760,27 @@ public class SerieClientController {
      * Loads an FXML file, creates a scene, sets it as the scene of a stage, and
      * displays
      * the stage.
-     * 
+     *
      * @param event event that triggered the execution of the `Oepisode` method,
      *              providing
      *              the necessary information for the method to perform its intended
      *              action.
-     * 
+     *              <p>
      *              Event: An instance of the `ActionEvent` class, representing an
      *              action event generated
      *              by the user through mouse clicks or keyboard inputs.
-     * 
+     *              <p>
      *              Properties:
-     * 
+     *              <p>
      *              - `getSource()`: Returns the source of the event, which is
      *              usually a button or a
      *              menu item that was clicked/selected.
      */
     @FXML
-    void Oepisode(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/EpisodeClient.fxml")));
-        Scene scene = new Scene(root);
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    void Oepisode(final ActionEvent event) throws IOException {
+        final Parent root = FXMLLoader.load(Objects.requireNonNull(this.getClass().getResource("/EpisodeClient.fxml")));
+        final Scene scene = new Scene(root);
+        final Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
     }
@@ -800,16 +796,16 @@ public class SerieClientController {
      */
     @FXML
     private void loadSeriesList() throws SQLException {
-        IServiceSerie<Serie> serieService = new IServiceSerieImpl();
-        List<Serie> series = serieService.recuperers();
-        afficherliste(series); // Utilisez votre méthode d'affichage pour la ListView
-        IServiceSerieImpl ss = new IServiceSerieImpl();
-        hboxTop3.setSpacing(20); // Set the spacing between VBox instances
-        hboxTop3.setPadding(new Insets(10));
-        List<Serie> listeTop3 = ss.findMostLiked();
-        for (Serie serie : listeTop3) {
-            VBox vbox = createSeriesVBox(serie);
-            hboxTop3.getChildren().add(vbox);
+        final IServiceSerie<Serie> serieService = new IServiceSerieImpl();
+        final List<Serie> series = serieService.recuperers();
+        this.afficherliste(series); // Utilisez votre méthode d'affichage pour la ListView
+        final IServiceSerieImpl ss = new IServiceSerieImpl();
+        this.hboxTop3.setSpacing(20); // Set the spacing between VBox instances
+        this.hboxTop3.setPadding(new Insets(10));
+        final List<Serie> listeTop3 = ss.findMostLiked();
+        for (final Serie serie : listeTop3) {
+            final VBox vbox = this.createSeriesVBox(serie);
+            this.hboxTop3.getChildren().add(vbox);
         }
     }
     // Function to display a list of series in the JavaFX ListView

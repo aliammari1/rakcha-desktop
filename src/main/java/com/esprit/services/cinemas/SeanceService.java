@@ -5,32 +5,31 @@ import com.esprit.models.cinemas.Seance;
 import com.esprit.models.films.Filmcinema;
 import com.esprit.services.IService;
 import com.esprit.services.films.FilmService;
-import com.esprit.services.produits.AvisService;
 import com.esprit.utils.DataSource;
 
-import java.sql.*;
 import java.sql.Date;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class SeanceService implements IService<Seance> {
-    private final Connection connection;
     private static final Logger LOGGER = Logger.getLogger(SeanceService.class.getName());
+    private final Connection connection;
 
     public SeanceService() {
-        connection = DataSource.getInstance().getConnection();
+        this.connection = DataSource.getInstance().getConnection();
     }
 
     /**
      * @param seance
      */
     @Override
-    public void create(Seance seance) {
-        String req = "INSERT into seance(id_film, id_salle, HD, HF, date, id_cinema, prix) values (?, ?, ?, ?, ?, ?, ?);";
+    public void create(final Seance seance) {
+        final String req = "INSERT into seance(id_film, id_salle, HD, HF, date, id_cinema, prix) values (?, ?, ?, ?, ?, ?, ?);";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
+            final PreparedStatement pst = this.connection.prepareStatement(req);
             pst.setInt(1, seance.getFilmcinema().getId_film().getId());
             pst.setInt(2, seance.getSalle().getId_salle());
             pst.setTime(3, seance.getHD());
@@ -39,9 +38,9 @@ public class SeanceService implements IService<Seance> {
             pst.setInt(6, seance.getFilmcinema().getId_cinema().getId_cinema());
             pst.setDouble(7, seance.getPrix());
             pst.executeUpdate();
-            LOGGER.info("Seance ajoutée !");
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            SeanceService.LOGGER.info("Seance ajoutée !");
+        } catch (final SQLException e) {
+            SeanceService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -49,8 +48,8 @@ public class SeanceService implements IService<Seance> {
      * @param seance
      */
     @Override
-    public void update(Seance seance) {
-        String req = """
+    public void update(final Seance seance) {
+        final String req = """
                 UPDATE seance \
                 JOIN cinema ON seance.id_cinema = cinema.id_cinema \
                 JOIN film ON seance.id_film = film.id \
@@ -60,7 +59,7 @@ public class SeanceService implements IService<Seance> {
                 WHERE seance.id_seance = ?;\
                 """;
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
+            final PreparedStatement pst = this.connection.prepareStatement(req);
             pst.setInt(1, seance.getFilmcinema().getId_film().getId());
             pst.setInt(2, seance.getSalle().getId_salle());
             pst.setTime(3, seance.getHD());
@@ -70,52 +69,52 @@ public class SeanceService implements IService<Seance> {
             pst.setDouble(7, seance.getPrix());
             pst.setInt(8, seance.getId_seance());
             pst.executeUpdate();
-            LOGGER.info("Seance modifiée !");
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            SeanceService.LOGGER.info("Seance modifiée !");
+        } catch (final SQLException e) {
+            SeanceService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
     @Override
-    public void delete(Seance seance) {
-        String req = "DELETE from seance where id_seance= ?;";
+    public void delete(final Seance seance) {
+        final String req = "DELETE from seance where id_seance= ?;";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
+            final PreparedStatement pst = this.connection.prepareStatement(req);
             pst.setInt(1, seance.getId_seance());
             pst.executeUpdate();
-            LOGGER.info("Seance supprmiée !");
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            SeanceService.LOGGER.info("Seance supprmiée !");
+        } catch (final SQLException e) {
+            SeanceService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
-    public List<Seance> readLoujain(int id_film, int id_cinema) {
-        List<Seance> seances = new ArrayList<>();
-        String req = "SELECT * FROM seance where id_film = ? AND id_cinema = ?";
+    public List<Seance> readLoujain(final int id_film, final int id_cinema) {
+        final List<Seance> seances = new ArrayList<>();
+        final String req = "SELECT * FROM seance where id_film = ? AND id_cinema = ?";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
+            final PreparedStatement pst = this.connection.prepareStatement(req);
             pst.setInt(1, id_film);
             pst.setInt(2, id_cinema);
-            ResultSet rs = pst.executeQuery();
-            CinemaService cs = new CinemaService();
-            SalleService ss = new SalleService();
-            FilmService fs = new FilmService();
-            int i = 0;
+            final ResultSet rs = pst.executeQuery();
+            final CinemaService cs = new CinemaService();
+            final SalleService ss = new SalleService();
+            final FilmService fs = new FilmService();
+            final int i = 0;
             while (rs.next()) {
                 seances.add(new Seance(rs.getInt("id_seance"), ss.getSalle(rs.getInt("id_salle")), rs.getTime("HD"),
                         rs.getTime("HF"), rs.getDate("date"), rs.getInt("prix"),
                         new Filmcinema(fs.getFilm(rs.getInt("id_film")), cs.getCinema(rs.getInt("id_cinema")))));
             }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            SeanceService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return seances;
     }
 
     @Override
     public List<Seance> read() {
-        List<Seance> seances = new ArrayList<>();
-        String req = """
+        final List<Seance> seances = new ArrayList<>();
+        final String req = """
                 SELECT seance.*, cinema.*, film.*, salle.* \
                 FROM seance \
                 JOIN cinema ON seance.id_cinema = cinema.id_cinema \
@@ -123,75 +122,75 @@ public class SeanceService implements IService<Seance> {
                 JOIN salle ON seance.id_salle = salle.id_salle\
                 """;
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
-            ResultSet rs = pst.executeQuery();
-            CinemaService cs = new CinemaService();
-            SalleService ss = new SalleService();
-            FilmService fs = new FilmService();
-            int i = 0;
+            final PreparedStatement pst = this.connection.prepareStatement(req);
+            final ResultSet rs = pst.executeQuery();
+            final CinemaService cs = new CinemaService();
+            final SalleService ss = new SalleService();
+            final FilmService fs = new FilmService();
+            final int i = 0;
             while (rs.next()) {
                 seances.add(new Seance(rs.getInt("id_seance"), ss.getSalle(rs.getInt("id_salle")), rs.getTime("HD"),
                         rs.getTime("HF"), rs.getDate("date"), rs.getInt("prix"),
                         new Filmcinema(fs.getFilm(rs.getInt("id_film")), cs.getCinema(rs.getInt("id_cinema")))));
             }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            SeanceService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return seances;
     }
 
     // Méthode pour récupérer les séances dans une plage de dates spécifiée
-    public Map<LocalDate, List<Seance>> getSeancesByDateRangeAndCinema(LocalDate startDate, LocalDate endDate,
-            Cinema cinema) {
-        Map<LocalDate, List<Seance>> seancesByDate = new HashMap<>();
+    public Map<LocalDate, List<Seance>> getSeancesByDateRangeAndCinema(final LocalDate startDate, final LocalDate endDate,
+                                                                       final Cinema cinema) {
+        final Map<LocalDate, List<Seance>> seancesByDate = new HashMap<>();
         // Vérifier si cinema est null
-        if (cinema == null) {
-            LOGGER.info("Erreur : cinema est null");
+        if (null == cinema) {
+            SeanceService.LOGGER.info("Erreur : cinema est null");
             return seancesByDate;
         }
         try {
             // Créer la requête SQL pour récupérer les séances dans la plage de dates
             // spécifiée et pour le cinéma donné
-            String query = "SELECT * FROM seance WHERE date BETWEEN ? AND ? AND id_cinema = ?";
-            PreparedStatement statement = connection.prepareStatement(query);
+            final String query = "SELECT * FROM seance WHERE date BETWEEN ? AND ? AND id_cinema = ?";
+            final PreparedStatement statement = this.connection.prepareStatement(query);
             statement.setDate(1, Date.valueOf(startDate)); // Utilisez java.sql.Date.valueOf
             statement.setDate(2, Date.valueOf(endDate)); // Utilisez java.sql.Date.valueOf
             statement.setInt(3, cinema.getId_cinema()); // Supposons que getId() renvoie l'identifiant du cinéma
             // Exécuter la requête
-            ResultSet rs = statement.executeQuery();
-            CinemaService cs = new CinemaService();
-            SalleService ss = new SalleService();
-            FilmService fs = new FilmService();
+            final ResultSet rs = statement.executeQuery();
+            final CinemaService cs = new CinemaService();
+            final SalleService ss = new SalleService();
+            final FilmService fs = new FilmService();
             // Parcourir les résultats de la requête et créer des objets Seance
             while (rs.next()) {
-                LocalDate seanceDate = rs.getDate("date").toLocalDate(); // Convertir java.sql.Date en
+                final LocalDate seanceDate = rs.getDate("date").toLocalDate(); // Convertir java.sql.Date en
                 // java.time.LocalDate
-                List<Seance> seancesForDate = seancesByDate.getOrDefault(seanceDate, new ArrayList<>());
+                final List<Seance> seancesForDate = seancesByDate.getOrDefault(seanceDate, new ArrayList<>());
                 seancesForDate.add(new Seance(rs.getInt("id_seance"), ss.getSalle(rs.getInt("id_salle")),
                         rs.getTime("HD"), rs.getTime("HF"), seanceDate, rs.getInt("prix"),
                         new Filmcinema(fs.getFilm(rs.getInt("id_film")), cs.getCinema(rs.getInt("id_cinema")))));
                 seancesByDate.put(seanceDate, seancesForDate);
             }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            SeanceService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return seancesByDate;
     }
 
-    public List<Seance> getSeancesByDate(LocalDate date) {
+    public List<Seance> getSeancesByDate(final LocalDate date) {
         // Exemple de liste de séances fictive
-        List<Seance> seances = new ArrayList<>();
+        final List<Seance> seances = new ArrayList<>();
         // Supposons que seanceList soit une liste de toutes les séances disponibles
         // Vous devez définir seanceList en fonction de votre logique d'accès aux
         // données
-        List<Seance> seanceList = null; // Logique pour récupérer les séances depuis la source de données
+        final List<Seance> seanceList = null; // Logique pour récupérer les séances depuis la source de données
         // Si seanceList est null, retourner une liste vide
-        if (seanceList == null) {
+        if (null == seanceList) {
             return Collections.emptyList();
         }
         // Parcourir toutes les séances disponibles et ajouter celles pour la date
         // spécifiée à la liste
-        for (Seance seance : seanceList) {
+        for (final Seance seance : seanceList) {
             if (seance.getDate().equals(date)) {
                 seances.add(seance);
             }

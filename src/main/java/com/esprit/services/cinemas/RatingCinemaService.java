@@ -3,7 +3,6 @@ package com.esprit.services.cinemas;
 import com.esprit.models.cinemas.Cinema;
 import com.esprit.models.cinemas.RatingCinema;
 import com.esprit.services.IService;
-import com.esprit.services.produits.AvisService;
 import com.esprit.utils.DataSource;
 
 import java.sql.Connection;
@@ -16,32 +15,31 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class RatingCinemaService implements IService<RatingCinema> {
-    Connection connection;
     private static final Logger LOGGER = Logger.getLogger(RatingCinemaService.class.getName());
+    Connection connection;
+    CinemaService cinemaService = new CinemaService();
 
     public RatingCinemaService() {
-        connection = DataSource.getInstance().getConnection();
+        this.connection = DataSource.getInstance().getConnection();
     }
-
-    CinemaService cinemaService = new CinemaService();
 
     /**
      * @param ratingCinema
      */
     @Override
-    public void create(RatingCinema ratingCinema) {
+    public void create(final RatingCinema ratingCinema) {
         // Supprimer l'ancienne note du même utilisateur pour le même cinéma s'il existe
-        deleteByUserAndCinema(ratingCinema.getId_user().getId(), ratingCinema.getId_cinema().getId_cinema());
+        this.deleteByUserAndCinema(ratingCinema.getId_user().getId(), ratingCinema.getId_cinema().getId_cinema());
         // Ajouter la nouvelle note à la base de données
-        String req = "INSERT INTO ratingcinema (id_cinema,id_user,rate) VALUES (?,?,?)";
+        final String req = "INSERT INTO ratingcinema (id_cinema,id_user,rate) VALUES (?,?,?)";
         try {
-            PreparedStatement statement = connection.prepareStatement(req);
+            final PreparedStatement statement = this.connection.prepareStatement(req);
             statement.setInt(1, ratingCinema.getId_cinema().getId_cinema());
             statement.setInt(2, ratingCinema.getId_user().getId());
             statement.setInt(3, ratingCinema.getRate());
             statement.executeUpdate();
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final Exception e) {
+            RatingCinemaService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -50,77 +48,77 @@ public class RatingCinemaService implements IService<RatingCinema> {
      * @param cinemaId
      * @return int
      */
-    public int getRatingForClientAndCinema(int clientId, int cinemaId) {
-        String req = "SELECT rate FROM ratingcinema WHERE id_cinema=? AND id_user=?";
+    public int getRatingForClientAndCinema(final int clientId, final int cinemaId) {
+        final String req = "SELECT rate FROM ratingcinema WHERE id_cinema=? AND id_user=?";
         try {
-            PreparedStatement statement = connection.prepareStatement(req);
+            final PreparedStatement statement = this.connection.prepareStatement(req);
             statement.setInt(1, cinemaId);
             statement.setInt(2, clientId);
-            ResultSet resultSet = statement.executeQuery();
+            final ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 return resultSet.getInt("rate");
             }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            RatingCinemaService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return -1; // Retourne -1 si aucun résultat n'est trouvé ou s'il y a une exception
     }
 
     // Méthode pour supprimer l'ancienne note du même utilisateur pour le même
     // cinéma
-    private void deleteByUserAndCinema(int userId, int cinemaId) {
-        String req = "DELETE FROM ratingcinema WHERE id_cinema=? AND id_user=?";
+    private void deleteByUserAndCinema(final int userId, final int cinemaId) {
+        final String req = "DELETE FROM ratingcinema WHERE id_cinema=? AND id_user=?";
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(req);
+            final PreparedStatement preparedStatement = this.connection.prepareStatement(req);
             preparedStatement.setInt(1, cinemaId);
             preparedStatement.setInt(2, userId);
             preparedStatement.executeUpdate();
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final Exception e) {
+            RatingCinemaService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
     @Override
     public List<RatingCinema> read() {
-        String req = "SELECT * FROM ratingcinema ";
+        final String req = "SELECT * FROM ratingcinema ";
         return null;
     }
 
     @Override
-    public void update(RatingCinema ratingCinema) {
+    public void update(final RatingCinema ratingCinema) {
     }
 
     @Override
-    public void delete(RatingCinema ratingCinema) {
-        String req = "DELETE FROM ratingcinema WHERE id_cinema=? AND id_user=?";
+    public void delete(final RatingCinema ratingCinema) {
+        final String req = "DELETE FROM ratingcinema WHERE id_cinema=? AND id_user=?";
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(req);
+            final PreparedStatement preparedStatement = this.connection.prepareStatement(req);
             preparedStatement.setInt(1, ratingCinema.getId_cinema().getId_cinema());
             preparedStatement.setInt(2, ratingCinema.getId_user().getId());
             preparedStatement.executeUpdate();
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final Exception e) {
+            RatingCinemaService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
-    public double getAverageRating(int cinemaId) {
-        String req = "SELECT AVG(rate) AS average FROM ratingcinema WHERE id_cinema=?";
+    public double getAverageRating(final int cinemaId) {
+        final String req = "SELECT AVG(rate) AS average FROM ratingcinema WHERE id_cinema=?";
         try {
-            PreparedStatement statement = connection.prepareStatement(req);
+            final PreparedStatement statement = this.connection.prepareStatement(req);
             statement.setInt(1, cinemaId);
-            ResultSet resultSet = statement.executeQuery();
+            final ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 return resultSet.getDouble("average");
             }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            RatingCinemaService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return 0; // Retourne 0 si aucun résultat n'est trouvé ou s'il y a une exception
     }
 
     public List<Cinema> getTopRatedCinemas() {
-        List<Cinema> topRatedCinemas = new ArrayList<>();
-        String req = """
+        final List<Cinema> topRatedCinemas = new ArrayList<>();
+        final String req = """
                 SELECT id_cinema, AVG(rate) AS average_rating \
                 FROM ratingcinema \
                 GROUP BY id_cinema \
@@ -128,18 +126,18 @@ public class RatingCinemaService implements IService<RatingCinema> {
                 LIMIT 3\
                 """; // Sélectionne les 3 premiers cinémas les mieux notés
         try {
-            PreparedStatement statement = connection.prepareStatement(req);
-            ResultSet resultSet = statement.executeQuery();
+            final PreparedStatement statement = this.connection.prepareStatement(req);
+            final ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                int cinemaId = resultSet.getInt("id_cinema");
-                LOGGER.info(" ------------ " + cinemaId);
-                Cinema cinema = cinemaService.getCinema(cinemaId);
-                if (cinema != null) {
+                final int cinemaId = resultSet.getInt("id_cinema");
+                RatingCinemaService.LOGGER.info(" ------------ " + cinemaId);
+                final Cinema cinema = this.cinemaService.getCinema(cinemaId);
+                if (null != cinema) {
                     topRatedCinemas.add(cinema);
                 }
             }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            RatingCinemaService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return topRatedCinemas;
     }

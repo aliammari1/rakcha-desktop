@@ -9,7 +9,7 @@ public class Feedback {
     private String description;
     private Date date;
 
-    public Feedback(int id, int id_user, String description, Date date, int id_episode) {
+    public Feedback(final int id, final int id_user, final String description, final Date date, final int id_episode) {
         this.id = id;
         this.id_user = id_user;
         this.description = description;
@@ -17,52 +17,52 @@ public class Feedback {
         this.id_episode = id_episode;
     }
 
-    public Feedback(int id_user, String description, Date date, int id_episode) {
+    public Feedback(final int id_user, final String description, final Date date, final int id_episode) {
         this.id_user = id_user;
         this.description = description;
         this.date = date;
         this.id_episode = id_episode;
     }
 
-    /** 
+    /**
      * @return int
      */
     public int getId() {
-        return id;
+        return this.id;
     }
 
-    /** 
+    /**
      * @param id
      */
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 
     public int getId_user() {
-        return id_user;
+        return this.id_user;
     }
 
-    public void setId_user(int id_user) {
+    public void setId_user(final int id_user) {
         this.id_user = id_user;
     }
 
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
     public Date getDate() {
-        return date;
+        return this.date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(final Date date) {
         this.date = date;
     }
 
     public int getId_episode() {
-        return id_episode;
+        return this.id_episode;
     }
 }

@@ -26,7 +26,7 @@ public class Ticket {
      * @param id_seance  The movie session associated with the ticket.
      * @param prix       The price of the ticket.
      */
-    public Ticket(int nbrdeplace, Client id_user, Seance id_seance, float prix) {
+    public Ticket(final int nbrdeplace, final Client id_user, final Seance id_seance, final float prix) {
         this.nbrdeplace = nbrdeplace;
         this.id_user = id_user;
         this.id_seance = id_seance;
@@ -39,7 +39,7 @@ public class Ticket {
      * @return The number of seats.
      */
     public int getNbrdeplace() {
-        return nbrdeplace;
+        return this.nbrdeplace;
     }
 
     /**
@@ -47,7 +47,7 @@ public class Ticket {
      *
      * @param nbrdeplace The number of seats.
      */
-    public void setNbrdeplace(int nbrdeplace) {
+    public void setNbrdeplace(final int nbrdeplace) {
         this.nbrdeplace = nbrdeplace;
     }
 
@@ -57,7 +57,7 @@ public class Ticket {
      * @return The client.
      */
     public Client getId_user() {
-        return id_user;
+        return this.id_user;
     }
 
     /**
@@ -65,7 +65,7 @@ public class Ticket {
      *
      * @param id_user The client.
      */
-    public void setId_user(Client id_user) {
+    public void setId_user(final Client id_user) {
         this.id_user = id_user;
     }
 
@@ -75,7 +75,7 @@ public class Ticket {
      * @return The movie session.
      */
     public Seance getId_seance() {
-        return id_seance;
+        return this.id_seance;
     }
 
     /**
@@ -83,7 +83,7 @@ public class Ticket {
      *
      * @param id_seance The movie session.
      */
-    public void setId_seance(Seance id_seance) {
+    public void setId_seance(final Seance id_seance) {
         this.id_seance = id_seance;
     }
 
@@ -93,7 +93,7 @@ public class Ticket {
      * @return The price.
      */
     public float getPrix() {
-        return prix;
+        return this.prix;
     }
 
     /**
@@ -101,7 +101,7 @@ public class Ticket {
      *
      * @param prix The price.
      */
-    public void setPrix(float prix) {
+    public void setPrix(final float prix) {
         this.prix = prix;
     }
 
@@ -113,10 +113,10 @@ public class Ticket {
     @Override
     public String toString() {
         return "Ticket{"
-                + "nbrdeplace=" + nbrdeplace
-                + ", id_user=" + id_user
-                + ", id_seance=" + id_seance
-                + ", prix=" + prix
+                + "nbrdeplace=" + this.nbrdeplace
+                + ", id_user=" + this.id_user
+                + ", id_seance=" + this.id_seance
+                + ", prix=" + this.prix
                 + '}';
     }
 }

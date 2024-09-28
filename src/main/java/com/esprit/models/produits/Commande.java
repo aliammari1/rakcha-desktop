@@ -1,14 +1,7 @@
 package com.esprit.models.produits;
 
 import com.esprit.models.users.Client;
-import com.esprit.models.users.User;
 
-import com.itextpdf.text.pdf.qrcode.QRCodeWriter;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,13 +27,13 @@ public class Commande {
     /**
      * Parameterized constructor for the Commande class.
      *
-     * @param dateCommande The date of the command.
-     * @param statu        The status of the command.
-     * @param idClient     The client associated with the command.
+     * @param dateCommande  The date of the command.
+     * @param statu         The status of the command.
+     * @param idClient      The client associated with the command.
      * @param num_telephone The telephone number associated with the command.
-     * @param adresse      The address associated with the command.
+     * @param adresse       The address associated with the command.
      */
-    public Commande(Date dateCommande, String statu, Client idClient, int num_telephone, String adresse) {
+    public Commande(final Date dateCommande, final String statu, final Client idClient, final int num_telephone, final String adresse) {
         this.dateCommande = dateCommande;
         this.statu = statu;
         this.idClient = idClient;
@@ -51,14 +44,14 @@ public class Commande {
     /**
      * Parameterized constructor for the Commande class.
      *
-     * @param idCommande   The ID of the command.
-     * @param dateCommande The date of the command.
-     * @param statu        The status of the command.
-     * @param idClient     The client associated with the command.
+     * @param idCommande    The ID of the command.
+     * @param dateCommande  The date of the command.
+     * @param statu         The status of the command.
+     * @param idClient      The client associated with the command.
      * @param num_telephone The telephone number associated with the command.
-     * @param adresse      The address associated with the command.
+     * @param adresse       The address associated with the command.
      */
-    public Commande(int idCommande, Date dateCommande, String statu, Client idClient, int num_telephone, String adresse) {
+    public Commande(final int idCommande, final Date dateCommande, final String statu, final Client idClient, final int num_telephone, final String adresse) {
         this.idCommande = idCommande;
         this.dateCommande = dateCommande;
         this.statu = statu;
@@ -73,7 +66,7 @@ public class Commande {
      * @return The ID of the command.
      */
     public int getIdCommande() {
-        return idCommande;
+        return this.idCommande;
     }
 
     /**
@@ -81,7 +74,7 @@ public class Commande {
      *
      * @param idCommande The ID of the command.
      */
-    public void setIdCommande(int idCommande) {
+    public void setIdCommande(final int idCommande) {
         this.idCommande = idCommande;
     }
 
@@ -91,7 +84,7 @@ public class Commande {
      * @return The date of the command.
      */
     public Date getDateCommande() {
-        return dateCommande;
+        return this.dateCommande;
     }
 
     /**
@@ -99,7 +92,7 @@ public class Commande {
      *
      * @param dateCommande The date of the command.
      */
-    public void setDateCommande(Date dateCommande) {
+    public void setDateCommande(final Date dateCommande) {
         this.dateCommande = dateCommande;
     }
 
@@ -109,7 +102,7 @@ public class Commande {
      * @return The status of the command.
      */
     public String getStatu() {
-        return statu;
+        return this.statu;
     }
 
     /**
@@ -117,7 +110,7 @@ public class Commande {
      *
      * @param statu The status of the command.
      */
-    public void setStatu(String statu) {
+    public void setStatu(final String statu) {
         this.statu = statu;
     }
 
@@ -127,7 +120,7 @@ public class Commande {
      * @return The client associated with the command.
      */
     public Client getIdClient() {
-        return idClient;
+        return this.idClient;
     }
 
     /**
@@ -135,7 +128,7 @@ public class Commande {
      *
      * @param idClient The client associated with the command.
      */
-    public void setIdClient(Client idClient) {
+    public void setIdClient(final Client idClient) {
         this.idClient = idClient;
     }
 
@@ -145,7 +138,7 @@ public class Commande {
      * @return The list of items in the command.
      */
     public List<CommandeItem> getCommandeItem() {
-        return commandeItem;
+        return this.commandeItem;
     }
 
     /**
@@ -153,7 +146,7 @@ public class Commande {
      *
      * @param commandeItem The list of items in the command.
      */
-    public void setCommandeItem(List<CommandeItem> commandeItem) {
+    public void setCommandeItem(final List<CommandeItem> commandeItem) {
         this.commandeItem = commandeItem;
     }
 
@@ -163,7 +156,7 @@ public class Commande {
      * @return The telephone number associated with the command.
      */
     public int getNum_telephone() {
-        return num_telephone;
+        return this.num_telephone;
     }
 
     /**
@@ -171,7 +164,7 @@ public class Commande {
      *
      * @param num_telephone The telephone number associated with the command.
      */
-    public void setNum_telephone(int num_telephone) {
+    public void setNum_telephone(final int num_telephone) {
         this.num_telephone = num_telephone;
     }
 
@@ -181,7 +174,7 @@ public class Commande {
      * @return The address associated with the command.
      */
     public String getAdresse() {
-        return adresse;
+        return this.adresse;
     }
 
     /**
@@ -189,7 +182,7 @@ public class Commande {
      *
      * @param adresse The address associated with the command.
      */
-    public void setAdresse(String adresse) {
+    public void setAdresse(final String adresse) {
         this.adresse = adresse;
     }
 
@@ -201,13 +194,13 @@ public class Commande {
     @Override
     public String toString() {
         return "Commande{"
-                + "idCommande=" + idCommande
-                + ", dateCommande=" + dateCommande
-                + ", statu='" + statu + '\''
-                + ", idClient=" + idClient
-                + ", commandeItem=" + commandeItem
-                + ", num_telephone=" + num_telephone
-                + ", adresse='" + adresse + '\''
+                + "idCommande=" + this.idCommande
+                + ", dateCommande=" + this.dateCommande
+                + ", statu='" + this.statu + '\''
+                + ", idClient=" + this.idClient
+                + ", commandeItem=" + this.commandeItem
+                + ", num_telephone=" + this.num_telephone
+                + ", adresse='" + this.adresse + '\''
                 + '}';
     }
 }

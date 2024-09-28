@@ -17,7 +17,7 @@ public class RatingCinema {
      * @param id_user   The user who is giving the rating.
      * @param rate      The rating given by the user.
      */
-    public RatingCinema(Cinema id_cinema, Client id_user, int rate) {
+    public RatingCinema(final Cinema id_cinema, final Client id_user, final int rate) {
         this.id_cinema = id_cinema;
         this.id_user = id_user;
         this.rate = rate;
@@ -29,7 +29,7 @@ public class RatingCinema {
      * @return The cinema being rated.
      */
     public Cinema getId_cinema() {
-        return id_cinema;
+        return this.id_cinema;
     }
 
     /**
@@ -37,7 +37,7 @@ public class RatingCinema {
      *
      * @param id_cinema The cinema being rated.
      */
-    public void setId_cinema(Cinema id_cinema) {
+    public void setId_cinema(final Cinema id_cinema) {
         this.id_cinema = id_cinema;
     }
 
@@ -47,7 +47,7 @@ public class RatingCinema {
      * @return The user who is giving the rating.
      */
     public Client getId_user() {
-        return id_user;
+        return this.id_user;
     }
 
     /**
@@ -55,7 +55,7 @@ public class RatingCinema {
      *
      * @param id_user The user who is giving the rating.
      */
-    public void setId_user(Client id_user) {
+    public void setId_user(final Client id_user) {
         this.id_user = id_user;
     }
 
@@ -65,7 +65,7 @@ public class RatingCinema {
      * @return The rating given by the user.
      */
     public int getRate() {
-        return rate;
+        return this.rate;
     }
 
     /**
@@ -73,7 +73,7 @@ public class RatingCinema {
      *
      * @param rate The rating given by the user.
      */
-    public void setRate(int rate) {
+    public void setRate(final int rate) {
         this.rate = rate;
     }
 
@@ -85,9 +85,9 @@ public class RatingCinema {
     @Override
     public String toString() {
         return "RatingCinema{"
-                + "id_cinema=" + id_cinema
-                + ", id_user=" + id_user
-                + ", rate=" + rate
+                + "id_cinema=" + this.id_cinema
+                + ", id_user=" + this.id_user
+                + ", rate=" + this.rate
                 + '}';
     }
 }

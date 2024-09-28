@@ -8,18 +8,18 @@ public class EpisodeDto extends Episode {
     public EpisodeDto() {
     }
 
-    /** 
+    /**
      * @return String
      */
     @Override
     public String getNomSerie() {
-        return nomSerie;
+        return this.nomSerie;
     }
 
-    /** 
+    /**
      * @param nomSerie
      */
-    public void setNomSerie(String nomSerie) {
+    public void setNomSerie(final String nomSerie) {
         this.nomSerie = nomSerie;
     }
 }

@@ -23,7 +23,7 @@ public class Produit {
      * @param categorieProduit the category of the product
      * @param quantiteP        the quantity of the product
      */
-    public Produit(int id_produit, String nom, int prix, String image, String description, Categorie_Produit categorieProduit, int quantiteP) {
+    public Produit(final int id_produit, final String nom, final int prix, final String image, final String description, final Categorie_Produit categorieProduit, final int quantiteP) {
         this.id_produit = id_produit;
         this.nom = nom;
         this.prix = prix;
@@ -43,7 +43,7 @@ public class Produit {
      * @param categorieProduit the category of the product
      * @param quantiteP        the quantity of the product
      */
-    public Produit(String nom, int prix, String image, String description, Categorie_Produit categorieProduit, int quantiteP) {
+    public Produit(final String nom, final int prix, final String image, final String description, final Categorie_Produit categorieProduit, final int quantiteP) {
         this.nom = nom;
         this.prix = prix;
         this.image = image;
@@ -57,7 +57,7 @@ public class Produit {
      *
      * @param id_produit the ID of the product
      */
-    public Produit(int id_produit) {
+    public Produit(final int id_produit) {
         this.id_produit = id_produit;
     }
 
@@ -73,7 +73,7 @@ public class Produit {
      * @return the ID of the product
      */
     public int getId_produit() {
-        return id_produit;
+        return this.id_produit;
     }
 
     /**
@@ -81,7 +81,7 @@ public class Produit {
      *
      * @param id_produit the ID of the product
      */
-    public void setId_produit(int id_produit) {
+    public void setId_produit(final int id_produit) {
         this.id_produit = id_produit;
     }
 
@@ -91,7 +91,7 @@ public class Produit {
      * @return the name of the product
      */
     public String getNom() {
-        return nom;
+        return this.nom;
     }
 
     /**
@@ -99,7 +99,7 @@ public class Produit {
      *
      * @param nom the name of the product
      */
-    public void setNom(String nom) {
+    public void setNom(final String nom) {
         this.nom = nom;
     }
 
@@ -109,7 +109,7 @@ public class Produit {
      * @return the price of the product
      */
     public int getPrix() {
-        return prix;
+        return this.prix;
     }
 
     /**
@@ -117,7 +117,7 @@ public class Produit {
      *
      * @param prix the price of the product
      */
-    public void setPrix(int prix) {
+    public void setPrix(final int prix) {
         this.prix = prix;
     }
 
@@ -127,7 +127,7 @@ public class Produit {
      * @return the image URL of the product
      */
     public String getImage() {
-        return image;
+        return this.image;
     }
 
     /**
@@ -135,7 +135,7 @@ public class Produit {
      *
      * @param image the image URL of the product
      */
-    public void setImage(String image) {
+    public void setImage(final String image) {
         this.image = image;
     }
 
@@ -145,7 +145,7 @@ public class Produit {
      * @return the description of the product
      */
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     /**
@@ -153,7 +153,7 @@ public class Produit {
      *
      * @param description the description of the product
      */
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -163,7 +163,7 @@ public class Produit {
      * @return the quantity of the product
      */
     public int getQuantiteP() {
-        return quantiteP;
+        return this.quantiteP;
     }
 
     /**
@@ -171,7 +171,7 @@ public class Produit {
      *
      * @param quantiteP the quantity of the product
      */
-    public void setQuantiteP(int quantiteP) {
+    public void setQuantiteP(final int quantiteP) {
         this.quantiteP = quantiteP;
     }
 
@@ -181,7 +181,7 @@ public class Produit {
      * @return the category of the product
      */
     public Categorie_Produit getCategorie() {
-        return categorieProduit;
+        return this.categorieProduit;
     }
 
     /**
@@ -189,7 +189,7 @@ public class Produit {
      *
      * @param categorieProduit the category of the product
      */
-    public void setCategorie(Categorie_Produit categorieProduit) {
+    public void setCategorie(final Categorie_Produit categorieProduit) {
         this.categorieProduit = categorieProduit;
     }
 
@@ -201,13 +201,13 @@ public class Produit {
     @Override
     public String toString() {
         return "Produit{"
-                + "id_produit=" + id_produit
-                + ", nom='" + nom + '\''
-                + ", prix='" + prix + '\''
-                + ", image='" + image + '\''
-                + ", description='" + description + '\''
-                + ", categorie=" + categorieProduit
-                + ", quantiteP=" + quantiteP
+                + "id_produit=" + this.id_produit
+                + ", nom='" + this.nom + '\''
+                + ", prix='" + this.prix + '\''
+                + ", image='" + this.image + '\''
+                + ", description='" + this.description + '\''
+                + ", categorie=" + this.categorieProduit
+                + ", quantiteP=" + this.quantiteP
                 + '}';
     }
 
@@ -217,7 +217,7 @@ public class Produit {
      * @return the category of the product
      */
     public Categorie_Produit getId_categorieProduit() {
-        return categorieProduit;
+        return this.categorieProduit;
     }
 
     /**
@@ -226,6 +226,6 @@ public class Produit {
      * @return the name of the category of the product
      */
     public String getNom_categorie() {
-        return categorieProduit.getNom_categorie();
+        return this.categorieProduit.getNom_categorie();
     }
 }

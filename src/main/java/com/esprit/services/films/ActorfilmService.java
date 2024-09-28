@@ -4,7 +4,6 @@ import com.esprit.models.films.Actor;
 import com.esprit.models.films.Actorfilm;
 import com.esprit.models.films.Film;
 import com.esprit.services.IService;
-import com.esprit.services.produits.AvisService;
 import com.esprit.utils.DataSource;
 
 import java.sql.Connection;
@@ -17,30 +16,30 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ActorfilmService implements IService<Actorfilm> {
-    Connection connection;
     private static final Logger LOGGER = Logger.getLogger(ActorfilmService.class.getName());
+    Connection connection;
 
     public ActorfilmService() {
-        connection = DataSource.getInstance().getConnection();
+        this.connection = DataSource.getInstance().getConnection();
     }
 
     /**
      * @param actorfilm
      */
     @Override
-    public void create(Actorfilm actorfilm) {
-        String req = "INSERT INTO film_actor (film_id,actor_id) VALUES (?,?)";
+    public void create(final Actorfilm actorfilm) {
+        final String req = "INSERT INTO film_actor (film_id,actor_id) VALUES (?,?)";
         try {
-            Actor actor = actorfilm.getIdactor();
-            String[] actorNames = actor.getNom().split(", ");
-            PreparedStatement statement = connection.prepareStatement(req);
-            for (String actorname : actorNames) {
-                LOGGER.info(actorname);
+            final Actor actor = actorfilm.getIdactor();
+            final String[] actorNames = actor.getNom().split(", ");
+            final PreparedStatement statement = this.connection.prepareStatement(req);
+            for (final String actorname : actorNames) {
+                ActorfilmService.LOGGER.info(actorname);
                 statement.setInt(1, FilmService.getFilmLastInsertID());
                 statement.setInt(2, new ActorService().getActorByNom(actorname).getId());
                 statement.executeUpdate();
             }
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             throw new RuntimeException(e);
         }
     }
@@ -50,11 +49,11 @@ public class ActorfilmService implements IService<Actorfilm> {
      */
     @Override
     public List<Actorfilm> read() {
-        List<Actorfilm> actorfilmArrayList = new ArrayList<>();
-        String req = "SELECT film.*,GROUP_CONCAT(actor.nom SEPARATOR ', ') AS actorNames,actor.id,actor.image,actor.biographie from film_actor JOIN actor  ON film_actor.actor_id = actor.id JOIN film on film_actor.film_id = film.id GROUP BY film.id;";
+        final List<Actorfilm> actorfilmArrayList = new ArrayList<>();
+        final String req = "SELECT film.*,GROUP_CONCAT(actor.nom SEPARATOR ', ') AS actorNames,actor.id,actor.image,actor.biographie from film_actor JOIN actor  ON film_actor.actor_id = actor.id JOIN film on film_actor.film_id = film.id GROUP BY film.id;";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
-            ResultSet rs = pst.executeQuery();
+            final PreparedStatement pst = this.connection.prepareStatement(req);
+            final ResultSet rs = pst.executeQuery();
             // int i = 0;
             while (rs.next()) {
                 actorfilmArrayList.add(new Actorfilm(
@@ -65,15 +64,15 @@ public class ActorfilmService implements IService<Actorfilm> {
                 // LOGGER.info(filmArrayList.get(i));
                 // i++;
             }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            ActorfilmService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return actorfilmArrayList;
     }
 
     @Override
-    public void update(Actorfilm actorfilm) {
-        String req = """
+    public void update(final Actorfilm actorfilm) {
+        final String req = """
                 UPDATE film_actor \
                 INNER JOIN actor ON film_actor.actor_id = actor.id \
                 INNER JOIN film ON film_actor.film_id = film.id \
@@ -82,54 +81,54 @@ public class ActorfilmService implements IService<Actorfilm> {
                 WHERE actor.id = ? AND film.id = ?;\
                 """;
         try {
-            PreparedStatement statement = connection.prepareStatement(req);
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            final PreparedStatement statement = this.connection.prepareStatement(req);
+        } catch (final SQLException e) {
+            ActorfilmService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
-    public void updateActors(Film film, List<String> actorNames) {
-        FilmService filmService = new FilmService();
-        ActorService actorService = new ActorService();
+    public void updateActors(final Film film, final List<String> actorNames) {
+        final FilmService filmService = new FilmService();
+        final ActorService actorService = new ActorService();
         filmService.update(film);
-        LOGGER.info("filmCategory---------------: " + film);
-        String reqDelete = "DELETE FROM film_actor WHERE film_id = ?;";
+        ActorfilmService.LOGGER.info("filmCategory---------------: " + film);
+        final String reqDelete = "DELETE FROM film_actor WHERE film_id = ?;";
         try {
-            PreparedStatement statement = connection.prepareStatement(reqDelete);
+            final PreparedStatement statement = this.connection.prepareStatement(reqDelete);
             statement.setInt(1, film.getId());
             statement.executeUpdate();
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final Exception e) {
+            ActorfilmService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
-        String req = "INSERT INTO film_actor (film_id, actor_id) VALUES (?,?)";
+        final String req = "INSERT INTO film_actor (film_id, actor_id) VALUES (?,?)";
         try {
-            PreparedStatement statement = connection.prepareStatement(req);
+            final PreparedStatement statement = this.connection.prepareStatement(req);
             statement.setInt(1, film.getId());
-            for (String actorname : actorNames) {
+            for (final String actorname : actorNames) {
                 statement.setInt(2, new ActorService().getActorByNom(actorname).getId());
                 statement.executeUpdate();
             }
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void delete(Actorfilm actorfilm) {
+    public void delete(final Actorfilm actorfilm) {
     }
 
-    public String getActorsNames(int id) {
+    public String getActorsNames(final int id) {
         String s = "";
-        String req = "SELECT GROUP_CONCAT(actor.nom SEPARATOR ', ') AS actorNames from film_actor JOIN actor  ON film_actor.actor_id = actor.id JOIN film on film_actor.film_id = film.id where film.id = ? GROUP BY film.id;";
+        final String req = "SELECT GROUP_CONCAT(actor.nom SEPARATOR ', ') AS actorNames from film_actor JOIN actor  ON film_actor.actor_id = actor.id JOIN film on film_actor.film_id = film.id where film.id = ? GROUP BY film.id;";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
+            final PreparedStatement pst = this.connection.prepareStatement(req);
             pst.setInt(1, id);
-            ResultSet rs = pst.executeQuery();
+            final ResultSet rs = pst.executeQuery();
             // int i = 0;
             rs.next();
             s = rs.getString("actorNames");
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            ActorfilmService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return s;
     }

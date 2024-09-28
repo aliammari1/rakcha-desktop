@@ -4,7 +4,6 @@ import com.esprit.models.films.Category;
 import com.esprit.models.films.Film;
 import com.esprit.models.films.Filmcategory;
 import com.esprit.services.IService;
-import com.esprit.services.produits.AvisService;
 import com.esprit.utils.DataSource;
 
 import java.sql.Connection;
@@ -17,30 +16,30 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class FilmcategoryService implements IService<Filmcategory> {
-    Connection connection;
     private static final Logger LOGGER = Logger.getLogger(FilmcategoryService.class.getName());
+    Connection connection;
 
     public FilmcategoryService() {
-        connection = DataSource.getInstance().getConnection();
+        this.connection = DataSource.getInstance().getConnection();
     }
 
     /**
      * @param filmcategory
      */
     @Override
-    public void create(Filmcategory filmcategory) {
-        FilmService filmService = new FilmService();
+    public void create(final Filmcategory filmcategory) {
+        final FilmService filmService = new FilmService();
         filmService.create(filmcategory.getFilmId());
-        String req = "INSERT INTO film_category (film_id, category_id) VALUES (LAST_INSERT_ID(),?)";
+        final String req = "INSERT INTO film_category (film_id, category_id) VALUES (LAST_INSERT_ID(),?)";
         try {
-            Category category = filmcategory.getCategoryId();
-            String[] categoryNames = category.getNom().split(", ");
-            PreparedStatement statement = connection.prepareStatement(req);
-            for (String categoryname : categoryNames) {
+            final Category category = filmcategory.getCategoryId();
+            final String[] categoryNames = category.getNom().split(", ");
+            final PreparedStatement statement = this.connection.prepareStatement(req);
+            for (final String categoryname : categoryNames) {
                 statement.setInt(1, new CategoryService().getCategoryByNom(categoryname).getId());
                 statement.executeUpdate();
             }
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             throw new RuntimeException(e);
         }
     }
@@ -50,11 +49,11 @@ public class FilmcategoryService implements IService<Filmcategory> {
      */
     @Override
     public List<Filmcategory> read() {
-        List<Filmcategory> filmcategoryArrayList = new ArrayList<>();
-        String req = "SELECT film.*,category.id,category.description, GROUP_CONCAT(category.nom SEPARATOR ', ') AS category_names from film_category JOIN category  ON film_category.category_id = category.id JOIN film on film_category.film_id = film.id GROUP BY film.id;";
+        final List<Filmcategory> filmcategoryArrayList = new ArrayList<>();
+        final String req = "SELECT film.*,category.id,category.description, GROUP_CONCAT(category.nom SEPARATOR ', ') AS category_names from film_category JOIN category  ON film_category.category_id = category.id JOIN film on film_category.film_id = film.id GROUP BY film.id;";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
-            ResultSet rs = pst.executeQuery();
+            final PreparedStatement pst = this.connection.prepareStatement(req);
+            final ResultSet rs = pst.executeQuery();
             // int i = 0;
             while (rs.next()) {
                 filmcategoryArrayList.add(new Filmcategory(
@@ -65,84 +64,84 @@ public class FilmcategoryService implements IService<Filmcategory> {
                 // LOGGER.info(filmArrayList.get(i));
                 // i++;
             }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            FilmcategoryService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return filmcategoryArrayList;
     }
 
     @Override
-    public void update(Filmcategory filmcategory) {
-        FilmService filmService = new FilmService();
-        CategoryService categoryService = new CategoryService();
+    public void update(final Filmcategory filmcategory) {
+        final FilmService filmService = new FilmService();
+        final CategoryService categoryService = new CategoryService();
         filmService.update(filmcategory.getFilmId());
-        LOGGER.info("filmCategory---------------: " + filmcategory);
-        String reqDelete = "DELETE FROM film_category WHERE film_id = ?;";
+        FilmcategoryService.LOGGER.info("filmCategory---------------: " + filmcategory);
+        final String reqDelete = "DELETE FROM film_category WHERE film_id = ?;";
         try {
-            PreparedStatement statement = connection.prepareStatement(reqDelete);
+            final PreparedStatement statement = this.connection.prepareStatement(reqDelete);
             statement.setInt(1, filmcategory.getFilmId().getId());
             statement.executeUpdate();
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final Exception e) {
+            FilmcategoryService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
-        String req = "INSERT INTO film_category (film_id, category_id) VALUES (?,?)";
+        final String req = "INSERT INTO film_category (film_id, category_id) VALUES (?,?)";
         try {
-            Category category = filmcategory.getCategoryId();
-            String[] categoryNames = category.getNom().split(", ");
-            PreparedStatement statement = connection.prepareStatement(req);
+            final Category category = filmcategory.getCategoryId();
+            final String[] categoryNames = category.getNom().split(", ");
+            final PreparedStatement statement = this.connection.prepareStatement(req);
             statement.setInt(2, filmcategory.getFilmId().getId());
-            for (String categoryname : categoryNames) {
+            for (final String categoryname : categoryNames) {
                 statement.setInt(2, new CategoryService().getCategoryByNom(categoryname).getId());
                 statement.executeUpdate();
             }
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void updateCategories(Film film, List<String> categoryNames) {
-        FilmService filmService = new FilmService();
-        CategoryService categoryService = new CategoryService();
+    public void updateCategories(final Film film, final List<String> categoryNames) {
+        final FilmService filmService = new FilmService();
+        final CategoryService categoryService = new CategoryService();
         filmService.update(film);
-        LOGGER.info("filmCategory---------------: " + film);
-        String reqDelete = "DELETE FROM film_category WHERE film_id = ?;";
+        FilmcategoryService.LOGGER.info("filmCategory---------------: " + film);
+        final String reqDelete = "DELETE FROM film_category WHERE film_id = ?;";
         try {
-            PreparedStatement statement = connection.prepareStatement(reqDelete);
+            final PreparedStatement statement = this.connection.prepareStatement(reqDelete);
             statement.setInt(1, film.getId());
             statement.executeUpdate();
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final Exception e) {
+            FilmcategoryService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
-        String req = "INSERT INTO film_category (film_id, category_id) VALUES (?,?)";
+        final String req = "INSERT INTO film_category (film_id, category_id) VALUES (?,?)";
         try {
-            PreparedStatement statement = connection.prepareStatement(req);
+            final PreparedStatement statement = this.connection.prepareStatement(req);
             statement.setInt(1, film.getId());
-            for (String categoryname : categoryNames) {
+            for (final String categoryname : categoryNames) {
                 statement.setInt(2, new CategoryService().getCategoryByNom(categoryname).getId());
                 statement.executeUpdate();
             }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            FilmcategoryService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void delete(Filmcategory filmcategory) {
+    public void delete(final Filmcategory filmcategory) {
     }
 
-    public String getCategoryNames(int id) {
+    public String getCategoryNames(final int id) {
         String s = "";
-        String req = "SELECT GROUP_CONCAT(category.nom SEPARATOR ', ') AS categoryNames from film_category JOIN category  ON film_category.category_id = category.id JOIN film on film_category.film_id = film.id where film.id = ? GROUP BY film.id;";
+        final String req = "SELECT GROUP_CONCAT(category.nom SEPARATOR ', ') AS categoryNames from film_category JOIN category  ON film_category.category_id = category.id JOIN film on film_category.film_id = film.id where film.id = ? GROUP BY film.id;";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
+            final PreparedStatement pst = this.connection.prepareStatement(req);
             pst.setInt(1, id);
-            ResultSet rs = pst.executeQuery();
+            final ResultSet rs = pst.executeQuery();
             // int i = 0;
             rs.next();
             s = rs.getString("categoryNames");
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            FilmcategoryService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return s;
     }

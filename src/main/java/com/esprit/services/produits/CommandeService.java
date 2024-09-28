@@ -15,31 +15,31 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class CommandeService implements IService<Commande> {
-    private final Connection connection;
     private static final Logger LOGGER = Logger.getLogger(CommandeService.class.getName());
+    private final Connection connection;
 
     public CommandeService() {
-        connection = DataSource.getInstance().getConnection();
+        this.connection = DataSource.getInstance().getConnection();
     }
 
     /**
      * @param commande
      */
     @Override
-    public void create(Commande commande) {
-        String req = "INSERT into commande(dateCommande,statu , idClient,num_telephone,adresse) values ( ?,?,?,?,?)  ;";
+    public void create(final Commande commande) {
+        final String req = "INSERT into commande(dateCommande,statu , idClient,num_telephone,adresse) values ( ?,?,?,?,?)  ;";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
+            final PreparedStatement pst = this.connection.prepareStatement(req);
             // pst.setInt(1, commande.getCommandeItem().());
             pst.setDate(1, (Date) commande.getDateCommande());
-            pst.setString(2, commande.getStatu() != null ? commande.getStatu() : "en cours");
+            pst.setString(2, null != commande.getStatu() ? commande.getStatu() : "en cours");
             pst.setInt(3, commande.getIdClient().getId());
             pst.setInt(4, commande.getNum_telephone());
             pst.setString(5, commande.getAdresse());
             pst.executeUpdate();
-            LOGGER.info("commande remplit !");
-        } catch (SQLException e) {
-            LOGGER.info("commande nom remplit ");
+            CommandeService.LOGGER.info("commande remplit !");
+        } catch (final SQLException e) {
+            CommandeService.LOGGER.info("commande nom remplit ");
         }
     }
 
@@ -48,17 +48,17 @@ public class CommandeService implements IService<Commande> {
      * @return int
      * @throws SQLException
      */
-    public int createcommande(Commande commande) throws SQLException {
+    public int createcommande(final Commande commande) throws SQLException {
         int commandeId = 0;
-        String req = "INSERT into commande(dateCommande,statu , idClient,num_telephone,adresse) values ( ?,?,?,?,?)  ;";
-        PreparedStatement pst = connection.prepareStatement(req, Statement.RETURN_GENERATED_KEYS);
+        final String req = "INSERT into commande(dateCommande,statu , idClient,num_telephone,adresse) values ( ?,?,?,?,?)  ;";
+        final PreparedStatement pst = this.connection.prepareStatement(req, Statement.RETURN_GENERATED_KEYS);
         pst.setDate(1, (Date) commande.getDateCommande());
-        pst.setString(2, commande.getStatu() != null ? commande.getStatu() : "en cours");
+        pst.setString(2, null != commande.getStatu() ? commande.getStatu() : "en cours");
         pst.setInt(3, commande.getIdClient().getId());
         pst.setInt(4, commande.getNum_telephone());
         pst.setString(5, commande.getAdresse());
         pst.executeUpdate();
-        ResultSet rs = pst.getGeneratedKeys();
+        final ResultSet rs = pst.getGeneratedKeys();
         if (rs.next()) {
             commandeId = rs.getInt(1);
         }
@@ -67,52 +67,52 @@ public class CommandeService implements IService<Commande> {
 
     @Override
     public List<Commande> read() {
-        CommandeItemService commandeItemService = new CommandeItemService();
-        List<Commande> commande = new ArrayList<>();
-        String req = "SELECT * from commande ";
+        final CommandeItemService commandeItemService = new CommandeItemService();
+        final List<Commande> commande = new ArrayList<>();
+        final String req = "SELECT * from commande ";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
-            ResultSet rs = pst.executeQuery();
-            CommandeItemService cs = new CommandeItemService();
-            UserService us = new UserService();
+            final PreparedStatement pst = this.connection.prepareStatement(req);
+            final ResultSet rs = pst.executeQuery();
+            final CommandeItemService cs = new CommandeItemService();
+            final UserService us = new UserService();
             while (rs.next()) {
-                Commande c1 = new Commande(rs.getInt("idCommande"), rs.getDate("dateCommande"), rs.getString("statu"),
+                final Commande c1 = new Commande(rs.getInt("idCommande"), rs.getDate("dateCommande"), rs.getString("statu"),
                         (Client) us.getUserById(rs.getInt("idClient")), rs.getInt("num_telephone"),
                         rs.getString("adresse"));
                 c1.setCommandeItem(commandeItemService.readCommandeItem(c1.getIdCommande()));
                 commande.add(c1);
             }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            CommandeService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return commande;
     }
 
     public List<Commande> readClient() {
-        CommandeItemService commandeItemService = new CommandeItemService();
-        List<Commande> commande = new ArrayList<>();
-        String req = "SELECT * from commande WHERE idClient=?";
+        final CommandeItemService commandeItemService = new CommandeItemService();
+        final List<Commande> commande = new ArrayList<>();
+        final String req = "SELECT * from commande WHERE idClient=?";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
-            ResultSet rs = pst.executeQuery();
-            CommandeItemService cs = new CommandeItemService();
-            UserService us = new UserService();
+            final PreparedStatement pst = this.connection.prepareStatement(req);
+            final ResultSet rs = pst.executeQuery();
+            final CommandeItemService cs = new CommandeItemService();
+            final UserService us = new UserService();
             while (rs.next()) {
-                Commande c1 = new Commande(rs.getInt("idCommande"), rs.getDate("dateCommande"),
+                final Commande c1 = new Commande(rs.getInt("idCommande"), rs.getDate("dateCommande"),
                         rs.getString("statuCommande"), (Client) us.getUserById(rs.getInt("idClient")),
                         rs.getInt("num_telephone"), rs.getString("adresse"));
                 c1.setCommandeItem(commandeItemService.readCommandeItem(c1.getIdCommande()));
                 commande.add(c1);
             }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            CommandeService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return commande;
     }
 
     @Override
-    public void update(Commande commande) {
-        String req = """
+    public void update(final Commande commande) {
+        final String req = """
                 UPDATE commande c\
                  JOIN commandeitem ci ON c.idCommande = ci.idCommande \
                 JOIN users cl ON c.idClient = cl.id \
@@ -120,38 +120,38 @@ public class CommandeService implements IService<Commande> {
                  WHERE c.idCommande = ? \
                 """;
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
+            final PreparedStatement pst = this.connection.prepareStatement(req);
             pst.setDate(1, (Date) commande.getDateCommande());
             pst.setString(2, commande.getStatu());
             pst.setInt(3, commande.getNum_telephone());
             pst.setString(4, commande.getAdresse());
             pst.setInt(5, commande.getIdCommande());
-            LOGGER.info("commande modifiée !");
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            CommandeService.LOGGER.info("commande modifiée !");
+        } catch (final SQLException e) {
+            CommandeService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
     @Override
-    public void delete(Commande commande) {
-        String req = "DELETE from commande where idCommande = ?;";
+    public void delete(final Commande commande) {
+        final String req = "DELETE from commande where idCommande = ?;";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
+            final PreparedStatement pst = this.connection.prepareStatement(req);
             pst.setInt(1, commande.getIdCommande());
             pst.executeUpdate();
-            LOGGER.info("commande supprmiée !");
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            CommandeService.LOGGER.info("commande supprmiée !");
+        } catch (final SQLException e) {
+            CommandeService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
-    public Commande getCommandeByID(int idCommande) throws SQLException {
-        UserService usersService = new UserService();
-        Commande commande = new Commande();
-        String req = "SELECT * from commande  WHERE idCommande=?";
-        PreparedStatement ps = connection.prepareStatement(req);
+    public Commande getCommandeByID(final int idCommande) throws SQLException {
+        final UserService usersService = new UserService();
+        final Commande commande = new Commande();
+        final String req = "SELECT * from commande  WHERE idCommande=?";
+        final PreparedStatement ps = this.connection.prepareStatement(req);
         ps.setInt(1, idCommande);
-        ResultSet rs = ps.executeQuery();
+        final ResultSet rs = ps.executeQuery();
         while (rs.next()) {
             commande.setIdCommande(rs.getInt("idCommande"));
             commande.setDateCommande(rs.getDate("dateCommande"));
@@ -163,15 +163,15 @@ public class CommandeService implements IService<Commande> {
     }
 
     public List<Commande> getCommandesPayees() {
-        List<Commande> commandesPayees = new ArrayList<>();
-        String req = "SELECT * FROM commande WHERE statu like 'payee'";
+        final List<Commande> commandesPayees = new ArrayList<>();
+        final String req = "SELECT * FROM commande WHERE statu like 'payee'";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
-            ResultSet rs = pst.executeQuery();
-            UserService usersService = new UserService();
-            CommandeItemService commandeItemService = new CommandeItemService();
+            final PreparedStatement pst = this.connection.prepareStatement(req);
+            final ResultSet rs = pst.executeQuery();
+            final UserService usersService = new UserService();
+            final CommandeItemService commandeItemService = new CommandeItemService();
             while (rs.next()) {
-                Commande commande = new Commande(
+                final Commande commande = new Commande(
                         rs.getInt("idCommande"),
                         rs.getDate("dateCommande"),
                         rs.getString("statu"),
@@ -181,26 +181,26 @@ public class CommandeService implements IService<Commande> {
                 commande.setCommandeItem(commandeItemService.readCommandeItem(commande.getIdCommande()));
                 commandesPayees.add(commande);
             }
-        } catch (SQLException e) {
-            LOGGER.info("Erreur lors de la récupération des commandes payees : " + e.getMessage());
+        } catch (final SQLException e) {
+            CommandeService.LOGGER.info("Erreur lors de la récupération des commandes payees : " + e.getMessage());
         }
         return commandesPayees;
     }
 
     // Compter le nombre d'achats d'un produit donné
     public Map<Integer, Integer> getTop3ProduitsAchetes() {
-        String req = "SELECT ci.id_produit, SUM(ci.quantity) AS nombreAchats FROM commandeitem ci JOIN commande c ON ci.idCommande = c.idCommande WHERE c.statu = 'payee' GROUP BY ci.id_produit ORDER BY nombreAchats DESC LIMIT 3";
-        Map<Integer, Integer> produitsAchats = new HashMap<>();
+        final String req = "SELECT ci.id_produit, SUM(ci.quantity) AS nombreAchats FROM commandeitem ci JOIN commande c ON ci.idCommande = c.idCommande WHERE c.statu = 'payee' GROUP BY ci.id_produit ORDER BY nombreAchats DESC LIMIT 3";
+        final Map<Integer, Integer> produitsAchats = new HashMap<>();
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(req);
-            ResultSet resultSet = preparedStatement.executeQuery();
+            final PreparedStatement preparedStatement = this.connection.prepareStatement(req);
+            final ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                int idProduit = resultSet.getInt("idProduit");
-                int nombreAchats = resultSet.getInt("nombreAchats");
+                final int idProduit = resultSet.getInt("idProduit");
+                final int nombreAchats = resultSet.getInt("nombreAchats");
                 produitsAchats.put(idProduit, nombreAchats);
             }
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final Exception e) {
+            CommandeService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return produitsAchats;
     }

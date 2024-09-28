@@ -8,32 +8,34 @@ import javafx.scene.control.Tooltip;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class InputValidator {
-    /** 
+public enum InputValidator {
+    ;
+
+    /**
      * @param textField
      * @param regexes
      * @param errorMessages
      * @param successMessages
      */
-    public static void inputValidator(TextField textField, String[] regexes, String[] errorMessages, String[] successMessages) {
-        Tooltip tooltip = new Tooltip();
+    public static void inputValidator(final TextField textField, final String[] regexes, final String[] errorMessages, final String[] successMessages) {
+        final Tooltip tooltip = new Tooltip();
         textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
-                Object obj = textField.getProperties().get("listener");
+                final Object obj = textField.getProperties().get("listener");
                 if (obj instanceof ChangeListener) {
-                    ChangeListener<String> oldListener = (ChangeListener<String>) obj;
+                    final ChangeListener<String> oldListener = (ChangeListener<String>) obj;
                     textField.textProperty().removeListener(oldListener);
                 }
-                ChangeListener<String> newListener = (textObservable, oldText, newText) -> {
+                final ChangeListener<String> newListener = (textObservable, oldText, newText) -> {
                     boolean isValid = true;
-                    StringBuilder combinedErrorMessage = new StringBuilder();
+                    final StringBuilder combinedErrorMessage = new StringBuilder();
                     if (newText.isEmpty()) {
                         isValid = false;
                         combinedErrorMessage.append("The TextField is empty.\n");
                     } else {
                         for (int i = 0; i < regexes.length; i++) {
-                            Pattern pattern = Pattern.compile(regexes[i]);
-                            Matcher matcher = pattern.matcher(newText);
+                            final Pattern pattern = Pattern.compile(regexes[i]);
+                            final Matcher matcher = pattern.matcher(newText);
                             if (!matcher.matches()) {
                                 isValid = false;
                                 combinedErrorMessage.append(errorMessages[i]).append("\n");
@@ -48,7 +50,7 @@ public class InputValidator {
                                 -fx-background-radius: 20.0px;\
                                 """);
                         textField.setStyle("-fx-border-color: #ff0000;");
-                        Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
+                        final Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
                         tooltip.show(textField.getScene().getWindow(), bounds.getMinX(), bounds.getMaxY());
                     } else {
                         tooltip.setText(String.join("\n", successMessages));
@@ -71,6 +73,4 @@ public class InputValidator {
         });
     }
 
-    private InputValidator() {
-    }
 }

@@ -3,9 +3,7 @@ package com.esprit.controllers.users;
 import com.esprit.models.users.Client;
 import com.esprit.models.users.Responsable_de_cinema;
 import com.esprit.models.users.User;
-import com.esprit.services.produits.AvisService;
 import com.esprit.services.users.UserService;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -64,75 +62,75 @@ public class SignUpController {
 
     @FXML
     void initialize() {
-        Tooltip tooltip = new Tooltip();
-        UserService userService = new UserService();
-        emailTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
-            if (!emailTextField.getText().matches(emailRegex)) {
-                emailTextField.getStyleClass().removeAll("checked");
+        final Tooltip tooltip = new Tooltip();
+        final UserService userService = new UserService();
+        this.emailTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            final String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
+            if (!this.emailTextField.getText().matches(emailRegex)) {
+                this.emailTextField.getStyleClass().removeAll("checked");
                 // emailErrorLabel.setText("this mail format is wrong");
-                emailTextField.getStyleClass().add("notChecked");
+                this.emailTextField.getStyleClass().add("notChecked");
             } else if (userService.checkEmailFound(newValue)) {
-                emailTextField.getStyleClass().removeAll("checked");
+                this.emailTextField.getStyleClass().removeAll("checked");
                 // emailErrorLabel.setText("this mail address is used");
-                emailTextField.getStyleClass().add("notChecked");
+                this.emailTextField.getStyleClass().add("notChecked");
             } else {
                 // emailErrorLabel.setText("");
-                emailTextField.getStyleClass().removeAll("notChecked");
-                emailTextField.getStyleClass().add("checked");
+                this.emailTextField.getStyleClass().removeAll("notChecked");
+                this.emailTextField.getStyleClass().add("checked");
             }
         });
-        passwordTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (passwordTextField.getLength() < 8) {
-                passwordTextField.getStyleClass().removeAll("checked");
+        this.passwordTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (8 > passwordTextField.getLength()) {
+                this.passwordTextField.getStyleClass().removeAll("checked");
                 // passwordErrorLabel.setText("the password must contain at least 8
                 // characters");
-                emailTextField.getStyleClass().add("notChecked");
+                this.emailTextField.getStyleClass().add("notChecked");
             } else {
                 // passwordErrorLabel.setText("");
-                passwordTextField.getStyleClass().removeAll("notChecked");
-                passwordTextField.getStyleClass().add("checked");
+                this.passwordTextField.getStyleClass().removeAll("notChecked");
+                this.passwordTextField.getStyleClass().add("checked");
             }
         });
-        nomTextField.textProperty().addListener(new ChangeListener<String>() {
+        this.nomTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                Validator validator = new Validator();
+            public void changed(final ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
+                final Validator validator = new Validator();
                 validator.createCheck()
-                        .dependsOn("firstName", nomTextField.textProperty())
+                        .dependsOn("firstName", SignUpController.this.nomTextField.textProperty())
                         .withMethod(c -> {
-                            String userName = c.get("firstName");
-                            if (userName != null && !userName.toLowerCase().equals(userName)) {
+                            final String userName = c.get("firstName");
+                            if (null != userName && !userName.toLowerCase().equals(userName)) {
                                 c.error("Please use only lowercase letters.");
                             } else if (userName.isEmpty()) {
                                 c.error("the string is empty");
                             }
                         })
-                        .decorates(nomTextField)
+                        .decorates(SignUpController.this.nomTextField)
                         .immediate();
-                Window window = nomTextField.getScene().getWindow();
-                Bounds bounds = nomTextField.localToScreen(nomTextField.getBoundsInLocal());
-                nomTextField.textProperty().addListener(new ChangeListener<String>() {
+                final Window window = SignUpController.this.nomTextField.getScene().getWindow();
+                final Bounds bounds = SignUpController.this.nomTextField.localToScreen(SignUpController.this.nomTextField.getBoundsInLocal());
+                SignUpController.this.nomTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
-                    public void changed(ObservableValue<? extends String> observable, String oldValue,
-                            String newValue) {
+                    public void changed(final ObservableValue<? extends String> observable, final String oldValue,
+                                        final String newValue) {
                         if (validator.containsErrors()) {
                             tooltip.setText(validator.createStringBinding().getValue());
                             tooltip.setStyle("-fx-background-color: #f00;");
-                            nomTextField.setTooltip(tooltip);
-                            nomTextField.getTooltip().show(window, bounds.getMinX() - 10,
+                            SignUpController.this.nomTextField.setTooltip(tooltip);
+                            SignUpController.this.nomTextField.getTooltip().show(window, bounds.getMinX() - 10,
                                     bounds.getMinY() + 30);
                         } else {
-                            if (nomTextField.getTooltip() != null) {
-                                nomTextField.getTooltip().hide();
+                            if (null != nomTextField.getTooltip()) {
+                                SignUpController.this.nomTextField.getTooltip().hide();
                             }
                         }
                     }
                 });
-                nomTextField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+                SignUpController.this.nomTextField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
                     @Override
-                    public void handle(KeyEvent event) {
-                        if (event.getCode().equals(KeyCode.ENTER)) {
+                    public void handle(final KeyEvent event) {
+                        if (KeyCode.ENTER == event.getCode()) {
                             if (validator.containsErrors()) {
                                 event.consume();
                             }
@@ -141,45 +139,45 @@ public class SignUpController {
                 });
             }
         });
-        prenomTextField.textProperty().addListener(new ChangeListener<String>() {
+        this.prenomTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                Validator validator = new Validator();
+            public void changed(final ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
+                final Validator validator = new Validator();
                 validator.createCheck()
-                        .dependsOn("firstName", prenomTextField.textProperty())
+                        .dependsOn("firstName", SignUpController.this.prenomTextField.textProperty())
                         .withMethod(c -> {
-                            String userName = c.get("firstName");
-                            if (userName != null && !userName.toLowerCase().equals(userName)) {
+                            final String userName = c.get("firstName");
+                            if (null != userName && !userName.toLowerCase().equals(userName)) {
                                 c.error("Please use only lowercase letters.");
                             } else if (userName.isEmpty()) {
                                 c.error("the string is empty");
                             }
                         })
-                        .decorates(prenomTextField)
+                        .decorates(SignUpController.this.prenomTextField)
                         .immediate();
-                Window window = prenomTextField.getScene().getWindow();
-                Bounds bounds = prenomTextField.localToScreen(prenomTextField.getBoundsInLocal());
-                prenomTextField.textProperty().addListener(new ChangeListener<String>() {
+                final Window window = SignUpController.this.prenomTextField.getScene().getWindow();
+                final Bounds bounds = SignUpController.this.prenomTextField.localToScreen(SignUpController.this.prenomTextField.getBoundsInLocal());
+                SignUpController.this.prenomTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
-                    public void changed(ObservableValue<? extends String> observable, String oldValue,
-                            String newValue) {
+                    public void changed(final ObservableValue<? extends String> observable, final String oldValue,
+                                        final String newValue) {
                         if (validator.containsErrors()) {
                             tooltip.setText(validator.createStringBinding().getValue());
                             tooltip.setStyle("-fx-background-color: #f00;");
-                            prenomTextField.setTooltip(tooltip);
-                            prenomTextField.getTooltip().show(window, bounds.getMinX() - 10,
+                            SignUpController.this.prenomTextField.setTooltip(tooltip);
+                            SignUpController.this.prenomTextField.getTooltip().show(window, bounds.getMinX() - 10,
                                     bounds.getMinY() + 30);
                         } else {
-                            if (prenomTextField.getTooltip() != null) {
-                                prenomTextField.getTooltip().hide();
+                            if (null != prenomTextField.getTooltip()) {
+                                SignUpController.this.prenomTextField.getTooltip().hide();
                             }
                         }
                     }
                 });
-                prenomTextField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+                SignUpController.this.prenomTextField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
                     @Override
-                    public void handle(KeyEvent event) {
-                        if (event.getCode().equals(KeyCode.ENTER)) {
+                    public void handle(final KeyEvent event) {
+                        if (KeyCode.ENTER == event.getCode()) {
                             if (validator.containsErrors()) {
                                 event.consume();
                             }
@@ -188,45 +186,45 @@ public class SignUpController {
                 });
             }
         });
-        adresseTextField.textProperty().addListener(new ChangeListener<String>() {
+        this.adresseTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                Validator validator = new Validator();
+            public void changed(final ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
+                final Validator validator = new Validator();
                 validator.createCheck()
-                        .dependsOn("firstName", adresseTextField.textProperty())
+                        .dependsOn("firstName", SignUpController.this.adresseTextField.textProperty())
                         .withMethod(c -> {
-                            String userName = c.get("firstName");
-                            if (userName != null && !userName.toLowerCase().equals(userName)) {
+                            final String userName = c.get("firstName");
+                            if (null != userName && !userName.toLowerCase().equals(userName)) {
                                 c.error("Please use only lowercase letters.");
                             } else if (userName.isEmpty()) {
                                 c.error("the string is empty");
                             }
                         })
-                        .decorates(adresseTextField)
+                        .decorates(SignUpController.this.adresseTextField)
                         .immediate();
-                Window window = adresseTextField.getScene().getWindow();
-                Bounds bounds = adresseTextField.localToScreen(adresseTextField.getBoundsInLocal());
-                adresseTextField.textProperty().addListener(new ChangeListener<String>() {
+                final Window window = SignUpController.this.adresseTextField.getScene().getWindow();
+                final Bounds bounds = SignUpController.this.adresseTextField.localToScreen(SignUpController.this.adresseTextField.getBoundsInLocal());
+                SignUpController.this.adresseTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
-                    public void changed(ObservableValue<? extends String> observable, String oldValue,
-                            String newValue) {
+                    public void changed(final ObservableValue<? extends String> observable, final String oldValue,
+                                        final String newValue) {
                         if (validator.containsErrors()) {
                             tooltip.setText(validator.createStringBinding().getValue());
                             tooltip.setStyle("-fx-background-color: #f00;");
-                            adresseTextField.setTooltip(tooltip);
-                            adresseTextField.getTooltip().show(window, bounds.getMinX() - 10,
+                            SignUpController.this.adresseTextField.setTooltip(tooltip);
+                            SignUpController.this.adresseTextField.getTooltip().show(window, bounds.getMinX() - 10,
                                     bounds.getMinY() + 30);
                         } else {
-                            if (adresseTextField.getTooltip() != null) {
-                                adresseTextField.getTooltip().hide();
+                            if (null != adresseTextField.getTooltip()) {
+                                SignUpController.this.adresseTextField.getTooltip().hide();
                             }
                         }
                     }
                 });
-                adresseTextField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+                SignUpController.this.adresseTextField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
                     @Override
-                    public void handle(KeyEvent event) {
-                        if (event.getCode().equals(KeyCode.ENTER)) {
+                    public void handle(final KeyEvent event) {
+                        if (KeyCode.ENTER == event.getCode()) {
                             if (validator.containsErrors()) {
                                 event.consume();
                             }
@@ -235,16 +233,16 @@ public class SignUpController {
                 });
             }
         });
-        emailTextField.textProperty().addListener(new ChangeListener<String>() {
+        this.emailTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                Validator validator = new Validator();
+            public void changed(final ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
+                final Validator validator = new Validator();
                 validator.createCheck()
-                        .dependsOn("firstName", emailTextField.textProperty())
+                        .dependsOn("firstName", SignUpController.this.emailTextField.textProperty())
                         .withMethod(c -> {
-                            String userName = c.get("firstName");
-                            if (userName != null) {
-                                String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+                            final String userName = c.get("firstName");
+                            if (null != userName) {
+                                final String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
                                 if (!userName.matches(emailRegex)) {
                                     c.error("Invalid email format.");
                                 }
@@ -252,30 +250,30 @@ public class SignUpController {
                                 c.error("the string is empty");
                             }
                         })
-                        .decorates(emailTextField)
+                        .decorates(SignUpController.this.emailTextField)
                         .immediate();
-                Window window = emailTextField.getScene().getWindow();
-                Bounds bounds = emailTextField.localToScreen(emailTextField.getBoundsInLocal());
-                emailTextField.textProperty().addListener(new ChangeListener<String>() {
+                final Window window = SignUpController.this.emailTextField.getScene().getWindow();
+                final Bounds bounds = SignUpController.this.emailTextField.localToScreen(SignUpController.this.emailTextField.getBoundsInLocal());
+                SignUpController.this.emailTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
-                    public void changed(ObservableValue<? extends String> observable, String oldValue,
-                            String newValue) {
+                    public void changed(final ObservableValue<? extends String> observable, final String oldValue,
+                                        final String newValue) {
                         if (validator.containsErrors()) {
                             tooltip.setText(validator.createStringBinding().getValue());
                             tooltip.setStyle("-fx-background-color: #f00;");
-                            emailTextField.setTooltip(tooltip);
-                            emailTextField.getTooltip().show(window, bounds.getMinX() - 10, bounds.getMinY() + 30);
+                            SignUpController.this.emailTextField.setTooltip(tooltip);
+                            SignUpController.this.emailTextField.getTooltip().show(window, bounds.getMinX() - 10, bounds.getMinY() + 30);
                         } else {
-                            if (emailTextField.getTooltip() != null) {
-                                emailTextField.getTooltip().hide();
+                            if (null != emailTextField.getTooltip()) {
+                                SignUpController.this.emailTextField.getTooltip().hide();
                             }
                         }
                     }
                 });
-                emailTextField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+                SignUpController.this.emailTextField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
                     @Override
-                    public void handle(KeyEvent event) {
-                        if (event.getCode().equals(KeyCode.ENTER)) {
+                    public void handle(final KeyEvent event) {
+                        if (KeyCode.ENTER == event.getCode()) {
                             if (validator.containsErrors()) {
                                 event.consume();
                             }
@@ -284,45 +282,45 @@ public class SignUpController {
                 });
             }
         });
-        passwordTextField.textProperty().addListener(new ChangeListener<String>() {
+        this.passwordTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                Validator validator = new Validator();
+            public void changed(final ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
+                final Validator validator = new Validator();
                 validator.createCheck()
-                        .dependsOn("firstName", passwordTextField.textProperty())
+                        .dependsOn("firstName", SignUpController.this.passwordTextField.textProperty())
                         .withMethod(c -> {
-                            String userName = c.get("firstName");
-                            if (userName != null && !userName.toLowerCase().equals(userName)) {
+                            final String userName = c.get("firstName");
+                            if (null != userName && !userName.toLowerCase().equals(userName)) {
                                 c.error("Please use only lowercase letters.");
                             } else if (userName.isEmpty()) {
                                 c.error("the string is empty");
                             }
                         })
-                        .decorates(passwordTextField)
+                        .decorates(SignUpController.this.passwordTextField)
                         .immediate();
-                Window window = passwordTextField.getScene().getWindow();
-                Bounds bounds = passwordTextField.localToScreen(passwordTextField.getBoundsInLocal());
-                passwordTextField.textProperty().addListener(new ChangeListener<String>() {
+                final Window window = SignUpController.this.passwordTextField.getScene().getWindow();
+                final Bounds bounds = SignUpController.this.passwordTextField.localToScreen(SignUpController.this.passwordTextField.getBoundsInLocal());
+                SignUpController.this.passwordTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
-                    public void changed(ObservableValue<? extends String> observable, String oldValue,
-                            String newValue) {
+                    public void changed(final ObservableValue<? extends String> observable, final String oldValue,
+                                        final String newValue) {
                         if (validator.containsErrors()) {
                             tooltip.setText(validator.createStringBinding().getValue());
                             tooltip.setStyle("-fx-background-color: #f00;");
-                            passwordTextField.setTooltip(tooltip);
-                            passwordTextField.getTooltip().show(window, bounds.getMinX() - 10,
+                            SignUpController.this.passwordTextField.setTooltip(tooltip);
+                            SignUpController.this.passwordTextField.getTooltip().show(window, bounds.getMinX() - 10,
                                     bounds.getMinY() + 30);
                         } else {
-                            if (passwordTextField.getTooltip() != null) {
-                                passwordTextField.getTooltip().hide();
+                            if (null != passwordTextField.getTooltip()) {
+                                SignUpController.this.passwordTextField.getTooltip().hide();
                             }
                         }
                     }
                 });
-                passwordTextField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+                SignUpController.this.passwordTextField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
                     @Override
-                    public void handle(KeyEvent event) {
-                        if (event.getCode().equals(KeyCode.ENTER)) {
+                    public void handle(final KeyEvent event) {
+                        if (KeyCode.ENTER == event.getCode()) {
                             if (validator.containsErrors()) {
                                 event.consume();
                             }
@@ -331,16 +329,16 @@ public class SignUpController {
                 });
             }
         });
-        num_telephoneTextField.textProperty().addListener(new ChangeListener<String>() {
+        this.num_telephoneTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                Validator validator = new Validator();
+            public void changed(final ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
+                final Validator validator = new Validator();
                 validator.createCheck()
-                        .dependsOn("firstName", num_telephoneTextField.textProperty())
+                        .dependsOn("firstName", SignUpController.this.num_telephoneTextField.textProperty())
                         .withMethod(c -> {
-                            String userName = c.get("firstName");
-                            if (userName != null) {
-                                String numberRegex = "\\d*";
+                            final String userName = c.get("firstName");
+                            if (null != userName) {
+                                final String numberRegex = "\\d*";
                                 if (!userName.matches(numberRegex)) {
                                     c.error("Please use only numbers.");
                                 }
@@ -348,31 +346,31 @@ public class SignUpController {
                                 c.error("the string is empty");
                             }
                         })
-                        .decorates(num_telephoneTextField)
+                        .decorates(SignUpController.this.num_telephoneTextField)
                         .immediate();
-                Window window = num_telephoneTextField.getScene().getWindow();
-                Bounds bounds = num_telephoneTextField.localToScreen(num_telephoneTextField.getBoundsInLocal());
-                num_telephoneTextField.textProperty().addListener(new ChangeListener<String>() {
+                final Window window = SignUpController.this.num_telephoneTextField.getScene().getWindow();
+                final Bounds bounds = SignUpController.this.num_telephoneTextField.localToScreen(SignUpController.this.num_telephoneTextField.getBoundsInLocal());
+                SignUpController.this.num_telephoneTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
-                    public void changed(ObservableValue<? extends String> observable, String oldValue,
-                            String newValue) {
+                    public void changed(final ObservableValue<? extends String> observable, final String oldValue,
+                                        final String newValue) {
                         if (validator.containsErrors()) {
                             tooltip.setText(validator.createStringBinding().getValue());
                             tooltip.setStyle("-fx-background-color: #f00;");
-                            num_telephoneTextField.setTooltip(tooltip);
-                            num_telephoneTextField.getTooltip().show(window, bounds.getMinX() - 10,
+                            SignUpController.this.num_telephoneTextField.setTooltip(tooltip);
+                            SignUpController.this.num_telephoneTextField.getTooltip().show(window, bounds.getMinX() - 10,
                                     bounds.getMinY() + 30);
                         } else {
-                            if (num_telephoneTextField.getTooltip() != null) {
-                                num_telephoneTextField.getTooltip().hide();
+                            if (null != num_telephoneTextField.getTooltip()) {
+                                SignUpController.this.num_telephoneTextField.getTooltip().hide();
                             }
                         }
                     }
                 });
-                num_telephoneTextField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+                SignUpController.this.num_telephoneTextField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
                     @Override
-                    public void handle(KeyEvent event) {
-                        if (event.getCode().equals(KeyCode.ENTER)) {
+                    public void handle(final KeyEvent event) {
+                        if (KeyCode.ENTER == event.getCode()) {
                             if (validator.containsErrors()) {
                                 event.consume();
                             }
@@ -381,9 +379,9 @@ public class SignUpController {
                 });
             }
         });
-        List<String> roleList = Arrays.asList("client", "responsable de cinema");
-        for (String role : roleList) {
-            roleComboBox.getItems().add(role);
+        final List<String> roleList = Arrays.asList("client", "responsable de cinema");
+        for (final String role : roleList) {
+            this.roleComboBox.getItems().add(role);
         }
     }
 
@@ -391,28 +389,28 @@ public class SignUpController {
      * @param event
      */
     @FXML
-    void importImage(ActionEvent event) {
-        FileChooser fileChooser = new FileChooser();
+    void importImage(final ActionEvent event) {
+        final FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("PNG", "*.png"),
                 new FileChooser.ExtensionFilter("JPG", "*.jpg"));
         fileChooser.setTitle("Sélectionner une image");
-        File selectedFile = fileChooser.showOpenDialog(null);
-        if (selectedFile != null) {
+        final File selectedFile = fileChooser.showOpenDialog(null);
+        if (null != selectedFile) {
             try {
-                String destinationDirectory1 = "./src/main/resources/img/users/";
-                String destinationDirectory2 = "../rakcha-web/public/img/users/";
-                Path destinationPath1 = Paths.get(destinationDirectory1);
-                Path destinationPath2 = Paths.get(destinationDirectory2);
-                String uniqueFileName = System.currentTimeMillis() + "_" + selectedFile.getName();
-                Path destinationFilePath1 = destinationPath1.resolve(uniqueFileName);
-                Path destinationFilePath2 = destinationPath2.resolve(uniqueFileName);
+                final String destinationDirectory1 = "./src/main/resources/img/users/";
+                final String destinationDirectory2 = "../rakcha-web/public/img/users/";
+                final Path destinationPath1 = Paths.get(destinationDirectory1);
+                final Path destinationPath2 = Paths.get(destinationDirectory2);
+                final String uniqueFileName = System.currentTimeMillis() + "_" + selectedFile.getName();
+                final Path destinationFilePath1 = destinationPath1.resolve(uniqueFileName);
+                final Path destinationFilePath2 = destinationPath2.resolve(uniqueFileName);
                 Files.copy(selectedFile.toPath(), destinationFilePath1);
                 Files.copy(selectedFile.toPath(), destinationFilePath2);
-                Image selectedImage = new Image(destinationFilePath1.toUri().toString());
-                photoDeProfilImageView.setImage(selectedImage);
-            } catch (IOException e) {
-                LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                final Image selectedImage = new Image(destinationFilePath1.toUri().toString());
+                this.photoDeProfilImageView.setImage(selectedImage);
+            } catch (final IOException e) {
+                SignUpController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
         }
     }
@@ -422,53 +420,53 @@ public class SignUpController {
      * @throws IOException
      */
     @FXML
-    void signup(ActionEvent event) throws IOException {
-        String role = roleComboBox.getValue();
+    void signup(final ActionEvent event) throws IOException {
+        final String role = this.roleComboBox.getValue();
         User user = null;
-        URI uri = null;
-        String nom = nomTextField.getText();
-        String prenom = prenomTextField.getText();
-        String num_telephone = num_telephoneTextField.getText();
-        String password = passwordTextField.getText();
-        String email = emailTextField.getText();
-        LocalDate dateDeNaissance = dateDeNaissanceDatePicker.getValue();
+        final URI uri = null;
+        final String nom = this.nomTextField.getText();
+        final String prenom = this.prenomTextField.getText();
+        final String num_telephone = this.num_telephoneTextField.getText();
+        final String password = this.passwordTextField.getText();
+        final String email = this.emailTextField.getText();
+        final LocalDate dateDeNaissance = this.dateDeNaissanceDatePicker.getValue();
         if (nom.isEmpty() || prenom.isEmpty() || num_telephone.isEmpty() || password.isEmpty()
-                || role.isEmpty() || email.isEmpty() || dateDeNaissance == null) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Please fill in all the required fields", ButtonType.CLOSE);
+                || role.isEmpty() || email.isEmpty() || null == dateDeNaissance) {
+            final Alert alert = new Alert(Alert.AlertType.ERROR, "Please fill in all the required fields", ButtonType.CLOSE);
             alert.show();
             return;
         }
         if (!num_telephone.matches("\\d+")) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid phone number format", ButtonType.CLOSE);
+            final Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid phone number format", ButtonType.CLOSE);
             alert.show();
             return;
         }
         if (!email.matches("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}")) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid email format", ButtonType.CLOSE);
+            final Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid email format", ButtonType.CLOSE);
             alert.show();
             return;
         }
         if ("responsable de cinema".equals(role)) {
-            user = new Responsable_de_cinema(nomTextField.getText(), prenomTextField.getText(),
-                    Integer.parseInt(num_telephoneTextField.getText()), passwordTextField.getText(),
-                    roleComboBox.getValue(), emailTextField.getText(),
-                    Date.valueOf(dateDeNaissanceDatePicker.getValue()), emailTextField.getText(), "");
+            user = new Responsable_de_cinema(this.nomTextField.getText(), this.prenomTextField.getText(),
+                    Integer.parseInt(this.num_telephoneTextField.getText()), this.passwordTextField.getText(),
+                    this.roleComboBox.getValue(), this.emailTextField.getText(),
+                    Date.valueOf(this.dateDeNaissanceDatePicker.getValue()), this.emailTextField.getText(), "");
         } else if ("client".equals(role)) {
-            user = new Client(nomTextField.getText(), prenomTextField.getText(),
-                    Integer.parseInt(num_telephoneTextField.getText()), passwordTextField.getText(),
-                    roleComboBox.getValue(), emailTextField.getText(),
-                    Date.valueOf(dateDeNaissanceDatePicker.getValue()), emailTextField.getText(), "");
+            user = new Client(this.nomTextField.getText(), this.prenomTextField.getText(),
+                    Integer.parseInt(this.num_telephoneTextField.getText()), this.passwordTextField.getText(),
+                    this.roleComboBox.getValue(), this.emailTextField.getText(),
+                    Date.valueOf(this.dateDeNaissanceDatePicker.getValue()), this.emailTextField.getText(), "");
         } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "the given role is not available", ButtonType.CLOSE);
+            final Alert alert = new Alert(Alert.AlertType.ERROR, "the given role is not available", ButtonType.CLOSE);
             alert.show();
             return;
         }
-        UserService userService = new UserService();
+        final UserService userService = new UserService();
         userService.create(user);
-        Stage stage = (Stage) nomTextField.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Profile.fxml"));
-        Parent root = loader.load();
-        ProfileController profileController = loader.getController();
+        final Stage stage = (Stage) this.nomTextField.getScene().getWindow();
+        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/Profile.fxml"));
+        final Parent root = loader.load();
+        final ProfileController profileController = loader.getController();
         profileController.setData(user);
         stage.setScene(new Scene(root));
     }

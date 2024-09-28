@@ -21,10 +21,10 @@ public class SharedData {
      * @return The instance of the SharedData class.
      */
     public static SharedData getInstance() {
-        if (instance == null) {
-            instance = new SharedData();
+        if (null == instance) {
+            SharedData.instance = new SharedData();
         }
-        return instance;
+        return SharedData.instance;
     }
 
     /**
@@ -33,7 +33,7 @@ public class SharedData {
      * @return The total price.
      */
     public double getTotalPrix() {
-        return totalPrix;
+        return this.totalPrix;
     }
 
     /**
@@ -41,7 +41,7 @@ public class SharedData {
      *
      * @param totalPrix The total price to be set.
      */
-    public void setTotalPrix(double totalPrix) {
+    public void setTotalPrix(final double totalPrix) {
         this.totalPrix = totalPrix;
     }
 }

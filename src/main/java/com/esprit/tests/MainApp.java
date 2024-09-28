@@ -1,7 +1,6 @@
 package com.esprit.tests;
 
 import com.esprit.utils.DataSource;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,26 +10,26 @@ import javafx.stage.Stage;
 import java.sql.Connection;
 
 public class MainApp extends Application {
-    /** 
+    /**
      * @param args
      */
-    public static void main(String[] args) {
-        launch(args);
+    public static void main(final String[] args) {
+        Application.launch(args);
     }
 
-    /** 
+    /**
      * @param primaryStage
      * @throws Exception
      */
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        Connection connection = DataSource.getInstance().getConnection();
-        if (connection == null) {
+    public void start(final Stage primaryStage) throws Exception {
+        final Connection connection = DataSource.getInstance().getConnection();
+        if (null == connection) {
             System.exit(1);
         }
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
-        Parent root = loader.load();
-        Scene scene = new Scene(root);
+        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/Login.fxml"));
+        final Parent root = loader.load();
+        final Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.show();
     }

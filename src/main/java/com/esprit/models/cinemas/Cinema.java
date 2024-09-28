@@ -16,37 +16,37 @@ public class Cinema {
     /**
      * Constructs a Cinema object with the specified parameters.
      *
-     * @param id_cinema    the ID of the cinema
-     * @param nom          the name of the cinema
-     * @param adresse      the address of the cinema
-     * @param responsable  the responsible person for the cinema
-     * @param logo         the logo of the cinema
-     * @param statut       the status of the cinema
+     * @param id_cinema   the ID of the cinema
+     * @param nom         the name of the cinema
+     * @param adresse     the address of the cinema
+     * @param responsable the responsible person for the cinema
+     * @param logo        the logo of the cinema
+     * @param statut      the status of the cinema
      */
-    public Cinema(int id_cinema, String nom, String adresse, Responsable_de_cinema responsable, String logo, String statut) {
+    public Cinema(final int id_cinema, final String nom, final String adresse, final Responsable_de_cinema responsable, final String logo, final String statut) {
         this.id_cinema = id_cinema;
         this.nom = nom;
         this.adresse = adresse;
         this.responsable = responsable;
         this.logo = logo;
-        Statut = statut;
+        this.Statut = statut;
     }
 
     /**
      * Constructs a Cinema object with the specified parameters.
      *
-     * @param nom          the name of the cinema
-     * @param adresse      the address of the cinema
-     * @param responsable  the responsible person for the cinema
-     * @param logo         the logo of the cinema
-     * @param statut       the status of the cinema
+     * @param nom         the name of the cinema
+     * @param adresse     the address of the cinema
+     * @param responsable the responsible person for the cinema
+     * @param logo        the logo of the cinema
+     * @param statut      the status of the cinema
      */
-    public Cinema(String nom, String adresse, Responsable_de_cinema responsable, String logo, String statut) {
+    public Cinema(final String nom, final String adresse, final Responsable_de_cinema responsable, final String logo, final String statut) {
         this.nom = nom;
         this.adresse = adresse;
         this.responsable = responsable;
         this.logo = logo;
-        Statut = statut;
+        this.Statut = statut;
     }
 
     /**
@@ -55,7 +55,7 @@ public class Cinema {
      * @return the ID of the cinema
      */
     public int getId_cinema() {
-        return id_cinema;
+        return this.id_cinema;
     }
 
     /**
@@ -63,7 +63,7 @@ public class Cinema {
      *
      * @param id_cinema the ID of the cinema
      */
-    public void setId_cinema(int id_cinema) {
+    public void setId_cinema(final int id_cinema) {
         this.id_cinema = id_cinema;
     }
 
@@ -73,7 +73,7 @@ public class Cinema {
      * @return the name of the cinema
      */
     public String getNom() {
-        return nom;
+        return this.nom;
     }
 
     /**
@@ -81,7 +81,7 @@ public class Cinema {
      *
      * @param nom the name of the cinema
      */
-    public void setNom(String nom) {
+    public void setNom(final String nom) {
         this.nom = nom;
     }
 
@@ -91,7 +91,7 @@ public class Cinema {
      * @return the address of the cinema
      */
     public String getAdresse() {
-        return adresse;
+        return this.adresse;
     }
 
     /**
@@ -99,7 +99,7 @@ public class Cinema {
      *
      * @param adresse the address of the cinema
      */
-    public void setAdresse(String adresse) {
+    public void setAdresse(final String adresse) {
         this.adresse = adresse;
     }
 
@@ -109,7 +109,7 @@ public class Cinema {
      * @return the responsible person for the cinema
      */
     public Responsable_de_cinema getResponsable() {
-        return responsable;
+        return this.responsable;
     }
 
     /**
@@ -118,7 +118,7 @@ public class Cinema {
      * @return the logo of the cinema
      */
     public String getLogo() {
-        return logo;
+        return this.logo;
     }
 
     /**
@@ -126,7 +126,7 @@ public class Cinema {
      *
      * @param logo the logo of the cinema
      */
-    public void setLogo(String logo) {
+    public void setLogo(final String logo) {
         this.logo = logo;
     }
 
@@ -136,7 +136,7 @@ public class Cinema {
      * @return the status of the cinema
      */
     public String getStatut() {
-        return Statut;
+        return this.Statut;
     }
 
     /**
@@ -144,8 +144,8 @@ public class Cinema {
      *
      * @param statut the status of the cinema
      */
-    public void setStatut(String statut) {
-        Statut = statut;
+    public void setStatut(final String statut) {
+        this.Statut = statut;
     }
 
     /**
@@ -156,12 +156,12 @@ public class Cinema {
     @Override
     public String toString() {
         return "Cinema{"
-                + "id_cinema=" + id_cinema
-                + ", nom='" + nom + '\''
-                + ", adresse='" + adresse + '\''
-                + ", responsable='" + responsable + '\''
-                + ", logo=" + logo
-                + ", Statut='" + Statut + '\''
+                + "id_cinema=" + this.id_cinema
+                + ", nom='" + this.nom + '\''
+                + ", adresse='" + this.adresse + '\''
+                + ", responsable='" + this.responsable + '\''
+                + ", logo=" + this.logo
+                + ", Statut='" + this.Statut + '\''
                 + '}';
     }
 }

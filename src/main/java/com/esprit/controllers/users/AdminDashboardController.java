@@ -2,9 +2,7 @@ package com.esprit.controllers.users;
 
 import com.esprit.models.users.Admin;
 import com.esprit.models.users.User;
-import com.esprit.services.produits.AvisService;
 import com.esprit.services.users.UserService;
-
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -96,47 +94,47 @@ public class AdminDashboardController {
     @FXML
     void initialize() {
         try {
-            roleTableColumn = new TableColumn<>("role");
-            photoDeProfilTableColumn = new TableColumn<>("photo de profil");
-            lastNameTableColumn = new TableColumn<>("lastName");
-            passwordTableColumn = new TableColumn<>("password");
-            numTelTableColumn = new TableColumn<>("numero de telephone");
-            firstNameTableColumn = new TableColumn<>("firstName");
-            dateDeNaissanceTableColumn = new TableColumn<>("date de naissance");
-            adresseTableColumn = new TableColumn<>("adresse");
-            emailTableColumn = new TableColumn<>("email");
-            deleteTableColumn = new TableColumn<>("delete");
-            tableValidator = new Validator();
-            userTableView.setEditable(true);
-            List<TableColumn<User, ?>> columns = Arrays.asList(firstNameTableColumn, lastNameTableColumn,
-                    emailTableColumn,
-                    passwordTableColumn, numTelTableColumn, adresseTableColumn, dateDeNaissanceTableColumn,
-                    roleTableColumn, photoDeProfilTableColumn, deleteTableColumn);
-            userTableView.getColumns().addAll(columns);
-            setupCellValueFactories();
-            setupCellFactories();
-            setupCellOnEditCommit();
-            Tooltip tooltip = new Tooltip();
-            addValidationListener(firstNameTextField, newValue -> newValue.toLowerCase().equals(newValue),
+            this.roleTableColumn = new TableColumn<>("role");
+            this.photoDeProfilTableColumn = new TableColumn<>("photo de profil");
+            this.lastNameTableColumn = new TableColumn<>("lastName");
+            this.passwordTableColumn = new TableColumn<>("password");
+            this.numTelTableColumn = new TableColumn<>("numero de telephone");
+            this.firstNameTableColumn = new TableColumn<>("firstName");
+            this.dateDeNaissanceTableColumn = new TableColumn<>("date de naissance");
+            this.adresseTableColumn = new TableColumn<>("adresse");
+            this.emailTableColumn = new TableColumn<>("email");
+            this.deleteTableColumn = new TableColumn<>("delete");
+            this.tableValidator = new Validator();
+            this.userTableView.setEditable(true);
+            final List<TableColumn<User, ?>> columns = Arrays.asList(this.firstNameTableColumn, this.lastNameTableColumn,
+                    this.emailTableColumn,
+                    this.passwordTableColumn, this.numTelTableColumn, this.adresseTableColumn, this.dateDeNaissanceTableColumn,
+                    this.roleTableColumn, this.photoDeProfilTableColumn, this.deleteTableColumn);
+            this.userTableView.getColumns().addAll(columns);
+            this.setupCellValueFactories();
+            this.setupCellFactories();
+            this.setupCellOnEditCommit();
+            final Tooltip tooltip = new Tooltip();
+            this.addValidationListener(this.firstNameTextField, newValue -> newValue.toLowerCase().equals(newValue),
                     "Please use only lowercase letters.");
-            addValidationListener(lastNameTextField, newValue -> newValue.toLowerCase().equals(newValue),
+            this.addValidationListener(this.lastNameTextField, newValue -> newValue.toLowerCase().equals(newValue),
                     "Please use only lowercase letters.");
-            addValidationListener(adresseTextField, newValue -> newValue.toLowerCase().equals(newValue),
+            this.addValidationListener(this.adresseTextField, newValue -> newValue.toLowerCase().equals(newValue),
                     "Please use only lowercase letters.");
-            String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-            addValidationListener(emailTextField, newValue -> newValue.matches(emailRegex), "Invalid email format.");
-            addValidationListener(passwordTextField, newValue -> newValue.toLowerCase().equals(newValue),
+            final String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+            this.addValidationListener(this.emailTextField, newValue -> newValue.matches(emailRegex), "Invalid email format.");
+            this.addValidationListener(this.passwordTextField, newValue -> newValue.toLowerCase().equals(newValue),
                     "Please use only lowercase letters.");
-            String numberRegex = "\\d*";
-            addValidationListener(phoneNumberTextField, newValue -> newValue.matches(numberRegex),
+            final String numberRegex = "\\d*";
+            this.addValidationListener(this.phoneNumberTextField, newValue -> newValue.matches(numberRegex),
                     "Please use only numbers.");
-            List<String> roleList = List.of("admin");
-            for (String role : roleList) {
-                roleComboBox.getItems().add(role);
+            final List<String> roleList = List.of("admin");
+            for (final String role : roleList) {
+                this.roleComboBox.getItems().add(role);
             }
-            readUserTable();
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            this.readUserTable();
+        } catch (final Exception e) {
+            AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -147,69 +145,67 @@ public class AdminDashboardController {
      * `Predicate<String>`. If the string is invalid, a tooltip with an error
      * message is
      * displayed near the text field.
-     * 
+     *
      * @param textField           TextField component whose text value will be
      *                            validated and whose
      *                            tooltip will be updated accordingly.
-     * 
      * @param validationPredicate function that determines whether or not a given
      *                            string
      *                            is valid, and it is used to determine whether an
      *                            error message should be displayed
      *                            when the user types something into the text field.
-     * 
      * @param errorMessage        message to be displayed as a tooltip when the user
      *                            enters an
      *                            invalid value in the text field.
      */
-    private void addValidationListener(TextField textField, Predicate<String> validationPredicate,
-            String errorMessage) {
-        Tooltip tooltip = new Tooltip();
+    private void addValidationListener(final TextField textField, final Predicate<String> validationPredicate,
+                                       final String errorMessage) {
+        final Tooltip tooltip = new Tooltip();
         textField.textProperty().addListener(new ChangeListener<String>() {
             /**
              * Detects changes to the `textField`'s value and displays an error message in a
              * tooltip if the new value does not meet a validation predicate or is empty.
-             * 
+             *
              * @param observable ObservableValue object that emits changes to its value,
              *                   allowing
              *                   the function to detect and respond to those changes.
-             * 
+             *
              * @param oldValue   previous value of the observable variable before the change
              *                   occurred,
              *                   which is used to validate the new value and determine if an
              *                   error message should
              *                   be displayed.
-             * 
+             *
              * @param newValue   updated value of the `TextField`, which is used to validate
              *                   and
              *                   display an error message if necessary.
              */
             @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+            public void changed(final ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
                 String error = null;
-                if (newValue != null) {
+                if (null != newValue) {
                     if (!validationPredicate.test(newValue)) {
                         error = errorMessage;
                     } else if (newValue.isEmpty()) {
                         error = "The string is empty.";
                     }
                 }
-                Window window = textField.getScene().getWindow();
-                Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
-                if (error != null) {
+                final Window window = textField.getScene().getWindow();
+                final Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
+                if (null != error) {
                     tooltip.setText(error);
                     tooltip.setStyle("-fx-background-color: #f00;");
                     textField.setTooltip(tooltip);
                     textField.getTooltip().show(window, bounds.getMinX() - 10, bounds.getMinY() + 30);
                 } else {
-                    if (textField.getTooltip() != null) {
+                    if (null != textField.getTooltip()) {
                         textField.getTooltip().hide();
                     }
                 }
             }
         });
         textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue && textField.getTooltip() != null) {
+            if (!newValue && null != textField.getTooltip()) {
                 textField.getTooltip().hide();
             }
         });
@@ -223,11 +219,11 @@ public class AdminDashboardController {
     @FXML
     void readUserTable() {
         try {
-            UserService userService = new UserService();
-            List<User> userList = userService.read();
-            userTableView.setItems(FXCollections.observableArrayList(userList));
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            final UserService userService = new UserService();
+            final List<User> userList = userService.read();
+            this.userTableView.setItems(FXCollections.observableArrayList(userList));
+        } catch (final Exception e) {
+            AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -238,70 +234,70 @@ public class AdminDashboardController {
      * name, phone number, password, email, and role. It then validates the input
      * and
      * creates a new admin user using the provided information.
-     * 
+     *
      * @param event `addAdmin` action, triggering the execution of the code within
      *              the function.
      */
     @FXML
-    void addAdmin(ActionEvent event) {
+    void addAdmin(final ActionEvent event) {
         try {
-            String role = roleComboBox.getValue();
+            final String role = this.roleComboBox.getValue();
             User user = null;
             URI uri = null;
             if ("admin".equals(role)) {
-                String fullPath = photoDeProfilImageView.getImage().getUrl();
-                String requiredPath = fullPath.substring(fullPath.indexOf("/img/users/"));
+                final String fullPath = this.photoDeProfilImageView.getImage().getUrl();
+                final String requiredPath = fullPath.substring(fullPath.indexOf("/img/users/"));
                 uri = new URI(requiredPath);
-                String firstName = firstNameTextField.getText();
-                String lastName = lastNameTextField.getText();
-                String phoneNumber = phoneNumberTextField.getText();
-                String password = passwordTextField.getText();
-                String email = emailTextField.getText();
-                LocalDate dateDeNaissance = dateDeNaissanceDatePicker.getValue();
+                final String firstName = this.firstNameTextField.getText();
+                final String lastName = this.lastNameTextField.getText();
+                final String phoneNumber = this.phoneNumberTextField.getText();
+                final String password = this.passwordTextField.getText();
+                final String email = this.emailTextField.getText();
+                final LocalDate dateDeNaissance = this.dateDeNaissanceDatePicker.getValue();
                 // Perform input validation
                 if (firstName.isEmpty() || lastName.isEmpty() || phoneNumber.isEmpty() || password.isEmpty()
-                        || role.isEmpty() || email.isEmpty() || dateDeNaissance == null) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR, "Please fill in all the required fields",
+                        || role.isEmpty() || email.isEmpty() || null == dateDeNaissance) {
+                    final Alert alert = new Alert(Alert.AlertType.ERROR, "Please fill in all the required fields",
                             ButtonType.CLOSE);
                     alert.show();
                     return;
                 }
                 // Validate name format
                 if (!firstName.matches("[a-zA-Z]+") || !lastName.matches("[a-zA-Z]+")) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid name format", ButtonType.CLOSE);
+                    final Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid name format", ButtonType.CLOSE);
                     alert.show();
                     return;
                 }
                 // Validate password length
-                if (password.length() < 8) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR, "Password must be at least 8 characters long",
+                if (8 > password.length()) {
+                    final Alert alert = new Alert(Alert.AlertType.ERROR, "Password must be at least 8 characters long",
                             ButtonType.CLOSE);
                     alert.show();
                     return;
                 }
                 // Validate phone number format
                 if (!phoneNumber.matches("\\d{10}")) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid phone number format", ButtonType.CLOSE);
+                    final Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid phone number format", ButtonType.CLOSE);
                     alert.show();
                     return;
                 }
                 // Validate email format
                 if (!email.matches("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}")) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid email format", ButtonType.CLOSE);
+                    final Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid email format", ButtonType.CLOSE);
                     alert.show();
                     return;
                 }
                 user = new Admin(firstName, lastName, Integer.parseInt(phoneNumber), password, role, email,
                         Date.valueOf(dateDeNaissance), email, uri.getPath());
             } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "the given role is not available", ButtonType.CLOSE);
+                final Alert alert = new Alert(Alert.AlertType.ERROR, "the given role is not available", ButtonType.CLOSE);
                 alert.show();
                 return;
             }
-            UserService userService = new UserService();
+            final UserService userService = new UserService();
             userService.create(user);
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final Exception e) {
+            AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -315,35 +311,35 @@ public class AdminDashboardController {
      * and photo profile picture.
      */
     private void setupCellValueFactories() {
-        firstNameTableColumn.setCellValueFactory(new PropertyValueFactory<User, String>("firstName"));
-        lastNameTableColumn.setCellValueFactory(new PropertyValueFactory<User, String>("lastName"));
-        numTelTableColumn.setCellValueFactory(new PropertyValueFactory<User, Integer>("phoneNumber"));
-        passwordTableColumn.setCellValueFactory(new PropertyValueFactory<User, String>("password"));
-        roleTableColumn.setCellValueFactory(new PropertyValueFactory<User, String>("role"));
-        adresseTableColumn.setCellValueFactory(new PropertyValueFactory<User, String>("address"));
-        dateDeNaissanceTableColumn.setCellValueFactory(
+        this.firstNameTableColumn.setCellValueFactory(new PropertyValueFactory<User, String>("firstName"));
+        this.lastNameTableColumn.setCellValueFactory(new PropertyValueFactory<User, String>("lastName"));
+        this.numTelTableColumn.setCellValueFactory(new PropertyValueFactory<User, Integer>("phoneNumber"));
+        this.passwordTableColumn.setCellValueFactory(new PropertyValueFactory<User, String>("password"));
+        this.roleTableColumn.setCellValueFactory(new PropertyValueFactory<User, String>("role"));
+        this.adresseTableColumn.setCellValueFactory(new PropertyValueFactory<User, String>("address"));
+        this.dateDeNaissanceTableColumn.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<User, DatePicker>, ObservableValue<DatePicker>>() {
                     /**
                      * Creates a new `DatePicker` object and sets its value to the local date of the
                      * user's birth date if it is not null.
-                     * 
+                     *
                      * @param param value of a table cell, which contains the birth date of a user.
-                     * 
+                     *
                      * @returns a `SimpleObjectProperty` of a `DatePicker` object initialized with
                      *          the
                      *          birth date value from the input `User` object, if available.
                      */
                     @Override
-                    public ObservableValue<DatePicker> call(TableColumn.CellDataFeatures<User, DatePicker> param) {
-                        DatePicker datePicker = new DatePicker();
-                        if (param.getValue().getBirthDate() != null) {
+                    public ObservableValue<DatePicker> call(final TableColumn.CellDataFeatures<User, DatePicker> param) {
+                        final DatePicker datePicker = new DatePicker();
+                        if (null != param.getValue().getBirthDate()) {
                             datePicker.setValue(param.getValue().getBirthDate().toLocalDate());
                         }
                         return new SimpleObjectProperty<DatePicker>(datePicker);
                     }
                 });
-        emailTableColumn.setCellValueFactory(new PropertyValueFactory<User, String>("email"));
-        photoDeProfilTableColumn.setCellValueFactory(
+        this.emailTableColumn.setCellValueFactory(new PropertyValueFactory<User, String>("email"));
+        this.photoDeProfilTableColumn.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<User, HBox>, ObservableValue<HBox>>() {
                     /**
                      * Takes a `TableColumn.CellDataFeatures` parameter and generates an `HBox`
@@ -354,21 +350,21 @@ public class AdminDashboardController {
                      * clicks on the image view, opening a file chooser to allow the user to select
                      * a new
                      * profile picture.
-                     * 
+                     *
                      * @param param value of the `User` object being processed, which provides the
                      *              `photo_de_profil` property that is used to display the photo of
                      *              the profile in the
                      *              `ImageView`.
-                     * 
+                     *
                      * @returns an `ObservableValue` of type `HBox`, which contains a single
                      *          `ImageView`
                      *          component that displays the user's profile picture.
                      */
                     @Override
-                    public ObservableValue<HBox> call(TableColumn.CellDataFeatures<User, HBox> param) {
-                        HBox hBox = new HBox();
+                    public ObservableValue<HBox> call(final TableColumn.CellDataFeatures<User, HBox> param) {
+                        final HBox hBox = new HBox();
                         try {
-                            ImageView imageView = new ImageView(new Image(param.getValue().getPhoto_de_profil()));
+                            final ImageView imageView = new ImageView(new Image(param.getValue().getPhoto_de_profil()));
                             imageView.setFitWidth(50);
                             imageView.setFitHeight(50);
                             hBox.getChildren().add(imageView);
@@ -379,38 +375,38 @@ public class AdminDashboardController {
                                  * selected image as the viewable image in the stage, and clears any previous
                                  * images
                                  * in the container.
-                                 * 
+                                 *
                                  * @param event mouse event that triggered the function's execution, providing
                                  *              no
                                  *              further context beyond that.
                                  */
                                 @Override
-                                public void handle(MouseEvent event) {
+                                public void handle(final MouseEvent event) {
                                     try {
-                                        FileChooser fileChooser = new FileChooser();
+                                        final FileChooser fileChooser = new FileChooser();
                                         fileChooser.getExtensionFilters().addAll(
                                                 new FileChooser.ExtensionFilter("PNG", "*.png"),
                                                 new FileChooser.ExtensionFilter("JPG", "*.jpg"));
-                                        File file = fileChooser.showOpenDialog(new Stage());
-                                        if (file != null) {
-                                            Image image = new Image(file.toURI().toURL().toString());
+                                        final File file = fileChooser.showOpenDialog(new Stage());
+                                        if (null != file) {
+                                            final Image image = new Image(file.toURI().toURL().toString());
                                             imageView.setImage(image);
                                             hBox.getChildren().clear();
                                             hBox.getChildren().add(imageView);
-                                            photoDeProfilImageView.setImage(image);
+                                            AdminDashboardController.this.photoDeProfilImageView.setImage(image);
                                         }
-                                    } catch (Exception e) {
-                                        LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                                    } catch (final Exception e) {
+                                        AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                                     }
                                 }
                             });
-                        } catch (Exception e) {
-                            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                        } catch (final Exception e) {
+                            AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                         }
                         return new SimpleObjectProperty<HBox>(hBox);
                     }
                 });
-        deleteTableColumn.setCellValueFactory(
+        this.deleteTableColumn.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<User, Button>, ObservableValue<Button>>() {
                     /**
                      * Creates a new `Button` element with the text "delete". The button's
@@ -418,33 +414,33 @@ public class AdminDashboardController {
                      * event handler is set to delete the corresponding user's ID when clicked, and
                      * then
                      * reads the entire user table.
-                     * 
+                     *
                      * @param param `CellDataFeatures` of a table column, providing the current cell
                      *              value
                      *              and related data.
-                     * 
+                     *
                      * @returns a `SimpleObjectProperty` of a `Button` object with an action to
                      *          delete
                      *          the corresponding user ID.
                      */
                     @Override
-                    public ObservableValue<Button> call(TableColumn.CellDataFeatures<User, Button> param) {
-                        Button button = new Button("delete");
+                    public ObservableValue<Button> call(final TableColumn.CellDataFeatures<User, Button> param) {
+                        final Button button = new Button("delete");
                         button.setOnAction(new EventHandler<ActionEvent>() {
                             /**
                              * Deletes a record with the specified ID from a data storage and subsequently
                              * reloads
                              * the user table.
-                             * 
+                             *
                              * @param event deleting event triggered by the user's action, and it is passed
                              *              to
                              *              the `handle()` method as an argument to enable the appropriate
                              *              actions to be taken.
                              */
                             @Override
-                            public void handle(ActionEvent event) {
-                                delete(param.getValue().getId());
-                                readUserTable();
+                            public void handle(final ActionEvent event) {
+                                AdminDashboardController.this.delete(param.getValue().getId());
+                                AdminDashboardController.this.readUserTable();
                             }
                         });
                         return new SimpleObjectProperty<Button>(button);
@@ -460,35 +456,35 @@ public class AdminDashboardController {
      * to create TableCells that can display text data in a formatted way.
      */
     private void setupCellFactories() {
-        firstNameTableColumn.setCellFactory(new Callback<TableColumn<User, String>, TableCell<User, String>>() {
+        this.firstNameTableColumn.setCellFactory(new Callback<TableColumn<User, String>, TableCell<User, String>>() {
             @Override
-            public TableCell<User, String> call(TableColumn<User, String> param) {
+            public TableCell<User, String> call(final TableColumn<User, String> param) {
                 return new TextFieldTableCell<User, String>(new DefaultStringConverter()) {
                     private Validator validator;
 
                     @Override
                     public void startEdit() {
                         super.startEdit();
-                        TextField textField = (TextField) getGraphic();
-                        if (textField != null && validator == null) {
-                            validator = new Validator();
-                            validator.createCheck()
+                        final TextField textField = (TextField) this.getGraphic();
+                        if (null != textField && null == validator) {
+                            this.validator = new Validator();
+                            this.validator.createCheck()
                                     .dependsOn("firstName", textField.textProperty())
                                     .withMethod(c -> {
-                                        String userName = c.get("firstName");
-                                        if (userName != null && !userName.toLowerCase().equals(userName)) {
+                                        final String userName = c.get("firstName");
+                                        if (null != userName && !userName.toLowerCase().equals(userName)) {
                                             c.error("Please use only lowercase letters.");
                                         }
                                     })
                                     .decorates(textField)
                                     .immediate();
-                            Window window = this.getScene().getWindow();
-                            Tooltip tooltip = new Tooltip();
-                            Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
+                            final Window window = getScene().getWindow();
+                            final Tooltip tooltip = new Tooltip();
+                            final Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
                             textField.textProperty().addListener(new ChangeListener<String>() {
                                 @Override
-                                public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                        String newValue) {
+                                public void changed(final ObservableValue<? extends String> observable, final String oldValue,
+                                                    final String newValue) {
                                     if (validator.containsErrors()) {
                                         tooltip.setText(validator.createStringBinding().getValue());
                                         tooltip.setStyle("-fx-background-color: #f00;");
@@ -496,7 +492,7 @@ public class AdminDashboardController {
                                         textField.getTooltip().show(window, bounds.getMinX() - 10,
                                                 bounds.getMinY() + 30);
                                     } else {
-                                        if (textField.getTooltip() != null) {
+                                        if (null != textField.getTooltip()) {
                                             textField.getTooltip().hide();
                                         }
                                     }
@@ -504,8 +500,8 @@ public class AdminDashboardController {
                             });
                             textField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
                                 @Override
-                                public void handle(KeyEvent event) {
-                                    if (event.getCode().equals(KeyCode.ENTER)) {
+                                public void handle(final KeyEvent event) {
+                                    if (KeyCode.ENTER == event.getCode()) {
                                         if (validator.containsErrors()) {
                                             event.consume();
                                         }
@@ -517,35 +513,35 @@ public class AdminDashboardController {
                 };
             }
         });
-        lastNameTableColumn.setCellFactory(new Callback<TableColumn<User, String>, TableCell<User, String>>() {
+        this.lastNameTableColumn.setCellFactory(new Callback<TableColumn<User, String>, TableCell<User, String>>() {
             @Override
-            public TableCell<User, String> call(TableColumn<User, String> param) {
+            public TableCell<User, String> call(final TableColumn<User, String> param) {
                 return new TextFieldTableCell<User, String>(new DefaultStringConverter()) {
                     private Validator validator;
 
                     @Override
                     public void startEdit() {
                         super.startEdit();
-                        TextField textField = (TextField) getGraphic();
-                        if (textField != null && validator == null) {
-                            validator = new Validator();
-                            validator.createCheck()
+                        final TextField textField = (TextField) this.getGraphic();
+                        if (null != textField && null == validator) {
+                            this.validator = new Validator();
+                            this.validator.createCheck()
                                     .dependsOn("lastName", textField.textProperty())
                                     .withMethod(c -> {
-                                        String userName = c.get("lastName");
-                                        if (userName != null && !userName.toLowerCase().equals(userName)) {
+                                        final String userName = c.get("lastName");
+                                        if (null != userName && !userName.toLowerCase().equals(userName)) {
                                             c.error("Please use only lowercase letters.");
                                         }
                                     })
                                     .decorates(textField)
                                     .immediate();
-                            Window window = this.getScene().getWindow();
-                            Tooltip tooltip = new Tooltip();
-                            Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
+                            final Window window = getScene().getWindow();
+                            final Tooltip tooltip = new Tooltip();
+                            final Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
                             textField.textProperty().addListener(new ChangeListener<String>() {
                                 @Override
-                                public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                        String newValue) {
+                                public void changed(final ObservableValue<? extends String> observable, final String oldValue,
+                                                    final String newValue) {
                                     if (validator.containsErrors()) {
                                         tooltip.setText(validator.createStringBinding().getValue());
                                         tooltip.setStyle("-fx-background-color: #f00;");
@@ -553,7 +549,7 @@ public class AdminDashboardController {
                                         textField.getTooltip().show(window, bounds.getMinX() - 10,
                                                 bounds.getMinY() + 30);
                                     } else {
-                                        if (textField.getTooltip() != null) {
+                                        if (null != textField.getTooltip()) {
                                             textField.getTooltip().hide();
                                         }
                                     }
@@ -561,8 +557,8 @@ public class AdminDashboardController {
                             });
                             textField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
                                 @Override
-                                public void handle(KeyEvent event) {
-                                    if (event.getCode().equals(KeyCode.ENTER)) {
+                                public void handle(final KeyEvent event) {
+                                    if (KeyCode.ENTER == event.getCode()) {
                                         if (validator.containsErrors()) {
                                             event.consume();
                                         }
@@ -574,35 +570,35 @@ public class AdminDashboardController {
                 };
             }
         });
-        numTelTableColumn.setCellFactory(new Callback<TableColumn<User, Integer>, TableCell<User, Integer>>() {
+        this.numTelTableColumn.setCellFactory(new Callback<TableColumn<User, Integer>, TableCell<User, Integer>>() {
             @Override
-            public TableCell<User, Integer> call(TableColumn<User, Integer> param) {
+            public TableCell<User, Integer> call(final TableColumn<User, Integer> param) {
                 return new TextFieldTableCell<User, Integer>(new IntegerStringConverter()) {
                     private Validator validator;
 
                     @Override
                     public void startEdit() {
                         super.startEdit();
-                        TextField textField = (TextField) getGraphic();
-                        if (textField != null && validator == null) {
-                            validator = new Validator();
-                            validator.createCheck()
+                        final TextField textField = (TextField) this.getGraphic();
+                        if (null != textField && null == validator) {
+                            this.validator = new Validator();
+                            this.validator.createCheck()
                                     .dependsOn("phoneNumber", textField.textProperty())
                                     .withMethod(c -> {
-                                        String userName = c.get("phoneNumber");
-                                        if (userName != null && !userName.toLowerCase().equals(userName)) {
+                                        final String userName = c.get("phoneNumber");
+                                        if (null != userName && !userName.toLowerCase().equals(userName)) {
                                             c.error("Please use only lowercase letters.");
                                         }
                                     })
                                     .decorates(textField)
                                     .immediate();
-                            Window window = this.getScene().getWindow();
-                            Tooltip tooltip = new Tooltip();
-                            Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
+                            final Window window = getScene().getWindow();
+                            final Tooltip tooltip = new Tooltip();
+                            final Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
                             textField.textProperty().addListener(new ChangeListener<String>() {
                                 @Override
-                                public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                        String newValue) {
+                                public void changed(final ObservableValue<? extends String> observable, final String oldValue,
+                                                    final String newValue) {
                                     if (validator.containsErrors()) {
                                         tooltip.setText(validator.createStringBinding().getValue());
                                         tooltip.setStyle("-fx-background-color: #f00;");
@@ -610,7 +606,7 @@ public class AdminDashboardController {
                                         textField.getTooltip().show(window, bounds.getMinX() - 10,
                                                 bounds.getMinY() + 30);
                                     } else {
-                                        if (textField.getTooltip() != null) {
+                                        if (null != textField.getTooltip()) {
                                             textField.getTooltip().hide();
                                         }
                                     }
@@ -618,8 +614,8 @@ public class AdminDashboardController {
                             });
                             textField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
                                 @Override
-                                public void handle(KeyEvent event) {
-                                    if (event.getCode().equals(KeyCode.ENTER)) {
+                                public void handle(final KeyEvent event) {
+                                    if (KeyCode.ENTER == event.getCode()) {
                                         if (validator.containsErrors()) {
                                             event.consume();
                                         }
@@ -631,35 +627,35 @@ public class AdminDashboardController {
                 };
             }
         });
-        passwordTableColumn.setCellFactory(new Callback<TableColumn<User, String>, TableCell<User, String>>() {
+        this.passwordTableColumn.setCellFactory(new Callback<TableColumn<User, String>, TableCell<User, String>>() {
             @Override
-            public TableCell<User, String> call(TableColumn<User, String> param) {
+            public TableCell<User, String> call(final TableColumn<User, String> param) {
                 return new TextFieldTableCell<User, String>(new DefaultStringConverter()) {
                     private Validator validator;
 
                     @Override
                     public void startEdit() {
                         super.startEdit();
-                        TextField textField = (TextField) getGraphic();
-                        if (textField != null && validator == null) {
-                            validator = new Validator();
-                            validator.createCheck()
+                        final TextField textField = (TextField) this.getGraphic();
+                        if (null != textField && null == validator) {
+                            this.validator = new Validator();
+                            this.validator.createCheck()
                                     .dependsOn("password", textField.textProperty())
                                     .withMethod(c -> {
-                                        String userName = c.get("password");
-                                        if (userName != null && !userName.toLowerCase().equals(userName)) {
+                                        final String userName = c.get("password");
+                                        if (null != userName && !userName.toLowerCase().equals(userName)) {
                                             c.error("Please use only lowercase letters.");
                                         }
                                     })
                                     .decorates(textField)
                                     .immediate();
-                            Window window = this.getScene().getWindow();
-                            Tooltip tooltip = new Tooltip();
-                            Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
+                            final Window window = getScene().getWindow();
+                            final Tooltip tooltip = new Tooltip();
+                            final Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
                             textField.textProperty().addListener(new ChangeListener<String>() {
                                 @Override
-                                public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                        String newValue) {
+                                public void changed(final ObservableValue<? extends String> observable, final String oldValue,
+                                                    final String newValue) {
                                     if (validator.containsErrors()) {
                                         tooltip.setText(validator.createStringBinding().getValue());
                                         tooltip.setStyle("-fx-background-color: #f00;");
@@ -667,7 +663,7 @@ public class AdminDashboardController {
                                         textField.getTooltip().show(window, bounds.getMinX() - 10,
                                                 bounds.getMinY() + 30);
                                     } else {
-                                        if (textField.getTooltip() != null) {
+                                        if (null != textField.getTooltip()) {
                                             textField.getTooltip().hide();
                                         }
                                     }
@@ -675,8 +671,8 @@ public class AdminDashboardController {
                             });
                             textField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
                                 @Override
-                                public void handle(KeyEvent event) {
-                                    if (event.getCode().equals(KeyCode.ENTER)) {
+                                public void handle(final KeyEvent event) {
+                                    if (KeyCode.ENTER == event.getCode()) {
                                         if (validator.containsErrors()) {
                                             event.consume();
                                         }
@@ -688,37 +684,37 @@ public class AdminDashboardController {
                 };
             }
         });
-        roleTableColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new DefaultStringConverter(), "admin", "client",
+        this.roleTableColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new DefaultStringConverter(), "admin", "client",
                 "responsable de cinema"));
-        adresseTableColumn.setCellFactory(new Callback<TableColumn<User, String>, TableCell<User, String>>() {
+        this.adresseTableColumn.setCellFactory(new Callback<TableColumn<User, String>, TableCell<User, String>>() {
             @Override
-            public TableCell<User, String> call(TableColumn<User, String> param) {
+            public TableCell<User, String> call(final TableColumn<User, String> param) {
                 return new TextFieldTableCell<User, String>(new DefaultStringConverter()) {
                     private Validator validator;
 
                     @Override
                     public void startEdit() {
                         super.startEdit();
-                        TextField textField = (TextField) getGraphic();
-                        if (textField != null && validator == null) {
-                            validator = new Validator();
-                            validator.createCheck()
+                        final TextField textField = (TextField) this.getGraphic();
+                        if (null != textField && null == validator) {
+                            this.validator = new Validator();
+                            this.validator.createCheck()
                                     .dependsOn("adresse", textField.textProperty())
                                     .withMethod(c -> {
-                                        String userName = c.get("adresse");
-                                        if (userName != null && !userName.toLowerCase().equals(userName)) {
+                                        final String userName = c.get("adresse");
+                                        if (null != userName && !userName.toLowerCase().equals(userName)) {
                                             c.error("Please use only lowercase letters.");
                                         }
                                     })
                                     .decorates(textField)
                                     .immediate();
-                            Window window = this.getScene().getWindow();
-                            Tooltip tooltip = new Tooltip();
-                            Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
+                            final Window window = getScene().getWindow();
+                            final Tooltip tooltip = new Tooltip();
+                            final Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
                             textField.textProperty().addListener(new ChangeListener<String>() {
                                 @Override
-                                public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                        String newValue) {
+                                public void changed(final ObservableValue<? extends String> observable, final String oldValue,
+                                                    final String newValue) {
                                     if (validator.containsErrors()) {
                                         tooltip.setText(validator.createStringBinding().getValue());
                                         tooltip.setStyle("-fx-background-color: #f00;");
@@ -726,7 +722,7 @@ public class AdminDashboardController {
                                         textField.getTooltip().show(window, bounds.getMinX() - 10,
                                                 bounds.getMinY() + 30);
                                     } else {
-                                        if (textField.getTooltip() != null) {
+                                        if (null != textField.getTooltip()) {
                                             textField.getTooltip().hide();
                                         }
                                     }
@@ -734,8 +730,8 @@ public class AdminDashboardController {
                             });
                             textField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
                                 @Override
-                                public void handle(KeyEvent event) {
-                                    if (event.getCode().equals(KeyCode.ENTER)) {
+                                public void handle(final KeyEvent event) {
+                                    if (KeyCode.ENTER == event.getCode()) {
                                         if (validator.containsErrors()) {
                                             event.consume();
                                         }
@@ -747,35 +743,35 @@ public class AdminDashboardController {
                 };
             }
         });
-        emailTableColumn.setCellFactory(new Callback<TableColumn<User, String>, TableCell<User, String>>() {
+        this.emailTableColumn.setCellFactory(new Callback<TableColumn<User, String>, TableCell<User, String>>() {
             @Override
-            public TableCell<User, String> call(TableColumn<User, String> param) {
+            public TableCell<User, String> call(final TableColumn<User, String> param) {
                 return new TextFieldTableCell<User, String>(new DefaultStringConverter()) {
                     private Validator validator;
 
                     @Override
                     public void startEdit() {
                         super.startEdit();
-                        TextField textField = (TextField) getGraphic();
-                        if (textField != null && validator == null) {
-                            validator = new Validator();
-                            validator.createCheck()
+                        final TextField textField = (TextField) this.getGraphic();
+                        if (null != textField && null == validator) {
+                            this.validator = new Validator();
+                            this.validator.createCheck()
                                     .dependsOn("email", textField.textProperty())
                                     .withMethod(c -> {
-                                        String userName = c.get("email");
-                                        if (userName != null && !userName.toLowerCase().equals(userName)) {
+                                        final String userName = c.get("email");
+                                        if (null != userName && !userName.toLowerCase().equals(userName)) {
                                             c.error("Please use only lowercase letters.");
                                         }
                                     })
                                     .decorates(textField)
                                     .immediate();
-                            Window window = this.getScene().getWindow();
-                            Tooltip tooltip = new Tooltip();
-                            Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
+                            final Window window = getScene().getWindow();
+                            final Tooltip tooltip = new Tooltip();
+                            final Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
                             textField.textProperty().addListener(new ChangeListener<String>() {
                                 @Override
-                                public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                        String newValue) {
+                                public void changed(final ObservableValue<? extends String> observable, final String oldValue,
+                                                    final String newValue) {
                                     if (validator.containsErrors()) {
                                         tooltip.setText(validator.createStringBinding().getValue());
                                         tooltip.setStyle("-fx-background-color: #f00;");
@@ -783,7 +779,7 @@ public class AdminDashboardController {
                                         textField.getTooltip().show(window, bounds.getMinX() - 10,
                                                 bounds.getMinY() + 30);
                                     } else {
-                                        if (textField.getTooltip() != null) {
+                                        if (null != textField.getTooltip()) {
                                             textField.getTooltip().hide();
                                         }
                                     }
@@ -791,8 +787,8 @@ public class AdminDashboardController {
                             });
                             textField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
                                 @Override
-                                public void handle(KeyEvent event) {
-                                    if (event.getCode().equals(KeyCode.ENTER)) {
+                                public void handle(final KeyEvent event) {
+                                    if (KeyCode.ENTER == event.getCode()) {
                                         if (validator.containsErrors()) {
                                             event.consume();
                                         }
@@ -807,120 +803,120 @@ public class AdminDashboardController {
     }
 
     private void setupCellOnEditCommit() {
-        firstNameTableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
+        this.firstNameTableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
             @Override
-            public void handle(TableColumn.CellEditEvent<User, String> event) {
+            public void handle(final TableColumn.CellEditEvent<User, String> event) {
                 try {
                     event.getTableView().getItems().get(
                             event.getTablePosition().getRow()).setFirstName(event.getNewValue());
-                    update(event.getTableView().getItems().get(
+                    AdminDashboardController.this.update(event.getTableView().getItems().get(
                             event.getTablePosition().getRow()));
-                } catch (Exception e) {
-                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                } catch (final Exception e) {
+                    AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
             }
         });
-        lastNameTableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
+        this.lastNameTableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
             @Override
-            public void handle(TableColumn.CellEditEvent<User, String> event) {
+            public void handle(final TableColumn.CellEditEvent<User, String> event) {
                 try {
                     event.getTableView().getItems().get(
                             event.getTablePosition().getRow()).setLastName(event.getNewValue());
-                    update(event.getTableView().getItems().get(
+                    AdminDashboardController.this.update(event.getTableView().getItems().get(
                             event.getTablePosition().getRow()));
-                } catch (Exception e) {
-                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                } catch (final Exception e) {
+                    AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
             }
         });
-        numTelTableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<User, Integer>>() {
+        this.numTelTableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<User, Integer>>() {
             @Override
-            public void handle(TableColumn.CellEditEvent<User, Integer> event) {
+            public void handle(final TableColumn.CellEditEvent<User, Integer> event) {
                 try {
                     event.getTableView().getItems().get(
                             event.getTablePosition().getRow()).setPhoneNumber(event.getNewValue());
-                    update(event.getTableView().getItems().get(
+                    AdminDashboardController.this.update(event.getTableView().getItems().get(
                             event.getTablePosition().getRow()));
-                } catch (Exception e) {
-                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                } catch (final Exception e) {
+                    AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
             }
         });
-        passwordTableColumn.setOnEditStart(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
+        this.passwordTableColumn.setOnEditStart(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
             @Override
-            public void handle(TableColumn.CellEditEvent<User, String> event) {
+            public void handle(final TableColumn.CellEditEvent<User, String> event) {
                 try {
                     event.getTableView().getItems().get(
                             event.getTablePosition().getRow()).setPassword(event.getNewValue());
-                    update(event.getTableView().getItems().get(
+                    AdminDashboardController.this.update(event.getTableView().getItems().get(
                             event.getTablePosition().getRow()));
-                } catch (Exception e) {
-                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                } catch (final Exception e) {
+                    AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
             }
         });
-        roleTableColumn.setOnEditStart(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
+        this.roleTableColumn.setOnEditStart(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
             @Override
-            public void handle(TableColumn.CellEditEvent<User, String> event) {
+            public void handle(final TableColumn.CellEditEvent<User, String> event) {
                 try {
                     event.getTableView().getItems().get(
                             event.getTablePosition().getRow()).setRole(event.getNewValue());
-                    update(event.getTableView().getItems().get(
+                    AdminDashboardController.this.update(event.getTableView().getItems().get(
                             event.getTablePosition().getRow()));
-                } catch (Exception e) {
-                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                } catch (final Exception e) {
+                    AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
             }
         });
-        adresseTableColumn.setOnEditStart(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
+        this.adresseTableColumn.setOnEditStart(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
             @Override
-            public void handle(TableColumn.CellEditEvent<User, String> event) {
+            public void handle(final TableColumn.CellEditEvent<User, String> event) {
                 try {
                     event.getTableView().getItems().get(
                             event.getTablePosition().getRow()).setAddress(event.getNewValue());
-                    update(event.getTableView().getItems().get(
+                    AdminDashboardController.this.update(event.getTableView().getItems().get(
                             event.getTablePosition().getRow()));
-                } catch (Exception e) {
-                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                } catch (final Exception e) {
+                    AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
             }
         });
-        dateDeNaissanceTableColumn.setOnEditStart(new EventHandler<TableColumn.CellEditEvent<User, DatePicker>>() {
+        this.dateDeNaissanceTableColumn.setOnEditStart(new EventHandler<TableColumn.CellEditEvent<User, DatePicker>>() {
             @Override
-            public void handle(TableColumn.CellEditEvent<User, DatePicker> event) {
+            public void handle(final TableColumn.CellEditEvent<User, DatePicker> event) {
                 event.getTableView().getItems().get(
-                        event.getTablePosition().getRow())
+                                event.getTablePosition().getRow())
                         .setBirthDate(Date.valueOf(event.getNewValue().getValue()));
-                update(event.getTableView().getItems().get(
+                AdminDashboardController.this.update(event.getTableView().getItems().get(
                         event.getTablePosition().getRow()));
             }
         });
-        emailTableColumn.setOnEditStart(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
+        this.emailTableColumn.setOnEditStart(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
             @Override
-            public void handle(TableColumn.CellEditEvent<User, String> event) {
+            public void handle(final TableColumn.CellEditEvent<User, String> event) {
                 event.getTableView().getItems().get(
                         event.getTablePosition().getRow()).setEmail(event.getNewValue());
-                update(event.getTableView().getItems().get(
+                AdminDashboardController.this.update(event.getTableView().getItems().get(
                         event.getTablePosition().getRow()));
             }
         });
     }
 
     @FXML
-    void clearTextFields(ActionEvent event) {
-        idTextField.setText("");
-        firstNameTextField.setText("");
-        lastNameTextField.setText("");
-        phoneNumberTextField.setText("");
-        passwordTextField.setText("");
-        roleComboBox.setValue("");
-        adresseTextField.setText("");
-        dateDeNaissanceDatePicker.setValue(new Date(0, 0, 0).toLocalDate());
-        emailTextField.setText("");
-        photoDeProfilImageView.setImage(null);
+    void clearTextFields(final ActionEvent event) {
+        this.idTextField.setText("");
+        this.firstNameTextField.setText("");
+        this.lastNameTextField.setText("");
+        this.phoneNumberTextField.setText("");
+        this.passwordTextField.setText("");
+        this.roleComboBox.setValue("");
+        this.adresseTextField.setText("");
+        this.dateDeNaissanceDatePicker.setValue(new Date(0, 0, 0).toLocalDate());
+        this.emailTextField.setText("");
+        this.photoDeProfilImageView.setImage(null);
     }
 
-    void delete(int id) {
+    void delete(final int id) {
         // String role = roleComboBox.getValue();
         // User user = null;
         // if (role.equals("admin")) {
@@ -950,58 +946,58 @@ public class AdminDashboardController {
         // alert.show();
         // return;
         // }
-        UserService userService = new UserService();
+        final UserService userService = new UserService();
         userService.delete(new User(id, "", "", 0, "", "", "", new Date(0, 0, 0), "", null) {
         });
     }
 
     @FXML
-    void importImage(ActionEvent event) {
-        FileChooser fileChooser = new FileChooser();
+    void importImage(final ActionEvent event) {
+        final FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("PNG", "*.png"),
                 new FileChooser.ExtensionFilter("JPG", "*.jpg"));
         fileChooser.setTitle("Sélectionner une image");
-        File selectedFile = fileChooser.showOpenDialog(null);
-        if (selectedFile != null) {
+        final File selectedFile = fileChooser.showOpenDialog(null);
+        if (null != selectedFile) {
             try {
-                String destinationDirectory1 = "./src/main/resources/img/users/";
-                String destinationDirectory2 = "C:\\xampp\\htdocs\\Rakcha\\rakcha-web\\public\\img\\users\\";
-                Path destinationPath1 = Paths.get(destinationDirectory1);
-                Path destinationPath2 = Paths.get(destinationDirectory2);
-                String uniqueFileName = System.currentTimeMillis() + "_" + selectedFile.getName();
-                Path destinationFilePath1 = destinationPath1.resolve(uniqueFileName);
-                Path destinationFilePath2 = destinationPath2.resolve(uniqueFileName);
+                final String destinationDirectory1 = "./src/main/resources/img/users/";
+                final String destinationDirectory2 = "C:\\xampp\\htdocs\\Rakcha\\rakcha-web\\public\\img\\users\\";
+                final Path destinationPath1 = Paths.get(destinationDirectory1);
+                final Path destinationPath2 = Paths.get(destinationDirectory2);
+                final String uniqueFileName = System.currentTimeMillis() + "_" + selectedFile.getName();
+                final Path destinationFilePath1 = destinationPath1.resolve(uniqueFileName);
+                final Path destinationFilePath2 = destinationPath2.resolve(uniqueFileName);
                 Files.copy(selectedFile.toPath(), destinationFilePath1);
                 Files.copy(selectedFile.toPath(), destinationFilePath2);
-                Image selectedImage = new Image(destinationFilePath1.toUri().toString());
-                photoDeProfilImageView.setImage(selectedImage);
-            } catch (IOException e) {
-                LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                final Image selectedImage = new Image(destinationFilePath1.toUri().toString());
+                this.photoDeProfilImageView.setImage(selectedImage);
+            } catch (final IOException e) {
+                AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
         }
     }
 
-    void update(User user) {
+    void update(final User user) {
         try {
-            UserService userService = new UserService();
+            final UserService userService = new UserService();
             userService.update(user);
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final Exception e) {
+            AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
     @FXML
     void generatePDF() {
-        UserService userService = new UserService();
+        final UserService userService = new UserService();
         userService.generateUserPDF();
     }
 
     @FXML
-    public void signOut(ActionEvent event) throws IOException {
-        Stage stage = (Stage) emailTextField.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/SignUp.fxml"));
-        Parent root = loader.load();
+    public void signOut(final ActionEvent event) throws IOException {
+        final Stage stage = (Stage) this.emailTextField.getScene().getWindow();
+        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/SignUp.fxml"));
+        final Parent root = loader.load();
         stage.setScene(new Scene(root));
     }
 }

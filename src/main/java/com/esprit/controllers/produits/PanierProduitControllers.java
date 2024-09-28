@@ -2,15 +2,8 @@ package com.esprit.controllers.produits;
 
 import com.esprit.models.produits.*;
 import com.esprit.models.users.Client;
-import com.esprit.services.produits.AvisService;
-import com.esprit.services.produits.CommandeItemService;
 import com.esprit.services.produits.PanierService;
 import com.esprit.services.produits.ProduitService;
-
-import org.kordamp.ikonli.javafx.FontIcon;
-
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -32,11 +25,10 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import org.kordamp.ikonli.javafx.FontIcon;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.logging.Level;
@@ -44,19 +36,18 @@ import java.util.logging.Logger;
 
 public class PanierProduitControllers implements Initializable {
     private static final Logger LOGGER = Logger.getLogger(PanierProduitControllers.class.getName());
-
-    @FXML
-    private FlowPane cartFlowPane;
-    @FXML
-    private FlowPane prixtotaleFlowPane;
-    Commande commande = new Commande();
     // Déclarez une structure de données pour stocker les VBox associés aux produits
     private final Map<Integer, VBox> produitVBoxMap = new HashMap<>();
+    Commande commande = new Commande();
     // Mettez à jour le prix total dans SharedData
     // SharedData sharedData = new SharedData();
     PanierService panierService = new PanierService();
     Panier panier = new Panier();
-    private double prixTotal = 0.0;
+    @FXML
+    private FlowPane cartFlowPane;
+    @FXML
+    private FlowPane prixtotaleFlowPane;
+    private double prixTotal;
     @FXML
     private FontIcon retour;
 
@@ -65,25 +56,24 @@ public class PanierProduitControllers implements Initializable {
      * Triggers a task to be executed on the EDT (Event Dispatch Thread) by calling
      * `Platform.runLater`. The task is an anonymous inner class that calls the
      * method `loadAcceptedPanier`.
-     * 
+     *
      * @param url            URL of the application that requires initialization,
      *                       and is passed to
      *                       the `runLater()` method for further processing.
-     * 
      * @param resourceBundle resource bundle that provides localized data for the
      *                       platform,
      *                       and is used to load the accepted panier in the run
      *                       method.
      */
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void initialize(final URL url, final ResourceBundle resourceBundle) {
         Platform.runLater(new Runnable() {
             /**
              * Loads accepted panier.
              */
             @Override
             public void run() {
-                loadAcceptedPanier();
+                PanierProduitControllers.this.loadAcceptedPanier();
             }
         });
     }
@@ -97,21 +87,21 @@ public class PanierProduitControllers implements Initializable {
      */
     private void loadAcceptedPanier() {
         // Récupérer toutes les produits depuis le service
-        PanierService panierService = new PanierService();
+        final PanierService panierService = new PanierService();
         List<Panier> items = null;
         try {
-            Client client = (Client) cartFlowPane.getScene().getWindow().getUserData();
+            final Client client = (Client) this.cartFlowPane.getScene().getWindow().getUserData();
             items = panierService.readUserPanier(client.getId());
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             throw new RuntimeException(e);
         }
-        for (Panier panier1 : items) {
+        for (final Panier panier1 : items) {
             // Vérifier si le produit a déjà été ajouté
-            if (!produitVBoxMap.containsKey(panier1.getProduit().getId_produit())) {
-                VBox produitVBox = createProduitVBox(panier1);
-                cartFlowPane.getChildren().add(produitVBox);
+            if (!this.produitVBoxMap.containsKey(panier1.getProduit().getId_produit())) {
+                final VBox produitVBox = this.createProduitVBox(panier1);
+                this.cartFlowPane.getChildren().add(produitVBox);
                 // Ajouter le produit à la map pour le marquer comme déjà ajouté
-                produitVBoxMap.put(panier1.getProduit().getId_produit(), produitVBox);
+                this.produitVBoxMap.put(panier1.getProduit().getId_produit(), produitVBox);
             }
         }
     }
@@ -121,16 +111,15 @@ public class PanierProduitControllers implements Initializable {
      * Creates a new Label element with the total price displayed as a double value,
      * using
      * the specified font size, position, and styling options.
-     * 
+     *
      * @param prixTotal total price of the product, which is used to create and set
      *                  the
      *                  label's text value.
-     * 
      * @returns a label with the price total value displayed in bold font.
      */
-    private Label createPrixTotalLabel(double prixTotal) {
+    private Label createPrixTotalLabel(final double prixTotal) {
         // Créez le Label du prix total ici
-        Label prixTotalLabel = new Label(prixTotal + " DT");
+        final Label prixTotalLabel = new Label(prixTotal + " DT");
         prixTotalLabel.setFont(Font.font("Verdana", 20));
         prixTotalLabel.setLayoutX(30);
         prixTotalLabel.setLayoutY(30);
@@ -144,42 +133,41 @@ public class PanierProduitControllers implements Initializable {
      * to decrease or increase the quantity and a label to display the total price.
      * It
      * also provides delete confirmation pop-up for removing items from the cart.
-     * 
+     *
      * @param Panier panier object that contains the details of the products,
      *               quantities,
      *               and total price, which are used to populate the UI elements in
      *               the `generateProduitCard()`
      *               function.
-     * 
      * @returns a VBox container that displays a product's details and allows users
-     *          to
-     *          select it for their order.
+     * to
+     * select it for their order.
      */
-    private VBox createProduitVBox(Panier Panier) {
-        VBox produitVBox = new VBox();
+    private VBox createProduitVBox(final Panier Panier) {
+        final VBox produitVBox = new VBox();
         produitVBox.setStyle("-fx-padding: 20px 0 0  10px;"); // Ajout de remplissage à gauche pour le décalage
-        AnchorPane card = new AnchorPane();
+        final AnchorPane card = new AnchorPane();
         // Image du Produit
-        ImageView imageView = new ImageView();
+        final ImageView imageView = new ImageView();
         imageView.setLayoutX(10);
         imageView.setLayoutY(3);
         imageView.setFitWidth(150);
         imageView.setFitHeight(150);
         try {
-            String produitImage = Panier.getProduit().getImage();
-            if (produitImage != null) {
-                Image image = new Image(produitImage);
+            final String produitImage = Panier.getProduit().getImage();
+            if (null != produitImage) {
+                final Image image = new Image(produitImage);
                 imageView.setImage(image);
             } else {
                 // Utiliser une image par défaut si le Blob est null
-                Image defaultImage = new Image(getClass().getResourceAsStream("defaultImage.png"));
+                final Image defaultImage = new Image(this.getClass().getResourceAsStream("defaultImage.png"));
                 imageView.setImage(defaultImage);
             }
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final Exception e) {
+            PanierProduitControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         // Nom du Produit
-        Label nameLabel = new Label(Panier.getProduit().getNom());
+        final Label nameLabel = new Label(Panier.getProduit().getNom());
         nameLabel.setLayoutX(175);
         nameLabel.setLayoutY(10);
         nameLabel.setFont(Font.font("Arial", 20));
@@ -187,20 +175,20 @@ public class PanierProduitControllers implements Initializable {
         nameLabel.setMaxWidth(200); // Ajuster la largeur maximale selon vos besoins
         nameLabel.setWrapText(true); // Activer le retour à la ligne automatique
         // Prix unitaire du Produit
-        Label priceLabel = new Label(" " + Panier.getProduit().getPrix() + " DT");
+        final Label priceLabel = new Label(" " + Panier.getProduit().getPrix() + " DT");
         priceLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
         priceLabel.setLayoutX(180);
         priceLabel.setLayoutY(140);
         // la quantité
-        TextField quantityTextField = new TextField("1");
+        final TextField quantityTextField = new TextField("1");
         quantityTextField.setPromptText("Quantité");
         quantityTextField.setLayoutX(375);
         quantityTextField.setLayoutY(80);
         quantityTextField.setMaxWidth(50);
         quantityTextField.setEditable(false); // Empêcher l'édition manuelle
-        int totalQuantiteProduit = Integer.parseInt(quantityTextField.getText());
-        Label sommeTotaleLabel = new Label(
-                "Somme totale : " + prixProduit(Panier.getProduit().getId_produit(), totalQuantiteProduit) + " DT");
+        final int totalQuantiteProduit = Integer.parseInt(quantityTextField.getText());
+        final Label sommeTotaleLabel = new Label(
+                "Somme totale : " + this.prixProduit(Panier.getProduit().getId_produit(), totalQuantiteProduit) + " DT");
         sommeTotaleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         sommeTotaleLabel.setLayoutX(550);
         sommeTotaleLabel.setLayoutY(60);
@@ -208,11 +196,11 @@ public class PanierProduitControllers implements Initializable {
         // PanierService.calculerSommeTotaleProduit(Panier.getProduit().getId_produit());
         sommeTotaleLabel.setWrapText(true); // Activer le retour à la ligne automatique
         // CheckBox pour sélectionner le produit
-        CheckBox checkBox = new CheckBox("Select");
+        final CheckBox checkBox = new CheckBox("Select");
         checkBox.setLayoutX(650);
         checkBox.setLayoutY(150);
         checkBox.setSelected(false); // Vous pouvez définir l'état initial selon vos besoins
-        CommandeItem commandeItem = new CommandeItem();
+        final CommandeItem commandeItem = new CommandeItem();
         commandeItem.setProduit(Panier.getProduit());
         commandeItem.setQuantity(Integer.parseInt(quantityTextField.getText()));
         // Ajout d'un gestionnaire d'événements pour réagir aux changements d'état de la
@@ -220,61 +208,61 @@ public class PanierProduitControllers implements Initializable {
         checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
             // Réagir au changement d'état de la CheckBox (sélectionné ou non)
             if (newValue) {
-                commande.getCommandeItem().add(commandeItem);
-                LOGGER.info("Produit sélectionné");
-                updatePrixTotal();
+                this.commande.getCommandeItem().add(commandeItem);
+                PanierProduitControllers.LOGGER.info("Produit sélectionné");
+                this.updatePrixTotal();
             } else {
-                commande.getCommandeItem().remove(commandeItem);
-                LOGGER.info("Produit non sélectionné");
-                updatePrixTotal();
+                this.commande.getCommandeItem().remove(commandeItem);
+                PanierProduitControllers.LOGGER.info("Produit non sélectionné");
+                this.updatePrixTotal();
             }
         });
         // Icône de diminution de quantité
-        FontIcon decreaseIcon = new FontIcon("fa-minus");
+        final FontIcon decreaseIcon = new FontIcon("fa-minus");
         decreaseIcon.setIconSize(15);
         decreaseIcon.setLayoutX(350);
         decreaseIcon.setLayoutY(95);
         decreaseIcon.setOnMouseClicked(event -> {
-            if (event.getButton() == MouseButton.PRIMARY) {
-                decreaseQuantity(quantityTextField, Panier);
-                sommeTotaleLabel.setText("Somme totale : " + prixProduit(Panier.getProduit().getId_produit(),
+            if (MouseButton.PRIMARY == event.getButton()) {
+                this.decreaseQuantity(quantityTextField, Panier);
+                sommeTotaleLabel.setText("Somme totale : " + this.prixProduit(Panier.getProduit().getId_produit(),
                         Integer.parseInt(quantityTextField.getText())) + " DT");
-                commande.getCommandeItem().get(commande.getCommandeItem().indexOf(commandeItem))
+                this.commande.getCommandeItem().get(this.commande.getCommandeItem().indexOf(commandeItem))
                         .setQuantity(Integer.parseInt(quantityTextField.getText()));
-                updatePrixTotal();
+                this.updatePrixTotal();
             }
         });
         // Icône d'augmentation de quantité
-        FontIcon increaseIcon = new FontIcon("fa-plus");
+        final FontIcon increaseIcon = new FontIcon("fa-plus");
         increaseIcon.setIconSize(15);
         increaseIcon.setLayoutX(435);
         increaseIcon.setLayoutY(95);
         increaseIcon.setOnMouseClicked(event -> {
-            if (event.getButton() == MouseButton.PRIMARY) {
-                increaseQuantity(quantityTextField, Panier);
-                sommeTotaleLabel.setText("Somme totale : " + prixProduit(Panier.getProduit().getId_produit(),
+            if (MouseButton.PRIMARY == event.getButton()) {
+                this.increaseQuantity(quantityTextField, Panier);
+                sommeTotaleLabel.setText("Somme totale : " + this.prixProduit(Panier.getProduit().getId_produit(),
                         Integer.parseInt(quantityTextField.getText())) + " DT");
-                commande.getCommandeItem().get(commande.getCommandeItem().indexOf(commandeItem))
+                this.commande.getCommandeItem().get(this.commande.getCommandeItem().indexOf(commandeItem))
                         .setQuantity(Integer.parseInt(quantityTextField.getText()));
-                updatePrixTotal();
+                this.updatePrixTotal();
             }
         });
-        FontIcon deleteIcon = new FontIcon("fa-trash");
+        final FontIcon deleteIcon = new FontIcon("fa-trash");
         deleteIcon.setIconSize(25);
         deleteIcon.setLayoutX(700); // Définissez la position X selon vos besoins
         deleteIcon.setLayoutY(30); // Définissez la position Y selon vos besoins
         deleteIcon.setOnMouseClicked(event -> {
-            if (event.getButton() == MouseButton.PRIMARY) {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            if (MouseButton.PRIMARY == event.getButton()) {
+                final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Confirmation de suppression");
                 alert.setHeaderText(null);
                 alert.setContentText("Voulez-vous vraiment supprimer cet élément du panier?");
-                Optional<ButtonType> result = alert.showAndWait();
+                final Optional<ButtonType> result = alert.showAndWait();
                 if (result.isPresent() && result.get() == ButtonType.OK) {
                     // L'utilisateur a confirmé la suppression
-                    panierService.delete(Panier);
+                    this.panierService.delete(Panier);
                     // Mettez à jour votre interface utilisateur ici
-                    refreshUI();
+                    this.refreshUI();
                 }
             }
         });
@@ -291,7 +279,7 @@ public class PanierProduitControllers implements Initializable {
         // Ajouter tous les éléments au VBox
         card.getChildren().addAll(imageView, nameLabel, priceLabel, decreaseIcon, quantityTextField, increaseIcon,
                 sommeTotaleLabel, checkBox, deleteIcon);
-        produitVBoxMap.put(Panier.getProduit().getId_produit(), produitVBox);
+        this.produitVBoxMap.put(Panier.getProduit().getId_produit(), produitVBox);
         produitVBox.getChildren().add(card);
         return produitVBox;
     }
@@ -303,12 +291,12 @@ public class PanierProduitControllers implements Initializable {
      */
     private void refreshUI() {
         // Effacer les éléments actuels du panier
-        cartFlowPane.getChildren().clear();
-        produitVBoxMap.clear();
+        this.cartFlowPane.getChildren().clear();
+        this.produitVBoxMap.clear();
         // Charger à nouveau les produits du panier
-        loadAcceptedPanier();
+        this.loadAcceptedPanier();
         // Mettre à jour le prix total
-        updatePrixTotal();
+        this.updatePrixTotal();
     }
 
     /**
@@ -316,18 +304,17 @@ public class PanierProduitControllers implements Initializable {
      * types
      * a negative value into a text field. The updated quantity is then saved in the
      * panier object and reflected in the cart's total quantity.
-     * 
+     *
      * @param quantityTextField quantity to be decreased, which is obtained from the
      *                          text
      *                          field of the same name.
-     * 
      * @param panier            Panier object whose quantity is being updated by the
      *                          function.
      */
-    private void decreaseQuantity(TextField quantityTextField, Panier panier) {
+    private void decreaseQuantity(final TextField quantityTextField, final Panier panier) {
         // Diminuer la quantité
-        int quantity = Integer.parseInt(quantityTextField.getText());
-        if (quantity > 1) {
+        final int quantity = Integer.parseInt(quantityTextField.getText());
+        if (1 < quantity) {
             quantityTextField.setText(String.valueOf(quantity - 1));
             panier.setQuantity(panier.getQuantity() - 1);
         }
@@ -337,20 +324,18 @@ public class PanierProduitControllers implements Initializable {
      * Compares the requested quantity with the available quantity of stock for a
      * given
      * product and returns true if there is enough stock, otherwise false.
-     * 
+     *
      * @param produit  product for which the availability of stock is being checked.
-     * 
      * @param quantity amount of units of the product that are required or desired
      *                 by the
      *                 user, which is compared with the available stock quantity to
      *                 determine if the
      *                 product is available for purchase.
-     * 
      * @returns a boolean value indicating whether the requested quantity of stock
-     *          is
-     *          available or not.
+     * is
+     * available or not.
      */
-    private boolean isStockAvailable(Produit produit, int quantity) {
+    private boolean isStockAvailable(final Produit produit, final int quantity) {
         // Comparer la quantité demandée avec la quantité disponible en stock
         return produit.getQuantiteP() >= quantity;
     }
@@ -359,24 +344,23 @@ public class PanierProduitControllers implements Initializable {
      * Increases the quantity of an item in a shopping cart by 1, checking if the
      * stock
      * is available and displaying an alert if it's not.
-     * 
+     *
      * @param quantityTextField quantity of the product to be updated in the panier,
      *                          as
      *                          indicated by its name.
-     * 
      * @param panier            containing the products that the user wishes to
      *                          increase the quantity
      *                          of.
      */
-    private void increaseQuantity(TextField quantityTextField, Panier panier) {
-        int currentQuantity = Integer.parseInt(quantityTextField.getText());
+    private void increaseQuantity(final TextField quantityTextField, final Panier panier) {
+        final int currentQuantity = Integer.parseInt(quantityTextField.getText());
         // Vérifier si le stock est disponible
-        if (isStockAvailable(panier.getProduit(), currentQuantity + 1)) {
+        if (this.isStockAvailable(panier.getProduit(), currentQuantity + 1)) {
             quantityTextField.setText(String.valueOf(currentQuantity + 1));
             panier.setQuantity(panier.getQuantity() + 1);
         } else {
             // Afficher une alerte en cas de stock insuffisant
-            Alert alert = new Alert(Alert.AlertType.WARNING);
+            final Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Stock Insuffisant");
             alert.setHeaderText("La quantité demandée dépasse la quantité en stock.");
             alert.setContentText("Veuillez réduire la quantité demandée.");
@@ -392,58 +376,56 @@ public class PanierProduitControllers implements Initializable {
      * instance, then adding it to the flow pane with a created label.
      */
     private void updatePrixTotal() {
-        prixTotal = 0.0;
-        for (CommandeItem commandeItem : commande.getCommandeItem()) {
-            prixTotal += prixProduit(commandeItem.getProduit().getId_produit(), commandeItem.getQuantity());
+        this.prixTotal = 0.0;
+        for (final CommandeItem commandeItem : this.commande.getCommandeItem()) {
+            this.prixTotal += this.prixProduit(commandeItem.getProduit().getId_produit(), commandeItem.getQuantity());
         }
         // Mettez à jour le prix total dans SharedData
-        SharedData.getInstance().setTotalPrix(prixTotal);
-        Label prixTotalLabel = createPrixTotalLabel(prixTotal);
-        prixtotaleFlowPane.getChildren().clear();
-        prixtotaleFlowPane.getChildren().add(prixTotalLabel);
+        SharedData.getInstance().setTotalPrix(this.prixTotal);
+        final Label prixTotalLabel = this.createPrixTotalLabel(this.prixTotal);
+        this.prixtotaleFlowPane.getChildren().clear();
+        this.prixtotaleFlowPane.getChildren().add(prixTotalLabel);
     }
 
     /**
      * Calculates the total price of a product based on its ID and quantity by
      * multiplying
      * the unitaire price fetched from the `ProduitService`.
-     * 
+     *
      * @param idProduit ID of the product for which the price is being calculated.
-     * 
      * @param quantity  number of units of the product to be priced, which is
      *                  multiplied
      *                  by the unit price returned by the `ProduitService` to
      *                  compute the total price.
-     * 
      * @returns the total price of a product in units of quantity.
      */
-    private double prixProduit(int idProduit, int quantity) {
-        ProduitService produitService = new ProduitService();
-        double prixUnitaire = produitService.getPrixProduit(idProduit);
+    private double prixProduit(final int idProduit, final int quantity) {
+        final ProduitService produitService = new ProduitService();
+        final double prixUnitaire = produitService.getPrixProduit(idProduit);
         return quantity * prixUnitaire;
     }
 
     /**
      * Loads a FXML file named `/CommandeClient.fxml` into a Stage, initializes a
      * `CommandeClientController`, and displays the scene on the Stage.
-     * 
+     *
      * @param event order action event that triggered the function, providing the
      *              necessary
      *              context for the code to operate properly.
      */
     @FXML
-    void order(ActionEvent event) {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/CommandeClient.fxml"));
-        Stage stage = (Stage) cartFlowPane.getScene().getWindow();
+    void order(final ActionEvent event) {
+        final FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/CommandeClient.fxml"));
+        final Stage stage = (Stage) this.cartFlowPane.getScene().getWindow();
         try {
-            Parent root = fxmlLoader.load();
-            CommandeClientController controller = fxmlLoader.getController();
-            controller.initialize(commande);
-            Scene scene = new Scene(root);
+            final Parent root = fxmlLoader.load();
+            final CommandeClientController controller = fxmlLoader.getController();
+            controller.initialize(this.commande);
+            final Scene scene = new Scene(root);
             stage.setTitle("order");
             stage.setScene(scene);
             stage.show();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -452,11 +434,11 @@ public class PanierProduitControllers implements Initializable {
      * Is a handling function for mouse events. It does not perform any specific
      * action
      * or have any distinctive features beyond processing mouse input.
-     * 
+     *
      * @param event mouse event that triggered the execution of the `Paiment()`
      *              function.
      */
-    public void Paiment(MouseEvent event) {
+    public void Paiment(final MouseEvent event) {
     }
 
     /**
@@ -464,31 +446,31 @@ public class PanierProduitControllers implements Initializable {
      * existing
      * stage, replacing the original interface, and finally closes the original
      * stage.
-     * 
+     *
      * @param event ActionEvent object that triggered the `cinemaclient` method,
      *              providing
      *              the necessary information to update the FXML layout of the
      *              stage.
      */
     @FXML
-    void cinemaclient(ActionEvent event) {
+    void cinemaclient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/CommentaireProduit.fxml"));
-            Parent root = loader.load();
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/CommentaireProduit.fxml"));
+            final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
-            Scene scene = new Scene(root);
+            final Scene scene = new Scene(root);
             // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
-            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            final Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             // Créer une nouvelle fenêtre (stage) et y attacher la scène
-            Stage stage = new Stage();
+            final Stage stage = new Stage();
             stage.setScene(scene);
             stage.setTitle("cinema ");
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
+        } catch (final IOException e) {
+            PanierProduitControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
     }
 
@@ -496,7 +478,7 @@ public class PanierProduitControllers implements Initializable {
      * Loads a new UI fragment (`AffichageEvenementClient.fxml`) and replaces the
      * current
      * scene with it, creating a new stage and closing the original one.
-     * 
+     *
      * @param event event object that triggered the function, providing information
      *              about
      *              the event, such as its source and details, which can be used to
@@ -504,24 +486,24 @@ public class PanierProduitControllers implements Initializable {
      *              appropriately.
      */
     @FXML
-    void eventClient(ActionEvent event) {
+    void eventClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AffichageEvenementClient.fxml"));
-            Parent root = loader.load();
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/AffichageEvenementClient.fxml"));
+            final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
-            Scene scene = new Scene(root);
+            final Scene scene = new Scene(root);
             // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
-            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            final Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             // Créer une nouvelle fenêtre (stage) et y attacher la scène
-            Stage stage = new Stage();
+            final Stage stage = new Stage();
             stage.setScene(scene);
             stage.setTitle("Event ");
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
+        } catch (final IOException e) {
+            PanierProduitControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
     }
 
@@ -529,7 +511,7 @@ public class PanierProduitControllers implements Initializable {
      * Loads a new FXML interface, creates a new scene and stage, and replaces the
      * current
      * stage with the new one, closing the old stage upon execution.
-     * 
+     *
      * @param event ActionEvent that triggers the function and provides access to
      *              information
      *              about the action that was performed, such as the source of the
@@ -537,67 +519,67 @@ public class PanierProduitControllers implements Initializable {
      *              where the action occurred.
      */
     @FXML
-    void produitClient(ActionEvent event) {
+    void produitClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherProduitClient.fxml"));
-            Parent root = loader.load();
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/AfficherProduitClient.fxml"));
+            final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
-            Scene scene = new Scene(root);
+            final Scene scene = new Scene(root);
             // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
-            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            final Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             // Créer une nouvelle fenêtre (stage) et y attacher la scène
-            Stage stage = new Stage();
+            final Stage stage = new Stage();
             stage.setScene(scene);
             stage.setTitle("products ");
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
+        } catch (final IOException e) {
+            PanierProduitControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
     }
 
     /**
      * Is expected to perform some actions or calculations upon receiving an event
      * call.
-     * 
+     *
      * @param event triggered event that initiated the call to the `profilclient`
      *              function.
      */
     @FXML
-    void profilclient(ActionEvent event) {
+    void profilclient(final ActionEvent event) {
     }
 
     /**
      * Loads a new FXML interface using `FXMLLoader`, creates a new scene and stage,
      * and
      * replaces the current stage with the new one, closing the previous stage.
-     * 
+     *
      * @param event ActionEvent object that triggered the function execution,
      *              providing
      *              access to information about the event such as its source and
      *              target.
      */
     @FXML
-    void MovieClient(ActionEvent event) {
+    void MovieClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/filmuser.fxml"));
-            Parent root = loader.load();
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/filmuser.fxml"));
+            final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
-            Scene scene = new Scene(root);
+            final Scene scene = new Scene(root);
             // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
-            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            final Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             // Créer une nouvelle fenêtre (stage) et y attacher la scène
-            Stage stage = new Stage();
+            final Stage stage = new Stage();
             stage.setScene(scene);
             stage.setTitle("movie ");
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
+        } catch (final IOException e) {
+            PanierProduitControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
     }
 
@@ -605,30 +587,30 @@ public class PanierProduitControllers implements Initializable {
      * Charges a new FXML file, creates a new scene, and attaches it to a new stage.
      * It
      * also closes the current stage and shows the new stage.
-     * 
+     *
      * @param event ActionEvent that triggers the `SerieClient()` method and
      *              provides
      *              information about the source of the event.
      */
     @FXML
-    void SerieClient(ActionEvent event) {
+    void SerieClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Series-view.fxml"));
-            Parent root = loader.load();
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/Series-view.fxml"));
+            final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
-            Scene scene = new Scene(root);
+            final Scene scene = new Scene(root);
             // Obtenir la Stage (fenêtre) actuelle à partir de l'événement
-            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            final Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             // Créer une nouvelle fenêtre (stage) et y attacher la scène
-            Stage stage = new Stage();
+            final Stage stage = new Stage();
             stage.setScene(scene);
             stage.setTitle("chat ");
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
+        } catch (final IOException e) {
+            PanierProduitControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
     }
 
@@ -636,21 +618,21 @@ public class PanierProduitControllers implements Initializable {
      * Loads an FXML file and displays it in a new stage, blocking the current stage
      * and
      * setting the new stage as the owner.
-     * 
+     *
      * @param mouseEvent mouse event that triggered the execution of the
      *                   `afficherProduit()`
      *                   method.
      */
-    public void afficherProduit(MouseEvent mouseEvent) {
+    public void afficherProduit(final MouseEvent mouseEvent) {
         // Obtenir la fenêtre précédente
-        Window previousWindow = retour.getScene().getWindow();
+        final Window previousWindow = this.retour.getScene().getWindow();
         // Charger le fichier FXML de la page "AfficherProduit.fxml"
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/AfficherProduitClient.fxml"));
+        final FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/AfficherProduitClient.fxml"));
         try {
-            Parent rootNode = fxmlLoader.load();
-            Scene scene = new Scene(rootNode);
+            final Parent rootNode = fxmlLoader.load();
+            final Scene scene = new Scene(rootNode);
             // Créer une nouvelle fenêtre pour la page "AfficherProduit.fxml"
-            Stage previousStage = new Stage();
+            final Stage previousStage = new Stage();
             // Configurer la fenêtre précédente avec les propriétés nécessaires
             previousStage.setScene(scene);
             previousStage.setTitle(" Afficher Produit");
@@ -659,10 +641,10 @@ public class PanierProduitControllers implements Initializable {
             previousStage.initOwner(previousWindow);
             previousStage.showAndWait();
             // Fermer la fenêtre actuelle
-            Stage currentStage = (Stage) retour.getScene().getWindow();
+            final Stage currentStage = (Stage) this.retour.getScene().getWindow();
             currentStage.close();
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception selon vos besoins
+        } catch (final Exception e) {
+            PanierProduitControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception selon vos besoins
         }
     }
 }

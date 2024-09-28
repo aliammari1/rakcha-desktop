@@ -3,7 +3,7 @@ package com.esprit.models.series;
 public class Episode {
     public int idepisode;
     public String titre;
-    public  int  numeroepisode;
+    public int numeroepisode;
     public int saison;
     private String image;
     private String video;
@@ -11,12 +11,12 @@ public class Episode {
     ///
     private Serie serie;
 
-///
+    ///
     public Episode() {
-        this.serie = new Serie();
+        serie = new Serie();
     }
 
-    public Episode(String titre, int numeroepisode, int saison, String image, String video, int idserie) {
+    public Episode(final String titre, final int numeroepisode, final int saison, final String image, final String video, final int idserie) {
         this.titre = titre;
         this.numeroepisode = numeroepisode;
         this.saison = saison;
@@ -25,91 +25,91 @@ public class Episode {
         this.idserie = idserie;
     }
 
-    /** 
+    /**
      * @return String
      */
     public String getVideo() {
-        return video;
+        return this.video;
     }
 
-    /** 
+    /**
      * @param video
      */
-    public void setVideo(String video) {
+    public void setVideo(final String video) {
         this.video = video;
     }
 
     public int getIdepisode() {
-        return idepisode;
+        return this.idepisode;
     }
 
-    public void setIdepisode(int idepisode) {
+    public void setIdepisode(final int idepisode) {
         this.idepisode = idepisode;
     }
 
     public String getTitre() {
-        return titre;
+        return this.titre;
     }
 
-    public void setTitre(String titre) {
+    public void setTitre(final String titre) {
         this.titre = titre;
     }
 
     public int getNumeroepisode() {
-        return numeroepisode;
+        return this.numeroepisode;
     }
 
-    public void setNumeroepisode(int numeroepisode) {
+    public void setNumeroepisode(final int numeroepisode) {
         this.numeroepisode = numeroepisode;
     }
 
     public int getSaison() {
-        return saison;
+        return this.saison;
     }
 
-    public void setSaison(int saison) {
+    public void setSaison(final int saison) {
         this.saison = saison;
     }
 
     public String getImage() {
-        return image;
+        return this.image;
     }
 
-    public void setImage(String image) {
+    public void setImage(final String image) {
         this.image = image;
     }
 
     public int getIdserie() {
-        return idserie;
+        return this.idserie;
     }
 
-    public void setIdserie(int idserie) {
+    public void setIdserie(final int idserie) {
         this.idserie = idserie;
     }
 
     @Override
     public String toString() {
         return "Episode{"
-                + "idepisode=" + idepisode
-                + ", titre='" + titre + '\''
-                + ", numeroepisode=" + numeroepisode
-                + ", saison=" + saison
-                + ", image='" + image + '\''
-                + ", video='" + video + '\''
-                + ", idserie=" + idserie
+                + "idepisode=" + this.idepisode
+                + ", titre='" + this.titre + '\''
+                + ", numeroepisode=" + this.numeroepisode
+                + ", saison=" + this.saison
+                + ", image='" + this.image + '\''
+                + ", video='" + this.video + '\''
+                + ", idserie=" + this.idserie
                 + '}';
     }
 
     public Serie getSerie() {
-        return serie;
+        return this.serie;
     }
 
-    public void setSerie(Serie serie) {
+    public void setSerie(final Serie serie) {
         this.serie = serie;
     }
 
     // Méthode pour obtenir le nom de la série associée à l'épisode
     public String getNomSerie() {
-        return serie != null ? serie.getNom() : null;
+        return null != serie ? this.serie.getNom() : null;
     }
 }

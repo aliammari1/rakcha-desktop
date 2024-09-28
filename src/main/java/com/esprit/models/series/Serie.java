@@ -19,10 +19,10 @@ public class Serie {
     public Serie() {
     }
 
-    public Serie(String s, String s1, String s2, String s3, String image) {
+    public Serie(final String s, final String s1, final String s2, final String s3, final String image) {
     }
 
-    public Serie(int idserie, String nom, String resume, String directeur, String pays, String image, int liked, int nbLikes, int disliked, int nbDislikes, int idcategorie) {
+    public Serie(final int idserie, final String nom, final String resume, final String directeur, final String pays, final String image, final int liked, final int nbLikes, final int disliked, final int nbDislikes, final int idcategorie) {
         this.idserie = idserie;
         this.nom = nom;
         this.resume = resume;
@@ -34,12 +34,12 @@ public class Serie {
         this.disliked = disliked;
         this.nbDislikes = nbDislikes;
         this.idcategorie = idcategorie;
-        this.clickLikes = 0;
-        this.clickDislikes = 0;
-        this.clickFavoris = 0;
+        clickLikes = 0;
+        clickDislikes = 0;
+        clickFavoris = 0;
     }
 
-    public Serie(String nom, String resume, String directeur, String pays, String image, int liked, int nbLikes, int disliked, int nbDislikes, int idcategorie) {
+    public Serie(final String nom, final String resume, final String directeur, final String pays, final String image, final int liked, final int nbLikes, final int disliked, final int nbDislikes, final int idcategorie) {
         this.nom = nom;
         this.resume = resume;
         this.directeur = directeur;
@@ -50,139 +50,139 @@ public class Serie {
         this.disliked = disliked;
         this.nbDislikes = nbDislikes;
         this.idcategorie = idcategorie;
-        this.clickLikes = 0;
-        this.clickDislikes = 0;
-        this.clickFavoris = 0;
+        clickLikes = 0;
+        clickDislikes = 0;
+        clickFavoris = 0;
     }
 
-    /** 
+    /**
      * @return int
      */
     public int getIdserie() {
-        return idserie;
+        return this.idserie;
     }
 
-    /** 
+    /**
      * @param idserie
      */
-    public void setIdserie(int idserie) {
+    public void setIdserie(final int idserie) {
         this.idserie = idserie;
     }
 
     public String getNom() {
-        return nom;
+        return this.nom;
     }
 
-    public void setNom(String nom) {
+    public void setNom(final String nom) {
         this.nom = nom;
     }
 
     public String getResume() {
-        return resume;
+        return this.resume;
     }
 
-    public void setResume(String resume) {
+    public void setResume(final String resume) {
         this.resume = resume;
     }
 
     public String getDirecteur() {
-        return directeur;
+        return this.directeur;
     }
 
-    public void setDirecteur(String directeur) {
+    public void setDirecteur(final String directeur) {
         this.directeur = directeur;
     }
 
     public String getPays() {
-        return pays;
+        return this.pays;
     }
 
-    public void setPays(String pays) {
+    public void setPays(final String pays) {
         this.pays = pays;
     }
 
     public String getImage() {
-        return image;
+        return this.image;
     }
 
-    public void setImage(String image) {
+    public void setImage(final String image) {
         this.image = image;
     }
 
     public int getLiked() {
-        return liked;
+        return this.liked;
     }
 
-    public void setLiked(int liked) {
+    public void setLiked(final int liked) {
         this.liked = liked;
     }
 
     public int getNbLikes() {
-        return nbLikes;
+        return this.nbLikes;
     }
 
-    public void setNbLikes(int nbLikes) {
+    public void setNbLikes(final int nbLikes) {
         this.nbLikes = nbLikes;
     }
 
     public int getDisliked() {
-        return disliked;
+        return this.disliked;
     }
 
-    public void setDisliked(int disliked) {
+    public void setDisliked(final int disliked) {
         this.disliked = disliked;
     }
 
     public int getNbDislikes() {
-        return nbDislikes;
+        return this.nbDislikes;
     }
 
-    public void setNbDislikes(int nbDislikes) {
+    public void setNbDislikes(final int nbDislikes) {
         this.nbDislikes = nbDislikes;
     }
 
     public int getIdcategorie() {
-        return idcategorie;
+        return this.idcategorie;
     }
 
-    public void setIdcategorie(int idcategorie) {
+    public void setIdcategorie(final int idcategorie) {
         this.idcategorie = idcategorie;
     }
 
     public int getClickLikes() {
-        return clickLikes;
+        return this.clickLikes;
     }
 
-    public void setClickLikes(int clickLikes) {
+    public void setClickLikes(final int clickLikes) {
         this.clickLikes = clickLikes;
     }
 
     public int getClickDislikes() {
-        return clickDislikes;
+        return this.clickDislikes;
     }
 
-    public void setClickDislikes(int clickDislikes) {
+    public void setClickDislikes(final int clickDislikes) {
         this.clickDislikes = clickDislikes;
     }
 
     public int getClickFavoris() {
-        return clickFavoris;
+        return this.clickFavoris;
     }
 
-    public void setClickFavoris(int clickFavoris) {
+    public void setClickFavoris(final int clickFavoris) {
         this.clickFavoris = clickFavoris;
     }
 
     @Override
     public String toString() {
         return "Serie{"
-                + "idserie=" + idserie
-                + ", nom='" + nom + '\''
-                + ", resume='" + resume + '\''
-                + ", directeur='" + directeur + '\''
-                + ", pays='" + pays + '\''
-                + ", image='" + image + '\''
-                + ", idcategorie=" + idcategorie
+                + "idserie=" + this.idserie
+                + ", nom='" + this.nom + '\''
+                + ", resume='" + this.resume + '\''
+                + ", directeur='" + this.directeur + '\''
+                + ", pays='" + this.pays + '\''
+                + ", image='" + this.image + '\''
+                + ", idcategorie=" + this.idcategorie
                 + '}';
     }
 }

@@ -8,17 +8,17 @@ public class SerieDto extends Serie {
     public SerieDto() {
     }
 
-    /** 
+    /**
      * @return String
      */
     public String getNomCategories() {
-        return nomCategories;
+        return this.nomCategories;
     }
 
-    /** 
+    /**
      * @param nomCategories1
      */
-    public void setNomCategories(String nomCategories1) {
-        nomCategories = nomCategories1;
+    public void setNomCategories(final String nomCategories1) {
+        this.nomCategories = nomCategories1;
     }
 }

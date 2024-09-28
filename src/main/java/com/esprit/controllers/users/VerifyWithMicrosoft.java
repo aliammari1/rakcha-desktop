@@ -1,8 +1,6 @@
 package com.esprit.controllers.users;
 
-import com.esprit.services.produits.AvisService;
 import com.esprit.utils.SignInMicrosoft;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -41,7 +39,7 @@ public class VerifyWithMicrosoft {
      */
     @FXML
     void initialize() throws IOException, ExecutionException, InterruptedException {
-        String link = SignInMicrosoft.SignInWithMicrosoft();
+        final String link = SignInMicrosoft.SignInWithMicrosoft();
         Desktop.getDesktop().browse(URI.create(link));
     }
 
@@ -49,15 +47,15 @@ public class VerifyWithMicrosoft {
      * @param event
      */
     @FXML
-    void verifyAuthCode(ActionEvent event) {
+    void verifyAuthCode(final ActionEvent event) {
         try {
-            SignInMicrosoft.verifyAuthUrl(authTextField.getText());
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Profile.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) sendButton.getScene().getWindow();
+            SignInMicrosoft.verifyAuthUrl(this.authTextField.getText());
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/Profile.fxml"));
+            final Parent root = loader.load();
+            final Stage stage = (Stage) this.sendButton.getScene().getWindow();
             stage.setScene(new Scene(root));
-        } catch (Exception e) {
-            LOGGER.info("the auth is wrong");
+        } catch (final Exception e) {
+            VerifyWithMicrosoft.LOGGER.info("the auth is wrong");
         }
     }
 }

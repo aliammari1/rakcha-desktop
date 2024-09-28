@@ -18,7 +18,7 @@ public class Actor {
      * @param image      the image URL of the actor
      * @param biographie the biography of the actor
      */
-    public Actor(int id, String nom, String image, String biographie) {
+    public Actor(final int id, final String nom, final String image, final String biographie) {
         this.id = id;
         this.nom = nom;
         this.image = image;
@@ -32,7 +32,7 @@ public class Actor {
      * @param image      the image URL of the actor
      * @param biographie the biography of the actor
      */
-    public Actor(String nom, String image, String biographie) {
+    public Actor(final String nom, final String image, final String biographie) {
         this.nom = nom;
         this.image = image;
         this.biographie = biographie;
@@ -43,27 +43,27 @@ public class Actor {
      *
      * @param id the id of the actor
      */
-    public Actor(int id) {
+    public Actor(final int id) {
         this.id = id;
-        this.nom = null;
-        this.image = null;
-        this.biographie = null;
+        nom = null;
+        image = null;
+        biographie = null;
     }
 
     /**
      * Constructs an Actor object with the specified id, name, image, biography, and number of appearances.
      *
-     * @param id                   the id of the actor
-     * @param nom                  the name of the actor
-     * @param img                  the image URL of the actor
-     * @param s                    the biography of the actor
-     * @param numberOfAppearances  the number of appearances of the actor
+     * @param id                  the id of the actor
+     * @param nom                 the name of the actor
+     * @param img                 the image URL of the actor
+     * @param s                   the biography of the actor
+     * @param numberOfAppearances the number of appearances of the actor
      */
-    public Actor(int id, String nom, String img, String s, int numberOfAppearances) {
+    public Actor(final int id, final String nom, final String img, final String s, final int numberOfAppearances) {
         this.id = id;
         this.nom = nom;
-        this.biographie = s;
-        this.image = img;
+        biographie = s;
+        image = img;
         this.numberOfAppearances = numberOfAppearances;
     }
 
@@ -73,7 +73,7 @@ public class Actor {
      * @return the number of appearances
      */
     public int getNumberOfAppearances() {
-        return numberOfAppearances;
+        return this.numberOfAppearances;
     }
 
     /**
@@ -81,7 +81,7 @@ public class Actor {
      *
      * @param numberOfAppearances the number of appearances
      */
-    public void setNumberOfAppearances(int numberOfAppearances) {
+    public void setNumberOfAppearances(final int numberOfAppearances) {
         this.numberOfAppearances = numberOfAppearances;
     }
 
@@ -91,7 +91,7 @@ public class Actor {
      * @return the id
      */
     public int getId() {
-        return id;
+        return this.id;
     }
 
     /**
@@ -99,7 +99,7 @@ public class Actor {
      *
      * @param id the id
      */
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 
@@ -109,7 +109,7 @@ public class Actor {
      * @return the name
      */
     public String getNom() {
-        return nom;
+        return this.nom;
     }
 
     /**
@@ -117,7 +117,7 @@ public class Actor {
      *
      * @param nom the name
      */
-    public void setNom(String nom) {
+    public void setNom(final String nom) {
         this.nom = nom;
     }
 
@@ -127,7 +127,7 @@ public class Actor {
      * @return the image URL
      */
     public String getImage() {
-        return image;
+        return this.image;
     }
 
     /**
@@ -135,7 +135,7 @@ public class Actor {
      *
      * @param image the image URL
      */
-    public void setImage(String image) {
+    public void setImage(final String image) {
         this.image = image;
     }
 
@@ -145,7 +145,7 @@ public class Actor {
      * @return the biography
      */
     public String getBiographie() {
-        return biographie;
+        return this.biographie;
     }
 
     /**
@@ -153,7 +153,7 @@ public class Actor {
      *
      * @param biographie the biography
      */
-    public void setBiographie(String biographie) {
+    public void setBiographie(final String biographie) {
         this.biographie = biographie;
     }
 
@@ -165,10 +165,10 @@ public class Actor {
     @Override
     public String toString() {
         return "Actor{"
-                + "id=" + id
-                + ", nom='" + nom + '\''
-                + ", image=" + image
-                + ", biographie='" + biographie + '\''
+                + "id=" + this.id
+                + ", nom='" + this.nom + '\''
+                + ", image=" + this.image
+                + ", biographie='" + this.biographie + '\''
                 + '}';
     }
 }

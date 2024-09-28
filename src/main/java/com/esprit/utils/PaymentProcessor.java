@@ -1,7 +1,5 @@
 package com.esprit.utils;
 
-import com.esprit.services.produits.AvisService;
-
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
@@ -13,7 +11,8 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class PaymentProcessor {
+public enum PaymentProcessor {
+    ;
     private static final String STRIPE_API_KEY = System.getenv("STRIPE_API_KEY");
     private static final Logger LOGGER = Logger.getLogger(PaymentProcessor.class.getName());
 
@@ -27,21 +26,21 @@ public class PaymentProcessor {
      * @param cardCvc
      * @return boolean
      */
-    public static boolean processPayment(String name, String email, float amount, String cardNumber, int cardExpMonth,
-            int cardExpYear, String cardCvc) {
+    public static boolean processPayment(final String name, final String email, final float amount, final String cardNumber, final int cardExpMonth,
+                                         final int cardExpYear, final String cardCvc) {
         boolean result = false;
         try {
-            Stripe.apiKey = STRIPE_API_KEY;
+            Stripe.apiKey = PaymentProcessor.STRIPE_API_KEY;
             // Create or retrieve customer
-            Customer customer = retrieveOrCreateCustomer(name, email);
+            final Customer customer = PaymentProcessor.retrieveOrCreateCustomer(name, email);
             // Create token for the credit card
-            Token token = createToken(cardNumber, cardExpMonth, cardExpYear, cardCvc);
+            final Token token = PaymentProcessor.createToken(cardNumber, cardExpMonth, cardExpYear, cardCvc);
             // Charge the customer
-            Charge charge = chargeCustomer(customer.getId(), token.getId(), amount);
+            final Charge charge = PaymentProcessor.chargeCustomer(customer.getId(), token.getId(), amount);
             // Check if the charge was successful
             result = "succeeded".equals(charge.getStatus());
-        } catch (StripeException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final StripeException e) {
+            PaymentProcessor.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return result;
     }
@@ -52,27 +51,27 @@ public class PaymentProcessor {
      * @return Customer
      * @throws StripeException
      */
-    private static Customer retrieveOrCreateCustomer(String name, String email) throws StripeException {
-        Map<String, Object> customerParams = new HashMap<>();
+    private static Customer retrieveOrCreateCustomer(final String name, final String email) throws StripeException {
+        final Map<String, Object> customerParams = new HashMap<>();
         customerParams.put("name", name);
         customerParams.put("email", email);
         return Customer.create(customerParams);
     }
 
-    private static Token createToken(String cardNumber, int expMonth, int expYear, String cvc) throws StripeException {
-        Map<String, Object> cardParams = new HashMap<>();
+    private static Token createToken(final String cardNumber, final int expMonth, final int expYear, final String cvc) throws StripeException {
+        final Map<String, Object> cardParams = new HashMap<>();
         cardParams.put("number", cardNumber);
         cardParams.put("exp_month", expMonth);
         cardParams.put("exp_year", expYear);
         cardParams.put("cvc", cvc);
-        LOGGER.info(cardParams.toString());
-        Map<String, Object> tokenParams = new HashMap<>();
+        PaymentProcessor.LOGGER.info(cardParams.toString());
+        final Map<String, Object> tokenParams = new HashMap<>();
         tokenParams.put("card", cardParams);
         return Token.create(tokenParams);
     }
 
-    private static Charge chargeCustomer(String customerId, String tokenId, float amount) throws StripeException {
-        Map<String, Object> chargeParams = new HashMap<>();
+    private static Charge chargeCustomer(final String customerId, final String tokenId, final float amount) throws StripeException {
+        final Map<String, Object> chargeParams = new HashMap<>();
         chargeParams.put("amount", (int) (amount * 100)); // Amount in cents
         chargeParams.put("currency", "eur");
         chargeParams.put("customer", customerId);
@@ -80,6 +79,4 @@ public class PaymentProcessor {
         return Charge.create(chargeParams);
     }
 
-    private PaymentProcessor() {
-    }
 }

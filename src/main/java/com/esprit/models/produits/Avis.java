@@ -20,7 +20,7 @@ public class Avis {
      * @param note    the note given by the client
      * @param produit the produit associated with the avis
      */
-    public Avis(Client user, int note, Produit produit) {
+    public Avis(final Client user, final int note, final Produit produit) {
         this.user = user;
         this.note = note;
         this.produit = produit;
@@ -32,7 +32,7 @@ public class Avis {
      * @return the client who gave the avis
      */
     public Client getUser() {
-        return user;
+        return this.user;
     }
 
     /**
@@ -40,7 +40,7 @@ public class Avis {
      *
      * @param user the client who gave the avis
      */
-    public void setUser(Client user) {
+    public void setUser(final Client user) {
         this.user = user;
     }
 
@@ -50,7 +50,7 @@ public class Avis {
      * @return the note given by the client
      */
     public int getNote() {
-        return note;
+        return this.note;
     }
 
     /**
@@ -58,7 +58,7 @@ public class Avis {
      *
      * @param note the note given by the client
      */
-    public void setNote(int note) {
+    public void setNote(final int note) {
         this.note = note;
     }
 
@@ -68,7 +68,7 @@ public class Avis {
      * @return the produit associated with the avis
      */
     public Produit getProduit() {
-        return produit;
+        return this.produit;
     }
 
     /**
@@ -76,16 +76,16 @@ public class Avis {
      *
      * @param produit the produit associated with the avis
      */
-    public void setProduit(Produit produit) {
+    public void setProduit(final Produit produit) {
         this.produit = produit;
     }
 
     @Override
     public String toString() {
         return "Avis{"
-                + "user=" + user
-                + ", note=" + note
-                + ", produit=" + produit
+                + "user=" + this.user
+                + ", note=" + this.note
+                + ", produit=" + this.produit
                 + '}';
     }
 }

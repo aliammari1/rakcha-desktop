@@ -1,8 +1,6 @@
 package com.esprit.controllers.users;
 
 import com.esprit.utils.UserSMSAPI;
-
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,7 +16,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.security.SecureRandom;
-import java.util.Random;
 import java.util.ResourceBundle;
 
 public class SMSAdminController implements Initializable {
@@ -37,14 +34,14 @@ public class SMSAdminController implements Initializable {
     /**
      * @param event
      */
-    public void sendSMS(ActionEvent event) {
-        if (verificationCode == Integer.parseInt(codeTextField.getText())) {
+    public void sendSMS(final ActionEvent event) {
+        if (this.verificationCode == Integer.parseInt(this.codeTextField.getText())) {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/ResetPasswordlogin.fxml"));
-                Parent root = loader.load();
-                Stage stage = (Stage) codeTextField.getScene().getWindow();
+                final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ResetPasswordlogin.fxml"));
+                final Parent root = loader.load();
+                final Stage stage = (Stage) this.codeTextField.getScene().getWindow();
                 stage.setScene(new Scene(root));
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -55,14 +52,14 @@ public class SMSAdminController implements Initializable {
      * @param resources
      */
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        phoneNumberTextfield.textProperty()
-                .addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-                    if (newValue.trim().length() == 8) {
-                        SecureRandom random = new SecureRandom();
-                        verificationCode = random.nextInt(999999 - 100000) + 100000;
-                        UserSMSAPI.sendSMS(Integer.parseInt(phoneNumberTextfield.getText()), "Rakcha Admin",
-                                "your code is " + verificationCode);
+    public void initialize(final URL location, final ResourceBundle resources) {
+        this.phoneNumberTextfield.textProperty()
+                .addListener((final ObservableValue<? extends String> observable, final String oldValue, final String newValue) -> {
+                    if (8 == newValue.trim().length()) {
+                        final SecureRandom random = new SecureRandom();
+                        this.verificationCode = random.nextInt(999999 - 100000) + 100000;
+                        UserSMSAPI.sendSMS(Integer.parseInt(this.phoneNumberTextfield.getText()), "Rakcha Admin",
+                                "your code is " + this.verificationCode);
                     }
                 });
     }

@@ -17,7 +17,7 @@ public class RatingFilm {
      * @param id_user The user who is rating the film.
      * @param rate    The rating given to the film.
      */
-    public RatingFilm(Film id_film, Client id_user, int rate) {
+    public RatingFilm(final Film id_film, final Client id_user, final int rate) {
         this.id_film = id_film;
         this.id_user = id_user;
         this.rate = rate;
@@ -29,7 +29,7 @@ public class RatingFilm {
      * @return The film being rated.
      */
     public Film getId_film() {
-        return id_film;
+        return this.id_film;
     }
 
     /**
@@ -37,7 +37,7 @@ public class RatingFilm {
      *
      * @param id_film The film being rated.
      */
-    public void setId_film(Film id_film) {
+    public void setId_film(final Film id_film) {
         this.id_film = id_film;
     }
 
@@ -47,7 +47,7 @@ public class RatingFilm {
      * @return The user who is rating the film.
      */
     public Client getId_user() {
-        return id_user;
+        return this.id_user;
     }
 
     /**
@@ -55,7 +55,7 @@ public class RatingFilm {
      *
      * @param id_user The user who is rating the film.
      */
-    public void setId_user(Client id_user) {
+    public void setId_user(final Client id_user) {
         this.id_user = id_user;
     }
 
@@ -65,7 +65,7 @@ public class RatingFilm {
      * @return The rating given to the film.
      */
     public int getRate() {
-        return rate;
+        return this.rate;
     }
 
     /**
@@ -73,7 +73,7 @@ public class RatingFilm {
      *
      * @param rate The rating given to the film.
      */
-    public void setRate(int rate) {
+    public void setRate(final int rate) {
         this.rate = rate;
     }
 
@@ -85,9 +85,9 @@ public class RatingFilm {
     @Override
     public String toString() {
         return "RatingFilm{"
-                + "id_film=" + id_film
-                + ", id_user=" + id_user
-                + ", rate=" + rate
+                + "id_film=" + this.id_film
+                + ", id_user=" + this.id_user
+                + ", rate=" + this.rate
                 + '}';
     }
 }

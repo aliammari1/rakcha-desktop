@@ -16,28 +16,28 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class CommandeItemService implements IService<CommandeItem> {
-    private final Connection connection;
     private static final Logger LOGGER = Logger.getLogger(CommandeItemService.class.getName());
+    private final Connection connection;
 
     public CommandeItemService() {
-        connection = DataSource.getInstance().getConnection();
+        this.connection = DataSource.getInstance().getConnection();
     }
 
     /**
      * @param commandeItem
      */
     @Override
-    public void create(CommandeItem commandeItem) {
-        String req = "INSERT into commandeitem(id_produit,quantity,idCommande) values (?, ?,?)  ;";
+    public void create(final CommandeItem commandeItem) {
+        final String req = "INSERT into commandeitem(id_produit,quantity,idCommande) values (?, ?,?)  ;";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
+            final PreparedStatement pst = this.connection.prepareStatement(req);
             pst.setInt(2, commandeItem.getQuantity());
             pst.setInt(1, commandeItem.getProduit().getId_produit());
             pst.setInt(3, commandeItem.getCommande().getIdCommande());
             pst.executeUpdate();
-            LOGGER.info("panier remplit !");
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            CommandeItemService.LOGGER.info("panier remplit !");
+        } catch (final SQLException e) {
+            CommandeItemService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -46,59 +46,59 @@ public class CommandeItemService implements IService<CommandeItem> {
      */
     @Override
     public List<CommandeItem> read() {
-        List<CommandeItem> commandeitem = new ArrayList<>();
-        String req = "SELECT * from commandeitem";
+        final List<CommandeItem> commandeitem = new ArrayList<>();
+        final String req = "SELECT * from commandeitem";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
-            ResultSet rs = pst.executeQuery();
-            ProduitService ps = new ProduitService();
-            CommandeService cs = new CommandeService();
+            final PreparedStatement pst = this.connection.prepareStatement(req);
+            final ResultSet rs = pst.executeQuery();
+            final ProduitService ps = new ProduitService();
+            final CommandeService cs = new CommandeService();
             while (rs.next()) {
                 commandeitem.add(new CommandeItem(rs.getInt("idCommandeItem"), rs.getInt("quantity"),
                         ps.getProduitById(rs.getInt("id_produit")), cs.getCommandeByID(rs.getInt("idCommande"))));
             }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            CommandeItemService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return commandeitem;
     }
 
-    public List<CommandeItem> readCommandeItem(int idCommande) {
-        List<CommandeItem> commandeitem = new ArrayList<>();
-        String req = "Select * FROM commandeitem where idCommande=?";
+    public List<CommandeItem> readCommandeItem(final int idCommande) {
+        final List<CommandeItem> commandeitem = new ArrayList<>();
+        final String req = "Select * FROM commandeitem where idCommande=?";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
+            final PreparedStatement pst = this.connection.prepareStatement(req);
             pst.setInt(1, idCommande);
-            ResultSet rs = pst.executeQuery();
-            ProduitService ps = new ProduitService();
-            CommandeService cs = new CommandeService();
+            final ResultSet rs = pst.executeQuery();
+            final ProduitService ps = new ProduitService();
+            final CommandeService cs = new CommandeService();
             while (rs.next()) {
                 commandeitem.add(new CommandeItem(rs.getInt("idCommandeItem"), rs.getInt("quantity"),
                         ps.getProduitById(rs.getInt("id_produit")), cs.getCommandeByID(rs.getInt("idCommande"))));
             }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            CommandeItemService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return commandeitem;
     }
 
     @Override
-    public void update(CommandeItem commandeItem) {
+    public void update(final CommandeItem commandeItem) {
     }
 
     @Override
-    public void delete(CommandeItem commandeItem) {
+    public void delete(final CommandeItem commandeItem) {
     }
 
-    public List<CommandeItem> getCommandeItemsByCommande(int idCommande) {
-        List<CommandeItem> commandeItems = new ArrayList<>();
-        String req = "SELECT * FROM commandeitem WHERE idCommande = ?";
+    public List<CommandeItem> getCommandeItemsByCommande(final int idCommande) {
+        final List<CommandeItem> commandeItems = new ArrayList<>();
+        final String req = "SELECT * FROM commandeitem WHERE idCommande = ?";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
+            final PreparedStatement pst = this.connection.prepareStatement(req);
             pst.setInt(1, idCommande);
-            ResultSet rs = pst.executeQuery();
-            ProduitService ps = new ProduitService();
-            CommandeService cs = new CommandeService();
+            final ResultSet rs = pst.executeQuery();
+            final ProduitService ps = new ProduitService();
+            final CommandeService cs = new CommandeService();
             while (rs.next()) {
                 commandeItems.add(new CommandeItem(
                         rs.getInt("idCommandeItem"),
@@ -106,15 +106,15 @@ public class CommandeItemService implements IService<CommandeItem> {
                         ps.getProduitById(rs.getInt("id_produit")),
                         cs.getCommandeByID(rs.getInt("idCommande"))));
             }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            CommandeItemService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return commandeItems;
     }
 
-    public int getTotalQuantityByCategoryAndDate(String nomCategorie, String formattedDate) {
+    public int getTotalQuantityByCategoryAndDate(final String nomCategorie, final String formattedDate) {
         int totalQuantity = 0;
-        String req = """
+        final String req = """
                 SELECT SUM(ci.quantity) AS totalQuantity \
                 FROM commandeitem ci \
                 JOIN produit p ON ci.id_produit = p.id_produit \
@@ -123,58 +123,58 @@ public class CommandeItemService implements IService<CommandeItem> {
                 WHERE cp.nom_categorie = ? AND DATE(c.dateCommande) = ?\
                 """;
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
+            final PreparedStatement pst = this.connection.prepareStatement(req);
             pst.setString(1, nomCategorie);
             pst.setString(2, formattedDate);
-            ResultSet rs = pst.executeQuery();
+            final ResultSet rs = pst.executeQuery();
             if (rs.next()) {
                 totalQuantity = rs.getInt("totalQuantity");
             }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            CommandeItemService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return totalQuantity;
     }
 
-    public List<CommandeItem> getItemsByCommande(int idCommande) {
-        List<CommandeItem> commandeItems = new ArrayList<>();
-        String req = "SELECT * FROM commandeitem WHERE idCommande = ?";
+    public List<CommandeItem> getItemsByCommande(final int idCommande) {
+        final List<CommandeItem> commandeItems = new ArrayList<>();
+        final String req = "SELECT * FROM commandeitem WHERE idCommande = ?";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
+            final PreparedStatement pst = this.connection.prepareStatement(req);
             pst.setInt(1, idCommande);
-            ResultSet rs = pst.executeQuery();
-            ProduitService ps = new ProduitService();
-            CommandeService cs = new CommandeService();
+            final ResultSet rs = pst.executeQuery();
+            final ProduitService ps = new ProduitService();
+            final CommandeService cs = new CommandeService();
             while (rs.next()) {
-                Produit produit = ps.getProduitById(rs.getInt("id_produit"));
-                Commande commande = cs.getCommandeByID(rs.getInt("idCommande"));
-                CommandeItem commandeItem = new CommandeItem(
+                final Produit produit = ps.getProduitById(rs.getInt("id_produit"));
+                final Commande commande = cs.getCommandeByID(rs.getInt("idCommande"));
+                final CommandeItem commandeItem = new CommandeItem(
                         rs.getInt("idCommandeItem"),
                         rs.getInt("quantity"),
                         produit,
                         commande);
                 commandeItems.add(commandeItem);
             }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            CommandeItemService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return commandeItems;
     }
 
     public List<CommandeItem> getavergeratingSorted() {
-        String req = "SELECT id_produit, quantity FROM commandeitem WHERE statu LIKE 'payee' GROUP BY id_produit ORDER BY quantity DESC";
-        List<CommandeItem> aver = new ArrayList<>();
+        final String req = "SELECT id_produit, quantity FROM commandeitem WHERE statu LIKE 'payee' GROUP BY id_produit ORDER BY quantity DESC";
+        final List<CommandeItem> aver = new ArrayList<>();
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
-            ResultSet rs = pst.executeQuery();
-            ProduitService ps = new ProduitService();
-            CommandeService cs = new CommandeService();
+            final PreparedStatement pst = this.connection.prepareStatement(req);
+            final ResultSet rs = pst.executeQuery();
+            final ProduitService ps = new ProduitService();
+            final CommandeService cs = new CommandeService();
             while (rs.next()) {
                 aver.add(new CommandeItem(rs.getInt("idCommandeItem"), rs.getInt("quantity"),
                         ps.getProduitById(rs.getInt("id_produit")), cs.getCommandeByID(rs.getInt("idCommande"))));
             }
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final Exception e) {
+            CommandeItemService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return aver;
     }

@@ -14,27 +14,27 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class CategorieService implements IService<Categorie_Produit> {
-    private final Connection connection;
     private static final Logger LOGGER = Logger.getLogger(CategorieService.class.getName());
+    private final Connection connection;
 
     public CategorieService() {
-        connection = DataSource.getInstance().getConnection();
+        this.connection = DataSource.getInstance().getConnection();
     }
 
     /**
      * @param categorieProduit
      */
     @Override
-    public void create(Categorie_Produit categorieProduit) {
-        String req = "INSERT into categorie_produit(nom_categorie, description) values (?, ?);";
+    public void create(final Categorie_Produit categorieProduit) {
+        final String req = "INSERT into categorie_produit(nom_categorie, description) values (?, ?);";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
+            final PreparedStatement pst = this.connection.prepareStatement(req);
             pst.setString(1, categorieProduit.getNom_categorie());
             pst.setString(2, categorieProduit.getDescription());
             pst.executeUpdate();
-            LOGGER.info("Categorie ajoutée !");
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            CategorieService.LOGGER.info("Categorie ajoutée !");
+        } catch (final SQLException e) {
+            CategorieService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -43,125 +43,125 @@ public class CategorieService implements IService<Categorie_Produit> {
      */
     @Override
     public List<Categorie_Produit> read() {
-        List<Categorie_Produit> categories = new ArrayList<>();
-        String req = "SELECT * from categorie_produit";
+        final List<Categorie_Produit> categories = new ArrayList<>();
+        final String req = "SELECT * from categorie_produit";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
-            ResultSet rs = pst.executeQuery();
+            final PreparedStatement pst = this.connection.prepareStatement(req);
+            final ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 categories.add(new Categorie_Produit(rs.getInt("id_categorie"), rs.getString("nom_categorie"),
                         rs.getString("description")));
             }
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            CategorieService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return categories;
     }
 
     @Override
-    public void update(Categorie_Produit categorieProduit) {
-        String req = "UPDATE categorie_produit set nom_categorie = ?,  description = ? where id_categorie=?";
+    public void update(final Categorie_Produit categorieProduit) {
+        final String req = "UPDATE categorie_produit set nom_categorie = ?,  description = ? where id_categorie=?";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
+            final PreparedStatement pst = this.connection.prepareStatement(req);
             pst.setString(1, categorieProduit.getNom_categorie());
             pst.setString(2, categorieProduit.getDescription());
             pst.setInt(3, categorieProduit.getId_categorie());
             pst.executeUpdate();
-            LOGGER.info("categorie modifiée !");
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            CategorieService.LOGGER.info("categorie modifiée !");
+        } catch (final SQLException e) {
+            CategorieService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
     @Override
-    public void delete(Categorie_Produit categorieProduit) {
-        String req = "DELETE from categorie_produit where id_categorie = ?;";
+    public void delete(final Categorie_Produit categorieProduit) {
+        final String req = "DELETE from categorie_produit where id_categorie = ?;";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
+            final PreparedStatement pst = this.connection.prepareStatement(req);
             pst.setInt(1, categorieProduit.getId_categorie());
             pst.executeUpdate();
-            LOGGER.info("categorie supprmiée !");
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            CategorieService.LOGGER.info("categorie supprmiée !");
+        } catch (final SQLException e) {
+            CategorieService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
-    public Categorie_Produit getCategorie(int categorie_id) {
+    public Categorie_Produit getCategorie(final int categorie_id) {
         Categorie_Produit category = null;
-        String req = "SELECT * from categorie_produit where id_categorie = ?";
+        final String req = "SELECT * from categorie_produit where id_categorie = ?";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
+            final PreparedStatement pst = this.connection.prepareStatement(req);
             pst.setInt(1, categorie_id);
-            ResultSet rs = pst.executeQuery();
+            final ResultSet rs = pst.executeQuery();
             rs.next();
             category = new Categorie_Produit(rs.getInt("id_categorie"), rs.getString("nom_categorie"),
                     rs.getString("description"));
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            CategorieService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return category;
     }
 
-    public Categorie_Produit getCategorieByNom(String categorie_nom) {
+    public Categorie_Produit getCategorieByNom(final String categorie_nom) {
         Categorie_Produit category = null;
-        String req = "SELECT * from categorie_produit where nom_categorie = ?";
+        final String req = "SELECT * from categorie_produit where nom_categorie = ?";
         try {
-            PreparedStatement pst = connection.prepareStatement(req);
+            final PreparedStatement pst = this.connection.prepareStatement(req);
             pst.setString(1, categorie_nom);
-            ResultSet rs = pst.executeQuery();
+            final ResultSet rs = pst.executeQuery();
             rs.next();
             category = new Categorie_Produit(rs.getInt("id_categorie"), rs.getString("nom_categorie"),
                     rs.getString("description"));
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            CategorieService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return category;
     }
 
     // Ajoutez cette méthode pour récupérer tous les noms de catégories
     public List<String> getAllCategoriesNames() {
-        List<String> categorieNames = new ArrayList<>();
+        final List<String> categorieNames = new ArrayList<>();
         // Remplacez "getAllCategories()" par la méthode réelle qui récupère toutes les
         // catégories
-        List<Categorie_Produit> categories = read();
+        final List<Categorie_Produit> categories = this.read();
         // Ajoutez les noms de catégories à la liste
-        for (Categorie_Produit categorieProduit : categories) {
+        for (final Categorie_Produit categorieProduit : categories) {
             categorieNames.add(categorieProduit.getNom_categorie());
         }
         return categorieNames;
     }
 
     public List<String> getAllCategories() {
-        List<String> categorieNames = new ArrayList<>();
+        final List<String> categorieNames = new ArrayList<>();
         // Remplacez "getAllCategories()" par la méthode réelle qui récupère toutes les
         // catégories
-        List<Categorie_Produit> categories = read();
+        final List<Categorie_Produit> categories = this.read();
         // Ajoutez les noms de catégories à la liste
-        for (Categorie_Produit categorieProduit : categories) {
+        for (final Categorie_Produit categorieProduit : categories) {
             categorieNames.add(categorieProduit.getNom_categorie());
         }
         return categorieNames;
     }
 
-    public List<Categorie_Produit> searchCategoriesByName(String searchKeyword) {
-        List<Categorie_Produit> result = new ArrayList<>();
+    public List<Categorie_Produit> searchCategoriesByName(final String searchKeyword) {
+        final List<Categorie_Produit> result = new ArrayList<>();
         try {
-            String query = "SELECT * FROM categorie_produit WHERE nom_categorie LIKE ?";
-            PreparedStatement statement = connection.prepareStatement(query);
+            final String query = "SELECT * FROM categorie_produit WHERE nom_categorie LIKE ?";
+            final PreparedStatement statement = this.connection.prepareStatement(query);
             statement.setString(1, "%" + searchKeyword + "%");
-            ResultSet resultSet = statement.executeQuery();
+            final ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                int idCategorie = resultSet.getInt("id_categorie");
-                String nomCategorie = resultSet.getString("nom_categorie");
+                final int idCategorie = resultSet.getInt("id_categorie");
+                final String nomCategorie = resultSet.getString("nom_categorie");
                 // Ajoutez d'autres colonnes si nécessaire
-                Categorie_Produit categorie = new Categorie_Produit(idCategorie, nomCategorie, null);
+                final Categorie_Produit categorie = new Categorie_Produit(idCategorie, nomCategorie, null);
                 // Initialisez d'autres propriétés si nécessaire
                 result.add(categorie);
             }
             statement.close();
             resultSet.close();
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (final SQLException e) {
+            CategorieService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return result;
     }

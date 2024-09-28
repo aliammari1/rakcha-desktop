@@ -8,44 +8,44 @@ public class Favoris {
     public Favoris() {
     }
 
-    public Favoris(int id, int id_user, int id_serie) {
+    public Favoris(final int id, final int id_user, final int id_serie) {
         this.id = id;
         this.id_user = id_user;
         this.id_serie = id_serie;
     }
 
-    public Favoris(int id_user, int id_serie) {
+    public Favoris(final int id_user, final int id_serie) {
         this.id_user = id_user;
         this.id_serie = id_serie;
     }
 
-    /** 
+    /**
      * @return int
      */
     public int getId() {
-        return id;
+        return this.id;
     }
 
-    /** 
+    /**
      * @param id
      */
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 
     public int getId_user() {
-        return id_user;
+        return this.id_user;
     }
 
-    public void setId_user(int id_user) {
+    public void setId_user(final int id_user) {
         this.id_user = id_user;
     }
 
     public int getId_serie() {
-        return id_serie;
+        return this.id_serie;
     }
 
-    public void setId_serie(int id_serie) {
+    public void setId_serie(final int id_serie) {
         this.id_serie = id_serie;
     }
 }

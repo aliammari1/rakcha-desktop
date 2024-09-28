@@ -21,7 +21,7 @@ public class CommentaireCinema {
      * @param commentaire   The comment text.
      * @param sentiment     The sentiment of the comment.
      */
-    public CommentaireCinema(int idcommentaire, Cinema cinema, Client client, String commentaire, String sentiment) {
+    public CommentaireCinema(final int idcommentaire, final Cinema cinema, final Client client, final String commentaire, final String sentiment) {
         this.idcommentaire = idcommentaire;
         this.cinema = cinema;
         this.client = client;
@@ -37,7 +37,7 @@ public class CommentaireCinema {
      * @param commentaire The comment text.
      * @param sentiment   The sentiment of the comment.
      */
-    public CommentaireCinema(Cinema cinema, Client client, String commentaire, String sentiment) {
+    public CommentaireCinema(final Cinema cinema, final Client client, final String commentaire, final String sentiment) {
         this.cinema = cinema;
         this.client = client;
         this.commentaire = commentaire;
@@ -50,7 +50,7 @@ public class CommentaireCinema {
      * @return The ID of the comment.
      */
     public int getIdcommentaire() {
-        return idcommentaire;
+        return this.idcommentaire;
     }
 
     /**
@@ -58,7 +58,7 @@ public class CommentaireCinema {
      *
      * @param idcommentaire The ID of the comment.
      */
-    public void setIdcommentaire(int idcommentaire) {
+    public void setIdcommentaire(final int idcommentaire) {
         this.idcommentaire = idcommentaire;
     }
 
@@ -68,7 +68,7 @@ public class CommentaireCinema {
      * @return The cinema associated with the comment.
      */
     public Cinema getCinema() {
-        return cinema;
+        return this.cinema;
     }
 
     /**
@@ -76,7 +76,7 @@ public class CommentaireCinema {
      *
      * @param cinema The cinema associated with the comment.
      */
-    public void setCinema(Cinema cinema) {
+    public void setCinema(final Cinema cinema) {
         this.cinema = cinema;
     }
 
@@ -86,7 +86,7 @@ public class CommentaireCinema {
      * @return The client who made the comment.
      */
     public Client getClient() {
-        return client;
+        return this.client;
     }
 
     /**
@@ -94,7 +94,7 @@ public class CommentaireCinema {
      *
      * @param client The client who made the comment.
      */
-    public void setClient(Client client) {
+    public void setClient(final Client client) {
         this.client = client;
     }
 
@@ -104,7 +104,7 @@ public class CommentaireCinema {
      * @return The comment text.
      */
     public String getCommentaire() {
-        return commentaire;
+        return this.commentaire;
     }
 
     /**
@@ -112,7 +112,7 @@ public class CommentaireCinema {
      *
      * @param commentaire The comment text.
      */
-    public void setCommentaire(String commentaire) {
+    public void setCommentaire(final String commentaire) {
         this.commentaire = commentaire;
     }
 
@@ -122,7 +122,7 @@ public class CommentaireCinema {
      * @return The sentiment of the comment.
      */
     public String getSentiment() {
-        return sentiment;
+        return this.sentiment;
     }
 
     /**
@@ -130,7 +130,7 @@ public class CommentaireCinema {
      *
      * @param sentiment The sentiment of the comment.
      */
-    public void setSentiment(String sentiment) {
+    public void setSentiment(final String sentiment) {
         this.sentiment = sentiment;
     }
 
@@ -142,11 +142,11 @@ public class CommentaireCinema {
     @Override
     public String toString() {
         return "CommentaireCinema{"
-                + "idcommentaire=" + idcommentaire
-                + ", cinema=" + cinema
-                + ", client=" + client
-                + ", commentaire='" + commentaire + '\''
-                + ", sentiment='" + sentiment + '\''
+                + "idcommentaire=" + this.idcommentaire
+                + ", cinema=" + this.cinema
+                + ", client=" + this.client
+                + ", commentaire='" + this.commentaire + '\''
+                + ", sentiment='" + this.sentiment + '\''
                 + '}';
     }
 }

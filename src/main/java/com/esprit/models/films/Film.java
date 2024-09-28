@@ -19,26 +19,26 @@ public class Film {
      *
      * @param f The Film object to copy.
      */
-    public Film(final Film f) {
-        this.id = f.id;
-        this.nom = f.nom;
-        this.image = f.image;
-        this.duree = f.duree;
-        this.description = f.description;
-        this.annederalisation = f.annederalisation;
+    public Film(Film f) {
+        id = f.id;
+        nom = f.nom;
+        image = f.image;
+        duree = f.duree;
+        description = f.description;
+        annederalisation = f.annederalisation;
     }
 
     /**
      * Constructs a new Film object with the specified attributes.
      *
-     * @param id                The ID of the film.
-     * @param nom               The name of the film.
-     * @param image             The image URL of the film.
-     * @param duree             The duration of the film.
-     * @param description       The description of the film.
-     * @param annederalisation  The year of release of the film.
+     * @param id               The ID of the film.
+     * @param nom              The name of the film.
+     * @param image            The image URL of the film.
+     * @param duree            The duration of the film.
+     * @param description      The description of the film.
+     * @param annederalisation The year of release of the film.
      */
-    public Film(int id, String nom, String image, Time duree, String description, int annederalisation) {
+    public Film(final int id, final String nom, final String image, final Time duree, final String description, final int annederalisation) {
         this.id = id;
         this.nom = nom;
         this.image = image;
@@ -50,13 +50,13 @@ public class Film {
     /**
      * Constructs a new Film object with the specified attributes.
      *
-     * @param nom               The name of the film.
-     * @param image             The image URL of the film.
-     * @param duree             The duration of the film.
-     * @param description       The description of the film.
-     * @param annederalisation  The year of release of the film.
+     * @param nom              The name of the film.
+     * @param image            The image URL of the film.
+     * @param duree            The duration of the film.
+     * @param description      The description of the film.
+     * @param annederalisation The year of release of the film.
      */
-    public Film(String nom, String image, Time duree, String description, int annederalisation) {
+    public Film(final String nom, final String image, final Time duree, final String description, final int annederalisation) {
         this.nom = nom;
         this.image = image;
         this.duree = duree;
@@ -69,13 +69,13 @@ public class Film {
      *
      * @param id The ID of the film.
      */
-    public Film(int id) {
+    public Film(final int id) {
         this.id = id;
-        this.nom = null;
-        this.image = null;
-        this.duree = null;
-        this.description = null;
-        this.annederalisation = 0;
+        nom = null;
+        image = null;
+        duree = null;
+        description = null;
+        annederalisation = 0;
     }
 
     /**
@@ -84,7 +84,7 @@ public class Film {
      * @return The name of the film.
      */
     public String getNom() {
-        return nom;
+        return this.nom;
     }
 
     /**
@@ -92,7 +92,7 @@ public class Film {
      *
      * @param nom The name of the film.
      */
-    public void setNom(String nom) {
+    public void setNom(final String nom) {
         this.nom = nom;
     }
 
@@ -102,7 +102,7 @@ public class Film {
      * @return The ID of the film.
      */
     public int getId() {
-        return id;
+        return this.id;
     }
 
     /**
@@ -110,7 +110,7 @@ public class Film {
      *
      * @param id The ID of the film.
      */
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 
@@ -120,7 +120,7 @@ public class Film {
      * @return The image URL of the film.
      */
     public String getImage() {
-        return image;
+        return this.image;
     }
 
     /**
@@ -128,7 +128,7 @@ public class Film {
      *
      * @param image The image URL of the film.
      */
-    public void setImage(String image) {
+    public void setImage(final String image) {
         this.image = image;
     }
 
@@ -138,7 +138,7 @@ public class Film {
      * @return The duration of the film.
      */
     public Time getDuree() {
-        return duree;
+        return this.duree;
     }
 
     /**
@@ -146,7 +146,7 @@ public class Film {
      *
      * @param duree The duration of the film.
      */
-    public void setDuree(Time duree) {
+    public void setDuree(final Time duree) {
         this.duree = duree;
     }
 
@@ -155,7 +155,7 @@ public class Film {
      *
      * @param categoryNom The category name of the film.
      */
-    public void setCategoryNom(String categoryNom) {
+    public void setCategoryNom(final String categoryNom) {
         this.categoryNom = categoryNom;
     }
 
@@ -165,7 +165,7 @@ public class Film {
      * @return The description of the film.
      */
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     /**
@@ -173,7 +173,7 @@ public class Film {
      *
      * @param description The description of the film.
      */
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -183,7 +183,7 @@ public class Film {
      * @return The year of release of the film.
      */
     public int getAnnederalisation() {
-        return annederalisation;
+        return this.annederalisation;
     }
 
     /**
@@ -191,7 +191,7 @@ public class Film {
      *
      * @param annederalisation The year of release of the film.
      */
-    public void setAnnederalisation(int annederalisation) {
+    public void setAnnederalisation(final int annederalisation) {
         this.annederalisation = annederalisation;
     }
 
@@ -203,12 +203,12 @@ public class Film {
     @Override
     public String toString() {
         return "Film{"
-                + "nom='" + nom + '\''
-                + ", id=" + id
-                + ", image=" + image
-                + ", duree=" + duree
-                + ", description='" + description + '\''
-                + ", annederalisation=" + annederalisation
+                + "nom='" + this.nom + '\''
+                + ", id=" + this.id
+                + ", image=" + this.image
+                + ", duree=" + this.duree
+                + ", description='" + this.description + '\''
+                + ", annederalisation=" + this.annederalisation
                 + '}';
     }
 }
