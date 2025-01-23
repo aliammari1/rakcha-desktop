@@ -1,85 +1,132 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.Hyperlink?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<AnchorPane fx:id="anchorPane" prefHeight="520.0" prefWidth="929.0" stylesheets="@styles/signup.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.users.LoginController">
-    <AnchorPane layoutX="467.0" prefHeight="520.0" prefWidth="468.0" styleClass="leftSideBar">
-        <Label layoutX="97.0" layoutY="122.0" prefHeight="58.0" prefWidth="318.0" text="Welcome to Rakcha" textFill="WHITE">
+<HBox fx:id="rootContainer" minWidth="929.0" minHeight="520.0" stylesheets="@styles/signup.css" 
+      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.esprit.controllers.users.LoginController">
+
+    <!-- Login Form Section -->
+    <VBox fx:id="loginSection" minWidth="461.0" spacing="15" HBox.hgrow="ALWAYS">
+        <padding>
+            <Insets top="40" right="40" bottom="40" left="40"/>
+        </padding>
+
+        <!-- Header with Sign In and Social Buttons -->
+        <HBox alignment="CENTER_LEFT" spacing="15">
+            <Label text="Sign In" styleClass="title-label">
+                <font>
+                    <Font name="Outfit Bold" size="36.0"/>
+                </font>
+            </Label>
+            <Region HBox.hgrow="ALWAYS"/>
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <Button fx:id="microsoftSignInButton" onAction="#signInWithMicrosoft" 
+                        styleClass="subLogin" maxWidth="44.0" maxHeight="42.0">
+                    <graphic>
+                        <FontIcon fill="WHITE" iconLiteral="fa-windows" iconSize="32"/>
+                    </graphic>
+                </Button>
+                <Button fx:id="googleSIgnInButton" onAction="#signInWithGoogle" 
+                        styleClass="subLogin" maxWidth="44.0" maxHeight="42.0">
+                    <graphic>
+                        <FontIcon iconColor="WHITE" iconLiteral="fa-google" iconSize="32"/>
+                    </graphic>
+                </Button>
+            </HBox>
+        </HBox>
+
+        <Region VBox.vgrow="ALWAYS" maxHeight="30"/>
+
+        <!-- Login Form -->
+        <GridPane vgap="10" hgap="10" alignment="CENTER">
+            <columnConstraints>
+                <ColumnConstraints minWidth="300" maxWidth="Infinity" hgrow="ALWAYS"/>
+            </columnConstraints>
+
+            <VBox spacing="5" GridPane.rowIndex="0">
+                <Label text="Username" styleClass="form-label">
+                    <font>
+                        <Font name="Outfit Medium" size="17.0"/>
+                    </font>
+                </Label>
+                <TextField fx:id="emailTextField" promptText="Username" styleClass="loginTextField" maxWidth="Infinity">
+                    <padding>
+                        <Insets top="10" right="15" bottom="10" left="15"/>
+                    </padding>
+                </TextField>
+                <Label fx:id="emailErrorLabel" textFill="RED"/>
+            </VBox>
+
+            <VBox spacing="5" GridPane.rowIndex="1">
+                <Label text="Password" styleClass="form-label">
+                    <font>
+                        <Font name="Outfit Medium" size="17.0"/>
+                    </font>
+                </Label>
+                <PasswordField fx:id="passwordTextField" promptText="Password" styleClass="loginTextField" maxWidth="Infinity">
+                    <padding>
+                        <Insets top="10" right="15" bottom="10" left="15"/>
+                    </padding>
+                </PasswordField>
+                <Label fx:id="passwordErrorLabel" textFill="RED"/>
+            </VBox>
+
+            <Button fx:id="signInButton" text="Sign In" onAction="#login" styleClass="loginButton" 
+                    maxWidth="Infinity" GridPane.rowIndex="2">
+                <padding>
+                    <Insets top="10" bottom="10"/>
+                </padding>
+                <font>
+                    <Font name="Outfit Medium" size="20.0"/>
+                </font>
+            </Button>
+        </GridPane>
+
+        <Region VBox.vgrow="ALWAYS" maxHeight="20"/>
+
+        <!-- Footer Links -->
+        <VBox spacing="10" alignment="CENTER">
+            <HBox alignment="CENTER" spacing="50">
+                <CheckBox id="rememberMe" text="Remember Me"/>
+                <Hyperlink fx:id="forgetPasswordHyperlink" text="Forgot Password"/>
+            </HBox>
+            <Hyperlink fx:id="forgetPasswordEmailHyperlink" text="Forgot Password email"/>
+        </VBox>
+    </VBox>
+
+    <!-- Welcome Section -->
+    <VBox styleClass="leftSideBar" minWidth="468.0" alignment="CENTER" spacing="25" HBox.hgrow="ALWAYS">
+        <padding>
+            <Insets top="40" right="40" bottom="40" left="40"/>
+        </padding>
+        
+        <VBox alignment="CENTER" spacing="15">
+            <Label text="Welcome to Rakcha" textFill="WHITE" wrapText="true" 
+                   alignment="CENTER" textAlignment="CENTER">
+                <font>
+                    <Font name="Outfit SemiBold" size="35.0"/>
+                </font>
+            </Label>
+            <Label text="Don't have an account" textFill="WHITE">
+                <font>
+                    <Font size="19.0"/>
+                </font>
+            </Label>
+        </VBox>
+
+        <Button fx:id="signUpButton" onAction="#switchToSignUp" styleClass="signupButton" 
+                text="Sign up" textFill="WHITE" prefWidth="150">
             <font>
-                <Font name="Outfit SemiBold" size="35.0" />
-            </font>
-        </Label>
-        <Label layoutX="162.0" layoutY="219.0" text="Don't have an account" textFill="WHITE">
-            <font>
-                <Font size="19.0" />
-            </font>
-        </Label>
-        <Button fx:id="signUpButton" layoutX="207.0" layoutY="276.0" mnemonicParsing="false" onAction="#switchToSignUp" prefHeight="34.0" prefWidth="97.0" styleClass="signupButton" text="Sign up" textFill="WHITE">
-            <font>
-                <Font name="Outfit Medium" size="17.0" />
-            </font>
-        </Button>
-    </AnchorPane>
-    <AnchorPane fx:id="loginAnchorPane" prefHeight="520.0" prefWidth="461.0">
-        <Label layoutX="87.0" layoutY="217.0" text="Password">
-            <font>
-                <Font name="Outfit Medium" size="17.0" />
-            </font>
-        </Label>
-        <TextField fx:id="emailTextField" layoutX="88.0" layoutY="150.0" prefHeight="42.0" prefWidth="271.0" promptText="Username" styleClass="loginTextField">
-            <font>
-                <Font name="Outfit Regular" size="15.0" />
+                <Font name="Outfit Medium" size="17.0"/>
             </font>
             <padding>
-                <Insets left="20.0" />
+                <Insets top="10" right="20" bottom="10" left="20"/>
             </padding>
-        </TextField>
-        <Label layoutX="85.0" layoutY="113.0" prefHeight="30.0" prefWidth="88.0" text="Username">
-            <font>
-                <Font name="Outfit Medium" size="17.0" />
-            </font>
-        </Label>
-        <Button fx:id="signInButton" layoutX="88.0" layoutY="333.0" mnemonicParsing="false" onAction="#login" prefHeight="42.0" prefWidth="271.0" styleClass="loginButton" text="Sign In" textFill="WHITE">
-            <font>
-                <Font name="Outfit Medium" size="20.0" />
-            </font>
         </Button>
-        <PasswordField fx:id="passwordTextField" layoutX="88.0" layoutY="247.0" prefHeight="42.0" prefWidth="271.0" promptText="Password" styleClass="loginTextField">
-            <padding>
-                <Insets left="20.0" />
-            </padding>
-            <font>
-                <Font name="Outfit Regular" size="15.0" />
-            </font>
-        </PasswordField>
-        <Label layoutX="62.0" layoutY="35.0" text="Sign In">
-            <font>
-                <Font name="Outfit Bold" size="36.0" />
-            </font>
-        </Label>
-        <CheckBox id="rememberMe" layoutX="74.0" layoutY="404.0" mnemonicParsing="false" text="Remember Me" />
-        <Hyperlink fx:id="forgetPasswordHyperlink" layoutX="266.0" layoutY="401.0" text="Forgot Password" />
-        <Button fx:id="googleSIgnInButton" layoutX="323.0" layoutY="37.0" mnemonicParsing="false" onAction="#signInWithGoogle" prefHeight="42.0" prefWidth="44.0" styleClass="subLogin">
-            <graphic>
-                <FontIcon iconColor="WHITE" iconLiteral="fa-google" iconSize="32" />
-            </graphic>
-        </Button>
-        <Button fx:id="microsoftSignInButton" layoutX="270.0" layoutY="37.0" mnemonicParsing="false" onAction="#signInWithMicrosoft" prefHeight="42.0" prefWidth="44.0" styleClass="subLogin">
-            <graphic>
-                <FontIcon fill="WHITE" iconLiteral="fa-windows" iconSize="32" />
-            </graphic>
-        </Button>
-        <Label fx:id="emailErrorLabel" layoutX="88.0" layoutY="192.0" prefHeight="18.0" prefWidth="271.0" textFill="RED" />
-        <Label fx:id="passwordErrorLabel" layoutX="88.0" layoutY="289.0" prefHeight="18.0" prefWidth="271.0" textFill="RED" />
-        <Hyperlink fx:id="forgetPasswordEmailHyperlink" layoutX="159.0" layoutY="444.0" text="Forgot Password email" />
-    </AnchorPane>
-</AnchorPane>
+    </VBox>
+</HBox>
