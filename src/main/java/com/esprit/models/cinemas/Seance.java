@@ -1,6 +1,7 @@
 package com.esprit.models.cinemas;
 
 import com.esprit.models.films.Filmcinema;
+import com.esprit.models.films.Film;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -29,7 +30,8 @@ public class Seance {
      * @param prix       the price of the seance
      * @param filmcinema the filmcinema associated with the seance
      */
-    public Seance(final int id_seance, final Salle salle, final Time HD, final Time HF, final Date date, final double prix, final Filmcinema filmcinema) {
+    public Seance(final int id_seance, final Salle salle, final Time HD, final Time HF, final Date date,
+            final double prix, final Filmcinema filmcinema) {
         this.id_seance = id_seance;
         this.filmcinema = filmcinema;
         this.salle = salle;
@@ -49,7 +51,8 @@ public class Seance {
      * @param prix       the price of the seance
      * @param filmcinema the filmcinema associated with the seance
      */
-    public Seance(final Salle salle, final Time HD, final Time HF, final Date date, final double prix, final Filmcinema filmcinema) {
+    public Seance(final Salle salle, final Time HD, final Time HF, final Date date, final double prix,
+            final Filmcinema filmcinema) {
         this.filmcinema = filmcinema;
         this.salle = salle;
         this.HD = HD;
@@ -69,9 +72,10 @@ public class Seance {
      * @param prix       the price of the seance
      * @param filmcinema the filmcinema associated with the seance
      */
-    public Seance(final int idSeance, final Salle salle, final Time HD, final Time HF, final LocalDate date, final int prix, final Filmcinema filmcinema) {
+    public Seance(final int idSeance, final Salle salle, final Time HD, final Time HF, final LocalDate date,
+            final int prix, final Filmcinema filmcinema) {
         this.filmcinema = filmcinema;
-        id_seance = this.id_seance;
+        this.id_seance = idSeance;
         this.salle = salle;
         this.HD = HD;
         this.HF = HF;
@@ -176,5 +180,9 @@ public class Seance {
 
     public int getId_seance() {
         return this.id_seance;
+    }
+
+    public Film getId_film() {
+        return this.filmcinema != null ? this.filmcinema.getFilm() : null;
     }
 }

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.image.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<?import org.controlsfx.control.Rating?>
+
+<VBox prefHeight="855.0" prefWidth="1507.0"
+    xmlns="http://javafx.com/javafx/21"
+    xmlns:fx="http://javafx.com/fxml/1" 
+    fx:controller="com.esprit.controllers.films.FilmDetailsController">
+
+    <HBox VBox.vgrow="ALWAYS">
+        <!-- SideBar -->
+        <fx:include source="../clientSideBar.fxml"/>
+        
+        <!-- Main Content -->
+        <VBox spacing="20" HBox.hgrow="ALWAYS">
+            <padding>
+                <Insets top="25" right="25" bottom="25" left="25"/>
+            </padding>
+
+            <!-- Movie Details Section -->
+            <HBox spacing="20" VBox.vgrow="ALWAYS">
+                <!-- Left Side - Movie Info -->
+                <VBox spacing="15" HBox.hgrow="ALWAYS" styleClass="bg-white">
+                    <padding>
+                        <Insets top="20" right="20" bottom="20" left="20"/>
+                    </padding>
+
+                    <!-- Movie Header -->
+                    <HBox spacing="20" alignment="CENTER_LEFT">
+                        <ImageView fx:id="moviePoster" fitHeight="300.0" fitWidth="200.0" 
+                                 preserveRatio="true" styleClass="movie-poster"/>
+                        
+                        <VBox spacing="10">
+                            <Label fx:id="movieTitle" styleClass="movie-title">
+                                <font>
+                                    <Font name="Arial Bold" size="24.0"/>
+                                </font>
+                            </Label>
+                            
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label fx:id="movieCategory"/>
+                                <Label fx:id="movieDuration"/>
+                                <Label fx:id="movieReleaseDate"/>
+                            </HBox>
+                            
+                            <Rating fx:id="movieRating" />
+                            
+                            <TextArea fx:id="movieDescription" wrapText="true" 
+                                     editable="false" styleClass="movie-description"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Trailer Section -->
+                    <VBox spacing="10">
+                        <Label text="Trailer" styleClass="section-title">
+                            <font>
+                                <Font name="Arial Bold" size="18.0"/>
+                            </font>
+                        </Label>
+                        <WebView fx:id="trailerWebView" prefHeight="315.0"/>
+                    </VBox>
+
+                    <!-- Cast Section -->
+                    <VBox spacing="10">
+                        <Label text="Cast" styleClass="section-title">
+                            <font>
+                                <Font name="Arial Bold" size="18.0"/>
+                            </font>
+                        </Label>
+                        <FlowPane fx:id="castFlowPane" hgap="15" vgap="15"/>
+                    </VBox>
+                </VBox>
+
+                <!-- Right Side Panel -->
+                <VBox spacing="15" maxWidth="300.0">
+                    <!-- Showtimes -->
+                    <VBox styleClass="bg-white" spacing="10">
+                        <padding>
+                            <Insets top="15" right="15" bottom="15" left="15"/>
+                        </padding>
+                        
+                        <Label text="Showtimes" styleClass="section-title">
+                            <font>
+                                <Font name="Arial Bold" size="18.0"/>
+                            </font>
+                        </Label>
+                        
+                        <ComboBox fx:id="cinemaSelector" promptText="Select Cinema" 
+                                 maxWidth="Infinity"/>
+                        <DatePicker fx:id="datePicker" promptText="Select Date" 
+                                  maxWidth="Infinity"/>
+                        <ListView fx:id="showtimesList" VBox.vgrow="ALWAYS"/>
+                        
+                        <Button onAction="#bookTicket" styleClass="primary-button" 
+                                text="Book Tickets" maxWidth="Infinity"/>
+                    </VBox>
+
+                    <!-- Reviews Section -->
+                    <VBox styleClass="bg-white" spacing="10" VBox.vgrow="ALWAYS">
+                        <padding>
+                            <Insets top="15" right="15" bottom="15" left="15"/>
+                        </padding>
+                        
+                        <Label text="Reviews" styleClass="section-title">
+                            <font>
+                                <Font name="Arial Bold" size="18.0"/>
+                            </font>
+                        </Label>
+                        
+                        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+                            <VBox fx:id="reviewsContainer" spacing="10"/>
+                        </ScrollPane>
+                        
+                        <VBox spacing="10">
+                            <Rating fx:id="userRating"/>
+                            <TextArea fx:id="reviewInput" promptText="Write your review..." 
+                                     prefRowCount="3"/>
+                            <Button onAction="#submitReview" styleClass="primary-button" 
+                                    text="Post Review" maxWidth="Infinity"/>
+                        </VBox>
+                    </VBox>
+                </VBox>
+            </HBox>
+
+            <!-- Back Button -->
+            <Button onAction="#navigateBack" styleClass="secondary-button">
+                <graphic>
+                    <FontIcon iconLiteral="fa-arrow-left"/>
+                </graphic>
+                <text>Back to Movies</text>
+            </Button>
+        </VBox>
+    </HBox>
+</VBox>

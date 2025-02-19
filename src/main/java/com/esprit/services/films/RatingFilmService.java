@@ -9,6 +9,7 @@ import com.esprit.utils.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -112,5 +113,29 @@ public class RatingFilmService implements IService<RatingFilm> {
             RatingFilmService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return rate;
+    }
+
+    public List<RatingFilm> getUserRatings(int userId) {
+        List<RatingFilm> ratings = new ArrayList<>();
+        String query = "SELECT * FROM ratingfilm WHERE id_user = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Client user = (Client) new UserService().getUserById(rs.getInt("user_id"));
+                if (user instanceof Client) {
+                    ratings.add(new RatingFilm(
+                            new FilmService().getFilm(rs.getInt("film_id")),
+                            user,
+                            rs.getInt("rate")));
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error getting user ratings: " + userId, e);
+        }
+
+        return ratings;
     }
 }

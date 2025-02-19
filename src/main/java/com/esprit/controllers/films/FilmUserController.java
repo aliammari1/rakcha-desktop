@@ -1,10 +1,12 @@
 package com.esprit.controllers.films;
 
+import com.esprit.models.cinemas.Seance;
 import com.esprit.models.films.Actor;
 import com.esprit.models.films.Film;
 import com.esprit.models.films.Filmcoment;
 import com.esprit.models.films.RatingFilm;
 import com.esprit.models.users.Client;
+import com.esprit.services.cinemas.SeanceService;
 import com.esprit.services.films.*;
 import com.esprit.services.users.UserService;
 import com.google.zxing.BarcodeFormat;
@@ -14,9 +16,11 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import javafx.application.Application;
 import javafx.application.HostServices;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -29,6 +33,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.TransferMode;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -47,11 +55,29 @@ import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.json.JSONObject;
+import org.json.JSONArray;
 
 /**
  * Is responsible for handling user interactions related to viewing and
@@ -131,6 +157,11 @@ public class FilmUserController extends Application {
     private ComboBox<String> tricomboBox;
     private int filmId;
 
+    // Add new fields
+    private final HashMap<Integer, Double> userPreferences = new HashMap<>();
+    // Add seance field
+    private Seance seance;
+
     /**
      * Queries a list of films for any that contain a specified search term in their
      * name,
@@ -146,17 +177,17 @@ public class FilmUserController extends Application {
      * @param recherche search query, which is used to filter the list of films in
      *                  the function.
      * @returns a list of `Film` objects that contain the searched string in their
-     * name.
-     * <p>
-     * - The list of films is filtered based on the search query, resulting
-     * in a subset
-     * of films that match the query.
-     * - The list contains only films with a non-null `nom` attribute and
-     * containing the
-     * search query in their name.
-     * - The list is returned as a new list of films, which can be used for
-     * further
-     * processing or analysis.
+     *          name.
+     *          <p>
+     *          - The list of films is filtered based on the search query, resulting
+     *          in a subset
+     *          of films that match the query.
+     *          - The list contains only films with a non-null `nom` attribute and
+     *          containing the
+     *          search query in their name.
+     *          - The list is returned as a new list of films, which can be used for
+     *          further
+     *          processing or analysis.
      */
     @FXML
     public static List<Film> rechercher(final List<Film> liste, final String recherche) {
@@ -178,14 +209,32 @@ public class FilmUserController extends Application {
      *            displayed.
      */
     public void switchtopayment(final String nom) throws IOException {
-        final FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/Paymentuser.fxml"));
+        final FilmService filmService = new FilmService();
+        final Film film = filmService.getFilmByName(nom);
+
+        // Initialize seance before passing to SeatSelection
+        this.seance = new SeanceService().getFirstSeanceForFilm(film.getId());
+        if (this.seance == null) {
+            showError("No Available Seance", "There are no available seances for this film.");
+            return;
+        }
+
+        final FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/ui/films/SeatSelection.fxml"));
         final AnchorPane root = fxmlLoader.load();
         final Stage stage = (Stage) this.reserver_Film.getScene().getWindow();
-        final PaymentuserController paymentuserController = fxmlLoader.getController();
+        final SeatSelectionController controller = fxmlLoader.getController();
         final Client client = (Client) stage.getUserData();
-        paymentuserController.setData(client, nom);
-        final Scene scene = new Scene(root, 1507, 855);
+        controller.initialize(seance, client);
+        final Scene scene = new Scene(root);
         stage.setScene(scene);
+    }
+
+    private void showError(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     /**
@@ -213,7 +262,16 @@ public class FilmUserController extends Application {
      * pane
      * to display films and three combos to display top actors or directors.
      */
+    @FXML
     public void initialize() {
+        // Initialize basic UI components first
+        setupBasicUI();
+
+        // Defer loading recommendations until scene is ready
+        Platform.runLater(this::setupRecommendations);
+    }
+
+    private void setupBasicUI() {
         this.top3combobox.getItems().addAll("Top 3 Films", "Top 3 Actors");
         this.top3combobox.setValue("Top 3 Films");
         this.top3combobox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -290,6 +348,39 @@ public class FilmUserController extends Application {
         }
     }
 
+    private void setupRecommendations() {
+        if (filmScrollPane.getScene() != null && filmScrollPane.getScene().getWindow() != null) {
+            // Add sharing button to film cards
+            flowpaneFilm.getChildren().forEach(node -> {
+                if (node instanceof AnchorPane) {
+                    Button shareButton = new Button("Share");
+                    shareButton.setOnAction(e -> shareToSocial(
+                            ((Film) node.getUserData())));
+                    ((AnchorPane) node).getChildren().add(shareButton);
+
+                    // Set up drag and drop
+                    setupDragAndDrop((AnchorPane) node, (Film) node.getUserData());
+                }
+            });
+
+            // Add recommendations section
+            try {
+                VBox recommendationsBox = new VBox(10);
+                recommendationsBox.getChildren().add(new Label("Recommended for You"));
+
+                int userId = getCurrentUserId();
+                if (userId > 0) {
+                    getRecommendations(userId).forEach(film -> {
+                        recommendationsBox.getChildren().add(createFilmCard(film));
+                    });
+                    flowpaneFilm.getChildren().add(recommendationsBox);
+                }
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Failed to load recommendations", e);
+            }
+        }
+    }
+
     /**
      * Filters a `Flowpane` of `AnchorPane` elements based on the text content of a
      * `.nomFilm` label, making the visible or invisible elements dependent on the
@@ -303,10 +394,12 @@ public class FilmUserController extends Application {
     private void filterByName(final String keyword) {
         for (final Node node : this.flowpaneFilm.getChildren()) {
             final AnchorPane filmCard = (AnchorPane) node;
-            final Label nomFilm = (Label) filmCard.lookup(".nomFilm"); // Supposons que le nom du film soit représenté par une
+            final Label nomFilm = (Label) filmCard.lookup(".nomFilm"); // Supposons que le nom du film soit représenté
+                                                                       // par une
             // classe CSS ".nomFilm"
             if (null != nomFilm) {
-                final boolean isVisible = nomFilm.getText().toLowerCase().contains(keyword); // Vérifie si le nom du film
+                final boolean isVisible = nomFilm.getText().toLowerCase().contains(keyword); // Vérifie si le nom du
+                                                                                             // film
                 // contient le mot-clé de
                 // recherche
                 filmCard.setVisible(isVisible); // Définit la visibilité de la carte en fonction du résultat du filtrage
@@ -337,64 +430,79 @@ public class FilmUserController extends Application {
      *             - `categories`: an array of categories the film belongs to
      *             - `actors`: an array of actors appearing in the film.
      * @returns an AnchorPane with a QR code generator, trailer player, and rating
-     * system
-     * for a given film.
-     * <p>
-     * - `hyperlink`: A Hyperlink component that displays the film's title
-     * and opens the
-     * IMDB page when clicked.
-     * - `imagefilmDetail`: An Image component that displays the film's
-     * poster image.
-     * - `descriptionDETAILfilm`: A Text component that displays the film's
-     * detailed description.
-     * - `labelavregeRate`: A Label component that displays the average
-     * rating of the film.
-     * - `ratefilm`: A Text component that displays the current rating of
-     * the film.
-     * - `topthreeVbox`: A VBox component that displays the top three
-     * actors of the film.
-     * - `trailer_Button`: A Button component that plays the film's trailer
-     * when clicked.
-     * <p>
-     * Note: The output is a JavaFX AnchorPane that contains all the
-     * components explained
-     * above.
+     *          system
+     *          for a given film.
+     *          <p>
+     *          - `hyperlink`: A Hyperlink component that displays the film's title
+     *          and opens the
+     *          IMDB page when clicked.
+     *          - `imagefilmDetail`: An Image component that displays the film's
+     *          poster image.
+     *          - `descriptionDETAILfilm`: A Text component that displays the film's
+     *          detailed description.
+     *          - `labelavregeRate`: A Label component that displays the average
+     *          rating of the film.
+     *          - `ratefilm`: A Text component that displays the current rating of
+     *          the film.
+     *          - `topthreeVbox`: A VBox component that displays the top three
+     *          actors of the film.
+     *          - `trailer_Button`: A Button component that plays the film's trailer
+     *          when clicked.
+     *          <p>
+     *          Note: The output is a JavaFX AnchorPane that contains all the
+     *          components explained
+     *          above.
      */
     private AnchorPane createFilmCard(final Film film) {
         final AnchorPane copyOfAnchorPane = new AnchorPane();
         copyOfAnchorPane.setLayoutX(0);
         copyOfAnchorPane.setLayoutY(0);
-        copyOfAnchorPane.setPrefSize(213, 334);
+        copyOfAnchorPane.setPrefSize(250, 400); // Increased size for better proportions
         copyOfAnchorPane.getStyleClass().add("anchorfilm");
+
         final ImageView imageView = new ImageView();
         try {
-            if (!film.getImage().isEmpty()) {
-                imageView.setImage(new Image(film.getImage()));
-                imageView.setLayoutX(45);
-                imageView.setLayoutY(7);
-                imageView.setFitHeight(193);
-                imageView.setFitWidth(132);
-                imageView.getStyleClass().addAll("bg-white");
+            // Remove caching logic and load image directly
+            String imagePath = film.getImage();
+            if (imagePath != null && !imagePath.isEmpty()) {
+                imageView.setImage(new Image(getClass().getResourceAsStream(imagePath)));
+            } else {
+                LOGGER.log(Level.WARNING, "Image path is null or empty for film ID: " + film.getId());
+                // Set a default image
+                imageView.setImage(new Image(getClass().getResourceAsStream("/img/films/default.jpg")));
             }
+
+            // Set consistent image dimensions
+            imageView.setFitWidth(220); // Slightly smaller than card width
+            imageView.setFitHeight(300); // Taller for movie poster aspect ratio
+            imageView.setPreserveRatio(true); // Maintain aspect ratio
+            imageView.setSmooth(true); // Better image quality
+            imageView.setLayoutX(15); // Center in card
+            imageView.setLayoutY(10); // Small top margin
+
         } catch (final Exception e) {
-            FilmUserController.LOGGER.info("Image not found LINE 263");
-            // LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            // Handle exception or set a default image
+            imageView.setImage(new Image(getClass().getResourceAsStream("/img/films/default.jpg")));
+            LOGGER.log(Level.WARNING, "Failed to load image for film: " + film.getId(), e);
         }
+
+        // Adjust positions of other elements to account for new image size
         final Label nomFilm = new Label(film.getNom());
-        nomFilm.setLayoutX(23);
-        nomFilm.setLayoutY(200);
-        nomFilm.setPrefSize(176, 32);
+        nomFilm.setLayoutX(15);
+        nomFilm.setLayoutY(320); // Position below image
+        nomFilm.setPrefSize(220, 32);
         nomFilm.setFont(new Font(18)); // Copy the font size
         nomFilm.getStyleClass().addAll("labeltext");
+
         final Label ratefilm = new Label(film.getNom());
         ratefilm.setLayoutX(15);
-        ratefilm.setLayoutY(222);
+        ratefilm.setLayoutY(350); // Adjust for new layout
         ratefilm.setPrefSize(176, 32);
-        ratefilm.setFont(new Font(18)); // Copy the font size
+        ratefilm.setFont(new Font(16)); // Copy the font size
         ratefilm.getStyleClass().addAll("labeltext");
         final double rate = new RatingFilmService().getavergerating(film.getId());
         ratefilm.setText(rate + "/5");
-        final RatingFilm ratingFilm = new RatingFilmService().ratingExiste(film.getId(), /* (Client) stage.getUserData() */2);
+        final RatingFilm ratingFilm = new RatingFilmService().ratingExiste(film.getId(), 2);
         this.filmRate.setRating(null != ratingFilm ? ratingFilm.getRate() : 0);
         final FontIcon etoile = new FontIcon();
         etoile.setIconLiteral("fa-star");
@@ -402,8 +510,8 @@ public class FilmUserController extends Application {
         etoile.setLayoutY(247);
         etoile.setFill(Color.web("#f2b604"));
         final Button button = new Button("reserve");
-        button.setLayoutX(22);
-        button.setLayoutY(278);
+        button.setLayoutX(39);
+        button.setLayoutY(385); // Move to bottom
         button.setPrefSize(172, 42);
         button.getStyleClass().addAll("sale");
         button.setOnAction(new EventHandler<>() {
@@ -441,17 +549,15 @@ public class FilmUserController extends Application {
              * and
              * listens for clicks on the image to open the movie's trailer in a web view.
              *
-             * @param event ActionEvent that triggered the function, providing the source of
-             *              the
-             *              event and allowing for proper handling of the corresponding
-             *              action.
+             * @param event ActionEvent that triggered the function's execution,
+             *              providing
+             *              information about the action that was performed, such as the
+             *              source of the event
+             *              and the key code pressed.
              *
-             *              - `event`: An instance of `ActionEvent`, representing an action
-             *              event triggered
-             *              by the user.
-             *              - `movie`: The `Movie` object associated with the event,
-             *              containing information
-             *              about the movie being displayed.
+             *              - `event`: A `MouseEvent` object representing the mouse event
+             *              that triggered the
+             *              function.
              */
             @Override
             public void handle(final ActionEvent event) {
@@ -469,9 +575,9 @@ public class FilmUserController extends Application {
                 final double rate = new RatingFilmService().getavergerating(film1.getId());
                 FilmUserController.this.labelavregeRate.setText(rate + "/5");
                 final RatingFilm ratingFilm = new RatingFilmService().ratingExiste(film1.getId(), /*
-                 * (Client)
-                 * stage.getUserData()
-                 */2);
+                                                                                                   * (Client)
+                                                                                                   * stage.getUserData()
+                                                                                                   */2);
                 final Rating rateFilm = new Rating();
                 rateFilm.setLayoutX(103);
                 rateFilm.setLayoutY(494);
@@ -532,12 +638,14 @@ public class FilmUserController extends Application {
                      *                        ID.
                      */
                     @Override
-                    public void changed(final ObservableValue<? extends Number> observableValue, final Number number, final Number t1) {
+                    public void changed(final ObservableValue<? extends Number> observableValue, final Number number,
+                            final Number t1) {
                         final RatingFilmService ratingFilmService = new RatingFilmService();
                         final RatingFilm ratingFilm = ratingFilmService.ratingExiste(film1.getId(), 2/*
-                         * (Client)
-                         * stage.getUserData()
-                         */);
+                                                                                                      * (Client)
+                                                                                                      * stage.
+                                                                                                      * getUserData()
+                                                                                                      */);
                         FilmUserController.LOGGER.info("---------   " + film1.getId());
                         if (null != ratingFilm) {
                             ratingFilmService.delete(ratingFilm);
@@ -550,7 +658,8 @@ public class FilmUserController extends Application {
                         ratefilm.setText(rate + "/5");
                         FilmUserController.this.topthreeVbox.getChildren().clear();
                         for (int i = 0; 3 > i; i++) {
-                            FilmUserController.this.topthreeVbox.getChildren().add(FilmUserController.this.createtopthree(i));
+                            FilmUserController.this.topthreeVbox.getChildren()
+                                    .add(FilmUserController.this.createtopthree(i));
                         }
                     }
                 });
@@ -579,34 +688,37 @@ public class FilmUserController extends Application {
                         });
                         final WebView webView = new WebView();
                         FilmUserController.LOGGER.info(film1.getNom());
-                        webView.getEngine().load(new FilmService().getTrailerFilm(film1.getNom()));
+                        Platform.runLater(() -> {
+                            webView.getEngine().load(new FilmService().getTrailerFilm(film1.getNom()));
+                        });
                         FilmUserController.LOGGER.info("film passed");
                         FilmUserController.this.anchorPane_Trailer.setVisible(true);
                         FilmUserController.this.anchorPane_Trailer.getChildren().add(webView);
-                        FilmUserController.this.anchorPane_Trailer.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-                            /**
-                             * Is triggered when the ESCAPE key is pressed. It disables all children nodes
-                             * in an
-                             * anchor pane and hides the anchor pane itself.
-                             *
-                             * @param keyEvent event object that contains information about the key that was
-                             *                 pressed, which is used to determine how to handle the event
-                             *                 in the `handle()` method.
-                             *
-                             *                 - `keyEvent.getCode()`: Returns the key code associated with
-                             *                 the event. In this
-                             *                 case, it is `KeyCode.ESCAPE`.
-                             */
-                            @Override
-                            public void handle(final KeyEvent keyEvent) {
-                                if (KeyCode.ESCAPE == keyEvent.getCode()) {
-                                    FilmUserController.this.anchorPane_Trailer.getChildren().forEach(node -> {
-                                        node.setDisable(true);
-                                    });
-                                    FilmUserController.this.anchorPane_Trailer.setVisible(false);
-                                }
-                            }
-                        });
+                        FilmUserController.this.anchorPane_Trailer.addEventHandler(KeyEvent.KEY_PRESSED,
+                                new EventHandler<KeyEvent>() {
+                                    /**
+                                     * Is triggered when the ESCAPE key is pressed. It disables all children nodes
+                                     * in an
+                                     * anchor pane and hides the anchor pane itself.
+                                     *
+                                     * @param keyEvent event object that contains information about the key that was
+                                     *                 pressed, which is used to determine how to handle the event
+                                     *                 in the `handle()` method.
+                                     *
+                                     *                 - `keyEvent.getCode()`: Returns the key code associated with
+                                     *                 the event. In this
+                                     *                 case, it is `KeyCode.ESCAPE`.
+                                     */
+                                    @Override
+                                    public void handle(final KeyEvent keyEvent) {
+                                        if (KeyCode.ESCAPE == keyEvent.getCode()) {
+                                            FilmUserController.this.anchorPane_Trailer.getChildren().forEach(node -> {
+                                                node.setDisable(true);
+                                            });
+                                            FilmUserController.this.anchorPane_Trailer.setVisible(false);
+                                        }
+                                    }
+                                });
                     }
                 });
                 FilmUserController.this.detalAnchorPane.getChildren().add(rateFilm);
@@ -629,27 +741,27 @@ public class FilmUserController extends Application {
      *                       the corresponding actor details and image from the
      *                       ActorService.
      * @returns an AnchorPane containing three components: an image view, a label
-     * with
-     * actor details, and a text area with actor biography.
-     * <p>
-     * - The anchor pane (`anchorPane`) is a container that holds the other
-     * components.
-     * - The image view (`imageView`) displays an image related to the
-     * actor.
-     * - The Label (`actorDetails`) shows the actor's name and number of
-     * appearances in
-     * films.
-     * - The TextArea (`actorBio`) contains the actor's biography.
-     * - The anchor pane has a prefSize of 244 x 226 pixels, with a
-     * background color of
-     * "meilleurfilm".
-     * - The image view, label, and text area have a layoutX of 0, a
-     * layoutY of 0, and
-     * a layout width of 167 and height of 122 pixels.
-     * - The image view and text area have a fit height and width of 167
-     * and 122 pixels,
-     * respectively.
-     * - The label has a font size of 22 pixels.
+     *          with
+     *          actor details, and a text area with actor biography.
+     *          <p>
+     *          - The anchor pane (`anchorPane`) is a container that holds the other
+     *          components.
+     *          - The image view (`imageView`) displays an image related to the
+     *          actor.
+     *          - The Label (`actorDetails`) shows the actor's name and number of
+     *          appearances in
+     *          films.
+     *          - The TextArea (`actorBio`) contains the actor's biography.
+     *          - The anchor pane has a prefSize of 244 x 226 pixels, with a
+     *          background color of
+     *          "meilleurfilm".
+     *          - The image view, label, and text area have a layoutX of 0, a
+     *          layoutY of 0, and
+     *          a layout width of 167 and height of 122 pixels.
+     *          - The image view and text area have a fit height and width of 167
+     *          and 122 pixels,
+     *          respectively.
+     *          - The label has a font size of 22 pixels.
      */
     public AnchorPane createActorDetails(final int actorPlacement) {
         final ActorService as = new ActorService();
@@ -706,74 +818,116 @@ public class FilmUserController extends Application {
      *                 higher
      *                 ranks displaying more prominently.
      * @returns an AnchorPane containing a label, a button, a rating widget, and an
-     * image
-     * view.
-     * <p>
-     * - `anchorPane`: A `AnchorPane` object that contains three components
-     * - `nomFilm`,
-     * `button`, and `rating`.
-     * - `nomFilm`: A `Label` object that displays the name of the film.
-     * - `button`: A `Button` object that allows users to reserve the film.
-     * - `rating`: A `Rating` object that displays the rating of the film.
-     * - `imageView`: An `ImageView` object that displays an image related
-     * to the film.
-     * <p>
-     * All these components are added to the `anchorPane` using the
-     * `getChildren()` method.
-     * The `anchorPane` is created by initializing a new instance of the
-     * `AnchorPane`
-     * class, and then adding the three components to it using the
-     * `getChildren()` method.
+     *          image
+     *          view.
+     *          <p>
+     *          - `anchorPane`: A `AnchorPane` object that contains three components
+     *          - `nomFilm`,
+     *          `button`, and `rating`.
+     *          - `nomFilm`: A `Label` object that displays the name of the film.
+     *          - `button`: A `Button` object that allows users to reserve the film.
+     *          - `rating`: A `Rating` object that displays the rating of the film.
+     *          - `imageView`: An `ImageView` object that displays an image related
+     *          to the film.
+     *          <p>
+     *          All these components are added to the `anchorPane` using the
+     *          `getChildren()` method.
+     *          The `anchorPane` is created by initializing a new instance of the
+     *          `AnchorPane`
+     *          class, and then adding the three components to it using the
+     *          `getChildren()` method.
      */
     public AnchorPane createtopthree(final int filmRank) {
         final List<RatingFilm> ratingFilmList = new RatingFilmService().getavergeratingSorted();
         final AnchorPane anchorPane = new AnchorPane();
+
         if (ratingFilmList.size() > filmRank) {
             anchorPane.setLayoutX(0);
             anchorPane.setLayoutY(0);
             anchorPane.setPrefSize(544, 226);
             anchorPane.getStyleClass().add("meilleurfilm");
+
             final RatingFilm ratingFilm = ratingFilmList.get(filmRank);
-            final ImageView imageView = new ImageView();
-            try {
-                if (!ratingFilm.getId_film().getImage().isEmpty()) {
-                    imageView.setImage(new Image(ratingFilm.getId_film().getImage()));
-                    imageView.setLayoutX(21);
-                    imageView.setLayoutY(21);
-                    imageView.setFitHeight(167);
-                    imageView.setFitWidth(122);
-                    imageView.getStyleClass().addAll("bg-white");
-                }
-            } catch (final Exception e) {
-                FilmUserController.LOGGER.info("no image found line 493");
-                // LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            if (ratingFilm == null || ratingFilm.getId_film() == null) {
+                LOGGER.warning("Invalid rating film data at rank: " + filmRank);
+                return anchorPane;
             }
+
+            final Film film = ratingFilm.getId_film();
+            final ImageView imageView = new ImageView();
+
             try {
-                final Label nomFilm = new Label(ratingFilm.getId_film().getNom());
+                String imagePath = film.getImage();
+                if (imagePath != null && !imagePath.isEmpty()) {
+                    // Try to load from resources first
+                    Image image = null;
+                    try {
+                        image = new Image(getClass().getResourceAsStream(imagePath));
+                    } catch (Exception e) {
+                        // If resource loading fails, try as direct path
+                        try {
+                            image = new Image("file:" + imagePath);
+                        } catch (Exception e2) {
+                            LOGGER.warning("Failed to load image from both resource and file: " + imagePath);
+                        }
+                    }
+
+                    if (image != null) {
+                        imageView.setImage(image);
+                        imageView.setFitWidth(180); // Adjusted size for top 3 section
+                        imageView.setFitHeight(260); // Maintain movie poster ratio
+                        imageView.setPreserveRatio(true);
+                        imageView.setSmooth(true);
+                        imageView.setLayoutX(21);
+                        imageView.setLayoutY(21);
+                        imageView.getStyleClass().addAll("bg-white");
+                    }
+                }
+            } catch (Exception e) {
+                LOGGER.warning("Error loading image for film: " + film.getId());
+            }
+
+            try {
+                final Label nomFilm = new Label(film.getNom() != null ? film.getNom() : "Untitled");
                 nomFilm.setLayoutX(153);
                 nomFilm.setLayoutY(87);
                 nomFilm.setPrefSize(205, 35);
                 nomFilm.setFont(new Font(22));
-                nomFilm.setTextFill(Color.WHITE);// Copy the font size
+                nomFilm.setTextFill(Color.WHITE);
+
                 final Button button = new Button("reserve");
                 button.setLayoutX(346);
                 button.setLayoutY(154);
                 button.setPrefSize(172, 42);
                 button.getStyleClass().addAll("sale");
+
                 final Rating rating = new Rating();
                 rating.setLayoutX(344);
                 rating.setLayoutY(38);
                 rating.setPrefSize(176, 32);
                 rating.setPartialRating(true);
-                final double rate = new RatingFilmService().getavergerating(ratingFilm.getId_film().getId());
+
+                final double rate = new RatingFilmService().getavergerating(film.getId());
                 rating.setRating(rate);
                 rating.setDisable(true);
-                anchorPane.getChildren().addAll(nomFilm, button, rating, imageView);
-            } catch (final Exception e) {
-                FilmUserController.LOGGER.info("line 522" + e.getMessage());
+
+                anchorPane.getChildren().addAll(nomFilm, button, rating);
+                if (imageView.getImage() != null) {
+                    anchorPane.getChildren().add(imageView);
+                }
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Error creating film card components", e);
             }
         }
         return anchorPane;
+    }
+
+    // Method to get resource path
+    private String getResourcePath(String path) {
+        if (path == null || path.isEmpty()) {
+            return "/img/films/default.jpg";
+        }
+        return path.startsWith("/") ? path : "/" + path;
     }
 
     /**
@@ -781,16 +935,16 @@ public class FilmUserController extends Application {
      * `FilmService`.
      *
      * @returns a list of unique cinema years obtained from the films' release
-     * dates.
-     * <p>
-     * 1/ The list contains unique `Integer` objects representing the
-     * cinema years.
-     * 2/ The list is generated by transforming the original list of films
-     * using a series
-     * of methods, specifically `map`, `distinct`, and `collect`.
-     * 3/ The transformation involves extracting the year of release from
-     * each film object
-     * using the `getAnnederalisation` method.
+     *          dates.
+     *          <p>
+     *          1/ The list contains unique `Integer` objects representing the
+     *          cinema years.
+     *          2/ The list is generated by transforming the original list of films
+     *          using a series
+     *          of methods, specifically `map`, `distinct`, and `collect`.
+     *          3/ The transformation involves extracting the year of release from
+     *          each film object
+     *          using the `getAnnederalisation` method.
      */
     private List<Integer> getCinemaYears() {
         final FilmService cinemaService = new FilmService();
@@ -848,8 +1002,6 @@ public class FilmUserController extends Application {
      *              `closercommets`
      *              method.
      *              <p>
-     *              Event: ActionEvent
-     *              <p>
      *              - Target: detalAnchorPane
      *              - Action: setOpacity() and setVisible() methods
      */
@@ -900,18 +1052,18 @@ public class FilmUserController extends Application {
      * years.
      *
      * @returns a list of integer values representing the selected years.
-     * <p>
-     * The output is a list of integers representing the selected years
-     * from the check
-     * boxes in the AnchorPane.
-     * <p>
-     * Each integer in the list corresponds to an individual check box that
-     * was selected
-     * by the user.
-     * <p>
-     * The list contains only the unique years that were selected by the
-     * user, without
-     * duplicates or invalid input.
+     *          <p>
+     *          The output is a list of integers representing the selected years
+     *          from the check
+     *          boxes in the AnchorPane.
+     *          <p>
+     *          Each integer in the list corresponds to an individual check box that
+     *          was selected
+     *          by the user.
+     *          <p>
+     *          The list contains only the unique years that were selected by the
+     *          user, without
+     *          duplicates or invalid input.
      */
     private List<Integer> getSelectedYears() {
         // Récupérer les années de réalisation sélectionnées dans l'AnchorPane de
@@ -923,7 +1075,8 @@ public class FilmUserController extends Application {
     }
 
     /**
-     * Loads a FXML file "SeriesClient.fxml" into a stage, replacing the current
+     * Loads a FXML file "/ui/series/SeriesClient.fxml" into a stage, replacing the
+     * current
      * scene.
      *
      * @param event event that triggered the execution of the
@@ -934,7 +1087,7 @@ public class FilmUserController extends Application {
      */
     public void switchtoajouterCinema(final ActionEvent event) {
         try {
-            final FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/SeriesClient.fxml"));
+            final FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/ui/series/SeriesClient.fxml"));
             final AnchorPane root = fxmlLoader.load();
             final Stage stage = (Stage) this.product.getScene().getWindow();
             final Scene scene = new Scene(root, 1280, 700);
@@ -945,18 +1098,25 @@ public class FilmUserController extends Application {
     }
 
     /**
-     * Loads an fxml file and displays its content on a stage with specified
-     * dimensions.
+     * Loads and displays a FXML file using the `FXMLLoader` class, replacing the
+     * current
+     * scene with the new one.
      *
-     * @param event Event object that triggered the call to the `switchtevent()`
+     * @param event ActionEvent that triggered the call to the `switchtevent()`
      *              method.
      *              <p>
-     *              - `Event`: This is the type of event that triggered the function
-     *              execution.
+     *              - Type: ActionEvent - indicates that the event was triggered by
+     *              an action (e.g.,
+     *              button click)
+     *              - Target: null - indicates that the event did not originate from
+     *              a specific
+     *              component or element
+     *              - Code: 0 - no code is provided with this event
      */
     public void switchtevent(final ActionEvent event) {
         try {
-            final FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/AffichageEvenementClient.fxml"));
+            final FXMLLoader fxmlLoader = new FXMLLoader(
+                    this.getClass().getResource("/ui//ui/AffichageEvenementClient.fxml"));
             final AnchorPane root = fxmlLoader.load();
             final Stage stage = (Stage) this.event_button.getScene().getWindow();
             final Scene scene = new Scene(root, 1280, 700);
@@ -983,7 +1143,8 @@ public class FilmUserController extends Application {
      */
     public void switchtcinemaaa(final ActionEvent event) {
         try {
-            final FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/DashboardClientCinema.fxml"));
+            final FXMLLoader fxmlLoader = new FXMLLoader(
+                    this.getClass().getResource("/ui/cinemas/DashboardClientCinema.fxml"));
             final AnchorPane root = fxmlLoader.load();
             final Stage stage = (Stage) this.Cinema_Button.getScene().getWindow();
             final Scene scene = new Scene(root, 1280, 700);
@@ -1010,7 +1171,8 @@ public class FilmUserController extends Application {
      */
     public void switchtoajouterproduct(final ActionEvent event) {
         try {
-            final FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/AfficherProduitClient.fxml"));
+            final FXMLLoader fxmlLoader = new FXMLLoader(
+                    this.getClass().getResource("/ui/produits/AfficherProduitClient.fxml"));
             final AnchorPane root = fxmlLoader.load();
             final Stage stage = (Stage) this.product.getScene().getWindow();
             final Scene scene = new Scene(root, 1280, 700);
@@ -1033,7 +1195,7 @@ public class FilmUserController extends Application {
      */
     public void switchtoSerie(final ActionEvent event) {
         try {
-            final FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/SeriesClient.fxml"));
+            final FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/ui/series/SeriesClient.fxml"));
             final AnchorPane root = fxmlLoader.load();
             final Stage stage = (Stage) this.SerieButton.getScene().getWindow();
             final Scene scene = new Scene(root, 1280, 700);
@@ -1120,18 +1282,18 @@ public class FilmUserController extends Application {
      *                    that represents the user's
      *                    profile picture URL.
      * @returns a HBox container that displays an image and text related to a
-     * comment.
-     * <p>
-     * - `HBox contentContainer`: This is the primary container for the
-     * image and comment
-     * card. It has a pref height of 50 pixels and a style of
-     * `-fx-background-color:
-     * transparent; -fx-padding: 10px`.
-     * - `imageBox` and `cardContainer`: These are sub-containers within
-     * the `contentContainer`.
-     * The `imageBox` contains the image of the user, while the
-     * `cardContainer` contains
-     * the text box with the user's name and comment.
+     *          comment.
+     *          <p>
+     *          - `HBox contentContainer`: This is the primary container for the
+     *          image and comment
+     *          card. It has a pref height of 50 pixels and a style of
+     *          `-fx-background-color:
+     *          transparent; -fx-padding: 10px`.
+     *          - `imageBox` and `cardContainer`: These are sub-containers within
+     *          the `contentContainer`.
+     *          The `imageBox` contains the image of the user, while the
+     *          `cardContainer` contains
+     *          the text box with the user's name and comment.
      */
     private HBox addCommentToView(final Filmcoment commentaire) {
         // Création du cercle pour l'image de l'utilisateur
@@ -1195,22 +1357,22 @@ public class FilmUserController extends Application {
      *
      * @param filmId id of the film for which the comments are to be retrieved.
      * @returns a list of commentaries for a specific cinema, filtered from all
-     * comments
-     * based on their film ID.
-     * <p>
-     * - `List<Filmcoment>` is the type of the returned value, indicating
-     * that it is a
-     * list of `Filmcoment` objects.
-     * - The variable `cinemaComments` is initialized as an empty list,
-     * indicating that
-     * no comments have been filtered yet.
-     * - The function uses a loop to iterate over all the comments in the
-     * `allComments`
-     * list and checks if the `film_id` of each comment matches the
-     * `filmId` parameter
-     * passed to the function. If it does, the comment is added to the
-     * `cinemaComments`
-     * list.
+     *          comments
+     *          based on their film ID.
+     *          <p>
+     *          - `List<Filmcoment>` is the type of the returned value, indicating
+     *          that it is a
+     *          list of `Filmcoment` objects.
+     *          - The variable `cinemaComments` is initialized as an empty list,
+     *          indicating that
+     *          no comments have been filtered yet.
+     *          - The function uses a loop to iterate over all the comments in the
+     *          `allComments`
+     *          list and checks if the `film_id` of each comment matches the
+     *          `filmId` parameter
+     *          passed to the function. If it does, the comment is added to the
+     *          `cinemaComments`
+     *          list.
      */
     private List<Filmcoment> getAllComment(final int filmId) {
         final FilmcomentService commentaireCinemaService = new FilmcomentService();
@@ -1252,5 +1414,124 @@ public class FilmUserController extends Application {
      */
     @Override
     public void start(final Stage stage) throws Exception {
+    }
+
+    private void setupDragAndDrop(AnchorPane filmCard, Film film) {
+        filmCard.setOnDragDetected(event -> {
+            Dragboard db = filmCard.startDragAndDrop(TransferMode.MOVE);
+            ClipboardContent content = new ClipboardContent();
+            content.putString(String.valueOf(film.getId()));
+            db.setContent(content);
+            event.consume();
+        });
+
+        filmCard.setOnDragDone(event -> {
+            if (event.getTransferMode() == TransferMode.MOVE) {
+                // Handle successful drag
+                double x = event.getSceneX();
+                double y = event.getSceneY();
+                filmCard.setLayoutX(x);
+                filmCard.setLayoutY(y);
+            }
+            event.consume();
+        });
+    }
+
+    private int getCurrentUserId() {
+        if (filmScrollPane == null || filmScrollPane.getScene() == null ||
+                filmScrollPane.getScene().getWindow() == null) {
+            return 2; // Default user ID if scene is not ready
+        }
+
+        Stage stage = (Stage) filmScrollPane.getScene().getWindow();
+        Client client = (Client) stage.getUserData();
+        return client != null ? client.getId() : 2;
+    }
+
+    private List<Film> getRecommendations(int userId) {
+        // Get user's ratings
+        RatingFilmService ratingService = new RatingFilmService();
+        List<RatingFilm> userRatings = ratingService.getUserRatings(userId);
+
+        // Calculate genre preferences
+        Map<String, Double> genreScores = new HashMap<>();
+        for (RatingFilm rating : userRatings) {
+            Film film = rating.getId_film();
+            List<String> genres = Arrays.asList(
+                    new FilmcategoryService().getCategoryNames(film.getId()).split(","));
+            for (String genre : genres) {
+                genreScores.merge(genre.trim(), rating.getRate() * 0.2, Double::sum);
+            }
+        }
+
+        // Find similar films
+        FilmService filmService = new FilmService();
+        List<Film> allFilms = filmService.read();
+        PriorityQueue<Film> recommendations = new PriorityQueue<>(
+                Comparator.comparingDouble(f -> calculateSimilarityScore(f, genreScores)));
+
+        allFilms.forEach(recommendations::offer);
+
+        return recommendations.stream()
+                .limit(10)
+                .collect(Collectors.toList());
+    }
+
+    private double calculateSimilarityScore(Film film, Map<String, Double> userPreferences) {
+        double score = 0.0;
+        List<String> filmGenres = Arrays.asList(
+                new FilmcategoryService().getCategoryNames(film.getId()).split(","));
+
+        for (String genre : filmGenres) {
+            score += userPreferences.getOrDefault(genre.trim(), 0.0);
+        }
+
+        // Add rating weight
+        double avgRating = new RatingFilmService().getavergerating(film.getId());
+        score += avgRating * 0.3;
+
+        return score;
+    }
+
+    private void shareToSocial(Film film) {
+        String shareText = String.format(
+                "Check out %s! Released in %d. %s",
+                film.getNom(),
+                film.getAnnederalisation(),
+                FilmService.getIMDBUrlbyNom(film.getNom()));
+
+        // Create sharing dialog
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Share Film");
+        dialog.setHeaderText("Share this film on social media");
+
+        ButtonType twitterType = new ButtonType("Twitter");
+        ButtonType facebookType = new ButtonType("Facebook");
+        ButtonType cancelType = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        dialog.getDialogPane().getButtonTypes().addAll(twitterType, facebookType, cancelType);
+
+        dialog.showAndWait().ifPresent(response -> {
+            if (response == twitterType) {
+                openTwitterShare(shareText);
+            } else if (response == facebookType) {
+                openFacebookShare(shareText);
+            }
+        });
+    }
+
+    private void openTwitterShare(String text) {
+        String twitterUrl = "https://twitter.com/intent/tweet?text=" +
+                URLEncoder.encode(text, StandardCharsets.UTF_8);
+        getHostServices().showDocument(twitterUrl);
+    }
+
+    private void openFacebookShare(String text) {
+        String fbUrl = "https://www.facebook.com/sharer/sharer.php?u=" +
+                URLEncoder.encode(text, StandardCharsets.UTF_8);
+        getHostServices().showDocument(fbUrl);
+    }
+
+    public void close() {
     }
 }

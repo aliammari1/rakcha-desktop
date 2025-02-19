@@ -50,7 +50,7 @@ import java.util.stream.Collectors;
  * types of user actions, such as importing images, creating a new product, and
  * viewing
  * a product details page. The controller also uses FXML to load user interface
- * elements from a file named "DesignProduitAdmin.fxml".
+ * elements from a file named "/ui/produits/DesignProduitAdmin.fxml".
  */
 public class DesignProduitAdminContoller {
     private static final Logger LOGGER = Logger.getLogger(DesignProduitAdminContoller.class.getName());
@@ -232,8 +232,9 @@ public class DesignProduitAdminContoller {
                     final CategorieService cs = new CategorieService();
                     final Produit nouveauProduit = new Produit(nomProduit, prix, uri.getPath(), descriptionProduit,
                             cs.getCategorieByNom(nomCategorie), quantite);
-                    DesignProduitAdminContoller.LOGGER.info(nomProduit + " " + prix + " " + uri.getPath() + " " + descriptionProduit + " "
-                            + cs.getCategorieByNom(nomCategorie) + " " + quantite);
+                    DesignProduitAdminContoller.LOGGER
+                            .info(nomProduit + " " + prix + " " + uri.getPath() + " " + descriptionProduit + " "
+                                    + cs.getCategorieByNom(nomCategorie) + " " + quantite);
                     DesignProduitAdminContoller.LOGGER.info("nouveauProduit: --------------- " + nouveauProduit);
                     ps.create(nouveauProduit);
                     // Ajouter le nouveau produit à la liste existante
@@ -658,7 +659,7 @@ public class DesignProduitAdminContoller {
     @FXML
     void GestionCategorie(final ActionEvent event) throws IOException {
         // Charger la nouvelle interface ListproduitAdmin.fxml
-        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/DesignCategorieAdmin.fxml"));
+        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/produits/DesignCategorieAdmin.fxml"));
         final Parent root = loader.load();
         // Créer une nouvelle scène avec la nouvelle interface
         final Scene scene = new Scene(root);
@@ -735,7 +736,7 @@ public class DesignProduitAdminContoller {
      * The returned list contains all product categories.
      *
      * @returns a list of `Produit` objects retrieved from the database through the
-     * `ProduitService`.
+     *          `ProduitService`.
      */
     private List<Produit> getAllCategories() {
         final ProduitService categorieservice = new ProduitService();
@@ -797,15 +798,15 @@ public class DesignProduitAdminContoller {
      * of strings.
      *
      * @returns a list of distinct category names retrieved from the database.
-     * <p>
-     * - The output is a list of strings, representing the categories of
-     * products obtained
-     * from the database.
-     * - The list contains distinct category names as extracted from the
-     * `Categorie`
-     * objects in the `categories` list.
-     * - The categories are determined by the `nom_categorie` field of each
-     * `Produit` object.
+     *          <p>
+     *          - The output is a list of strings, representing the categories of
+     *          products obtained
+     *          from the database.
+     *          - The list contains distinct category names as extracted from the
+     *          `Categorie`
+     *          objects in the `categories` list.
+     *          - The categories are determined by the `nom_categorie` field of each
+     *          `Produit` object.
      */
     public List<String> getCategorie_Produit() {
         // Récupérer tous les cinémas depuis la base de données
@@ -858,12 +859,12 @@ public class DesignProduitAdminContoller {
      * array, returning a list of strings representing the selected categories.
      *
      * @returns a list of selected addresses.
-     * <p>
-     * - The list contains only selected addresses from the
-     * `addressCheckBoxes` stream.
-     * - Each element in the list is a string representing the text of the
-     * corresponding
-     * selected address.
+     *          <p>
+     *          - The list contains only selected addresses from the
+     *          `addressCheckBoxes` stream.
+     *          - Each element in the list is a string representing the text of the
+     *          corresponding
+     *          selected address.
      */
     private List<String> getSelectedCategories() {
         // Récupérer les adresses sélectionnées dans l'AnchorPane de filtrage
@@ -893,7 +894,7 @@ public class DesignProduitAdminContoller {
     void cinemaclient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/CommentaireProduit.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/produits/CommentaireProduit.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -907,12 +908,13 @@ public class DesignProduitAdminContoller {
             // Fermer la fenêtre actuelle
             currentStage.close();
         } catch (final IOException e) {
-            DesignProduitAdminContoller.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
+            DesignProduitAdminContoller.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
+                                                                                     // d'entrée/sortie
         }
     }
 
     /**
-     * Loads a new FXML file "DesignEvenementAdmin.fxml" and creates a new scene
+     * Loads a new FXML file "/ui//ui/DesignEvenementAdmin.fxml" and creates a new scene
      * with it,
      * replacing the current stage with the new scene.
      *
@@ -932,7 +934,7 @@ public class DesignProduitAdminContoller {
     void eventClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("DesignEvenementAdmin.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui//ui/DesignEvenementAdmin.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -946,7 +948,8 @@ public class DesignProduitAdminContoller {
             // Fermer la fenêtre actuelle
             currentStage.close();
         } catch (final IOException e) {
-            DesignProduitAdminContoller.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
+            DesignProduitAdminContoller.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
+                                                                                     // d'entrée/sortie
         }
     }
 
@@ -970,7 +973,7 @@ public class DesignProduitAdminContoller {
     void produitClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/DesignProduitAdmin.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/produits/DesignProduitAdmin.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -984,7 +987,8 @@ public class DesignProduitAdminContoller {
             // Fermer la fenêtre actuelle
             currentStage.close();
         } catch (final IOException e) {
-            DesignProduitAdminContoller.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
+            DesignProduitAdminContoller.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
+                                                                                     // d'entrée/sortie
         }
     }
 
@@ -1023,7 +1027,7 @@ public class DesignProduitAdminContoller {
     void MovieClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/filmuser.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/films/filmuser.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -1037,7 +1041,8 @@ public class DesignProduitAdminContoller {
             // Fermer la fenêtre actuelle
             currentStage.close();
         } catch (final IOException e) {
-            DesignProduitAdminContoller.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
+            DesignProduitAdminContoller.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
+                                                                                     // d'entrée/sortie
         }
     }
 
@@ -1058,7 +1063,7 @@ public class DesignProduitAdminContoller {
     void SerieClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/Serie-view.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/series/Serie-view.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -1072,7 +1077,8 @@ public class DesignProduitAdminContoller {
             // Fermer la fenêtre actuelle
             currentStage.close();
         } catch (final IOException e) {
-            DesignProduitAdminContoller.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
+            DesignProduitAdminContoller.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
+                                                                                     // d'entrée/sortie
         }
     }
 

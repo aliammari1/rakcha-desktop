@@ -357,7 +357,7 @@ public class PaymentController {
     private void redirect_to_successPage() {
         // try {
         // FXMLLoader loader = new
-        // FXMLLoader(getClass().getResource("../gui/reservation/Success_page.fxml"));
+        // FXMLLoader(getClass().getResource("/ui//ui/Success_page.fxml"));
         // Parent root = loader.load();
         // //UPDATE The Controller with Data :
         // Success_pageController controller = loader.getController();
@@ -380,7 +380,7 @@ public class PaymentController {
     private void redirect_to_FailPage() {
         // try {
         // FXMLLoader loader = new
-        // FXMLLoader(getClass().getResource("../gui/reservation/Fail_page.fxml"));
+        // FXMLLoader(getClass().getResource("/ui//ui/Fail_page.fxml"));
         // Parent root = loader.load();
         // //UPDATE The Controller with Data :
         // Fail_pageController controller = loader.getController();
@@ -412,7 +412,7 @@ public class PaymentController {
     private void redirectToListReservation(final ActionEvent event) {
         // try {
         // FXMLLoader loader = new
-        // FXMLLoader(getClass().getResource("../gui/reservation/Reservation_view_client.fxml"));
+        // FXMLLoader(getClass().getResource("/ui//ui/Reservation_view_client.fxml"));
         // Parent root = loader.load();
         // //UPDATE The Controller with Data :
         // Reservation_view_client controller = loader.getController();

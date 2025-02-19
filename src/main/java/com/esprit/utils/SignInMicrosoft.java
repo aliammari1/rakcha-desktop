@@ -1,5 +1,6 @@
 package com.esprit.utils;
 
+import com.esprit.Config;
 import com.github.scribejava.apis.LiveApi;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth2AccessToken;
@@ -18,60 +19,71 @@ public enum SignInMicrosoft {
     ;
     private static final String PROTECTED_RESOURCE_URL = "https://apis.live.net/v5.0/me";
     private static final Logger LOGGER = Logger.getLogger(SignInMicrosoft.class.getName());
-    static OAuth20Service service;
+    private static OAuth20Service service;
 
     /**
-     * @param args
-     * @return String
-     * @throws IOException
-     * @throws InterruptedException
-     * @throws ExecutionException
+     * Initialize Microsoft Sign-In flow
+     * 
+     * @param args Optional arguments (not used)
+     * @return Authorization URL for the user to visit
+     * @throws IOException           if there's an I/O error
+     * @throws InterruptedException  if the operation is interrupted
+     * @throws ExecutionException    if the operation fails
+     * @throws IllegalStateException if required environment variables are missing
      */
-    @SuppressWarnings("PMD.SystemPrintln")
     public static String SignInWithMicrosoft(final String... args)
             throws IOException, InterruptedException, ExecutionException {
-        // Replace these with your own api key and secret
-        String apiKey = System.getenv("MICROSOFT_CLIENT_ID");
-        String apiSecret = System.getenv("MICROSOFT_CLIENT_SECRET");
-        SignInMicrosoft.service = new ServiceBuilder(apiKey)
-                .apiSecret(apiSecret)
-                .defaultScope("wl.basic")
+        Config config = Config.getInstance();
+        String clientId = config.get("microsoft.client.id");
+        String clientSecret = config.get("microsoft.client.secret");
+
+        if (clientId == null || clientSecret == null) {
+            throw new IllegalStateException("Microsoft OAuth credentials not found in config");
+        }
+
+        service = new ServiceBuilder(clientId)
+                .apiSecret(clientSecret)
+                .defaultScope("wl.basic wl.emails")
                 .callback("https://login.microsoftonline.com/common/oauth2/nativeclient")
                 .build(LiveApi.instance());
-        Scanner in = new Scanner(System.in, StandardCharsets.UTF_8);
-        SignInMicrosoft.LOGGER.info("=== Windows Live's OAuth Workflow ===");
-        // Obtain the Authorization URL
-        SignInMicrosoft.LOGGER.info("Fetching the Authorization URL...");
-        String authorizationUrl = SignInMicrosoft.service.getAuthorizationUrl();
-        SignInMicrosoft.LOGGER.info("Got the Authorization URL!");
-        SignInMicrosoft.LOGGER.info("Now go and authorize ScribeJava here:");
+
+        LOGGER.info("=== Microsoft Live OAuth Workflow ===");
+        String authorizationUrl = service.getAuthorizationUrl();
+        LOGGER.info("Authorization URL generated successfully");
         return authorizationUrl;
     }
 
     /**
-     * @param code
-     * @throws IOException
-     * @throws ExecutionException
-     * @throws InterruptedException
+     * Complete the OAuth flow with the authorization code
+     * 
+     * @param code The authorization code from Microsoft
+     * @return boolean indicating if verification was successful
+     * @throws IOException          if there's an I/O error
+     * @throws ExecutionException   if the operation fails
+     * @throws InterruptedException if the operation is interrupted
      */
-    public static void verifyAuthUrl(final String code) throws IOException, ExecutionException, InterruptedException {
-        SignInMicrosoft.LOGGER.info("And paste the authorization code here");
-        SignInMicrosoft.LOGGER.info(">>");
-        // final String code = in.nextLine();
-        SignInMicrosoft.LOGGER.info("Trading the Authorization Code for an Access Token...");
-        OAuth2AccessToken accessToken = SignInMicrosoft.service.getAccessToken(code);
-        SignInMicrosoft.LOGGER.info("Got the Access Token!");
-        SignInMicrosoft.LOGGER.info("(The raw response looks like this: " + accessToken.getRawResponse() + "')");
-        // Now let's go and ask for a protected resource!
-        SignInMicrosoft.LOGGER.info("Now we're going to access a protected resource...");
-        OAuthRequest request = new OAuthRequest(Verb.GET, SignInMicrosoft.PROTECTED_RESOURCE_URL);
-        SignInMicrosoft.service.signRequest(accessToken, request);
-        try (final Response response = SignInMicrosoft.service.execute(request)) {
-            SignInMicrosoft.LOGGER.info("Got it! Lets see what we found...");
-            SignInMicrosoft.LOGGER.info(String.valueOf(response.getCode()));
-            SignInMicrosoft.LOGGER.info(response.getBody());
-        }
-        SignInMicrosoft.LOGGER.info("Thats it man! Go and build something awesome with ScribeJava! :)");
-    }
+    public static boolean verifyAuthUrl(final String code)
+            throws IOException, ExecutionException, InterruptedException {
+        try {
+            OAuth2AccessToken accessToken = service.getAccessToken(code);
+            LOGGER.info("Access Token obtained successfully");
 
+            // Get user info
+            OAuthRequest request = new OAuthRequest(Verb.GET, PROTECTED_RESOURCE_URL);
+            service.signRequest(accessToken, request);
+
+            try (Response response = service.execute(request)) {
+                if (response.getCode() == 200) {
+                    LOGGER.info("User info retrieved successfully");
+                    return true;
+                } else {
+                    LOGGER.warning("Failed to get user info. Status code: " + response.getCode());
+                    return false;
+                }
+            }
+        } catch (Exception e) {
+            LOGGER.warning("Authentication failed: " + e.getMessage());
+            return false;
+        }
+    }
 }

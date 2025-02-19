@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.image.*?>
+
+<HBox prefHeight="820.0" prefWidth="1229.0"
+    stylesheets="@styles/signup.css"
+    xmlns="http://javafx.com/javafx/21"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.esprit.controllers.users.SignUpController">
+
+    <!-- Left Side - Form -->
+    <VBox spacing="20" minWidth="661.0" styleClass="form-section">
+        <padding>
+            <Insets top="40" right="40" bottom="40" left="40"/>
+        </padding>
+
+        <!-- Form Title -->
+        <Label text="Sign Up" styleClass="title-label">
+            <font>
+                <Font name="Outfit SemiBold" size="36.0"/>
+            </font>
+        </Label>
+
+        <!-- Form Fields -->
+        <GridPane hgap="20" vgap="15">
+            <columnConstraints>
+                <ColumnConstraints hgrow="ALWAYS" percentWidth="50"/>
+                <ColumnConstraints hgrow="ALWAYS" percentWidth="50"/>
+            </columnConstraints>
+
+            <!-- First Name -->
+            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                <Label text="First Name" styleClass="field-label"/>
+                <TextField fx:id="nomTextField" styleClass="text-input"/>
+            </VBox>
+
+            <!-- Last Name -->
+            <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                <Label text="Last Name" styleClass="field-label"/>
+                <TextField fx:id="prenomTextField" styleClass="text-input"/>
+            </VBox>
+
+            <!-- Email -->
+            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                <Label text="Email" styleClass="field-label"/>
+                <TextField fx:id="emailTextField" styleClass="text-input"/>
+            </VBox>
+
+            <!-- Phone Number -->
+            <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <Label text="Phone Number" styleClass="field-label"/>
+                <TextField fx:id="num_telephoneTextField" styleClass="text-input"/>
+            </VBox>
+
+            <!-- Password -->
+            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                <Label text="Password" styleClass="field-label"/>
+                <TextField fx:id="passwordTextField" styleClass="text-input"/>
+            </VBox>
+
+            <!-- Role -->
+            <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                <Label text="Role" styleClass="field-label"/>
+                <ComboBox fx:id="roleComboBox" styleClass="combo-input" maxWidth="Infinity"/>
+            </VBox>
+
+            <!-- Address -->
+            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="3">
+                <Label text="Address" styleClass="field-label"/>
+                <TextField fx:id="adresseTextField" styleClass="text-input"/>
+            </VBox>
+
+            <!-- Birth Date -->
+            <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                <Label text="Birth Date" styleClass="field-label"/>
+                <DatePicker fx:id="dateDeNaissanceDatePicker" styleClass="date-input" maxWidth="Infinity"/>
+            </VBox>
+
+            <!-- Profile Picture -->
+            <VBox spacing="10" GridPane.columnSpan="2" GridPane.rowIndex="4" alignment="CENTER">
+                <ImageView fx:id="photoDeProfilImageView" fitHeight="150.0" fitWidth="150.0" 
+                          pickOnBounds="true" preserveRatio="true"/>
+                <Button onAction="#importImage" styleClass="secondary-button" text="Upload Profile Picture"/>
+            </VBox>
+        </GridPane>
+
+        <Region VBox.vgrow="ALWAYS"/>
+
+        <!-- Actions -->
+        <HBox spacing="15" alignment="CENTER">
+            <Button fx:id="signUpButton" onAction="#signup" styleClass="primary-button" text="Sign Up"/>
+            <Button fx:id="loginButton" onAction="#switchToLogin" styleClass="secondary-button" text="Back to Login"/>
+        </HBox>
+    </VBox>
+
+    <!-- Right Side - Banner -->
+    <VBox styleClass="banner-section" HBox.hgrow="ALWAYS">
+        <padding>
+            <Insets top="40" right="40" bottom="40" left="40"/>
+        </padding>
+
+        <!-- Welcome Text -->
+        <Label text="Welcome to Rakcha" styleClass="banner-title">
+            <font>
+                <Font name="Outfit SemiBold" size="35.0"/>
+            </font>
+        </Label>
+
+        <!-- Logo -->
+        <ImageView fitHeight="325.0" fitWidth="299.0" 
+                   pickOnBounds="true" preserveRatio="true">
+            <Image url="@Logo.png"/>
+        </ImageView>
+    </VBox>
+
+</HBox>

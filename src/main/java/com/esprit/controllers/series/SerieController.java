@@ -515,8 +515,8 @@ public class SerieController {
      *
      * @param file File to be tested for being an image file.
      * @returns a boolean value indicating whether the provided file is an image
-     * file or
-     * not.
+     *          file or
+     *          not.
      */
     private boolean isImageFile(final File file) {
         try {
@@ -551,9 +551,9 @@ public class SerieController {
      * it displays an error message and returns `false`.
      *
      * @returns `true` if a value is provided for `categorieF.getValue()`, otherwise
-     * it
-     * returns `false` and sets the `categoriecheck` text to "Please select
-     * a Category".
+     *          it
+     *          returns `false` and sets the `categoriecheck` text to "Please select
+     *          a Category".
      */
     boolean categoriecheck() {
         if (null != categorieF.getValue()) {
@@ -570,7 +570,7 @@ public class SerieController {
      * it sets an error message and returns `false`.
      *
      * @returns a boolean value indicating whether a valid director has been
-     * entered.
+     *          entered.
      */
     boolean directeurcheck() {
         if ("" != directeurF.getText()) {
@@ -589,7 +589,7 @@ public class SerieController {
      * displays an error message and returns false.
      *
      * @returns a boolean value indicating whether a valid country was entered or
-     * not.
+     *          not.
      */
     boolean payscheck() {
         if ("" != paysF.getText()) {
@@ -696,7 +696,8 @@ public class SerieController {
         this.directeurcheck();
         this.payscheck();
         this.resumecheck();
-        if (this.nomcheck() && this.categoriecheck() && this.directeurcheck() && this.payscheck() && this.resumecheck()) {
+        if (this.nomcheck() && this.categoriecheck() && this.directeurcheck() && this.payscheck()
+                && this.resumecheck()) {
             try {
                 final String fullPath = this.serieImageView.getImage().getUrl();
                 final String requiredPath = fullPath.substring(fullPath.indexOf("/img/series/"));
@@ -768,7 +769,8 @@ public class SerieController {
      */
     @FXML
     void Oepisodes(final ActionEvent event) throws IOException {
-        final Parent root = FXMLLoader.load(Objects.requireNonNull(this.getClass().getResource("/Episode-view.fxml")));
+        final Parent root = FXMLLoader
+                .load(Objects.requireNonNull(this.getClass().getResource("/ui/series/Episode-view.fxml")));
         final Scene scene = new Scene(root);
         final Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
@@ -776,7 +778,7 @@ public class SerieController {
     }
 
     /**
-     * Loads a FXML file named `"Serie-view.fxml"` and displays it on a Stage,
+     * Loads a FXML file named `"/ui/series/Serie-view.fxml"` and displays it on a Stage,
      * creating
      * a new Scene and setting it as the scene of the Stage.
      *
@@ -788,7 +790,7 @@ public class SerieController {
      */
     @FXML
     void Oseries(final ActionEvent event) throws IOException {
-        final Parent root = FXMLLoader.load(Objects.requireNonNull(this.getClass().getResource("/Serie-view.fxml")));
+        final Parent root = FXMLLoader.load(Objects.requireNonNull(this.getClass().getResource("/ui/series/Serie-view.fxml")));
         final Scene scene = new Scene(root);
         final Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
@@ -806,7 +808,8 @@ public class SerieController {
      */
     @FXML
     void Oepisode(final ActionEvent event) throws IOException {
-        final Parent root = FXMLLoader.load(Objects.requireNonNull(this.getClass().getResource("/Episode-view.fxml")));
+        final Parent root = FXMLLoader
+                .load(Objects.requireNonNull(this.getClass().getResource("/ui/series/Episode-view.fxml")));
         final Scene scene = new Scene(root);
         final Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);

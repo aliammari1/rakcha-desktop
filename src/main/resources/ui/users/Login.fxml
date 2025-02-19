@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<HBox fx:id="rootContainer" minWidth="929.0" minHeight="520.0" stylesheets="@styles/auth.css" 
+      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.esprit.controllers.users.LoginController">
+
+    <!-- Login Form Section -->
+    <VBox fx:id="loginSection" minWidth="461.0" spacing="15" HBox.hgrow="ALWAYS" styleClass="form-section">
+        <padding>
+            <Insets top="40" right="40" bottom="40" left="40"/>
+        </padding>
+
+        <!-- Header with Sign In and Social Buttons -->
+        <HBox alignment="CENTER_LEFT" spacing="15">
+            <Label text="Sign In" styleClass="title-label">
+                <font>
+                    <Font name="Outfit Bold" size="36.0"/>
+                </font>
+            </Label>
+            <Region HBox.hgrow="ALWAYS"/>
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <Button fx:id="microsoftSignInButton" onAction="#signInWithMicrosoft" 
+                        styleClass="subLogin" maxWidth="44.0" maxHeight="42.0">
+                    <graphic>
+                        <FontIcon fill="WHITE" iconLiteral="fa-windows" iconSize="32"/>
+                    </graphic>
+                </Button>
+                <Button fx:id="googleSIgnInButton" onAction="#signInWithGoogle" 
+                        styleClass="subLogin" maxWidth="44.0" maxHeight="42.0">
+                    <graphic>
+                        <FontIcon iconColor="WHITE" iconLiteral="fa-google" iconSize="32"/>
+                    </graphic>
+                </Button>
+            </HBox>
+        </HBox>
+
+        <Region VBox.vgrow="ALWAYS" maxHeight="30"/>
+
+        <!-- Improved decorative film strip -->
+        <HBox styleClass="decorative-film-strip" alignment="CENTER" spacing="15">
+            <Region HBox.hgrow="ALWAYS"/>
+            <Region styleClass="film-cell"/>
+            <Region styleClass="film-cell"/>
+            <Region styleClass="film-cell"/>
+            <Region styleClass="film-cell"/>
+            <Region styleClass="film-cell"/>
+            <Region styleClass="film-cell"/>
+            <Region styleClass="film-cell"/>
+            <Region styleClass="film-cell"/>
+            <Region HBox.hgrow="ALWAYS"/>
+        </HBox>
+
+        <!-- Login Form -->
+        <GridPane vgap="10" hgap="10" alignment="CENTER">
+            <columnConstraints>
+                <ColumnConstraints minWidth="300" maxWidth="Infinity" hgrow="ALWAYS"/>
+            </columnConstraints>
+
+            <VBox spacing="5" GridPane.rowIndex="0">
+                <Label text="Username" styleClass="form-label">
+                    <font>
+                        <Font name="Outfit Medium" size="17.0"/>
+                    </font>
+                </Label>
+                <TextField fx:id="emailTextField" text="aliammari862002@gmail.com" promptText="Username" styleClass="loginTextField" maxWidth="Infinity">
+                    <padding>
+                        <Insets top="10" right="15" bottom="10" left="15"/>
+                    </padding>
+                </TextField>
+                <Label fx:id="emailErrorLabel" textFill="RED"/>
+            </VBox>
+
+            <VBox spacing="5" GridPane.rowIndex="1">
+                <Label text="Password" styleClass="form-label">
+                    <font>
+                        <Font name="Outfit Medium" size="17.0"/>
+                    </font>
+                </Label>
+                <PasswordField fx:id="passwordTextField" text="password" promptText="Password" styleClass="loginTextField" maxWidth="Infinity">
+                    <padding>
+                        <Insets top="10" right="15" bottom="10" left="15"/>
+                    </padding>
+                </PasswordField>
+                <Label fx:id="passwordErrorLabel" textFill="RED"/>
+            </VBox>
+
+            <Button fx:id="signInButton" text="Sign In" onAction="#login" styleClass="loginButton" 
+                    maxWidth="Infinity" GridPane.rowIndex="2">
+                <padding>
+                    <Insets top="10" bottom="10"/>
+                </padding>
+                <font>
+                    <Font name="Outfit Medium" size="20.0"/>
+                </font>
+            </Button>
+        </GridPane>
+
+        <Region VBox.vgrow="ALWAYS" maxHeight="20"/>
+
+        <!-- Footer Links -->
+        <VBox spacing="10" alignment="CENTER">
+            <HBox alignment="CENTER" spacing="50">
+                <CheckBox id="rememberMe" text="Remember Me"/>
+                <Hyperlink fx:id="forgetPasswordHyperlink" text="Forgot Password"/>
+            </HBox>
+            <Hyperlink fx:id="forgetPasswordEmailHyperlink" text="Forgot Password email"/>
+        </VBox>
+    </VBox>
+
+    <!-- Welcome Section -->
+    <VBox styleClass="leftSideBar" minWidth="468.0" alignment="CENTER" spacing="25" HBox.hgrow="ALWAYS">
+        <padding>
+            <Insets top="40" right="40" bottom="40" left="40"/>
+        </padding>
+        
+        <VBox alignment="CENTER" spacing="15">
+            <Label text="Welcome to Rakcha" textFill="WHITE" wrapText="true" 
+                   alignment="CENTER" textAlignment="CENTER">
+                <font>
+                    <Font name="Outfit SemiBold" size="35.0"/>
+                </font>
+            </Label>
+            <Label text="Don't have an account" textFill="WHITE">
+                <font>
+                    <Font size="19.0"/>
+                </font>
+            </Label>
+        </VBox>
+
+        <Button fx:id="signUpButton" onAction="#switchToSignUp" styleClass="signupButton" 
+                text="Sign up" textFill="WHITE" prefWidth="150">
+            <font>
+                <Font name="Outfit Medium" size="17.0"/>
+            </font>
+            <padding>
+                <Insets top="10" right="20" bottom="10" left="20"/>
+            </padding>
+        </Button>
+    </VBox>
+</HBox>

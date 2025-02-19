@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.image.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<VBox prefHeight="855.0" prefWidth="1507.0"
+    xmlns="http://javafx.com/javafx/21"
+    xmlns:fx="http://javafx.com/fxml/1" 
+    fx:controller="com.esprit.controllers.films.ReservationController">
+
+    <HBox VBox.vgrow="ALWAYS">
+        <!-- SideBar -->
+        <fx:include source="../clientSideBar.fxml"/>
+        
+        <!-- Main Content -->
+        <VBox spacing="20" HBox.hgrow="ALWAYS">
+            <padding>
+                <Insets top="25" right="25" bottom="25" left="25"/>
+            </padding>
+
+            <!-- Header -->
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <ImageView fx:id="moviePoster" fitHeight="150.0" fitWidth="100.0" 
+                         preserveRatio="true"/>
+                <VBox spacing="5">
+                    <Label fx:id="movieTitle" styleClass="movie-title">
+                        <font>
+                            <Font name="Arial Bold" size="24.0"/>
+                        </font>
+                    </Label>
+                    <Label fx:id="showtime" styleClass="showtime-label"/>
+                </VBox>
+            </HBox>
+
+            <!-- Content Area -->
+            <HBox spacing="20" VBox.vgrow="ALWAYS">
+                <!-- Seat Selection -->
+                <VBox spacing="15" HBox.hgrow="ALWAYS" styleClass="bg-white">
+                    <padding>
+                        <Insets top="20" right="20" bottom="20" left="20"/>
+                    </padding>
+
+                    <Label text="Select Your Seats" styleClass="section-title">
+                        <font>
+                            <Font name="Arial Bold" size="20.0"/>
+                        </font>
+                    </Label>
+
+                    <!-- Screen -->
+                    <HBox alignment="CENTER">
+                        <Label text="SCREEN" styleClass="screen-label"/>
+                    </HBox>
+
+                    <!-- Seats Grid -->
+                    <GridPane fx:id="seatsGrid" alignment="CENTER" hgap="10" vgap="10" 
+                             VBox.vgrow="ALWAYS"/>
+
+                    <!-- Legend -->
+                    <HBox spacing="20" alignment="CENTER">
+                        <HBox spacing="5" alignment="CENTER">
+                            <Region styleClass="seat-available"/>
+                            <Label text="Available"/>
+                        </HBox>
+                        <HBox spacing="5" alignment="CENTER">
+                            <Region styleClass="seat-selected"/>
+                            <Label text="Selected"/>
+                        </HBox>
+                        <HBox spacing="5" alignment="CENTER">
+                            <Region styleClass="seat-occupied"/>
+                            <Label text="Occupied"/>
+                        </HBox>
+                    </HBox>
+                </VBox>
+
+                <!-- Booking Summary -->
+                <VBox spacing="15" maxWidth="300.0" styleClass="bg-white">
+                    <padding>
+                        <Insets top="20" right="20" bottom="20" left="20"/>
+                    </padding>
+
+                    <Label text="Booking Summary" styleClass="section-title">
+                        <font>
+                            <Font name="Arial Bold" size="20.0"/>
+                        </font>
+                    </Label>
+
+                    <GridPane vgap="10" hgap="10">
+                        <Label text="Selected Seats:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                        <Label fx:id="selectedSeatsLabel" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                        <Label text="Price per Seat:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                        <Label fx:id="pricePerSeatLabel" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                        <Label text="Total Price:" GridPane.rowIndex="2" GridPane.columnIndex="0" 
+                               styleClass="total-label">
+                            <font>
+                                <Font name="Arial Bold" size="16.0"/>
+                            </font>
+                        </Label>
+                        <Label fx:id="totalPriceLabel" GridPane.rowIndex="2" GridPane.columnIndex="1" 
+                               styleClass="total-label">
+                            <font>
+                                <Font name="Arial Bold" size="16.0"/>
+                            </font>
+                        </Label>
+                    </GridPane>
+
+                    <!-- Payment Method -->
+                    <VBox spacing="10">
+                        <Label text="Payment Method" styleClass="subsection-title"/>
+                        <ComboBox fx:id="paymentMethodCombo" maxWidth="Infinity"/>
+                    </VBox>
+
+                    <!-- Action Buttons -->
+                    <VBox spacing="10">
+                        <Button onAction="#confirmBooking" styleClass="primary-button" 
+                                text="Confirm Booking" maxWidth="Infinity"/>
+                        <Button onAction="#cancel" styleClass="secondary-button" 
+                                text="Cancel" maxWidth="Infinity"/>
+                    </VBox>
+                </VBox>
+            </HBox>
+        </VBox>
+    </HBox>
+</VBox>

@@ -14,6 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -55,7 +56,7 @@ public class SerieClientController {
     @FXML
     private Label resultatLabel;
     @FXML
-    private ComboBox<String> CamboxCategorie;
+    private ComboBox<Categorie> CamboxCategorie;
     @FXML
     private ListView<Serie> listeSerie;
     private List<Categorie> categorieList = new ArrayList<>();
@@ -133,16 +134,16 @@ public class SerieClientController {
      * @param recherche search query, which is used to filter the list of series and
      *                  return only the matches.
      * @returns a list of `Serie` objects that match the given search query.
-     * <p>
-     * - The output is a list of `Serie` objects, which represents the list
-     * of series
-     * that match the search query.
-     * - Each element in the list contains the `Nom` attribute, which
-     * contains the name
-     * of the series.
-     * - If the `Nom` attribute matches the search query, the element is
-     * included in the
-     * output list.
+     *          <p>
+     *          - The output is a list of `Serie` objects, which represents the list
+     *          of series
+     *          that match the search query.
+     *          - Each element in the list contains the `Nom` attribute, which
+     *          contains the name
+     *          of the series.
+     *          - If the `Nom` attribute matches the search query, the element is
+     *          included in the
+     *          output list.
      */
     public static List<Serie> rechercher(final List<Serie> liste, final String recherche) {
         final List<Serie> resultats = new ArrayList<>();
@@ -168,7 +169,7 @@ public class SerieClientController {
      */
     @FXML
     void onWatch(final ActionEvent event) throws IOException {
-        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/EpisodeClient.fxml"));
+        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/series/EpisodeClient.fxml"));
         final Parent root = loader.load();
         final Stage stage = (Stage) this.watchEpisode.getScene().getWindow();
         stage.setScene(new Scene(root));
@@ -194,18 +195,18 @@ public class SerieClientController {
      *              - `image`: The path to the image associated with the series.
      *              - `nbLikes`: The number of likes for the series.
      * @returns a vertical box container with a centered label, an image view, and a
-     * label
-     * displaying the number of likes.
-     * <p>
-     * 1/ `vbox`: A `VBox` object that contains the series information and
-     * image.
-     * 2/ `spacing`: The spacing between the children in the `VBox`.
-     * 3/ `alignment`: The alignment of the children in the `VBox`.
-     * 4/ `padding`: The padding around the children in the `VBox`.
-     * 5/ `minSize`: The minimum size of the `VBox`.
-     * 6/ `children`: A list of `Node` objects, including a `Label`, an
-     * `ImageView`, and
-     * another `Label`, which contain the series information and image.
+     *          label
+     *          displaying the number of likes.
+     *          <p>
+     *          1/ `vbox`: A `VBox` object that contains the series information and
+     *          image.
+     *          2/ `spacing`: The spacing between the children in the `VBox`.
+     *          3/ `alignment`: The alignment of the children in the `VBox`.
+     *          4/ `padding`: The padding around the children in the `VBox`.
+     *          5/ `minSize`: The minimum size of the `VBox`.
+     *          6/ `children`: A list of `Node` objects, including a `Label`, an
+     *          `ImageView`, and
+     *          another `Label`, which contain the series information and image.
      */
     private VBox createSeriesVBox(final Serie serie) {
         final VBox vbox = new VBox();
@@ -593,7 +594,8 @@ public class SerieClientController {
                     // Définissez l'AnchorPane en tant que graphique pour la cellule
                     this.setGraphic(anchorPane);
                     watchButton.setOnAction(event -> {
-                        final FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/EpisodeClient.fxml"));
+                        final FXMLLoader fxmlLoader = new FXMLLoader(
+                                this.getClass().getResource("/ui/series/EpisodeClient.fxml"));
                         final Stage stage = (Stage) watchButton.getScene().getWindow();
                         try {
                             final Parent root = fxmlLoader.load();
@@ -632,7 +634,7 @@ public class SerieClientController {
      */
     @FXML
     void AfficherFavList(final ActionEvent event) {
-        final FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/ListFavoris.fxml"));
+        final FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/ui/series/ListFavoris.fxml"));
         final Stage stage = new Stage();
         try {
             final Parent root = fxmlLoader.load();
@@ -654,24 +656,23 @@ public class SerieClientController {
      * for
      * searching series by name.
      */
-    @FXML
-    private void initialize() throws SQLException {
+
+    public void initialize() throws SQLException {
         this.loadSeriesList();
         final IServiceSerieImpl iServiceSerie = new IServiceSerieImpl();
         final IServiceCategorieImpl iServiceCategorie = new IServiceCategorieImpl();
         final List<Categorie> categorieList = iServiceCategorie.recuperer();
-        final ObservableList<String> categorieNames = FXCollections.observableArrayList();
-        for (final Categorie categorie : categorieList) {
-            categorieNames.add(categorie.getNom());
+        final ObservableList<Categorie> categorieObservableList = FXCollections.observableArrayList();
+        if (CamboxCategorie != null) {
+            this.CamboxCategorie.setItems(categorieObservableList);
         }
-        this.CamboxCategorie.setItems(categorieNames);
         this.CamboxCategorie.setOnAction(event -> {
-            final String selectedCategorie = this.CamboxCategorie.getValue();
+            final Categorie selectedCategorie = this.CamboxCategorie.getValue();
             if (!this.selectedCategories.contains(selectedCategorie)) {
                 for (final Categorie c : categorieList) {
-                    if (c.getNom() == selectedCategorie) {
+                    if (c.getNom() == selectedCategorie.getNom()) {
                         try {
-                            this.listerecherche = iServiceSerie.recuperes(c.getIdcategorie());
+                            this.listerecherche = iServiceSerie.recuperes(selectedCategorie.getIdcategorie());
                             this.trierParNom(this.listerecherche); // Tri des séries par nom
                             this.afficherliste(this.listerecherche);
                         } catch (final SQLException e) {
@@ -690,7 +691,8 @@ public class SerieClientController {
         this.listeSerie.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
             if (0 <= newValue.intValue()) {
                 final Serie selectedSerie = this.listeSerie.getItems().get(newValue.intValue());
-                final FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/EpisodeClient.fxml"));
+                final FXMLLoader fxmlLoader = new FXMLLoader(
+                        this.getClass().getResource("/ui/series/EpisodeClient.fxml"));
                 SerieClientController.LOGGER.info("serieee " + this.listeSerie.getScene().getWindow().getUserData());
                 final Stage stage = (Stage) this.listeSerie.getScene().getWindow();
                 try {
@@ -710,7 +712,7 @@ public class SerieClientController {
 
     /// gestion de menu
     /**
-     * Loads and displays a FXML file named "CategorieClient.fxml" using the
+     * Loads and displays a FXML file named "/ui//ui/CategorieClient.fxml" using the
      * `FXMLLoader`
      * class.
      *
@@ -724,7 +726,8 @@ public class SerieClientController {
      */
     @FXML
     void Ocategories(final ActionEvent event) throws IOException {
-        final Parent root = FXMLLoader.load(Objects.requireNonNull(this.getClass().getResource("/CategorieClient.fxml")));
+        final Parent root = FXMLLoader
+                .load(Objects.requireNonNull(this.getClass().getResource("/ui//ui/CategorieClient.fxml")));
         final Scene scene = new Scene(root);
         final Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
@@ -749,7 +752,8 @@ public class SerieClientController {
      */
     @FXML
     void Oseries(final ActionEvent event) throws IOException {
-        final Parent root = FXMLLoader.load(Objects.requireNonNull(this.getClass().getResource("/SeriesClient.fxml")));
+        final Parent root = FXMLLoader
+                .load(Objects.requireNonNull(this.getClass().getResource("/ui/series/SeriesClient.fxml")));
         final Scene scene = new Scene(root);
         final Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
@@ -778,7 +782,8 @@ public class SerieClientController {
      */
     @FXML
     void Oepisode(final ActionEvent event) throws IOException {
-        final Parent root = FXMLLoader.load(Objects.requireNonNull(this.getClass().getResource("/EpisodeClient.fxml")));
+        final Parent root = FXMLLoader
+                .load(Objects.requireNonNull(this.getClass().getResource("/ui/series/EpisodeClient.fxml")));
         final Scene scene = new Scene(root);
         final Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);

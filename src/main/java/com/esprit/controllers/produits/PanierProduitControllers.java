@@ -140,8 +140,8 @@ public class PanierProduitControllers implements Initializable {
      *               the `generateProduitCard()`
      *               function.
      * @returns a VBox container that displays a product's details and allows users
-     * to
-     * select it for their order.
+     *          to
+     *          select it for their order.
      */
     private VBox createProduitVBox(final Panier Panier) {
         final VBox produitVBox = new VBox();
@@ -188,7 +188,8 @@ public class PanierProduitControllers implements Initializable {
         quantityTextField.setEditable(false); // Empêcher l'édition manuelle
         final int totalQuantiteProduit = Integer.parseInt(quantityTextField.getText());
         final Label sommeTotaleLabel = new Label(
-                "Somme totale : " + this.prixProduit(Panier.getProduit().getId_produit(), totalQuantiteProduit) + " DT");
+                "Somme totale : " + this.prixProduit(Panier.getProduit().getId_produit(), totalQuantiteProduit)
+                        + " DT");
         sommeTotaleLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         sommeTotaleLabel.setLayoutX(550);
         sommeTotaleLabel.setLayoutY(60);
@@ -332,8 +333,8 @@ public class PanierProduitControllers implements Initializable {
      *                 determine if the
      *                 product is available for purchase.
      * @returns a boolean value indicating whether the requested quantity of stock
-     * is
-     * available or not.
+     *          is
+     *          available or not.
      */
     private boolean isStockAvailable(final Produit produit, final int quantity) {
         // Comparer la quantité demandée avec la quantité disponible en stock
@@ -415,7 +416,7 @@ public class PanierProduitControllers implements Initializable {
      */
     @FXML
     void order(final ActionEvent event) {
-        final FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/CommandeClient.fxml"));
+        final FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/ui/produits/CommandeClient.fxml"));
         final Stage stage = (Stage) this.cartFlowPane.getScene().getWindow();
         try {
             final Parent root = fxmlLoader.load();
@@ -456,7 +457,7 @@ public class PanierProduitControllers implements Initializable {
     void cinemaclient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/CommentaireProduit.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/produits/CommentaireProduit.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -489,7 +490,7 @@ public class PanierProduitControllers implements Initializable {
     void eventClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/AffichageEvenementClient.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui//ui/AffichageEvenementClient.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -522,7 +523,7 @@ public class PanierProduitControllers implements Initializable {
     void produitClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/AfficherProduitClient.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/produits/AfficherProduitClient.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -565,7 +566,7 @@ public class PanierProduitControllers implements Initializable {
     void MovieClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/filmuser.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/films/filmuser.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -596,7 +597,7 @@ public class PanierProduitControllers implements Initializable {
     void SerieClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/Series-view.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui//ui/Series-view.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -626,12 +627,12 @@ public class PanierProduitControllers implements Initializable {
     public void afficherProduit(final MouseEvent mouseEvent) {
         // Obtenir la fenêtre précédente
         final Window previousWindow = this.retour.getScene().getWindow();
-        // Charger le fichier FXML de la page "AfficherProduit.fxml"
-        final FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/AfficherProduitClient.fxml"));
+        // Charger le fichier FXML de la page "/ui//ui/AfficherProduit.fxml"
+        final FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/ui/produits/AfficherProduitClient.fxml"));
         try {
             final Parent rootNode = fxmlLoader.load();
             final Scene scene = new Scene(rootNode);
-            // Créer une nouvelle fenêtre pour la page "AfficherProduit.fxml"
+            // Créer une nouvelle fenêtre pour la page "/ui//ui/AfficherProduit.fxml"
             final Stage previousStage = new Stage();
             // Configurer la fenêtre précédente avec les propriétés nécessaires
             previousStage.setScene(scene);

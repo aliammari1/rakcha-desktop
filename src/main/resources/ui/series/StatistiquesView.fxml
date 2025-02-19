@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="855.0" prefWidth="1507.0"
+    xmlns="http://javafx.com/javafx/21"
+    xmlns:fx="http://javafx.com/fxml/1" 
+    fx:controller="com.esprit.controllers.series.StatistiquesController">
+
+    <HBox VBox.vgrow="ALWAYS">
+        <!-- SideBar -->
+        <fx:include source="../adminSideBar.fxml"/>
+        
+        <!-- Main Content -->
+        <VBox spacing="20" HBox.hgrow="ALWAYS">
+            <padding>
+                <Insets top="25" right="25" bottom="25" left="25"/>
+            </padding>
+
+            <!-- Header -->
+            <Label text="Series Analytics" styleClass="section-title">
+                <font>
+                    <Font name="Arial Rounded MT Bold" size="32.0"/>
+                </font>
+            </Label>
+
+            <!-- Charts Grid -->
+            <GridPane hgap="20" vgap="20" VBox.vgrow="ALWAYS">
+                <!-- Rating Distribution -->
+                <PieChart fx:id="ratingDistributionChart" title="Rating Distribution"
+                         GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+
+                <!-- Category Distribution -->
+                <BarChart fx:id="categoryDistributionChart" title="Categories Distribution"
+                         GridPane.columnIndex="1" GridPane.rowIndex="0">
+                    <xAxis>
+                        <CategoryAxis label="Categories"/>
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis label="Number of Series"/>
+                    </yAxis>
+                </BarChart>
+
+                <!-- Ratings Over Time -->
+                <LineChart fx:id="ratingsOverTimeChart" title="Ratings Trend"
+                          GridPane.columnIndex="0" GridPane.rowIndex="1">
+                    <xAxis>
+                        <CategoryAxis label="Time Period"/>
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis label="Average Rating"/>
+                    </yAxis>
+                </LineChart>
+
+                <!-- Popular Series -->
+                <StackedBarChart fx:id="popularSeriesChart" title="Most Popular Series"
+                                GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    <xAxis>
+                        <CategoryAxis label="Series"/>
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis label="Views/Ratings"/>
+                    </yAxis>
+                </StackedBarChart>
+            </GridPane>
+
+            <!-- Export Options -->
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <Button onAction="#exportToPDF" styleClass="primary-button" text="Export to PDF"/>
+                <Button onAction="#navigateBack" styleClass="secondary-button" text="Back to Series"/>
+            </HBox>
+        </VBox>
+    </HBox>
+</VBox>

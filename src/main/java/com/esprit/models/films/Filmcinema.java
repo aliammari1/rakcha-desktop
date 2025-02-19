@@ -57,6 +57,15 @@ public class Filmcinema {
     }
 
     /**
+     * Returns the film.
+     *
+     * @return The film.
+     */
+    public Film getFilm() {
+        return this.id_film;
+    }
+
+    /**
      * Returns a string representation of the Filmcinema object.
      *
      * @return A string representation of the Filmcinema object.

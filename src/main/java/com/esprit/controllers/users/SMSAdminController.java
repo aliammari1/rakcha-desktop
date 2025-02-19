@@ -37,7 +37,7 @@ public class SMSAdminController implements Initializable {
     public void sendSMS(final ActionEvent event) {
         if (this.verificationCode == Integer.parseInt(this.codeTextField.getText())) {
             try {
-                final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ResetPasswordlogin.fxml"));
+                final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/users/ResetPasswordlogin.fxml"));
                 final Parent root = loader.load();
                 final Stage stage = (Stage) this.codeTextField.getScene().getWindow();
                 stage.setScene(new Scene(root));
@@ -54,7 +54,8 @@ public class SMSAdminController implements Initializable {
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
         this.phoneNumberTextfield.textProperty()
-                .addListener((final ObservableValue<? extends String> observable, final String oldValue, final String newValue) -> {
+                .addListener((final ObservableValue<? extends String> observable, final String oldValue,
+                        final String newValue) -> {
                     if (8 == newValue.trim().length()) {
                         final SecureRandom random = new SecureRandom();
                         this.verificationCode = random.nextInt(999999 - 100000) + 100000;

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class CommandeItemService implements IService<CommandeItem> {
     private static final Logger LOGGER = Logger.getLogger(CommandeItemService.class.getName());
@@ -162,7 +163,7 @@ public class CommandeItemService implements IService<CommandeItem> {
     }
 
     public List<CommandeItem> getavergeratingSorted() {
-        final String req = "SELECT id_produit, quantity FROM commandeitem WHERE statu LIKE 'payee' GROUP BY id_produit ORDER BY quantity DESC";
+        final String req = "SELECT id_produit, quantity,c.idCommande as idCommande,idCommandeItem FROM commandeitem ci join commande c on ci.idCommande = c.idCommande join produit p on ci.id_produit = p.id_produit WHERE statu LIKE 'payee' GROUP BY id_produit";
         final List<CommandeItem> aver = new ArrayList<>();
         try {
             final PreparedStatement pst = this.connection.prepareStatement(req);
@@ -176,6 +177,6 @@ public class CommandeItemService implements IService<CommandeItem> {
         } catch (final Exception e) {
             CommandeItemService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
-        return aver;
+        return aver.stream().sorted((CommandeItem c1,CommandeItem c2) -> c2.getQuantity() - c1.getQuantity()).collect(Collectors.toList());
     }
 }

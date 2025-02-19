@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.image.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<VBox prefHeight="855.0" prefWidth="1507.0"
+    xmlns="http://javafx.com/javafx/21"
+    xmlns:fx="http://javafx.com/fxml/1" 
+    fx:controller="com.esprit.controllers.series.ListFavorisController">
+
+    <HBox VBox.vgrow="ALWAYS">
+        <!-- SideBar -->
+        <fx:include source="../clientSideBar.fxml"/>
+        
+        <!-- Main Content -->
+        <VBox spacing="20" HBox.hgrow="ALWAYS">
+            <padding>
+                <Insets top="25" right="25" bottom="25" left="25"/>
+            </padding>
+
+            <!-- Header -->
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <Label text="My Favorites" styleClass="section-title">
+                    <font>
+                        <Font name="Arial Rounded MT Bold" size="32.0"/>
+                    </font>
+                </Label>
+            </HBox>
+
+            <!-- Content Area -->
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="bg-white">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+                
+                <FlowPane fx:id="favorisFlowPane" hgap="20" vgap="20"/>
+            </ScrollPane>
+
+            <!-- Back Button -->
+            <HBox alignment="CENTER_LEFT">
+                <Button onAction="#retour" styleClass="nav-button">
+                    <graphic>
+                        <FontIcon iconLiteral="fa-arrow-left" iconSize="16"/>
+                    </graphic>
+                    <text>Back to Series</text>
+                </Button>
+            </HBox>
+        </VBox>
+    </HBox>
+</VBox>

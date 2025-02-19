@@ -51,6 +51,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.function.Predicate;
+import javafx.collections.transformation.SortedList;
 
 public class FilmController {
     private static final Logger LOGGER = Logger.getLogger(FilmController.class.getName());
@@ -117,6 +119,9 @@ public class FilmController {
     @FXML
     private Button bouttonAnchor_outfilltrer1;
 
+    private FilteredList<Film> filteredFilms;
+    private SortedList<Film> sortedFilms;
+
     /**
      * Populates a ComboBox with actor names, another with cinema names, and a third
      * with
@@ -157,6 +162,7 @@ public class FilmController {
         this.recherche_textField.textProperty().addListener((observable, oldValue, newValue) -> {
             this.searchActor(newValue);
         });
+        setupAdvancedSearch();
     }
 
     /**
@@ -185,6 +191,34 @@ public class FilmController {
             final String lowerCaseFilter = searchText.toLowerCase();
             return actor.getNom().toLowerCase().contains(lowerCaseFilter);
         });
+    }
+
+    private void setupAdvancedSearch() {
+        filteredFilms = new FilteredList<>(filmCategory_tableView1.getItems(), p -> true);
+        sortedFilms = new SortedList<>(filteredFilms);
+        sortedFilms.comparatorProperty().bind(filmCategory_tableView1.comparatorProperty());
+        filmCategory_tableView1.setItems(sortedFilms);
+
+        recherche_textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredFilms.setPredicate(createSearchPredicate(newValue));
+        });
+    }
+
+    private Predicate<Film> createSearchPredicate(String searchText) {
+        return film -> {
+            if (searchText == null || searchText.isEmpty()) {
+                return true;
+            }
+
+            String lowerCaseFilter = searchText.toLowerCase();
+
+            // Search in multiple fields
+            return film.getNom().toLowerCase().contains(lowerCaseFilter) ||
+                    film.getDescription().toLowerCase().contains(lowerCaseFilter) ||
+                    String.valueOf(film.getAnnederalisation()).contains(lowerCaseFilter) ||
+                    new FilmcategoryService().getCategoryNames(film.getId()).toLowerCase().contains(lowerCaseFilter) ||
+                    new ActorfilmService().getActorsNames(film.getId()).toLowerCase().contains(lowerCaseFilter);
+        };
     }
 
     /**
@@ -493,8 +527,9 @@ public class FilmController {
                                  *                   in the tooltip.
                                  */
                                 @Override
-                                public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                                                    final String newValue) {
+                                public void changed(final ObservableValue<? extends String> observable,
+                                        final String oldValue,
+                                        final String newValue) {
                                     FilmController.LOGGER.info(String.valueOf(validator.containsErrors()));
                                     if (validator.containsErrors()) {
                                         tooltip.setText(validator.createStringBinding().getValue());
@@ -579,7 +614,7 @@ public class FilmController {
                                          *                   updated
                                          *                   and processed in the function.
                                          *
-                                         * @param oldValue   previous value of the `observable` before the change
+                                         * @param oldValue   previous value of the observable variable before the change
                                          *                   occurred.
                                          *
                                          * @param newValue   String value of the observable variable being monitored,
@@ -590,7 +625,7 @@ public class FilmController {
                                          */
                                         @Override
                                         public void changed(final ObservableValue<? extends String> observable,
-                                                            final String oldValue, final String newValue) {
+                                                final String oldValue, final String newValue) {
                                             if (validator.containsErrors()) {
                                                 tooltip.setText(validator.createStringBinding().getValue());
                                                 tooltip.setStyle("-fx-background-color: #f00;");
@@ -705,8 +740,9 @@ public class FilmController {
                                  *                   message should be.
                                  */
                                 @Override
-                                public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                                                    final String newValue) {
+                                public void changed(final ObservableValue<? extends String> observable,
+                                        final String oldValue,
+                                        final String newValue) {
                                     FilmController.LOGGER.info(String.valueOf(validator.containsErrors()));
                                     if (validator.containsErrors()) {
                                         tooltip.setText(validator.createStringBinding().getValue());
@@ -726,92 +762,95 @@ public class FilmController {
             }
         });
         // nomFilm_tableColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        this.descriptionFilm_tableColumn.setCellFactory(new Callback<TableColumn<Film, String>, TableCell<Film, String>>() {
-            /**
-             * Generates a `TextFieldTableCell` instance with a built-in validator that
-             * checks
-             * if the input string starts with an uppercase letter, and displays an error
-             * message
-             * if it doesn't meet the criteria.
-             *
-             * @param param TableColumn<Film, String> that contains the data to be edited.
-             *
-             * @returns a `TextFieldTableCell` instance that provides text input validation.
-             */
-            @Override
-            public TableCell<Film, String> call(final TableColumn<Film, String> param) {
-                return new TextFieldTableCell<Film, String>(new DefaultStringConverter()) {
-                    private Validator validator;
-
+        this.descriptionFilm_tableColumn
+                .setCellFactory(new Callback<TableColumn<Film, String>, TableCell<Film, String>>() {
                     /**
-                     * Sets up a validator that checks if the input is empty or not an uppercase
-                     * letter,
-                     * and displays an error tooltip when errors are found.
+                     * Generates a `TextFieldTableCell` instance with a built-in validator that
+                     * checks
+                     * if the input string starts with an uppercase letter, and displays an error
+                     * message
+                     * if it doesn't meet the criteria.
+                     *
+                     * @param param TableColumn<Film, String> that contains the data to be edited.
+                     *
+                     * @returns a `TextFieldTableCell` instance that provides text input validation.
                      */
                     @Override
-                    public void startEdit() {
-                        super.startEdit();
-                        final TextField textField = (TextField) this.getGraphic();
-                        if (null != textField && null == validator) {
-                            this.validator = new Validator();
-                            this.validator.createCheck()
-                                    .dependsOn("description", textField.textProperty())
-                                    .withMethod(c -> {
-                                        final String input = c.get("description");
-                                        if (null == input || input.trim().isEmpty()) {
-                                            c.error("Input cannot be empty.");
-                                        } else if (!Character.isUpperCase(input.charAt(0))) {
-                                            c.error("Please start with an uppercase letter.");
+                    public TableCell<Film, String> call(final TableColumn<Film, String> param) {
+                        return new TextFieldTableCell<Film, String>(new DefaultStringConverter()) {
+                            private Validator validator;
+
+                            /**
+                             * Sets up a validator that checks if the input is empty or not an uppercase
+                             * letter,
+                             * and displays an error tooltip when errors are found.
+                             */
+                            @Override
+                            public void startEdit() {
+                                super.startEdit();
+                                final TextField textField = (TextField) this.getGraphic();
+                                if (null != textField && null == validator) {
+                                    this.validator = new Validator();
+                                    this.validator.createCheck()
+                                            .dependsOn("description", textField.textProperty())
+                                            .withMethod(c -> {
+                                                final String input = c.get("description");
+                                                if (null == input || input.trim().isEmpty()) {
+                                                    c.error("Input cannot be empty.");
+                                                } else if (!Character.isUpperCase(input.charAt(0))) {
+                                                    c.error("Please start with an uppercase letter.");
+                                                }
+                                            })
+                                            .decorates(textField)
+                                            .immediate();
+                                    final Window window = getScene().getWindow();
+                                    final Tooltip tooltip = new Tooltip();
+                                    final Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
+                                    textField.textProperty().addListener(new ChangeListener<String>() {
+                                        /**
+                                         * Is called whenever the value of an observable changes. It checks if there are
+                                         * any
+                                         * validation errors and displays a tooltip with the error message if present,
+                                         * otherwise
+                                         * it hides the tooltip.
+                                         *
+                                         * @param observable ObservableValue<? extends String> that is being monitored
+                                         *                   and
+                                         *                   updated in the function, which captures changes to the
+                                         *                   value of the property it
+                                         *                   is observing.
+                                         *
+                                         * @param oldValue   previous value of the observable value being observed,
+                                         *                   which is
+                                         *                   passed as an argument to the `changed()` method for
+                                         *                   informational purposes only.
+                                         *
+                                         * @param newValue   string value that is being updated or replaced in the
+                                         *                   `textField`.
+                                         */
+                                        @Override
+                                        public void changed(final ObservableValue<? extends String> observable,
+                                                final String oldValue,
+                                                final String newValue) {
+                                            FilmController.LOGGER.info(String.valueOf(validator.containsErrors()));
+                                            if (validator.containsErrors()) {
+                                                tooltip.setText(validator.createStringBinding().getValue());
+                                                tooltip.setStyle("-fx-background-color: #f00;");
+                                                textField.setTooltip(tooltip);
+                                                textField.getTooltip().show(window, bounds.getMinX(),
+                                                        bounds.getMinY() - 30);
+                                            } else {
+                                                if (null != textField.getTooltip()) {
+                                                    textField.getTooltip().hide();
+                                                }
+                                            }
                                         }
-                                    })
-                                    .decorates(textField)
-                                    .immediate();
-                            final Window window = getScene().getWindow();
-                            final Tooltip tooltip = new Tooltip();
-                            final Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
-                            textField.textProperty().addListener(new ChangeListener<String>() {
-                                /**
-                                 * Is called whenever the value of an observable changes. It checks if there are
-                                 * any
-                                 * validation errors and displays a tooltip with the error message if present,
-                                 * otherwise
-                                 * it hides the tooltip.
-                                 *
-                                 * @param observable ObservableValue<? extends String> that is being monitored
-                                 *                   and
-                                 *                   updated in the function, which captures changes to the
-                                 *                   value of the property it
-                                 *                   is observing.
-                                 *
-                                 * @param oldValue   previous value of the observable value being observed,
-                                 *                   which is
-                                 *                   passed as an argument to the `changed()` method for
-                                 *                   informational purposes only.
-                                 *
-                                 * @param newValue   string value that is being updated or replaced in the
-                                 *                   `textField`.
-                                 */
-                                @Override
-                                public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                                                    final String newValue) {
-                                    FilmController.LOGGER.info(String.valueOf(validator.containsErrors()));
-                                    if (validator.containsErrors()) {
-                                        tooltip.setText(validator.createStringBinding().getValue());
-                                        tooltip.setStyle("-fx-background-color: #f00;");
-                                        textField.setTooltip(tooltip);
-                                        textField.getTooltip().show(window, bounds.getMinX(), bounds.getMinY() - 30);
-                                    } else {
-                                        if (null != textField.getTooltip()) {
-                                            textField.getTooltip().hide();
-                                        }
-                                    }
+                                    });
                                 }
-                            });
-                        }
+                            }
+                        };
                     }
-                };
-            }
-        });
+                });
     }
 
     /**
@@ -1058,7 +1097,8 @@ public class FilmController {
                             l.add(c.getNom());
                         checkComboBox.getItems().addAll(l);
                         final FilmcategoryService fcs = new FilmcategoryService();
-                        final List<String> ls = Stream.of(fcs.getCategoryNames(p.getValue().getId()).split(", ")).toList();
+                        final List<String> ls = Stream.of(fcs.getCategoryNames(p.getValue().getId()).split(", "))
+                                .toList();
                         for (final String checkedString : ls) {
                             FilmController.LOGGER.info(checkedString);
                             checkComboBox.getCheckModel().check(checkedString);
@@ -1161,7 +1201,7 @@ public class FilmController {
                         FilmController.LOGGER.info(filmcategoryStringCellDataFeatures.getValue().getId() + " "
                                 + afs.getActorsNames(filmcategoryStringCellDataFeatures.getValue().getId()));
                         final List<String> ls = Stream.of(
-                                        afs.getActorsNames(filmcategoryStringCellDataFeatures.getValue().getId()).split(", "))
+                                afs.getActorsNames(filmcategoryStringCellDataFeatures.getValue().getId()).split(", "))
                                 .toList();
                         FilmController.LOGGER.info("pass: " + filmcategoryStringCellDataFeatures.getValue().getId());
                         for (final String checkedString : ls)
@@ -1220,7 +1260,7 @@ public class FilmController {
                         checkComboBox.getItems().addAll(l);
                         final FilmcinemaService cfs = new FilmcinemaService();
                         final List<String> ls = Stream.of(
-                                        cfs.getcinemaNames(filmcategoryStringCellDataFeatures.getValue().getId()).split(", "))
+                                cfs.getcinemaNames(filmcategoryStringCellDataFeatures.getValue().getId()).split(", "))
                                 .toList();
                         for (final String checkedString : ls)
                             checkComboBox.getCheckModel().check(checkedString);
@@ -1259,30 +1299,31 @@ public class FilmController {
      * film detail field with the new value from the event.
      */
     private void setupCellOnEditCommit() {
-        this.annederalisationFilm_tableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Film, Integer>>() {
-            /**
-             * Is called when a cell editing event occurs in a table displaying films, and
-             * it
-             * updates the film's annederalisation based on the new value entered by the
-             * user.
-             *
-             * @param event CellEditEvent object that contains information about the cell
-             *              being
-             *              edited, including the table position and the new value being
-             *              entered by the user.
-             */
-            @Override
-            public void handle(final TableColumn.CellEditEvent<Film, Integer> event) {
-                try {
-                    event.getTableView().getItems().get(
-                            event.getTablePosition().getRow()).setAnnederalisation(event.getNewValue());
-                    FilmController.this.updateFilm(event.getTableView().getItems().get(
-                            event.getTablePosition().getRow()));
-                } catch (final Exception e) {
-                    FilmController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
-                }
-            }
-        });
+        this.annederalisationFilm_tableColumn
+                .setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Film, Integer>>() {
+                    /**
+                     * Is called when a cell editing event occurs in a table displaying films, and
+                     * it
+                     * updates the film's annederalisation based on the new value entered by the
+                     * user.
+                     *
+                     * @param event CellEditEvent object that contains information about the cell
+                     *              being
+                     *              edited, including the table position and the new value being
+                     *              entered by the user.
+                     */
+                    @Override
+                    public void handle(final TableColumn.CellEditEvent<Film, Integer> event) {
+                        try {
+                            event.getTableView().getItems().get(
+                                    event.getTablePosition().getRow()).setAnnederalisation(event.getNewValue());
+                            FilmController.this.updateFilm(event.getTableView().getItems().get(
+                                    event.getTablePosition().getRow()));
+                        } catch (final Exception e) {
+                            FilmController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                        }
+                    }
+                });
         this.nomFilm_tableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Film, String>>() {
             /**
              * Handles cell editing events for a table displaying films. It updates the film
@@ -1397,28 +1438,33 @@ public class FilmController {
      */
     @FXML
     void importImage(final ActionEvent event) {
-        final FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("PNG", "*.png"),
-                new FileChooser.ExtensionFilter("JPG", "*.jpg"));
-        fileChooser.setTitle("Sélectionner une image");
-        final File selectedFile = fileChooser.showOpenDialog(null);
-        if (null != selectedFile) {
-            try {
-                final String destinationDirectory1 = "./src/main/resources/img/films/";
-                final String destinationDirectory2 = "C:\\xampp\\htdocs\\Rakcha\\rakcha-web\\public\\img\\films\\";
-                final Path destinationPath1 = Paths.get(destinationDirectory1);
-                final Path destinationPath2 = Paths.get(destinationDirectory2);
-                final String uniqueFileName = System.currentTimeMillis() + "_" + selectedFile.getName();
-                final Path destinationFilePath1 = destinationPath1.resolve(uniqueFileName);
-                final Path destinationFilePath2 = destinationPath2.resolve(uniqueFileName);
-                Files.copy(selectedFile.toPath(), destinationFilePath1);
-                Files.copy(selectedFile.toPath(), destinationFilePath2);
-                final Image selectedImage = new Image(destinationFilePath1.toUri().toString());
-                this.imageFilm_ImageView.setImage(selectedImage);
-            } catch (final IOException e) {
-                FilmController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        // Add try-with-resources to ensure proper cleanup
+        try {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("PNG", "*.png"),
+                    new FileChooser.ExtensionFilter("JPG", "*.jpg"));
+            fileChooser.setTitle("Sélectionner une image");
+            final File selectedFile = fileChooser.showOpenDialog(null);
+            if (null != selectedFile) {
+                try {
+                    final String destinationDirectory1 = "./src/main/resources/img/films/";
+                    final String destinationDirectory2 = "C:\\xampp\\htdocs\\Rakcha\\rakcha-web\\public\\img\\films\\";
+                    final Path destinationPath1 = Paths.get(destinationDirectory1);
+                    final Path destinationPath2 = Paths.get(destinationDirectory2);
+                    final String uniqueFileName = System.currentTimeMillis() + "_" + selectedFile.getName();
+                    final Path destinationFilePath1 = destinationPath1.resolve(uniqueFileName);
+                    final Path destinationFilePath2 = destinationPath2.resolve(uniqueFileName);
+                    Files.copy(selectedFile.toPath(), destinationFilePath1);
+                    Files.copy(selectedFile.toPath(), destinationFilePath2);
+                    final Image selectedImage = new Image(destinationFilePath1.toUri().toString());
+                    this.imageFilm_ImageView.setImage(selectedImage);
+                } catch (final IOException e) {
+                    FilmController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                }
             }
+        } catch (final Exception e) {
+            FilmController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -1433,7 +1479,8 @@ public class FilmController {
     @FXML
     public void switchtoajouterCinema(final ActionEvent event) {
         try {
-            final FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/DashboardResponsableCinema.fxml"));
+            final FXMLLoader fxmlLoader = new FXMLLoader(
+                    this.getClass().getResource("/ui/cinemas/DashboardResponsableCinema.fxml"));
             final AnchorPane root = fxmlLoader.load();
             final Stage stage = (Stage) this.ajouterCinema_Button.getScene().getWindow();
             final Scene scene = new Scene(root, 1280, 700);

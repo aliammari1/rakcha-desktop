@@ -21,9 +21,12 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Is used to modify the details of a cinema object in a GUI application using JavaFX.
- * It has fields for entering cinema name, address, and logo, and methods for updating
- * the cinema details and displaying an alert message. The class also includes an
+ * Is used to modify the details of a cinema object in a GUI application using
+ * JavaFX.
+ * It has fields for entering cinema name, address, and logo, and methods for
+ * updating
+ * the cinema details and displaying an alert message. The class also includes
+ * an
  * initialize method and event handlers for the select and modifier buttons.
  */
 public class ModifierCinemaController implements Initializable {
@@ -37,10 +40,12 @@ public class ModifierCinemaController implements Initializable {
     private File selectedFile;
 
     /**
-     * Is called when an instance of a class is created and initializes its resources by
+     * Is called when an instance of a class is created and initializes its
+     * resources by
      * performing no-op actions.
      *
-     * @param location  URL of the web application's root document, which is used to locate
+     * @param location  URL of the web application's root document, which is used to
+     *                  locate
      *                  the necessary resources for its proper operation.
      * @param resources ResourceBundle that contains keys for localization of the
      *                  application's user interface and other textual content.
@@ -50,14 +55,18 @@ public class ModifierCinemaController implements Initializable {
     }
 
     /**
-     * Sets text fields and displays an image based on input cinema object's properties:
+     * Sets text fields and displays an image based on input cinema object's
+     * properties:
      * nom, adresse, logo.
      *
-     * @param cinema Cinema object that contains the name, address, and logo of the cinema,
-     *               which are then set as text values for the `tfNom`, `tfAdresse`, and `tfLogo` fields,
+     * @param cinema Cinema object that contains the name, address, and logo of the
+     *               cinema,
+     *               which are then set as text values for the `tfNom`, `tfAdresse`,
+     *               and `tfLogo` fields,
      *               respectively, within the function's body.
      *               <p>
-     *               - `cinema`: A `Cinema` object representing a movie theater with name, address,
+     *               - `cinema`: A `Cinema` object representing a movie theater with
+     *               name, address,
      *               and logo.
      */
     public void initData(Cinema cinema) {
@@ -70,17 +79,23 @@ public class ModifierCinemaController implements Initializable {
     }
 
     /**
-     * Allows users to edit the details of a cinema, including its name and address. It
-     * updates the cinema's information in the database and displays an alert message
+     * Allows users to edit the details of a cinema, including its name and address.
+     * It
+     * updates the cinema's information in the database and displays an alert
+     * message
      * upon successful completion.
      *
-     * @param event ActionEvent object that triggered the method execution, providing the
+     * @param event ActionEvent object that triggered the method execution,
+     *              providing the
      *              source of the event and any related data.
      *              <p>
-     *              - `event` is an instance of `ActionEvent`, which represents a user action related
+     *              - `event` is an instance of `ActionEvent`, which represents a
+     *              user action related
      *              to a UI component.
-     *              - The `event` object contains information about the action that triggered the
-     *              function, such as the source of the action (e.g., a button or a menu item) and the
+     *              - The `event` object contains information about the action that
+     *              triggered the
+     *              function, such as the source of the action (e.g., a button or a
+     *              menu item) and the
      *              state of the component at the time of the action.
      */
     @FXML
@@ -106,7 +121,7 @@ public class ModifierCinemaController implements Initializable {
         cinemaService.update(cinema);
         showAlert("Les modifications ont été enregistrées avec succès.");
         // Charger la nouvelle interface ListCinemaAdmin.fxml
-        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ListCinemaResponsable.fxml"));
+        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui//ui/ListCinemaResponsable.fxml"));
         final Parent root = loader.load();
         // Créer une nouvelle scène avec la nouvelle interface
         final Scene scene = new Scene(root);
@@ -117,13 +132,15 @@ public class ModifierCinemaController implements Initializable {
     }
 
     /**
-     * Is used to select an image file from a file chooser and set it as the logo for the
+     * Is used to select an image file from a file chooser and set it as the logo
+     * for the
      * FXML stage.
      *
      * @param event selection event that triggered the function execution.
      *              <p>
      *              - Event type: `ActionEvent`
-     *              - Target: `null` (no specific component is associated with the event)
+     *              - Target: `null` (no specific component is associated with the
+     *              event)
      */
     @FXML
     void select(final ActionEvent event) {
@@ -139,7 +156,8 @@ public class ModifierCinemaController implements Initializable {
     /**
      * Creates an Alert dialog with an information message.
      *
-     * @param message text to be displayed as an information message when the `showAlert()`
+     * @param message text to be displayed as an information message when the
+     *                `showAlert()`
      *                method is called.
      */
     @FXML

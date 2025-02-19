@@ -26,7 +26,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
 /**
- * Manages user interaction with the FXML file "StatistiqueView.fxml". It
+ * Manages user interaction with the FXML file "/ui//ui/StatistiqueView.fxml". It
  * initializes
  * and populates a BarChart, PieChart, or BorderPane depending on the selected
  * category

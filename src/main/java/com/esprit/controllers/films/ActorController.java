@@ -22,6 +22,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.application.Platform;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,6 +32,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.List;
+import java.util.Stack;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Is responsible for handling user interactions related to actors in a movie
@@ -73,6 +80,11 @@ public class ActorController {
     @FXML
     private TextField recherche_textField;
 
+    private final ConcurrentHashMap<String, Image> imageCache = new ConcurrentHashMap<>();
+    private final ExecutorService imageLoaderService = Executors.newFixedThreadPool(3);
+    private final Stack<UndoableAction> undoStack = new Stack<>();
+    private final Stack<UndoableAction> redoStack = new Stack<>();
+
     /**
      * Sets up a filtered list of actors based on a searchable text field and
      * updates a
@@ -88,6 +100,20 @@ public class ActorController {
         // Appliquer le filtre lorsque le texte de recherche change
         this.recherche_textField.textProperty().addListener((observable, oldValue, newValue) -> {
             this.searchActor(newValue);
+        });
+
+        // Add keyboard shortcuts
+        filmActor_tableView11.setOnKeyPressed(event -> {
+            if (event.isControlDown()) {
+                switch (event.getCode()) {
+                    case Z -> undo();
+                    case Y -> redo();
+                    case E -> exportActors("actors_export.json");
+                    case I -> importActors("actors_import.json");
+                    default -> {
+                    }
+                }
+            }
         });
     }
 
@@ -130,6 +156,9 @@ public class ActorController {
         fileChooser.setTitle("Sélectionner une image");
         final File selectedFile = fileChooser.showOpenDialog(null);
         if (null != selectedFile) {
+            if (!validateImage(selectedFile)) {
+                return;
+            }
             try {
                 final String destinationDirectory = "./src/main/resources/img/films/";
                 final Path destinationPath = Paths.get(destinationDirectory);
@@ -300,6 +329,9 @@ public class ActorController {
         fileChooser.setTitle("Sélectionner une image");
         final File selectedFile = fileChooser.showOpenDialog(null);
         if (null != selectedFile) {
+            if (!validateImage(selectedFile)) {
+                return;
+            }
             try {
                 final String destinationDirectory1 = "./src/main/resources/img/actors/";
                 final String destinationDirectory2 = "C:\\xampp\\htdocs\\Rakcha\\rakcha-web\\public\\img\\actors\\";
@@ -356,172 +388,202 @@ public class ActorController {
             this.filmActor_tableView11.setEditable(true);
             this.idActor_tableColumn1.setVisible(false);
             this.idActor_tableColumn1.setCellValueFactory(new PropertyValueFactory<>("id"));
-            this.nomAcotr_tableColumn1.setCellValueFactory((TableColumn.CellDataFeatures<Actor, String> actorStringCellDataFeatures) -> new SimpleStringProperty(actorStringCellDataFeatures.getValue().getNom())
-                    /**
-                     * Generates a `SimpleStringProperty` instance from the `Value` object returned
-                     * by
-                     * the `getNom()` method of an `Actor` object.
-                     *
-                     * @param actorStringCellDataFeatures cell data features of an actor,
-                     *                                    specifically
-                     *                                    the string value of the actor's name.
-                     *
-                     * @returns a `SimpleStringProperty` object containing the nominal value of the
-                     *          input
-                     *          `Actor` object.
-                     */);
+            this.nomAcotr_tableColumn1.setCellValueFactory((
+                    TableColumn.CellDataFeatures<Actor, String> actorStringCellDataFeatures) -> new SimpleStringProperty(
+                            actorStringCellDataFeatures.getValue().getNom())
+            /**
+             * Generates a `SimpleStringProperty` instance from the `Value` object returned
+             * by
+             * the `getNom()` method of an `Actor` object.
+             *
+             * @param actorStringCellDataFeatures cell data features of an actor,
+             *                                    specifically
+             *                                    the string value of the actor's name.
+             *
+             * @returns a `SimpleStringProperty` object containing the nominal value of the
+             *          input
+             *          `Actor` object.
+             */
+            );
             this.nomAcotr_tableColumn1.setCellFactory(TextFieldTableCell.forTableColumn());
             this.DeleteActor_Column1.setCellValueFactory(filmcategoryButtonCellDataFeatures -> {
-                        final Button button = new Button("delete");
-                        button.setOnAction((final ActionEvent event) -> {
-                            this.deleteFilm(filmcategoryButtonCellDataFeatures.getValue().getId());
-                        } /**
-                         * Deletes a film based on the ID passed as an event parameter from the
-                         * `filmcategoryButtonCellDataFeatures`.
-                         *
-                         * @param event `ActionEvent` that triggered the function execution, providing
-                         *              the
-                         *              identifier of the button that was clicked.
-                         */);
-                        return new SimpleObjectProperty<>(button);
-                    }
-                    /**
-                     * Creates a new button with an `OnAction` event handler that deletes a film
-                     * when
-                     * clicked, and returns the button object as an observable value.
-                     *
-                     * @param filmcategoryButtonCellDataFeatures value of a Button cell in a
-                     *                                           TableColumn,
-                     *                                           which contains the ID of a film
-                     *                                           category.
-                     *
-                     *                                           - `getValue()`: returns the
-                     *                                           internal value of the object, which
-                     *                                           is an instance
-                     *                                           of `FilmCategoryButtonCellData`.
-                     *                                           - `getId()`: retrieves the unique
-                     *                                           identifier for the film category
-                     *                                           button.
-                     *
-                     * @returns a `SimpleObjectProperty` of a `Button` object with the text
-                     *          "delete".
-                     *
-                     *          - The output is an `ObservableValue` of type `Button`, which means
-                     *          that it can
-                     *          be observed to change over time.
-                     *          - The output is created by calling the `Button` constructor and
-                     *          setting an
-                     *          `OnAction` event handler for the button's `onAction` method.
-                     *          - The `OnAction` event handler is an instance of `EventHandler`,
-                     *          which is a
-                     *          standard Java interface for handling events. In this case, the event
-                     *          handler deletes
-                     *          the film with the specified ID when the button is pressed.
-                     */);
-            this.bioActor_tableColumn1.setCellValueFactory((TableColumn.CellDataFeatures<Actor, String> actorStringCellDataFeatures) -> new SimpleStringProperty(actorStringCellDataFeatures.getValue().getBiographie()) /**
-             * Takes a `TableColumn.CellDataFeatures<Actor, String>` parameter and returns
-             * an
-             * `ObservableValue<String>` representing the actor's biography.
+                final Button button = new Button("delete");
+                button.setOnAction((final ActionEvent event) -> {
+                    this.deleteFilm(filmcategoryButtonCellDataFeatures.getValue().getId());
+                } /**
+                   * Deletes a film based on the ID passed as an event parameter from the
+                   * `filmcategoryButtonCellDataFeatures`.
+                   *
+                   * @param event `ActionEvent` that triggered the function execution, providing
+                   *              the
+                   *              identifier of the button that was clicked.
+                   */
+                );
+                return new SimpleObjectProperty<>(button);
+            }
+            /**
+             * Creates a new button with an `OnAction` event handler that deletes a film
+             * when
+             * clicked, and returns the button object as an observable value.
              *
-             * @param actorStringCellDataFeatures String value of a cell in a table that
-             *                                    displays
-             *                                    an actor's biography.
+             * @param filmcategoryButtonCellDataFeatures value of a Button cell in a
+             *                                           TableColumn,
+             *                                           which contains the ID of a film
+             *                                           category.
              *
-             * @returns a `SimpleStringProperty` containing the biography of the actor.
-             */);
+             *                                           - `getValue()`: returns the
+             *                                           internal value of the object, which
+             *                                           is an instance
+             *                                           of `FilmCategoryButtonCellData`.
+             *                                           - `getId()`: retrieves the unique
+             *                                           identifier for the film category
+             *                                           button.
+             *
+             * @returns a `SimpleObjectProperty` of a `Button` object with the text
+             *          "delete".
+             *
+             *          - The output is an `ObservableValue` of type `Button`, which means
+             *          that it can
+             *          be observed to change over time.
+             *          - The output is created by calling the `Button` constructor and
+             *          setting an
+             *          `OnAction` event handler for the button's `onAction` method.
+             *          - The `OnAction` event handler is an instance of `EventHandler`,
+             *          which is a
+             *          standard Java interface for handling events. In this case, the event
+             *          handler deletes
+             *          the film with the specified ID when the button is pressed.
+             */
+            );
+            this.bioActor_tableColumn1.setCellValueFactory((
+                    TableColumn.CellDataFeatures<Actor, String> actorStringCellDataFeatures) -> new SimpleStringProperty(
+                            actorStringCellDataFeatures.getValue().getBiographie()) /**
+                                                                                     * Takes a
+                                                                                     * `TableColumn.CellDataFeatures<Actor,
+                                                                                     * String>` parameter and returns
+                                                                                     * an
+                                                                                     * `ObservableValue<String>`
+                                                                                     * representing the actor's
+                                                                                     * biography.
+                                                                                     *
+                                                                                     * @param actorStringCellDataFeatures String
+                                                                                     *                                    value
+                                                                                     *                                    of
+                                                                                     *                                    a
+                                                                                     *                                    cell
+                                                                                     *                                    in
+                                                                                     *                                    a
+                                                                                     *                                    table
+                                                                                     *                                    that
+                                                                                     *                                    displays
+                                                                                     *                                    an
+                                                                                     *                                    actor's
+                                                                                     *                                    biography.
+                                                                                     *
+                                                                                     * @returns a `SimpleStringProperty`
+                                                                                     *          containing the biography
+                                                                                     *          of the actor.
+                                                                                     */
+            );
             this.bioActor_tableColumn1.setCellFactory(TextFieldTableCell.forTableColumn());
-            this.imageAcotr_tableColumn1.setCellValueFactory((final TableColumn.CellDataFeatures<Actor, HBox> param) -> {
-                final HBox hBox = new HBox();
-                try {
-                    final ImageView imageView = new ImageView();
-                    imageView.setFitWidth(120); // Réglez la largeur de l'image selon vos préférences
-                    imageView.setFitHeight(100); // Réglez la hauteur de l'image selon vos préférences
-                    try {
-                        imageView.setImage(new Image(param.getValue().getImage()));
-                    } catch (final Exception e) {
-                        ActorController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
-                    }
-                    hBox.getChildren().add(imageView);
-                    hBox.addEventHandler(MouseEvent.MOUSE_CLICKED, (final MouseEvent event) -> {
+            this.imageAcotr_tableColumn1
+                    .setCellValueFactory((final TableColumn.CellDataFeatures<Actor, HBox> param) -> {
+                        final HBox hBox = new HBox();
                         try {
-                            final FileChooser fileChooser = new FileChooser();
-                            fileChooser.getExtensionFilters().addAll(
-                                    new FileChooser.ExtensionFilter("PNG", "*.png"),
-                                    new FileChooser.ExtensionFilter("JPG", "*.jpg"));
-                            final File file = fileChooser.showOpenDialog(null);
-                            if (null != file) {
-                                final String destinationDirectory = "./src/main/resources/img/films/";
-                                final Path destinationPath = Paths.get(destinationDirectory);
-                                final String uniqueFileName = System.currentTimeMillis() + "_"
-                                        + file.getName();
-                                final Path destinationFilePath = destinationPath.resolve(uniqueFileName);
-                                Files.copy(file.toPath(), destinationFilePath);
-                                final Image image = new Image(destinationFilePath.toUri().toString());
-                                imageView.setImage(image);
-                                hBox.getChildren().clear();
-                                hBox.getChildren().add(imageView);
-                                new ActorService().update(
-                                        new Actor(null, destinationFilePath.toUri().toString(), null));
+                            final ImageView imageView = new ImageView();
+                            imageView.setFitWidth(120); // Réglez la largeur de l'image selon vos préférences
+                            imageView.setFitHeight(100); // Réglez la hauteur de l'image selon vos préférences
+                            try {
+                                loadImageWithCache(param.getValue().getImage(), imageView);
+                            } catch (final Exception e) {
+                                ActorController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                             }
-                        } catch (final IOException e) {
+                            hBox.getChildren().add(imageView);
+                            hBox.addEventHandler(MouseEvent.MOUSE_CLICKED, (final MouseEvent event) -> {
+                                try {
+                                    final FileChooser fileChooser = new FileChooser();
+                                    fileChooser.getExtensionFilters().addAll(
+                                            new FileChooser.ExtensionFilter("PNG", "*.png"),
+                                            new FileChooser.ExtensionFilter("JPG", "*.jpg"));
+                                    final File file = fileChooser.showOpenDialog(null);
+                                    if (null != file) {
+                                        if (!validateImage(file)) {
+                                            return;
+                                        }
+                                        final String destinationDirectory = "./src/main/resources/img/films/";
+                                        final Path destinationPath = Paths.get(destinationDirectory);
+                                        final String uniqueFileName = System.currentTimeMillis() + "_"
+                                                + file.getName();
+                                        final Path destinationFilePath = destinationPath.resolve(uniqueFileName);
+                                        Files.copy(file.toPath(), destinationFilePath);
+                                        final Image image = new Image(destinationFilePath.toUri().toString());
+                                        imageView.setImage(image);
+                                        hBox.getChildren().clear();
+                                        hBox.getChildren().add(imageView);
+                                        new ActorService().update(
+                                                new Actor(null, destinationFilePath.toUri().toString(), null));
+                                    }
+                                } catch (final IOException e) {
+                                    ActorController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                                }
+                            } /**
+                               * Displays an open file dialog, saves the selected file to a designated
+                               * directory,
+                               * creates an image from the saved file, and displays the image in a graphical
+                               * user
+                               * interface.
+                               *
+                               * @param event mouse event that triggered the function, providing information
+                               *              about
+                               *              the location and type of the event.
+                               *
+                               *              - `event`: a `MouseEvent` object representing a user interaction
+                               *              with the application.
+                               */
+                            );
+                        } catch (final Exception e) {
                             ActorController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                         }
+                        return new SimpleObjectProperty<>(hBox);
                     } /**
-                     * Displays an open file dialog, saves the selected file to a designated
-                     * directory,
-                     * creates an image from the saved file, and displays the image in a graphical
-                     * user
-                     * interface.
-                     *
-                     * @param event mouse event that triggered the function, providing information
-                     *              about
-                     *              the location and type of the event.
-                     *
-                     *              - `event`: a `MouseEvent` object representing a user interaction
-                     *              with the application.
-                     */);
-                } catch (final Exception e) {
-                    ActorController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
-                }
-                return new SimpleObjectProperty<>(hBox);
-            } /**
-             * Generates an `HBox` container that displays an image when clicked, allowing
-             * users
-             * to select images from a file system and display them in the application.
-             *
-             * @param param CellDataFeatures of a TableColumn, providing an Actor object as
-             *              its
-             *              value, which is used to display an image and handle mouse clicks
-             *              to save the image
-             *              to a designated directory.
-             *
-             *              - `param.getValue()`: returns an instance of `Actor`, which
-             *              contains the image
-             *              to be displayed.
-             *
-             *              The `param` object is not destructured in this case.
-             *
-             * @returns an `ObservableValue` of type `HBox`, which contains a `ImageView`
-             *          element
-             *          that displays an image selected by the user and allows for its save
-             *          to a designated
-             *          directory.
-             *
-             *          - `HBox` is the type of the output, which is an observable value of
-             *          type HBox.
-             *          - The output is created by initializing a new instance of HBox and
-             *          adding an
-             *          ImageView component to it.
-             *          - The ImageView component displays an image, which is set using the
-             *          `setImage()`
-             *          method and passing in the image from the `getValue()` method of the
-             *          parameter object.
-             *          - The ImageView component also has an event handler attached to it
-             *          that responds
-             *          to a mouse click event. When the event occurs, the handler will
-             *          execute the code
-             *          inside it.
-             */);
+                       * Generates an `HBox` container that displays an image when clicked, allowing
+                       * users
+                       * to select images from a file system and display them in the application.
+                       *
+                       * @param param CellDataFeatures of a TableColumn, providing an Actor object as
+                       *              its
+                       *              value, which is used to display an image and handle mouse clicks
+                       *              to save the image
+                       *              to a designated directory.
+                       *
+                       *              - `param.getValue()`: returns an instance of `Actor`, which
+                       *              contains the image
+                       *              to be displayed.
+                       *
+                       *              The `param` object is not destructured in this case.
+                       *
+                       * @returns an `ObservableValue` of type `HBox`, which contains a `ImageView`
+                       *          element
+                       *          that displays an image selected by the user and allows for its save
+                       *          to a designated
+                       *          directory.
+                       *
+                       *          - `HBox` is the type of the output, which is an observable value of
+                       *          type HBox.
+                       *          - The output is created by initializing a new instance of HBox and
+                       *          adding an
+                       *          ImageView component to it.
+                       *          - The ImageView component displays an image, which is set using the
+                       *          `setImage()`
+                       *          method and passing in the image from the `getValue()` method of the
+                       *          parameter object.
+                       *          - The ImageView component also has an event handler attached to it
+                       *          that responds
+                       *          to a mouse click event. When the event occurs, the handler will
+                       *          execute the code
+                       *          inside it.
+                       */
+                    );
             final ActorService categoryService = new ActorService();
             final ObservableList<Actor> obC = FXCollections.observableArrayList(categoryService.read());
             this.filmActor_tableView11.setItems(obC);
@@ -564,7 +626,7 @@ public class ActorController {
     @FXML
     public void switchtoajouterCinema(final ActionEvent event) {
         try {
-            final FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/InterfaceFilm.fxml"));
+            final FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/ui/films/InterfaceFilm.fxml"));
             final AnchorPane root = fxmlLoader.load();
             final Stage stage = (Stage) this.AjouterFilm_Button.getScene().getWindow();
             final Scene scene = new Scene(root, 1280, 700);
@@ -572,5 +634,128 @@ public class ActorController {
         } catch (final IOException e) {
             ActorController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+    }
+
+    private boolean validateImage(File file) {
+        // Add size limit (e.g., 5MB)
+        if (file.length() > 5_000_000) {
+            showAlert("Image file is too large. Maximum size is 5MB.");
+            return false;
+        }
+        // Validate actual image format
+        try {
+            Image image = new Image(file.toURI().toString());
+            return !image.isError();
+        } catch (Exception e) {
+            showAlert("Invalid image file format");
+            return false;
+        }
+    }
+
+    private void loadImageWithCache(String url, ImageView imageView) {
+        if (imageCache.containsKey(url)) {
+            imageView.setImage(imageCache.get(url));
+            return;
+        }
+
+        imageLoaderService.submit(() -> {
+            try {
+                Image image = new Image(url);
+                imageCache.put(url, image);
+                Platform.runLater(() -> imageView.setImage(image));
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Failed to load image: " + url, e);
+            }
+        });
+    }
+
+    public void exportActors(String filePath) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            List<Actor> actors = filmActor_tableView11.getItems();
+            mapper.writeValue(new File(filePath), actors);
+            showAlert("Export successful");
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Failed to export actors", e);
+            showAlert("Export failed: " + e.getMessage());
+        }
+    }
+
+    public void importActors(String filePath) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            List<Actor> actors = mapper.readValue(new File(filePath),
+                    mapper.getTypeFactory().constructCollectionType(List.class, Actor.class));
+
+            UndoableAction action = new UndoableAction(
+                    () -> {
+                        filmActor_tableView11.getItems().addAll(actors);
+                        actors.forEach(actor -> {
+                            ActorService service = new ActorService();
+                            service.create(actor);
+                        });
+                    },
+                    () -> {
+                        filmActor_tableView11.getItems().removeAll(actors);
+                        actors.forEach(actor -> {
+                            ActorService service = new ActorService();
+                            service.delete(actor);
+                        });
+                    });
+
+            executeAction(action);
+            showAlert("Import successful");
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Failed to import actors", e);
+            showAlert("Import failed: " + e.getMessage());
+        }
+    }
+
+    public void undo() {
+        if (!undoStack.isEmpty()) {
+            UndoableAction action = undoStack.pop();
+            action.undo();
+            redoStack.push(action);
+        }
+    }
+
+    public void redo() {
+        if (!redoStack.isEmpty()) {
+            UndoableAction action = redoStack.pop();
+            action.execute();
+            undoStack.push(action);
+        }
+    }
+
+    private void executeAction(UndoableAction action) {
+        action.execute();
+        undoStack.push(action);
+        redoStack.clear();
+    }
+
+    // Add inner class for undo/redo support
+    private static class UndoableAction {
+        private final Runnable doAction;
+        private final Runnable undoAction;
+
+        public UndoableAction(Runnable doAction, Runnable undoAction) {
+            this.doAction = doAction;
+            this.undoAction = undoAction;
+        }
+
+        public void execute() {
+            doAction.run();
+        }
+
+        public void undo() {
+            undoAction.run();
+        }
+    }
+
+    // Override close method to clean up resources
+    @FXML
+    public void close() {
+        imageLoaderService.shutdown();
+        imageCache.clear();
     }
 }

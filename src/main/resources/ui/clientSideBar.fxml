@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.ClientSideBarController">
+    <AnchorPane prefHeight="855.0" prefWidth="248.0" styleClass="nav-form" stylesheets="@styles/filmStyle.css">
+        <ImageView fitHeight="208.0" fitWidth="239.0" layoutX="14.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@Logo.png" />
+        </ImageView>
+        <Button fx:id="movieButton" layoutY="334.0" mnemonicParsing="false" onAction="#switchToMovies" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" stylesheets="@styles/filmStyle.css" text="Movies            " />
+        <Button fx:id="productButton" layoutY="396.0" mnemonicParsing="false" onAction="#switchToProducts" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" stylesheets="@styles/filmStyle.css" text="Products         " />
+        <Button fx:id="cinemaButton" layoutY="458.0" mnemonicParsing="false" onAction="#switchtcinema" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" text="Cinema         " />
+        <FontIcon fill="#f2efef" iconLiteral="fa-film" layoutX="14.0" layoutY="377.0" text="" wrappingWidth="36.0" />
+        <FontIcon fill="#ebe5e5" iconLiteral="fa-cubes" layoutX="13.0" layoutY="438.0" text="" />
+        <FontIcon fill="#ebe5e5" iconLiteral="fa-video-camera" layoutX="17.0" layoutY="500.0" text="" />
+        <FontIcon fill="#ebe5e5" iconLiteral="fa-tv" layoutX="15.0" layoutY="312.0" />
+        <FontIcon fill="#ebe5e5" iconLiteral="fa-user" layoutX="61.0" layoutY="758.0" text="" />
+        <FontIcon fill="#ebe5e5" iconLiteral="fa-sign-out" layoutX="61.0" layoutY="801.0" text="" />
+        <Button fx:id="profileButton" layoutX="105.0" layoutY="732.0" mnemonicParsing="false" onAction="#switchToProfile" styleClass="nav-btn" text="Account" />
+        <Button fx:id="logoutButton" layoutX="117.0" layoutY="774.0" mnemonicParsing="false" onAction="#switchToLogout" styleClass="nav-btn" text="EXIT" />
+        <Button fx:id="serieButton" layoutY="270.0" mnemonicParsing="false" onAction="#switchToSeries" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" stylesheets="@styles/filmStyle.css" text="Series              " textAlignment="CENTER" />
+    </AnchorPane>
+</AnchorPane>
