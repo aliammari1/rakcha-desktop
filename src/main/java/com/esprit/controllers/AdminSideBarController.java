@@ -76,7 +76,7 @@ public class AdminSideBarController implements Initializable {
     @FXML
     void switchToMovies(final ActionEvent event) {
         try {
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ListeCommande.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/produits/ListeCommande.fxml"));
             // FilmController seanceController = loader.getController();
             // seanceController.setData(admin);
             final Parent root = loader.load();
@@ -106,7 +106,7 @@ public class AdminSideBarController implements Initializable {
     @FXML
     void switchToProducts(final ActionEvent event) {
         try {
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/DesignProduitAdmin.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/produits/DesignProduitAdmin.fxml"));
             // DesignProduitAdminContoller seanceController = loader.getController();
             // seanceController.setData(admin);
             final Parent root = loader.load();
@@ -118,7 +118,7 @@ public class AdminSideBarController implements Initializable {
     }
 
     /**
-     * Loads a FXML file named "Categorie-view.fxml" into a Stage using the
+     * Loads a FXML file named "/ui/series/Categorie-view.fxml" into a Stage using the
      * `FXMLLoader`.
      * It sets the data for the controller and then sets the scene of the Stage to
      * the
@@ -134,7 +134,7 @@ public class AdminSideBarController implements Initializable {
     @FXML
     void switchToSeries(final ActionEvent event) {
         try {
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/Categorie-view.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/series/Categorie-view.fxml"));
             // SerieClientController seanceController = loader.getController();
             // seanceController.setData(admin);
             final Parent root = loader.load();
@@ -160,7 +160,7 @@ public class AdminSideBarController implements Initializable {
     @FXML
     void switchtcinema(final ActionEvent event) {
         try {
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/DashboardAdminCinema.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/cinemas/DashboardAdminCinema.fxml"));
             final Parent root = loader.load();
             final Stage stage = (Stage) this.cinemaButton.getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -182,7 +182,7 @@ public class AdminSideBarController implements Initializable {
     @FXML
     public void switchToUsers(final ActionEvent event) {
         try {
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/AdminDashboard.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/users/AdminDashboard.fxml"));
             final Parent root = loader.load();
             final Stage stage = (Stage) this.usersButton.getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -221,7 +221,7 @@ public class AdminSideBarController implements Initializable {
     @FXML
     void switchToLogout(final ActionEvent event) {
         try {
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/Login.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/users/Login.fxml"));
             final Parent root = loader.load();
             final Stage stage = (Stage) this.logoutButton.getScene().getWindow();
             stage.setUserData(null);
@@ -244,7 +244,7 @@ public class AdminSideBarController implements Initializable {
     @FXML
     void switchToProfile(final ActionEvent event) {
         try {
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/Profile.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/users/Profile.fxml"));
             final Parent root = loader.load();
             final Stage stage = (Stage) this.profileButton.getScene().getWindow();
             stage.setScene(new Scene(root));

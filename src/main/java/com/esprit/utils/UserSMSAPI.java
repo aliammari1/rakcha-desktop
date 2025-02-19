@@ -1,5 +1,6 @@
 package com.esprit.utils;
 
+import com.esprit.Config;
 import com.vonage.client.VonageClient;
 import com.vonage.client.sms.MessageStatus;
 import com.vonage.client.sms.SmsSubmissionResponse;
@@ -17,16 +18,29 @@ public enum UserSMSAPI {
      * @param messageBody
      */
     public static void sendSMS(final int number, final String senderName, final String messageBody) {
-        final VonageClient client = VonageClient.builder().apiKey("bf61ba81").apiSecret("BsA4inzyxBJDOCwk").build();
+        final Config config = Config.getInstance();
+        final String apiKey = config.get("vonage.api.key");
+        final String apiSecret = config.get("vonage.api.secret");
+
+        if (apiKey == null || apiSecret == null) {
+            LOGGER.severe("Vonage API credentials not found in config");
+            return;
+        }
+
+        final VonageClient client = VonageClient.builder()
+                .apiKey(apiKey)
+                .apiSecret(apiSecret)
+                .build();
+
         final TextMessage message = new TextMessage("Vonage APIs",
                 "216" + number,
                 messageBody);
+
         final SmsSubmissionResponse response = client.getSmsClient().submitMessage(message);
         if (MessageStatus.OK == response.getMessages().get(0).getStatus()) {
-            UserSMSAPI.LOGGER.info("Message sent successfully.");
+            LOGGER.info("Message sent successfully.");
         } else {
-            UserSMSAPI.LOGGER.info("Message failed with error: " + response.getMessages().get(0).getErrorText());
+            LOGGER.info("Message failed with error: " + response.getMessages().get(0).getErrorText());
         }
     }
-
 }

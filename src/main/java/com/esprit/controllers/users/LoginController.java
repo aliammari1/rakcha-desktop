@@ -59,7 +59,7 @@ public class LoginController implements Initializable {
     @FXML
     void signInWithGoogle(final ActionEvent event) throws IOException, ExecutionException, InterruptedException {
         try {
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/VerifyWithGoogle.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/users/VerifyWithGoogle.fxml"));
             final Parent root = loader.load();
             final Stage stage = (Stage) this.googleSIgnInButton.getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -77,7 +77,7 @@ public class LoginController implements Initializable {
     @FXML
     void signInWithMicrosoft(final ActionEvent event) throws IOException, ExecutionException, InterruptedException {
         try {
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/VerifyWithMicrosoft.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/users/VerifyWithMicrosoft.fxml"));
             final Parent root = loader.load();
             final Stage stage = (Stage) this.microsoftSignInButton.getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -91,28 +91,52 @@ public class LoginController implements Initializable {
         final UserService userService = new UserService();
         final User user = userService.login(this.emailTextField.getText(), this.passwordTextField.getText());
         if (null != user) {
-            final TrayNotification trayNotification = new TrayNotification("users", "the user found", Notifications.SUCCESS);
-            trayNotification.showAndDismiss(new Duration(3000));
-            final Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "the user was found", ButtonType.CLOSE);
-            alert.show();
-            final Stage stage = (Stage) this.signInButton.getScene().getWindow();
-            stage.setUserData(user);
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/Profile.fxml"));
-            final Parent root = loader.load();
-            FXMLLoader loaderSideBar = null;
-            final ProfileController profileController = loader.getController();
-            if ("admin".equals(user.getRole())) {
-                loaderSideBar = new FXMLLoader(this.getClass().getResource("/adminSideBar.fxml"));
-            } else if ("client".equals(user.getRole())) {
-                loaderSideBar = new FXMLLoader(this.getClass().getResource("/clientSideBar.fxml"));
-            } else if ("responsable de cinema".equals(user.getRole())) {
-                loaderSideBar = new FXMLLoader(this.getClass().getResource("/responsableDeCinemaSideBar.fxml"));
+            try {
+                final TrayNotification trayNotification = new TrayNotification("users", "the user found",
+                        Notifications.SUCCESS);
+                trayNotification.showAndDismiss(new Duration(3000));
+
+                final Stage stage = (Stage) this.signInButton.getScene().getWindow();
+                stage.setUserData(user);
+
+                final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/users/Profile.fxml"));
+                final Parent root = loader.load();
+
+                FXMLLoader loaderSideBar = null;
+                final ProfileController profileController = loader.getController();
+
+                // Load appropriate sidebar based on user role
+                if ("admin".equals(user.getRole())) {
+                    loaderSideBar = new FXMLLoader(this.getClass().getResource("/ui/adminSideBar.fxml"));
+                } else if ("client".equals(user.getRole())) {
+                    loaderSideBar = new FXMLLoader(this.getClass().getResource("/ui/clientSideBar.fxml"));
+                } else if ("responsable de cinema".equals(user.getRole())) {
+                    loaderSideBar = new FXMLLoader(this.getClass().getResource("/ui/responsableDeCinemaSideBar.fxml"));
+                }
+
+                if (null != loaderSideBar) {
+                    try {
+                        profileController.setLeftPane(loaderSideBar.load());
+                    } catch (IOException e) {
+                        LOGGER.log(Level.SEVERE, "Error loading sidebar", e);
+                        throw e;
+                    }
+                }
+
+                try {
+                    profileController.setData(user);
+                } catch (IllegalArgumentException e) {
+                    LOGGER.log(Level.WARNING, "Error setting user data: " + e.getMessage());
+                    // Continue even if profile image fails to load
+                }
+
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, "Error during login process", e);
+                throw new IOException("Failed to complete login process", e);
             }
-            if (null != loaderSideBar) {
-                profileController.setLeftPane(loaderSideBar.load());
-            }
-            profileController.setData(user);
-            stage.setScene(new Scene(root));
         } else {
             final Alert alert = new Alert(Alert.AlertType.ERROR, "the user was not found", ButtonType.CLOSE);
             alert.show();
@@ -120,11 +144,16 @@ public class LoginController implements Initializable {
     }
 
     @FXML
-    void switchToSignUp(final ActionEvent event) throws IOException {
-        final Stage stage = (Stage) this.signUpButton.getScene().getWindow();
-        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/SignUp.fxml"));
-        final Parent root = loader.load();
-        stage.setScene(new Scene(root));
+    void switchToSignUp(ActionEvent event) throws IOException {
+        try {
+            Stage stage = (Stage) signUpButton.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/users/SignUp.fxml"));
+            Parent root = loader.load();
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "Error switching to signup view", e);
+            throw e;
+        }
     }
 
     @Override
@@ -133,7 +162,7 @@ public class LoginController implements Initializable {
             @Override
             public void handle(final ActionEvent event) {
                 try {
-                    final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/smsadmin.fxml"));
+                    final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/users/smsadmin.fxml"));
                     final Parent root = loader.load();
                     final Stage stage = (Stage) LoginController.this.forgetPasswordHyperlink.getScene().getWindow();
                     stage.setScene(new Scene(root));
@@ -146,13 +175,23 @@ public class LoginController implements Initializable {
             @Override
             public void handle(final ActionEvent event) {
                 try {
-                    final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/maillogin.fxml"));
+                    final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/users/maillogin.fxml"));
                     final Parent root = loader.load();
-                    final Stage stage = (Stage) LoginController.this.forgetPasswordEmailHyperlink.getScene().getWindow();
+                    final Stage stage = (Stage) LoginController.this.forgetPasswordEmailHyperlink.getScene()
+                            .getWindow();
                     stage.setScene(new Scene(root));
                 } catch (final IOException e) {
                     throw new RuntimeException(e);
                 }
+            }
+        });
+
+        // Ensure signUpButton has its event handler
+        signUpButton.setOnAction(event -> {
+            try {
+                switchToSignUp(event);
+            } catch (IOException e) {
+                LOGGER.log(Level.SEVERE, "Error switching to signup view", e);
             }
         });
     }

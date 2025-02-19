@@ -72,7 +72,7 @@ public class DesignCategorieAdminController {
     @FXML
     void GestionProduit(final ActionEvent event) throws IOException {
         // Charger la nouvelle interface ListproduitAdmin.fxml
-        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/DesignProduitAdmin.fxml"));
+        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/produits/DesignProduitAdmin.fxml"));
         final Parent root = loader.load();
         // Créer une nouvelle scène avec la nouvelle interface
         final Scene scene = new Scene(root);
@@ -183,7 +183,8 @@ public class DesignCategorieAdminController {
                     {
                         this.btnDelete.getStyleClass().add("delete-button");
                         this.btnDelete.setOnAction((final ActionEvent event) -> {
-                            final Categorie_Produit categorieProduit = this.getTableView().getItems().get(this.getIndex());
+                            final Categorie_Produit categorieProduit = this.getTableView().getItems()
+                                    .get(this.getIndex());
                             final CategorieService cs = new CategorieService();
                             cs.delete(categorieProduit);
                             DesignCategorieAdminController.this.categorie_tableview.getItems().remove(categorieProduit);
@@ -268,7 +269,8 @@ public class DesignCategorieAdminController {
         // Enter
         this.categorie_tableview.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                final Categorie_Produit selectedCategorieProduit = this.categorie_tableview.getSelectionModel().getSelectedItem();
+                final Categorie_Produit selectedCategorieProduit = this.categorie_tableview.getSelectionModel()
+                        .getSelectedItem();
                 if (null != selectedCategorieProduit) {
                     this.modifier_categorie(selectedCategorieProduit);
                 }
@@ -342,8 +344,8 @@ public class DesignCategorieAdminController {
      * categories.
      *
      * @returns a list of `Categorie_Produit` objects containing all categories for
-     * which
-     * category data is available.
+     *          which
+     *          category data is available.
      */
     private List<Categorie_Produit> getAllCategories() {
         final CategorieService categorieservice = new CategorieService();
@@ -446,7 +448,7 @@ public class DesignCategorieAdminController {
      * returning a list of selected categories as strings.
      *
      * @returns a list of selected addresses from an AnchorPane of filtering
-     * controls.
+     *          controls.
      */
     private List<String> getSelectedCategories() {
         // Récupérer les adresses sélectionnées dans l'AnchorPane de filtrage
@@ -457,7 +459,8 @@ public class DesignCategorieAdminController {
     }
 
     /**
-     * Loads a new user interface "CommentaireProduit.fxml" using the FXMLLoader,
+     * Loads a new user interface "/ui/produits/CommentaireProduit.fxml" using the
+     * FXMLLoader,
      * creates
      * a new scene from it, and attaches it to a new stage. It then closes the
      * current
@@ -471,7 +474,7 @@ public class DesignCategorieAdminController {
     void cinemaclient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/CommentaireProduit.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/produits/CommentaireProduit.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -485,7 +488,8 @@ public class DesignCategorieAdminController {
             // Fermer la fenêtre actuelle
             currentStage.close();
         } catch (final IOException e) {
-            DesignCategorieAdminController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
+            DesignCategorieAdminController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
+                                                                                        // d'entrée/sortie
         }
     }
 
@@ -503,7 +507,7 @@ public class DesignCategorieAdminController {
     void eventClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource(".fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui//ui/.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -517,7 +521,8 @@ public class DesignCategorieAdminController {
             // Fermer la fenêtre actuelle
             currentStage.close();
         } catch (final IOException e) {
-            DesignCategorieAdminController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
+            DesignCategorieAdminController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
+                                                                                        // d'entrée/sortie
         }
     }
 
@@ -535,7 +540,7 @@ public class DesignCategorieAdminController {
     void produitClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/DesignProduitAdmin.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/produits/DesignProduitAdmin.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -549,7 +554,8 @@ public class DesignCategorieAdminController {
             // Fermer la fenêtre actuelle
             currentStage.close();
         } catch (final IOException e) {
-            DesignCategorieAdminController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
+            DesignCategorieAdminController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
+                                                                                        // d'entrée/sortie
         }
     }
 
@@ -577,7 +583,7 @@ public class DesignCategorieAdminController {
     void MovieClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/filmuser.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/films/filmuser.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -591,12 +597,14 @@ public class DesignCategorieAdminController {
             // Fermer la fenêtre actuelle
             currentStage.close();
         } catch (final IOException e) {
-            DesignCategorieAdminController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
+            DesignCategorieAdminController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
+                                                                                        // d'entrée/sortie
         }
     }
 
     /**
-     * Charges a new UI file "Series-view.fxml" into an existing scene, creates a
+     * Charges a new UI file "/ui//ui/Series-view.fxml" into an existing scene, creates
+     * a
      * new
      * stage with the new interface and attaches it to the current stage, closing
      * the
@@ -611,7 +619,7 @@ public class DesignCategorieAdminController {
     void SerieClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/Serie-view.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/series/Serie-view.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -625,7 +633,8 @@ public class DesignCategorieAdminController {
             // Fermer la fenêtre actuelle
             currentStage.close();
         } catch (final IOException e) {
-            DesignCategorieAdminController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
+            DesignCategorieAdminController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
+                                                                                        // d'entrée/sortie
         }
     }
 }

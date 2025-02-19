@@ -247,7 +247,7 @@ public class ListCommandeController {
     void statCommande(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/AnalyseCommande.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/produits/AnalyseCommande.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);

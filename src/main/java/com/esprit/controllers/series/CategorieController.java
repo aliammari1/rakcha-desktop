@@ -247,14 +247,14 @@ public class CategorieController {
      * Otherwise, it displays an error message and returns `false`.
      *
      * @returns a boolean value indicating whether a valid name has been entered.
-     * <p>
-     * - The function returns a boolean value indicating whether the user
-     * has entered a
-     * valid name or not.
-     * - If the input field is not empty, the function returns `true`.
-     * - If the input field is empty, the function returns `false` and sets
-     * the `checkname`
-     * text to "Please enter a valid Name".
+     *          <p>
+     *          - The function returns a boolean value indicating whether the user
+     *          has entered a
+     *          valid name or not.
+     *          - If the input field is not empty, the function returns `true`.
+     *          - If the input field is empty, the function returns `false` and sets
+     *          the `checkname`
+     *          text to "Please enter a valid Name".
      */
     boolean checkname() {
         if ("" != nomF.getText()) {
@@ -273,15 +273,15 @@ public class CategorieController {
      * enter a valid description.
      *
      * @returns a boolean value indicating whether a valid description has been
-     * entered.
-     * <p>
-     * - The function returns a boolean value indicating whether the user
-     * has entered a
-     * valid description or not.
-     * - If the description is not empty, the function returns `true`.
-     * - If the description is empty, the function sets the
-     * `checkdescreption` text to
-     * "Please enter a valid Description" and returns `false`.
+     *          entered.
+     *          <p>
+     *          - The function returns a boolean value indicating whether the user
+     *          has entered a
+     *          valid description or not.
+     *          - If the description is not empty, the function returns `true`.
+     *          - If the description is empty, the function sets the
+     *          `checkdescreption` text to
+     *          "Please enter a valid Description" and returns `false`.
      */
     boolean checkdescreption() {
         if ("" != descreptionF.getText()) {
@@ -348,7 +348,8 @@ public class CategorieController {
      */
     @FXML
     void Ocategories(final ActionEvent event) throws IOException {
-        final Parent root = FXMLLoader.load(Objects.requireNonNull(this.getClass().getResource("/Categorie-view.fxml")));
+        final Parent root = FXMLLoader
+                .load(Objects.requireNonNull(this.getClass().getResource("/ui/series/Categorie-view.fxml")));
         final Scene scene = new Scene(root);
         final Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
@@ -373,7 +374,7 @@ public class CategorieController {
      */
     @FXML
     void Oseriess(final ActionEvent event) throws IOException {
-        final Parent root = FXMLLoader.load(Objects.requireNonNull(this.getClass().getResource("/Serie-view.fxml")));
+        final Parent root = FXMLLoader.load(Objects.requireNonNull(this.getClass().getResource("/ui/series/Serie-view.fxml")));
         final Scene scene = new Scene(root);
         final Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
@@ -400,7 +401,8 @@ public class CategorieController {
      */
     @FXML
     void Oepisode(final ActionEvent event) throws IOException {
-        final Parent root = FXMLLoader.load(Objects.requireNonNull(this.getClass().getResource("/Episode-view.fxml")));
+        final Parent root = FXMLLoader
+                .load(Objects.requireNonNull(this.getClass().getResource("/ui/series/Episode-view.fxml")));
         final Scene scene = new Scene(root);
         final Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
@@ -425,7 +427,7 @@ public class CategorieController {
             // Logique pour basculer vers la vue des statistiques
             // Vous pouvez utiliser un FXMLLoader pour charger la vue des statistiques
             try {
-                final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/StatistiquesView.fxml"));
+                final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/series/StatistiquesView.fxml"));
                 final Parent root = loader.load();
                 final StatistiqueController statistiqueController = loader.getController();
                 // Initialisez le contrôleur statistique si nécessaire

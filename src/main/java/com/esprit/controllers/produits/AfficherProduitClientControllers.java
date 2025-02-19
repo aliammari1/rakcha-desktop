@@ -75,7 +75,7 @@ public class AfficherProduitClientControllers implements Initializable {
     private List<Produit> l1 = new ArrayList<>();
     private int produitId;
     @FXML
-    private AnchorPane top3anchorpane;
+    private VBox top3anchorpane;
     @FXML
     private FlowPane topthreeVbox;
     @FXML
@@ -103,15 +103,15 @@ public class AfficherProduitClientControllers implements Initializable {
      *                  returned
      *                  by the function.
      * @returns a list of `Produit` objects that match the given search query.
-     * <p>
-     * - The output is a list of `Produit` objects, representing the
-     * matching products
-     * in the input list.
-     * - The list contains only the elements from the input list that match
-     * the search
-     * query.
-     * - Each element in the list has a `Nom` attribute that contains the
-     * search query.
+     *          <p>
+     *          - The output is a list of `Produit` objects, representing the
+     *          matching products
+     *          in the input list.
+     *          - The list contains only the elements from the input list that match
+     *          the search
+     *          query.
+     *          - Each element in the list has a `Nom` attribute that contains the
+     *          search query.
      */
     @FXML
     public static List<Produit> rechercher(final List<Produit> liste, final String recherche) {
@@ -211,40 +211,40 @@ public class AfficherProduitClientControllers implements Initializable {
      *                - `prix`: The product price
      *                - `image`: The product image URL
      * @returns a `Pane` object containing the UI components for displaying a single
-     * product in a shopping cart.
-     * <p>
-     * - `card`: The card container that displays information about the
-     * selected product,
-     * including an image view, name label, description label, price label,
-     * add to cart
-     * button, and chat icon.
-     * - `imageView`: An image view that displays a picture of the selected
-     * product.
-     * - `nameLabel`: A label that displays the name of the selected
-     * product.
-     * - `descriptionLabel`: A label that displays a brief description of
-     * the selected
-     * product.
-     * - `priceLabel`: A label that displays the price of the selected
-     * product.
-     * - `addToCartButton`: A button that allows users to add the selected
-     * product to
-     * their cart.
-     * - `chatIcon`: An icon that represents the chat function, which
-     * displays all
-     * comments for the selected product when clicked.
-     * <p>
-     * The main attributes of the returned output are:
-     * <p>
-     * - The card container has a white background with a gradient border
-     * from the top
-     * left corner to the bottom right corner.
-     * - The image view, name label, description label, price label, and
-     * add to cart
-     * button have a font size of 12px, bold font weight, and a padding of
-     * 10px.
-     * - The chat icon has an icon literal of "fa-commenting" and an icon
-     * size of 20px.
+     *          product in a shopping cart.
+     *          <p>
+     *          - `card`: The card container that displays information about the
+     *          selected product,
+     *          including an image view, name label, description label, price label,
+     *          add to cart
+     *          button, and chat icon.
+     *          - `imageView`: An image view that displays a picture of the selected
+     *          product.
+     *          - `nameLabel`: A label that displays the name of the selected
+     *          product.
+     *          - `descriptionLabel`: A label that displays a brief description of
+     *          the selected
+     *          product.
+     *          - `priceLabel`: A label that displays the price of the selected
+     *          product.
+     *          - `addToCartButton`: A button that allows users to add the selected
+     *          product to
+     *          their cart.
+     *          - `chatIcon`: An icon that represents the chat function, which
+     *          displays all
+     *          comments for the selected product when clicked.
+     *          <p>
+     *          The main attributes of the returned output are:
+     *          <p>
+     *          - The card container has a white background with a gradient border
+     *          from the top
+     *          left corner to the bottom right corner.
+     *          - The image view, name label, description label, price label, and
+     *          add to cart
+     *          button have a font size of 12px, bold font weight, and a padding of
+     *          10px.
+     *          - The chat icon has an icon literal of "fa-commenting" and an icon
+     *          size of 20px.
      */
     private VBox createProduitCard(final Produit Produit) {
         // Créer une carte pour le produit avec ses informations
@@ -272,9 +272,11 @@ public class AfficherProduitClientControllers implements Initializable {
         }
         imageView.setOnMouseClicked(event -> {
             try {
-                final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/DetailsProduitClient.fxml"));
+                final FXMLLoader loader = new FXMLLoader(
+                        this.getClass().getResource("/ui/produits/DetailsProduitClient.fxml"));
                 Parent root = null;
-                AfficherProduitClientControllers.LOGGER.info("Clique sur le nom du produit. ID du produit : " + Produit.getId_produit());
+                AfficherProduitClientControllers.LOGGER
+                        .info("Clique sur le nom du produit. ID du produit : " + Produit.getId_produit());
                 root = loader.load();
                 // Récupérez le contrôleur et passez l'id du produit lors de l'initialisation
                 final DetailsProduitClientController controller = loader.getController();
@@ -314,9 +316,11 @@ public class AfficherProduitClientControllers implements Initializable {
         nameLabel.setWrapText(true); // Activer le retour à la ligne automatique
         nameLabel.setOnMouseClicked(event -> {
             try {
-                final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/DetailsProduitClient.fxml"));
+                final FXMLLoader loader = new FXMLLoader(
+                        this.getClass().getResource("/ui/produits/DetailsProduitClient.fxml"));
                 Parent root = null;
-                AfficherProduitClientControllers.LOGGER.info("Clique sur le nom du produit. ID du produit : " + Produit.getId_produit());
+                AfficherProduitClientControllers.LOGGER
+                        .info("Clique sur le nom du produit. ID du produit : " + Produit.getId_produit());
                 root = loader.load();
                 // Récupérez le contrôleur et passez l'id du produit lors de l'initialisation
                 final DetailsProduitClientController controller = loader.getController();
@@ -482,30 +486,30 @@ public class AfficherProduitClientControllers implements Initializable {
      *                - `commander`: a button to add the product to the cart or
      *                continue shopping.
      * @returns a `Node` object representing a card with the contents of the
-     * shopping cart.
-     * <p>
-     * - `panierContainer`: The parent Node for the entire card, which
-     * contains all the
-     * children components.
-     * - `cartLabel`: A Label component displaying the word "Panier" in
-     * bold and a larger
-     * font size.
-     * - `closeIcon`: A FontIcon component displaying an icon of a times
-     * circle, used
-     * for closing the card.
-     * - `imageView`: An ImageView component displaying a shopping cart
-     * icon.
-     * - `nameLabel`: A Label component displaying the text "Nom du
-     * produits".
-     * - `quantiteLabel`: A Label component displaying the text "Quantité".
-     * - `sommeTotaleLabel`: A Label component displaying the text "Somme
-     * totale".
-     * - `achatbutton`: A Button component displaying the text "Continuer
-     * les achats"
-     * and used for navigating to the next stage.
-     * - `commandebutton`: A Button component displaying the text "Order"
-     * and used for
-     * adding an item to the cart.
+     *          shopping cart.
+     *          <p>
+     *          - `panierContainer`: The parent Node for the entire card, which
+     *          contains all the
+     *          children components.
+     *          - `cartLabel`: A Label component displaying the word "Panier" in
+     *          bold and a larger
+     *          font size.
+     *          - `closeIcon`: A FontIcon component displaying an icon of a times
+     *          circle, used
+     *          for closing the card.
+     *          - `imageView`: An ImageView component displaying a shopping cart
+     *          icon.
+     *          - `nameLabel`: A Label component displaying the text "Nom du
+     *          produits".
+     *          - `quantiteLabel`: A Label component displaying the text "Quantité".
+     *          - `sommeTotaleLabel`: A Label component displaying the text "Somme
+     *          totale".
+     *          - `achatbutton`: A Button component displaying the text "Continuer
+     *          les achats"
+     *          and used for navigating to the next stage.
+     *          - `commandebutton`: A Button component displaying the text "Order"
+     *          and used for
+     *          adding an item to the cart.
      */
     private HBox createPanierCard(final Produit produit) {
         // Créer une carte pour le produit avec ses informations
@@ -575,7 +579,8 @@ public class AfficherProduitClientControllers implements Initializable {
                 """);
         commandebutton.setOnAction(
                 event -> {
-                    final FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/PanierProduit.fxml"));
+                    final FXMLLoader fxmlLoader = new FXMLLoader(
+                            this.getClass().getResource("/ui/produits/PanierProduit.fxml"));
                     try {
                         Parent root = null;
                         root = fxmlLoader.load();
@@ -588,10 +593,14 @@ public class AfficherProduitClientControllers implements Initializable {
                         currentStage.show();
                         // Fermer la fenêtre actuelle
                     } catch (final IOException e) {
-                        AfficherProduitClientControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Affiche l'erreur dans la console (vous pourriez
+                        AfficherProduitClientControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Affiche
+                                                                                                      // l'erreur dans
+                                                                                                      // la console
+                                                                                                      // (vous pourriez
                         // le
                         // remplacer par une boîte de dialogue)
-                        AfficherProduitClientControllers.LOGGER.info("Erreur lors du chargement du fichier FXML : " + e.getMessage());
+                        AfficherProduitClientControllers.LOGGER
+                                .info("Erreur lors du chargement du fichier FXML : " + e.getMessage());
                     }
                 });
         // Bouton Ajouter au Panier
@@ -654,10 +663,9 @@ public class AfficherProduitClientControllers implements Initializable {
      * new
      * stage is then displayed and the previous stage is closed.
      *
-     * @param event MouseEvent object that triggered the function, providing
-     *              information
-     *              about the mouse button pressed, the screen position of the
-     *              click, and other details.
+     * @param event MouseEvent object that triggered the function, providing the
+     *              source
+     *              of the event and any relevant data.
      *              <p>
      *              - Event source: The element that triggered the event (not
      *              specified).
@@ -666,7 +674,7 @@ public class AfficherProduitClientControllers implements Initializable {
     void panier(final MouseEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/PanierProduit.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/produits/PanierProduit.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -680,7 +688,8 @@ public class AfficherProduitClientControllers implements Initializable {
             // Fermer la fenêtre actuelle
             currentStage.close();
         } catch (final IOException e) {
-            AfficherProduitClientControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
+            AfficherProduitClientControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
+                                                                                          // d'entrée/sortie
         }
     }
 
@@ -773,20 +782,20 @@ public class AfficherProduitClientControllers implements Initializable {
      * their respective names using the `getNom_categorie()` method.
      *
      * @returns a list of distinct category names obtained from the database.
-     * <p>
-     * The function returns a list of strings, where each string represents
-     * a category name.
-     * The list contains all unique category names that were retrieved from
-     * the database
-     * using the `getAllCategories()` method.
-     * The categories are obtained by calling the `map()` method on the
-     * list of `Produit`
-     * objects, which applies the `getCategorie().getNom_categorie()`
-     * method to each
-     * object and returns a stream of category names.
-     * The `distinct()` method is then called on the stream to remove any
-     * duplicates,
-     * resulting in a list of unique category names.
+     *          <p>
+     *          The function returns a list of strings, where each string represents
+     *          a category name.
+     *          The list contains all unique category names that were retrieved from
+     *          the database
+     *          using the `getAllCategories()` method.
+     *          The categories are obtained by calling the `map()` method on the
+     *          list of `Produit`
+     *          objects, which applies the `getCategorie().getNom_categorie()`
+     *          method to each
+     *          object and returns a stream of category names.
+     *          The `distinct()` method is then called on the stream to remove any
+     *          duplicates,
+     *          resulting in a list of unique category names.
      */
     public List<String> getCategorie_Produit() {
         // Récupérer tous les cinémas depuis la base de données
@@ -853,16 +862,16 @@ public class AfficherProduitClientControllers implements Initializable {
      * them based on the selected state of CheckBoxes within the pane.
      *
      * @returns a list of selected category names.
-     * <p>
-     * - The output is a list of strings (type `List<String>`).
-     * - The list contains the selected addresses from the
-     * `addressCheckBoxes` stream,
-     * where each address is represented by a string.
-     * - The addresses are filtered based on whether the corresponding
-     * CheckBox is
-     * selected or not using the `filter()` method.
-     * - The text of each selected CheckBox is mapped to a string using the
-     * `map()` method.
+     *          <p>
+     *          - The output is a list of strings (type `List<String>`).
+     *          - The list contains the selected addresses from the
+     *          `addressCheckBoxes` stream,
+     *          where each address is represented by a string.
+     *          - The addresses are filtered based on whether the corresponding
+     *          CheckBox is
+     *          selected or not using the `filter()` method.
+     *          - The text of each selected CheckBox is mapped to a string using the
+     *          `map()` method.
      */
     private List<String> getSelectedCategories() {
         // Récupérer les adresses sélectionnées dans l'AnchorPane de filtrage
@@ -894,7 +903,8 @@ public class AfficherProduitClientControllers implements Initializable {
     void cinemaclient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/CommentaireProduit.fxml"));
+            final FXMLLoader loader = new FXMLLoader(
+                    this.getClass().getResource("/ui/produits/CommentaireProduit.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -908,7 +918,8 @@ public class AfficherProduitClientControllers implements Initializable {
             // Fermer la fenêtre actuelle
             currentStage.close();
         } catch (final IOException e) {
-            AfficherProduitClientControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
+            AfficherProduitClientControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
+                                                                                          // d'entrée/sortie
         }
     }
 
@@ -933,7 +944,8 @@ public class AfficherProduitClientControllers implements Initializable {
     void eventClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/AffichageEvenementClient.fxml"));
+            final FXMLLoader loader = new FXMLLoader(
+                    this.getClass().getResource("/ui//ui/AffichageEvenementClient.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -947,7 +959,8 @@ public class AfficherProduitClientControllers implements Initializable {
             // Fermer la fenêtre actuelle
             currentStage.close();
         } catch (final IOException e) {
-            AfficherProduitClientControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
+            AfficherProduitClientControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
+                                                                                          // d'entrée/sortie
         }
     }
 
@@ -971,7 +984,8 @@ public class AfficherProduitClientControllers implements Initializable {
     void produitClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/AfficherProduitClient.fxml"));
+            final FXMLLoader loader = new FXMLLoader(
+                    this.getClass().getResource("/ui/produits/AfficherProduitClient.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -985,7 +999,8 @@ public class AfficherProduitClientControllers implements Initializable {
             // Fermer la fenêtre actuelle
             currentStage.close();
         } catch (final IOException e) {
-            AfficherProduitClientControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
+            AfficherProduitClientControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
+                                                                                          // d'entrée/sortie
         }
     }
 
@@ -1027,7 +1042,7 @@ public class AfficherProduitClientControllers implements Initializable {
     void MovieClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/filmuser.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/films/filmuser.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -1041,7 +1056,8 @@ public class AfficherProduitClientControllers implements Initializable {
             // Fermer la fenêtre actuelle
             currentStage.close();
         } catch (final IOException e) {
-            AfficherProduitClientControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
+            AfficherProduitClientControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
+                                                                                          // d'entrée/sortie
         }
     }
 
@@ -1069,7 +1085,7 @@ public class AfficherProduitClientControllers implements Initializable {
     void SerieClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/Series-view.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui//ui/Series-view.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -1083,7 +1099,8 @@ public class AfficherProduitClientControllers implements Initializable {
             // Fermer la fenêtre actuelle
             currentStage.close();
         } catch (final IOException e) {
-            AfficherProduitClientControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
+            AfficherProduitClientControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
+                                                                                          // d'entrée/sortie
         }
     }
 
@@ -1111,7 +1128,8 @@ public class AfficherProduitClientControllers implements Initializable {
         } else {
             // Créez un objet Commentaire
             final Client client = (Client) this.txtAreaComments.getScene().getWindow().getUserData();
-            final Commentaire commentaire = new Commentaire(client, userMessage, produitService.getProduitById(this.produitId));
+            final Commentaire commentaire = new Commentaire(client, userMessage,
+                    produitService.getProduitById(this.produitId));
             final CommentaireService commentaireService = new CommentaireService();
             // Ajoutez le commentaire à la base de données
             commentaireService.create(commentaire);
@@ -1127,16 +1145,16 @@ public class AfficherProduitClientControllers implements Initializable {
      *                  and
      *                  returned.
      * @returns a list of commentaries filtered based on the product ID.
-     * <p>
-     * - The `List<Commentaire>` returned represents all comments for a
-     * specific product
-     * with the provided ID.
-     * - The list contains `Commentaire` objects that have been filtered
-     * based on the
-     * product ID.
-     * - Each `Commentaire` object in the list has a `Produit` field with
-     * the ID of the
-     * matching product.
+     *          <p>
+     *          - The `List<Commentaire>` returned represents all comments for a
+     *          specific product
+     *          with the provided ID.
+     *          - The list contains `Commentaire` objects that have been filtered
+     *          based on the
+     *          product ID.
+     *          - Each `Commentaire` object in the list has a `Produit` field with
+     *          the ID of the
+     *          matching product.
      */
     private List<Commentaire> getAllComment(final int idproduit) {
         final CommentaireService commentaireService = new CommentaireService();
@@ -1206,23 +1224,23 @@ public class AfficherProduitClientControllers implements Initializable {
      *                    - `photo_de_profil`: The image URL of the user who made
      *                    the comment (a `String`)
      * @returns a HBox container containing an ImageView, a Group of images and
-     * text, and
-     * a VBox for the comment text.
-     * <p>
-     * 1/ `HBox contentContainer`: This is the container that holds the
-     * image and the
-     * text of the comment. It has a prefheight of 50 pixels to set the
-     * maximum height
-     * of the container.
-     * 2/ `imageBox`: This is the group containing the image of the user
-     * and the image view.
-     * 3/ `cardContainer`: This is the group containing the text box with
-     * the name of the
-     * user and the comment, as well as any additional children added to
-     * it.
-     * 4/ `textBox`: This is the VBox that contains the text box with the
-     * name of the
-     * user and the comment.
+     *          text, and
+     *          a VBox for the comment text.
+     *          <p>
+     *          1/ `HBox contentContainer`: This is the container that holds the
+     *          image and the
+     *          text of the comment. It has a prefheight of 50 pixels to set the
+     *          maximum height
+     *          of the container.
+     *          2/ `imageBox`: This is the group containing the image of the user
+     *          and the image view.
+     *          3/ `cardContainer`: This is the group containing the text box with
+     *          the name of the
+     *          user and the comment, as well as any additional children added to
+     *          it.
+     *          4/ `textBox`: This is the VBox that contains the text box with the
+     *          name of the
+     *          user and the comment.
      */
     private HBox addCommentToView(final Commentaire commentaire) {
         // Création du cercle pour l'image de l'utilisateur
@@ -1257,7 +1275,8 @@ public class AfficherProduitClientControllers implements Initializable {
         cardContainer.setStyle(
                 "-fx-background-color: white; -fx-padding: 5px ; -fx-border-radius: 8px; -fx-border-color: #000; -fx-background-radius: 8px; ");
         // Nom de l'utilisateur
-        final Text userName = new Text(commentaire.getClient().getFirstName() + " " + commentaire.getClient().getLastName());
+        final Text userName = new Text(
+                commentaire.getClient().getFirstName() + " " + commentaire.getClient().getLastName());
         userName.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-weight: bold;");
         // Commentaire
         final Text commentText = new Text(commentaire.getCommentaire());
@@ -1362,43 +1381,43 @@ public class AfficherProduitClientControllers implements Initializable {
      *                - `image`: the image URL or a default image if null
      *                - `prix`: the product price in DT (Djibouti Francs)
      * @returns a `VBox` container with three elements: an image, a product name,
-     * and a
-     * price label.
-     * <p>
-     * 1/ `cardContainer`: This is the top-level container for the three
-     * components that
-     * make up the card. It has a style class of `-fx-padding: 20px 0 0
-     * 30px;` which adds
-     * left padding to the container.
-     * 2/ `imageView`: This is an `ImageView` component that displays the
-     * image of the
-     * product. The image view has a layoutX of 5 and a layoutY of 21, and
-     * its fit width
-     * and height are set to 50. It also has an OnMouseClicked event
-     * listener that triggers
-     * when the image is clicked.
-     * 3/ `nameLabel`: This is a `Label` component that displays the name
-     * of the product.
-     * The label has a font size of 15 and a style class of `-fx-text-fill:
-     * #333333;`,
-     * which sets the text fill color to black. It also has a layoutX of 60
-     * and a layoutY
-     * of 25.
-     * 4/ `priceLabel`: This is another `Label` component that displays the
-     * price of the
-     * product. The label has a font size of 14 and a style class of
-     * `-fx-text-fill:
-     * black;`, which sets the text fill color to black. It also has a
-     * layoutX of 60 and
-     * a layoutY of 55.
-     * <p>
-     * In summary, the `createtopthree` function returns a container with
-     * three components
-     * – an image view, a label for the product name, and another label for
-     * the price –
-     * with specific properties and attributes set to display the
-     * information about the
-     * product.
+     *          and a
+     *          price label.
+     *          <p>
+     *          1/ `cardContainer`: This is the top-level container for the three
+     *          components that
+     *          make up the card. It has a style class of `-fx-padding: 20px 0 0
+     *          30px;` which adds
+     *          left padding to the container.
+     *          2/ `imageView`: This is an `ImageView` component that displays the
+     *          image of the
+     *          product. The image view has a layoutX of 5 and a layoutY of 21, and
+     *          its fit width
+     *          and height are set to 50. It also has an OnMouseClicked event
+     *          listener that triggers
+     *          when the image is clicked.
+     *          3/ `nameLabel`: This is a `Label` component that displays the name
+     *          of the product.
+     *          The label has a font size of 15 and a style class of `-fx-text-fill:
+     *          #333333;`,
+     *          which sets the text fill color to black. It also has a layoutX of 60
+     *          and a layoutY
+     *          of 25.
+     *          4/ `priceLabel`: This is another `Label` component that displays the
+     *          price of the
+     *          product. The label has a font size of 14 and a style class of
+     *          `-fx-text-fill:
+     *          black;`, which sets the text fill color to black. It also has a
+     *          layoutX of 60 and
+     *          a layoutY of 55.
+     *          <p>
+     *          In summary, the `createtopthree` function returns a container with
+     *          three components
+     *          – an image view, a label for the product name, and another label for
+     *          the price –
+     *          with specific properties and attributes set to display the
+     *          information about the
+     *          product.
      */
     public VBox createtopthree(final Produit produit) {
         final VBox cardContainer = new VBox(5);
@@ -1432,9 +1451,11 @@ public class AfficherProduitClientControllers implements Initializable {
         }
         imageView.setOnMouseClicked(event -> {
             try {
-                final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/DetailsProduitClient.fxml"));
+                final FXMLLoader loader = new FXMLLoader(
+                        this.getClass().getResource("/ui/produits/DetailsProduitClient.fxml"));
                 Parent root = null;
-                AfficherProduitClientControllers.LOGGER.info("Clique sur le nom du produit. ID du produit : " + produit.getId_produit());
+                AfficherProduitClientControllers.LOGGER
+                        .info("Clique sur le nom du produit. ID du produit : " + produit.getId_produit());
                 root = loader.load();
                 // Récupérez le contrôleur et passez l'id du produit lors de l'initialisation
                 final DetailsProduitClientController controller = loader.getController();
@@ -1460,9 +1481,11 @@ public class AfficherProduitClientControllers implements Initializable {
         nameLabel.setWrapText(true);
         nameLabel.setOnMouseClicked(event -> {
             try {
-                final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/DetailsProduitClient.fxml"));
+                final FXMLLoader loader = new FXMLLoader(
+                        this.getClass().getResource("/ui/produits/DetailsProduitClient.fxml"));
                 Parent root = null;
-                AfficherProduitClientControllers.LOGGER.info("Clique sur le nom du produit. ID du produit : " + produit.getId_produit());
+                AfficherProduitClientControllers.LOGGER
+                        .info("Clique sur le nom du produit. ID du produit : " + produit.getId_produit());
                 root = loader.load();
                 // Récupérez le contrôleur et passez l'id du produit lors de l'initialisation
                 final DetailsProduitClientController controller = loader.getController();

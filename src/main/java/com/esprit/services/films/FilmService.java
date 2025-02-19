@@ -61,7 +61,8 @@ public class FilmService implements IService<Film> {
                 FilmService.LOGGER.info("Status Code: " + conn.getResponseCode());
             } while (123 != statusCode);
             // Read the response
-            final BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
+            final BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
             final StringBuilder responseBuilder = new StringBuilder();
             String line;
             while (null != (line = reader.readLine())) {
@@ -197,19 +198,24 @@ public class FilmService implements IService<Film> {
     }
 
     public Film getFilm(final int film_id) {
-        Film film = null;
-        final String req = "SELECT * from film where id = ?";
-        try {
-            final PreparedStatement pst = this.connection.prepareStatement(req);
-            pst.setInt(1, film_id);
-            final ResultSet rs = pst.executeQuery();
-            rs.next();
-            film = new Film(rs.getInt("id"), rs.getString("nom"), rs.getString("image"), rs.getTime("duree"),
-                    rs.getString("description"), rs.getInt("annederalisation"));
-        } catch (final SQLException e) {
-            FilmService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        String query = "SELECT * FROM film WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, film_id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) { // Add check before accessing results
+                return new Film(
+                        rs.getInt("id"),
+                        rs.getString("nom"),
+                        rs.getString("image"),
+                        rs.getTime("duree"),
+                        rs.getString("description"),
+                        rs.getInt("annederalisation"));
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error getting film: " + film_id, e);
         }
-        return film;
+        return null;
     }
 
     public Film getFilmByName(final String nom_film) {

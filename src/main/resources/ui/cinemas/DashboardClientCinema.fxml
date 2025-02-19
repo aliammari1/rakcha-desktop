@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+
+<VBox prefHeight="855.0" prefWidth="1507.0" stylesheets="@styles/filmStyle.css"
+    xmlns="http://javafx.com/javafx/21"
+    xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.cinemas.DashboardClientController">
+
+    <HBox VBox.vgrow="ALWAYS">
+        <!-- SideBar -->
+        <fx:include source="../clientSideBar.fxml" />
+        
+        <!-- Main Content -->
+        <VBox spacing="20" HBox.hgrow="ALWAYS">
+            <padding>
+                <Insets top="25" right="25" bottom="25" left="25"/>
+            </padding>
+
+            <!-- Header Section -->
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <ImageView fitHeight="69.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
+                    <Image url="@Logo.png" />
+                </ImageView>
+                <VBox>
+                    <Label text="Loujain Hajlaoui" />
+                    <Label text="User" />
+                </VBox>
+                <Region HBox.hgrow="ALWAYS" />
+                <ComboBox fx:id="tricomboBox" prefHeight="40.0" prefWidth="139.0" styleClass="sale" />
+                <TextField fx:id="searchbar1" prefHeight="42.0" prefWidth="248.0" promptText="Search here ......................" />
+                <Button mnemonicParsing="false" onAction="#filtrer" styleClass="sale" text="Filter" />
+            </HBox>
+
+            <!-- Content Area -->
+            <HBox VBox.vgrow="ALWAYS" spacing="20">
+                <!-- Left Side - Cinema List -->
+                <ScrollPane fitToWidth="true" HBox.hgrow="ALWAYS">
+                    <FlowPane fx:id="cinemaFlowPane" styleClass="bg-white" VBox.vgrow="ALWAYS"/>
+                </ScrollPane>
+
+                <!-- Right Side - Top 3 -->
+                <VBox spacing="15" styleClass="bg-white" maxWidth="403.0">
+                    <Label text="Top 3" styleClass="section-title">
+                        <font>
+                            <Font name="Arial Rounded MT Bold" size="48.0" />
+                        </font>
+                    </Label>
+                    <AnchorPane fx:id="Anchortop3" VBox.vgrow="ALWAYS" />
+                </VBox>
+            </HBox>
+        </VBox>
+    </HBox>
+
+    <!-- Planning Pane -->
+    <AnchorPane fx:id="PlanningPane" visible="false" styleClass="bg-white">
+        <VBox spacing="15">
+            <HBox alignment="CENTER_RIGHT">
+                <Button fx:id="closeDetailFilm" onAction="#Planninggclose" styleClass="close">
+                    <graphic>
+                        <FontAwesomeIconView glyphName="CLOSE" styleClass="close" />
+                    </graphic>
+                </Button>
+            </HBox>
+            <Label text="Planning: " styleClass="section-title">
+                <font>
+                    <Font name="Arial Rounded MT Bold" size="48.0" />
+                </font>
+            </Label>
+            <FlowPane fx:id="planningFlowPane" styleClass="table-view" VBox.vgrow="ALWAYS" />
+        </VBox>
+    </AnchorPane>
+
+    <!-- Filter Anchor -->
+    <AnchorPane fx:id="filterAnchor" styleClass="bg-white" visible="false">
+        <VBox spacing="10">
+            <Button text="Apply Filter" onAction="#filtrercinema"/>
+        </VBox>
+    </AnchorPane>
+
+    <!-- Comments Anchor -->
+    <AnchorPane fx:id="AnchorComments" styleClass="top-form" visible="false">
+        <VBox spacing="10">
+            <HBox alignment="CENTER_RIGHT">
+                <FontAwesomeIconView glyphName="CLOSE" onMouseClicked="#closeCommets" size="20" />
+            </HBox>
+            <ScrollPane fx:id="ScrollPaneComments" VBox.vgrow="ALWAYS">
+                <VBox spacing="5"/>
+            </ScrollPane>
+            <HBox spacing="10" alignment="CENTER">
+                <TextArea fx:id="txtAreaComments" HBox.hgrow="ALWAYS" promptText="Write your comment..."/>
+                <FontAwesomeIconView fill="#ab3a3a" glyphName="SEND" onMouseClicked="#AddComment" size="30" />
+            </HBox>
+        </VBox>
+    </AnchorPane>
+
+    <!-- List Cinema Client -->
+    <AnchorPane fx:id="listCinemaClient" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" 
+                AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0">
+        <VBox spacing="20">
+            <!-- Header Section -->
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <ComboBox fx:id="tricomboBox" prefHeight="40.0" prefWidth="139.0" styleClass="sale" />
+                <TextField fx:id="searchbar1" prefHeight="42.0" prefWidth="248.0" promptText="Search here ...." />
+                <Button mnemonicParsing="false" onAction="#filtrer" styleClass="sale" text="Filter" />
+            </HBox>
+
+            <!-- Cinema Flow Pane -->
+            <FlowPane fx:id="cinemaFlowPane" styleClass="bg-white" VBox.vgrow="ALWAYS"/>
+
+            <!-- Top 3 Section -->
+            <AnchorPane fx:id="Anchortop3" VBox.vgrow="ALWAYS" />
+        </VBox>
+    </AnchorPane>
+
+</VBox>

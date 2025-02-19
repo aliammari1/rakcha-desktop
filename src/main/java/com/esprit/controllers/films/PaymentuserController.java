@@ -2,10 +2,12 @@ package com.esprit.controllers.films;
 
 import com.esprit.models.cinemas.Cinema;
 import com.esprit.models.cinemas.Seance;
+import com.esprit.models.cinemas.Seat;
 import com.esprit.models.films.Ticket;
 import com.esprit.models.users.Client;
 import com.esprit.services.cinemas.CinemaService;
 import com.esprit.services.cinemas.SeanceService;
+import com.esprit.services.cinemas.SeatService;
 import com.esprit.services.films.FilmService;
 import com.esprit.services.films.TicketService;
 import com.esprit.services.users.UserService;
@@ -44,6 +46,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.concurrent.ConcurrentHashMap;
+import java.time.LocalDateTime;
 
 /**
  * Is responsible for handling payments for a Visa card. It has several methods
@@ -57,6 +61,7 @@ public class PaymentuserController implements Initializable {
 
     Client client;
     private Seance seance;
+    private List<Seat> selectedSeats;
     @FXML
     private Label total;
     @FXML
@@ -88,6 +93,67 @@ public class PaymentuserController implements Initializable {
     @FXML
     private Button viewPDF;
 
+    private static final ConcurrentHashMap<String, PaymentValidationResult> validationCache = new ConcurrentHashMap<>();
+    private static final Pattern CARD_NUMBER_PATTERN = Pattern.compile("^4[0-9]{12}(?:[0-9]{3})?$");
+    private static final Pattern CVC_PATTERN = Pattern.compile("^[0-9]{3}$");
+
+    private static class PaymentValidationResult {
+        final boolean isValid;
+        final LocalDateTime timestamp;
+        final String message;
+
+        PaymentValidationResult(boolean isValid, String message) {
+            this.isValid = isValid;
+            this.timestamp = LocalDateTime.now();
+            this.message = message;
+        }
+
+        boolean isExpired() {
+            return LocalDateTime.now().minusMinutes(30).isAfter(timestamp);
+        }
+    }
+
+    private boolean validatePaymentWithCache(String cardNumber) {
+        PaymentValidationResult cached = validationCache.get(cardNumber);
+        if (cached != null && !cached.isExpired()) {
+            if (!cached.isValid) {
+                showError("Payment Validation", cached.message);
+            }
+            return cached.isValid;
+        }
+
+        boolean isValid = validateCardNumber(cardNumber);
+        String message = isValid ? "Valid card" : "Invalid card number";
+        validationCache.put(cardNumber, new PaymentValidationResult(isValid, message));
+
+        if (!isValid) {
+            showError("Payment Validation", message);
+        }
+        return isValid;
+    }
+
+    private boolean validateCardNumber(String cardNumber) {
+        // Advanced Luhn algorithm implementation
+        if (!CARD_NUMBER_PATTERN.matcher(cardNumber).matches()) {
+            return false;
+        }
+
+        int sum = 0;
+        boolean alternate = false;
+        for (int i = cardNumber.length() - 1; i >= 0; i--) {
+            int n = Integer.parseInt(cardNumber.substring(i, i + 1));
+            if (alternate) {
+                n *= 2;
+                if (n > 9) {
+                    n = (n % 10) + 1;
+                }
+            }
+            sum += n;
+            alternate = !alternate;
+        }
+        return (sum % 10 == 0);
+    }
+
     /**
      * Checks if a given string is a numerical value by matching it against a
      * regular
@@ -95,8 +161,8 @@ public class PaymentuserController implements Initializable {
      *
      * @param str String to be checked for matching the regular expression `\d+`.
      * @returns a `Boolean` value indicating whether the input string matches the
-     * regular
-     * expression for a number.
+     *          regular
+     *          expression for a number.
      */
     public static boolean isNum(final String str) {
         final String expression = "\\d+";
@@ -212,17 +278,24 @@ public class PaymentuserController implements Initializable {
              *                        film and cinema.
              */
             @Override
-            public void changed(final ObservableValue<? extends String> observableValue, final String s, final String t1) {
+            public void changed(final ObservableValue<? extends String> observableValue, final String s,
+                    final String t1) {
                 final List<Seance> seances = new SeanceService().readLoujain(
                         new FilmService().getFilmByName(PaymentuserController.this.filmLabel_Payment.getText()).getId(),
-                        new CinemaService().getCinemaByName(PaymentuserController.this.cinemacombox_res.getValue()).getId_cinema());
+                        new CinemaService().getCinemaByName(PaymentuserController.this.cinemacombox_res.getValue())
+                                .getId_cinema());
                 PaymentuserController.this.checkcomboboxseance_res.setDisable(false);
                 PaymentuserController.this.checkcomboboxseance_res.getItems().clear();
-                PaymentuserController.LOGGER.info(new FilmService().getFilmByName(PaymentuserController.this.filmLabel_Payment.getText()).getId() + " "
-                        + new CinemaService().getCinemaByName(PaymentuserController.this.cinemacombox_res.getValue()).getId_cinema());
+                PaymentuserController.LOGGER.info(
+                        new FilmService().getFilmByName(PaymentuserController.this.filmLabel_Payment.getText()).getId()
+                                + " "
+                                + new CinemaService()
+                                        .getCinemaByName(PaymentuserController.this.cinemacombox_res.getValue())
+                                        .getId_cinema());
                 for (int i = 0; i < seances.size(); i++) {
-                    PaymentuserController.this.checkcomboboxseance_res.getItems().add("Seance " + (i + 1) + " " + seances.get(i).getDate() + " "
-                            + seances.get(i).getHD() + "-" + seances.get(i).getHF());
+                    PaymentuserController.this.checkcomboboxseance_res.getItems()
+                            .add("Seance " + (i + 1) + " " + seances.get(i).getDate() + " "
+                                    + seances.get(i).getHD() + "-" + seances.get(i).getHF());
                 }
             }
         });
@@ -251,12 +324,17 @@ public class PaymentuserController implements Initializable {
                 while (change.next()) {
                     if (change.wasAdded()) {
                         final List<Seance> seances = new SeanceService().readLoujain(
-                                new FilmService().getFilmByName(PaymentuserController.this.filmLabel_Payment.getText()).getId(),
-                                new CinemaService().getCinemaByName(PaymentuserController.this.cinemacombox_res.getValue()).getId_cinema());
+                                new FilmService().getFilmByName(PaymentuserController.this.filmLabel_Payment.getText())
+                                        .getId(),
+                                new CinemaService()
+                                        .getCinemaByName(PaymentuserController.this.cinemacombox_res.getValue())
+                                        .getId_cinema());
                         PaymentuserController.this.seance = seances.get(0);
-                        PaymentuserController.this.anchorpane_payment.getChildren().forEach(node -> node.setDisable(false));
-                        PaymentuserController.this.nbrplacepPayment_Spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1,
-                                seances.get(0).getId_salle().getNb_places(), 1, 1));
+                        PaymentuserController.this.anchorpane_payment.getChildren()
+                                .forEach(node -> node.setDisable(false));
+                        PaymentuserController.this.nbrplacepPayment_Spinner
+                                .setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1,
+                                        seances.get(0).getId_salle().getNb_places(), 1, 1));
                     }
                 }
             }
@@ -296,13 +374,16 @@ public class PaymentuserController implements Initializable {
              *                        the film.
              */
             @Override
-            public void changed(final ObservableValue<? extends Integer> observableValue, final Integer integer, final Integer t1) {
+            public void changed(final ObservableValue<? extends Integer> observableValue, final Integer integer,
+                    final Integer t1) {
                 final List<Seance> seances = new SeanceService().readLoujain(
                         new FilmService().getFilmByName(PaymentuserController.this.filmLabel_Payment.getText()).getId(),
-                        new CinemaService().getCinemaByName(PaymentuserController.this.cinemacombox_res.getValue()).getId_cinema());
+                        new CinemaService().getCinemaByName(PaymentuserController.this.cinemacombox_res.getValue())
+                                .getId_cinema());
                 double totalPrice = 0;
                 for (int i = 0; i < seances.size(); i++) {
-                    totalPrice += seances.get(i).getPrix() * PaymentuserController.this.nbrplacepPayment_Spinner.getValue();
+                    totalPrice += seances.get(i).getPrix()
+                            * PaymentuserController.this.nbrplacepPayment_Spinner.getValue();
                 }
                 PaymentuserController.LOGGER.info(String.valueOf(totalPrice));
                 final String total_txt = "Total : " + totalPrice + " Dt.";
@@ -335,11 +416,20 @@ public class PaymentuserController implements Initializable {
     @FXML
     private void Pay(final ActionEvent event) throws StripeException {
         final TicketService scom = new TicketService();
-        // TODO replace the next line with reservation
-        // Seance seance;
-        final UserService sc = new UserService();
+        final SeatService seatService = new SeatService();
+
         if (this.isValidInput()) {
-            final float f = (float) this.seance.getPrix() * 100;
+            // Update seat status
+            for (Seat seat : selectedSeats) {
+                seatService.updateSeatStatus(seat.getId(), true);
+            }
+
+            // Continue with payment processing
+            final float f = (float) this.seance.getPrix() * 100; // Potential NPE if seance is null
+            // Add null check:
+            if (this.seance == null) {
+                return;
+            }
             final int k = PaymentuserController.floatToInt(f);
             final String url = Paymentuser.pay(k);
             final Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -402,9 +492,11 @@ public class PaymentuserController implements Initializable {
             this.showError("Numéro de carte invalide", "Veuillez entrer un numéro de carte Visa valide.");
             return false;
         }
-        if (this.moisExp.getText().isEmpty() || !PaymentuserController.isNum(this.moisExp.getText()) || 1 > Integer.parseInt(moisExp.getText())
+        if (this.moisExp.getText().isEmpty() || !PaymentuserController.isNum(this.moisExp.getText())
+                || 1 > Integer.parseInt(moisExp.getText())
                 || 12 < Integer.parseInt(moisExp.getText())) {
-            this.showError("Mois d'expiration invalide", "Veuillez entrer un mois d'expiration valide (entre 1 et 12).");
+            this.showError("Mois d'expiration invalide",
+                    "Veuillez entrer un mois d'expiration valide (entre 1 et 12).");
             return false;
         }
         if (this.anneeExp.getText().isEmpty() || !PaymentuserController.isNum(this.anneeExp.getText())
@@ -428,18 +520,18 @@ public class PaymentuserController implements Initializable {
      *
      * @param text 13-digit credit card number to be validated.
      * @returns a boolean value indicating whether the given string represents a
-     * valid
-     * Visa card number or not.
-     * <p>
-     * - The function returns a boolean value indicating whether the given
-     * text represents
-     * a valid Visa card number or not.
-     * - The output is based on the pattern `(^4[0-9]{12}(?:[0-9]{3})?$)`
-     * which is used
-     * to validate the Visa card number.
-     * - The pattern checks that the card number consists of 12 digits,
-     * with the first
-     * 4 digits being "4", and optionally followed by a further 3 digits.
+     *          valid
+     *          Visa card number or not.
+     *          <p>
+     *          - The function returns a boolean value indicating whether the given
+     *          text represents
+     *          a valid Visa card number or not.
+     *          - The output is based on the pattern `(^4[0-9]{12}(?:[0-9]{3})?$)`
+     *          which is used
+     *          to validate the Visa card number.
+     *          - The pattern checks that the card number consists of 12 digits,
+     *          with the first
+     *          4 digits being "4", and optionally followed by a further 3 digits.
      */
     private boolean isValidVisaCardNo(final String text) {
         final String regex = "^4[0-9]{12}(?:[0-9]{3})?$";
@@ -485,8 +577,23 @@ public class PaymentuserController implements Initializable {
         this.total.setText("Payer " + p.getPrix() + "dinars");
     }
 
+    public void initWithSeats(Seance seance, Client client, List<Seat> selectedSeats) {
+        this.seance = seance;
+        this.client = client;
+        this.selectedSeats = selectedSeats;
+        this.filmLabel_Payment.setText(seance.getId_film().getNom());
+
+        // Calculate total based on number of seats
+        double totalPrice = seance.getPrix() * selectedSeats.size();
+        total.setText(String.format("Total: %.2f Dt.", totalPrice));
+
+        // Disable seat selection since it's already done
+        nbrplacepPayment_Spinner.setDisable(true);
+        nbrplacepPayment_Spinner.getValueFactory().setValue(selectedSeats.size());
+    }
+
     /**
-     * Loads and displays a FXML file named "filmuser.fxml" using Java's
+     * Loads and displays a FXML file named "/ui/films/filmuser.fxml" using Java's
      * `FXMLLoader`
      * class, creating a new stage and scene to display the content.
      *
@@ -498,7 +605,7 @@ public class PaymentuserController implements Initializable {
      */
     public void switchtfillmmaa(final ActionEvent event) {
         try {
-            final FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/filmuser.fxml"));
+            final FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/ui/films/filmuser.fxml"));
             final AnchorPane root = fxmlLoader.load();
             final Stage stage = (Stage) this.anchorpane_payment.getScene().getWindow();
             final Scene scene = new Scene(root, 1507, 855);

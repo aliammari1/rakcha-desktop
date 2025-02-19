@@ -90,7 +90,8 @@ public class CommentaireProduitController implements Initializable {
         try {
             // Convertir la chaîne de texte en objet Date
             final String dateString = this.monCommentaitreText.getText();
-            final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // ajustez le format selon vos besoins
+            final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // ajustez le format selon vos
+                                                                                    // besoins
             final Date datecommantaire = dateFormat.parse(dateString);
             // Affichez la date pour vérification
             CommentaireProduitController.LOGGER.info("datecommantaire: " + datecommantaire);
@@ -105,7 +106,8 @@ public class CommentaireProduitController implements Initializable {
                 alert.showAndWait();
             } else {
                 // Créez un objet Commentaire
-                final Commentaire commentaire = new Commentaire((Client) new UserService().getUserById(111), userMessage,
+                final Commentaire commentaire = new Commentaire((Client) new UserService().getUserById(111),
+                        userMessage,
                         produitService.getProduitById(produit.getId_produit()));
                 final CommentaireService commentaireService = new CommentaireService();
                 // Ajoutez le commentaire à la base de données
@@ -169,47 +171,47 @@ public class CommentaireProduitController implements Initializable {
      *             - `comm.getCommentaire()` returns the actual comment text made by
      *             the user.
      * @returns a customizable HBox containing the author's name and the content of
-     * a
-     * given comment.
-     * <p>
-     * 1/ The output is an `HBox` object, which represents a container for
-     * other UI elements.
-     * 2/ The `setStyle` method is used to set the padding of the `HBox` to
-     * 5 pixels on
-     * all sides.
-     * 3/ An `AnchorPane` object is created and set as the content of the
-     * `HBox`. This
-     * means that the `AnchorPane` will be the container for the other UI
-     * elements inside
-     * the `HBox`.
-     * 4/ The `setPrefWidth` method is used to set the width of the
-     * `AnchorPane` to 200
-     * pixels.
-     * 5/ A `Label` object representing the author's name is created and
-     * added as a child
-     * element of the `AnchorPane`.
-     * 6/ The `setStyle` method is used again to set the font weight, font
-     * family, and
-     * text fill color of the label to bold, Verdana, and black,
-     * respectively.
-     * 7/ The `setPrefWidth` method is used to set the width of the label
-     * to 230 pixels.
-     * 8/ The `setLayoutX` and `setLayoutY` methods are used to position
-     * the label at
-     * (20, 30) on the anchor pane.
-     * 9/ A second `Label` object representing the comment is created and
-     * added as a child
-     * element of the `AnchorPane`.
-     * 10/ The same styling properties as before are applied to the second
-     * label.
-     * 11/ The `setPrefWidth` method is used again to set the width of the
-     * second label
-     * to 230 pixels.
-     * 12/ The `setLayoutX` and `setLayoutY` methods are used to position
-     * the second label
-     * at (20, 55) on the anchor pane.
-     * 13/ Finally, the `getChildren` method is used to add both labels to
-     * the `AnchorPane`.
+     *          a
+     *          given comment.
+     *          <p>
+     *          1/ The output is an `HBox` object, which represents a container for
+     *          other UI elements.
+     *          2/ The `setStyle` method is used to set the padding of the `HBox` to
+     *          5 pixels on
+     *          all sides.
+     *          3/ An `AnchorPane` object is created and set as the content of the
+     *          `HBox`. This
+     *          means that the `AnchorPane` will be the container for the other UI
+     *          elements inside
+     *          the `HBox`.
+     *          4/ The `setPrefWidth` method is used to set the width of the
+     *          `AnchorPane` to 200
+     *          pixels.
+     *          5/ A `Label` object representing the author's name is created and
+     *          added as a child
+     *          element of the `AnchorPane`.
+     *          6/ The `setStyle` method is used again to set the font weight, font
+     *          family, and
+     *          text fill color of the label to bold, Verdana, and black,
+     *          respectively.
+     *          7/ The `setPrefWidth` method is used to set the width of the label
+     *          to 230 pixels.
+     *          8/ The `setLayoutX` and `setLayoutY` methods are used to position
+     *          the label at
+     *          (20, 30) on the anchor pane.
+     *          9/ A second `Label` object representing the comment is created and
+     *          added as a child
+     *          element of the `AnchorPane`.
+     *          10/ The same styling properties as before are applied to the second
+     *          label.
+     *          11/ The `setPrefWidth` method is used again to set the width of the
+     *          second label
+     *          to 230 pixels.
+     *          12/ The `setLayoutX` and `setLayoutY` methods are used to position
+     *          the second label
+     *          at (20, 55) on the anchor pane.
+     *          13/ Finally, the `getChildren` method is used to add both labels to
+     *          the `AnchorPane`.
      */
     public HBox createcommentairecard(final Commentaire comm) {
         // Charger les commentaires depuis le service
@@ -269,7 +271,7 @@ public class CommentaireProduitController implements Initializable {
     void cinemaclient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/CommentaireProduit.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/produits/CommentaireProduit.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -283,7 +285,8 @@ public class CommentaireProduitController implements Initializable {
             // Fermer la fenêtre actuelle
             currentStage.close();
         } catch (final IOException e) {
-            CommentaireProduitController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
+            CommentaireProduitController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
+                                                                                      // d'entrée/sortie
         }
     }
 
@@ -311,7 +314,7 @@ public class CommentaireProduitController implements Initializable {
     void eventClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/AffichageEvenementClient.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui//ui/AffichageEvenementClient.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -325,7 +328,8 @@ public class CommentaireProduitController implements Initializable {
             // Fermer la fenêtre actuelle
             currentStage.close();
         } catch (final IOException e) {
-            CommentaireProduitController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
+            CommentaireProduitController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
+                                                                                      // d'entrée/sortie
         }
     }
 
@@ -347,7 +351,7 @@ public class CommentaireProduitController implements Initializable {
     void produitClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/AfficherProduitClient.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/produits/AfficherProduitClient.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -361,7 +365,8 @@ public class CommentaireProduitController implements Initializable {
             // Fermer la fenêtre actuelle
             currentStage.close();
         } catch (final IOException e) {
-            CommentaireProduitController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
+            CommentaireProduitController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
+                                                                                      // d'entrée/sortie
         }
     }
 
@@ -397,7 +402,7 @@ public class CommentaireProduitController implements Initializable {
     void MovieClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/filmuser.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/films/filmuser.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -411,7 +416,8 @@ public class CommentaireProduitController implements Initializable {
             // Fermer la fenêtre actuelle
             currentStage.close();
         } catch (final IOException e) {
-            CommentaireProduitController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
+            CommentaireProduitController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
+                                                                                      // d'entrée/sortie
         }
     }
 
@@ -436,7 +442,7 @@ public class CommentaireProduitController implements Initializable {
     void SerieClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/Series-view.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui//ui/Series-view.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -450,7 +456,8 @@ public class CommentaireProduitController implements Initializable {
             // Fermer la fenêtre actuelle
             currentStage.close();
         } catch (final IOException e) {
-            CommentaireProduitController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
+            CommentaireProduitController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
+                                                                                      // d'entrée/sortie
         }
     }
 }

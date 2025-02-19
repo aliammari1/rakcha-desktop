@@ -50,7 +50,7 @@ public class VerifyWithMicrosoft {
     void verifyAuthCode(final ActionEvent event) {
         try {
             SignInMicrosoft.verifyAuthUrl(this.authTextField.getText());
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/Profile.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/users/Profile.fxml"));
             final Parent root = loader.load();
             final Stage stage = (Stage) this.sendButton.getScene().getWindow();
             stage.setScene(new Scene(root));

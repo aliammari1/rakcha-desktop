@@ -128,7 +128,8 @@ public class FilmcinemaService implements IService<Filmcinema> {
             pst.setInt(1, cinemaId);
             final ResultSet rs = pst.executeQuery();
             while (rs.next()) {
-                final Film film = new Film(rs.getInt("id"), rs.getString("nom"), rs.getString("image"), rs.getTime("duree"),
+                final Film film = new Film(rs.getInt("id"), rs.getString("nom"), rs.getString("image"),
+                        rs.getTime("duree"),
                         rs.getString("description"), rs.getInt("annederalisation"));
                 moviesForCinema.add(film);
             }
@@ -136,5 +137,21 @@ public class FilmcinemaService implements IService<Filmcinema> {
             FilmcinemaService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return moviesForCinema;
+    }
+
+    public Filmcinema getById(int id) {
+        String query = "SELECT * FROM filmcinema WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Film film = new FilmService().getFilm(rs.getInt("film_id"));
+                Cinema cinema = new CinemaService().getCinema(rs.getInt("cinema_id"));
+                return new Filmcinema(film, cinema);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

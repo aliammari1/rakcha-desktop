@@ -1,700 +1,112 @@
 package com.esprit.utils;
 
+import org.opencv.core.*;
+import org.opencv.imgproc.Imgproc;
+import org.opencv.objdetect.CascadeClassifier;
+import org.opencv.videoio.VideoCapture;
+
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class FaceDetector implements Runnable {
+    private static final Logger LOGGER = Logger.getLogger(FaceDetector.class.getName());
+    private static final String FRONTAL_FACE_CASCADE = "/haarcascades/haarcascade_frontalface_alt.xml";
+    private static final String EYE_CASCADE = "/haarcascades/haarcascade_eye.xml";
+
+    private final CascadeClassifier faceCascade;
+    private final CascadeClassifier eyeCascade;
+    private final VideoCapture videoCapture;
+    private final AtomicBoolean running;
+    private final FaceDetectionCallback callback;
+
+    public interface FaceDetectionCallback {
+        void onFaceDetected(Mat face);
+
+        void onFrameProcessed(Mat frame);
+    }
+
+    public FaceDetector(FaceDetectionCallback callback) {
+        this.callback = callback;
+        this.running = new AtomicBoolean(false);
+
+        // Initialize OpenCV classifiers
+        this.faceCascade = new CascadeClassifier();
+        this.eyeCascade = new CascadeClassifier();
+
+        // Load the cascades from resources
+        String faceCascadePath = getClass().getResource(FRONTAL_FACE_CASCADE).getPath();
+        String eyeCascadePath = getClass().getResource(EYE_CASCADE).getPath();
+
+        if (!faceCascade.load(faceCascadePath) || !eyeCascade.load(eyeCascadePath)) {
+            throw new RuntimeException("Error loading cascade classifiers");
+        }
+
+        // Initialize video capture
+        this.videoCapture = new VideoCapture(0);
+        if (!this.videoCapture.isOpened()) {
+            throw new RuntimeException("Error opening video capture device");
+        }
+    }
+
     @Override
     public void run() {
+        running.set(true);
+        Mat frame = new Mat();
+        Mat gray = new Mat();
+
+        while (running.get() && videoCapture.isOpened()) {
+            try {
+                if (videoCapture.read(frame)) {
+                    // Convert to grayscale for detection
+                    Imgproc.cvtColor(frame, gray, Imgproc.COLOR_BGR2GRAY);
+
+                    // Detect faces
+                    MatOfRect faces = new MatOfRect();
+                    faceCascade.detectMultiScale(gray, faces, 1.1, 3, 0,
+                            new Size(30, 30), new Size());
+
+                    // Process detected faces
+                    for (Rect faceRect : faces.toArray()) {
+                        // Draw rectangle around face
+                        Imgproc.rectangle(frame, faceRect, new Scalar(0, 255, 0), 2);
+
+                        // Extract face region
+                        Mat faceROI = new Mat(gray, faceRect);
+
+                        // Detect eyes in face region
+                        MatOfRect eyes = new MatOfRect();
+                        eyeCascade.detectMultiScale(faceROI, eyes);
+
+                        // If eyes are detected, consider it a valid face
+                        if (eyes.toArray().length > 0) {
+                            callback.onFaceDetected(faceROI);
+                        }
+                    }
+
+                    callback.onFrameProcessed(frame);
+                }
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, "Error processing video frame", e);
+            }
+        }
+
+        cleanup();
     }
-    //
-    // private final int count = 0;
-    // private final CvSeq sideface = null;
-    // @FXML
-    // public Label ll;
-    // public String classiferName;
-    // public File classifierFile;
-    // public boolean saveFace = false;
-    // public boolean isRecFace = false;
-    // public boolean isOutput = false;
-    // public boolean isOcrMode = false;
-    // public boolean isMotion = false;
-    // public boolean isEyeDetection = false;
-    // public boolean isSmile = false;
-    // public boolean isUpperBody = false;
-    // public boolean isFullBody = false;
-    // public CvMemStorage storage = null;
-    // public ImageView frames2;
-    // public ImageView frames;
-    // public int code;
-    // public int reg;
-    // public int age;
-    // public String fname; //first name
-    // public String Lname; //last name
-    // public String sec; //section
-    // public String name;
-    // //Database database = new Database();
-    // ArrayList<String> user;
-    // FaceRecognition faceRecognizer = new FaceRecognition();
-    // //MotionDetector motionDetector = new MotionDetector();
-    // OpenCVFrameConverter.ToIplImage grabberConverter = new
-    // OpenCVFrameConverter.ToIplImage();
-    // Java2DFrameConverter paintConverter = new Java2DFrameConverter();
-    // ArrayList<String> output = new ArrayList<String>();
-    // int recogniseCode;
-    // private Exception exception = null;
-    // private boolean stop = false;
-    // private CvHaarClassifierCascade classifier = null;
-    // private CvHaarClassifierCascade classifierEye = null;
-    // private CvHaarClassifierCascade classifierSideFace = null;
-    // private CvHaarClassifierCascade classifierUpperBody = null;
-    // private CvHaarClassifierCascade classifierFullBody = null;
-    // private CvHaarClassifierCascade classifierSmile = null;
-    // private CvHaarClassifierCascade classifierEyeglass = null;
-    // private FrameGrabber grabber = null;
-    // private IplImage grabbedImage = null, temp, temp2, grayImage = null,
-    // smallImage = null;
-    // private CvSeq faces = null;
-    // private CvSeq eyes = null;
-    // private CvSeq smile = null;
-    // private CvSeq upperBody = null;
-    // private CvSeq fullBody = null;
-    //
-    // public void init() {
-    // FaceRecognition.init();
-    //
-    // setClassifier("/haar/haarcascade_frontalface_alt.xml");
-    // setClassifierEye("/haar/haarcascade_eye.xml");
-    // setClassifierEyeGlass("/haar/haarcascade_eye_tree_eyeglasses.xml");
-    // setClassifierSideFace("/haar/haarcascade_profileface.xml");
-    // setClassifierFullBody("/haar/haarcascade_fullbody.xml");
-    // setClassifierUpperBody("/haar/haarcascade_upperbody.xml");
-    // setClassifierSmile("/haar/haarcascade_smile.xml");
-    //
-    // }
-    //
-    // public void start() {
-    // try {
-    // new Thread(this).start();
-    // } catch (Exception e) {
-    // if (exception == null) {
-    // exception = e;
-    //
-    // }
-    // }
-    // }
-    //
-    // public void run() {
-    // try {
-    // try {
-    // grabber = OpenCVFrameGrabber.createDefault(0); //parameter 0 default camera ,
-    // 1 for secondary
-    //
-    // grabber.setImageWidth(700);
-    // grabber.setImageHeight(700);
-    // grabber.start();
-    //
-    // grabbedImage = grabberConverter.convert(grabber.grab());
-    //
-    // storage = CvMemStorage.create();
-    // } catch (Exception e) {
-    // if (grabber != null)
-    // grabber.release();
-    // grabber = new OpenCVFrameGrabber(0);
-    // grabber.setImageWidth(700);
-    // grabber.setImageHeight(700);
-    // grabber.start();
-    // grabbedImage = grabberConverter.convert(grabber.grab());
-    //
-    // }
-    // int count = 15;
-    // grayImage = cvCreateImage(cvGetSize(grabbedImage), 8, 1); //converting image
-    // to grayscale
-    //
-    // //reducing the size of the image to speed up the processing
-    // smallImage = cvCreateImage(cvSize(grabbedImage.width() / 4,
-    // grabbedImage.height() / 4), 8, 1);
-    //
-    // stop = false;
-    //
-    // while (!stop && (grabbedImage = grabberConverter.convert(grabber.grab())) !=
-    // null) {
-    //
-    // Frame frame = grabberConverter.convert(grabbedImage);
-    // BufferedImage image = paintConverter.getBufferedImage(frame, 2.2 /
-    // grabber.getGamma());
-    // Graphics2D g2 = image.createGraphics();
-    //
-    // if (faces == null) {
-    // cvClearMemStorage(storage);
-    //
-    // //creating a temporary image
-    // temp = cvCreateImage(cvGetSize(grabbedImage), grabbedImage.depth(),
-    // grabbedImage.nChannels());
-    //
-    // cvCopy(grabbedImage, temp);
-    //
-    // cvCvtColor(grabbedImage, grayImage, CV_BGR2GRAY);
-    // cvResize(grayImage, smallImage, CV_INTER_AREA);
-    //
-    // //cvHaarDetectObjects(image, cascade, storage, scale_factor, min_neighbors,
-    // flags, min_size, max_size)
-    // faces = cvHaarDetectObjects(smallImage, classifier, storage, 1.1, 3,
-    // CV_HAAR_DO_CANNY_PRUNING);
-    // //face detection
-    //
-    // CvPoint org = null;
-    // if (grabbedImage != null) {
-    //
-    // if (isEyeDetection) { //eye detection logic
-    // eyes = cvHaarDetectObjects(smallImage, classifierEye, storage, 1.1, 3,
-    // CV_HAAR_DO_CANNY_PRUNING);
-    //
-    // if (eyes.total() == 0) {
-    // eyes = cvHaarDetectObjects(smallImage, classifierEyeglass, storage, 1.1, 3,
-    // CV_HAAR_DO_CANNY_PRUNING);
-    //
-    // }
-    //
-    // printResult(eyes, eyes.total(), g2);
-    //
-    // }
-    //
-    // if (isFullBody) { //full body detection logic
-    // fullBody = cvHaarDetectObjects(smallImage, classifierFullBody, storage, 1.1,
-    // 3,
-    // CV_HAAR_DO_CANNY_PRUNING);
-    //
-    // if (fullBody.total() > 0) {
-    // printResult(fullBody, fullBody.total(), g2);
-    // }
-    //
-    // }
-    //
-    // if (isUpperBody) {
-    // try {
-    // upperBody = cvHaarDetectObjects(smallImage, classifierUpperBody, storage,
-    // 1.1, 3,
-    // CV_HAAR_DO_CANNY_PRUNING);
-    //
-    // if (upperBody.total() > 0) {
-    // printResult(upperBody, upperBody.total(), g2);
-    // }
-    //
-    // } catch (Exception e) {
-    //
-    // LOGGER.log(Level.SEVERE, e.getMessage(), e);
-    // }
-    // }
-    //
-    // if (isSmile) {
-    // try {
-    // smile = cvHaarDetectObjects(smallImage, classifierSmile, storage, 1.1, 3,
-    // CV_HAAR_DO_CANNY_PRUNING);
-    //
-    // if (smile != null) {
-    // printResult(smile, smile.total(), g2);
-    // }
-    // } catch (Exception e) {
-    //
-    // LOGGER.log(Level.SEVERE, e.getMessage(), e);
-    // }
-    //
-    // }
-    //
-    // if (isOcrMode) {
-    // try {
-    //
-    // OutputStream os = new FileOutputStream("captures.png");
-    // ImageIO.write(image, "PNG", os);
-    // } catch (IOException e) {
-    //
-    // LOGGER.log(Level.SEVERE, e.getMessage(), e);
-    // }
-    // }
-    //
-    // isOcrMode = false;
-    //
-    // if (faces.total() == 0) {
-    // faces = cvHaarDetectObjects(smallImage, classifierSideFace, storage, 1.1, 3,
-    // CV_HAAR_DO_CANNY_PRUNING);
-    // }
-    //
-    // if (faces != null) {
-    // g2.setColor(Color.green);
-    // g2.setStroke(new BasicStroke(2));
-    // int total = faces.total();
-    //
-    // for (int i = 0; i < total; i++) {
-    //
-    // //printing rectange box where face detected frame by frame
-    // CvRect r = new CvRect(cvGetSeqElem(faces, i));
-    // g2.drawRect((r.x() * 4), (r.y() * 4), (r.width() * 4), (r.height() * 4));
-    //
-    // CvRect re = new CvRect((r.x() * 4), r.y() * 4, (r.width() * 4), r.height() *
-    // 4);
-    //
-    // cvSetImageROI(temp, re);
-    //
-    // // File f = new File("captures.png");
-    //
-    // org = new CvPoint(r.x(), r.y());
-    //
-    // if (isRecFace) {
-    // String names = "Unknown Person!";
-    // this.recogniseCode = faceRecognizer.recognize(temp);
-    //
-    // //getting recognised user from the database
-    //
-    // if (recogniseCode != -1) {
-    // //database.init();
-    // user = new ArrayList<String>();
-    // //user = database.getUser(this.recogniseCode);
-    // this.output = user;
-    //
-    // //names = user.get(1) + " " + user.get(2);
-    // }
-    //
-    // //printing recognised person name into the frame
-    // g2.setColor(Color.WHITE);
-    // g2.setFont(new Font("Arial Black", Font.BOLD, 20));
-    //
-    // g2.drawString(names, (int) (r.x() * 6.5), r.y() * 4);
-    //
-    // }
-    //
-    // if (saveFace) { //saving captured face to the disk
-    // //keep it in mind that face code should be unique to each person
-    // String fName = "faces/" + code + "-" + fname + "_" + Lname + "_" + count +
-    // ".jpg";
-    // cvSaveImage(fName, temp);
-    // count++;
-    //
-    // }
-    //
-    // }
-    // this.saveFace = false;
-    // faces = null;
-    // }
-    //
-    // //WritableImage showFrame = SwingFXUtils.toFXImage(image, null);
-    //
-    // javafx.application.Platform.runLater(new Runnable() {
-    //
-    // @Override
-    // public void run() {
-    // // frames.setImage(showFrame);
-    // }
-    // });
-    //
-    // if (isMotion) {
-    // new Thread(() -> {
-    //
-    // try {
-    //
-    // // motionDetector.init(grabbedImage, g2);
-    //
-    // } catch (Exception e) {
-    //
-    // LOGGER.log(Level.SEVERE, e.getMessage(), e);
-    // }
-    //
-    // }).start();
-    //
-    // }
-    // isMotion = false;
-    //
-    // }
-    // cvReleaseImage(temp);
-    // }
-    //
-    // }
-    //
-    // } catch (Exception e) {
-    // if (exception == null) {
-    // exception = e;
-    //
-    // }
-    // }
-    // }
-    //
-    // public void stop() {
-    // stop = true;
-    //
-    // grabbedImage = grayImage = smallImage = null;
-    // try {
-    // grabber.stop();
-    // } catch (org.bytedeco.javacv.FrameGrabber.Exception e) {
-    //
-    // LOGGER.log(Level.SEVERE, e.getMessage(), e);
-    // }
-    // try {
-    // grabber.release();
-    // } catch (org.bytedeco.javacv.FrameGrabber.Exception e) {
-    //
-    // LOGGER.log(Level.SEVERE, e.getMessage(), e);
-    // }
-    // grabber = null;
-    // }
-    //
-    // public void setClassifier(String name) {
-    //
-    // try {
-    //
-    // setClassiferName(name);
-    // classifierFile = Loader.extractResource(classiferName, null, "classifier",
-    // ".xml");
-    //
-    // if (classifierFile == null || classifierFile.length() <= 0) {
-    // throw new IOException("Could not extract \"" + classiferName + "\" from Java
-    // resources.");
-    // }
-    //
-    // // Preload the opencv_objdetect module to work around a known bug.
-    // Loader.load(opencv_objdetect.class);
-    // classifier = new
-    // CvHaarClassifierCascade(cvLoad(classifierFile.getAbsolutePath()));
-    // classifierFile.delete();
-    // if (classifier.isNull()) {
-    // throw new IOException("Could not load the classifier file.");
-    // }
-    //
-    // } catch (Exception e) {
-    // if (exception == null) {
-    // exception = e;
-    //
-    // }
-    // }
-    //
-    // }
-    //
-    // public void setClassifierEye(String name) {
-    //
-    // try {
-    //
-    // classiferName = name;
-    // classifierFile = Loader.extractResource(classiferName, null, "classifier",
-    // ".xml");
-    //
-    // if (classifierFile == null || classifierFile.length() <= 0) {
-    // throw new IOException("Could not extract \"" + classiferName + "\" from Java
-    // resources.");
-    // }
-    //
-    // // Preload the opencv_objdetect module to work around a known bug.
-    // Loader.load(opencv_objdetect.class);
-    // classifierEye = new
-    // CvHaarClassifierCascade(cvLoad(classifierFile.getAbsolutePath()));
-    // classifierFile.delete();
-    // if (classifier.isNull()) {
-    // throw new IOException("Could not load the classifier file.");
-    // }
-    //
-    // } catch (Exception e) {
-    // if (exception == null) {
-    // exception = e;
-    //
-    // }
-    // }
-    //
-    // }
-    //
-    // public void setClassifierSmile(String name) {
-    //
-    // try {
-    //
-    // setClassiferName(name);
-    // classifierFile = Loader.extractResource(classiferName, null, "classifier",
-    // ".xml");
-    //
-    // if (classifierFile == null || classifierFile.length() <= 0) {
-    // throw new IOException("Could not extract \"" + classiferName + "\" from Java
-    // resources.");
-    // }
-    //
-    // // Preload the opencv_objdetect module to work around a known bug.
-    // Loader.load(opencv_objdetect.class);
-    // classifierSmile = new
-    // CvHaarClassifierCascade(cvLoad(classifierFile.getAbsolutePath()));
-    // classifierFile.delete();
-    // if (classifier.isNull()) {
-    // throw new IOException("Could not load the classifier file.");
-    // }
-    //
-    // } catch (Exception e) {
-    // if (exception == null) {
-    // exception = e;
-    //
-    // }
-    // }
-    //
-    // }
-    //
-    // public void printResult(CvSeq data, int total, Graphics2D g2) {
-    // for (int j = 0; j < total; j++) {
-    // CvRect eye = new CvRect(cvGetSeqElem(eyes, j));
-    //
-    // g2.drawOval((eye.x() * 4), (eye.y() * 4), (eye.width() * 4), (eye.height() *
-    // 4));
-    //
-    // }
-    // }
-    //
-    // public void setClassifierSideFace(String name) {
-    //
-    // try {
-    //
-    // classiferName = name;
-    // classifierFile = Loader.extractResource(classiferName, null, "classifier",
-    // ".xml");
-    //
-    // if (classifierFile == null || classifierFile.length() <= 0) {
-    // throw new IOException("Could not extract \"" + classiferName + "\" from Java
-    // resources.");
-    // }
-    //
-    // // Preload the opencv_objdetect module to work around a known bug.
-    // Loader.load(opencv_objdetect.class);
-    // classifierSideFace = new
-    // CvHaarClassifierCascade(cvLoad(classifierFile.getAbsolutePath()));
-    // classifierFile.delete();
-    // if (classifier.isNull()) {
-    // throw new IOException("Could not load the classifier file.");
-    // }
-    //
-    // } catch (Exception e) {
-    // if (exception == null) {
-    // exception = e;
-    //
-    // }
-    // }
-    //
-    // }
-    //
-    // public void setClassifierFullBody(String name) {
-    //
-    // try {
-    //
-    // setClassiferName(name);
-    // classifierFile = Loader.extractResource(classiferName, null, "classifier",
-    // ".xml");
-    //
-    // if (classifierFile == null || classifierFile.length() <= 0) {
-    // throw new IOException("Could not extract \"" + classiferName + "\" from Java
-    // resources.");
-    // }
-    //
-    // // Preload the opencv_objdetect module to work around a known bug.
-    // Loader.load(opencv_objdetect.class);
-    // classifierFullBody = new
-    // CvHaarClassifierCascade(cvLoad(classifierFile.getAbsolutePath()));
-    // classifierFile.delete();
-    // if (classifier.isNull()) {
-    // throw new IOException("Could not load the classifier file.");
-    // }
-    //
-    // } catch (Exception e) {
-    // if (exception == null) {
-    // exception = e;
-    //
-    // }
-    // }
-    //
-    // }
-    //
-    // public void setClassifierEyeGlass(String name) {
-    //
-    // try {
-    //
-    // setClassiferName(name);
-    // classifierFile = Loader.extractResource(classiferName, null, "classifier",
-    // ".xml");
-    //
-    // if (classifierFile == null || classifierFile.length() <= 0) {
-    // throw new IOException("Could not extract \"" + classiferName + "\" from Java
-    // resources.");
-    // }
-    //
-    // // Preload the opencv_objdetect module to work around a known bug.
-    // Loader.load(opencv_objdetect.class);
-    // classifierEyeglass = new
-    // CvHaarClassifierCascade(cvLoad(classifierFile.getAbsolutePath()));
-    // classifierFile.delete();
-    // if (classifier.isNull()) {
-    // throw new IOException("Could not load the classifier file.");
-    // }
-    //
-    // } catch (Exception e) {
-    // if (exception == null) {
-    // exception = e;
-    //
-    // }
-    // }
-    //
-    // }
-    //
-    // public void setClassifierUpperBody(String name) {
-    //
-    // try {
-    //
-    // classiferName = name;
-    // classifierFile = Loader.extractResource(classiferName, null, "classifier",
-    // ".xml");
-    //
-    // if (classifierFile == null || classifierFile.length() <= 0) {
-    // throw new IOException("Could not extract \"" + classiferName + "\" from Java
-    // resources.");
-    // }
-    //
-    // // Preload the opencv_objdetect module to work around a known bug.
-    // Loader.load(opencv_objdetect.class);
-    // classifierUpperBody = new
-    // CvHaarClassifierCascade(cvLoad(classifierFile.getAbsolutePath()));
-    // classifierFile.delete();
-    // if (classifier.isNull()) {
-    // throw new IOException("Could not load the classifier file.");
-    // }
-    //
-    // } catch (Exception e) {
-    // if (exception == null) {
-    // exception = e;
-    //
-    // }
-    // }
-    //
-    // }
-    //
-    // public String getClassiferName() {
-    // return classiferName;
-    // }
-    //
-    // public void setClassiferName(String classiferName) {
-    // this.classiferName = classiferName;
-    // }
-    //
-    // public void setFrames2(ImageView frames2) {
-    // this.frames2 = frames2;
-    // }
-    //
-    // public void setSmile(boolean isSmile) {
-    // this.isSmile = isSmile;
-    // }
-    //
-    // public void setUpperBody(boolean isUpperBody) {
-    // this.isUpperBody = isUpperBody;
-    // }
-    //
-    // public void setFullBody(boolean isFullBody) {
-    // this.isFullBody = isFullBody;
-    // }
-    //
-    // public boolean isEyeDetection() {
-    //
-    // return isEyeDetection;
-    // }
-    //
-    // public void setEyeDetection(boolean isEyeDetection) {
-    // this.isEyeDetection = isEyeDetection;
-    // }
-    //
-    // public boolean getOcrMode() {
-    // return isOcrMode;
-    // }
-    //
-    // public void setOcrMode(boolean isOcrMode) {
-    // this.isOcrMode = isOcrMode;
-    // }
-    //
-    // public void destroy() {
-    // }
-    //
-    // public boolean isMotion() {
-    // return isMotion;
-    // }
-    //
-    // public void setMotion(boolean isMotion) {
-    // this.isMotion = isMotion;
-    // }
-    //
-    // public ArrayList<String> getOutput() {
-    // return output;
-    // }
-    //
-    // public void setOutput(ArrayList<String> output) {
-    // this.output = output;
-    // }
-    //
-    // public void clearOutput() {
-    // this.output.clear();
-    // }
-    //
-    // public int getRecogniseCode() {
-    // return recogniseCode;
-    // }
-    //
-    // public void setRecogniseCode(int recogniseCode) {
-    // this.recogniseCode = recogniseCode;
-    // }
-    //
-    // public int getCode() {
-    // return code;
-    // }
-    //
-    // public void setCode(int code) {
-    // this.code = code;
-    // }
-    //
-    // public String getFname() {
-    // return fname;
-    // }
-    //
-    // public void setFname(String fname) {
-    // this.fname = fname;
-    // }
-    //
-    // public String getLname() {
-    // return Lname;
-    // }
-    //
-    // public void setLname(String lname) {
-    // Lname = lname;
-    // }
-    //
-    // public int getReg() {
-    // return reg;
-    // }
-    //
-    // public void setReg(int reg) {
-    // this.reg = reg;
-    // }
-    //
-    // public int getAge() {
-    // return age;
-    // }
-    //
-    // public void setAge(int age) {
-    // this.age = age;
-    // }
-    //
-    // public String getSec() {
-    // return sec;
-    // }
-    //
-    // public void setSec(String sec) {
-    // this.sec = sec;
-    // }
-    //
-    // public void setFrame(ImageView frame) {
-    // this.frames = frame;
-    // }
-    //
-    // public void setSaveFace(Boolean f) {
-    // this.saveFace = f;
-    // }
-    //
-    // public Boolean getIsRecFace() {
-    // return isRecFace;
-    // }
-    //
-    // public void setIsRecFace(Boolean isRecFace) {
-    // this.isRecFace = isRecFace;
-    // }
-    //
+
+    public void stop() {
+        running.set(false);
+    }
+
+    private void cleanup() {
+        if (videoCapture != null && videoCapture.isOpened()) {
+            videoCapture.release();
+        }
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        cleanup();
+        super.finalize();
+    }
 }

@@ -377,7 +377,8 @@ public class ListFavorisController implements Initializable {
                     // Définissez l'AnchorPane en tant que graphique pour la cellule
                     this.setGraphic(anchorPane);
                     watchButton.setOnAction(event -> {
-                        final FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/EpisodeClient.fxml"));
+                        final FXMLLoader fxmlLoader = new FXMLLoader(
+                                this.getClass().getResource("/ui/series/EpisodeClient.fxml"));
                         final Stage stage = new Stage();
                         try {
                             final Parent root = fxmlLoader.load();

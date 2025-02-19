@@ -208,7 +208,8 @@ public class DashboardResponsableController implements Initializable {
         }
         final String defaultStatut = "Pending";
         // Fetch the responsible cinema by its ID
-        final Responsable_de_cinema responsableDeCinema = (Responsable_de_cinema) this.tfNom.getScene().getWindow().getUserData();
+        final Responsable_de_cinema responsableDeCinema = (Responsable_de_cinema) this.tfNom.getScene().getWindow()
+                .getUserData();
         URI uri = null;
         try {
             final String fullPath = this.image.getImage().getUrl();
@@ -218,7 +219,8 @@ public class DashboardResponsableController implements Initializable {
             DashboardResponsableController.LOGGER.info(e.getMessage());
         }
         // Create the cinema object
-        final Cinema cinema = new Cinema(this.tfNom.getText(), this.tfAdresse.getText(), responsableDeCinema, uri.getPath(),
+        final Cinema cinema = new Cinema(this.tfNom.getText(), this.tfAdresse.getText(), responsableDeCinema,
+                uri.getPath(),
                 defaultStatut);
         // Call the CinemaService to create the cinema
         final CinemaService cs = new CinemaService();
@@ -300,7 +302,8 @@ public class DashboardResponsableController implements Initializable {
             this.comboCinema.getItems().add(c.getNom());
         }
         this.comboCinema.getSelectionModel().selectedItemProperty()
-                .addListener((final ObservableValue<? extends String> observable, final String oldValue, final String newValue) -> {
+                .addListener((final ObservableValue<? extends String> observable, final String oldValue,
+                        final String newValue) -> {
                     if (null != newValue) {
                         final Cinema selectedCinema = acceptedCinemas.stream()
                                 .filter(cinema -> cinema.getNom().equals(newValue))
@@ -354,15 +357,15 @@ public class DashboardResponsableController implements Initializable {
      * on a flow pane.
      *
      * @returns a set of Cinema objects representing the accepted cinemas.
-     * <p>
-     * - `HashSet<Cinema>` represents a set of accepted cinemas in the
-     * system.
-     * - The set contains only cinemas with a "Accepted" status.
-     * - The list of cinemas is collected from the `read()` method of the
-     * `CinemaService`
-     * class.
-     * - The `HBox` objects created for each cinema are added to the
-     * `cinemaFlowPane` component.
+     *          <p>
+     *          - `HashSet<Cinema>` represents a set of accepted cinemas in the
+     *          system.
+     *          - The set contains only cinemas with a "Accepted" status.
+     *          - The list of cinemas is collected from the `read()` method of the
+     *          `CinemaService`
+     *          class.
+     *          - The `HBox` objects created for each cinema are added to the
+     *          `cinemaFlowPane` component.
      */
     private HashSet<Cinema> loadAcceptedCinemas() {
         final CinemaService cinemaService = new CinemaService();
@@ -387,17 +390,17 @@ public class DashboardResponsableController implements Initializable {
      * and returns a set of accepted cinemas.
      *
      * @returns a hash set of Cinema objects that represent accepted cinemas.
-     * <p>
-     * 1/ The output is a `HashSet` containing only cinemas that have a
-     * `Statut` equal
-     * to "Accepted".
-     * 2/ The `HashSet` contains only a subset of the original list of
-     * cinemas, specifically
-     * those that meet the filter condition.
-     * 3/ The size of the `HashSet` is either zero or the number of cinemas
-     * that meet the
-     * filter condition, depending on whether any cinemas have a `Statut`
-     * equal to "Accepted".
+     *          <p>
+     *          1/ The output is a `HashSet` containing only cinemas that have a
+     *          `Statut` equal
+     *          to "Accepted".
+     *          2/ The `HashSet` contains only a subset of the original list of
+     *          cinemas, specifically
+     *          those that meet the filter condition.
+     *          3/ The size of the `HashSet` is either zero or the number of cinemas
+     *          that meet the
+     *          filter condition, depending on whether any cinemas have a `Statut`
+     *          equal to "Accepted".
      */
     private HashSet<Cinema> chargerAcceptedCinemas() {
         final CinemaService cinemaService = new CinemaService();
@@ -427,29 +430,29 @@ public class DashboardResponsableController implements Initializable {
      *               - `adresse_cinema`: the address of the cinema
      *               - `capacite_cinema`: the capacity of the cinema.
      * @returns a Card object containing a Circle and an FontAwesomeIconView,
-     * representing
-     * a cinema.
-     * <p>
-     * - `card`: The root element of the card that contains information
-     * about a cinema.
-     * - `SalleCircle`: A circle with a radius of 30 pixels used to
-     * represent the cinema's
-     * capacity.
-     * - `facebookIcon`: An instance of `FontAwesomeIconView` representing
-     * the Facebook
-     * logo.
-     * - `facebookAnchor`: An instance of `Hyperlink` that displays the
-     * Facebook page
-     * for the cinema.
-     * - `circlefacebook`: A circle with a radius of 30 pixels used to
-     * represent the
-     * Facebook logo.
-     * - `salleIcon`: An instance of `FontAwesomeIconView` representing the
-     * building
-     * icon used to indicate the cinema's location.
-     * - `cardContainer`: The container element that holds the card
-     * containing information
-     * about the cinema.
+     *          representing
+     *          a cinema.
+     *          <p>
+     *          - `card`: The root element of the card that contains information
+     *          about a cinema.
+     *          - `SalleCircle`: A circle with a radius of 30 pixels used to
+     *          represent the cinema's
+     *          capacity.
+     *          - `facebookIcon`: An instance of `FontAwesomeIconView` representing
+     *          the Facebook
+     *          logo.
+     *          - `facebookAnchor`: An instance of `Hyperlink` that displays the
+     *          Facebook page
+     *          for the cinema.
+     *          - `circlefacebook`: A circle with a radius of 30 pixels used to
+     *          represent the
+     *          Facebook logo.
+     *          - `salleIcon`: An instance of `FontAwesomeIconView` representing the
+     *          building
+     *          icon used to indicate the cinema's location.
+     *          - `cardContainer`: The container element that holds the card
+     *          containing information
+     *          about the cinema.
      */
     private HBox createCinemaCard(final Cinema cinema) {
         final HBox cardContainer = new HBox();
@@ -1421,7 +1424,8 @@ public class DashboardResponsableController implements Initializable {
                 this.setOnMouseClicked(event -> {
                     if (2 == event.getClickCount()) {
                         final ComboBox<String> cinemaComboBox = new ComboBox<>();
-                        final HashSet<Cinema> acceptedCinema = DashboardResponsableController.this.chargerAcceptedCinemas();
+                        final HashSet<Cinema> acceptedCinema = DashboardResponsableController.this
+                                .chargerAcceptedCinemas();
                         for (final Cinema cinema : acceptedCinema) {
                             cinemaComboBox.getItems().add(cinema.getNom());
                         }
@@ -1683,23 +1687,23 @@ public class DashboardResponsableController implements Initializable {
      * observable list, and sets it as the items of a view.
      *
      * @returns a list of Seance objects.
-     * <p>
-     * 1/ List<Seance>: This is the type of the returned output, indicating
-     * that it is a
-     * list of `Seance` objects.
-     * 2/ SeanceService: The class used to read the seance data, which is
-     * likely a database
-     * or API call.
-     * 3/ read(): The method called on the `SeanceService` instance to
-     * retrieve the seance
-     * data.
-     * 4/ List<Seance>: The list of `Seance` objects returned by the
-     * `read()` method.
-     * 5/ ObservableList<Seance>: An observable list of `Seance` objects,
-     * which means
-     * that the list can be modified through operations such as adding,
-     * removing, or
-     * modifying elements.
+     *          <p>
+     *          1/ List<Seance>: This is the type of the returned output, indicating
+     *          that it is a
+     *          list of `Seance` objects.
+     *          2/ SeanceService: The class used to read the seance data, which is
+     *          likely a database
+     *          or API call.
+     *          3/ read(): The method called on the `SeanceService` instance to
+     *          retrieve the seance
+     *          data.
+     *          4/ List<Seance>: The list of `Seance` objects returned by the
+     *          `read()` method.
+     *          5/ ObservableList<Seance>: An observable list of `Seance` objects,
+     *          which means
+     *          that the list can be modified through operations such as adding,
+     *          removing, or
+     *          modifying elements.
      */
     private List<Seance> loadSeances() {
         final SeanceService seanceService = new SeanceService();
@@ -1831,7 +1835,7 @@ public class DashboardResponsableController implements Initializable {
      */
     @FXML
     void AfficherFilmResponsable(final ActionEvent event) throws IOException {
-        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/InterfaceFilm.fxml"));
+        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/films/InterfaceFilm.fxml"));
         final Parent root = loader.load();
         final Scene scene = new Scene(root);
         final Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();

@@ -712,7 +712,8 @@ INSERT INTO `produit` (`id_produit`, `nom`, `prix`, `image`, `description`, `qua
 
 CREATE TABLE `ratingcinema` (
   `id_cinema` int(11) NOT NULL,
-  `id_user` int(11) NOT NULL
+  `id_user` int(11) NOT NULL,
+  `rate` int(3) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------

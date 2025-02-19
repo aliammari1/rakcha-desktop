@@ -169,7 +169,8 @@ public class EpisodeClientController implements Initializable {
                     imageView.setPreserveRatio(true);
                     this.setText("\n   Title :" + item.getTitre() + "\n  Number: " + item.getNumeroepisode()
                             + "\n   Season : " + item.getSaison());
-                    this.setStyle("-fx-font-size: 14; -fx-font-family: 'Arial'; -fx-font-weight: bold;"); // Police en gras
+                    this.setStyle("-fx-font-size: 14; -fx-font-family: 'Arial'; -fx-font-weight: bold;"); // Police en
+                                                                                                          // gras
                     this.setGraphic(imageView);
                     EpisodeClientController.this.idep = item.getIdepisode();
                 }
@@ -254,7 +255,8 @@ public class EpisodeClientController implements Initializable {
      */
     @FXML
     public void afficherserie(final MouseEvent event) throws IOException {
-        final Parent root = FXMLLoader.load(Objects.requireNonNull(this.getClass().getResource("/SeriesClient.fxml")));
+        final Parent root = FXMLLoader
+                .load(Objects.requireNonNull(this.getClass().getResource("/ui/series/SeriesClient.fxml")));
         final Scene scene = new Scene(root);
         final Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+
+<AnchorPane prefHeight="474.0" prefWidth="864.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.users.AdminDashboardController">
+    <BorderPane prefHeight="474.0" prefWidth="864.0" styleClass="top-form" stylesheets="@styles/dashbord.css">
+        <top>
+            <AnchorPane prefHeight="40.0" prefWidth="1291.0" BorderPane.alignment="CENTER" />
+        </top>
+        <left>
+            <fx:include source="../adminSideBar.fxml" />
+        </left>
+        <center>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                <AnchorPane layoutX="265.0" layoutY="83.0" prefHeight="686.0" prefWidth="1050.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+
+                    <TableView fx:id="userTableView" layoutX="26.0" layoutY="37.0" prefHeight="200.0" prefWidth="775.0" />
+                    <Label layoutX="233.0" layoutY="392.0" text="nom" />
+                    <TextField fx:id="firstNameTextField" layoutX="233.0" layoutY="419.0" prefHeight="26.0" prefWidth="94.0" />
+                    <TextField fx:id="lastNameTextField" layoutX="233.0" layoutY="354.0" prefHeight="26.0" prefWidth="94.0" />
+                    <Label layoutX="236.0" layoutY="326.0" text="prenom" />
+                    <Label layoutX="222.0" layoutY="269.0" text="numero de telephone" />
+                    <TextField fx:id="phoneNumberTextField" layoutX="233.0" layoutY="287.0" prefHeight="26.0" prefWidth="94.0" />
+                    <TextField fx:id="passwordTextField" layoutX="361.0" layoutY="419.0" prefHeight="26.0" prefWidth="109.0" />
+                    <Label layoutX="364.0" layoutY="401.0" text="password" />
+                    <Label layoutX="501.0" layoutY="401.0" text="role" />
+                    <TextField fx:id="adresseTextField" layoutX="497.0" layoutY="354.0" prefHeight="26.0" prefWidth="94.0" />
+                    <Label layoutX="491.0" layoutY="335.0" text="adresse" />
+                    <Label layoutX="494.0" layoutY="269.0" text="date de naissance" />
+                    <DatePicker fx:id="dateDeNaissanceDatePicker" layoutX="494.0" layoutY="287.0" prefHeight="26.0" prefWidth="94.0" />
+                    <TextField fx:id="emailTextField" layoutX="360.0" layoutY="285.0" prefHeight="26.0" prefWidth="110.0" />
+                    <Label layoutX="361.0" layoutY="269.0" text="email" />
+                    <Label layoutX="652.0" layoutY="241.0" text="image" />
+                    <ImageView fx:id="photoDeProfilImageView" fitHeight="150.0" fitWidth="200.0" layoutX="636.0" layoutY="260.0" pickOnBounds="true" preserveRatio="true" />
+                    <Button layoutX="710.0" layoutY="419.0" mnemonicParsing="false" onAction="#importImage" styleClass="sale" text="import" />
+                    <ComboBox fx:id="roleComboBox" layoutX="501.0" layoutY="419.0" prefHeight="26.0" prefWidth="94.0" />
+                    <Button layoutX="55.0" layoutY="274.0" mnemonicParsing="false" onAction="#addAdmin" styleClass="sale" text="add" />
+                    <Button layoutX="53.0" layoutY="322.0" mnemonicParsing="false" onAction="#clearTextFields" styleClass="sale" text="clear" />
+                    <Button layoutX="33.0" layoutY="14.0" mnemonicParsing="false" onAction="#generatePDF" styleClass="sale" text="generate PDF" />
+                </AnchorPane>
+            </AnchorPane>
+        </center>
+    </BorderPane>
+</AnchorPane>

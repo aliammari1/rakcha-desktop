@@ -64,7 +64,7 @@ public class ResponsableDeCinemaSideBarController implements Initializable {
     @FXML
     void switchToActor(final ActionEvent event) {
         try {
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/InterfaceActor.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/films/InterfaceActor.fxml"));
             final ActorController seanceController = loader.getController();
             // seanceController.setData(resp);
             final Parent root = loader.load();
@@ -76,7 +76,8 @@ public class ResponsableDeCinemaSideBarController implements Initializable {
     }
 
     /**
-     * Loads an FXML file named "statistiques.fxml" using the `FXMLLoader` class,
+     * Loads an FXML file named "/ui/cinemas/statistiques.fxml" using the `FXMLLoader`
+     * class,
      * creates
      * a new controller instance from the loaded file, and sets the scene of a stage
      * to
@@ -91,7 +92,7 @@ public class ResponsableDeCinemaSideBarController implements Initializable {
     @FXML
     void switchstatestique(final ActionEvent event) {
         try {
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/statistiques.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/cinemas/statistiques.fxml"));
             final CinemaStatisticsController seanceController = loader.getController();
             // seanceController.setData(resp);
             final Parent root = loader.load();
@@ -103,7 +104,8 @@ public class ResponsableDeCinemaSideBarController implements Initializable {
     }
 
     /**
-     * Loads and displays a FXML file named "DashboardResponsableCinema.fxml" in a
+     * Loads and displays a FXML file named "/ui/cinemas/DashboardResponsableCinema.fxml" in
+     * a
      * JavaFX
      * stage, replacing the existing content.
      *
@@ -114,7 +116,7 @@ public class ResponsableDeCinemaSideBarController implements Initializable {
      */
     @FXML
     void switchToCinema(final ActionEvent event) throws IOException {
-        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/DashboardResponsableCinema.fxml"));
+        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/cinemas/DashboardResponsableCinema.fxml"));
         final Parent root = loader.load();
         final Stage stage = (Stage) this.cinemaButton.getScene().getWindow();
         stage.setScene(new Scene(root));
@@ -132,7 +134,7 @@ public class ResponsableDeCinemaSideBarController implements Initializable {
     @FXML
     void switchToFilmCategorie(final ActionEvent event) {
         try {
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/InterfaceCategory.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/films/InterfaceCategory.fxml"));
             final CategorieController seanceController = loader.getController();
             // seanceController.setData(resp);
             final Parent root = loader.load();
@@ -158,7 +160,7 @@ public class ResponsableDeCinemaSideBarController implements Initializable {
     @FXML
     void switchToMovies(final ActionEvent event) {
         try {
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/InterfaceFilm.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/films/InterfaceFilm.fxml"));
             final FilmController seanceController = loader.getController();
             // seanceController.setData(resp);
             final Parent root = loader.load();
@@ -184,7 +186,8 @@ public class ResponsableDeCinemaSideBarController implements Initializable {
     @FXML
     void switchToSeances(final ActionEvent event) {
         try {
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/DashboardResponsableCinema.fxml"));
+            final FXMLLoader loader = new FXMLLoader(
+                    this.getClass().getResource("/ui/cinemas/DashboardResponsableCinema.fxml"));
             final Parent root = loader.load();
             final Stage stage = (Stage) this.seanceButton.getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -232,7 +235,7 @@ public class ResponsableDeCinemaSideBarController implements Initializable {
     @FXML
     void switchToLogout(final ActionEvent event) {
         try {
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/Login.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/users/Login.fxml"));
             final Parent root = loader.load();
             final Stage stage = (Stage) this.logoutButton.getScene().getWindow();
             stage.setUserData(null);
@@ -256,7 +259,7 @@ public class ResponsableDeCinemaSideBarController implements Initializable {
     @FXML
     void switchToProfile(final ActionEvent event) {
         try {
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/Profile.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/users/Profile.fxml"));
             final Parent root = loader.load();
             final Stage stage = (Stage) this.profileButton.getScene().getWindow();
             stage.setScene(new Scene(root));

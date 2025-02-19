@@ -30,7 +30,7 @@ public class ResetPasswordController {
         if (this.newPass.getText().equals(this.pass.getText())) {
             try {
                 // new UserService().forgetPassword();
-                final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/Login.fxml"));
+                final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/users/Login.fxml"));
                 final Parent root = loader.load();
                 final Stage stage = (Stage) this.newPass.getScene().getWindow();
                 stage.setScene(new Scene(root));

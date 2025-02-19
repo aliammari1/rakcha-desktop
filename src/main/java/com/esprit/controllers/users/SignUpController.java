@@ -59,6 +59,16 @@ public class SignUpController {
     private TextField prenomTextField;
     @FXML
     private ComboBox<String> roleComboBox;
+    @FXML
+    private Button loginButton; // Add this field
+
+    @FXML
+    void switchToLogin(ActionEvent event) throws IOException {
+        Stage stage = (Stage) loginButton.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/users/Login.fxml"));
+        Parent root = loader.load();
+        stage.setScene(new Scene(root));
+    }
 
     @FXML
     void initialize() {
@@ -94,7 +104,8 @@ public class SignUpController {
         });
         this.nomTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void changed(final ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
+            public void changed(final ObservableValue<? extends String> observable, final String oldValue,
+                    final String newValue) {
                 final Validator validator = new Validator();
                 validator.createCheck()
                         .dependsOn("firstName", SignUpController.this.nomTextField.textProperty())
@@ -109,11 +120,12 @@ public class SignUpController {
                         .decorates(SignUpController.this.nomTextField)
                         .immediate();
                 final Window window = SignUpController.this.nomTextField.getScene().getWindow();
-                final Bounds bounds = SignUpController.this.nomTextField.localToScreen(SignUpController.this.nomTextField.getBoundsInLocal());
+                final Bounds bounds = SignUpController.this.nomTextField
+                        .localToScreen(SignUpController.this.nomTextField.getBoundsInLocal());
                 SignUpController.this.nomTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
                     public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                                        final String newValue) {
+                            final String newValue) {
                         if (validator.containsErrors()) {
                             tooltip.setText(validator.createStringBinding().getValue());
                             tooltip.setStyle("-fx-background-color: #f00;");
@@ -141,7 +153,8 @@ public class SignUpController {
         });
         this.prenomTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void changed(final ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
+            public void changed(final ObservableValue<? extends String> observable, final String oldValue,
+                    final String newValue) {
                 final Validator validator = new Validator();
                 validator.createCheck()
                         .dependsOn("firstName", SignUpController.this.prenomTextField.textProperty())
@@ -156,11 +169,12 @@ public class SignUpController {
                         .decorates(SignUpController.this.prenomTextField)
                         .immediate();
                 final Window window = SignUpController.this.prenomTextField.getScene().getWindow();
-                final Bounds bounds = SignUpController.this.prenomTextField.localToScreen(SignUpController.this.prenomTextField.getBoundsInLocal());
+                final Bounds bounds = SignUpController.this.prenomTextField
+                        .localToScreen(SignUpController.this.prenomTextField.getBoundsInLocal());
                 SignUpController.this.prenomTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
                     public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                                        final String newValue) {
+                            final String newValue) {
                         if (validator.containsErrors()) {
                             tooltip.setText(validator.createStringBinding().getValue());
                             tooltip.setStyle("-fx-background-color: #f00;");
@@ -174,21 +188,23 @@ public class SignUpController {
                         }
                     }
                 });
-                SignUpController.this.prenomTextField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-                    @Override
-                    public void handle(final KeyEvent event) {
-                        if (KeyCode.ENTER == event.getCode()) {
-                            if (validator.containsErrors()) {
-                                event.consume();
+                SignUpController.this.prenomTextField.addEventFilter(KeyEvent.KEY_PRESSED,
+                        new EventHandler<KeyEvent>() {
+                            @Override
+                            public void handle(final KeyEvent event) {
+                                if (KeyCode.ENTER == event.getCode()) {
+                                    if (validator.containsErrors()) {
+                                        event.consume();
+                                    }
+                                }
                             }
-                        }
-                    }
-                });
+                        });
             }
         });
         this.adresseTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void changed(final ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
+            public void changed(final ObservableValue<? extends String> observable, final String oldValue,
+                    final String newValue) {
                 final Validator validator = new Validator();
                 validator.createCheck()
                         .dependsOn("firstName", SignUpController.this.adresseTextField.textProperty())
@@ -203,11 +219,12 @@ public class SignUpController {
                         .decorates(SignUpController.this.adresseTextField)
                         .immediate();
                 final Window window = SignUpController.this.adresseTextField.getScene().getWindow();
-                final Bounds bounds = SignUpController.this.adresseTextField.localToScreen(SignUpController.this.adresseTextField.getBoundsInLocal());
+                final Bounds bounds = SignUpController.this.adresseTextField
+                        .localToScreen(SignUpController.this.adresseTextField.getBoundsInLocal());
                 SignUpController.this.adresseTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
                     public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                                        final String newValue) {
+                            final String newValue) {
                         if (validator.containsErrors()) {
                             tooltip.setText(validator.createStringBinding().getValue());
                             tooltip.setStyle("-fx-background-color: #f00;");
@@ -221,21 +238,23 @@ public class SignUpController {
                         }
                     }
                 });
-                SignUpController.this.adresseTextField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-                    @Override
-                    public void handle(final KeyEvent event) {
-                        if (KeyCode.ENTER == event.getCode()) {
-                            if (validator.containsErrors()) {
-                                event.consume();
+                SignUpController.this.adresseTextField.addEventFilter(KeyEvent.KEY_PRESSED,
+                        new EventHandler<KeyEvent>() {
+                            @Override
+                            public void handle(final KeyEvent event) {
+                                if (KeyCode.ENTER == event.getCode()) {
+                                    if (validator.containsErrors()) {
+                                        event.consume();
+                                    }
+                                }
                             }
-                        }
-                    }
-                });
+                        });
             }
         });
         this.emailTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void changed(final ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
+            public void changed(final ObservableValue<? extends String> observable, final String oldValue,
+                    final String newValue) {
                 final Validator validator = new Validator();
                 validator.createCheck()
                         .dependsOn("firstName", SignUpController.this.emailTextField.textProperty())
@@ -253,16 +272,18 @@ public class SignUpController {
                         .decorates(SignUpController.this.emailTextField)
                         .immediate();
                 final Window window = SignUpController.this.emailTextField.getScene().getWindow();
-                final Bounds bounds = SignUpController.this.emailTextField.localToScreen(SignUpController.this.emailTextField.getBoundsInLocal());
+                final Bounds bounds = SignUpController.this.emailTextField
+                        .localToScreen(SignUpController.this.emailTextField.getBoundsInLocal());
                 SignUpController.this.emailTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
                     public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                                        final String newValue) {
+                            final String newValue) {
                         if (validator.containsErrors()) {
                             tooltip.setText(validator.createStringBinding().getValue());
                             tooltip.setStyle("-fx-background-color: #f00;");
                             SignUpController.this.emailTextField.setTooltip(tooltip);
-                            SignUpController.this.emailTextField.getTooltip().show(window, bounds.getMinX() - 10, bounds.getMinY() + 30);
+                            SignUpController.this.emailTextField.getTooltip().show(window, bounds.getMinX() - 10,
+                                    bounds.getMinY() + 30);
                         } else {
                             if (null != emailTextField.getTooltip()) {
                                 SignUpController.this.emailTextField.getTooltip().hide();
@@ -284,7 +305,8 @@ public class SignUpController {
         });
         this.passwordTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void changed(final ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
+            public void changed(final ObservableValue<? extends String> observable, final String oldValue,
+                    final String newValue) {
                 final Validator validator = new Validator();
                 validator.createCheck()
                         .dependsOn("firstName", SignUpController.this.passwordTextField.textProperty())
@@ -299,11 +321,12 @@ public class SignUpController {
                         .decorates(SignUpController.this.passwordTextField)
                         .immediate();
                 final Window window = SignUpController.this.passwordTextField.getScene().getWindow();
-                final Bounds bounds = SignUpController.this.passwordTextField.localToScreen(SignUpController.this.passwordTextField.getBoundsInLocal());
+                final Bounds bounds = SignUpController.this.passwordTextField
+                        .localToScreen(SignUpController.this.passwordTextField.getBoundsInLocal());
                 SignUpController.this.passwordTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
                     public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                                        final String newValue) {
+                            final String newValue) {
                         if (validator.containsErrors()) {
                             tooltip.setText(validator.createStringBinding().getValue());
                             tooltip.setStyle("-fx-background-color: #f00;");
@@ -317,21 +340,23 @@ public class SignUpController {
                         }
                     }
                 });
-                SignUpController.this.passwordTextField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-                    @Override
-                    public void handle(final KeyEvent event) {
-                        if (KeyCode.ENTER == event.getCode()) {
-                            if (validator.containsErrors()) {
-                                event.consume();
+                SignUpController.this.passwordTextField.addEventFilter(KeyEvent.KEY_PRESSED,
+                        new EventHandler<KeyEvent>() {
+                            @Override
+                            public void handle(final KeyEvent event) {
+                                if (KeyCode.ENTER == event.getCode()) {
+                                    if (validator.containsErrors()) {
+                                        event.consume();
+                                    }
+                                }
                             }
-                        }
-                    }
-                });
+                        });
             }
         });
         this.num_telephoneTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void changed(final ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
+            public void changed(final ObservableValue<? extends String> observable, final String oldValue,
+                    final String newValue) {
                 final Validator validator = new Validator();
                 validator.createCheck()
                         .dependsOn("firstName", SignUpController.this.num_telephoneTextField.textProperty())
@@ -349,16 +374,18 @@ public class SignUpController {
                         .decorates(SignUpController.this.num_telephoneTextField)
                         .immediate();
                 final Window window = SignUpController.this.num_telephoneTextField.getScene().getWindow();
-                final Bounds bounds = SignUpController.this.num_telephoneTextField.localToScreen(SignUpController.this.num_telephoneTextField.getBoundsInLocal());
+                final Bounds bounds = SignUpController.this.num_telephoneTextField
+                        .localToScreen(SignUpController.this.num_telephoneTextField.getBoundsInLocal());
                 SignUpController.this.num_telephoneTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
                     public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                                        final String newValue) {
+                            final String newValue) {
                         if (validator.containsErrors()) {
                             tooltip.setText(validator.createStringBinding().getValue());
                             tooltip.setStyle("-fx-background-color: #f00;");
                             SignUpController.this.num_telephoneTextField.setTooltip(tooltip);
-                            SignUpController.this.num_telephoneTextField.getTooltip().show(window, bounds.getMinX() - 10,
+                            SignUpController.this.num_telephoneTextField.getTooltip().show(window,
+                                    bounds.getMinX() - 10,
                                     bounds.getMinY() + 30);
                         } else {
                             if (null != num_telephoneTextField.getTooltip()) {
@@ -367,22 +394,32 @@ public class SignUpController {
                         }
                     }
                 });
-                SignUpController.this.num_telephoneTextField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-                    @Override
-                    public void handle(final KeyEvent event) {
-                        if (KeyCode.ENTER == event.getCode()) {
-                            if (validator.containsErrors()) {
-                                event.consume();
+                SignUpController.this.num_telephoneTextField.addEventFilter(KeyEvent.KEY_PRESSED,
+                        new EventHandler<KeyEvent>() {
+                            @Override
+                            public void handle(final KeyEvent event) {
+                                if (KeyCode.ENTER == event.getCode()) {
+                                    if (validator.containsErrors()) {
+                                        event.consume();
+                                    }
+                                }
                             }
-                        }
-                    }
-                });
+                        });
             }
         });
         final List<String> roleList = Arrays.asList("client", "responsable de cinema");
         for (final String role : roleList) {
             this.roleComboBox.getItems().add(role);
         }
+
+        // Add event handler for login button
+        loginButton.setOnAction(event -> {
+            try {
+                switchToLogin(event);
+            } catch (IOException e) {
+                LOGGER.log(Level.SEVERE, "Error switching to login view", e);
+            }
+        });
     }
 
     /**
@@ -432,7 +469,8 @@ public class SignUpController {
         final LocalDate dateDeNaissance = this.dateDeNaissanceDatePicker.getValue();
         if (nom.isEmpty() || prenom.isEmpty() || num_telephone.isEmpty() || password.isEmpty()
                 || role.isEmpty() || email.isEmpty() || null == dateDeNaissance) {
-            final Alert alert = new Alert(Alert.AlertType.ERROR, "Please fill in all the required fields", ButtonType.CLOSE);
+            final Alert alert = new Alert(Alert.AlertType.ERROR, "Please fill in all the required fields",
+                    ButtonType.CLOSE);
             alert.show();
             return;
         }
@@ -464,7 +502,7 @@ public class SignUpController {
         final UserService userService = new UserService();
         userService.create(user);
         final Stage stage = (Stage) this.nomTextField.getScene().getWindow();
-        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/Profile.fxml"));
+        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/users/Profile.fxml"));
         final Parent root = loader.load();
         final ProfileController profileController = loader.getController();
         profileController.setData(user);

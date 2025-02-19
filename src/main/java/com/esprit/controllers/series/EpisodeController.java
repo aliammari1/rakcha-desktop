@@ -391,8 +391,8 @@ public class EpisodeController {
      *
      * @param file file to be checked for being an image file.
      * @returns a boolean value indicating whether the provided file is an image
-     * file or
-     * not.
+     *          file or
+     *          not.
      */
     private boolean isImageFile(final File file) {
         try {
@@ -440,8 +440,8 @@ public class EpisodeController {
      *
      * @param file File that needs to be checked for being a video file.
      * @returns a boolean value indicating whether the provided file is an MP4, AVI,
-     * or
-     * MKV video file.
+     *          or
+     *          MKV video file.
      */
     private boolean isVideoFile(final File file) {
         final String fileName = file.getName();
@@ -458,8 +458,8 @@ public class EpisodeController {
      *
      * @param s String to be parsed as an integer.
      * @returns a boolean value indicating whether the given string can be parsed as
-     * an
-     * integer.
+     *          an
+     *          integer.
      */
     boolean isStringInt(final String s) {
         try {
@@ -476,8 +476,8 @@ public class EpisodeController {
      * an error message and returns `false`.
      *
      * @returns `true` if a title is provided, otherwise it returns `false` and
-     * provides
-     * an error message.
+     *          provides
+     *          an error message.
      */
     boolean titrecheck() {
         if ("" != titreF.getText()) {
@@ -496,8 +496,8 @@ public class EpisodeController {
      * message and returns `false`.
      *
      * @returns `true` if the input string is not empty and can be converted to an
-     * integer,
-     * otherwise it returns `false`.
+     *          integer,
+     *          otherwise it returns `false`.
      */
     boolean seasoncheck() {
         final String numero = this.saisonF.getText();
@@ -514,7 +514,7 @@ public class EpisodeController {
      * returns `false`.
      *
      * @returns a boolean value indicating whether a picture has been selected or
-     * not.
+     *          not.
      */
     boolean picturechek() {
         if ("" != imgpath) {
@@ -549,7 +549,7 @@ public class EpisodeController {
      * UI if it's invalid.
      *
      * @returns a boolean value indicating whether a valid video path has been
-     * provided.
+     *          provided.
      */
     boolean videocheck() {
         if ("" != videopath) {
@@ -568,9 +568,9 @@ public class EpisodeController {
      * returns `false`.
      *
      * @returns `true` if a value is provided for `serieF.getValue()`, otherwise it
-     * returns
-     * `false` with an error message indicating that a serie must be
-     * selected.
+     *          returns
+     *          `false` with an error message indicating that a serie must be
+     *          selected.
      */
     boolean seriecheck() {
         if (null != serieF.getValue()) {
@@ -649,7 +649,8 @@ public class EpisodeController {
                     if (Objects.equals(s.getNom(), this.serieF.getValue())) {
                         episode.setIdserie(s.getIdserie());
                         // Envoi d'un SMS après avoir ajouté l'épisode avec succès
-                        final String message = " Episode " + episode.getNumeroepisode() + " Season " + episode.getSaison()
+                        final String message = " Episode " + episode.getNumeroepisode() + " Season "
+                                + episode.getSaison()
                                 + "from your series : " + s.getNom() + " is now available!";
                         this.sendSMS("+21653775010", message);
                         break; // Sortir de la boucle une fois la série trouvée
@@ -674,7 +675,8 @@ public class EpisodeController {
      */
     @FXML
     void Ocategories(final ActionEvent event) throws IOException {
-        final Parent root = FXMLLoader.load(Objects.requireNonNull(this.getClass().getResource("/Categorie-view.fxml")));
+        final Parent root = FXMLLoader
+                .load(Objects.requireNonNull(this.getClass().getResource("/ui/series/Categorie-view.fxml")));
         final Scene scene = new Scene(root);
         final Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
@@ -692,7 +694,7 @@ public class EpisodeController {
      */
     @FXML
     void Oseries(final ActionEvent event) throws IOException {
-        final Parent root = FXMLLoader.load(Objects.requireNonNull(this.getClass().getResource("/Serie-view.fxml")));
+        final Parent root = FXMLLoader.load(Objects.requireNonNull(this.getClass().getResource("/ui/series/Serie-view.fxml")));
         final Scene scene = new Scene(root);
         final Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
@@ -700,7 +702,7 @@ public class EpisodeController {
     }
 
     /**
-     * Loads and displays an FXML file named "Episode-view.fxml" in a JavaFX
+     * Loads and displays an FXML file named "/ui/series/Episode-view.fxml" in a JavaFX
      * application.
      *
      * @param event event that triggered the method execution, providing the
@@ -709,7 +711,8 @@ public class EpisodeController {
      */
     @FXML
     void Oepisode(final ActionEvent event) throws IOException {
-        final Parent root = FXMLLoader.load(Objects.requireNonNull(this.getClass().getResource("/Episode-view.fxml")));
+        final Parent root = FXMLLoader
+                .load(Objects.requireNonNull(this.getClass().getResource("/ui/series/Episode-view.fxml")));
         final Scene scene = new Scene(root);
         final Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);

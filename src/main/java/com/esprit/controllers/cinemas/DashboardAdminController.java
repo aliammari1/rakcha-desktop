@@ -1,13 +1,16 @@
 package com.esprit.controllers.cinemas;
 
 import com.esprit.models.cinemas.Cinema;
+import com.esprit.models.films.Film;
 import com.esprit.services.cinemas.CinemaService;
+import com.esprit.services.films.FilmcinemaService;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -16,13 +19,17 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
@@ -68,7 +75,9 @@ public class DashboardAdminController {
      */
     @FXML
     void afficherCinemas() {
-        this.cinemasList.setVisible(true);
+        if (cinemasList != null) {
+            cinemasList.setVisible(true);
+        }
         // Appelée lorsque le fichier FXML est chargé
         // Configurer les cellules des colonnes pour afficher les données
         this.colCinema.setCellValueFactory(new PropertyValueFactory<>("nom"));
@@ -94,109 +103,123 @@ public class DashboardAdminController {
         this.colStatut.setCellValueFactory(new PropertyValueFactory<>("Statut"));
         // Configurer la cellule de la colonne Action
         this.colAction.setCellFactory((TableColumn<Cinema, Void> param) -> new TableCell<Cinema, Void>() {
-                    private final Button acceptButton;
-                    private final Button refuseButton;
-                    private final Button showMoviesButton;
+            private final Button acceptButton = new Button("Accepter");
+            private final Button refuseButton = new Button("Refuser");
+            private final Button showMoviesButton = new Button("Show Movies");
 
-                    {
-                        this.acceptButton = new Button("Accepter");
-                        this.refuseButton = new Button("Refuser");
-                        this.showMoviesButton = new Button("Show Movies");
+            {
+                acceptButton.getStyleClass().add("delete-btn");
+                refuseButton.getStyleClass().add("delete-btn");
+                showMoviesButton.getStyleClass().add("movies-btn");
 
-                        this.acceptButton.getStyleClass().add("delete-btn");
-                        this.acceptButton.setOnAction(event -> {
-                            final Cinema cinema = this.getTableView().getItems().get(this.getIndex());
-                            // Mettre à jour le statut du cinéma en "Accepted"
-                            cinema.setStatut("Accepted");
-                            // Mettre à jour le statut dans la base de données
-                            final CinemaService cinemaService = new CinemaService();
-                            cinemaService.update(cinema);
-                            // Rafraîchir la TableView pour refléter les changements
-                            this.getTableView().refresh();
-                        });
-                        this.refuseButton.getStyleClass().add("delete-btn");
-                        this.refuseButton.setOnAction(event -> {
-                            final Cinema cinema = this.getTableView().getItems().get(this.getIndex());
-                            final CinemaService cinemaService = new CinemaService();
-                            cinemaService.delete(cinema);
-                            this.getTableView().getItems().remove(cinema);
-                        });
-                        this.showMoviesButton.getStyleClass().add("delete-btn");
-                        this.showMoviesButton.setOnAction(event -> {
-                        });
-                    }
+                acceptButton.setOnAction(event -> {
+                    Cinema cinema = getTableView().getItems().get(getIndex());
+                    cinema.setStatut("Accepted");
+                    CinemaService cinemaService = new CinemaService();
+                    cinemaService.update(cinema);
+                    getTableView().refresh();
+                });
 
-                    /**
-                     * Updates the graphic displayed by an item in a table based on its empty status
-                     * and
-                     * the status of the associated cinema.
-                     *
-                     * @param item  item being updated in the `TableView`, which is passed to the
-                     *              superclass's
-                     *              `updateItem` method for further processing before displaying the
-                     *              appropriate button
-                     *              or buttons.
-                     *
-                     *              - `item`: A Void object representing an item to be updated.
-                     *              - `empty`: A boolean indicating whether the item is empty or
-                     *              not.
-                     *
-                     * @param empty whether the line is empty or not, and controls the display of
-                     *              buttons
-                     *              for accepting or refusing the movie.
-                     */
-                    @Override
-                    protected void updateItem(final Void item, final boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty) {
-                            this.setGraphic(null);
-                        } else {
-                            // Récupérer le cinéma associé à cette ligne
-                            final Cinema cinema = this.getTableView().getItems().get(this.getIndex());
-                            if ("Accepted".equals(cinema.getStatut())) {
-                                // Afficher le bouton "Show Movies" si le statut est "Accepted"
-                                this.setGraphic(this.showMoviesButton);
-                            } else {
-                                // Afficher les boutons "Accepter" et "Refuser" si le statut est "En attente"
-                                this.setGraphic(new HBox(this.acceptButton, this.refuseButton));
-                            }
-                        }
+                refuseButton.setOnAction(event -> {
+                    Cinema cinema = getTableView().getItems().get(getIndex());
+                    cinema.setStatut("Refused");
+                    CinemaService cinemaService = new CinemaService();
+                    cinemaService.update(cinema);
+                    getTableView().refresh();
+                });
+
+                showMoviesButton.setOnAction(event -> {
+                    Cinema cinema = getTableView().getItems().get(getIndex());
+                    showFilmsInModal(cinema);
+                });
+            }
+
+            @Override
+            protected void updateItem(final Void item, final boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    this.setGraphic(null);
+                } else {
+                    // Récupérer le cinéma associé à cette ligne
+                    final Cinema cinema = this.getTableView().getItems().get(this.getIndex());
+                    if ("Accepted".equals(cinema.getStatut())) {
+                        // Afficher le bouton "Show Movies" si le statut est "Accepted"
+                        this.setGraphic(this.showMoviesButton);
+                    } else {
+                        // Afficher les boutons "Accepter" et "Refuser" si le statut est "En attente"
+                        this.setGraphic(new HBox(10, this.acceptButton, this.refuseButton));
                     }
                 }
-                /**
-                 * Generates a `TableCell` that displays buttons for accepting or refusing a
-                 * movie.
-                 * When a button is pressed, it updates the cinema's status and refreshes the
-                 * table
-                 * view to reflect the change.
-                 *
-                 * @param param `TableColumn<Cinema, Void>` object that triggers the function,
-                 *              providing
-                 *              the necessary information for the cell to render properly.
-                 *
-                 *              - `param`: A `TableColumn` object that represents the column
-                 *              being edited.
-                 *              - `getIndex()`: Returns the row index of the item being edited
-                 *              in the table.
-                 *
-                 * @returns a `TableCell` object that displays buttons for accepting or refusing
-                 *          movies based on the cinema's status.
-                 *
-                 *          - The returned output is an instance of `TableCell`, which
-                 *          represents a cell in
-                 *          a table.
-                 *          - The cell contains three buttons: "Accepter", "Refuser", and "Show
-                 *          Movies".
-                 *          - The buttons are created using the `Button` class and are added to
-                 *          the cell's
-                 *          graphic using the `setGraphic` method.
-                 *          - The `acceptButton`, `refuseButton`, and `showMoviesButton` are
-                 *          private fields
-                 *          in the `TableCell` class that correspond to the buttons added to the
-                 *          cell.
-                 */
-        );
+            }
+        });
         this.loadCinemas();
+    }
+
+    private void showFilmsInModal(Cinema cinema) {
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.setTitle("Movies at " + cinema.getNom());
+
+        FlowPane flowPane = new FlowPane();
+        flowPane.setHgap(10);
+        flowPane.setVgap(10);
+        flowPane.setPadding(new Insets(10));
+
+        ScrollPane scrollPane = new ScrollPane(flowPane);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setPrefViewportHeight(500);
+
+        FilmcinemaService filmcinemaService = new FilmcinemaService();
+        List<Film> films = filmcinemaService.readMoviesForCinema(cinema.getId_cinema());
+
+        for (Film film : films) {
+            AnchorPane card = createFilmCard(film);
+            flowPane.getChildren().add(card);
+        }
+
+        Scene scene = new Scene(scrollPane);
+        scene.getStylesheets().add(getClass().getResource("/ui/cinemas/styles/dashboard.css").toExternalForm());
+        dialog.setScene(scene);
+        dialog.show();
+    }
+
+    private AnchorPane createFilmCard(Film film) {
+        AnchorPane card = new AnchorPane();
+        card.setPrefSize(200, 300);
+        card.getStyleClass().add("film-card");
+
+        ImageView imageView = new ImageView();
+        imageView.setFitWidth(200);
+        imageView.setFitHeight(200);
+        try {
+            Image image = new Image(film.getImage());
+            imageView.setImage(image);
+        } catch (Exception e) {
+            // Use default image if film image fails to load
+            Image defaultImage = new Image(getClass().getResourceAsStream("/Logo.png"));
+            imageView.setImage(defaultImage);
+        }
+
+        Label titleLabel = new Label(film.getNom());
+        titleLabel.getStyleClass().add("film-title");
+        titleLabel.setLayoutX(10);
+        titleLabel.setLayoutY(210);
+        titleLabel.setMaxWidth(180);
+        titleLabel.setWrapText(true);
+
+        Label durationLabel = new Label("Duration: " + film.getDuree());
+        durationLabel.getStyleClass().add("film-info");
+        durationLabel.setLayoutX(10);
+        durationLabel.setLayoutY(240);
+
+        Label yearLabel = new Label("Year: " + film.getAnnederalisation());
+        yearLabel.getStyleClass().add("film-info");
+        yearLabel.setLayoutX(10);
+        yearLabel.setLayoutY(260);
+
+        card.getChildren().addAll(imageView, titleLabel, durationLabel, yearLabel);
+
+        return card;
     }
 
     /**
@@ -230,15 +253,16 @@ public class DashboardAdminController {
      */
     @FXML
     public void initialize() {
-        // Ajouter un écouteur de changement pour le champ de recherche
-        this.tfSearch.textProperty().addListener((observable, oldValue, newValue) -> {
-            // Filtrer la liste des cinémas en fonction du nouveau texte saisi dans le champ
-            // de recherche
-            this.filterCinemas(newValue.trim());
-        });
-        // Charger tous les cinémas initialement
-        this.loadCinemas();
-        this.afficherCinemas();
+        if (cinemasList != null) {
+            cinemasList.setVisible(true);
+        }
+        if (tfSearch != null) {
+            tfSearch.textProperty().addListener((observable, oldValue, newValue) -> {
+                filterCinemas(newValue.trim());
+            });
+        }
+        loadCinemas();
+        afficherCinemas();
     }
 
     /**
@@ -332,14 +356,14 @@ public class DashboardAdminController {
      * from the list of cinemas using Stream API.
      *
      * @returns a list of unique cinema addresses obtained from the database.
-     * <p>
-     * - The output is a list of strings representing the unique addresses
-     * of cinemas.
-     * - The list is generated by streaming the `cinemas` collection using
-     * `map()` and
-     * `distinct()` methods to extract the addresses.
-     * - The `collect()` method is used to collect the distinct addresses
-     * into a list.
+     *          <p>
+     *          - The output is a list of strings representing the unique addresses
+     *          of cinemas.
+     *          - The list is generated by streaming the `cinemas` collection using
+     *          `map()` and
+     *          `distinct()` methods to extract the addresses.
+     *          - The `collect()` method is used to collect the distinct addresses
+     *          into a list.
      */
     public List<String> getCinemaAddresses() {
         // Récupérer tous les cinémas depuis la base de données
@@ -357,10 +381,10 @@ public class DashboardAdminController {
      * and returns it.
      *
      * @returns a list of predefined cinema statuses: "Pending" and "Accepted".
-     * <p>
-     * - The list contains 2 pre-defined statuses: "Pending" and
-     * "Accepted".
-     * - Each status is a unique string in the list.
+     *          <p>
+     *          - The list contains 2 pre-defined statuses: "Pending" and
+     *          "Accepted".
+     *          - Each status is a unique string in the list.
      */
     public List<String> getCinemaStatuses() {
         // Créer une liste de statuts pré-définis
@@ -411,18 +435,18 @@ public class DashboardAdminController {
      * of strings.
      *
      * @returns a list of selected addresses represented as strings.
-     * <p>
-     * 1/ The output is a list of strings (`List<String>`), indicating that
-     * each selected
-     * address is represented as a string.
-     * 2/ The list is generated using the `stream()`, `filter()`, and
-     * `map()` methods of
-     * the `Optional` class, which suggests that the function returns a
-     * stream of filtered
-     * and transformed elements.
-     * 3/ The `collect()` method is used to collect the filtered and
-     * transformed elements
-     * into a list, which is then returned as the output.
+     *          <p>
+     *          1/ The output is a list of strings (`List<String>`), indicating that
+     *          each selected
+     *          address is represented as a string.
+     *          2/ The list is generated using the `stream()`, `filter()`, and
+     *          `map()` methods of
+     *          the `Optional` class, which suggests that the function returns a
+     *          stream of filtered
+     *          and transformed elements.
+     *          3/ The `collect()` method is used to collect the filtered and
+     *          transformed elements
+     *          into a list, which is then returned as the output.
      */
     private List<String> getSelectedAddresses() {
         // Récupérer les adresses sélectionnées dans l'AnchorPane de filtrage
@@ -440,12 +464,12 @@ public class DashboardAdminController {
      * statuses as a list.
      *
      * @returns a list of selected statuses represented as strings.
-     * <p>
-     * - The list contains only selected statuses as determined by the
-     * `isSelected`
-     * method of the `CheckBox` class.
-     * - Each element in the list is a string representing the text of the
-     * selected status.
+     *          <p>
+     *          - The list contains only selected statuses as determined by the
+     *          `isSelected`
+     *          method of the `CheckBox` class.
+     *          - Each element in the list is a string representing the text of the
+     *          selected status.
      */
     private List<String> getSelectedStatuses() {
         // Récupérer les statuts sélectionnés dans l'AnchorPane de filtrage
@@ -469,7 +493,7 @@ public class DashboardAdminController {
      */
     @FXML
     void afficherEventsAdmin(final ActionEvent event) throws IOException {
-        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/DesignEvenementAdmin.fxml"));
+        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui//ui/DesignEvenementAdmin.fxml"));
         final Parent root = loader.load();
         final Scene scene = new Scene(root);
         final Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -495,7 +519,7 @@ public class DashboardAdminController {
      */
     @FXML
     void afficherMovieAdmin(final ActionEvent event) throws IOException {
-        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/InterfaceFilm.fxml"));
+        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/films/InterfaceFilm.fxml"));
         final Parent root = loader.load();
         final Scene scene = new Scene(root);
         final Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -522,7 +546,7 @@ public class DashboardAdminController {
      */
     @FXML
     void afficherserieAdmin(final ActionEvent event) throws IOException {
-        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/Serie-view.fxml"));
+        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/series/Serie-view.fxml"));
         final Parent root = loader.load();
         final Scene scene = new Scene(root);
         final Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -548,7 +572,7 @@ public class DashboardAdminController {
      */
     @FXML
     void AfficherProduitAdmin(final ActionEvent event) throws IOException {
-        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/DesignProduitAdmin.fxml.fxml"));
+        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui//ui/DesignProduitAdmin.fxml.fxml"));
         final Parent root = loader.load();
         final Scene scene = new Scene(root);
         final Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();

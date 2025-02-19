@@ -136,4 +136,22 @@ public class SalleService implements IService<Salle> {
         }
         return roomsForCinema;
     }
+
+    public Salle getSalleById(int id) {
+        String query = "SELECT * FROM salle WHERE id_salle = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Salle(
+                        rs.getInt("id_salle"),
+                        rs.getInt("id_cinema"),
+                        rs.getInt("nb_places"),
+                        rs.getString("nom_salle"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

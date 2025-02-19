@@ -106,9 +106,11 @@ public class AdminDashboardController {
             this.deleteTableColumn = new TableColumn<>("delete");
             this.tableValidator = new Validator();
             this.userTableView.setEditable(true);
-            final List<TableColumn<User, ?>> columns = Arrays.asList(this.firstNameTableColumn, this.lastNameTableColumn,
+            final List<TableColumn<User, ?>> columns = Arrays.asList(this.firstNameTableColumn,
+                    this.lastNameTableColumn,
                     this.emailTableColumn,
-                    this.passwordTableColumn, this.numTelTableColumn, this.adresseTableColumn, this.dateDeNaissanceTableColumn,
+                    this.passwordTableColumn, this.numTelTableColumn, this.adresseTableColumn,
+                    this.dateDeNaissanceTableColumn,
                     this.roleTableColumn, this.photoDeProfilTableColumn, this.deleteTableColumn);
             this.userTableView.getColumns().addAll(columns);
             this.setupCellValueFactories();
@@ -122,7 +124,8 @@ public class AdminDashboardController {
             this.addValidationListener(this.adresseTextField, newValue -> newValue.toLowerCase().equals(newValue),
                     "Please use only lowercase letters.");
             final String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-            this.addValidationListener(this.emailTextField, newValue -> newValue.matches(emailRegex), "Invalid email format.");
+            this.addValidationListener(this.emailTextField, newValue -> newValue.matches(emailRegex),
+                    "Invalid email format.");
             this.addValidationListener(this.passwordTextField, newValue -> newValue.toLowerCase().equals(newValue),
                     "Please use only lowercase letters.");
             final String numberRegex = "\\d*";
@@ -159,7 +162,7 @@ public class AdminDashboardController {
      *                            invalid value in the text field.
      */
     private void addValidationListener(final TextField textField, final Predicate<String> validationPredicate,
-                                       final String errorMessage) {
+            final String errorMessage) {
         final Tooltip tooltip = new Tooltip();
         textField.textProperty().addListener(new ChangeListener<String>() {
             /**
@@ -181,7 +184,8 @@ public class AdminDashboardController {
              *                   display an error message if necessary.
              */
             @Override
-            public void changed(final ObservableValue<? extends String> observable, final String oldValue, final String newValue) {
+            public void changed(final ObservableValue<? extends String> observable, final String oldValue,
+                    final String newValue) {
                 String error = null;
                 if (null != newValue) {
                     if (!validationPredicate.test(newValue)) {
@@ -277,7 +281,8 @@ public class AdminDashboardController {
                 }
                 // Validate phone number format
                 if (!phoneNumber.matches("\\d{10}")) {
-                    final Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid phone number format", ButtonType.CLOSE);
+                    final Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid phone number format",
+                            ButtonType.CLOSE);
                     alert.show();
                     return;
                 }
@@ -290,7 +295,8 @@ public class AdminDashboardController {
                 user = new Admin(firstName, lastName, Integer.parseInt(phoneNumber), password, role, email,
                         Date.valueOf(dateDeNaissance), email, uri.getPath());
             } else {
-                final Alert alert = new Alert(Alert.AlertType.ERROR, "the given role is not available", ButtonType.CLOSE);
+                final Alert alert = new Alert(Alert.AlertType.ERROR, "the given role is not available",
+                        ButtonType.CLOSE);
                 alert.show();
                 return;
             }
@@ -330,7 +336,8 @@ public class AdminDashboardController {
                      *          birth date value from the input `User` object, if available.
                      */
                     @Override
-                    public ObservableValue<DatePicker> call(final TableColumn.CellDataFeatures<User, DatePicker> param) {
+                    public ObservableValue<DatePicker> call(
+                            final TableColumn.CellDataFeatures<User, DatePicker> param) {
                         final DatePicker datePicker = new DatePicker();
                         if (null != param.getValue().getBirthDate()) {
                             datePicker.setValue(param.getValue().getBirthDate().toLocalDate());
@@ -483,8 +490,9 @@ public class AdminDashboardController {
                             final Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
                             textField.textProperty().addListener(new ChangeListener<String>() {
                                 @Override
-                                public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                                                    final String newValue) {
+                                public void changed(final ObservableValue<? extends String> observable,
+                                        final String oldValue,
+                                        final String newValue) {
                                     if (validator.containsErrors()) {
                                         tooltip.setText(validator.createStringBinding().getValue());
                                         tooltip.setStyle("-fx-background-color: #f00;");
@@ -540,8 +548,9 @@ public class AdminDashboardController {
                             final Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
                             textField.textProperty().addListener(new ChangeListener<String>() {
                                 @Override
-                                public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                                                    final String newValue) {
+                                public void changed(final ObservableValue<? extends String> observable,
+                                        final String oldValue,
+                                        final String newValue) {
                                     if (validator.containsErrors()) {
                                         tooltip.setText(validator.createStringBinding().getValue());
                                         tooltip.setStyle("-fx-background-color: #f00;");
@@ -597,8 +606,9 @@ public class AdminDashboardController {
                             final Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
                             textField.textProperty().addListener(new ChangeListener<String>() {
                                 @Override
-                                public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                                                    final String newValue) {
+                                public void changed(final ObservableValue<? extends String> observable,
+                                        final String oldValue,
+                                        final String newValue) {
                                     if (validator.containsErrors()) {
                                         tooltip.setText(validator.createStringBinding().getValue());
                                         tooltip.setStyle("-fx-background-color: #f00;");
@@ -654,8 +664,9 @@ public class AdminDashboardController {
                             final Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
                             textField.textProperty().addListener(new ChangeListener<String>() {
                                 @Override
-                                public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                                                    final String newValue) {
+                                public void changed(final ObservableValue<? extends String> observable,
+                                        final String oldValue,
+                                        final String newValue) {
                                     if (validator.containsErrors()) {
                                         tooltip.setText(validator.createStringBinding().getValue());
                                         tooltip.setStyle("-fx-background-color: #f00;");
@@ -684,8 +695,9 @@ public class AdminDashboardController {
                 };
             }
         });
-        this.roleTableColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new DefaultStringConverter(), "admin", "client",
-                "responsable de cinema"));
+        this.roleTableColumn
+                .setCellFactory(ComboBoxTableCell.forTableColumn(new DefaultStringConverter(), "admin", "client",
+                        "responsable de cinema"));
         this.adresseTableColumn.setCellFactory(new Callback<TableColumn<User, String>, TableCell<User, String>>() {
             @Override
             public TableCell<User, String> call(final TableColumn<User, String> param) {
@@ -713,8 +725,9 @@ public class AdminDashboardController {
                             final Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
                             textField.textProperty().addListener(new ChangeListener<String>() {
                                 @Override
-                                public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                                                    final String newValue) {
+                                public void changed(final ObservableValue<? extends String> observable,
+                                        final String oldValue,
+                                        final String newValue) {
                                     if (validator.containsErrors()) {
                                         tooltip.setText(validator.createStringBinding().getValue());
                                         tooltip.setStyle("-fx-background-color: #f00;");
@@ -770,8 +783,9 @@ public class AdminDashboardController {
                             final Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
                             textField.textProperty().addListener(new ChangeListener<String>() {
                                 @Override
-                                public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                                                    final String newValue) {
+                                public void changed(final ObservableValue<? extends String> observable,
+                                        final String oldValue,
+                                        final String newValue) {
                                     if (validator.containsErrors()) {
                                         tooltip.setText(validator.createStringBinding().getValue());
                                         tooltip.setStyle("-fx-background-color: #f00;");
@@ -885,7 +899,7 @@ public class AdminDashboardController {
             @Override
             public void handle(final TableColumn.CellEditEvent<User, DatePicker> event) {
                 event.getTableView().getItems().get(
-                                event.getTablePosition().getRow())
+                        event.getTablePosition().getRow())
                         .setBirthDate(Date.valueOf(event.getNewValue().getValue()));
                 AdminDashboardController.this.update(event.getTableView().getItems().get(
                         event.getTablePosition().getRow()));
@@ -996,7 +1010,7 @@ public class AdminDashboardController {
     @FXML
     public void signOut(final ActionEvent event) throws IOException {
         final Stage stage = (Stage) this.emailTextField.getScene().getWindow();
-        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/SignUp.fxml"));
+        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/users/SignUp.fxml"));
         final Parent root = loader.load();
         stage.setScene(new Scene(root));
     }

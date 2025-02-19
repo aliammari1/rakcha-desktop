@@ -109,8 +109,10 @@ public class CommandeClientController implements Initializable {
                      */
                     @Override
                     public void run() {
-                        CommandeClientController.this.connectedUser = (Client) CommandeClientController.this.prixtotaleFlowPane.getScene().getWindow().getUserData();
-                        CommandeClientController.LOGGER.info("produits:    user:  " + CommandeClientController.this.connectedUser);
+                        CommandeClientController.this.connectedUser = (Client) CommandeClientController.this.prixtotaleFlowPane
+                                .getScene().getWindow().getUserData();
+                        CommandeClientController.LOGGER
+                                .info("produits:    user:  " + CommandeClientController.this.connectedUser);
                     }
                 });
         // Récupérer le prix total depuis SharedData et créer le Label correspondant
@@ -141,12 +143,12 @@ public class CommandeClientController implements Initializable {
      *                  the
      *                  value displayed.
      * @returns a label displaying the price total in bold font with a specific
-     * color.
-     * <p>
-     * - The output is a `Label` object named `prixTotalLabel`.
-     * - The label's text value is the sum of `prixTotal` and "DT".
-     * - The font of the label is set to Verdana with a size of 25.
-     * - The text fill color of the label is set to #d72222.
+     *          color.
+     *          <p>
+     *          - The output is a `Label` object named `prixTotalLabel`.
+     *          - The label's text value is the sum of `prixTotal` and "DT".
+     *          - The font of the label is set to Verdana with a size of 25.
+     *          - The text fill color of the label is set to #d72222.
      */
     private Label createPrixTotalLabel(final double prixTotal) {
         final Label prixTotalLabel = new Label(prixTotal + " DT");
@@ -235,8 +237,8 @@ public class CommandeClientController implements Initializable {
      *                    format,
      *                    consisting only of digits.
      * @returns a boolean value indicating whether the provided string represents a
-     * valid
-     * phone number.
+     *          valid
+     *          phone number.
      */
     private boolean isValidPhoneNumber(final String phoneNumber) {
         // Vérifier si le numéro de téléphone a exactement 8 chiffres et ne contient que
@@ -289,7 +291,7 @@ public class CommandeClientController implements Initializable {
     void panier(final MouseEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/PanierProduit.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/produits/PanierProduit.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -324,7 +326,8 @@ public class CommandeClientController implements Initializable {
      */
     @FXML
     void payment(final ActionEvent event) {
-        final APIContext apiContext = new APIContext(CommandeClientController.CLIENT_ID, CommandeClientController.CLIENT_SECRET, "sandbox");
+        final APIContext apiContext = new APIContext(CommandeClientController.CLIENT_ID,
+                CommandeClientController.CLIENT_SECRET, "sandbox");
         final Amount amount = new Amount();
         amount.setCurrency("USD");
         amount.setTotal(String.valueOf(this.totalPrix)); // totalPrix should be set to the total price of the order
@@ -443,7 +446,8 @@ public class CommandeClientController implements Initializable {
      *                  used to identify the user making the payment.
      */
     private void completePayment(final String paymentId, final String payerId) {
-        final APIContext apiContext = new APIContext(CommandeClientController.CLIENT_ID, CommandeClientController.CLIENT_SECRET, "sandbox");
+        final APIContext apiContext = new APIContext(CommandeClientController.CLIENT_ID,
+                CommandeClientController.CLIENT_SECRET, "sandbox");
         final Payment payment = new Payment();
         payment.setId(paymentId);
         final PaymentExecution paymentExecution = new PaymentExecution();
@@ -479,7 +483,7 @@ public class CommandeClientController implements Initializable {
     void cinemaclient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/CommentaireProduit.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/produits/CommentaireProduit.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -518,7 +522,7 @@ public class CommandeClientController implements Initializable {
     void eventClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/AffichageEvenementClient.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui//ui/AffichageEvenementClient.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -555,7 +559,7 @@ public class CommandeClientController implements Initializable {
     void produitClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/AfficherProduitClient.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/produits/AfficherProduitClient.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -633,7 +637,7 @@ public class CommandeClientController implements Initializable {
     void showmovie(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/Series-view.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui//ui/Series-view.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -680,7 +684,7 @@ public class CommandeClientController implements Initializable {
     void showserie(final ActionEvent event) throws IOException {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/Series-view.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui//ui/Series-view.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -720,7 +724,7 @@ public class CommandeClientController implements Initializable {
     void MovieClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/filmuser.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/films/filmuser.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -758,7 +762,7 @@ public class CommandeClientController implements Initializable {
     void SerieClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface PanierProduit.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/Series-view.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui//ui/Series-view.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);

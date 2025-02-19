@@ -5,6 +5,7 @@ import com.esprit.models.cinemas.Seance;
 import com.esprit.models.films.Filmcinema;
 import com.esprit.services.IService;
 import com.esprit.services.films.FilmService;
+import com.esprit.services.films.FilmcinemaService; // Add this import
 import com.esprit.utils.DataSource;
 
 import java.sql.Date;
@@ -140,8 +141,9 @@ public class SeanceService implements IService<Seance> {
     }
 
     // Méthode pour récupérer les séances dans une plage de dates spécifiée
-    public Map<LocalDate, List<Seance>> getSeancesByDateRangeAndCinema(final LocalDate startDate, final LocalDate endDate,
-                                                                       final Cinema cinema) {
+    public Map<LocalDate, List<Seance>> getSeancesByDateRangeAndCinema(final LocalDate startDate,
+            final LocalDate endDate,
+            final Cinema cinema) {
         final Map<LocalDate, List<Seance>> seancesByDate = new HashMap<>();
         // Vérifier si cinema est null
         if (null == cinema) {
@@ -197,5 +199,32 @@ public class SeanceService implements IService<Seance> {
         }
         // Retourner la liste des séances pour la date spécifiée
         return seances;
+    }
+
+    public Seance getFirstSeanceForFilm(int filmId) {
+        String query = "SELECT s.* FROM seance s " +
+                "JOIN film_cinema fc ON s.id_film = fc.film_id " + // Changed from filmcinema to film_cinema
+                "WHERE fc.film_id = ? " +
+                "AND s.date >= CURRENT_DATE " +
+                "ORDER BY s.date, s.HD LIMIT 1";
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, filmId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return new Seance(
+                        rs.getInt("id_seance"),
+                        new SalleService().getSalleById(rs.getInt("id_salle")),
+                        rs.getTime("HD"),
+                        rs.getTime("HF"),
+                        rs.getDate("date"),
+                        rs.getDouble("prix"),
+                        new FilmcinemaService().getById(rs.getInt("id_film")));
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error getting first seance for film: " + filmId, e);
+        }
+        return null;
     }
 }

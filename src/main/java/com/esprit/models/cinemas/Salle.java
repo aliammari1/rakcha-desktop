@@ -1,8 +1,10 @@
 package com.esprit.models.cinemas;
 
 /**
- * Is used to represent a salle within a cinema. It has several fields and methods
- * that allow for the manipulation of these values. The class has four fields: id_salle,
+ * Is used to represent a salle within a cinema. It has several fields and
+ * methods
+ * that allow for the manipulation of these values. The class has four fields:
+ * id_salle,
  * id_cinema, nb_places, and nom_salle. Additionally, it has several methods for
  * accessing and modifying these fields, such as getId_salle(), setId_salle(),
  * getId_cinema(), setId_cinema(), getNb_places(), and setNb_places().
@@ -14,7 +16,8 @@ public class Salle {
     private String nom_salle;
 
     /**
-     * Constructs a new Salle object with the specified id_salle, id_cinema, nb_places, and nom_salle.
+     * Constructs a new Salle object with the specified id_salle, id_cinema,
+     * nb_places, and nom_salle.
      *
      * @param id_salle  the id of the salle
      * @param id_cinema the id of the cinema
@@ -29,7 +32,8 @@ public class Salle {
     }
 
     /**
-     * Constructs a new Salle object with the specified id_cinema, nb_places, and nom_salle.
+     * Constructs a new Salle object with the specified id_cinema, nb_places, and
+     * nom_salle.
      *
      * @param id_cinema the id of the cinema
      * @param nb_places the number of places in the salle
@@ -111,6 +115,15 @@ public class Salle {
      */
     public void setNom_salle(final String nom_salle) {
         this.nom_salle = nom_salle;
+    }
+
+    /**
+     * Returns the id of the salle.
+     *
+     * @return the id of the salle
+     */
+    public int getId() {
+        return this.id_salle;
     }
 
     /**

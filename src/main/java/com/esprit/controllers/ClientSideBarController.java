@@ -53,7 +53,8 @@ public class ClientSideBarController implements Initializable {
     }
 
     /**
-     * Loads a new FXML file "filmuser.fxml" into the stage using the `FXMLLoader`
+     * Loads a new FXML file "/ui/films/filmuser.fxml" into the stage using the
+     * `FXMLLoader`
      * class,
      * replacing the current scene with the newly loaded one.
      *
@@ -68,7 +69,7 @@ public class ClientSideBarController implements Initializable {
     @FXML
     void switchToMovies(final ActionEvent event) {
         try {
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/filmuser.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/films/filmuser.fxml"));
             final Parent root = loader.load();
             final Stage stage = (Stage) this.movieButton.getScene().getWindow();
             ClientSideBarController.LOGGER.log(Level.INFO, "---------{0}", stage.getUserData());
@@ -92,7 +93,7 @@ public class ClientSideBarController implements Initializable {
     @FXML
     void switchToProducts(final ActionEvent event) {
         try {
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/AfficherProduitClient.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/produits/AfficherProduitClient.fxml"));
             final Parent root = loader.load();
             final Stage stage = (Stage) this.productButton.getScene().getWindow();
             ClientSideBarController.LOGGER.info("---------" + stage.getUserData());
@@ -103,7 +104,8 @@ public class ClientSideBarController implements Initializable {
     }
 
     /**
-     * Loads a new FXML file "SeriesClient.fxml" when the " serieButton" action is
+     * Loads a new FXML file "/ui/series/SeriesClient.fxml" when the " serieButton" action
+     * is
      * triggered, replacing the current stage with a new scene containing the loaded
      * root
      * node.
@@ -121,7 +123,7 @@ public class ClientSideBarController implements Initializable {
     @FXML
     void switchToSeries(final ActionEvent event) {
         try {
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/SeriesClient.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/series/SeriesClient.fxml"));
             final Parent root = loader.load();
             final Stage stage = (Stage) this.serieButton.getScene().getWindow();
             ClientSideBarController.LOGGER.info("---------" + stage.getUserData());
@@ -143,7 +145,7 @@ public class ClientSideBarController implements Initializable {
     @FXML
     void switchtcinema(final ActionEvent event) {
         try {
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/DashboardClientCinema.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/cinemas/DashboardClientCinema.fxml"));
             final Parent root = loader.load();
             final Stage stage = (Stage) this.cinemaButton.getScene().getWindow();
             ClientSideBarController.LOGGER.info("---------" + stage.getUserData());
@@ -168,7 +170,7 @@ public class ClientSideBarController implements Initializable {
     @FXML
     void switchToLogout(final ActionEvent event) {
         try {
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/Login.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/users/Login.fxml"));
             final Parent root = loader.load();
             final Stage stage = (Stage) this.logoutButton.getScene().getWindow();
             stage.setUserData(null);
@@ -180,7 +182,7 @@ public class ClientSideBarController implements Initializable {
 
     /**
      * Loads a new scene containing a `Parent` element with the FXML file
-     * `"Profile.fxml"`
+     * `"/ui/users/Profile.fxml"`
      * when the `profileButton` is clicked.
      *
      * @param event click event that triggered the function execution.
@@ -193,7 +195,7 @@ public class ClientSideBarController implements Initializable {
     @FXML
     void switchToProfile(final ActionEvent event) {
         try {
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/Profile.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/users/Profile.fxml"));
             final Parent root = loader.load();
             final Stage stage = (Stage) this.profileButton.getScene().getWindow();
             stage.setScene(new Scene(root));
