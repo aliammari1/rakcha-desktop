@@ -1,0 +1,38 @@
+# Git
+.git
+.gitignore
+.github
+
+# Docker
+docker-compose*.yml
+Dockerfile
+.dockerignore
+
+# Logs
+logs/
+*.log
+
+# Build files
+target/
+!target/*.jar
+
+# Documentation
+docs/
+*.md
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.settings/
+.classpath
+.project
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Other
+node_modules/
