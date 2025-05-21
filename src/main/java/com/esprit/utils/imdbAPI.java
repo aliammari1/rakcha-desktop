@@ -10,7 +10,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ImdbAPI {
@@ -89,19 +88,5 @@ public class ImdbAPI {
         }
 
         throw new IOException("Max retries exceeded while searching IMDb");
-    }
-
-    public static void main(final String[] args) {
-        final String query = "spiderwoman";
-        try {
-            String imdbUrl = searchMovie(query);
-            if (imdbUrl != null) {
-                LOGGER.info("IMDb URL of the first result: " + imdbUrl);
-            } else {
-                LOGGER.info("No results found.");
-            }
-        } catch (final Exception e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
-        }
     }
 }
