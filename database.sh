@@ -5,50 +5,74 @@
 # 1. Install WSL (Windows Subsystem for Linux) - https://learn.microsoft.com/en-us/windows/wsl/install
 # 2. Install Docker Desktop for Windows - https://docs.docker.com/docker-for-windows/install/
 # 3. Open WSL - `wsl`
-# 4. Run this script - `./start-database.sh`
+# 4. Run this script - `./database.sh start`
 
-# On Linux and macOS you can run this script directly - `./start-database.sh`
+# On Linux and macOS you can run this script directly - `./database.sh start`
 
 DB_CONTAINER_NAME="rakcha-mysql"
-DATABASE_URL="mysql://root:root@localhost:3306/rakcha" # Updated with new root password and container name
+DATABASE_URL="mysql://root:root@localhost:3306/rakcha_db"
 
-# Define any other environment variables you need directly in this script
-# For example:
-# DB_USER="root"
-# DB_NAME="rakcha"
-
+# Check if Docker is installed
 if ! [ -x "$(command -v docker)" ]; then
     echo -e "Docker is not installed. Please install docker and try again.\nDocker install guide: https://docs.docker.com/engine/install/"
     exit 1
 fi
 
-if [ "$(docker ps -q -f name=$DB_CONTAINER_NAME)" ]; then
-    echo "Database container '$DB_CONTAINER_NAME' already running"
-    exit 0
+# Check if Docker Compose is installed
+if ! [ -x "$(command -v docker-compose)" ]; then
+    echo -e "Docker Compose is not installed. Please install docker-compose and try again.\nDocker Compose install guide: https://docs.docker.com/compose/install/"
+    exit 1
 fi
 
-if [ "$(docker ps -q -a -f name=$DB_CONTAINER_NAME)" ]; then
-    docker start "$DB_CONTAINER_NAME"
-    echo "Existing database container '$DB_CONTAINER_NAME' started"
-    exit 0
-fi
+# Function to start services
+start_services() {
+    echo "Starting Docker containers using docker-compose..."
+    docker-compose up -d
+    echo "Docker containers started successfully!"
+}
 
-DB_PASSWORD=$(echo "$DATABASE_URL" | awk -F':' '{print $3}' | awk -F'@' '{print $1}')
-DB_PORT=$(echo "$DATABASE_URL" | awk -F':' '{print $4}' | awk -F'\/' '{print $1}')
+# Function to stop services
+stop_services() {
+    echo "Stopping Docker containers..."
+    docker-compose down
+    echo "Docker containers stopped successfully!"
+}
 
-# Create the MySQL container with the new command
-docker run -p 3306:3306 \
-    --name $DB_CONTAINER_NAME \
-    -e MYSQL_ROOT_PASSWORD=root \
-    -e MYSQL_DATABASE=rakcha \
-    -d mysql \
-    -h 127.0.0.1 && echo "Database container '$DB_CONTAINER_NAME' was successfully created"
+# Function to restart services
+restart_services() {
+    echo "Restarting Docker containers..."
+    docker-compose down
+    docker-compose up -d
+    echo "Docker containers restarted successfully!"
+}
 
-# Wait a bit longer for MySQL to initialize (optional, might be needed for the next command to succeed)
-sleep 20
+# Function to show logs
+show_logs() {
+    echo "Showing logs for services..."
+    docker-compose logs -f
+}
 
-# Import the SQL file into the MySQL database
-docker exec -i $DB_CONTAINER_NAME mysql --user=root --password=root rakcha < rakcha_db.sql
+# Command handling
+case "$1" in
+    start)
+        start_services
+        ;;
+    stop)
+        stop_services
+        ;;
+    restart)
+        restart_services
+        ;;
+    logs)
+        show_logs
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart|logs}"
+        exit 1
+        ;;
+esac
+
+exit 0
 
 # Inspect the container for its IP address
 docker inspect $DB_CONTAINER_NAME | grep IPAddress

@@ -360,6 +360,80 @@ Rakcha Desktop integrates with several external APIs:
 
 ## 🚀 Deployment
 
+### 🐳 Docker Deployment
+
+Rakcha Desktop can be easily deployed using Docker containers, simplifying the setup process and ensuring consistent environments across different systems.
+
+#### Prerequisites
+
+- [Docker](https://docs.docker.com/get-docker/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+
+#### Running with Docker Compose
+
+1. Build and start the containers:
+
+   ```bash
+   ./database.sh start
+   ```
+
+2. Stop the containers:
+
+   ```bash
+   ./database.sh stop
+   ```
+
+3. View container logs:
+
+   ```bash
+   ./database.sh logs
+   ```
+
+4. Restart containers:
+   ```bash
+   ./database.sh restart
+   ```
+
+#### Docker Configuration
+
+The application is containerized using the following components:
+
+- **App Container**: Java application built with Maven and running on Amazon Corretto JDK 17
+- **MySQL Container**: Database server with pre-initialized schema and data
+
+The Docker setup automatically handles:
+
+- Database initialization using the provided SQL script
+- Environment variable configuration
+- Network setup between the application and database
+- Volume persistence for the database
+
+#### Manual Docker Commands
+
+If needed, you can also use direct Docker commands:
+
+```bash
+# Build the Docker image
+docker build -t rakcha-app .
+
+# Run the MySQL container
+docker run -d -p 3306:3306 --name rakcha-mysql \
+  -e MYSQL_ROOT_PASSWORD=root \
+  -e MYSQL_DATABASE=rakcha_db \
+  -v $(pwd)/rakcha_db.sql:/docker-entrypoint-initdb.d/rakcha_db.sql \
+  mysql:8.0
+
+# Run the application container
+docker run -d -p 8080:8080 --name rakcha-app \
+  -e DB_HOST=rakcha-mysql \
+  -e DB_PORT=3306 \
+  -e DB_NAME=rakcha_db \
+  -e DB_USER=root \
+  -e DB_PASSWORD=root \
+  --link rakcha-mysql \
+  rakcha-app
+```
+
 ### 🏠 Local Deployment
 
 For local development and testing:
