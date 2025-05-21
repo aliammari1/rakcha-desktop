@@ -1,130 +1,144 @@
-# Rakcha Desktop: Your Ultimate Entertainment Hub
+# 🎬 Rakcha Desktop: Your Ultimate Entertainment Hub
 
 Welcome to Rakcha Desktop, the ultimate platform for accessing a wide array of entertainment options including movies, series, cinemas, and exclusive products related to these categories. Designed with the user in mind, Rakcha Desktop offers a seamless experience for exploring and enjoying your favorite content across multiple platforms.
 
 ![Rakcha Desktop Logo](src/main/resources/Logo.png)
 
-## Table of Contents
+[![Java Version](https://img.shields.io/badge/Java-17-orange.svg)](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
+[![JavaFX Version](https://img.shields.io/badge/JavaFX-21.0.2-blue.svg)](https://openjfx.io/)
+[![MySQL](https://img.shields.io/badge/MySQL-9.0.0-blue.svg)](https://www.mysql.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
 
-- [Rakcha Desktop: Your Ultimate Entertainment Hub](#rakcha-desktop-your-ultimate-entertainment-hub)
-  - [Table of Contents](#table-of-contents)
-  - [Features](#features)
-    - [Film & Cinema Management](#film--cinema-management)
-    - [Series & Episodes](#series--episodes)
-    - [Product Marketplace](#product-marketplace)
-    - [User Management](#user-management)
-    - [Security & Authentication](#security--authentication)
-    - [Payment Processing](#payment-processing)
-    - [Communication & Notifications](#communication--notifications)
-  - [Technologies Used](#technologies-used)
-  - [Architecture](#architecture)
-  - [Getting Started](#getting-started)
-    - [Prerequisites](#prerequisites)
-    - [Installation](#installation)
-    - [Database Setup](#database-setup)
-  - [Usage](#usage)
-    - [User Roles](#user-roles)
-    - [Basic Operations](#basic-operations)
-    - [Advanced Features](#advanced-features)
-  - [API Integrations](#api-integrations)
-  - [Building from Source](#building-from-source)
-  - [Project Structure](#project-structure)
-  - [Testing](#testing)
-  - [Contributing](#contributing)
-  - [License](#license)
-  - [Authors](#authors)
-  - [Acknowledgments](#acknowledgments)
+## 📋 Table of Contents
 
-## Features
+- [🎬 Rakcha Desktop: Your Ultimate Entertainment Hub](#-rakcha-desktop-your-ultimate-entertainment-hub)
+  - [📋 Table of Contents](#-table-of-contents)
+  - [✨ Features](#-features)
+    - [🎞️ Film & Cinema Management](#-film--cinema-management)
+    - [📺 Series & Episodes](#-series--episodes)
+    - [🛍️ Product Marketplace](#-product-marketplace)
+    - [👥 User Management](#-user-management)
+    - [🔐 Security & Authentication](#-security--authentication)
+    - [💳 Payment Processing](#-payment-processing)
+    - [📨 Communication & Notifications](#-communication--notifications)
+  - [🛠️ Technologies Used](#-technologies-used)
+  - [🏗️ Architecture](#-architecture)
+  - [🚀 Getting Started](#-getting-started)
+    - [📋 Prerequisites](#-prerequisites)
+    - [💻 System Requirements](#-system-requirements)
+    - [⚡ Performance Optimization](#-performance-optimization)
+    - [📥 Installation](#-installation)
+    - [🗄️ Database Setup](#-database-setup)
+  - [📖 Usage](#-usage)
+    - [👤 User Roles](#-user-roles)
+    - [🔄 Basic Operations](#-basic-operations)
+    - [🌟 Advanced Features](#-advanced-features)
+  - [🔌 API Integrations](#-api-integrations)
+  - [🚀 Deployment](#-deployment)
+    - [🏠 Local Deployment](#-local-deployment)
+    - [🌍 Production Deployment](#-production-deployment)
+  - [🔨 Building from Source](#-building-from-source)
+  - [📁 Project Structure](#-project-structure)
+  - [🔍 Code Quality and CI/CD](#-code-quality-and-cicd)
+  - [🧪 Testing](#-testing)
+  - [👥 Contributing](#-contributing)
+  - [📜 License](#-license)
+  - [✍️ Authors](#-authors)
+  - [🗺️ Future Development Roadmap](#-future-development-roadmap)
+    - [📅 Planned Features](#-planned-features)
+    - [💭 Under Consideration](#-under-consideration)
+  - [🙏 Acknowledgments](#-acknowledgments)
+
+## ✨ Features
 
 Rakcha Desktop offers a comprehensive suite of features organized into several integrated modules:
 
-### Film & Cinema Management
+### 🎞️ Film & Cinema Management
 
-- **Film Database**: Extensive catalog of films with detailed information including descriptions, durations, and categories
-- **Actor Management**: Track actors and their filmographies with biographical information
-- **Cinema Management**: Comprehensive system for cinema venues, halls, and seating arrangements
-- **Scheduling System**: Manage movie seances with date, time, and cinema hall information
-- **Ticket Booking**: Purchase and manage tickets for film showings
-- **Film Recommendations**: AI-powered recommendation system based on user preferences and ratings
-- **Rating & Reviews**: Allow users to rate films and leave detailed comments
-- **YouTube Trailer Integration**: Automatically fetch and display film trailers through YouTube API
-- **IMDB Data Integration**: Pull rich film metadata from the IMDB database
+- **🎥 Film Database**: Extensive catalog of films with detailed information including descriptions, durations, and categories
+- **👨‍🎤 Actor Management**: Track actors and their filmographies with biographical information
+- **🏢 Cinema Management**: Comprehensive system for cinema venues, halls, and seating arrangements
+- **📅 Scheduling System**: Manage movie seances with date, time, and cinema hall information
+- **🎟️ Ticket Booking**: Purchase and manage tickets for film showings
+- **🧠 Film Recommendations**: AI-powered recommendation system based on user preferences and ratings
+- **⭐ Rating & Reviews**: Allow users to rate films and leave detailed comments
+- **▶️ YouTube Trailer Integration**: Automatically fetch and display film trailers through YouTube API
+- **🌐 IMDB Data Integration**: Pull rich film metadata from the IMDB database
 
-### Series & Episodes
+### 📺 Series & Episodes
 
-- **Series Catalog**: Browse and manage TV series with detailed information
-- **Episode Tracking**: Track episodes by season with descriptions and media content
-- **Favorites System**: Allow users to mark series as favorites for quick access
-- **Feedback System**: User comments and ratings for episodes and series
-- **Category Management**: Organize series by genre and categories
-- **Media Streaming**: Watch episodes directly within the application
+- **📚 Series Catalog**: Browse and manage TV series with detailed information
+- **📝 Episode Tracking**: Track episodes by season with descriptions and media content
+- **❤️ Favorites System**: Allow users to mark series as favorites for quick access
+- **💬 Feedback System**: User comments and ratings for episodes and series
+- **🏷️ Category Management**: Organize series by genre and categories
+- **📱 Media Streaming**: Watch episodes directly within the application
 
-### Product Marketplace
+### 🛍️ Product Marketplace
 
-- **Product Catalog**: Browse entertainment-related merchandise
-- **Shopping Cart**: Add products to cart and manage order items
-- **Order Processing**: Complete end-to-end order management system
-- **Product Reviews**: Rating and commenting system for products
-- **Product Categories**: Organized product navigation by categories
-- **QR Code Generation**: Create QR codes for products and promotions
-- **Barcode Integration**: Support for product barcode scanning and generation
+- **📋 Product Catalog**: Browse entertainment-related merchandise
+- **🛒 Shopping Cart**: Add products to cart and manage order items
+- **📦 Order Processing**: Complete end-to-end order management system
+- **🌟 Product Reviews**: Rating and commenting system for products
+- **📑 Product Categories**: Organized product navigation by categories
+- **📱 QR Code Generation**: Create QR codes for products and promotions
+- **📊 Barcode Integration**: Support for product barcode scanning and generation
 
-### User Management
+### 👥 User Management
 
-- **Multi-Role System**: Support for Clients, Admins, and Cinema Managers with role-specific functionality
-- **User Profiles**: Comprehensive user profile management
-- **Profile Customization**: Personalized user experience based on preferences
-- **User Activity Tracking**: Monitor and analyze user behaviors
-- **Administrative Tools**: Powerful admin dashboard for user management
+- **👨‍💼 Multi-Role System**: Support for Clients, Admins, and Cinema Managers with role-specific functionality
+- **👤 User Profiles**: Comprehensive user profile management
+- **🎨 Profile Customization**: Personalized user experience based on preferences
+- **📈 User Activity Tracking**: Monitor and analyze user behaviors
+- **🔧 Administrative Tools**: Powerful admin dashboard for user management
 
-### Security & Authentication
+### 🔐 Security & Authentication
 
-- **Traditional Login**: Username and password authentication
-- **Social Authentication**: Sign in using Google or Microsoft accounts
-- **Biometric Authentication**: Face recognition login using OpenCV
-- **Password Encryption**: Secure password storage using BCrypt
-- **Permission Management**: Role-based access control throughout the application
+- **🔑 Traditional Login**: Username and password authentication
+- **🔄 Social Authentication**: Sign in using Google or Microsoft accounts
+- **👁️ Biometric Authentication**: Face recognition login using OpenCV
+- **🔒 Password Encryption**: Secure password storage using BCrypt
+- **🛡️ Permission Management**: Role-based access control throughout the application
 
-### Payment Processing
+### 💳 Payment Processing
 
-- **Multiple Payment Gateways**: Integration with Stripe and PayPal
-- **Secure Transactions**: PCI-compliant payment processing
-- **Order History**: Comprehensive tracking of past purchases
-- **Invoicing**: PDF generation for receipts and invoices
-- **Payment Analytics**: Track and analyze payment data
+- **💰 Multiple Payment Gateways**: Integration with Stripe and PayPal
+- **🔒 Secure Transactions**: PCI-compliant payment processing
+- **📜 Order History**: Comprehensive tracking of past purchases
+- **🧾 Invoicing**: PDF generation for receipts and invoices
+- **📊 Payment Analytics**: Track and analyze payment data
 
-### Communication & Notifications
+### 📨 Communication & Notifications
 
-- **Email Notifications**: Automated emails for account activities and promotions
-- **SMS Notifications**: Text message alerts via Twilio and Vonage
-- **In-App Notifications**: Real-time system notifications
-- **Chat System**: Direct messaging between users
-- **PDF Reports**: Generate and export data in PDF format
+- **📧 Email Notifications**: Automated emails for account activities and promotions
+- **📱 SMS Notifications**: Text message alerts via Twilio and Vonage
+- **🔔 In-App Notifications**: Real-time system notifications
+- **💬 Chat System**: Direct messaging between users
+- **📄 PDF Reports**: Generate and export data in PDF format
 
-## Technologies Used
+## 🛠️ Technologies Used
 
 Rakcha Desktop leverages a variety of modern technologies:
 
-- **Core Platform**:
+- **⚙️ Core Platform**:
 
-  - Java 17 - Modern Java features including records and enhanced switch expressions
-  - JavaFX 21.0.2 - Rich client platform for desktop applications
-  - FXML - XML-based UI markup language for defining JavaFX UI
+  - ☕ Java 17 - Modern Java features including records and enhanced switch expressions
+  - 🖥️ JavaFX 21.0.2 - Rich client platform for desktop applications
+  - 📝 FXML - XML-based UI markup language for defining JavaFX UI
 
-- **Database**:
+- **💾 Database**:
 
-  - MySQL 9.0.0 - Robust relational database for data persistence
-  - DataSource pattern - Connection pool implementation for efficient database access
+  - 🗄️ MySQL 9.0.0 - Robust relational database for data persistence
+  - 🔄 DataSource pattern - Connection pool implementation for efficient database access
 
-- **UI Framework**:
+- **🎨 UI Framework**:
 
-  - JavaFX Controls - Standard UI components
-  - ControlsFX 11.2.1 - Extended JavaFX controls
-  - FontAwesomeFX - Icon integration
-  - Ikonli 12.3.1 - Icon packs for JavaFX
-  - AnimateFX & Animated - Animation libraries for dynamic UI effects
-  - CalendarFX - Advanced calendar components
+  - 🧩 JavaFX Controls - Standard UI components
+  - 🎛️ ControlsFX 11.2.1 - Extended JavaFX controls
+  - 🔣 FontAwesomeFX - Icon integration
+  - 🖼️ Ikonli 12.3.1 - Icon packs for JavaFX
+  - ✨ AnimateFX & Animated - Animation libraries for dynamic UI effects
+  - 📅 CalendarFX - Advanced calendar components
 
 - **Authentication**:
 
@@ -175,7 +189,7 @@ Rakcha Desktop leverages a variety of modern technologies:
   - Logback 1.5.6 - Logging framework
   - SnakeYAML 2.2 - YAML processing for configuration
 
-## Architecture
+## 🏗️ Architecture
 
 Rakcha Desktop follows a well-structured MVC (Model-View-Controller) architecture pattern:
 
@@ -221,18 +235,47 @@ Rakcha Desktop follows a well-structured MVC (Model-View-Controller) architectur
   - **Document Generation** - PDF export and reporting
   - **Security** - Cryptography and validation
 
-## Getting Started
+## 🚀 Getting Started
 
 These instructions will help you set up the project on your local machine.
 
-### Prerequisites
+### 📋 Prerequisites
 
-- Java JDK 17 or later
-- Maven 3.6+
-- MySQL 8.0+ (with XAMPP or standalone)
-- IDE with JavaFX support (IntelliJ IDEA, Eclipse, VS Code with extensions)
+- ☕ Java JDK 17 or later
+- 🛠️ Maven 3.6+
+- 🗄️ MySQL 8.0+ (with XAMPP or standalone)
+- 💻 IDE with JavaFX support (IntelliJ IDEA, Eclipse, VS Code with extensions)
 
-### Installation
+### 💻 System Requirements
+
+**🔧 Minimum Requirements:**
+
+- **💿 OS**: Windows 10, macOS 10.15 (Catalina), Ubuntu 20.04 or later
+- **⚙️ Processor**: Intel Core i3 or AMD equivalent
+- **🧠 RAM**: 4 GB
+- **💽 Storage**: 500 MB for application, 1 GB+ recommended for content
+- **🖼️ Graphics**: Graphics card with DirectX 11 support
+- **🌐 Internet**: Broadband connection for streaming features
+
+**✅ Recommended Specifications:**
+
+- **⚙️ Processor**: Intel Core i5/i7 or AMD equivalent
+- **🧠 RAM**: 8 GB or more
+- **🖥️ Graphics**: Dedicated GPU with 2GB+ VRAM for optimal performance with face recognition
+- **💽 Storage**: SSD storage for better performance
+- **🌐 Internet**: 10+ Mbps connection for HD streaming
+
+### ⚡ Performance Optimization
+
+Rakcha Desktop includes several performance optimizations:
+
+- Connection pooling for database operations
+- Lazy loading of media content
+- Image caching for faster UI rendering
+- Asynchronous operations for network-bound tasks
+- GPU acceleration for video processing and face recognition
+
+### 📥 Installation
 
 1. **Clone the repository**:
 
@@ -251,7 +294,7 @@ These instructions will help you set up the project on your local machine.
    - Set up database credentials in the appropriate configuration file
    - Configure API keys for external services (Google, Microsoft, Stripe, etc.)
 
-### Database Setup
+### 🗄️ Database Setup
 
 1. **Start MySQL server** (using XAMPP or standalone MySQL)
 2. **Run the database script**:
@@ -263,39 +306,39 @@ These instructions will help you set up the project on your local machine.
    ./database.sh
    ```
 
-## Usage
+## 📖 Usage
 
-### User Roles
+### 👤 User Roles
 
 Rakcha Desktop supports multiple user roles with different capabilities:
 
-1. **Client/User**:
+1. **👨‍👩‍👧‍👦 Client/User**:
 
    - Browse and watch movies and series
    - Purchase tickets for cinema showings
    - Shop for entertainment-related products
    - Manage personal profile and preferences
 
-2. **Admin**:
+2. **👨‍💼 Admin**:
 
    - Manage users and content
    - Access analytics and reports
    - Configure system settings
    - Moderate reviews and comments
 
-3. **Cinema Manager**:
+3. **🎭 Cinema Manager**:
    - Add/update cinema information
    - Manage movie showings and schedules
    - Process ticket sales and promotions
    - View cinema-specific statistics
 
-### Basic Operations
+### 🔄 Basic Operations
 
 - **Authentication**: Use traditional login, social authentication, or face recognition
 - **Content Navigation**: Use the sidebar to switch between movies, series, events, products, and cinemas
 - **Profile Management**: Update personal information, preferences, and payment methods
 
-### Advanced Features
+### 🌟 Advanced Features
 
 - **Cinema Integration**: Find nearby cinemas, view showtimes, and purchase tickets
 - **Movie and Series Streaming**: Watch content directly within the application
@@ -304,18 +347,66 @@ Rakcha Desktop supports multiple user roles with different capabilities:
 - **Payment Processing**: Secure checkout with multiple payment options
 - **Notifications**: Receive updates about new content, promotions, and account activity
 
-## API Integrations
+## 🔌 API Integrations
 
 Rakcha Desktop integrates with several external APIs:
 
-- **Google & Microsoft OAuth**: For social authentication
-- **YouTube API**: For movie trailers and related content
-- **IMDB API**: For film and series information
-- **Stripe & PayPal**: For payment processing
-- **Twilio**: For SMS notifications
-- **Weather API**: For location-based information
+- **🔐 Google & Microsoft OAuth**: For social authentication
+- **▶️ YouTube API**: For movie trailers and related content
+- **🎬 IMDB API**: For film and series information
+- **💳 Stripe & PayPal**: For payment processing
+- **📱 Twilio**: For SMS notifications
+- **☁️ Weather API**: For location-based information
 
-## Building from Source
+## 🚀 Deployment
+
+### 🏠 Local Deployment
+
+For local development and testing:
+
+```bash
+# Package the application
+mvn clean package
+
+# Run the packaged JAR
+java -jar target/RAKCHA-1.0-SNAPSHOT.jar
+```
+
+### 🌍 Production Deployment
+
+For production environments:
+
+1. **Create a distributable package**:
+
+   ```bash
+   mvn clean package
+   ```
+
+2. **Create platform-specific installers** (optional, requires additional plugins):
+
+   ```bash
+   # For Windows installer
+   mvn jpackage:jpackage@win
+
+   # For macOS app bundle
+   mvn jpackage:jpackage@mac
+
+   # For Linux package
+   mvn jpackage:jpackage@linux
+   ```
+
+3. **Database setup for production**:
+
+   - Configure a dedicated MySQL server
+   - Set up database replication if needed
+   - Configure proper backup procedures
+
+4. **Environment configuration**:
+   - Use production API keys and credentials
+   - Configure logging for production environment
+   - Set up monitoring and alerting
+
+## 🔨 Building from Source
 
 1. **Clone the repository**:
 
@@ -336,11 +427,23 @@ Rakcha Desktop integrates with several external APIs:
    ```
 
 4. **Run the application**:
+
    ```bash
    java -jar target/RAKCHA-1.0-SNAPSHOT.jar
    ```
 
-## Project Structure
+   Alternatively, you can use the JavaFX Maven plugin:
+
+   ```bash
+   mvn javafx:run
+   ```
+
+5. **Development in IDE**:
+   - Open the project in your preferred IDE (IntelliJ IDEA, Eclipse, etc.)
+   - Ensure you have the JavaFX plugin installed
+   - Run the main class: `com.esprit.MainApp`
+
+## 📁 Project Structure
 
 ```
 rakcha-desktop/
@@ -349,28 +452,44 @@ rakcha-desktop/
 │   │   ├── java/
 │   │   │   └── com/
 │   │   │       └── esprit/
-│   │   │           ├── controllers/ # UI controllers
-│   │   │           │   ├── films/   # Film-related controllers
-│   │   │           │   ├── series/  # Series-related controllers
-│   │   │           │   ├── users/   # User-related controllers
-│   │   │           │   ├── cinemas/ # Cinema-related controllers
-│   │   │           │   └── produits/ # Product-related controllers
-│   │   │           ├── models/     # Data models
-│   │   │           ├── services/   # Business logic
-│   │   │           └── utils/      # Utility classes
+│   │   │           ├── controllers/ # 🎮 UI controllers
+│   │   │           │   ├── films/   # 🎬 Film-related controllers
+│   │   │           │   ├── series/  # 📺 Series-related controllers
+│   │   │           │   ├── users/   # 👤 User-related controllers
+│   │   │           │   ├── cinemas/ # 🏢 Cinema-related controllers
+│   │   │           │   └── produits/ # 🛍️ Product-related controllers
+│   │   │           ├── models/     # 📊 Data models
+│   │   │           ├── services/   # ⚙️ Business logic
+│   │   │           └── utils/      # 🛠️ Utility classes
 │   │   └── resources/
-│   │       ├── ui/          # FXML UI files
-│   │       ├── images/      # Image resources
-│   │       ├── styles/      # CSS style files
-│   │       └── META-INF/    # Metadata
+│   │       ├── ui/          # 🎨 FXML UI files
+│   │       ├── images/      # 🖼️ Image resources
+│   │       ├── styles/      # 💅 CSS style files
+│   │       └── META-INF/    # 📝 Metadata
 │   └── test/
-│       └── java/            # Test classes
-├── docs/                    # Documentation
-├── pom.xml                  # Maven configuration
-└── README.md                # This file
+│       └── java/            # 🧪 Test classes
+├── docs/                    # 📚 Documentation
+├── pom.xml                  # 📦 Maven configuration
+└── README.md                # 📖 This file
 ```
 
-## Testing
+## 🔍 Code Quality and CI/CD
+
+Rakcha Desktop implements several practices to ensure code quality and maintainability:
+
+- **OpenRewrite**: Automated refactoring and code modernization
+- **Java Best Practices**: Following Java 17 conventions and patterns
+- **Code Cleanup**: Automated static analysis and code style enforcement
+- **Continuous Documentation**: JavaDoc generation with comprehensive API documentation
+- **Code Structure**: Clean modular architecture with clear separation of concerns
+
+Testing pipelines include:
+
+- Unit tests for business logic
+- Integration tests for service interactions
+- UI tests for interface validation
+
+## 🧪 Testing
 
 Run the tests using Maven:
 
@@ -380,32 +499,59 @@ mvn test
 
 The application includes various test types:
 
-- Unit tests for individual components
-- Integration tests for service-to-service communication
-- UI tests for the JavaFX interface
+- ✅ Unit tests for individual components
+- 🔄 Integration tests for service-to-service communication
+- 🖥️ UI tests for the JavaFX interface
 
-## Contributing
+## 👥 Contributing
 
 We welcome contributions to Rakcha Desktop! Please read our [CONTRIBUTING.md](CONTRIBUTING.md) file for details on how to submit pull requests.
 
-1. Fork the repository
-2. Create your feature branch: `git checkout -b feature/amazing-feature`
-3. Commit your changes: `git commit -m 'Add some amazing feature'`
-4. Push to the branch: `git push origin feature/amazing-feature`
-5. Open a Pull Request
+1. 🍴 Fork the repository
+2. 🌿 Create your feature branch: `git checkout -b feature/amazing-feature`
+3. 💾 Commit your changes: `git commit -m 'Add some amazing feature'`
+4. 📤 Push to the branch: `git push origin feature/amazing-feature`
+5. 🔍 Open a Pull Request
 
-## License
+## 📜 License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
 
-## Authors
+## ✍️ Authors
 
 - **Ali Ammari** - _Initial work_ - [aliammari1](https://github.com/aliammari1)
 
 See also the list of [contributors](https://github.com/aliammari1/rakcha-desktop/contributors) who participated in this project.
 
-## Acknowledgments
+## 🗺️ Future Development Roadmap
 
-- Special thanks to all contributors and testers
-- Inspiration from modern entertainment platforms
-- Libraries and frameworks that made this project possible
+### 📅 Planned Features
+
+1. **Q3 2025**
+
+   - 📱 Mobile companion application with cross-platform synchronization
+   - 🧠 AI-enhanced content recommendations based on viewing habits
+   - 📊 Advanced analytics dashboard for business intelligence
+
+2. **Q4 2025**
+
+   - 🥽 Virtual reality cinema experience integration
+   - 👥 Enhanced social features with friend connections and watch parties
+   - 🌐 International payment gateway expansion
+
+3. **Q1 2026**
+   - 🎥 Content creator portal for independent filmmakers
+   - 🔄 Subscription service model implementation
+   - 🏠 Integration with smart home systems
+
+### 💭 Under Consideration
+
+- ⛓️ Blockchain-based loyalty program
+- 🔍 AR experiences for product visualization
+- 🎤 Voice control interface
+
+## 🙏 Acknowledgments
+
+- 👏 Special thanks to all contributors and testers
+- 💡 Inspiration from modern entertainment platforms
+- 📚 Libraries and frameworks that made this project possible
