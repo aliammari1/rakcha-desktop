@@ -1,4 +1,21 @@
-FROM maven:3.9-amazoncorretto-17 AS builder
+FROM ubuntu:22.04 AS builder
+USER root
+
+# Set non-interactive installation
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=Etc/UTC
+
+# Install basic dependencies
+RUN apt-get update && apt-get install -y curl zip unzip ca-certificates git && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install SDKMAN and setup Java and Maven
+RUN curl -s "https://get.sdkman.io" | bash
+RUN bash -c "source $HOME/.sdkman/bin/sdkman-init.sh && \
+    yes | sdk install java 21.0.2-open && \
+    yes | sdk install maven 3.9.4 && \
+    sdk use java 21.0.2-open && \
+    sdk use maven 3.9.4"
 
 # Set working directory
 WORKDIR /app
@@ -8,28 +25,101 @@ COPY pom.xml .
 COPY src ./src
 
 # Build the application
-RUN mvn clean package -DskipTests
+RUN bash -c "source $HOME/.sdkman/bin/sdkman-init.sh && mvn clean package -DskipTests"
 
-# Runtime stage
-FROM amazoncorretto:17
+# Runtime stage with JavaFX support and noVNC
+FROM ubuntu:22.04
+USER root
+
+# Set non-interactive installation
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=Etc/UTC
+
+# Install dependencies for JavaFX, X11, and noVNC
+RUN apt-get update && apt-get install -y \
+    curl \
+    zip \
+    unzip \
+    ca-certificates \
+    git \
+    xvfb \
+    x11vnc \
+    xterm \
+    fluxbox \
+    wmctrl \
+    wget \
+    net-tools \
+    supervisor \
+    python3 \
+    python3-numpy \
+    libnss3 \
+    libnspr4 \
+    libatk1.0-0 \
+    libatk-bridge2.0-0 \
+    libcups2 \
+    libdrm2 \
+    libxkbcommon0 \
+    libxcomposite1 \
+    libxdamage1 \
+    libxfixes3 \
+    libxrandr2 \
+    libasound2 \
+    libpango-1.0-0 \
+    libcairo2 \
+    libatspi2.0-0 \
+    libgtk-3-0 \
+    libgbm1 \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install SDKMAN with Java and Maven
+RUN curl -s "https://get.sdkman.io" | bash
+RUN bash -c "source $HOME/.sdkman/bin/sdkman-init.sh && \
+    yes | sdk install java 21.0.2-open && \
+    yes | sdk install maven 3.9.4 && \
+    sdk use java 21.0.2-open && \
+    sdk use maven 3.9.4"
+
+# Install noVNC
+RUN mkdir -p /opt/novnc && \
+    git clone https://github.com/novnc/noVNC.git /opt/novnc && \
+    git clone https://github.com/novnc/websockify.git /opt/novnc/utils/websockify
 
 WORKDIR /app
 
-# Copy the built artifact from the builder stage
-COPY --from=builder /app/target/*.jar ./app.jar
+# Copy the Maven project structure instead of just the JAR
+COPY pom.xml .
+COPY src ./src
 
-# Copy resources needed at runtime
-COPY src/main/resources ./resources
+# Copy supervisor configuration
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Set environment variables
-ENV DB_HOST=mysql
-ENV DB_PORT=3306
-ENV DB_NAME=rakcha_db
-ENV DB_USER=root
-ENV DB_PASSWORD=root
+# Set environment variables for display and locale
+ENV DISPLAY=:1
+ENV HOME=/root
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US.UTF-8
+ENV LC_ALL=C.UTF-8
 
-# Expose the application port (replace 8080 with your application's port if different)
-EXPOSE 8080
+# Note: Database credentials will be provided by docker-compose environment variables
 
-# Run the application
-CMD ["java", "-jar", "app.jar"]
+# Add SDKMAN to PATH
+ENV PATH="$PATH:/root/.sdkman/candidates/java/current/bin"
+
+# Create supervisor log directory
+RUN mkdir -p /var/log/supervisor
+
+# Create startup script
+RUN mkdir -p /var/log/supervisor
+COPY <<EOF /app/entrypoint.sh
+#!/bin/bash
+# Start the supervisord service which manages all the processes
+supervisord -c /etc/supervisor/conf.d/supervisord.conf
+EOF
+
+RUN chmod +x /app/entrypoint.sh
+
+# Expose ports
+EXPOSE 5900 6080
+
+# Set entrypoint
+ENTRYPOINT ["/app/entrypoint.sh"]

@@ -8,15 +8,17 @@ services:
     container_name: rakcha-app
     ports:
       - "${APP_PORT:-8080}:8080"
+      - "${NOVNC_PORT:-6080}:6080" # noVNC web interface port
+      - "${VNC_PORT:-5900}:5900" # VNC port for direct VNC clients
     depends_on:
       - mysql
     environment:
-      - DB_HOST=${DB_HOST}
-      - DB_PORT=${DB_PORT}
-      - DB_NAME=${DB_NAME}
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - JAVA_OPTS=${JAVA_OPTS:-"-Xmx512m"}
+      - DB_HOST=${DB_HOST:-mysql}
+      - DB_PORT=${DB_PORT:-3306}
+      - DB_NAME=${DB_NAME:-rakcha_db}
+      - DB_USER=${DB_USER:-root}
+      - DB_PASSWORD=${DB_PASSWORD:-root}
+      - JAVA_OPTS=${JAVA_OPTS:-"-Xmx1024m"}
     restart: unless-stopped
     networks:
       - rakcha-network

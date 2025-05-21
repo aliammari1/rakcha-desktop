@@ -398,8 +398,9 @@ Rakcha Desktop can be easily deployed using Docker containers, simplifying the s
 
 The application is containerized using the following components:
 
-- **App Container**: Java application built with Maven and running on Amazon Corretto JDK 17
+- **App Container**: Java application built with Maven and running on JDK 21 with noVNC for GUI access
 - **MySQL Container**: Database server with pre-initialized schema and data
+- **PHPMyAdmin Container**: Web interface for database management
 
 The Docker setup automatically handles:
 
@@ -407,6 +408,17 @@ The Docker setup automatically handles:
 - Environment variable configuration
 - Network setup between the application and database
 - Volume persistence for the database
+- Virtual framebuffer (Xvfb) and VNC server for GUI access through a web browser
+
+#### Accessing the Application GUI
+
+Once the containers are running, you can access the JavaFX GUI through your web browser:
+
+1. Open your web browser and navigate to `http://localhost:6080/vnc.html`
+2. Click the "Connect" button (no password needed)
+3. You should now see the Rakcha Desktop application interface in your browser
+
+You can also connect directly with a VNC client to `localhost:5900` (no password required).
 
 #### Manual Docker Commands
 
@@ -423,8 +435,12 @@ docker run -d -p 3306:3306 --name rakcha-mysql \
   -v $(pwd)/rakcha_db.sql:/docker-entrypoint-initdb.d/rakcha_db.sql \
   mysql:8.0
 
-# Run the application container
-docker run -d -p 8080:8080 --name rakcha-app \
+# Run the application container with noVNC
+docker run -d \
+  --name rakcha-app \
+  -p 8080:8080 \
+  -p 6080:6080 \
+  -p 5900:5900 \
   -e DB_HOST=rakcha-mysql \
   -e DB_PORT=3306 \
   -e DB_NAME=rakcha_db \
