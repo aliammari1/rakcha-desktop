@@ -1,16 +1,25 @@
 package com.esprit.utils;
 
-import com.esprit.Config;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.esprit.Config;
+
+/**
+ * Utility class providing helper methods for the RAKCHA application. Contains
+ * reusable functionality and common operations.
+ *
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class DataSource {
     private static final Logger LOGGER = Logger.getLogger(DataSource.class.getName());
     private static DataSource instance;
-    private static final String DEFAULT_URL = "jdbc:mysql://localhost:3306/rakcha";
+    private static final String DEFAULT_URL = "jdbc:mysql://localhost:3306/rakcha_db";
     private final String url;
     private final String user;
     private final String password;

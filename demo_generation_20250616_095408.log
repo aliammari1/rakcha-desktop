@@ -1,0 +1,25 @@
+2025-06-16 09:54:08 - SECTION: RAKCHA DESKTOP AUTOMATED DEMO GENERATION
+2025-06-16 09:54:08 - SECTION: SYSTEM REQUIREMENTS CHECK
+2025-06-16 09:54:08 - SUCCESS: Java 21 found
+2025-06-16 09:54:08 - SUCCESS: Maven found
+2025-06-16 09:54:08 - SUCCESS: FFmpeg found - video generation enabled
+2025-06-16 09:54:08 - SUCCESS: ImageMagick found - image processing enabled
+2025-06-16 09:54:08 - SUCCESS: Display available for GUI applications
+2025-06-16 09:54:08 - SUCCESS: System requirements check completed
+2025-06-16 09:54:08 - SECTION: SETTING UP DEMO STRUCTURE
+2025-06-16 09:54:08 - STEP: Creating directory structure...
+2025-06-16 09:54:08 - SUCCESS: Demo directory structure created
+2025-06-16 09:54:08 - INFO: Directory structure:
+2025-06-16 09:54:08 - SECTION: BUILDING APPLICATION
+2025-06-16 09:54:08 - STEP: Cleaning previous builds...
+2025-06-16 09:54:10 - SUCCESS: Previous builds cleaned
+2025-06-16 09:54:10 - STEP: Compiling application...
+2025-06-16 09:54:27 - SUCCESS: Application compiled successfully
+2025-06-16 09:54:27 - STEP: Resolving dependencies...
+2025-06-16 09:54:52 - SUCCESS: Dependencies resolved
+2025-06-16 09:54:52 - SUCCESS: Application build completed
+2025-06-16 09:54:52 - SECTION: GENERATING AUTOMATED SCREENSHOTS
+2025-06-16 09:54:52 - STEP: Preparing screenshot generation...
+2025-06-16 09:54:52 - STEP: Running automated screenshot generator...
+2025-06-16 09:54:55 - ERROR: No screenshots were generated
+2025-06-16 09:54:55 - ERROR: Screenshot generation failed - cannot complete demo package

@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns="http://maven.apache.org/POM/4.0.0"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.example</groupId>
   <artifactId>RAKCHA</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0.0</version>
 
   <properties>
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
     <maven.compiler.release>17</maven.compiler.release>
-    <!-- Add this line -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <junit.version>5.9.2</junit.version>
+    <junit.version>5.10.0</junit.version>
+    <hibernate.version>6.2.13.Final</hibernate.version>
+    <lombok.version>1.18.28</lombok.version>
+    <slf4j.version>2.0.9</slf4j.version>
+    <logback.version>1.4.11</logback.version>
+    <h2.version>2.2.224</h2.version>
+    <testfx.version>4.0.17</testfx.version>
   </properties>
 
   <repositories>
@@ -29,6 +34,123 @@
   </repositories>
 
   <dependencies>
+    <!-- Hibernate ORM Dependencies -->
+    <dependency>
+      <groupId>org.hibernate.orm</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>${hibernate.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate.orm</groupId>
+      <artifactId>hibernate-hikaricp</artifactId>
+      <version>${hibernate.version}</version>
+    </dependency>
+
+    <!-- H2 Database for development -->
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>${h2.version}</version>
+    </dependency>
+
+    <!-- PostgreSQL for production -->
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>42.6.0</version>
+    </dependency>
+
+    <!-- Logging Dependencies -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${slf4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>${logback.version}</version>
+    </dependency>
+
+    <!-- Testing Dependencies -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testfx</groupId>
+      <artifactId>testfx-core</artifactId>
+      <version>${testfx.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testfx</groupId>
+      <artifactId>testfx-junit5</artifactId>
+      <version>${testfx.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Screenshot and Video Generation Dependencies -->
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>javacv-platform</artifactId>
+      <version>1.5.10</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>ffmpeg-platform-gpl</artifactId>
+      <version>6.1.1-1.5.10</version>
+    </dependency>
+
+    <!-- Modern UI Packages -->
+    <!-- MaterialFX for modern UI components -->
+    <dependency>
+      <groupId>io.github.palexdev</groupId>
+      <artifactId>materialfx</artifactId>
+      <version>11.15.0</version>
+    </dependency>
+
+    <!-- JFoenix for Material Design components -->
+    <dependency>
+      <groupId>com.jfoenix</groupId>
+      <artifactId>jfoenix</artifactId>
+      <version>9.0.10</version>
+    </dependency>
+
+    <!-- AnimateFX for smooth animations -->
+    <dependency>
+      <groupId>io.github.typhon0</groupId>
+      <artifactId>AnimateFX</artifactId>
+      <version>1.2.4</version>
+    </dependency>
+
+    <!-- FontAwesome Icons -->
+    <dependency>
+      <groupId>de.jensd</groupId>
+      <artifactId>fontawesomefx-materialicons</artifactId>
+      <version>2.2.0-9.1.2</version>
+    </dependency>
+
+    <!-- Ikonli for additional icons -->
+    <dependency>
+      <groupId>org.kordamp.ikonli</groupId>
+      <artifactId>ikonli-javafx</artifactId>
+      <version>12.3.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.kordamp.ikonli</groupId>
+      <artifactId>ikonli-fontawesome5-pack</artifactId>
+      <version>12.3.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.kordamp.ikonli</groupId>
+      <artifactId>ikonli-material-pack</artifactId>
+      <version>12.3.1</version>
+    </dependency>
+
+    <!-- Existing Dependencies -->
     <dependency>
       <groupId>com.github.PlusHaze</groupId>
       <artifactId>TrayNotification</artifactId>
@@ -85,12 +207,6 @@
       <version>1.5.0-b01</version>
     </dependency>
     <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter</artifactId>
-      <version>5.11.0-M2</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>net.synedra</groupId>
       <artifactId>validatorfx</artifactId>
       <version>0.5.1</version>
@@ -104,7 +220,6 @@
       <groupId>com.sun.mail</groupId>
       <artifactId>javax.mail</artifactId>
       <version>1.6.2</version>
-      <!-- Utilisez la version la plus récente -->
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
@@ -222,11 +337,6 @@
       <version>1.3.0</version>
     </dependency>
     <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <version>1.5.6</version>
-    </dependency>
-    <dependency>
       <groupId>edu.stanford.nlp</groupId>
       <artifactId>stanford-corenlp</artifactId>
       <version>4.5.7</version>
@@ -244,18 +354,8 @@
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
-      <artifactId>javacv-platform</artifactId>
-      <version>1.5.10</version>
-    </dependency>
-    <dependency>
-      <groupId>org.bytedeco</groupId>
       <artifactId>opencv-platform-gpu</artifactId>
       <version>4.10.0-1.5.11</version>
-    </dependency>
-    <dependency>
-      <groupId>org.bytedeco</groupId>
-      <artifactId>ffmpeg-platform-gpl</artifactId>
-      <version>6.1.1-1.5.10</version>
     </dependency>
     <dependency>
       <groupId>org.mindrot</groupId>
@@ -272,9 +372,36 @@
       <artifactId>snakeyaml</artifactId>
       <version>2.2</version>
     </dependency>
+    <!-- Lombok for reducing boilerplate code -->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${lombok.version}</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
+      <!-- Maven Compiler Plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.11.0</version>
+        <configuration>
+          <source>17</source>
+          <target>17</target>
+          <release>17</release>
+          <annotationProcessorPaths>
+            <path>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+              <version>1.18.38</version>
+            </path>
+          </annotationProcessorPaths>
+        </configuration>
+      </plugin>
+
+      <!-- JavaFX Maven Plugin -->
       <plugin>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-maven-plugin</artifactId>
@@ -283,12 +410,52 @@
           <mainClass>com.esprit.MainApp</mainClass>
         </configuration>
       </plugin>
+
+      <!-- Maven Shade Plugin for fat JAR -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.5.0</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <createDependencyReducedPom>false</createDependencyReducedPom>
+              <transformers>
+                <transformer
+                  implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>com.esprit.MainApp</mainClass>
+                </transformer>
+              </transformers>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Surefire Plugin for Testing -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.1.2</version>
+        <configuration>
+          <argLine>
+            --add-opens javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
+            --add-exports javafx.graphics/com.sun.glass.ui=ALL-UNNAMED
+          </argLine>
+        </configuration>
+      </plugin>
+
+      <!-- OpenRewrite Plugin for Code Refactoring and Best Practices -->
       <plugin>
         <groupId>org.openrewrite.maven</groupId>
         <artifactId>rewrite-maven-plugin</artifactId>
         <version>5.36.0</version>
         <configuration>
           <exportDatatables>true</exportDatatables>
+          <configLocation>rewrite.yml</configLocation>
           <activeRecipes>
             <recipe>org.openrewrite.recipes.JavaRecipeBestPractices</recipe>
             <recipe>org.openrewrite.java.migrate.UpgradeToJava17</recipe>
@@ -297,6 +464,13 @@
             <recipe>org.openrewrite.recommendations.CodeStyle</recipe>
             <recipe>org.openrewrite.staticanalysis.MissingOverrideAnnotation</recipe>
             <recipe>org.openrewrite.staticanalysis.CodeCleanup</recipe>
+            <recipe>org.openrewrite.staticanalysis.AddSerialVersionUidToSerializable</recipe>
+            <recipe>org.openrewrite.staticanalysis.ExplicitInitialization</recipe>
+            <recipe>org.openrewrite.staticanalysis.FinalizePrivateFields</recipe>
+            <recipe>org.openrewrite.staticanalysis.MethodNameCasing</recipe>
+            <recipe>org.openrewrite.staticanalysis.UnnecessaryParentheses</recipe>
+            <recipe>org.openrewrite.staticanalysis.UseDiamondOperator</recipe>
+            <recipe>com.esprit.recipes.AddJavadocComments</recipe>
           </activeRecipes>
         </configuration>
         <dependencies>
@@ -316,6 +490,172 @@
             <version>1.12.0</version>
           </dependency>
         </dependencies>
+      </plugin>
+
+      <!-- Javadoc Plugin for Documentation Generation -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.6.3</version>
+        <configuration>
+          <source>17</source>
+          <target>17</target>
+          <encoding>UTF-8</encoding>
+          <docencoding>UTF-8</docencoding>
+          <charset>UTF-8</charset>
+          <show>private</show>
+          <nohelp>true</nohelp>
+          <failOnError>false</failOnError>
+          <failOnWarnings>false</failOnWarnings>
+          <quiet>true</quiet>
+          <additionalJOptions>
+            <additionalJOption>-Xdoclint:none</additionalJOption>
+          </additionalJOptions>
+          <tags>
+            <tag>
+              <name>apiNote</name>
+              <placement>a</placement>
+              <head>API Note:</head>
+            </tag>
+            <tag>
+              <name>implSpec</name>
+              <placement>a</placement>
+              <head>Implementation Requirements:</head>
+            </tag>
+            <tag>
+              <name>implNote</name>
+              <placement>a</placement>
+              <head>Implementation Note:</head>
+            </tag>
+          </tags>
+        </configuration>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>generate-docs</id>
+            <phase>package</phase>
+            <goals>
+              <goal>javadoc</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- SpotBugs Plugin for Static Analysis -->
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <version>4.8.2.0</version>
+        <configuration>
+          <effort>Max</effort>
+          <threshold>Low</threshold>
+          <failOnError>false</failOnError>
+          <xmlOutput>true</xmlOutput>
+          <spotbugsXmlOutputDirectory>${project.build.directory}/spotbugs</spotbugsXmlOutputDirectory>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Checkstyle Plugin for Code Style -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>3.3.1</version>
+        <configuration>
+          <configLocation>checkstyle.xml</configLocation>
+          <encoding>UTF-8</encoding>
+          <consoleOutput>true</consoleOutput>
+          <failsOnError>false</failsOnError>
+          <linkXRef>false</linkXRef>
+        </configuration>
+        <executions>
+          <execution>
+            <id>validate</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>com.puppycrawl.tools</groupId>
+            <artifactId>checkstyle</artifactId>
+            <version>10.12.7</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+
+      <!-- PMD Plugin for Code Quality -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <version>3.21.2</version>
+        <configuration>
+          <rulesets>
+            <ruleset>/category/java/bestpractices.xml</ruleset>
+            <ruleset>/category/java/codestyle.xml</ruleset>
+            <ruleset>/category/java/design.xml</ruleset>
+            <ruleset>/category/java/errorprone.xml</ruleset>
+            <ruleset>/category/java/performance.xml</ruleset>
+            <ruleset>/category/java/security.xml</ruleset>
+          </rulesets>
+          <failOnViolation>false</failOnViolation>
+          <printFailingErrors>true</printFailingErrors>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Failsafe Plugin for Integration Tests -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>3.2.5</version>
+        <configuration>
+          <argLine>
+            --add-opens javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
+            --add-exports javafx.graphics/com.sun.glass.ui=ALL-UNNAMED
+            --add-opens javafx.controls/javafx.scene.control=ALL-UNNAMED
+            --add-opens javafx.controls/javafx.scene.control.skin=ALL-UNNAMED
+            --add-opens javafx.base/com.sun.javafx.event=ALL-UNNAMED
+            --add-opens javafx.base/com.sun.javafx=ALL-UNNAMED
+            --add-opens java.base/java.lang.reflect=ALL-UNNAMED
+            -Djava.awt.headless=false
+            -Dtestfx.robot=glass
+            -Dtestfx.headless=false
+            -Dprism.order=sw
+          </argLine>
+          <includes>
+            <include>**/*IT.java</include>
+            <include>**/*E2E.java</include>
+            <include>**/*IntegrationTest.java</include>
+          </includes>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

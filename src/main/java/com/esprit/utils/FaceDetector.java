@@ -1,14 +1,22 @@
 package com.esprit.utils;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
 import org.opencv.videoio.VideoCapture;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+/**
+ * Utility class providing helper methods for the RAKCHA application. Contains
+ * reusable functionality and common operations.
+ *
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class FaceDetector implements Runnable {
     private static final Logger LOGGER = Logger.getLogger(FaceDetector.class.getName());
     private static final String FRONTAL_FACE_CASCADE = "/haarcascades/haarcascade_frontalface_alt.xml";
@@ -26,6 +34,11 @@ public class FaceDetector implements Runnable {
         void onFrameProcessed(Mat frame);
     }
 
+    /**
+     * Performs FaceDetector operation.
+     *
+     * @return the result of the operation
+     */
     public FaceDetector(FaceDetectionCallback callback) {
         this.callback = callback;
         this.running = new AtomicBoolean(false);
@@ -50,6 +63,11 @@ public class FaceDetector implements Runnable {
     }
 
     @Override
+    /**
+     * Performs run operation.
+     *
+     * @return the result of the operation
+     */
     public void run() {
         running.set(true);
         Mat frame = new Mat();
@@ -63,8 +81,7 @@ public class FaceDetector implements Runnable {
 
                     // Detect faces
                     MatOfRect faces = new MatOfRect();
-                    faceCascade.detectMultiScale(gray, faces, 1.1, 3, 0,
-                            new Size(30, 30), new Size());
+                    faceCascade.detectMultiScale(gray, faces, 1.1, 3, 0, new Size(30, 30), new Size());
 
                     // Process detected faces
                     for (Rect faceRect : faces.toArray()) {
@@ -94,6 +111,11 @@ public class FaceDetector implements Runnable {
         cleanup();
     }
 
+    /**
+     * Performs stop operation.
+     *
+     * @return the result of the operation
+     */
     public void stop() {
         running.set(false);
     }

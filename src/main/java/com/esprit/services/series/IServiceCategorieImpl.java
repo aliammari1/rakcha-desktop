@@ -1,8 +1,5 @@
 package com.esprit.services.series;
 
-import com.esprit.models.series.Categorie;
-import com.esprit.utils.DataSource;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,92 +8,140 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class IServiceCategorieImpl implements IServiceCategorie<Categorie> {
+import com.esprit.models.series.Category;
+import com.esprit.services.IService;
+import com.esprit.utils.DataSource;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+/**
+ * Service class providing business logic for the RAKCHA application. Implements
+ * CRUD operations and business rules for data management.
+ *
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
+ */
+public class IServiceCategorieImpl implements IService<Category> {
     private static final Logger LOGGER = Logger.getLogger(IServiceCategorieImpl.class.getName());
-    private static List<Categorie> categories;
     private final Connection connection;
 
+    /**
+     * Performs IServiceCategorieImpl operation.
+     *
+     * @return the result of the operation
+     */
     public IServiceCategorieImpl() {
         this.connection = DataSource.getInstance().getConnection();
     }
 
+    @Override
     /**
-     * @param categorie
-     * @throws SQLException
+     * Creates a new entity in the database.
+     *
+     * @param entity
+     *            the entity to create
      */
-    @Override
-    public void ajouter(final Categorie categorie) throws SQLException {
-        final String req = "INSERT INTO categories (nom, description) VALUES (?, ?)";
-        final PreparedStatement st = this.connection.prepareStatement(req);
-        st.setString(1, categorie.getNom());
-        st.setString(2, categorie.getDescription());
-        st.executeUpdate();
-        IServiceCategorieImpl.LOGGER.info("Categorie ajoutee avec succes");
-    }
-
-    /**
-     * @param categorie
-     * @throws SQLException
-     */
-    @Override
-    public void modifier(final Categorie categorie) throws SQLException {
-        final String req = "UPDATE categories SET nom = ?, description = ? WHERE idcategorie = ?";
-        final PreparedStatement os = this.connection.prepareStatement(req);
-        os.setString(1, categorie.getNom());
-        os.setString(2, categorie.getDescription());
-        os.setInt(3, categorie.getIdcategorie());
-        os.executeUpdate();
-        IServiceCategorieImpl.LOGGER.info("Categorie modifiee avec succes");
-    }
-
-    @Override
-    public void supprimer(final int id) throws SQLException {
-        final String req = "DELETE FROM categories WHERE idcategorie = ?";
-        final PreparedStatement os = this.connection.prepareStatement(req);
-        os.setInt(1, id);
-        os.executeUpdate();
-        IServiceCategorieImpl.LOGGER.info("Categorie supprimee avec succes");
-    }
-
-    @Override
-    public List<Categorie> recuperer() throws SQLException {
-        final List<Categorie> categories = new ArrayList<>();
-        final String req = "SELECT * FROM categories";
-        final Statement st = this.connection.createStatement();
-        final ResultSet rs = st.executeQuery(req);
-        while (rs.next()) {
-            final Categorie categorie = new Categorie();
-            categorie.setIdcategorie(rs.getInt("idcategorie"));
-            categorie.setNom(rs.getString("nom"));
-            categorie.setDescription(rs.getString("description"));
-            categories.add(categorie);
+    public void create(final Category category) {
+        final String req = "INSERT INTO category (name, description) VALUES (?, ?)";
+        try (final PreparedStatement st = this.connection.prepareStatement(req)) {
+            st.setString(1, category.getName());
+            st.setString(2, category.getDescription());
+            st.executeUpdate();
+            LOGGER.info("Category added successfully");
+        } catch (final SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error creating category: " + e.getMessage(), e);
+            throw new RuntimeException("Failed to create category", e);
         }
-        IServiceCategorieImpl.LOGGER.info(categories.toString());
+    }
+
+    @Override
+    /**
+     * Updates an existing entity in the database.
+     *
+     * @param entity
+     *            the entity to update
+     */
+    public void update(final Category category) {
+        final String req = "UPDATE category SET name = ?, description = ? WHERE id = ?";
+        try (final PreparedStatement os = this.connection.prepareStatement(req)) {
+            os.setString(1, category.getName());
+            os.setString(2, category.getDescription());
+            os.setLong(3, category.getId());
+            os.executeUpdate();
+            LOGGER.info("Category updated successfully");
+        } catch (final SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error updating category: " + e.getMessage(), e);
+            throw new RuntimeException("Failed to update category", e);
+        }
+    }
+
+    @Override
+    /**
+     * Deletes an entity from the database.
+     *
+     * @param id
+     *            the ID of the entity to delete
+     */
+    public void delete(final Category category) {
+        final String req = "DELETE FROM category WHERE id = ?";
+        try (final PreparedStatement os = this.connection.prepareStatement(req)) {
+            os.setLong(1, category.getId());
+            os.executeUpdate();
+            LOGGER.info("Category deleted successfully");
+        } catch (final SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error deleting category: " + e.getMessage(), e);
+            throw new RuntimeException("Failed to delete category", e);
+        }
+    }
+
+    @Override
+    /**
+     * Performs read operation.
+     *
+     * @return the result of the operation
+     */
+    public List<Category> read() {
+        final List<Category> categories = new ArrayList<>();
+        final String req = "SELECT * FROM category";
+        try (final Statement st = this.connection.createStatement(); final ResultSet rs = st.executeQuery(req)) {
+            while (rs.next()) {
+                final Category category = Category.builder().id(rs.getLong("id")).name(rs.getString("name"))
+                        .description(rs.getString("description")).build();
+                categories.add(category);
+            }
+        } catch (final SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error reading categories: " + e.getMessage(), e);
+            throw new RuntimeException("Failed to read categories", e);
+        }
+        LOGGER.info(categories.toString());
         return categories;
     }
 
-    @Override
-    public Map<Categorie, Long> getCategoriesStatistics() {
-        final Map<Categorie, Long> statistics = new HashMap<>();
-        try {
-            final String query = """
-                    SELECT categories.*, COUNT(series.idserie) as series_count \
-                    FROM categories \
-                    LEFT JOIN series ON categories.idcategorie = series.idcategorie \
-                    GROUP BY categories.idcategorie\
-                    """;
-            final PreparedStatement statement = this.connection.prepareStatement(query);
-            final ResultSet resultSet = statement.executeQuery();
+    /**
+     * Retrieves the CategoriesStatistics value.
+     *
+     * @return the CategoriesStatistics value
+     */
+    public Map<Category, Long> getCategoriesStatistics() {
+        final Map<Category, Long> statistics = new HashMap<>();
+        final String query = """
+                SELECT c.*, COUNT(sc.series_id) as series_count
+                FROM category c
+                LEFT JOIN series_categories sc ON c.id = sc.category_id
+                GROUP BY c.id
+                """;
+        try (final PreparedStatement statement = this.connection.prepareStatement(query);
+                final ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
-                final Categorie categorie = new Categorie();
-                categorie.setIdcategorie(resultSet.getInt("idcategorie"));
-                categorie.setNom(resultSet.getString("nom"));
-                categorie.setDescription(resultSet.getString("description"));
+                final Category category = Category.builder().id(resultSet.getLong("id"))
+                        .name(resultSet.getString("name")).description(resultSet.getString("description")).build();
                 final long seriesCount = resultSet.getLong("series_count");
-                statistics.put(categorie, seriesCount);
+                statistics.put(category, seriesCount);
             }
         } catch (final SQLException e) {
-            IServiceCategorieImpl.LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return statistics;
     }

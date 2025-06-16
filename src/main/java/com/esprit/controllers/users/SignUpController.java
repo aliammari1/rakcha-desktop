@@ -1,9 +1,23 @@
 package com.esprit.controllers.users;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.esprit.models.users.CinemaManager;
 import com.esprit.models.users.Client;
-import com.esprit.models.users.Responsable_de_cinema;
 import com.esprit.models.users.User;
 import com.esprit.services.users.UserService;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -24,19 +38,14 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import net.synedra.validatorfx.Validator;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.sql.Date;
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+/**
+ * JavaFX controller class for the RAKCHA application. Handles UI interactions
+ * and manages view logic using FXML.
+ *
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class SignUpController {
     private static final Logger LOGGER = Logger.getLogger(SignUpController.class.getName());
     @FXML
@@ -104,11 +113,15 @@ public class SignUpController {
         });
         this.nomTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
+            /**
+             * Performs changed operation.
+             *
+             * @return the result of the operation
+             */
             public void changed(final ObservableValue<? extends String> observable, final String oldValue,
                     final String newValue) {
                 final Validator validator = new Validator();
-                validator.createCheck()
-                        .dependsOn("firstName", SignUpController.this.nomTextField.textProperty())
+                validator.createCheck().dependsOn("firstName", SignUpController.this.nomTextField.textProperty())
                         .withMethod(c -> {
                             final String userName = c.get("firstName");
                             if (null != userName && !userName.toLowerCase().equals(userName)) {
@@ -116,14 +129,17 @@ public class SignUpController {
                             } else if (userName.isEmpty()) {
                                 c.error("the string is empty");
                             }
-                        })
-                        .decorates(SignUpController.this.nomTextField)
-                        .immediate();
+                        }).decorates(SignUpController.this.nomTextField).immediate();
                 final Window window = SignUpController.this.nomTextField.getScene().getWindow();
                 final Bounds bounds = SignUpController.this.nomTextField
                         .localToScreen(SignUpController.this.nomTextField.getBoundsInLocal());
                 SignUpController.this.nomTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
+                    /**
+                     * Performs changed operation.
+                     *
+                     * @return the result of the operation
+                     */
                     public void changed(final ObservableValue<? extends String> observable, final String oldValue,
                             final String newValue) {
                         if (validator.containsErrors()) {
@@ -141,6 +157,11 @@ public class SignUpController {
                 });
                 SignUpController.this.nomTextField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
                     @Override
+                    /**
+                     * Performs handle operation.
+                     *
+                     * @return the result of the operation
+                     */
                     public void handle(final KeyEvent event) {
                         if (KeyCode.ENTER == event.getCode()) {
                             if (validator.containsErrors()) {
@@ -153,11 +174,15 @@ public class SignUpController {
         });
         this.prenomTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
+            /**
+             * Performs changed operation.
+             *
+             * @return the result of the operation
+             */
             public void changed(final ObservableValue<? extends String> observable, final String oldValue,
                     final String newValue) {
                 final Validator validator = new Validator();
-                validator.createCheck()
-                        .dependsOn("firstName", SignUpController.this.prenomTextField.textProperty())
+                validator.createCheck().dependsOn("firstName", SignUpController.this.prenomTextField.textProperty())
                         .withMethod(c -> {
                             final String userName = c.get("firstName");
                             if (null != userName && !userName.toLowerCase().equals(userName)) {
@@ -165,14 +190,17 @@ public class SignUpController {
                             } else if (userName.isEmpty()) {
                                 c.error("the string is empty");
                             }
-                        })
-                        .decorates(SignUpController.this.prenomTextField)
-                        .immediate();
+                        }).decorates(SignUpController.this.prenomTextField).immediate();
                 final Window window = SignUpController.this.prenomTextField.getScene().getWindow();
                 final Bounds bounds = SignUpController.this.prenomTextField
                         .localToScreen(SignUpController.this.prenomTextField.getBoundsInLocal());
                 SignUpController.this.prenomTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
+                    /**
+                     * Performs changed operation.
+                     *
+                     * @return the result of the operation
+                     */
                     public void changed(final ObservableValue<? extends String> observable, final String oldValue,
                             final String newValue) {
                         if (validator.containsErrors()) {
@@ -191,6 +219,11 @@ public class SignUpController {
                 SignUpController.this.prenomTextField.addEventFilter(KeyEvent.KEY_PRESSED,
                         new EventHandler<KeyEvent>() {
                             @Override
+                            /**
+                             * Performs handle operation.
+                             *
+                             * @return the result of the operation
+                             */
                             public void handle(final KeyEvent event) {
                                 if (KeyCode.ENTER == event.getCode()) {
                                     if (validator.containsErrors()) {
@@ -203,11 +236,15 @@ public class SignUpController {
         });
         this.adresseTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
+            /**
+             * Performs changed operation.
+             *
+             * @return the result of the operation
+             */
             public void changed(final ObservableValue<? extends String> observable, final String oldValue,
                     final String newValue) {
                 final Validator validator = new Validator();
-                validator.createCheck()
-                        .dependsOn("firstName", SignUpController.this.adresseTextField.textProperty())
+                validator.createCheck().dependsOn("firstName", SignUpController.this.adresseTextField.textProperty())
                         .withMethod(c -> {
                             final String userName = c.get("firstName");
                             if (null != userName && !userName.toLowerCase().equals(userName)) {
@@ -215,14 +252,17 @@ public class SignUpController {
                             } else if (userName.isEmpty()) {
                                 c.error("the string is empty");
                             }
-                        })
-                        .decorates(SignUpController.this.adresseTextField)
-                        .immediate();
+                        }).decorates(SignUpController.this.adresseTextField).immediate();
                 final Window window = SignUpController.this.adresseTextField.getScene().getWindow();
                 final Bounds bounds = SignUpController.this.adresseTextField
                         .localToScreen(SignUpController.this.adresseTextField.getBoundsInLocal());
                 SignUpController.this.adresseTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
+                    /**
+                     * Performs changed operation.
+                     *
+                     * @return the result of the operation
+                     */
                     public void changed(final ObservableValue<? extends String> observable, final String oldValue,
                             final String newValue) {
                         if (validator.containsErrors()) {
@@ -241,6 +281,11 @@ public class SignUpController {
                 SignUpController.this.adresseTextField.addEventFilter(KeyEvent.KEY_PRESSED,
                         new EventHandler<KeyEvent>() {
                             @Override
+                            /**
+                             * Performs handle operation.
+                             *
+                             * @return the result of the operation
+                             */
                             public void handle(final KeyEvent event) {
                                 if (KeyCode.ENTER == event.getCode()) {
                                     if (validator.containsErrors()) {
@@ -253,11 +298,15 @@ public class SignUpController {
         });
         this.emailTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
+            /**
+             * Performs changed operation.
+             *
+             * @return the result of the operation
+             */
             public void changed(final ObservableValue<? extends String> observable, final String oldValue,
                     final String newValue) {
                 final Validator validator = new Validator();
-                validator.createCheck()
-                        .dependsOn("firstName", SignUpController.this.emailTextField.textProperty())
+                validator.createCheck().dependsOn("firstName", SignUpController.this.emailTextField.textProperty())
                         .withMethod(c -> {
                             final String userName = c.get("firstName");
                             if (null != userName) {
@@ -268,14 +317,17 @@ public class SignUpController {
                             } else if (userName.isEmpty()) {
                                 c.error("the string is empty");
                             }
-                        })
-                        .decorates(SignUpController.this.emailTextField)
-                        .immediate();
+                        }).decorates(SignUpController.this.emailTextField).immediate();
                 final Window window = SignUpController.this.emailTextField.getScene().getWindow();
                 final Bounds bounds = SignUpController.this.emailTextField
                         .localToScreen(SignUpController.this.emailTextField.getBoundsInLocal());
                 SignUpController.this.emailTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
+                    /**
+                     * Performs changed operation.
+                     *
+                     * @return the result of the operation
+                     */
                     public void changed(final ObservableValue<? extends String> observable, final String oldValue,
                             final String newValue) {
                         if (validator.containsErrors()) {
@@ -293,6 +345,11 @@ public class SignUpController {
                 });
                 SignUpController.this.emailTextField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
                     @Override
+                    /**
+                     * Performs handle operation.
+                     *
+                     * @return the result of the operation
+                     */
                     public void handle(final KeyEvent event) {
                         if (KeyCode.ENTER == event.getCode()) {
                             if (validator.containsErrors()) {
@@ -305,11 +362,15 @@ public class SignUpController {
         });
         this.passwordTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
+            /**
+             * Performs changed operation.
+             *
+             * @return the result of the operation
+             */
             public void changed(final ObservableValue<? extends String> observable, final String oldValue,
                     final String newValue) {
                 final Validator validator = new Validator();
-                validator.createCheck()
-                        .dependsOn("firstName", SignUpController.this.passwordTextField.textProperty())
+                validator.createCheck().dependsOn("firstName", SignUpController.this.passwordTextField.textProperty())
                         .withMethod(c -> {
                             final String userName = c.get("firstName");
                             if (null != userName && !userName.toLowerCase().equals(userName)) {
@@ -317,14 +378,17 @@ public class SignUpController {
                             } else if (userName.isEmpty()) {
                                 c.error("the string is empty");
                             }
-                        })
-                        .decorates(SignUpController.this.passwordTextField)
-                        .immediate();
+                        }).decorates(SignUpController.this.passwordTextField).immediate();
                 final Window window = SignUpController.this.passwordTextField.getScene().getWindow();
                 final Bounds bounds = SignUpController.this.passwordTextField
                         .localToScreen(SignUpController.this.passwordTextField.getBoundsInLocal());
                 SignUpController.this.passwordTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
+                    /**
+                     * Performs changed operation.
+                     *
+                     * @return the result of the operation
+                     */
                     public void changed(final ObservableValue<? extends String> observable, final String oldValue,
                             final String newValue) {
                         if (validator.containsErrors()) {
@@ -343,6 +407,11 @@ public class SignUpController {
                 SignUpController.this.passwordTextField.addEventFilter(KeyEvent.KEY_PRESSED,
                         new EventHandler<KeyEvent>() {
                             @Override
+                            /**
+                             * Performs handle operation.
+                             *
+                             * @return the result of the operation
+                             */
                             public void handle(final KeyEvent event) {
                                 if (KeyCode.ENTER == event.getCode()) {
                                     if (validator.containsErrors()) {
@@ -355,6 +424,11 @@ public class SignUpController {
         });
         this.num_telephoneTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
+            /**
+             * Performs changed operation.
+             *
+             * @return the result of the operation
+             */
             public void changed(final ObservableValue<? extends String> observable, final String oldValue,
                     final String newValue) {
                 final Validator validator = new Validator();
@@ -370,14 +444,17 @@ public class SignUpController {
                             } else if (userName.isEmpty()) {
                                 c.error("the string is empty");
                             }
-                        })
-                        .decorates(SignUpController.this.num_telephoneTextField)
-                        .immediate();
+                        }).decorates(SignUpController.this.num_telephoneTextField).immediate();
                 final Window window = SignUpController.this.num_telephoneTextField.getScene().getWindow();
                 final Bounds bounds = SignUpController.this.num_telephoneTextField
                         .localToScreen(SignUpController.this.num_telephoneTextField.getBoundsInLocal());
                 SignUpController.this.num_telephoneTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
+                    /**
+                     * Performs changed operation.
+                     *
+                     * @return the result of the operation
+                     */
                     public void changed(final ObservableValue<? extends String> observable, final String oldValue,
                             final String newValue) {
                         if (validator.containsErrors()) {
@@ -385,8 +462,7 @@ public class SignUpController {
                             tooltip.setStyle("-fx-background-color: #f00;");
                             SignUpController.this.num_telephoneTextField.setTooltip(tooltip);
                             SignUpController.this.num_telephoneTextField.getTooltip().show(window,
-                                    bounds.getMinX() - 10,
-                                    bounds.getMinY() + 30);
+                                    bounds.getMinX() - 10, bounds.getMinY() + 30);
                         } else {
                             if (null != num_telephoneTextField.getTooltip()) {
                                 SignUpController.this.num_telephoneTextField.getTooltip().hide();
@@ -397,6 +473,11 @@ public class SignUpController {
                 SignUpController.this.num_telephoneTextField.addEventFilter(KeyEvent.KEY_PRESSED,
                         new EventHandler<KeyEvent>() {
                             @Override
+                            /**
+                             * Performs handle operation.
+                             *
+                             * @return the result of the operation
+                             */
                             public void handle(final KeyEvent event) {
                                 if (KeyCode.ENTER == event.getCode()) {
                                     if (validator.containsErrors()) {
@@ -428,8 +509,7 @@ public class SignUpController {
     @FXML
     void importImage(final ActionEvent event) {
         final FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("PNG", "*.png"),
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PNG", "*.png"),
                 new FileChooser.ExtensionFilter("JPG", "*.jpg"));
         fileChooser.setTitle("Sélectionner une image");
         final File selectedFile = fileChooser.showOpenDialog(null);
@@ -467,8 +547,8 @@ public class SignUpController {
         final String password = this.passwordTextField.getText();
         final String email = this.emailTextField.getText();
         final LocalDate dateDeNaissance = this.dateDeNaissanceDatePicker.getValue();
-        if (nom.isEmpty() || prenom.isEmpty() || num_telephone.isEmpty() || password.isEmpty()
-                || role.isEmpty() || email.isEmpty() || null == dateDeNaissance) {
+        if (nom.isEmpty() || prenom.isEmpty() || num_telephone.isEmpty() || password.isEmpty() || role.isEmpty()
+                || email.isEmpty() || null == dateDeNaissance) {
             final Alert alert = new Alert(Alert.AlertType.ERROR, "Please fill in all the required fields",
                     ButtonType.CLOSE);
             alert.show();
@@ -484,17 +564,20 @@ public class SignUpController {
             alert.show();
             return;
         }
-        if ("responsable de cinema".equals(role)) {
-            user = new Responsable_de_cinema(this.nomTextField.getText(), this.prenomTextField.getText(),
-                    Integer.parseInt(this.num_telephoneTextField.getText()), this.passwordTextField.getText(),
+        switch (role) {
+        case "responsable de cinema" :
+            user = new CinemaManager(this.nomTextField.getText(), this.prenomTextField.getText(),
+                    this.num_telephoneTextField.getText(), this.passwordTextField.getText(),
                     this.roleComboBox.getValue(), this.emailTextField.getText(),
                     Date.valueOf(this.dateDeNaissanceDatePicker.getValue()), this.emailTextField.getText(), "");
-        } else if ("client".equals(role)) {
+            break;
+        case "client" :
             user = new Client(this.nomTextField.getText(), this.prenomTextField.getText(),
-                    Integer.parseInt(this.num_telephoneTextField.getText()), this.passwordTextField.getText(),
+                    this.num_telephoneTextField.getText(), this.passwordTextField.getText(),
                     this.roleComboBox.getValue(), this.emailTextField.getText(),
                     Date.valueOf(this.dateDeNaissanceDatePicker.getValue()), this.emailTextField.getText(), "");
-        } else {
+            break;
+        default :
             final Alert alert = new Alert(Alert.AlertType.ERROR, "the given role is not available", ButtonType.CLOSE);
             alert.show();
             return;

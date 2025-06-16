@@ -1,14 +1,22 @@
 package com.esprit;
 
+import java.sql.Connection;
+
 import com.esprit.utils.DataSource;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.sql.Connection;
-
+/**
+ * MainApp class for the RAKCHA JavaFX desktop application.
+ *
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class MainApp extends Application {
     /**
      * @param args
@@ -22,6 +30,11 @@ public class MainApp extends Application {
      * @throws Exception
      */
     @Override
+    /**
+     * Performs start operation.
+     *
+     * @return the result of the operation
+     */
     public void start(final Stage primaryStage) throws Exception {
         final Connection connection = DataSource.getInstance().getConnection();
         if (null == connection) {

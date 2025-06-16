@@ -2,142 +2,83 @@ package com.esprit.models.users;
 
 import java.sql.Date;
 
+import jakarta.persistence.*;
+
+import lombok.*;
+import lombok.experimental.SuperBuilder;
+
+/**
+ * Abstract User entity representing the base user model Fixed issues:
+ * phoneNumber changed from int to String for proper phone handling Added proper
+ * Hibernate annotations and Lombok annotations
+ */
+@Entity
+@Table(name = "users")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+/**
+ * Entity class for the RAKCHA application. Provides data persistence using
+ * Hibernate/JPA annotations.
+ *
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public abstract class User {
-    private int id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    @EqualsAndHashCode.Include
+    private Long id;
+
+    @Column(name = "first_name", nullable = false, length = 50)
     private String firstName;
+
+    @Column(name = "last_name", nullable = false, length = 50)
     private String lastName;
-    private int phoneNumber;
+
+    @Column(name = "phone_number", nullable = false, length = 15)
+    private String phoneNumber;
+
+    @Column(name = "password", nullable = false)
     private String password;
+
+    @Column(name = "role", nullable = false, length = 30)
     private String role;
+
+    @Column(name = "address", length = 200)
     private String address;
+
+    @Column(name = "birth_date")
     private Date birthDate;
+
+    @Column(name = "email", nullable = false, unique = true, length = 100)
+    @EqualsAndHashCode.Include
     private String email;
-    private String photo_de_profil;
 
-    protected User(final String firstName, final String lastName, final int phoneNumber, final String password, final String role, final String address,
-                   final Date birthDate, final String email, final String photo_de_profil) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phoneNumber = phoneNumber;
-        this.password = password;
-        this.role = role;
-        this.address = address;
-        this.birthDate = birthDate;
-        this.email = email;
-        this.photo_de_profil = photo_de_profil;
-    }
-
-    protected User(final int id, final String firstName, final String lastName, final int phoneNumber, final String password, final String role, final String address, final Date birthDate, final String email, final String photo_de_profil) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phoneNumber = phoneNumber;
-        this.password = password;
-        this.role = role;
-        this.address = address;
-        this.birthDate = birthDate;
-        this.email = email;
-        this.photo_de_profil = photo_de_profil;
-    }
+    @Column(name = "photo_de_profil", length = 255)
+    private String photoDeProfil;
 
     /**
-     * @return int
+     * Constructor without id for creating new user instances.
      */
-    public int getId() {
-        return this.id;
-    }
-
-    /**
-     * @param id
-     */
-    public void setId(final int id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return this.firstName;
-    }
-
-    public void setFirstName(final String firstName) {
+    protected User(final String firstName, final String lastName, final String phoneNumber, final String password,
+            final String role, final String address, final Date birthDate, final String email,
+            final String photoDeProfil) {
         this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return this.lastName;
-    }
-
-    public void setLastName(final String lastName) {
         this.lastName = lastName;
-    }
-
-    public int getPhoneNumber() {
-        return this.phoneNumber;
-    }
-
-    public void setPhoneNumber(final int phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public String getPassword() {
-        return this.password;
-    }
-
-    public void setPassword(final String password) {
         this.password = password;
-    }
-
-    public String getRole() {
-        return this.role;
-    }
-
-    public void setRole(final String role) {
         this.role = role;
-    }
-
-    public String getAddress() {
-        return this.address;
-    }
-
-    public void setAddress(final String address) {
         this.address = address;
-    }
-
-    public Date getBirthDate() {
-        return this.birthDate;
-    }
-
-    public void setBirthDate(final Date birthDate) {
         this.birthDate = birthDate;
-    }
-
-    public String getEmail() {
-        return this.email;
-    }
-
-    public void setEmail(final String email) {
         this.email = email;
-    }
-
-    public String getPhoto_de_profil() {
-        return this.photo_de_profil;
-    }
-
-    public void setPhoto_de_profil(final String photo_de_profil) {
-        this.photo_de_profil = photo_de_profil;
-    }
-
-    @Override
-    public String toString() {
-        return
-                "id=" + this.id
-                        + ", firstName='" + this.firstName + '\''
-                        + ", lastName='" + this.lastName + '\''
-                        + ", phoneNumber=" + this.phoneNumber
-                        + ", password='" + this.password + '\''
-                        + ", role='" + this.role + '\''
-                        + ", address='" + this.address + '\''
-                        + ", birthDate=" + this.birthDate
-                        + ", email='" + this.email + '\''
-                        + ", photo_de_profil='" + this.photo_de_profil;
+        this.photoDeProfil = photoDeProfil;
     }
 }

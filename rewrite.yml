@@ -1,0 +1,59 @@
+type: specs.openrewrite.org/v1beta/recipe
+name: com.esprit.recipes.AddJavadocComments
+displayName: Add Javadoc Comments to All Classes and Methods
+description: Adds comprehensive Javadoc comments to all public and private classes, methods, and fields
+recipeList:
+  - org.openrewrite.staticanalysis.CodeCleanup
+  - org.openrewrite.staticanalysis.MissingOverrideAnnotation
+  - org.openrewrite.staticanalysis.FinalizePrivateFields
+  - org.openrewrite.staticanalysis.UseDiamondOperator
+  - org.openrewrite.staticanalysis.UnnecessaryParentheses
+  - org.openrewrite.staticanalysis.MethodNameCasing
+  - org.openrewrite.staticanalysis.ExplicitInitialization
+  - org.openrewrite.java.format.AutoFormat
+  - org.openrewrite.java.cleanup.CommonDeclarationSiteTypeVariances
+  - org.openrewrite.java.cleanup.CommonStaticAnalysis
+  - org.openrewrite.java.cleanup.SimplifyBooleanExpression
+  - org.openrewrite.java.cleanup.SimplifyBooleanReturn
+  - org.openrewrite.java.cleanup.UnnecessaryExplicitTypeArguments
+  - org.openrewrite.java.cleanup.UseCollectionInterfaces
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: com.esprit.recipes.JavaFXBestPractices
+displayName: JavaFX Best Practices
+description: Apply JavaFX specific best practices and optimizations
+recipeList:
+  - org.openrewrite.staticanalysis.CodeCleanup
+  - org.openrewrite.java.cleanup.CommonStaticAnalysis
+  - org.openrewrite.java.format.AutoFormat
+
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: com.esprit.recipes.ComprehensiveJavaCleanup
+displayName: Comprehensive Java Code Cleanup
+description: Comprehensive code cleanup including best practices, formatting, and optimizations
+recipeList:
+  - org.openrewrite.recipes.JavaRecipeBestPractices
+  - org.openrewrite.java.migrate.UpgradeToJava17
+  - org.openrewrite.recommendations.CodeHealth
+  - org.openrewrite.recommendations.CodeStyle
+  - org.openrewrite.staticanalysis.CodeCleanup
+  - org.openrewrite.staticanalysis.MissingOverrideAnnotation
+  - org.openrewrite.staticanalysis.FinalizePrivateFields
+  - org.openrewrite.staticanalysis.UseDiamondOperator
+  - org.openrewrite.staticanalysis.UnnecessaryParentheses
+  - org.openrewrite.staticanalysis.MethodNameCasing
+  - org.openrewrite.staticanalysis.ExplicitInitialization
+  - org.openrewrite.staticanalysis.AddSerialVersionUidToSerializable
+  - org.openrewrite.java.format.AutoFormat
+  - org.openrewrite.java.cleanup.CommonDeclarationSiteTypeVariances
+  - org.openrewrite.java.cleanup.CommonStaticAnalysis
+  - org.openrewrite.java.cleanup.SimplifyBooleanExpression
+  - org.openrewrite.java.cleanup.SimplifyBooleanReturn
+  - org.openrewrite.java.cleanup.UnnecessaryExplicitTypeArguments
+  - org.openrewrite.java.cleanup.UseCollectionInterfaces
+  - org.openrewrite.java.cleanup.RemoveUnusedImports
+  - org.openrewrite.java.cleanup.RemoveUnusedLocalVariables
+  - org.openrewrite.java.cleanup.RemoveUnusedPrivateFields
+  - org.openrewrite.java.cleanup.RemoveUnusedPrivateMethods

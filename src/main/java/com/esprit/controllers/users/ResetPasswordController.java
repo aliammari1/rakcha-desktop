@@ -1,5 +1,8 @@
 package com.esprit.controllers.users;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,9 +12,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+/**
+ * JavaFX controller class for the RAKCHA application. Handles UI interactions
+ * and manages view logic using FXML.
+ *
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class ResetPasswordController {
     private static final Logger LOGGER = Logger.getLogger(ResetPasswordController.class.getName());
 

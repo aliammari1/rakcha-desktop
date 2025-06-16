@@ -1,6 +1,13 @@
 package com.esprit.controllers.users;
 
+import java.awt.*;
+import java.io.IOException;
+import java.net.URI;
+import java.util.concurrent.ExecutionException;
+import java.util.logging.Logger;
+
 import com.esprit.utils.SignInMicrosoft;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,12 +19,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.awt.*;
-import java.io.IOException;
-import java.net.URI;
-import java.util.concurrent.ExecutionException;
-import java.util.logging.Logger;
-
+/**
+ * JavaFX controller class for the RAKCHA application. Handles UI interactions
+ * and manages view logic using FXML.
+ *
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class VerifyWithMicrosoft {
     private static final Logger LOGGER = Logger.getLogger(VerifyWithMicrosoft.class.getName());
 

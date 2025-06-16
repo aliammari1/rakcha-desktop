@@ -2,67 +2,66 @@ package com.esprit.models.series;
 
 import java.util.Date;
 
+import jakarta.persistence.*;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Table(name = "feedback")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+/**
+ * Series management entity class for the RAKCHA application. Represents series
+ * data with Hibernate/JPA annotations for database persistence.
+ *
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class Feedback {
-    private final int id_episode;
-    private int id;
-    private int id_user;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "id_user", nullable = false)
+    private Long userId;
+
+    @Column(name = "description")
     private String description;
+
+    @Column(name = "date")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
-    public Feedback(final int id, final int id_user, final String description, final Date date, final int id_episode) {
-        this.id = id;
-        this.id_user = id_user;
-        this.description = description;
-        this.date = date;
-        this.id_episode = id_episode;
-    }
+    @Column(name = "id_episode", nullable = false)
+    private Long episodeId;
 
-    public Feedback(final int id_user, final String description, final Date date, final int id_episode) {
-        this.id_user = id_user;
-        this.description = description;
-        this.date = date;
-        this.id_episode = id_episode;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_episode", referencedColumnName = "idepisode", insertable = false, updatable = false)
+    private Episode episode;
 
     /**
-     * @return int
+     * Constructor without id for creating new feedback instances.
+     *
+     * @param userId
+     *            the user ID
+     * @param description
+     *            the feedback description
+     * @param date
+     *            the date of feedback
+     * @param episodeId
+     *            the episode ID
      */
-    public int getId() {
-        return this.id;
-    }
-
-    /**
-     * @param id
-     */
-    public void setId(final int id) {
-        this.id = id;
-    }
-
-    public int getId_user() {
-        return this.id_user;
-    }
-
-    public void setId_user(final int id_user) {
-        this.id_user = id_user;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public void setDescription(final String description) {
+    public Feedback(final Long userId, final String description, final Date date, final Long episodeId) {
+        this.userId = userId;
         this.description = description;
-    }
-
-    public Date getDate() {
-        return this.date;
-    }
-
-    public void setDate(final Date date) {
         this.date = date;
-    }
-
-    public int getId_episode() {
-        return this.id_episode;
+        this.episodeId = episodeId;
     }
 }

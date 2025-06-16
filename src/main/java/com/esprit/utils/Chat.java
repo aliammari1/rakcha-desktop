@@ -1,6 +1,5 @@
 package com.esprit.utils;
 
-import com.esprit.Config;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,12 +11,27 @@ import java.sql.Connection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.esprit.Config;
+
+/**
+ * Utility class providing helper methods for the RAKCHA application. Contains
+ * reusable functionality and common operations.
+ *
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class Chat {
     private static final Logger LOGGER = Logger.getLogger(Chat.class.getName());
     private static final String API_URL = "https://api.openai.com/v1/chat/completions";
     private final Connection connection;
     private final Config config;
 
+    /**
+     * Performs Chat operation.
+     *
+     * @return the result of the operation
+     */
     public Chat() {
         this.connection = DataSource.getInstance().getConnection();
         this.config = Config.getInstance();
@@ -29,6 +43,11 @@ public class Chat {
         return response.substring(startMarker, endMarker).trim();
     }
 
+    /**
+     * Performs chatGPT operation.
+     *
+     * @return the result of the operation
+     */
     public String chatGPT(final String message) {
         final String apiKey = config.get("openai.api.key");
         final String model = config.get("openai.model");
@@ -47,8 +66,7 @@ public class Chat {
             conn.setDoOutput(true);
 
             final String body = String.format(
-                    "{\"model\": \"%s\", \"messages\": [{\"role\": \"user\", \"content\": \"%s\"}]}",
-                    model,
+                    "{\"model\": \"%s\", \"messages\": [{\"role\": \"user\", \"content\": \"%s\"}]}", model,
                     message.replace("\"", "\\\""));
 
             try (OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream(), StandardCharsets.UTF_8)) {
@@ -78,6 +96,11 @@ public class Chat {
         }
     }
 
+    /**
+     * Performs badword operation.
+     *
+     * @return the result of the operation
+     */
     public String badword(final String message) {
         final String question = "Is this content hateful or inappropriate? Reply with only '1' for yes or '0' for no: "
                 + message;

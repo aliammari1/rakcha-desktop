@@ -1,29 +1,63 @@
 package com.esprit.models.cinemas;
 
-public class Seat {
-    private int id;
-    private int seatNumber;
-    private int rowNumber;
-    private boolean isOccupied;
-    private int salleId;
+import java.util.ArrayList;
+import java.util.List;
 
-    public Seat(int id, int seatNumber, int rowNumber, boolean isOccupied, int salleId) {
-        this.id = id;
+import jakarta.persistence.*;
+
+import com.esprit.models.films.Ticket;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Table(name = "seats")
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+/**
+ * Cinema management entity class for the RAKCHA application. Handles
+ * cinema-related data with database persistence capabilities.
+ *
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
+ */
+public class Seat {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "seat_number", nullable = false)
+    private Integer seatNumber;
+
+    @Column(name = "row_number", nullable = false)
+    private Integer rowNumber;
+
+    @Column(name = "is_occupied", nullable = false)
+    @Builder.Default
+    private Boolean isOccupied = false;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cinema_hall_id", nullable = false)
+    private CinemaHall cinemaHall;
+
+    @ManyToMany(mappedBy = "reservedSeats", fetch = FetchType.LAZY)
+    @Builder.Default
+    private List<Ticket> tickets = new ArrayList<>();
+
+    /**
+     * Constructor without id for creating new seat instances.
+     */
+    public Seat(Integer seatNumber, Integer rowNumber, Boolean isOccupied, CinemaHall cinemaHall) {
         this.seatNumber = seatNumber;
         this.rowNumber = rowNumber;
         this.isOccupied = isOccupied;
-        this.salleId = salleId;
+        this.cinemaHall = cinemaHall;
+        this.tickets = new ArrayList<>();
     }
-
-    // Getters and setters
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
-    public int getSeatNumber() { return seatNumber; }
-    public void setSeatNumber(int seatNumber) { this.seatNumber = seatNumber; }
-    public int getRowNumber() { return rowNumber; }
-    public void setRowNumber(int rowNumber) { this.rowNumber = rowNumber; }
-    public boolean isOccupied() { return isOccupied; }
-    public void setOccupied(boolean occupied) { isOccupied = occupied; }
-    public int getSalleId() { return salleId; }
-    public void setSalleId(int salleId) { this.salleId = salleId; }
 }

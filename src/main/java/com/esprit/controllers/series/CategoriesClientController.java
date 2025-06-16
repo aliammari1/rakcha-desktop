@@ -1,7 +1,13 @@
 package com.esprit.controllers.series;
 
-import com.esprit.models.series.Categorie;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+import com.esprit.models.series.Category;
 import com.esprit.services.series.IServiceCategorieImpl;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,26 +23,17 @@ import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
 /**
  * Is responsible for handling user interactions related to categories, such as
  * displaying category information and handling menu events. The controller uses
- * an
- * `IServiceCategorieImpl` interface to retrieve category data from a database
- * and
- * displays the information in a tile pane. Additionally, it handles menu events
- * for
- * different types of content (series, episodes) and displays them in separate
- * stages.
+ * an `IServiceCategorieImpl` interface to retrieve category data from a
+ * database and displays the information in a tile pane. Additionally, it
+ * handles menu events for different types of content (series, episodes) and
+ * displays them in separate stages.
  */
 public class CategoriesClientController {
     @FXML
-    ListView<Categorie> listeV2;
+    ListView<Category> listeV2;
     @FXML
     Label prixF;
     int id = 1;
@@ -46,23 +43,22 @@ public class CategoriesClientController {
     /**
      * Clears the children of a `tilepane`, retrieves a list of categories from an
      * `IServiceCategorieImpl`, loops through the list and adds a `VBox` for each
-     * category,
-     * displaying its name and description.
+     * category, displaying its name and description.
      */
     public void afficher() {
         this.tilepane.getChildren().clear();
         final IServiceCategorieImpl iServiceCategorie = new IServiceCategorieImpl();
         final double imageWidth = 200; // Largeur fixe souhaitée
         final double imageHeight = 200; // Hauteur fixe souhaitée
-        // recupuration de liste de plat ajouter au panier
-        List<Categorie> categories = new ArrayList<>();
+        // recupuration de liste de plat ajouter au shoppingcart
+        List<Category> categories = new ArrayList<>();
         try {
-            categories = iServiceCategorie.recuperer();
-        } catch (final SQLException e) {
+            categories = iServiceCategorie.read();
+        } catch (final Exception e) {
             throw new RuntimeException(e);
         }
-        for (final Categorie c : categories) {
-            final String titre = c.getNom();
+        for (final Category c : categories) {
+            final String titre = c.getName();
             final String description = c.getDescription();
             // Créer une boîte pour afficher les informations de l'oeuvre
             final Insets spacing = new Insets(10, 10, 10, 10); // 10 pixels d'espacement
@@ -91,16 +87,15 @@ public class CategoriesClientController {
      */
     /// gestion de menu
     /**
-     * Loads a FXML file named "/ui//ui/CategorieClient.fxml", creates a scene with the
-     * root node,
-     * sets the scene on a stage, and displays the stage.
+     * Loads a FXML file named "/ui//ui/CategorieClient.fxml", creates a scene with
+     * the root node, sets the scene on a stage, and displays the stage.
      *
-     * @param event event that triggered the function, specifically the opening of a
-     *              JavaFX application.
-     *              <p>
-     *              - `event`: An `ActionEvent` object representing the user's
-     *              action that triggered
-     *              the function execution.
+     * @param event
+     *            event that triggered the function, specifically the opening of a
+     *            JavaFX application.
+     *            <p>
+     *            - `event`: An `ActionEvent` object representing the user's action
+     *            that triggered the function execution.
      */
     @FXML
     void Ocategories(final ActionEvent event) throws IOException {
@@ -115,13 +110,12 @@ public class CategoriesClientController {
     /**
      * Loads a FXML file, creates a scene and stages it.
      *
-     * @param event event that triggered the function execution, which in this case
-     *              is a
-     *              user action on the SeriesClient.fxml file.
-     *              <p>
-     *              - `event`: An `ActionEvent` object representing the user action
-     *              that triggered
-     *              the function.
+     * @param event
+     *            event that triggered the function execution, which in this case is
+     *            a user action on the SeriesClient.fxml file.
+     *            <p>
+     *            - `event`: An `ActionEvent` object representing the user action
+     *            that triggered the function.
      */
     @FXML
     void Oseries(final ActionEvent event) throws IOException {
@@ -136,18 +130,18 @@ public class CategoriesClientController {
     /**
      * Loads an FXML file, creates a scene and stages it in a window.
      *
-     * @param event EventObject that triggered the execution of the `Oepisode()`
-     *              method,
-     *              providing information about the source of the event and its
-     *              associated data.
-     *              <p>
-     *              Event: `ActionEvent event`
-     *              <p>
-     *              Main properties:
-     *              <p>
-     *              - Source: The object that triggered the action (not shown)
-     *              - Event type: The specific action that was triggered (e.g.,
-     *              "SELECT", "SAVE")
+     * @param event
+     *            EventObject that triggered the execution of the `Oepisode()`
+     *            method, providing information about the source of the event and
+     *            its associated data.
+     *            <p>
+     *            Event: `ActionEvent event`
+     *            <p>
+     *            Main properties:
+     *            <p>
+     *            - Source: The object that triggered the action (not shown) - Event
+     *            type: The specific action that was triggered (e.g., "SELECT",
+     *            "SAVE")
      */
     @FXML
     void Oepisode(final ActionEvent event) throws IOException {

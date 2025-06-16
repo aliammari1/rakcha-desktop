@@ -1,6 +1,5 @@
 package com.esprit;
 
-import org.yaml.snakeyaml.Yaml;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -10,6 +9,15 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.yaml.snakeyaml.Yaml;
+
+/**
+ * Config class for the RAKCHA JavaFX desktop application.
+ *
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class Config {
     private static final Logger LOGGER = Logger.getLogger(Config.class.getName());
     private static final String CONFIG_PATH = "src/main/java/com/esprit/config.yml";
@@ -20,6 +28,11 @@ public class Config {
         this.config = loadConfig();
     }
 
+    /**
+     * Retrieves the Instance value.
+     *
+     * @return the Instance value
+     */
     public static Config getInstance() {
         if (instance == null) {
             instance = new Config();
@@ -27,16 +40,32 @@ public class Config {
         return instance;
     }
 
+    /**
+     * Retrieves the value.
+     *
+     * @return the value
+     */
     public String get(String key) {
         Object value = config.get(key);
         return value != null ? value.toString() : null;
     }
 
+    /**
+     * Retrieves the OrDefault value.
+     *
+     * @return the OrDefault value
+     */
     public String getOrDefault(String key, String defaultValue) {
         String value = get(key);
         return value != null ? value : defaultValue;
     }
 
+    /**
+     * Sets the value.
+     *
+     * @param set
+     *            the value to set
+     */
     public void set(String key, String value) {
         config.put(key, value);
         saveConfig();
