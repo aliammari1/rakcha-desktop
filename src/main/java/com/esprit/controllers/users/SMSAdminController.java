@@ -1,6 +1,12 @@
 package com.esprit.controllers.users;
 
+import java.io.IOException;
+import java.net.URL;
+import java.security.SecureRandom;
+import java.util.ResourceBundle;
+
 import com.esprit.utils.UserSMSAPI;
+
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,11 +19,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.net.URL;
-import java.security.SecureRandom;
-import java.util.ResourceBundle;
-
+/**
+ * JavaFX controller class for the RAKCHA application. Handles UI interactions
+ * and manages view logic using FXML.
+ *
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class SMSAdminController implements Initializable {
     int verificationCode;
     @FXML
@@ -37,7 +46,8 @@ public class SMSAdminController implements Initializable {
     public void sendSMS(final ActionEvent event) {
         if (this.verificationCode == Integer.parseInt(this.codeTextField.getText())) {
             try {
-                final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/users/ResetPasswordlogin.fxml"));
+                final FXMLLoader loader = new FXMLLoader(
+                        this.getClass().getResource("/ui/users/ResetPasswordlogin.fxml"));
                 final Parent root = loader.load();
                 final Stage stage = (Stage) this.codeTextField.getScene().getWindow();
                 stage.setScene(new Scene(root));
@@ -52,10 +62,13 @@ public class SMSAdminController implements Initializable {
      * @param resources
      */
     @Override
+    /**
+     * Initializes the JavaFX controller and sets up UI components. This method is
+     * called automatically by JavaFX after loading the FXML file.
+     */
     public void initialize(final URL location, final ResourceBundle resources) {
-        this.phoneNumberTextfield.textProperty()
-                .addListener((final ObservableValue<? extends String> observable, final String oldValue,
-                        final String newValue) -> {
+        this.phoneNumberTextfield.textProperty().addListener(
+                (final ObservableValue<? extends String> observable, final String oldValue, final String newValue) -> {
                     if (8 == newValue.trim().length()) {
                         final SecureRandom random = new SecureRandom();
                         this.verificationCode = random.nextInt(999999 - 100000) + 100000;

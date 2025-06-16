@@ -1,12 +1,12 @@
 package com.esprit.utils;
 
-import com.stripe.Stripe;
-import com.stripe.exception.StripeException;
-import com.stripe.model.Charge;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
+
+import com.stripe.Stripe;
+import com.stripe.exception.StripeException;
+import com.stripe.model.Charge;
 
 public enum Paymentuser {
     ;

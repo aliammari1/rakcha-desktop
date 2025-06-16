@@ -1,174 +1,87 @@
 package com.esprit.models.films;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.*;
+
+import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
 /**
  * The Actor class represents an actor in a film.
  */
+@Entity
+@Table(name = "actors")
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+/**
+ * Entity class for the RAKCHA application. Provides data persistence using
+ * Hibernate/JPA annotations.
+ *
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class Actor {
-    private String biographie;
-    private int id;
-    private String nom;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "image")
     private String image;
+
+    @Column(name = "biography", columnDefinition = "TEXT")
+    private String biography;
+
+    @Column(name = "number_of_appearances")
     private int numberOfAppearances;
 
+    @ManyToMany(mappedBy = "actors", fetch = FetchType.LAZY)
+    @Builder.Default
+    private List<Film> films = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "actor_category", joinColumns = @JoinColumn(name = "actor_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
+    @Builder.Default
+    private List<Category> categories = new ArrayList<>();
+
     /**
-     * Constructs an Actor object with the specified id, name, image, and biography.
-     *
-     * @param id         the id of the actor
-     * @param nom        the name of the actor
-     * @param image      the image URL of the actor
-     * @param biographie the biography of the actor
+     * Constructor without id for creating new actor instances.
      */
-    public Actor(final int id, final String nom, final String image, final String biographie) {
-        this.id = id;
-        this.nom = nom;
+    public Actor(final String name, final String image, final String biography) {
+        this.name = name;
         this.image = image;
-        this.biographie = biographie;
+        this.biography = biography;
+        this.films = new ArrayList<>();
+        this.categories = new ArrayList<>();
     }
 
     /**
-     * Constructs an Actor object with the specified name, image, and biography.
-     *
-     * @param nom        the name of the actor
-     * @param image      the image URL of the actor
-     * @param biographie the biography of the actor
+     * Constructor with id for existing actor instances.
      */
-    public Actor(final String nom, final String image, final String biographie) {
-        this.nom = nom;
+    public Actor(final Long id, final String name, final String image, final String biography) {
+        this.id = id;
+        this.name = name;
         this.image = image;
-        this.biographie = biographie;
+        this.biography = biography;
+        this.films = new ArrayList<>();
+        this.categories = new ArrayList<>();
     }
 
     /**
-     * Constructs an Actor object with the specified id.
-     *
-     * @param id the id of the actor
+     * Constructor with only id.
      */
-    public Actor(final int id) {
+    public Actor(final Long id) {
         this.id = id;
-        nom = null;
-        image = null;
-        biographie = null;
-    }
-
-    /**
-     * Constructs an Actor object with the specified id, name, image, biography, and number of appearances.
-     *
-     * @param id                  the id of the actor
-     * @param nom                 the name of the actor
-     * @param img                 the image URL of the actor
-     * @param s                   the biography of the actor
-     * @param numberOfAppearances the number of appearances of the actor
-     */
-    public Actor(final int id, final String nom, final String img, final String s, final int numberOfAppearances) {
-        this.id = id;
-        this.nom = nom;
-        biographie = s;
-        image = img;
-        this.numberOfAppearances = numberOfAppearances;
-    }
-
-    /**
-     * Returns the number of appearances of the actor.
-     *
-     * @return the number of appearances
-     */
-    public int getNumberOfAppearances() {
-        return this.numberOfAppearances;
-    }
-
-    /**
-     * Sets the number of appearances of the actor.
-     *
-     * @param numberOfAppearances the number of appearances
-     */
-    public void setNumberOfAppearances(final int numberOfAppearances) {
-        this.numberOfAppearances = numberOfAppearances;
-    }
-
-    /**
-     * Returns the id of the actor.
-     *
-     * @return the id
-     */
-    public int getId() {
-        return this.id;
-    }
-
-    /**
-     * Sets the id of the actor.
-     *
-     * @param id the id
-     */
-    public void setId(final int id) {
-        this.id = id;
-    }
-
-    /**
-     * Returns the name of the actor.
-     *
-     * @return the name
-     */
-    public String getNom() {
-        return this.nom;
-    }
-
-    /**
-     * Sets the name of the actor.
-     *
-     * @param nom the name
-     */
-    public void setNom(final String nom) {
-        this.nom = nom;
-    }
-
-    /**
-     * Returns the image URL of the actor.
-     *
-     * @return the image URL
-     */
-    public String getImage() {
-        return this.image;
-    }
-
-    /**
-     * Sets the image URL of the actor.
-     *
-     * @param image the image URL
-     */
-    public void setImage(final String image) {
-        this.image = image;
-    }
-
-    /**
-     * Returns the biography of the actor.
-     *
-     * @return the biography
-     */
-    public String getBiographie() {
-        return this.biographie;
-    }
-
-    /**
-     * Sets the biography of the actor.
-     *
-     * @param biographie the biography
-     */
-    public void setBiographie(final String biographie) {
-        this.biographie = biographie;
-    }
-
-    /**
-     * Returns a string representation of the Actor object.
-     *
-     * @return a string representation of the object
-     */
-    @Override
-    public String toString() {
-        return "Actor{"
-                + "id=" + this.id
-                + ", nom='" + this.nom + '\''
-                + ", image=" + this.image
-                + ", biographie='" + this.biographie + '\''
-                + '}';
+        this.films = new ArrayList<>();
+        this.categories = new ArrayList<>();
     }
 }

@@ -1,5 +1,9 @@
 package com.esprit.utils;
 
+import java.io.IOException;
+import java.util.concurrent.ExecutionException;
+import java.util.logging.Logger;
+
 import com.esprit.Config;
 import com.github.scribejava.apis.LiveApi;
 import com.github.scribejava.core.builder.ServiceBuilder;
@@ -9,12 +13,6 @@ import com.github.scribejava.core.model.Response;
 import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth20Service;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Scanner;
-import java.util.concurrent.ExecutionException;
-import java.util.logging.Logger;
-
 public enum SignInMicrosoft {
     ;
     private static final String PROTECTED_RESOURCE_URL = "https://apis.live.net/v5.0/me";
@@ -23,13 +21,18 @@ public enum SignInMicrosoft {
 
     /**
      * Initialize Microsoft Sign-In flow
-     * 
-     * @param args Optional arguments (not used)
+     *
+     * @param args
+     *            Optional arguments (not used)
      * @return Authorization URL for the user to visit
-     * @throws IOException           if there's an I/O error
-     * @throws InterruptedException  if the operation is interrupted
-     * @throws ExecutionException    if the operation fails
-     * @throws IllegalStateException if required environment variables are missing
+     * @throws IOException
+     *             if there's an I/O error
+     * @throws InterruptedException
+     *             if the operation is interrupted
+     * @throws ExecutionException
+     *             if the operation fails
+     * @throws IllegalStateException
+     *             if required environment variables are missing
      */
     public static String SignInWithMicrosoft(final String... args)
             throws IOException, InterruptedException, ExecutionException {
@@ -41,11 +44,8 @@ public enum SignInMicrosoft {
             throw new IllegalStateException("Microsoft OAuth credentials not found in config");
         }
 
-        service = new ServiceBuilder(clientId)
-                .apiSecret(clientSecret)
-                .defaultScope("wl.basic wl.emails")
-                .callback("https://login.microsoftonline.com/common/oauth2/nativeclient")
-                .build(LiveApi.instance());
+        service = new ServiceBuilder(clientId).apiSecret(clientSecret).defaultScope("wl.basic wl.emails")
+                .callback("https://login.microsoftonline.com/common/oauth2/nativeclient").build(LiveApi.instance());
 
         LOGGER.info("=== Microsoft Live OAuth Workflow ===");
         String authorizationUrl = service.getAuthorizationUrl();
@@ -55,12 +55,16 @@ public enum SignInMicrosoft {
 
     /**
      * Complete the OAuth flow with the authorization code
-     * 
-     * @param code The authorization code from Microsoft
+     *
+     * @param code
+     *            The authorization code from Microsoft
      * @return boolean indicating if verification was successful
-     * @throws IOException          if there's an I/O error
-     * @throws ExecutionException   if the operation fails
-     * @throws InterruptedException if the operation is interrupted
+     * @throws IOException
+     *             if there's an I/O error
+     * @throws ExecutionException
+     *             if the operation fails
+     * @throws InterruptedException
+     *             if the operation is interrupted
      */
     public static boolean verifyAuthUrl(final String code)
             throws IOException, ExecutionException, InterruptedException {

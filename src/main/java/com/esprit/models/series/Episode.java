@@ -1,115 +1,83 @@
 package com.esprit.models.series;
 
+import java.util.List;
+
+import jakarta.persistence.*;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Table(name = "episode")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+/**
+ * Series management entity class for the RAKCHA application. Represents series
+ * data with Hibernate/JPA annotations for database persistence.
+ *
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class Episode {
-    public int idepisode;
-    public String titre;
-    public int numeroepisode;
-    public int saison;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idepisode")
+    private Long id;
+
+    @Column(name = "title", nullable = false)
+    private String title;
+
+    @Column(name = "episode_number", nullable = false)
+    private int episodeNumber;
+
+    @Column(name = "season", nullable = false)
+    private int season;
+
+    @Column(name = "image")
     private String image;
+
+    @Column(name = "video")
     private String video;
-    private int idserie;
-    ///
-    private Serie serie;
 
-    ///
-    public Episode() {
-        serie = new Serie();
-    }
+    @Column(name = "series_id", nullable = false)
+    private int seriesId;
 
-    public Episode(final String titre, final int numeroepisode, final int saison, final String image, final String video, final int idserie) {
-        this.titre = titre;
-        this.numeroepisode = numeroepisode;
-        this.saison = saison;
-        this.image = image;
-        this.video = video;
-        this.idserie = idserie;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "series_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private Series series;
+
+    @OneToMany(mappedBy = "episode", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Feedback> feedbacks;
 
     /**
-     * @return String
-     */
-    public String getVideo() {
-        return this.video;
-    }
-
-    /**
+     * Constructor without id for creating new episode instances.
+     *
+     * @param title
+     *            the title of the episode
+     * @param episodeNumber
+     *            the episode number
+     * @param season
+     *            the season number
+     * @param image
+     *            the image URL of the episode
      * @param video
+     *            the video URL of the episode
+     * @param seriesId
+     *            the ID of the series
      */
-    public void setVideo(final String video) {
-        this.video = video;
-    }
-
-    public int getIdepisode() {
-        return this.idepisode;
-    }
-
-    public void setIdepisode(final int idepisode) {
-        this.idepisode = idepisode;
-    }
-
-    public String getTitre() {
-        return this.titre;
-    }
-
-    public void setTitre(final String titre) {
-        this.titre = titre;
-    }
-
-    public int getNumeroepisode() {
-        return this.numeroepisode;
-    }
-
-    public void setNumeroepisode(final int numeroepisode) {
-        this.numeroepisode = numeroepisode;
-    }
-
-    public int getSaison() {
-        return this.saison;
-    }
-
-    public void setSaison(final int saison) {
-        this.saison = saison;
-    }
-
-    public String getImage() {
-        return this.image;
-    }
-
-    public void setImage(final String image) {
+    public Episode(final String title, final int episodeNumber, final int season, final String image,
+            final String video, final int seriesId) {
+        this.title = title;
+        this.episodeNumber = episodeNumber;
+        this.season = season;
         this.image = image;
-    }
-
-    public int getIdserie() {
-        return this.idserie;
-    }
-
-    public void setIdserie(final int idserie) {
-        this.idserie = idserie;
-    }
-
-    @Override
-    public String toString() {
-        return "Episode{"
-                + "idepisode=" + this.idepisode
-                + ", titre='" + this.titre + '\''
-                + ", numeroepisode=" + this.numeroepisode
-                + ", saison=" + this.saison
-                + ", image='" + this.image + '\''
-                + ", video='" + this.video + '\''
-                + ", idserie=" + this.idserie
-                + '}';
-    }
-
-    public Serie getSerie() {
-        return this.serie;
-    }
-
-    public void setSerie(final Serie serie) {
-        this.serie = serie;
-    }
-
-    // Méthode pour obtenir le nom de la série associée à l'épisode
-    public String getNomSerie() {
-        return null != serie ? this.serie.getNom() : null;
+        this.video = video;
+        this.seriesId = seriesId;
     }
 }

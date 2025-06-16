@@ -1,16 +1,35 @@
 package com.esprit.controllers.series;
 
-import com.esprit.models.series.Categorie;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.apache.commons.mail.DefaultAuthenticator;
+import org.apache.commons.mail.Email;
+import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.HtmlEmail;
+
+import com.esprit.models.series.Category;
 import com.esprit.models.series.Feedback;
-import com.esprit.models.series.Serie;
-import com.esprit.services.series.DTO.SerieDto;
+import com.esprit.models.series.Series;
 import com.esprit.services.series.IServiceCategorieImpl;
 import com.esprit.services.series.IServiceFeedbackImpl;
-import com.esprit.services.series.IServiceSerieImpl;
+import com.esprit.services.series.IServiceSeriesImpl;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,26 +44,15 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-import org.apache.commons.mail.DefaultAuthenticator;
-import org.apache.commons.mail.Email;
-import org.apache.commons.mail.EmailException;
-import org.apache.commons.mail.HtmlEmail;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.sql.SQLException;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+/**
+ * JavaFX controller class for the RAKCHA application. Handles UI interactions
+ * and manages view logic using FXML.
+ *
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class SerieController {
     private static final Logger LOGGER = Logger.getLogger(SerieController.class.getName());
 
@@ -74,19 +82,17 @@ public class SerieController {
     private TextField paysF;
     @FXML
     private ComboBox<String> categorieF;
-    private List<Categorie> categorieList;
+    private List<Category> categorieList;
     @FXML
-    private TableView<SerieDto> tableView;
+    private TableView<Series> tableView;
 
     /**
-     * 1/ Clears the content of `tableView`, `categorieF`, and other fields.
-     * 2/ Recovers categories and series from a database using
-     * `IServiceCategorieImpl`
-     * and `IServiceSerieImpl`.
-     * 3/ Adds recovered categories to `tableView` and sets their cells.
-     * 4/ Creates new columns for editing and deleting series.
-     * 5/ Initializes buttons for editing and deleting series.
-     * 6/ Updates the graphic of each cell based on its state (empty or not).
+     * 1/ Clears the content of `tableView`, `categorieF`, and other fields. 2/
+     * Recovers categories and series from a database using `IServiceCategorieImpl`
+     * and `IServiceSerieImpl`. 3/ Adds recovered categories to `tableView` and sets
+     * their cells. 4/ Creates new columns for editing and deleting series. 5/
+     * Initializes buttons for editing and deleting series. 6/ Updates the graphic
+     * of each cell based on its state (empty or not).
      */
     private void ref() {
         this.tableView.getItems().clear();
@@ -98,42 +104,42 @@ public class SerieController {
         this.paysF.setText("");
         this.imgpath = "";
         final IServiceCategorieImpl categorieserv = new IServiceCategorieImpl();
-        final IServiceSerieImpl iServiceSerie = new IServiceSerieImpl();
+        final IServiceSeriesImpl iServiceSerie = new IServiceSeriesImpl();
         try {
-            this.categorieList = categorieserv.recuperer();
-            for (final Categorie c : this.categorieList) {
-                this.categorieF.getItems().add(c.getNom());
+            this.categorieList = categorieserv.read();
+            for (final Category c : this.categorieList) {
+                this.categorieF.getItems().add(c.getName());
             }
-        } catch (final SQLException e) {
+        } catch (final Exception e) {
             throw new RuntimeException(e);
         }
         ///// affichage du tableau
-        final IServiceSerieImpl serviceSerie = new IServiceSerieImpl();
-        // TableColumn<SerieDto, Integer> idCol = new TableColumn<>("ID");
+        final IServiceSeriesImpl serviceSerie = new IServiceSeriesImpl();
+        // TableColumn<Series, Integer> idCol = new TableColumn<>("ID");
         // idCol.setCellValueFactory(new PropertyValueFactory<>("idserie"));
-        final TableColumn<SerieDto, String> nomCol = new TableColumn<>("Name");
+        final TableColumn<Series, String> nomCol = new TableColumn<>("Name");
         nomCol.setCellValueFactory(new PropertyValueFactory<>("nom"));
-        final TableColumn<SerieDto, String> resumeCol = new TableColumn<>("Summary");
+        final TableColumn<Series, String> resumeCol = new TableColumn<>("Summary");
         resumeCol.setCellValueFactory(new PropertyValueFactory<>("resume"));
-        final TableColumn<SerieDto, String> directeurCol = new TableColumn<>("Director");
+        final TableColumn<Series, String> directeurCol = new TableColumn<>("Director");
         directeurCol.setCellValueFactory(new PropertyValueFactory<>("directeur"));
-        final TableColumn<SerieDto, String> paysCol = new TableColumn<>("Country");
+        final TableColumn<Series, String> paysCol = new TableColumn<>("Country");
         paysCol.setCellValueFactory(new PropertyValueFactory<>("pays"));
-        final TableColumn<SerieDto, String> categorieCol = new TableColumn<>("Category");
+        final TableColumn<Series, String> categorieCol = new TableColumn<>("Category");
         categorieCol.setCellValueFactory(new PropertyValueFactory<>("nomCategories"));
-        final TableColumn<SerieDto, Void> supprimerCol = new TableColumn<>("Delete");
+        final TableColumn<Series, Void> supprimerCol = new TableColumn<>("Delete");
         supprimerCol.setCellFactory(param -> new TableCell<>() {
             private final Button button = new Button("delete");
 
             {
                 this.button.setOnAction(event -> {
-                    final SerieDto serieDto = this.getTableView().getItems().get(this.getIndex());
+                    final Series serieDto = this.getTableView().getItems().get(this.getIndex());
                     try {
-                        iServiceSerie.supprimer(serieDto.getIdserie());
+                        iServiceSerie.delete(serieDto);
                         SerieController.this.tableView.getItems().remove(serieDto);
                         SerieController.this.tableView.refresh();
                         SerieController.this.showAlert("Succes", "Deleted Successfully!");
-                    } catch (final SQLException e) {
+                    } catch (final Exception e) {
                         SerieController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                         SerieController.this.showAlert("Succes", "Deleted Successfully!");
                     }
@@ -142,18 +148,18 @@ public class SerieController {
 
             /**
              * Updates a graphical item's state based on a boolean input, setting its
-             * graphics
-             * component to either null or an provided button component upon empty/non-empty
-             * status.
+             * graphics component to either null or an provided button component upon
+             * empty/non-empty status.
              *
-             * @param item  widget being updated, and it is passed to the super method
-             *              `updateItem()`
-             *              along with the `empty` parameter for further processing.
+             * @param item
+             *            widget being updated, and it is passed to the super method
+             *            `updateItem()` along with the `empty` parameter for further
+             *            processing.
              *
-             * @param empty ether the item being updated is empty or not, and accordingly
-             *              sets
-             *              the graphic of the button to null or the button itself when it
-             *              is not empty.
+             * @param empty
+             *            ether the item being updated is empty or not, and accordingly sets
+             *            the graphic of the button to null or the button itself when it is
+             *            not empty.
              */
             @Override
             protected void updateItem(final Void item, final boolean empty) {
@@ -165,7 +171,7 @@ public class SerieController {
                 }
             }
         });
-        final TableColumn<SerieDto, Void> modifierCol = new TableColumn<>("Edit");
+        final TableColumn<Series, Void> modifierCol = new TableColumn<>("Edit");
         modifierCol.setCellFactory(param -> new TableCell<>() {
             private final Button button = new Button("Edit");
             private int clickCount;
@@ -174,7 +180,7 @@ public class SerieController {
                 this.button.setOnAction(event -> {
                     this.clickCount++;
                     if (2 == clickCount) {
-                        final SerieDto serie = this.getTableView().getItems().get(this.getIndex());
+                        final Series serie = this.getTableView().getItems().get(this.getIndex());
                         SerieController.this.modifierSerie(serie);
                         this.clickCount = 0;
                     }
@@ -183,17 +189,16 @@ public class SerieController {
 
             /**
              * Updates a widget's graphics based on an item's `empty` status, setting the
-             * graphic
-             * to `null` if the item is empty and `button` otherwise.
+             * graphic to `null` if the item is empty and `button` otherwise.
              *
-             * @param item  element being updated, which can be null or the `button` object
-             *              depending
-             *              on whether it is being updated or not.
+             * @param item
+             *            element being updated, which can be null or the `button` object
+             *            depending on whether it is being updated or not.
              *
-             * @param empty status of the item being updated, and its value determines
-             *              whether
-             *              or not to set the graphic of the button to null or the specified
-             *              button graphics.
+             * @param empty
+             *            status of the item being updated, and its value determines whether
+             *            or not to set the graphic of the button to null or the specified
+             *            button graphics.
              */
             @Override
             protected void updateItem(final Void item, final boolean empty) {
@@ -211,21 +216,19 @@ public class SerieController {
                 modifierCol);
         // Récupérer les catégories et les ajouter à la TableView
         try {
-            this.tableView.getItems().addAll(serviceSerie.recuperer());
-        } catch (final SQLException e) {
+            this.tableView.getItems().addAll(serviceSerie.read());
+        } catch (final Exception e) {
             SerieController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
     /**
-     * /**
-     * Generates a PDF document containing a table with columns for description,
-     * date,
-     * and episode number, based on feedback data.
+     * /** Generates a PDF document containing a table with columns for description,
+     * date, and episode number, based on feedback data.
      *
-     * @param event An action event that triggers the function execution, providing
-     *              the
-     *              user's feedback selection.
+     * @param event
+     *            An action event that triggers the function execution, providing
+     *            the user's feedback selection.
      */
     @FXML
     private void exportPdf(final ActionEvent event) {
@@ -236,7 +239,7 @@ public class SerieController {
         final File selectedFile = fileChooser.showSaveDialog(((Node) event.getSource()).getScene().getWindow());
         if (null != selectedFile) {
             final IServiceFeedbackImpl sf = new IServiceFeedbackImpl();
-            final List<Feedback> feedbackList = sf.Show();
+            final List<Feedback> feedbackList = sf.read();
             try {
                 // Créer le document PDF
                 final Document document = new Document();
@@ -316,7 +319,7 @@ public class SerieController {
                     cellR2.setPaddingBottom(10);
                     cellR2.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cellR2);
-                    final PdfPCell cellR3 = new PdfPCell(new Paragraph(String.valueOf(fee.getId_episode()), hdFont));
+                    final PdfPCell cellR3 = new PdfPCell(new Paragraph(String.valueOf(fee.getEpisodeId()), hdFont));
                     cellR3.setBorderColor(titleColor);
                     cellR3.setPaddingTop(10);
                     cellR3.setPaddingBottom(10);
@@ -334,31 +337,28 @@ public class SerieController {
     }
 
     /**
-     * /**
-     * Modifies a serie's information by displaying a dialog box to enter and
-     * validate
-     * the values of name, summary, director, country, add image, and categories,
-     * and
-     * then updating the serie with the new information.
+     * /** Modifies a serie's information by displaying a dialog box to enter and
+     * validate the values of name, summary, director, country, add image, and
+     * categories, and then updating the serie with the new information.
      *
-     * @param serieDto data for a serie that is being modified, which includes the
-     *                 serie's
-     *                 ID, name, summary, director, country, and image, as well as
-     *                 its category(ies).
+     * @param serieDto
+     *            data for a serie that is being modified, which includes the
+     *            serie's ID, name, summary, director, country, and image, as well
+     *            as its category(ies).
      */
-    private void modifierSerie(final SerieDto serieDto) {
-        final IServiceSerieImpl iServiceSerie = new IServiceSerieImpl();
+    private void modifierSerie(final Series serieDto) {
+        final IServiceSeriesImpl iServiceSerie = new IServiceSeriesImpl();
         final Dialog<Pair<String, String>> dialog = new Dialog<>();
         dialog.setTitle("Edit Serie ");
-        final TextField nomFild = new TextField(serieDto.getNom());
-        final TextField resumeFild = new TextField(serieDto.getResume());
-        final TextField directeurFild = new TextField(serieDto.getDirecteur());
-        final TextField paysFild = new TextField(serieDto.getPays());
+        final TextField nomFild = new TextField(serieDto.getName());
+        final TextField resumeFild = new TextField(serieDto.getSummary());
+        final TextField directeurFild = new TextField(serieDto.getDirector());
+        final TextField paysFild = new TextField(serieDto.getCountry());
         final ComboBox<String> categorieComboBox = new ComboBox<>();
-        for (final Categorie c : this.categorieList) {
-            categorieComboBox.getItems().add(c.getNom());
+        for (final Category c : this.categorieList) {
+            categorieComboBox.getItems().add(c.getName());
         }
-        categorieComboBox.setValue(serieDto.getNomCategories());
+        categorieComboBox.setValue(serieDto.getCategories().stream().findFirst().map(Category::getName).orElse(""));
         final Button Ajouterimage = new Button("ADD");
         {
             Ajouterimage.setOnAction(event -> {
@@ -377,24 +377,24 @@ public class SerieController {
             return null;
         });
         final Optional<Pair<String, String>> result = dialog.showAndWait();
-        final Serie serie = new Serie();
+        final Series serie = new Series();
         result.ifPresent(pair -> {
-            serie.setIdserie(serieDto.getIdserie());
-            serie.setNom(nomFild.getText());
-            serie.setResume(resumeFild.getText());
-            serie.setDirecteur(directeurFild.getText());
-            serie.setPays(paysFild.getText());
+            serie.setId(serieDto.getId());
+            serie.setName(nomFild.getText());
+            serie.setSummary(resumeFild.getText());
+            serie.setDirector(directeurFild.getText());
+            serie.setCountry(paysFild.getText());
             serie.setImage(this.imgpath);
-            for (final Categorie c : this.categorieList) {
-                if (Objects.equals(c.getNom(), categorieComboBox.getValue())) {
-                    serie.setIdcategorie(c.getIdcategorie());
+            for (final Category c : this.categorieList) {
+                if (Objects.equals(c.getName(), categorieComboBox.getValue())) {
+                    serie.setId(c.getId());
                 }
             }
             try {
-                iServiceSerie.modifier(serie);
+                iServiceSerie.update(serie);
                 this.showAlert("Succes", "Successfully modified!");
                 this.ref();
-            } catch (final SQLException e) {
+            } catch (final Exception e) {
                 throw new RuntimeException(e);
             }
         });
@@ -410,13 +410,13 @@ public class SerieController {
 
     /**
      * Creates an alert box with a title and message and displays it using the
-     * `showAndWait()`
-     * method.
+     * `showAndWait()` method.
      *
-     * @param title   title of an alert message shown by the `showAlert` method,
-     *                which is
-     *                displayed in a title bar at the top of the window.
-     * @param message message to be displayed in the Alert dialog box.
+     * @param title
+     *            title of an alert message shown by the `showAlert` method, which
+     *            is displayed in a title bar at the top of the window.
+     * @param message
+     *            message to be displayed in the Alert dialog box.
      */
     @FXML
     private void showAlert(final String title, final String message) {
@@ -429,16 +429,13 @@ public class SerieController {
 
     /**
      * Enables users to choose an image from their local computer and stores its
-     * path in
-     * a variable called `imgpath`. If an invalid file is selected, an error message
-     * is
-     * displayed.
+     * path in a variable called `imgpath`. If an invalid file is selected, an error
+     * message is displayed.
      *
-     * @param event selection event triggered by the user selecting an image file
-     *              using
-     *              the FileChooser, and it provides the path of the selected file
-     *              to the `addimg`
-     *              method for processing.
+     * @param event
+     *            selection event triggered by the user selecting an image file
+     *            using the FileChooser, and it provides the path of the selected
+     *            file to the `addimg` method for processing.
      */
     @FXML
     void addimg(final ActionEvent event) {
@@ -460,16 +457,15 @@ public class SerieController {
 
     /**
      * Allows the user to select an image file, then saves it in two different
-     * locations
-     * and sets the image as the `serieImageView` field.
+     * locations and sets the image as the `serieImageView` field.
      *
-     * @param event open file dialog event that triggers the function to execute.
+     * @param event
+     *            open file dialog event that triggers the function to execute.
      */
     @FXML
     void importImage(final ActionEvent event) {
         final FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("PNG", "*.png"),
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PNG", "*.png"),
                 new FileChooser.ExtensionFilter("JPG", "*.jpg"));
         fileChooser.setTitle("Sélectionner une image");
         final File selectedFile = fileChooser.showOpenDialog(null);
@@ -507,16 +503,14 @@ public class SerieController {
 
     /**
      * Takes a `File` object as input and returns a `Boolean` value indicating
-     * whether
-     * the file is an image file or not. It does so by attempting to create an
-     * `Image`
-     * object from the file's URI string, and returning `true` if the creation was
-     * successful and `false` otherwise.
+     * whether the file is an image file or not. It does so by attempting to create
+     * an `Image` object from the file's URI string, and returning `true` if the
+     * creation was successful and `false` otherwise.
      *
-     * @param file File to be tested for being an image file.
+     * @param file
+     *            File to be tested for being an image file.
      * @returns a boolean value indicating whether the provided file is an image
-     *          file or
-     *          not.
+     *          file or not.
      */
     private boolean isImageFile(final File file) {
         try {
@@ -531,8 +525,7 @@ public class SerieController {
 
     /**
      * Checks if the user's entered name is empty, and returns `true` otherwise it
-     * sets
-     * the text to "Please enter a valid Name" and returns `false`.
+     * sets the text to "Please enter a valid Name" and returns `false`.
      *
      * @returns a boolean value indicating whether the input name is valid or not.
      */
@@ -547,13 +540,11 @@ public class SerieController {
 
     /**
      * Verifies if a category has been selected and returns `true` if it has,
-     * otherwise
-     * it displays an error message and returns `false`.
+     * otherwise it displays an error message and returns `false`.
      *
      * @returns `true` if a value is provided for `categorieF.getValue()`, otherwise
-     *          it
-     *          returns `false` and sets the `categoriecheck` text to "Please select
-     *          a Category".
+     *          it returns `false` and sets the `categoriecheck` text to "Please
+     *          select a Category".
      */
     boolean categoriecheck() {
         if (null != categorieF.getValue()) {
@@ -566,8 +557,7 @@ public class SerieController {
 
     /**
      * Verifies if a director's name is provided and returns `true` if it is valid,
-     * else
-     * it sets an error message and returns `false`.
+     * else it sets an error message and returns `false`.
      *
      * @returns a boolean value indicating whether a valid director has been
      *          entered.
@@ -583,10 +573,8 @@ public class SerieController {
 
     /**
      * Checks if the user has entered a valid country by comparing the inputted
-     * string
-     * to an empty string. If it is not empty, the function returns true, otherwise
-     * it
-     * displays an error message and returns false.
+     * string to an empty string. If it is not empty, the function returns true,
+     * otherwise it displays an error message and returns false.
      *
      * @returns a boolean value indicating whether a valid country was entered or
      *          not.
@@ -602,10 +590,9 @@ public class SerieController {
 
     /**
      * Verifies if the user has entered a non-empty string in the `resumeF` field.
-     * If the
-     * field is not empty, it returns `true`. Otherwise, it sets the text of the
-     * `resumecheck`
-     * label to "Please enter a valid Summary" and returns `false`.
+     * If the field is not empty, it returns `true`. Otherwise, it sets the text of
+     * the `resumecheck` label to "Please enter a valid Summary" and returns
+     * `false`.
      *
      * @returns a boolean value indicating whether a summary is provided.
      */
@@ -620,8 +607,7 @@ public class SerieController {
 
     /**
      * Checks if an input image path is provided, returning `true` if valid and
-     * "Please
-     * select a Picture" otherwise.
+     * "Please select a Picture" otherwise.
      *
      * @returns "Please select a Picture".
      */
@@ -640,15 +626,15 @@ public class SerieController {
      * Sends an HTML-formatted email to a recipient via Gmail's SMTP service, using
      * authentication and STARTTLS protocol for encryption.
      *
-     * @param recipientEmail email address of the intended recipient of the email
-     *                       message
-     *                       being sent.
-     * @param subject        subject of the email to be sent, which is used as the
-     *                       email's title
-     *                       in the recipient's inbox.
-     * @param message        message that will be sent through the email, and it is
-     *                       passed as a
-     *                       string to the `setMsg()` method of the `Email` class.
+     * @param recipientEmail
+     *            email address of the intended recipient of the email message being
+     *            sent.
+     * @param subject
+     *            subject of the email to be sent, which is used as the email's
+     *            title in the recipient's inbox.
+     * @param message
+     *            message that will be sent through the email, and it is passed as a
+     *            string to the `setMsg()` method of the `Email` class.
      */
     public void sendEmail(final String recipientEmail, final String subject, final String message) {
         try {
@@ -672,25 +658,20 @@ public class SerieController {
 
     /**
      * Allows users to create a new serie by inputting necessary information such as
-     * name,
-     * category, director, pay, and resume. The function then checks if all fields
-     * are
-     * filled in correctly, and if so, adds the series to a list of saved series and
-     * sends
-     * an email notification to a predefined recipient with details about the newly
-     * added
-     * serie.
+     * name, category, director, pay, and resume. The function then checks if all
+     * fields are filled in correctly, and if so, adds the series to a list of saved
+     * series and sends an email notification to a predefined recipient with details
+     * about the newly added serie.
      *
-     * @param event ClickEvent that triggers the execution of the `ajouterSerie()`
-     *              method
-     *              and provides information about the event, such as the button or
-     *              component that was
-     *              clicked.
+     * @param event
+     *            ClickEvent that triggers the execution of the `ajouterSerie()`
+     *            method and provides information about the event, such as the
+     *            button or component that was clicked.
      */
     @FXML
     void ajouterSerie(final ActionEvent event) {
-        final IServiceSerieImpl serieserv = new IServiceSerieImpl();
-        final Serie serie = new Serie();
+        final IServiceSeriesImpl serieserv = new IServiceSeriesImpl();
+        final Series serie = new Series();
         this.nomcheck();
         this.categoriecheck();
         this.directeurcheck();
@@ -702,17 +683,17 @@ public class SerieController {
                 final String fullPath = this.serieImageView.getImage().getUrl();
                 final String requiredPath = fullPath.substring(fullPath.indexOf("/img/series/"));
                 final URI uri = new URI(requiredPath);
-                serie.setNom(this.nomF.getText());
-                serie.setResume(this.resumeF.getText());
-                serie.setDirecteur(this.directeurF.getText());
-                serie.setPays(this.paysF.getText());
+                serie.setName(this.nomF.getText());
+                serie.setSummary(this.resumeF.getText());
+                serie.setDirector(this.directeurF.getText());
+                serie.setCountry(this.paysF.getText());
                 serie.setImage(uri.getPath());
-                for (final Categorie c : this.categorieList) {
-                    if (Objects.equals(c.getNom(), this.categorieF.getValue())) {
-                        serie.setIdcategorie(c.getIdcategorie());
+                for (final Category c : this.categorieList) {
+                    if (Objects.equals(c.getName(), this.categorieF.getValue())) {
+                        serie.setId(c.getId());
                     }
                 }
-                serieserv.ajouter(serie);
+                serieserv.create(serie);
                 this.showAlert("successfully", "The serie has been successfully saved");
                 this.nomcheck.setText("");
                 this.categoriecheck.setText("");
@@ -725,12 +706,10 @@ public class SerieController {
                 // destinataire
                 final String subject = "Exciting News! New Series Alert 🚀";
                 final String message = "Dear Viewer,\n\nWe are thrilled to announce a new series on our platform!\n\n"
-                        + "Title: " + serie.getNom() + "\n"
-                        + "Description: " + serie.getResume() + "\n\n"
-                        + "Get ready for an incredible viewing experience. Enjoy the show!\n\n"
-                        + "Best regards.\n";
-                final String newSerieTitle = serie.getNom();
-                final String newSerieDescription = serie.getResume(); // Vous pouvez personnaliser cela
+                        + "Title: " + serie.getName() + "\n" + "Description: " + serie.getSummary() + "\n\n"
+                        + "Get ready for an incredible viewing experience. Enjoy the show!\n\n" + "Best regards.\n";
+                final String newSerieTitle = serie.getName();
+                final String newSerieDescription = serie.getSummary(); // Vous pouvez personnaliser cela
                 this.sendEmail(recipientEmail, newSerieTitle, message);
                 this.ref();
             } catch (final Exception e) {
@@ -740,18 +719,13 @@ public class SerieController {
         }
         ///
         /*
-         * private void showStatistics() {
-         * IServiceSerieImpl serviceSerie = new IServiceSerieImpl();
+         * private void showStatistics() { IServiceSerieImpl serviceSerie = new
+         * IServiceSerieImpl();
          *
-         * try {
-         * Map<String, Long> statistics = serviceSerie.getSeriesStatisticsByCategory();
-         * // Handle or display the statistics as needed
-         * LOGGER.info(statistics);
-         * } catch (SQLException e) {
-         * LOGGER.log(Level.SEVERE, e.getMessage(), e);
-         * // Handle the exception
-         * }
-         * }
+         * try { Map<String, Long> statistics =
+         * serviceSerie.getSeriesStatisticsByCategory(); // Handle or display the
+         * statistics as needed LOGGER.info(statistics); } catch (SQLException e) {
+         * LOGGER.log(Level.SEVERE, e.getMessage(), e); // Handle the exception } }
          */
         ///
     }
@@ -761,11 +735,10 @@ public class SerieController {
     /**
      * Loads an FXML file, creates a scene, and displays it on a Stage.
      *
-     * @param event action event that triggered the execution of the `Oepisodes()`
-     *              method,
-     *              providing the source of the event as an object that can be
-     *              referenced and used
-     *              within the method.
+     * @param event
+     *            action event that triggered the execution of the `Oepisodes()`
+     *            method, providing the source of the event as an object that can be
+     *            referenced and used within the method.
      */
     @FXML
     void Oepisodes(final ActionEvent event) throws IOException {
@@ -778,19 +751,18 @@ public class SerieController {
     }
 
     /**
-     * Loads a FXML file named `"/ui/series/Serie-view.fxml"` and displays it on a Stage,
-     * creating
-     * a new Scene and setting it as the scene of the Stage.
+     * Loads a FXML file named `"/ui/series/Serie-view.fxml"` and displays it on a
+     * Stage, creating a new Scene and setting it as the scene of the Stage.
      *
-     * @param event An action event object that triggers the `Oseries` method and
-     *              provides
-     *              information about the event, such as the source of the event and
-     *              the state of the
-     *              stage.
+     * @param event
+     *            An action event object that triggers the `Oseries` method and
+     *            provides information about the event, such as the source of the
+     *            event and the state of the stage.
      */
     @FXML
     void Oseries(final ActionEvent event) throws IOException {
-        final Parent root = FXMLLoader.load(Objects.requireNonNull(this.getClass().getResource("/ui/series/Serie-view.fxml")));
+        final Parent root = FXMLLoader
+                .load(Objects.requireNonNull(this.getClass().getResource("/ui/series/Serie-view.fxml")));
         final Scene scene = new Scene(root);
         final Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
@@ -799,12 +771,11 @@ public class SerieController {
 
     /**
      * Loads an FXML file, creates a scene from it, and displays the scene on the
-     * primary
-     * Stage.
+     * primary Stage.
      *
-     * @param event ActionEvent object that triggers the function, providing
-     *              information
-     *              about the source of the event and any related data.
+     * @param event
+     *            ActionEvent object that triggers the function, providing
+     *            information about the source of the event and any related data.
      */
     @FXML
     void Oepisode(final ActionEvent event) throws IOException {
@@ -819,7 +790,8 @@ public class SerieController {
     /**
      * Displays a list of movies to the user.
      *
-     * @param actionEvent occurrence of an event that triggered the function call.
+     * @param actionEvent
+     *            occurrence of an event that triggered the function call.
      */
     public void showmovies(final ActionEvent actionEvent) {
     }
@@ -827,19 +799,19 @@ public class SerieController {
     /**
      * Likely displays a list or inventory of products.
      *
-     * @param actionEvent occurrence of an event that triggers the execution of the
-     *                    `showProducts` method.
+     * @param actionEvent
+     *            occurrence of an event that triggers the execution of the
+     *            `showProducts` method.
      */
     public void showproducts(final ActionEvent actionEvent) {
     }
 
     /**
      * Is called when the `ActionEvent` occurs, and it does not provide any
-     * information
-     * about what it does beyond the fact that it exists.
+     * information about what it does beyond the fact that it exists.
      *
-     * @param actionEvent event that triggered the execution of the `show cinema`
-     *                    function.
+     * @param actionEvent
+     *            event that triggered the execution of the `show cinema` function.
      */
     public void showcinema(final ActionEvent actionEvent) {
     }
@@ -847,7 +819,8 @@ public class SerieController {
     /**
      * Handles an `ActionEvent`.
      *
-     * @param actionEvent event that triggered the function call.
+     * @param actionEvent
+     *            event that triggered the function call.
      */
     public void showevent(final ActionEvent actionEvent) {
     }
@@ -855,15 +828,14 @@ public class SerieController {
     /**
      * Likely displays a series of data or elements in a graphical interface.
      *
-     * @param actionEvent event that triggered the call to the `showSeries`
-     *                    function.
+     * @param actionEvent
+     *            event that triggered the call to the `showSeries` function.
      */
     public void showseries(final ActionEvent actionEvent) {
     }
 }
 /*
- * @FXML
- * public void showStatistics(ActionEvent actionEvent) {
+ * @FXML public void showStatistics(ActionEvent actionEvent) {
  * statstiqueController.handleShowPieChart();
  *
  * }

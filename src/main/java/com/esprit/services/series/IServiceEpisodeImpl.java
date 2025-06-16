@@ -1,112 +1,169 @@
 package com.esprit.services.series;
 
-import com.esprit.models.series.Episode;
-import com.esprit.services.series.DTO.EpisodeDto;
-import com.esprit.utils.DataSource;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class IServiceEpisodeImpl implements IServiceEpisode<Episode> {
+import com.esprit.models.series.Episode;
+import com.esprit.services.IService;
+import com.esprit.utils.DataSource;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+/**
+ * Service class providing business logic for the RAKCHA application. Implements
+ * CRUD operations and business rules for data management.
+ *
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
+ */
+public class IServiceEpisodeImpl implements IService<Episode> {
     private static final Logger LOGGER = Logger.getLogger(IServiceEpisodeImpl.class.getName());
     private final Connection connection;
 
+    /**
+     * Performs IServiceEpisodeImpl operation.
+     *
+     * @return the result of the operation
+     */
     public IServiceEpisodeImpl() {
         this.connection = DataSource.getInstance().getConnection();
     }
 
+    @Override
     /**
-     * @param episode
-     * @throws SQLException
+     * Creates a new entity in the database.
+     *
+     * @param entity
+     *            the entity to create
      */
+    public void create(final Episode episode) {
+        final String req = "INSERT INTO episode (title, episode_number, season, image, video, series_id) VALUES (?, ?, ?, ?, ?, ?)";
+        try (final PreparedStatement st = this.connection.prepareStatement(req)) {
+            st.setString(1, episode.getTitle());
+            st.setInt(2, episode.getEpisodeNumber());
+            st.setInt(3, episode.getSeason());
+            st.setString(4, episode.getImage());
+            st.setString(5, episode.getVideo());
+            st.setInt(6, episode.getSeriesId());
+            st.executeUpdate();
+            LOGGER.info("Episode created successfully");
+        } catch (SQLException e) {
+            log.error("Error creating episode: {}", e.getMessage(), e);
+            throw new RuntimeException("Failed to create episode", e);
+        }
+    }
+
     @Override
-    public void ajouter(final Episode episode) throws SQLException {
-        final String req = "INSERT INTO episodes (titre, numeroepisode, saison, image, video, idserie) VALUES (?, ?, ?, ?, ?, ?)";
-        final PreparedStatement st = this.connection.prepareStatement(req);
-        st.setString(1, episode.getTitre());
-        st.setInt(2, episode.getNumeroepisode());
-        st.setInt(3, episode.getSaison());
-        st.setString(4, episode.getImage());
-        st.setString(5, episode.getVideo());
-        st.setInt(6, episode.getIdserie());
-        st.executeUpdate();
-        IServiceEpisodeImpl.LOGGER.info("episode ajoutee avec succes");
+    /**
+     * Updates an existing entity in the database.
+     *
+     * @param entity
+     *            the entity to update
+     */
+    public void update(final Episode episode) {
+        final String req = "UPDATE episode SET title = ?, episode_number = ?, season = ?, image = ?, video = ?, series_id = ? WHERE idepisode = ?";
+        try (final PreparedStatement st = this.connection.prepareStatement(req)) {
+            st.setString(1, episode.getTitle());
+            st.setInt(2, episode.getEpisodeNumber());
+            st.setInt(3, episode.getSeason());
+            st.setString(4, episode.getImage());
+            st.setString(5, episode.getVideo());
+            st.setInt(6, episode.getSeriesId());
+            st.setLong(7, episode.getId());
+            st.executeUpdate();
+            LOGGER.info("Episode updated successfully");
+        } catch (SQLException e) {
+            log.error("Error updating episode: {}", e.getMessage(), e);
+            throw new RuntimeException("Failed to update episode", e);
+        }
+    }
+
+    @Override
+    /**
+     * Deletes an entity from the database.
+     *
+     * @param id
+     *            the ID of the entity to delete
+     */
+    public void delete(final Episode episode) {
+        if (episode == null) {
+            log.error("Cannot delete null episode");
+            throw new IllegalArgumentException("Episode cannot be null");
+        }
+        if (episode.getId() == null) {
+            log.error("Cannot delete episode with null ID");
+            throw new IllegalArgumentException("Episode ID cannot be null");
+        }
+        deleteById(episode.getId());
     }
 
     /**
-     * @param episode
-     * @throws SQLException
+     * Performs deleteById operation.
+     *
+     * @return the result of the operation
      */
-    @Override
-    public void modifier(final Episode episode) throws SQLException {
-        final String req = "UPDATE episodes set titre = ?, numeroepisode = ?,saison = ?, image = ?,video = ? ,idserie = ?  where idepisode = ?;";
-        final PreparedStatement st = this.connection.prepareStatement(req);
-        st.setString(1, episode.getTitre());
-        st.setInt(2, episode.getNumeroepisode());
-        st.setInt(3, episode.getSaison());
-        st.setString(4, episode.getImage());
-        st.setString(5, episode.getVideo());
-        st.setInt(6, episode.getIdserie());
-        st.setInt(7, episode.getIdepisode());
-        st.executeUpdate();
-        IServiceEpisodeImpl.LOGGER.info("episode modifier avec succes");
+    public void deleteById(final Long id) {
+        final String req = "DELETE FROM episode WHERE idepisode = ?";
+        try (final PreparedStatement ps = this.connection.prepareStatement(req)) {
+            ps.setLong(1, id);
+            ps.executeUpdate();
+            LOGGER.info("Episode deleted successfully");
+        } catch (SQLException e) {
+            log.error("Error deleting episode: {}", e.getMessage(), e);
+            throw new RuntimeException("Failed to delete episode", e);
+        }
     }
 
     @Override
-    public void supprimer(final int id) throws SQLException {
-        final String req = "DELETE FROM episodes WHERE idepisode = ?";
-        final PreparedStatement ps = this.connection.prepareStatement(req);
-        ps.setInt(1, id);
-        ps.executeUpdate();
-        IServiceEpisodeImpl.LOGGER.info("episode supprimee avec succes");
-    }
-
-    @Override
-    public List<EpisodeDto> recuperer() throws SQLException {
-        final List<EpisodeDto> episodeDtos = new ArrayList<>();
-        final String req = "SELECT * FROM episodes ";
-        final Statement st = this.connection.createStatement();
-        final ResultSet rs = st.executeQuery(req);
-        while (rs.next()) {
-            final EpisodeDto e = new EpisodeDto();
-            e.setIdepisode(rs.getInt("idepisode"));
-            e.setTitre(rs.getString("titre"));
-            e.setNumeroepisode(rs.getInt("numeroepisode"));
-            e.setSaison(rs.getInt("saison"));
-            e.setImage(rs.getString("image"));
-            e.setVideo(rs.getString("video"));
-            e.setIdserie(rs.getInt("idserie"));
-            final String req2 = "SELECT series.nom FROM series WHERE idserie = ? ";
-            final PreparedStatement ps = this.connection.prepareStatement(req2);
-            ps.setInt(1, e.getIdserie());
-            final ResultSet rs2 = ps.executeQuery();
-            while (rs2.next()) {
-                e.setNomSerie(rs2.getString("nom"));
+    /**
+     * Performs read operation.
+     *
+     * @return the result of the operation
+     */
+    public List<Episode> read() {
+        final List<Episode> episodeDtos = new ArrayList<>();
+        final String req = "SELECT * FROM episode";
+        try (final Statement st = this.connection.createStatement(); final ResultSet rs = st.executeQuery(req)) {
+            while (rs.next()) {
+                final Episode e = Episode.builder().id(rs.getLong("idepisode")).title(rs.getString("title"))
+                        .episodeNumber(rs.getInt("episode_number")).season(rs.getInt("season"))
+                        .image(rs.getString("image")).video(rs.getString("video")).seriesId(rs.getInt("series_id"))
+                        .build();
+                episodeDtos.add(e);
             }
-            episodeDtos.add(e);
+        } catch (SQLException e) {
+            log.error("Error reading episodes: {}", e.getMessage(), e);
+            throw new RuntimeException("Failed to read episodes", e);
         }
         return episodeDtos;
     }
 
-    @Override
-    public List<Episode> recupuerselonSerie(final int id) throws SQLException {
+    /**
+     * Performs retrieveBySeries operation.
+     *
+     * @return the result of the operation
+     */
+    public List<Episode> retrieveBySeries(final Long seriesId) {
         final List<Episode> episodes = new ArrayList<>();
-        final String req = "SELECT * FROM episodes Where idserie=?";
-        final PreparedStatement ps = this.connection.prepareStatement(req);
-        ps.setInt(1, id);
-        final ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            final Episode episode = new Episode();
-            episode.setIdepisode(rs.getInt("idepisode"));
-            episode.setTitre(rs.getString("titre"));
-            episode.setNumeroepisode(rs.getInt("numeroepisode"));
-            episode.setSaison(rs.getInt("saison"));
-            episode.setImage(rs.getString("image"));
-            episode.setVideo(rs.getString("video"));
-            episode.setIdserie(rs.getInt("idserie"));
-            episodes.add(episode);
+        final String req = "SELECT * FROM episode WHERE series_id = ?";
+        try (final PreparedStatement ps = this.connection.prepareStatement(req)) {
+            ps.setLong(1, seriesId);
+            try (final ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    final Episode episode = Episode.builder().id(rs.getLong("idepisode")).title(rs.getString("title"))
+                            .episodeNumber(rs.getInt("episode_number")).season(rs.getInt("season"))
+                            .image(rs.getString("image")).video(rs.getString("video")).seriesId(rs.getInt("series_id"))
+                            .build();
+                    episodes.add(episode);
+                }
+            }
+        } catch (SQLException e) {
+            log.error("Error retrieving episodes by series {}: {}", seriesId, e.getMessage(), e);
+            throw new RuntimeException("Failed to retrieve episodes by series", e);
         }
         return episodes;
     }

@@ -1,17 +1,25 @@
 package com.esprit.utils;
 
-import com.esprit.Config;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.services.youtube.YouTube;
-import com.google.api.services.youtube.model.SearchResult;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.esprit.Config;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.services.youtube.YouTube;
+import com.google.api.services.youtube.model.SearchResult;
+
+/**
+ * Utility class providing helper methods for the RAKCHA application. Contains
+ * reusable functionality and common operations.
+ *
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class FilmYoutubeTrailer {
     private static final Logger LOGGER = Logger.getLogger(FilmYoutubeTrailer.class.getName());
     private static final String APPLICATION_NAME = "Rakcha";
@@ -22,6 +30,11 @@ public class FilmYoutubeTrailer {
     private final String apiKey;
     private final YouTube youtube;
 
+    /**
+     * Performs FilmYoutubeTrailer operation.
+     *
+     * @return the result of the operation
+     */
     public FilmYoutubeTrailer() {
         Config config = Config.getInstance();
         this.apiKey = config.get("youtube.api.key");
@@ -29,19 +42,15 @@ public class FilmYoutubeTrailer {
             throw new IllegalStateException("YouTube API key not found in config");
         }
 
-        this.youtube = new YouTube.Builder(
-                new NetHttpTransport(),
-                new GsonFactory(),
-                request -> {
-                })
-                .setApplicationName(APPLICATION_NAME)
-                .build();
+        this.youtube = new YouTube.Builder(new NetHttpTransport(), new GsonFactory(), request -> {
+        }).setApplicationName(APPLICATION_NAME).build();
     }
 
     /**
      * Search for and return the trailer URL for a given film
-     * 
-     * @param filmName The name of the film to search for
+     *
+     * @param filmName
+     *            The name of the film to search for
      * @return URL of the trailer video, or fallback URL if not found
      */
     public String watchTrailer(final String filmName) {

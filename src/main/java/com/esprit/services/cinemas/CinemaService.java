@@ -1,148 +1,198 @@
 package com.esprit.services.cinemas;
 
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.esprit.models.cinemas.Cinema;
-import com.esprit.models.users.Responsable_de_cinema;
+import com.esprit.models.users.CinemaManager;
 import com.esprit.services.IService;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.DataSource;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
+/**
+ * Service class providing business logic for the RAKCHA application. Implements
+ * CRUD operations and business rules for data management.
+ *
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class CinemaService implements IService<Cinema> {
-    private static final Logger LOGGER = Logger.getLogger(CinemaService.class.getName());
     private final Connection connection;
+    private final UserService userService;
 
+    /**
+     * Performs CinemaService operation.
+     *
+     * @return the result of the operation
+     */
     public CinemaService() {
         this.connection = DataSource.getInstance().getConnection();
+        this.userService = new UserService();
     }
 
+    @Override
     /**
-     * @param cinema
+     * Creates a new entity in the database.
+     *
+     * @param entity
+     *            the entity to create
      */
-    @Override
-    public void create(final Cinema cinema) {
-        final String req = "INSERT into cinema(nom, adresse, responsable, logo, Statut) values (?, ?, ?, ?, ?);";
-        try {
-            final PreparedStatement pst = this.connection.prepareStatement(req);
-            pst.setString(1, cinema.getNom());
-            pst.setString(2, cinema.getAdresse());
-            pst.setInt(3, cinema.getResponsable().getId());
-            pst.setString(4, cinema.getLogo());
-            // Définition de la valeur par défaut pour le champ Statut
-            pst.setString(5, null != cinema.getStatut() ? cinema.getStatut() : "Pending");
-            pst.executeUpdate();
-            CinemaService.LOGGER.info("Cinéma ajouté !");
-        } catch (final SQLException e) {
-            CinemaService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
+    public void create(Cinema cinema) {
+        String query = "INSERT INTO cinema (name, address, manager_id, logo_path, status) VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, cinema.getName());
+            stmt.setString(2, cinema.getAddress());
+            stmt.setLong(3, cinema.getManager().getId());
+            stmt.setString(4, cinema.getLogoPath());
+            stmt.setString(5, cinema.getStatus() != null ? cinema.getStatus() : "Pending");
+            stmt.executeUpdate();
+            log.info("Cinema created successfully");
+        } catch (SQLException e) {
+            log.error("Error creating cinema", e);
         }
     }
 
+    @Override
     /**
-     * @param cinema
+     * Updates an existing entity in the database.
+     *
+     * @param entity
+     *            the entity to update
      */
-    @Override
-    public void update(final Cinema cinema) {
-        final String req = "UPDATE cinema set nom = ?, adresse = ?, logo = ?, Statut = ? where id_cinema = ?;";
-        try {
-            final PreparedStatement pst = this.connection.prepareStatement(req);
-            pst.setInt(5, cinema.getId_cinema());
-            pst.setString(1, cinema.getNom());
-            pst.setString(2, cinema.getAdresse());
-            pst.setString(3, cinema.getLogo());
-            pst.setString(4, cinema.getStatut());
-            pst.executeUpdate();
-            CinemaService.LOGGER.info("Cinéma modifiée !");
-        } catch (final SQLException e) {
-            CinemaService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
+    public void update(Cinema cinema) {
+        String query = "UPDATE cinema SET name = ?, address = ?, logo_path = ?, status = ? WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, cinema.getName());
+            stmt.setString(2, cinema.getAddress());
+            stmt.setString(3, cinema.getLogoPath());
+            stmt.setString(4, cinema.getStatus());
+            stmt.setLong(5, cinema.getId());
+            stmt.executeUpdate();
+            log.info("Cinema updated successfully");
+        } catch (SQLException e) {
+            log.error("Error updating cinema", e);
         }
     }
 
     @Override
-    public void delete(final Cinema cinema) {
-        final String req = "DELETE from cinema where id_cinema= ?;";
-        try {
-            final PreparedStatement pst = this.connection.prepareStatement(req);
-            pst.setInt(1, cinema.getId_cinema());
-            pst.executeUpdate();
-            CinemaService.LOGGER.info("Cinema supprmiée !");
-        } catch (final SQLException e) {
-            CinemaService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
+    /**
+     * Deletes an entity from the database.
+     *
+     * @param id
+     *            the ID of the entity to delete
+     */
+    public void delete(Cinema cinema) {
+        String query = "DELETE FROM cinema WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setLong(1, cinema.getId());
+            stmt.executeUpdate();
+            log.info("Cinema deleted successfully");
+        } catch (SQLException e) {
+            log.error("Error deleting cinema", e);
         }
     }
 
     @Override
+    /**
+     * Performs read operation.
+     *
+     * @return the result of the operation
+     */
     public List<Cinema> read() {
-        final List<Cinema> cinemas = new ArrayList<>();
-        final String req = "SELECT * from cinema";
-        try {
-            final PreparedStatement pst = this.connection.prepareStatement(req);
-            final ResultSet rs = pst.executeQuery();
+        List<Cinema> cinemas = new ArrayList<>();
+        String query = "SELECT * FROM cinema";
+        try (PreparedStatement stmt = connection.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
+
             while (rs.next()) {
-                cinemas.add(new Cinema(rs.getInt("id_cinema"), rs.getString("nom"), rs.getString("adresse"),
-                        (Responsable_de_cinema) new UserService().getUserById(rs.getInt("responsable")),
-                        rs.getString("logo"), rs.getString("Statut")));
+                Cinema cinema = buildCinema(rs);
+                if (cinema != null) {
+                    cinemas.add(cinema);
+                }
             }
-        } catch (final SQLException e) {
-            CinemaService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (SQLException e) {
+            log.error("Error reading cinemas", e);
         }
         return cinemas;
     }
 
-    public List<Cinema> sort(final String p) {
-        final List<Cinema> cinemas = new ArrayList<>();
-        final String req = "SELECT * from cinema ORDER BY %s".formatted(p);
-        try {
-            final PreparedStatement pst = this.connection.prepareStatement(req);
-            final ResultSet rs = pst.executeQuery();
+    /**
+     * Performs sort operation.
+     *
+     * @return the result of the operation
+     */
+    public List<Cinema> sort(String orderBy) {
+        List<Cinema> cinemas = new ArrayList<>();
+        String query = "SELECT * FROM cinema ORDER BY " + orderBy;
+        try (PreparedStatement stmt = connection.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
+
             while (rs.next()) {
-                cinemas.add(new Cinema(rs.getInt("id_cinema"), rs.getString("nom"), rs.getString("adresse"),
-                        (Responsable_de_cinema) new UserService().getUserById(rs.getInt("responsable")),
-                        rs.getString("logo"), rs.getString("Statut")));
+                Cinema cinema = buildCinema(rs);
+                if (cinema != null) {
+                    cinemas.add(cinema);
+                }
             }
-        } catch (final SQLException e) {
-            CinemaService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        } catch (SQLException e) {
+            log.error("Error sorting cinemas", e);
         }
         return cinemas;
     }
 
-    public Cinema getCinema(final int cinema_id) {
-        Cinema cinema = null;
-        final String req = "SELECT * from cinema where id_cinema = ?";
-        try {
-            final PreparedStatement pst = this.connection.prepareStatement(req);
-            pst.setInt(1, cinema_id);
-            final ResultSet rs = pst.executeQuery();
-            rs.next();
-            cinema = new Cinema(rs.getInt("id_cinema"), rs.getString("nom"), rs.getString("adresse"),
-                    (Responsable_de_cinema) new UserService().getUserById(rs.getInt("responsable")),
-                    rs.getString("logo"), rs.getString("Statut"));
-        } catch (final SQLException e) {
-            CinemaService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
+    /**
+     * Retrieves the CinemaById value.
+     *
+     * @return the CinemaById value
+     */
+    public Cinema getCinemaById(Long cinemaId) {
+        String query = "SELECT * FROM cinema WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setLong(1, cinemaId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return buildCinema(rs);
+            }
+        } catch (SQLException e) {
+            log.error("Error getting cinema by id: " + cinemaId, e);
         }
-        return cinema;
+        return null;
     }
 
-    public Cinema getCinemaByName(final String nom_cinema) {
-        Cinema cinema = null;
-        final String req = "SELECT * from cinema where nom = ?";
-        try {
-            final PreparedStatement pst = this.connection.prepareStatement(req);
-            pst.setString(1, nom_cinema);
-            final ResultSet rs = pst.executeQuery();
-            rs.next();
-            cinema = new Cinema(rs.getInt("id_cinema"), rs.getString("nom"), rs.getString("adresse"),
-                    (Responsable_de_cinema) new UserService().getUserById(rs.getInt("responsable")),
-                    rs.getString("logo"), rs.getString("Statut"));
-        } catch (final SQLException e) {
-            CinemaService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
+    /**
+     * Retrieves the CinemaByName value.
+     *
+     * @return the CinemaByName value
+     */
+    public Cinema getCinemaByName(String name) {
+        String query = "SELECT * FROM cinema WHERE name = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, name);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return buildCinema(rs);
+            }
+        } catch (SQLException e) {
+            log.error("Error getting cinema by name: " + name, e);
         }
-        return cinema;
+        return null;
+    }
+
+    private Cinema buildCinema(ResultSet rs) {
+        try {
+            CinemaManager manager = (CinemaManager) userService.getUserById(rs.getLong("manager_id"));
+            if (manager == null) {
+                log.warn("Cinema manager not found for cinema id: " + rs.getLong("id"));
+                return null;
+            }
+
+            return Cinema.builder().id(rs.getLong("id")).name(rs.getString("name")).address(rs.getString("address"))
+                    .manager(manager).logoPath(rs.getString("logo_path")).status(rs.getString("status")).build();
+        } catch (SQLException e) {
+            log.error("Error building cinema from ResultSet", e);
+            return null;
+        }
     }
 }

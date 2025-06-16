@@ -1,12 +1,5 @@
 package com.esprit.services.films;
 
-import com.esprit.models.films.Film;
-import com.esprit.services.IService;
-import com.esprit.utils.DataSource;
-import com.esprit.utils.FilmYoutubeTrailer;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -22,11 +15,35 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import com.esprit.models.films.Film;
+import com.esprit.services.IService;
+import com.esprit.utils.DataSource;
+import com.esprit.utils.FilmYoutubeTrailer;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+/**
+ * Service class providing business logic for the RAKCHA application. Implements
+ * CRUD operations and business rules for data management.
+ *
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class FilmService implements IService<Film> {
     private static final Logger LOGGER = Logger.getLogger(FilmService.class.getName());
     static private int filmLastInsertID;
     Connection connection;
 
+    /**
+     * Performs FilmService operation.
+     *
+     * @return the result of the operation
+     */
     public FilmService() {
         this.connection = DataSource.getInstance().getConnection();
     }
@@ -90,41 +107,50 @@ public class FilmService implements IService<Film> {
     }
 
     @Override
+    /**
+     * Creates a new entity in the database.
+     *
+     * @param entity
+     *            the entity to create
+     */
     public void create(final Film film) {
-        final String req = "insert into film (nom,image,duree,description,annederalisation) values (?,?,?,?,?) ";
-        try {
-            final PreparedStatement statement = this.connection.prepareStatement(req);
-            statement.setString(1, film.getNom());
+        final String req = "insert into films (name,image,duration,description,release_year) values (?,?,?,?,?) ";
+        try (final PreparedStatement statement = this.connection.prepareStatement(req)) {
+            statement.setString(1, film.getName());
             statement.setString(2, film.getImage());
-            statement.setTime(3, film.getDuree());
+            statement.setTime(3, film.getDuration());
             statement.setString(4, film.getDescription());
-            statement.setInt(5, film.getAnnederalisation());
+            statement.setInt(5, film.getReleaseYear());
             statement.executeUpdate();
             final String selectSql = "SELECT LAST_INSERT_ID()";
-            final PreparedStatement selectPs = this.connection.prepareStatement(selectSql);
-            final ResultSet rs = selectPs.executeQuery();
-            if (rs.next()) {
-                FilmService.filmLastInsertID = rs.getInt(1);
-                FilmService.LOGGER.info(String.valueOf(FilmService.filmLastInsertID));
+            try (final PreparedStatement selectPs = this.connection.prepareStatement(selectSql);
+                    final ResultSet rs = selectPs.executeQuery()) {
+                if (rs.next()) {
+                    FilmService.filmLastInsertID = rs.getInt(1);
+                    log.info("Film created with ID: " + FilmService.filmLastInsertID);
+                }
             }
         } catch (final SQLException e) {
+            log.error("Error creating film", e);
             throw new RuntimeException(e);
         }
     }
 
     @Override
+    /**
+     * Performs read operation.
+     *
+     * @return the result of the operation
+     */
     public List<Film> read() {
         final List<Film> filmArrayList = new ArrayList<>();
-        final String req = "SELECT * from film";
-        try {
-            final PreparedStatement pst = this.connection.prepareStatement(req);
+        final String req = "SELECT * from films";
+        try (final PreparedStatement pst = this.connection.prepareStatement(req)) {
             final ResultSet rs = pst.executeQuery();
-            // int i = 0;
             while (rs.next()) {
-                filmArrayList.add(new Film(rs.getInt("id"), rs.getString("nom"), rs.getString("image"),
-                        rs.getTime("duree"), rs.getString("description"), rs.getInt("annederalisation")));
-                // LOGGER.info(filmArrayList.get(i));
-                // i++;
+                filmArrayList.add(Film.builder().id(rs.getLong("id")).name(rs.getString("name"))
+                        .image(rs.getString("image")).duration(rs.getTime("duration"))
+                        .description(rs.getString("description")).releaseYear(rs.getInt("release_year")).build());
             }
         } catch (final SQLException e) {
             FilmService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
@@ -132,18 +158,20 @@ public class FilmService implements IService<Film> {
         return filmArrayList;
     }
 
+    /**
+     * Performs sort operation.
+     *
+     * @return the result of the operation
+     */
     public List<Film> sort(final String p) {
         final List<Film> filmArrayList = new ArrayList<>();
-        final String req = "SELECT * from film ORDER BY %s".formatted(p);
-        try {
-            final PreparedStatement pst = this.connection.prepareStatement(req);
+        final String req = "SELECT * from films ORDER BY %s".formatted(p);
+        try (final PreparedStatement pst = this.connection.prepareStatement(req)) {
             final ResultSet rs = pst.executeQuery();
-            // int i = 0;
             while (rs.next()) {
-                filmArrayList.add(new Film(rs.getInt("id"), rs.getString("nom"), rs.getString("image"),
-                        rs.getTime("duree"), rs.getString("description"), rs.getInt("annederalisation")));
-                // LOGGER.info(filmArrayList.get(i));
-                // i++;
+                filmArrayList.add(Film.builder().id(rs.getLong("id")).name(rs.getString("name"))
+                        .image(rs.getString("image")).duration(rs.getTime("duration"))
+                        .description(rs.getString("description")).releaseYear(rs.getInt("release_year")).build());
             }
         } catch (final SQLException e) {
             FilmService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
@@ -151,16 +179,22 @@ public class FilmService implements IService<Film> {
         return filmArrayList;
     }
 
-    public Film getCinema(final int id) {
+    /**
+     * Retrieves the Film value.
+     *
+     * @return the Film value
+     */
+    public Film getFilm(final int id) {
         Film film = null;
-        final String req = "SELECT * from Film where id = ?";
-        try {
-            final PreparedStatement pst = this.connection.prepareStatement(req);
+        final String req = "SELECT * from films where id = ?";
+        try (final PreparedStatement pst = this.connection.prepareStatement(req)) {
             pst.setInt(1, id);
             final ResultSet rs = pst.executeQuery();
-            rs.next();
-            film = new Film(rs.getInt("id"), rs.getString("nom"), rs.getString("image"), rs.getTime("duree"),
-                    rs.getString("description"), rs.getInt("annederalisation"));
+            if (rs.next()) {
+                film = Film.builder().id(rs.getLong("id")).name(rs.getString("name")).image(rs.getString("image"))
+                        .duration(rs.getTime("duration")).description(rs.getString("description"))
+                        .releaseYear(rs.getInt("release_year")).build();
+            }
         } catch (final SQLException e) {
             FilmService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
@@ -168,72 +202,96 @@ public class FilmService implements IService<Film> {
     }
 
     @Override
+    /**
+     * Updates an existing entity in the database.
+     *
+     * @param entity
+     *            the entity to update
+     */
     public void update(final Film film) {
-        final String req = "UPDATE film set nom=?,image=?,duree=?,description=?,annederalisation=? where id=?;";
-        try {
-            FilmService.LOGGER.info("uodate: " + film);
-            final PreparedStatement statement = this.connection.prepareStatement(req);
-            statement.setString(1, film.getNom());
+        final String req = "UPDATE films set name=?,image=?,duration=?,description=?,release_year=? where id=?;";
+        try (final PreparedStatement statement = this.connection.prepareStatement(req)) {
+            log.info("update: " + film);
+            statement.setString(1, film.getName());
             statement.setString(2, film.getImage());
-            statement.setTime(3, film.getDuree());
+            statement.setTime(3, film.getDuration());
             statement.setString(4, film.getDescription());
-            statement.setInt(5, film.getAnnederalisation());
-            statement.setInt(6, film.getId());
+            statement.setInt(5, film.getReleaseYear());
+            statement.setLong(6, film.getId());
             statement.executeUpdate();
         } catch (final SQLException e) {
+            log.error("Error updating film", e);
             throw new RuntimeException(e);
         }
     }
 
     @Override
+    /**
+     * Deletes an entity from the database.
+     *
+     * @param id
+     *            the ID of the entity to delete
+     */
     public void delete(final Film film) {
-        final String req = "DELETE FROM film where id = ?";
-        try {
-            final PreparedStatement statement = this.connection.prepareStatement(req);
-            statement.setInt(1, film.getId());
+        final String req = "DELETE FROM films where id = ?";
+        try (final PreparedStatement statement = this.connection.prepareStatement(req)) {
+            statement.setLong(1, film.getId());
             statement.executeUpdate();
         } catch (final SQLException e) {
+            log.error("Error deleting film", e);
             throw new RuntimeException(e);
         }
     }
 
-    public Film getFilm(final int film_id) {
-        String query = "SELECT * FROM film WHERE id = ?";
+    /**
+     * Retrieves the Film value.
+     *
+     * @return the Film value
+     */
+    public Film getFilm(final Long film_id) {
+        String query = "SELECT * FROM films WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setInt(1, film_id);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) { // Add check before accessing results
-                return new Film(
-                        rs.getInt("id"),
-                        rs.getString("nom"),
-                        rs.getString("image"),
-                        rs.getTime("duree"),
-                        rs.getString("description"),
-                        rs.getInt("annederalisation"));
+            stmt.setLong(1, film_id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return Film.builder().id(rs.getLong("id")).name(rs.getString("name")).image(rs.getString("image"))
+                            .duration(rs.getTime("duration")).description(rs.getString("description"))
+                            .releaseYear(rs.getInt("release_year")).build();
+                }
             }
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error getting film: " + film_id, e);
+            log.error("Error getting film: " + film_id, e);
         }
         return null;
     }
 
+    /**
+     * Retrieves the FilmByName value.
+     *
+     * @return the FilmByName value
+     */
     public Film getFilmByName(final String nom_film) {
         Film film = null;
-        final String req = "SELECT * from film where nom = ?";
-        try {
-            final PreparedStatement pst = this.connection.prepareStatement(req);
+        final String req = "SELECT * from films where name = ?";
+        try (final PreparedStatement pst = this.connection.prepareStatement(req)) {
             pst.setString(1, nom_film);
             final ResultSet rs = pst.executeQuery();
-            rs.next();
-            film = new Film(rs.getInt("id"), rs.getString("nom"), rs.getString("image"), rs.getTime("duree"),
-                    rs.getString("description"), rs.getInt("annederalisation"));
+            if (rs.next()) {
+                film = Film.builder().id(rs.getLong("id")).name(rs.getString("name")).image(rs.getString("image"))
+                        .duration(rs.getTime("duration")).description(rs.getString("description"))
+                        .releaseYear(rs.getInt("release_year")).build();
+            }
         } catch (final SQLException e) {
             FilmService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return film;
     }
 
+    /**
+     * Retrieves the TrailerFilm value.
+     *
+     * @return the TrailerFilm value
+     */
     public String getTrailerFilm(final String nomFilm) {
         String s = "";
         try {

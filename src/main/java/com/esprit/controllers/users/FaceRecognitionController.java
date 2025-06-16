@@ -3,6 +3,14 @@ package com.esprit.controllers.users;
 //
 ////
 ////
+/**
+ * JavaFX controller class for the RAKCHA application. Handles UI interactions
+ * and manages view logic using FXML.
+ *
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class FaceRecognitionController {
     // @FXML
     // ClientSideBarController clientSideBarController;

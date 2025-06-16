@@ -1,214 +1,136 @@
 package com.esprit.models.films;
 
 import java.sql.Time;
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.*;
+
+import com.esprit.models.cinemas.MovieSession;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Represents a film.
  */
+@Entity
+@Table(name = "films")
+@Data
+@NoArgsConstructor
+@Builder
+@AllArgsConstructor
+/**
+ * Entity class for the RAKCHA application. Provides data persistence using
+ * Hibernate/JPA annotations.
+ *
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class Film {
-    private String nom;
-    private String categoryNom;
-    private int id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "image")
     private String image;
-    private Time duree;
+
+    @Column(name = "duration")
+    private Time duration;
+
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
-    private int annederalisation;
+
+    @Column(name = "release_year")
+    private int releaseYear;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "film_category", joinColumns = @JoinColumn(name = "film_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
+    @Builder.Default
+    private List<Category> categories = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "actor_film", joinColumns = @JoinColumn(name = "film_id"), inverseJoinColumns = @JoinColumn(name = "actor_id"))
+    @Builder.Default
+    private List<Actor> actors = new ArrayList<>();
+
+    @OneToMany(mappedBy = "film", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<MovieSession> movieSessions = new ArrayList<>();
+
+    @OneToMany(mappedBy = "film", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<FilmComment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "film", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<FilmRating> ratings = new ArrayList<>();
 
     /**
-     * Constructs a new Film object by copying the attributes of another Film object.
-     *
-     * @param f The Film object to copy.
+     * Constructor without id for creating new film instances.
+     */
+    public Film(final String name, final String image, final Time duration, final String description,
+            final int releaseYear) {
+        this.name = name;
+        this.image = image;
+        this.duration = duration;
+        this.description = description;
+        this.releaseYear = releaseYear;
+        this.categories = new ArrayList<>();
+        this.actors = new ArrayList<>();
+        this.movieSessions = new ArrayList<>();
+        this.comments = new ArrayList<>();
+        this.ratings = new ArrayList<>();
+    }
+
+    /**
+     * Constructor with id for existing film instances.
+     */
+    public Film(final Long id, final String name, final String image, final Time duration, final String description,
+            final int releaseYear) {
+        this.id = id;
+        this.name = name;
+        this.image = image;
+        this.duration = duration;
+        this.description = description;
+        this.releaseYear = releaseYear;
+        this.categories = new ArrayList<>();
+        this.actors = new ArrayList<>();
+        this.movieSessions = new ArrayList<>();
+        this.comments = new ArrayList<>();
+        this.ratings = new ArrayList<>();
+    }
+
+    /**
+     * Copy constructor.
      */
     public Film(Film f) {
-        id = f.id;
-        nom = f.nom;
-        image = f.image;
-        duree = f.duree;
-        description = f.description;
-        annederalisation = f.annederalisation;
+        this.id = f.id;
+        this.name = f.name;
+        this.image = f.image;
+        this.duration = f.duration;
+        this.description = f.description;
+        this.releaseYear = f.releaseYear;
+        this.categories = new ArrayList<>(f.categories != null ? f.categories : new ArrayList<>());
+        this.actors = new ArrayList<>(f.actors != null ? f.actors : new ArrayList<>());
+        this.movieSessions = new ArrayList<>(f.movieSessions != null ? f.movieSessions : new ArrayList<>());
+        this.comments = new ArrayList<>(f.comments != null ? f.comments : new ArrayList<>());
+        this.ratings = new ArrayList<>(f.ratings != null ? f.ratings : new ArrayList<>());
     }
 
     /**
-     * Constructs a new Film object with the specified attributes.
+     * Performs Film operation.
      *
-     * @param id               The ID of the film.
-     * @param nom              The name of the film.
-     * @param image            The image URL of the film.
-     * @param duree            The duration of the film.
-     * @param description      The description of the film.
-     * @param annederalisation The year of release of the film.
+     * @return the result of the operation
      */
-    public Film(final int id, final String nom, final String image, final Time duree, final String description, final int annederalisation) {
+    public Film(final Long id) {
         this.id = id;
-        this.nom = nom;
-        this.image = image;
-        this.duree = duree;
-        this.description = description;
-        this.annederalisation = annederalisation;
-    }
-
-    /**
-     * Constructs a new Film object with the specified attributes.
-     *
-     * @param nom              The name of the film.
-     * @param image            The image URL of the film.
-     * @param duree            The duration of the film.
-     * @param description      The description of the film.
-     * @param annederalisation The year of release of the film.
-     */
-    public Film(final String nom, final String image, final Time duree, final String description, final int annederalisation) {
-        this.nom = nom;
-        this.image = image;
-        this.duree = duree;
-        this.description = description;
-        this.annederalisation = annederalisation;
-    }
-
-    /**
-     * Constructs a new Film object with the specified ID.
-     *
-     * @param id The ID of the film.
-     */
-    public Film(final int id) {
-        this.id = id;
-        nom = null;
-        image = null;
-        duree = null;
-        description = null;
-        annederalisation = 0;
-    }
-
-    /**
-     * Retrieves the name of the film.
-     *
-     * @return The name of the film.
-     */
-    public String getNom() {
-        return this.nom;
-    }
-
-    /**
-     * Sets the name of the film.
-     *
-     * @param nom The name of the film.
-     */
-    public void setNom(final String nom) {
-        this.nom = nom;
-    }
-
-    /**
-     * Retrieves the ID of the film.
-     *
-     * @return The ID of the film.
-     */
-    public int getId() {
-        return this.id;
-    }
-
-    /**
-     * Sets the ID of the film.
-     *
-     * @param id The ID of the film.
-     */
-    public void setId(final int id) {
-        this.id = id;
-    }
-
-    /**
-     * Retrieves the image URL of the film.
-     *
-     * @return The image URL of the film.
-     */
-    public String getImage() {
-        return this.image;
-    }
-
-    /**
-     * Sets the image URL of the film.
-     *
-     * @param image The image URL of the film.
-     */
-    public void setImage(final String image) {
-        this.image = image;
-    }
-
-    /**
-     * Retrieves the duration of the film.
-     *
-     * @return The duration of the film.
-     */
-    public Time getDuree() {
-        return this.duree;
-    }
-
-    /**
-     * Sets the duration of the film.
-     *
-     * @param duree The duration of the film.
-     */
-    public void setDuree(final Time duree) {
-        this.duree = duree;
-    }
-
-    /**
-     * Sets the category name of the film.
-     *
-     * @param categoryNom The category name of the film.
-     */
-    public void setCategoryNom(final String categoryNom) {
-        this.categoryNom = categoryNom;
-    }
-
-    /**
-     * Retrieves the description of the film.
-     *
-     * @return The description of the film.
-     */
-    public String getDescription() {
-        return this.description;
-    }
-
-    /**
-     * Sets the description of the film.
-     *
-     * @param description The description of the film.
-     */
-    public void setDescription(final String description) {
-        this.description = description;
-    }
-
-    /**
-     * Retrieves the year of release of the film.
-     *
-     * @return The year of release of the film.
-     */
-    public int getAnnederalisation() {
-        return this.annederalisation;
-    }
-
-    /**
-     * Sets the year of release of the film.
-     *
-     * @param annederalisation The year of release of the film.
-     */
-    public void setAnnederalisation(final int annederalisation) {
-        this.annederalisation = annederalisation;
-    }
-
-    /**
-     * Returns a string representation of the Film object.
-     *
-     * @return A string representation of the Film object.
-     */
-    @Override
-    public String toString() {
-        return "Film{"
-                + "nom='" + this.nom + '\''
-                + ", id=" + this.id
-                + ", image=" + this.image
-                + ", duree=" + this.duree
-                + ", description='" + this.description + '\''
-                + ", annederalisation=" + this.annederalisation
-                + '}';
     }
 }

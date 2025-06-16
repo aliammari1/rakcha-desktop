@@ -2,20 +2,37 @@ package com.esprit.models.users;
 
 import java.sql.Date;
 
-public class Client extends User {
-    public Client(final String firstName, final String lastName, final int phoneNumber, final String password, final String role, final String address, final Date birthDate, final String email, final String photo_de_profil) {
-        super(firstName, lastName, phoneNumber, password, role, address, birthDate, email, photo_de_profil);
-    }
+import jakarta.persistence.*;
 
-    public Client(final int id, final String firstName, final String lastName, final int phoneNumber, final String password, final String role, final String address, final Date birthDate, final String email, final String photo_de_profil) {
-        super(id, firstName, lastName, phoneNumber, password, role, address, birthDate, email, photo_de_profil);
-    }
+import lombok.*;
+import lombok.experimental.SuperBuilder;
+
+/**
+ * Client entity extending User with Hibernate annotations
+ */
+@Entity
+@DiscriminatorValue("CLIENT")
+@Data
+@NoArgsConstructor
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+/**
+ * Entity class for the RAKCHA application. Provides data persistence using
+ * Hibernate/JPA annotations.
+ *
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
+ */
+public class Client extends User {
 
     /**
-     * @return String
+     * Constructor without id for creating new client instances.
      */
-    @Override
-    public String toString() {
-        return "Client{" + super.toString() + "}";
+    public Client(final String firstName, final String lastName, final String phoneNumber, final String password,
+            final String role, final String address, final Date birthDate, final String email,
+            final String photoDeProfil) {
+        super(firstName, lastName, phoneNumber, password, role, address, birthDate, email, photoDeProfil);
     }
 }

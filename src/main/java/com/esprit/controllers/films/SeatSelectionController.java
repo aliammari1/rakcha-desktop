@@ -1,41 +1,54 @@
 package com.esprit.controllers.films;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.esprit.models.cinemas.MovieSession;
 import com.esprit.models.cinemas.Seat;
-import com.esprit.models.cinemas.Seance;
 import com.esprit.models.users.Client;
 import com.esprit.services.cinemas.SeatService;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.ArrayList;
-
+/**
+ * JavaFX controller class for the RAKCHA application. Handles UI interactions
+ * and manages view logic using FXML.
+ *
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class SeatSelectionController {
     @FXML
     private GridPane seatGrid;
     @FXML
     private Button confirmButton;
 
-    private Seance seance;
+    private MovieSession moviesession;
     private Client client;
     private List<Seat> selectedSeats = new ArrayList<>();
 
-    public void initialize(Seance seance, Client client) {
-        this.seance = seance;
+    /**
+     * Initializes the JavaFX controller and sets up UI components. This method is
+     * called automatically by JavaFX after loading the FXML file.
+     */
+    public void initialize(MovieSession moviesession, Client client) {
+        this.moviesession = moviesession;
         this.client = client;
         loadSeats();
     }
 
     private void loadSeats() {
         SeatService seatService = new SeatService();
-        List<Seat> seats = seatService.getSeatsBySalleId(seance.getId_salle().getId());
+        List<Seat> seats = seatService.getSeatsByCinemaHallId(moviesession.getCinemaHall().getId());
 
         int maxRow = 0;
         int maxCol = 0;
@@ -51,9 +64,10 @@ public class SeatSelectionController {
 
                 final Seat currentSeat = findSeat(seats, row + 1, col + 1);
                 if (currentSeat != null) {
-                    seatButton.setDisable(currentSeat.isOccupied());
-                    seatButton.setStyle(
-                            currentSeat.isOccupied() ? "-fx-background-color: red;" : "-fx-background-color: green;");
+                    seatButton.setDisable(currentSeat.getIsOccupied());
+                    seatButton.setStyle(currentSeat.getIsOccupied()
+                            ? "-fx-background-color: red;"
+                            : "-fx-background-color: green;");
 
                     seatButton.setOnAction(e -> handleSeatSelection(seatButton, currentSeat));
                 }
@@ -64,10 +78,7 @@ public class SeatSelectionController {
     }
 
     private Seat findSeat(List<Seat> seats, int row, int col) {
-        return seats.stream()
-                .filter(s -> s.getRowNumber() == row && s.getSeatNumber() == col)
-                .findFirst()
-                .orElse(null);
+        return seats.stream().filter(s -> s.getRowNumber() == row && s.getSeatNumber() == col).findFirst().orElse(null);
     }
 
     private void handleSeatSelection(Button seatButton, Seat seat) {
@@ -89,8 +100,8 @@ public class SeatSelectionController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/films/Paymentuser.fxml"));
         AnchorPane root = loader.load();
 
-        PaymentuserController controller = loader.getController();
-        controller.initWithSeats(seance, client, selectedSeats);
+        PaymentUserController controller = loader.getController();
+        controller.initWithSeats(moviesession, client, selectedSeats);
 
         Stage stage = (Stage) confirmButton.getScene().getWindow();
         Scene scene = new Scene(root);

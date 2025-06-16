@@ -1,5 +1,12 @@
 package com.esprit.utils;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.esprit.models.users.User;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
@@ -9,13 +16,14 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.util.Arrays;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+/**
+ * Utility class providing helper methods for the RAKCHA application. Contains
+ * reusable functionality and common operations.
+ *
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class UserPDF {
     private static final Logger LOGGER = Logger.getLogger(UserPDF.class.getName());
 
@@ -63,7 +71,7 @@ public class UserPDF {
 
     private void addRows(PdfPTable table, List<User> userData) {
         for (User user : userData) {
-            table.addCell(String.valueOf(user.getId()));
+            table.addCell(String.valueOf(user.getId().intValue()));
             table.addCell(user.getFirstName());
             table.addCell(user.getLastName());
             table.addCell(String.valueOf(user.getPhoneNumber()));

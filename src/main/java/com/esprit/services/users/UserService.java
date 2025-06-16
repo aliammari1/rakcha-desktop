@@ -1,17 +1,5 @@
 package com.esprit.services.users;
 
-import com.esprit.models.users.Admin;
-import com.esprit.models.users.Client;
-import com.esprit.models.users.Responsable_de_cinema;
-import com.esprit.models.users.User;
-import com.esprit.services.IService;
-import com.esprit.utils.DataSource;
-import com.esprit.utils.UserMail;
-import com.esprit.utils.UserPDF;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import org.mindrot.jbcrypt.BCrypt;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,10 +9,39 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.mindrot.jbcrypt.BCrypt;
+
+import com.esprit.models.users.Admin;
+import com.esprit.models.users.CinemaManager;
+import com.esprit.models.users.Client;
+import com.esprit.models.users.User;
+import com.esprit.services.IService;
+import com.esprit.utils.DataSource;
+import com.esprit.utils.UserMail;
+import com.esprit.utils.UserPDF;
+
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+/**
+ * Service class providing business logic for the RAKCHA application. Implements
+ * CRUD operations and business rules for data management.
+ *
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class UserService implements IService<User> {
     private static final Logger LOGGER = Logger.getLogger(UserService.class.getName());
     Connection con;
 
+    /**
+     * Performs UserService operation.
+     *
+     * @return the result of the operation
+     */
     public UserService() {
         con = DataSource.getInstance().getConnection();
     }
@@ -33,12 +50,12 @@ public class UserService implements IService<User> {
      * @param id
      * @return User
      */
-    public User getUserById(final int id) {
+    public User getUserById(final Long id) {
         final String req = "select * from users where id = ?";
         User user = null;
         try {
             final PreparedStatement preparedStatement = this.con.prepareStatement(req);
-            preparedStatement.setInt(1, id);
+            preparedStatement.setLong(1, id);
             user = this.getUserRow(preparedStatement);
         } catch (final Exception e) {
             UserService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
@@ -64,13 +81,19 @@ public class UserService implements IService<User> {
     }
 
     @Override
+    /**
+     * Creates a new entity in the database.
+     *
+     * @param entity
+     *            the entity to create
+     */
     public void create(final User user) {
         try {
             final PreparedStatement statement = con.prepareStatement(
                     "INSERT INTO users (nom,prenom,num_telephone,password,role,adresse,date_de_naissance,email,photo_de_profil,is_verified,roles) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
             statement.setString(1, user.getFirstName());
             statement.setString(2, user.getLastName());
-            statement.setInt(3, user.getPhoneNumber());
+            statement.setString(3, user.getPhoneNumber());
             String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
             hashedPassword = hashedPassword.replaceFirst("\\$2a\\$", "\\$2y\\$");
             statement.setString(4, hashedPassword);
@@ -78,14 +101,14 @@ public class UserService implements IService<User> {
             statement.setString(6, user.getAddress());
             statement.setDate(7, user.getBirthDate());
             statement.setString(8, user.getEmail());
-            statement.setString(9, user.getPhoto_de_profil());
+            statement.setString(9, user.getPhotoDeProfil());
             statement.setBoolean(10, true);
             if ("admin".equals(user.getRole())) {
                 statement.setString(11, "[\"ROLE_ADMIN\"]");
             } else if ("client".equals(user.getRole())) {
                 statement.setString(11, "[\"ROLE_CLIENT\"]");
             } else if ("responsable de cinema".equals(user.getRole())) {
-                statement.setString(11, "[\"ROLE_RESPONSABLE_DE_CINEMA\"]");
+                statement.setString(11, "[\"ROLE_CINEMAMANAGER\"]");
             }
             statement.executeUpdate();
             UserService.LOGGER.info("user was added");
@@ -95,6 +118,11 @@ public class UserService implements IService<User> {
     }
 
     @Override
+    /**
+     * Performs read operation.
+     *
+     * @return the result of the operation
+     */
     public List<User> read() {
         try {
             final List<User> userList = new ArrayList<>();
@@ -108,6 +136,12 @@ public class UserService implements IService<User> {
     }
 
     @Override
+    /**
+     * Updates an existing entity in the database.
+     *
+     * @param entity
+     *            the entity to update
+     */
     public void update(final User user) {
         try {
             final PreparedStatement statement = con.prepareStatement(
@@ -115,14 +149,14 @@ public class UserService implements IService<User> {
             UserService.LOGGER.info(user.toString());
             statement.setString(1, user.getFirstName());
             statement.setString(2, user.getLastName());
-            statement.setInt(3, user.getPhoneNumber());
+            statement.setString(3, user.getPhoneNumber());
             statement.setString(4, user.getPassword());
             statement.setString(5, user.getRole());
             statement.setString(6, user.getAddress());
             statement.setDate(7, user.getBirthDate());
             statement.setString(8, user.getEmail());
-            statement.setString(9, user.getPhoto_de_profil());
-            statement.setInt(10, user.getId());
+            statement.setString(9, user.getPhotoDeProfil());
+            statement.setLong(10, user.getId().longValue());
             statement.executeUpdate();
             UserService.LOGGER.info("user is updated");
         } catch (final SQLException e) {
@@ -131,10 +165,16 @@ public class UserService implements IService<User> {
     }
 
     @Override
+    /**
+     * Deletes an entity from the database.
+     *
+     * @param id
+     *            the ID of the entity to delete
+     */
     public void delete(final User user) {
         try {
             final PreparedStatement statement = con.prepareStatement("DELETE FROM users WHERE id = ?");
-            statement.setInt(1, user.getId());
+            statement.setLong(1, user.getId().intValue());
             statement.executeUpdate();
             UserService.LOGGER.info("user is deleted");
         } catch (final SQLException e) {
@@ -142,15 +182,30 @@ public class UserService implements IService<User> {
         }
     }
 
+    /**
+     * Performs sendMail operation.
+     *
+     * @return the result of the operation
+     */
     public void sendMail(final String Recipient, final String messageToSend) {
         UserMail.send(Recipient, messageToSend);
     }
 
+    /**
+     * Performs generateUserPDF operation.
+     *
+     * @return the result of the operation
+     */
     public void generateUserPDF() {
         final UserPDF userPDF = new UserPDF();
         userPDF.generate(sort("role"));
     }
 
+    /**
+     * Performs sort operation.
+     *
+     * @return the result of the operation
+     */
     public List<User> sort(final String Option) {
         try {
             final List<User> userList = new ArrayList<>();
@@ -167,51 +222,41 @@ public class UserService implements IService<User> {
         final ResultSet resultSet = statement.executeQuery();
         while (resultSet.next()) {
             final String role = resultSet.getString("role");
-            userList.add(
-                    switch (role) {
-                        case "admin":
-                            yield new Admin(
-                                    resultSet.getInt("id"),
-                                    resultSet.getString("nom"),
-                                    resultSet.getString("prenom"),
-                                    resultSet.getInt("num_telephone"),
-                                    resultSet.getString("password"),
-                                    resultSet.getString("role"),
-                                    resultSet.getString("adresse"),
-                                    resultSet.getDate("date_de_naissance"),
-                                    resultSet.getString("email"),
-                                    resultSet.getString("photo_de_profil"));
-                        case "client":
-                            yield new Client(
-                                    resultSet.getInt("id"),
-                                    resultSet.getString("nom"),
-                                    resultSet.getString("prenom"),
-                                    resultSet.getInt("num_telephone"),
-                                    resultSet.getString("password"),
-                                    resultSet.getString("role"),
-                                    resultSet.getString("adresse"),
-                                    resultSet.getDate("date_de_naissance"),
-                                    resultSet.getString("email"),
-                                    resultSet.getString("photo_de_profil"));
-                        case "responsable de cinema":
-                            yield new Responsable_de_cinema(
-                                    resultSet.getInt("id"),
-                                    resultSet.getString("nom"),
-                                    resultSet.getString("prenom"),
-                                    resultSet.getInt("num_telephone"),
-                                    resultSet.getString("password"),
-                                    resultSet.getString("role"),
-                                    resultSet.getString("adresse"),
-                                    resultSet.getDate("date_de_naissance"),
-                                    resultSet.getString("email"),
-                                    resultSet.getString("photo_de_profil"));
-                        default:
-                            yield null;
-                    });
+            User user = switch (role) {
+            case "admin" :
+                yield new Admin(resultSet.getString("nom"), resultSet.getString("prenom"),
+                        resultSet.getString("num_telephone"), resultSet.getString("password"),
+                        resultSet.getString("role"), resultSet.getString("adresse"),
+                        resultSet.getDate("date_de_naissance"), resultSet.getString("email"),
+                        resultSet.getString("photo_de_profil"));
+            case "client" :
+                yield new Client(resultSet.getString("nom"), resultSet.getString("prenom"),
+                        resultSet.getString("num_telephone"), resultSet.getString("password"),
+                        resultSet.getString("role"), resultSet.getString("adresse"),
+                        resultSet.getDate("date_de_naissance"), resultSet.getString("email"),
+                        resultSet.getString("photo_de_profil"));
+            case "responsable de cinema" :
+                yield new CinemaManager(resultSet.getString("nom"), resultSet.getString("prenom"),
+                        resultSet.getString("num_telephone"), resultSet.getString("password"),
+                        resultSet.getString("role"), resultSet.getString("adresse"),
+                        resultSet.getDate("date_de_naissance"), resultSet.getString("email"),
+                        resultSet.getString("photo_de_profil"));
+            default :
+                yield null;
+            };
+            if (user != null) {
+                user.setId(resultSet.getLong("id"));
+                userList.add(user);
+            }
         }
         return userList;
     }
 
+    /**
+     * Performs checkEmailFound operation.
+     *
+     * @return the result of the operation
+     */
     public boolean checkEmailFound(final String email) {
         final String req = "select email from users where email LIKE ?";
         boolean check = false;
@@ -226,6 +271,11 @@ public class UserService implements IService<User> {
         return check;
     }
 
+    /**
+     * Performs updatePassword operation.
+     *
+     * @return the result of the operation
+     */
     public void updatePassword(final String email, final String NewPassword) {
         try {
             final PreparedStatement statement = con.prepareStatement("UPDATE users SET password=? where email=? ");
@@ -238,6 +288,11 @@ public class UserService implements IService<User> {
         }
     }
 
+    /**
+     * Performs forgetPassword operation.
+     *
+     * @return the result of the operation
+     */
     public void forgetPassword(final String email, final String Password) {
         final String query = "select * from users where email LIKE ?";
         try {
@@ -260,50 +315,41 @@ public class UserService implements IService<User> {
         if (resultSet.next()) {
             final String role = resultSet.getString("role");
             UserService.LOGGER.info(role);
-            return switch (role.trim()) {
-                case "admin":
-                    yield new Admin(
-                            resultSet.getInt("id"),
-                            resultSet.getString("nom"),
-                            resultSet.getString("prenom"),
-                            resultSet.getInt("num_telephone"),
-                            resultSet.getString("password"),
-                            resultSet.getString("role"),
-                            resultSet.getString("adresse"),
-                            resultSet.getDate("date_de_naissance"),
-                            resultSet.getString("email"),
-                            resultSet.getString("photo_de_profil"));
-                case "client":
-                    yield new Client(
-                            resultSet.getInt("id"),
-                            resultSet.getString("nom"),
-                            resultSet.getString("prenom"),
-                            resultSet.getInt("num_telephone"),
-                            resultSet.getString("password"),
-                            resultSet.getString("role"),
-                            resultSet.getString("adresse"),
-                            resultSet.getDate("date_de_naissance"),
-                            resultSet.getString("email"),
-                            resultSet.getString("photo_de_profil"));
-                case "responsable de cinema":
-                    yield new Responsable_de_cinema(
-                            resultSet.getInt("id"),
-                            resultSet.getString("nom"),
-                            resultSet.getString("prenom"),
-                            resultSet.getInt("num_telephone"),
-                            resultSet.getString("password"),
-                            resultSet.getString("role"),
-                            resultSet.getString("adresse"),
-                            resultSet.getDate("date_de_naissance"),
-                            resultSet.getString("email"),
-                            resultSet.getString("photo_de_profil"));
-                default:
-                    yield null;
+            User user = switch (role.trim()) {
+            case "admin" :
+                yield new Admin(resultSet.getString("nom"), resultSet.getString("prenom"),
+                        resultSet.getString("num_telephone"), resultSet.getString("password"),
+                        resultSet.getString("role"), resultSet.getString("adresse"),
+                        resultSet.getDate("date_de_naissance"), resultSet.getString("email"),
+                        resultSet.getString("photo_de_profil"));
+            case "client" :
+                yield new Client(resultSet.getString("nom"), resultSet.getString("prenom"),
+                        resultSet.getString("num_telephone"), resultSet.getString("password"),
+                        resultSet.getString("role"), resultSet.getString("adresse"),
+                        resultSet.getDate("date_de_naissance"), resultSet.getString("email"),
+                        resultSet.getString("photo_de_profil"));
+            case "responsable de cinema" :
+                yield new CinemaManager(resultSet.getString("nom"), resultSet.getString("prenom"),
+                        resultSet.getString("num_telephone"), resultSet.getString("password"),
+                        resultSet.getString("role"), resultSet.getString("adresse"),
+                        resultSet.getDate("date_de_naissance"), resultSet.getString("email"),
+                        resultSet.getString("photo_de_profil"));
+            default :
+                yield null;
             };
+            if (user != null) {
+                user.setId(resultSet.getLong("id"));
+            }
+            return user;
         }
         return null;
     }
 
+    /**
+     * Performs login operation.
+     *
+     * @return the result of the operation
+     */
     public User login(final String email, final String password) {
         User user = this.getUserByEmail(email);
         if (null == user) {

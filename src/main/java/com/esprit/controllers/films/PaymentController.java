@@ -1,31 +1,29 @@
 package com.esprit.controllers.films;
 
-import com.esprit.models.cinemas.Seance;
-import com.esprit.services.cinemas.SeanceService;
-import com.esprit.utils.PaymentProcessor;
-import com.stripe.exception.StripeException;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.layout.Pane;
-import org.controlsfx.control.CheckComboBox;
-
 import java.time.LocalDate;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.controlsfx.control.CheckComboBox;
+
+import com.esprit.models.cinemas.MovieSession;
+import com.esprit.services.cinemas.MovieSessionService;
+import com.esprit.utils.PaymentProcessor;
+import com.stripe.exception.StripeException;
+
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+import javafx.scene.layout.Pane;
+
 /**
  * Is responsible for handling payment processing and redirection to either a
- * success
- * or failure page after a successful payment. The class includes several
- * methods
- * that validate credit card numbers, email addresses, and expiration dates, and
- * checks if the client's information is valid before redirecting to the
- * appropriate
- * page. Additionally, it provides an alert mechanism for displaying
- * informational
- * messages during the payment process.
+ * success or failure page after a successful payment. The class includes
+ * several methods that validate credit card numbers, email addresses, and
+ * expiration dates, and checks if the client's information is valid before
+ * redirecting to the appropriate page. Additionally, it provides an alert
+ * mechanism for displaying informational messages during the payment process.
  */
 public class PaymentController {
     private static final Logger LOGGER = Logger.getLogger(PaymentController.class.getName());
@@ -48,8 +46,8 @@ public class PaymentController {
     private Spinner<Integer> cvc;
     @FXML
     private Spinner<Integer> nbrplacepPayment_Spinner;
-    private float total_pay;
-    private Seance seance;
+    private double total_pay;
+    private MovieSession moviesession;
     @FXML
     private TextField client_name;
     @FXML
@@ -59,65 +57,59 @@ public class PaymentController {
     @FXML
     private Pane anchorpane_payment;
     @FXML
-    private CheckComboBox<String> checkcomboboxseance_res;
+    private CheckComboBox<String> checkcomboboxmoviesession_res;
     @FXML
     private ComboBox<String> cinemacombox_res;
 
     /**
      * Sets up three SpinnerValueFactories, `MM`, `YY`, and `cvc`, for displaying
-     * dates
-     * in the format `mm/yyyy/ccvc`. It assigns the value factories to the
+     * dates in the format `mm/yyyy/ccvc`. It assigns the value factories to the
      * respective Spinners.
      */
     @FXML
     void initialize() {
-        final SpinnerValueFactory<Integer> valueFactory_month = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 12, 1,
-                1);// (min,max,startvalue,incrementValue)
-        final SpinnerValueFactory<Integer> valueFactory_year = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 9999999,
+        final SpinnerValueFactory<Integer> valueFactory_month = new SpinnerValueFactory.IntegerSpinnerValueFactory(1,
+                12, 1, 1);// (min,max,startvalue,incrementValue)
+        final SpinnerValueFactory<Integer> valueFactory_year = new SpinnerValueFactory.IntegerSpinnerValueFactory(1,
+                9999999, 1, 1);// (min,max,startvalue,incrementValue)
+        final SpinnerValueFactory<Integer> valueFactory_cvc = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 999,
                 1, 1);// (min,max,startvalue,incrementValue)
-        final SpinnerValueFactory<Integer> valueFactory_cvc = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 999, 1,
-                1);// (min,max,startvalue,incrementValue)
         this.MM.setValueFactory(valueFactory_month);
         this.YY.setValueFactory(valueFactory_year);
         this.cvc.setValueFactory(valueFactory_cvc);
     }
 
     /**
-     * Sets the `Seance` object's fields and updates spinner values for the year,
-     * month,
-     * and cvc based on the `Seance` object's `prix` field and sets the text of a
-     * text
-     * field with the total amount.
+     * Sets the `MovieSession` object's fields and updates spinner values for the
+     * year, month, and cvc based on the `MovieSession` object's `prix` field and
+     * sets the text of a text field with the total amount.
      *
-     * @param s Seance object passed into the function, which is used to set the
-     *          values
-     *          of various fields within the `Seance` object.
-     *          <p>
-     *          - `seance`: represents an object of the Seance class, containing
-     *          information about
-     *          a seance.
-     *          - `prix`: a float representing the price of the seance.
-     *          - `terrain_id`: an integer representing the terrain ID for display
-     *          purposes.
-     *          - `monthValue` and `year`: integers representing the current month
-     *          and year respectively.
-     *          - `cvc`: an object of the CVC class, used to display a spinner for
-     *          the number of
-     *          seats available in the seance.
+     * @param s
+     *            MovieSession object passed into the function, which is used to set
+     *            the values of various fields within the `MovieSession` object.
+     *            <p>
+     *            - `moviesession`: represents an object of the MovieSession class,
+     *            containing information about a moviesession. - `prix`: a float
+     *            representing the price of the moviesession. - `terrain_id`: an
+     *            integer representing the terrain ID for display purposes. -
+     *            `monthValue` and `year`: integers representing the current month
+     *            and year respectively. - `cvc`: an object of the CVC class, used
+     *            to display a spinner for the number of seats available in the
+     *            moviesession.
      */
-    public void setData(final Seance s) {
-        seance = s;
-        final SeanceService sc = new SeanceService();
+    public void setData(final MovieSession s) {
+        moviesession = s;
+        final MovieSessionService sc = new MovieSessionService();
         // Terrain t = ts.diplay(r.getTerrain_id());
-        this.total_pay = (float) s.getPrix();
+        this.total_pay = s.getPrice();
         final int mm = LocalDate.now().getMonthValue();
         final int yy = LocalDate.now().getYear();
-        final SpinnerValueFactory<Integer> valueFactory_month = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 12, mm,
-                1);// (min,max,startvalue,incrementValue)
-        final SpinnerValueFactory<Integer> valueFactory_year = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 9999999,
-                yy, 1);// (min,max,startvalue,incrementValue)
-        final SpinnerValueFactory<Integer> valueFactory_cvc = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 999, 1,
-                1);// (min,max,startvalue,incrementValue)
+        final SpinnerValueFactory<Integer> valueFactory_month = new SpinnerValueFactory.IntegerSpinnerValueFactory(1,
+                12, mm, 1);// (min,max,startvalue,incrementValue)
+        final SpinnerValueFactory<Integer> valueFactory_year = new SpinnerValueFactory.IntegerSpinnerValueFactory(1,
+                9999999, yy, 1);// (min,max,startvalue,incrementValue)
+        final SpinnerValueFactory<Integer> valueFactory_cvc = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 999,
+                1, 1);// (min,max,startvalue,incrementValue)
         this.MM.setValueFactory(valueFactory_month);
         this.YY.setValueFactory(valueFactory_year);
         this.cvc.setValueFactory(valueFactory_cvc);
@@ -135,26 +127,22 @@ public class PaymentController {
 
     /**
      * Validates user input and processes a payment using a third-party payment
-     * processor.
-     * If the payment is successful, it displays an information alert; otherwise, it
-     * displays an error alert.
+     * processor. If the payment is successful, it displays an information alert;
+     * otherwise, it displays an error alert.
      *
-     * @param event payment action that triggered the function execution, and it is
-     *              used
-     *              to identify the specific payment method being processed.
-     *              <p>
-     *              - `LOGGER.info(cvc.getValue());`: This line prints the value of
-     *              the `CVC`
-     *              field.
-     *              <p>
-     *              `event` is an instance of the `ActionEvent` class, which
-     *              represents a user event
-     *              related to a button press or other action in the JavaFX
-     *              application. It provides
-     *              information about the event, such as the source of the event
-     *              (e.g., a button), the
-     *              type of event (e.g., "click"), and any additional data related
-     *              to the event.
+     * @param event
+     *            payment action that triggered the function execution, and it is
+     *            used to identify the specific payment method being processed.
+     *            <p>
+     *            - `LOGGER.info(cvc.getValue());`: This line prints the value of
+     *            the `CVC` field.
+     *            <p>
+     *            `event` is an instance of the `ActionEvent` class, which
+     *            represents a user event related to a button press or other action
+     *            in the JavaFX application. It provides information about the
+     *            event, such as the source of the event (e.g., a button), the type
+     *            of event (e.g., "click"), and any additional data related to the
+     *            event.
      */
     @FXML
     private void payment(final ActionEvent event) throws StripeException {
@@ -260,14 +248,13 @@ public class PaymentController {
 
     /**
      * Verifies if a given integer value can be represented as a three-digit credit
-     * card
-     * number (CVC) by checking its length. If the length is equal to 3, the
-     * function
-     * returns `true`, otherwise it returns `false`.
+     * card number (CVC) by checking its length. If the length is equal to 3, the
+     * function returns `true`, otherwise it returns `false`.
      *
-     * @param value 3-digit credit card number to be checked for length.
+     * @param value
+     *            3-digit credit card number to be checked for length.
      * @returns a boolean value indicating whether the input string has a length of
-     * 3.
+     *          3.
      */
     private boolean check_cvc(final int value) {
         final String cvc_txt = String.valueOf(value);
@@ -276,15 +263,14 @@ public class PaymentController {
 
     /**
      * Takes two parameters `value_y` and `value_mm`, checks if the date represented
-     * by
-     * those parameters is after the current date, and returns `true` if it is, or
-     * `false`
-     * otherwise.
+     * by those parameters is after the current date, and returns `true` if it is,
+     * or `false` otherwise.
      *
-     * @param value_y  4-digit year value in the expiration date.
-     * @param value_mm month of the date to be checked, which is used to determine
-     *                 if the
-     *                 date is valid.
+     * @param value_y
+     *            4-digit year value in the expiration date.
+     * @param value_mm
+     *            month of the date to be checked, which is used to determine if the
+     *            date is valid.
      * @returns a boolean value indicating whether the given date is valid.
      */
     private boolean check_expDate(final int value_y, final int value_mm) {
@@ -298,17 +284,14 @@ public class PaymentController {
 
     /**
      * Checks whether a given credit card number follows a specific format by
-     * matching
-     * it against a regular expression pattern. It returns `true` if the pattern
-     * matches
-     * and `false` otherwise.
+     * matching it against a regular expression pattern. It returns `true` if the
+     * pattern matches and `false` otherwise.
      *
-     * @param cardNumber 13-19 digit credit card number to be checked against the
-     *                   regular
-     *                   expression pattern for validation.
+     * @param cardNumber
+     *            13-19 digit credit card number to be checked against the regular
+     *            expression pattern for validation.
      * @returns a boolean value indicating whether the provided credit card number
-     * matches
-     * the specified pattern.
+     *          matches the specified pattern.
      */
     private boolean check_card_num(String cardNumber) {
         // Trim the input string to remove any leading or trailing whitespace
@@ -329,13 +312,12 @@ public class PaymentController {
 
     /**
      * Checks whether a given email address is valid by matching it against a
-     * regular
-     * expression pattern that matches most standard email addresses.
+     * regular expression pattern that matches most standard email addresses.
      *
-     * @param email email address to be checked for validity.
+     * @param email
+     *            email address to be checked for validity.
      * @returns a boolean value indicating whether the provided email address is
-     * valid
-     * or not.
+     *          valid or not.
      */
     public boolean isValidEmail(String email) {
         // Trim the input string to remove any leading or trailing whitespace
@@ -374,8 +356,8 @@ public class PaymentController {
 
     /**
      * Redirects the user to a "Fail Page" by loading an FXML file, updating the
-     * controller
-     * with data from the reservation object, and displaying the scene on the stage.
+     * controller with data from the reservation object, and displaying the scene on
+     * the stage.
      */
     private void redirect_to_FailPage() {
         // try {
@@ -397,16 +379,14 @@ public class PaymentController {
 
     /**
      * Redirects the user to a new scene containing a reservation view client. It
-     * loads
-     * the reservation view client fxml file, sets the controller data with the
-     * client
-     * ID, and displays the stage in a new window.
+     * loads the reservation view client fxml file, sets the controller data with
+     * the client ID, and displays the stage in a new window.
      *
-     * @param event triggering of an action, specifically the click on the "Back"
-     *              button,
-     *              which calls the `redirectToListReservation()` method.
-     *              <p>
-     *              - `event` is an instance of the `ActionEvent` class.
+     * @param event
+     *            triggering of an action, specifically the click on the "Back"
+     *            button, which calls the `redirectToListReservation()` method.
+     *            <p>
+     *            - `event` is an instance of the `ActionEvent` class.
      */
     @FXML
     private void redirectToListReservation(final ActionEvent event) {

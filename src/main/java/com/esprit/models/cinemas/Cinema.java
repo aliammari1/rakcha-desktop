@@ -1,167 +1,95 @@
 package com.esprit.models.cinemas;
 
-import com.esprit.models.users.Responsable_de_cinema;
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.*;
+
+import com.esprit.models.users.CinemaManager;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Represents a cinema.
  */
+@Entity
+@Table(name = "cinema")
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+/**
+ * Cinema management entity class for the RAKCHA application. Handles
+ * cinema-related data with database persistence capabilities.
+ *
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class Cinema {
-    private final Responsable_de_cinema responsable;
-    private int id_cinema;
-    private String nom;
-    private String adresse;
-    private String logo;
-    private String Statut;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "address", nullable = false)
+    private String address;
+
+    @Column(name = "logo_path")
+    private String logoPath;
+
+    @Column(name = "status")
+    private String status;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "manager_id")
+    private CinemaManager manager;
+
+    @OneToMany(mappedBy = "cinema", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<CinemaHall> cinemaHalls = new ArrayList<>();
+
+    @OneToMany(mappedBy = "cinema", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<CinemaRating> ratings = new ArrayList<>();
+
+    @OneToMany(mappedBy = "cinema", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<CinemaComment> comments = new ArrayList<>();
 
     /**
-     * Constructs a Cinema object with the specified parameters.
-     *
-     * @param id_cinema   the ID of the cinema
-     * @param nom         the name of the cinema
-     * @param adresse     the address of the cinema
-     * @param responsable the responsible person for the cinema
-     * @param logo        the logo of the cinema
-     * @param statut      the status of the cinema
+     * Constructor without id for creating new cinema instances.
      */
-    public Cinema(final int id_cinema, final String nom, final String adresse, final Responsable_de_cinema responsable, final String logo, final String statut) {
-        this.id_cinema = id_cinema;
-        this.nom = nom;
-        this.adresse = adresse;
-        this.responsable = responsable;
-        this.logo = logo;
-        this.Statut = statut;
+    public Cinema(final String name, final String address, final CinemaManager manager, final String logoPath,
+            final String status) {
+        this.name = name;
+        this.address = address;
+        this.manager = manager;
+        this.logoPath = logoPath;
+        this.status = status;
+        this.cinemaHalls = new ArrayList<>();
+        this.ratings = new ArrayList<>();
+        this.comments = new ArrayList<>();
     }
 
     /**
-     * Constructs a Cinema object with the specified parameters.
-     *
-     * @param nom         the name of the cinema
-     * @param adresse     the address of the cinema
-     * @param responsable the responsible person for the cinema
-     * @param logo        the logo of the cinema
-     * @param statut      the status of the cinema
+     * Get all movie sessions for this cinema across all halls.
      */
-    public Cinema(final String nom, final String adresse, final Responsable_de_cinema responsable, final String logo, final String statut) {
-        this.nom = nom;
-        this.adresse = adresse;
-        this.responsable = responsable;
-        this.logo = logo;
-        this.Statut = statut;
-    }
-
-    /**
-     * Returns the ID of the cinema.
-     *
-     * @return the ID of the cinema
-     */
-    public int getId_cinema() {
-        return this.id_cinema;
-    }
-
-    /**
-     * Sets the ID of the cinema.
-     *
-     * @param id_cinema the ID of the cinema
-     */
-    public void setId_cinema(final int id_cinema) {
-        this.id_cinema = id_cinema;
-    }
-
-    /**
-     * Returns the name of the cinema.
-     *
-     * @return the name of the cinema
-     */
-    public String getNom() {
-        return this.nom;
-    }
-
-    /**
-     * Sets the name of the cinema.
-     *
-     * @param nom the name of the cinema
-     */
-    public void setNom(final String nom) {
-        this.nom = nom;
-    }
-
-    /**
-     * Returns the address of the cinema.
-     *
-     * @return the address of the cinema
-     */
-    public String getAdresse() {
-        return this.adresse;
-    }
-
-    /**
-     * Sets the address of the cinema.
-     *
-     * @param adresse the address of the cinema
-     */
-    public void setAdresse(final String adresse) {
-        this.adresse = adresse;
-    }
-
-    /**
-     * Returns the responsible person for the cinema.
-     *
-     * @return the responsible person for the cinema
-     */
-    public Responsable_de_cinema getResponsable() {
-        return this.responsable;
-    }
-
-    /**
-     * Returns the logo of the cinema.
-     *
-     * @return the logo of the cinema
-     */
-    public String getLogo() {
-        return this.logo;
-    }
-
-    /**
-     * Sets the logo of the cinema.
-     *
-     * @param logo the logo of the cinema
-     */
-    public void setLogo(final String logo) {
-        this.logo = logo;
-    }
-
-    /**
-     * Returns the status of the cinema.
-     *
-     * @return the status of the cinema
-     */
-    public String getStatut() {
-        return this.Statut;
-    }
-
-    /**
-     * Sets the status of the cinema.
-     *
-     * @param statut the status of the cinema
-     */
-    public void setStatut(final String statut) {
-        this.Statut = statut;
-    }
-
-    /**
-     * Returns a string representation of the Cinema object.
-     *
-     * @return a string representation of the Cinema object
-     */
-    @Override
-    public String toString() {
-        return "Cinema{"
-                + "id_cinema=" + this.id_cinema
-                + ", nom='" + this.nom + '\''
-                + ", adresse='" + this.adresse + '\''
-                + ", responsable='" + this.responsable + '\''
-                + ", logo=" + this.logo
-                + ", Statut='" + this.Statut + '\''
-                + '}';
+    public List<MovieSession> getMovieSessions() {
+        List<MovieSession> allSessions = new ArrayList<>();
+        if (cinemaHalls != null) {
+            for (CinemaHall hall : cinemaHalls) {
+                if (hall.getMovieSessions() != null) {
+                    allSessions.addAll(hall.getMovieSessions());
+                }
+            }
+        }
+        return allSessions;
     }
 }

@@ -1,102 +1,81 @@
 package com.esprit.models.films;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.*;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * Represents a category of films.
  */
+@Entity
+@Table(name = "categories")
+@Data
+@NoArgsConstructor
+@Builder
+@AllArgsConstructor
+/**
+ * Entity class for the RAKCHA application. Provides data persistence using
+ * Hibernate/JPA annotations.
+ *
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class Category {
-    private String nom;
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "name", nullable = false, length = 100)
+    private String name;
+
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    /**
-     * Constructs a Category object with the given name and description.
-     *
-     * @param nom         the name of the category
-     * @param description the description of the category
-     */
-    public Category(final String nom, final String description) {
-        this.nom = nom;
-        this.description = description;
-    }
+    @ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY)
+    @Builder.Default
+    private List<Film> films = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY)
+    @Builder.Default
+    private List<Actor> actors = new ArrayList<>();
 
     /**
-     * Constructs a Category object with the given id, name, and description.
+     * Constructor with id, name, and description for database mapping.
      *
-     * @param id          the id of the category
-     * @param nom         the name of the category
-     * @param description the description of the category
+     * @param id
+     *            the id of the category
+     * @param name
+     *            the name of the category
+     * @param description
+     *            the description of the category
      */
-    public Category(final int id, final String nom, final String description) {
+    public Category(final Long id, final String name, final String description) {
         this.id = id;
-        this.nom = nom;
+        this.name = name;
         this.description = description;
+        this.films = new ArrayList<>();
+        this.actors = new ArrayList<>();
     }
 
     /**
-     * Returns the name of the category.
+     * Constructor without id for creating new category instances.
      *
-     * @return the name of the category
+     * @param name
+     *            the name of the category
+     * @param description
+     *            the description of the category
      */
-    public String getNom() {
-        return this.nom;
-    }
-
-    /**
-     * Sets the name of the category.
-     *
-     * @param nom the name of the category
-     */
-    public void setNom(final String nom) {
-        this.nom = nom;
-    }
-
-    /**
-     * Returns the id of the category.
-     *
-     * @return the id of the category
-     */
-    public int getId() {
-        return this.id;
-    }
-
-    /**
-     * Sets the id of the category.
-     *
-     * @param id the id of the category
-     */
-    public void setId(final int id) {
-        this.id = id;
-    }
-
-    /**
-     * Returns the description of the category.
-     *
-     * @return the description of the category
-     */
-    public String getDescription() {
-        return this.description;
-    }
-
-    /**
-     * Sets the description of the category.
-     *
-     * @param description the description of the category
-     */
-    public void setDescription(final String description) {
+    public Category(final String name, final String description) {
+        this.name = name;
         this.description = description;
-    }
-
-    /**
-     * Returns a string representation of the Category object.
-     *
-     * @return a string representation of the Category object
-     */
-    @Override
-    public String toString() {
-        return "Category{"
-                + "nom='" + this.nom + '\''
-                + ", id=" + this.id
-                + ", description='" + this.description + '\''
-                + '}';
+        this.films = new ArrayList<>();
+        this.actors = new ArrayList<>();
     }
 }

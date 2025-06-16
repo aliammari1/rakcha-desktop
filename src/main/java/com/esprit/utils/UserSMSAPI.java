@@ -1,12 +1,12 @@
 package com.esprit.utils;
 
+import java.util.logging.Logger;
+
 import com.esprit.Config;
 import com.vonage.client.VonageClient;
 import com.vonage.client.sms.MessageStatus;
 import com.vonage.client.sms.SmsSubmissionResponse;
 import com.vonage.client.sms.messages.TextMessage;
-
-import java.util.logging.Logger;
 
 public enum UserSMSAPI {
     ;
@@ -27,14 +27,9 @@ public enum UserSMSAPI {
             return;
         }
 
-        final VonageClient client = VonageClient.builder()
-                .apiKey(apiKey)
-                .apiSecret(apiSecret)
-                .build();
+        final VonageClient client = VonageClient.builder().apiKey(apiKey).apiSecret(apiSecret).build();
 
-        final TextMessage message = new TextMessage("Vonage APIs",
-                "216" + number,
-                messageBody);
+        final TextMessage message = new TextMessage("Vonage APIs", "216" + number, messageBody);
 
         final SmsSubmissionResponse response = client.getSmsClient().submitMessage(message);
         if (MessageStatus.OK == response.getMessages().get(0).getStatus()) {

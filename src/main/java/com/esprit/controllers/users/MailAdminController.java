@@ -1,14 +1,23 @@
 package com.esprit.controllers.users;
 
+import java.security.SecureRandom;
+
 import com.esprit.utils.UserMail;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
-import java.security.SecureRandom;
-
+/**
+ * JavaFX controller class for the RAKCHA application. Handles UI interactions
+ * and manages view logic using FXML.
+ *
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class MailAdminController {
     @FXML
     private Label emailErrorLabel;

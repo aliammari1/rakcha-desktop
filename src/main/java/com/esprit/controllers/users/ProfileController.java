@@ -1,7 +1,18 @@
 package com.esprit.controllers.users;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.nio.file.*;
+import java.sql.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.esprit.models.users.User;
 import com.esprit.services.users.UserService;
+
+import animatefx.animation.*;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,27 +22,23 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.*;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import animatefx.animation.*;
-import javafx.scene.effect.DropShadow;
-import javafx.animation.Timeline;
-import javafx.util.Duration;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.nio.file.*;
-import java.sql.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+/**
+ * JavaFX controller class for the RAKCHA application. Handles UI interactions
+ * and manages view logic using FXML.
+ *
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class ProfileController {
     private static final Logger LOGGER = Logger.getLogger(ProfileController.class.getName());
     // Using a more reliable GIF URL
@@ -70,6 +77,10 @@ public class ProfileController {
     private Button signOutButton;
 
     @FXML
+    /**
+     * Initializes the JavaFX controller and sets up UI components. This method is
+     * called automatically by JavaFX after loading the FXML file.
+     */
     public void initialize() {
         configureImageCircle();
         ensureProfileImageDirectoryExists();
@@ -82,8 +93,7 @@ public class ProfileController {
     private void loadAndSetImage(String imageUrl) {
         try {
             // Create image with explicit size and background loading disabled
-            Image image = new Image(imageUrl,
-                    140, // width
+            Image image = new Image(imageUrl, 140, // width
                     140, // height
                     true, // preserve ratio
                     true, // smooth
@@ -117,11 +127,8 @@ public class ProfileController {
     }
 
     private void useGradientFallback() {
-        imageCircle.setFill(new LinearGradient(
-                0, 0, 1, 1, true,
-                CycleMethod.NO_CYCLE,
-                new Stop(0, Color.valueOf("#e74141")),
-                new Stop(1, Color.valueOf("#333333"))));
+        imageCircle.setFill(new LinearGradient(0, 0, 1, 1, true, CycleMethod.NO_CYCLE,
+                new Stop(0, Color.valueOf("#e74141")), new Stop(1, Color.valueOf("#333333"))));
 
         // Add glow effect
         DropShadow glow = new DropShadow();
@@ -145,6 +152,12 @@ public class ProfileController {
     }
 
     @FXML
+    /**
+     * Sets the Data value.
+     *
+     * @param setData
+     *            the value to set
+     */
     public void setData(final User user) {
         this.user = user;
         if (null != user.getFirstName()) {
@@ -159,17 +172,17 @@ public class ProfileController {
         if (null != user.getEmail()) {
             this.emailTextField.setText(user.getEmail());
         }
-        if (0 != user.getPhoneNumber()) {
+        if (!String.valueOf(0).equals(user.getPhoneNumber())) {
             this.phoneNumberTextField.setText(String.valueOf(user.getPhoneNumber()));
         }
         if (null != user.getBirthDate()) {
             this.dateDeNaissanceDatePicker.setValue(user.getBirthDate().toLocalDate());
         }
-        if (user.getPhoto_de_profil() != null && !user.getPhoto_de_profil().isEmpty()) {
+        if (user.getPhotoDeProfil() != null && !user.getPhotoDeProfil().isEmpty()) {
             try {
-                if (user.getPhoto_de_profil().startsWith("file:")) {
+                if (user.getPhotoDeProfil().startsWith("file:")) {
                     // Handle local files
-                    Path imagePath = Paths.get(URI.create(user.getPhoto_de_profil()));
+                    Path imagePath = Paths.get(URI.create(user.getPhotoDeProfil()));
                     if (Files.exists(imagePath)) {
                         loadAndSetImage(imagePath.toUri().toString());
                     } else {
@@ -177,7 +190,7 @@ public class ProfileController {
                     }
                 } else {
                     // Handle URLs directly
-                    loadAndSetImage(user.getPhoto_de_profil());
+                    loadAndSetImage(user.getPhotoDeProfil());
                 }
             } catch (Exception e) {
                 LOGGER.log(Level.WARNING, "Error loading profile image, using default", e);
@@ -189,6 +202,11 @@ public class ProfileController {
     }
 
     @FXML
+    /**
+     * Performs deleteAccount operation.
+     *
+     * @return the result of the operation
+     */
     public void deleteAccount(final ActionEvent event) throws IOException {
         final Stage stage = (Stage) this.firstNameTextField.getScene().getWindow();
         final User user = (User) stage.getUserData();
@@ -200,6 +218,11 @@ public class ProfileController {
     }
 
     @FXML
+    /**
+     * Performs modifyAccount operation.
+     *
+     * @return the result of the operation
+     */
     public void modifyAccount(final ActionEvent event) {
         try {
             if (validateInputs()) {
@@ -232,13 +255,18 @@ public class ProfileController {
             user.setBirthDate(Date.valueOf(dateDeNaissanceDatePicker.getValue()));
         }
         try {
-            user.setPhoneNumber(Integer.parseInt(phoneNumberTextField.getText()));
+            user.setPhoneNumber(phoneNumberTextField.getText());
         } catch (NumberFormatException e) {
             LOGGER.warning("Invalid phone number format");
         }
     }
 
     @FXML
+    /**
+     * Performs signOut operation.
+     *
+     * @return the result of the operation
+     */
     public void signOut(final ActionEvent event) throws IOException {
         final Stage stage = (Stage) this.emailTextField.getScene().getWindow();
         final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/users/SignUp.fxml"));
@@ -246,18 +274,29 @@ public class ProfileController {
         stage.setScene(new Scene(root));
     }
 
+    /**
+     * Sets the LeftPane value.
+     *
+     * @param setLeftPane
+     *            the value to set
+     */
     public void setLeftPane(final AnchorPane leftPane) {
         this.leftPane.getChildren().clear();
         this.leftPane.getChildren().add(leftPane);
     }
 
     @FXML
+    /**
+     * Performs importPhoto operation.
+     *
+     * @return the result of the operation
+     */
     public void importPhoto() {
         try {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Select Profile Picture");
-            fileChooser.getExtensionFilters().addAll(
-                    new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif"));
+            fileChooser.getExtensionFilters()
+                    .addAll(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif"));
 
             File selectedFile = fileChooser.showOpenDialog(imageCircle.getScene().getWindow());
             if (selectedFile != null) {
@@ -269,7 +308,7 @@ public class ProfileController {
                 loadAndSetImage(imageUri);
 
                 if (user != null) {
-                    user.setPhoto_de_profil(imageUri);
+                    user.setPhotoDeProfil(imageUri);
                 }
             }
         } catch (Exception e) {

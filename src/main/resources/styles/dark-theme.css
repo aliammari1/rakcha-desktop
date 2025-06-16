@@ -1,0 +1,68 @@
+/* Modern Dark Theme CSS */
+.root {
+    -fx-base: #2C3E50;
+    -fx-background: #2C3E50;
+    -fx-control-inner-background: #34495E;
+    -fx-accent: #3498DB;
+    -fx-focus-color: #3498DB;
+    -fx-faint-focus-color: #3498DB22;
+    -fx-text-fill: #ECF0F1;
+}
+
+/* Override light theme with dark colors */
+.card {
+    -fx-background-color: #34495E;
+}
+
+.modern-textfield {
+    -fx-background-color: #34495E;
+    -fx-border-color: #566573;
+    -fx-text-fill: #ECF0F1;
+    -fx-prompt-text-fill: #95A5A6;
+}
+
+.table-view {
+    -fx-background-color: #34495E;
+    -fx-text-fill: #ECF0F1;
+}
+
+.table-view .column-header {
+    -fx-background-color: #2C3E50;
+    -fx-text-fill: #ECF0F1;
+}
+
+.table-view .table-row-cell {
+    -fx-background-color: #34495E;
+    -fx-text-fill: #ECF0F1;
+}
+
+.table-view .table-row-cell:selected {
+    -fx-background-color: #3498DB;
+    -fx-text-fill: white;
+}
+
+.combo-box {
+    -fx-background-color: #34495E;
+    -fx-border-color: #566573;
+    -fx-text-fill: #ECF0F1;
+}
+
+.date-picker {
+    -fx-background-color: #34495E;
+    -fx-border-color: #566573;
+    -fx-text-fill: #ECF0F1;
+}
+
+.menu-bar {
+    -fx-background-color: #2C3E50;
+    -fx-border-color: #566573;
+}
+
+.context-menu {
+    -fx-background-color: #34495E;
+    -fx-border-color: #566573;
+}
+
+.floating-label {
+    -fx-text-fill: #BDC3C7;
+}

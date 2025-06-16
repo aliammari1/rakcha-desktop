@@ -1,8 +1,5 @@
 package com.esprit.utils;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,6 +9,17 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+/**
+ * Utility class providing helper methods for the RAKCHA application. Contains
+ * reusable functionality and common operations.
+ *
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class ImdbAPI {
     private static final Logger LOGGER = Logger.getLogger(ImdbAPI.class.getName());
     private static final String API_URL = "https://script.google.com/macros/s/AKfycbyeuvvPJ2jljewXKStVhiOrzvhMPkAEj5xT_cun3IRWc9XEF4F64d-jimDvK198haZk/exec";
@@ -20,10 +28,12 @@ public class ImdbAPI {
 
     /**
      * Search for a movie on IMDb
-     * 
-     * @param query The movie title to search for
+     *
+     * @param query
+     *            The movie title to search for
      * @return The IMDb URL of the first matching result, or null if not found
-     * @throws IOException if there's an error communicating with the API
+     * @throws IOException
+     *             if there's an error communicating with the API
      */
     public static String searchMovie(final String query) throws IOException {
         if (query == null || query.trim().isEmpty()) {

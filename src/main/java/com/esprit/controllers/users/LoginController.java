@@ -1,9 +1,17 @@
 package com.esprit.controllers.users;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.esprit.models.users.User;
 import com.esprit.services.users.UserService;
 import com.github.plushaze.traynotification.notification.Notifications;
 import com.github.plushaze.traynotification.notification.TrayNotification;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -16,13 +24,14 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+/**
+ * JavaFX controller class for the RAKCHA application. Handles UI interactions
+ * and manages view logic using FXML.
+ *
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class LoginController implements Initializable {
     private static final Logger LOGGER = Logger.getLogger(LoginController.class.getName());
     @FXML
@@ -111,7 +120,7 @@ public class LoginController implements Initializable {
                 } else if ("client".equals(user.getRole())) {
                     loaderSideBar = new FXMLLoader(this.getClass().getResource("/ui/clientSideBar.fxml"));
                 } else if ("responsable de cinema".equals(user.getRole())) {
-                    loaderSideBar = new FXMLLoader(this.getClass().getResource("/ui/responsableDeCinemaSideBar.fxml"));
+                    loaderSideBar = new FXMLLoader(this.getClass().getResource("/ui/cinemaManagerSideBar.fxml"));
                 }
 
                 if (null != loaderSideBar) {
@@ -157,9 +166,18 @@ public class LoginController implements Initializable {
     }
 
     @Override
+    /**
+     * Initializes the JavaFX controller and sets up UI components. This method is
+     * called automatically by JavaFX after loading the FXML file.
+     */
     public void initialize(final URL location, final ResourceBundle resources) {
         this.forgetPasswordHyperlink.setOnAction(new EventHandler<>() {
             @Override
+            /**
+             * Performs handle operation.
+             *
+             * @return the result of the operation
+             */
             public void handle(final ActionEvent event) {
                 try {
                     final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/users/smsadmin.fxml"));
@@ -173,6 +191,11 @@ public class LoginController implements Initializable {
         });
         this.forgetPasswordEmailHyperlink.setOnAction(new EventHandler<>() {
             @Override
+            /**
+             * Performs handle operation.
+             *
+             * @return the result of the operation
+             */
             public void handle(final ActionEvent event) {
                 try {
                     final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/users/maillogin.fxml"));

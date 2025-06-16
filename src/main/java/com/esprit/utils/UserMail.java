@@ -1,11 +1,12 @@
 package com.esprit.utils;
 
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 public enum UserMail {
     ;
@@ -30,20 +31,23 @@ public enum UserMail {
         props.setProperty("mail.smtp.ssl.trust", "smtp.gmail.com");
         props.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
         // Get the Session object.
-        final Session session = Session.getInstance(props,
-                new Authenticator() {
-                    public PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(username, password);
-                    }
-                });
+        final Session session = Session.getInstance(props, new Authenticator() {
+            /**
+             * Retrieves the PasswordAuthentication value.
+             *
+             * @return the PasswordAuthentication value
+             */
+            public PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(username, password);
+            }
+        });
         try {
             // Create a default MimeMessage object.
             final Message message = new MimeMessage(session);
             // Set From: header field of the header.
             message.setFrom(new InternetAddress(from));
             // Set To: header field of the header.
-            message.setRecipients(Message.RecipientType.TO,
-                    InternetAddress.parse(Recipient));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(Recipient));
             // Set Subject: header field
             message.setSubject("Testing Subject");
             // Now set the actual message

@@ -1,10 +1,5 @@
 package com.esprit.utils;
 
-import org.opencv.core.*;
-import org.opencv.face.LBPHFaceRecognizer;
-import org.opencv.imgcodecs.Imgcodecs;
-import org.opencv.imgproc.Imgproc;
-
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
@@ -12,6 +7,19 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.opencv.core.*;
+import org.opencv.face.LBPHFaceRecognizer;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
+
+/**
+ * Utility class providing helper methods for the RAKCHA application. Contains
+ * reusable functionality and common operations.
+ *
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class FaceRecognition {
     private static final Logger LOGGER = Logger.getLogger(FaceRecognition.class.getName());
     private static final String FACES_DIR = "./faces";
@@ -23,13 +31,18 @@ public class FaceRecognition {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
     }
 
+    /**
+     * Performs FaceRecognition operation.
+     *
+     * @return the result of the operation
+     */
     public FaceRecognition() {
         this.faceRecognizer = LBPHFaceRecognizer.create();
     }
 
     /**
      * Initialize the face recognizer with training data
-     * 
+     *
      * @return true if initialization was successful
      */
     public boolean init() {
@@ -88,8 +101,9 @@ public class FaceRecognition {
 
     /**
      * Recognize a face in the given image
-     * 
-     * @param faceImage The image containing a face to recognize
+     *
+     * @param faceImage
+     *            The image containing a face to recognize
      * @return the recognized label, or -1 if not recognized or error
      */
     public int recognize(Mat faceImage) {

@@ -1,46 +1,5 @@
 package com.esprit.controllers.cinemas;
 
-import com.esprit.models.cinemas.Cinema;
-import com.esprit.models.cinemas.Salle;
-import com.esprit.models.cinemas.Seance;
-import com.esprit.models.films.Film;
-import com.esprit.models.films.Filmcinema;
-import com.esprit.models.users.Responsable_de_cinema;
-import com.esprit.services.cinemas.CinemaService;
-import com.esprit.services.cinemas.SalleService;
-import com.esprit.services.cinemas.SeanceService;
-import com.esprit.services.films.FilmService;
-import com.esprit.services.films.FilmcinemaService;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.chart.PieChart;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
-import javafx.stage.FileChooser;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.util.Callback;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -64,20 +23,57 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import com.esprit.models.cinemas.Cinema;
+import com.esprit.models.cinemas.CinemaHall;
+import com.esprit.models.cinemas.MovieSession;
+import com.esprit.models.films.Film;
+import com.esprit.models.users.CinemaManager;
+import com.esprit.services.cinemas.CinemaHallService;
+import com.esprit.services.cinemas.CinemaService;
+import com.esprit.services.cinemas.MovieSessionService;
+import com.esprit.services.films.FilmCinemaService;
+import com.esprit.services.films.FilmService;
+
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
+import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.util.Callback;
+
 /**
  * Is responsible for handling user interactions related to the dashboard
- * section of
- * the application. It provides functionality such as displaying the room form,
- * back
- * button, and cinema list pane, as well as handling events related to showing
- * sessions
- * and importing images. The class also includes methods for loading seances and
- * showing session forms.
+ * section of the application. It provides functionality such as displaying the
+ * room form, back button, and cinema list pane, as well as handling events
+ * related to showing sessions and importing images. The class also includes
+ * methods for loading moviesessions and showing session forms.
  */
 public class DashboardResponsableController implements Initializable {
     private static final Logger LOGGER = Logger.getLogger(DashboardResponsableController.class.getName());
 
-    Responsable_de_cinema responsableDeCinema;
+    CinemaManager cinemaManager;
     @FXML
     private ImageView image;
     @FXML
@@ -107,73 +103,68 @@ public class DashboardResponsableController implements Initializable {
     @FXML
     private TextField tfPrice;
     @FXML
-    private TableView<Seance> SessionTableView;
+    private TableView<MovieSession> SessionTableView;
     @FXML
-    private TableColumn<Seance, Void> colAction;
+    private TableColumn<MovieSession, Void> colAction;
     @FXML
-    private TableColumn<Seance, String> colCinema;
+    private TableColumn<MovieSession, String> colCinema;
     @FXML
-    private TableColumn<Seance, Date> colDate;
+    private TableColumn<MovieSession, Date> colDate;
     @FXML
-    private TableColumn<Seance, Time> colDepartTime;
+    private TableColumn<MovieSession, Time> colDepartTime;
     @FXML
-    private TableColumn<Seance, Time> colEndTime;
+    private TableColumn<MovieSession, Time> colEndTime;
     @FXML
-    private TableColumn<Seance, String> colMovie;
+    private TableColumn<MovieSession, String> colMovie;
     @FXML
-    private TableColumn<Seance, String> colMovieRoom;
+    private TableColumn<MovieSession, String> colMovieRoom;
     @FXML
-    private TableColumn<Seance, Double> colPrice;
+    private TableColumn<MovieSession, Double> colPrice;
     @FXML
     private AnchorPane addRoomForm;
     @FXML
     private TextField tfNbrPlaces;
     @FXML
-    private TextField tfNomSalle;
-    private int cinemaId;
+    private TextField tfNomCinemaHall;
+    private Long cinemaId;
     @FXML
-    private TableView<Salle> RoomTableView;
+    private TableView<CinemaHall> RoomTableView;
     @FXML
-    private TableColumn<Salle, Void> colActionRoom;
+    private TableColumn<CinemaHall, Void> colActionRoom;
     @FXML
-    private TableColumn<Salle, String> colNameRoom;
+    private TableColumn<CinemaHall, String> colNameRoom;
     @FXML
-    private TableColumn<Salle, Integer> colNbrPlaces;
+    private TableColumn<CinemaHall, Integer> colNbrPlaces;
     @FXML
     private AnchorPane facebookAnchor;
     @FXML
     private TextArea txtareaStatut;
     @FXML
-    private AnchorPane StatisticsAnchor;
-    @FXML
     private FontAwesomeIconView backButton;
     @FXML
     private Button sessionButton;
     @FXML
-    private PieChart pieChart;
-    @FXML
     private FontAwesomeIconView backSession;
 
     /**
-     * Sets the value of the `responsableDeCinema` field to the input parameter
-     * `resp`.
+     * Sets the value of the `cinemaManager` field to the input parameter `resp`.
      *
-     * @param resp Responsable_de_cinema object that will be associated with the
-     *             method's
-     *             caller, thereby transferring ownership of the object to the
-     *             method caller.
+     * @param resp
+     *            CinemaManager object that will be associated with the method's
+     *            caller, thereby transferring ownership of the object to the method
+     *            caller.
      */
-    public void setData(final Responsable_de_cinema resp) {
-        responsableDeCinema = resp;
+    public void setData(final CinemaManager resp) {
+        cinemaManager = resp;
     }
 
     /**
      * Creates an Alert object and displays a message in it using the `show()`
      * method.
      *
-     * @param message text to be displayed as an alert message when the
-     *                `showAlert()`
-     *                method is called.
+     * @param message
+     *            text to be displayed as an alert message when the `showAlert()`
+     *            method is called.
      */
     @FXML
     private void showAlert(final String message) {
@@ -186,19 +177,16 @@ public class DashboardResponsableController implements Initializable {
 
     /**
      * Allows users to input cinema details, including name and address. If fields
-     * are
-     * empty, an alert is displayed. Then, a responsible cinema object is created
-     * based
-     * on ID, and the CinemaService creates a new cinema object using the provided
-     * details.
+     * are empty, an alert is displayed. Then, a responsible cinema object is
+     * created based on ID, and the CinemaService creates a new cinema object using
+     * the provided details.
      *
-     * @param event action event triggered by the user's click on the "Add Cinema"
-     *              button,
-     *              which initiates the functionality of the function.
-     *              <p>
-     *              - `tfNom`: A text field containing the name of the cinema.
-     *              - `tfAdresse`: A text field containing the address of the
-     *              cinema.
+     * @param event
+     *            action event triggered by the user's click on the "Add Cinema"
+     *            button, which initiates the functionality of the function.
+     *            <p>
+     *            - `tfNom`: A text field containing the name of the cinema. -
+     *            `tfAdresse`: A text field containing the address of the cinema.
      */
     @FXML
     void addCinema(final ActionEvent event) {
@@ -208,8 +196,7 @@ public class DashboardResponsableController implements Initializable {
         }
         final String defaultStatut = "Pending";
         // Fetch the responsible cinema by its ID
-        final Responsable_de_cinema responsableDeCinema = (Responsable_de_cinema) this.tfNom.getScene().getWindow()
-                .getUserData();
+        final CinemaManager cinemaManager = (CinemaManager) this.tfNom.getScene().getWindow().getUserData();
         URI uri = null;
         try {
             final String fullPath = this.image.getImage().getUrl();
@@ -219,8 +206,8 @@ public class DashboardResponsableController implements Initializable {
             DashboardResponsableController.LOGGER.info(e.getMessage());
         }
         // Create the cinema object
-        final Cinema cinema = new Cinema(this.tfNom.getText(), this.tfAdresse.getText(), responsableDeCinema,
-                uri.getPath(),
+        final Cinema cinema = new Cinema(this.tfNom.getText(), this.tfAdresse.getText(), cinemaManager,
+                (uri != null ? uri.getPath() : ""), // fix null pointer
                 defaultStatut);
         // Call the CinemaService to create the cinema
         final CinemaService cs = new CinemaService();
@@ -232,13 +219,12 @@ public class DashboardResponsableController implements Initializable {
      * Allows the user to select an image file, which is then copied to a specified
      * directory and set as the image for a `Image` component.
      *
-     * @param event mouse event that triggered the function execution, providing the
-     *              necessary information to determine the appropriate action to
-     *              take.
-     *              <p>
-     *              - `event`: A `MouseEvent` object representing the user's action
-     *              that triggered
-     *              the function.
+     * @param event
+     *            mouse event that triggered the function execution, providing the
+     *            necessary information to determine the appropriate action to take.
+     *            <p>
+     *            - `event`: A `MouseEvent` object representing the user's action
+     *            that triggered the function.
      */
     @FXML
     void selectImage(final MouseEvent event) {
@@ -262,31 +248,26 @@ public class DashboardResponsableController implements Initializable {
 
     /**
      * Loads accepted cinemas and sets pane visibility, adds cinema names to a combo
-     * box,
-     * and listens for selection changes to load movies and rooms for the selected
-     * cinema.
+     * box, and listens for selection changes to load movies and rooms for the
+     * selected cinema.
      *
-     * @param location  URL of the initial page to load, which in this case is the
-     *                  home
-     *                  page with the list of cinemas.
-     *                  <p>
-     *                  - `location`: A `URL` object representing the location of
-     *                  the application.
-     *                  - `resources`: A `ResourceBundle` object containing
-     *                  localized messages and data
-     *                  for the application.
-     * @param resources ResourceBundle containing the translation keys for the
-     *                  application's
-     *                  messages, which are used to display the labels and values in
-     *                  the user interface.
-     *                  <p>
-     *                  - `location`: represents the URL of the web page being
-     *                  loaded.
-     *                  - `resources`: contains resource bundles for displaying
-     *                  messages and other
-     *                  information to the user.
+     * @param location
+     *            URL of the initial page to load, which in this case is the home
+     *            page with the list of cinemas.
+     *            <p>
+     *            - `location`: A `URL` object representing the location of the
+     *            application. - `resources`: A `ResourceBundle` object containing
+     *            localized messages and data for the application.
+     *            <p>
+     *            - `location`: represents the URL of the web page being loaded. -
+     *            `resources`: contains resource bundles for displaying messages and
+     *            other information to the user.
      */
     @Override
+    /**
+     * Initializes the JavaFX controller and sets up UI components. This method is
+     * called automatically by JavaFX after loading the FXML file.
+     */
     public void initialize(final URL location, final ResourceBundle resources) {
         final HashSet<Cinema> acceptedCinemas = this.loadAcceptedCinemas();
         this.cinemaFormPane.setVisible(true);
@@ -299,19 +280,16 @@ public class DashboardResponsableController implements Initializable {
         this.backSession.setVisible(false);
         this.backButton.setVisible(false);
         for (final Cinema c : acceptedCinemas) {
-            this.comboCinema.getItems().add(c.getNom());
+            this.comboCinema.getItems().add(c.getName());
         }
-        this.comboCinema.getSelectionModel().selectedItemProperty()
-                .addListener((final ObservableValue<? extends String> observable, final String oldValue,
-                        final String newValue) -> {
+        this.comboCinema.getSelectionModel().selectedItemProperty().addListener(
+                (final ObservableValue<? extends String> observable, final String oldValue, final String newValue) -> {
                     if (null != newValue) {
                         final Cinema selectedCinema = acceptedCinemas.stream()
-                                .filter(cinema -> cinema.getNom().equals(newValue))
-                                .findFirst()
-                                .orElse(null);
+                                .filter(cinema -> cinema.getName().equals(newValue)).findFirst().orElse(null);
                         if (null != selectedCinema) {
-                            this.loadMoviesForCinema(selectedCinema.getId_cinema());
-                            this.loadRoomsForCinema(selectedCinema.getId_cinema());
+                            this.loadMoviesForCinema(selectedCinema.getId());
+                            this.loadRoomsForCinema(selectedCinema.getId());
                         }
                     }
                 });
@@ -319,60 +297,56 @@ public class DashboardResponsableController implements Initializable {
 
     /**
      * Clears the list of movies for a specified cinema and then reads the movies
-     * from
-     * the FilmcinemaService, adding them to the combo movie list.
+     * from the FilmCinemaService, adding them to the combo movie list.
      *
-     * @param cinemaId unique identifier of the cinema for which the movies are to
-     *                 be loaded.
+     * @param cinemaId
+     *            unique identifier of the cinema for which the movies are to be
+     *            loaded.
      */
-    private void loadMoviesForCinema(final int cinemaId) {
+    private void loadMoviesForCinema(final Long cinemaId) {
         this.comboMovie.getItems().clear();
-        final FilmcinemaService fs = new FilmcinemaService();
-        final List<Film> moviesForCinema = fs.readMoviesForCinema(cinemaId);
+        FilmCinemaService filmCinemaService = new FilmCinemaService();
+        List<Film> moviesForCinema = filmCinemaService.readMoviesForCinema(cinemaId);
+
         for (final Film f : moviesForCinema) {
-            DashboardResponsableController.LOGGER.info("moviesForCinema: " + f);
-            this.comboMovie.getItems().add(f.getNom());
+            this.comboMovie.getItems().add(f.getName());
         }
     }
 
     /**
      * Clears the items of a `JList` called `comboRoom`, then reads the rooms for a
-     * given
-     * cinema using the `SalleService`, and adds the room names to the list.
+     * given cinema using the `CinemaHallService`, and adds the room names to the
+     * list.
      *
-     * @param cinemaId id of the cinema for which the rooms are being loaded.
+     * @param cinemaId
+     *            id of the cinema for which the rooms are being loaded.
      */
-    private void loadRoomsForCinema(final int cinemaId) {
+    private void loadRoomsForCinema(final Long cinemaId) {
         this.comboRoom.getItems().clear();
-        final SalleService ss = new SalleService();
-        final List<Salle> roomsForCinema = ss.readRoomsForCinema(cinemaId);
-        for (final Salle s : roomsForCinema) {
-            this.comboRoom.getItems().add(s.getNom_salle());
+        final CinemaHallService ss = new CinemaHallService();
+        final List<CinemaHall> roomsForCinema = ss.getCinemaHallsByCinemaId(cinemaId);
+        for (final CinemaHall s : roomsForCinema) {
+            this.comboRoom.getItems().add(s.getName());
         }
     }
 
     /**
      * Loads a set of accepted cinemas from a CinemaService and displays them as
-     * cards
-     * on a flow pane.
+     * cards on a flow pane.
      *
      * @returns a set of Cinema objects representing the accepted cinemas.
      *          <p>
      *          - `HashSet<Cinema>` represents a set of accepted cinemas in the
-     *          system.
-     *          - The set contains only cinemas with a "Accepted" status.
-     *          - The list of cinemas is collected from the `read()` method of the
-     *          `CinemaService`
-     *          class.
-     *          - The `HBox` objects created for each cinema are added to the
-     *          `cinemaFlowPane` component.
+     *          system. - The set contains only cinemas with a "Accepted" status. -
+     *          The list of cinemas is collected from the `read()` method of the
+     *          `CinemaService` class. - The `HBox` objects created for each cinema
+     *          are added to the `cinemaFlowPane` component.
      */
     private HashSet<Cinema> loadAcceptedCinemas() {
         final CinemaService cinemaService = new CinemaService();
         final List<Cinema> cinemas = cinemaService.read();
         final List<Cinema> acceptedCinemasList = cinemas.stream()
-                .filter(cinema -> "Accepted".equals(cinema.getStatut()))
-                .collect(Collectors.toList());
+                .filter(cinema -> "Accepted".equals(cinema.getStatus())).collect(Collectors.toList());
         if (acceptedCinemasList.isEmpty()) {
             this.showAlert("No accepted cinemas are available.");
         }
@@ -386,28 +360,22 @@ public class DashboardResponsableController implements Initializable {
 
     /**
      * Retrieves a list of cinemas from a service, filters them based on their
-     * status,
-     * and returns a set of accepted cinemas.
+     * status, and returns a set of accepted cinemas.
      *
      * @returns a hash set of Cinema objects that represent accepted cinemas.
      *          <p>
      *          1/ The output is a `HashSet` containing only cinemas that have a
-     *          `Statut` equal
-     *          to "Accepted".
-     *          2/ The `HashSet` contains only a subset of the original list of
-     *          cinemas, specifically
-     *          those that meet the filter condition.
-     *          3/ The size of the `HashSet` is either zero or the number of cinemas
-     *          that meet the
-     *          filter condition, depending on whether any cinemas have a `Statut`
-     *          equal to "Accepted".
+     *          `Statut` equal to "Accepted". 2/ The `HashSet` contains only a
+     *          subset of the original list of cinemas, specifically those that meet
+     *          the filter condition. 3/ The size of the `HashSet` is either zero or
+     *          the number of cinemas that meet the filter condition, depending on
+     *          whether any cinemas have a `Statut` equal to "Accepted".
      */
     private HashSet<Cinema> chargerAcceptedCinemas() {
         final CinemaService cinemaService = new CinemaService();
         final List<Cinema> cinemas = cinemaService.read();
         final List<Cinema> acceptedCinemasList = cinemas.stream()
-                .filter(cinema -> "Accepted".equals(cinema.getStatut()))
-                .collect(Collectors.toList());
+                .filter(cinema -> "Accepted".equals(cinema.getStatus())).collect(Collectors.toList());
         if (acceptedCinemasList.isEmpty()) {
             this.showAlert("No accepted cinemas are available.");
         }
@@ -416,43 +384,30 @@ public class DashboardResponsableController implements Initializable {
 
     /**
      * Creates a card that displays a cinema's details, including its name,
-     * capacity, and
-     * delete button. It also includes a Facebook icon and anchor for opening the
-     * cinema's
-     * Facebook page.
+     * capacity, and delete button. It also includes a Facebook icon and anchor for
+     * opening the cinema's Facebook page.
      *
-     * @param cinema cinema object that will be deleted or updated, and is used to
-     *               access
-     *               its properties and methods in the function.
-     *               <p>
-     *               - `id_cinema`: the unique identifier of the cinema
-     *               - `nom_cinema`: the name of the cinema
-     *               - `adresse_cinema`: the address of the cinema
-     *               - `capacite_cinema`: the capacity of the cinema.
+     * @param cinema
+     *            cinema object that will be deleted or updated, and is used to
+     *            access its properties and methods in the function.
+     *            <p>
+     *            - `id_cinema`: the unique identifier of the cinema - `nom_cinema`:
+     *            the name of the cinema - `adresse_cinema`: the address of the
+     *            cinema - `capacite_cinema`: the capacity of the cinema.
      * @returns a Card object containing a Circle and an FontAwesomeIconView,
-     *          representing
-     *          a cinema.
+     *          representing a cinema.
      *          <p>
      *          - `card`: The root element of the card that contains information
-     *          about a cinema.
-     *          - `SalleCircle`: A circle with a radius of 30 pixels used to
-     *          represent the cinema's
-     *          capacity.
-     *          - `facebookIcon`: An instance of `FontAwesomeIconView` representing
-     *          the Facebook
-     *          logo.
-     *          - `facebookAnchor`: An instance of `Hyperlink` that displays the
-     *          Facebook page
-     *          for the cinema.
-     *          - `circlefacebook`: A circle with a radius of 30 pixels used to
-     *          represent the
-     *          Facebook logo.
-     *          - `salleIcon`: An instance of `FontAwesomeIconView` representing the
-     *          building
-     *          icon used to indicate the cinema's location.
-     *          - `cardContainer`: The container element that holds the card
-     *          containing information
-     *          about the cinema.
+     *          about a cinema. - `CinemaHallCircle`: A circle with a radius of 30
+     *          pixels used to represent the cinema's capacity. - `facebookIcon`: An
+     *          instance of `FontAwesomeIconView` representing the Facebook logo. -
+     *          `facebookAnchor`: An instance of `Hyperlink` that displays the
+     *          Facebook page for the cinema. - `circlefacebook`: A circle with a
+     *          radius of 30 pixels used to represent the Facebook logo. -
+     *          `cinemahallIcon`: An instance of `FontAwesomeIconView` representing
+     *          the building icon used to indicate the cinema's location. -
+     *          `cardContainer`: The container element that holds the card
+     *          containing information about the cinema.
      */
     private HBox createCinemaCard(final Cinema cinema) {
         final HBox cardContainer = new HBox();
@@ -469,8 +424,8 @@ public class DashboardResponsableController implements Initializable {
         logoImageView.setStyle("-fx-border-color: #000000 ; -fx-border-width: 2px; -fx-border-radius: 5px;");
         Image image = null;
         try {
-            if (!cinema.getLogo().isEmpty()) {
-                image = new Image(cinema.getLogo());
+            if (!cinema.getLogoPath().isEmpty()) {
+                image = new Image(cinema.getLogoPath());
             } else {
                 image = new Image("Logo.png");
             }
@@ -484,14 +439,14 @@ public class DashboardResponsableController implements Initializable {
             if (2 == event.getClickCount()) {
                 final FileChooser fileChooser = new FileChooser();
                 fileChooser.setTitle("Choose a new image");
-                fileChooser.getExtensionFilters().addAll(
-                        new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.gif"));
+                fileChooser.getExtensionFilters()
+                        .addAll(new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.gif"));
                 final File selectedFile = fileChooser.showOpenDialog(null);
                 if (null != selectedFile) {
                     final CinemaService cinemaService = new CinemaService();
-                    cinema.setLogo("");
+                    cinema.setLogoPath("");
                     cinemaService.update(cinema);
-                    final Image newImage = new Image(cinema.getLogo());
+                    final Image newImage = new Image(cinema.getLogoPath());
                     logoImageView.setImage(newImage);
                 }
             }
@@ -501,7 +456,7 @@ public class DashboardResponsableController implements Initializable {
         NomLabel.setLayoutY(25);
         NomLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
         card.getChildren().add(NomLabel);
-        final Label nameLabel = new Label(cinema.getNom());
+        final Label nameLabel = new Label(cinema.getName());
         nameLabel.setLayoutX(160);
         nameLabel.setLayoutY(25);
         nameLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
@@ -515,7 +470,7 @@ public class DashboardResponsableController implements Initializable {
                 nameTextField.setPrefWidth(nameLabel.getWidth());
                 nameTextField.setOnAction(e -> {
                     nameLabel.setText(nameTextField.getText());
-                    cinema.setNom(nameTextField.getText());
+                    cinema.setName(nameTextField.getText());
                     final CinemaService cinemaService = new CinemaService();
                     cinemaService.update(cinema);
                     card.getChildren().remove(nameTextField);
@@ -530,7 +485,7 @@ public class DashboardResponsableController implements Initializable {
         AdrsLabel.setLayoutY(50);
         AdrsLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
         card.getChildren().add(AdrsLabel);
-        final Label adresseLabel = new Label(cinema.getAdresse());
+        final Label adresseLabel = new Label(cinema.getAddress());
         adresseLabel.setLayoutX(180);
         adresseLabel.setLayoutY(50);
         adresseLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
@@ -544,7 +499,7 @@ public class DashboardResponsableController implements Initializable {
                 adresseTextField.setPrefWidth(adresseLabel.getWidth());
                 adresseTextField.setOnAction(e -> {
                     adresseLabel.setText(adresseTextField.getText());
-                    cinema.setAdresse(adresseTextField.getText());
+                    cinema.setAddress(adresseTextField.getText());
                     final CinemaService cinemaService = new CinemaService();
                     cinemaService.update(cinema);
                     card.getChildren().remove(adresseTextField);
@@ -586,138 +541,102 @@ public class DashboardResponsableController implements Initializable {
             }
         });
         card.getChildren().addAll(circle, deleteIcon);
-        final Circle SalleCircle = new Circle();
-        SalleCircle.setRadius(30);
-        SalleCircle.setLayoutX(360);
-        SalleCircle.setLayoutY(45);
-        SalleCircle.setFill(Color.web("#ae2d3c"));
-        final FontAwesomeIconView salleIcon = new FontAwesomeIconView();
-        salleIcon.setGlyphName("GROUP");
-        salleIcon.setSize("3em");
-        salleIcon.setLayoutX(340);
-        salleIcon.setLayoutY(57);
-        salleIcon.setFill(Color.WHITE);
-        salleIcon.setOnMouseClicked(event -> {
-            this.cinemaId = cinema.getId_cinema();
+        final Circle CinemaHallCircle = new Circle();
+        CinemaHallCircle.setRadius(30);
+        CinemaHallCircle.setLayoutX(360);
+        CinemaHallCircle.setLayoutY(45);
+        CinemaHallCircle.setFill(Color.web("#ae2d3c"));
+        final FontAwesomeIconView cinemahallIcon = new FontAwesomeIconView();
+        cinemahallIcon.setGlyphName("GROUP");
+        cinemahallIcon.setSize("3em");
+        cinemahallIcon.setLayoutX(340);
+        cinemahallIcon.setLayoutY(57);
+        cinemahallIcon.setFill(Color.WHITE);
+        cinemahallIcon.setOnMouseClicked(event -> {
+            this.cinemaId = cinema.getId();
             this.cinemaFormPane.setVisible(false);
             this.cinemaListPane.setVisible(false);
             this.addRoomForm.setVisible(true);
             this.RoomTableView.setVisible(true);
             this.backButton.setVisible(true);
             this.sessionButton.setVisible(false);
-            this.colNameRoom.setCellValueFactory(new PropertyValueFactory<>("nom_salle"));
-            this.colNbrPlaces.setCellValueFactory(new PropertyValueFactory<>("nb_places"));
-            this.colActionRoom.setCellFactory(new Callback<TableColumn<Salle, Void>, TableCell<Salle, Void>>() {
-                /**
-                 * Generates a `TableCell` instance that displays a button for deleting a room
-                 * from
-                 * a `TableView`. When the button is clicked, the function calls the
-                 * `SalleService`
-                 * to delete the room and then removes it from the `TableView`.
-                 *
-                 * @param param TableColumn object that triggered the cell's action, and it is
-                 *              used
-                 *              to get the index of the room in the table view.
-                 *
-                 *              - `param`: A `TableColumn<Salle, Void>` object representing a
-                 *              column in a table.
-                 *
-                 * @returns a `TableCell` object that displays a delete button for each room in
-                 *          the
-                 *          table.
-                 *
-                 *          - The output is a `TableCell` object, which represents a cell in a
-                 *          table.
-                 *          - The cell contains a button with the label "Delete".
-                 *          - The button has an `OnAction` handler that deletes the item at the
-                 *          specified
-                 *          position in the table when clicked.
-                 */
-                @Override
-                public TableCell<Salle, Void> call(final TableColumn<Salle, Void> param) {
-                    return new TableCell<Salle, Void>() {
-                        private final Button deleteRoomButton = new Button("Delete");
-
-                        {
-                            this.deleteRoomButton.getStyleClass().add("delete-btn");
-                            this.deleteRoomButton.setOnAction(event -> {
-                                final Salle salle = this.getTableView().getItems().get(this.getIndex());
-                                final SalleService salleService = new SalleService();
-                                salleService.delete(salle);
-                                this.getTableView().getItems().remove(salle);
-                            });
-                        }
-
-                        /**
-                         * Updates an item's graphic based on whether it is empty or not. If the item is
-                         * empty, the function sets its graphic to null. Otherwise, it sets the graphic
-                         * to a
-                         * new HBox containing a delete room button.
-                         *
-                         * @param item  Void to be updated, which is then passed to the superclass's
-                         *              `updateItem()`
-                         *              method for further processing.
-                         *
-                         *              - `item`: A void value representing an item to be updated.
-                         *              - `empty`: A boolean value indicating whether the item is empty
-                         *              or not.
-                         *
-                         * @param empty status of the item being updated, with `true` indicating that
-                         *              the
-                         *              item is empty and `false` indicating otherwise.
-                         */
+            this.colNameRoom.setCellValueFactory(new PropertyValueFactory<>("name"));
+            this.colNbrPlaces.setCellValueFactory(new PropertyValueFactory<>("seatCapacity"));
+            this.colActionRoom
+                    .setCellFactory(new Callback<TableColumn<CinemaHall, Void>, TableCell<CinemaHall, Void>>() {
                         @Override
-                        protected void updateItem(final Void item, final boolean empty) {
-                            super.updateItem(item, empty);
-                            if (empty) {
-                                this.setGraphic(null);
-                            } else {
-                                this.setGraphic(new HBox(this.deleteRoomButton));
-                            }
+                        /**
+                         * Performs call operation.
+                         *
+                         * @return the result of the operation
+                         */
+                        public TableCell<CinemaHall, Void> call(final TableColumn<CinemaHall, Void> param) {
+                            return new TableCell<CinemaHall, Void>() {
+                                private final Button deleteRoomButton = new Button("Delete");
+
+                                {
+                                    this.deleteRoomButton.getStyleClass().add("delete-btn");
+                                    this.deleteRoomButton.setOnAction(event -> {
+                                        final CinemaHall cinemahall = this.getTableView().getItems()
+                                                .get(this.getIndex());
+                                        final CinemaHallService cinemahallService = new CinemaHallService();
+                                        cinemahallService.delete(cinemahall);
+                                        this.getTableView().getItems().remove(cinemahall);
+                                    });
+                                }
+
+                                @Override
+                                protected void updateItem(final Void item, final boolean empty) {
+                                    super.updateItem(item, empty);
+                                    if (empty) {
+                                        this.setGraphic(null);
+                                    } else {
+                                        this.setGraphic(new HBox(this.deleteRoomButton));
+                                    }
+                                }
+                            };
                         }
-                    };
-                }
-            });
+                    });
             this.RoomTableView.setEditable(true);
-            this.colNbrPlaces.setCellFactory(tc -> new TableCell<Salle, Integer>() {
+            this.colNbrPlaces.setCellFactory(tc -> new TableCell<CinemaHall, Integer>() {
                 /**
                  * Updates an item's quantity based on user input. If the quantity is null or
-                 * empty,
-                 * it sets the text to null. Otherwise, it sets the text to the updated
+                 * empty, it sets the text to null. Otherwise, it sets the text to the updated
                  * quantity.
                  *
-                 * @param nb_salles number of sales, which is used to set the text value of the
-                 *                  `setText()` method call.
+                 * @param nb_cinemahalls
+                 *            number of sales, which is used to set the text value of the
+                 *            `setText()` method call.
                  *
-                 *                  - `nb_salles` represents the number of places available for
-                 *                  renting.
-                 *                  - It can be null or an integer value.
-                 *                  - When it is not null, it signifies that there are available
-                 *                  places for renting.
+                 *            - `nb_cinemahalls` represents the number of places available for
+                 *            renting. - It can be null or an integer value. - When it is not
+                 *            null, it signifies that there are available places for renting.
                  *
-                 * @param empty     state of the item, with a value of `true` indicating an
-                 *                  empty item
-                 *                  and a value of `false` indicating an item with a number of
-                 *                  places.
+                 * @param empty
+                 *            state of the item, with a value of `true` indicating an empty item
+                 *            and a value of `false` indicating an item with a number of places.
                  */
                 @Override
-                protected void updateItem(final Integer nb_salles, final boolean empty) {
-                    super.updateItem(nb_salles, empty);
-                    if (empty || null == nb_salles) {
+                protected void updateItem(final Integer nb_cinemahalls, final boolean empty) {
+                    super.updateItem(nb_cinemahalls, empty);
+                    if (empty || null == nb_cinemahalls) {
                         this.setText(null);
                     } else {
-                        this.setText(nb_salles + " places");
+                        this.setText(nb_cinemahalls + " places");
                     }
                 }
 
                 /**
                  * 1) calls super's `startEdit`, 2) checks if the item is empty, and 3) creates
-                 * a
-                 * `TextField` with the item's value and sets an `OnAction` listener to commit
-                 * the
-                 * edit when the user types something.
+                 * a `TextField` with the item's value and sets an `OnAction` listener to commit
+                 * the edit when the user types something.
                  */
                 @Override
+                /**
+                 * Performs startEdit operation.
+                 *
+                 * @return the result of the operation
+                 */
                 public void startEdit() {
                     super.startEdit();
                     if (this.isEmpty()) {
@@ -736,6 +655,11 @@ public class DashboardResponsableController implements Initializable {
                  * graphic properties of an object to their original values.
                  */
                 @Override
+                /**
+                 * Performs cancelEdit operation.
+                 *
+                 * @return the result of the operation
+                 */
                 public void cancelEdit() {
                     super.cancelEdit();
                     this.setText(this.getItem() + " places");
@@ -743,67 +667,70 @@ public class DashboardResponsableController implements Initializable {
                 }
 
                 /**
-                 * Updates the number of places in a `Salle` object based on a user input, then
-                 * calls
-                 * the super method to commit the change, and sets the text and graphic of the
-                 * cell
-                 * to display the updated value.
+                 * Updates the number of places in a `CinemaHall` object based on a user input,
+                 * then calls the super method to commit the change, and sets the text and
+                 * graphic of the cell to display the updated value.
                  *
-                 * @param newValue new value of the number of places for the salle to be updated
-                 *                 by
-                 *                 the `SalleService`.
+                 * @param newValue
+                 *            new value of the number of places for the cinemahall to be updated
+                 *            by the `CinemaHallService`.
                  *
-                 *                 - `Integer newValue`: The new value for the number of places
-                 *                 in a salle.
+                 *            - `Integer newValue`: The new value for the number of places in a
+                 *            cinemahall.
                  */
                 @Override
+                /**
+                 * Performs commitEdit operation.
+                 *
+                 * @return the result of the operation
+                 */
                 public void commitEdit(final Integer newValue) {
                     super.commitEdit(newValue);
-                    final Salle salle = this.getTableView().getItems().get(this.getIndex());
-                    salle.setNb_places(newValue);
-                    final SalleService salleService = new SalleService();
-                    salleService.update(salle);
+                    final CinemaHall cinemahall = this.getTableView().getItems().get(this.getIndex());
+                    cinemahall.setSeatCapacity(newValue);
+                    final CinemaHallService cinemahallService = new CinemaHallService();
+                    cinemahallService.update(cinemahall);
                     this.setText(newValue + " places");
                     this.setGraphic(null);
                 }
             });
-            this.colNameRoom.setCellFactory(tc -> new TableCell<Salle, String>() {
+            this.colNameRoom.setCellFactory(tc -> new TableCell<CinemaHall, String>() {
                 /**
                  * Updates an item's text based on whether it is empty or not, and sets the text
-                 * to
-                 * the hall name if it is not empty.
+                 * to the hall name if it is not empty.
                  *
-                 * @param nom_salle name of the hall to be updated, which is passed to the
-                 *                  superclass's
-                 *                  `updateItem()` method and then further processed based on
-                 *                  its value.
+                 * @param nom_cinemahall
+                 *            name of the hall to be updated, which is passed to the
+                 *            superclass's `updateItem()` method and then further processed
+                 *            based on its value.
                  *
-                 * @param empty     whether the salle is empty or not, and triggers the
-                 *                  appropriate text
-                 *                  display in the `updateItem` method.
+                 * @param empty
+                 *            whether the cinemahall is empty or not, and triggers the
+                 *            appropriate text display in the `updateItem` method.
                  */
                 @Override
-                protected void updateItem(final String nom_salle, final boolean empty) {
-                    super.updateItem(nom_salle, empty);
-                    if (empty || null == nom_salle) {
+                protected void updateItem(final String nom_cinemahall, final boolean empty) {
+                    super.updateItem(nom_cinemahall, empty);
+                    if (empty || null == nom_cinemahall) {
                         this.setText(null);
                     } else {
-                        this.setText(nom_salle);
+                        this.setText(nom_cinemahall);
                     }
                 }
 
                 /**
                  * Initializes a new `TextField` instance and sets its text to the current
-                 * item's
-                 * value. It also sets an action listener on the `TextField` that calls the
-                 * `commitEdit`
-                 * method when the user presses enter or clicks outside the field. Finally, it
-                 * replaces
-                 * the `TextField` with the newly created instance in the graphical
-                 * representation
-                 * of the editor.
+                 * item's value. It also sets an action listener on the `TextField` that calls
+                 * the `commitEdit` method when the user presses enter or clicks outside the
+                 * field. Finally, it replaces the `TextField` with the newly created instance
+                 * in the graphical representation of the editor.
                  */
                 @Override
+                /**
+                 * Performs startEdit operation.
+                 *
+                 * @return the result of the operation
+                 */
                 public void startEdit() {
                     super.startEdit();
                     if (this.isEmpty()) {
@@ -819,10 +746,14 @@ public class DashboardResponsableController implements Initializable {
 
                 /**
                  * In Java overrides the parent `cancelEdit()` method and sets the text and
-                 * graphic
-                 * properties of an object to their original values.
+                 * graphic properties of an object to their original values.
                  */
                 @Override
+                /**
+                 * Performs cancelEdit operation.
+                 *
+                 * @return the result of the operation
+                 */
                 public void cancelEdit() {
                     super.cancelEdit();
                     this.setText(this.getItem());
@@ -830,28 +761,31 @@ public class DashboardResponsableController implements Initializable {
                 }
 
                 /**
-                 * Updates a salle object's nom_salle property by calling the `update` method of
-                 * the
-                 * SalleService class, and then sets the new value for the nom_salle property of
-                 * the
-                 * salle object.
+                 * Updates a cinemahall object's nom_cinemahall property by calling the `update`
+                 * method of the CinemaHallService class, and then sets the new value for the
+                 * nom_cinemahall property of the cinemahall object.
                  *
-                 * @param newValue new value of the `nom_salle` field for the selected `Salle`
-                 *                 object
-                 *                 in the `TableView`.
+                 * @param newValue
+                 *            new value of the `nom_cinemahall` field for the selected
+                 *            `CinemaHall` object in the `TableView`.
                  */
                 @Override
+                /**
+                 * Performs commitEdit operation.
+                 *
+                 * @return the result of the operation
+                 */
                 public void commitEdit(final String newValue) {
                     super.commitEdit(newValue);
-                    final Salle salle = this.getTableView().getItems().get(this.getIndex());
-                    salle.setNom_salle(newValue);
-                    final SalleService salleService = new SalleService();
-                    salleService.update(salle);
+                    final CinemaHall cinemahall = this.getTableView().getItems().get(this.getIndex());
+                    cinemahall.setName(newValue);
+                    final CinemaHallService cinemahallService = new CinemaHallService();
+                    cinemahallService.update(cinemahall);
                     this.setText(newValue);
                     this.setGraphic(null);
                 }
             });
-            this.loadsalles();
+            this.loadcinemahalls();
         });
         final Circle circlefacebook = new Circle();
         circlefacebook.setRadius(30);
@@ -868,15 +802,15 @@ public class DashboardResponsableController implements Initializable {
             this.facebookAnchor.setVisible(true);
         });
         card.getChildren().addAll(circlefacebook, facebookIcon);
-        card.getChildren().addAll(SalleCircle, salleIcon);
+        card.getChildren().addAll(CinemaHallCircle, cinemahallIcon);
         cardContainer.getChildren().add(card);
         return cardContainer;
     }
 
     /**
      * Sets the visible state of various panes and tables within a JavaFX
-     * application,
-     * making the cinema list pane visible and the other components hidden.
+     * application, making the cinema list pane visible and the other components
+     * hidden.
      */
     @FXML
     private void showCinemaList() {
@@ -890,10 +824,8 @@ public class DashboardResponsableController implements Initializable {
 
     /**
      * Is responsible for creating and displaying a form within a table cell to
-     * allow
-     * users to edit the cinema's information, including its name and address, as
-     * well
-     * as the names of the salle and film associated with it.
+     * allow users to edit the cinema's information, including its name and address,
+     * as well as the names of the cinemahall and film associated with it.
      */
     @FXML
     private void showSessionForm() {
@@ -904,127 +836,129 @@ public class DashboardResponsableController implements Initializable {
         this.addRoomForm.setVisible(false);
         this.RoomTableView.setVisible(false);
         this.colMovie.setCellValueFactory(
-                new Callback<TableColumn.CellDataFeatures<Seance, String>, ObservableValue<String>>() {
+                new Callback<TableColumn.CellDataFeatures<MovieSession, String>, ObservableValue<String>>() {
                     /**
                      * Generates a `SimpleStringProperty` observable value from the `getValue()` of
-                     * the
-                     * `Seance` object, which contains the film ID as a string.
+                     * the `MovieSession` object, which contains the film ID as a string.
                      *
-                     * @param seanceStringCellDataFeatures cell data features of a Seance object,
-                     *                                     which
-                     *                                     contains the value of the film's ID.
+                     * @param moviesessionStringCellDataFeatures
+                     *            cell data features of a MovieSession object, which contains the
+                     *            value of the film's ID.
                      *
                      * @returns a `SimpleStringProperty` object representing the film's ID.
                      */
                     @Override
+                    /**
+                     * Performs call operation.
+                     *
+                     * @return the result of the operation
+                     */
                     public ObservableValue<String> call(
-                            final TableColumn.CellDataFeatures<Seance, String> seanceStringCellDataFeatures) {
+                            final TableColumn.CellDataFeatures<MovieSession, String> moviesessionStringCellDataFeatures) {
                         return new SimpleStringProperty(
-                                seanceStringCellDataFeatures.getValue().getFilmcinema().getId_film().getNom());
+                                moviesessionStringCellDataFeatures.getValue().getFilm().getName());
                     }
                 });
         this.colCinema.setCellValueFactory(
-                new Callback<TableColumn.CellDataFeatures<Seance, String>, ObservableValue<String>>() {
+                new Callback<TableColumn.CellDataFeatures<MovieSession, String>, ObservableValue<String>>() {
                     /**
                      * Takes a `TableColumn.CellDataFeatures` object as input and returns an
-                     * `ObservableValue`
-                     * of type `String`, which represents the cinema ID.
+                     * `ObservableValue` of type `String`, which represents the cinema ID.
                      *
-                     * @param seanceStringCellDataFeatures cell data features of a table column
-                     *                                     containing
-                     *                                     strings that correspond to the cinema ID
-                     *                                     of the movie being displayed.
+                     * @param moviesessionStringCellDataFeatures
+                     *            cell data features of a table column containing strings that
+                     *            correspond to the cinema ID of the movie being displayed.
                      *
                      * @returns a `SimpleStringProperty` representing the cinema ID.
                      */
                     @Override
+                    /**
+                     * Performs call operation.
+                     *
+                     * @return the result of the operation
+                     */
                     public ObservableValue<String> call(
-                            final TableColumn.CellDataFeatures<Seance, String> seanceStringCellDataFeatures) {
+                            final TableColumn.CellDataFeatures<MovieSession, String> moviesessionStringCellDataFeatures) {
                         return new SimpleStringProperty(
-                                seanceStringCellDataFeatures.getValue().getFilmcinema().getId_cinema().getNom());
+                                moviesessionStringCellDataFeatures.getValue().getCinemaHall().getCinema().getName());
                     }
                 });
-        this.colMovieRoom.setCellValueFactory(new PropertyValueFactory<>("nom_salle"));
-        this.colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
-        this.colDepartTime.setCellValueFactory(new PropertyValueFactory<>("HD"));
-        this.colEndTime.setCellValueFactory(new PropertyValueFactory<>("HF"));
-        this.colPrice.setCellValueFactory(new PropertyValueFactory<>("prix"));
-        this.colAction.setCellFactory(new Callback<TableColumn<Seance, Void>, TableCell<Seance, Void>>() {
+        this.colMovieRoom.setCellValueFactory(new PropertyValueFactory<>("cinemaHall"));
+        this.colDate.setCellValueFactory(new PropertyValueFactory<>("sessionDate"));
+        this.colDepartTime.setCellValueFactory(new PropertyValueFactory<>("startTime"));
+        this.colEndTime.setCellValueFactory(new PropertyValueFactory<>("endTime"));
+        this.colPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
+        this.colAction.setCellFactory(new Callback<TableColumn<MovieSession, Void>, TableCell<MovieSession, Void>>() {
             /**
-             * Generates a `TableCell` that displays a button for deleting a `Seance`
-             * object.
-             * When the button is clicked, the `SeanceService` service is invoked to delete
-             * the
-             * `Seance`, and the cell's graphic is updated to show null when there is no
-             * item or
-             * an icon button when an item exists.
+             * Generates a `TableCell` that displays a button for deleting a `MovieSession`
+             * object. When the button is clicked, the `MovieSessionService` service is
+             * invoked to delete the `MovieSession`, and the cell's graphic is updated to
+             * show null when there is no item or an icon button when an item exists.
              *
-             * @param param TableColumn that the function is called on, allowing the
-             *              function to
-             *              modify its behavior based on the context of the table it is a
-             *              part of.
+             * @param param
+             *            TableColumn that the function is called on, allowing the function
+             *            to modify its behavior based on the context of the table it is a
+             *            part of.
              *
-             *              - `param`: A `TableColumn<Seance, Void>` object representing a
-             *              table column.
+             *            - `param`: A `TableColumn<MovieSession, Void>` object representing
+             *            a table column.
              *
              * @returns a `TableCell` object that displays a "Delete" button for each item
-             *          in the
-             *          table.
-             *
-             *          - `TableCell<Seance, Void>`: The type of the cell, indicating that
-             *          it is a table
-             *          cell for objects of type `Seance` and void.
-             *          - `Button deleteButton`: A button with the text "Delete", which when
-             *          clicked will
-             *          call the `setOnAction` method to delete the corresponding `Seance`
-             *          object.
-             *          - `SeanceService seanceService`: An instance of the `SeanceService`
-             *          class, which
-             *          is used to delete the `Seance` object.
-             *          - `getTableView().getItems()`: A method that returns a list of all
-             *          `Seance` objects
              *          in the table.
-             *          - `getIndex()`: A method that returns the index of the `Seance`
-             *          object in the list.
-             *          - `updateItem(Void item, boolean empty)`: A method that updates the
-             *          graphics of
-             *          the cell based on whether the `item` is null or not. If `item` is
-             *          null, the graphics
-             *          are set to null, otherwise they are set to a new `HBox` containing
-             *          the `deleteButton`.
+             *
+             *          - `TableCell<MovieSession, Void>`: The type of the cell, indicating
+             *          that it is a table cell for objects of type `MovieSession` and void.
+             *          - `Button deleteButton`: A button with the text "Delete", which when
+             *          clicked will call the `setOnAction` method to delete the
+             *          corresponding `MovieSession` object. - `MovieSessionService
+             *          moviesessionService`: An instance of the `MovieSessionService`
+             *          class, which is used to delete the `MovieSession` object. -
+             *          `getTableView().getItems()`: A method that returns a list of all
+             *          `MovieSession` objects in the table. - `getIndex()`: A method that
+             *          returns the index of the `MovieSession` object in the list. -
+             *          `updateItem(Void item, boolean empty)`: A method that updates the
+             *          graphics of the cell based on whether the `item` is null or not. If
+             *          `item` is null, the graphics are set to null, otherwise they are set
+             *          to a new `HBox` containing the `deleteButton`.
              */
             @Override
-            public TableCell<Seance, Void> call(final TableColumn<Seance, Void> param) {
-                return new TableCell<Seance, Void>() {
+            /**
+             * Performs call operation.
+             *
+             * @return the result of the operation
+             */
+            public TableCell<MovieSession, Void> call(final TableColumn<MovieSession, Void> param) {
+                return new TableCell<MovieSession, Void>() {
                     private final Button deleteButton = new Button("Delete");
 
                     {
                         this.deleteButton.getStyleClass().add("delete-btn");
                         this.deleteButton.setOnAction(event -> {
-                            final Seance seance = this.getTableView().getItems().get(this.getIndex());
-                            final SeanceService seanceService = new SeanceService();
-                            seanceService.delete(seance);
-                            this.getTableView().getItems().remove(seance);
+                            final MovieSession ms = this.getTableView().getItems().get(this.getIndex()); // rename to
+                                                                                                         // avoid
+                                                                                                         // shadowing
+                            final MovieSessionService moviesessionService = new MovieSessionService();
+                            moviesessionService.delete(ms);
+                            this.getTableView().getItems().remove(ms);
                         });
                     }
 
                     /**
                      * Updates an item's graphic based on whether it is empty or not. If the item is
                      * empty, the function sets the graphic to null. Otherwise, it sets the graphic
-                     * to a
-                     * new HBox containing a delete button.
+                     * to a new HBox containing a delete button.
                      *
-                     * @param item  Void item being updated, which is passed to the superclass's
-                     *              `updateItem()`
-                     *              method along with a boolean value indicating whether the item is
-                     *              empty or not.
+                     * @param item
+                     *            Void item being updated, which is passed to the superclass's
+                     *            `updateItem()` method along with a boolean value indicating
+                     *            whether the item is empty or not.
                      *
-                     *              `item`: A Void object representing an item to be updated. Its
-                     *              main property is
-                     *              whether it is empty or not.
+                     *            `item`: A Void object representing an item to be updated. Its main
+                     *            property is whether it is empty or not.
                      *
-                     * @param empty ether the item is empty or not, and it is used to determine the
-                     *              graphics displayed in the updateItem method.
+                     * @param empty
+                     *            ether the item is empty or not, and it is used to determine the
+                     *            graphics displayed in the updateItem method.
                      */
                     @Override
                     protected void updateItem(final Void item, final boolean empty) {
@@ -1039,25 +973,23 @@ public class DashboardResponsableController implements Initializable {
             }
         });
         this.SessionTableView.setEditable(true);
-        this.colPrice.setCellFactory(tc -> new TableCell<Seance, Double>() {
+        this.colPrice.setCellFactory(tc -> new TableCell<MovieSession, Double>() {
             /**
              * Updates an item's price and emptiness status. If the item is empty or the
-             * price
-             * is null, the text is set to null. Otherwise, the text is set to the price
-             * plus "DT".
+             * price is null, the text is set to null. Otherwise, the text is set to the
+             * price plus "DT".
              *
-             * @param prix  price of the item being updated, which is used to set the text
-             *              value
-             *              of the component.
+             * @param prix
+             *            price of the item being updated, which is used to set the text
+             *            value of the component.
              *
-             *              - `prix` is a double value that represents the price of an item.
-             *              - It can be either `null` or a non-null value indicating whether
-             *              the item is empty
-             *              or not.
+             *            - `prix` is a double value that represents the price of an item. -
+             *            It can be either `null` or a non-null value indicating whether the
+             *            item is empty or not.
              *
-             * @param empty state of the item, and when it is `true`, the `setText()` method
-             *              sets
-             *              the text to `null`.
+             * @param empty
+             *            state of the item, and when it is `true`, the `setText()` method
+             *            sets the text to `null`.
              */
             @Override
             protected void updateItem(final Double prix, final boolean empty) {
@@ -1071,12 +1003,16 @@ public class DashboardResponsableController implements Initializable {
 
             /**
              * Initializes a `TextField` widget with the value of the currently selected
-             * item,
-             * sets an `OnAction` listener to commit the edit when the user types something,
-             * and
-             * sets the `Text` field to null to indicate that editing is in progress.
+             * item, sets an `OnAction` listener to commit the edit when the user types
+             * something, and sets the `Text` field to null to indicate that editing is in
+             * progress.
              */
             @Override
+            /**
+             * Performs startEdit operation.
+             *
+             * @return the result of the operation
+             */
             public void startEdit() {
                 super.startEdit();
                 if (this.isEmpty()) {
@@ -1092,10 +1028,14 @@ public class DashboardResponsableController implements Initializable {
 
             /**
              * In the provided Java code cancels the editing state of an item and sets the
-             * text
-             * and graphic properties accordingly.
+             * text and graphic properties accordingly.
              */
             @Override
+            /**
+             * Performs cancelEdit operation.
+             *
+             * @return the result of the operation
+             */
             public void cancelEdit() {
                 super.cancelEdit();
                 this.setText(this.getItem() + " DT");
@@ -1103,53 +1043,53 @@ public class DashboardResponsableController implements Initializable {
             }
 
             /**
-             * Updates a `Seance` object's `prix` field with a new value, and then calls the
-             * `update` method of the `SeanceService` class to save the changes. The
-             * function
-             * also updates the display value of the cell to show the new value.
+             * Updates a `MovieSession` object's `prix` field with a new value, and then
+             * calls the `update` method of the `MovieSessionService` class to save the
+             * changes. The function also updates the display value of the cell to show the
+             * new value.
              *
-             * @param newValue updated price of the seance that is being edited, which is
-             *                 then
-             *                 set to the `prix` field of the corresponding `Seance` object
-             *                 and saved in the
-             *                 database through the `update()` method of the
-             *                 `SeanceService`.
+             * @param newValue
+             *            updated price of the moviesession that is being edited, which is
+             *            then set to the `prix` field of the corresponding `MovieSession`
+             *            object and saved in the database through the `update()` method of
+             *            the `MovieSessionService`.
              *
-             *                 - `Double`: `newValue` is a `Double` value representing the
-             *                 new price for the seance.
+             *            - `Double`: `newValue` is a `Double` value representing the new
+             *            price for the moviesession.
              */
             @Override
+            /**
+             * Performs commitEdit operation.
+             *
+             * @return the result of the operation
+             */
             public void commitEdit(final Double newValue) {
                 super.commitEdit(newValue);
-                final Seance seance = this.getTableView().getItems().get(this.getIndex());
-                seance.setPrix(newValue);
-                final SeanceService seanceService = new SeanceService();
-                seanceService.update(seance);
+                final MovieSession moviesession = this.getTableView().getItems().get(this.getIndex());
+                moviesession.setPrice(newValue);
+                final MovieSessionService moviesessionService = new MovieSessionService();
+                moviesessionService.update(moviesession);
                 this.setText(newValue + " DT");
                 this.setGraphic(null);
             }
         });
-        this.colEndTime.setCellFactory(tc -> new TableCell<Seance, Time>() {
+        this.colEndTime.setCellFactory(tc -> new TableCell<MovieSession, Time>() {
             /**
              * Updates an item's text based on whether it is empty or contains a valid value
-             * from
-             * the `Time` class.
+             * from the `Time` class.
              *
-             * @param HF    time value that is to be updated in the text field, and its
-             *              value
-             *              determines whether the text field's text is set to null or the
-             *              string representation
-             *              of the time value.
+             * @param HF
+             *            time value that is to be updated in the text field, and its value
+             *            determines whether the text field's text is set to null or the
+             *            string representation of the time value.
              *
-             *              - `HF` is a `Time` object representing a specific moment in
-             *              time.
-             *              - It can be either `null` or a non-`null` value indicating the
-             *              presence of an
-             *              item at that time.
+             *            - `HF` is a `Time` object representing a specific moment in time.
+             *            - It can be either `null` or a non-`null` value indicating the
+             *            presence of an item at that time.
              *
-             * @param empty state of the item being updated, with `true` indicating an empty
-             *              state
-             *              and `false` indicating otherwise.
+             * @param empty
+             *            state of the item being updated, with `true` indicating an empty
+             *            state and `false` indicating otherwise.
              */
             @Override
             protected void updateItem(final Time HF, final boolean empty) {
@@ -1163,12 +1103,15 @@ public class DashboardResponsableController implements Initializable {
 
             /**
              * Initializes a `TextField` component with the value of the current item, sets
-             * an
-             * `OnAction` listener to commit the edit when the user types something, and
-             * replaces
-             * the text field with the one created.
+             * an `OnAction` listener to commit the edit when the user types something, and
+             * replaces the text field with the one created.
              */
             @Override
+            /**
+             * Performs startEdit operation.
+             *
+             * @return the result of the operation
+             */
             public void startEdit() {
                 super.startEdit();
                 if (this.isEmpty()) {
@@ -1184,10 +1127,15 @@ public class DashboardResponsableController implements Initializable {
 
             /**
              * In Java overrides the parent method and performs the following actions:
-             * cancels
-             * editing, sets the text to the original value, and sets the graphic to null.
+             * cancels editing, sets the text to the original value, and sets the graphic to
+             * null.
              */
             @Override
+            /**
+             * Performs cancelEdit operation.
+             *
+             * @return the result of the operation
+             */
             public void cancelEdit() {
                 super.cancelEdit();
                 this.setText(String.valueOf(this.getItem()));
@@ -1195,50 +1143,53 @@ public class DashboardResponsableController implements Initializable {
             }
 
             /**
-             * Updates a seance's high fidelity value based on a new value provided, and
-             * saves
-             * the changes to the seance in the database using the `SeanceService`.
+             * Updates a moviesession's high fidelity value based on a new value provided,
+             * and saves the changes to the moviesession in the database using the
+             * `MovieSessionService`.
              *
-             * @param newValue updated value of the `HF` field for the corresponding
-             *                 `Seance`
-             *                 object in the `getTableView().getItems()` collection, which
-             *                 is then updated in the
-             *                 database through the `SeanceService`.
+             * @param newValue
+             *            updated value of the `HF` field for the corresponding
+             *            `MovieSession` object in the `getTableView().getItems()`
+             *            collection, which is then updated in the database through the
+             *            `MovieSessionService`.
              *
-             *                 - `Time newValue`: Represents a time value that represents
-             *                 the updated seance duration.
+             *            - `Time newValue`: Represents a time value that represents the
+             *            updated moviesession duration.
              */
             @Override
+            /**
+             * Performs commitEdit operation.
+             *
+             * @return the result of the operation
+             */
             public void commitEdit(final Time newValue) {
                 super.commitEdit(newValue);
-                final Seance seance = this.getTableView().getItems().get(this.getIndex());
-                seance.setHF(newValue);
-                final SeanceService seanceService = new SeanceService();
-                seanceService.update(seance);
+                final MovieSession moviesession = this.getTableView().getItems().get(this.getIndex());
+                moviesession.setEndTime(newValue);
+                final MovieSessionService moviesessionService = new MovieSessionService();
+                moviesessionService.update(moviesession);
                 this.setText(String.valueOf(newValue));
                 this.setGraphic(null);
             }
         });
-        this.colDepartTime.setCellFactory(tc -> new TableCell<Seance, Time>() {
+        this.colDepartTime.setCellFactory(tc -> new TableCell<MovieSession, Time>() {
             /**
              * Updates an item's text based on whether it is empty or contains a valid value
-             * from
-             * the `Time` object passed as a parameter.
+             * from the `Time` object passed as a parameter.
              *
-             * @param HD    time value to be updated, which is passed through to the
-             *              superclass's
-             *              `updateItem()` method and then processed further in the current
-             *              implementation.
+             * @param HD
+             *            time value to be updated, which is passed through to the
+             *            superclass's `updateItem()` method and then processed further in
+             *            the current implementation.
              *
-             *              - If `empty` is true or `HD` is null, then `setText` method sets
-             *              the text to null.
-             *              - Otherwise, `setText` method sets the text to a string
-             *              representation of `HD`.
+             *            - If `empty` is true or `HD` is null, then `setText` method sets
+             *            the text to null. - Otherwise, `setText` method sets the text to a
+             *            string representation of `HD`.
              *
-             * @param empty whether the time is empty or not, and determines whether the
-             *              `setText()`
-             *              method should be called with a null value or the string
-             *              representation of the time.
+             * @param empty
+             *            whether the time is empty or not, and determines whether the
+             *            `setText()` method should be called with a null value or the
+             *            string representation of the time.
              */
             @Override
             protected void updateItem(final Time HD, final boolean empty) {
@@ -1252,10 +1203,14 @@ public class DashboardResponsableController implements Initializable {
 
             /**
              * 1) calls superclass `startEdit`, 2) checks if the object is empty, and 3)
-             * creates
-             * a new `TextField` with the object's value as its text.
+             * creates a new `TextField` with the object's value as its text.
              */
             @Override
+            /**
+             * Performs startEdit operation.
+             *
+             * @return the result of the operation
+             */
             public void startEdit() {
                 super.startEdit();
                 if (this.isEmpty()) {
@@ -1271,13 +1226,16 @@ public class DashboardResponsableController implements Initializable {
 
             /**
              * In Java overrides the parent method and performs two actions: first, it calls
-             * the
-             * superclass's `cancelEdit` method; second, it sets the text field to the
-             * original
-             * value of the item and removes any graphic associated with the editable
-             * component.
+             * the superclass's `cancelEdit` method; second, it sets the text field to the
+             * original value of the item and removes any graphic associated with the
+             * editable component.
              */
             @Override
+            /**
+             * Performs cancelEdit operation.
+             *
+             * @return the result of the operation
+             */
             public void cancelEdit() {
                 super.cancelEdit();
                 this.setText(String.valueOf(this.getItem()));
@@ -1285,57 +1243,56 @@ public class DashboardResponsableController implements Initializable {
             }
 
             /**
-             * Updates the `HD` field of a `Seance` object in a table view, and then calls
-             * the
-             * `update` method of the `SeanceService` class to persist the changes.
+             * Updates the `HD` field of a `MovieSession` object in a table view, and then
+             * calls the `update` method of the `MovieSessionService` class to persist the
+             * changes.
              *
-             * @param newValue new time value that will be assigned to the `HD` field of the
-             *                 `Seance` object referenced by the
-             *                 `getTableView().getItems().get(getIndex());`
-             *                 method call.
+             * @param newValue
+             *            new time value that will be assigned to the `HD` field of the
+             *            `MovieSession` object referenced by the
+             *            `getTableView().getItems().get(getIndex());` method call.
              *
-             *                 - It represents a time value that has been edited by the
-             *                 user.
-             *                 - It is an instance of the `Time` class in Java, which
-             *                 represents time values in
-             *                 milliseconds since the Unix epoch (January 1, 1970, 00:00:00
-             *                 UTC).
+             *            - It represents a time value that has been edited by the user. -
+             *            It is an instance of the `Time` class in Java, which represents
+             *            time values in milliseconds since the Unix epoch (January 1, 1970,
+             *            00:00:00 UTC).
              */
             @Override
+            /**
+             * Performs commitEdit operation.
+             *
+             * @return the result of the operation
+             */
             public void commitEdit(final Time newValue) {
                 super.commitEdit(newValue);
-                final Seance seance = this.getTableView().getItems().get(this.getIndex());
-                seance.setHD(newValue);
-                final SeanceService seanceService = new SeanceService();
-                seanceService.update(seance);
+                final MovieSession moviesession = this.getTableView().getItems().get(this.getIndex());
+                moviesession.setStartTime(newValue);
+                final MovieSessionService moviesessionService = new MovieSessionService();
+                moviesessionService.update(moviesession);
                 this.setText(String.valueOf(newValue));
                 this.setGraphic(null);
             }
         });
-        this.colDate.setCellFactory(tc -> new TableCell<Seance, Date>() {
+        this.colDate.setCellFactory(tc -> new TableCell<MovieSession, Date>() {
             /**
              * Updates an item's text based on whether it is empty or not, and adds a mouse
-             * click
-             * event listener that displays a date picker when clicked twice, allowing the
-             * user
-             * to select a date which is then committed as the item's value.
+             * click event listener that displays a date picker when clicked twice, allowing
+             * the user to select a date which is then committed as the item's value.
              *
-             * @param date  date to be updated or retrieved, which is passed to the super
-             *              method
-             *              `updateItem()` and used to set the text value of the item.
+             * @param date
+             *            date to be updated or retrieved, which is passed to the super
+             *            method `updateItem()` and used to set the text value of the item.
              *
-             *              - `date` can be either `null` or a `Date` object representing a
-             *              specific date and
-             *              time.
-             *              - If `empty` is `true`, then `date` will be `null`.
-             *              - The `toString()` method is called on `date` to obtain its
-             *              string representation,
-             *              which is assigned to the `setText()` method's argument.
+             *            - `date` can be either `null` or a `Date` object representing a
+             *            specific date and time. - If `empty` is `true`, then `date` will
+             *            be `null`. - The `toString()` method is called on `date` to obtain
+             *            its string representation, which is assigned to the `setText()`
+             *            method's argument.
              *
-             * @param empty presence or absence of a value for the item being updated, and
-             *              determines whether the `setText()` method is called with a null
-             *              value or the date
-             *              string representation when the item is empty.
+             * @param empty
+             *            presence or absence of a value for the item being updated, and
+             *            determines whether the `setText()` method is called with a null
+             *            value or the date string representation when the item is empty.
              */
             @Override
             protected void updateItem(final Date date, final boolean empty) {
@@ -1368,51 +1325,34 @@ public class DashboardResponsableController implements Initializable {
             }
 
             /**
-             * Updates a `Seance` object's `Date` field by calling the superclass's
-             * `commitEdit`
-             * method, then setting the updated value to the `Seance` object and saving it
-             * to the
-             * database using the `SeanceService`.
+             * Updates a `MovieSession` object's `Date` field by calling the superclass's
+             * `commitEdit` method, then setting the updated value to the `MovieSession`
+             * object and saving it to the database using the `MovieSessionService`.
              *
-             * @param newValue new date to be updated for the corresponding `Seance` object
-             *                 in
-             *                 the `getTableView()` method.
+             * @param newValue
+             *            new date to be updated for the corresponding `MovieSession` object
+             *            in the `getTableView()` method.
              *
-             *                 - `Date`: represents the date to be updated for the
-             *                 corresponding seance in the
-             *                 table view.
+             *            - `Date`: represents the date to be updated for the corresponding
+             *            moviesession in the table view.
              */
             @Override
+            /**
+             * Performs commitEdit operation.
+             *
+             * @return the result of the operation
+             */
             public void commitEdit(final Date newValue) {
                 super.commitEdit(newValue);
-                final Seance seance = this.getTableView().getItems().get(this.getIndex());
-                seance.setDate(newValue);
-                final SeanceService seanceService = new SeanceService();
-                seanceService.update(seance);
+                final MovieSession moviesession = this.getTableView().getItems().get(this.getIndex());
+                moviesession.setSessionDate(newValue);
+                final MovieSessionService moviesessionService = new MovieSessionService();
+                moviesessionService.update(moviesession);
                 this.setText(String.valueOf(newValue));
                 this.setGraphic(null);
             }
         });
-        this.colCinema.setCellFactory(tc -> new TableCell<Seance, String>() {
-            /**
-             * Updates a cell's value in a `TableView` based on user input, displaying a
-             * `ComboBox`
-             * with available cinema names and handling selection changes to update the cell
-             * value
-             * and database entry for the corresponding cinema.
-             *
-             * @param cinemaName name of the cinema to which the cell's value will be
-             *                   updated,
-             *                   and it is used to determine whether to display the ComboBox
-             *                   or not, as well as to
-             *                   set the value of the ComboBox when the user clicks twice on
-             *                   the cell.
-             *
-             * @param empty      empty state of the ` cinemaName ` field, which determines
-             *                   whether to
-             *                   display or hide the ComboBox containing the list of cinemas
-             *                   when the cell is clicked.
-             */
+        this.colCinema.setCellFactory(tc -> new TableCell<MovieSession, String>() {
             @Override
             protected void updateItem(final String cinemaName, final boolean empty) {
                 super.updateItem(cinemaName, empty);
@@ -1427,135 +1367,125 @@ public class DashboardResponsableController implements Initializable {
                         final HashSet<Cinema> acceptedCinema = DashboardResponsableController.this
                                 .chargerAcceptedCinemas();
                         for (final Cinema cinema : acceptedCinema) {
-                            cinemaComboBox.getItems().add(cinema.getNom());
+                            cinemaComboBox.getItems().add(cinema.getName());
                         }
-                        // Sélectionner le nom du cinéma correspondant à la valeur actuelle de la
-                        // cellule
                         cinemaComboBox.setValue(cinemaName);
-                        // Définir un EventHandler pour le changement de sélection dans le ComboBox
                         cinemaComboBox.setOnAction(e -> {
                             final String selectedCinemaName = cinemaComboBox.getValue();
-                            // Mettre à jour la valeur de la cellule dans le TableView
                             this.commitEdit(selectedCinemaName);
-                            // Mettre à jour la base de données en utilisant la méthode update de
-                            // seanceService
-                            final Seance seance = this.getTableView().getItems().get(this.getIndex());
+                            final MovieSession ms = this.getTableView().getItems().get(this.getIndex());
                             for (final Cinema cinema : acceptedCinema) {
-                                if (cinema.getNom().equals(selectedCinemaName)) {
-                                    seance.getFilmcinema().setId_cinema(cinema);
+                                if (cinema.getName().equals(selectedCinemaName)) { // fix getName() -> getName()
+                                    // ms.setCinema(cinema); // remove, likely not needed
                                     break;
                                 }
                             }
-                            final SeanceService seanceService = new SeanceService();
-                            seanceService.update(seance);
+                            final MovieSessionService moviesessionService = new MovieSessionService();
+                            moviesessionService.update(ms);
                         });
-                        // Afficher le ComboBox dans la cellule
                         this.setGraphic(cinemaComboBox);
                     }
                 });
             }
         });
-        this.colMovieRoom.setCellFactory(tc -> new TableCell<Seance, String>() {
+        this.colMovieRoom.setCellFactory(tc -> new TableCell<MovieSession, String>() {
             /**
              * Updates the value of a cell in a table view based on user input. It creates a
-             * ComboBox to display associated salle names and selects the corresponding
-             * salle
-             * name upon second click.
+             * ComboBox to display associated cinemahall names and selects the corresponding
+             * cinemahall name upon second click.
              *
-             * @param salleName name of the salle to be updated, which is used to set the
-             *                  text
-             *                  value of the cell or to select the corresponding salle from
-             *                  a combo box when the
-             *                  user double-clicks on the cell.
+             * @param cinemahallName
+             *            name of the cinemahall to be updated, which is used to set the
+             *            text value of the cell or to select the corresponding cinemahall
+             *            from a combo box when the user double-clicks on the cell.
              *
-             * @param empty     absence of a salle name or a null reference, which triggers
-             *                  the
-             *                  corresponding actions in the function, such as setting the
-             *                  text to null or displaying
-             *                  the ComboBox with associated salle names.
+             * @param empty
+             *            absence of a cinemahall name or a null reference, which triggers
+             *            the corresponding actions in the function, such as setting the
+             *            text to null or displaying the ComboBox with associated cinemahall
+             *            names.
              */
             @Override
-            protected void updateItem(final String salleName, final boolean empty) {
-                super.updateItem(salleName, empty);
-                if (empty || null == salleName) {
+            protected void updateItem(final String cinemahallName, final boolean empty) {
+                super.updateItem(cinemahallName, empty);
+                if (empty || null == cinemahallName) {
                     this.setText(null);
                 } else {
-                    this.setText(salleName);
+                    this.setText(cinemahallName);
                 }
                 // Double clic détecté
                 this.setOnMouseClicked(event -> {
                     if (2 == event.getClickCount()) {
-                        // Créer un ComboBox contenant les noms des salles associées au cinéma
+                        // Créer un ComboBox contenant les noms des cinemahalls associées au cinéma
                         // sélectionné
-                        final ComboBox<String> salleComboBox = new ComboBox<>();
-                        final Seance seance = this.getTableView().getItems().get(this.getIndex());
-                        final Cinema selectedCinema = seance.getFilmcinema().getId_cinema();
-                        // Récupérer les salles associées au cinéma sélectionné
-                        final List<Salle> associatedSalles = this.loadAssociatedSalles(selectedCinema.getId_cinema());
-                        for (final Salle salle : associatedSalles) {
-                            salleComboBox.getItems().add(salle.getNom_salle());
+                        final ComboBox<String> cinemahallComboBox = new ComboBox<>();
+                        final MovieSession moviesession = this.getTableView().getItems().get(this.getIndex());
+                        final Cinema selectedCinema = moviesession.getCinemaHall().getCinema();
+                        // Récupérer les cinemahalls associées au cinéma sélectionné
+                        final List<CinemaHall> associatedCinemaHalls = this
+                                .loadAssociatedCinemaHalls(selectedCinema.getId());
+                        for (final CinemaHall cinemahall : associatedCinemaHalls) {
+                            cinemahallComboBox.getItems().add(cinemahall.getName());
                         }
-                        // Sélectionner le nom de la salle correspondant à la valeur actuelle de la
+                        // Sélectionner le nom de la cinemahall correspondant à la valeur actuelle de la
                         // cellule
-                        salleComboBox.setValue(salleName);
+                        cinemahallComboBox.setValue(cinemahallName);
                         // Définir un EventHandler pour le changement de sélection dans le ComboBox
-                        salleComboBox.setOnAction(e -> {
-                            final String selectedSalleName = salleComboBox.getValue();
+                        cinemahallComboBox.setOnAction(e -> {
+                            final String selectedCinemaHallName = cinemahallComboBox.getValue();
                             // Mettre à jour la valeur de la cellule dans le TableView
-                            this.commitEdit(selectedSalleName);
+                            this.commitEdit(selectedCinemaHallName);
                             // Mettre à jour la base de données en utilisant la méthode update de
-                            // seanceService
-                            for (final Salle salle : associatedSalles) {
-                                if (salle.getNom_salle().equals(selectedSalleName)) {
-                                    seance.setSalle(salle);
+                            // moviesessionService
+                            final MovieSession ms = this.getTableView().getItems().get(this.getIndex());
+                            for (final CinemaHall cinemahall : associatedCinemaHalls) {
+                                if (cinemahall.getName().equals(selectedCinemaHallName)) {
+                                    moviesession.setCinemaHall(cinemahall);
                                     break;
                                 }
                             }
-                            final SeanceService seanceService = new SeanceService();
-                            seanceService.update(seance);
+                            final MovieSessionService moviesessionService = new MovieSessionService();
+                            moviesessionService.update(moviesession);
                         });
                         // Afficher le ComboBox dans la cellule
-                        this.setGraphic(salleComboBox);
+                        this.setGraphic(cinemahallComboBox);
                     }
                 });
             }
 
             /**
-             * Retrieves a list of `Salle` objects associated with a given cinema ID using
-             * the `SalleService`.
+             * Retrieves a list of `CinemaHall` objects associated with a given cinema ID
+             * using the `CinemaHallService`.
              *
-             * @param idCinema ID of the cinema for which the associated salles are to be
-             *                 loaded.
+             * @param idCinema
+             *            ID of the cinema for which the associated cinemahalls are to be
+             *            loaded.
              *
-             * @returns a list of `Salle` objects associated with the specified cinema id.
+             * @returns a list of `CinemaHall` objects associated with the specified cinema
+             *          id.
              */
-            private List<Salle> loadAssociatedSalles(final int idCinema) {
-                final SalleService salleService = new SalleService();
-                return salleService.readRoomsForCinema(idCinema);
+            private List<CinemaHall> loadAssociatedCinemaHalls(final Long idCinema) {
+                final CinemaHallService cinemahallService = new CinemaHallService();
+                return cinemahallService.getCinemaHallsByCinemaId(idCinema);
             }
         });
-        this.colMovie.setCellFactory(tc -> new TableCell<Seance, String>() {
+        this.colMovie.setCellFactory(tc -> new TableCell<MovieSession, String>() {
             /**
              * Updates the item value in a TableView based on user input, and displays a
-             * ComboBox
-             * containing film names associated with the selected cinema. When the user
-             * double-clicks
-             * on the cell, the ComboBox is displayed, and the user can select a film name
-             * to
-             * update the item value and display the corresponding film name in the
-             * TableView.
+             * ComboBox containing film names associated with the selected cinema. When the
+             * user double-clicks on the cell, the ComboBox is displayed, and the user can
+             * select a film name to update the item value and display the corresponding
+             * film name in the TableView.
              *
-             * @param filmName name of the film to be updated in the cinema's database,
-             *                 which is
-             *                 used to set the value of the `setText()` method and trigger
-             *                 the event handler for
-             *                 the ComboBox.
+             * @param filmName
+             *            name of the film to be updated in the cinema's database, which is
+             *            used to set the value of the `setText()` method and trigger the
+             *            event handler for the ComboBox.
              *
-             * @param empty    value of the `filmName` field when it is left blank or null,
-             *                 and it
-             *                 determines whether to display a message or not when the user
-             *                 clicks twice on the
-             *                 cell.
+             * @param empty
+             *            value of the `filmName` field when it is left blank or null, and
+             *            it determines whether to display a message or not when the user
+             *            clicks twice on the cell.
              */
             @Override
             protected void updateItem(final String filmName, final boolean empty) {
@@ -1571,14 +1501,14 @@ public class DashboardResponsableController implements Initializable {
                         // Créer un ComboBox contenant les noms des films associées au cinéma
                         // sélectionné
                         final ComboBox<String> filmComboBox = new ComboBox<>();
-                        final Seance seance = this.getTableView().getItems().get(this.getIndex());
-                        final Cinema selectedCinema = seance.getFilmcinema().getId_cinema();
+                        final MovieSession moviesession = this.getTableView().getItems().get(this.getIndex());
+                        final Cinema selectedCinema = moviesession.getCinemaHall().getCinema();
                         // Récupérer les films associées au cinéma sélectionné
-                        final List<Film> associatedFilms = this.loadAssociatedFilms(selectedCinema.getId_cinema());
+                        final List<Film> associatedFilms = this.loadAssociatedFilms(selectedCinema.getId());
                         for (final Film film : associatedFilms) {
-                            filmComboBox.getItems().add(film.getNom());
+                            filmComboBox.getItems().add(film.getName());
                         }
-                        // Sélectionner le nom de la salle correspondant à la valeur actuelle de la
+                        // Sélectionner le nom de la cinemahall correspondant à la valeur actuelle de la
                         // cellule
                         filmComboBox.setValue(filmName);
                         // Définir un EventHandler pour le changement de sélection dans le ComboBox
@@ -1587,15 +1517,15 @@ public class DashboardResponsableController implements Initializable {
                             // Mettre à jour la valeur de la cellule dans le TableView
                             this.commitEdit(selectedFilmName);
                             // Mettre à jour la base de données en utilisant la méthode update de
-                            // seanceService
+                            // moviesessionService
                             for (final Film film : associatedFilms) {
-                                if (film.getNom().equals(selectedFilmName)) {
-                                    seance.getFilmcinema().setId_film(film);
+                                if (film.getName().equals(selectedFilmName)) {
+                                    moviesession.setFilm(film);
                                     break;
                                 }
                             }
-                            final SeanceService seanceService = new SeanceService();
-                            seanceService.update(seance);
+                            final MovieSessionService moviesessionService = new MovieSessionService();
+                            moviesessionService.update(moviesession);
                         });
                         // Afficher le ComboBox dans la cellule
                         this.setGraphic(filmComboBox);
@@ -1605,32 +1535,29 @@ public class DashboardResponsableController implements Initializable {
 
             /**
              * Retrieves a list of films associated with a given cinema ID using the
-             * `readMoviesForCinema`
-             * method provided by the `FilmcinemaService`.
+             * `readMoviesForCinema` method provided by the `FilmCinemaService`.
              *
-             * @param idCinema unique identifier of the cinema for which associated films
-             *                 are to
-             *                 be loaded.
+             * @param idCinema
+             *            unique identifier of the cinema for which associated films are to
+             *            be loaded.
              *
              * @returns a list of movies associated with the given cinema ID.
              */
-            private List<Film> loadAssociatedFilms(final int idCinema) {
-                final FilmcinemaService filmService = new FilmcinemaService();
-                return filmService.readMoviesForCinema(idCinema);
+            private List<Film> loadAssociatedFilms(final Long idCinema) {
+                FilmCinemaService filmCinemaService = new FilmCinemaService();
+                return filmCinemaService.readMoviesForCinema(idCinema);
             }
         });
-        this.loadSeances();
+        this.loadMovieSessions();
     }
 
     /**
      * Allows users to input cinema, film and room information, as well as a start
-     * and
-     * end time, and price. It then creates a new seance in the SeanceService with
-     * the
-     * relevant details.
+     * and end time, and price. It then creates a new moviesession in the
+     * MovieSessionService with the relevant details.
      */
     @FXML
-    void addSeance() {
+    void addMovieSession() {
         final String selectedCinemaName = this.comboCinema.getValue();
         final String selectedFilmName = this.comboMovie.getValue();
         final String selectedRoomName = this.comboRoom.getValue();
@@ -1666,72 +1593,63 @@ public class DashboardResponsableController implements Initializable {
         final Cinema selectedCinema = cinemaService.getCinemaByName(selectedCinemaName);
         final FilmService filmService = new FilmService();
         final Film selectedFilm = filmService.getFilmByName(selectedFilmName);
-        final SalleService salleService = new SalleService();
-        final Salle selectedRoom = salleService.getSalleByName(selectedRoomName);
+        final CinemaHallService cinemahallService = new CinemaHallService();
+        final CinemaHall selectedRoom = cinemahallService.getCinemaHallByName(selectedRoomName);
         final Time departureTime = Time.valueOf(LocalTime.parse(departureTimeText));
         final Time endTime = Time.valueOf(LocalTime.parse(endTimeText));
         final Date date = Date.valueOf(selectedDate);
         final double price = Double.parseDouble(priceText);
-        final Seance newSeance = new Seance(selectedRoom, departureTime, endTime, date, price,
-                new Filmcinema(selectedFilm, selectedCinema));
-        final SeanceService seanceService = new SeanceService();
-        seanceService.create(newSeance);
+        final MovieSession newMovieSession = new MovieSession(selectedRoom, selectedFilm, departureTime, endTime, date,
+                price);
+        final MovieSessionService moviesessionService = new MovieSessionService();
+        moviesessionService.create(newMovieSession);
         this.showAlert("Session added successfully!");
-        this.loadSeances();
+        this.loadMovieSessions();
         this.showSessionForm();
     }
 
     /**
-     * Retrieves a list of `Seance` objects from an external service, converts it to
-     * an
-     * observable list, and sets it as the items of a view.
+     * Retrieves a list of `MovieSession` objects from an external service, converts
+     * it to an observable list, and sets it as the items of a view.
      *
-     * @returns a list of Seance objects.
+     * @returns a list of MovieSession objects.
      *          <p>
-     *          1/ List<Seance>: This is the type of the returned output, indicating
-     *          that it is a
-     *          list of `Seance` objects.
-     *          2/ SeanceService: The class used to read the seance data, which is
-     *          likely a database
-     *          or API call.
-     *          3/ read(): The method called on the `SeanceService` instance to
-     *          retrieve the seance
-     *          data.
-     *          4/ List<Seance>: The list of `Seance` objects returned by the
-     *          `read()` method.
-     *          5/ ObservableList<Seance>: An observable list of `Seance` objects,
-     *          which means
-     *          that the list can be modified through operations such as adding,
-     *          removing, or
+     *          1/ List<MovieSession>: This is the type of the returned output,
+     *          indicating that it is a list of `MovieSession` objects. 2/
+     *          MovieSessionService: The class used to read the moviesession data,
+     *          which is likely a database or API call. 3/ read(): The method called
+     *          on the `MovieSessionService` instance to retrieve the moviesession
+     *          data. 4/ List<MovieSession>: The list of `MovieSession` objects
+     *          returned by the `read()` method. 5/ ObservableList<MovieSession>: An
+     *          observable list of `MovieSession` objects, which means that the list
+     *          can be modified through operations such as adding, removing, or
      *          modifying elements.
      */
-    private List<Seance> loadSeances() {
-        final SeanceService seanceService = new SeanceService();
-        final List<Seance> seances = seanceService.read();
-        final ObservableList<Seance> seanceObservableList = FXCollections.observableArrayList(seances);
-        this.SessionTableView.setItems(seanceObservableList);
-        return seances;
+    private List<MovieSession> loadMovieSessions() {
+        final MovieSessionService moviesessionService = new MovieSessionService();
+        final List<MovieSession> moviesessions = moviesessionService.read();
+        final ObservableList<MovieSession> moviesessionObservableList = FXCollections
+                .observableArrayList(moviesessions);
+        this.SessionTableView.setItems(moviesessionObservableList);
+        return moviesessions;
     }
 
     /**
      * Verifies that all fields are filled, and then creates a new room in the
-     * cinema's
-     * database with the provided number of places and name, displaying an alert
-     * message
-     * after successful creation.
+     * cinema's database with the provided number of places and name, displaying an
+     * alert message after successful creation.
      *
-     * @param event event of a button click and triggers the execution of the code
-     *              within
-     *              the function.
-     *              <p>
-     *              - `event` is an `ActionEvent`, indicating that the method was
-     *              called as a result
-     *              of user action.
+     * @param event
+     *            event of a button click and triggers the execution of the code
+     *            within the function.
+     *            <p>
+     *            - `event` is an `ActionEvent`, indicating that the method was
+     *            called as a result of user action.
      */
     @FXML
-    void AjouterSalle(final ActionEvent event) {
+    void AjouterCinemaHall(final ActionEvent event) {
         // Vérifier que tous les champs sont remplis
-        if (this.tfNbrPlaces.getText().isEmpty() || this.tfNomSalle.getText().isEmpty()) {
+        if (this.tfNbrPlaces.getText().isEmpty() || this.tfNomCinemaHall.getText().isEmpty()) {
             this.showAlert("please complete all fields!");
             return;
         }
@@ -1745,40 +1663,42 @@ public class DashboardResponsableController implements Initializable {
             this.showAlert("The number of places must be an integer!");
             return;
         }
-        final SalleService ss = new SalleService();
-        ss.create(new Salle(this.cinemaId, Integer.parseInt(this.tfNbrPlaces.getText()), this.tfNomSalle.getText()));
+        final CinemaHallService ss = new CinemaHallService();
+        final CinemaService cinemaService = new CinemaService();
+        final Cinema cinema = cinemaService.getCinemaById(this.cinemaId);
+        ss.create(new CinemaHall(cinema, Integer.parseInt(this.tfNbrPlaces.getText()), this.tfNomCinemaHall.getText()));
         final Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Added room");
         alert.setContentText("Added room!");
         alert.show();
-        this.loadsalles();
+        this.loadcinemahalls();
     }
 
     /**
-     * Reads salle data from a service, filters them based on cinema Id, and
-     * displays the
-     * available rooms in a list view.
+     * Reads cinemahall data from a service, filters them based on cinema Id, and
+     * displays the available rooms in a list view.
      */
-    private void loadsalles() {
-        final SalleService salleService = new SalleService();
-        final List<Salle> salles = salleService.read();
-        final List<Salle> salles_cinema = salles.stream()
-                .filter(salle -> salle.getId_cinema() == this.cinemaId)
+    private void loadcinemahalls() {
+        final CinemaHallService cinemahallService = new CinemaHallService();
+        final List<CinemaHall> cinemahalls = cinemahallService.read();
+        final List<CinemaHall> cinemahalls_cinema = cinemahalls.stream()
+                .filter(cinemahall -> cinemahall.getCinema().getId().equals(this.cinemaId))
                 .collect(Collectors.toList());
-        if (salles_cinema.isEmpty()) {
+        if (cinemahalls_cinema.isEmpty()) {
             this.showAlert("No rooms are available");
             return;
         }
-        final ObservableList<Salle> salleInfos = FXCollections.observableArrayList(salles_cinema);
-        this.RoomTableView.setItems(salleInfos);
+        final ObservableList<CinemaHall> cinemahallInfos = FXCollections.observableArrayList(cinemahalls_cinema);
+        this.RoomTableView.setItems(cinemahallInfos);
     }
 
     /**
      * Makes the `facebookAnchor` component invisible when the `Facebook` button is
      * clicked.
      *
-     * @param event occurrence of a button click event that triggered the function
-     *              execution.
+     * @param event
+     *            occurrence of a button click event that triggered the function
+     *            execution.
      */
     @FXML
     void closeAnchor(final ActionEvent event) {
@@ -1789,13 +1709,12 @@ public class DashboardResponsableController implements Initializable {
      * Posts a status update to Facebook using an access token and message from a
      * text area.
      *
-     * @param event action that triggered the function execution, providing the
-     *              necessary
-     *              context for the code to perform its intended task.
-     *              <p>
-     *              - `txtareaStatut`: This is a text area where the status message
-     *              to be published
-     *              is entered by the user.
+     * @param event
+     *            action that triggered the function execution, providing the
+     *            necessary context for the code to perform its intended task.
+     *            <p>
+     *            - `txtareaStatut`: This is a text area where the status message to
+     *            be published is entered by the user.
      */
     @FXML
     void PublierStatut(final ActionEvent event) {
@@ -1813,8 +1732,6 @@ public class DashboardResponsableController implements Initializable {
             os.write(data.getBytes(StandardCharsets.UTF_8));
             os.flush();
             os.close();
-            final int responseCode = con.getResponseCode();
-            DashboardResponsableController.LOGGER.info("Response Code : " + responseCode);
         } catch (final IOException e) {
             DashboardResponsableController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
@@ -1822,16 +1739,14 @@ public class DashboardResponsableController implements Initializable {
 
     /**
      * Loads an FXML file, creates a new stage and replaces the current stage with
-     * it,
-     * displaying the contents of the FXML file on the screen.
+     * it, displaying the contents of the FXML file on the screen.
      *
-     * @param event event that triggered the function, specifically the button click
-     *              event
-     *              that initiates the display of the film management interface.
-     *              <p>
-     *              - `event` represents an ActionEvent object, which carries
-     *              information about the
-     *              action that triggered the function.
+     * @param event
+     *            event that triggered the function, specifically the button click
+     *            event that initiates the display of the film management interface.
+     *            <p>
+     *            - `event` represents an ActionEvent object, which carries
+     *            information about the action that triggered the function.
      */
     @FXML
     void AfficherFilmResponsable(final ActionEvent event) throws IOException {
@@ -1849,13 +1764,12 @@ public class DashboardResponsableController implements Initializable {
     /**
      * Makes the `addRoomForm`, `backButton`, `RoomTableView`, and `cinemaFormPane`
      * invisible, while making the `sessionButton` visible, when a user clicks the
-     * back
-     * button.
+     * back button.
      *
-     * @param event mouse event that triggered the execution of the `back` method.
-     *              <p>
-     *              Event type: `MouseEvent`
-     *              Target element: `backButton`
+     * @param event
+     *            mouse event that triggered the execution of the `back` method.
+     *            <p>
+     *            Event type: `MouseEvent` Target element: `backButton`
      */
     @FXML
     void back(final MouseEvent event) {
@@ -1870,18 +1784,15 @@ public class DashboardResponsableController implements Initializable {
     /**
      * Makes the `sessionFormPane`, `SessionTableView`, and `backSession` components
      * visible, while hiding `cinemaFormPane`, `cinemaListPane`, and
-     * `sessionButton`. It
-     * also calls `loadSeances()` and `showSessionForm()` to display the session
-     * form and
-     * content.
+     * `sessionButton`. It also calls `loadMovieSessions()` and `showSessionForm()`
+     * to display the session form and content.
      *
-     * @param event occurrence of an action, triggering the execution of the
-     *              `showSessions()`
-     *              method.
-     *              <p>
-     *              - `event` is an `ActionEvent` object representing the user
-     *              action that triggered
-     *              the function.
+     * @param event
+     *            occurrence of an action, triggering the execution of the
+     *            `showSessions()` method.
+     *            <p>
+     *            - `event` is an `ActionEvent` object representing the user action
+     *            that triggered the function.
      */
     @FXML
     void showSessions(final ActionEvent event) {
@@ -1891,27 +1802,23 @@ public class DashboardResponsableController implements Initializable {
         this.SessionTableView.setVisible(true);
         this.sessionButton.setVisible(false);
         this.backSession.setVisible(true);
-        this.loadSeances();
+        this.loadMovieSessions();
         this.showSessionForm();
     }
 
     /**
      * Sets the visibility of various components in a JavaFX application, including
-     * the
-     * `cinemaFormPane`, `cinemaListPane`, `sessionFormPane`, and
-     * `SessionTableView`. It
-     * makes these components visible or invisible based on a user input event.
+     * the `cinemaFormPane`, `cinemaListPane`, `sessionFormPane`, and
+     * `SessionTableView`. It makes these components visible or invisible based on a
+     * user input event.
      *
-     * @param event mouse event that triggered the `back2()` method, providing
-     *              information
-     *              about the location and type of the event.
-     *              <p>
-     *              - Type: `MouseEvent`
-     *              - Target: `cinemaFormPane` or `sessionButton` (depending on the
-     *              location of the
-     *              click)
-     *              - Code: The button that was clicked (either `cinemaFormPane` or
-     *              `sessionButton`)
+     * @param event
+     *            mouse event that triggered the `back2()` method, providing
+     *            information about the location and type of the event.
+     *            <p>
+     *            - Type: `MouseEvent` - Target: `cinemaFormPane` or `sessionButton`
+     *            (depending on the location of the click) - Code: The button that
+     *            was clicked (either `cinemaFormPane` or `sessionButton`)
      */
     @FXML
     void back2(final MouseEvent event) {
@@ -1924,22 +1831,20 @@ public class DashboardResponsableController implements Initializable {
 
     /**
      * Allows the user to select an image file, then copies it to a specified
-     * directory
-     * and sets the selected image as the `image` field.
+     * directory and sets the selected image as the `image` field.
      *
-     * @param event mouse event that triggered the `importImage()` method and
-     *              provides
-     *              the location of the selected file through its `FileChooser`
-     *              object.
-     *              <p>
-     *              - `event` is a `MouseEvent` object representing a user's
-     *              interaction with the application.
+     * @param event
+     *            mouse event that triggered the `importImage()` method and provides
+     *            the location of the selected file through its `FileChooser`
+     *            object.
+     *            <p>
+     *            - `event` is a `MouseEvent` object representing a user's
+     *            interaction with the application.
      */
     @FXML
     void importImage(final MouseEvent event) {
         final FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("PNG", "*.png"),
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PNG", "*.png"),
                 new FileChooser.ExtensionFilter("JPG", "*.jpg"));
         fileChooser.setTitle("Sélectionner une image");
         final File selectedFile = fileChooser.showOpenDialog(null);
