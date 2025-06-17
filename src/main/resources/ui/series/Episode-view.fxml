@@ -12,65 +12,65 @@
             stylesheets="@styles/dashboard.css" xmlns="http://javafx.com/javafx/21"
             fx:controller="com.esprit.controllers.series.EpisodeController">
     <children>
-        <SplitPane layoutX="26.0" layoutY="27.0" prefHeight="591.0" prefWidth="157.0" stylesheets="@dashbord.css"/>
+        <SplitPane layoutX="26.0" layoutY="27.0" prefHeight="591.0" prefWidth="157.0" stylesheets="@styles/dashbord.css"/>
         <Pane layoutX="331.0" layoutY="80.0" prefHeight="646.0" prefWidth="248.0" styleClass="nav-btn">
             <children>
-                <Label layoutX="14.0" layoutY="167.0" prefHeight="17.0" prefWidth="68.0" stylesheets="@dashbord.css"
+                <Label layoutX="14.0" layoutY="167.0" prefHeight="17.0" prefWidth="68.0" stylesheets="@styles/dashbord.css"
                        text="Title :" textFill="#a42121">
                     <font>
                         <Font name="Arial Rounded MT Bold" size="16.0"/>
                     </font>
                 </Label>
-                <Label layoutX="12.0" layoutY="247.0" prefHeight="20.0" prefWidth="125.0" stylesheets="@dashbord.css"
+                <Label layoutX="12.0" layoutY="247.0" prefHeight="20.0" prefWidth="125.0" stylesheets="@styles/dashbord.css"
                        text="Number :" textFill="#a42121">
                     <font>
                         <Font name="Arial Rounded MT Bold" size="16.0"/>
                     </font>
                 </Label>
                 <TextField fx:id="titreF" layoutX="40.0" layoutY="192.0" prefHeight="25.0" prefWidth="193.0"
-                           styleClass="text-field-red" stylesheets="@dashbord.css"/>
+                           styleClass="text-field-red" stylesheets="@styles/dashbord.css"/>
                 <TextField fx:id="numeroepisodeF" layoutX="40.0" layoutY="271.0" prefHeight="25.0" prefWidth="193.0"
-                           styleClass="text-field-red" stylesheets="@dashbord.css"/>
+                           styleClass="text-field-red" stylesheets="@styles/dashbord.css"/>
                 <Button layoutX="75.0" layoutY="612.0" mnemonicParsing="false" onAction="#ajouterSerie"
-                        prefHeight="25.0" prefWidth="104.0" styleClass="instert-btn" stylesheets="@dashbord.css"
+                        prefHeight="25.0" prefWidth="104.0" styleClass="instert-btn" stylesheets="@styles/dashbord.css"
                         text="ADD"/>
                 <Button fx:id="video" layoutX="44.0" layoutY="467.0" mnemonicParsing="false" onAction="#addVideo"
-                        prefHeight="23.0" prefWidth="187.0" styleClass="instert-btn-picture" stylesheets="@dashbord.css"
+                        prefHeight="23.0" prefWidth="187.0" styleClass="instert-btn-picture" stylesheets="@styles/dashbord.css"
                         text="Select"/>
                 <Button fx:id="image" layoutX="43.0" layoutY="404.0" mnemonicParsing="false" onAction="#importImage"
                         prefHeight="23.0" prefWidth="187.0" styleClass="instert-btn-picture" text="Select">
                     <stylesheets>
-                        <URL value="@dashbord.css"/>
+                        <URL value="@styles/dashbord.css"/>
                     </stylesheets>
                 </Button>
-                <Label layoutX="12.0" layoutY="318.0" prefHeight="20.0" prefWidth="125.0" stylesheets="@dashbord.css"
+                <Label layoutX="12.0" layoutY="318.0" prefHeight="20.0" prefWidth="125.0" stylesheets="@styles/dashbord.css"
                        text="Season :" textFill="#a42121">
                     <font>
                         <Font name="Arial Rounded MT Bold" size="16.0"/>
                     </font>
                 </Label>
                 <TextField fx:id="saisonF" layoutX="41.0" layoutY="341.0" prefHeight="25.0" prefWidth="193.0"
-                           styleClass="text-field-red" stylesheets="@dashbord.css"/>
-                <Label layoutX="12.0" layoutY="384.0" prefHeight="20.0" prefWidth="125.0" stylesheets="@dashbord.css"
+                           styleClass="text-field-red" stylesheets="@styles/dashbord.css"/>
+                <Label layoutX="12.0" layoutY="384.0" prefHeight="20.0" prefWidth="125.0" stylesheets="@styles/dashbord.css"
                        text="Picture :" textFill="#a42121">
                     <font>
                         <Font name="Arial Rounded MT Bold" size="16.0"/>
                     </font>
                 </Label>
-                <Label layoutX="12.0" layoutY="448.0" prefHeight="20.0" prefWidth="125.0" stylesheets="@dashbord.css"
+                <Label layoutX="12.0" layoutY="448.0" prefHeight="20.0" prefWidth="125.0" stylesheets="@styles/dashbord.css"
                        text="Video :" textFill="#a42121">
                     <font>
                         <Font name="Arial Rounded MT Bold" size="16.0"/>
                     </font>
                 </Label>
                 <ComboBox fx:id="serieF" layoutX="40.0" layoutY="539.0" prefHeight="25.0" prefWidth="193.0"/>
-                <Label layoutX="12.0" layoutY="514.0" prefHeight="20.0" prefWidth="125.0" stylesheets="@dashbord.css"
+                <Label layoutX="12.0" layoutY="514.0" prefHeight="20.0" prefWidth="125.0" stylesheets="@styles/dashbord.css"
                        text="Serie :" textFill="#a42121">
                     <font>
                         <Font name="Arial Rounded MT Bold" size="16.0"/>
                     </font>
                 </Label>
-                <Label layoutX="53.0" layoutY="6.0" prefHeight="43.0" prefWidth="170.0" stylesheets="@dashbord.css"
+                <Label layoutX="53.0" layoutY="6.0" prefHeight="43.0" prefWidth="170.0" stylesheets="@styles/dashbord.css"
                        text="Add Episode" textFill="#bfd485">
                     <font>
                         <Font name="Arial Rounded MT Bold" size="24.0"/>
@@ -123,7 +123,7 @@
                 <TableView fx:id="tableView" layoutX="8.0" layoutY="87.0" prefHeight="316.0" prefWidth="645.0"
                            styleClass="combo-box-red">
                     <stylesheets>
-                        <URL value="@dashbord.css"/>
+                        <URL value="@styles/dashbord.css"/>
                         <URL value="@styles/dashboard.css"/>
                     </stylesheets>
                 </TableView>

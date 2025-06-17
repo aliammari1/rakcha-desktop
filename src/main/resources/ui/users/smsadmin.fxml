@@ -9,7 +9,7 @@
 <VBox prefHeight="855.0" prefWidth="1507.0"
     xmlns="http://javafx.com/javafx/21"
     xmlns:fx="http://javafx.com/fxml/1" 
-    fx:controller="com.esprit.controllers.SmsController">
+    fx:controller="com.esprit.controllers.users.SMSAdminController">
 
     <HBox VBox.vgrow="ALWAYS">
         <!-- SideBar -->
@@ -63,7 +63,7 @@
                         </graphic>
                         <text>Send SMS</text>
                     </Button>
-                    <Button onAction="#clearFields" styleClass="secondary-button">
+                    <Button  styleClass="secondary-button">
                         <graphic>
                             <FontIcon iconLiteral="fa-refresh"/>
                         </graphic>

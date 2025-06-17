@@ -15,7 +15,7 @@
 
     <HBox VBox.vgrow="ALWAYS">
         <!-- SideBar -->
-        <fx:include source="../cinemaManagerSideBar.fxml" />
+        <fx:include source="../CinemaManagerSideBar.fxml" />
 
         <!-- Main Content -->
         <VBox spacing="20" HBox.hgrow="ALWAYS">
@@ -113,10 +113,10 @@
 
                     <!-- Action Buttons -->
                     <HBox spacing="10" alignment="CENTER">
-                        <Button onAction="#ajouteroeuvre" styleClass="sale" text="Add Series" />
-                        <Button onAction="#modifier" styleClass="edit-button" text="Update" />
-                        <Button onAction="#gotoep" styleClass="nav-button" text="Manage Episodes" />
-                        <Button onAction="#gotocategory" styleClass="nav-button"
+                        <Button  styleClass="sale" text="Add Series" />
+                        <Button  styleClass="edit-button" text="Update" />
+                        <Button  styleClass="nav-button" text="Manage Episodes" />
+                        <Button  styleClass="nav-button"
                             text="Manage Categories" />
                     </HBox>
                 </VBox>

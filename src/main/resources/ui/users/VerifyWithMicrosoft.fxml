@@ -10,7 +10,7 @@
     stylesheets="@styles/auth.css"
     xmlns="http://javafx.com/javafx/21"
     xmlns:fx="http://javafx.com/fxml/1" 
-    fx:controller="com.esprit.controllers.users.VerifyWithMicrosoftController">
+    fx:controller="com.esprit.controllers.users.VerifyWithMicrosoft">
 
     <!-- Left Side - Form -->
     <VBox spacing="20" minWidth="461.0" styleClass="form-section">
@@ -41,10 +41,10 @@
 
         <!-- Action Buttons -->
         <HBox spacing="15" alignment="CENTER">
-            <Button fx:id="verifyButton" onAction="#verifyCode" 
+            <Button fx:id="verifyButton" onAction="#verifyAuthCode"
                     styleClass="primary-button" text="Verify"/>
-            <Button fx:id="resendButton" onAction="#resendCode" 
-                    styleClass="secondary-button" text="Request New Code"/>
+<!--            <Button fx:id="resendButton" onAction="#resendCode" -->
+<!--                    styleClass="secondary-button" text="Request New Code"/>-->
         </HBox>
     </VBox>
 

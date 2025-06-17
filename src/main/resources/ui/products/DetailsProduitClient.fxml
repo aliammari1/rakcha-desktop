@@ -10,7 +10,7 @@
 <VBox prefHeight="855.0" prefWidth="1507.0"
     xmlns="http://javafx.com/javafx/21"
     xmlns:fx="http://javafx.com/fxml/1" 
-    fx:controller="com.esprit.controllers.produits.DetailsProduitClientController">
+    fx:controller="com.esprit.controllers.products.DetailsProductClientController">
 
     <HBox VBox.vgrow="ALWAYS">
         <!-- SideBar -->
@@ -32,13 +32,13 @@
 
             <!-- Action Buttons -->
             <HBox spacing="10" alignment="CENTER_RIGHT">
-                <Button onAction="#navigateBack" styleClass="secondary-button">
+                <Button styleClass="secondary-button">
                     <graphic>
                         <FontIcon iconLiteral="fa-arrow-left"/>
                     </graphic>
                     <text>Back to Products</text>
                 </Button>
-                <Button onAction="#addToCart" styleClass="sale">
+                <Button styleClass="sale">
                     <graphic>
                         <FontIcon iconLiteral="fa-shopping-cart"/>
                     </graphic>

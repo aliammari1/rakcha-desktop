@@ -9,7 +9,7 @@
 <VBox prefHeight="855.0" prefWidth="1507.0"
     xmlns="http://javafx.com/javafx/21"
     xmlns:fx="http://javafx.com/fxml/1" 
-    fx:controller="com.esprit.controllers.series.StatistiquesController">
+    fx:controller="com.esprit.controllers.series.StatistiqueController">
 
     <HBox VBox.vgrow="ALWAYS">
         <!-- SideBar -->
@@ -70,8 +70,8 @@
 
             <!-- Export Options -->
             <HBox spacing="10" alignment="CENTER_RIGHT">
-                <Button onAction="#exportToPDF" styleClass="primary-button" text="Export to PDF"/>
-                <Button onAction="#navigateBack" styleClass="secondary-button" text="Back to Series"/>
+                <Button styleClass="primary-button" text="Export to PDF"/>
+                <Button styleClass="secondary-button" text="Back to Series"/>
             </HBox>
         </VBox>
     </HBox>

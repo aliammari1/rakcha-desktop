@@ -64,7 +64,7 @@
         <Pane layoutX="382.0" layoutY="4.0" prefHeight="482.0" prefWidth="514.0" stylesheets="@styles/dashboard.css">
             <children>
                 <MediaView fx:id="midiavideo" fitHeight="650.0" fitWidth="700.0" layoutX="54.0" layoutY="93.0" />
-                <Button id="jouerbtn" fx:id="jouerbtn" alignment="CENTER" contentDisplay="CENTER" layoutX="447.0" layoutY="495.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="83.0" stylesheets="@dashbord.css" text="Play" textFill="#e7dede">
+                <Button id="jouerbtn" fx:id="jouerbtn" alignment="CENTER" contentDisplay="CENTER" layoutX="447.0" layoutY="495.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="83.0" stylesheets="@styles/dashbord.css" text="Play" textFill="#e7dede">
                     <font>
                         <Font name="Bodoni MT Black" size="12.0" />
                     </font>
@@ -73,7 +73,7 @@
                         <String fx:value="text-field-red" />
                     </styleClass>
                 </Button>
-                <Button fx:id="pausebtn" alignment="CENTER" contentDisplay="CENTER" layoutX="547.0" layoutY="494.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="74.0" stylesheets="@dashbord.css" text="Pause" textFill="#e7dddd" textOverrun="WORD_ELLIPSIS">
+                <Button fx:id="pausebtn" alignment="CENTER" contentDisplay="CENTER" layoutX="547.0" layoutY="494.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="74.0" stylesheets="@styles/dashbord.css" text="Pause" textFill="#e7dddd" textOverrun="WORD_ELLIPSIS">
                     <font>
                         <Font name="Bodoni MT Black" size="12.0" />
                     </font>
@@ -82,7 +82,7 @@
                         <String fx:value="text-field-red" />
                     </styleClass>
                 </Button>
-                <Button fx:id="arreterbtn" alignment="CENTER" contentDisplay="CENTER" layoutX="636.0" layoutY="494.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="77.0" stylesheets="@dashbord.css" text="Stop" textFill="#efdada">
+                <Button fx:id="arreterbtn" alignment="CENTER" contentDisplay="CENTER" layoutX="636.0" layoutY="494.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="77.0" stylesheets="@styles/dashbord.css" text="Stop" textFill="#efdada">
                     <font>
                         <Font name="Bodoni MT Black" size="12.0" />
                     </font>
@@ -106,13 +106,13 @@
                     </styleClass>
                     <stylesheets>
                         <URL value="@styles/dashboard.css" />
-                        <URL value="@dashbord.css" />
+                        <URL value="@styles/dashbord.css" />
                     </stylesheets>
                 </Button>
                 <TextArea fx:id="txtDescriptionFeedBack" layoutX="161.0" layoutY="587.0" prefHeight="90.0" prefWidth="618.0" promptText="FeedBack ...">
                     <stylesheets>
                         <URL value="@styles/dashboard.css" />
-                        <URL value="@dashbord.css" />
+                        <URL value="@styles/dashbord.css" />
                     </stylesheets>
                 </TextArea>
                 <Label layoutX="37.0" layoutY="553.0" prefHeight="22.0" prefWidth="297.0" text="Please leave your feedback below :" textFill="#f4f4e7">

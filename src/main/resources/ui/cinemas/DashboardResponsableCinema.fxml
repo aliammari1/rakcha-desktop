@@ -15,7 +15,7 @@
 
     <HBox VBox.vgrow="ALWAYS">
         <!-- SideBar -->
-        <fx:include source="../cinemaManagerSideBar.fxml" />
+        <fx:include source="../CinemaManagerSideBar.fxml" />
 
         <!-- Main Content -->
         <StackPane HBox.hgrow="ALWAYS">
