@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.CheckComboBox?>
 
-<AnchorPane id="AnchorPane" fx:id="bord" prefHeight="784.0" prefWidth="1430.0" style="-fx-background-image: red; -fx-background-color: #AE2D3C;" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.films.PaymentuserController">
+<AnchorPane id="AnchorPane" fx:id="bord" prefHeight="784.0" prefWidth="1430.0" style="-fx-background-image: red; -fx-background-color: #AE2D3C;" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.films.PaymentUserController">
     <children>
         <Label fx:id="filmLabel_Payment" alignment="CENTER" layoutX="222.0" layoutY="34.0" prefHeight="33.0" prefWidth="168.0" style="-fx-font-size: 30;" text="gnfyh" AnchorPane.leftAnchor="222.0" AnchorPane.rightAnchor="410.0" />
         <Pane layoutX="1063.0" prefHeight="101.0" prefWidth="345.0" style="-fx-background-radius: 20 20 0 0;" styleClass="linear-grad">

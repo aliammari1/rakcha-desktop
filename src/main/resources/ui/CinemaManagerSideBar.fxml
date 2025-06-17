@@ -13,7 +13,7 @@
         </ImageView>
         <Button fx:id="movieButton" layoutY="311.0" mnemonicParsing="false" onAction="#switchToMovies" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" stylesheets="@styles/filmStyle.css" text="           Movies            " />
         <FontIcon fill="#f2efef" iconLiteral="fa-film" layoutX="19.0" layoutY="353.0" text="" wrappingWidth="36.0" />
-        <Button fx:id="seanceButton" layoutY="519.0" mnemonicParsing="false" onAction="#switchToSeances" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" text="Seances" />
+        <Button fx:id="seanceButton" layoutY="519.0" mnemonicParsing="false" onAction="#switchToMovieSessions" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn" text="Seances" />
         <Button fx:id="profileButton" layoutX="105.0" layoutY="732.0" mnemonicParsing="false" onAction="#switchToProfile" styleClass="nav-btn" text="Account" />
         <FontIcon fill="#ebe5e5" iconLiteral="fa-user" layoutX="61.0" layoutY="758.0" text="" />
         <Button fx:id="logoutButton" layoutX="117.0" layoutY="774.0" mnemonicParsing="false" onAction="#switchToLogout" styleClass="nav-btn" text="EXIT" />

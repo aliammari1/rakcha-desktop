@@ -9,7 +9,7 @@
 <VBox prefHeight="855.0" prefWidth="1500.0"
     xmlns="http://javafx.com/javafx/21"
     xmlns:fx="http://javafx.com/fxml/1" 
-    fx:controller="com.esprit.controllers.produits.PanierProduitControllers">
+    fx:controller="com.esprit.controllers.products.ShoppingCartProductControllers">
 
     <HBox VBox.vgrow="ALWAYS">
         <!-- SideBar -->
@@ -37,12 +37,12 @@
                     </ScrollPane>
 
                     <HBox spacing="10" alignment="CENTER_RIGHT">
-                        <Button onAction="#payement" styleClass="sale" text="Proceed to Checkout">
+                        <Button onAction="#Paiment" styleClass="sale" text="Proceed to Checkout">
                             <font>
                                 <Font name="Arial" size="14.0"/>
                             </font>
                         </Button>
-                        <Button onAction="#clearCart" styleClass="delete-button" text="Clear Cart">
+                        <Button  styleClass="delete-button" text="Clear Cart">
                             <font>
                                 <Font name="Arial" size="14.0"/>
                             </font>
@@ -64,17 +64,17 @@
 
                     <GridPane vgap="10">
                         <Label text="Subtotal:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                        <Label fx:id="subtotalLabel" text="$0.00" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                        <Label fx:id="subtotalLabel" text="\$0.00" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
                         <Label text="Tax:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                        <Label fx:id="taxLabel" text="$0.00" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                        <Label fx:id="taxLabel" text="\$0.00" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
                         <Label text="Total:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="total-label">
                             <font>
                                 <Font name="Arial Bold" size="16.0"/>
                             </font>
                         </Label>
-                        <Label fx:id="totalLabel" text="$0.00" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="total-label">
+                        <Label fx:id="totalLabel" text="\$0.00" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="total-label">
                             <font>
                                 <Font name="Arial Bold" size="16.0"/>
                             </font>

@@ -10,7 +10,7 @@
       stylesheets="@styles/filmStyle.css"
       xmlns="http://javafx.com/javafx/21"
       xmlns:fx="http://javafx.com/fxml/1" 
-      fx:controller="com.esprit.controllers.produits.ListeCommandeController">
+      fx:controller="com.esprit.controllers.products.ListOrderController">
 
     <HBox VBox.vgrow="ALWAYS">
         <!-- SideBar -->
@@ -38,7 +38,7 @@
                     </graphic>
                 </Button>
                 <FontIcon fx:id="idfilter" fill="#9a4141" iconLiteral="fa-filter" 
-                         onMouseClicked="#filtrer"/>
+                         />
             </HBox>
 
             <!-- Content Area -->
@@ -89,7 +89,7 @@
                             </font>
                         </Label>
                         
-                        <Button onAction="#analyser" styleClass="nav-button" 
+                        <Button onAction="#statOrder" styleClass="nav-button"
                                 text="View Statistics"/>
                     </VBox>
                 </VBox>
@@ -103,7 +103,7 @@
             <padding>
                 <Insets top="20" right="20" bottom="20" left="20"/>
             </padding>
-            <Button onAction="#filtercinema" styleClass="sale" text="Filter"/>
+            <Button styleClass="sale" text="Filter"/>
         </VBox>
     </AnchorPane>
 </VBox>

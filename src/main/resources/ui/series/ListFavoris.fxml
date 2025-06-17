@@ -42,7 +42,7 @@
 
             <!-- Back Button -->
             <HBox alignment="CENTER_LEFT">
-                <Button onAction="#retour" styleClass="nav-button">
+                <Button styleClass="nav-button">
                     <graphic>
                         <FontIcon iconLiteral="fa-arrow-left" iconSize="16"/>
                     </graphic>
