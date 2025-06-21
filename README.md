@@ -13,6 +13,7 @@
 ## 🚀 Product Hunt Launch Ready
 
 This MVP has been thoroughly optimized for Product Hunt launch with:
+
 - ✅ **Bug-free codebase** with comprehensive error handling and input validation
 - ✅ **Professional UI/UX** with modern design and smooth animations
 - ✅ **Automated demo generation** with screenshot and video utilities
@@ -138,10 +139,16 @@ Rakcha Desktop leverages a variety of modern technologies:
   - 🖥️ JavaFX 21.0.2 - Rich client platform for desktop applications
   - 📝 FXML - XML-based UI markup language for defining JavaFX UI
 
-- **💾 Database**:
+- **💾 Database & Persistence**:
 
-  - 🗄️ MySQL 9.0.0 - Robust relational database for data persistence
-  - 🔄 DataSource pattern - Connection pool implementation for efficient database access
+  - 🗄️ **Hibernate 6.2.13** - Modern ORM framework with JPA support
+  - 🐬 **MySQL** - Production-ready relational database with connection pooling
+  - 📝 **SQLite** - Lightweight file-based database for development and testing
+  - 🐘 **PostgreSQL** - Advanced open-source relational database
+  - � **H2** - In-memory database for testing and rapid prototyping
+  - 🔄 **HikariCP** - High-performance JDBC connection pool
+  - 📊 **Multi-database Support** - Seamless switching between database types
+  - 🔧 **Environment-based Configuration** - Different databases for dev/test/prod
 
 - **🎨 UI Framework**:
 
@@ -308,15 +315,82 @@ Rakcha Desktop includes several performance optimizations:
 
 ### 🗄️ Database Setup
 
-1. **Start MySQL server** (using XAMPP or standalone MySQL)
-2. **Run the database script**:
+RAKCHA supports multiple database types for different environments:
+
+#### 🚀 Quick Start (SQLite - Recommended for Development)
+
+No setup required! The application automatically uses SQLite:
+
+```bash
+# Run with SQLite (default for development)
+mvn compile exec:java -Dexec.mainClass="com.esprit.MainApp"
+```
+
+The SQLite database file will be created automatically at `data/rakcha_db.sqlite`.
+
+#### 🏭 Production Setup (MySQL)
+
+1. **Start MySQL server** (using XAMPP or standalone MySQL):
+
    ```bash
-   mysql -u username -p < rakcha_db.sql
+   # Using provided VS Code task
+   Ctrl+Shift+P → "Tasks: Run Task" → "Start MySQL"
+
+   # Or manually with XAMPP
+   C:/xampp/mysql/bin/mysqld.exe --defaults-file=C:/xampp/mysql/bin/my.ini --standalone
    ```
-   Or use the provided script:
+
+2. **Create database**:
+
+   ```sql
+   CREATE DATABASE rakcha_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+   ```
+
+3. **Switch to MySQL**:
+
    ```bash
-   ./database.sh
+   # Set environment variable
+   export DB_TYPE=mysql
+
+   # Or use the configuration script
+   ./database-config.sh mysql
+
+   # Or configure programmatically
+   mvn compile exec:java -Dexec.mainClass="com.esprit.examples.DatabaseExample"
    ```
+
+#### 🔧 Environment-Based Configuration
+
+Set these environment variables to configure your database:
+
+**For SQLite (Development):**
+
+```bash
+export DB_TYPE=sqlite
+export DB_URL="jdbc:sqlite:data/rakcha_db.sqlite"
+```
+
+**For MySQL (Production):**
+
+```bash
+export DB_TYPE=mysql
+export DB_URL="jdbc:mysql://localhost:3306/rakcha_db?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true"
+export DB_USER=root
+export DB_PASSWORD=your_password
+```
+
+**For PostgreSQL:**
+
+```bash
+export DB_TYPE=postgresql
+export DB_URL="jdbc:postgresql://localhost:5432/rakcha_db"
+export DB_USER=postgres
+export DB_PASSWORD=your_password
+```
+
+#### 📚 Detailed Configuration
+
+For comprehensive database setup instructions, see [DATABASE_GUIDE.md](DATABASE_GUIDE.md)
 
 ## 📖 Usage
 

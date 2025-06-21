@@ -9,8 +9,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "category")
+@Entity(name = "SeriesCategory")
+@Table(name = "series_categories")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -42,9 +42,9 @@ public class Category {
      * Constructor without id for creating new category instances.
      *
      * @param name
-     *            the name of the category
+     *                    the name of the category
      * @param description
-     *            the description of the category
+     *                    the description of the category
      */
     public Category(final String name, final String description) {
         this.name = name;

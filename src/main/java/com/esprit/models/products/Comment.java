@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 /**
  * The Comment class represents a comment made by a client on a product.
  */
-@Entity
-@Table(name = "comments")
+@Entity(name = "ProductComment")
+@Table(name = "product_comments")
 @Data
 @Builder
 @NoArgsConstructor
@@ -47,11 +47,11 @@ public class Comment {
      * Constructor without id for creating new comment instances.
      *
      * @param client
-     *            The client who made the comment.
+     *                    The client who made the comment.
      * @param commentText
-     *            The comment text.
+     *                    The comment text.
      * @param product
-     *            The product associated with the comment.
+     *                    The product associated with the comment.
      */
     public Comment(final Client client, final String commentText, final Product product) {
         this.client = client;

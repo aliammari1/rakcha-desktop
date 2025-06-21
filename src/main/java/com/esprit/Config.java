@@ -95,7 +95,9 @@ public class Config {
 
     private Map<String, Object> createDefaultConfig() {
         Map<String, Object> defaultConfig = new HashMap<>();
+
         // Database configuration
+        defaultConfig.put("db.type", System.getenv("DB_TYPE")); // h2, mysql, sqlite, postgresql
         defaultConfig.put("db.url", System.getenv("DB_URL"));
         defaultConfig.put("db.user", System.getenv("DB_USER"));
         defaultConfig.put("db.password", System.getenv("DB_PASSWORD"));

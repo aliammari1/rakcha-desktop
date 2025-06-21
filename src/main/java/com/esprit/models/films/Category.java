@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 /**
  * Represents a category of films.
  */
-@Entity
-@Table(name = "categories")
+@Entity(name = "FilmCategory")
+@Table(name = "film_categories")
 @Data
 @NoArgsConstructor
 @Builder
@@ -50,11 +50,11 @@ public class Category {
      * Constructor with id, name, and description for database mapping.
      *
      * @param id
-     *            the id of the category
+     *                    the id of the category
      * @param name
-     *            the name of the category
+     *                    the name of the category
      * @param description
-     *            the description of the category
+     *                    the description of the category
      */
     public Category(final Long id, final String name, final String description) {
         this.id = id;
@@ -68,9 +68,9 @@ public class Category {
      * Constructor without id for creating new category instances.
      *
      * @param name
-     *            the name of the category
+     *                    the name of the category
      * @param description
-     *            the description of the category
+     *                    the description of the category
      */
     public Category(final String name, final String description) {
         this.name = name;
