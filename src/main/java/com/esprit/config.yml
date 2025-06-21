@@ -1,40 +1,19 @@
-# Database configuration
-db:
-  url: ${DB_URL}
-  user: ${DB_USER}
-  password: ${DB_PASSWORD}
-
-# API Keys
+db: {url: '${DB_URL}', user: '${DB_USER}', password: '${DB_PASSWORD}'}
 vonage:
-  api:
-    key: ${VONAGE_API_KEY}
-    secret: ${VONAGE_API_SECRET}
-
+  api: {key: '${VONAGE_API_KEY}', secret: '${VONAGE_API_SECRET}'}
 stripe:
-  api:
-    key: ${STRIPE_API_KEY}
-
+  api: {key: '${STRIPE_API_KEY}'}
 openai:
-  api:
-    key: ${OPENAI_API_KEY}
+  api: {key: '${OPENAI_API_KEY}'}
   model: ${OPENAI_MODEL}
-
 youtube:
-  api:
-    key: ${YOUTUBE_API_KEY}
-
+  api: {key: '${YOUTUBE_API_KEY}'}
 microsoft:
-  client:
-    id: ${MICROSOFT_CLIENT_ID}
-    secret: ${MICROSOFT_CLIENT_SECRET}
-
+  client: {id: '${MICROSOFT_CLIENT_ID}', secret: '${MICROSOFT_CLIENT_SECRET}'}
 google:
-  client:
-    id: ${GOOGLE_CLIENT_ID}
-    secret: ${GOOGLE_CLIENT_SECRET}
-
-# Email configuration
-email:
-  from: ${EMAIL_FROM}
-  username: ${EMAIL_USERNAME}
-  password: ${JAVAMAIL_APP_PASSWORD}
+  client: {id: '${GOOGLE_CLIENT_ID}', secret: '${GOOGLE_CLIENT_SECRET}'}
+email: {from: '${EMAIL_FROM}', username: '${EMAIL_USERNAME}', password: '${JAVAMAIL_APP_PASSWORD}'}
+db.type: sqlite
+db.url: jdbc:sqlite:data/rakcha_db.sqlite
+db.user: ''
+db.password: ''

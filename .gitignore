@@ -32,10 +32,12 @@ build/
 !**/src/test/**/build/
 
 ### VS Code ###
-# .vscode/
+.vscode/
 
 ### Mac OS ###
 .DS_Store
 
 /tmp
 /src/resources/faces/*
+
+.env
