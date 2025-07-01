@@ -10,6 +10,12 @@
 [![JavaFX](https://img.shields.io/badge/javafx-17+-green.svg)](https://openjfx.io/)
 [![SQLite](https://img.shields.io/badge/database-sqlite-blue.svg)](https://www.sqlite.org/)
 
+
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Java](https://img.shields.io/badge/java-17+-orange.svg)](https://openjdk.java.net/)
+[![JavaFX](https://img.shields.io/badge/javafx-17+-green.svg)](https://openjfx.io/)
+[![SQLite](https://img.shields.io/badge/database-sqlite-blue.svg)](https://www.sqlite.org/)
+
 # 🎬 RAKCHA - Ultimate Entertainment Hub (MVP Ready for Product Hunt)
 
 ![RAKCHA Logo](src/main/resources/Logo.png)
