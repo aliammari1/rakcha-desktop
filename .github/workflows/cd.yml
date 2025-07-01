@@ -294,7 +294,7 @@ jobs:
             dist/rakcha-${{ steps.version.outputs.VERSION }}-${{ matrix.platform }}.*
           draft: false
           prerelease: false
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT_TOKEN }}
 
   docker-build:
     name: Build Docker Image
@@ -320,7 +320,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.PAT_TOKEN }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
