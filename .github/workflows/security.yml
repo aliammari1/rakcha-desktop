@@ -134,7 +134,6 @@ jobs:
         run: |
           mvn org.codehaus.mojo:license-maven-plugin:add-third-party
           mvn org.codehaus.mojo:license-maven-plugin:download-licenses
-
       - name: Check for GPL/LGPL licenses
         run: |
           if [ -f "target/generated-sources/license/THIRD-PARTY.txt" ]; then
