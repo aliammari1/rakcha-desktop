@@ -3,7 +3,6 @@ package com.esprit.controllers.cinemas;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.esprit.models.cinemas.Cinema;
 import com.esprit.models.films.Film;
@@ -358,7 +357,7 @@ public class DashboardAdminController {
         // Récupérer tous les cinémas depuis la base de données
         final List<Cinema> cinemas = this.getAllCinemas();
         // Extraire les adresses uniques des cinémas
-        return cinemas.stream().map(Cinema::getAddress).distinct().collect(Collectors.toList());
+        return cinemas.stream().map(Cinema::getAddress).distinct().toList();
     }
 
     /**
@@ -403,7 +402,7 @@ public class DashboardAdminController {
         final List<Cinema> filteredCinemas = this.getAllCinemas().stream()
                 .filter(cinema -> selectedAddresses.isEmpty() || selectedAddresses.contains(cinema.getAddress()))
                 .filter(cinema -> selectedStatuses.isEmpty() || selectedStatuses.contains(cinema.getStatus()))
-                .collect(Collectors.toList());
+                .toList();
         // Mettre à jour le TableView avec les cinémas filtrés
         final ObservableList<Cinema> filteredList = FXCollections.observableArrayList(filteredCinemas);
         this.listCinema.setItems(filteredList);
@@ -427,7 +426,7 @@ public class DashboardAdminController {
     private List<String> getSelectedAddresses() {
         // Récupérer les adresses sélectionnées dans l'AnchorPane de filtrage
         return this.addressCheckBoxes.stream().filter(CheckBox::isSelected).map(CheckBox::getText)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -444,7 +443,7 @@ public class DashboardAdminController {
     private List<String> getSelectedStatuses() {
         // Récupérer les statuts sélectionnés dans l'AnchorPane de filtrage
         return this.statusCheckBoxes.stream().filter(CheckBox::isSelected).map(CheckBox::getText)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
