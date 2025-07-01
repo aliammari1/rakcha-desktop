@@ -7,7 +7,6 @@ com.esprit.controllers.films
 com.esprit.controllers.products
 com.esprit.controllers.series
 com.esprit.controllers.users
-com.esprit.examples
 com.esprit.models.cinemas
 com.esprit.models.films
 com.esprit.models.products

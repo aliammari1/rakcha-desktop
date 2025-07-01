@@ -7,18 +7,19 @@
   <groupId>org.example</groupId>
   <artifactId>RAKCHA</artifactId>
   <version>1.0.0</version>
-
   <properties>
-    <maven.compiler.source>21</maven.compiler.source>
-    <maven.compiler.target>21</maven.compiler.target>
-    <maven.compiler.release>21</maven.compiler.release>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <maven.compiler.release>17</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    
+
     <junit.version>5.10.0</junit.version>
-    <hibernate.version>6.2.13.Final</hibernate.version>
+    <hibernate.version>7.0.2.Final</hibernate.version>
     <lombok.version>1.18.28</lombok.version>
     <slf4j.version>2.0.9</slf4j.version>
     <logback.version>1.4.12</logback.version>
+
+
     <h2.version>2.2.224</h2.version>
     <testfx.version>4.0.18</testfx.version>
   </properties>
@@ -35,7 +36,7 @@
   </repositories>
 
   <dependencies>
-    
+
     <!-- Hibernate ORM Dependencies -->
     <dependency>
       <groupId>org.hibernate.orm</groupId>
@@ -45,6 +46,11 @@
     <dependency>
       <groupId>org.hibernate.orm</groupId>
       <artifactId>hibernate-hikaricp</artifactId>
+      <version>${hibernate.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate.orm</groupId>
+      <artifactId>hibernate-community-dialects</artifactId>
       <version>${hibernate.version}</version>
     </dependency>
 
@@ -60,6 +66,67 @@
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
       <version>42.6.1</version>
+    </dependency>
+
+    <!-- SQLite JDBC Driver -->
+    <dependency>
+      <groupId>org.xerial</groupId>
+      <artifactId>sqlite-jdbc</artifactId>
+      <version>3.45.2.0</version>
+    </dependency>
+
+    <!-- XML Processing Dependencies -->
+    <!-- JAXB and Activation APIs - Jakarta version -->
+    <dependency>
+      <groupId>jakarta.xml.bind</groupId>
+      <artifactId>jakarta.xml.bind-api</artifactId>
+      <version>3.0.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jaxb</groupId>
+      <artifactId>jaxb-runtime</artifactId>
+      <version>3.0.2</version>
+    </dependency>
+    <dependency>
+      <groupId>jakarta.activation</groupId>
+      <artifactId>jakarta.activation-api</artifactId>
+      <version>2.1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.angus</groupId>
+      <artifactId>angus-activation</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+
+    <!-- StAX API and implementations -->
+    <dependency>
+      <groupId>javax.xml.stream</groupId>
+      <artifactId>stax-api</artifactId>
+      <version>1.0-2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.woodstox</groupId>
+      <artifactId>stax2-api</artifactId>
+      <version>4.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.woodstox</groupId>
+      <artifactId>woodstox-core</artifactId>
+      <version>6.4.0</version>
+    </dependency>
+
+    <!-- Additional XML support -->
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-impl</artifactId>
+      <version>3.0.2</version>
+    </dependency>
+
+    <!-- Jackson XML support for compatibility -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.dataformat</groupId>
+      <artifactId>jackson-dataformat-xml</artifactId>
+      <version>2.15.2</version>
     </dependency>
 
     <!-- Logging Dependencies -->
@@ -94,6 +161,7 @@
       <scope>test</scope>
     </dependency>
 
+
     <!-- Screenshot and Video Generation Dependencies -->
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -121,12 +189,6 @@
       <version>9.0.10</version>
     </dependency>
 
-    <!-- AnimateFX for smooth animations -->
-    <dependency>
-      <groupId>io.github.typhon0</groupId>
-      <artifactId>AnimateFX</artifactId>
-      <version>1.2.4</version>
-    </dependency>
 
     <!-- FontAwesome Icons -->
     <dependency>
@@ -136,16 +198,6 @@
     </dependency>
 
     <!-- Ikonli for additional icons -->
-    <dependency>
-      <groupId>org.kordamp.ikonli</groupId>
-      <artifactId>ikonli-javafx</artifactId>
-      <version>12.3.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.kordamp.ikonli</groupId>
-      <artifactId>ikonli-fontawesome5-pack</artifactId>
-      <version>12.3.1</version>
-    </dependency>
     <dependency>
       <groupId>org.kordamp.ikonli</groupId>
       <artifactId>ikonli-material-pack</artifactId>
@@ -354,11 +406,11 @@
       <artifactId>view</artifactId>
       <version>11.12.7</version>
     </dependency>
-<!--    <dependency>-->
-<!--      <groupId>org.bytedeco</groupId>-->
-<!--      <artifactId>opencv-platform-gpu</artifactId>-->
-<!--      <version>4.10.0-1.5.11</version>-->
-<!--    </dependency>-->
+    <!--    <dependency>-->
+    <!--      <groupId>org.bytedeco</groupId>-->
+    <!--      <artifactId>opencv-platform-gpu</artifactId>-->
+    <!--      <version>4.10.0-1.5.11</version>-->
+    <!--    </dependency>-->
     <dependency>
       <groupId>org.mindrot</groupId>
       <artifactId>jbcrypt</artifactId>
@@ -390,9 +442,9 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.11.0</version>
         <configuration>
-          <source>21</source>
-          <target>21</target>
-          <release>21</release>
+          <source>17</source>
+          <target>17</target>
+          <release>17</release>
           <annotationProcessorPaths>
             <path>
               <groupId>org.projectlombok</groupId>
@@ -400,6 +452,49 @@
               <version>1.18.38</version>
             </path>
           </annotationProcessorPaths>
+        </configuration>
+      </plugin>      <!--
+      Maven Dependency Plugin to copy dependencies -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>3.6.1</version>
+        <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/lib</outputDirectory>
+              <overWriteReleases>false</overWriteReleases>
+              <overWriteSnapshots>false</overWriteSnapshots>
+              <overWriteIfNewer>true</overWriteIfNewer>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Maven JAR Plugin with proper manifest -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.3.0</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <addClasspath>true</addClasspath>
+              <classpathPrefix>lib/</classpathPrefix>
+              <mainClass>com.esprit.MainApp</mainClass>
+              <classpathLayoutType>custom</classpathLayoutType>
+              <customClasspathLayout>
+                lib/$${artifact.groupId}.$${artifact.artifactId}.$${artifact.extension}</customClasspathLayout>
+            </manifest>
+            <manifestEntries>
+              <Class-Path>.</Class-Path>
+            </manifestEntries>
+          </archive>
         </configuration>
       </plugin>
 
@@ -410,6 +505,90 @@
         <version>0.0.8</version>
         <configuration>
           <mainClass>com.esprit.MainApp</mainClass>
+          <commandlineArgs>-Dfile.encoding=UTF-8</commandlineArgs>
+          <includePathExceptionsInClasspath>true</includePathExceptionsInClasspath>
+          <options>
+            <option>-Djavax.xml.stream.XMLInputFactory=com.ctc.wstx.stax.WstxInputFactory</option>
+            <option>-Djavax.xml.stream.XMLOutputFactory=com.ctc.wstx.stax.WstxOutputFactory</option>
+            <option>-Djavax.xml.stream.XMLEventFactory=com.ctc.wstx.stax.WstxEventFactory</option>
+            <option>
+              -Djakarta.xml.bind.JAXBContextFactory=org.glassfish.jaxb.runtime.v2.JAXBContextFactory</option>
+            <option>-Djdk.module.illegalAccess=deny</option>
+            <option>--add-opens</option>
+            <option>java.base/java.lang=ALL-UNNAMED</option>
+            <option>--add-opens</option>
+            <option>java.base/java.nio=ALL-UNNAMED</option>
+            <option>--add-opens</option>
+            <option>java.base/java.util=ALL-UNNAMED</option>
+            <option>--add-exports</option>
+            <option>java.base/sun.nio.ch=ALL-UNNAMED</option>
+            <option>--add-exports</option>
+            <option>java.management/sun.management=ALL-UNNAMED</option>
+            <option>--add-exports</option>
+            <option>jdk.unsupported/sun.misc=ALL-UNNAMED</option>
+            <option>--add-exports</option>
+            <option>java.xml/com.sun.org.apache.xerces.internal.dom=ALL-UNNAMED</option>
+            <option>--add-opens</option>
+            <option>java.xml/com.sun.org.apache.xerces.internal.util=ALL-UNNAMED</option>
+            <option>--add-opens</option>
+            <option>java.xml/com.sun.org.apache.xerces.internal.parsers=ALL-UNNAMED</option>
+            <option>--add-opens</option>
+            <option>java.xml/com.sun.org.apache.xerces.internal.impl=ALL-UNNAMED</option>
+            <option>--add-opens</option>
+            <option>java.xml/com.sun.org.apache.xerces.internal.impl.dtd=ALL-UNNAMED</option>
+            <option>--add-opens</option>
+            <option>java.xml/com.sun.org.apache.xerces.internal.impl.xs=ALL-UNNAMED</option>
+            <option>--add-opens</option>
+            <option>java.xml/com.sun.org.apache.xml.internal.serialize=ALL-UNNAMED</option>
+            <option>--add-opens</option>
+            <option>java.base/java.io=ALL-UNNAMED</option>
+            <option>--add-opens</option>
+            <option>java.base/java.util.regex=ALL-UNNAMED</option>
+          </options>
+          <stripDebug>true</stripDebug>
+          <compress>2</compress>
+          <noHeaderFiles>true</noHeaderFiles>
+          <noManPages>true</noManPages>
+          <launcher>rakcha</launcher>
+          <jlinkImageName>rakcha-app</jlinkImageName>
+          <jlinkZipName>rakcha-app</jlinkZipName>
+          <jlinkJmodsPath>target/jmods</jlinkJmodsPath>
+          <jlinkModules>
+            javafx.controls,javafx.fxml,javafx.web,javafx.swing,javafx.media,java.sql,java.xml,java.naming,java.desktop</jlinkModules>
+        </configuration>
+      </plugin>
+
+      <!-- Maven Exec Plugin for running the application -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.1.1</version>
+        <configuration>
+          <mainClass>com.esprit.MainApp</mainClass>
+          <classpathScope>runtime</classpathScope>
+          <cleanupDaemonThreads>false</cleanupDaemonThreads>
+          <systemProperties>
+            <systemProperty>
+              <key>javax.xml.stream.XMLInputFactory</key>
+              <value>com.ctc.wstx.stax.WstxInputFactory</value>
+            </systemProperty>
+            <systemProperty>
+              <key>javax.xml.stream.XMLOutputFactory</key>
+              <value>com.ctc.wstx.stax.WstxOutputFactory</value>
+            </systemProperty>
+            <systemProperty>
+              <key>javax.xml.stream.XMLEventFactory</key>
+              <value>com.ctc.wstx.stax.WstxEventFactory</value>
+            </systemProperty>
+            <systemProperty>
+              <key>jakarta.xml.bind.JAXBContextFactory</key>
+              <value>org.glassfish.jaxb.runtime.v2.JAXBContextFactory</value>
+            </systemProperty>
+            <systemProperty>
+              <key>hibernate.jakarta.xml.bind.JAXBContextFactory</key>
+              <value>org.glassfish.jaxb.runtime.v2.JAXBContextFactory</value>
+            </systemProperty>
+          </systemProperties>
         </configuration>
       </plugin>
 
@@ -487,13 +666,14 @@
             <version>1.12.0</version>
           </dependency>
         </dependencies>
-      </plugin>      <!-- Javadoc Plugin for Documentation Generation -->
+      </plugin>      <!--
+      Javadoc Plugin for Documentation Generation -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>3.6.3</version>
         <configuration>
-          <source>21</source>
+          <source>17</source>
           <encoding>UTF-8</encoding>
           <docencoding>UTF-8</docencoding>
           <charset>UTF-8</charset>
@@ -501,7 +681,8 @@
           <nohelp>true</nohelp>
           <failOnError>false</failOnError>
           <failOnWarnings>false</failOnWarnings>
-          <quiet>true</quiet>          <reportOutputDirectory>${project.basedir}</reportOutputDirectory>
+          <quiet>true</quiet>
+          <reportOutputDirectory>${project.basedir}</reportOutputDirectory>
           <destDir>docs</destDir>
           <additionalJOptions>
             <additionalJOption>-Xdoclint:none</additionalJOption>
@@ -651,6 +832,91 @@
           </execution>
         </executions>
       </plugin>
+
+      <!-- OWASP Dependency Check Plugin -->
+      <plugin>
+        <groupId>org.owasp</groupId>
+        <artifactId>dependency-check-maven</artifactId>
+        <version>9.0.7</version>
+        <configuration>
+          <failBuildOnCVSS>7</failBuildOnCVSS>
+          <suppressionFile>owasp-suppressions.xml</suppressionFile>
+          <formats>
+            <format>HTML</format>
+            <format>XML</format>
+            <format>SARIF</format>
+          </formats>
+          <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
+          <nodeAnalyzerEnabled>false</nodeAnalyzerEnabled>
+          <nodeAuditAnalyzerEnabled>false</nodeAuditAnalyzerEnabled>
+          <retireJsAnalyzerEnabled>false</retireJsAnalyzerEnabled>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- License Maven Plugin -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>license-maven-plugin</artifactId>
+        <version>2.3.0</version>
+        <configuration>
+          <verbose>false</verbose>
+          <addSvnKeyWords>true</addSvnKeyWords>
+          <licenseName>mit</licenseName>
+          <roots>
+            <root>src/main/java</root>
+            <root>src/test/java</root>
+          </roots>
+        </configuration>
+        <executions>
+          <execution>
+            <id>first</id>
+            <goals>
+              <goal>update-file-header</goal>
+            </goals>
+            <phase>process-sources</phase>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Versions Maven Plugin for dependency updates -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>versions-maven-plugin</artifactId>
+        <version>2.16.2</version>
+        <configuration>
+          <generateBackupPoms>false</generateBackupPoms>
+        </configuration>
+      </plugin>
+
+      <!-- Maven Deploy Plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>3.1.1</version>
+      </plugin>
+
+      <!-- Maven Site Plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>4.0.0-M13</version>
+      </plugin>
+
+      <!-- Maven Project Info Reports Plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>3.4.5</version>
+      </plugin>
+
+      <!-- ...existing plugins... -->
     </plugins>
   </build>
 </project>
