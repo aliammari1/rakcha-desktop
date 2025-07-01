@@ -1,3 +1,15 @@
+# RAKCHA Desktop Application
+
+[![CI](https://github.com/aliammari1/rakcha-desktop/workflows/CI%20-%20Continuous%20Integration/badge.svg)](https://github.com/aliammari1/rakcha-desktop/actions/workflows/ci.yml)
+[![CD](https://github.com/aliammari1/rakcha-desktop/workflows/CD%20-%20Continuous%20Deployment/badge.svg)](https://github.com/aliammari1/rakcha-desktop/actions/workflows/cd.yml)
+[![Security](https://github.com/aliammari1/rakcha-desktop/workflows/Security%20and%20Dependency%20Scanning/badge.svg)](https://github.com/aliammari1/rakcha-desktop/actions/workflows/security.yml)
+[![JavaFX Tests](https://github.com/aliammari1/rakcha-desktop/workflows/JavaFX%20Application%20Tests/badge.svg)](https://github.com/aliammari1/rakcha-desktop/actions/workflows/javafx-tests.yml)
+[![Database Tests](https://github.com/aliammari1/rakcha-desktop/workflows/Database%20Integration%20Tests/badge.svg)](https://github.com/aliammari1/rakcha-desktop/actions/workflows/database-tests.yml)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Java](https://img.shields.io/badge/java-17+-orange.svg)](https://openjdk.java.net/)
+[![JavaFX](https://img.shields.io/badge/javafx-17+-green.svg)](https://openjfx.io/)
+[![SQLite](https://img.shields.io/badge/database-sqlite-blue.svg)](https://www.sqlite.org/)
+
 # 🎬 RAKCHA - Ultimate Entertainment Hub (MVP Ready for Product Hunt)
 
 ![RAKCHA Logo](src/main/resources/Logo.png)
