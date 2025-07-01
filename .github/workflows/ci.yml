@@ -50,8 +50,16 @@ jobs:
           export DISPLAY=:99
           Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
 
-      - name: Create data directory
+      - name: Create data directory (Unix)
+        if: runner.os != 'Windows'
         run: mkdir -p data
+
+      - name: Create data directory (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          if (!(Test-Path "data")) {
+            New-Item -ItemType Directory -Path "data"
+          }
 
       - name: Set database environment variables
         run: |
