@@ -9,6 +9,9 @@ on:
 env:
   JAVA_VERSION: "17"
   MAVEN_OPTS: "-Xmx1024m"
+  TESTFX_HEADLESS: "true"
+  TESTFX_ROBOT: "glass"
+  PRISM_ORDER: "sw"
 
 jobs:
   test:
@@ -46,9 +49,10 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: |
           sudo apt-get update
-          sudo apt-get install -y xvfb
+          sudo apt-get install -y xvfb libxtst6 libxrender1 libxi6 libgl1-mesa-glx fontconfig
           export DISPLAY=:99
-          Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+          Xvfb :99 -screen 0 1280x1024x24 -ac > /dev/null 2>&1 &
+          sleep 3 # Wait for Xvfb to start completely
 
       - name: Create data directory (Unix)
         if: runner.os != 'Windows'
@@ -63,10 +67,17 @@ jobs:
 
       - name: Set database environment variables
         run: |
-          echo "DB_TYPE=sqlite" >> $GITHUB_ENV
-          echo "DB_URL=jdbc:sqlite:data/rakcha_db.sqlite" >> $GITHUB_ENV
-          echo "DB_USER=" >> $GITHUB_ENV
-          echo "DB_PASSWORD=" >> $GITHUB_ENV
+          if [ "${{ runner.os }}" = "Windows" ]; then
+            echo "DB_TYPE=sqlite" >> $env:GITHUB_ENV
+            echo "DB_URL=jdbc:sqlite:data/rakcha_db.sqlite" >> $env:GITHUB_ENV
+            echo "DB_USER=" >> $env:GITHUB_ENV
+            echo "DB_PASSWORD=" >> $env:GITHUB_ENV
+          else
+            echo "DB_TYPE=sqlite" >> $GITHUB_ENV
+            echo "DB_URL=jdbc:sqlite:data/rakcha_db.sqlite" >> $GITHUB_ENV
+            echo "DB_USER=" >> $GITHUB_ENV
+            echo "DB_PASSWORD=" >> $GITHUB_ENV
+          fi
 
       - name: Validate Maven project
         run: mvn validate
@@ -79,6 +90,14 @@ jobs:
         env:
           DISPLAY: ${{ matrix.display }}
           TESTFX_HEADLESS: true
+          JAVA_OPTS: >-
+            --add-opens javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
+            --add-exports javafx.graphics/com.sun.glass.ui=ALL-UNNAMED
+            --add-opens javafx.controls/javafx.scene.control=ALL-UNNAMED
+            --add-opens javafx.base/com.sun.javafx.event=ALL-UNNAMED
+            --add-opens java.base/java.lang.reflect=ALL-UNNAMED
+            --add-exports javafx.graphics/com.sun.glass.ui=ALL-UNNAMED
+            -Dprism.order=sw
 
       - name: Run integration tests
         run: mvn verify -DskipUnitTests=true
@@ -96,8 +115,9 @@ jobs:
         if: success() || failure()
         with:
           name: Maven Tests (${{ matrix.os }})
-          path: target/surefire-reports/*.xml
+          path: "**/target/surefire-reports/TEST-*.xml"
           reporter: java-junit
+          fail-on-error: false
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
@@ -178,6 +198,35 @@ jobs:
           echo "DB_URL=jdbc:sqlite:data/rakcha_db.sqlite" >> $GITHUB_ENV
           echo "DB_USER=" >> $GITHUB_ENV
           echo "DB_PASSWORD=" >> $GITHUB_ENV
+
+      - name: Initialize SQLite database (if needed)
+        run: |
+          if [ -f "rakcha_db.sql" ]; then
+            if [ "${{ runner.os }}" = "Windows" ]; then
+              # For Windows, use PowerShell to initialize SQLite
+              powershell -Command "if (!(Test-Path 'data/rakcha_db.sqlite')) { sqlite3 data/rakcha_db.sqlite '.read rakcha_db.sql' }"
+            else
+              # For Linux/macOS
+              if [ ! -f "data/rakcha_db.sqlite" ]; then
+                if command -v sqlite3 &> /dev/null; then
+                  echo "Initializing SQLite database from schema..."
+                  sqlite3 data/rakcha_db.sqlite < rakcha_db.sql
+                else
+                  echo "SQLite3 command not found, installing..."
+                  if [ "$(uname)" = "Darwin" ]; then
+                    brew install sqlite3
+                  else
+                    sudo apt-get install -y sqlite3
+                  fi
+                  sqlite3 data/rakcha_db.sqlite < rakcha_db.sql
+                fi
+              fi
+            fi
+            echo "Database initialized successfully."
+          else
+            echo "No database schema found (rakcha_db.sql), skipping initialization."
+            touch data/rakcha_db.sqlite
+          fi
 
       - name: Package application
         run: mvn package -DskipTests

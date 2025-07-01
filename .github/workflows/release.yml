@@ -118,7 +118,7 @@ jobs:
           fi
 
           # Generate changelog
-          CHANGELOG=$(cat << 'EOF'
+          CHANGELOG=$(cat << EOF
           ## What's Changed
 
           ### Features
