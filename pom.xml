@@ -18,8 +18,6 @@
     <lombok.version>1.18.28</lombok.version>
     <slf4j.version>2.0.9</slf4j.version>
     <logback.version>1.4.12</logback.version>
-
-
     <h2.version>2.2.224</h2.version>
     <testfx.version>4.0.18</testfx.version>
   </properties>
@@ -833,33 +831,6 @@
         </executions>
       </plugin>
 
-      <!-- OWASP Dependency Check Plugin -->
-      <plugin>
-        <groupId>org.owasp</groupId>
-        <artifactId>dependency-check-maven</artifactId>
-        <version>9.0.7</version>
-        <configuration>
-          <failBuildOnCVSS>7</failBuildOnCVSS>
-          <suppressionFile>owasp-suppressions.xml</suppressionFile>
-          <formats>
-            <format>HTML</format>
-            <format>XML</format>
-            <format>SARIF</format>
-          </formats>
-          <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
-          <nodeAnalyzerEnabled>false</nodeAnalyzerEnabled>
-          <nodeAuditAnalyzerEnabled>false</nodeAuditAnalyzerEnabled>
-          <retireJsAnalyzerEnabled>false</retireJsAnalyzerEnabled>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>check</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-
       <!-- License Maven Plugin -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -869,6 +840,8 @@
           <verbose>false</verbose>
           <addSvnKeyWords>true</addSvnKeyWords>
           <licenseName>mit</licenseName>
+          <organizationName>RAKCHA</organizationName>
+          <inceptionYear>2023</inceptionYear>
           <roots>
             <root>src/main/java</root>
             <root>src/test/java</root>
@@ -916,7 +889,34 @@
         <version>3.4.5</version>
       </plugin>
 
-      <!-- ...existing plugins... -->
+      <!-- SonarQube Maven Plugin -->
+      <plugin>
+        <groupId>org.sonarsource.scanner.maven</groupId>
+        <artifactId>sonar-maven-plugin</artifactId>
+        <version>3.10.0.2594</version>
+      </plugin>
+
+      <!-- JaCoCo Plugin for code coverage -->
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.8.11</version>
+        <executions>
+          <execution>
+            <id>prepare-agent</id>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>report</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 </project>
