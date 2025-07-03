@@ -47,11 +47,11 @@ public class ShoppingCart {
      * Constructor without id for creating new shopping cart instances.
      *
      * @param quantity
-     *            The quantity of the product in the cart.
+     *                 The quantity of the product in the cart.
      * @param product
-     *            The product associated with the cart.
+     *                 The product associated with the cart.
      * @param user
-     *            The user associated with the cart.
+     *                 The user associated with the cart.
      */
     public ShoppingCart(final int quantity, final Product product, final User user) {
         this.quantity = quantity;

@@ -214,6 +214,21 @@
       <version>9.0.0</version>
     </dependency>
     <dependency>
+      <groupId>com.cloudinary</groupId>
+      <artifactId>cloudinary-http5</artifactId>
+      <version>2.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.cloudinary</groupId>
+      <artifactId>cloudinary-taglib</artifactId>
+      <version>2.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>io.github.cdimascio</groupId>
+      <artifactId>dotenv-java</artifactId>
+      <version>2.2.4</version>
+    </dependency>
+    <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
       <version>21.0.2</version>
@@ -474,28 +489,6 @@
         </executions>
       </plugin>
 
-      <!-- Maven JAR Plugin with proper manifest -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <version>3.3.0</version>
-        <configuration>
-          <archive>
-            <manifest>
-              <addClasspath>true</addClasspath>
-              <classpathPrefix>lib/</classpathPrefix>
-              <mainClass>com.esprit.MainApp</mainClass>
-              <classpathLayoutType>custom</classpathLayoutType>
-              <customClasspathLayout>
-                lib/$${artifact.groupId}.$${artifact.artifactId}.$${artifact.extension}</customClasspathLayout>
-            </manifest>
-            <manifestEntries>
-              <Class-Path>.</Class-Path>
-            </manifestEntries>
-          </archive>
-        </configuration>
-      </plugin>
-
       <!-- JavaFX Maven Plugin -->
       <plugin>
         <groupId>org.openjfx</groupId>
@@ -550,9 +543,6 @@
           <launcher>rakcha</launcher>
           <jlinkImageName>rakcha-app</jlinkImageName>
           <jlinkZipName>rakcha-app</jlinkZipName>
-          <jlinkJmodsPath>target/jmods</jlinkJmodsPath>
-          <jlinkModules>
-            javafx.controls,javafx.fxml,javafx.web,javafx.swing,javafx.media,java.sql,java.xml,java.naming,java.desktop</jlinkModules>
         </configuration>
       </plugin>
 
@@ -666,7 +656,7 @@
         </dependencies>
       </plugin>      <!--
       Javadoc Plugin for Documentation Generation -->
-      <plugin>
+      <!-- <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>3.6.3</version>
@@ -680,8 +670,8 @@
           <failOnError>false</failOnError>
           <failOnWarnings>false</failOnWarnings>
           <quiet>true</quiet>
-          <reportOutputDirectory>${project.basedir}</reportOutputDirectory>
-          <destDir>docs</destDir>
+          <reportOutputDirectory>${project.build.directory}/reports</reportOutputDirectory>
+          <destDir>apidocs</destDir>
           <additionalJOptions>
             <additionalJOption>-Xdoclint:none</additionalJOption>
           </additionalJOptions>
@@ -718,6 +708,41 @@
             </goals>
           </execution>
         </executions>
+      </plugin> -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.6.3</version>
+        <configuration>
+          <source>17</source>
+          <encoding>UTF-8</encoding>
+          <docencoding>UTF-8</docencoding>
+          <charset>UTF-8</charset>
+          <reportOutputDirectory>${project.build.directory}/reports</reportOutputDirectory>
+          <destDir>apidocs</destDir>
+          <tags>
+            <tag>
+              <name>apiNote</name>
+              <placement>a</placement>
+              <head>API Note:</head>
+            </tag>
+            <tag>
+              <name>implSpec</name>
+              <placement>a</placement>
+              <head>Implementation Requirements:</head>
+            </tag>
+            <tag>
+              <name>implNote</name>
+              <placement>a</placement>
+              <head>Implementation Note:</head>
+            </tag>
+            <tag>
+              <name>returns</name>
+              <placement>m</placement>
+              <head>Returns:</head>
+            </tag>
+          </tags>
+        </configuration>
       </plugin>
 
       <!-- SpotBugs Plugin for Static Analysis -->
@@ -741,132 +766,6 @@
         </executions>
       </plugin>
 
-      <!-- Checkstyle Plugin for Code Style -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>3.3.1</version>
-        <configuration>
-          <configLocation>checkstyle.xml</configLocation>
-          <consoleOutput>true</consoleOutput>
-          <failsOnError>false</failsOnError>
-          <linkXRef>false</linkXRef>
-        </configuration>
-        <executions>
-          <execution>
-            <id>validate</id>
-            <phase>validate</phase>
-            <goals>
-              <goal>check</goal>
-            </goals>
-          </execution>
-        </executions>
-        <dependencies>
-          <dependency>
-            <groupId>com.puppycrawl.tools</groupId>
-            <artifactId>checkstyle</artifactId>
-            <version>10.12.7</version>
-          </dependency>
-        </dependencies>
-      </plugin>
-
-      <!-- PMD Plugin for Code Quality -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-pmd-plugin</artifactId>
-        <version>3.21.2</version>
-        <configuration>
-          <rulesets>
-            <ruleset>/category/java/bestpractices.xml</ruleset>
-            <ruleset>/category/java/codestyle.xml</ruleset>
-            <ruleset>/category/java/design.xml</ruleset>
-            <ruleset>/category/java/errorprone.xml</ruleset>
-            <ruleset>/category/java/performance.xml</ruleset>
-            <ruleset>/category/java/security.xml</ruleset>
-          </rulesets>
-          <failOnViolation>false</failOnViolation>
-          <printFailingErrors>true</printFailingErrors>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>check</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-
-      <!-- Failsafe Plugin for Integration Tests -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-failsafe-plugin</artifactId>
-        <version>3.2.5</version>
-        <configuration>
-          <argLine>
-            --add-opens javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
-            --add-exports javafx.graphics/com.sun.glass.ui=ALL-UNNAMED
-            --add-opens javafx.controls/javafx.scene.control=ALL-UNNAMED
-            --add-opens javafx.controls/javafx.scene.control.skin=ALL-UNNAMED
-            --add-opens javafx.base/com.sun.javafx.event=ALL-UNNAMED
-            --add-opens javafx.base/com.sun.javafx=ALL-UNNAMED
-            --add-opens java.base/java.lang.reflect=ALL-UNNAMED
-            -Djava.awt.headless=false
-            -Dtestfx.robot=glass
-            -Dtestfx.headless=false
-            -Dprism.order=sw
-          </argLine>
-          <includes>
-            <include>**/*IT.java</include>
-            <include>**/*E2E.java</include>
-            <include>**/*IntegrationTest.java</include>
-          </includes>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>integration-test</goal>
-              <goal>verify</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-
-      <!-- License Maven Plugin -->
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>license-maven-plugin</artifactId>
-        <version>2.3.0</version>
-        <configuration>
-          <verbose>false</verbose>
-          <addSvnKeyWords>true</addSvnKeyWords>
-          <licenseName>mit</licenseName>
-          <organizationName>RAKCHA</organizationName>
-          <inceptionYear>2023</inceptionYear>
-          <roots>
-            <root>src/main/java</root>
-            <root>src/test/java</root>
-          </roots>
-        </configuration>
-        <executions>
-          <execution>
-            <id>first</id>
-            <goals>
-              <goal>update-file-header</goal>
-            </goals>
-            <phase>process-sources</phase>
-          </execution>
-        </executions>
-      </plugin>
-
-      <!-- Versions Maven Plugin for dependency updates -->
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>versions-maven-plugin</artifactId>
-        <version>2.16.2</version>
-        <configuration>
-          <generateBackupPoms>false</generateBackupPoms>
-        </configuration>
-      </plugin>
 
       <!-- Maven Deploy Plugin -->
       <plugin>
@@ -887,13 +786,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
         <version>3.4.5</version>
-      </plugin>
-
-      <!-- SonarQube Maven Plugin -->
-      <plugin>
-        <groupId>org.sonarsource.scanner.maven</groupId>
-        <artifactId>sonar-maven-plugin</artifactId>
-        <version>3.10.0.2594</version>
       </plugin>
 
       <!-- JaCoCo Plugin for code coverage -->

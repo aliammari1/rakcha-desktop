@@ -52,11 +52,11 @@ public class DemoVideoGenerator {
      * Create a demo video from a series of screenshots
      *
      * @param screenshotPaths
-     *            Array of screenshot file paths
+     *                         Array of screenshot file paths
      * @param outputFilename
-     *            Output video filename (without extension)
+     *                         Output video filename (without extension)
      * @param durationPerImage
-     *            Duration in seconds for each image
+     *                         Duration in seconds for each image
      * @return Path to the generated video file
      */
     public static Path createVideoFromScreenshots(Path[] screenshotPaths, String outputFilename,
@@ -134,9 +134,9 @@ public class DemoVideoGenerator {
      * installation)
      *
      * @param durationSeconds
-     *            Duration of recording in seconds
+     *                        Duration of recording in seconds
      * @param outputFilename
-     *            Output filename (without extension)
+     *                        Output filename (without extension)
      * @return Path to the generated video file or null if failed
      */
     public static Path createScreenRecording(int durationSeconds, String outputFilename) {

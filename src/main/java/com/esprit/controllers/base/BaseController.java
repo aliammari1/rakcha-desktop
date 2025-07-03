@@ -23,10 +23,20 @@ import net.synedra.validatorfx.Validator;
 
 /**
  * Generic base controller providing common functionality for CRUD operations
- * and UI management. Reduces boilerplate code across controllers.
+ * and UI management.
+ * 
+ * <p>
+ * This abstract class reduces boilerplate code across controllers by providing
+ * common functionality such as table setup, search functionality, validation,
+ * and standard UI operations. It follows the Template Method pattern where
+ * concrete implementations provide specific behavior while common operations
+ * are handled by this base class.
+ * </p>
  *
- * @param <T>
- *            The entity type this controller manages
+ * @param <T> the entity type this controller manages
+ * @author Esprit Team
+ * @version 1.0
+ * @since 1.0
  */
 public abstract class BaseController<T> {
 
@@ -47,7 +57,13 @@ public abstract class BaseController<T> {
     protected ImageView imageView;
 
     /**
-     * Initialize the controller with common setup
+     * Initialize the controller with common setup.
+     * 
+     * <p>
+     * This method is called automatically when the FXML file is loaded.
+     * It sets up validation, table view, search functionality, and loads initial
+     * data.
+     * </p>
      */
     @FXML
     protected void initialize() {
@@ -59,7 +75,12 @@ public abstract class BaseController<T> {
     }
 
     /**
-     * Setup the TableView with common configurations
+     * Setup the TableView with common configurations.
+     * 
+     * <p>
+     * Configures table view properties, sets up columns, cell factories,
+     * and initializes filtered and sorted lists for data binding.
+     * </p>
      */
     protected void setupTableView() {
         if (tableView != null) {
@@ -78,7 +99,7 @@ public abstract class BaseController<T> {
     }
 
     /**
-     * Setup search functionality
+     * Setup search functionality for the table view.
      */
     protected void setupSearch() {
         if (searchTextField != null && filteredItems != null) {
@@ -89,42 +110,79 @@ public abstract class BaseController<T> {
     }
 
     /**
-     * Setup validation for form fields
+     * Setup validation for form fields.
+     * 
+     * <p>
+     * This method must be implemented by subclasses to define specific
+     * validation rules for their form fields.
+     * </p>
      */
     protected abstract void setupValidation();
 
     /**
-     * Setup table columns - to be implemented by subclasses
+     * Setup table columns - to be implemented by subclasses.
+     * 
+     * <p>
+     * Subclasses should implement this method to define their specific
+     * table column structure and properties.
+     * </p>
      */
     protected abstract void setupTableColumns();
 
     /**
-     * Setup cell factories for table columns
+     * Setup cell factories for table columns.
+     * 
+     * <p>
+     * Subclasses should implement this method to define custom cell
+     * factories for their table columns.
+     * </p>
      */
     protected abstract void setupCellFactories();
 
     /**
-     * Setup cell value factories for table columns
+     * Setup cell value factories for table columns.
+     * 
+     * <p>
+     * Subclasses should implement this method to bind table columns
+     * to entity properties.
+     * </p>
      */
     protected abstract void setupCellValueFactories();
 
     /**
-     * Setup cell edit commit handlers
+     * Setup cell edit commit handlers for editable columns.
+     * 
+     * <p>
+     * Subclasses should implement this method to handle cell edit
+     * commit events for editable table columns.
+     * </p>
      */
     protected abstract void setupCellEditCommit();
 
     /**
-     * Create search predicate for filtering
+     * Create search predicate for filtering table data.
+     * 
+     * @param searchText the text to search for
+     * @return a predicate that filters entities based on the search text
      */
     protected abstract Predicate<T> createSearchPredicate(String searchText);
 
     /**
-     * Load data into the table
+     * Load data into the table.
+     * 
+     * <p>
+     * Subclasses should implement this method to load their specific
+     * entity data from the appropriate service layer.
+     * </p>
      */
     protected abstract void loadData();
 
     /**
-     * Add validation listener to a text field
+     * Add validation listener to a text field.
+     * 
+     * @param textField           the text field to add validation to
+     * @param validationPredicate the predicate to validate the text
+     * @param errorMessage        the error message to display if validation fails
      */
     protected void addValidationListener(TextField textField, Predicate<String> validationPredicate,
             String errorMessage) {
@@ -147,7 +205,13 @@ public abstract class BaseController<T> {
     }
 
     /**
-     * Generic method to create text field table cells with validation
+     * Generic method to create text field table cells with validation.
+     * 
+     * @param <S>          the type of the cell value
+     * @param converter    the string converter for the cell value
+     * @param validator    the predicate to validate the cell value
+     * @param errorMessage the error message to display if validation fails
+     * @return a callback that creates validated text field table cells
      */
     protected <S> Callback<TableColumn<T, S>, TableCell<T, S>> createTextFieldCellFactory(StringConverter<S> converter,
             Predicate<S> validator, String errorMessage) {
@@ -155,9 +219,10 @@ public abstract class BaseController<T> {
             TextFieldTableCell<T, S> cell = new TextFieldTableCell<T, S>(converter) {
                 @Override
                 /**
-                 * Performs updateItem operation.
+                 * Updates the item display in the table cell.
                  *
-                 * @return the result of the operation
+                 * @param item  the item to display
+                 * @param empty whether the cell is empty
                  */
                 public void updateItem(S item, boolean empty) {
                     super.updateItem(item, empty);
@@ -175,7 +240,9 @@ public abstract class BaseController<T> {
     }
 
     /**
-     * Generic method to create delete button column
+     * Generic method to create delete button column.
+     * 
+     * @return a table column with delete buttons for each row
      */
     protected TableColumn<T, Button> createDeleteColumn() {
         TableColumn<T, Button> deleteColumn = new TableColumn<>("Actions");
@@ -226,29 +293,33 @@ public abstract class BaseController<T> {
     }
 
     /**
-     * Clear all form fields
+     * Clear all form fields.
      */
     @FXML
     protected abstract void clearFields();
 
     /**
-     * Save/Create new item
+     * Save/Create new item.
      */
     @FXML
     protected abstract void saveItem();
 
     /**
-     * Update existing item
+     * Update existing item.
+     * 
+     * @param item the item to update
      */
     protected abstract void updateItem(T item);
 
     /**
-     * Delete item
+     * Delete item.
+     * 
+     * @param item the item to delete
      */
     protected abstract void deleteItem(T item);
 
     /**
-     * Refresh the table data
+     * Refresh the table data.
      */
     @FXML
     protected void refreshTable() {
@@ -256,7 +327,10 @@ public abstract class BaseController<T> {
     }
 
     /**
-     * Show error alert dialog
+     * Show error alert dialog.
+     * 
+     * @param title   the alert title
+     * @param message the alert message
      */
     protected void showErrorAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -267,7 +341,10 @@ public abstract class BaseController<T> {
     }
 
     /**
-     * Show information alert dialog
+     * Show information alert dialog.
+     * 
+     * @param title   the alert title
+     * @param message the alert message
      */
     protected void showInfoAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -278,7 +355,11 @@ public abstract class BaseController<T> {
     }
 
     /**
-     * Show confirmation dialog
+     * Show confirmation dialog.
+     * 
+     * @param title   the alert title
+     * @param message the alert message
+     * @return true if user confirms, false otherwise
      */
     protected boolean showConfirmationDialog(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -289,19 +370,25 @@ public abstract class BaseController<T> {
     }
 
     /**
-     * Validate form fields before save/update
+     * Validate form fields before save/update.
+     * 
+     * @return true if form is valid, false otherwise
      */
     protected abstract boolean validateForm();
 
     /**
-     * Get selected item from table
+     * Get selected item from table.
+     * 
+     * @return the currently selected item, or null if none selected
      */
     protected T getSelectedItem() {
         return tableView != null ? tableView.getSelectionModel().getSelectedItem() : null;
     }
 
     /**
-     * Select item in table
+     * Select item in table.
+     * 
+     * @param item the item to select
      */
     protected void selectItem(T item) {
         if (tableView != null && item != null) {

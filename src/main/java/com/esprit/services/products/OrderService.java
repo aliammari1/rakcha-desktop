@@ -43,7 +43,7 @@ public class OrderService implements IService<Order> {
      * Creates a new entity in the database.
      *
      * @param entity
-     *            the entity to create
+     *               the entity to create
      */
     public void create(final Order order) {
         final String req = "INSERT into orders(order_date, status, client_id, phone_number, address) values (?, ?, ?, ?, ?)";
@@ -141,7 +141,7 @@ public class OrderService implements IService<Order> {
      * Updates an existing entity in the database.
      *
      * @param entity
-     *            the entity to update
+     *               the entity to update
      */
     public void update(final Order order) {
         final String req = "UPDATE orders SET order_date = ?, status = ?, phone_number = ?, address = ? WHERE id = ?";
@@ -164,7 +164,7 @@ public class OrderService implements IService<Order> {
      * Deletes an entity from the database.
      *
      * @param id
-     *            the ID of the entity to delete
+     *           the ID of the entity to delete
      */
     public void delete(final Order order) {
         final String req = "DELETE from orders where id = ?";

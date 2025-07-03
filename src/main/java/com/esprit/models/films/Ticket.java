@@ -60,13 +60,13 @@ public class Ticket {
      * Constructor without id for creating new ticket instances.
      *
      * @param numberOfSeats
-     *            The number of seats for the ticket.
+     *                      The number of seats for the ticket.
      * @param client
-     *            The client associated with the ticket.
+     *                      The client associated with the ticket.
      * @param movieSession
-     *            The movie session associated with the ticket.
+     *                      The movie session associated with the ticket.
      * @param price
-     *            The price of the ticket.
+     *                      The price of the ticket.
      */
     public Ticket(final int numberOfSeats, final Client client, final MovieSession movieSession, final float price) {
         this.numberOfSeats = numberOfSeats;

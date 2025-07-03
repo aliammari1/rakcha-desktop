@@ -44,7 +44,7 @@ public class ProductService implements IService<Product> {
      * Creates a new entity in the database.
      *
      * @param entity
-     *            the entity to create
+     *               the entity to create
      */
     public void create(final Product product) {
         final String req = "INSERT into products(name, price, image, description, quantity) values (?, ?, ?, ?, ?)";
@@ -161,7 +161,7 @@ public class ProductService implements IService<Product> {
      * Updates an existing entity in the database.
      *
      * @param entity
-     *            the entity to update
+     *               the entity to update
      */
     public void update(final Product product) {
         final String req = "UPDATE products SET name = ?, price = ?, description = ?, image = ?, quantity = ? WHERE id = ?";
@@ -204,7 +204,7 @@ public class ProductService implements IService<Product> {
      * Deletes an entity from the database.
      *
      * @param id
-     *            the ID of the entity to delete
+     *           the ID of the entity to delete
      */
     public void delete(final Product product) {
         try {

@@ -79,7 +79,7 @@ public class SeatService {
      * Creates a new entity in the database.
      *
      * @param entity
-     *            the entity to create
+     *               the entity to create
      */
     public void create(Seat seat) {
         String query = "INSERT INTO seats (seat_number, row_number, is_occupied, cinema_hall_id) VALUES (?, ?, ?, ?)";

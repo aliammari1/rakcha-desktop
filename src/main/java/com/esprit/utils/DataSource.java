@@ -24,7 +24,7 @@ public class DataSource {
     private static DataSource instance;
     // Default URLs for different database types
     private static final String DEFAULT_MYSQL_URL = "jdbc:mysql://localhost:3306/rakcha_db?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true";
-    private static final String DEFAULT_SQLITE_URL = "jdbc:sqlite:data/rakcha_db.sqlite";
+    private static final String DEFAULT_SQLITE_URL = "jdbc:sqlite:data/rakcha.db";
     private static final String DEFAULT_H2_URL = "jdbc:h2:mem:rakcha_db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE";
     private static final String DEFAULT_POSTGRESQL_URL = "jdbc:postgresql://localhost:5432/rakcha_db";
 

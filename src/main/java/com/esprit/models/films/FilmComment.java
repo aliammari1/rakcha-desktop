@@ -47,11 +47,11 @@ public class FilmComment {
      * Constructor without id for creating new comment instances.
      *
      * @param comment
-     *            the comment text
+     *                the comment text
      * @param client
-     *            the user who made the comment
+     *                the user who made the comment
      * @param film
-     *            the film to which the comment belongs
+     *                the film to which the comment belongs
      */
     public FilmComment(final String comment, final Client client, final Film film) {
         this.comment = comment;

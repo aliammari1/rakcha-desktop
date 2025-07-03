@@ -85,7 +85,7 @@ public class UserService implements IService<User> {
      * Creates a new entity in the database.
      *
      * @param entity
-     *            the entity to create
+     *               the entity to create
      */
     public void create(final User user) {
         try {
@@ -140,7 +140,7 @@ public class UserService implements IService<User> {
      * Updates an existing entity in the database.
      *
      * @param entity
-     *            the entity to update
+     *               the entity to update
      */
     public void update(final User user) {
         try {
@@ -169,7 +169,7 @@ public class UserService implements IService<User> {
      * Deletes an entity from the database.
      *
      * @param id
-     *            the ID of the entity to delete
+     *           the ID of the entity to delete
      */
     public void delete(final User user) {
         try {
@@ -223,26 +223,26 @@ public class UserService implements IService<User> {
         while (resultSet.next()) {
             final String role = resultSet.getString("role");
             User user = switch (role) {
-            case "admin" :
-                yield new Admin(resultSet.getString("nom"), resultSet.getString("prenom"),
-                        resultSet.getString("num_telephone"), resultSet.getString("password"),
-                        resultSet.getString("role"), resultSet.getString("adresse"),
-                        resultSet.getDate("date_de_naissance"), resultSet.getString("email"),
-                        resultSet.getString("photo_de_profil"));
-            case "client" :
-                yield new Client(resultSet.getString("nom"), resultSet.getString("prenom"),
-                        resultSet.getString("num_telephone"), resultSet.getString("password"),
-                        resultSet.getString("role"), resultSet.getString("adresse"),
-                        resultSet.getDate("date_de_naissance"), resultSet.getString("email"),
-                        resultSet.getString("photo_de_profil"));
-            case "responsable de cinema" :
-                yield new CinemaManager(resultSet.getString("nom"), resultSet.getString("prenom"),
-                        resultSet.getString("num_telephone"), resultSet.getString("password"),
-                        resultSet.getString("role"), resultSet.getString("adresse"),
-                        resultSet.getDate("date_de_naissance"), resultSet.getString("email"),
-                        resultSet.getString("photo_de_profil"));
-            default :
-                yield null;
+                case "admin":
+                    yield new Admin(resultSet.getString("nom"), resultSet.getString("prenom"),
+                            resultSet.getString("num_telephone"), resultSet.getString("password"),
+                            resultSet.getString("role"), resultSet.getString("adresse"),
+                            resultSet.getDate("date_de_naissance"), resultSet.getString("email"),
+                            resultSet.getString("photo_de_profil"));
+                case "client":
+                    yield new Client(resultSet.getString("nom"), resultSet.getString("prenom"),
+                            resultSet.getString("num_telephone"), resultSet.getString("password"),
+                            resultSet.getString("role"), resultSet.getString("adresse"),
+                            resultSet.getDate("date_de_naissance"), resultSet.getString("email"),
+                            resultSet.getString("photo_de_profil"));
+                case "responsable de cinema":
+                    yield new CinemaManager(resultSet.getString("nom"), resultSet.getString("prenom"),
+                            resultSet.getString("num_telephone"), resultSet.getString("password"),
+                            resultSet.getString("role"), resultSet.getString("adresse"),
+                            resultSet.getDate("date_de_naissance"), resultSet.getString("email"),
+                            resultSet.getString("photo_de_profil"));
+                default:
+                    yield null;
             };
             if (user != null) {
                 user.setId(resultSet.getLong("id"));
@@ -316,26 +316,26 @@ public class UserService implements IService<User> {
             final String role = resultSet.getString("role");
             UserService.LOGGER.info(role);
             User user = switch (role.trim()) {
-            case "admin" :
-                yield new Admin(resultSet.getString("nom"), resultSet.getString("prenom"),
-                        resultSet.getString("num_telephone"), resultSet.getString("password"),
-                        resultSet.getString("role"), resultSet.getString("adresse"),
-                        resultSet.getDate("date_de_naissance"), resultSet.getString("email"),
-                        resultSet.getString("photo_de_profil"));
-            case "client" :
-                yield new Client(resultSet.getString("nom"), resultSet.getString("prenom"),
-                        resultSet.getString("num_telephone"), resultSet.getString("password"),
-                        resultSet.getString("role"), resultSet.getString("adresse"),
-                        resultSet.getDate("date_de_naissance"), resultSet.getString("email"),
-                        resultSet.getString("photo_de_profil"));
-            case "responsable de cinema" :
-                yield new CinemaManager(resultSet.getString("nom"), resultSet.getString("prenom"),
-                        resultSet.getString("num_telephone"), resultSet.getString("password"),
-                        resultSet.getString("role"), resultSet.getString("adresse"),
-                        resultSet.getDate("date_de_naissance"), resultSet.getString("email"),
-                        resultSet.getString("photo_de_profil"));
-            default :
-                yield null;
+                case "admin":
+                    yield new Admin(resultSet.getString("nom"), resultSet.getString("prenom"),
+                            resultSet.getString("num_telephone"), resultSet.getString("password"),
+                            resultSet.getString("role"), resultSet.getString("adresse"),
+                            resultSet.getDate("date_de_naissance"), resultSet.getString("email"),
+                            resultSet.getString("photo_de_profil"));
+                case "client":
+                    yield new Client(resultSet.getString("nom"), resultSet.getString("prenom"),
+                            resultSet.getString("num_telephone"), resultSet.getString("password"),
+                            resultSet.getString("role"), resultSet.getString("adresse"),
+                            resultSet.getDate("date_de_naissance"), resultSet.getString("email"),
+                            resultSet.getString("photo_de_profil"));
+                case "responsable de cinema":
+                    yield new CinemaManager(resultSet.getString("nom"), resultSet.getString("prenom"),
+                            resultSet.getString("num_telephone"), resultSet.getString("password"),
+                            resultSet.getString("role"), resultSet.getString("adresse"),
+                            resultSet.getDate("date_de_naissance"), resultSet.getString("email"),
+                            resultSet.getString("photo_de_profil"));
+                default:
+                    yield null;
             };
             if (user != null) {
                 user.setId(resultSet.getLong("id"));

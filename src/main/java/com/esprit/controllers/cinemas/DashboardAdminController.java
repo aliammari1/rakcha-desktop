@@ -32,11 +32,22 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
- * Is responsible for handling user interactions related to admin dashboards for
- * various applications. It provides functionality to filter and display data
- * from the Cinema, Addresses, Statuses, Events, Movies, and Series modules
- * based on user selections. The controller also handles button clicks to
- * display different views for each module.
+ * Controller responsible for handling admin dashboard operations for cinema
+ * management.
+ * 
+ * <p>
+ * This controller provides functionality to filter and display data from the
+ * Cinema module,
+ * including cinema approval/rejection, movie display, and various filtering
+ * options.
+ * It handles user interactions related to admin dashboards for cinema,
+ * addresses, statuses,
+ * events, movies, and series modules based on user selections.
+ * </p>
+ * 
+ * @author Esprit Team
+ * @version 1.0
+ * @since 1.0
  */
 public class DashboardAdminController {
     private final List<CheckBox> addressCheckBoxes = new ArrayList<>();
@@ -63,9 +74,18 @@ public class DashboardAdminController {
     private AnchorPane filterAnchor;
 
     /**
-     * Configures a table to display cinemas, including their name, address, and
-     * responsible person. It also sets up buttons for accepting or refusing
-     * cinemas, and a button to show movies.
+     * Configures and displays the cinema table with all necessary columns and
+     * action buttons.
+     * 
+     * <p>
+     * This method sets up a table to display cinemas, including their name,
+     * address, and
+     * responsible person. It configures action buttons for accepting or refusing
+     * cinemas, and a button to show movies. The method also handles the visibility
+     * of action buttons based on cinema status.
+     * </p>
+     * 
+     * @since 1.0
      */
     @FXML
     void afficherCinemas() {
@@ -149,6 +169,18 @@ public class DashboardAdminController {
         this.loadCinemas();
     }
 
+    /**
+     * Shows movies for a specific cinema in a modal dialog.
+     * 
+     * <p>
+     * This method creates a new modal dialog window displaying all movies available
+     * at the specified cinema. Movies are shown in a flow pane layout with cards
+     * containing movie information and images.
+     * </p>
+     * 
+     * @param cinema the cinema for which to display movies
+     * @since 1.0
+     */
     private void showFilmsInModal(Cinema cinema) {
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
@@ -177,6 +209,19 @@ public class DashboardAdminController {
         dialog.show();
     }
 
+    /**
+     * Creates a film card UI component for a given film.
+     * 
+     * <p>
+     * This method generates an AnchorPane containing film information including
+     * title, duration, and release year. It also displays the film's poster image
+     * if available, or a default image if not.
+     * </p>
+     * 
+     * @param film the film object containing information to display
+     * @return an AnchorPane containing the formatted film card
+     * @since 1.0
+     */
     private AnchorPane createFilmCard(Film film) {
         AnchorPane card = new AnchorPane();
         card.setPrefSize(200, 300);
@@ -218,7 +263,9 @@ public class DashboardAdminController {
 
     /**
      * Creates an observable list of cinemas by reading them from a service and
-     * setting it as the items of a `ListBox`.
+     * setting it as the items of a table view.
+     * 
+     * @since 1.0
      */
     private void loadCinemas() {
         final CinemaService cinemaService = new CinemaService();
@@ -228,10 +275,10 @@ public class DashboardAdminController {
     }
 
     /**
-     * Retrieves a list of cinemas through the use of the `CinemaService`. The list
-     * is then returned.
+     * Retrieves a list of cinemas through the use of the CinemaService.
      *
-     * @returns a list of Cinema objects retrieved from the Cinema Service.
+     * @return a list of Cinema objects retrieved from the Cinema Service
+     * @since 1.0
      */
     private List<Cinema> getAllCinemas() {
         final CinemaService cinemaService = new CinemaService();
@@ -239,15 +286,16 @@ public class DashboardAdminController {
     }
 
     /**
-     * Adds a listener to the `tfSearch` text field to filter and update the list of
-     * cinemas when the user types in it, loads all cinemas initially, and displays
-     * them.
-     */
-    @FXML
-    /**
      * Initializes the JavaFX controller and sets up UI components. This method is
      * called automatically by JavaFX after loading the FXML file.
+     * 
+     * <p>
+     * This method sets up the search functionality and loads initial cinema data.
+     * </p>
+     * 
+     * @since 1.0
      */
+    @FXML
     public void initialize() {
         if (cinemasList != null) {
             cinemasList.setVisible(true);
@@ -266,8 +314,9 @@ public class DashboardAdminController {
      * list in a TableView.
      *
      * @param searchText
-     *            search term used to filter the list of cinemas displayed on the
-     *            screen.
+     *                   search term used to filter the list of cinemas displayed on
+     *                   the
+     *                   screen.
      */
     private void filterCinemas(final String searchText) {
         // Vérifier si le champ de recherche n'est pas vide
@@ -296,11 +345,11 @@ public class DashboardAdminController {
      * visibility to true.
      *
      * @param event
-     *            ActionEvent that triggered the filtrer method, providing the
-     *            necessary information to update the UI components accordingly.
-     *            <p>
-     *            - `event`: an ActionEvent object representing the user's action
-     *            that triggered the function execution.
+     *              ActionEvent that triggered the filtrer method, providing the
+     *              necessary information to update the UI components accordingly.
+     *              <p>
+     *              - `event`: an ActionEvent object representing the user's action
+     *              that triggered the function execution.
      */
     @FXML
     void filtrer(final ActionEvent event) {
@@ -383,13 +432,16 @@ public class DashboardAdminController {
      * updates the TableView with the filtered list.
      *
      * @param event
-     *            occurrence of an action event, such as a button press or key
-     *            stroke, that triggers the execution of the `filtrercinema` method.
-     *            <p>
-     *            - `Event`: This represents an event object that triggered the
-     *            function to be executed. - `ActionEvent`: This is a specific type
-     *            of event object that indicates that a button or other control was
-     *            pressed.
+     *              occurrence of an action event, such as a button press or key
+     *              stroke, that triggers the execution of the `filtrercinema`
+     *              method.
+     *              <p>
+     *              - `Event`: This represents an event object that triggered the
+     *              function to be executed. - `ActionEvent`: This is a specific
+     *              type
+     *              of event object that indicates that a button or other control
+     *              was
+     *              pressed.
      */
     @FXML
     void filtrercinema(final ActionEvent event) {
@@ -452,12 +504,12 @@ public class DashboardAdminController {
      * stage to the new one.
      *
      * @param event
-     *            event that triggered the function and provides access to its
-     *            related data, allowing the code inside the function to interact
-     *            with it.
-     *            <p>
-     *            - `event`: An `ActionEvent` object representing an action
-     *            performed on the application.
+     *              event that triggered the function and provides access to its
+     *              related data, allowing the code inside the function to interact
+     *              with it.
+     *              <p>
+     *              - `event`: An `ActionEvent` object representing an action
+     *              performed on the application.
      */
     @FXML
     void afficherEventsAdmin(final ActionEvent event) throws IOException {
@@ -477,11 +529,12 @@ public class DashboardAdminController {
      * replaces the current stage with the new one.
      *
      * @param event
-     *            event that triggered the function execution, specifically an
-     *            `ActionEvent` related to the loading of the FXML file.
-     *            <p>
-     *            Event: An event object that represents a user-initiated action or
-     *            event, such as a button click or a key press.
+     *              event that triggered the function execution, specifically an
+     *              `ActionEvent` related to the loading of the FXML file.
+     *              <p>
+     *              Event: An event object that represents a user-initiated action
+     *              or
+     *              event, such as a button click or a key press.
      */
     @FXML
     void afficherMovieAdmin(final ActionEvent event) throws IOException {
@@ -501,12 +554,13 @@ public class DashboardAdminController {
      * interface, and replaces the current stage with the new one.
      *
      * @param event
-     *            event that triggered the execution of the `afficherserieAdmin()`
-     *            function, which is an action event generated by a user's click on
-     *            a button or other element in the FXML file.
-     *            <p>
-     *            - `event` is an `ActionEvent`, indicating that the method was
-     *            called as a result of user action.
+     *              event that triggered the execution of the `afficherserieAdmin()`
+     *              function, which is an action event generated by a user's click
+     *              on
+     *              a button or other element in the FXML file.
+     *              <p>
+     *              - `event` is an `ActionEvent`, indicating that the method was
+     *              called as a result of user action.
      */
     @FXML
     void afficherserieAdmin(final ActionEvent event) throws IOException {
@@ -526,11 +580,12 @@ public class DashboardAdminController {
      * with the new one.
      *
      * @param event
-     *            ActionEvent object that triggered the execution of the
-     *            `AfficherProductAdmin()` method.
-     *            <p>
-     *            - `event`: An `ActionEvent` object representing a user action that
-     *            triggered the function to execute.
+     *              ActionEvent object that triggered the execution of the
+     *              `AfficherProductAdmin()` method.
+     *              <p>
+     *              - `event`: An `ActionEvent` object representing a user action
+     *              that
+     *              triggered the function to execute.
      */
     @FXML
     void AfficherProductAdmin(final ActionEvent event) throws IOException {

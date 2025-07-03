@@ -50,13 +50,13 @@ public class Feedback {
      * Constructor without id for creating new feedback instances.
      *
      * @param userId
-     *            the user ID
+     *                    the user ID
      * @param description
-     *            the feedback description
+     *                    the feedback description
      * @param date
-     *            the date of feedback
+     *                    the date of feedback
      * @param episodeId
-     *            the episode ID
+     *                    the episode ID
      */
     public Feedback(final Long userId, final String description, final Date date, final Long episodeId) {
         this.userId = userId;

@@ -51,9 +51,29 @@ import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
 /**
- * Is responsible for handling payments for a Visa card. It has several methods
- * for validating user input, creating a receipt PDF, and opening the PDF file.
- * The class also initializes an Alert to display error messages if necessary.
+ * Controller class for handling user payments for cinema tickets.
+ * 
+ * <p>
+ * This controller manages the payment process for movie tickets, including
+ * credit card validation, payment processing, and receipt generation. It
+ * provides
+ * a user interface for entering payment details and handles the validation and
+ * submission of payment information.
+ * </p>
+ * 
+ * <p>
+ * Key features include:
+ * </p>
+ * <ul>
+ * <li>Credit card validation with Luhn algorithm</li>
+ * <li>PDF receipt generation</li>
+ * <li>Integration with Stripe payment processing</li>
+ * <li>Cached validation results for improved performance</li>
+ * </ul>
+ * 
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public class PaymentUserController implements Initializable {
     private static final Logger LOGGER = Logger.getLogger(PaymentUserController.class.getName());
@@ -96,22 +116,49 @@ public class PaymentUserController implements Initializable {
     private static final Pattern CARD_NUMBER_PATTERN = Pattern.compile("^4[0-9]{12}(?:[0-9]{3})?$");
     private static final Pattern CVC_PATTERN = Pattern.compile("^[0-9]{3}$");
 
+    /**
+     * Inner class representing the result of a payment validation operation.
+     * Used for caching validation results to improve performance.
+     */
     private static class PaymentValidationResult {
         final boolean isValid;
         final LocalDateTime timestamp;
         final String message;
 
+        /**
+         * Constructs a new validation result.
+         *
+         * @param isValid whether the payment information is valid
+         * @param message the validation message or error
+         */
         PaymentValidationResult(boolean isValid, String message) {
             this.isValid = isValid;
             this.timestamp = LocalDateTime.now();
             this.message = message;
         }
 
+        /**
+         * Checks if the cached validation result has expired.
+         *
+         * @return true if the result was created more than 30 minutes ago
+         */
         boolean isExpired() {
             return LocalDateTime.now().minusMinutes(30).isAfter(timestamp);
         }
     }
 
+    /**
+     * Validates payment information with caching support.
+     * 
+     * <p>
+     * This method checks if a validation result exists in the cache before
+     * performing a full validation of the card number. If an expired or invalid
+     * result is found, it displays an error message.
+     * </p>
+     *
+     * @param cardNumber the card number to validate
+     * @return true if the card number is valid, false otherwise
+     */
     private boolean validatePaymentWithCache(String cardNumber) {
         PaymentValidationResult cached = validationCache.get(cardNumber);
         if (cached != null && !cached.isExpired()) {
@@ -172,7 +219,7 @@ public class PaymentUserController implements Initializable {
      * operator `(int)`.
      *
      * @param value
-     *            floating-point number to be converted to an integer.
+     *              floating-point number to be converted to an integer.
      * @returns an integer value equivalent to the provided floating-point number.
      */
     public static int doubleToInt(final double value) {
@@ -184,11 +231,13 @@ public class PaymentUserController implements Initializable {
      * the value of `client` to the console.
      *
      * @param client
-     *            Client object that provides the payment details for the film name
-     *            set by the `filmName` parameter.
+     *                 Client object that provides the payment details for the film
+     *                 name
+     *                 set by the `filmName` parameter.
      * @param filmName
-     *            name of a film that is being associated with the `Client` object
-     *            passed as an argument to the `setData()` method.
+     *                 name of a film that is being associated with the `Client`
+     *                 object
+     *                 passed as an argument to the `setData()` method.
      */
     public void setData(final Client client, final String filmName) {
         this.client = client;
@@ -246,24 +295,35 @@ public class PaymentUserController implements Initializable {
              * new moviesession data, and adds it to the combobox.
              *
              * @param observableValue
-             *            observable value that has been changed, providing the updated
-             *            value and the previous value (in `s` and `t1`).
+             *                        observable value that has been changed, providing the
+             *                        updated
+             *                        value and the previous value (in `s` and `t1`).
              *
-             *            - `observableValue` is an `ObservableValue` object that represents
-             *            changes to the `MovieSession` list in the UI. - The type of the
-             *            value being observed is a `String`, indicating that the list
-             *            contains strings representing the names of `MovieSession` objects.
-             *            - The third argument, `t1`, is not used in this implementation.
+             *                        - `observableValue` is an `ObservableValue` object
+             *                        that represents
+             *                        changes to the `MovieSession` list in the UI. - The
+             *                        type of the
+             *                        value being observed is a `String`, indicating that
+             *                        the list
+             *                        contains strings representing the names of
+             *                        `MovieSession` objects.
+             *                        - The third argument, `t1`, is not used in this
+             *                        implementation.
              *
              * @param s
-             *            string value of a film label, which is used to retrieve the id of
-             *            the corresponding film and cinema id for displaying moviesession
-             *            options in the combobox.
+             *                        string value of a film label, which is used to
+             *                        retrieve the id of
+             *                        the corresponding film and cinema id for displaying
+             *                        moviesession
+             *                        options in the combobox.
              *
              * @param t1
-             *            2nd string value passed to the function, which is used to populate
-             *            the `checkcomboboxmoviesession_res` widget with available
-             *            moviesession options based on the selected film and cinema.
+             *                        2nd string value passed to the function, which is used
+             *                        to populate
+             *                        the `checkcomboboxmoviesession_res` widget with
+             *                        available
+             *                        moviesession options based on the selected film and
+             *                        cinema.
              */
             @Override
             /**
@@ -300,14 +360,16 @@ public class PaymentUserController implements Initializable {
                      * cinema, and sets the disable status of the payment nodes to false.
                      *
                      * @param change
-                     *            change event that occurs when the user interacts with the
-                     *            `Loujain` list, providing the opportunity to process the changes
-                     *            and update the `MovieSession` objects accordingly.
+                     *               change event that occurs when the user interacts with the
+                     *               `Loujain` list, providing the opportunity to process the
+                     *               changes
+                     *               and update the `MovieSession` objects accordingly.
                      *
-                     *            - `change.next()` returns true if there are more changes to
-                     *            iterate over. - `change.wasAdded()` indicates whether a new
-                     *            element was added to the list or not. If true, the code inside the
-                     *            `if` statement is executed.
+                     *               - `change.next()` returns true if there are more changes to
+                     *               iterate over. - `change.wasAdded()` indicates whether a new
+                     *               element was added to the list or not. If true, the code inside
+                     *               the
+                     *               `if` statement is executed.
                      */
                     @Override
                     /**
@@ -345,27 +407,37 @@ public class PaymentUserController implements Initializable {
              * to the user.
              *
              * @param observableValue
-             *            observeable value that has changed, providing the new value and
-             *            the old value for the method to operate on.
+             *                        observeable value that has changed, providing the new
+             *                        value and
+             *                        the old value for the method to operate on.
              *
-             *            - `observableValue`: An observable value of type `Integer`, which
-             *            represents the selected payment method. - `integer`: The current
-             *            value of the `observableValue`.
+             *                        - `observableValue`: An observable value of type
+             *                        `Integer`, which
+             *                        represents the selected payment method. - `integer`:
+             *                        The current
+             *                        value of the `observableValue`.
              *
              * @param integer
-             *            2nd value passed to the `changed()` method, which is the `t1`
-             *            value from the observable value notification.
+             *                        2nd value passed to the `changed()` method, which is
+             *                        the `t1`
+             *                        value from the observable value notification.
              *
-             *            - `t1`: The value of `t1` is not explicitly mentioned in the
-             *            provided code snippet. However, based on the context, it can be
-             *            inferred that `t1` represents a time interval or a timestamp.
+             *                        - `t1`: The value of `t1` is not explicitly mentioned
+             *                        in the
+             *                        provided code snippet. However, based on the context,
+             *                        it can be
+             *                        inferred that `t1` represents a time interval or a
+             *                        timestamp.
              *
              * @param t1
-             *            2nd value passed to the `readLoujain()` method, which is used to
-             *            retrieve the film and cinema information for the payment
-             *            calculation.
+             *                        2nd value passed to the `readLoujain()` method, which
+             *                        is used to
+             *                        retrieve the film and cinema information for the
+             *                        payment
+             *                        calculation.
              *
-             *            - `t1`: An `Integer` variable representing the ID of the film.
+             *                        - `t1`: An `Integer` variable representing the ID of
+             *                        the film.
              */
             @Override
             /**
@@ -404,11 +476,13 @@ public class PaymentUserController implements Initializable {
      * price and quantity, and finally saving the order to the database.
      *
      * @param event
-     *            Pay action event, which triggers the execution of the function and
-     *            enables the processing of the payment request.
-     *            <p>
-     *            - `event` is an ActionEvent that represents a user's action on the
-     *            Pay button.
+     *              Pay action event, which triggers the execution of the function
+     *              and
+     *              enables the processing of the payment request.
+     *              <p>
+     *              - `event` is an ActionEvent that represents a user's action on
+     *              the
+     *              Pay button.
      */
     @FXML
     private void Pay(final ActionEvent event) throws StripeException {
@@ -476,11 +550,20 @@ public class PaymentUserController implements Initializable {
     }
 
     /**
-     * Validates input fields for a Visa card number, month and year of expiration,
-     * and CVC code. It returns `true` if all inputs are valid, otherwise it
-     * displays an error message and returns `false`.
+     * Validates all payment input fields.
+     * 
+     * <p>
+     * This method performs comprehensive validation of all payment input fields
+     * including:
+     * <ul>
+     * <li>Credit card number validation (must be a valid Visa card format)</li>
+     * <li>Expiration month validation (must be a number between 1-12)</li>
+     * <li>Expiration year validation (must be current year or later)</li>
+     * <li>CVC code validation (must be a valid numeric code)</li>
+     * </ul>
+     * </p>
      *
-     * @returns a boolean value indicating whether the input is valid or not.
+     * @return true if all input fields are valid, false otherwise
      */
     private boolean isValidInput() {
         if (!this.isValidVisaCardNo(this.carte.getText())) {
@@ -511,7 +594,7 @@ public class PaymentUserController implements Initializable {
      * hyphen and then another four digits.
      *
      * @param text
-     *            13-digit credit card number to be validated.
+     *             13-digit credit card number to be validated.
      * @returns a boolean value indicating whether the given string represents a
      *          valid Visa card number or not.
      *          <p>
@@ -535,11 +618,13 @@ public class PaymentUserController implements Initializable {
      * the `showAndWait()` method.
      *
      * @param title
-     *            title of an error message that is displayed in the alert box when
-     *            the `showError()` method is called.
+     *                title of an error message that is displayed in the alert box
+     *                when
+     *                the `showError()` method is called.
      * @param message
-     *            message to be displayed as the content of an error alert when the
-     *            function is called.
+     *                message to be displayed as the content of an error alert when
+     *                the
+     *                function is called.
      */
     private void showError(final String title, final String message) {
         final Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -554,11 +639,11 @@ public class PaymentUserController implements Initializable {
      * the text of a label `total`.
      *
      * @param p
-     *            MovieSession object, which is assigned to the class instance
-     *            variable `moviesession`.
+     *               MovieSession object, which is assigned to the class instance
+     *               variable `moviesession`.
      * @param client
-     *            Client object that is associated with the MovieSession object
-     *            being initialized.
+     *               Client object that is associated with the MovieSession object
+     *               being initialized.
      */
     public void init(final MovieSession p, final Client client) {
         this.client = client;
@@ -567,9 +652,18 @@ public class PaymentUserController implements Initializable {
     }
 
     /**
-     * Performs initWithSeats operation.
+     * Initializes the payment controller with movie session, client, and selected
+     * seats information.
+     * 
+     * <p>
+     * This method configures the payment view with the selected movie session,
+     * client details,
+     * and calculates the total price based on the number of seats selected.
+     * </p>
      *
-     * @return the result of the operation
+     * @param moviesession  the movie session for which tickets are being purchased
+     * @param client        the client who is making the payment
+     * @param selectedSeats the list of seats selected by the client
      */
     public void initWithSeats(MovieSession moviesession, Client client, List<Seat> selectedSeats) {
         this.moviesession = moviesession;
@@ -591,10 +685,11 @@ public class PaymentUserController implements Initializable {
      * `FXMLLoader` class, creating a new stage and scene to display the content.
      *
      * @param event
-     *            ActionEvent object that triggered the method execution, providing
-     *            the necessary information about the action that was performed.
-     *            <p>
-     *            Event: An ActionEvent object representing a user event.
+     *              ActionEvent object that triggered the method execution,
+     *              providing
+     *              the necessary information about the action that was performed.
+     *              <p>
+     *              Event: An ActionEvent object representing a user event.
      */
     public void switchtfillmmaa(final ActionEvent event) {
         try {
@@ -609,20 +704,18 @@ public class PaymentUserController implements Initializable {
     }
 
     /**
-     * Creates a PDF receipt for a ticket purchase by adding text and graphics to a
-     * blank page using a PDPageContentStream, then saving the document with a
-     * specified filename.
+     * Creates a PDF receipt for a ticket purchase.
+     * 
+     * <p>
+     * This method generates a PDF document containing receipt information for a
+     * ticket purchase.
+     * It creates a new document, adds a page, and writes the ticket details before
+     * saving the file.
+     * </p>
      *
-     * @param filename
-     *            name of the output PDF file that the `createReceiptPDF` method
-     *            will save.
-     * @param ticket
-     *            ticket for which a receipt is to be generated, and its contents
-     *            are used to populate the receipt document.
-     *            <p>
-     *            - Ticket is an instance of the `Ticket` class. - It contains
-     *            information about the ticket purchase, such as the date and time
-     *            of purchase, the amount paid, and any other relevant details.
+     * @param filename the name of the output PDF file
+     * @param ticket   the ticket object containing purchase details
+     * @throws IOException if there is an error creating or writing to the PDF file
      */
     public void createReceiptPDF(final String filename, final Ticket ticket) throws IOException {
         try (final PDDocument document = new PDDocument()) {
@@ -642,8 +735,8 @@ public class PaymentUserController implements Initializable {
     /**
      * Opens a PDF file using the desktop application.
      *
-     * @param filename
-     *            name of the PDF file to be opened.
+     * @param filename the name of the PDF file to be opened
+     * @throws IOException if there is an error opening the file
      */
     public void openPDF(final String filename) throws IOException {
         if (Desktop.isDesktopSupported()) {

@@ -89,8 +89,9 @@ public class DetailsProductClientController implements Initializable {
      * product based on the set ID.
      *
      * @param produitId
-     *            ID of the product to which the method is being called, and it is
-     *            used to store the value in the field `this.produitId`.
+     *                  ID of the product to which the method is being called, and
+     *                  it is
+     *                  used to store the value in the field `this.produitId`.
      */
     public void setProductId(final Long produitId) throws IOException {
         this.produitId = produitId;
@@ -103,20 +104,26 @@ public class DetailsProductClientController implements Initializable {
      * icon's mouse click, which displays the product when clicked.
      *
      * @param location
-     *            URL of the resource to be initialized, which is used to load the
-     *            accepted top-3 products when the function is called.
-     *            <p>
-     *            Location refers to an URL that provides the root resource of the
-     *            application. It represents the base URL of the application and is
-     *            used in loading accepted top 3.
+     *                  URL of the resource to be initialized, which is used to load
+     *                  the
+     *                  accepted top-3 products when the function is called.
+     *                  <p>
+     *                  Location refers to an URL that provides the root resource of
+     *                  the
+     *                  application. It represents the base URL of the application
+     *                  and is
+     *                  used in loading accepted top 3.
      * @param resources
-     *            ResourceBundle containing keys for localized strings, which are
-     *            used to display product information when the user clicks on the
-     *            icon.
-     *            <p>
-     *            - `location`: A URL object representing the location of the
-     *            application. - `resources`: A ResourceBundle object providing
-     *            key-value pairs of resource strings in different languages.
+     *                  ResourceBundle containing keys for localized strings, which
+     *                  are
+     *                  used to display product information when the user clicks on
+     *                  the
+     *                  icon.
+     *                  <p>
+     *                  - `location`: A URL object representing the location of the
+     *                  application. - `resources`: A ResourceBundle object
+     *                  providing
+     *                  key-value pairs of resource strings in different languages.
      */
     @Override
     /**
@@ -169,18 +176,21 @@ public class DetailsProductClientController implements Initializable {
      * with the current rating value.
      *
      * @param produit
-     *            Product object that is being displayed in the detail view, and it
-     *            is used to retrieve the product's ID, name, image URL, price, and
-     *            rating for display in the corresponding Card element.
-     *            <p>
-     *            - `id_produit`: an integer representing the product ID - `nom`: a
-     *            string representing the product name - `description`: a string
-     *            representing the product description - `prix`: a double
-     *            representing the product price - `imagePath`: a string
-     *            representing the path to the product image
-     *            <p>
-     *            Note: These properties are not explained in detail as they are
-     *            already defined in the function.
+     *                Product object that is being displayed in the detail view, and
+     *                it
+     *                is used to retrieve the product's ID, name, image URL, price,
+     *                and
+     *                rating for display in the corresponding Card element.
+     *                <p>
+     *                - `id_produit`: an integer representing the product ID -
+     *                `nom`: a
+     *                string representing the product name - `description`: a string
+     *                representing the product description - `prix`: a double
+     *                representing the product price - `imagePath`: a string
+     *                representing the path to the product image
+     *                <p>
+     *                Note: These properties are not explained in detail as they are
+     *                already defined in the function.
      * @returns a stage with a card containing information about a product,
      *          including an image, name, description, price, and rating.
      *          <p>
@@ -317,9 +327,10 @@ public class DetailsProductClientController implements Initializable {
      * displays the updated shoppingcart.
      *
      * @param produitId
-     *            ID of the product to be added to the cart.
+     *                  ID of the product to be added to the cart.
      * @param quantity
-     *            quantity of the product that the user wants to add to the cart.
+     *                  quantity of the product that the user wants to add to the
+     *                  cart.
      */
     private void ajouterAuShoppingCart(final long produitId, final int quantity) {
         final ProductService produitService = new ProductService();
@@ -395,15 +406,20 @@ public class DetailsProductClientController implements Initializable {
      * handlers for closing the card and the "Continue Shopping" button.
      *
      * @param produit
-     *            product to be displayed in the shopping cart card, which is used
-     *            to set the corresponding labels and images for each product in the
-     *            shoppingcart.
-     *            <p>
-     *            - `name`: The name of the product. - `imageUrl`: The URL of the
-     *            product image. - `price`: The price of the product in euros. -
-     *            `quantite`: The quantity of the product in stock. - `sommeTotale`:
-     *            The total cost of the product in euros, calculated by multiplying
-     *            the quantity by the price.
+     *                product to be displayed in the shopping cart card, which is
+     *                used
+     *                to set the corresponding labels and images for each product in
+     *                the
+     *                shoppingcart.
+     *                <p>
+     *                - `name`: The name of the product. - `imageUrl`: The URL of
+     *                the
+     *                product image. - `price`: The price of the product in euros. -
+     *                `quantite`: The quantity of the product in stock. -
+     *                `sommeTotale`:
+     *                The total cost of the product in euros, calculated by
+     *                multiplying
+     *                the quantity by the price.
      * @returns a `Pane` object containing all the elements of the shopping cart.
      *          <p>
      *          - `shoppingcartContainer`: The Parent Node that holds all the
@@ -550,11 +566,13 @@ public class DetailsProductClientController implements Initializable {
      * and multiplies it by the input quantity to obtain the total price.
      *
      * @param idProduct
-     *            ID of the product for which the price is being calculated.
+     *                  ID of the product for which the price is being calculated.
      * @param quantity
-     *            number of products to be priced, and is multiplied by the unit
-     *            price returned by the `getPriceProduct()` method to calculate the
-     *            total price for the specified quantity of products.
+     *                  number of products to be priced, and is multiplied by the
+     *                  unit
+     *                  price returned by the `getPriceProduct()` method to
+     *                  calculate the
+     *                  total price for the specified quantity of products.
      * @returns the product of the quantity and the price of the product for the
      *          given ID.
      */
@@ -570,12 +588,15 @@ public class DetailsProductClientController implements Initializable {
      * the `anchordetail` and `top3anchorpane` visible and sets their opacity to 1.
      *
      * @param shoppingcartContainer
-     *            `HBox` container that holds the `FlowPane` representing the
-     *            shopping cart, which is rendered invisible when the function is
-     *            called.
-     *            <p>
-     *            - `shoppingcartContainer` is an instance of `HBox`. - It contains
-     *            a `FlowPane` and other components.
+     *                              `HBox` container that holds the `FlowPane`
+     *                              representing the
+     *                              shopping cart, which is rendered invisible when
+     *                              the function is
+     *                              called.
+     *                              <p>
+     *                              - `shoppingcartContainer` is an instance of
+     *                              `HBox`. - It contains
+     *                              a `FlowPane` and other components.
      */
     private void fermerShoppingCartCard(final HBox shoppingcartContainer) {
         // Rendre la carte du shoppingcart invisible
@@ -595,12 +616,14 @@ public class DetailsProductClientController implements Initializable {
      * stage, replacing the current stage, and closes the original stage.
      *
      * @param event
-     *            MouseEvent object that triggered the function execution, providing
-     *            information about the mouse click or other event that occurred.
-     *            <p>
-     *            - Event source: The element that triggered the event (not shown) -
-     *            Type: The type of event (not shown) - X and Y coordinates: The
-     *            position of the event relative to the element (not shown)
+     *              MouseEvent object that triggered the function execution,
+     *              providing
+     *              information about the mouse click or other event that occurred.
+     *              <p>
+     *              - Event source: The element that triggered the event (not shown)
+     *              -
+     *              Type: The type of event (not shown) - X and Y coordinates: The
+     *              position of the event relative to the element (not shown)
      */
     @FXML
     void shoppingcart(final MouseEvent event) {
@@ -632,14 +655,15 @@ public class DetailsProductClientController implements Initializable {
      * current stage upon execution.
      *
      * @param event
-     *            MouseEvent that triggered the function execution, providing
-     *            information about the mouse click or other event that occurred in
-     *            the FXML document.
-     *            <p>
-     *            - It is a `MouseEvent` object representing a mouse event that
-     *            triggered the function's execution. - The source of the event is
-     *            the element that was clicked or hovered over, which is not
-     *            explicitly stated in the code snippet provided.
+     *              MouseEvent that triggered the function execution, providing
+     *              information about the mouse click or other event that occurred
+     *              in
+     *              the FXML document.
+     *              <p>
+     *              - It is a `MouseEvent` object representing a mouse event that
+     *              triggered the function's execution. - The source of the event is
+     *              the element that was clicked or hovered over, which is not
+     *              explicitly stated in the code snippet provided.
      */
     @FXML
     void commentaire(final MouseEvent event) {
@@ -671,13 +695,15 @@ public class DetailsProductClientController implements Initializable {
      * previous stage.
      *
      * @param event
-     *            ActionEvent object that triggered the function execution,
-     *            providing the source of the event and allowing the code to access
-     *            its related information.
-     *            <p>
-     *            - `event`: an ActionEvent object representing the event triggered
-     *            by the user's action, such as clicking on a button or entering
-     *            text in a field.
+     *              ActionEvent object that triggered the function execution,
+     *              providing the source of the event and allowing the code to
+     *              access
+     *              its related information.
+     *              <p>
+     *              - `event`: an ActionEvent object representing the event
+     *              triggered
+     *              by the user's action, such as clicking on a button or entering
+     *              text in a field.
      */
     @FXML
     void cinemaclient(final ActionEvent event) {
@@ -708,12 +734,14 @@ public class DetailsProductClientController implements Initializable {
      * current stage with the new one.
      *
      * @param event
-     *            EventObject that triggered the method, providing access to
-     *            information about the event, such as its source and details, which
-     *            can be used to handle the event appropriately.
-     *            <p>
-     *            - Event object contains information about the event that triggered
-     *            the function, such as the source element and the type of event.
+     *              EventObject that triggered the method, providing access to
+     *              information about the event, such as its source and details,
+     *              which
+     *              can be used to handle the event appropriately.
+     *              <p>
+     *              - Event object contains information about the event that
+     *              triggered
+     *              the function, such as the source element and the type of event.
      */
     @FXML
     void eventClient(final ActionEvent event) {
@@ -744,13 +772,15 @@ public class DetailsProductClientController implements Initializable {
      * replacing the current stage. It also closes the current stage.
      *
      * @param event
-     *            ActionEvent object that triggered the function execution,
-     *            providing the source of the action and allowing the code to access
-     *            the event details.
-     *            <p>
-     *            - Event source: The object that triggered the event (in this case,
-     *            a button press) - Type of event: The type of event that was
-     *            triggered (in this case, an action event)
+     *              ActionEvent object that triggered the function execution,
+     *              providing the source of the action and allowing the code to
+     *              access
+     *              the event details.
+     *              <p>
+     *              - Event source: The object that triggered the event (in this
+     *              case,
+     *              a button press) - Type of event: The type of event that was
+     *              triggered (in this case, an action event)
      */
     @FXML
     void produitClient(final ActionEvent event) {
@@ -782,8 +812,8 @@ public class DetailsProductClientController implements Initializable {
      * is not explicitly stated in the provided code snippet.
      *
      * @param event
-     *            client profile data that triggered the execution of the
-     *            `profilclient` method.
+     *              client profile data that triggered the execution of the
+     *              `profilclient` method.
      */
     @FXML
     void profilclient(final ActionEvent event) {
@@ -795,12 +825,12 @@ public class DetailsProductClientController implements Initializable {
      * current stage and displays the new one.
      *
      * @param event
-     *            ActionEvent object that triggered the function execution,
-     *            providing information about the source of the event and the type
-     *            of action performed.
-     *            <p>
-     *            - Event source: The object that generated the event, which is
-     *            typically a button or other user interface element.
+     *              ActionEvent object that triggered the function execution,
+     *              providing information about the source of the event and the type
+     *              of action performed.
+     *              <p>
+     *              - Event source: The object that generated the event, which is
+     *              typically a button or other user interface element.
      */
     @FXML
     void MovieClient(final ActionEvent event) {
@@ -830,13 +860,13 @@ public class DetailsProductClientController implements Initializable {
      * replacing the current stage.
      *
      * @param event
-     *            ActionEvent object that triggered the `SeriesClient()` method,
-     *            providing information about the source of the event and allowing
-     *            the method to determine the appropriate action to take.
-     *            <p>
-     *            - Event source: The origin of the event, which is an instance of
-     *            the `ActionEvent` class. - Parameter: An optional parameter
-     *            associated with the event, which can be of any type.
+     *              ActionEvent object that triggered the `SeriesClient()` method,
+     *              providing information about the source of the event and allowing
+     *              the method to determine the appropriate action to take.
+     *              <p>
+     *              - Event source: The origin of the event, which is an instance of
+     *              the `ActionEvent` class. - Parameter: An optional parameter
+     *              associated with the event, which can be of any type.
      */
     @FXML
     void SerieClient(final ActionEvent event) {
@@ -880,7 +910,7 @@ public class DetailsProductClientController implements Initializable {
                 DetailsProductClientController.LOGGER.info(String.valueOf(produit.getId()));
                 final VBox cardContainer = this.createtopthree(produit);
                 DetailsProductClientController.LOGGER.log(Level.INFO, "------------------{0}{1}",
-                        new Object[]{j, cardContainer.getChildren()});
+                        new Object[] { j, cardContainer.getChildren() });
                 this.topthreeVbox.getChildren().add(cardContainer);
                 j++;
             }
@@ -897,13 +927,16 @@ public class DetailsProductClientController implements Initializable {
      * is clicked, a new stage displaying details of the product is opened.
      *
      * @param produit
-     *            Product object that contains information about the product,
-     *            including its name, image, and price, which are used to create the
-     *            UI elements and display them in the card container.
-     *            <p>
-     *            - `id_produit`: an integer representing the product ID. - `nom`:
-     *            the product name. - `prix`: the product price. - `image`: a Blob
-     *            object containing the image of the product (optional).
+     *                Product object that contains information about the product,
+     *                including its name, image, and price, which are used to create
+     *                the
+     *                UI elements and display them in the card container.
+     *                <p>
+     *                - `id_produit`: an integer representing the product ID. -
+     *                `nom`:
+     *                the product name. - `prix`: the product price. - `image`: a
+     *                Blob
+     *                object containing the image of the product (optional).
      * @returns a `VBox` container containing an `ImageView`, a `Label`, and a
      *          `Label`, representing the product's name, price, and image.
      *          <p>

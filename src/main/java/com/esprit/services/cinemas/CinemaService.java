@@ -40,7 +40,7 @@ public class CinemaService implements IService<Cinema> {
      * Creates a new entity in the database.
      *
      * @param entity
-     *            the entity to create
+     *               the entity to create
      */
     public void create(Cinema cinema) {
         String query = "INSERT INTO cinema (name, address, manager_id, logo_path, status) VALUES (?, ?, ?, ?, ?)";
@@ -62,7 +62,7 @@ public class CinemaService implements IService<Cinema> {
      * Updates an existing entity in the database.
      *
      * @param entity
-     *            the entity to update
+     *               the entity to update
      */
     public void update(Cinema cinema) {
         String query = "UPDATE cinema SET name = ?, address = ?, logo_path = ?, status = ? WHERE id = ?";
@@ -84,7 +84,7 @@ public class CinemaService implements IService<Cinema> {
      * Deletes an entity from the database.
      *
      * @param id
-     *            the ID of the entity to delete
+     *           the ID of the entity to delete
      */
     public void delete(Cinema cinema) {
         String query = "DELETE FROM cinema WHERE id = ?";

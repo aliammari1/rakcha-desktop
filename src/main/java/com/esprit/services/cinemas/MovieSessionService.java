@@ -47,7 +47,7 @@ public class MovieSessionService implements IService<MovieSession> {
      * Creates a new entity in the database.
      *
      * @param entity
-     *            the entity to create
+     *               the entity to create
      */
     public void create(MovieSession movieSession) {
         String query = "INSERT INTO movie_session (film_id, cinema_hall_id, start_time, end_time, session_date, price) VALUES (?, ?, ?, ?, ?, ?)";
@@ -70,7 +70,7 @@ public class MovieSessionService implements IService<MovieSession> {
      * Updates an existing entity in the database.
      *
      * @param entity
-     *            the entity to update
+     *               the entity to update
      */
     public void update(MovieSession movieSession) {
         String query = "UPDATE movie_session SET film_id = ?, cinema_hall_id = ?, start_time = ?, end_time = ?, session_date = ?, price = ? WHERE id = ?";
@@ -94,7 +94,7 @@ public class MovieSessionService implements IService<MovieSession> {
      * Deletes an entity from the database.
      *
      * @param id
-     *            the ID of the entity to delete
+     *           the ID of the entity to delete
      */
     public void delete(MovieSession movieSession) {
         String query = "DELETE FROM movie_session WHERE id = ?";

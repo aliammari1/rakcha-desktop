@@ -12,8 +12,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Hibernate Configuration Manager Manages database connection and session
- * factory configuration
+ * Hibernate Configuration Manager that manages database connection and session
+ * factory configuration.
+ * 
+ * <p>
+ * This class provides centralized configuration for Hibernate ORM framework,
+ * supporting multiple database types including H2, PostgreSQL, SQLite, and
+ * MySQL.
+ * It automatically configures the session factory based on environment
+ * variables
+ * and system properties.
+ * </p>
+ * 
+ * @author Esprit Team
+ * @version 1.0
+ * @since 1.0
  */
 public class HibernateConfig {
 
@@ -24,28 +37,63 @@ public class HibernateConfig {
     private static final String HIBERNATE_SQLITE_CONFIG_FILE = "hibernate-sqlite.properties";
     private static final String HIBERNATE_MYSQL_CONFIG_FILE = "hibernate-mysql.properties";
 
+    /**
+     * Enumeration of supported database types with their configuration files.
+     * 
+     * <p>
+     * Each database type is associated with a specific Hibernate configuration file
+     * that contains the appropriate connection settings and dialect configuration.
+     * </p>
+     */
     public enum DatabaseType {
+        /** H2 in-memory database for development and testing */
         H2("h2", HIBERNATE_CONFIG_FILE),
+        /** PostgreSQL database for production environments */
         POSTGRESQL("postgresql", HIBERNATE_PRODUCTION_CONFIG_FILE),
+        /** SQLite database for lightweight applications */
         SQLITE("sqlite", HIBERNATE_SQLITE_CONFIG_FILE),
+        /** MySQL database for traditional web applications */
         MYSQL("mysql", HIBERNATE_MYSQL_CONFIG_FILE);
 
         private final String name;
         private final String configFile;
 
+        /**
+         * Constructs a new DatabaseType with the specified name and configuration file.
+         * 
+         * @param name       the database type name
+         * @param configFile the path to the Hibernate configuration file
+         */
         DatabaseType(String name, String configFile) {
             this.name = name;
             this.configFile = configFile;
         }
 
+        /**
+         * Gets the database type name.
+         * 
+         * @return the database type name
+         */
         public String getName() {
             return name;
         }
 
+        /**
+         * Gets the configuration file path for this database type.
+         * 
+         * @return the path to the Hibernate configuration file
+         */
         public String getConfigFile() {
             return configFile;
         }
 
+        /**
+         * Converts a string representation to a DatabaseType enum value.
+         * 
+         * @param dbType the string representation of the database type
+         * @return the corresponding DatabaseType enum value, or H2 as default if not
+         *         found
+         */
         public static DatabaseType fromString(String dbType) {
             if (dbType == null)
                 return H2; // Default
@@ -69,7 +117,17 @@ public class HibernateConfig {
     }
 
     /**
-     * Build SessionFactory from configuration
+     * Builds the SessionFactory from configuration.
+     * 
+     * <p>
+     * This method loads the appropriate Hibernate properties based on the
+     * environment,
+     * adds all annotated entity classes to the configuration, and creates the
+     * SessionFactory
+     * with the configured service registry.
+     * </p>
+     * 
+     * @throws RuntimeException if SessionFactory creation fails
      */
     private static void buildSessionFactory() {
         try {
@@ -96,7 +154,16 @@ public class HibernateConfig {
     }
 
     /**
-     * Load Hibernate properties from configuration file
+     * Loads Hibernate properties from the appropriate configuration file.
+     * 
+     * <p>
+     * Determines the database type from environment variables or system properties,
+     * loads the corresponding configuration file, and applies environment variable
+     * overrides if available.
+     * </p>
+     * 
+     * @return the loaded Hibernate properties
+     * @throws RuntimeException if the configuration file cannot be found or loaded
      */
     private static Properties loadHibernateProperties() {
         Properties properties = new Properties();
@@ -131,7 +198,18 @@ public class HibernateConfig {
     }
 
     /**
-     * Override properties with environment variables for flexible configuration
+     * Overrides properties with environment variables for flexible configuration.
+     * 
+     * <p>
+     * This method checks for environment variables like DB_URL, DB_USER, and
+     * DB_PASSWORD
+     * to override default configuration values. For SQLite databases, it sets a
+     * default
+     * path if no custom URL is provided.
+     * </p>
+     * 
+     * @param properties   the properties to be modified
+     * @param databaseType the type of database being configured
      */
     private static void overrideWithEnvironmentVariables(Properties properties, DatabaseType databaseType) {
         String dbUrl = System.getenv("DB_URL");
@@ -155,14 +233,22 @@ public class HibernateConfig {
 
         // Set default SQLite path if using SQLite and no custom URL provided
         if (databaseType == DatabaseType.SQLITE && dbUrl == null) {
-            String sqliteDbPath = System.getProperty("user.dir") + "/data/rakcha_db.sqlite";
+            String sqliteDbPath = System.getProperty("user.dir") + "/data/rakcha.db";
             properties.setProperty("hibernate.connection.url", "jdbc:sqlite:" + sqliteDbPath);
             log.info("Using default SQLite database path: {}", sqliteDbPath);
         }
     }
 
     /**
-     * Add all entity classes to the configuration
+     * Add all entity classes to the configuration.
+     * 
+     * <p>
+     * This method registers all the entity classes from different packages
+     * including users, products, cinemas, films, and series with the Hibernate
+     * configuration to enable ORM mapping.
+     * </p>
+     * 
+     * @param configuration the Hibernate configuration to add entity classes to
      */
     private static void addAnnotatedClasses(Configuration configuration) {
         // User entities
@@ -205,7 +291,9 @@ public class HibernateConfig {
     }
 
     /**
-     * Check if running in production environment
+     * Check if running in production environment.
+     * 
+     * @return true if running in production environment, false otherwise
      */
     private static boolean isProduction() {
         String env = System.getProperty("app.environment", "development");
@@ -213,7 +301,9 @@ public class HibernateConfig {
     }
 
     /**
-     * Get the SessionFactory instance
+     * Get the SessionFactory instance.
+     * 
+     * @return the configured SessionFactory instance
      */
     public static SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
@@ -223,7 +313,7 @@ public class HibernateConfig {
     }
 
     /**
-     * Close the SessionFactory
+     * Close the SessionFactory and release resources.
      */
     public static void shutdown() {
         if (sessionFactory != null && !sessionFactory.isClosed()) {
@@ -233,7 +323,9 @@ public class HibernateConfig {
     }
 
     /**
-     * Get current database type being used
+     * Get current database type being used.
+     * 
+     * @return the current DatabaseType in use
      */
     public static DatabaseType getCurrentDatabaseType() {
         String dbType = System.getProperty("db.type", System.getenv("DB_TYPE"));
@@ -247,7 +339,9 @@ public class HibernateConfig {
     }
 
     /**
-     * Switch database type at runtime (requires application restart)
+     * Switch database type at runtime (requires application restart).
+     * 
+     * @param databaseType the database type to switch to
      */
     public static void setDatabaseType(DatabaseType databaseType) {
         System.setProperty("db.type", databaseType.getName());
@@ -255,7 +349,7 @@ public class HibernateConfig {
     }
 
     /**
-     * Create data directory for SQLite if it doesn't exist
+     * Create data directory for SQLite if it doesn't exist.
      */
     private static void ensureDataDirectoryExists() {
         try {
@@ -270,7 +364,7 @@ public class HibernateConfig {
     }
 
     /**
-     * Initialize database - create tables and initial data if needed
+     * Initialize database - create tables and initial data if needed.
      */
     public static void initializeDatabase() {
         DatabaseType currentType = getCurrentDatabaseType();

@@ -14,6 +14,6 @@ google:
   client: {id: '${GOOGLE_CLIENT_ID}', secret: '${GOOGLE_CLIENT_SECRET}'}
 email: {from: '${EMAIL_FROM}', username: '${EMAIL_USERNAME}', password: '${JAVAMAIL_APP_PASSWORD}'}
 db.type: sqlite
-db.url: jdbc:sqlite:data/rakcha_db.sqlite
+db.url: jdbc:sqlite:data/rakcha.db
 db.user: ''
 db.password: ''

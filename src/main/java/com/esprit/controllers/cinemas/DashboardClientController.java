@@ -59,12 +59,28 @@ import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
 /**
- * Is responsible for handling user interactions related to the cinema
- * dashboard. It provides methods for displaying all comments, adding new
- * comments, and closing the comment section. The class also includes a scroll
- * pane for displaying all comments for a given cinema ID. Additionally, it
- * includes an HBox for each comment, which contains an image of the user who
- * made the comment, their name, and the comment itself.
+ * Controller responsible for handling client dashboard operations for cinema
+ * management.
+ * 
+ * <p>
+ * This controller provides functionality for clients to interact with cinema
+ * data including
+ * viewing cinema listings, filtering cinemas, viewing movie sessions, adding
+ * comments and ratings,
+ * and displaying cinema locations on maps. It handles the client-side interface
+ * for the cinema
+ * management system.
+ * </p>
+ * 
+ * <p>
+ * Key features include cinema listing and filtering, movie session planning,
+ * comment and rating
+ * system, map integration, and top-rated cinema recommendations.
+ * </p>
+ * 
+ * @author Esprit Team
+ * @version 1.0
+ * @since 1.0
  */
 public class DashboardClientController {
     private static final Logger LOGGER = Logger.getLogger(DashboardClientController.class.getName());
@@ -117,12 +133,13 @@ public class DashboardClientController {
      * list of matching objects.
      *
      * @param liste
-     *            list of cinemas to search in.
-     *            <p>
-     *            - `liste` is a list of `Cinema` objects.
+     *                  list of cinemas to search in.
+     *                  <p>
+     *                  - `liste` is a list of `Cinema` objects.
      * @param recherche
-     *            search query used to filter the list of cinemas returned by the
-     *            function.
+     *                  search query used to filter the list of cinemas returned by
+     *                  the
+     *                  function.
      * @returns a list of `Cinema` objects containing the search query.
      *          <p>
      *          - The `List<Cinema>` object `resultats` is initialized and returned
@@ -152,15 +169,15 @@ public class DashboardClientController {
      * upon an action event.
      *
      * @param event
-     *            event that triggered the `Planninggclose()` method to be called,
-     *            providing the necessary context for the method to perform its
-     *            intended action.
-     *            <p>
-     *            Event: `ActionEvent`
-     *            <p>
-     *            - `target`: Reference to the component that triggered the event
-     *            (in this case, `PlanningPane`) - `code`: The action that was
-     *            performed (in this case, `setVisible(false)`)
+     *              event that triggered the `Planninggclose()` method to be called,
+     *              providing the necessary context for the method to perform its
+     *              intended action.
+     *              <p>
+     *              Event: `ActionEvent`
+     *              <p>
+     *              - `target`: Reference to the component that triggered the event
+     *              (in this case, `PlanningPane`) - `code`: The action that was
+     *              performed (in this case, `setVisible(false)`)
      */
     @FXML
     void Planninggclose(final ActionEvent event) {
@@ -175,12 +192,12 @@ public class DashboardClientController {
      * to `true` and `false`, respectively.
      *
      * @param event
-     *            user's action of clicking the "Show List Cinema" button, which
-     *            triggers the function to clear the content of the
-     *            `cinemaFlowPane`, load the accepted cinemas, and set the
-     *            visibility of the `listCinemaClient` and `PlanningPane`.
-     *            <p>
-     *            Event: An action event object representing a user interaction.
+     *              user's action of clicking the "Show List Cinema" button, which
+     *              triggers the function to clear the content of the
+     *              `cinemaFlowPane`, load the accepted cinemas, and set the
+     *              visibility of the `listCinemaClient` and `PlanningPane`.
+     *              <p>
+     *              Event: An action event object representing a user interaction.
      */
     @FXML
     void showListCinema(final ActionEvent event) {
@@ -226,8 +243,8 @@ public class DashboardClientController {
      * shows the Alert to the user.
      *
      * @param message
-     *            text to be displayed as an information alert when the
-     *            `showAlert()` method is called.
+     *                text to be displayed as an information alert when the
+     *                `showAlert()` method is called.
      */
     @FXML
     private void showAlert(final String message) {
@@ -246,15 +263,18 @@ public class DashboardClientController {
      * line, buttons for showing movies and planning, and a rating component.
      *
      * @param cinema
-     *            Cinema object that provides the necessary information for creating
-     *            the cinema card, such as name, logo, address, and rating.
-     *            <p>
-     *            - `getLogo()`: returns the cinema's logo as a string -
-     *            `getName()`: returns the cinema's name - `getAdresse()`: returns
-     *            the cinema's address - `getId_cinema()`: returns the cinema's ID
-     *            <p>
-     *            These properties are used to create and display a card for the
-     *            cinema.
+     *               Cinema object that provides the necessary information for
+     *               creating
+     *               the cinema card, such as name, logo, address, and rating.
+     *               <p>
+     *               - `getLogo()`: returns the cinema's logo as a string -
+     *               `getName()`: returns the cinema's name - `getAdresse()`:
+     *               returns
+     *               the cinema's address - `getId_cinema()`: returns the cinema's
+     *               ID
+     *               <p>
+     *               These properties are used to create and display a card for the
+     *               cinema.
      * @returns a HBox container with a cinema card displaying the cinema's name,
      *          address, and logo, along with a rating system for the client.
      *          <p>
@@ -387,13 +407,18 @@ public class DashboardClientController {
      * added.
      *
      * @param Anchortop3
-     *            `AnchorPane` where the top-rated cinema cards will be added.
-     *            <p>
-     *            - `Anchortop3`: Anchor pane where the cinema cards will be added.
-     *            - `topRatedCinemas`: List of top-rated cinemas to create cards
-     *            for. - `cardHeight`: Height of each cinema card. - `cardSpacing`:
-     *            Spacing between each cinema card. - `currentY`: Position Y of the
-     *            first cinema card.
+     *                   `AnchorPane` where the top-rated cinema cards will be
+     *                   added.
+     *                   <p>
+     *                   - `Anchortop3`: Anchor pane where the cinema cards will be
+     *                   added.
+     *                   - `topRatedCinemas`: List of top-rated cinemas to create
+     *                   cards
+     *                   for. - `cardHeight`: Height of each cinema card. -
+     *                   `cardSpacing`:
+     *                   Spacing between each cinema card. - `currentY`: Position Y
+     *                   of the
+     *                   first cinema card.
      */
     public void createTopRatedCinemaCards(final AnchorPane Anchortop3) {
         final CinemaRatingService ratingCinemaService = new CinemaRatingService();
@@ -449,9 +474,10 @@ public class DashboardClientController {
      * then opens a map dialog with the retrieved coordinates.
      *
      * @param address
-     *            address to be geocoded, which is sent as a query to the Nominatim
-     *            API to retrieve the latitude and longitude coordinates for the
-     *            location.
+     *                address to be geocoded, which is sent as a query to the
+     *                Nominatim
+     *                API to retrieve the latitude and longitude coordinates for the
+     *                location.
      */
     private void geocodeAddress(final String address) {
         new Thread(() -> {
@@ -532,14 +558,16 @@ public class DashboardClientController {
      * moviesessions for that date.
      *
      * @param cinema
-     *            Cinema object that contains information about the cinema and its
-     *            scheduling.
-     *            <p>
-     *            - `listCinemaClient`: A visible container for cinema client
-     *            listings (set to `false`). - `PlanningPane`: Visible pane
-     *            displaying the planning schedule (set to `true`). - `tilePane`: A
-     *            container for displaying individual days of the week in a tile
-     *            format (created and added to `planningContent`).
+     *               Cinema object that contains information about the cinema and
+     *               its
+     *               scheduling.
+     *               <p>
+     *               - `listCinemaClient`: A visible container for cinema client
+     *               listings (set to `false`). - `PlanningPane`: Visible pane
+     *               displaying the planning schedule (set to `true`). - `tilePane`:
+     *               A
+     *               container for displaying individual days of the week in a tile
+     *               format (created and added to `planningContent`).
      */
     public void showPlanning(final Cinema cinema) {
         this.listCinemaClient.setVisible(false);
@@ -575,17 +603,21 @@ public class DashboardClientController {
      * cinema using MovieSessionService.
      *
      * @param startDate
-     *            starting date of the current week for which the planning is being
-     *            loaded.
-     *            <p>
-     *            - LocalDate representing the start date of the current week - Can
-     *            be modified or manipulated within the function
-     *            <p>
-     *            Please provide the Java code for which you would like a summary.
+     *                  starting date of the current week for which the planning is
+     *                  being
+     *                  loaded.
+     *                  <p>
+     *                  - LocalDate representing the start date of the current week
+     *                  - Can
+     *                  be modified or manipulated within the function
+     *                  <p>
+     *                  Please provide the Java code for which you would like a
+     *                  summary.
      * @param cinema
-     *            cinemas for which the moviesession is being planned.
-     *            <p>
-     *            - Cinema is an object representing a cinema with unknown details.
+     *                  cinemas for which the moviesession is being planned.
+     *                  <p>
+     *                  - Cinema is an object representing a cinema with unknown
+     *                  details.
      * @returns a map containing the seating plan for the current week at a specific
      *          cinema.
      *          <p>
@@ -609,19 +641,22 @@ public class DashboardClientController {
      * is clicked.
      *
      * @param date
-     *            LocalDate for which to display the cinema moviesessions, and it is
-     *            used to load the relevant planning data from the database or API.
-     *            <p>
-     *            - `LocalDate date`: represents a specific date in the format
-     *            `YYYY-MM-DD`. - ` cinema`: represents the cinema for which the
-     *            seating plan is being generated.
+     *               LocalDate for which to display the cinema moviesessions, and it
+     *               is
+     *               used to load the relevant planning data from the database or
+     *               API.
+     *               <p>
+     *               - `LocalDate date`: represents a specific date in the format
+     *               `YYYY-MM-DD`. - ` cinema`: represents the cinema for which the
+     *               seating plan is being generated.
      * @param cinema
-     *            cinema for which the moviesessions are being displayed, and is
-     *            used to load the relevant planning data into the function.
-     *            <p>
-     *            - `cinema`: A `Cinema` object representing the cinema for which
-     *            the moviesessions are being displayed. Its main properties include
-     *            the cinema's name and address.
+     *               cinema for which the moviesessions are being displayed, and is
+     *               used to load the relevant planning data into the function.
+     *               <p>
+     *               - `cinema`: A `Cinema` object representing the cinema for which
+     *               the moviesessions are being displayed. Its main properties
+     *               include
+     *               the cinema's name and address.
      */
     private void displayMovieSessionsForDate(final LocalDate date, final Cinema cinema) {
         // Charger les séances pour la date spécifiée
@@ -683,17 +718,25 @@ public class DashboardClientController {
      * price.
      *
      * @param moviesession
-     *            MovieSession object that contains information about the film,
-     *            cinemahall, and time of the screening, which is used to populate
-     *            the card with relevant labels.
-     *            <p>
-     *            - `moviesession.getFilmcinema()`: Returns an instance of
-     *            `Filmcinema` containing information about the film showing at the
-     *            moviesession. - `moviesession.getName_cinemahall()`: Returns the
-     *            name of the hall where the moviesession is taking place. -
-     *            `moviesession.getHD()` and `moviesession.getHF()`: Return the
-     *            starting time and ending time of the moviesession, respectively. -
-     *            `moviesession.getPrice()`: Returns the price of the moviesession.
+     *                     MovieSession object that contains information about the
+     *                     film,
+     *                     cinemahall, and time of the screening, which is used to
+     *                     populate
+     *                     the card with relevant labels.
+     *                     <p>
+     *                     - `moviesession.getFilmcinema()`: Returns an instance of
+     *                     `Filmcinema` containing information about the film
+     *                     showing at the
+     *                     moviesession. - `moviesession.getName_cinemahall()`:
+     *                     Returns the
+     *                     name of the hall where the moviesession is taking place.
+     *                     -
+     *                     `moviesession.getHD()` and `moviesession.getHF()`: Return
+     *                     the
+     *                     starting time and ending time of the moviesession,
+     *                     respectively. -
+     *                     `moviesession.getPrice()`: Returns the price of the
+     *                     moviesession.
      * @returns a stack pane containing a HBox with an ImageView and three Labels.
      *          <p>
      *          - `cardContainer`: A StackPane that contains all the elements that
@@ -791,8 +834,9 @@ public class DashboardClientController {
      * the film cards.
      *
      * @param cinemas
-     *            List of cinemas for which film cards are to be created and added
-     *            to the pane.
+     *                List of cinemas for which film cards are to be created and
+     *                added
+     *                to the pane.
      */
     private void createCinemaCards(List<Cinema> cinemas) {
         for (Cinema cinema : cinemas) {
@@ -817,12 +861,13 @@ public class DashboardClientController {
      * containing check boxes for addresses and names to the pane.
      *
      * @param event
-     *            Anchor Button's event that triggered the filtration process.
-     *            <p>
-     *            - `event`: An `ActionEvent` object representing the triggered
-     *            action. - `listCinemaClient`: A `VBox` container for displaying
-     *            the cinema client list. - `filterAnchor`: A `Region` component for
-     *            hosting the filtering controls.
+     *              Anchor Button's event that triggered the filtration process.
+     *              <p>
+     *              - `event`: An `ActionEvent` object representing the triggered
+     *              action. - `listCinemaClient`: A `VBox` container for displaying
+     *              the cinema client list. - `filterAnchor`: A `Region` component
+     *              for
+     *              hosting the filtering controls.
      */
     @FXML
     void filtrer(final ActionEvent event) {
@@ -869,15 +914,16 @@ public class DashboardClientController {
      * displays the filtered list in a flow pane.
      *
      * @param event
-     *            occurrence of an action event, triggering the function to execute
-     *            and filter the cinemas based on the selected addresses and/or
-     *            names.
-     *            <p>
-     *            - `listCinemaClient`: A reference to an observable list of
-     *            cinemas. - `filterAnchor`: A reference to a component that
-     *            displays a filter option. - `getSelectedAddresses()` and
-     *            `getSelectedNames()`: Methods that return lists of selected
-     *            addresses and names, respectively.
+     *              occurrence of an action event, triggering the function to
+     *              execute
+     *              and filter the cinemas based on the selected addresses and/or
+     *              names.
+     *              <p>
+     *              - `listCinemaClient`: A reference to an observable list of
+     *              cinemas. - `filterAnchor`: A reference to a component that
+     *              displays a filter option. - `getSelectedAddresses()` and
+     *              `getSelectedNames()`: Methods that return lists of selected
+     *              addresses and names, respectively.
      */
     @FXML
     void filtrercinema(final ActionEvent event) {
@@ -979,13 +1025,15 @@ public class DashboardClientController {
      * fxml.
      *
      * @param event
-     *            Event Object that triggered the function, providing information
-     *            about the event that occurred, such as the source of the event and
-     *            the type of event.
-     *            <p>
-     *            Event type: The type of event that triggered the function
-     *            execution, which could be any of the possible types recognized by
-     *            the application.
+     *              Event Object that triggered the function, providing information
+     *              about the event that occurred, such as the source of the event
+     *              and
+     *              the type of event.
+     *              <p>
+     *              Event type: The type of event that triggered the function
+     *              execution, which could be any of the possible types recognized
+     *              by
+     *              the application.
      */
     @FXML
     void afficherEventsClient(final ActionEvent event) throws IOException {
@@ -1005,11 +1053,11 @@ public class DashboardClientController {
      * Stage object.
      *
      * @param event
-     *            an action event that triggered the function execution, providing
-     *            the necessary context for the code to perform its intended task.
-     *            <p>
-     *            - `event` is an `ActionEvent`, indicating that the function was
-     *            triggered by user action.
+     *              an action event that triggered the function execution, providing
+     *              the necessary context for the code to perform its intended task.
+     *              <p>
+     *              - `event` is an `ActionEvent`, indicating that the function was
+     *              triggered by user action.
      */
     @FXML
     void afficherMoviesClient(final ActionEvent event) throws IOException {
@@ -1029,12 +1077,13 @@ public class DashboardClientController {
      * for the interface, and closes the previous stage.
      *
      * @param event
-     *            event that triggered the function, specifically the button click
-     *            event that activates the function to display the product client
-     *            interface.
-     *            <p>
-     *            - `event`: An `ActionEvent` object representing a user action that
-     *            triggered the function execution.
+     *              event that triggered the function, specifically the button click
+     *              event that activates the function to display the product client
+     *              interface.
+     *              <p>
+     *              - `event`: An `ActionEvent` object representing a user action
+     *              that
+     *              triggered the function execution.
      */
     @FXML
     void afficherProductsClient(final ActionEvent event) throws IOException {
@@ -1055,12 +1104,14 @@ public class DashboardClientController {
      * stage, replacing the current stage.
      *
      * @param event
-     *            event that triggered the execution of the `afficherSeriesClient()`
-     *            method, specifically the button click event on the client series
-     *            view.
-     *            <p>
-     *            - Event type: `ActionEvent` - Source object: (`Node`) reference to
-     *            the element that triggered the event
+     *              event that triggered the execution of the
+     *              `afficherSeriesClient()`
+     *              method, specifically the button click event on the client series
+     *              view.
+     *              <p>
+     *              - Event type: `ActionEvent` - Source object: (`Node`) reference
+     *              to
+     *              the element that triggered the event
      */
     @FXML
     void afficherSeriesClient(final ActionEvent event) throws IOException {
@@ -1110,9 +1161,10 @@ public class DashboardClientController {
      * event is triggered.
      *
      * @param event
-     *            user's click on the "Add Comment" button, which triggers the
-     *            execution of the `addCommentaire()` method and the display of all
-     *            comments for the specified `cinemaId`.
+     *              user's click on the "Add Comment" button, which triggers the
+     *              execution of the `addCommentaire()` method and the display of
+     *              all
+     *              comments for the specified `cinemaId`.
      */
     @FXML
     void AddComment(final MouseEvent event) {
@@ -1125,7 +1177,7 @@ public class DashboardClientController {
      * the comments and then filtering them based on the cinema ID.
      *
      * @param cinemaId
-     *            Id of the cinema for which the comments are to be retrieved.
+     *                 Id of the cinema for which the comments are to be retrieved.
      * @returns a list of `CinemaComment` objects for the specified cinema ID.
      *          <p>
      *          - The output is a list of `CinemaComment` objects, representing all
@@ -1152,15 +1204,19 @@ public class DashboardClientController {
      * center the image within the circle.
      *
      * @param commentaire
-     *            CinemaComment object passed to the function, containing
-     *            information about the user's comment and image.
-     *            <p>
-     *            - `client`: contains information about the user who made the
-     *            comment + `getPhotoDeProfil()`: the URL of the user's profile
-     *            picture - `getCommentaire()`: the actual comment made by the user
-     *            <p>
-     *            Both properties are used to generate the image and text display
-     *            for the comment.
+     *                    CinemaComment object passed to the function, containing
+     *                    information about the user's comment and image.
+     *                    <p>
+     *                    - `client`: contains information about the user who made
+     *                    the
+     *                    comment + `getPhotoDeProfil()`: the URL of the user's
+     *                    profile
+     *                    picture - `getCommentaire()`: the actual comment made by
+     *                    the user
+     *                    <p>
+     *                    Both properties are used to generate the image and text
+     *                    display
+     *                    for the comment.
      * @returns a `HBox` container containing an image and text related to a
      *          comment.
      *          <p>
@@ -1247,7 +1303,8 @@ public class DashboardClientController {
      * pane.
      *
      * @param cinemaId
-     *            identity of the cinema for which all comments are to be displayed.
+     *                 identity of the cinema for which all comments are to be
+     *                 displayed.
      */
     private void displayAllComments(final Long cinemaId) {
         final List<CinemaComment> comments = this.getAllComment(cinemaId);
@@ -1264,11 +1321,11 @@ public class DashboardClientController {
      * another visible.
      *
      * @param event
-     *            mouse event that triggered the execution of the `closeCommets()`
-     *            method.
-     *            <p>
-     *            Event type: MouseEvent Target element: AnchorComments Current
-     *            state: Visible
+     *              mouse event that triggered the execution of the `closeCommets()`
+     *              method.
+     *              <p>
+     *              Event type: MouseEvent Target element: AnchorComments Current
+     *              state: Visible
      */
     @FXML
     void closeCommets(final MouseEvent event) {

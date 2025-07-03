@@ -30,10 +30,10 @@ public class ImdbAPI {
      * Search for a movie on IMDb
      *
      * @param query
-     *            The movie title to search for
+     *              The movie title to search for
      * @return The IMDb URL of the first matching result, or null if not found
      * @throws IOException
-     *             if there's an error communicating with the API
+     *                     if there's an error communicating with the API
      */
     public static String searchMovie(final String query) throws IOException {
         if (query == null || query.trim().isEmpty()) {

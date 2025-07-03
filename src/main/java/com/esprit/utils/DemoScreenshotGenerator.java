@@ -56,9 +56,9 @@ public class DemoScreenshotGenerator {
      * Capture screenshot of entire stage/window
      *
      * @param stage
-     *            The JavaFX Stage to capture
+     *                 The JavaFX Stage to capture
      * @param filename
-     *            Custom filename (without extension)
+     *                 Custom filename (without extension)
      * @return Path to the generated screenshot file
      */
     public static Path captureStage(Stage stage, String filename) {
@@ -91,9 +91,9 @@ public class DemoScreenshotGenerator {
      * Capture screenshot of specific node/component
      *
      * @param node
-     *            The JavaFX Node to capture
+     *                 The JavaFX Node to capture
      * @param filename
-     *            Custom filename (without extension)
+     *                 Custom filename (without extension)
      * @return Path to the generated screenshot file
      */
     public static Path captureNode(Node node, String filename) {
@@ -126,9 +126,9 @@ public class DemoScreenshotGenerator {
      * Capture multiple screenshots of different scenes/stages
      *
      * @param stages
-     *            Array of stages to capture
+     *                     Array of stages to capture
      * @param baseFilename
-     *            Base filename (will be appended with numbers)
+     *                     Base filename (will be appended with numbers)
      * @return Array of paths to generated screenshot files
      */
     public static Path[] captureMultipleStages(Stage[] stages, String baseFilename) {
@@ -161,7 +161,7 @@ public class DemoScreenshotGenerator {
      * Clean up old screenshots (keeps only recent ones)
      *
      * @param keepCount
-     *            Number of recent screenshots to keep
+     *                  Number of recent screenshots to keep
      */
     public static void cleanupOldScreenshots(int keepCount) {
         try {

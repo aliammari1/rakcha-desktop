@@ -1,6 +1,7 @@
 
 /**
- * AddComprehensiveJavaDoc class provides functionality for the RAKCHA desktop application.
+ * AddComprehensiveJavaDoc class provides functionality for the RAKCHA desktop
+ * application.
  * <p>
  * This class is part of the JavaFX-based desktop application designed for
  * comprehensive cinema and product management system.

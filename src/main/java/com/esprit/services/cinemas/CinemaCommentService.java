@@ -43,7 +43,7 @@ public class CinemaCommentService implements IService<CinemaComment> {
      * Creates a new entity in the database.
      *
      * @param entity
-     *            the entity to create
+     *               the entity to create
      */
     public void create(CinemaComment cinemaComment) {
         String query = "INSERT INTO cinema_comment (cinema_id, client_id, comment_text, sentiment) VALUES (?, ?, ?, ?)";
@@ -64,7 +64,7 @@ public class CinemaCommentService implements IService<CinemaComment> {
      * Updates an existing entity in the database.
      *
      * @param entity
-     *            the entity to update
+     *               the entity to update
      */
     public void update(CinemaComment cinemaComment) {
         String query = "UPDATE cinema_comment SET comment_text = ?, sentiment = ? WHERE id = ?";
@@ -84,7 +84,7 @@ public class CinemaCommentService implements IService<CinemaComment> {
      * Deletes an entity from the database.
      *
      * @param id
-     *            the ID of the entity to delete
+     *           the ID of the entity to delete
      */
     public void delete(CinemaComment cinemaComment) {
         String query = "DELETE FROM cinema_comment WHERE id = ?";

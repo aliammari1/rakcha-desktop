@@ -87,16 +87,18 @@ public class CategorieController {
              * to a button.
              *
              * @param item
-             *            Void object that is being updated by the function, and its value
-             *            determines whether the graphic associated with the item should be
-             *            set to null or the button provided as an argument to the function.
+             *              Void object that is being updated by the function, and its value
+             *              determines whether the graphic associated with the item should
+             *              be
+             *              set to null or the button provided as an argument to the
+             *              function.
              *
-             *            - `item`: A Void object representing an item whose graphic is to
-             *            be updated.
+             *              - `item`: A Void object representing an item whose graphic is to
+             *              be updated.
              *
              * @param empty
-             *            whether the item is empty or not, which determines whether the
-             *            graphic element is set to `null` or `button`.
+             *              whether the item is empty or not, which determines whether the
+             *              graphic element is set to `null` or `button`.
              */
             @Override
             protected void updateItem(final Void item, final boolean empty) {
@@ -130,16 +132,16 @@ public class CategorieController {
              * graphic to a button.
              *
              * @param item
-             *            Void object being updated, and its value is passed to the super
-             *            method `updateItem()` for further processing.
+             *              Void object being updated, and its value is passed to the super
+             *              method `updateItem()` for further processing.
              *
-             *            - `item`: A Void object representing an item to be updated. -
-             *            `empty`: A boolean indicating whether the item is empty or not.
+             *              - `item`: A Void object representing an item to be updated. -
+             *              `empty`: A boolean indicating whether the item is empty or not.
              *
              * @param empty
-             *            whether the item is empty or not, and determines whether the
-             *            graphic of the item should be updated to null or the button
-             *            object.
+             *              whether the item is empty or not, and determines whether the
+             *              graphic of the item should be updated to null or the button
+             *              object.
              */
             @Override
             protected void updateItem(final Void item, final boolean empty) {
@@ -166,10 +168,10 @@ public class CategorieController {
      * user via the `showAndWait()` method.
      *
      * @param title
-     *            title of an alert window that will be displayed when the
-     *            `showAlert` method is called.
+     *                title of an alert window that will be displayed when the
+     *                `showAlert` method is called.
      * @param message
-     *            text to be displayed in the alert box.
+     *                text to be displayed in the alert box.
      */
     private void showAlert(final String title, final String message) {
         final Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -186,12 +188,14 @@ public class CategorieController {
      * new details and confirmed the modifications.
      *
      * @param categorie
-     *            category object that is to be modified through the dialog box, and
-     *            its properties (name and description) are editable and can be
-     *            modified by the user through the dialog UI.
-     *            <p>
-     *            - `nom`: The name of the category. - `description`: A brief
-     *            description of the category.
+     *                  category object that is to be modified through the dialog
+     *                  box, and
+     *                  its properties (name and description) are editable and can
+     *                  be
+     *                  modified by the user through the dialog UI.
+     *                  <p>
+     *                  - `nom`: The name of the category. - `description`: A brief
+     *                  description of the category.
      */
     private void modifierCategorie(final Category categorie) {
         final IServiceCategorieImpl iServiceCategorie = new IServiceCategorieImpl();
@@ -280,12 +284,12 @@ public class CategorieController {
      * upon successful save.
      *
      * @param event
-     *            user's action of clicking the "Add Category" button, which
-     *            triggers the execution of the code within the function.
-     *            <p>
-     *            - Type: `ActionEvent` - Details: Contains information about the
-     *            action that triggered the function, such as the source of the
-     *            event and the identifier of the event.
+     *              user's action of clicking the "Add Category" button, which
+     *              triggers the execution of the code within the function.
+     *              <p>
+     *              - Type: `ActionEvent` - Details: Contains information about the
+     *              action that triggered the function, such as the source of the
+     *              event and the identifier of the event.
      */
     @FXML
     void ajouteroeuvre(final ActionEvent event) {
@@ -314,14 +318,14 @@ public class CategorieController {
      * then shows the stage.
      *
      * @param event
-     *            event that triggered the method, specifically the opening of the
-     *            `Categorie-view.fxml` file.
-     *            <p>
-     *            - `Event`: This is the class that represents an event in Java,
-     *            containing information about the source and type of the event. -
-     *            `Object`: The `event` parameter is an instance of the `Object`
-     *            class, which provides no additional information beyond the fact
-     *            that it is an event object.
+     *              event that triggered the method, specifically the opening of the
+     *              `Categorie-view.fxml` file.
+     *              <p>
+     *              - `Event`: This is the class that represents an event in Java,
+     *              containing information about the source and type of the event. -
+     *              `Object`: The `event` parameter is an instance of the `Object`
+     *              class, which provides no additional information beyond the fact
+     *              that it is an event object.
      */
     @FXML
     void Ocategories(final ActionEvent event) throws IOException {
@@ -337,16 +341,17 @@ public class CategorieController {
      * Loads and displays a FXML view named "Serie-view".
      *
      * @param event
-     *            event object that triggered the function, providing information
-     *            about the source of the event and other details.
-     *            <p>
-     *            Event: An ActionEvent object representing an action triggered by
-     *            the user.
-     *            <p>
-     *            Properties:
-     *            <p>
-     *            - `getSource()`: Returns the source of the event (i.e., the button
-     *            or menu item that was clicked).
+     *              event object that triggered the function, providing information
+     *              about the source of the event and other details.
+     *              <p>
+     *              Event: An ActionEvent object representing an action triggered by
+     *              the user.
+     *              <p>
+     *              Properties:
+     *              <p>
+     *              - `getSource()`: Returns the source of the event (i.e., the
+     *              button
+     *              or menu item that was clicked).
      */
     @FXML
     void Oseriess(final ActionEvent event) throws IOException {
@@ -363,15 +368,15 @@ public class CategorieController {
      * displaying the content on the stage.
      *
      * @param event
-     *            source of the action that triggered the method, providing a
-     *            reference to the object from which the event originated.
-     *            <p>
-     *            Event: An instance of the `ActionEvent` class that contains
-     *            information about the action performed by the user. Properties:
-     *            <p>
-     *            - `getSource()`: Returns the object that triggered the event. In
-     *            this case, it is a `Node` representing the `Episode-view.fxml`
-     *            stage.
+     *              source of the action that triggered the method, providing a
+     *              reference to the object from which the event originated.
+     *              <p>
+     *              Event: An instance of the `ActionEvent` class that contains
+     *              information about the action performed by the user. Properties:
+     *              <p>
+     *              - `getSource()`: Returns the object that triggered the event. In
+     *              this case, it is a `Node` representing the `Episode-view.fxml`
+     *              stage.
      */
     @FXML
     void Oepisode(final ActionEvent event) throws IOException {
@@ -388,11 +393,13 @@ public class CategorieController {
      * is triggered.
      *
      * @param actionEvent
-     *            event that triggered the function, which is used to determine what
-     *            action to take based on the event type.
-     *            <p>
-     *            - If `actionEvent` is not null, it represents an action event
-     *            triggered by the user.
+     *                    event that triggered the function, which is used to
+     *                    determine what
+     *                    action to take based on the event type.
+     *                    <p>
+     *                    - If `actionEvent` is not null, it represents an action
+     *                    event
+     *                    triggered by the user.
      */
     @FXML
     /**
@@ -432,7 +439,8 @@ public class CategorieController {
      * when an event is triggered.
      *
      * @param actionEvent
-     *            event that triggered the execution of the `showMovies` function.
+     *                    event that triggered the execution of the `showMovies`
+     *                    function.
      */
     public void showmovies(final ActionEvent actionEvent) {
     }
@@ -441,7 +449,7 @@ public class CategorieController {
      * Displays a list of products.
      *
      * @param actionEvent
-     *            event that triggered the function call.
+     *                    event that triggered the function call.
      */
     public void showproducts(final ActionEvent actionEvent) {
     }
@@ -451,7 +459,7 @@ public class CategorieController {
      * lacks any statements or actions to perform.
      *
      * @param actionEvent
-     *            event that triggered the function call.
+     *                    event that triggered the function call.
      */
     public void showcinema(final ActionEvent actionEvent) {
     }
@@ -461,7 +469,7 @@ public class CategorieController {
      * only contains a blank implementation.
      *
      * @param actionEvent
-     *            event that triggered the function's execution.
+     *                    event that triggered the function's execution.
      */
     public void showevent(final ActionEvent actionEvent) {
     }
@@ -471,8 +479,9 @@ public class CategorieController {
      * the code author or licensing.
      *
      * @param actionEvent
-     *            event that triggered the `showseries()` function to be called,
-     *            providing the necessary context for its execution.
+     *                    event that triggered the `showseries()` function to be
+     *                    called,
+     *                    providing the necessary context for its execution.
      */
     public void showseries(final ActionEvent actionEvent) {
     }

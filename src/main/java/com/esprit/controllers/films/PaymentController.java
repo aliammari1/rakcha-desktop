@@ -18,12 +18,29 @@ import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 
 /**
- * Is responsible for handling payment processing and redirection to either a
- * success or failure page after a successful payment. The class includes
- * several methods that validate credit card numbers, email addresses, and
- * expiration dates, and checks if the client's information is valid before
- * redirecting to the appropriate page. Additionally, it provides an alert
- * mechanism for displaying informational messages during the payment process.
+ * Controller class for handling payment processing in the RAKCHA application.
+ * 
+ * <p>
+ * This controller is responsible for validating and processing payments for
+ * movie tickets.
+ * It handles credit card information validation, payment processing, and user
+ * feedback.
+ * </p>
+ * 
+ * <p>
+ * Key features include:
+ * </p>
+ * <ul>
+ * <li>Credit card number validation using regex patterns</li>
+ * <li>Expiration date validation</li>
+ * <li>CVC validation</li>
+ * <li>Email format validation</li>
+ * <li>Integration with Stripe payment processing</li>
+ * </ul>
+ * 
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public class PaymentController {
     private static final Logger LOGGER = Logger.getLogger(PaymentController.class.getName());
@@ -62,9 +79,15 @@ public class PaymentController {
     private ComboBox<String> cinemacombox_res;
 
     /**
-     * Sets up three SpinnerValueFactories, `MM`, `YY`, and `cvc`, for displaying
-     * dates in the format `mm/yyyy/ccvc`. It assigns the value factories to the
-     * respective Spinners.
+     * Sets up three SpinnerValueFactories for month, year, and CVC input fields.
+     * 
+     * <p>
+     * This method initializes the month spinner with values 1-12, the year spinner
+     * with a wide range of valid years, and the CVC spinner with values 1-999. Each
+     * spinner is configured with appropriate minimum and maximum values, initial
+     * values,
+     * and increment steps.
+     * </p>
      */
     @FXML
     void initialize() {
@@ -85,17 +108,17 @@ public class PaymentController {
      * sets the text of a text field with the total amount.
      *
      * @param s
-     *            MovieSession object passed into the function, which is used to set
-     *            the values of various fields within the `MovieSession` object.
-     *            <p>
-     *            - `moviesession`: represents an object of the MovieSession class,
-     *            containing information about a moviesession. - `prix`: a float
-     *            representing the price of the moviesession. - `terrain_id`: an
-     *            integer representing the terrain ID for display purposes. -
-     *            `monthValue` and `year`: integers representing the current month
-     *            and year respectively. - `cvc`: an object of the CVC class, used
-     *            to display a spinner for the number of seats available in the
-     *            moviesession.
+     *          MovieSession object passed into the function, which is used to set
+     *          the values of various fields within the `MovieSession` object.
+     *          <p>
+     *          - `moviesession`: represents an object of the MovieSession class,
+     *          containing information about a moviesession. - `prix`: a float
+     *          representing the price of the moviesession. - `terrain_id`: an
+     *          integer representing the terrain ID for display purposes. -
+     *          `monthValue` and `year`: integers representing the current month
+     *          and year respectively. - `cvc`: an object of the CVC class, used
+     *          to display a spinner for the number of seats available in the
+     *          moviesession.
      */
     public void setData(final MovieSession s) {
         moviesession = s;
@@ -126,23 +149,22 @@ public class PaymentController {
     }
 
     /**
-     * Validates user input and processes a payment using a third-party payment
-     * processor. If the payment is successful, it displays an information alert;
-     * otherwise, it displays an error alert.
+     * Processes a payment after validating all required input fields.
+     * 
+     * <p>
+     * This method performs comprehensive validation of all payment information
+     * including client name, email, card number, CVC, and expiration date. If all
+     * validations pass, it processes the payment through the PaymentProcessor.
+     * </p>
+     * 
+     * <p>
+     * The method displays appropriate error alerts if any validation fails,
+     * highlighting the problematic field with a red border.
+     * </p>
      *
-     * @param event
-     *            payment action that triggered the function execution, and it is
-     *            used to identify the specific payment method being processed.
-     *            <p>
-     *            - `LOGGER.info(cvc.getValue());`: This line prints the value of
-     *            the `CVC` field.
-     *            <p>
-     *            `event` is an instance of the `ActionEvent` class, which
-     *            represents a user event related to a button press or other action
-     *            in the JavaFX application. It provides information about the
-     *            event, such as the source of the event (e.g., a button), the type
-     *            of event (e.g., "click"), and any additional data related to the
-     *            event.
+     * @param event the action event that triggered this method
+     * @throws StripeException if there is an error with the Stripe payment
+     *                         processing
      */
     @FXML
     private void payment(final ActionEvent event) throws StripeException {
@@ -248,13 +270,10 @@ public class PaymentController {
 
     /**
      * Verifies if a given integer value can be represented as a three-digit credit
-     * card number (CVC) by checking its length. If the length is equal to 3, the
-     * function returns `true`, otherwise it returns `false`.
+     * card security code (CVC).
      *
-     * @param value
-     *            3-digit credit card number to be checked for length.
-     * @returns a boolean value indicating whether the input string has a length of
-     *          3.
+     * @param value the CVC value to check
+     * @return true if the value is a valid three-digit number, false otherwise
      */
     private boolean check_cvc(final int value) {
         final String cvc_txt = String.valueOf(value);
@@ -262,16 +281,17 @@ public class PaymentController {
     }
 
     /**
-     * Takes two parameters `value_y` and `value_mm`, checks if the date represented
-     * by those parameters is after the current date, and returns `true` if it is,
-     * or `false` otherwise.
+     * Validates if the provided expiration date is in the future.
+     * 
+     * <p>
+     * Checks that the year and month combination represents a date that
+     * is not in the past compared to the current date.
+     * </p>
      *
-     * @param value_y
-     *            4-digit year value in the expiration date.
-     * @param value_mm
-     *            month of the date to be checked, which is used to determine if the
-     *            date is valid.
-     * @returns a boolean value indicating whether the given date is valid.
+     * @param value_y  the year value of the expiration date
+     * @param value_mm the month value of the expiration date (1-12)
+     * @return true if the expiration date is valid and in the future, false
+     *         otherwise
      */
     private boolean check_expDate(final int value_y, final int value_mm) {
         boolean valid = false;
@@ -283,15 +303,17 @@ public class PaymentController {
     }
 
     /**
-     * Checks whether a given credit card number follows a specific format by
-     * matching it against a regular expression pattern. It returns `true` if the
-     * pattern matches and `false` otherwise.
+     * Validates a credit card number using a regular expression pattern.
+     * 
+     * <p>
+     * This method validates whether the provided string represents a valid
+     * credit card number by checking its format against standard patterns for
+     * major credit card providers including Visa, MasterCard, American Express,
+     * and others.
+     * </p>
      *
-     * @param cardNumber
-     *            13-19 digit credit card number to be checked against the regular
-     *            expression pattern for validation.
-     * @returns a boolean value indicating whether the provided credit card number
-     *          matches the specified pattern.
+     * @param cardNumber the credit card number to validate
+     * @return true if the card number matches a valid pattern, false otherwise
      */
     private boolean check_card_num(String cardNumber) {
         // Trim the input string to remove any leading or trailing whitespace
@@ -311,13 +333,15 @@ public class PaymentController {
     }
 
     /**
-     * Checks whether a given email address is valid by matching it against a
-     * regular expression pattern that matches most standard email addresses.
+     * Validates an email address using a regular expression pattern.
+     * 
+     * <p>
+     * Checks if the provided string follows the standard email format
+     * with a username portion, @ symbol, and domain portion with TLD.
+     * </p>
      *
-     * @param email
-     *            email address to be checked for validity.
-     * @returns a boolean value indicating whether the provided email address is
-     *          valid or not.
+     * @param email the email address to validate
+     * @return true if the email address is valid, false otherwise
      */
     public boolean isValidEmail(String email) {
         // Trim the input string to remove any leading or trailing whitespace
@@ -383,10 +407,10 @@ public class PaymentController {
      * the client ID, and displays the stage in a new window.
      *
      * @param event
-     *            triggering of an action, specifically the click on the "Back"
-     *            button, which calls the `redirectToListReservation()` method.
-     *            <p>
-     *            - `event` is an instance of the `ActionEvent` class.
+     *              triggering of an action, specifically the click on the "Back"
+     *              button, which calls the `redirectToListReservation()` method.
+     *              <p>
+     *              - `event` is an instance of the `ActionEvent` class.
      */
     @FXML
     private void redirectToListReservation(final ActionEvent event) {

@@ -47,10 +47,10 @@ public class DatabaseManager {
      * Switch to SQLite database
      * 
      * @param databasePath Path to SQLite database file (default:
-     *                     data/rakcha_db.sqlite)
+     *                     data/rakcha.db)
      */
     public static void switchToSQLite(String databasePath) {
-        String path = databasePath != null ? databasePath : "data/rakcha_db.sqlite";
+        String path = databasePath != null ? databasePath : "data/rakcha.db";
         String url = "jdbc:sqlite:" + path;
 
         updateDatabaseConfig(HibernateConfig.DatabaseType.SQLITE, url, "", "");

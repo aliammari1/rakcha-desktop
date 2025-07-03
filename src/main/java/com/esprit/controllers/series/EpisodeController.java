@@ -134,12 +134,13 @@ public class EpisodeController {
              * Updates an item's graphical representation based on its emptiness status.
              *
              * @param item
-             *            component being updated, which can be either null or a `Button`
-             *            object when the `empty` parameter is false.
+             *              component being updated, which can be either null or a `Button`
+             *              object when the `empty` parameter is false.
              *
              * @param empty
-             *            ether value of the item being updated, and determines whether or
-             *            not the button's graphic should be set to `null` or the `button`.
+             *              ether value of the item being updated, and determines whether or
+             *              not the button's graphic should be set to `null` or the
+             *              `button`.
              */
             @Override
             protected void updateItem(final Void item, final boolean empty) {
@@ -173,13 +174,15 @@ public class EpisodeController {
              * on its status as empty or not.
              *
              * @param item
-             *            Void item being updated, which is passed to the superclass's
-             *            `updateItem` method and then used to set the graphic of the button
-             *            in the function.
+             *              Void item being updated, which is passed to the superclass's
+             *              `updateItem` method and then used to set the graphic of the
+             *              button
+             *              in the function.
              *
              * @param empty
-             *            state of the item being updated, and sets the graphic of the item
-             *            accordingly when it is false.
+             *              state of the item being updated, and sets the graphic of the
+             *              item
+             *              accordingly when it is false.
              */
             @Override
             protected void updateItem(final Void item, final boolean empty) {
@@ -208,8 +211,9 @@ public class EpisodeController {
      * database using an IoC container.
      *
      * @param episodeDto
-     *            data of an episode to be edited, containing information such as
-     *            title, number, season, image, and video path.
+     *                   data of an episode to be edited, containing information
+     *                   such as
+     *                   title, number, season, image, and video path.
      */
     private void modifierEpisode(final Episode episode) {
         final IServiceEpisodeImpl iServiceEpisode = new IServiceEpisodeImpl();
@@ -289,11 +293,12 @@ public class EpisodeController {
      * close it.
      *
      * @param title
-     *            title of an Alert that will be displayed to the user when the
-     *            function is called.
+     *                title of an Alert that will be displayed to the user when the
+     *                function is called.
      * @param message
-     *            content text to be displayed within an alert box when the function
-     *            is called.
+     *                content text to be displayed within an alert box when the
+     *                function
+     *                is called.
      */
     @FXML
     private void showAlert(final String title, final String message) {
@@ -309,8 +314,9 @@ public class EpisodeController {
      * path in `imgpath`, and sets the image using `Image`.
      *
      * @param event
-     *            action that triggered the function, specifically the opening of a
-     *            file using the FileChooser.
+     *              action that triggered the function, specifically the opening of
+     *              a
+     *              file using the FileChooser.
      */
     @FXML
     void addimg(final ActionEvent event) {
@@ -336,8 +342,8 @@ public class EpisodeController {
      * two different locations, and displays the image in an `ImageView`.
      *
      * @param event
-     *            trigger that initiates the action of importing an image when
-     *            clicked by the user.
+     *              trigger that initiates the action of importing an image when
+     *              clicked by the user.
      */
     @FXML
     void importImage(final ActionEvent event) {
@@ -385,7 +391,7 @@ public class EpisodeController {
      * the function returns `false`.
      *
      * @param file
-     *            file to be checked for being an image file.
+     *             file to be checked for being an image file.
      * @returns a boolean value indicating whether the provided file is an image
      *          file or not.
      */
@@ -406,8 +412,8 @@ public class EpisodeController {
      * `videopath`.
      *
      * @param event
-     *            occurance of a user clicking on the "Choose a video" button and
-     *            triggers the execution of the function.
+     *              occurance of a user clicking on the "Choose a video" button and
+     *              triggers the execution of the function.
      */
     @FXML
     void addVideo(final ActionEvent event) {
@@ -435,7 +441,7 @@ public class EpisodeController {
      * otherwise.
      *
      * @param file
-     *            File that needs to be checked for being a video file.
+     *             File that needs to be checked for being a video file.
      * @returns a boolean value indicating whether the provided file is an MP4, AVI,
      *          or MKV video file.
      */
@@ -453,7 +459,7 @@ public class EpisodeController {
      * `false`.
      *
      * @param s
-     *            String to be parsed as an integer.
+     *          String to be parsed as an integer.
      * @returns a boolean value indicating whether the given string can be parsed as
      *          an integer.
      */
@@ -574,10 +580,11 @@ public class EpisodeController {
      * and sends the message using a carrier service.
      *
      * @param recipientNumber
-     *            10-digit phone number of the recipient for whom the SMS message is
-     *            being sent.
+     *                        10-digit phone number of the recipient for whom the
+     *                        SMS message is
+     *                        being sent.
      * @param messageBody
-     *            text content of the SMS message to be sent.
+     *                        text content of the SMS message to be sent.
      */
     private void sendSMS(final String recipientNumber, final String messageBody) {
         final PhoneNumber fromPhoneNumber = new PhoneNumber("+17573640849");
@@ -592,8 +599,8 @@ public class EpisodeController {
      * phone with the details of the added episode.
      *
      * @param event
-     *            clicked button event on the user interface that triggered the
-     *            function execution.
+     *              clicked button event on the user interface that triggered the
+     *              function execution.
      */
     @FXML
     void ajouterSerie(final ActionEvent event) {
@@ -654,8 +661,8 @@ public class EpisodeController {
      * given resources.
      *
      * @param event
-     *            event that triggered the `Ocategories` function, providing the
-     *            necessary information for the function to perform its actions.
+     *              event that triggered the `Ocategories` function, providing the
+     *              necessary information for the function to perform its actions.
      */
     @FXML
     void Ocategories(final ActionEvent event) throws IOException {
@@ -672,8 +679,9 @@ public class EpisodeController {
      * the stage in the UI.
      *
      * @param event
-     *            Event that triggered the function, and it is used to load the FXML
-     *            file for display in the stage.
+     *              Event that triggered the function, and it is used to load the
+     *              FXML
+     *              file for display in the stage.
      */
     @FXML
     void Oseries(final ActionEvent event) throws IOException {
@@ -690,8 +698,9 @@ public class EpisodeController {
      * JavaFX application.
      *
      * @param event
-     *            event that triggered the method execution, providing the necessary
-     *            information for displaying the appropriate episode view.
+     *              event that triggered the method execution, providing the
+     *              necessary
+     *              information for displaying the appropriate episode view.
      */
     @FXML
     void Oepisode(final ActionEvent event) throws IOException {
@@ -708,7 +717,8 @@ public class EpisodeController {
      * of now.
      *
      * @param actionEvent
-     *            event that triggered the execution of the `showMovies()` function.
+     *                    event that triggered the execution of the `showMovies()`
+     *                    function.
      */
     public void showmovies(final ActionEvent actionEvent) {
     }
@@ -717,7 +727,8 @@ public class EpisodeController {
      * Displays a list of products.
      *
      * @param actionEvent
-     *            event that triggered the execution of the `showProducts` function.
+     *                    event that triggered the execution of the `showProducts`
+     *                    function.
      */
     public void showproducts(final ActionEvent actionEvent) {
     }
@@ -726,7 +737,7 @@ public class EpisodeController {
      * Likely displays a cinema or movie-related information within an application.
      *
      * @param actionEvent
-     *            event that triggered the function call.
+     *                    event that triggered the function call.
      */
     public void showcinema(final ActionEvent actionEvent) {
     }
@@ -736,7 +747,8 @@ public class EpisodeController {
      * interface (GUI).
      *
      * @param actionEvent
-     *            occurrence of an event that triggers the function's execution.
+     *                    occurrence of an event that triggers the function's
+     *                    execution.
      */
     public void showevent(final ActionEvent actionEvent) {
     }
@@ -746,7 +758,8 @@ public class EpisodeController {
      * purpose beyond its activation.
      *
      * @param actionEvent
-     *            event that triggered the call to the `showSeries()` method.
+     *                    event that triggered the call to the `showSeries()`
+     *                    method.
      */
     public void showseries(final ActionEvent actionEvent) {
     }

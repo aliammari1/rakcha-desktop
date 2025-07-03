@@ -46,9 +46,9 @@ public class ProductCategory {
      * Constructor without id for creating new category instances.
      *
      * @param categoryName
-     *            The name of the category.
+     *                     The name of the category.
      * @param description
-     *            The description of the category.
+     *                     The description of the category.
      */
     public ProductCategory(final String categoryName, final String description) {
         this.categoryName = categoryName;

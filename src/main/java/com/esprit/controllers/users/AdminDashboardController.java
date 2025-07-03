@@ -153,15 +153,20 @@ public class AdminDashboardController {
      * error message is displayed near the text field.
      *
      * @param textField
-     *            TextField component whose text value will be validated and whose
-     *            tooltip will be updated accordingly.
+     *                            TextField component whose text value will be
+     *                            validated and whose
+     *                            tooltip will be updated accordingly.
      * @param validationPredicate
-     *            function that determines whether or not a given string is valid,
-     *            and it is used to determine whether an error message should be
-     *            displayed when the user types something into the text field.
+     *                            function that determines whether or not a given
+     *                            string is valid,
+     *                            and it is used to determine whether an error
+     *                            message should be
+     *                            displayed when the user types something into the
+     *                            text field.
      * @param errorMessage
-     *            message to be displayed as a tooltip when the user enters an
-     *            invalid value in the text field.
+     *                            message to be displayed as a tooltip when the user
+     *                            enters an
+     *                            invalid value in the text field.
      */
     private void addValidationListener(final TextField textField, final Predicate<String> validationPredicate,
             final String errorMessage) {
@@ -172,17 +177,20 @@ public class AdminDashboardController {
              * tooltip if the new value does not meet a validation predicate or is empty.
              *
              * @param observable
-             *            ObservableValue object that emits changes to its value, allowing
-             *            the function to detect and respond to those changes.
+             *                   ObservableValue object that emits changes to its value,
+             *                   allowing
+             *                   the function to detect and respond to those changes.
              *
              * @param oldValue
-             *            previous value of the observable variable before the change
-             *            occurred, which is used to validate the new value and determine if
-             *            an error message should be displayed.
+             *                   previous value of the observable variable before the change
+             *                   occurred, which is used to validate the new value and
+             *                   determine if
+             *                   an error message should be displayed.
              *
              * @param newValue
-             *            updated value of the `TextField`, which is used to validate and
-             *            display an error message if necessary.
+             *                   updated value of the `TextField`, which is used to validate
+             *                   and
+             *                   display an error message if necessary.
              */
             @Override
             /**
@@ -242,8 +250,9 @@ public class AdminDashboardController {
      * input and creates a new admin user using the provided information.
      *
      * @param event
-     *            `addAdmin` action, triggering the execution of the code within the
-     *            function.
+     *              `addAdmin` action, triggering the execution of the code within
+     *              the
+     *              function.
      */
     @FXML
     void addAdmin(final ActionEvent event) {
@@ -330,7 +339,7 @@ public class AdminDashboardController {
                      * user's birth date if it is not null.
                      *
                      * @param param
-                     *            value of a table cell, which contains the birth date of a user.
+                     *              value of a table cell, which contains the birth date of a user.
                      *
                      * @returns a `SimpleObjectProperty` of a `DatePicker` object initialized with
                      *          the birth date value from the input `User` object, if available.
@@ -361,9 +370,9 @@ public class AdminDashboardController {
                      * user to select a new profile picture.
                      *
                      * @param param
-                     *            value of the `User` object being processed, which provides the
-                     *            `photo_de_profil` property that is used to display the photo of
-                     *            the profile in the `ImageView`.
+                     *              value of the `User` object being processed, which provides the
+                     *              `photo_de_profil` property that is used to display the photo of
+                     *              the profile in the `ImageView`.
                      *
                      * @returns an `ObservableValue` of type `HBox`, which contains a single
                      *          `ImageView` component that displays the user's profile picture.
@@ -388,8 +397,9 @@ public class AdminDashboardController {
                                  * previous images in the container.
                                  *
                                  * @param event
-                                 *            mouse event that triggered the function's execution, providing no
-                                 *            further context beyond that.
+                                 *              mouse event that triggered the function's execution, providing
+                                 *              no
+                                 *              further context beyond that.
                                  */
                                 @Override
                                 /**
@@ -430,8 +440,8 @@ public class AdminDashboardController {
                      * clicked, and then reads the entire user table.
                      *
                      * @param param
-                     *            `CellDataFeatures` of a table column, providing the current cell
-                     *            value and related data.
+                     *              `CellDataFeatures` of a table column, providing the current cell
+                     *              value and related data.
                      *
                      * @returns a `SimpleObjectProperty` of a `Button` object with an action to
                      *          delete the corresponding user ID.
@@ -450,9 +460,10 @@ public class AdminDashboardController {
                              * reloads the user table.
                              *
                              * @param event
-                             *            deleting event triggered by the user's action, and it is passed to
-                             *            the `handle()` method as an argument to enable the appropriate
-                             *            actions to be taken.
+                             *              deleting event triggered by the user's action, and it is passed
+                             *              to
+                             *              the `handle()` method as an argument to enable the appropriate
+                             *              actions to be taken.
                              */
                             @Override
                             /**

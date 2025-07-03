@@ -42,7 +42,7 @@ public class CategoryService implements IService<ProductCategory> {
      * Creates a new entity in the database.
      *
      * @param entity
-     *            the entity to create
+     *               the entity to create
      */
     public void create(final ProductCategory productCategory) {
         final String req = "INSERT into product_categories(category_name, description) values (?, ?)";
@@ -85,7 +85,7 @@ public class CategoryService implements IService<ProductCategory> {
      * Updates an existing entity in the database.
      *
      * @param entity
-     *            the entity to update
+     *               the entity to update
      */
     public void update(final ProductCategory productCategory) {
         final String req = "UPDATE product_categories set category_name = ?, description = ? where id = ?";
@@ -106,7 +106,7 @@ public class CategoryService implements IService<ProductCategory> {
      * Deletes an entity from the database.
      *
      * @param id
-     *            the ID of the entity to delete
+     *           the ID of the entity to delete
      */
     public void delete(final ProductCategory productCategory) {
         final String req = "DELETE from product_categories where id = ?";

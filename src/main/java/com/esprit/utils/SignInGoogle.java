@@ -35,13 +35,13 @@ public enum SignInGoogle {
      *
      * @return Authorization URL for the user to visit
      * @throws InterruptedException
-     *             if the operation is interrupted
+     *                               if the operation is interrupted
      * @throws ExecutionException
-     *             if the operation fails
+     *                               if the operation fails
      * @throws IOException
-     *             if there's an I/O error
+     *                               if there's an I/O error
      * @throws IllegalStateException
-     *             if required environment variables are missing
+     *                               if required environment variables are missing
      */
     public static String signInWithGoogle() throws InterruptedException, ExecutionException, IOException {
         Config config = Config.getInstance();
@@ -75,14 +75,14 @@ public enum SignInGoogle {
      * Complete the OAuth flow with the authorization code
      *
      * @param code
-     *            The authorization code from Google
+     *             The authorization code from Google
      * @return true if authentication was successful
      * @throws IOException
-     *             if there's an I/O error
+     *                              if there's an I/O error
      * @throws ExecutionException
-     *             if the operation fails
+     *                              if the operation fails
      * @throws InterruptedException
-     *             if the operation is interrupted
+     *                              if the operation is interrupted
      */
     public static boolean verifyAuthUrl(final String code)
             throws IOException, ExecutionException, InterruptedException {

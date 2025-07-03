@@ -47,11 +47,11 @@ public class Review {
      * Constructor without id for creating new review instances.
      *
      * @param client
-     *            the client who gave the review
+     *                the client who gave the review
      * @param rating
-     *            the rating given by the client
+     *                the rating given by the client
      * @param product
-     *            the product associated with the review
+     *                the product associated with the review
      */
     public Review(final Client client, final int rating, final Product product) {
         this.client = client;

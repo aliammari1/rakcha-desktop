@@ -91,11 +91,12 @@ public class CategoriesClientController {
      * the root node, sets the scene on a stage, and displays the stage.
      *
      * @param event
-     *            event that triggered the function, specifically the opening of a
-     *            JavaFX application.
-     *            <p>
-     *            - `event`: An `ActionEvent` object representing the user's action
-     *            that triggered the function execution.
+     *              event that triggered the function, specifically the opening of a
+     *              JavaFX application.
+     *              <p>
+     *              - `event`: An `ActionEvent` object representing the user's
+     *              action
+     *              that triggered the function execution.
      */
     @FXML
     void Ocategories(final ActionEvent event) throws IOException {
@@ -111,11 +112,12 @@ public class CategoriesClientController {
      * Loads a FXML file, creates a scene and stages it.
      *
      * @param event
-     *            event that triggered the function execution, which in this case is
-     *            a user action on the SeriesClient.fxml file.
-     *            <p>
-     *            - `event`: An `ActionEvent` object representing the user action
-     *            that triggered the function.
+     *              event that triggered the function execution, which in this case
+     *              is
+     *              a user action on the SeriesClient.fxml file.
+     *              <p>
+     *              - `event`: An `ActionEvent` object representing the user action
+     *              that triggered the function.
      */
     @FXML
     void Oseries(final ActionEvent event) throws IOException {
@@ -131,17 +133,18 @@ public class CategoriesClientController {
      * Loads an FXML file, creates a scene and stages it in a window.
      *
      * @param event
-     *            EventObject that triggered the execution of the `Oepisode()`
-     *            method, providing information about the source of the event and
-     *            its associated data.
-     *            <p>
-     *            Event: `ActionEvent event`
-     *            <p>
-     *            Main properties:
-     *            <p>
-     *            - Source: The object that triggered the action (not shown) - Event
-     *            type: The specific action that was triggered (e.g., "SELECT",
-     *            "SAVE")
+     *              EventObject that triggered the execution of the `Oepisode()`
+     *              method, providing information about the source of the event and
+     *              its associated data.
+     *              <p>
+     *              Event: `ActionEvent event`
+     *              <p>
+     *              Main properties:
+     *              <p>
+     *              - Source: The object that triggered the action (not shown) -
+     *              Event
+     *              type: The specific action that was triggered (e.g., "SELECT",
+     *              "SAVE")
      */
     @FXML
     void Oepisode(final ActionEvent event) throws IOException {

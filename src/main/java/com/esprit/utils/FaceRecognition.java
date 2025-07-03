@@ -103,7 +103,7 @@ public class FaceRecognition {
      * Recognize a face in the given image
      *
      * @param faceImage
-     *            The image containing a face to recognize
+     *                  The image containing a face to recognize
      * @return the recognized label, or -1 if not recognized or error
      */
     public int recognize(Mat faceImage) {

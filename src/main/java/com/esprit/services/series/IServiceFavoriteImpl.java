@@ -40,7 +40,7 @@ public class IServiceFavoriteImpl implements IService<Favorite> {
      * Creates a new entity in the database.
      *
      * @param entity
-     *            the entity to create
+     *               the entity to create
      */
     public void create(final Favorite favorite) {
         final String req = """
@@ -63,7 +63,7 @@ public class IServiceFavoriteImpl implements IService<Favorite> {
      * Updates an existing entity in the database.
      *
      * @param entity
-     *            the entity to update
+     *               the entity to update
      */
     public void update(final Favorite favorite) {
         final String req = "UPDATE favorites SET user_id=?, series_id=? WHERE id=?";
@@ -83,7 +83,7 @@ public class IServiceFavoriteImpl implements IService<Favorite> {
      * Deletes an entity from the database.
      *
      * @param id
-     *            the ID of the entity to delete
+     *           the ID of the entity to delete
      */
     public void delete(final Favorite favorite) {
         final String req = "DELETE FROM favorites WHERE id=?";

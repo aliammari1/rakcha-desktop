@@ -53,11 +53,12 @@ public class CinemaManagerSideBarController implements Initializable {
      * in a reference to the actor's data as an argument.
      *
      * @param event
-     *            user's action of clicking on the button that triggers the
-     *            function.
-     *            <p>
-     *            - `event`: An `ActionEvent` object representing a user interaction
-     *            with the stage button.
+     *              user's action of clicking on the button that triggers the
+     *              function.
+     *              <p>
+     *              - `event`: An `ActionEvent` object representing a user
+     *              interaction
+     *              with the stage button.
      */
     @FXML
     void switchToActor(final ActionEvent event) {
@@ -79,10 +80,10 @@ public class CinemaManagerSideBarController implements Initializable {
      * and sets the scene of a stage to display the loaded content.
      *
      * @param event
-     *            event of a button click that triggered the function execution.
-     *            <p>
-     *            - Event is an ActionEvent object, representing a user action
-     *            related to the stage or window where the function is called.
+     *              event of a button click that triggered the function execution.
+     *              <p>
+     *              - Event is an ActionEvent object, representing a user action
+     *              related to the stage or window where the function is called.
      */
     @FXML
     void switchstatestique(final ActionEvent event) {
@@ -104,10 +105,10 @@ public class CinemaManagerSideBarController implements Initializable {
      * the existing content.
      *
      * @param event
-     *            click event on the cinema button that triggered the function
-     *            execution.
-     *            <p>
-     *            Event: An ActionEvent object representing a button press.
+     *              click event on the cinema button that triggered the function
+     *              execution.
+     *              <p>
+     *              Event: An ActionEvent object representing a button press.
      */
     @FXML
     void switchToCinema(final ActionEvent event) throws IOException {
@@ -123,10 +124,11 @@ public class CinemaManagerSideBarController implements Initializable {
      * current scene.
      *
      * @param event
-     *            clicked button that triggered the function call.
-     *            <p>
-     *            Event: An action event object representing the user's interaction
-     *            with the button.
+     *              clicked button that triggered the function call.
+     *              <p>
+     *              Event: An action event object representing the user's
+     *              interaction
+     *              with the button.
      */
     @FXML
     void switchToFilmCategorie(final ActionEvent event) {
@@ -147,12 +149,14 @@ public class CinemaManagerSideBarController implements Initializable {
      * class.
      *
      * @param event
-     *            click event that triggered the `switchToMovies()` method to be
-     *            executed.
-     *            <p>
-     *            - Event type: `ActionEvent` indicating a user action on the movie
-     *            button - Target object: `movieButton` providing the context of the
-     *            event
+     *              click event that triggered the `switchToMovies()` method to be
+     *              executed.
+     *              <p>
+     *              - Event type: `ActionEvent` indicating a user action on the
+     *              movie
+     *              button - Target object: `movieButton` providing the context of
+     *              the
+     *              event
      */
     @FXML
     void switchToMovies(final ActionEvent event) {
@@ -174,11 +178,12 @@ public class CinemaManagerSideBarController implements Initializable {
      * scenes.
      *
      * @param event
-     *            occurrence of a button press event that triggers the function to
-     *            switch to the `DashboardResponsableCinema.fxml` scene.
-     *            <p>
-     *            - `event`: An `ActionEvent` object representing the user's action
-     *            that triggered the function.
+     *              occurrence of a button press event that triggers the function to
+     *              switch to the `DashboardResponsableCinema.fxml` scene.
+     *              <p>
+     *              - `event`: An `ActionEvent` object representing the user's
+     *              action
+     *              that triggered the function.
      */
     @FXML
     void switchToMovieSessions(final ActionEvent event) {
@@ -197,7 +202,7 @@ public class CinemaManagerSideBarController implements Initializable {
      * Sets the value of the `resp` field to a provided `CinemaManager` object.
      *
      * @param resp
-     *            CinemaManager object that will store the data.
+     *             CinemaManager object that will store the data.
      */
     public void setData(final CinemaManager resp) {
         this.resp = resp;
@@ -208,10 +213,11 @@ public class CinemaManagerSideBarController implements Initializable {
      * a URL and resource bundle as arguments.
      *
      * @param location
-     *            URL of the initial resource to be processed by the function.
+     *                  URL of the initial resource to be processed by the function.
      * @param resources
-     *            resource bundle for the application, providing localized strings
-     *            and formatting data to the initialize method.
+     *                  resource bundle for the application, providing localized
+     *                  strings
+     *                  and formatting data to the initialize method.
      */
     @Override
     /**
@@ -226,11 +232,11 @@ public class CinemaManagerSideBarController implements Initializable {
      * replacing the current scene with a new one containing the loaded stage.
      *
      * @param event
-     *            event of button click, which triggers the function to switch to
-     *            the login screen.
-     *            <p>
-     *            - `event`: an `ActionEvent` object representing a user action on
-     *            the logout button.
+     *              event of button click, which triggers the function to switch to
+     *              the login screen.
+     *              <p>
+     *              - `event`: an `ActionEvent` object representing a user action on
+     *              the logout button.
      */
     @FXML
     void switchToLogout(final ActionEvent event) {
@@ -249,11 +255,13 @@ public class CinemaManagerSideBarController implements Initializable {
      * Loads a new FXML file, replacing the current scene with the new one.
      *
      * @param event
-     *            occurrence of a button press event that triggers the execution of
-     *            the `switchToProfile()` method.
-     *            <p>
-     *            - `event`: An `ActionEvent` object representing the user's action
-     *            of pressing the profile button.
+     *              occurrence of a button press event that triggers the execution
+     *              of
+     *              the `switchToProfile()` method.
+     *              <p>
+     *              - `event`: An `ActionEvent` object representing the user's
+     *              action
+     *              of pressing the profile button.
      */
     @FXML
     void switchToProfile(final ActionEvent event) {

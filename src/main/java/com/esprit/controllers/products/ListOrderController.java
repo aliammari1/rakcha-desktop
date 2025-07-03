@@ -25,12 +25,21 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 
 /**
- * Is responsible for handling user interactions related to order data display
- * and manipulation. The controller initiates the display of the order table,
- * enables cell selection, and implements a search function using an observable
- * list. Additionally, it provides a delete column and handles deletion events.
- * Finally, it offers an option to open a new stage with an analysis interface
- * for further examination of the command data.
+ * Controller class for managing and displaying orders in the RAKCHA
+ * application.
+ * This controller handles the display of orders in a TableView, provides search
+ * functionality, and allows for order deletion and statistical analysis.
+ * 
+ * <p>
+ * The controller initializes the table view with order data from the database,
+ * configures cell factories for displaying client information, and sets up
+ * event
+ * handlers for user interactions with the UI.
+ * </p>
+ *
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public class ListOrderController {
     private static final Logger LOGGER = Logger.getLogger(ListOrderController.class.getName());
@@ -55,9 +64,13 @@ public class ListOrderController {
     private TableColumn<Order, Void> deleteColumn;
 
     /**
-     * Sets up events for the `SearchBar` text property, triggering the `search`
-     * method when the text changes. It also calls `afficheOrder()` and initializes
-     * a delete column.
+     * Initializes the controller by setting up event listeners and populating the
+     * table view.
+     * 
+     * <p>
+     * This method configures the search bar to trigger filtering when text changes,
+     * initializes the order display, and sets up the delete column functionality.
+     * </p>
      */
     @FXML
     void initialize() {
@@ -69,11 +82,14 @@ public class ListOrderController {
     }
 
     /**
-     * Displays the details of a command in a table, including the client's first
-     * and last name, address, phone number, and order date, using a
-     * `PropertyValueFactory` to generate cell values based on the command object.
-     * It also sets up an observable list to store the commands and enables cell
-     * selection for easy navigation.
+     * Displays orders in the table view with appropriate column mappings.
+     * 
+     * <p>
+     * This method configures the table columns to display client information
+     * (first name, last name), order address, phone number, date, and status.
+     * It populates the table with data from the OrderService and enables cell
+     * selection.
+     * </p>
      */
     void afficheOrder() {
         this.idnom.setCellValueFactory(cellData -> {
@@ -102,13 +118,14 @@ public class ListOrderController {
     }
 
     /**
-     * Receives a keyword and filters the `Order` objects based on their addresses,
-     * client names, or statuses containing the keyword. It then adds the filtered
-     * objects to an observable list and sets it as the items of a table view.
+     * Filters the orders displayed in the table view based on a search keyword.
+     * 
+     * <p>
+     * This method searches for orders that match the keyword in client name,
+     * address, or status fields. If the keyword is empty, all orders are displayed.
+     * </p>
      *
-     * @param keyword
-     *            search query used to filter the list of Commands displayed in the
-     *            `orderTableView`.
+     * @param keyword The search term to filter orders by
      */
     @FXML
     private void search(final String keyword) {
@@ -130,40 +147,26 @@ public class ListOrderController {
     }
 
     /**
-     * Sets up a custom cell factory for a delete button in a table view, which when
-     * clicked deletes the item in the table and updates the view.
+     * Initializes the delete column with a button that allows users to delete
+     * orders.
+     * 
+     * <p>
+     * This method creates a custom cell factory for the delete column, adding a
+     * delete
+     * button to each row that, when clicked, removes the corresponding order from
+     * both
+     * the database and the table view.
+     * </p>
      */
     private void initDeleteColumn() {
         final Callback<TableColumn<Order, Void>, TableCell<Order, Void>> cellFactory = new Callback<>() {
             /**
-             * Creates a new `TableCell` instance that displays a delete button for each
-             * item in the table. When the button is pressed, the corresponding item is
-             * deleted from the table and the table view is updated.
+             * Creates a new TableCell instance with a delete button.
              *
-             * @param param
-             *            TableColumn object that invokes the function, providing the
-             *            necessary context for the function to operate on the appropriate
-             *            data.
-             *
-             *            - `param`: A `TableColumn<Order, Void>` object representing the
-             *            table column that the cell belongs to.
-             *
-             * @returns a `TableCell` object that displays a delete button for each item in
-             *          the table.
-             *
-             *          - The output is a `TableCell` object of type `<Order, Void>`. - The
-             *          cell contains a button with a class of "delete-button". - The button
-             *          has an `onAction` method that deletes the corresponding Order object
-             *          from the database when clicked. - The method also updates the
-             *          TableView by removing the deleted Order object and refreshing the
-             *          view.
+             * @param param The TableColumn to which the cell belongs
+             * @return A TableCell containing a delete button
              */
             @Override
-            /**
-             * Performs call operation.
-             *
-             * @return the result of the operation
-             */
             public TableCell<Order, Void> call(TableColumn<Order, Void> param) {
                 return new TableCell<>() {
                     private final Button btnDelete = new Button("Delete");
@@ -181,23 +184,10 @@ public class ListOrderController {
                     }
 
                     /**
-                     * Updates an item's graphic based on its emptiness, setting `null` if empty and
-                     * `btnDelete` otherwise.
+                     * Updates the cell to display the delete button when the cell is not empty.
                      *
-                     * @param item
-                     *            Void object being updated, which is passed to the superclass's
-                     *            `updateItem()` method and then processed further in the current
-                     *            method based on the value of the `empty` parameter.
-                     *
-                     *            - `item`: The item being updated, which can be either null or an
-                     *            instance of `Void`. - `empty`: A boolean indicating whether the
-                     *            item is empty or not. If true, the graphic is set to null;
-                     *            otherwise, it is set to `btnDelete`.
-                     *
-                     * @param empty
-                     *            whether the item being updated is empty or not, and determines
-                     *            whether the graphic of the update button should be set to `null`
-                     *            or `btnDelete`.
+                     * @param item  The item to update
+                     * @param empty Whether the cell is empty
                      */
                     @Override
                     protected void updateItem(final Void item, final boolean empty) {
@@ -215,20 +205,15 @@ public class ListOrderController {
     }
 
     /**
-     * Loads a new FXML interface, creates a new scene and stage, and attaches the
-     * scene to the stage. When the stage is closed, the original stage is shown.
+     * Opens the order statistics view in a new window.
+     * 
+     * <p>
+     * This method loads the AnalyseOrder.fxml file, creates a new scene and stage,
+     * and displays it. The original stage is shown again when the statistics window
+     * is closed.
+     * </p>
      *
-     * @param event
-     *            ActionEvent object that triggered the function execution and
-     *            provides access to the source node of the event, which is the
-     *            button in this case.
-     *            <p>
-     *            - `event`: An `ActionEvent` object representing the event
-     *            triggered by the user's action on the UI element.
-     *            <p>
-     *            The `event` object provides information about the source of the
-     *            event, the type of event, and other details that can be used to
-     *            handle the event appropriately.
+     * @param event The action event that triggered this method
      */
     @FXML
     void statOrder(final ActionEvent event) {

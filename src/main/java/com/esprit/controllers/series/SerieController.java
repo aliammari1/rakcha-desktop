@@ -152,14 +152,16 @@ public class SerieController {
              * empty/non-empty status.
              *
              * @param item
-             *            widget being updated, and it is passed to the super method
-             *            `updateItem()` along with the `empty` parameter for further
-             *            processing.
+             *              widget being updated, and it is passed to the super method
+             *              `updateItem()` along with the `empty` parameter for further
+             *              processing.
              *
              * @param empty
-             *            ether the item being updated is empty or not, and accordingly sets
-             *            the graphic of the button to null or the button itself when it is
-             *            not empty.
+             *              ether the item being updated is empty or not, and accordingly
+             *              sets
+             *              the graphic of the button to null or the button itself when it
+             *              is
+             *              not empty.
              */
             @Override
             protected void updateItem(final Void item, final boolean empty) {
@@ -192,13 +194,14 @@ public class SerieController {
              * graphic to `null` if the item is empty and `button` otherwise.
              *
              * @param item
-             *            element being updated, which can be null or the `button` object
-             *            depending on whether it is being updated or not.
+             *              element being updated, which can be null or the `button` object
+             *              depending on whether it is being updated or not.
              *
              * @param empty
-             *            status of the item being updated, and its value determines whether
-             *            or not to set the graphic of the button to null or the specified
-             *            button graphics.
+             *              status of the item being updated, and its value determines
+             *              whether
+             *              or not to set the graphic of the button to null or the specified
+             *              button graphics.
              */
             @Override
             protected void updateItem(final Void item, final boolean empty) {
@@ -227,8 +230,8 @@ public class SerieController {
      * date, and episode number, based on feedback data.
      *
      * @param event
-     *            An action event that triggers the function execution, providing
-     *            the user's feedback selection.
+     *              An action event that triggers the function execution, providing
+     *              the user's feedback selection.
      */
     @FXML
     private void exportPdf(final ActionEvent event) {
@@ -342,9 +345,10 @@ public class SerieController {
      * categories, and then updating the serie with the new information.
      *
      * @param serieDto
-     *            data for a serie that is being modified, which includes the
-     *            serie's ID, name, summary, director, country, and image, as well
-     *            as its category(ies).
+     *                 data for a serie that is being modified, which includes the
+     *                 serie's ID, name, summary, director, country, and image, as
+     *                 well
+     *                 as its category(ies).
      */
     private void modifierSerie(final Series serieDto) {
         final IServiceSeriesImpl iServiceSerie = new IServiceSeriesImpl();
@@ -413,10 +417,11 @@ public class SerieController {
      * `showAndWait()` method.
      *
      * @param title
-     *            title of an alert message shown by the `showAlert` method, which
-     *            is displayed in a title bar at the top of the window.
+     *                title of an alert message shown by the `showAlert` method,
+     *                which
+     *                is displayed in a title bar at the top of the window.
      * @param message
-     *            message to be displayed in the Alert dialog box.
+     *                message to be displayed in the Alert dialog box.
      */
     @FXML
     private void showAlert(final String title, final String message) {
@@ -433,9 +438,9 @@ public class SerieController {
      * message is displayed.
      *
      * @param event
-     *            selection event triggered by the user selecting an image file
-     *            using the FileChooser, and it provides the path of the selected
-     *            file to the `addimg` method for processing.
+     *              selection event triggered by the user selecting an image file
+     *              using the FileChooser, and it provides the path of the selected
+     *              file to the `addimg` method for processing.
      */
     @FXML
     void addimg(final ActionEvent event) {
@@ -460,7 +465,7 @@ public class SerieController {
      * locations and sets the image as the `serieImageView` field.
      *
      * @param event
-     *            open file dialog event that triggers the function to execute.
+     *              open file dialog event that triggers the function to execute.
      */
     @FXML
     void importImage(final ActionEvent event) {
@@ -508,7 +513,7 @@ public class SerieController {
      * creation was successful and `false` otherwise.
      *
      * @param file
-     *            File to be tested for being an image file.
+     *             File to be tested for being an image file.
      * @returns a boolean value indicating whether the provided file is an image
      *          file or not.
      */
@@ -627,14 +632,17 @@ public class SerieController {
      * authentication and STARTTLS protocol for encryption.
      *
      * @param recipientEmail
-     *            email address of the intended recipient of the email message being
-     *            sent.
+     *                       email address of the intended recipient of the email
+     *                       message being
+     *                       sent.
      * @param subject
-     *            subject of the email to be sent, which is used as the email's
-     *            title in the recipient's inbox.
+     *                       subject of the email to be sent, which is used as the
+     *                       email's
+     *                       title in the recipient's inbox.
      * @param message
-     *            message that will be sent through the email, and it is passed as a
-     *            string to the `setMsg()` method of the `Email` class.
+     *                       message that will be sent through the email, and it is
+     *                       passed as a
+     *                       string to the `setMsg()` method of the `Email` class.
      */
     public void sendEmail(final String recipientEmail, final String subject, final String message) {
         try {
@@ -664,9 +672,9 @@ public class SerieController {
      * about the newly added serie.
      *
      * @param event
-     *            ClickEvent that triggers the execution of the `ajouterSerie()`
-     *            method and provides information about the event, such as the
-     *            button or component that was clicked.
+     *              ClickEvent that triggers the execution of the `ajouterSerie()`
+     *              method and provides information about the event, such as the
+     *              button or component that was clicked.
      */
     @FXML
     void ajouterSerie(final ActionEvent event) {
@@ -736,9 +744,10 @@ public class SerieController {
      * Loads an FXML file, creates a scene, and displays it on a Stage.
      *
      * @param event
-     *            action event that triggered the execution of the `Oepisodes()`
-     *            method, providing the source of the event as an object that can be
-     *            referenced and used within the method.
+     *              action event that triggered the execution of the `Oepisodes()`
+     *              method, providing the source of the event as an object that can
+     *              be
+     *              referenced and used within the method.
      */
     @FXML
     void Oepisodes(final ActionEvent event) throws IOException {
@@ -755,9 +764,9 @@ public class SerieController {
      * Stage, creating a new Scene and setting it as the scene of the Stage.
      *
      * @param event
-     *            An action event object that triggers the `Oseries` method and
-     *            provides information about the event, such as the source of the
-     *            event and the state of the stage.
+     *              An action event object that triggers the `Oseries` method and
+     *              provides information about the event, such as the source of the
+     *              event and the state of the stage.
      */
     @FXML
     void Oseries(final ActionEvent event) throws IOException {
@@ -774,8 +783,8 @@ public class SerieController {
      * primary Stage.
      *
      * @param event
-     *            ActionEvent object that triggers the function, providing
-     *            information about the source of the event and any related data.
+     *              ActionEvent object that triggers the function, providing
+     *              information about the source of the event and any related data.
      */
     @FXML
     void Oepisode(final ActionEvent event) throws IOException {
@@ -791,7 +800,7 @@ public class SerieController {
      * Displays a list of movies to the user.
      *
      * @param actionEvent
-     *            occurrence of an event that triggered the function call.
+     *                    occurrence of an event that triggered the function call.
      */
     public void showmovies(final ActionEvent actionEvent) {
     }
@@ -800,8 +809,8 @@ public class SerieController {
      * Likely displays a list or inventory of products.
      *
      * @param actionEvent
-     *            occurrence of an event that triggers the execution of the
-     *            `showProducts` method.
+     *                    occurrence of an event that triggers the execution of the
+     *                    `showProducts` method.
      */
     public void showproducts(final ActionEvent actionEvent) {
     }
@@ -811,7 +820,8 @@ public class SerieController {
      * information about what it does beyond the fact that it exists.
      *
      * @param actionEvent
-     *            event that triggered the execution of the `show cinema` function.
+     *                    event that triggered the execution of the `show cinema`
+     *                    function.
      */
     public void showcinema(final ActionEvent actionEvent) {
     }
@@ -820,7 +830,7 @@ public class SerieController {
      * Handles an `ActionEvent`.
      *
      * @param actionEvent
-     *            event that triggered the function call.
+     *                    event that triggered the function call.
      */
     public void showevent(final ActionEvent actionEvent) {
     }
@@ -829,7 +839,8 @@ public class SerieController {
      * Likely displays a series of data or elements in a graphical interface.
      *
      * @param actionEvent
-     *            event that triggered the call to the `showSeries` function.
+     *                    event that triggered the call to the `showSeries`
+     *                    function.
      */
     public void showseries(final ActionEvent actionEvent) {
     }

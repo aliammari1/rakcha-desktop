@@ -46,7 +46,7 @@ public class ReviewService implements IService<Review> {
      * Creates a new entity in the database.
      *
      * @param entity
-     *            the entity to create
+     *               the entity to create
      */
     public void create(final Review review) {
         final String req = "INSERT into reviews(user_id, rating, product_id) values (?, ?, ?)";
@@ -95,7 +95,7 @@ public class ReviewService implements IService<Review> {
      * Updates an existing entity in the database.
      *
      * @param entity
-     *            the entity to update
+     *               the entity to update
      */
     public void update(final Review review) {
         final String req = "UPDATE avis set note = ? where id=?";
@@ -114,7 +114,7 @@ public class ReviewService implements IService<Review> {
      * Deletes an entity from the database.
      *
      * @param id
-     *            the ID of the entity to delete
+     *           the ID of the entity to delete
      */
     public void delete(final Review review) {
         final String req = "DELETE from reviews where user_id = ? and product_id = ?";

@@ -37,8 +37,16 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 
 /**
- * JavaFX controller class for the RAKCHA application. Handles UI interactions
- * and manages view logic using FXML.
+ * Controller class for managing the shopping cart interface in the RAKCHA
+ * application.
+ * This controller handles displaying the products in the shopping cart,
+ * allowing users
+ * to modify quantities, delete items, and proceed to checkout.
+ * 
+ * <p>
+ * The controller manages the cart flow pane, price total display, and provides
+ * functionality for navigating to other parts of the application.
+ * </p>
  *
  * @author RAKCHA Team
  * @version 1.0.0
@@ -62,16 +70,21 @@ public class ShoppingCartProductControllers implements Initializable {
     private FontIcon retour;
 
     /**
-     * /** Triggers a task to be executed on the EDT (Event Dispatch Thread) by
-     * calling `Platform.runLater`. The task is an anonymous inner class that calls
-     * the method `loadAcceptedShoppingCart`.
+     * Initializes the controller after its root element has been completely
+     * processed.
+     * This method loads the shopping cart contents from the database and displays
+     * them in the UI.
+     * 
+     * <p>
+     * The method uses Platform.runLater to ensure that the UI loading happens on
+     * the JavaFX
+     * application thread after the FXML has been fully loaded.
+     * </p>
      *
-     * @param url
-     *            URL of the application that requires initialization, and is passed
-     *            to the `runLater()` method for further processing.
-     * @param resourceBundle
-     *            resource bundle that provides localized data for the platform, and
-     *            is used to load the accepted shoppingcart in the run method.
+     * @param url            The location used to resolve relative paths for the
+     *                       root object, or null if the location is not known
+     * @param resourceBundle The resources used to localize the root object, or null
+     *                       if the root object was not localized
      */
     @Override
     /**
@@ -81,7 +94,7 @@ public class ShoppingCartProductControllers implements Initializable {
     public void initialize(final URL url, final ResourceBundle resourceBundle) {
         Platform.runLater(new Runnable() {
             /**
-             * Loads accepted shoppingcart.
+             * Loads accepted shopping cart items when the UI is ready.
              */
             @Override
             /**
@@ -126,8 +139,9 @@ public class ShoppingCartProductControllers implements Initializable {
      * value, using the specified font size, position, and styling options.
      *
      * @param prixTotal
-     *            total price of the product, which is used to create and set the
-     *            label's text value.
+     *                  total price of the product, which is used to create and set
+     *                  the
+     *                  label's text value.
      * @returns a label with the price total value displayed in bold font.
      */
     private Label createPrixTotalLabel(final double prixTotal) {
@@ -147,9 +161,11 @@ public class ShoppingCartProductControllers implements Initializable {
      * the cart.
      *
      * @param ShoppingCart
-     *            shoppingcart object that contains the details of the products,
-     *            quantities, and total price, which are used to populate the UI
-     *            elements in the `generateProductCard()` function.
+     *                     shoppingcart object that contains the details of the
+     *                     products,
+     *                     quantities, and total price, which are used to populate
+     *                     the UI
+     *                     elements in the `generateProductCard()` function.
      * @returns a VBox container that displays a product's details and allows users
      *          to select it for their order.
      */
@@ -314,11 +330,13 @@ public class ShoppingCartProductControllers implements Initializable {
      * in the shoppingcart object and reflected in the cart's total quantity.
      *
      * @param quantityTextField
-     *            quantity to be decreased, which is obtained from the text field of
-     *            the same name.
+     *                          quantity to be decreased, which is obtained from the
+     *                          text field of
+     *                          the same name.
      * @param shoppingcart
-     *            ShoppingCart object whose quantity is being updated by the
-     *            function.
+     *                          ShoppingCart object whose quantity is being updated
+     *                          by the
+     *                          function.
      */
     private void decreaseQuantity(final TextField quantityTextField, final ShoppingCart shoppingcart) {
         // Diminuer la quantité
@@ -334,11 +352,12 @@ public class ShoppingCartProductControllers implements Initializable {
      * given product and returns true if there is enough stock, otherwise false.
      *
      * @param produit
-     *            product for which the availability of stock is being checked.
+     *                 product for which the availability of stock is being checked.
      * @param quantity
-     *            amount of units of the product that are required or desired by the
-     *            user, which is compared with the available stock quantity to
-     *            determine if the product is available for purchase.
+     *                 amount of units of the product that are required or desired
+     *                 by the
+     *                 user, which is compared with the available stock quantity to
+     *                 determine if the product is available for purchase.
      * @returns a boolean value indicating whether the requested quantity of stock
      *          is available or not.
      */
@@ -352,11 +371,13 @@ public class ShoppingCartProductControllers implements Initializable {
      * stock is available and displaying an alert if it's not.
      *
      * @param quantityTextField
-     *            quantity of the product to be updated in the shoppingcart, as
-     *            indicated by its name.
+     *                          quantity of the product to be updated in the
+     *                          shoppingcart, as
+     *                          indicated by its name.
      * @param shoppingcart
-     *            containing the products that the user wishes to increase the
-     *            quantity of.
+     *                          containing the products that the user wishes to
+     *                          increase the
+     *                          quantity of.
      */
     private void increaseQuantity(final TextField quantityTextField, final ShoppingCart shoppingcart) {
         final int currentQuantity = Integer.parseInt(quantityTextField.getText());
@@ -396,11 +417,13 @@ public class ShoppingCartProductControllers implements Initializable {
      * multiplying the unitaire price fetched from the `ProductService`.
      *
      * @param idProduct
-     *            ID of the product for which the price is being calculated.
+     *                  ID of the product for which the price is being calculated.
      * @param quantity
-     *            number of units of the product to be priced, which is multiplied
-     *            by the unit price returned by the `ProductService` to compute the
-     *            total price.
+     *                  number of units of the product to be priced, which is
+     *                  multiplied
+     *                  by the unit price returned by the `ProductService` to
+     *                  compute the
+     *                  total price.
      * @returns the total price of a product in units of quantity.
      */
     private double prixProduct(final Long idProduct, final int quantity) {
@@ -414,8 +437,8 @@ public class ShoppingCartProductControllers implements Initializable {
      * `OrderClientController`, and displays the scene on the Stage.
      *
      * @param event
-     *            order action event that triggered the function, providing the
-     *            necessary context for the code to operate properly.
+     *              order action event that triggered the function, providing the
+     *              necessary context for the code to operate properly.
      */
     @FXML
     void order(final ActionEvent event) {
@@ -439,8 +462,8 @@ public class ShoppingCartProductControllers implements Initializable {
      * action or have any distinctive features beyond processing mouse input.
      *
      * @param event
-     *            mouse event that triggered the execution of the `Paiment()`
-     *            function.
+     *              mouse event that triggered the execution of the `Paiment()`
+     *              function.
      */
     public void Paiment(final MouseEvent event) {
     }
@@ -451,9 +474,9 @@ public class ShoppingCartProductControllers implements Initializable {
      * original stage.
      *
      * @param event
-     *            ActionEvent object that triggered the `cinemaclient` method,
-     *            providing the necessary information to update the FXML layout of
-     *            the stage.
+     *              ActionEvent object that triggered the `cinemaclient` method,
+     *              providing the necessary information to update the FXML layout of
+     *              the stage.
      */
     @FXML
     void cinemaclient(final ActionEvent event) {
@@ -484,9 +507,10 @@ public class ShoppingCartProductControllers implements Initializable {
      * current scene with it, creating a new stage and closing the original one.
      *
      * @param event
-     *            event object that triggered the function, providing information
-     *            about the event, such as its source and details, which can be used
-     *            to handle the event appropriately.
+     *              event object that triggered the function, providing information
+     *              about the event, such as its source and details, which can be
+     *              used
+     *              to handle the event appropriately.
      */
     @FXML
     void eventClient(final ActionEvent event) {
@@ -517,9 +541,9 @@ public class ShoppingCartProductControllers implements Initializable {
      * current stage with the new one, closing the old stage upon execution.
      *
      * @param event
-     *            ActionEvent that triggers the function and provides access to
-     *            information about the action that was performed, such as the
-     *            source of the event and the stage where the action occurred.
+     *              ActionEvent that triggers the function and provides access to
+     *              information about the action that was performed, such as the
+     *              source of the event and the stage where the action occurred.
      */
     @FXML
     void produitClient(final ActionEvent event) {
@@ -550,8 +574,8 @@ public class ShoppingCartProductControllers implements Initializable {
      * call.
      *
      * @param event
-     *            triggered event that initiated the call to the `profilclient`
-     *            function.
+     *              triggered event that initiated the call to the `profilclient`
+     *              function.
      */
     @FXML
     void profilclient(final ActionEvent event) {
@@ -562,9 +586,10 @@ public class ShoppingCartProductControllers implements Initializable {
      * and replaces the current stage with the new one, closing the previous stage.
      *
      * @param event
-     *            ActionEvent object that triggered the function execution,
-     *            providing access to information about the event such as its source
-     *            and target.
+     *              ActionEvent object that triggered the function execution,
+     *              providing access to information about the event such as its
+     *              source
+     *              and target.
      */
     @FXML
     void MovieClient(final ActionEvent event) {
@@ -590,12 +615,13 @@ public class ShoppingCartProductControllers implements Initializable {
     }
 
     /**
-     * Charges a new FXML file, creates a new scene, and attaches it to a new stage.
+     * Loads a new FXML file, creates a new scene, and attaches it to a new stage.
      * It also closes the current stage and shows the new stage.
      *
      * @param event
-     *            ActionEvent that triggers the `SerieClient()` method and provides
-     *            information about the source of the event.
+     *              ActionEvent that triggers the `SerieClient()` method and
+     *              provides
+     *              information about the source of the event.
      */
     @FXML
     void SerieClient(final ActionEvent event) {
@@ -621,12 +647,14 @@ public class ShoppingCartProductControllers implements Initializable {
     }
 
     /**
-     * Loads an FXML file and displays it in a new stage, blocking the current stage
-     * and setting the new stage as the owner.
+     * Returns to the product display interface.
+     * 
+     * <p>
+     * Loads the AfficherProductClient.fxml file, creates a new scene and stage,
+     * and displays it modally while closing the current stage.
+     * </p>
      *
-     * @param mouseEvent
-     *            mouse event that triggered the execution of the
-     *            `afficherProduct()` method.
+     * @param mouseEvent The mouse event that triggered this method
      */
     public void afficherProduct(final MouseEvent mouseEvent) {
         // Obtenir la fenêtre précédente

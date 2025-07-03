@@ -106,13 +106,14 @@ public class SerieClientController {
      * list of matching Series.
      *
      * @param liste
-     *            list of series that is searched for matches in the `recherche`
-     *            string.
-     *            <p>
-     *            - `liste` is a list of `Serie` objects.
+     *                  list of series that is searched for matches in the
+     *                  `recherche`
+     *                  string.
+     *                  <p>
+     *                  - `liste` is a list of `Serie` objects.
      * @param recherche
-     *            search query, which is used to filter the list of series and
-     *            return only the matches.
+     *                  search query, which is used to filter the list of series and
+     *                  return only the matches.
      * @returns a list of `Serie` objects that match the given search query.
      *          <p>
      *          - The output is a list of `Serie` objects, which represents the list
@@ -136,12 +137,12 @@ public class SerieClientController {
      * scene.
      *
      * @param event
-     *            event that triggered the function, specifically an action event
-     *            related to the `watchEpisode` button.
-     *            <p>
-     *            Event: ActionEvent
-     *            <p>
-     *            - Target: The object that triggered the event (not shown)
+     *              event that triggered the function, specifically an action event
+     *              related to the `watchEpisode` button.
+     *              <p>
+     *              Event: ActionEvent
+     *              <p>
+     *              - Target: The object that triggered the event (not shown)
      */
     @FXML
     void onWatch(final ActionEvent event) throws IOException {
@@ -160,13 +161,14 @@ public class SerieClientController {
      * the Box and returns it.
      *
      * @param serie
-     *            data structure containing information about a specific series,
-     *            which is used to create a graphical representation of the series
-     *            within the `VBox`.
-     *            <p>
-     *            - `nom`: The name of the series. - `image`: The path to the image
-     *            associated with the series. - `nbLikes`: The number of likes for
-     *            the series.
+     *              data structure containing information about a specific series,
+     *              which is used to create a graphical representation of the series
+     *              within the `VBox`.
+     *              <p>
+     *              - `nom`: The name of the series. - `image`: The path to the
+     *              image
+     *              associated with the series. - `nbLikes`: The number of likes for
+     *              the series.
      * @returns a vertical box container with a centered label, an image view, and a
      *          label displaying the number of likes.
      *          <p>
@@ -223,9 +225,9 @@ public class SerieClientController {
      * indicating the result of the comparison.
      *
      * @param series
-     *            list of series to be sorted, which is passed through the
-     *            `Collections.sort()` method using a custom comparison algorithm
-     *            based on the nomenclature of each series.
+     *               list of series to be sorted, which is passed through the
+     *               `Collections.sort()` method using a custom comparison algorithm
+     *               based on the nomenclature of each series.
      */
     private void trierParNom(final List<Series> series) {
         Collections.sort(series, (serie1, serie2) -> serie1.getName().compareToIgnoreCase(serie2.getName()));
@@ -236,23 +238,29 @@ public class SerieClientController {
      * each series, and a separator line after every element except the last one.
      *
      * @param series
-     *            list of series that will be displayed in the client's profile, and
-     *            it is used to populate the `listeSerie` observable list which is
-     *            then passed as an argument to the `FXMLLoader` constructor to load
-     *            the FXML file.
-     *            <p>
-     *            - `id_serie`: an integer representing the ID of the series. -
-     *            `name`: a string representing the name of the series. -
-     *            `description`: a string representing the description of the
-     *            series. - `director`: a string representing the director of the
-     *            series. - `country`: a string representing the country where the
-     *            series is from. - `year`: an integer representing the year the
-     *            series was released. - `poster_path`: a string representing the
-     *            path to the poster image of the series. - `clicks`: an integer
-     *            representing the number of clicks on the series. - `favoris`: an
-     *            integer representing the number of favorites for the series. -
-     *            `nb_dislikes`: an integer representing the number of dislikes for
-     *            the series.
+     *               list of series that will be displayed in the client's profile,
+     *               and
+     *               it is used to populate the `listeSerie` observable list which
+     *               is
+     *               then passed as an argument to the `FXMLLoader` constructor to
+     *               load
+     *               the FXML file.
+     *               <p>
+     *               - `id_serie`: an integer representing the ID of the series. -
+     *               `name`: a string representing the name of the series. -
+     *               `description`: a string representing the description of the
+     *               series. - `director`: a string representing the director of the
+     *               series. - `country`: a string representing the country where
+     *               the
+     *               series is from. - `year`: an integer representing the year the
+     *               series was released. - `poster_path`: a string representing the
+     *               path to the poster image of the series. - `clicks`: an integer
+     *               representing the number of clicks on the series. - `favoris`:
+     *               an
+     *               integer representing the number of favorites for the series. -
+     *               `nb_dislikes`: an integer representing the number of dislikes
+     *               for
+     *               the series.
      */
     public void afficherliste(final List<Series> series) {
         this.listeSerie.getItems().clear();
@@ -264,26 +272,29 @@ public class SerieClientController {
              * favorite list.
              *
              * @param item
-             *            `Episode` object that will be used to display its details and
-             *            likes/dislikes count on the stage, and it is passed as a parameter
-             *            to the `initView()` method to facilitate the retrieval of the
-             *            necessary data from the `EpisodeClientController` controller.
+             *              `Episode` object that will be used to display its details and
+             *              likes/dislikes count on the stage, and it is passed as a
+             *              parameter
+             *              to the `initView()` method to facilitate the retrieval of the
+             *              necessary data from the `EpisodeClientController` controller.
              *
-             *            - `id`: the unique identifier for the episode - `name`: the name
-             *            of the episode - `director`: the director of the episode -
-             *            `country`: the country where the episode was produced - `likes`:
-             *            the number of likes for the episode - `dislikes`: the number of
-             *            dislikes for the episode - `HeartImageView`: an image view
-             *            displaying a heart for liked episodes - `likeButton`: a button to
-             *            like the episode - `dislikeButton`: a button to dislike the
-             *            episode - `favButton`: a button to add the episode to the user's
-             *            favorites - `watchButton`: a button to watch the episode.
+             *              - `id`: the unique identifier for the episode - `name`: the name
+             *              of the episode - `director`: the director of the episode -
+             *              `country`: the country where the episode was produced - `likes`:
+             *              the number of likes for the episode - `dislikes`: the number of
+             *              dislikes for the episode - `HeartImageView`: an image view
+             *              displaying a heart for liked episodes - `likeButton`: a button
+             *              to
+             *              like the episode - `dislikeButton`: a button to dislike the
+             *              episode - `favButton`: a button to add the episode to the user's
+             *              favorites - `watchButton`: a button to watch the episode.
              *
              * @param empty
-             *            AnchorPanes' graphic element, which is set to an empty
-             *            `AnchorPane` when the function is called with no arguments,
-             *            causing the `likeButton`, `dislikeButton`, and `watchButton` to be
-             *            displayed without any content.
+             *              AnchorPanes' graphic element, which is set to an empty
+             *              `AnchorPane` when the function is called with no arguments,
+             *              causing the `likeButton`, `dislikeButton`, and `watchButton` to
+             *              be
+             *              displayed without any content.
              */
             @Override
             protected void updateItem(final Series item, final boolean empty) {
@@ -391,13 +402,14 @@ public class SerieClientController {
                          * item's liked status.
                          *
                          * @param event
-                         *            action event triggered by a user's click on the like button, and
-                         *            it is passed to the function as an argument to enable the updating
-                         *            of the item's likes count.
+                         *              action event triggered by a user's click on the like button, and
+                         *              it is passed to the function as an argument to enable the
+                         *              updating
+                         *              of the item's likes count.
                          *
-                         *            - `item`: the current item being processed. - `clickLikes`: the
-                         *            number of clicks on the item. - `NbLikes`: the total number of
-                         *            likes for the item.
+                         *              - `item`: the current item being processed. - `clickLikes`: the
+                         *              number of clicks on the item. - `NbLikes`: the total number of
+                         *              likes for the item.
                          */
                         @Override
                         /**
@@ -437,12 +449,13 @@ public class SerieClientController {
                          * service method to add or remove a dislike from the item in the database.
                          *
                          * @param event
-                         *            event that triggered the function, and it is used to increment the
-                         *            number of clicks on an item and print its current click dislike
-                         *            count.
+                         *              event that triggered the function, and it is used to increment
+                         *              the
+                         *              number of clicks on an item and print its current click dislike
+                         *              count.
                          *
-                         *            - `item`: The current item being processed, which contains
-                         *            information such as its ID and click dislikes count.
+                         *              - `item`: The current item being processed, which contains
+                         *              information such as its ID and click dislikes count.
                          */
                         @Override
                         /**
@@ -484,11 +497,12 @@ public class SerieClientController {
                          * prints it to the console.
                          *
                          * @param event
-                         *            ActionEvent object that triggered the handling of the method.
+                         *              ActionEvent object that triggered the handling of the method.
                          *
-                         *            - `favButton`: The button that triggered the event, which
-                         *            represents a client. - `item`: The object passed as an argument to
-                         *            the function, containing information about the favorite.
+                         *              - `favButton`: The button that triggered the event, which
+                         *              represents a client. - `item`: The object passed as an argument
+                         *              to
+                         *              the function, containing information about the favorite.
                          */
                         @Override
                         /**
@@ -584,10 +598,11 @@ public class SerieClientController {
      * loaded scene, and displays it in the stage.
      *
      * @param event
-     *            event of the button click that triggered the function execution.
-     *            <p>
-     *            - Event type: `ActionEvent` - Target object: none (the function is
-     *            called directly without any target object)
+     *              event of the button click that triggered the function execution.
+     *              <p>
+     *              - Event type: `ActionEvent` - Target object: none (the function
+     *              is
+     *              called directly without any target object)
      */
     @FXML
     void AfficherFavList(final ActionEvent event) {
@@ -674,11 +689,13 @@ public class SerieClientController {
      * `FXMLLoader` class.
      *
      * @param event
-     *            event that triggered the function execution, which in this case is
-     *            a button click event.
-     *            <p>
-     *            - `event`: An `ActionEvent` object representing a user action that
-     *            triggered the function to execute.
+     *              event that triggered the function execution, which in this case
+     *              is
+     *              a button click event.
+     *              <p>
+     *              - `event`: An `ActionEvent` object representing a user action
+     *              that
+     *              triggered the function to execute.
      */
     @FXML
     void Ocategories(final ActionEvent event) throws IOException {
@@ -695,13 +712,15 @@ public class SerieClientController {
      * showing the stage.
      *
      * @param event
-     *            event that triggered the function execution, which in this case is
-     *            a button click.
-     *            <p>
-     *            - `event` represents an action event generated by the user's
-     *            interaction with the application. - `getSource()` returns the
-     *            source of the event, which is typically a button or other control
-     *            in the user interface.
+     *              event that triggered the function execution, which in this case
+     *              is
+     *              a button click.
+     *              <p>
+     *              - `event` represents an action event generated by the user's
+     *              interaction with the application. - `getSource()` returns the
+     *              source of the event, which is typically a button or other
+     *              control
+     *              in the user interface.
      */
     @FXML
     void Oseries(final ActionEvent event) throws IOException {
@@ -718,18 +737,20 @@ public class SerieClientController {
      * displays the stage.
      *
      * @param event
-     *            event that triggered the execution of the `Oepisode` method,
-     *            providing the necessary information for the method to perform its
-     *            intended action.
-     *            <p>
-     *            Event: An instance of the `ActionEvent` class, representing an
-     *            action event generated by the user through mouse clicks or
-     *            keyboard inputs.
-     *            <p>
-     *            Properties:
-     *            <p>
-     *            - `getSource()`: Returns the source of the event, which is usually
-     *            a button or a menu item that was clicked/selected.
+     *              event that triggered the execution of the `Oepisode` method,
+     *              providing the necessary information for the method to perform
+     *              its
+     *              intended action.
+     *              <p>
+     *              Event: An instance of the `ActionEvent` class, representing an
+     *              action event generated by the user through mouse clicks or
+     *              keyboard inputs.
+     *              <p>
+     *              Properties:
+     *              <p>
+     *              - `getSource()`: Returns the source of the event, which is
+     *              usually
+     *              a button or a menu item that was clicked/selected.
      */
     @FXML
     void Oepisode(final ActionEvent event) throws IOException {

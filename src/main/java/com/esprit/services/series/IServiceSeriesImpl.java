@@ -41,7 +41,7 @@ public class IServiceSeriesImpl implements IService<Series> {
      * Creates a new entity in the database.
      *
      * @param entity
-     *            the entity to create
+     *               the entity to create
      */
     public void create(Series serie) {
         final String req = "INSERT INTO serie (name, summary, director, country, image, liked, number_of_likes, disliked, number_of_dislikes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -67,7 +67,7 @@ public class IServiceSeriesImpl implements IService<Series> {
      * Updates an existing entity in the database.
      *
      * @param entity
-     *            the entity to update
+     *               the entity to update
      */
     public void update(Series serie) {
         final String req = "UPDATE serie SET name = ?, summary = ?, director = ?, country = ?, image = ?, liked = ?, number_of_likes = ?, disliked = ?, number_of_dislikes = ? WHERE id = ?";
@@ -94,7 +94,7 @@ public class IServiceSeriesImpl implements IService<Series> {
      * Deletes an entity from the database.
      *
      * @param id
-     *            the ID of the entity to delete
+     *           the ID of the entity to delete
      */
     public void delete(Series serie) {
         final String req = "DELETE FROM serie WHERE id = ?";

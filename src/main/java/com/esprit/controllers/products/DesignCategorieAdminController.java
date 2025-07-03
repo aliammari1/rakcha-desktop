@@ -71,9 +71,9 @@ public class DesignCategorieAdminController {
      * stage with the new scene, closing the previous one.
      *
      * @param event
-     *            ActionEvent object that triggered the method call, providing
-     *            information about the action that was performed, such as the
-     *            source of the event and any associated data.
+     *              ActionEvent object that triggered the method call, providing
+     *              information about the action that was performed, such as the
+     *              source of the event and any associated data.
      */
     @FXML
     void GestionProduct(final ActionEvent event) throws IOException {
@@ -113,9 +113,10 @@ public class DesignCategorieAdminController {
      * list in the `ProductCategory` class.
      *
      * @param event
-     *            user action that triggered the method, and it is used to determine
-     *            the specific action taken by the user, such as clicking on the
-     *            "Ajouter une catégorie" button.
+     *              user action that triggered the method, and it is used to
+     *              determine
+     *              the specific action taken by the user, such as clicking on the
+     *              "Ajouter une catégorie" button.
      */
     @FXML
     void ajouter_categorie(final ActionEvent event) {
@@ -166,8 +167,8 @@ public class DesignCategorieAdminController {
              * `ProductCategory` item from the table view.
              *
              * @param param
-             *            TableColumn object that is used to define the appearance and
-             *            behavior of the table cells in the table view.
+             *              TableColumn object that is used to define the appearance and
+             *              behavior of the table cells in the table view.
              *
              * @returns a `TableCell` object that contains a button with a delete action.
              */
@@ -199,12 +200,12 @@ public class DesignCategorieAdminController {
                      * set to a button representing deletion.
                      *
                      * @param item
-                     *            Void item that is being updated, and its value is passed to the
-                     *            parent class's `updateItem()` method for further processing.
+                     *              Void item that is being updated, and its value is passed to the
+                     *              parent class's `updateItem()` method for further processing.
                      *
                      * @param empty
-                     *            whether or not the `item` is empty, and its value is used to
-                     *            control the display of the graphic element `btnDelete`.
+                     *              whether or not the `item` is empty, and its value is used to
+                     *              control the display of the graphic element `btnDelete`.
                      */
                     @Override
                     protected void updateItem(final Void item, final boolean empty) {
@@ -227,9 +228,10 @@ public class DesignCategorieAdminController {
      * in the database using the `CategoryService`.
      *
      * @param categorieProduct
-     *            categorization information for a product, which is used to update
-     *            the corresponding record in the database using the
-     *            `CategoryService`.
+     *                         categorization information for a product, which is
+     *                         used to update
+     *                         the corresponding record in the database using the
+     *                         `CategoryService`.
      */
     @FXML
     void modifier_categorie(final ProductCategory categorieProduct) {
@@ -290,8 +292,8 @@ public class DesignCategorieAdminController {
      * view's items.
      *
      * @param keyword
-     *            search term that filters the data displayed in the
-     *            `categorie_tableview`.
+     *                search term that filters the data displayed in the
+     *                `categorie_tableview`.
      */
     @FXML
     private void search(final String keyword) {
@@ -316,7 +318,7 @@ public class DesignCategorieAdminController {
      * text. It updates the `categorie_tableview` with the filtered list.
      *
      * @param searchText
-     *            search term used to filter the list of cinemas.
+     *                   search term used to filter the list of cinemas.
      */
     private void filterCategorieProducts(final String searchText) {
         // Vérifier si le champ de recherche n'est pas vide
@@ -357,8 +359,9 @@ public class DesignCategorieAdminController {
      * a new VBox added to the filter anchor.
      *
      * @param event
-     *            mouse event that triggered the function execution and is not used
-     *            in this specific code snippet.
+     *              mouse event that triggered the function execution and is not
+     *              used
+     *              in this specific code snippet.
      */
     @FXML
     void filtrer(final MouseEvent event) {
@@ -407,8 +410,8 @@ public class DesignCategorieAdminController {
      * filtered list.
      *
      * @param event
-     *            ActionEvent that triggered the function, and it is not used or
-     *            referred to within the provided code snippet.
+     *              ActionEvent that triggered the function, and it is not used or
+     *              referred to within the provided code snippet.
      */
     @FXML
     /**
@@ -455,8 +458,8 @@ public class DesignCategorieAdminController {
      * then closes the current stage and shows the new one.
      *
      * @param event
-     *            ActionEvent that triggered the function, providing information
-     *            about the source of the event and the event itself.
+     *              ActionEvent that triggered the function, providing information
+     *              about the source of the event and the event itself.
      */
     @FXML
     void cinemaclient(final ActionEvent event) {
@@ -487,9 +490,9 @@ public class DesignCategorieAdminController {
      * when an event is triggered. It then closes the current stage.
      *
      * @param event
-     *            ActionEvent that triggered the event handling method, providing
-     *            access to information about the action that occurred and the
-     *            underlying source node.
+     *              ActionEvent that triggered the event handling method, providing
+     *              access to information about the action that occurred and the
+     *              underlying source node.
      */
     @FXML
     void eventClient(final ActionEvent event) {
@@ -519,9 +522,10 @@ public class DesignCategorieAdminController {
      * replacing the current stage.
      *
      * @param event
-     *            ActionEvent object that triggers the fonction and provides access
-     *            to information about the event, such as the source of the event
-     *            and the event's type.
+     *              ActionEvent object that triggers the fonction and provides
+     *              access
+     *              to information about the event, such as the source of the event
+     *              and the event's type.
      */
     @FXML
     void produitClient(final ActionEvent event) {
@@ -553,7 +557,7 @@ public class DesignCategorieAdminController {
      * session.
      *
      * @param event
-     *            event that triggered the execution of the `profilclient` method.
+     *              event that triggered the execution of the `profilclient` method.
      */
     @FXML
     void profilclient(final ActionEvent event) {
@@ -564,8 +568,9 @@ public class DesignCategorieAdminController {
      * It then closes the current stage and displays the new one.
      *
      * @param event
-     *            action event that triggers the function and provides access to the
-     *            source node of the event, which is used to load the FXML file.
+     *              action event that triggers the function and provides access to
+     *              the
+     *              source node of the event, which is used to load the FXML file.
      */
     @FXML
     void MovieClient(final ActionEvent event) {
@@ -596,9 +601,10 @@ public class DesignCategorieAdminController {
      * stage, closing the original stage upon attachment.
      *
      * @param event
-     *            ActionEvent object that triggers the method, providing access to
-     *            information about the action that triggered the method call, such
-     *            as the source of the action and any related data.
+     *              ActionEvent object that triggers the method, providing access to
+     *              information about the action that triggered the method call,
+     *              such
+     *              as the source of the action and any related data.
      */
     @FXML
     void SerieClient(final ActionEvent event) {
