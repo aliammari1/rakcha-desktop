@@ -41,9 +41,9 @@ public class Favorite {
      * Constructor without id for creating new favorite instances.
      *
      * @param userId
-     *            the user ID
+     *                 the user ID
      * @param seriesId
-     *            the series ID
+     *                 the series ID
      */
     public Favorite(final Long userId, final Long seriesId) {
         this.userId = userId;

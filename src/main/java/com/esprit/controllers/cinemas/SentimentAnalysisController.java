@@ -9,22 +9,51 @@ import edu.stanford.nlp.sentiment.SentimentCoreAnnotations;
 import edu.stanford.nlp.util.CoreMap;
 
 /**
- * Is designed to analyze text sentiment using Stanford CoreNLP pipeline. It
- * takes a text input and returns a sentiment result as a string. The class
- * configures the pipeline properties, initializes the StanfordCoreNLP pipeline,
- * creates an annotation with the input text, and analyzes the text to extract
- * sentiment annotations.
+ * Controller for analyzing text sentiment using Stanford CoreNLP pipeline.
+ * 
+ * <p>
+ * This class provides functionality to analyze text sentiment by utilizing the
+ * Stanford CoreNLP library. It configures a natural language processing
+ * pipeline
+ * with tokenization, sentence splitting, part-of-speech tagging, lemmatization,
+ * parsing, and sentiment analysis capabilities.
+ * </p>
+ * 
+ * <p>
+ * The sentiment analysis returns classifications such as "Very Positive",
+ * "Positive",
+ * "Neutral", "Negative", or "Very Negative" for each sentence in the input
+ * text.
+ * </p>
+ * 
+ * @author Esprit Team
+ * @version 1.0
+ * @since 1.0
+ * @see edu.stanford.nlp.pipeline.StanfordCoreNLP
+ * @see edu.stanford.nlp.sentiment.SentimentCoreAnnotations
  */
 public class SentimentAnalysisController {
     /**
-     * Analyzes a given text using Stanford CoreNLP pipeline to extract sentiment
-     * annotations, such as positive, negative or neutral. It returns the extracted
-     * sentiment in a string format.
+     * Analyzes the sentiment of the given text using Stanford CoreNLP pipeline.
+     * 
+     * <p>
+     * This method configures a Stanford CoreNLP pipeline with tokenization,
+     * sentence splitting,
+     * part-of-speech tagging, lemmatization, parsing, and sentiment analysis. It
+     * processes
+     * the input text and returns sentiment classifications for each sentence.
+     * </p>
+     * 
+     * <p>
+     * The sentiment analysis categorizes text into one of five sentiment classes:
+     * "Very Positive", "Positive", "Neutral", "Negative", or "Very Negative".
+     * </p>
      *
-     * @param text
-     *            text to be analyzed for sentiment using the Stanford CoreNLP
-     *            pipeline.
-     * @returns a string containing the sentiment annotations of the given text.
+     * @param text the input text to be analyzed for sentiment
+     * @return a string containing sentiment classifications, one per line for each
+     *         sentence
+     * @throws IllegalArgumentException if text is null
+     * @since 1.0
      */
     public String analyzeSentiment(final String text) {
         // Configure pipeline properties

@@ -48,19 +48,25 @@ public class ListFavorisController implements Initializable {
      * SQLException-catching mechanism if an error occurs.
      *
      * @param url
-     *            URL of the web page from which the user's favorite series should
-     *            be loaded.
-     *            <p>
-     *            - `URL`: represents a web address or a URL, which provides access
-     *            to a specific resource or service on the internet.
+     *                       URL of the web page from which the user's favorite
+     *                       series should
+     *                       be loaded.
+     *                       <p>
+     *                       - `URL`: represents a web address or a URL, which
+     *                       provides access
+     *                       to a specific resource or service on the internet.
      * @param resourceBundle
-     *            localized data for the application, which is used to load the
-     *            series favor list.
-     *            <p>
-     *            - `URL`: represents the URL of the web page that contains the
-     *            series favorites list data - `ResourceBundle`: is a collection of
-     *            culturally-specific data, including messages, labels, and other
-     *            information.
+     *                       localized data for the application, which is used to
+     *                       load the
+     *                       series favor list.
+     *                       <p>
+     *                       - `URL`: represents the URL of the web page that
+     *                       contains the
+     *                       series favorites list data - `ResourceBundle`: is a
+     *                       collection of
+     *                       culturally-specific data, including messages, labels,
+     *                       and other
+     *                       information.
      */
     @Override
     /**
@@ -81,17 +87,22 @@ public class ListFavorisController implements Initializable {
      * on the series data model.
      *
      * @param series
-     *            2D array of series data that will be displayed in the list view,
-     *            and it is used to populate the list view with the appropriate
-     *            series items.
-     *            <p>
-     *            - `id`: an integer representing the unique identifier of the
-     *            series. - `nom`: a string representing the name of the series. -
-     *            `genre`: a string representing the genre of the series (e.g.,
-     *            "drama", "comedy", etc.). - `description`: a string representing a
-     *            brief description of the series. - `poster`: a URL or image path
-     *            representing the poster image for the series. - `nbEpisodes`: an
-     *            integer representing the number of episodes in the series.
+     *               2D array of series data that will be displayed in the list
+     *               view,
+     *               and it is used to populate the list view with the appropriate
+     *               series items.
+     *               <p>
+     *               - `id`: an integer representing the unique identifier of the
+     *               series. - `nom`: a string representing the name of the series.
+     *               -
+     *               `genre`: a string representing the genre of the series (e.g.,
+     *               "drama", "comedy", etc.). - `description`: a string
+     *               representing a
+     *               brief description of the series. - `poster`: a URL or image
+     *               path
+     *               representing the poster image for the series. - `nbEpisodes`:
+     *               an
+     *               integer representing the number of episodes in the series.
      */
     public void afficherliste(final List<Series> series) {
         this.listViewFav.getItems().clear();
@@ -103,25 +114,30 @@ public class ListFavorisController implements Initializable {
              * and watch status accordingly.
              *
              * @param item
-             *            current episode being displayed, and it is used to access its
-             *            properties such as title, image, likes count, dislikes count, and
-             *            favorite status, which are then displayed on the user interface.
+             *              current episode being displayed, and it is used to access its
+             *              properties such as title, image, likes count, dislikes count,
+             *              and
+             *              favorite status, which are then displayed on the user interface.
              *
-             *            - `id serie`: The id of the series to which the item belongs. -
-             *            `name`: The name of the episode. - `summary`: A brief summary of
-             *            the episode. - `director`: The director of the episode. -
-             *            `country`: The country where the episode was produced. - `likes`:
-             *            The number of likes received by the episode. - `dislikes`: The
-             *            number of dislikes received by the episode. - `clickDislikes`: The
-             *            number of times the dislike button has been clicked. -
-             *            `NbDislikes`: The total number of dislikes received by the
-             *            episode. - `clickFavoris`: The number of times the favorite button
-             *            has been clicked. - `NbFavoris`: The total number of favorites for
-             *            the episode.
+             *              - `id serie`: The id of the series to which the item belongs. -
+             *              `name`: The name of the episode. - `summary`: A brief summary of
+             *              the episode. - `director`: The director of the episode. -
+             *              `country`: The country where the episode was produced. -
+             *              `likes`:
+             *              The number of likes received by the episode. - `dislikes`: The
+             *              number of dislikes received by the episode. - `clickDislikes`:
+             *              The
+             *              number of times the dislike button has been clicked. -
+             *              `NbDislikes`: The total number of dislikes received by the
+             *              episode. - `clickFavoris`: The number of times the favorite
+             *              button
+             *              has been clicked. - `NbFavoris`: The total number of favorites
+             *              for
+             *              the episode.
              *
              * @param empty
-             *            empty stage, which is used to display the watch episode button
-             *            when the user clicks on it.
+             *              empty stage, which is used to display the watch episode button
+             *              when the user clicks on it.
              */
             @Override
             protected void updateItem(final Series item, final boolean empty) {
@@ -209,17 +225,19 @@ public class ListFavorisController implements Initializable {
                          * the database.
                          *
                          * @param event
-                         *            ActionEvent object that triggered the function, providing the
-                         *            context and event information for the handling of likes and
-                         *            dislikes.
+                         *              ActionEvent object that triggered the function, providing the
+                         *              context and event information for the handling of likes and
+                         *              dislikes.
                          *
-                         *            - `item`: an instance of the `Item` class representing the item
-                         *            that triggered the event - `likes`: the total number of likes for
-                         *            the item
+                         *              - `item`: an instance of the `Item` class representing the item
+                         *              that triggered the event - `likes`: the total number of likes
+                         *              for
+                         *              the item
                          *
-                         *            These properties are used in the function to increment the number
-                         *            of likes and print it, as well as to check if the item has been
-                         *            liked or disliked.
+                         *              These properties are used in the function to increment the
+                         *              number
+                         *              of likes and print it, as well as to check if the item has been
+                         *              liked or disliked.
                          */
                         @Override
                         /**
@@ -258,14 +276,16 @@ public class ListFavorisController implements Initializable {
                          * removes the item from a list, and disables the like button accordingly.
                          *
                          * @param event
-                         *            event generated by the click of a button, which triggers the
-                         *            execution of the `handle()` method and the updating of the item's
-                         *            dislike count.
+                         *              event generated by the click of a button, which triggers the
+                         *              execution of the `handle()` method and the updating of the
+                         *              item's
+                         *              dislike count.
                          *
-                         *            - `event` represents an action event that triggers the function's
-                         *            execution. - `item` is the object on which the action was
-                         *            performed, containing information such as click count and
-                         *            likes/dislikes counter.
+                         *              - `event` represents an action event that triggers the
+                         *              function's
+                         *              execution. - `item` is the object on which the action was
+                         *              performed, containing information such as click count and
+                         *              likes/dislikes counter.
                          */
                         @Override
                         /**
@@ -305,12 +325,12 @@ public class ListFavorisController implements Initializable {
                          * console.
                          *
                          * @param event
-                         *            ActionEvent object that triggered the function execution,
-                         *            providing the necessary information to handle the corresponding
-                         *            action.
+                         *              ActionEvent object that triggered the function execution,
+                         *              providing the necessary information to handle the corresponding
+                         *              action.
                          *
-                         *            - `event`: an instance of `ActionEvent`, representing an action
-                         *            event triggered by a user interaction with the application.
+                         *              - `event`: an instance of `ActionEvent`, representing an action
+                         *              event triggered by a user interaction with the application.
                          */
                         @Override
                         /**

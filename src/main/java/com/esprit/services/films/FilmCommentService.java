@@ -44,7 +44,7 @@ public class FilmCommentService implements IService<FilmComment> {
      * Creates a new entity in the database.
      *
      * @param entity
-     *            the entity to create
+     *               the entity to create
      */
     public void create(final FilmComment filmComment) {
         final String req = "INSERT into film_comments(comment,user_id,film_id) values (?,?,?);";
@@ -97,7 +97,7 @@ public class FilmCommentService implements IService<FilmComment> {
      * Updates an existing entity in the database.
      *
      * @param entity
-     *            the entity to update
+     *               the entity to update
      */
     public void update(final FilmComment filmComment) {
         final String req = "UPDATE film_comments SET comment=? WHERE id=?";
@@ -116,7 +116,7 @@ public class FilmCommentService implements IService<FilmComment> {
      * Deletes an entity from the database.
      *
      * @param id
-     *            the ID of the entity to delete
+     *           the ID of the entity to delete
      */
     public void delete(final FilmComment filmComment) {
         final String req = "DELETE FROM film_comments WHERE id = ?";

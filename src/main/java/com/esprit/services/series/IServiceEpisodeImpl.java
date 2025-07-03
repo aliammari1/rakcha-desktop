@@ -38,7 +38,7 @@ public class IServiceEpisodeImpl implements IService<Episode> {
      * Creates a new entity in the database.
      *
      * @param entity
-     *            the entity to create
+     *               the entity to create
      */
     public void create(final Episode episode) {
         final String req = "INSERT INTO episode (title, episode_number, season, image, video, series_id) VALUES (?, ?, ?, ?, ?, ?)";
@@ -62,7 +62,7 @@ public class IServiceEpisodeImpl implements IService<Episode> {
      * Updates an existing entity in the database.
      *
      * @param entity
-     *            the entity to update
+     *               the entity to update
      */
     public void update(final Episode episode) {
         final String req = "UPDATE episode SET title = ?, episode_number = ?, season = ?, image = ?, video = ?, series_id = ? WHERE idepisode = ?";
@@ -87,7 +87,7 @@ public class IServiceEpisodeImpl implements IService<Episode> {
      * Deletes an entity from the database.
      *
      * @param id
-     *            the ID of the entity to delete
+     *           the ID of the entity to delete
      */
     public void delete(final Episode episode) {
         if (episode == null) {

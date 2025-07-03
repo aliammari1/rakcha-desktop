@@ -86,17 +86,22 @@ public class EpisodeClientController implements Initializable {
      * from a database and displays it in a list view.
      *
      * @param selectedSerie
-     *            selected series for which the functions initializes the image and
-     *            video components.
-     *            <p>
-     *            - `getImage()`: String representing the image file path -
-     *            `getName()`: String representing the series name - `getResume()`:
-     *            String representing the series summary - `getDirecteur()`: String
-     *            representing the director's name - `getPays()`: String
-     *            representing the country of origin
-     *            <p>
-     *            These properties are used to display the series information in
-     *            various parts of the user interface.
+     *                      selected series for which the functions initializes the
+     *                      image and
+     *                      video components.
+     *                      <p>
+     *                      - `getImage()`: String representing the image file path
+     *                      -
+     *                      `getName()`: String representing the series name -
+     *                      `getResume()`:
+     *                      String representing the series summary -
+     *                      `getDirecteur()`: String
+     *                      representing the director's name - `getPays()`: String
+     *                      representing the country of origin
+     *                      <p>
+     *                      These properties are used to display the series
+     *                      information in
+     *                      various parts of the user interface.
      */
     public void initialize(final Series selectedSerie) {
         this.selectedSerie = selectedSerie;
@@ -126,18 +131,21 @@ public class EpisodeClientController implements Initializable {
              * specific size and weight.
              *
              * @param item
-             *            episode object being updated, which contains information such as
-             *            title, number, season, and image path, that is used to set the
-             *            text and graphic properties of the `ImageView`.
+             *              episode object being updated, which contains information such as
+             *              title, number, season, and image path, that is used to set the
+             *              text and graphic properties of the `ImageView`.
              *
-             *            - `item`: The episode object containing information such as title,
-             *            number, season, and image. - `empty`: A boolean indicating whether
-             *            the `item` is empty or not. - `img`: The image associated with the
-             *            `item`, represented as a string.
+             *              - `item`: The episode object containing information such as
+             *              title,
+             *              number, season, and image. - `empty`: A boolean indicating
+             *              whether
+             *              the `item` is empty or not. - `img`: The image associated with
+             *              the
+             *              `item`, represented as a string.
              *
              * @param empty
-             *            emptiness of the `Episode` object, and determines whether to set
-             *            the `text` property to null or not.
+             *              emptiness of the `Episode` object, and determines whether to set
+             *              the `text` property to null or not.
              */
             @Override
             protected void updateItem(final Episode item, final boolean empty) {
@@ -186,10 +194,11 @@ public class EpisodeClientController implements Initializable {
      * appropriate methods.
      *
      * @param url
-     *            URL of the web application being initialized.
+     *                       URL of the web application being initialized.
      * @param resourceBundle
-     *            resource bundle that contains localized data for the component
-     *            being initialized.
+     *                       resource bundle that contains localized data for the
+     *                       component
+     *                       being initialized.
      */
     @Override
     /**
@@ -205,11 +214,11 @@ public class EpisodeClientController implements Initializable {
      * method, and the `idep` parameter is included in the feedback object.
      *
      * @param event
-     *            user's action of clicking the "Add Feedback" button and triggers
-     *            the execution of the function.
-     *            <p>
-     *            - `txtDescriptionFeedBack`: The text field where the user has
-     *            entered the feedback description.
+     *              user's action of clicking the "Add Feedback" button and triggers
+     *              the execution of the function.
+     *              <p>
+     *              - `txtDescriptionFeedBack`: The text field where the user has
+     *              entered the feedback description.
      */
     @FXML
     void ajouterFeedBack(final ActionEvent event) {
@@ -234,12 +243,12 @@ public class EpisodeClientController implements Initializable {
      * event occurs.
      *
      * @param event
-     *            mouse event that triggered the function execution, providing
-     *            information about the location and type of the event on the user
-     *            interface.
-     *            <p>
-     *            - `event`: A `javafx.scene.input.MouseEvent` object representing
-     *            the mouse event that triggered the function.
+     *              mouse event that triggered the function execution, providing
+     *              information about the location and type of the event on the user
+     *              interface.
+     *              <p>
+     *              - `event`: A `javafx.scene.input.MouseEvent` object representing
+     *              the mouse event that triggered the function.
      */
     @FXML
     /**

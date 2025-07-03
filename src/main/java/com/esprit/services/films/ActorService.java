@@ -44,7 +44,7 @@ public class ActorService implements IService<Actor> {
      * Creates a new entity in the database.
      *
      * @param entity
-     *            the entity to create
+     *               the entity to create
      */
     public void create(final Actor actor) {
         final String req = "insert into actors (name,image,biography) values (?,?,?) ";
@@ -90,7 +90,7 @@ public class ActorService implements IService<Actor> {
      * Updates an existing entity in the database.
      *
      * @param entity
-     *            the entity to update
+     *               the entity to update
      */
     public void update(final Actor actor) {
         final String req = "UPDATE actors set name=?,image=?,biography=? where id=?;";
@@ -135,7 +135,7 @@ public class ActorService implements IService<Actor> {
      * Deletes an entity from the database.
      *
      * @param id
-     *            the ID of the entity to delete
+     *           the ID of the entity to delete
      */
     public void delete(final Actor actor) {
         final String req = " DELETE  FROM actors where id = ?";

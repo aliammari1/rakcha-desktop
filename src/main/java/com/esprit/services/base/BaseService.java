@@ -19,9 +19,9 @@ import jakarta.persistence.criteria.Root;
  * boilerplate code across service classes.
  *
  * @param <T>
- *            The entity type this service manages
+ *             The entity type this service manages
  * @param <ID>
- *            The ID type of the entity
+ *             The ID type of the entity
  */
 public abstract class BaseService<T, ID> {
 

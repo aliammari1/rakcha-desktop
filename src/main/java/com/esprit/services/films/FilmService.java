@@ -111,7 +111,7 @@ public class FilmService implements IService<Film> {
      * Creates a new entity in the database.
      *
      * @param entity
-     *            the entity to create
+     *               the entity to create
      */
     public void create(final Film film) {
         final String req = "insert into films (name,image,duration,description,release_year) values (?,?,?,?,?) ";
@@ -206,7 +206,7 @@ public class FilmService implements IService<Film> {
      * Updates an existing entity in the database.
      *
      * @param entity
-     *            the entity to update
+     *               the entity to update
      */
     public void update(final Film film) {
         final String req = "UPDATE films set name=?,image=?,duration=?,description=?,release_year=? where id=?;";
@@ -230,7 +230,7 @@ public class FilmService implements IService<Film> {
      * Deletes an entity from the database.
      *
      * @param id
-     *            the ID of the entity to delete
+     *           the ID of the entity to delete
      */
     public void delete(final Film film) {
         final String req = "DELETE FROM films where id = ?";

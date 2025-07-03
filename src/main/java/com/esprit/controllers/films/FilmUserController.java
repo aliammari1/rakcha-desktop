@@ -154,14 +154,17 @@ public class FilmUserController extends Application {
      * name, and returns a list of matches.
      *
      * @param liste
-     *            list of films that will be searched for matching titles within the
-     *            provided `recherche` parameter.
-     *            <p>
-     *            - It is a list of `Film` objects - Each element in the list has a
-     *            `nom` attribute that can contain the search query
+     *                  list of films that will be searched for matching titles
+     *                  within the
+     *                  provided `recherche` parameter.
+     *                  <p>
+     *                  - It is a list of `Film` objects - Each element in the list
+     *                  has a
+     *                  `nom` attribute that can contain the search query
      * @param recherche
-     *            search query, which is used to filter the list of films in the
-     *            function.
+     *                  search query, which is used to filter the list of films in
+     *                  the
+     *                  function.
      * @returns a list of `Film` objects that contain the searched string in their
      *          name.
      *          <p>
@@ -217,6 +220,20 @@ public class FilmUserController extends Application {
         stage.setScene(scene);
     }
 
+    /**
+     * Displays an error alert with the given title and message.
+     * 
+     * <p>
+     * This method creates and shows a JavaFX Alert dialog of type ERROR
+     * with the specified title and message. The dialog blocks the application
+     * until the user acknowledges it by clicking OK.
+     * </p>
+     *
+     * @param title   the title text for the error dialog
+     * @param message the detailed error message to display
+     * @see Alert
+     * @see Alert.AlertType#ERROR
+     */
     private void showError(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
@@ -230,12 +247,13 @@ public class FilmUserController extends Application {
      * for each card and adding it to a `FlowPane` containing other cards.
      *
      * @param Films
-     *            list of films to create film cards for, which are then added as
-     *            children of the `flowpaneFilm`.
-     *            <p>
-     *            - `Film` objects are contained in the list. - Each `Film` object
-     *            has various attributes, such as title, director, year of release,
-     *            etc.
+     *              list of films to create film cards for, which are then added as
+     *              children of the `flowpaneFilm`.
+     *              <p>
+     *              - `Film` objects are contained in the list. - Each `Film` object
+     *              has various attributes, such as title, director, year of
+     *              release,
+     *              etc.
      */
     private void createfilmCards(final List<Film> Films) {
         for (final Film film : Films) {
@@ -245,14 +263,26 @@ public class FilmUserController extends Application {
     }
 
     /**
-     * Sets up the user interface for a film application, including creating a flow
-     * pane to display films and three combos to display top actors or directors.
+     * Initializes the JavaFX controller and sets up UI components.
+     * 
+     * <p>
+     * This method is called automatically by JavaFX after loading the FXML file.
+     * It configures UI components such as comboboxes, flowpanes, and event handlers
+     * for film display and interaction.
+     * </p>
+     * 
+     * <p>
+     * Specifically, it:
+     * </p>
+     * <ul>
+     * <li>Sets up the top 3 films and actors combobox</li>
+     * <li>Configures sorting options for films</li>
+     * <li>Initializes search functionality</li>
+     * <li>Sets up the film cards display area</li>
+     * <li>Registers event handlers for UI interactions</li>
+     * </ul>
      */
     @FXML
-    /**
-     * Initializes the JavaFX controller and sets up UI components. This method is
-     * called automatically by JavaFX after loading the FXML file.
-     */
     public void initialize() {
         // Initialize basic UI components first
         setupBasicUI();
@@ -360,8 +390,8 @@ public class FilmUserController extends Application {
      * keyword search result.
      *
      * @param keyword
-     *            search term used to filter the film cards, and its value
-     *            determines whether or not a card is visible and managed.
+     *                search term used to filter the film cards, and its value
+     *                determines whether or not a card is visible and managed.
      */
     private void filterByName(final String keyword) {
         for (final Node node : this.flowpaneFilm.getChildren()) {
@@ -387,15 +417,17 @@ public class FilmUserController extends Application {
      * to handle clicks on the movie card and the QR code.
      *
      * @param film
-     *            film object that will be displayed in the anchor pane, and is used
-     *            to retrieve the film's information such as title, image, rating,
-     *            and trailer link.
-     *            <p>
-     *            - `id`: a unique identifier for the film - `nom`: the film's title
-     *            - `description`: a brief description of the film - `duree`: the
-     *            film's duration - `annderalisation`: the film's release date -
-     *            `categories`: an array of categories the film belongs to -
-     *            `actors`: an array of actors appearing in the film.
+     *             film object that will be displayed in the anchor pane, and is
+     *             used
+     *             to retrieve the film's information such as title, image, rating,
+     *             and trailer link.
+     *             <p>
+     *             - `id`: a unique identifier for the film - `nom`: the film's
+     *             title
+     *             - `description`: a brief description of the film - `duree`: the
+     *             film's duration - `annderalisation`: the film's release date -
+     *             `categories`: an array of categories the film belongs to -
+     *             `actors`: an array of actors appearing in the film.
      * @returns an AnchorPane with a QR code generator, trailer player, and rating
      *          system for a given film.
      *          <p>
@@ -738,11 +770,11 @@ public class FilmUserController extends Application {
      * visible.
      *
      * @param event
-     *            action event that triggered the filtration process.
-     *            <p>
-     *            - Event type: `ActionEvent` - Target: `Anchore_Pane_filtrage` (a
-     *            pane in the scene) - Command: Unspecified (as the function does
-     *            not use a specific command)
+     *              action event that triggered the filtration process.
+     *              <p>
+     *              - Event type: `ActionEvent` - Target: `Anchore_Pane_filtrage` (a
+     *              pane in the scene) - Command: Unspecified (as the function does
+     *              not use a specific command)
      */
     @FXML
     void filtrer(final ActionEvent event) {
@@ -774,11 +806,12 @@ public class FilmUserController extends Application {
      * AnchorPane visible.
      *
      * @param event
-     *            user interaction that triggered the execution of the
-     *            `closercommets` method.
-     *            <p>
-     *            - Target: detalAnchorPane - Action: setOpacity() and setVisible()
-     *            methods
+     *              user interaction that triggered the execution of the
+     *              `closercommets` method.
+     *              <p>
+     *              - Target: detalAnchorPane - Action: setOpacity() and
+     *              setVisible()
+     *              methods
      */
     @FXML
     void closercommets(final ActionEvent event) {
@@ -792,14 +825,15 @@ public class FilmUserController extends Application {
      * displays the filtered cinemas in a flow pane.
      *
      * @param event
-     *            occurrence of an action event, such as clicking on the "Filtrer"
-     *            button, that triggers the execution of the `filtrercinema()`
-     *            method.
-     *            <p>
-     *            - `event` is an `ActionEvent`, indicating that the function was
-     *            called as a result of user action. - The `event` object contains
-     *            information about the source of the action, such as the button or
-     *            link that was clicked.
+     *              occurrence of an action event, such as clicking on the "Filtrer"
+     *              button, that triggers the execution of the `filtrercinema()`
+     *              method.
+     *              <p>
+     *              - `event` is an `ActionEvent`, indicating that the function was
+     *              called as a result of user action. - The `event` object contains
+     *              information about the source of the action, such as the button
+     *              or
+     *              link that was clicked.
      */
     @FXML
     void filtrercinema(final ActionEvent event) {
@@ -845,10 +879,10 @@ public class FilmUserController extends Application {
      * current scene.
      *
      * @param event
-     *            event that triggered the execution of the
-     *            `switchtoajouterCinema()` method.
-     *            <p>
-     *            - `event`: An `ActionEvent` object representing a user action.
+     *              event that triggered the execution of the
+     *              `switchtoajouterCinema()` method.
+     *              <p>
+     *              - `event`: An `ActionEvent` object representing a user action.
      */
     public void switchtoajouterCinema(final ActionEvent event) {
         try {
@@ -867,13 +901,14 @@ public class FilmUserController extends Application {
      * current scene with the new one.
      *
      * @param event
-     *            ActionEvent that triggered the call to the `switchtevent()`
-     *            method.
-     *            <p>
-     *            - Type: ActionEvent - indicates that the event was triggered by an
-     *            action (e.g., button click) - Target: null - indicates that the
-     *            event did not originate from a specific component or element -
-     *            Code: 0 - no code is provided with this event
+     *              ActionEvent that triggered the call to the `switchtevent()`
+     *              method.
+     *              <p>
+     *              - Type: ActionEvent - indicates that the event was triggered by
+     *              an
+     *              action (e.g., button click) - Target: null - indicates that the
+     *              event did not originate from a specific component or element -
+     *              Code: 0 - no code is provided with this event
      */
     public void switchtevent(final ActionEvent event) {
         try {
@@ -894,12 +929,12 @@ public class FilmUserController extends Application {
      * window with a specified size.
      *
      * @param event
-     *            ActionEvent that triggered the call to the `switchtcinemaaa()`
-     *            method.
-     *            <p>
-     *            - `ActionEvent event`: Represents an action that occurred in the
-     *            application, carrying information about the source of the action
-     *            and the type of action performed.
+     *              ActionEvent that triggered the call to the `switchtcinemaaa()`
+     *              method.
+     *              <p>
+     *              - `ActionEvent event`: Represents an action that occurred in the
+     *              application, carrying information about the source of the action
+     *              and the type of action performed.
      */
     public void switchtcinemaaa(final ActionEvent event) {
         try {
@@ -919,13 +954,14 @@ public class FilmUserController extends Application {
      * interface.
      *
      * @param event
-     *            event that triggered the call to the `switchtoajouterproduct()`
-     *            method.
-     *            <p>
-     *            - Type: ActionEvent - indicates that the event was triggered by an
-     *            action (e.g., button click) - Target: null - indicates that the
-     *            event did not originate from a specific component or element -
-     *            Code: 0 - no code is provided with this event
+     *              event that triggered the call to the `switchtoajouterproduct()`
+     *              method.
+     *              <p>
+     *              - Type: ActionEvent - indicates that the event was triggered by
+     *              an
+     *              action (e.g., button click) - Target: null - indicates that the
+     *              event did not originate from a specific component or element -
+     *              Code: 0 - no code is provided with this event
      */
     public void switchtoajouterproduct(final ActionEvent event) {
         try {
@@ -945,11 +981,12 @@ public class FilmUserController extends Application {
      * current scene with the new one.
      *
      * @param event
-     *            ActionEvent that triggered the call to the `switchtoSerie()`
-     *            method.
-     *            <p>
-     *            - Type: ActionEvent, indicating that the event was triggered by a
-     *            user action.
+     *              ActionEvent that triggered the call to the `switchtoSerie()`
+     *              method.
+     *              <p>
+     *              - Type: ActionEvent, indicating that the event was triggered by
+     *              a
+     *              user action.
      */
     public void switchtoSerie(final ActionEvent event) {
         try {
@@ -1056,15 +1093,21 @@ public class FilmUserController extends Application {
      * container. It adds the HBox to a ScrollPaneComments.
      *
      * @param commentaire
-     *            FilmComment object containing information about a comment made by
-     *            a user on a film, which is used to display the commenter's name
-     *            and comment text in the function's output.
-     *            <p>
-     *            - `commentaire`: an object of class `FilmComment`, which contains
-     *            information about a user's comment on a film. - `User_id`: a field
-     *            in the `FilmComment` class that represents the user who made the
-     *            comment. - `Photo_de_profil`: a field in the `FilmComment` class
-     *            that represents the user's profile picture URL.
+     *                    FilmComment object containing information about a comment
+     *                    made by
+     *                    a user on a film, which is used to display the commenter's
+     *                    name
+     *                    and comment text in the function's output.
+     *                    <p>
+     *                    - `commentaire`: an object of class `FilmComment`, which
+     *                    contains
+     *                    information about a user's comment on a film. - `User_id`:
+     *                    a field
+     *                    in the `FilmComment` class that represents the user who
+     *                    made the
+     *                    comment. - `Photo_de_profil`: a field in the `FilmComment`
+     *                    class
+     *                    that represents the user's profile picture URL.
      * @returns a HBox container that displays an image and text related to a
      *          comment.
      *          <p>
@@ -1136,7 +1179,7 @@ public class FilmUserController extends Application {
      * those that belong to the corresponding cinema.
      *
      * @param filmId
-     *            id of the film for which the comments are to be retrieved.
+     *               id of the film for which the comments are to be retrieved.
      * @returns a list of commentaries for a specific cinema, filtered from all
      *          comments based on their film ID.
      *          <p>
@@ -1166,7 +1209,7 @@ public class FilmUserController extends Application {
      * Displays all comments associated with a specific film ID in a scroll pane.
      *
      * @param filmId
-     *            identifier of the film to display all comments for.
+     *               identifier of the film to display all comments for.
      */
     private void displayAllComments(final Long filmId) {
         final List<FilmComment> comments = this.getAllComment(filmId);
@@ -1183,10 +1226,10 @@ public class FilmUserController extends Application {
      * interaction.
      *
      * @param stage
-     *            Stage object that serves as the root of the JavaFX application's
-     *            event handling and visual representation, and it is used to
-     *            initialize the application's UI components and layout when the
-     *            `start()` method is called.
+     *              Stage object that serves as the root of the JavaFX application's
+     *              event handling and visual representation, and it is used to
+     *              initialize the application's UI components and layout when the
+     *              `start()` method is called.
      */
     @Override
     /**

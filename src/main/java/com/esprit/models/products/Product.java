@@ -68,17 +68,17 @@ public class Product {
      * Constructor without id for creating new product instances.
      *
      * @param name
-     *            the name of the product
+     *                    the name of the product
      * @param price
-     *            the price of the product
+     *                    the price of the product
      * @param image
-     *            the image URL of the product
+     *                    the image URL of the product
      * @param description
-     *            the description of the product
+     *                    the description of the product
      * @param categories
-     *            the categories of the product
+     *                    the categories of the product
      * @param quantity
-     *            the quantity of the product
+     *                    the quantity of the product
      */
     public Product(final String name, final int price, final String image, final String description,
             final List<ProductCategory> categories, final int quantity) {
@@ -94,7 +94,7 @@ public class Product {
      * Constructor with only id for creating product references.
      *
      * @param productId
-     *            the ID of the product
+     *                  the ID of the product
      */
     public Product(final Long productId) {
         this.id = productId;
@@ -113,7 +113,7 @@ public class Product {
      * Sets the categories of the product.
      *
      * @param categories
-     *            the categories of the product
+     *                   the categories of the product
      */
     public void setCategories(final List<ProductCategory> categories) {
         this.categories = categories;

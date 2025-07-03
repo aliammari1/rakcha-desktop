@@ -156,7 +156,7 @@ public class ProfileController {
      * Sets the Data value.
      *
      * @param setData
-     *            the value to set
+     *                the value to set
      */
     public void setData(final User user) {
         this.user = user;
@@ -278,7 +278,7 @@ public class ProfileController {
      * Sets the LeftPane value.
      *
      * @param setLeftPane
-     *            the value to set
+     *                    the value to set
      */
     public void setLeftPane(final AnchorPane leftPane) {
         this.leftPane.getChildren().clear();

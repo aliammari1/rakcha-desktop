@@ -51,8 +51,9 @@ public class AdminSideBarController implements Initializable {
      * variables.
      *
      * @param event
-     *            occurrence of an action that triggered the `switchToEvent` method
-     *            to be called.
+     *              occurrence of an action that triggered the `switchToEvent`
+     *              method
+     *              to be called.
      */
     @FXML
     void switchToEvent(final ActionEvent event) {
@@ -63,11 +64,11 @@ public class AdminSideBarController implements Initializable {
      * display its root element.
      *
      * @param event
-     *            triggered action that initiated the code execution in the
-     *            `switchToMovies()` method.
-     *            <p>
-     *            - Event type: `ActionEvent` - Target: `movieButton` (a button
-     *            object)
+     *              triggered action that initiated the code execution in the
+     *              `switchToMovies()` method.
+     *              <p>
+     *              - Event type: `ActionEvent` - Target: `movieButton` (a button
+     *              object)
      */
     @FXML
     void switchToMovies(final ActionEvent event) {
@@ -88,16 +89,17 @@ public class AdminSideBarController implements Initializable {
      * file.
      *
      * @param event
-     *            click event of a button, which triggers the execution of the
-     *            `switchToProducts()` method.
-     *            <p>
-     *            Event: An event object representing a button press.
-     *            <p>
-     *            Properties:
-     *            <p>
-     *            - `getSource()`: Returns the source of the event (in this case,
-     *            the `ProductButton`). - `getButton()`: Returns the button that was
-     *            pressed (e.g., "Product").
+     *              click event of a button, which triggers the execution of the
+     *              `switchToProducts()` method.
+     *              <p>
+     *              Event: An event object representing a button press.
+     *              <p>
+     *              Properties:
+     *              <p>
+     *              - `getSource()`: Returns the source of the event (in this case,
+     *              the `ProductButton`). - `getButton()`: Returns the button that
+     *              was
+     *              pressed (e.g., "Product").
      */
     @FXML
     void switchToProducts(final ActionEvent event) {
@@ -120,11 +122,11 @@ public class AdminSideBarController implements Initializable {
      * of the Stage to the loaded root node.
      *
      * @param event
-     *            click event of the `switchToSeries` button, triggering the
-     *            execution of the code inside the function.
-     *            <p>
-     *            - `event`: An `ActionEvent` object representing a user-initiated
-     *            action.
+     *              click event of the `switchToSeries` button, triggering the
+     *              execution of the code inside the function.
+     *              <p>
+     *              - `event`: An `ActionEvent` object representing a user-initiated
+     *              action.
      */
     @FXML
     void switchToSeries(final ActionEvent event) {
@@ -146,11 +148,12 @@ public class AdminSideBarController implements Initializable {
      * element.
      *
      * @param event
-     *            click event on the cinema button that triggered the function
-     *            execution.
-     *            <p>
-     *            - `event`: An `ActionEvent` object representing the user's action
-     *            of switching to the cinema view.
+     *              click event on the cinema button that triggered the function
+     *              execution.
+     *              <p>
+     *              - `event`: An `ActionEvent` object representing the user's
+     *              action
+     *              of switching to the cinema view.
      */
     @FXML
     void switchtcinema(final ActionEvent event) {
@@ -170,10 +173,10 @@ public class AdminSideBarController implements Initializable {
      * stage with the new scene.
      *
      * @param event
-     *            user action that triggered the call to the `switchToUsers()`
-     *            method.
-     *            <p>
-     *            - Event type: ActionEvent
+     *              user action that triggered the call to the `switchToUsers()`
+     *              method.
+     *              <p>
+     *              - Event type: ActionEvent
      */
     @FXML
     /**
@@ -197,10 +200,11 @@ public class AdminSideBarController implements Initializable {
      * resources.
      *
      * @param location
-     *            URL of the application's resource bundle, which is used to load
-     *            the appropriate resources for the application.
+     *                  URL of the application's resource bundle, which is used to
+     *                  load
+     *                  the appropriate resources for the application.
      * @param resources
-     *            resource bundle for the current application.
+     *                  resource bundle for the current application.
      */
     @Override
     /**
@@ -215,12 +219,12 @@ public class AdminSideBarController implements Initializable {
      * replacing the current stage's scene with the new one.
      *
      * @param event
-     *            click event on the logout button that triggers the function
-     *            execution.
-     *            <p>
-     *            - Event type: `ActionEvent`, indicating that the event was
-     *            triggered by a user action. - Target object: `logoutButton`,
-     *            indicating the button that was clicked to trigger the event.
+     *              click event on the logout button that triggers the function
+     *              execution.
+     *              <p>
+     *              - Event type: `ActionEvent`, indicating that the event was
+     *              triggered by a user action. - Target object: `logoutButton`,
+     *              indicating the button that was clicked to trigger the event.
      */
     @FXML
     void switchToLogout(final ActionEvent event) {
@@ -240,10 +244,11 @@ public class AdminSideBarController implements Initializable {
      * clicked.
      *
      * @param event
-     *            mouse click event that triggered the function execution.
-     *            <p>
-     *            - `event`: An `ActionEvent` object representing the user's action
-     *            of clicking on the "Switch to Profile" button.
+     *              mouse click event that triggered the function execution.
+     *              <p>
+     *              - `event`: An `ActionEvent` object representing the user's
+     *              action
+     *              of clicking on the "Switch to Profile" button.
      */
     @FXML
     void switchToProfile(final ActionEvent event) {

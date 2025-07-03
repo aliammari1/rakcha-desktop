@@ -42,9 +42,9 @@ public class ClientSideBarController implements Initializable {
      * type.
      *
      * @param event
-     *            event that triggered the function execution, providing the
-     *            necessary information for the function to perform its intended
-     *            action.
+     *              event that triggered the function execution, providing the
+     *              necessary information for the function to perform its intended
+     *              action.
      */
     @FXML
     void switchToEvent(final ActionEvent event) {
@@ -55,12 +55,12 @@ public class ClientSideBarController implements Initializable {
      * `FXMLLoader` class, replacing the current scene with the newly loaded one.
      *
      * @param event
-     *            user's action that triggered the function, and it is of type
-     *            `ActionEvent`.
-     *            <p>
-     *            - It is an `ActionEvent`, indicating that the event occurred due
-     *            to user action. - The event target is the `movieButton`,
-     *            indicating the button that was clicked.
+     *              user's action that triggered the function, and it is of type
+     *              `ActionEvent`.
+     *              <p>
+     *              - It is an `ActionEvent`, indicating that the event occurred due
+     *              to user action. - The event target is the `movieButton`,
+     *              indicating the button that was clicked.
      */
     @FXML
     void switchToMovies(final ActionEvent event) {
@@ -80,10 +80,11 @@ public class ClientSideBarController implements Initializable {
      * a Stage to the loaded root element, replacing the previous content.
      *
      * @param event
-     *            occurrence of a button press, which triggers the execution of the
-     *            `switchToProducts()` method.
-     *            <p>
-     *            Event: An action event that triggered the function execution.
+     *              occurrence of a button press, which triggers the execution of
+     *              the
+     *              `switchToProducts()` method.
+     *              <p>
+     *              Event: An action event that triggered the function execution.
      */
     @FXML
     void switchToProducts(final ActionEvent event) {
@@ -105,13 +106,13 @@ public class ClientSideBarController implements Initializable {
      * the loaded root node.
      *
      * @param event
-     *            `ActionEvent` that triggered the `switchToSeries()` method,
-     *            providing the source of the event that initiated the method's
-     *            execution.
-     *            <p>
-     *            - Type: `ActionEvent` (represents an action event occurring on a
-     *            JavaFX component) - Source: Reference to the component that
-     *            generated the event (usually a button or menu item)
+     *              `ActionEvent` that triggered the `switchToSeries()` method,
+     *              providing the source of the event that initiated the method's
+     *              execution.
+     *              <p>
+     *              - Type: `ActionEvent` (represents an action event occurring on a
+     *              JavaFX component) - Source: Reference to the component that
+     *              generated the event (usually a button or menu item)
      */
     @FXML
     void switchToSeries(final ActionEvent event) {
@@ -130,11 +131,11 @@ public class ClientSideBarController implements Initializable {
      * Loads a new scene from an FXML file when the "Cinema" button is clicked.
      *
      * @param event
-     *            event that triggered the `switchtcinema` function, which is an
-     *            ActionEvent in this case.
-     *            <p>
-     *            - `event`: an `ActionEvent` object representing a user-initiated
-     *            event.
+     *              event that triggered the `switchtcinema` function, which is an
+     *              ActionEvent in this case.
+     *              <p>
+     *              - `event`: an `ActionEvent` object representing a user-initiated
+     *              event.
      */
     @FXML
     void switchtcinema(final ActionEvent event) {
@@ -155,12 +156,13 @@ public class ClientSideBarController implements Initializable {
      * the stage's user data to null.
      *
      * @param event
-     *            click event on the logout button that triggered the function
-     *            execution.
-     *            <p>
-     *            - `event`: An instance of the `ActionEvent` class, representing a
-     *            user action (such as button press) that triggered the function
-     *            execution.
+     *              click event on the logout button that triggered the function
+     *              execution.
+     *              <p>
+     *              - `event`: An instance of the `ActionEvent` class, representing
+     *              a
+     *              user action (such as button press) that triggered the function
+     *              execution.
      */
     @FXML
     void switchToLogout(final ActionEvent event) {
@@ -180,11 +182,11 @@ public class ClientSideBarController implements Initializable {
      * `"/ui/users/Profile.fxml"` when the `profileButton` is clicked.
      *
      * @param event
-     *            click event that triggered the function execution.
-     *            <p>
-     *            - Event type: `ActionEvent` indicating that the event was
-     *            triggered by a user action on the associated control (in this
-     *            case, the `profileButton`).
+     *              click event that triggered the function execution.
+     *              <p>
+     *              - Event type: `ActionEvent` indicating that the event was
+     *              triggered by a user action on the associated control (in this
+     *              case, the `profileButton`).
      */
     @FXML
     void switchToProfile(final ActionEvent event) {
@@ -204,10 +206,12 @@ public class ClientSideBarController implements Initializable {
      * additional initialization logic specified in the method body.
      *
      * @param location
-     *            URL of the web application's root directory.
+     *                  URL of the web application's root directory.
      * @param resources
-     *            resource bundle for the application, providing localized strings
-     *            and other resources for the user interface and functionality.
+     *                  resource bundle for the application, providing localized
+     *                  strings
+     *                  and other resources for the user interface and
+     *                  functionality.
      */
     @Override
     /**

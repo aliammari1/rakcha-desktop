@@ -118,8 +118,8 @@ public class DesignProductAdminContoller {
      * content text provided as arguments.
      *
      * @param message
-     *            text to be displayed as an information alert when the
-     *            `showAlert()` method is called.
+     *                text to be displayed as an information alert when the
+     *                `showAlert()` method is called.
      */
     @FXML
     private void showAlert(final String message) {
@@ -135,12 +135,12 @@ public class DesignProductAdminContoller {
      * image is selected, it sets the `image` field to the selected image.
      *
      * @param event
-     *            MouseEvent object that triggered the function, providing
-     *            information about the mouse event that initiated the image
-     *            selection process.
-     *            <p>
-     *            Event: MouseEvent Type: Input event related to mouse actions
-     *            (clicks, moves, releases, etc.) Parameters: none
+     *              MouseEvent object that triggered the function, providing
+     *              information about the mouse event that initiated the image
+     *              selection process.
+     *              <p>
+     *              Event: MouseEvent Type: Input event related to mouse actions
+     *              (clicks, moves, releases, etc.) Parameters: none
      */
     @FXML
     void selectImage(final MouseEvent event) {
@@ -159,14 +159,19 @@ public class DesignProductAdminContoller {
      * adds the product to the existing list.
      *
      * @param actionEvent
-     *            event that triggered the execution of the `add_produit()` method,
-     *            which in this case is a button click.
-     *            <p>
-     *            - `actionEvent` represents an action event triggered by the user,
-     *            such as clicking on a button or selecting an image. - The event
-     *            may contain additional information, such as the source of the
-     *            action (e.g., a button or a link) and the ID of the element that
-     *            was activated.
+     *                    event that triggered the execution of the `add_produit()`
+     *                    method,
+     *                    which in this case is a button click.
+     *                    <p>
+     *                    - `actionEvent` represents an action event triggered by
+     *                    the user,
+     *                    such as clicking on a button or selecting an image. - The
+     *                    event
+     *                    may contain additional information, such as the source of
+     *                    the
+     *                    action (e.g., a button or a link) and the ID of the
+     *                    element that
+     *                    was activated.
      */
     @FXML
     /**
@@ -256,15 +261,19 @@ public class DesignProductAdminContoller {
      * database using a `ProductService`.
      *
      * @param produit
-     *            Product object to be modified, containing the product's ID,
-     *            category name, nom, prix, description, image, and quantity.
-     *            <p>
-     *            - `nouvelleCategorie`: The new category name for the product. -
-     *            `nouveauNom`: The new product name. - `nouveauPrix`: The new price
-     *            of the product. - `nouvelleDescription`: The new product
-     *            description. - `img`: The new image associated with the product. -
-     *            `nouvelleQuantite`: The new quantity of the product in stock. -
-     *            `id`: The unique identifier for the product in the database.
+     *                Product object to be modified, containing the product's ID,
+     *                category name, nom, prix, description, image, and quantity.
+     *                <p>
+     *                - `nouvelleCategorie`: The new category name for the product.
+     *                -
+     *                `nouveauNom`: The new product name. - `nouveauPrix`: The new
+     *                price
+     *                of the product. - `nouvelleDescription`: The new product
+     *                description. - `img`: The new image associated with the
+     *                product. -
+     *                `nouvelleQuantite`: The new quantity of the product in stock.
+     *                -
+     *                `id`: The unique identifier for the product in the database.
      */
     @FXML
     void modifier_produit(final Product produit) {
@@ -299,12 +308,14 @@ public class DesignProductAdminContoller {
              * in the produits table.
              *
              * @param item
-             *            current selected item or value in the `updateItem` function, which
-             *            is being updated and processed accordingly.
+             *              current selected item or value in the `updateItem` function,
+             *              which
+             *              is being updated and processed accordingly.
              *
              * @param empty
-             *            empty state of the item being updated, which determines whether to
-             *            show or hide the combo box and its content.
+             *              empty state of the item being updated, which determines whether
+             *              to
+             *              show or hide the combo box and its content.
              */
             @Override
             /*
@@ -440,18 +451,20 @@ public class DesignProductAdminContoller {
              * and sets the corresponding properties of the function's image view.
              *
              * @param item
-             *            ImageView object that is being updated, and its `Image` property
-             *            is set to the `Image` object of the corresponding table row item.
+             *              ImageView object that is being updated, and its `Image` property
+             *              is set to the `Image` object of the corresponding table row
+             *              item.
              *
-             *            - `empty`: A boolean indicating whether `item` is empty or not. -
-             *            `item`: The ImageView object to be updated, which contains an
-             *            image and other display properties. - `produit`: The product
-             *            associated with the item, which is obtained from the parent
-             *            TableRow object.
+             *              - `empty`: A boolean indicating whether `item` is empty or not.
+             *              -
+             *              `item`: The ImageView object to be updated, which contains an
+             *              image and other display properties. - `produit`: The product
+             *              associated with the item, which is obtained from the parent
+             *              TableRow object.
              *
              * @param empty
-             *            whether the imageView is empty or not and affects whether the
-             *            graphic and text are set to null or not.
+             *              whether the imageView is empty or not and affects whether the
+             *              graphic and text are set to null or not.
              */
             @Override
             protected void updateItem(final ImageView item, final boolean empty) {
@@ -503,15 +516,16 @@ public class DesignProductAdminContoller {
              * the TableView and the underlying data source.
              *
              * @param param
-             *            TableColumn object from which the method is being called, and is
-             *            used to supply the necessary context for the method to work
-             *            properly.
+             *              TableColumn object from which the method is being called, and is
+             *              used to supply the necessary context for the method to work
+             *              properly.
              *
-             *            - `param`: an instance of `TableColumn<Product, Void>`
-             *            representing the table column that triggered the cell's creation.
-             *            - `getIndex()`: returns the index of the row where the cell is
-             *            located in the `produit` list. - `getItems()`: returns a list of
-             *            `Product` objects representing the data displayed in the column.
+             *              - `param`: an instance of `TableColumn<Product, Void>`
+             *              representing the table column that triggered the cell's
+             *              creation.
+             *              - `getIndex()`: returns the index of the row where the cell is
+             *              located in the `produit` list. - `getItems()`: returns a list of
+             *              `Product` objects representing the data displayed in the column.
              *
              * @returns a `TableCell` object that displays a delete button for each item in
              *          the table.
@@ -552,17 +566,18 @@ public class DesignProductAdminContoller {
                      * graphic to a button with the text "Delete".
                      *
                      * @param item
-                     *            Void object being updated, which is passed to the superclass's
-                     *            `updateItem()` method and then processed further in the current
-                     *            method based on the value of the `empty` parameter.
+                     *              Void object being updated, which is passed to the superclass's
+                     *              `updateItem()` method and then processed further in the current
+                     *              method based on the value of the `empty` parameter.
                      *
-                     *            - `item`: The object being updated, which may be `null`. -
-                     *            `empty`: A boolean indicating whether the item is empty or not.
+                     *              - `item`: The object being updated, which may be `null`. -
+                     *              `empty`: A boolean indicating whether the item is empty or not.
                      *
                      * @param empty
-                     *            whether the item is empty or not and affects the graphic displayed
-                     *            in the function, with `true` indicating no item and `false`
-                     *            indicating an item present.
+                     *              whether the item is empty or not and affects the graphic
+                     *              displayed
+                     *              in the function, with `true` indicating no item and `false`
+                     *              indicating an item present.
                      */
                     @Override
                     protected void updateItem(final Void item, final boolean empty) {
@@ -587,11 +602,12 @@ public class DesignProductAdminContoller {
      * product's image using a database connection.
      *
      * @param produit
-     *            object being updated with the selected image.
-     *            <p>
-     *            - `produit`: A `Product` object representing the product whose
-     *            image is being changed. - `image`: A string containing the URL of
-     *            the existing image associated with the product.
+     *                object being updated with the selected image.
+     *                <p>
+     *                - `produit`: A `Product` object representing the product whose
+     *                image is being changed. - `image`: A string containing the URL
+     *                of
+     *                the existing image associated with the product.
      */
     private void changerImage(final Product produit) {
         final FileChooser fileChooser = new FileChooser();
@@ -616,11 +632,11 @@ public class DesignProductAdminContoller {
      * with it, while closing the original stage.
      *
      * @param event
-     *            event that triggered the function, specifically the button click
-     *            event that initiated the category management process.
-     *            <p>
-     *            - `event` is an `ActionEvent` object representing the triggering
-     *            event for the function.
+     *              event that triggered the function, specifically the button click
+     *              event that initiated the category management process.
+     *              <p>
+     *              - `event` is an `ActionEvent` object representing the triggering
+     *              event for the function.
      */
     @FXML
     void GestionCategorie(final ActionEvent event) throws IOException {
@@ -646,8 +662,9 @@ public class DesignProductAdminContoller {
      * `ProductTableView`.
      *
      * @param keyword
-     *            search query provided by the user and is used to filter the list
-     *            of products in the `produitservice.read()` method.
+     *                search query provided by the user and is used to filter the
+     *                list
+     *                of products in the `produitservice.read()` method.
      */
     @FXML
     private void search(final String keyword) {
@@ -672,8 +689,9 @@ public class DesignProductAdminContoller {
      * products that have the searched category name in their name.
      *
      * @param searchText
-     *            search query entered by the user, which is used to filter the list
-     *            of products in the `Product_tableview`.
+     *                   search query entered by the user, which is used to filter
+     *                   the list
+     *                   of products in the `Product_tableview`.
      */
     private void filterCategorieProducts(final String searchText) {
         // Vérifier si le champ de recherche n'est pas vide
@@ -714,15 +732,16 @@ public class DesignProductAdminContoller {
      * element, and makes the parent element visible.
      *
      * @param event
-     *            MouseEvent that triggered the function execution and provides
-     *            information about the event, such as the button that was clicked
-     *            or the location of the click within the screen.
-     *            <p>
-     *            - `event` is an instance of `MouseEvent`, which represents a mouse
-     *            event such as a click or a drag. - The event may have various
-     *            properties such as the `button` (which button was clicked),
-     *            `clickCount` (the number of times the button was clicked), and
-     *            `location` (the coordinates of the event).
+     *              MouseEvent that triggered the function execution and provides
+     *              information about the event, such as the button that was clicked
+     *              or the location of the click within the screen.
+     *              <p>
+     *              - `event` is an instance of `MouseEvent`, which represents a
+     *              mouse
+     *              event such as a click or a drag. - The event may have various
+     *              properties such as the `button` (which button was clicked),
+     *              `clickCount` (the number of times the button was clicked), and
+     *              `location` (the coordinates of the event).
      */
     @FXML
     void filtrer(final MouseEvent event) {
@@ -774,15 +793,16 @@ public class DesignProductAdminContoller {
      * the TableView with the filtered results.
      *
      * @param event
-     *            action event that triggers the execution of the `filtercinema()`
-     *            method.
-     *            <p>
-     *            - Type: ActionEvent, indicating that the event was triggered by an
-     *            action (e.g., button click) - Source: the object that generated
-     *            the event (e.g., a button)
-     *            <p>
-     *            In summary, `event` is an instance of the ActionEvent class,
-     *            providing information about the source and type of the event.
+     *              action event that triggers the execution of the `filtercinema()`
+     *              method.
+     *              <p>
+     *              - Type: ActionEvent, indicating that the event was triggered by
+     *              an
+     *              action (e.g., button click) - Source: the object that generated
+     *              the event (e.g., a button)
+     *              <p>
+     *              In summary, `event` is an instance of the ActionEvent class,
+     *              providing information about the source and type of the event.
      */
     @FXML
     /**
@@ -832,12 +852,12 @@ public class DesignProductAdminContoller {
      * and shows the new one.
      *
      * @param event
-     *            ActionEvent object that triggered the function execution,
-     *            providing information about the source of the event and allowing
-     *            the function to handle the appropriate action.
-     *            <p>
-     *            - `event`: an ActionEvent object representing a user action that
-     *            triggered the function.
+     *              ActionEvent object that triggered the function execution,
+     *              providing information about the source of the event and allowing
+     *              the function to handle the appropriate action.
+     *              <p>
+     *              - `event`: an ActionEvent object representing a user action that
+     *              triggered the function.
      */
     @FXML
     void cinemaclient(final ActionEvent event) {
@@ -868,14 +888,15 @@ public class DesignProductAdminContoller {
      * scene with it, replacing the current stage with the new scene.
      *
      * @param event
-     *            ActionEvent object that triggered the event handling, providing
-     *            the source of the event and allowing the code to access the
-     *            relevant information.
-     *            <p>
-     *            - `event` is an `ActionEvent` representing a user action that
-     *            triggered the function execution. - The source of the event is the
-     *            element in the UI that was interacted with by the user, which is
-     *            passed as the parameter to the function.
+     *              ActionEvent object that triggered the event handling, providing
+     *              the source of the event and allowing the code to access the
+     *              relevant information.
+     *              <p>
+     *              - `event` is an `ActionEvent` representing a user action that
+     *              triggered the function execution. - The source of the event is
+     *              the
+     *              element in the UI that was interacted with by the user, which is
+     *              passed as the parameter to the function.
      */
     @FXML
     void eventClient(final ActionEvent event) {
@@ -905,13 +926,15 @@ public class DesignProductAdminContoller {
      * stage, replacing the current stage.
      *
      * @param event
-     *            ActionEvent object triggered by the user's action, which initiates
-     *            the code execution and loads the new interface in the scene.
-     *            <p>
-     *            - It is an instance of `ActionEvent`, which represents an event
-     *            triggered by a user action on a JavaFX component. - The source of
-     *            the event is typically a button or other control that initiated
-     *            the action.
+     *              ActionEvent object triggered by the user's action, which
+     *              initiates
+     *              the code execution and loads the new interface in the scene.
+     *              <p>
+     *              - It is an instance of `ActionEvent`, which represents an event
+     *              triggered by a user action on a JavaFX component. - The source
+     *              of
+     *              the event is typically a button or other control that initiated
+     *              the action.
      */
     @FXML
     void produitClient(final ActionEvent event) {
@@ -943,8 +966,9 @@ public class DesignProductAdminContoller {
      * beyond calling the default behavior of the `void` return type.
      *
      * @param event
-     *            occurrence of an action event that triggered the execution of the
-     *            `profilclient` method.
+     *              occurrence of an action event that triggered the execution of
+     *              the
+     *              `profilclient` method.
      */
     @FXML
     void profilclient(final ActionEvent event) {
@@ -955,13 +979,15 @@ public class DesignProductAdminContoller {
      * current stage with the new one.
      *
      * @param event
-     *            ActionEvent object that triggered the `MovieClient()` method,
-     *            providing information about the action that was performed, such as
-     *            the source of the event and the type of event.
-     *            <p>
-     *            - Event type: The event type is `ActionEvent`, indicating that the
-     *            event was triggered by an action (such as clicking a button or
-     *            pressing a key).
+     *              ActionEvent object that triggered the `MovieClient()` method,
+     *              providing information about the action that was performed, such
+     *              as
+     *              the source of the event and the type of event.
+     *              <p>
+     *              - Event type: The event type is `ActionEvent`, indicating that
+     *              the
+     *              event was triggered by an action (such as clicking a button or
+     *              pressing a key).
      */
     @FXML
     void MovieClient(final ActionEvent event) {
@@ -991,11 +1017,11 @@ public class DesignProductAdminContoller {
      * current stage with the new one.
      *
      * @param event
-     *            ActionEvent that triggered the function, providing information
-     *            about the source of the event and any relevant data.
-     *            <p>
-     *            - Event source: The object that generated the event. - Type of
-     *            event: The type of event (e.g., button click, window closing).
+     *              ActionEvent that triggered the function, providing information
+     *              about the source of the event and any relevant data.
+     *              <p>
+     *              - Event source: The object that generated the event. - Type of
+     *              event: The type of event (e.g., button click, window closing).
      */
     @FXML
     void SerieClient(final ActionEvent event) {
@@ -1026,13 +1052,13 @@ public class DesignProductAdminContoller {
      * field's new image.
      *
      * @param event
-     *            MouseEvent object that triggered the function's execution and
-     *            provides information about the user's action, such as the button
-     *            that was clicked or the position of the mouse pointer, which is
-     *            not used in this particular function.
-     *            <p>
-     *            - `MouseEvent event`: represents an event generated by a mouse
-     *            button press or release, or a mouse move.
+     *              MouseEvent object that triggered the function's execution and
+     *              provides information about the user's action, such as the button
+     *              that was clicked or the position of the mouse pointer, which is
+     *              not used in this particular function.
+     *              <p>
+     *              - `MouseEvent event`: represents an event generated by a mouse
+     *              button press or release, or a mouse move.
      */
     @FXML
     void importImage(final MouseEvent event) {

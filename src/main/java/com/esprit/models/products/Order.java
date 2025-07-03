@@ -60,15 +60,15 @@ public class Order {
      * Constructor without id for creating new order instances.
      *
      * @param orderDate
-     *            The date of the order.
+     *                    The date of the order.
      * @param status
-     *            The status of the order.
+     *                    The status of the order.
      * @param client
-     *            The client associated with the order.
+     *                    The client associated with the order.
      * @param phoneNumber
-     *            The telephone number associated with the order.
+     *                    The telephone number associated with the order.
      * @param address
-     *            The address associated with the order.
+     *                    The address associated with the order.
      */
     public Order(final Date orderDate, final String status, final Client client, final int phoneNumber,
             final String address) {

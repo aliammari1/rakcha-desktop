@@ -44,7 +44,7 @@ public class CommentService implements IService<Comment> {
      * Creates a new entity in the database.
      *
      * @param entity
-     *            the entity to create
+     *               the entity to create
      */
     public void create(final Comment comment) {
         final String req = "INSERT into comments (client_id, comment_text, product_id) values (?, ?, ?)";
@@ -90,7 +90,7 @@ public class CommentService implements IService<Comment> {
      * Updates an existing entity in the database.
      *
      * @param entity
-     *            the entity to update
+     *               the entity to update
      */
     public void update(final Comment comment) {
     }
@@ -100,7 +100,7 @@ public class CommentService implements IService<Comment> {
      * Deletes an entity from the database.
      *
      * @param id
-     *            the ID of the entity to delete
+     *           the ID of the entity to delete
      */
     public void delete(final Comment comment) {
     }

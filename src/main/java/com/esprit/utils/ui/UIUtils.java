@@ -215,14 +215,14 @@ public class UIUtils {
     public static void animateIn(Node node, AnimationType type) {
         Platform.runLater(() -> {
             switch (type) {
-            case FADE_IN -> new FadeIn(node).play();
-            case SLIDE_IN_LEFT -> new SlideInLeft(node).play();
-            case SLIDE_IN_RIGHT -> new SlideInRight(node).play();
-            case SLIDE_IN_UP -> new SlideInUp(node).play();
-            case SLIDE_IN_DOWN -> new SlideInDown(node).play();
-            case BOUNCE_IN -> new BounceIn(node).play();
-            case ZOOM_IN -> new ZoomIn(node).play();
-            default -> new FadeIn(node).play();
+                case FADE_IN -> new FadeIn(node).play();
+                case SLIDE_IN_LEFT -> new SlideInLeft(node).play();
+                case SLIDE_IN_RIGHT -> new SlideInRight(node).play();
+                case SLIDE_IN_UP -> new SlideInUp(node).play();
+                case SLIDE_IN_DOWN -> new SlideInDown(node).play();
+                case BOUNCE_IN -> new BounceIn(node).play();
+                case ZOOM_IN -> new ZoomIn(node).play();
+                default -> new FadeIn(node).play();
             }
         });
     }
@@ -233,14 +233,14 @@ public class UIUtils {
     public static void animateOut(Node node, AnimationType type, Runnable onFinished) {
         Platform.runLater(() -> {
             AnimationFX animation = switch (type) {
-            case FADE_OUT -> new FadeOut(node);
-            case SLIDE_OUT_LEFT -> new SlideOutLeft(node);
-            case SLIDE_OUT_RIGHT -> new SlideOutRight(node);
-            case SLIDE_OUT_UP -> new SlideOutUp(node);
-            case SLIDE_OUT_DOWN -> new SlideOutDown(node);
-            case BOUNCE_OUT -> new BounceOut(node);
-            case ZOOM_OUT -> new ZoomOut(node);
-            default -> new FadeOut(node);
+                case FADE_OUT -> new FadeOut(node);
+                case SLIDE_OUT_LEFT -> new SlideOutLeft(node);
+                case SLIDE_OUT_RIGHT -> new SlideOutRight(node);
+                case SLIDE_OUT_UP -> new SlideOutUp(node);
+                case SLIDE_OUT_DOWN -> new SlideOutDown(node);
+                case BOUNCE_OUT -> new BounceOut(node);
+                case ZOOM_OUT -> new ZoomOut(node);
+                default -> new FadeOut(node);
             };
 
             animation.setOnFinished(e -> {
@@ -382,7 +382,8 @@ public class UIUtils {
      * Animation types enumeration
      */
     public enum AnimationType {
-        FADE_IN, FADE_OUT, SLIDE_IN_LEFT, SLIDE_IN_RIGHT, SLIDE_IN_UP, SLIDE_IN_DOWN, SLIDE_OUT_LEFT, SLIDE_OUT_RIGHT, SLIDE_OUT_UP, SLIDE_OUT_DOWN, BOUNCE_IN, BOUNCE_OUT, ZOOM_IN, ZOOM_OUT
+        FADE_IN, FADE_OUT, SLIDE_IN_LEFT, SLIDE_IN_RIGHT, SLIDE_IN_UP, SLIDE_IN_DOWN, SLIDE_OUT_LEFT, SLIDE_OUT_RIGHT,
+        SLIDE_OUT_UP, SLIDE_OUT_DOWN, BOUNCE_IN, BOUNCE_OUT, ZOOM_IN, ZOOM_OUT
     }
 
     /**

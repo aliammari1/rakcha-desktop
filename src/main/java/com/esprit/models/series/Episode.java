@@ -59,17 +59,17 @@ public class Episode {
      * Constructor without id for creating new episode instances.
      *
      * @param title
-     *            the title of the episode
+     *                      the title of the episode
      * @param episodeNumber
-     *            the episode number
+     *                      the episode number
      * @param season
-     *            the season number
+     *                      the season number
      * @param image
-     *            the image URL of the episode
+     *                      the image URL of the episode
      * @param video
-     *            the video URL of the episode
+     *                      the video URL of the episode
      * @param seriesId
-     *            the ID of the series
+     *                      the ID of the series
      */
     public Episode(final String title, final int episodeNumber, final int season, final String image,
             final String video, final int seriesId) {

@@ -45,7 +45,7 @@ public class OrderItemService implements IService<OrderItem> {
      * Creates a new entity in the database.
      *
      * @param entity
-     *            the entity to create
+     *               the entity to create
      */
     public void create(final OrderItem orderItem) {
         final String req = "INSERT into order_items(product_id, quantity, order_id) values (?, ?, ?)";
@@ -118,7 +118,7 @@ public class OrderItemService implements IService<OrderItem> {
      * Updates an existing entity in the database.
      *
      * @param entity
-     *            the entity to update
+     *               the entity to update
      */
     public void update(final OrderItem orderItem) {
     }
@@ -128,7 +128,7 @@ public class OrderItemService implements IService<OrderItem> {
      * Deletes an entity from the database.
      *
      * @param id
-     *            the ID of the entity to delete
+     *           the ID of the entity to delete
      */
     public void delete(final OrderItem orderItem) {
     }

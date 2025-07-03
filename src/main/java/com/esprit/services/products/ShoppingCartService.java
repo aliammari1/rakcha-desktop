@@ -43,7 +43,7 @@ public class ShoppingCartService implements IService<ShoppingCart> {
      * Creates a new entity in the database.
      *
      * @param entity
-     *            the entity to create
+     *               the entity to create
      */
     public void create(final ShoppingCart shoppingCart) {
         final String req = "INSERT into shopping_cart(produit_id, quantity, user_id) values (?, ?, ?)";
@@ -97,7 +97,7 @@ public class ShoppingCartService implements IService<ShoppingCart> {
      * Updates an existing entity in the database.
      *
      * @param entity
-     *            the entity to update
+     *               the entity to update
      */
     public void update(final ShoppingCart shoppingCart) {
         final String req = "UPDATE shopping_cart SET produit_id = ?, quantity = ?, user_id = ? WHERE id = ?";
@@ -119,7 +119,7 @@ public class ShoppingCartService implements IService<ShoppingCart> {
      * Deletes an entity from the database.
      *
      * @param id
-     *            the ID of the entity to delete
+     *           the ID of the entity to delete
      */
     public void delete(final ShoppingCart shoppingCart) {
         final String req = "DELETE from shopping_cart where produit_id = ? and user_id = ?";

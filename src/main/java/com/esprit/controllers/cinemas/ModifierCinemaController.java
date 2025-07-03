@@ -22,11 +22,27 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 /**
- * Is used to modify the details of a cinema object in a GUI application using
- * JavaFX. It has fields for entering cinema name, address, and logo, and
- * methods for updating the cinema details and displaying an alert message. The
- * class also includes an initialize method and event handlers for the select
- * and modifier buttons.
+ * Controller for modifying cinema details in a GUI application using JavaFX.
+ * 
+ * <p>
+ * This controller provides functionality to modify cinema information such as
+ * name,
+ * address, and logo. It handles form validation, file selection for logos, and
+ * database updates through the CinemaService.
+ * </p>
+ * 
+ * <p>
+ * The controller implements the Initializable interface to set up the UI
+ * components
+ * when the FXML is loaded.
+ * </p>
+ * 
+ * @author Esprit Team
+ * @version 1.0
+ * @since 1.0
+ * @see javafx.fxml.Initializable
+ * @see com.esprit.models.cinemas.Cinema
+ * @see com.esprit.services.cinemas.CinemaService
  */
 public class ModifierCinemaController implements Initializable {
     @FXML
@@ -39,36 +55,36 @@ public class ModifierCinemaController implements Initializable {
     private File selectedFile;
 
     /**
-     * Is called when an instance of a class is created and initializes its
-     * resources by performing no-op actions.
-     *
-     * @param location
-     *            URL of the web application's root document, which is used to
-     *            locate the necessary resources for its proper operation.
-     * @param resources
-     *            ResourceBundle that contains keys for localization of the
-     *            application's user interface and other textual content.
-     */
-    @Override
-    /**
      * Initializes the JavaFX controller and sets up UI components. This method is
      * called automatically by JavaFX after loading the FXML file.
+     * 
+     * <p>
+     * This method is a no-op implementation as no specific initialization is
+     * required.
+     * </p>
+     *
+     * @param location  the location used to resolve relative paths for the root
+     *                  object,
+     *                  or null if the location is not known
+     * @param resources the resources used to localize the root object,
+     *                  or null if the root object was not localized
+     * @since 1.0
      */
+    @Override
     public void initialize(URL location, ResourceBundle resources) {
     }
 
     /**
-     * Sets text fields and displays an image based on input cinema object's
-     * properties: nom, adresse, logo.
+     * Initializes the form with cinema data for editing.
+     * 
+     * <p>
+     * This method sets the text fields and image view with the current cinema's
+     * information including name, address, and logo image.
+     * </p>
      *
-     * @param cinema
-     *            Cinema object that contains the name, address, and logo of the
-     *            cinema, which are then set as text values for the `tfNom`,
-     *            `tfAdresse`, and `tfLogo` fields, respectively, within the
-     *            function's body.
-     *            <p>
-     *            - `cinema`: A `Cinema` object representing a movie theater with
-     *            name, address, and logo.
+     * @param cinema the Cinema object containing the data to populate the form
+     * @throws IllegalArgumentException if cinema is null
+     * @since 1.0
      */
     public void initData(Cinema cinema) {
         this.cinema = cinema;
@@ -86,15 +102,11 @@ public class ModifierCinemaController implements Initializable {
      * It updates the cinema's information in the database and displays an alert
      * message upon successful completion.
      *
-     * @param event
-     *            ActionEvent object that triggered the method execution, providing
-     *            the source of the event and any related data.
-     *            <p>
-     *            - `event` is an instance of `ActionEvent`, which represents a user
-     *            action related to a UI component. - The `event` object contains
-     *            information about the action that triggered the function, such as
-     *            the source of the action (e.g., a button or a menu item) and the
-     *            state of the component at the time of the action.
+     * @param event ActionEvent object that triggered the method execution,
+     *              providing
+     *              the source of the event and any related data
+     * @throws IOException if an I/O error occurs during FXML loading
+     * @since 1.0
      */
     @FXML
     void modifier(ActionEvent event) throws IOException {
@@ -130,14 +142,17 @@ public class ModifierCinemaController implements Initializable {
     }
 
     /**
-     * Is used to select an image file from a file chooser and set it as the logo
-     * for the FXML stage.
+     * Handles file selection for cinema logo images.
+     * 
+     * <p>
+     * This method opens a file chooser dialog allowing users to select an image
+     * file
+     * for the cinema logo. The selected image is then displayed in the logo
+     * ImageView.
+     * </p>
      *
-     * @param event
-     *            selection event that triggered the function execution.
-     *            <p>
-     *            - Event type: `ActionEvent` - Target: `null` (no specific
-     *            component is associated with the event)
+     * @param event the ActionEvent that triggered this method
+     * @since 1.0
      */
     @FXML
     void select(final ActionEvent event) {
@@ -154,8 +169,8 @@ public class ModifierCinemaController implements Initializable {
      * Creates an Alert dialog with an information message.
      *
      * @param message
-     *            text to be displayed as an information message when the
-     *            `showAlert()` method is called.
+     *                text to be displayed as an information message when the
+     *                `showAlert()` method is called.
      */
     @FXML
     private void showAlert(final String message) {

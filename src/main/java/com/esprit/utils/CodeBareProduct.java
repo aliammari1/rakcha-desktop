@@ -38,9 +38,9 @@ public class CodeBareProduct {
      * Generate a barcode image for a product
      *
      * @param productCode
-     *            The product code to encode
+     *                    The product code to encode
      * @param filePath
-     *            The path where the barcode image should be saved
+     *                    The path where the barcode image should be saved
      * @return boolean indicating if generation was successful
      */
     public static boolean generateBarcode(String productCode, Path filePath) {
@@ -66,7 +66,7 @@ public class CodeBareProduct {
      * Read a barcode from an image file
      *
      * @param barcodeImage
-     *            The image file containing the barcode
+     *                     The image file containing the barcode
      * @return The decoded barcode text, or null if reading failed
      */
     public static String readBarcode(File barcodeImage) {

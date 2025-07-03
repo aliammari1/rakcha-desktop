@@ -2,7 +2,6 @@ package com.esprit.services;
 
 import java.util.List;
 
-
 /**
  * IService class provides functionality for the RAKCHA desktop application.
  * <p>

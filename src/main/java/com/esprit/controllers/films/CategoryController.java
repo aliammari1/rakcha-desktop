@@ -27,13 +27,30 @@ import javafx.util.converter.DefaultStringConverter;
 import net.synedra.validatorfx.Validator;
 
 /**
- * Is responsible for handling user interactions with the category table. It
- * provides a setupCellFactory method to set up cell factories for each column
- * in the table, including id, nom, and description. The setupCellValueFactory
- * method sets the cell value factory for each column, and the
- * setupCellOnEditCommit method sets the on edit commit event handler for each
- * column. These methods work together to handle user input and updates to the
- * category table.
+ * Controller class for managing film categories in the RAKCHA application.
+ * 
+ * <p>
+ * This controller handles user interactions with the category management
+ * interface,
+ * including listing, creating, updating, and deleting film categories. It
+ * provides
+ * a robust validation system for user input with real-time feedback through
+ * tooltips.
+ * </p>
+ * 
+ * <p>
+ * Key features include:
+ * </p>
+ * <ul>
+ * <li>Category CRUD operations (Create, Read, Update, Delete)</li>
+ * <li>Real-time validation with immediate feedback</li>
+ * <li>Inline table editing with validation</li>
+ * <li>Category search and filtering</li>
+ * </ul>
+ * 
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public class CategoryController {
     private static final Logger LOGGER = Logger.getLogger(CategoryController.class.getName());
@@ -64,10 +81,13 @@ public class CategoryController {
     private TextField recherche_textField;
 
     /**
-     * Adds a new column to a table, makes the table editable, sets up cell
-     * factories, value factories, and on-edit commit listeners. It also reads data
-     * from a category table and provides initial values for a filter criteria
-     * combobox.
+     * Initializes the controller after FXML loading is complete.
+     * 
+     * <p>
+     * This method sets up the TableView with necessary columns, configures
+     * cell factories and value factories, and initializes the filtering criteria.
+     * It is automatically called by JavaFX after the FXML file is loaded.
+     * </p>
      */
     @FXML
     void initialize() {
@@ -82,12 +102,17 @@ public class CategoryController {
     }
 
     /**
-     * Filters and displays a list of categories based on a search query provided as
-     * an argument.
+     * Filters and displays categories based on a search keyword.
+     * 
+     * <p>
+     * This method searches through all categories in the database and filters them
+     * based on the provided keyword. If the keyword is null or empty, all
+     * categories
+     * are displayed. Otherwise, only categories whose name or description contains
+     * the keyword (case-insensitive) are shown.
+     * </p>
      *
-     * @param keyword
-     *            search query used to filter and display only relevant categories
-     *            in the `filmCategory_tableView`.
+     * @param keyword the search term to filter categories by name or description
      */
     private void search(final String keyword) {
         final CategoryService categoryService = new CategoryService();
@@ -106,19 +131,17 @@ public class CategoryController {
     }
 
     /**
-     * Allows the user to create a new category by filling in a form with the
-     * category name and description, then calls the `create()` method of a
-     * `CategoryService` class to insert the category into the database, displays an
-     * alert message confirming the operation, and then refreshes the table
-     * displaying the categories.
+     * Creates a new category in the database.
+     * 
+     * <p>
+     * This method creates a Category object with the name and description
+     * provided in the respective text areas, persists it to the database
+     * via CategoryService, and displays a confirmation alert to the user.
+     * </p>
      *
-     * @param event
-     *            user-generated action that triggered the function execution,
-     *            allowing the code to respond accordingly.
-     *            <p>
-     *            Event type: `ActionEvent` Target object: `nomCategory_textArea`
-     *            and `descriptionCategory_textArea` Context: Callback function for
-     *            button press
+     * @param event the action event triggered by clicking the insert button
+     * @see Category
+     * @see CategoryService#create(Category)
      */
     @FXML
     void insertCategory(final ActionEvent event) {
@@ -135,8 +158,17 @@ public class CategoryController {
     }
 
     /**
-     * Retrieves a list of categories from a service and populates a table with
-     * them.
+     * Retrieves categories from the database and populates the table view.
+     * 
+     * <p>
+     * This method fetches all categories using the CategoryService,
+     * converts them to an ObservableList, and sets this list as the
+     * items source for the category table view. Any exceptions during
+     * this process are logged.
+     * </p>
+     * 
+     * @see CategoryService#read()
+     * @see FXCollections#observableArrayList(java.util.Collection)
      */
     void readCategoryTable() {
         try {
@@ -149,11 +181,14 @@ public class CategoryController {
     }
 
     /**
-     * Sets the visibility of an interface based on the source of the event.
+     * Toggles the visibility of the category CRUD interface.
+     * 
+     * <p>
+     * This method checks if the source of the event is the AjouterCategory_Button
+     * and if so, makes the categoryCrudInterface visible.
+     * </p>
      *
-     * @param event
-     *            ActionEvent object that triggered the method, providing
-     *            information about the source of the event and its state.
+     * @param event the action event that triggered this method
      */
     public void switchForm(final ActionEvent event) {
         if (event.getSource() == this.AjouterCategory_Button) {
@@ -162,11 +197,18 @@ public class CategoryController {
     }
 
     /**
-     * Deletes a category with the given ID using `CategoryService`. If successful,
-     * it displays an alert message and updates the category table.
+     * Deletes a category with the given ID from the database.
+     * 
+     * <p>
+     * This method retrieves the category with the specified ID using
+     * CategoryService,
+     * deletes it from the database, displays a confirmation alert, and refreshes
+     * the category table to reflect the change.
+     * </p>
      *
-     * @param id
-     *            identity of the category to be deleted.
+     * @param id the unique identifier of the category to delete
+     * @see CategoryService#delete(Category)
+     * @see CategoryService#getCategory(Long)
      */
     void deleteCategory(final Long id) {
         try {
@@ -184,16 +226,16 @@ public class CategoryController {
     }
 
     /**
-     * Updates a specified category using the `CategoryService`, displays an alert
-     * to confirm the update, and then calls the `readCategoryTable()` function to
-     * refresh the category table.
+     * Updates a category in the database.
+     * 
+     * <p>
+     * This method uses the CategoryService to update the provided category in the
+     * database, displays a confirmation alert, and refreshes the category table
+     * to reflect the changes.
+     * </p>
      *
-     * @param category
-     *            category object to be updated.
-     *            <p>
-     *            - `Category category`: Represents a single category to be updated.
-     *            Its main properties include its name and any relevant
-     *            subcategories.
+     * @param category the category object to update with new values
+     * @see CategoryService#update(Category)
      */
     void updateCategory(final Category category) {
         final CategoryService categoryService = new CategoryService();
@@ -221,11 +263,13 @@ public class CategoryController {
              * them as a tooltip.
              *
              * @param param
-             *            TableColumn object that provides the editing functionality for the
-             *            cell.
+             *              TableColumn object that provides the editing functionality for
+             *              the
+             *              cell.
              *
-             *            - `param`: A `TableColumn<Category, String>` object, representing
-             *            the column to be edited.
+             *              - `param`: A `TableColumn<Category, String>` object,
+             *              representing
+             *              the column to be edited.
              *
              * @returns a `TableCell` object that displays an editable text field with
              *          validation rules.
@@ -285,22 +329,29 @@ public class CategoryController {
                                  * present.
                                  *
                                  * @param observable
-                                 *            ObservableValue object that is being observed for changes, and it
-                                 *            provides the old and new values of the observed value in the
-                                 *            method call.
+                                 *                   ObservableValue object that is being observed for changes,
+                                 *                   and it
+                                 *                   provides the old and new values of the observed value in
+                                 *                   the
+                                 *                   method call.
                                  *
-                                 *            - `observable`: An observable value that can hold a String value.
-                                 *            - `oldValue`: The previous value of the observable. - `newValue`:
-                                 *            The current value of the observable.
+                                 *                   - `observable`: An observable value that can hold a String
+                                 *                   value.
+                                 *                   - `oldValue`: The previous value of the observable. -
+                                 *                   `newValue`:
+                                 *                   The current value of the observable.
                                  *
                                  * @param oldValue
-                                 *            previous value of the observable property before the change
-                                 *            occurred, which is used to check if the new value is valid or not.
+                                 *                   previous value of the observable property before the change
+                                 *                   occurred, which is used to check if the new value is valid
+                                 *                   or not.
                                  *
                                  * @param newValue
-                                 *            updated value of the observable field, which is used to determine
-                                 *            if any validation errors exist and to update the tooltip text
-                                 *            accordingly.
+                                 *                   updated value of the observable field, which is used to
+                                 *                   determine
+                                 *                   if any validation errors exist and to update the tooltip
+                                 *                   text
+                                 *                   accordingly.
                                  */
                                 @Override
                                 /**
@@ -346,8 +397,8 @@ public class CategoryController {
                      * `Category` object and returns it.
                      *
                      * @param param
-                     *            cell value of a table column, and provides access to its
-                     *            corresponding description property.
+                     *              cell value of a table column, and provides access to its
+                     *              corresponding description property.
                      *
                      * @returns a `SimpleStringProperty` containing the description of the input
                      *          value.
@@ -369,11 +420,14 @@ public class CategoryController {
                      * `getName()` method result and returns it.
                      *
                      * @param filmcategoryStringCellDataFeatures
-                     *            cell data features of a table column, specifically the string
-                     *            value of the category field.
+                     *                                           cell data features of a table
+                     *                                           column, specifically the string
+                     *                                           value of the category field.
                      *
-                     *            - `Value`: The current value of the cell data feature, which is a
-                     *            string representing the nominal value of a category.
+                     *                                           - `Value`: The current value of the
+                     *                                           cell data feature, which is a
+                     *                                           string representing the nominal
+                     *                                           value of a category.
                      *
                      * @returns a `SimpleStringProperty` containing the nominated value of the `
                      *          filmcategoryStringCellDataFeatures` parameter.
@@ -403,12 +457,13 @@ public class CategoryController {
                      * button.
                      *
                      * @param param
-                     *            current cell value of the table column, which is of type
-                     *            `Category`, and provides access to its `Id` attribute.
+                     *              current cell value of the table column, which is of type
+                     *              `Category`, and provides access to its `Id` attribute.
                      *
-                     *            - `param.getValue()`: returns the value of the category being
-                     *            processed, which is of type `Category`. - `param.getId()`: returns
-                     *            the ID of the category being processed.
+                     *              - `param.getValue()`: returns the value of the category being
+                     *              processed, which is of type `Category`. - `param.getId()`:
+                     *              returns
+                     *              the ID of the category being processed.
                      *
                      * @returns a `SimpleObjectProperty` of a `Button` object with an action to
                      *          delete a category.
@@ -433,7 +488,7 @@ public class CategoryController {
                              * Deletes a category based on its ID.
                              *
                              * @param event
-                             *            deletion of a category, which is triggered by the user's action.
+                             *              deletion of a category, which is triggered by the user's action.
                              */
                             @Override
                             /**
@@ -461,14 +516,17 @@ public class CategoryController {
              * also updates the corresponding category object.
              *
              * @param event
-             *            `TableColumn.CellEditEvent` that triggered the function's
-             *            execution, providing the edited cell value and its position in the
-             *            table.
+             *              `TableColumn.CellEditEvent` that triggered the function's
+             *              execution, providing the edited cell value and its position in
+             *              the
+             *              table.
              *
-             *            - `event.getTableView()` returns the table view object associated
-             *            with the event. - `event.getTablePosition().getRow()` returns the
-             *            row index of the cell being edited. - `event.getNewValue()`
-             *            returns the new value to be set in the cell.
+             *              - `event.getTableView()` returns the table view object
+             *              associated
+             *              with the event. - `event.getTablePosition().getRow()` returns
+             *              the
+             *              row index of the cell being edited. - `event.getNewValue()`
+             *              returns the new value to be set in the cell.
              */
             @Override
             /**
@@ -494,14 +552,14 @@ public class CategoryController {
                      * category object itself.
                      *
                      * @param event
-                     *            CellEditEvent object that contains information about the edited
-                     *            cell, including the new value and the row index of the edited
-                     *            cell.
+                     *              CellEditEvent object that contains information about the edited
+                     *              cell, including the new value and the row index of the edited
+                     *              cell.
                      *
-                     *            - `TableColumn.CellEditEvent<Category, String> event`: This
-                     *            represents an event that occurs when a cell in a table is being
-                     *            edited. The event provides information about the edited cell and
-                     *            its position in the table.
+                     *              - `TableColumn.CellEditEvent<Category, String> event`: This
+                     *              represents an event that occurs when a cell in a table is being
+                     *              edited. The event provides information about the edited cell and
+                     *              its position in the table.
                      */
                     @Override
                     /**

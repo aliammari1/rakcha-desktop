@@ -2,17 +2,17 @@ package com.esprit.controllers.users;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.esprit.models.users.CinemaManager;
 import com.esprit.models.users.Client;
 import com.esprit.models.users.User;
@@ -503,6 +503,8 @@ public class SignUpController {
         });
     }
 
+    private String cloudinaryImageUrl;
+
     /**
      * @param event
      */
@@ -515,19 +517,27 @@ public class SignUpController {
         final File selectedFile = fileChooser.showOpenDialog(null);
         if (null != selectedFile) {
             try {
-                final String destinationDirectory1 = "./src/main/resources/img/users/";
-                final String destinationDirectory2 = "../rakcha-web/public/img/users/";
-                final Path destinationPath1 = Paths.get(destinationDirectory1);
-                final Path destinationPath2 = Paths.get(destinationDirectory2);
-                final String uniqueFileName = System.currentTimeMillis() + "_" + selectedFile.getName();
-                final Path destinationFilePath1 = destinationPath1.resolve(uniqueFileName);
-                final Path destinationFilePath2 = destinationPath2.resolve(uniqueFileName);
-                Files.copy(selectedFile.toPath(), destinationFilePath1);
-                Files.copy(selectedFile.toPath(), destinationFilePath2);
-                final Image selectedImage = new Image(destinationFilePath1.toUri().toString());
+                // Configure Cloudinary with your credentials
+                Map<String, String> config = new HashMap<>();
+                config.put("cloud_name", "dddqilcmw"); // Replace with your Cloudinary cloud name
+                config.put("api_key", "786637482253218"); // Replace with your Cloudinary API key
+                config.put("api_secret", "qaDHzzQB2K7DsSTlmHyqgrJjGXo"); // Replace with your Cloudinary API secret
+                Cloudinary cloudinary = new Cloudinary(config);
+
+                // Upload the file to Cloudinary
+                Map<String, Object> uploadResult = cloudinary.uploader().upload(selectedFile, ObjectUtils.emptyMap());
+
+                // Get the secure URL of the uploaded image
+                cloudinaryImageUrl = (String) uploadResult.get("secure_url");
+
+                // Display the image in the ImageView
+                final Image selectedImage = new Image(cloudinaryImageUrl);
                 this.photoDeProfilImageView.setImage(selectedImage);
+
+                LOGGER.info("Image uploaded to Cloudinary: " + cloudinaryImageUrl);
+
             } catch (final IOException e) {
-                SignUpController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                SignUpController.LOGGER.log(Level.SEVERE, "Error uploading image to Cloudinary", e);
             }
         }
     }
@@ -540,7 +550,6 @@ public class SignUpController {
     void signup(final ActionEvent event) throws IOException {
         final String role = this.roleComboBox.getValue();
         User user = null;
-        final URI uri = null;
         final String nom = this.nomTextField.getText();
         final String prenom = this.prenomTextField.getText();
         final String num_telephone = this.num_telephoneTextField.getText();
@@ -565,22 +574,25 @@ public class SignUpController {
             return;
         }
         switch (role) {
-        case "responsable de cinema" :
-            user = new CinemaManager(this.nomTextField.getText(), this.prenomTextField.getText(),
-                    this.num_telephoneTextField.getText(), this.passwordTextField.getText(),
-                    this.roleComboBox.getValue(), this.emailTextField.getText(),
-                    Date.valueOf(this.dateDeNaissanceDatePicker.getValue()), this.emailTextField.getText(), "");
-            break;
-        case "client" :
-            user = new Client(this.nomTextField.getText(), this.prenomTextField.getText(),
-                    this.num_telephoneTextField.getText(), this.passwordTextField.getText(),
-                    this.roleComboBox.getValue(), this.emailTextField.getText(),
-                    Date.valueOf(this.dateDeNaissanceDatePicker.getValue()), this.emailTextField.getText(), "");
-            break;
-        default :
-            final Alert alert = new Alert(Alert.AlertType.ERROR, "the given role is not available", ButtonType.CLOSE);
-            alert.show();
-            return;
+            case "responsable de cinema":
+                user = new CinemaManager(this.nomTextField.getText(), this.prenomTextField.getText(),
+                        this.num_telephoneTextField.getText(), this.passwordTextField.getText(),
+                        this.roleComboBox.getValue(), this.emailTextField.getText(),
+                        Date.valueOf(this.dateDeNaissanceDatePicker.getValue()), this.emailTextField.getText(),
+                        cloudinaryImageUrl != null ? cloudinaryImageUrl : "");
+                break;
+            case "client":
+                user = new Client(this.nomTextField.getText(), this.prenomTextField.getText(),
+                        this.num_telephoneTextField.getText(), this.passwordTextField.getText(),
+                        this.roleComboBox.getValue(), this.emailTextField.getText(),
+                        Date.valueOf(this.dateDeNaissanceDatePicker.getValue()), this.emailTextField.getText(),
+                        cloudinaryImageUrl != null ? cloudinaryImageUrl : "");
+                break;
+            default:
+                final Alert alert = new Alert(Alert.AlertType.ERROR, "the given role is not available",
+                        ButtonType.CLOSE);
+                alert.show();
+                return;
         }
         final UserService userService = new UserService();
         userService.create(user);

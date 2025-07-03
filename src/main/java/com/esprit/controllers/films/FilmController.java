@@ -58,8 +58,29 @@ import javafx.util.converter.IntegerStringConverter;
 import net.synedra.validatorfx.Validator;
 
 /**
- * JavaFX controller class for the RAKCHA application. Handles UI interactions
- * and manages view logic using FXML.
+ * Controller class responsible for managing film-related operations in the
+ * RAKCHA application.
+ * 
+ * <p>
+ * This controller handles the complete lifecycle of film entities, including
+ * creation,
+ * reading, updating, and deletion. It provides functionality for managing film
+ * details,
+ * assigning categories and actors to films, handling image uploads, and
+ * implementing
+ * advanced search and filtering capabilities.
+ * </p>
+ * 
+ * <p>
+ * Key features include:
+ * </p>
+ * <ul>
+ * <li>Film CRUD operations with validation</li>
+ * <li>Category and actor association management</li>
+ * <li>Image upload and management</li>
+ * <li>Advanced search and filtering</li>
+ * <li>Inline table editing with validation</li>
+ * </ul>
  *
  * @author RAKCHA Team
  * @version 1.0.0
@@ -181,9 +202,11 @@ public class FilmController {
      * contains the lowercase version of the search text, ignoring case.
      *
      * @param searchText
-     *            searched text, which is used to filter the `filteredActors` list
-     *            by checking if an actor's name contains the search text in lower
-     *            case.
+     *                   searched text, which is used to filter the `filteredActors`
+     *                   list
+     *                   by checking if an actor's name contains the search text in
+     *                   lower
+     *                   case.
      */
     private void searchActor(final String searchText) {
         this.filteredActors.setPredicate(actor -> {
@@ -230,7 +253,7 @@ public class FilmController {
      * /** Generates an information alert displaying a provided message.
      *
      * @param message
-     *            information to be displayed as the content of the alert.
+     *                information to be displayed as the content of the alert.
      */
     @FXML
     private void showAlert(final String message) {
@@ -246,8 +269,8 @@ public class FilmController {
      * file, and sets the image as the Image component's source.
      *
      * @param event
-     *            ActionEvent that triggered the execution of the
-     *            `importFilmImage()` method.
+     *              ActionEvent that triggered the execution of the
+     *              `importFilmImage()` method.
      */
     @FXML
     void importFilmImage(final ActionEvent event) {
@@ -265,7 +288,7 @@ public class FilmController {
      * information alert message.
      *
      * @param id
-     *            unique identifier of the film to be deleted.
+     *           unique identifier of the film to be deleted.
      */
     void deleteFilm(final Long id) {
         final FilmService fs = new FilmService();
@@ -282,8 +305,8 @@ public class FilmController {
      * before inserting the film into a database.
      *
      * @param event
-     *            action event that triggered the method to be executed, and it is
-     *            not used in this case.
+     *              action event that triggered the method to be executed, and it is
+     *              not used in this case.
      */
     @FXML
     void insertFilm(final ActionEvent event) {
@@ -366,8 +389,8 @@ public class FilmController {
      * based on that source.
      *
      * @param event
-     *            event that occurred and triggered the execution of the
-     *            `switchForm()` function.
+     *              event that occurred and triggered the execution of the
+     *              `switchForm()` function.
      */
     public void switchForm(final ActionEvent event) {
         if (event.getSource() == this.AjouterFilm_Button) {
@@ -401,9 +424,9 @@ public class FilmController {
              * added and removed actors respectively.
              *
              * @param c
-             *            Change object that contains a list of Actor objects, which are
-             *            used to perform operations such as inserting or removing actors
-             *            from the actorFilm table in the database.
+             *          Change object that contains a list of Actor objects, which are
+             *          used to perform operations such as inserting or removing actors
+             *          from the actorFilm table in the database.
              */
             @Override
             /**
@@ -462,8 +485,8 @@ public class FilmController {
              * a tooltip near the input field when it detects errors.
              *
              * @param param
-             *            TableColumn<Film, String> object that defines the cell's
-             *            properties and behavior.
+             *              TableColumn<Film, String> object that defines the cell's
+             *              properties and behavior.
              *
              * @returns a `TextFieldTableCell` instance with a built-in validator to check
              *          for empty or invalid input.
@@ -512,17 +535,20 @@ public class FilmController {
                                  * in the validator and displays a tooltip with the error message if present.
                                  *
                                  * @param observable
-                                 *            ObservableValue of the form <T extends String> that emits changes
-                                 *            to its value, and it is being passed into the function as a
-                                 *            reference to track changes to its value.
+                                 *                   ObservableValue of the form <T extends String> that emits
+                                 *                   changes
+                                 *                   to its value, and it is being passed into the function as a
+                                 *                   reference to track changes to its value.
                                  *
                                  * @param oldValue
-                                 *            previous value of the `observable` before the change occurred.
+                                 *                   previous value of the `observable` before the change
+                                 *                   occurred.
                                  *
                                  * @param newValue
-                                 *            newly entered value by the user and is used to determine if any
-                                 *            validation errors are present, and if so, to display the
-                                 *            corresponding error message in the tooltip.
+                                 *                   newly entered value by the user and is used to determine if
+                                 *                   any
+                                 *                   validation errors are present, and if so, to display the
+                                 *                   corresponding error message in the tooltip.
                                  */
                                 @Override
                                 /**
@@ -558,8 +584,8 @@ public class FilmController {
                      * property.
                      *
                      * @param param
-                     *            TableColumn<Film, Integer> object that is used to display the
-                     *            edited value in the table cell.
+                     *              TableColumn<Film, Integer> object that is used to display the
+                     *              edited value in the table cell.
                      *
                      * @returns a `TextFieldTableCell` instance that provides editing capabilities
                      *          for the Film data property.
@@ -617,17 +643,19 @@ public class FilmController {
                                          * errors.
                                          *
                                          * @param observable
-                                         *            ObservableValue of the text field's value, which is being updated
-                                         *            and processed in the function.
+                                         *                   ObservableValue of the text field's value, which is being
+                                         *                   updated
+                                         *                   and processed in the function.
                                          *
                                          * @param oldValue
-                                         *            previous value of the observable variable before the change
-                                         *            occurred.
+                                         *                   previous value of the observable variable before the change
+                                         *                   occurred.
                                          *
                                          * @param newValue
-                                         *            String value of the observable variable being monitored, which is
-                                         *            used to update the tooltip text displayed next to the
-                                         *            corresponding text field when the function is called.
+                                         *                   String value of the observable variable being monitored,
+                                         *                   which is
+                                         *                   used to update the tooltip text displayed next to the
+                                         *                   corresponding text field when the function is called.
                                          */
                                         @Override
                                         /**
@@ -664,8 +692,10 @@ public class FilmController {
              * tooltip with error messages if the input is invalid.
              *
              * @param filmcategoryTimeTableColumn
-             *            TableColumn object that provides the table cell with the necessary
-             *            properties and methods to display and validate the time value.
+             *                                    TableColumn object that provides the table
+             *                                    cell with the necessary
+             *                                    properties and methods to display and
+             *                                    validate the time value.
              *
              * @returns a `TextFieldTableCell` instance with a validator that checks for a
              *          valid time format.
@@ -682,7 +712,7 @@ public class FilmController {
                      * Returns the specified `Time` object in a string representation.
                      *
                      * @param time
-                     *            time value that is to be converted into a string.
+                     *             time value that is to be converted into a string.
                      *
                      * @returns a string representation of the input `time` parameter.
                      */
@@ -700,8 +730,8 @@ public class FilmController {
                      * Parses a time string and returns a `Time` object.
                      *
                      * @param s
-                     *            10-character string to be converted into a `Time` object through
-                     *            the `ValueOf()` method.
+                     *          10-character string to be converted into a `Time` object through
+                     *          the `ValueOf()` method.
                      *
                      * @returns a `Time` object representing the specified time string.
                      */
@@ -751,17 +781,21 @@ public class FilmController {
                                  * present.
                                  *
                                  * @param observable
-                                 *            ObservableValue of the text field's value, which is being observed
-                                 *            and triggered the method execution when its value changes.
+                                 *                   ObservableValue of the text field's value, which is being
+                                 *                   observed
+                                 *                   and triggered the method execution when its value changes.
                                  *
                                  * @param oldValue
-                                 *            previous value of the observable variable before the change was
-                                 *            made.
+                                 *                   previous value of the observable variable before the change
+                                 *                   was
+                                 *                   made.
                                  *
                                  * @param newValue
-                                 *            new value of the observable variable passed to the function, which
-                                 *            is used to determine whether an error message should be displayed
-                                 *            and what that message should be.
+                                 *                   new value of the observable variable passed to the
+                                 *                   function, which
+                                 *                   is used to determine whether an error message should be
+                                 *                   displayed
+                                 *                   and what that message should be.
                                  */
                                 @Override
                                 /**
@@ -798,7 +832,7 @@ public class FilmController {
                      * error message if it doesn't meet the criteria.
                      *
                      * @param param
-                     *            TableColumn<Film, String> that contains the data to be edited.
+                     *              TableColumn<Film, String> that contains the data to be edited.
                      *
                      * @returns a `TextFieldTableCell` instance that provides text input validation.
                      */
@@ -846,17 +880,22 @@ public class FilmController {
                                          * present, otherwise it hides the tooltip.
                                          *
                                          * @param observable
-                                         *            ObservableValue<? extends String> that is being monitored and
-                                         *            updated in the function, which captures changes to the value of
-                                         *            the property it is observing.
+                                         *                   ObservableValue<? extends String> that is being monitored
+                                         *                   and
+                                         *                   updated in the function, which captures changes to the
+                                         *                   value of
+                                         *                   the property it is observing.
                                          *
                                          * @param oldValue
-                                         *            previous value of the observable value being observed, which is
-                                         *            passed as an argument to the `changed()` method for informational
-                                         *            purposes only.
+                                         *                   previous value of the observable value being observed,
+                                         *                   which is
+                                         *                   passed as an argument to the `changed()` method for
+                                         *                   informational
+                                         *                   purposes only.
                                          *
                                          * @param newValue
-                                         *            string value that is being updated or replaced in the `textField`.
+                                         *                   string value that is being updated or replaced in the
+                                         *                   `textField`.
                                          */
                                         @Override
                                         /**
@@ -903,8 +942,10 @@ public class FilmController {
                      * on-action handler that calls the `deleteFilm` function when pressed.
                      *
                      * @param filmcategoryButtonCellDataFeatures
-                     *            `FilmCategoryButtonCellDataFeatures` class instance, which
-                     *            contains the film category and button data for the given film ID.
+                     *                                           `FilmCategoryButtonCellDataFeatures`
+                     *                                           class instance, which
+                     *                                           contains the film category and
+                     *                                           button data for the given film ID.
                      *
                      * @returns a `SimpleObjectProperty` of a `Button` object with the text "delete"
                      *          and the style class "sale".
@@ -925,7 +966,7 @@ public class FilmController {
                              * selecting a film category button cell.
                              *
                              * @param event
-                             *            selection of a film category button.
+                             *              selection of a film category button.
                              */
                             @Override
                             /**
@@ -948,8 +989,9 @@ public class FilmController {
                      * input film category.
                      *
                      * @param filmcategoryIntegerCellDataFeatures
-                     *            integer value of the Film category column in the given
-                     *            TableColumn.
+                     *                                            integer value of the Film category
+                     *                                            column in the given
+                     *                                            TableColumn.
                      *
                      * @returns an `ObservableValue` of type `Integer`.
                      */
@@ -972,8 +1014,9 @@ public class FilmController {
                      * `SimpleObjectProperty` instance with the duration.
                      *
                      * @param filmcategoryTimeCellDataFeatures
-                     *            cell data features of a table column, specifically the `Duree`
-                     *            property of the Film object.
+                     *                                         cell data features of a table column,
+                     *                                         specifically the `Duree`
+                     *                                         property of the Film object.
                      *
                      * @returns a `SimpleObjectProperty` of type `Time` representing the duration of
                      *          the film.
@@ -1000,8 +1043,8 @@ public class FilmController {
                      * set as the film's image.
                      *
                      * @param param
-                     *            Film object that contains the image data to be displayed in the
-                     *            HBox.
+                     *              Film object that contains the image data to be displayed in the
+                     *              HBox.
                      *
                      * @returns an `ObservableValue` of type `HBox` containing a `ImageView` element
                      *          with a changed image.
@@ -1026,8 +1069,8 @@ public class FilmController {
                                  * its `setImage()` method.
                                  *
                                  * @param event
-                                 *            mouse event that triggered the function, providing the necessary
-                                 *            information to handle the corresponding action.
+                                 *              mouse event that triggered the function, providing the necessary
+                                 *              information to handle the corresponding action.
                                  */
                                 @Override
                                 /**
@@ -1068,8 +1111,9 @@ public class FilmController {
                      * Generates an `ObservableValue` representing the duration of a film category.
                      *
                      * @param filmcategoryTimeCellDataFeatures
-                     *            cell data features of a Film entity, specifically its duration or
-                     *            duree.
+                     *                                         cell data features of a Film entity,
+                     *                                         specifically its duration or
+                     *                                         duree.
                      *
                      * @returns a `SimpleObjectProperty` of type `Time` containing the duration
                      *          value of the Film.
@@ -1093,8 +1137,9 @@ public class FilmController {
                      * given Film category.
                      *
                      * @param filmcategoryStringCellDataFeatures
-                     *            cell data features of a table column that contains a description
-                     *            of the film category.
+                     *                                           cell data features of a table
+                     *                                           column that contains a description
+                     *                                           of the film category.
                      *
                      * @returns a simple string property containing the description of the film
                      *          category.
@@ -1118,7 +1163,8 @@ public class FilmController {
                      * and returning it as an `Object`.
                      *
                      * @param filmcategoryIntegerCellDataFeatures
-                     *            integer value of the category of a film.
+                     *                                            integer value of the category of a
+                     *                                            film.
                      *
                      * @returns an `ObservableValue<Integer>` of a simple integer property.
                      */
@@ -1142,9 +1188,9 @@ public class FilmController {
                      * check box.
                      *
                      * @param p
-                     *            Film object for which the function is being called, providing the
-                     *            necessary data for the function to populate the combobox with
-                     *            categories associated with that film.
+                     *          Film object for which the function is being called, providing the
+                     *          necessary data for the function to populate the combobox with
+                     *          categories associated with that film.
                      *
                      * @returns a `SimpleObjectProperty` of a `CheckComboBox` instance, which
                      *          displays and updates the categories of a film based on its ID.
@@ -1176,8 +1222,9 @@ public class FilmController {
                              * its checked items.
                              *
                              * @param change
-                             *            Change event that has occurred on the `checkComboBox`, providing
-                             *            the current state of the selected items.
+                             *               Change event that has occurred on the `checkComboBox`,
+                             *               providing
+                             *               the current state of the selected items.
                              */
                             @Override
                             /**
@@ -1202,8 +1249,9 @@ public class FilmController {
                      * cell, and creates a new property with that value.
                      *
                      * @param filmcategoryLongCellDataFeatures
-                     *            FilmCategory data feature of the cell being processed, providing
-                     *            its integer value.
+                     *                                         FilmCategory data feature of the cell
+                     *                                         being processed, providing
+                     *                                         its integer value.
                      *
                      * @returns an `ObservableValue<Long>` object representing the id of the film
                      *          category.
@@ -1226,8 +1274,9 @@ public class FilmController {
                      * film category, based on the input cell data features.
                      *
                      * @param filmcategoryStringCellDataFeatures
-                     *            `nom` value of a `Film` object, which is passed as an argument to
-                     *            the `call()` method.
+                     *                                           `nom` value of a `Film` object,
+                     *                                           which is passed as an argument to
+                     *                                           the `call()` method.
                      *
                      * @returns a string representation of the `nom` value of the provided `Film`
                      *          object.
@@ -1251,9 +1300,11 @@ public class FilmController {
                      * update the selection based on changes to the list of checked items.
                      *
                      * @param filmcategoryStringCellDataFeatures
-                     *            cell data features of a table column, providing the necessary
-                     *            information to perform the necessary operations on the actors'
-                     *            names for the given film category.
+                     *                                           cell data features of a table
+                     *                                           column, providing the necessary
+                     *                                           information to perform the
+                     *                                           necessary operations on the actors'
+                     *                                           names for the given film category.
                      *
                      * @returns a `SimpleObjectProperty` of a `CheckComboBox` with pre-populated
                      *          items.
@@ -1287,8 +1338,8 @@ public class FilmController {
                              * Service using the `updateActors` method.
                              *
                              * @param change
-                             *            Change<? extends String> event that occurred, providing the
-                             *            information about the changed objects.
+                             *               Change<? extends String> event that occurred, providing the
+                             *               information about the changed objects.
                              */
                             @Override
                             /**
@@ -1315,9 +1366,12 @@ public class FilmController {
                      * the Filmcinema service, which will reflect the change in the UI.
                      *
                      * @param filmcategoryStringCellDataFeatures
-                     *            cell data features of a table column that contains the cinema
-                     *            category string values, which are used to populate the
-                     *            CheckComboBox and update the cinemas in the database.
+                     *                                           cell data features of a table
+                     *                                           column that contains the cinema
+                     *                                           category string values, which are
+                     *                                           used to populate the
+                     *                                           CheckComboBox and update the
+                     *                                           cinemas in the database.
                      *
                      * @returns a `SimpleObjectProperty` of a `CheckComboBox` object containing the
                      *          selected cinema names.
@@ -1350,8 +1404,9 @@ public class FilmController {
                              * cinema data.
                              *
                              * @param change
-                             *            Change<? extends String> object that contains information about a
-                             *            change to the value of the CheckBox control.
+                             *               Change<? extends String> object that contains information about
+                             *               a
+                             *               change to the value of the CheckBox control.
                              */
                             @Override
                             /**
@@ -1386,9 +1441,10 @@ public class FilmController {
                      * user.
                      *
                      * @param event
-                     *            CellEditEvent object that contains information about the cell
-                     *            being edited, including the table position and the new value being
-                     *            entered by the user.
+                     *              CellEditEvent object that contains information about the cell
+                     *              being edited, including the table position and the new value
+                     *              being
+                     *              entered by the user.
                      */
                     @Override
                     /**
@@ -1414,9 +1470,10 @@ public class FilmController {
              * source.
              *
              * @param event
-             *            `TableColumn.CellEditEvent` that occurred in the table, providing
-             *            access to information such as the edited cell's position and new
-             *            value.
+             *              `TableColumn.CellEditEvent` that occurred in the table,
+             *              providing
+             *              access to information such as the edited cell's position and new
+             *              value.
              */
             @Override
             /**
@@ -1439,9 +1496,9 @@ public class FilmController {
              * Modifies a film's description based on a user edit event in a table view.
              *
              * @param event
-             *            `TableColumn.CellEditEvent<Film, String>` event generated by the
-             *            user's edit action on the cell in the table displaying the Film
-             *            objects and their descriptions.
+             *              `TableColumn.CellEditEvent<Film, String>` event generated by the
+             *              user's edit action on the cell in the table displaying the Film
+             *              objects and their descriptions.
              */
             @Override
             /**
@@ -1467,10 +1524,10 @@ public class FilmController {
              * the table view.
              *
              * @param event
-             *            CellEditEvent object that contains information about the editing
-             *            event on a cell in a table, including the row and column of the
-             *            edited cell, the original value and the new value entered by the
-             *            user.
+             *              CellEditEvent object that contains information about the editing
+             *              event on a cell in a table, including the row and column of the
+             *              edited cell, the original value and the new value entered by the
+             *              user.
              */
             @Override
             /**
@@ -1498,7 +1555,7 @@ public class FilmController {
      * the film table again to reflect the update.
      *
      * @param film
-     *            Film object that will be updated.
+     *             Film object that will be updated.
      */
     void updateFilm(final Film film) {
         // if (imageString != null) { // Vérifier si une image a été sélectionnée
@@ -1524,9 +1581,9 @@ public class FilmController {
      * imported image as the image displayable in the `imageFilm_ImageView`.
      *
      * @param event
-     *            event object that triggered the `importImage()` method to be
-     *            called, providing the source of the action that led to the file
-     *            selection and import process.
+     *              event object that triggered the `importImage()` method to be
+     *              called, providing the source of the action that led to the file
+     *              selection and import process.
      */
     @FXML
     void importImage(final ActionEvent event) {
@@ -1563,9 +1620,10 @@ public class FilmController {
      * Loads an FXML file and displays it as a stage with a specific size.
      *
      * @param event
-     *            triggered action event that caused the method to be called,
-     *            providing the necessary context for the code inside the method to
-     *            execute properly.
+     *              triggered action event that caused the method to be called,
+     *              providing the necessary context for the code inside the method
+     *              to
+     *              execute properly.
      */
     @FXML
     /**

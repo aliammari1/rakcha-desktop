@@ -32,19 +32,19 @@ public enum PaymentProcessor {
      * Process a payment with Stripe
      *
      * @param name
-     *            Customer name
+     *                     Customer name
      * @param email
-     *            Customer email
+     *                     Customer email
      * @param amount
-     *            Amount to charge in the default currency
+     *                     Amount to charge in the default currency
      * @param cardNumber
-     *            Credit card number
+     *                     Credit card number
      * @param cardExpMonth
-     *            Card expiration month
+     *                     Card expiration month
      * @param cardExpYear
-     *            Card expiration year
+     *                     Card expiration year
      * @param cardCvc
-     *            Card CVC code
+     *                     Card CVC code
      * @return boolean indicating if the payment was successful
      */
     public static boolean processPayment(final String name, final String email, final float amount,

@@ -50,7 +50,7 @@ public class FilmYoutubeTrailer {
      * Search for and return the trailer URL for a given film
      *
      * @param filmName
-     *            The name of the film to search for
+     *                 The name of the film to search for
      * @return URL of the trailer video, or fallback URL if not found
      */
     public String watchTrailer(final String filmName) {

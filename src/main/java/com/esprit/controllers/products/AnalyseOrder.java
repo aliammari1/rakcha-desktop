@@ -21,13 +21,23 @@ import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.XYChart;
 
 /**
- * Is used to analyze the number of orders placed by date and categorize them
- * based on the products purchased. It updates two graphical representations:
- * TauxOrder (number of orders per date) and TauxCategorie (number of categories
- * purchased per date). The class retrieves data from various sources, including
- * a list of all orders, a list of all products, and a list of all categories.
- * It then processes the data to create the graphs and displays them on the
- * screen.
+ * Controller class for analyzing orders and visualizing order data in the
+ * RAKCHA application.
+ * This controller provides graphical representations of order statistics
+ * including:
+ * - Number of orders by date (completed vs. in progress)
+ * - Products purchased by category over time
+ * 
+ * <p>
+ * The controller uses LineChart and StackedBarChart components to display the
+ * data
+ * and retrieves information from OrderService, OrderItemService, and
+ * CategoryService.
+ * </p>
+ *
+ * @author RAKCHA Team
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public class AnalyseOrder implements Initializable {
     @FXML
@@ -40,15 +50,14 @@ public class AnalyseOrder implements Initializable {
     private CategoryAxis xOrderAxis;
 
     /**
-     * Is responsible for calling the initialization logic, which in turn updates
-     * the graphs.
+     * Initializes the controller after its root element has been completely
+     * processed.
+     * This method calls updateGraphs() to load and display the order statistics.
      *
-     * @param location
-     *            URL of the initial graph layout, which is passed to the
-     *            `updateGraphs()` method for initialization.
-     * @param resources
-     *            resource bundle that provides localized strings and values for the
-     *            application.
+     * @param location  The location used to resolve relative paths for the root
+     *                  object, or null if the location is not known
+     * @param resources The resources used to localize the root object, or null if
+     *                  the root object was not localized
      */
     @Override
     /**
@@ -61,9 +70,17 @@ public class AnalyseOrder implements Initializable {
     }
 
     /**
-     * Updates a bar graph and a stacked bar chart with the number of orders,
-     * payments, and categories purchased by date. It retrieves data from a database
-     * and calculates the number of orders and payments for each category by date.
+     * Updates the charts with order and category data from the database.
+     * 
+     * <p>
+     * This method:
+     * 1. Clears existing chart data
+     * 2. Retrieves orders, order items, and categories from their respective
+     * services
+     * 3. Analyzes orders by date and status (in progress vs. paid)
+     * 4. Analyzes product categories purchased by date
+     * 5. Configures and populates the charts with the analyzed data
+     * </p>
      */
     private void updateGraphs() {
         // Mettre à jour les graphiques ici

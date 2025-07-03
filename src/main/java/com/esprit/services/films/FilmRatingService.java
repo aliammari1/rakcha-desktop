@@ -46,7 +46,7 @@ public class FilmRatingService implements IService<FilmRating> {
      * Creates a new entity in the database.
      *
      * @param entity
-     *            the entity to create
+     *               the entity to create
      */
     public void create(final FilmRating filmRating) {
         final String req = "INSERT INTO film_ratings (film_id, user_id, rating) VALUES (?,?,?)";
@@ -97,7 +97,7 @@ public class FilmRatingService implements IService<FilmRating> {
      * Updates an existing entity in the database.
      *
      * @param entity
-     *            the entity to update
+     *               the entity to update
      */
     public void update(final FilmRating filmRating) {
         final String req = "UPDATE film_ratings SET rating=? WHERE film_id=? AND user_id=?";
@@ -117,7 +117,7 @@ public class FilmRatingService implements IService<FilmRating> {
      * Deletes an entity from the database.
      *
      * @param id
-     *            the ID of the entity to delete
+     *           the ID of the entity to delete
      */
     public void delete(final FilmRating filmRating) {
         final String req = "DELETE FROM film_ratings WHERE film_id=? AND user_id=?";

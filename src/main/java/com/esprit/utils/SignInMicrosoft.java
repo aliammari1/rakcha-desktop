@@ -23,16 +23,16 @@ public enum SignInMicrosoft {
      * Initialize Microsoft Sign-In flow
      *
      * @param args
-     *            Optional arguments (not used)
+     *             Optional arguments (not used)
      * @return Authorization URL for the user to visit
      * @throws IOException
-     *             if there's an I/O error
+     *                               if there's an I/O error
      * @throws InterruptedException
-     *             if the operation is interrupted
+     *                               if the operation is interrupted
      * @throws ExecutionException
-     *             if the operation fails
+     *                               if the operation fails
      * @throws IllegalStateException
-     *             if required environment variables are missing
+     *                               if required environment variables are missing
      */
     public static String SignInWithMicrosoft(final String... args)
             throws IOException, InterruptedException, ExecutionException {
@@ -57,14 +57,14 @@ public enum SignInMicrosoft {
      * Complete the OAuth flow with the authorization code
      *
      * @param code
-     *            The authorization code from Microsoft
+     *             The authorization code from Microsoft
      * @return boolean indicating if verification was successful
      * @throws IOException
-     *             if there's an I/O error
+     *                              if there's an I/O error
      * @throws ExecutionException
-     *             if the operation fails
+     *                              if the operation fails
      * @throws InterruptedException
-     *             if the operation is interrupted
+     *                              if the operation is interrupted
      */
     public static boolean verifyAuthUrl(final String code)
             throws IOException, ExecutionException, InterruptedException {
