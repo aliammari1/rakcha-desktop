@@ -6,8 +6,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.*;
-
 import com.esprit.models.films.Film;
 import com.esprit.models.films.Ticket;
 
@@ -19,8 +17,7 @@ import lombok.NoArgsConstructor;
 /**
  * Represents a movie session in a cinema.
  */
-@Entity
-@Table(name = "movie_session")
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -35,31 +32,20 @@ import lombok.NoArgsConstructor;
  */
 public class MovieSession {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cinema_hall_id", nullable = false)
     private CinemaHall cinemaHall;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "film_id", nullable = false)
     private Film film;
 
-    @Column(name = "start_time", nullable = false)
     private Time startTime;
 
-    @Column(name = "end_time", nullable = false)
     private Time endTime;
 
-    @Column(name = "session_date", nullable = false)
     private Date sessionDate;
 
-    @Column(name = "price", nullable = false)
     private Double price;
 
-    @OneToMany(mappedBy = "movieSession", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Ticket> tickets = new ArrayList<>();
 

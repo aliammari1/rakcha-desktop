@@ -8,17 +8,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Stack;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.esprit.models.films.Actor;
 import com.esprit.services.films.ActorService;
+import com.esprit.utils.CloudinaryStorage;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -86,7 +82,7 @@ import javafx.stage.Stage;
  * // Export actors
  * controller.exportActors("actors_backup.json");
  * }</pre>
- * </p>
+ * 
  * 
  * @author RAKCHA Team
  * @version 1.0.0
@@ -126,9 +122,8 @@ public class ActorController {
     private FilteredList<Actor> filteredActors;
     @FXML
     private TextField recherche_textField;
+    private String cloudinaryImageUrl;
 
-    private final ConcurrentHashMap<String, Image> imageCache = new ConcurrentHashMap<>();
-    private final ExecutorService imageLoaderService = Executors.newFixedThreadPool(3);
     private final Stack<UndoableAction> undoStack = new Stack<>();
     private final Stack<UndoableAction> redoStack = new Stack<>();
 
@@ -404,6 +399,7 @@ public class ActorController {
      *              - `event`: an ActionEvent object representing the user's action
      *              of
      *              opening a file from the FileChooser.
+     *              </p>
      */
     @FXML
     void importImage(final ActionEvent event) {
@@ -417,19 +413,17 @@ public class ActorController {
                 return;
             }
             try {
-                final String destinationDirectory1 = "./src/main/resources/img/actors/";
-                final String destinationDirectory2 = "C:\\xampp\\htdocs\\Rakcha\\rakcha-web\\public\\img\\actors\\";
-                final Path destinationPath1 = Paths.get(destinationDirectory1);
-                final Path destinationPath2 = Paths.get(destinationDirectory2);
-                final String uniqueFileName = System.currentTimeMillis() + "_" + selectedFile.getName();
-                final Path destinationFilePath1 = destinationPath1.resolve(uniqueFileName);
-                final Path destinationFilePath2 = destinationPath2.resolve(uniqueFileName);
-                Files.copy(selectedFile.toPath(), destinationFilePath1);
-                Files.copy(selectedFile.toPath(), destinationFilePath2);
-                final Image selectedImage = new Image(destinationFilePath1.toUri().toString());
+                // Use the CloudinaryStorage service to upload the image
+                CloudinaryStorage cloudinaryStorage = CloudinaryStorage.getInstance();
+                cloudinaryImageUrl = cloudinaryStorage.uploadImage(selectedFile);
+
+                // Display the image in the ImageView
+                final Image selectedImage = new Image(cloudinaryImageUrl);
                 this.imageAcotr_ImageView1.setImage(selectedImage);
+
+                LOGGER.info("Image uploaded to Cloudinary: " + cloudinaryImageUrl);
             } catch (final IOException e) {
-                ActorController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                LOGGER.log(Level.SEVERE, "Error uploading image to Cloudinary", e);
             }
         }
     }
@@ -443,6 +437,7 @@ public class ActorController {
      *              Actor object to be updated.
      *              <p>
      *              - `Actor actor`: The actor to be updated.
+     *              </p>
      */
     void updateActor(final Actor actor) {
         try {
@@ -560,7 +555,7 @@ public class ActorController {
                             imageView.setFitWidth(120); // Réglez la largeur de l'image selon vos préférences
                             imageView.setFitHeight(100); // Réglez la hauteur de l'image selon vos préférences
                             try {
-                                loadImageWithCache(param.getValue().getImage(), imageView);
+                                loadImage(param.getValue().getImage(), imageView);
                             } catch (final Exception e) {
                                 ActorController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                             }
@@ -674,6 +669,7 @@ public class ActorController {
      *              <p>
      *              - `event`: An instance of `ActionEvent`, representing a user
      *              action that triggered the function to execute.
+     *              </p>
      */
     @FXML
     /**
@@ -750,64 +746,27 @@ public class ActorController {
     }
 
     /**
-     * Loads an image with caching support to improve performance.
-     * 
+     * Loads an image directly without caching.
+     *
      * <p>
-     * This method implements a caching mechanism to avoid reloading the same image
-     * multiple times. Images are loaded asynchronously using a thread pool to
-     * prevent
-     * blocking the JavaFX Application Thread. If the image is already cached, it is
-     * immediately set on the ImageView. Otherwise, it's loaded in a background
-     * thread
-     * and cached for future use.
+     * This method loads an image synchronously and sets it directly on the
+     * ImageView.
      * </p>
-     * 
+     *
      * @param url       the URL or path of the image to load, must not be
      *                  {@code null}
      * @param imageView the ImageView component to display the image, must not be
      *                  {@code null}
      * @throws IllegalArgumentException if url or imageView is {@code null}
-     * @see Platform#runLater(Runnable)
-     * @see ExecutorService#submit(Runnable)
      * @since 1.0.0
      */
-    /**
-     * Loads an image with caching support to improve performance.
-     * 
-     * <p>
-     * This method implements a caching mechanism to avoid reloading the same image
-     * multiple times. Images are loaded asynchronously using a thread pool to
-     * prevent
-     * blocking the JavaFX Application Thread. If the image is already cached, it is
-     * immediately set on the ImageView. Otherwise, it's loaded in a background
-     * thread
-     * and cached for future use.
-     * </p>
-     * 
-     * @param url       the URL or path of the image to load, must not be
-     *                  {@code null}
-     * @param imageView the ImageView component to display the image, must not be
-     *                  {@code null}
-     * @throws IllegalArgumentException if url or imageView is {@code null}
-     * @see Platform#runLater(Runnable)
-     * @see ExecutorService#submit(Runnable)
-     * @since 1.0.0
-     */
-    private void loadImageWithCache(String url, ImageView imageView) {
-        if (imageCache.containsKey(url)) {
-            imageView.setImage(imageCache.get(url));
-            return;
+    private void loadImage(String url, ImageView imageView) {
+        try {
+            Image image = new Image(url);
+            imageView.setImage(image);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Failed to load image: " + url, e);
         }
-
-        imageLoaderService.submit(() -> {
-            try {
-                Image image = new Image(url);
-                imageCache.put(url, image);
-                Platform.runLater(() -> imageView.setImage(image));
-            } catch (Exception e) {
-                LOGGER.log(Level.WARNING, "Failed to load image: " + url, e);
-            }
-        });
     }
 
     /**
@@ -850,7 +809,6 @@ public class ActorController {
      * @param filePath the source file path for the JSON import, must not be
      *                 {@code null}
      * @throws IllegalArgumentException if filePath is {@code null} or empty
-     * @throws IOException              if the file cannot be read or parsed
      * @see ObjectMapper#readValue(File, Class)
      * @see #exportActors(String)
      * @see UndoableAction
@@ -1011,17 +969,14 @@ public class ActorController {
      * Cleans up resources when the controller is no longer needed.
      * 
      * <p>
-     * This method properly shuts down the image loader service and clears the
-     * image cache to free up memory. It should be called when the view using
-     * this controller is being closed or destroyed.
+     * This method should be called when the view using this controller
+     * is being closed or destroyed.
      * </p>
      * 
-     * @see ExecutorService#shutdown()
      * @since 1.0.0
      */
     @FXML
     public void close() {
-        imageLoaderService.shutdown();
-        imageCache.clear();
+        // Clean up any remaining resources if needed
     }
 }

@@ -3,32 +3,39 @@
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" styleClass="main-container"
-            stylesheets="@styles/dashbord.css,@styles/auth.css"
-            fx:controller="com.esprit.controllers.users.ProfileController">
-    
+    stylesheets="@../styles/dashbord.css,@../styles/auth.css"
+    fx:controller="com.esprit.controllers.users.ProfileController">
+
     <!-- Top Navigation Bar -->
     <top>
         <HBox alignment="CENTER_LEFT" spacing="10" styleClass="top-bar">
-            <padding><Insets left="10" right="10" top="10" bottom="10"/></padding>
-            <Label text="Rakcha" styleClass="app-title"/>
-            <Region HBox.hgrow="ALWAYS"/>
+            <padding>
+                <Insets left="10" right="10" top="10" bottom="10" />
+            </padding>
+            <Label text="Rakcha" styleClass="app-title" />
+            <Region HBox.hgrow="ALWAYS" />
             <Button styleClass="window-button,minus">
-                <graphic><FontIcon iconLiteral="fa-minus"/></graphic>
+                <graphic>
+                    <FontIcon iconLiteral="fa-minus" />
+                </graphic>
             </Button>
             <Button styleClass="window-button,close">
-                <graphic><FontIcon iconLiteral="fa-close"/></graphic>
+                <graphic>
+                    <FontIcon iconLiteral="fa-close" />
+                </graphic>
             </Button>
         </HBox>
     </top>
 
     <!-- Left Sidebar -->
     <left>
-        <AnchorPane fx:id="leftPane"/>
+        <AnchorPane fx:id="leftPane" />
     </left>
 
     <!-- Main Content - Now Centered -->
@@ -36,69 +43,85 @@
         <StackPane alignment="CENTER">
             <ScrollPane fitToWidth="true" styleClass="content-area" maxWidth="900">
                 <VBox spacing="20" alignment="TOP_CENTER">
-                    <padding><Insets top="30" right="30" bottom="30" left="30"/></padding>
+                    <padding>
+                        <Insets top="30" right="30" bottom="30" left="30" />
+                    </padding>
 
                     <!-- Profile Header -->
                     <VBox alignment="CENTER" spacing="15" styleClass="profile-header">
-                        <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
-                        <Circle fx:id="imageCircle" radius="70" styleClass="profile-image-circle" smooth="true"/>
-                        <Button fx:id="importPhotoButton" text="Import Photo" 
-                                onAction="#importPhoto" styleClass="import-button"/>
+                        <padding>
+                            <Insets top="20" right="20" bottom="20" left="20" />
+                        </padding>
+                        <Circle fx:id="imageCircle" radius="70" styleClass="profile-image-circle"
+                            smooth="true" />
+                        <!-- ImageView is hidden but needs to be in the scene graph for loading
+                        images -->
+                        <ImageView fx:id="photoDeProfilImageView" fitHeight="140.0" fitWidth="140.0"
+                            opacity="0.0" managed="true" preserveRatio="true" />
+                        <Button fx:id="importPhotoButton" text="Import Photo"
+                            onAction="#importPhoto" styleClass="import-button" />
                     </VBox>
 
                     <!-- Profile Form -->
                     <GridPane styleClass="profile-form" hgap="20" vgap="15" alignment="CENTER">
                         <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="100" prefWidth="150"/>
-                            <ColumnConstraints hgrow="ALWAYS" minWidth="200"/>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="100" prefWidth="150"/>
-                            <ColumnConstraints hgrow="ALWAYS" minWidth="200"/>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="100" prefWidth="150" />
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="200" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="100" prefWidth="150" />
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="200" />
                         </columnConstraints>
 
                         <!-- Phone Number -->
-                        <Label text="Phone Number:" styleClass="form-label" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                        <TextField fx:id="phoneNumberTextField" styleClass="form-field" 
-                                 GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                        <Label text="Phone Number:" styleClass="form-label" GridPane.rowIndex="0"
+                            GridPane.columnIndex="0" />
+                        <TextField fx:id="phoneNumberTextField" styleClass="form-field"
+                            GridPane.rowIndex="0" GridPane.columnIndex="1" />
 
                         <!-- Email -->
-                        <Label text="Email:" styleClass="form-label" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+                        <Label text="Email:" styleClass="form-label" GridPane.rowIndex="0"
+                            GridPane.columnIndex="2" />
                         <TextField fx:id="emailTextField" styleClass="form-field"
-                                 GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+                            GridPane.rowIndex="0" GridPane.columnIndex="3" />
 
                         <!-- Last Name -->
-                        <Label text="Last Name:" styleClass="form-label" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                        <Label text="Last Name:" styleClass="form-label" GridPane.rowIndex="1"
+                            GridPane.columnIndex="0" />
                         <TextField fx:id="lastNameTextField" styleClass="form-field"
-                                 GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                            GridPane.rowIndex="1" GridPane.columnIndex="1" />
 
                         <!-- First Name -->
-                        <Label text="First Name:" styleClass="form-label" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+                        <Label text="First Name:" styleClass="form-label" GridPane.rowIndex="1"
+                            GridPane.columnIndex="2" />
                         <TextField fx:id="firstNameTextField" styleClass="form-field"
-                                 GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+                            GridPane.rowIndex="1" GridPane.columnIndex="3" />
 
                         <!-- Address -->
-                        <Label text="Address:" styleClass="form-label" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                        <Label text="Address:" styleClass="form-label" GridPane.rowIndex="2"
+                            GridPane.columnIndex="0" />
                         <TextField fx:id="adresseTextField" styleClass="form-field"
-                                 GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                            GridPane.rowIndex="2" GridPane.columnIndex="1" />
 
                         <!-- Birth Date -->
-                        <Label text="Birth Date:" styleClass="form-label" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
+                        <Label text="Birth Date:" styleClass="form-label" GridPane.rowIndex="2"
+                            GridPane.columnIndex="2" />
                         <DatePicker fx:id="dateDeNaissanceDatePicker" styleClass="form-field"
-                                  GridPane.rowIndex="2" GridPane.columnIndex="3"/>
+                            GridPane.rowIndex="2" GridPane.columnIndex="3" />
 
                         <!-- Password -->
-                        <Label text="Password:" styleClass="form-label" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                        <Label text="Password:" styleClass="form-label" GridPane.rowIndex="3"
+                            GridPane.columnIndex="0" />
                         <PasswordField fx:id="passwordTextField" styleClass="form-field"
-                                     GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.columnSpan="2"/>
+                            GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.columnSpan="2" />
                     </GridPane>
 
                     <!-- Action Buttons -->
                     <HBox spacing="20" alignment="CENTER">
-                        <Button fx:id="saveButton" text="Save Changes" 
-                                onAction="#modifyAccount" styleClass="primary-button"/>
-                        <Button fx:id="deleteButton" text="Delete Account" 
-                                onAction="#deleteAccount" styleClass="danger-button"/>
-                        <Button fx:id="signOutButton" text="Sign Out" 
-                                onAction="#signOut" styleClass="danger-button"/>
+                        <Button fx:id="saveButton" text="Save Changes"
+                            onAction="#modifyAccount" styleClass="primary-button" />
+                        <Button fx:id="deleteButton" text="Delete Account"
+                            onAction="#deleteAccount" styleClass="danger-button" />
+                        <Button fx:id="signOutButton" text="Sign Out"
+                            onAction="#signOut" styleClass="danger-button" />
                     </HBox>
                 </VBox>
             </ScrollPane>

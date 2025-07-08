@@ -31,9 +31,8 @@ public class ProductService implements IService<Product> {
     private final Connection connection;
 
     /**
-     * Performs ProductService operation.
-     *
-     * @return the result of the operation
+     * Constructs a new ProductService instance.
+     * Initializes database connection.
      */
     public ProductService() {
         this.connection = DataSource.getInstance().getConnection();
@@ -74,6 +73,11 @@ public class ProductService implements IService<Product> {
         }
     }
 
+    /**
+     * @param productId
+     * @param categories
+     * @throws SQLException
+     */
     private void createProductCategoryRelations(final long productId, final List<ProductCategory> categories)
             throws SQLException {
         final String req = "INSERT INTO product_category(product_id, category_id) VALUES (?, ?)";
@@ -112,6 +116,10 @@ public class ProductService implements IService<Product> {
         return products;
     }
 
+    /**
+     * @param productId
+     * @return List<ProductCategory>
+     */
     private List<ProductCategory> getCategoriesForProduct(final Long productId) {
         final List<ProductCategory> categories = new ArrayList<>();
         final String req = "SELECT c.* FROM product_categories c "
@@ -184,6 +192,11 @@ public class ProductService implements IService<Product> {
         }
     }
 
+    /**
+     * @param productId
+     * @param categories
+     * @throws SQLException
+     */
     private void updateProductCategoryRelations(final Long productId, final List<ProductCategory> categories)
             throws SQLException {
         // First, delete existing relationships

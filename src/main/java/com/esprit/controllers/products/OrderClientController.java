@@ -109,9 +109,9 @@ public class OrderClientController implements Initializable {
              */
             @Override
             public void run() {
-                OrderClientController.this.connectedUser = OrderClientController.this.usersService.getUserById(4L);
+                connectedUser = usersService.getUserById(4L);
                 OrderClientController.LOGGER
-                        .info("User connected: " + OrderClientController.this.connectedUser.getEmail());
+                        .info("User connected: " + connectedUser.getEmail());
             }
         });
         // Récupérer le prix total depuis SharedData et créer le Label correspondant

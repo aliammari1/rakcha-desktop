@@ -14,38 +14,48 @@ import com.esprit.utils.DataSource;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 /**
- * Service class providing business logic for the RAKCHA application. Implements
- * CRUD operations and business rules for data management.
+ * Service class providing business logic for managing Actor entities in the
+ * RAKCHA application.
+ * Implements the IService interface to provide CRUD operations for Actor
+ * objects.
+ * 
+ * <p>
+ * This service handles all database operations related to actors, including:
+ * <ul>
+ * <li>Creating new actors</li>
+ * <li>Retrieving all actors or specific actors by ID, name, or placement</li>
+ * <li>Updating existing actor information</li>
+ * <li>Deleting actors from the database</li>
+ * </ul>
  *
  * @author RAKCHA Team
  * @version 1.0.0
  * @since 1.0.0
  */
+@Slf4j
 public class ActorService implements IService<Actor> {
     private static final Logger LOGGER = Logger.getLogger(ActorService.class.getName());
     Connection connection;
 
     /**
-     * Performs ActorService operation.
-     *
-     * @return the result of the operation
+     * Constructor that initializes the database connection.
      */
     public ActorService() {
         this.connection = DataSource.getInstance().getConnection();
     }
 
     /**
-     * @param actor
+     * Creates a new actor in the database.
+     * 
+     * @param actor the actor entity to create
+     */
+    /**
+     * Creates a new actor in the database.
+     *
+     * @param actor the actor entity to create
      */
     @Override
-    /**
-     * Creates a new entity in the database.
-     *
-     * @param entity
-     *               the entity to create
-     */
     public void create(final Actor actor) {
         final String req = "insert into actors (name,image,biography) values (?,?,?) ";
         try (final PreparedStatement statement = this.connection.prepareStatement(req)) {
@@ -60,14 +70,16 @@ public class ActorService implements IService<Actor> {
     }
 
     /**
-     * @return List<Actor>
+     * Retrieves all actors from the database.
+     * 
+     * @return a list of all actors
+     */
+    /**
+     * Retrieves all actors from the database.
+     * 
+     * @return a list of all actors
      */
     @Override
-    /**
-     * Performs read operation.
-     *
-     * @return the result of the operation
-     */
     public List<Actor> read() {
         final List<Actor> actorArrayList = new ArrayList<>();
         final String req = "SELECT * from actors";
@@ -85,13 +97,12 @@ public class ActorService implements IService<Actor> {
         return actorArrayList;
     }
 
-    @Override
     /**
-     * Updates an existing entity in the database.
+     * Updates an existing actor in the database.
      *
-     * @param entity
-     *               the entity to update
+     * @param actor the actor to update
      */
+    @Override
     public void update(final Actor actor) {
         final String req = "UPDATE actors set name=?,image=?,biography=? where id=?;";
         try (final PreparedStatement statement = this.connection.prepareStatement(req)) {
@@ -107,9 +118,10 @@ public class ActorService implements IService<Actor> {
     }
 
     /**
-     * Retrieves the ActorByNom value.
+     * Retrieves an actor by their name.
      *
-     * @return the ActorByNom value
+     * @param nom the name of the actor to retrieve
+     * @return the actor with the specified name, or null if not found
      */
     public Actor getActorByNom(final String nom) {
         Actor actor = null;
@@ -130,13 +142,12 @@ public class ActorService implements IService<Actor> {
         return actor;
     }
 
-    @Override
     /**
-     * Deletes an entity from the database.
+     * Deletes an actor from the database.
      *
-     * @param id
-     *           the ID of the entity to delete
+     * @param actor the actor to delete
      */
+    @Override
     public void delete(final Actor actor) {
         final String req = " DELETE  FROM actors where id = ?";
         try (final PreparedStatement statement = this.connection.prepareStatement(req)) {
@@ -149,9 +160,11 @@ public class ActorService implements IService<Actor> {
     }
 
     /**
-     * Retrieves the ActorByPlacement value.
+     * Retrieves an actor by their placement ranking (based on number of
+     * appearances).
      *
-     * @return the ActorByPlacement value
+     * @param actorPlacement the placement ranking to search for
+     * @return the actor with the specified placement, or null if not found
      */
     public Actor getActorByPlacement(final int actorPlacement) {
         final String req = """

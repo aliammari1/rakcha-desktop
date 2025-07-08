@@ -60,10 +60,22 @@ public class AfficherProductClientControllers implements Initializable {
     private final List<CheckBox> statusCheckBoxes = new ArrayList<>();
     private final List<Product> shoppingcartList = new ArrayList<>();
     private final Chat chat = new Chat();
+
+    /**
+     * FlowPane for displaying shopping cart items.
+     */
     @FXML
     public FlowPane shoppingcartFlowPane;
+
+    /**
+     * TextField for product search functionality.
+     */
     @FXML
     public TextField SearchBar;
+
+    /**
+     * Button for forwarding messages in chat.
+     */
     @FXML
     public Button forward_message;
     @FXML
@@ -117,7 +129,11 @@ public class AfficherProductClientControllers implements Initializable {
     /**
      * Performs rechercher operation.
      *
-     * @return the result of the operation
+     * Searches for products in a list based on the search term.
+     *
+     * @param liste     the list of products to search through
+     * @param recherche the search term to match against product names
+     * @return a list of products that match the search criteria
      */
     public static List<Product> rechercher(final List<Product> liste, final String recherche) {
         final List<Product> resultats = new ArrayList<>();
@@ -767,11 +783,12 @@ public class AfficherProductClientControllers implements Initializable {
      *          a category name. The list contains all unique category names that
      *          were retrieved from the database using the `getAllCategories()`
      *          method. The categories are obtained by calling the `map()` method on
-     *          the list of `Product` objects, which applies the
-     *          `getCategorie().getName_categorie()` method to each object and
-     *          returns a stream of category names. The `distinct()` method is then
-     *          called on the stream to remove any duplicates, resulting in a list
-     *          of unique category names.
+     *          Gets a list of unique product category names.
+     *          This method retrieves all products and extracts their category
+     *          names,
+     *          removing duplicates to return a list of unique category names.
+     *
+     * @return a list of unique product category names
      */
     public List<String> getProductCategory() {
         // Récupérer tous les cinémas depuis la base de données
@@ -1343,13 +1360,13 @@ public class AfficherProductClientControllers implements Initializable {
      *          fill color to black. It also has a layoutX of 60 and a layoutY of
      *          25. 4/ `priceLabel`: This is another `Label` component that displays
      *          the price of the product. The label has a font size of 14 and a
-     *          style class of `-fx-text-fill: black;`, which sets the text fill
-     *          color to black. It also has a layoutX of 60 and a layoutY of 55.
-     *          <p>
-     *          In summary, the `createtopthree` function returns a container with
-     *          three components – an image view, a label for the product name, and
-     *          another label for the price – with specific properties and
-     *          attributes set to display the information about the product.
+     *          Creates a VBox container for displaying top three products.
+     *          This method creates a styled container with product image, name, and
+     *          price
+     *          components arranged vertically.
+     *
+     * @param produit the product to display in the container
+     * @return a VBox container with the product information displayed
      */
     public VBox createtopthree(final Product produit) {
         final VBox cardContainer = new VBox(5);

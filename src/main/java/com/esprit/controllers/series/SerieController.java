@@ -25,6 +25,7 @@ import com.esprit.models.series.Series;
 import com.esprit.services.series.IServiceCategorieImpl;
 import com.esprit.services.series.IServiceFeedbackImpl;
 import com.esprit.services.series.IServiceSeriesImpl;
+import com.esprit.utils.CloudinaryStorage;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -59,6 +60,7 @@ public class SerieController {
     @FXML
     public ImageView serieImageView;
     String imgpath;
+    private String cloudinaryImageUrl;
     ///
     @FXML
     private Label categoriecheck;
@@ -136,12 +138,12 @@ public class SerieController {
                     final Series serieDto = this.getTableView().getItems().get(this.getIndex());
                     try {
                         iServiceSerie.delete(serieDto);
-                        SerieController.this.tableView.getItems().remove(serieDto);
-                        SerieController.this.tableView.refresh();
-                        SerieController.this.showAlert("Succes", "Deleted Successfully!");
+                        tableView.getItems().remove(serieDto);
+                        tableView.refresh();
+                        showAlert("Succes", "Deleted Successfully!");
                     } catch (final Exception e) {
                         SerieController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
-                        SerieController.this.showAlert("Succes", "Deleted Successfully!");
+                        showAlert("Succes", "Deleted Successfully!");
                     }
                 });
             }
@@ -183,7 +185,7 @@ public class SerieController {
                     this.clickCount++;
                     if (2 == clickCount) {
                         final Series serie = this.getTableView().getItems().get(this.getIndex());
-                        SerieController.this.modifierSerie(serie);
+                        modifierSerie(serie);
                         this.clickCount = 0;
                     }
                 });
@@ -476,19 +478,18 @@ public class SerieController {
         final File selectedFile = fileChooser.showOpenDialog(null);
         if (null != selectedFile) {
             try {
-                final String destinationDirectory1 = "./src/main/resources/img/series/";
-                final String destinationDirectory2 = "C:\\xampp\\htdocs\\Rakcha\\rakcha-web\\public\\img\\series\\";
-                final Path destinationPath1 = Paths.get(destinationDirectory1);
-                final Path destinationPath2 = Paths.get(destinationDirectory2);
-                final String uniqueFileName = System.currentTimeMillis() + "_" + selectedFile.getName();
-                final Path destinationFilePath1 = destinationPath1.resolve(uniqueFileName);
-                final Path destinationFilePath2 = destinationPath2.resolve(uniqueFileName);
-                Files.copy(selectedFile.toPath(), destinationFilePath1);
-                Files.copy(selectedFile.toPath(), destinationFilePath2);
-                final Image selectedImage = new Image(destinationFilePath1.toUri().toString());
+                // Use the CloudinaryStorage service to upload the image
+                CloudinaryStorage cloudinaryStorage = CloudinaryStorage.getInstance();
+                cloudinaryImageUrl = cloudinaryStorage.uploadImage(selectedFile);
+
+                // Display the image in the ImageView
+                final Image selectedImage = new Image(cloudinaryImageUrl);
                 this.serieImageView.setImage(selectedImage);
+                this.imgpath = cloudinaryImageUrl;
+
+                LOGGER.info("Image uploaded to Cloudinary: " + cloudinaryImageUrl);
             } catch (final IOException e) {
-                SerieController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                LOGGER.log(Level.SEVERE, "Error uploading image to Cloudinary", e);
             }
         }
     }

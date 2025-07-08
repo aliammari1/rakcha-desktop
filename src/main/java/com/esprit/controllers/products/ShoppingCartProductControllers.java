@@ -103,7 +103,7 @@ public class ShoppingCartProductControllers implements Initializable {
              * @return the result of the operation
              */
             public void run() {
-                ShoppingCartProductControllers.this.loadAcceptedShoppingCart();
+                loadAcceptedShoppingCart();
             }
         });
     }

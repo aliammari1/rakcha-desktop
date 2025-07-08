@@ -497,7 +497,7 @@ public class CategoryController {
                              * @return the result of the operation
                              */
                             public void handle(final ActionEvent event) {
-                                CategoryController.this.deleteCategory(param.getValue().getId());
+                                deleteCategory(param.getValue().getId());
                             }
                         });
                         return new SimpleObjectProperty<Button>(button);
@@ -571,7 +571,7 @@ public class CategoryController {
                         try {
                             event.getTableView().getItems().get(event.getTablePosition().getRow())
                                     .setDescription(event.getNewValue());
-                            CategoryController.this.updateCategory(
+                            updateCategory(
                                     event.getTableView().getItems().get(event.getTablePosition().getRow()));
                         } catch (final Exception e) {
                             CategoryController.LOGGER.log(Level.SEVERE, e.getMessage(), e);

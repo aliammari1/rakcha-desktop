@@ -5,10 +5,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -68,7 +66,6 @@ import javafx.stage.Stage;
  * <li>Credit card validation with Luhn algorithm</li>
  * <li>PDF receipt generation</li>
  * <li>Integration with Stripe payment processing</li>
- * <li>Cached validation results for improved performance</li>
  * </ul>
  * 
  * @author RAKCHA Team
@@ -111,94 +108,6 @@ public class PaymentUserController implements Initializable {
     private Label nomPrenom;
     @FXML
     private Button viewPDF;
-
-    private static final ConcurrentHashMap<String, PaymentValidationResult> validationCache = new ConcurrentHashMap<>();
-    private static final Pattern CARD_NUMBER_PATTERN = Pattern.compile("^4[0-9]{12}(?:[0-9]{3})?$");
-    private static final Pattern CVC_PATTERN = Pattern.compile("^[0-9]{3}$");
-
-    /**
-     * Inner class representing the result of a payment validation operation.
-     * Used for caching validation results to improve performance.
-     */
-    private static class PaymentValidationResult {
-        final boolean isValid;
-        final LocalDateTime timestamp;
-        final String message;
-
-        /**
-         * Constructs a new validation result.
-         *
-         * @param isValid whether the payment information is valid
-         * @param message the validation message or error
-         */
-        PaymentValidationResult(boolean isValid, String message) {
-            this.isValid = isValid;
-            this.timestamp = LocalDateTime.now();
-            this.message = message;
-        }
-
-        /**
-         * Checks if the cached validation result has expired.
-         *
-         * @return true if the result was created more than 30 minutes ago
-         */
-        boolean isExpired() {
-            return LocalDateTime.now().minusMinutes(30).isAfter(timestamp);
-        }
-    }
-
-    /**
-     * Validates payment information with caching support.
-     * 
-     * <p>
-     * This method checks if a validation result exists in the cache before
-     * performing a full validation of the card number. If an expired or invalid
-     * result is found, it displays an error message.
-     * </p>
-     *
-     * @param cardNumber the card number to validate
-     * @return true if the card number is valid, false otherwise
-     */
-    private boolean validatePaymentWithCache(String cardNumber) {
-        PaymentValidationResult cached = validationCache.get(cardNumber);
-        if (cached != null && !cached.isExpired()) {
-            if (!cached.isValid) {
-                showError("Payment Validation", cached.message);
-            }
-            return cached.isValid;
-        }
-
-        boolean isValid = validateCardNumber(cardNumber);
-        String message = isValid ? "Valid card" : "Invalid card number";
-        validationCache.put(cardNumber, new PaymentValidationResult(isValid, message));
-
-        if (!isValid) {
-            showError("Payment Validation", message);
-        }
-        return isValid;
-    }
-
-    private boolean validateCardNumber(String cardNumber) {
-        // Advanced Luhn algorithm implementation
-        if (!CARD_NUMBER_PATTERN.matcher(cardNumber).matches()) {
-            return false;
-        }
-
-        int sum = 0;
-        boolean alternate = false;
-        for (int i = cardNumber.length() - 1; i >= 0; i--) {
-            int n = Integer.parseInt(cardNumber.substring(i, i + 1));
-            if (alternate) {
-                n *= 2;
-                if (n > 9) {
-                    n = (n % 10) + 1;
-                }
-            }
-            sum += n;
-            alternate = !alternate;
-        }
-        return (sum % 10 == 0);
-    }
 
     /**
      * Checks if a given string is a numerical value by matching it against a
@@ -334,19 +243,19 @@ public class PaymentUserController implements Initializable {
             public void changed(final ObservableValue<? extends String> observableValue, final String s,
                     final String t1) {
                 final List<MovieSession> moviesessions = new MovieSessionService().getSessionsByFilmAndCinema(
-                        new FilmService().getFilmByName(PaymentUserController.this.filmLabel_Payment.getText()).getId(),
-                        new CinemaService().getCinemaByName(PaymentUserController.this.cinemacombox_res.getValue())
+                        new FilmService().getFilmByName(filmLabel_Payment.getText()).getId(),
+                        new CinemaService().getCinemaByName(cinemacombox_res.getValue())
                                 .getId());
-                PaymentUserController.this.checkcomboboxmoviesession_res.setDisable(false);
-                PaymentUserController.this.checkcomboboxmoviesession_res.getItems().clear();
+                checkcomboboxmoviesession_res.setDisable(false);
+                checkcomboboxmoviesession_res.getItems().clear();
                 PaymentUserController.LOGGER.info(
-                        new FilmService().getFilmByName(PaymentUserController.this.filmLabel_Payment.getText()).getId()
+                        new FilmService().getFilmByName(filmLabel_Payment.getText()).getId()
                                 + " "
                                 + new CinemaService()
-                                        .getCinemaByName(PaymentUserController.this.cinemacombox_res.getValue())
+                                        .getCinemaByName(cinemacombox_res.getValue())
                                         .getId());
                 for (int i = 0; i < moviesessions.size(); i++) {
-                    PaymentUserController.this.checkcomboboxmoviesession_res.getItems()
+                    checkcomboboxmoviesession_res.getItems()
                             .add("MovieSession " + (i + 1) + " " + moviesessions.get(i).getSessionDate() + " "
                                     + moviesessions.get(i).getStartTime() + "-" + moviesessions.get(i).getEndTime());
                 }
@@ -384,16 +293,16 @@ public class PaymentUserController implements Initializable {
                                         .getSessionsByFilmAndCinema(
                                                 new FilmService()
                                                         .getFilmByName(
-                                                                PaymentUserController.this.filmLabel_Payment.getText())
+                                                                filmLabel_Payment.getText())
                                                         .getId(),
                                                 new CinemaService()
                                                         .getCinemaByName(
-                                                                PaymentUserController.this.cinemacombox_res.getValue())
+                                                                cinemacombox_res.getValue())
                                                         .getId());
-                                PaymentUserController.this.moviesession = moviesessions.get(0);
-                                PaymentUserController.this.anchorpane_payment.getChildren()
+                                moviesession = moviesessions.get(0);
+                                anchorpane_payment.getChildren()
                                         .forEach(node -> node.setDisable(false));
-                                PaymentUserController.this.nbrplacepPayment_Spinner
+                                nbrplacepPayment_Spinner
                                         .setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1,
                                                 moviesessions.get(0).getCinemaHall().getSeatCapacity(), 1, 1));
                             }
@@ -448,17 +357,17 @@ public class PaymentUserController implements Initializable {
             public void changed(final ObservableValue<? extends Integer> observableValue, final Integer integer,
                     final Integer t1) {
                 final List<MovieSession> moviesessions = new MovieSessionService().getSessionsByFilmAndCinema(
-                        new FilmService().getFilmByName(PaymentUserController.this.filmLabel_Payment.getText()).getId(),
-                        new CinemaService().getCinemaByName(PaymentUserController.this.cinemacombox_res.getValue())
+                        new FilmService().getFilmByName(filmLabel_Payment.getText()).getId(),
+                        new CinemaService().getCinemaByName(cinemacombox_res.getValue())
                                 .getId());
                 double totalPrice = 0;
                 for (int i = 0; i < moviesessions.size(); i++) {
                     totalPrice += moviesessions.get(i).getPrice()
-                            * PaymentUserController.this.nbrplacepPayment_Spinner.getValue();
+                            * nbrplacepPayment_Spinner.getValue();
                 }
                 PaymentUserController.LOGGER.info(String.valueOf(totalPrice));
                 final String total_txt = "Total : " + totalPrice + " Dt.";
-                PaymentUserController.this.total.setText(total_txt);
+                total.setText(total_txt);
             }
         });
         final CinemaService cinemaService = new CinemaService();
@@ -509,7 +418,6 @@ public class PaymentUserController implements Initializable {
             alert.showAndWait();
             final Stage stage = new Stage();
             WebView webView = new WebView();
-            WebEngine webEngine = webView.getEngine();
             // Path dest = Path.of("stripe.pdf");
             // try (InputStream in = new URL(url).openStream()) {
             // Files.copy(in, Paths.get(dest.toUri()));

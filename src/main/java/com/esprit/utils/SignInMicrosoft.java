@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
 
-import com.esprit.Config;
+import io.github.cdimascio.dotenv.Dotenv;
 import com.github.scribejava.apis.LiveApi;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth2AccessToken;
@@ -36,12 +36,12 @@ public enum SignInMicrosoft {
      */
     public static String SignInWithMicrosoft(final String... args)
             throws IOException, InterruptedException, ExecutionException {
-        Config config = Config.getInstance();
-        String clientId = config.get("microsoft.client.id");
-        String clientSecret = config.get("microsoft.client.secret");
+        Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+        String clientId = dotenv.get("MICROSOFT_CLIENT_ID");
+        String clientSecret = dotenv.get("MICROSOFT_CLIENT_SECRET");
 
         if (clientId == null || clientSecret == null) {
-            throw new IllegalStateException("Microsoft OAuth credentials not found in config");
+            throw new IllegalStateException("Microsoft OAuth credentials not found in .env file");
         }
 
         service = new ServiceBuilder(clientId).apiSecret(clientSecret).defaultScope("wl.basic wl.emails")

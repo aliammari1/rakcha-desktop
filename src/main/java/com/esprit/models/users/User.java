@@ -2,8 +2,6 @@ package com.esprit.models.users;
 
 import java.sql.Date;
 
-import jakarta.persistence.*;
-
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -12,10 +10,7 @@ import lombok.experimental.SuperBuilder;
  * phoneNumber changed from int to String for proper phone handling Added proper
  * Hibernate annotations and Lombok annotations
  */
-@Entity
-@Table(name = "users")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,42 +26,40 @@ import lombok.experimental.SuperBuilder;
  */
 public abstract class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     @EqualsAndHashCode.Include
     private Long id;
 
-    @Column(name = "first_name", nullable = false, length = 50)
     private String firstName;
 
-    @Column(name = "last_name", nullable = false, length = 50)
     private String lastName;
 
-    @Column(name = "phone_number", nullable = false, length = 15)
     private String phoneNumber;
 
-    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "role", nullable = false, length = 30)
     private String role;
 
-    @Column(name = "address", length = 200)
     private String address;
 
-    @Column(name = "birth_date")
     private Date birthDate;
 
-    @Column(name = "email", nullable = false, unique = true, length = 100)
     @EqualsAndHashCode.Include
     private String email;
 
-    @Column(name = "photo_de_profil", length = 255)
     private String photoDeProfil;
 
     /**
      * Constructor without id for creating new user instances.
+     *
+     * @param firstName     the user's first name
+     * @param lastName      the user's last name
+     * @param phoneNumber   the user's phone number
+     * @param password      the user's password
+     * @param role          the user's role in the system
+     * @param address       the user's address
+     * @param birthDate     the user's birth date
+     * @param email         the user's email address
+     * @param photoDeProfil the path to the user's profile photo
      */
     protected User(final String firstName, final String lastName, final String phoneNumber, final String password,
             final String role, final String address, final Date birthDate, final String email,

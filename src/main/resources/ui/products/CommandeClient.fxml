@@ -11,17 +11,17 @@
 
 <VBox prefHeight="855.0" prefWidth="1507.0"
     xmlns="http://javafx.com/javafx/21"
-    xmlns:fx="http://javafx.com/fxml/1" 
+    xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="com.esprit.controllers.produits.CommandeClientController">
 
     <HBox VBox.vgrow="ALWAYS">
         <!-- SideBar -->
         <fx:include source="../clientSideBar.fxml" />
-        
+
         <!-- Main Content -->
         <VBox spacing="20" HBox.hgrow="ALWAYS">
             <padding>
-                <Insets top="25" right="25" bottom="25" left="25"/>
+                <Insets top="25" right="25" bottom="25" left="25" />
             </padding>
 
             <!-- Header -->
@@ -42,7 +42,7 @@
                 <!-- Payment Form -->
                 <VBox fx:id="paimenet" styleClass="bg-white" maxWidth="645.0" spacing="20">
                     <padding>
-                        <Insets top="25" right="25" bottom="25" left="25"/>
+                        <Insets top="25" right="25" bottom="25" left="25" />
                     </padding>
 
                     <HBox spacing="15" alignment="CENTER">
@@ -64,14 +64,16 @@
                                 <Font name="Arial Rounded MT Bold" size="24.0" />
                             </font>
                         </Label>
-                        <TextField fx:id="numTelephoneTextField" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+                        <TextField fx:id="numTelephoneTextField" GridPane.rowIndex="0"
+                            GridPane.columnIndex="1" />
 
                         <Label text="Address :" GridPane.rowIndex="1" GridPane.columnIndex="0">
                             <font>
                                 <Font name="Arial Rounded MT Bold" size="24.0" />
                             </font>
                         </Label>
-                        <TextField fx:id="adresseTextField" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+                        <TextField fx:id="adresseTextField" GridPane.rowIndex="1"
+                            GridPane.columnIndex="1" />
                     </GridPane>
 
                     <Button onAction="#order" styleClass="sale" text="order">
@@ -88,8 +90,10 @@
                             <Font name="Tw Cen MT Condensed" size="36.0" />
                         </font>
                     </Label>
-                    <FlowPane fx:id="prixtotaleFlowPane" styleClass="bg-white" prefHeight="65.0" prefWidth="188.0" />
-                    <Button fx:id="idpaymentenligne" onAction="#payment" styleClass="sale" text="Online Payment" visible="false">
+                    <FlowPane fx:id="prixtotaleFlowPane" styleClass="bg-white" prefHeight="65.0"
+                        prefWidth="188.0" />
+                    <Button fx:id="idpaymentenligne" onAction="#payment" styleClass="sale"
+                        text="Online Payment" visible="false">
                         <font>
                             <Font size="14.0" />
                         </font>
@@ -100,7 +104,7 @@
     </HBox>
 
     <stylesheets>
-        <URL value="@styles/produitStyle.css" />
-        <URL value="@styles/filmStyle.css" />
+        <URL value="@../styles/produitStyle.css" />
+        <URL value="@../styles/filmStyle.css" />
     </stylesheets>
 </VBox>

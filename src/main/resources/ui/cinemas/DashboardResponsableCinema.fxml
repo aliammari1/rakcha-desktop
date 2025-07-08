@@ -65,8 +65,8 @@
 
                 <Button onAction="#addCinema" styleClass="sale" text="ADD">
                     <stylesheets>
-                        <URL value="@styles/dashboard.css" />
-                        <URL value="@styles/filmStyle.css" />
+                        <URL value="@../styles/dashboard.css" />
+                        <URL value="@../styles/filmStyle.css" />
                     </stylesheets>
                 </Button>
             </VBox>

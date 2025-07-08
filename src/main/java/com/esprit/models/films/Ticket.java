@@ -3,8 +3,6 @@ package com.esprit.models.films;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.*;
-
 import com.esprit.models.cinemas.MovieSession;
 import com.esprit.models.cinemas.Seat;
 import com.esprit.models.users.Client;
@@ -17,8 +15,7 @@ import lombok.NoArgsConstructor;
 /**
  * The Ticket class represents a ticket for a movie session.
  */
-@Entity
-@Table(name = "tickets")
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -33,26 +30,16 @@ import lombok.NoArgsConstructor;
  */
 public class Ticket {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "number_of_seats", nullable = false)
     private int numberOfSeats;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
     private Client client;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "movie_session_id", nullable = false)
     private MovieSession movieSession;
 
-    @Column(name = "price", nullable = false)
     private float price;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "ticket_seats", joinColumns = @JoinColumn(name = "ticket_id"), inverseJoinColumns = @JoinColumn(name = "seat_id"))
     @Builder.Default
     private List<Seat> reservedSeats = new ArrayList<>();
 

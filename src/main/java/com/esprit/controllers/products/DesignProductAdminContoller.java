@@ -18,6 +18,7 @@ import com.esprit.models.products.Product;
 import com.esprit.models.products.ProductCategory;
 import com.esprit.services.products.CategoryService;
 import com.esprit.services.products.ProductService;
+import com.esprit.utils.CloudinaryStorage;
 import com.esprit.utils.DataSource;
 
 import javafx.beans.property.SimpleObjectProperty;
@@ -56,7 +57,8 @@ public class DesignProductAdminContoller {
     private final List<CheckBox> addressCheckBoxes = new ArrayList<>();
     private final List<CheckBox> statusCheckBoxes = new ArrayList<>();
     private final List<Product> l1 = new ArrayList<>();
-    private File selectedFile; // pour stocke le fichier image selectionné
+    private File selectedFile;
+    private String cloudinaryImageUrl;
     @FXML
     private TableColumn<Product, Integer> PrixP_tableC;
     @FXML
@@ -440,8 +442,8 @@ public class DesignProductAdminContoller {
             {
                 this.setOnMouseClicked(event -> {
                     if (!this.isEmpty()) {
-                        DesignProductAdminContoller.this.changerImage(this.produit);
-                        DesignProductAdminContoller.this.afficher_produit();
+                        changerImage(this.produit);
+                        afficher_produit();
                     }
                 });
             }
@@ -555,8 +557,8 @@ public class DesignProductAdminContoller {
                             final ProductService ps = new ProductService();
                             ps.delete(produit);
                             // Mise à jour de la TableView après la suppression de la base de données
-                            DesignProductAdminContoller.this.Product_tableview.getItems().remove(produit);
-                            DesignProductAdminContoller.this.Product_tableview.refresh();
+                            Product_tableview.getItems().remove(produit);
+                            Product_tableview.refresh();
                         });
                     }
 
@@ -1069,18 +1071,17 @@ public class DesignProductAdminContoller {
         this.selectedFile = fileChooser.showOpenDialog(null);
         if (null != selectedFile) {
             try {
-                final String destinationDirectory1 = "./src/main/resources/img/produit/";
-                final String destinationDirectory2 = "C:\\xampp\\htdocs\\Rakcha\\rakcha-web\\public\\img\\produit\\";
-                final Path destinationPath1 = Paths.get(destinationDirectory1);
-                final Path destinationPath2 = Paths.get(destinationDirectory2);
-                final String uniqueFileName = System.currentTimeMillis() + "_" + this.selectedFile.getName();
-                final Path destinationFilePath1 = destinationPath1.resolve(uniqueFileName);
-                final Path destinationFilePath2 = destinationPath2.resolve(uniqueFileName);
-                Files.copy(this.selectedFile.toPath(), destinationFilePath1);
-                Files.copy(this.selectedFile.toPath(), destinationFilePath2);
-                final Image selectedImage = new Image(destinationFilePath1.toUri().toString());
+                // Use the CloudinaryStorage service to upload the image
+                CloudinaryStorage cloudinaryStorage = CloudinaryStorage.getInstance();
+                cloudinaryImageUrl = cloudinaryStorage.uploadImage(selectedFile);
+
+                // Display the image in the ImageView
+                final Image selectedImage = new Image(cloudinaryImageUrl);
                 this.image.setImage(selectedImage);
+
+                LOGGER.info("Image uploaded to Cloudinary: " + cloudinaryImageUrl);
             } catch (final IOException e) {
+                LOGGER.log(Level.SEVERE, "Error uploading image to Cloudinary", e);
                 DesignProductAdminContoller.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
         }

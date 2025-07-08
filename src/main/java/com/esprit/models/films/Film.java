@@ -4,8 +4,6 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.*;
-
 import com.esprit.models.cinemas.MovieSession;
 
 import lombok.AllArgsConstructor;
@@ -16,8 +14,7 @@ import lombok.NoArgsConstructor;
 /**
  * Represents a film.
  */
-@Entity
-@Table(name = "films")
+
 @Data
 @NoArgsConstructor
 @Builder
@@ -32,49 +29,41 @@ import lombok.NoArgsConstructor;
  */
 public class Film {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "image")
     private String image;
 
-    @Column(name = "duration")
     private Time duration;
 
-    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "release_year")
     private int releaseYear;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "film_category", joinColumns = @JoinColumn(name = "film_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
     @Builder.Default
     private List<Category> categories = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "actor_film", joinColumns = @JoinColumn(name = "film_id"), inverseJoinColumns = @JoinColumn(name = "actor_id"))
     @Builder.Default
     private List<Actor> actors = new ArrayList<>();
 
-    @OneToMany(mappedBy = "film", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private List<MovieSession> movieSessions = new ArrayList<>();
 
-    @OneToMany(mappedBy = "film", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private List<FilmComment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "film", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private List<FilmRating> ratings = new ArrayList<>();
 
     /**
      * Constructor without id for creating new film instances.
+     * 
+     * @param name        the name of the film
+     * @param image       the image path or URL for the film
+     * @param duration    the duration of the film
+     * @param description the description of the film
+     * @param releaseYear the year the film was released
      */
     public Film(final String name, final String image, final Time duration, final String description,
             final int releaseYear) {
@@ -92,6 +81,13 @@ public class Film {
 
     /**
      * Constructor with id for existing film instances.
+     * 
+     * @param id          the unique identifier for the film
+     * @param name        the name of the film
+     * @param image       the image path or URL for the film
+     * @param duration    the duration of the film
+     * @param description the description of the film
+     * @param releaseYear the year the film was released
      */
     public Film(final Long id, final String name, final String image, final Time duration, final String description,
             final int releaseYear) {
@@ -110,6 +106,8 @@ public class Film {
 
     /**
      * Copy constructor.
+     * 
+     * @param f the Film object to copy from
      */
     public Film(Film f) {
         this.id = f.id;
@@ -126,9 +124,9 @@ public class Film {
     }
 
     /**
-     * Performs Film operation.
+     * Constructor for creating a Film with just an ID.
      *
-     * @return the result of the operation
+     * @param id the unique identifier for the film
      */
     public Film(final Long id) {
         this.id = id;

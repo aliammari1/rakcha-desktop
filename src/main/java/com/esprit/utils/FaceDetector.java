@@ -28,16 +28,29 @@ public class FaceDetector implements Runnable {
     private final AtomicBoolean running;
     private final FaceDetectionCallback callback;
 
+    /**
+     * Callback interface for face detection events.
+     */
     public interface FaceDetectionCallback {
+        /**
+         * Called when a face is detected in the video stream.
+         *
+         * @param face the detected face as a Mat object
+         */
         void onFaceDetected(Mat face);
 
+        /**
+         * Called when a frame has been processed.
+         *
+         * @param frame the processed frame as a Mat object
+         */
         void onFrameProcessed(Mat frame);
     }
 
     /**
-     * Performs FaceDetector operation.
+     * Constructs a new FaceDetector with the specified callback.
      *
-     * @return the result of the operation
+     * @param callback the callback interface for face detection events
      */
     public FaceDetector(FaceDetectionCallback callback) {
         this.callback = callback;
@@ -112,9 +125,7 @@ public class FaceDetector implements Runnable {
     }
 
     /**
-     * Performs stop operation.
-     *
-     * @return the result of the operation
+     * Stops the face detection process.
      */
     public void stop() {
         running.set(false);
@@ -126,6 +137,11 @@ public class FaceDetector implements Runnable {
         }
     }
 
+    /**
+     * Cleans up resources when the object is garbage collected.
+     * 
+     * @throws Throwable if an error occurs during finalization
+     */
     @Override
     protected void finalize() throws Throwable {
         cleanup();

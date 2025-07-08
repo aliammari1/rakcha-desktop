@@ -70,13 +70,13 @@ public class CategorieController {
                     final Category category = this.getTableView().getItems().get(this.getIndex());
                     try {
                         categorieserv.delete(category);
-                        CategorieController.this.tableView.getItems().remove(category);
-                        CategorieController.this.showAlert("Succes", "Deleted successfully !");
-                        CategorieController.this.ref();
-                        CategorieController.this.tableView.refresh();
+                        tableView.getItems().remove(category);
+                        showAlert("Succes", "Deleted successfully !");
+                        ref();
+                        tableView.refresh();
                     } catch (final Exception e) {
                         CategorieController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
-                        CategorieController.this.showAlert("Error", e.getMessage());
+                        showAlert("Error", e.getMessage());
                     }
                 });
             }
@@ -120,7 +120,7 @@ public class CategorieController {
                     this.clickCount++;
                     if (2 == clickCount) {
                         final Category category = this.getTableView().getItems().get(this.getIndex());
-                        CategorieController.this.modifierCategorie(category);
+                        modifierCategorie(category);
                         this.clickCount = 0;
                     }
                 });

@@ -31,9 +31,8 @@ public class CommentService implements IService<Comment> {
     private final Connection connection;
 
     /**
-     * Performs CommentService operation.
-     *
-     * @return the result of the operation
+     * Constructs a new CommentService instance.
+     * Initializes database connection.
      */
     public CommentService() {
         this.connection = DataSource.getInstance().getConnection();
@@ -106,9 +105,10 @@ public class CommentService implements IService<Comment> {
     }
 
     /**
-     * Performs readByClientId operation.
+     * Reads a comment by client ID.
      *
-     * @return the result of the operation
+     * @param clientId the ID of the client
+     * @return the comment by the specified client, or null if not found
      */
     public Comment readByClientId(final int clientId) {
         Comment comment = null;
@@ -131,9 +131,10 @@ public class CommentService implements IService<Comment> {
     }
 
     /**
-     * Retrieves the CommentsByProductId value.
+     * Retrieves comments by product ID.
      *
-     * @return the CommentsByProductId value
+     * @param productId the ID of the product to get comments for
+     * @return list of comments for the specified product
      */
     public List<Comment> getCommentsByProductId(final int productId) {
         final List<Comment> comments = new ArrayList<>();

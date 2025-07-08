@@ -33,9 +33,8 @@ public class ReviewService implements IService<Review> {
     private final Connection connection;
 
     /**
-     * Performs ReviewService operation.
-     *
-     * @return the result of the operation
+     * Constructs a new ReviewService instance.
+     * Initializes database connection.
      */
     public ReviewService() {
         this.connection = DataSource.getInstance().getConnection();

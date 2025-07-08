@@ -2,15 +2,11 @@ package com.esprit.models.series;
 
 import java.util.Date;
 
-import jakarta.persistence.*;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "feedback")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,25 +21,16 @@ import lombok.NoArgsConstructor;
  */
 public class Feedback {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "id_user", nullable = false)
     private Long userId;
 
-    @Column(name = "description")
     private String description;
 
-    @Column(name = "date")
-    @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
-    @Column(name = "id_episode", nullable = false)
     private Long episodeId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_episode", referencedColumnName = "idepisode", insertable = false, updatable = false)
     private Episode episode;
 
     /**

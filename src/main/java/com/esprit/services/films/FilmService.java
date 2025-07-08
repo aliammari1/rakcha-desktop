@@ -40,9 +40,8 @@ public class FilmService implements IService<Film> {
     Connection connection;
 
     /**
-     * Performs FilmService operation.
-     *
-     * @return the result of the operation
+     * Constructs a new FilmService instance.
+     * Initializes database connection and related services.
      */
     public FilmService() {
         this.connection = DataSource.getInstance().getConnection();

@@ -57,10 +57,21 @@ import javafx.stage.Window;
 public class DetailsProductClientController implements Initializable {
     private static final Logger LOGGER = Logger.getLogger(DetailsProductClientController.class.getName());
     private final int quantiteSelectionnee = 1; // Initialiser à 1 par défaut
+    /**
+     * FlowPane for displaying detailed product information.
+     */
     @FXML
     public FlowPane detailFlowPane;
+
+    /**
+     * FlowPane for displaying shopping cart items.
+     */
     @FXML
     public FlowPane shoppingcartFlowPane;
+
+    /**
+     * TextField for product search functionality.
+     */
     @FXML
     public TextField SearchBar;
     ShoppingCartService shoppingcartService = new ShoppingCartService();

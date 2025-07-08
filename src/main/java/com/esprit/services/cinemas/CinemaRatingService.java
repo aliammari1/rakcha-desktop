@@ -29,9 +29,8 @@ public class CinemaRatingService implements IService<CinemaRating> {
     private final UserService userService;
 
     /**
-     * Performs CinemaRatingService operation.
-     *
-     * @return the result of the operation
+     * Constructs a new CinemaRatingService instance.
+     * Initializes database connection and related services.
      */
     public CinemaRatingService() {
         this.connection = DataSource.getInstance().getConnection();
@@ -125,9 +124,11 @@ public class CinemaRatingService implements IService<CinemaRating> {
     }
 
     /**
-     * Retrieves the RatingForClientAndCinema value.
+     * Retrieves the rating for a specific client and cinema.
      *
-     * @return the RatingForClientAndCinema value
+     * @param clientId the ID of the client
+     * @param cinemaId the ID of the cinema
+     * @return the rating value, or null if not found
      */
     public Integer getRatingForClientAndCinema(Long clientId, Long cinemaId) {
         String query = "SELECT rating FROM cinema_rating WHERE cinema_id = ? AND client_id = ?";
@@ -146,9 +147,10 @@ public class CinemaRatingService implements IService<CinemaRating> {
     }
 
     /**
-     * Retrieves the AverageRating value.
+     * Retrieves the average rating for a cinema.
      *
-     * @return the AverageRating value
+     * @param cinemaId the ID of the cinema
+     * @return the average rating for the cinema
      */
     public Double getAverageRating(Long cinemaId) {
         String query = "SELECT AVG(rating) as average FROM cinema_rating WHERE cinema_id = ?";
@@ -187,6 +189,10 @@ public class CinemaRatingService implements IService<CinemaRating> {
         return topRatedCinemas;
     }
 
+    /**
+     * @param clientId
+     * @param cinemaId
+     */
     private void deleteByClientAndCinema(Long clientId, Long cinemaId) {
         String query = "DELETE FROM cinema_rating WHERE cinema_id = ? AND client_id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -199,9 +205,10 @@ public class CinemaRatingService implements IService<CinemaRating> {
     }
 
     /**
-     * Retrieves the CommentsByCinemaId value.
+     * Retrieves comments by cinema ID.
      *
-     * @return the CommentsByCinemaId value
+     * @param cinemaId the ID of the cinema to get comments for
+     * @return list of comments for the specified cinema
      */
     public List<CinemaComment> getCommentsByCinemaId(Long cinemaId) {
         List<CinemaComment> comments = new ArrayList<>();
@@ -222,6 +229,10 @@ public class CinemaRatingService implements IService<CinemaRating> {
         return comments;
     }
 
+    /**
+     * @param rs
+     * @return CinemaRating
+     */
     private CinemaRating buildCinemaRating(ResultSet rs) {
         try {
             Cinema cinema = cinemaService.getCinemaById(rs.getLong("cinema_id"));
@@ -240,6 +251,10 @@ public class CinemaRatingService implements IService<CinemaRating> {
         }
     }
 
+    /**
+     * @param rs
+     * @return CinemaComment
+     */
     private CinemaComment buildCinemaComment(ResultSet rs) {
         try {
             Cinema cinema = cinemaService.getCinemaById(rs.getLong("cinema_id"));

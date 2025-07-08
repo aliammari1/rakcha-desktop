@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import jakarta.persistence.*;
-
 import com.esprit.models.users.Client;
 
 import lombok.AllArgsConstructor;
@@ -16,8 +14,7 @@ import lombok.NoArgsConstructor;
 /**
  * The Order class represents an order made by a client.
  */
-@Entity
-@Table(name = "orders")
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -32,28 +29,18 @@ import lombok.NoArgsConstructor;
  */
 public class Order {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "order_date", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
     private Date orderDate;
 
-    @Column(name = "status")
     private String status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    @Column(name = "phone_number")
     private int phoneNumber;
 
-    @Column(name = "address")
     private String address;
 
     /**

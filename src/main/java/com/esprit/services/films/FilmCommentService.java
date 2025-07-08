@@ -31,9 +31,8 @@ public class FilmCommentService implements IService<FilmComment> {
     private final Connection connection;
 
     /**
-     * Performs FilmCommentService operation.
-     *
-     * @return the result of the operation
+     * Constructs a new FilmCommentService instance.
+     * Initializes database connection and related services.
      */
     public FilmCommentService() {
         this.connection = DataSource.getInstance().getConnection();

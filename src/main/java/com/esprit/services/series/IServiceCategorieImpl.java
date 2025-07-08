@@ -28,9 +28,8 @@ public class IServiceCategorieImpl implements IService<Category> {
     private final Connection connection;
 
     /**
-     * Performs IServiceCategorieImpl operation.
-     *
-     * @return the result of the operation
+     * Constructs a new IServiceCategorieImpl instance.
+     * Initializes database connection.
      */
     public IServiceCategorieImpl() {
         this.connection = DataSource.getInstance().getConnection();

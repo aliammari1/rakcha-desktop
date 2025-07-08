@@ -26,9 +26,8 @@ public class CinemaService implements IService<Cinema> {
     private final UserService userService;
 
     /**
-     * Performs CinemaService operation.
-     *
-     * @return the result of the operation
+     * Constructs a new CinemaService instance.
+     * Initializes database connection and user service.
      */
     public CinemaService() {
         this.connection = DataSource.getInstance().getConnection();
@@ -121,9 +120,10 @@ public class CinemaService implements IService<Cinema> {
     }
 
     /**
-     * Performs sort operation.
+     * Sorts cinemas by the specified field.
      *
-     * @return the result of the operation
+     * @param orderBy the field to sort by
+     * @return sorted list of cinemas
      */
     public List<Cinema> sort(String orderBy) {
         List<Cinema> cinemas = new ArrayList<>();
@@ -143,9 +143,10 @@ public class CinemaService implements IService<Cinema> {
     }
 
     /**
-     * Retrieves the CinemaById value.
+     * Retrieves a cinema by its ID.
      *
-     * @return the CinemaById value
+     * @param cinemaId the ID of the cinema to retrieve
+     * @return the cinema with the specified ID, or null if not found
      */
     public Cinema getCinemaById(Long cinemaId) {
         String query = "SELECT * FROM cinema WHERE id = ?";
@@ -162,9 +163,10 @@ public class CinemaService implements IService<Cinema> {
     }
 
     /**
-     * Retrieves the CinemaByName value.
+     * Retrieves a cinema by its name.
      *
-     * @return the CinemaByName value
+     * @param name the name of the cinema to retrieve
+     * @return the cinema with the specified name, or null if not found
      */
     public Cinema getCinemaByName(String name) {
         String query = "SELECT * FROM cinema WHERE name = ?";
@@ -180,6 +182,10 @@ public class CinemaService implements IService<Cinema> {
         return null;
     }
 
+    /**
+     * @param rs
+     * @return Cinema
+     */
     private Cinema buildCinema(ResultSet rs) {
         try {
             CinemaManager manager = (CinemaManager) userService.getUserById(rs.getLong("manager_id"));

@@ -178,8 +178,8 @@ public class ListOrderController {
                             final OrderService ps = new OrderService();
                             ps.delete(order);
                             // Mise à jour de la TableView après la suppression de la base de données
-                            ListOrderController.this.orderTableView.getItems().remove(order);
-                            ListOrderController.this.orderTableView.refresh();
+                            orderTableView.getItems().remove(order);
+                            orderTableView.refresh();
                         });
                     }
 

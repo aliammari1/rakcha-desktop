@@ -2,16 +2,13 @@ package com.esprit.models.users;
 
 import java.sql.Date;
 
-import jakarta.persistence.*;
-
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 /**
  * Client entity extending User with Hibernate annotations
  */
-@Entity
-@DiscriminatorValue("CLIENT")
+
 @Data
 @NoArgsConstructor
 @SuperBuilder
@@ -29,6 +26,16 @@ public class Client extends User {
 
     /**
      * Constructor without id for creating new client instances.
+     * 
+     * @param firstName     the first name of the client
+     * @param lastName      the last name of the client
+     * @param phoneNumber   the phone number of the client
+     * @param password      the password for the client account
+     * @param role          the role of the client
+     * @param address       the address of the client
+     * @param birthDate     the birth date of the client
+     * @param email         the email address of the client
+     * @param photoDeProfil the profile photo path of the client
      */
     public Client(final String firstName, final String lastName, final String phoneNumber, final String password,
             final String role, final String address, final Date birthDate, final String email,

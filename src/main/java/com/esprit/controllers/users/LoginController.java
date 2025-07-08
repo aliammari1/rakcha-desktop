@@ -95,6 +95,10 @@ public class LoginController implements Initializable {
         }
     }
 
+    /** 
+     * @param event
+     * @throws IOException
+     */
     @FXML
     void login(final ActionEvent event) throws IOException {
         final UserService userService = new UserService();
@@ -152,6 +156,10 @@ public class LoginController implements Initializable {
         }
     }
 
+    /** 
+     * @param event
+     * @throws IOException
+     */
     @FXML
     void switchToSignUp(ActionEvent event) throws IOException {
         try {
@@ -182,7 +190,7 @@ public class LoginController implements Initializable {
                 try {
                     final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/users/smsadmin.fxml"));
                     final Parent root = loader.load();
-                    final Stage stage = (Stage) LoginController.this.forgetPasswordHyperlink.getScene().getWindow();
+                    final Stage stage = (Stage) forgetPasswordHyperlink.getScene().getWindow();
                     stage.setScene(new Scene(root));
                 } catch (final IOException e) {
                     throw new RuntimeException(e);
@@ -200,7 +208,7 @@ public class LoginController implements Initializable {
                 try {
                     final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/users/maillogin.fxml"));
                     final Parent root = loader.load();
-                    final Stage stage = (Stage) LoginController.this.forgetPasswordEmailHyperlink.getScene()
+                    final Stage stage = (Stage) forgetPasswordEmailHyperlink.getScene()
                             .getWindow();
                     stage.setScene(new Scene(root));
                 } catch (final IOException e) {

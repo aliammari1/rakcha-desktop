@@ -20,7 +20,7 @@
     <children>
         <fx:include source="../CinemaManagerSideBar.fxml" />
         <AnchorPane layoutX="313.0" layoutY="180.0" prefHeight="576.0" prefWidth="525.0"
-            styleClass="bg-white" stylesheets="@styles/filmStyle.css">
+            styleClass="bg-white" stylesheets="@../styles/filmStyle.css">
 
             <children>
                 <Label layoutX="32.0" layoutY="82.0" text="Name of category :">
@@ -41,11 +41,11 @@
                     wrapText="true" />
                 <Button layoutX="202.0" layoutY="460.0" mnemonicParsing="false"
                     onAction="#insertCategory" prefHeight="40.0" prefWidth="172.0" styleClass="sale"
-                    stylesheets="@styles/filmStyle.css" text="Insérer" />
+                    stylesheets="@../styles/filmStyle.css" text="Insérer" />
             </children>
         </AnchorPane>
         <AnchorPane layoutX="888.0" layoutY="186.0" prefHeight="561.0" prefWidth="593.0"
-            styleClass="bg-white" stylesheets="@styles/filmStyle.css">
+            styleClass="bg-white" stylesheets="@../styles/filmStyle.css">
             <children>
                 <ComboBox fx:id="filterCriteriaComboBox" layoutX="69.0" layoutY="34.0"
                     prefHeight="39.0" prefWidth="107.0" styleClass="sale">
@@ -71,7 +71,7 @@
                 <FontIcon fill="#ae2d3c" iconLiteral="fa-search" layoutX="349.0" layoutY="63.0"
                     text="" textAlignment="RIGHT" />
                 <Button layoutX="411.0" layoutY="30.0" mnemonicParsing="false" prefHeight="53.0"
-                    prefWidth="107.0" styleClass="sale" stylesheets="@styles/filmStyle.css"
+                    prefWidth="107.0" styleClass="sale" stylesheets="@../styles/filmStyle.css"
                     text="Search" />
             </children>
         </AnchorPane>
