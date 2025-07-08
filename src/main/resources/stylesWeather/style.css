@@ -1,7 +1,0 @@
-#txtField {
- -fx-opacity: 1.0;
-}
-
-#txtField:focused {
- -fx-opacity: 0.8;
-}
