@@ -3,25 +3,16 @@
    ======================= */
 
 .root {
-  -fx-background-color: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+  -fx-background-color: linear-gradient(to bottom right, #0f0f23, #1a1a2e);
 }
 
 /* Animated Background */
 .animated-background {
-  -fx-background-color: linear-gradient(
-    135deg,
-    #0f0f23 0%,
-    #1a1a2e 50%,
-    #16213e 100%
-  );
+  -fx-background-color: linear-gradient(to bottom right, #0f0f23, #1a1a2e, #16213e);
 }
 
 .particle {
-  -fx-fill: linear-gradient(
-    to bottom,
-    rgba(231, 65, 65, 0.6),
-    rgba(231, 65, 65, 0.2)
-  );
+  -fx-fill: linear-gradient(to bottom, rgba(231, 65, 65, 0.6), rgba(231, 65, 65, 0.2));
   -fx-effect: dropshadow(gaussian, rgba(231, 65, 65, 0.4), 8, 0, 0, 0);
 }
 
@@ -29,38 +20,47 @@
   -fx-translate-x: 0;
   -fx-translate-y: 0;
 }
+
 .particle-2 {
   -fx-translate-x: 5;
   -fx-translate-y: -3;
 }
+
 .particle-3 {
   -fx-translate-x: -3;
   -fx-translate-y: 4;
 }
+
 .particle-4 {
   -fx-translate-x: 2;
   -fx-translate-y: -2;
 }
+
 .particle-5 {
   -fx-translate-x: -4;
   -fx-translate-y: 3;
 }
+
 .particle-6 {
   -fx-translate-x: 3;
   -fx-translate-y: -5;
 }
+
 .particle-7 {
   -fx-translate-x: -2;
   -fx-translate-y: 2;
 }
+
 .particle-8 {
   -fx-translate-x: 4;
   -fx-translate-y: -1;
 }
+
 .particle-9 {
   -fx-translate-x: -1;
   -fx-translate-y: 4;
 }
+
 .particle-10 {
   -fx-translate-x: 2;
   -fx-translate-y: -3;
@@ -68,12 +68,7 @@
 
 /* Cinema Experience Section */
 .cinema-experience-section {
-  -fx-background-color: linear-gradient(
-    45deg,
-    rgba(231, 65, 65, 0.95) 0%,
-    rgba(180, 40, 40, 0.95) 50%,
-    rgba(140, 25, 25, 0.95) 100%
-  );
+  -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, rgba(231, 65, 65, 0.95), rgba(180, 40, 40, 0.95), rgba(140, 25, 25, 0.95));
   -fx-background-image: url("https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1000&q=80");
   -fx-background-size: cover;
   -fx-background-position: center;
@@ -146,7 +141,7 @@
 
 /* Modern Login Section */
 .modern-login-section {
-  -fx-background-color: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  -fx-background-color: linear-gradient(to bottom right, #ffffff, #f8f9fa);
   -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 20, 0, 0, 0);
 }
 
@@ -297,7 +292,7 @@
 
 /* Buttons */
 .modern-primary-btn {
-  -fx-background-color: linear-gradient(135deg, #e74141 0%, #d63031 100%);
+  -fx-background-color: linear-gradient(to bottom right, #e74141, #d63031);
   -fx-background-radius: 12;
   -fx-text-fill: white;
   -fx-font-family: "Outfit SemiBold";
@@ -306,7 +301,7 @@
 }
 
 .modern-primary-btn:hover {
-  -fx-background-color: linear-gradient(135deg, #d63031 0%, #c0392b 100%);
+  -fx-background-color: linear-gradient(to bottom right, #d63031, #c0392b);
   -fx-effect: dropshadow(gaussian, rgba(231, 65, 65, 0.5), 16, 0, 0, 6);
 }
 
@@ -382,11 +377,7 @@
 }
 
 .leftSideBar {
-  -fx-background-color: linear-gradient(
-    to bottom right,
-    rgba(231, 65, 65, 0.9),
-    rgba(158, 28, 28, 0.9)
-  );
+  -fx-background-color: linear-gradient(to bottom right, rgba(231, 65, 65, 0.9), rgba(158, 28, 28, 0.9));
   -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 15, 0, 0, 0);
   -fx-background-image: url("https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1000&q=80");
   -fx-background-size: cover;
@@ -439,7 +430,7 @@
   -fx-background-color: transparent;
 }
 
-.transparent-scroll-pane > .viewport {
+.transparent-scroll-pane>.viewport {
   -fx-background-color: transparent;
 }
 
@@ -481,13 +472,7 @@
 }
 
 .decorative-film-strip {
-  -fx-background-color: linear-gradient(
-    to right,
-    transparent 0%,
-    rgba(231, 65, 65, 0.1) 20%,
-    rgba(231, 65, 65, 0.1) 80%,
-    transparent 100%
-  );
+  -fx-background-color: linear-gradient(to right, transparent, rgba(231, 65, 65, 0.1), rgba(231, 65, 65, 0.1), transparent);
   -fx-padding: 2;
   -fx-border-width: 0 1px;
   -fx-border-color: rgba(231, 65, 65, 0.2);

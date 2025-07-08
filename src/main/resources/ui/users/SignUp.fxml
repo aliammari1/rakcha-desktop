@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import org.kordamp.ikonli.javafx.FontIcon?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -8,393 +7,754 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.effect.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<?import java.net.URL?>
 
-<StackPane prefHeight="900.0" prefWidth="1400.0"
-    stylesheets="@../styles/signup.css"
-    xmlns="http://javafx.com/javafx/21"
-    xmlns:fx="http://javafx.com/fxml/1"
-    fx:controller="com.esprit.controllers.users.SignUpController">
+<StackPane fx:id="rootContainer" maxWidth="1200.0" maxHeight="680.0" minWidth="1200.0" minHeight="680.0"
+           xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.esprit.controllers.users.SignUpController"
+           style="-fx-background-color: linear-gradient(to bottom right, #0a0a0a, #1a0a0a, #2a0f0f, #1a0606, #0a0a0a);
+           -fx-effect: dropshadow(gaussian, #8b0000, 50, 0, 0, 0);
+           -fx-background-animation: true;"
+           stylesheets="@../styles/login-animations.css">
 
-    <!-- Animated Background -->
-    <AnchorPane styleClass="signup-animated-background">
-        <!-- Floating elements -->
-        <Circle radius="8" layoutX="200" layoutY="100" styleClass="float-element float-1" />
-        <Rectangle width="15" height="15" layoutX="400" layoutY="150"
-            styleClass="float-element float-2" />
-        <Circle radius="6" layoutX="600" layoutY="80" styleClass="float-element float-3" />
-        <Rectangle width="12" height="12" layoutX="800" layoutY="200"
-            styleClass="float-element float-4" />
-        <Circle radius="10" layoutX="1000" layoutY="120" styleClass="float-element float-5" />
-        <Rectangle width="18" height="18" layoutX="1200" layoutY="180"
-            styleClass="float-element float-6" />
-        <Circle radius="5" layoutX="150" layoutY="400" styleClass="float-element float-7" />
-        <Rectangle width="20" height="20" layoutX="350" layoutY="500"
-            styleClass="float-element float-8" />
-        <Circle radius="7" layoutX="550" layoutY="600" styleClass="float-element float-9" />
-        <Rectangle width="14" height="14" layoutX="750" layoutY="450"
-            styleClass="float-element float-10" />
+    <!-- Background Animations Container - Comes first in the StackPane for proper layering -->
+    <AnchorPane style="-fx-background-color: transparent;" maxWidth="1200.0" maxHeight="630.0" styleClass="animated-background">
+        
+        <!-- Geometric Shapes with style matching login screen -->
+        <Polygon fx:id="shape1" points="150.0,300.0,170.0,280.0,190.0,300.0,170.0,320.0" 
+            styleClass="rotating-shape, pulsing-shape"
+            style="-fx-fill: linear-gradient(to bottom right, rgba(200, 0, 0, 0.6), rgba(100, 0, 0, 0.4)); 
+                   -fx-stroke: #8b0000; 
+                   -fx-stroke-width: 2;
+                   -fx-effect: dropshadow(gaussian, rgba(200, 0, 0, 0.8), 15, 0, 0, 0);
+                   -fx-z-index: 100;" 
+            opacity="0.8" />
+            
+        <Polygon fx:id="shape2" points="950.0,200.0,980.0,180.0,1010.0,200.0,995.0,230.0,965.0,230.0" 
+            styleClass="rotating-shape"
+            style="-fx-fill: linear-gradient(to bottom right, rgba(200, 0, 0, 0.7), rgba(100, 0, 0, 0.4)); 
+                   -fx-stroke: #660000; 
+                   -fx-stroke-width: 2;
+                   -fx-effect: dropshadow(gaussian, rgba(200, 0, 0, 0.7), 12, 0, 0, 0);
+                   -fx-z-index: 101;" 
+            opacity="0.8" />
+            
+        <Rectangle fx:id="shape3" width="35" height="35" layoutX="600" layoutY="100"
+            styleClass="rotating-shape, pulsing-shape"
+            style="-fx-fill: linear-gradient(to bottom right, rgba(255, 68, 68, 0.7), rgba(139, 0, 0, 0.5));
+                   -fx-stroke: #ff4444;
+                   -fx-stroke-width: 2;
+                   -fx-rotate: 45;
+                   -fx-effect: dropshadow(gaussian, rgba(255, 68, 68, 0.8), 12, 0, 0, 0);
+                   -fx-z-index: 102;"
+            opacity="0.8" />
+            
+        <Circle fx:id="shape4" radius="25" layoutX="1050" layoutY="500"
+            styleClass="pulsing-shape, glow-red"
+            style="-fx-fill: linear-gradient(center 50%, radius 50%, rgba(255, 102, 102, 0.7), rgba(139, 0, 0, 0.3));
+                   -fx-stroke: #ff6666;
+                   -fx-stroke-width: 2;
+                   -fx-effect: dropshadow(gaussian, rgba(255, 102, 102, 0.8), 18, 0, 0, 0);
+                   -fx-z-index: 103;"
+            opacity="0.7" />
+            
+        <Polygon fx:id="shape5" points="350.0,150.0,370.0,120.0,400.0,135.0,385.0,170.0" 
+            styleClass="rotating-shape, pulsing-shape"
+            style="-fx-fill: linear-gradient(to bottom right, rgba(180, 0, 0, 0.5), rgba(90, 0, 0, 0.3)); 
+                   -fx-stroke: #aa0000; 
+                   -fx-stroke-width: 2;
+                   -fx-effect: dropshadow(gaussian, rgba(180, 0, 0, 0.7), 12, 0, 0, 0);
+                   -fx-z-index: 104;" 
+            opacity="0.7" />
+            
+        <Rectangle fx:id="shape6" width="40" height="15" layoutX="800" layoutY="250"
+            styleClass="rotating-shape"
+            style="-fx-fill: linear-gradient(to bottom right, rgba(220, 50, 50, 0.6), rgba(120, 0, 0, 0.4));
+                   -fx-stroke: #cc2222;
+                   -fx-stroke-width: 1;
+                   -fx-rotate: 30;
+                   -fx-effect: dropshadow(gaussian, rgba(220, 50, 50, 0.6), 10, 0, 0, 0);
+                   -fx-z-index: 105;"
+            opacity="0.7" />
     </AnchorPane>
 
-    <HBox spacing="0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
-        <!-- Left Side - Registration Form -->
-        <VBox styleClass="modern-signup-section" minWidth="800.0" spacing="25" HBox.hgrow="ALWAYS">
+    <HBox spacing="0" maxWidth="1200.0" maxHeight="630.0" style="-fx-background-color: transparent;">
+        <!-- Left Side - Features Panel similar to Login -->
+        <VBox alignment="CENTER" spacing="25" prefWidth="400.0" maxWidth="400.0"
+            style="-fx-background-color: linear-gradient(to bottom, rgba(20, 5, 5, 0.9), rgba(40, 10, 10, 0.8), rgba(20, 5, 5, 0.9));
+                   -fx-background-radius: 0 25 25 0;
+                   -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.8), 25, 0, 5, 0);
+                   -fx-border-color: #8b0000;
+                   -fx-border-width: 0 2 0 0;
+                   -fx-border-radius: 0 25 25 0;">
             <padding>
-                <Insets top="40" right="50" bottom="40" left="50" />
+                <Insets top="40" right="30" bottom="40" left="30" />
             </padding>
 
-            <!-- Header -->
-            <VBox spacing="10" alignment="CENTER">
+            <!-- RAKCHA Logo and Title -->
+            <VBox alignment="CENTER" spacing="20"
+                style="-fx-background-color: radial-gradient(center 50% 50%, radius 70%, rgba(139, 0, 0, 0.3), rgba(0, 0, 0, 0.1));
+                       -fx-background-radius: 20;
+                       -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.6), 15, 0, 0, 0);
+                       -fx-padding: 20;">
                 <HBox alignment="CENTER" spacing="15">
-                    <FontIcon iconLiteral="fa-user-plus" iconSize="32"
-                        styleClass="signup-header-icon" />
-                    <Label text="Create Account" styleClass="signup-title">
-                        <font>
-                            <Font name="Outfit Bold" size="32.0" />
-                        </font>
-                    </Label>
+                    <FontIcon iconLiteral="fa-film" iconSize="40"
+                        style="-fx-icon-color: #ff4444;
+                               -fx-effect: dropshadow(gaussian, #ff0000, 10, 0, 0, 0);" />
+                    <Label text="RAKCHA"
+                        styleClass="animated-text"
+                        style="-fx-text-fill: #ffffff;
+                               -fx-font-family: 'Arial Black';
+                               -fx-font-size: 32px;
+                               -fx-font-weight: bold;
+                               -fx-effect: dropshadow(gaussian, #8b0000, 8, 0, 2, 2);" />
                 </HBox>
-                <Label text="Join the Rakcha community today" styleClass="signup-subtitle">
-                    <font>
-                        <Font name="Outfit Regular" size="16.0" />
-                    </font>
-                </Label>
+                <Label text="Cinema • Series • Excellence"
+                    style="-fx-text-fill: #cccccc;
+                           -fx-font-family: 'Arial';
+                           -fx-font-size: 14px;
+                           -fx-font-style: italic;" />
             </VBox>
 
-            <!-- Progress Indicator -->
-            <HBox spacing="10" alignment="CENTER" styleClass="progress-container">
-                <Circle radius="8" styleClass="progress-step active-step" />
-                <Line endX="30" styleClass="progress-line" />
-                <Circle radius="8" styleClass="progress-step" />
-                <Line endX="30" styleClass="progress-line" />
-                <Circle radius="8" styleClass="progress-step" />
-                <Label text="Personal Info" styleClass="progress-label" />
-            </HBox>
-
-            <ScrollPane fitToWidth="true" styleClass="transparent-scroll" VBox.vgrow="ALWAYS">
-                <VBox spacing="25">
-                    <!-- Personal Information Section -->
-                    <VBox spacing="20" styleClass="form-section-container">
-                        <Label text="Personal Information" styleClass="section-header">
-                            <graphic>
-                                <FontIcon iconLiteral="fa-user" iconSize="18" />
-                            </graphic>
-                        </Label>
-
-                        <GridPane hgap="20" vgap="18">
-                            <columnConstraints>
-                                <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
-                                <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
-                            </columnConstraints>
-
-                            <!-- First Name -->
-                            <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                                <Label text="First Name" styleClass="modern-field-label">
-                                    <font>
-                                        <Font name="Outfit Medium" size="14.0" />
-                                    </font>
-                                </Label>
-                                <HBox styleClass="modern-input-container">
-                                    <FontIcon iconLiteral="fa-user" iconSize="14"
-                                        styleClass="input-icon" />
-                                    <TextField fx:id="nomTextField"
-                                        promptText="Enter your first name"
-                                        styleClass="modern-text-field" HBox.hgrow="ALWAYS" />
-                                </HBox>
-                            </VBox>
-
-                            <!-- Last Name -->
-                            <VBox spacing="8" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                                <Label text="Last Name" styleClass="modern-field-label">
-                                    <font>
-                                        <Font name="Outfit Medium" size="14.0" />
-                                    </font>
-                                </Label>
-                                <HBox styleClass="modern-input-container">
-                                    <FontIcon iconLiteral="fa-user" iconSize="14"
-                                        styleClass="input-icon" />
-                                    <TextField fx:id="prenomTextField"
-                                        promptText="Enter your last name"
-                                        styleClass="modern-text-field" HBox.hgrow="ALWAYS" />
-                                </HBox>
-                            </VBox>
-
-                            <!-- Email -->
-                            <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="1">
-                                <Label text="Email Address" styleClass="modern-field-label">
-                                    <font>
-                                        <Font name="Outfit Medium" size="14.0" />
-                                    </font>
-                                </Label>
-                                <HBox styleClass="modern-input-container">
-                                    <FontIcon iconLiteral="fa-envelope" iconSize="14"
-                                        styleClass="input-icon" />
-                                    <TextField fx:id="emailTextField"
-                                        promptText="your.email@example.com"
-                                        styleClass="modern-text-field" HBox.hgrow="ALWAYS" />
-                                </HBox>
-                            </VBox>
-
-                            <!-- Phone Number -->
-                            <VBox spacing="8" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                <Label text="Phone Number" styleClass="modern-field-label">
-                                    <font>
-                                        <Font name="Outfit Medium" size="14.0" />
-                                    </font>
-                                </Label>
-                                <HBox styleClass="modern-input-container">
-                                    <FontIcon iconLiteral="fa-phone" iconSize="14"
-                                        styleClass="input-icon" />
-                                    <TextField fx:id="num_telephoneTextField"
-                                        promptText="+1 (555) 123-4567"
-                                        styleClass="modern-text-field" HBox.hgrow="ALWAYS" />
-                                </HBox>
-                            </VBox>
-
-                            <!-- Birth Date -->
-                            <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="2">
-                                <Label text="Date of Birth" styleClass="modern-field-label">
-                                    <font>
-                                        <Font name="Outfit Medium" size="14.0" />
-                                    </font>
-                                </Label>
-                                <HBox styleClass="modern-input-container">
-                                    <FontIcon iconLiteral="fa-calendar" iconSize="14"
-                                        styleClass="input-icon" />
-                                    <DatePicker fx:id="dateDeNaissanceDatePicker"
-                                        promptText="Select date"
-                                        styleClass="modern-date-picker" maxWidth="Infinity" />
-                                </HBox>
-                            </VBox>
-
-                            <!-- Address -->
-                            <VBox spacing="8" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                                <Label text="Address" styleClass="modern-field-label">
-                                    <font>
-                                        <Font name="Outfit Medium" size="14.0" />
-                                    </font>
-                                </Label>
-                                <HBox styleClass="modern-input-container">
-                                    <FontIcon iconLiteral="fa-map-marker" iconSize="14"
-                                        styleClass="input-icon" />
-                                    <TextField fx:id="adresseTextField" promptText="Your address"
-                                        styleClass="modern-text-field" HBox.hgrow="ALWAYS" />
-                                </HBox>
-                            </VBox>
-                        </GridPane>
+            <!-- Benefits Section -->
+            <VBox spacing="20" alignment="CENTER">
+                <Label text="Why Join RAKCHA?"
+                    style="-fx-text-fill: #ffffff;
+                           -fx-font-family: 'Arial Black';
+                           -fx-font-size: 18px;
+                           -fx-font-weight: bold;
+                           -fx-effect: dropshadow(gaussian, #8b0000, 3, 0, 1, 1);" />
+                
+                <!-- Benefit 1 -->
+                <HBox spacing="15" alignment="CENTER_LEFT"
+                    style="-fx-background-color: rgba(139, 0, 0, 0.2);
+                           -fx-background-radius: 10;
+                           -fx-padding: 12;
+                           -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.3), 5, 0, 0, 2);">
+                    <FontIcon iconLiteral="fa-ticket" iconSize="24" style="-fx-icon-color: #ff4444;" />
+                    <VBox spacing="3">
+                        <Label text="Premium Seating"
+                            style="-fx-text-fill: white;
+                                   -fx-font-family: 'Arial';
+                                   -fx-font-size: 14px;
+                                   -fx-font-weight: bold;" />
+                        <Label text="Book the best seats in the house"
+                            style="-fx-text-fill: #cccccc;
+                                   -fx-font-family: 'Arial';
+                                   -fx-font-size: 12px;" />
                     </VBox>
-
-                    <!-- Account Security Section -->
-                    <VBox spacing="20" styleClass="form-section-container">
-                        <Label text="Account Security" styleClass="section-header">
-                            <graphic>
-                                <FontIcon iconLiteral="fa-shield" iconSize="18" />
-                            </graphic>
-                        </Label>
-
-                        <GridPane hgap="20" vgap="18">
-                            <columnConstraints>
-                                <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
-                                <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
-                            </columnConstraints>
-
-                            <!-- Password -->
-                            <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                                <Label text="Password" styleClass="modern-field-label">
-                                    <font>
-                                        <Font name="Outfit Medium" size="14.0" />
-                                    </font>
-                                </Label>
-                                <HBox styleClass="modern-input-container">
-                                    <FontIcon iconLiteral="fa-lock" iconSize="14"
-                                        styleClass="input-icon" />
-                                    <PasswordField fx:id="passwordTextField"
-                                        promptText="Create a strong password"
-                                        styleClass="modern-text-field" HBox.hgrow="ALWAYS" />
-                                </HBox>
-                                <Label text="Use 8+ characters with letters, numbers &amp; symbols"
-                                    styleClass="helper-text" />
-                            </VBox>
-
-                            <!-- Role -->
-                            <VBox spacing="8" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                                <Label text="Account Type" styleClass="modern-field-label">
-                                    <font>
-                                        <Font name="Outfit Medium" size="14.0" />
-                                    </font>
-                                </Label>
-                                <HBox styleClass="modern-input-container">
-                                    <FontIcon iconLiteral="fa-users" iconSize="14"
-                                        styleClass="input-icon" />
-                                    <ComboBox fx:id="roleComboBox" promptText="Select your role"
-                                        styleClass="modern-combo-box" maxWidth="Infinity" />
-                                </HBox>
-                            </VBox>
-                        </GridPane>
+                </HBox>
+                
+                <!-- Benefit 2 -->
+                <HBox spacing="15" alignment="CENTER_LEFT"
+                    style="-fx-background-color: rgba(139, 0, 0, 0.2);
+                           -fx-background-radius: 10;
+                           -fx-padding: 12;
+                           -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.3), 5, 0, 0, 2);">
+                    <FontIcon iconLiteral="fa-play-circle" iconSize="24" style="-fx-icon-color: #ff4444;" />
+                    <VBox spacing="3">
+                        <Label text="4K Streaming"
+                            style="-fx-text-fill: white;
+                                   -fx-font-family: 'Arial';
+                                   -fx-font-size: 14px;
+                                   -fx-font-weight: bold;" />
+                        <Label text="Watch in stunning ultra HD quality"
+                            style="-fx-text-fill: #cccccc;
+                                   -fx-font-family: 'Arial';
+                                   -fx-font-size: 12px;" />
                     </VBox>
-
-                    <!-- Profile Picture Section -->
-                    <VBox spacing="20" styleClass="form-section-container" alignment="CENTER">
-                        <Label text="Profile Picture" styleClass="section-header">
-                            <graphic>
-                                <FontIcon iconLiteral="fa-camera" iconSize="18" />
-                            </graphic>
-                        </Label>
-
-                        <VBox spacing="15" alignment="CENTER">
-                            <StackPane styleClass="profile-image-container">
-                                <Circle radius="60" styleClass="profile-image-border" />
-                                <ImageView fx:id="photoDeProfilImageView" fitHeight="120.0"
-                                    fitWidth="120.0"
-                                    pickOnBounds="true" preserveRatio="true"
-                                    styleClass="profile-image-view">
-                                    <clip>
-                                        <Circle radius="60" centerX="60" centerY="60" />
-                                    </clip>
-                                </ImageView>
-                                <VBox alignment="CENTER" spacing="5" styleClass="upload-overlay">
-                                    <FontIcon iconLiteral="fa-camera" iconSize="24"
-                                        styleClass="upload-icon" />
-                                    <Label text="Upload" styleClass="upload-text" />
-                                </VBox>
-                            </StackPane>
-                            <Button onAction="#importImage" styleClass="modern-upload-btn">
-                                <graphic>
-                                    <HBox spacing="8" alignment="CENTER">
-                                        <FontIcon iconLiteral="fa-upload" iconSize="14" />
-                                        <Label text="Choose Profile Picture" />
-                                    </HBox>
-                                </graphic>
-                            </Button>
-                        </VBox>
+                </HBox>
+                
+                <!-- Benefit 3 -->
+                <HBox spacing="15" alignment="CENTER_LEFT"
+                    style="-fx-background-color: rgba(139, 0, 0, 0.2);
+                           -fx-background-radius: 10;
+                           -fx-padding: 12;
+                           -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.3), 5, 0, 0, 2);">
+                    <FontIcon iconLiteral="fa-star" iconSize="24" style="-fx-icon-color: #ff4444;" />
+                    <VBox spacing="3">
+                        <Label text="VIP Access"
+                            style="-fx-text-fill: white;
+                                   -fx-font-family: 'Arial';
+                                   -fx-font-size: 14px;
+                                   -fx-font-weight: bold;" />
+                        <Label text="Exclusive events and pre-screenings"
+                            style="-fx-text-fill: #cccccc;
+                                   -fx-font-family: 'Arial';
+                                   -fx-font-size: 12px;" />
                     </VBox>
-
-                    <!-- Terms and Actions -->
-                    <VBox spacing="20" alignment="CENTER">
-                        <CheckBox text="I agree to the Terms of Service and Privacy Policy"
-                            styleClass="terms-checkbox" />
-
-                        <HBox spacing="15" alignment="CENTER">
-                            <Button fx:id="signUpButton" onAction="#signup"
-                                styleClass="modern-primary-btn">
-                                <graphic>
-                                    <HBox spacing="10" alignment="CENTER">
-                                        <FontIcon iconLiteral="fa-user-plus" iconSize="16" />
-                                        <Label text="Create Account" styleClass="btn-text" />
-                                    </HBox>
-                                </graphic>
-                                <padding>
-                                    <Insets top="15" right="30" bottom="15" left="30" />
-                                </padding>
-                            </Button>
-                            <Button fx:id="loginButton" onAction="#switchToLogin"
-                                styleClass="modern-secondary-btn">
-                                <graphic>
-                                    <HBox spacing="8" alignment="CENTER">
-                                        <FontIcon iconLiteral="fa-sign-in" iconSize="14" />
-                                        <Label text="Back to Login" />
-                                    </HBox>
-                                </graphic>
-                            </Button>
-                        </HBox>
-                    </VBox>
-                </VBox>
-            </ScrollPane>
-        </VBox>
-
-        <!-- Right Side - Welcome & Features -->
-        <VBox styleClass="welcome-features-section" minWidth="600.0" alignment="CENTER" spacing="35"
-            HBox.hgrow="ALWAYS">
-            <padding>
-                <Insets top="50" right="50" bottom="50" left="50" />
-            </padding>
-
-            <!-- Welcome Message -->
-            <VBox alignment="CENTER" spacing="20">
-                <ImageView fitHeight="80.0" fitWidth="80.0" preserveRatio="true"
-                    styleClass="welcome-logo">
-                    <Image url="@Logo.png" />
-                </ImageView>
-                <Label text="Join Rakcha Today!" styleClass="welcome-title">
-                    <font>
-                        <Font name="Outfit Bold" size="38.0" />
-                    </font>
-                </Label>
-                <Label text="Experience the future of cinema entertainment"
-                    styleClass="welcome-subtitle">
-                    <font>
-                        <Font name="Outfit Regular" size="18.0" />
-                    </font>
-                </Label>
-            </VBox>
-
-            <!-- Feature Benefits -->
-            <VBox spacing="25" maxWidth="450">
-                <VBox spacing="15" styleClass="benefit-card">
-                    <HBox spacing="15" alignment="CENTER_LEFT">
-                        <Circle radius="25" styleClass="benefit-icon-circle">
-                            <effect>
-                                <DropShadow color="#e74141" radius="8" offsetX="0" offsetY="2" />
-                            </effect>
-                        </Circle>
-                        <FontIcon iconLiteral="fa-ticket" iconSize="20" styleClass="benefit-icon" />
-                    </HBox>
-                    <VBox spacing="8">
-                        <Label text="Smart Booking System" styleClass="benefit-title" />
-                        <Label
-                            text="Book tickets with AI-powered seat recommendations and real-time availability"
-                            styleClass="benefit-description" wrapText="true" />
-                    </VBox>
-                </VBox>
-
-                <VBox spacing="15" styleClass="benefit-card">
-                    <HBox spacing="15" alignment="CENTER_LEFT">
-                        <Circle radius="25" styleClass="benefit-icon-circle">
-                            <effect>
-                                <DropShadow color="#e74141" radius="8" offsetX="0" offsetY="2" />
-                            </effect>
-                        </Circle>
-                        <FontIcon iconLiteral="fa-star" iconSize="20" styleClass="benefit-icon" />
-                    </HBox>
-                    <VBox spacing="8">
-                        <Label text="Premium Content Access" styleClass="benefit-title" />
-                        <Label
-                            text="Exclusive series, early movie releases, and behind-the-scenes content"
-                            styleClass="benefit-description" wrapText="true" />
-                    </VBox>
-                </VBox>
-
-                <VBox spacing="15" styleClass="benefit-card">
-                    <HBox spacing="15" alignment="CENTER_LEFT">
-                        <Circle radius="25" styleClass="benefit-icon-circle">
-                            <effect>
-                                <DropShadow color="#e74141" radius="8" offsetX="0" offsetY="2" />
-                            </effect>
-                        </Circle>
-                        <FontIcon iconLiteral="fa-gift" iconSize="20" styleClass="benefit-icon" />
-                    </HBox>
-                    <VBox spacing="8">
-                        <Label text="Loyalty Rewards" styleClass="benefit-title" />
-                        <Label text="Earn points with every purchase and unlock exclusive discounts"
-                            styleClass="benefit-description" wrapText="true" />
-                    </VBox>
-                </VBox>
+                </HBox>
             </VBox>
 
             <!-- Social Proof -->
-            <VBox spacing="15" alignment="CENTER" styleClass="social-proof">
-                <HBox spacing="10" alignment="CENTER">
-                    <FontIcon iconLiteral="fa-users" iconSize="20" styleClass="social-icon" />
-                    <Label text="Join 10,000+ happy customers" styleClass="social-text" />
-                </HBox>
-                <HBox spacing="5" alignment="CENTER">
-                    <FontIcon iconLiteral="fa-star" iconSize="16" styleClass="star-icon" />
-                    <FontIcon iconLiteral="fa-star" iconSize="16" styleClass="star-icon" />
-                    <FontIcon iconLiteral="fa-star" iconSize="16" styleClass="star-icon" />
-                    <FontIcon iconLiteral="fa-star" iconSize="16" styleClass="star-icon" />
-                    <FontIcon iconLiteral="fa-star" iconSize="16" styleClass="star-icon" />
-                    <Label text="4.9/5 rating" styleClass="rating-text" />
-                </HBox>
+            <HBox alignment="CENTER" spacing="5"
+                style="-fx-background-color: linear-gradient(to right, transparent, rgba(139, 0, 0, 0.3), transparent);
+                       -fx-background-radius: 5;
+                       -fx-padding: 8;">
+                <Circle radius="2" style="-fx-fill: #8b0000;" />
+                <Rectangle width="15" height="2" style="-fx-fill: #8b0000;" />
+                <Circle radius="2" style="-fx-fill: #8b0000;" />
+                <Label text="⭐⭐⭐⭐⭐" style="-fx-text-fill: #ff4444; -fx-font-size: 14px;" />
+                <Circle radius="2" style="-fx-fill: #8b0000;" />
+                <Rectangle width="15" height="2" style="-fx-fill: #8b0000;" />
+                <Circle radius="2" style="-fx-fill: #8b0000;" />
+            </HBox>
+        </VBox>
+
+        <!-- Right Side - Registration Form -->
+        <VBox alignment="CENTER" spacing="20" prefWidth="800.0" maxWidth="800.0"
+            style="-fx-background-color: radial-gradient(center 50% 50%, radius 80%, rgba(15, 15, 15, 0.95), rgba(5, 5, 5, 0.98));
+                   -fx-background-radius: 25 0 0 25;
+                   -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.3), 30, 0, 0, 0);">
+            <padding>
+                <Insets top="40" right="60" bottom="40" left="60" />
+            </padding>
+
+            <!-- Form Header -->
+            <VBox spacing="15" alignment="CENTER">
+                <StackPane>
+                    <Rectangle width="300" height="80"
+                        style="-fx-fill: radial-gradient(center 50% 50%, radius 70%, rgba(139, 0, 0, 0.2), transparent);
+                               -fx-background-radius: 20;"
+                        opacity="0.8" />
+                    <VBox alignment="CENTER" spacing="5">
+                        <Label text="CREATE ACCOUNT"
+                            styleClass="animated-text"
+                            style="-fx-text-fill: #ffffff;
+                                   -fx-font-family: 'Arial Black';
+                                   -fx-font-size: 28px;
+                                   -fx-font-weight: bold;
+                                   -fx-effect: dropshadow(gaussian, #8b0000, 6, 0, 1, 1);" />
+                        <Label text="Join the World of Cinema"
+                            style="-fx-text-fill: #cccccc;
+                                   -fx-font-family: 'Arial';
+                                   -fx-font-size: 14px;
+                                   -fx-font-style: italic;" />
+                    </VBox>
+                </StackPane>
             </VBox>
+
+            <!-- Form Fields in a ScrollPane -->
+            <ScrollPane fitToWidth="true" maxHeight="400" prefHeight="400"
+                style="-fx-background-color: transparent;
+                       -fx-background: transparent;
+                       -fx-border-color: transparent;
+                       -fx-focus-color: transparent;
+                       -fx-faint-focus-color: transparent;">
+                <VBox spacing="20" alignment="CENTER" maxWidth="650">
+                    <!-- Personal Information Section -->
+                    <VBox spacing="20">
+                        <Label text="Personal Information"
+                            style="-fx-text-fill: #ff6666;
+                                   -fx-font-family: 'Arial';
+                                   -fx-font-size: 16px;
+                                   -fx-font-weight: bold;" />
+                        
+                        <!-- First Name and Last Name in one row -->
+                        <HBox spacing="20">
+                            <!-- First Name -->
+                            <VBox spacing="8" HBox.hgrow="ALWAYS">
+                                <Label text="First Name"
+                                    style="-fx-text-fill: #cccccc;
+                                           -fx-font-family: 'Arial';
+                                           -fx-font-size: 13px;
+                                           -fx-font-weight: bold;" />
+                                <StackPane>
+                                    <Rectangle width="315" height="50"
+                                        style="-fx-fill: linear-gradient(to bottom, rgba(40, 40, 40, 0.8), rgba(20, 20, 20, 0.9));
+                                               -fx-stroke: #8b0000;
+                                               -fx-stroke-width: 1;
+                                               -fx-background-radius: 12;
+                                               -fx-stroke-radius: 12;
+                                               -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.3), 8, 0, 0, 0);" />
+                                    <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-padding: 0 20 0 20;">
+                                        <FontIcon iconLiteral="fa-user" iconSize="16"
+                                            style="-fx-icon-color: #8b0000;" />
+                                        <TextField fx:id="nomTextField"
+                                            promptText="Enter your first name"
+                                            style="-fx-background-color: transparent;
+                                                   -fx-text-fill: white;
+                                                   -fx-font-family: 'Arial';
+                                                   -fx-font-size: 14px;
+                                                   -fx-border-color: transparent;
+                                                   -fx-focus-color: transparent;
+                                                   -fx-faint-focus-color: transparent;
+                                                   -fx-prompt-text-fill: #666666;"
+                                            HBox.hgrow="ALWAYS" />
+                                    </HBox>
+                                </StackPane>
+                            </VBox>
+                            
+                            <!-- Last Name -->
+                            <VBox spacing="8" HBox.hgrow="ALWAYS">
+                                <Label text="Last Name"
+                                    style="-fx-text-fill: #cccccc;
+                                           -fx-font-family: 'Arial';
+                                           -fx-font-size: 13px;
+                                           -fx-font-weight: bold;" />
+                                <StackPane>
+                                    <Rectangle width="315" height="50"
+                                        style="-fx-fill: linear-gradient(to bottom, rgba(40, 40, 40, 0.8), rgba(20, 20, 20, 0.9));
+                                               -fx-stroke: #8b0000;
+                                               -fx-stroke-width: 1;
+                                               -fx-background-radius: 12;
+                                               -fx-stroke-radius: 12;
+                                               -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.3), 8, 0, 0, 0);" />
+                                    <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-padding: 0 20 0 20;">
+                                        <FontIcon iconLiteral="fa-user" iconSize="16"
+                                            style="-fx-icon-color: #8b0000;" />
+                                        <TextField fx:id="prenomTextField"
+                                            promptText="Enter your last name"
+                                            style="-fx-background-color: transparent;
+                                                   -fx-text-fill: white;
+                                                   -fx-font-family: 'Arial';
+                                                   -fx-font-size: 14px;
+                                                   -fx-border-color: transparent;
+                                                   -fx-focus-color: transparent;
+                                                   -fx-faint-focus-color: transparent;
+                                                   -fx-prompt-text-fill: #666666;"
+                                            HBox.hgrow="ALWAYS" />
+                                    </HBox>
+                                </StackPane>
+                            </VBox>
+                        </HBox>
+                        
+                        <!-- Email -->
+                        <VBox spacing="8">
+                            <Label text="Email Address"
+                                style="-fx-text-fill: #cccccc;
+                                       -fx-font-family: 'Arial';
+                                       -fx-font-size: 13px;
+                                       -fx-font-weight: bold;" />
+                            <StackPane>
+                                <Rectangle width="650" height="50"
+                                    style="-fx-fill: linear-gradient(to bottom, rgba(40, 40, 40, 0.8), rgba(20, 20, 20, 0.9));
+                                           -fx-stroke: #8b0000;
+                                           -fx-stroke-width: 1;
+                                           -fx-background-radius: 12;
+                                           -fx-stroke-radius: 12;
+                                           -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.3), 8, 0, 0, 0);" />
+                                <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-padding: 0 20 0 20;">
+                                    <FontIcon iconLiteral="fa-envelope" iconSize="16"
+                                        style="-fx-icon-color: #8b0000;" />
+                                    <TextField fx:id="emailTextField"
+                                        promptText="your.email@example.com"
+                                        style="-fx-background-color: transparent;
+                                               -fx-text-fill: white;
+                                               -fx-font-family: 'Arial';
+                                               -fx-font-size: 14px;
+                                               -fx-border-color: transparent;
+                                               -fx-focus-color: transparent;
+                                               -fx-faint-focus-color: transparent;
+                                               -fx-prompt-text-fill: #666666;"
+                                        HBox.hgrow="ALWAYS" />
+                                </HBox>
+                            </StackPane>
+                        </VBox>
+                        
+                        <!-- Phone Number and Birth Date in one row -->
+                        <HBox spacing="20">
+                            <!-- Phone Number -->
+                            <VBox spacing="8" HBox.hgrow="ALWAYS">
+                                <Label text="Phone Number"
+                                    style="-fx-text-fill: #cccccc;
+                                           -fx-font-family: 'Arial';
+                                           -fx-font-size: 13px;
+                                           -fx-font-weight: bold;" />
+                                <StackPane>
+                                    <Rectangle width="315" height="50"
+                                        style="-fx-fill: linear-gradient(to bottom, rgba(40, 40, 40, 0.8), rgba(20, 20, 20, 0.9));
+                                               -fx-stroke: #8b0000;
+                                               -fx-stroke-width: 1;
+                                               -fx-background-radius: 12;
+                                               -fx-stroke-radius: 12;
+                                               -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.3), 8, 0, 0, 0);" />
+                                    <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-padding: 0 20 0 20;">
+                                        <FontIcon iconLiteral="fa-phone" iconSize="16"
+                                            style="-fx-icon-color: #8b0000;" />
+                                        <TextField fx:id="num_telephoneTextField"
+                                            promptText="+1 (555) 123-4567"
+                                            style="-fx-background-color: transparent;
+                                                   -fx-text-fill: white;
+                                                   -fx-font-family: 'Arial';
+                                                   -fx-font-size: 14px;
+                                                   -fx-border-color: transparent;
+                                                   -fx-focus-color: transparent;
+                                                   -fx-faint-focus-color: transparent;
+                                                   -fx-prompt-text-fill: #666666;"
+                                            HBox.hgrow="ALWAYS" />
+                                    </HBox>
+                                </StackPane>
+                            </VBox>
+                            
+                            <!-- Birth Date -->
+                            <VBox spacing="8" HBox.hgrow="ALWAYS">
+                                <Label text="Date of Birth"
+                                    style="-fx-text-fill: #cccccc;
+                                           -fx-font-family: 'Arial';
+                                           -fx-font-size: 13px;
+                                           -fx-font-weight: bold;" />
+                                <StackPane>
+                                    <Rectangle width="315" height="50"
+                                        style="-fx-fill: linear-gradient(to bottom, rgba(40, 40, 40, 0.8), rgba(20, 20, 20, 0.9));
+                                               -fx-stroke: #8b0000;
+                                               -fx-stroke-width: 1;
+                                               -fx-background-radius: 12;
+                                               -fx-stroke-radius: 12;
+                                               -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.3), 8, 0, 0, 0);" />
+                                    <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-padding: 0 20 0 20;">
+                                        <FontIcon iconLiteral="fa-calendar" iconSize="16"
+                                            style="-fx-icon-color: #8b0000;" />
+                                        <DatePicker fx:id="dateDeNaissanceDatePicker"
+                                            promptText="Select date of birth"
+                                            style="-fx-background-color: transparent;
+                                                   -fx-text-fill: white;
+                                                   -fx-font-family: 'Arial';
+                                                   -fx-font-size: 14px;
+                                                   -fx-border-color: transparent;
+                                                   -fx-background-radius: 0;
+                                                   -fx-focus-color: transparent;
+                                                   -fx-faint-focus-color: transparent;"
+                                            maxWidth="Infinity" HBox.hgrow="ALWAYS" />
+                                    </HBox>
+                                </StackPane>
+                            </VBox>
+                        </HBox>
+                        
+                        <!-- Address -->
+                        <VBox spacing="8">
+                            <Label text="Address"
+                                style="-fx-text-fill: #cccccc;
+                                       -fx-font-family: 'Arial';
+                                       -fx-font-size: 13px;
+                                       -fx-font-weight: bold;" />
+                            <StackPane>
+                                <Rectangle width="650" height="50"
+                                    style="-fx-fill: linear-gradient(to bottom, rgba(40, 40, 40, 0.8), rgba(20, 20, 20, 0.9));
+                                           -fx-stroke: #8b0000;
+                                           -fx-stroke-width: 1;
+                                           -fx-background-radius: 12;
+                                           -fx-stroke-radius: 12;
+                                           -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.3), 8, 0, 0, 0);" />
+                                <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-padding: 0 20 0 20;">
+                                    <FontIcon iconLiteral="fa-map-marker" iconSize="16"
+                                        style="-fx-icon-color: #8b0000;" />
+                                    <TextField fx:id="adresseTextField"
+                                        promptText="Your address"
+                                        style="-fx-background-color: transparent;
+                                               -fx-text-fill: white;
+                                               -fx-font-family: 'Arial';
+                                               -fx-font-size: 14px;
+                                               -fx-border-color: transparent;
+                                               -fx-focus-color: transparent;
+                                               -fx-faint-focus-color: transparent;
+                                               -fx-prompt-text-fill: #666666;"
+                                        HBox.hgrow="ALWAYS" />
+                                </HBox>
+                            </StackPane>
+                        </VBox>
+                    </VBox>
+                    
+                    <!-- Security Section -->
+                    <VBox spacing="20">
+                        <Label text="Account Security"
+                            style="-fx-text-fill: #ff6666;
+                                   -fx-font-family: 'Arial';
+                                   -fx-font-size: 16px;
+                                   -fx-font-weight: bold;" />
+                        
+                        <!-- Password and Role in one row -->
+                        <HBox spacing="20">
+                            <!-- Password -->
+                            <VBox spacing="8" HBox.hgrow="ALWAYS">
+                                <Label text="Password"
+                                    style="-fx-text-fill: #cccccc;
+                                           -fx-font-family: 'Arial';
+                                           -fx-font-size: 13px;
+                                           -fx-font-weight: bold;" />
+                                <StackPane>
+                                    <Rectangle width="315" height="50"
+                                        style="-fx-fill: linear-gradient(to bottom, rgba(40, 40, 40, 0.8), rgba(20, 20, 20, 0.9));
+                                               -fx-stroke: #8b0000;
+                                               -fx-stroke-width: 1;
+                                               -fx-background-radius: 12;
+                                               -fx-stroke-radius: 12;
+                                               -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.3), 8, 0, 0, 0);" />
+                                    <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-padding: 0 20 0 20;">
+                                        <FontIcon iconLiteral="fa-lock" iconSize="16"
+                                            style="-fx-icon-color: #8b0000;" />
+                                        <PasswordField fx:id="passwordTextField"
+                                            promptText="Create a strong password"
+                                            style="-fx-background-color: transparent;
+                                                   -fx-text-fill: white;
+                                                   -fx-font-family: 'Arial';
+                                                   -fx-font-size: 14px;
+                                                   -fx-border-color: transparent;
+                                                   -fx-focus-color: transparent;
+                                                   -fx-faint-focus-color: transparent;
+                                                   -fx-prompt-text-fill: #666666;"
+                                            HBox.hgrow="ALWAYS" />
+                                    </HBox>
+                                </StackPane>
+                                <Label text="Use 8+ characters with letters, numbers &amp; symbols"
+                                    style="-fx-text-fill: #888888;
+                                           -fx-font-family: 'Arial';
+                                           -fx-font-size: 11px;" />
+                            </VBox>
+                            
+                            <!-- Role -->
+                            <VBox spacing="8" HBox.hgrow="ALWAYS">
+                                <Label text="Account Type"
+                                    style="-fx-text-fill: #cccccc;
+                                           -fx-font-family: 'Arial';
+                                           -fx-font-size: 13px;
+                                           -fx-font-weight: bold;" />
+                                <StackPane>
+                                    <Rectangle width="315" height="50"
+                                        style="-fx-fill: linear-gradient(to bottom, rgba(40, 40, 40, 0.8), rgba(20, 20, 20, 0.9));
+                                               -fx-stroke: #8b0000;
+                                               -fx-stroke-width: 1;
+                                               -fx-background-radius: 12;
+                                               -fx-stroke-radius: 12;
+                                               -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.3), 8, 0, 0, 0);" />
+                                    <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-padding: 0 20 0 20;">
+                                        <FontIcon iconLiteral="fa-users" iconSize="16"
+                                            style="-fx-icon-color: #8b0000;" />
+                                        <ComboBox fx:id="roleComboBox"
+                                            promptText="Select your role"
+                                            style="-fx-background-color: transparent;
+                                                   -fx-text-fill: white;
+                                                   -fx-font-family: 'Arial';
+                                                   -fx-font-size: 14px;
+                                                   -fx-border-color: transparent;
+                                                   -fx-focus-color: transparent;
+                                                   -fx-faint-focus-color: transparent;"
+                                            maxWidth="Infinity" HBox.hgrow="ALWAYS" />
+                                    </HBox>
+                                </StackPane>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+                    
+                    <!-- Profile Picture Section -->
+                    <VBox spacing="15" alignment="CENTER">
+                        <Label text="Profile Picture"
+                            style="-fx-text-fill: #ff6666;
+                                   -fx-font-family: 'Arial';
+                                   -fx-font-size: 16px;
+                                   -fx-font-weight: bold;" />
+                        
+                        <StackPane>
+                            <Circle radius="60" 
+                                style="-fx-fill: linear-gradient(to bottom right, #2a0000, #440000);
+                                       -fx-stroke: #8b0000;
+                                       -fx-stroke-width: 2;
+                                       -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.7), 15, 0, 0, 0);" />
+                            
+                            <ImageView fx:id="photoDeProfilImageView" fitHeight="120.0" fitWidth="120.0"
+                                preserveRatio="true"
+                                style="-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.8), 10, 0, 0, 0);">
+                                <clip>
+                                    <Circle radius="60" centerX="60" centerY="60" />
+                                </clip>
+                            </ImageView>
+                            
+                            <StackPane style="-fx-cursor: hand;">
+                                <Circle radius="60" 
+                                    style="-fx-fill: rgba(0, 0, 0, 0.5);
+                                           -fx-opacity: 0.7;" />
+                                <VBox alignment="CENTER" spacing="10">
+                                    <FontIcon iconLiteral="fa-camera" iconSize="24" 
+                                        style="-fx-icon-color: white;" />
+                                    <Label text="Upload Photo"
+                                        style="-fx-text-fill: white;
+                                               -fx-font-family: 'Arial';
+                                               -fx-font-size: 12px;
+                                               -fx-font-weight: bold;" />
+                                </VBox>
+                            </StackPane>
+                        </StackPane>
+                        
+                        <Button onAction="#importImage"
+                            style="-fx-background-color: transparent;
+                                   -fx-text-fill: #ff6666;
+                                   -fx-font-family: 'Arial';
+                                   -fx-font-size: 13px;
+                                   -fx-font-weight: bold;
+                                   -fx-border-color: #ff6666;
+                                   -fx-border-width: 1;
+                                   -fx-border-radius: 20;
+                                   -fx-background-radius: 20;
+                                   -fx-cursor: hand;
+                                   -fx-padding: 8 20 8 20;">
+                            <graphic>
+                                <HBox spacing="10" alignment="CENTER">
+                                    <FontIcon iconLiteral="fa-upload" iconSize="14" 
+                                        style="-fx-icon-color: #ff6666;" />
+                                    <Label text="Choose Profile Picture"
+                                        style="-fx-text-fill: #ff6666;
+                                               -fx-font-family: 'Arial';
+                                               -fx-font-size: 13px;
+                                               -fx-font-weight: bold;" />
+                                </HBox>
+                            </graphic>
+                        </Button>
+                    </VBox>
+                    
+                    <!-- Terms and Conditions -->
+                    <CheckBox text="I agree to the Terms of Service and Privacy Policy"
+                        style="-fx-text-fill: #cccccc;
+                               -fx-font-family: 'Arial';
+                               -fx-font-size: 13px;" />
+                </VBox>
+            </ScrollPane>
+
+            <!-- Action Buttons -->
+            <HBox spacing="20" alignment="CENTER">
+                <StackPane>
+                    <Rectangle width="300" height="55"
+                        style="-fx-fill: radial-gradient(center 50% 50%, radius 60%, rgba(139, 0, 0, 0.4), transparent);
+                               -fx-background-radius: 15;"
+                        opacity="0.8" />
+                    <Button fx:id="signUpButton" onAction="#signup"
+                        styleClass="animated-button"
+                        style="-fx-background-color: linear-gradient(to bottom right, #8b0000, #440000, #8b0000);
+                               -fx-text-fill: white;
+                               -fx-font-family: 'Arial Black';
+                               -fx-font-size: 16px;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 15;
+                               -fx-border-color: #ff4444;
+                               -fx-border-width: 1;
+                               -fx-border-radius: 15;
+                               -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.8), 15, 0, 0, 3);
+                               -fx-cursor: hand;
+                               -fx-padding: 18 50 18 50;"
+                        maxWidth="300">
+                        <graphic>
+                            <HBox spacing="15" alignment="CENTER">
+                                <FontIcon iconLiteral="fa-user-plus" iconSize="18" 
+                                    style="-fx-icon-color: white;" />
+                                <Label text="CREATE ACCOUNT"
+                                    style="-fx-text-fill: white;
+                                           -fx-font-family: 'Arial Black';
+                                           -fx-font-size: 16px;
+                                           -fx-font-weight: bold;" />
+                            </HBox>
+                        </graphic>
+                    </Button>
+                </StackPane>
+            </HBox>
+
+            <!-- Login Link -->
+            <HBox alignment="CENTER" spacing="10">
+                <Label text="Already have an account?"
+                    style="-fx-text-fill: #888888;
+                           -fx-font-family: 'Arial';
+                           -fx-font-size: 13px;" />
+                <Button fx:id="loginButton" onAction="#switchToLogin" text="Sign In"
+                    styleClass="animated-button"
+                    style="-fx-background-color: transparent;
+                           -fx-text-fill: #ff6666;
+                           -fx-font-family: 'Arial';
+                           -fx-font-size: 13px;
+                           -fx-font-weight: bold;
+                           -fx-border-color: #ff6666;
+                           -fx-border-width: 1;
+                           -fx-border-radius: 20;
+                           -fx-background-radius: 20;
+                           -fx-cursor: hand;
+                           -fx-padding: 8 20 8 20;" />
+            </HBox>
         </VBox>
     </HBox>
+
+    <!-- Foreground particles layer - Added at the end to ensure they're on top -->
+    <AnchorPane style="-fx-background-color: transparent;" mouseTransparent="true">
+        <!-- Enhanced particles with better visibility and positioning -->
+        <Circle fx:id="particle1" radius="4" layoutX="200" layoutY="150" 
+            styleClass="floating-particle, glow-red"
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff4444, #aa0000); 
+                   -fx-effect: dropshadow(gaussian, #ff0000, 15, 0, 0, 0);
+                   -fx-opacity: 0.8;
+                   -fx-z-index: 200;" />
+                   
+        <Circle fx:id="particle2" radius="5" layoutX="800" layoutY="250" 
+            styleClass="floating-particle, glow-red"
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff3333, #880000); 
+                   -fx-effect: dropshadow(gaussian, #ff0000, 18, 0, 0, 0);
+                   -fx-opacity: 0.85;
+                   -fx-z-index: 201;" />
+                   
+        <Circle fx:id="particle3" radius="6" layoutX="300" layoutY="500" 
+            styleClass="floating-particle, glow-red"
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff6666, #bb0000); 
+                   -fx-effect: dropshadow(gaussian, #ff3333, 20, 0, 0, 0);
+                   -fx-opacity: 0.9;
+                   -fx-z-index: 202;" />
+                   
+        <Circle fx:id="particle4" radius="3.5" layoutX="900" layoutY="400" 
+            styleClass="floating-particle, glow-red"
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff5555, #990000); 
+                   -fx-effect: dropshadow(gaussian, #ff1111, 15, 0, 0, 0);
+                   -fx-opacity: 0.8;
+                   -fx-z-index: 203;" />
+                   
+        <Circle fx:id="particle5" radius="4.5" layoutX="150" layoutY="350" 
+            styleClass="floating-particle, glow-red"
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff2222, #770000); 
+                   -fx-effect: dropshadow(gaussian, #ff0000, 16, 0, 0, 0);
+                   -fx-opacity: 0.95;
+                   -fx-z-index: 204;" />
+                   
+        <Circle fx:id="particle6" radius="3" layoutX="750" layoutY="450" 
+            styleClass="floating-particle, glow-red"
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff7777, #aa2222); 
+                   -fx-effect: dropshadow(gaussian, #ff4444, 12, 0, 0, 0);
+                   -fx-opacity: 0.8;
+                   -fx-z-index: 205;" />
+                   
+        <Circle fx:id="particle7" radius="4.5" layoutX="500" layoutY="200" 
+            styleClass="floating-particle, glow-red"
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff5555, #aa2222); 
+                   -fx-effect: dropshadow(gaussian, #ff2222, 17, 0, 0, 0);
+                   -fx-opacity: 0.85;
+                   -fx-z-index: 206;" />
+                   
+        <Circle fx:id="particle8" radius="3" layoutX="650" layoutY="350" 
+            styleClass="floating-particle, glow-red"
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff3333, #990000); 
+                   -fx-effect: dropshadow(gaussian, #ff0000, 14, 0, 0, 0);
+                   -fx-opacity: 0.8;
+                   -fx-z-index: 207;" />
+                   
+        <Circle fx:id="particle9" radius="5" layoutX="450" layoutY="450" 
+            styleClass="floating-particle, glow-red"
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff6666, #cc2222); 
+                   -fx-effect: dropshadow(gaussian, #ff3333, 18, 0, 0, 0);
+                   -fx-opacity: 0.9;
+                   -fx-z-index: 208;" />
+                   
+        <Circle fx:id="particle10" radius="2.5" layoutX="1050" layoutY="250" 
+            styleClass="floating-particle, glow-red"
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff4444, #880000); 
+                   -fx-effect: dropshadow(gaussian, #ff1111, 12, 0, 0, 0);
+                   -fx-opacity: 0.75;
+                   -fx-z-index: 209;" />
+                   
+        <Circle fx:id="particle11" radius="4" layoutX="350" layoutY="100" 
+            styleClass="floating-particle, glow-red"
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff7777, #bb2222); 
+                   -fx-effect: dropshadow(gaussian, #ff4444, 16, 0, 0, 0);
+                   -fx-opacity: 0.85;
+                   -fx-z-index: 210;" />
+                   
+        <Circle fx:id="particle12" radius="3.5" layoutX="950" layoutY="530" 
+            styleClass="floating-particle, glow-red"
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff5555, #aa0000); 
+                   -fx-effect: dropshadow(gaussian, #ff2222, 15, 0, 0, 0);
+                   -fx-opacity: 0.8;
+                   -fx-z-index: 211;" />
+    </AnchorPane>
 </StackPane>
