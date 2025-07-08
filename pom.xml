@@ -19,7 +19,7 @@
     <logback.version>1.4.12</logback.version>
     <h2.version>2.2.224</h2.version>
     <testfx.version>4.0.18</testfx.version>
-    <javafx.version>20.0.2</javafx.version>
+    <javafx.version>21.0.2</javafx.version>
   </properties>
 
   <repositories>
