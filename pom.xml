@@ -19,7 +19,8 @@
     <logback.version>1.4.12</logback.version>
     <h2.version>2.2.224</h2.version>
     <testfx.version>4.0.18</testfx.version>
-    <javafx.version>20.0.2</javafx.version>
+    <javafx.version>21.0.2</javafx.version>
+    <jpro.version>2024.4.1</jpro.version>
   </properties>
 
   <repositories>
@@ -47,7 +48,7 @@
     <dependency>
       <groupId>one.jpro</groupId>
       <artifactId>jpro-webapi</artifactId>
-      <version>2025.2.1</version>
+      <version>${jpro.version}</version>
       <scope>compile</scope>
     </dependency>
     <!-- H2 Database for development -->
@@ -558,7 +559,7 @@
       <plugin>
         <groupId>one.jpro</groupId>
         <artifactId>jpro-maven-plugin</artifactId>
-        <version>2025.2.1</version>
+        <version>${jpro.version}</version>
         <configuration>
           <mainClassName>com.esprit.MainApp</mainClassName>
         </configuration>
