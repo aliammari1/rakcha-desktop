@@ -19,7 +19,7 @@ COPY src/ src/
 COPY .env.example .env
 
 # Build the application
-RUN mvn clean compile jpro:build -DskipTests
+RUN mvn clean compile -DskipTests
 
 # Expose port
 EXPOSE 8080
