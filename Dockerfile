@@ -1,9 +1,27 @@
-FROM eclipse-temurin:21-jdk-alpine
+FROM amd64/ubuntu:24.04
 
-# Install required packages (Alpine uses apk, not apt-get)
-RUN apk update && apk add --no-cache \
-    maven \
-    curl
+# Update package lists
+RUN apt-get update
+
+# Install X11 and GTK dependencies for JavaFX
+RUN apt-get install -y xorg libgtk-3-0
+
+# Install wget and software-properties-common
+RUN apt-get install -y wget software-properties-common
+
+# Add the Adoptium (Eclipse Temurin) APT repository and import the GPG key
+RUN wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public | apt-key add - && \
+    add-apt-repository --yes https://packages.adoptium.net/artifactory/deb/
+
+# Install Temurin 21 JDK and Maven
+RUN apt-get update && \
+    apt-get install -y temurin-21-jdk maven curl && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Set JAVA_HOME environment variable
+ENV JAVA_HOME=/usr/lib/jvm/temurin-21-jdk-amd64
+ENV PATH=$JAVA_HOME/bin:$PATH
 
 # Set working directory
 WORKDIR /app
