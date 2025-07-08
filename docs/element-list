@@ -12,7 +12,6 @@ com.esprit.models.films
 com.esprit.models.products
 com.esprit.models.series
 com.esprit.models.users
-com.esprit.rewrite
 com.esprit.services
 com.esprit.services.base
 com.esprit.services.cinemas

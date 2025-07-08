@@ -1,7 +1,5 @@
 package com.esprit.models.products;
 
-import jakarta.persistence.*;
-
 import com.esprit.models.users.User;
 
 import lombok.AllArgsConstructor;
@@ -12,8 +10,7 @@ import lombok.NoArgsConstructor;
 /**
  * Is used to represent a shopping cart containing various products and users.
  */
-@Entity
-@Table(name = "shopping_cart")
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -28,19 +25,12 @@ import lombok.NoArgsConstructor;
  */
 public class ShoppingCart {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "quantity", nullable = false)
     private int quantity;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "produit_id", nullable = false)
     private Product product;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     /**

@@ -3,8 +3,6 @@ package com.esprit.models.cinemas;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.*;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,8 +11,7 @@ import lombok.NoArgsConstructor;
 /**
  * Represents a cinema hall (room) within a cinema.
  */
-@Entity
-@Table(name = "cinema_hall")
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -29,30 +26,26 @@ import lombok.NoArgsConstructor;
  */
 public class CinemaHall {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cinema_id")
     private Cinema cinema;
 
-    @Column(name = "seat_capacity")
     private Integer seatCapacity;
 
-    @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "cinemaHall", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Seat> seats = new ArrayList<>();
 
-    @OneToMany(mappedBy = "cinemaHall", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<MovieSession> movieSessions = new ArrayList<>();
 
     /**
      * Constructor without id for creating new cinema hall instances.
+     * 
+     * @param cinema       the cinema this hall belongs to
+     * @param seatCapacity the seating capacity of the hall
+     * @param name         the name of the hall
      */
     public CinemaHall(final Cinema cinema, final Integer seatCapacity, final String name) {
         this.cinema = cinema;

@@ -4,143 +4,218 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.effect.*?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<HBox fx:id="rootContainer" minWidth="929.0" minHeight="520.0" stylesheets="@styles/auth.css" 
-      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" 
-      fx:controller="com.esprit.controllers.users.LoginController">
+<StackPane fx:id="rootContainer" minWidth="1200.0" minHeight="700.0"
+    stylesheets="@../styles/auth.css"
+    xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.esprit.controllers.users.LoginController">
 
-    <!-- Login Form Section -->
-    <VBox fx:id="loginSection" minWidth="461.0" spacing="15" HBox.hgrow="ALWAYS" styleClass="form-section">
-        <padding>
-            <Insets top="40" right="40" bottom="40" left="40"/>
-        </padding>
+    <!-- Background with animated particles -->
+    <AnchorPane styleClass="animated-background">
+        <!-- Background particles -->
+        <Circle radius="4" layoutX="100" layoutY="150" styleClass="particle particle-1" />
+        <Circle radius="3" layoutX="300" layoutY="80" styleClass="particle particle-2" />
+        <Circle radius="5" layoutX="500" layoutY="200" styleClass="particle particle-3" />
+        <Circle radius="2" layoutX="700" layoutY="120" styleClass="particle particle-4" />
+        <Circle radius="4" layoutX="900" layoutY="180" styleClass="particle particle-5" />
+        <Circle radius="3" layoutX="1050" layoutY="90" styleClass="particle particle-6" />
+        <Circle radius="6" layoutX="150" layoutY="400" styleClass="particle particle-7" />
+        <Circle radius="2" layoutX="350" layoutY="450" styleClass="particle particle-8" />
+        <Circle radius="5" layoutX="550" layoutY="500" styleClass="particle particle-9" />
+        <Circle radius="3" layoutX="750" layoutY="420" styleClass="particle particle-10" />
+    </AnchorPane>
 
-        <!-- Header with Sign In and Social Buttons -->
-        <HBox alignment="CENTER_LEFT" spacing="15">
-            <Label text="Sign In" styleClass="title-label">
-                <font>
-                    <Font name="Outfit Bold" size="36.0"/>
-                </font>
-            </Label>
-            <Region HBox.hgrow="ALWAYS"/>
-            <HBox spacing="10" alignment="CENTER_RIGHT">
-                <Button fx:id="microsoftSignInButton" onAction="#signInWithMicrosoft" 
-                        styleClass="subLogin" maxWidth="44.0" maxHeight="42.0">
-                    <graphic>
-                        <FontIcon fill="WHITE" iconLiteral="fa-windows" iconSize="32"/>
-                    </graphic>
-                </Button>
-                <Button fx:id="googleSIgnInButton" onAction="#signInWithGoogle" 
-                        styleClass="subLogin" maxWidth="44.0" maxHeight="42.0">
-                    <graphic>
-                        <FontIcon iconColor="WHITE" iconLiteral="fa-google" iconSize="32"/>
-                    </graphic>
-                </Button>
-            </HBox>
-        </HBox>
-
-        <Region VBox.vgrow="ALWAYS" maxHeight="30"/>
-
-        <!-- Improved decorative film strip -->
-        <HBox styleClass="decorative-film-strip" alignment="CENTER" spacing="15">
-            <Region HBox.hgrow="ALWAYS"/>
-            <Region styleClass="film-cell"/>
-            <Region styleClass="film-cell"/>
-            <Region styleClass="film-cell"/>
-            <Region styleClass="film-cell"/>
-            <Region styleClass="film-cell"/>
-            <Region styleClass="film-cell"/>
-            <Region styleClass="film-cell"/>
-            <Region styleClass="film-cell"/>
-            <Region HBox.hgrow="ALWAYS"/>
-        </HBox>
-
-        <!-- Login Form -->
-        <GridPane vgap="10" hgap="10" alignment="CENTER">
-            <columnConstraints>
-                <ColumnConstraints minWidth="300" maxWidth="Infinity" hgrow="ALWAYS"/>
-            </columnConstraints>
-
-            <VBox spacing="5" GridPane.rowIndex="0">
-                <Label text="Username" styleClass="form-label">
-                    <font>
-                        <Font name="Outfit Medium" size="17.0"/>
-                    </font>
-                </Label>
-                <TextField fx:id="emailTextField" text="aliammari862002@gmail.com" promptText="Username" styleClass="loginTextField" maxWidth="Infinity">
-                    <padding>
-                        <Insets top="10" right="15" bottom="10" left="15"/>
-                    </padding>
-                </TextField>
-                <Label fx:id="emailErrorLabel" textFill="RED"/>
-            </VBox>
-
-            <VBox spacing="5" GridPane.rowIndex="1">
-                <Label text="Password" styleClass="form-label">
-                    <font>
-                        <Font name="Outfit Medium" size="17.0"/>
-                    </font>
-                </Label>
-                <PasswordField fx:id="passwordTextField" text="password" promptText="Password" styleClass="loginTextField" maxWidth="Infinity">
-                    <padding>
-                        <Insets top="10" right="15" bottom="10" left="15"/>
-                    </padding>
-                </PasswordField>
-                <Label fx:id="passwordErrorLabel" textFill="RED"/>
-            </VBox>
-
-            <Button fx:id="signInButton" text="Sign In" onAction="#login" styleClass="loginButton" 
-                    maxWidth="Infinity" GridPane.rowIndex="2">
-                <padding>
-                    <Insets top="10" bottom="10"/>
-                </padding>
-                <font>
-                    <Font name="Outfit Medium" size="20.0"/>
-                </font>
-            </Button>
-        </GridPane>
-
-        <Region VBox.vgrow="ALWAYS" maxHeight="20"/>
-
-        <!-- Footer Links -->
-        <VBox spacing="10" alignment="CENTER">
-            <HBox alignment="CENTER" spacing="50">
-                <CheckBox id="rememberMe" text="Remember Me"/>
-                <Hyperlink fx:id="forgetPasswordHyperlink" text="Forgot Password"/>
-            </HBox>
-            <Hyperlink fx:id="forgetPasswordEmailHyperlink" text="Forgot Password email"/>
-        </VBox>
-    </VBox>
-
-    <!-- Welcome Section -->
-    <VBox styleClass="leftSideBar" minWidth="468.0" alignment="CENTER" spacing="25" HBox.hgrow="ALWAYS">
-        <padding>
-            <Insets top="40" right="40" bottom="40" left="40"/>
-        </padding>
-        
-        <VBox alignment="CENTER" spacing="15">
-            <Label text="Welcome to Rakcha" textFill="WHITE" wrapText="true" 
-                   alignment="CENTER" textAlignment="CENTER">
-                <font>
-                    <Font name="Outfit SemiBold" size="35.0"/>
-                </font>
-            </Label>
-            <Label text="Don't have an account" textFill="WHITE">
-                <font>
-                    <Font size="19.0"/>
-                </font>
-            </Label>
-        </VBox>
-
-        <Button fx:id="signUpButton" onAction="#switchToSignUp" styleClass="signupButton" 
-                text="Sign up" textFill="WHITE" prefWidth="150">
-            <font>
-                <Font name="Outfit Medium" size="17.0"/>
-            </font>
+    <HBox spacing="0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+        <!-- Left Side - Cinema Experience -->
+        <VBox styleClass="cinema-experience-section" minWidth="600.0" alignment="CENTER"
+            spacing="30" HBox.hgrow="ALWAYS">
             <padding>
-                <Insets top="10" right="20" bottom="10" left="20"/>
+                <Insets top="50" right="50" bottom="50" left="50" />
             </padding>
-        </Button>
-    </VBox>
-</HBox>
+
+            <!-- Cinematic Logo -->
+            <VBox alignment="CENTER" spacing="20">
+                <HBox alignment="CENTER" spacing="15" styleClass="logo-container">
+                    <FontIcon iconLiteral="fa-film" iconSize="48" styleClass="logo-icon" />
+                    <Label text="RAKCHA" styleClass="brand-logo">
+                        <font>
+                            <Font name="Outfit ExtraBold" size="42.0" />
+                        </font>
+                    </Label>
+                </HBox>
+                <Label text="Your Gateway to Cinematic Excellence" styleClass="brand-tagline">
+                    <font>
+                        <Font name="Outfit Light" size="16.0" />
+                    </font>
+                </Label>
+            </VBox>
+
+            <!-- Cinema Feature Highlights -->
+            <VBox spacing="25" alignment="CENTER" maxWidth="450">
+                <HBox spacing="15" alignment="CENTER_LEFT" styleClass="feature-item">
+                    <FontIcon iconLiteral="fa-ticket" iconSize="24" styleClass="feature-icon" />
+                    <VBox spacing="5">
+                        <Label text="Book Premium Seats" styleClass="feature-title" />
+                        <Label text="Reserve your favorite seats in advance"
+                            styleClass="feature-description" />
+                    </VBox>
+                </HBox>
+
+                <HBox spacing="15" alignment="CENTER_LEFT" styleClass="feature-item">
+                    <FontIcon iconLiteral="fa-shopping-cart" iconSize="24" styleClass="feature-icon" />
+                    <VBox spacing="5">
+                        <Label text="Cinema Store" styleClass="feature-title" />
+                        <Label text="Buy snacks and merchandise online"
+                            styleClass="feature-description" />
+                    </VBox>
+                </HBox>
+
+                <HBox spacing="15" alignment="CENTER_LEFT" styleClass="feature-item">
+                    <FontIcon iconLiteral="fa-star" iconSize="24" styleClass="feature-icon" />
+                    <VBox spacing="5">
+                        <Label text="Exclusive Content" styleClass="feature-title" />
+                        <Label text="Access to series and premium movies"
+                            styleClass="feature-description" />
+                    </VBox>
+                </HBox>
+            </VBox>
+
+            <!-- Decorative Film Strip -->
+            <HBox styleClass="cinematic-film-strip" alignment="CENTER" spacing="8">
+                <Region styleClass="film-hole" />
+                <Region styleClass="film-hole" />
+                <Region styleClass="film-hole" />
+                <Label text="🎬" styleClass="film-emoji" />
+                <Region styleClass="film-hole" />
+                <Region styleClass="film-hole" />
+                <Region styleClass="film-hole" />
+                <Label text="🍿" styleClass="film-emoji" />
+                <Region styleClass="film-hole" />
+                <Region styleClass="film-hole" />
+                <Region styleClass="film-hole" />
+            </HBox>
+        </VBox>
+
+        <!-- Right Side - Login Form -->
+        <VBox styleClass="modern-login-section" minWidth="600.0" spacing="25" HBox.hgrow="ALWAYS">
+            <padding>
+                <Insets top="60" right="60" bottom="60" left="60" />
+            </padding>
+
+            <!-- Header -->
+            <VBox spacing="15" alignment="CENTER">
+                <Label text="Welcome Back!" styleClass="login-title">
+                    <font>
+                        <Font name="Outfit Bold" size="36.0" />
+                    </font>
+                </Label>
+                <Label text="Sign in to your account" styleClass="login-subtitle">
+                    <font>
+                        <Font name="Outfit Regular" size="16.0" />
+                    </font>
+                </Label>
+            </VBox>
+
+            <!-- Social Login Buttons -->
+            <HBox spacing="15" alignment="CENTER">
+                <Button fx:id="googleSIgnInButton" onAction="#signInWithGoogle"
+                    styleClass="social-login-btn google-btn">
+                    <graphic>
+                        <HBox spacing="10" alignment="CENTER">
+                            <FontIcon iconLiteral="fa-google" iconSize="18" />
+                            <Label text="Google" styleClass="social-btn-text" />
+                        </HBox>
+                    </graphic>
+                </Button>
+                <Button fx:id="microsoftSignInButton" onAction="#signInWithMicrosoft"
+                    styleClass="social-login-btn microsoft-btn">
+                    <graphic>
+                        <HBox spacing="10" alignment="CENTER">
+                            <FontIcon iconLiteral="fa-windows" iconSize="18" />
+                            <Label text="Microsoft" styleClass="social-btn-text" />
+                        </HBox>
+                    </graphic>
+                </Button>
+            </HBox>
+
+            <!-- Divider -->
+            <HBox alignment="CENTER" spacing="15">
+                <Line endX="80" styleClass="divider-line" />
+                <Label text="or" styleClass="divider-text" />
+                <Line endX="80" styleClass="divider-line" />
+            </HBox>
+
+            <!-- Login Form -->
+            <VBox spacing="20" maxWidth="400" alignment="CENTER">
+                <!-- Username Field -->
+                <VBox spacing="8">
+                    <Label text="Email or Username" styleClass="modern-field-label">
+                        <font>
+                            <Font name="Outfit Medium" size="14.0" />
+                        </font>
+                    </Label>
+                    <HBox styleClass="modern-input-container">
+                        <FontIcon iconLiteral="fa-user" iconSize="16" styleClass="input-icon" />
+                        <TextField fx:id="emailTextField" text="aliammari862002@gmail.com"
+                            promptText="Enter your email or username"
+                            styleClass="modern-text-field" HBox.hgrow="ALWAYS">
+                        </TextField>
+                    </HBox>
+                    <Label fx:id="emailErrorLabel" styleClass="error-label" />
+                </VBox>
+
+                <!-- Password Field -->
+                <VBox spacing="8">
+                    <Label text="Password" styleClass="modern-field-label">
+                        <font>
+                            <Font name="Outfit Medium" size="14.0" />
+                        </font>
+                    </Label>
+                    <HBox styleClass="modern-input-container">
+                        <FontIcon iconLiteral="fa-lock" iconSize="16" styleClass="input-icon" />
+                        <PasswordField fx:id="passwordTextField" text="password"
+                            promptText="Enter your password"
+                            styleClass="modern-text-field" HBox.hgrow="ALWAYS">
+                        </PasswordField>
+                    </HBox>
+                    <Label fx:id="passwordErrorLabel" styleClass="error-label" />
+                </VBox>
+
+                <!-- Remember Me & Forgot Password -->
+                <HBox alignment="CENTER" spacing="40">
+                    <CheckBox id="rememberMe" text="Remember me" styleClass="modern-checkbox" />
+                    <Hyperlink fx:id="forgetPasswordHyperlink" text="Forgot Password?"
+                        styleClass="modern-hyperlink" />
+                </HBox>
+
+                <!-- Sign In Button -->
+                <Button fx:id="signInButton" text="Sign In" onAction="#login"
+                    styleClass="modern-primary-btn" maxWidth="Infinity">
+                    <font>
+                        <Font name="Outfit SemiBold" size="16.0" />
+                    </font>
+                    <padding>
+                        <Insets top="15" right="20" bottom="15" left="20" />
+                    </padding>
+                </Button>
+
+                <!-- Sign Up Link -->
+                <HBox alignment="CENTER" spacing="8">
+                    <Label text="Don't have an account?" styleClass="signup-prompt" />
+                    <Button fx:id="signUpButton" onAction="#switchToSignUp"
+                        text="Sign Up" styleClass="modern-secondary-btn" />
+                </HBox>
+
+                <!-- Additional Links -->
+                <VBox spacing="8" alignment="CENTER">
+                    <Hyperlink fx:id="forgetPasswordEmailHyperlink" text="Email Password Reset"
+                        styleClass="additional-link" />
+                </VBox>
+            </VBox>
+        </VBox>
+    </HBox>
+</StackPane>

@@ -3,9 +3,6 @@ package com.esprit.controllers.users;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -17,6 +14,7 @@ import java.util.logging.Logger;
 import com.esprit.models.users.Admin;
 import com.esprit.models.users.User;
 import com.esprit.services.users.UserService;
+import com.esprit.utils.CloudinaryStorage;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -71,6 +69,7 @@ public class AdminDashboardController {
     Validator tableValidator;
     Tooltip formValidatorTooltip;
     Tooltip tableValidatorTooltip;
+    private String cloudinaryImageUrl;
     @FXML
     private TextField adresseTextField;
     @FXML
@@ -419,7 +418,7 @@ public class AdminDashboardController {
                                             imageView.setImage(image);
                                             hBox.getChildren().clear();
                                             hBox.getChildren().add(imageView);
-                                            AdminDashboardController.this.photoDeProfilImageView.setImage(image);
+                                            photoDeProfilImageView.setImage(image);
                                         }
                                     } catch (final Exception e) {
                                         AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
@@ -472,8 +471,8 @@ public class AdminDashboardController {
                              * @return the result of the operation
                              */
                             public void handle(final ActionEvent event) {
-                                AdminDashboardController.this.delete(param.getValue().getId());
-                                AdminDashboardController.this.readUserTable();
+                                delete(param.getValue().getId());
+                                readUserTable();
                             }
                         });
                         return new SimpleObjectProperty<Button>(button);
@@ -1072,6 +1071,9 @@ public class AdminDashboardController {
         });
     }
 
+    /**
+     * @param event
+     */
     @FXML
     void clearTextFields(final ActionEvent event) {
         this.idTextField.setText("");
@@ -1086,6 +1088,9 @@ public class AdminDashboardController {
         this.photoDeProfilImageView.setImage(null);
     }
 
+    /**
+     * @param id
+     */
     void delete(final Long id) {
         // String role = roleComboBox.getValue();
         // User user = null;
@@ -1121,6 +1126,9 @@ public class AdminDashboardController {
         });
     }
 
+    /**
+     * @param event
+     */
     @FXML
     void importImage(final ActionEvent event) {
         final FileChooser fileChooser = new FileChooser();
@@ -1130,23 +1138,24 @@ public class AdminDashboardController {
         final File selectedFile = fileChooser.showOpenDialog(null);
         if (null != selectedFile) {
             try {
-                final String destinationDirectory1 = "./src/main/resources/img/users/";
-                final String destinationDirectory2 = "C:\\xampp\\htdocs\\Rakcha\\rakcha-web\\public\\img\\users\\";
-                final Path destinationPath1 = Paths.get(destinationDirectory1);
-                final Path destinationPath2 = Paths.get(destinationDirectory2);
-                final String uniqueFileName = System.currentTimeMillis() + "_" + selectedFile.getName();
-                final Path destinationFilePath1 = destinationPath1.resolve(uniqueFileName);
-                final Path destinationFilePath2 = destinationPath2.resolve(uniqueFileName);
-                Files.copy(selectedFile.toPath(), destinationFilePath1);
-                Files.copy(selectedFile.toPath(), destinationFilePath2);
-                final Image selectedImage = new Image(destinationFilePath1.toUri().toString());
+                // Use the CloudinaryStorage service to upload the image
+                CloudinaryStorage cloudinaryStorage = CloudinaryStorage.getInstance();
+                cloudinaryImageUrl = cloudinaryStorage.uploadImage(selectedFile);
+
+                // Display the image in the ImageView
+                final Image selectedImage = new Image(cloudinaryImageUrl);
                 this.photoDeProfilImageView.setImage(selectedImage);
+
+                LOGGER.info("Image uploaded to Cloudinary: " + cloudinaryImageUrl);
             } catch (final IOException e) {
-                AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                AdminDashboardController.LOGGER.log(Level.SEVERE, "Error uploading image to Cloudinary", e);
             }
         }
     }
 
+    /**
+     * @param user
+     */
     void update(final User user) {
         try {
             final UserService userService = new UserService();
@@ -1165,8 +1174,10 @@ public class AdminDashboardController {
     @FXML
     /**
      * Performs signOut operation.
+     * Signs out the current user and redirects to the sign-up page.
      *
-     * @return the result of the operation
+     * @param event the action event triggered by the sign-out action
+     * @throws IOException if there's an error loading the sign-up FXML file
      */
     public void signOut(final ActionEvent event) throws IOException {
         final Stage stage = (Stage) this.emailTextField.getScene().getWindow();

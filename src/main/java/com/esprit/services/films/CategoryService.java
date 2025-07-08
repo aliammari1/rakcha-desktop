@@ -13,37 +13,38 @@ import com.esprit.utils.DataSource;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 /**
- * Service class providing business logic for the RAKCHA application. Implements
- * CRUD operations and business rules for data management.
- *
+ * Service class for managing film categories in the database.
+ * 
+ * <p>
+ * This service provides CRUD operations for film categories, including
+ * creating,
+ * reading, updating, and deleting categories. It implements the IService
+ * interface
+ * for consistent service behavior across the application.
+ * </p>
+ * 
  * @author RAKCHA Team
  * @version 1.0.0
  * @since 1.0.0
  */
+@Slf4j
 public class CategoryService implements IService<Category> {
     Connection connection;
 
     /**
-     * Performs CategoryService operation.
-     *
-     * @return the result of the operation
+     * Constructs a new CategoryService and initializes the database connection.
      */
     public CategoryService() {
         this.connection = DataSource.getInstance().getConnection();
     }
 
     /**
-     * @param category
+     * Creates a new category in the database.
+     *
+     * @param category The category object to be created
      */
     @Override
-    /**
-     * Creates a new entity in the database.
-     *
-     * @param entity
-     *               the entity to create
-     */
     public void create(final Category category) {
         final String req = "insert into categories (name,description) values (?,?) ";
         try {
@@ -57,14 +58,11 @@ public class CategoryService implements IService<Category> {
     }
 
     /**
-     * @return List<Category>
+     * Retrieves all categories from the database.
+     *
+     * @return A list of all Category objects in the database
      */
     @Override
-    /**
-     * Performs read operation.
-     *
-     * @return the result of the operation
-     */
     public List<Category> read() {
         final List<Category> categoryArrayList = new ArrayList<>();
         final String req = "SELECT * FROM categories";
@@ -81,13 +79,12 @@ public class CategoryService implements IService<Category> {
         return categoryArrayList;
     }
 
-    @Override
     /**
-     * Updates an existing entity in the database.
+     * Updates an existing category in the database.
      *
-     * @param entity
-     *               the entity to update
+     * @param category The category object to update
      */
+    @Override
     public void update(final Category category) {
         final String req = "UPDATE categories set name=?,description=? where id=?";
         try {
@@ -101,13 +98,12 @@ public class CategoryService implements IService<Category> {
         }
     }
 
-    @Override
     /**
-     * Deletes an entity from the database.
+     * Deletes a category from the database.
      *
-     * @param id
-     *           the ID of the entity to delete
+     * @param category The category object to delete
      */
+    @Override
     public void delete(final Category category) {
         final String req = "DELETE FROM categories where id = ?";
         try {
@@ -120,9 +116,10 @@ public class CategoryService implements IService<Category> {
     }
 
     /**
-     * Retrieves the Category value.
+     * Retrieves a category by its ID.
      *
-     * @return the Category value
+     * @param id The unique identifier of the category to retrieve
+     * @return The Category object if found, null otherwise
      */
     public Category getCategory(final Long id) {
         Category category = null;
@@ -141,9 +138,10 @@ public class CategoryService implements IService<Category> {
     }
 
     /**
-     * Retrieves the CategoryByNom value.
+     * Retrieves a category by its name.
      *
-     * @return the CategoryByNom value
+     * @param nom The name of the category to retrieve
+     * @return The Category object if found, null otherwise
      */
     public Category getCategoryByNom(final String nom) {
         Category category = null;

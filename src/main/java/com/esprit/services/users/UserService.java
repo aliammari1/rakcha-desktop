@@ -38,9 +38,8 @@ public class UserService implements IService<User> {
     Connection con;
 
     /**
-     * Performs UserService operation.
-     *
-     * @return the result of the operation
+     * Constructs a new UserService instance.
+     * Initializes database connection.
      */
     public UserService() {
         con = DataSource.getInstance().getConnection();
@@ -183,18 +182,17 @@ public class UserService implements IService<User> {
     }
 
     /**
-     * Performs sendMail operation.
+     * Sends an email to the specified recipient.
      *
-     * @return the result of the operation
+     * @param Recipient     the email address of the recipient
+     * @param messageToSend the message content to send
      */
     public void sendMail(final String Recipient, final String messageToSend) {
         UserMail.send(Recipient, messageToSend);
     }
 
     /**
-     * Performs generateUserPDF operation.
-     *
-     * @return the result of the operation
+     * Generates a PDF report of all users sorted by role.
      */
     public void generateUserPDF() {
         final UserPDF userPDF = new UserPDF();
@@ -218,6 +216,12 @@ public class UserService implements IService<User> {
         return null;
     }
 
+    /**
+     * @param userList
+     * @param statement
+     * @return List<User>
+     * @throws SQLException
+     */
     private List<User> getUsers(final List<User> userList, final PreparedStatement statement) throws SQLException {
         final ResultSet resultSet = statement.executeQuery();
         while (resultSet.next()) {
@@ -272,9 +276,10 @@ public class UserService implements IService<User> {
     }
 
     /**
-     * Performs updatePassword operation.
+     * Updates the password for a user with the specified email.
      *
-     * @return the result of the operation
+     * @param email       the email of the user whose password to update
+     * @param NewPassword the new password to set
      */
     public void updatePassword(final String email, final String NewPassword) {
         try {
@@ -289,9 +294,10 @@ public class UserService implements IService<User> {
     }
 
     /**
-     * Performs forgetPassword operation.
+     * Handles forgotten password by sending a password reset email.
      *
-     * @return the result of the operation
+     * @param email    the email address of the user who forgot their password
+     * @param Password the password parameter (unused in current implementation)
      */
     public void forgetPassword(final String email, final String Password) {
         final String query = "select * from users where email LIKE ?";
@@ -310,6 +316,11 @@ public class UserService implements IService<User> {
         }
     }
 
+    /**
+     * @param preparedStatement
+     * @return User
+     * @throws SQLException
+     */
     private User getUserRow(final PreparedStatement preparedStatement) throws SQLException {
         final ResultSet resultSet = preparedStatement.executeQuery();
         if (resultSet.next()) {

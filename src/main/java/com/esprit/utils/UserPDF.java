@@ -69,6 +69,10 @@ public class UserPDF {
         });
     }
 
+    /** 
+     * @param table
+     * @param userData
+     */
     private void addRows(PdfPTable table, List<User> userData) {
         for (User user : userData) {
             table.addCell(String.valueOf(user.getId().intValue()));

@@ -8,62 +8,68 @@
 <?import javafx.scene.text.*?>
 <?import java.net.URL?>
 
-<VBox prefHeight="783.0" prefWidth="1063.0" stylesheets="@styles/dashbord.css"
-    xmlns="http://javafx.com/javafx/21" 
-    xmlns:fx="http://javafx.com/fxml/1" 
+<VBox prefHeight="783.0" prefWidth="1063.0" stylesheets="@../styles/dashbord.css"
+    xmlns="http://javafx.com/javafx/21"
+    xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="com.esprit.controllers.series.CategorieController">
 
     <HBox VBox.vgrow="ALWAYS">
         <!-- SideBar -->
-        <fx:include source="../adminSideBar.fxml"/>
-        
+        <fx:include source="../adminSideBar.fxml" />
+
         <!-- Main Content -->
         <HBox spacing="20" HBox.hgrow="ALWAYS">
             <padding>
-                <Insets top="25" right="25" bottom="25" left="25"/>
+                <Insets top="25" right="25" bottom="25" left="25" />
             </padding>
 
             <!-- Add Category Form -->
             <VBox styleClass="bg-white" maxWidth="300.0" spacing="20">
                 <padding>
-                    <Insets top="20" right="20" bottom="20" left="20"/>
+                    <Insets top="20" right="20" bottom="20" left="20" />
                 </padding>
 
                 <Label text="Add Category" textFill="#d1d485">
                     <font>
-                        <Font name="Arial Rounded MT Bold" size="24.0"/>
+                        <Font name="Arial Rounded MT Bold" size="24.0" />
                     </font>
                 </Label>
 
                 <GridPane vgap="20" hgap="10">
-                    <Label text="Name :" textFill="#a42121" GridPane.rowIndex="0" GridPane.columnIndex="0">
+                    <Label text="Name :" textFill="#a42121" GridPane.rowIndex="0"
+                        GridPane.columnIndex="0">
                         <font>
-                            <Font name="Arial Rounded MT Bold" size="16.0"/>
+                            <Font name="Arial Rounded MT Bold" size="16.0" />
                         </font>
                     </Label>
-                    <TextField fx:id="nomF" styleClass="text-field-red" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                    <Label fx:id="checkname" textFill="RED" GridPane.rowIndex="2" GridPane.columnIndex="0">
+                    <TextField fx:id="nomF" styleClass="text-field-red" GridPane.rowIndex="1"
+                        GridPane.columnIndex="0" />
+                    <Label fx:id="checkname" textFill="RED" GridPane.rowIndex="2"
+                        GridPane.columnIndex="0">
                         <font>
-                            <Font name="Arial" size="12.0"/>
+                            <Font name="Arial" size="12.0" />
                         </font>
                     </Label>
 
-                    <Label text="Description :" textFill="#a42121" GridPane.rowIndex="3" GridPane.columnIndex="0">
+                    <Label text="Description :" textFill="#a42121" GridPane.rowIndex="3"
+                        GridPane.columnIndex="0">
                         <font>
-                            <Font name="Arial Rounded MT Bold" size="16.0"/>
+                            <Font name="Arial Rounded MT Bold" size="16.0" />
                         </font>
                     </Label>
-                    <TextField fx:id="descreptionF" styleClass="text-field-red" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-                    <Label fx:id="checkdescreption" textFill="RED" GridPane.rowIndex="5" GridPane.columnIndex="0">
+                    <TextField fx:id="descreptionF" styleClass="text-field-red"
+                        GridPane.rowIndex="4" GridPane.columnIndex="0" />
+                    <Label fx:id="checkdescreption" textFill="RED" GridPane.rowIndex="5"
+                        GridPane.columnIndex="0">
                         <font>
-                            <Font name="Arial" size="12.0"/>
+                            <Font name="Arial" size="12.0" />
                         </font>
                     </Label>
                 </GridPane>
 
                 <Button onAction="#ajouteroeuvre" styleClass="instert-btn" text="ADD">
                     <font>
-                        <Font name="Blackadder ITC" size="13.0"/>
+                        <Font name="Blackadder ITC" size="13.0" />
                     </font>
                 </Button>
             </VBox>
@@ -73,31 +79,33 @@
                 <HBox spacing="10" alignment="CENTER">
                     <TextField promptText="Search" styleClass="combo-box-red">
                         <font>
-                            <Font name="Bell MT" size="12.0"/>
+                            <Font name="Bell MT" size="12.0" />
                         </font>
                     </TextField>
                     <Button styleClass="nav-form" text="Categories Details" textFill="#c3c75e">
                         <font>
-                            <Font name="Berlin Sans FB Demi Bold" size="14.0"/>
+                            <Font name="Berlin Sans FB Demi Bold" size="14.0" />
                         </font>
                     </Button>
                 </HBox>
 
-                <TableView fx:id="tableView" VBox.vgrow="ALWAYS" styleClass="combo-box-red"/>
+                <TableView fx:id="tableView" VBox.vgrow="ALWAYS" styleClass="combo-box-red" />
 
-                <Button onAction="#showStatistics" styleClass="nav-form" text="Show Statistics" textFill="#cdd961">
+                <Button onAction="#showStatistics" styleClass="nav-form" text="Show Statistics"
+                    textFill="#cdd961">
                     <font>
-                        <Font name="Berlin Sans FB Demi Bold" size="14.0"/>
+                        <Font name="Berlin Sans FB Demi Bold" size="14.0" />
                     </font>
                 </Button>
 
-                <Button onAction="#Oseriess" styleClass="instert-btn-picture" text="Series Management"/>
+                <Button onAction="#Oseriess" styleClass="instert-btn-picture"
+                    text="Series Management" />
             </VBox>
         </HBox>
     </HBox>
 
     <stylesheets>
-        <URL value="@styles/dashbord.css"/>
-        <URL value="@styles/dashboard.css"/>
+        <URL value="@../styles/dashbord.css" />
+        <URL value="@../styles/dashboard.css" />
     </stylesheets>
 </VBox>

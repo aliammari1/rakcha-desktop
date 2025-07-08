@@ -25,9 +25,8 @@ public class IServiceEpisodeImpl implements IService<Episode> {
     private final Connection connection;
 
     /**
-     * Performs IServiceEpisodeImpl operation.
-     *
-     * @return the result of the operation
+     * Constructs a new IServiceEpisodeImpl instance.
+     * Initializes database connection.
      */
     public IServiceEpisodeImpl() {
         this.connection = DataSource.getInstance().getConnection();
@@ -102,9 +101,9 @@ public class IServiceEpisodeImpl implements IService<Episode> {
     }
 
     /**
-     * Performs deleteById operation.
+     * Deletes an episode by its ID.
      *
-     * @return the result of the operation
+     * @param id the ID of the episode to delete
      */
     public void deleteById(final Long id) {
         final String req = "DELETE FROM episode WHERE idepisode = ?";
@@ -120,9 +119,9 @@ public class IServiceEpisodeImpl implements IService<Episode> {
 
     @Override
     /**
-     * Performs read operation.
+     * Reads all episodes from the database.
      *
-     * @return the result of the operation
+     * @return list of all episodes
      */
     public List<Episode> read() {
         final List<Episode> episodeDtos = new ArrayList<>();
@@ -143,9 +142,10 @@ public class IServiceEpisodeImpl implements IService<Episode> {
     }
 
     /**
-     * Performs retrieveBySeries operation.
+     * Retrieves episodes by series ID.
      *
-     * @return the result of the operation
+     * @param seriesId the ID of the series to retrieve episodes for
+     * @return list of episodes for the specified series
      */
     public List<Episode> retrieveBySeries(final Long seriesId) {
         final List<Episode> episodes = new ArrayList<>();

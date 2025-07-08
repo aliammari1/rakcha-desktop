@@ -2,15 +2,11 @@ package com.esprit.models.series;
 
 import java.util.List;
 
-import jakarta.persistence.*;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "serie")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,54 +21,36 @@ import lombok.NoArgsConstructor;
  */
 public class Series {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
     private String name;
 
-    @Column(name = "summary")
     private String summary;
 
-    @Column(name = "director")
     private String director;
 
-    @Column(name = "country")
     private String country;
 
-    @Column(name = "image")
     private String image;
 
-    @Column(name = "liked")
     private int liked;
 
-    @Column(name = "number_of_likes")
     private int numberOfLikes;
 
-    @Column(name = "disliked")
     private int disliked;
 
-    @Column(name = "number_of_dislikes")
     private int numberOfDislikes;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "series_categories", joinColumns = @JoinColumn(name = "series_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
     private List<Category> categories;
 
-    @OneToMany(mappedBy = "series", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Episode> episodes;
 
-    @OneToMany(mappedBy = "series", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Favorite> favorites;
 
-    @Transient
     private int clickLikes;
 
-    @Transient
     private int clickDislikes;
 
-    @Transient
     private int clickFavorites;
 
     /**

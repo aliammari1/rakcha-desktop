@@ -31,9 +31,8 @@ public class MovieSessionService implements IService<MovieSession> {
     private final FilmService filmService;
 
     /**
-     * Performs MovieSessionService operation.
-     *
-     * @return the result of the operation
+     * Constructs a new MovieSessionService instance.
+     * Initializes database connection and related services.
      */
     public MovieSessionService() {
         this.connection = DataSource.getInstance().getConnection();
@@ -230,6 +229,10 @@ public class MovieSessionService implements IService<MovieSession> {
         return null;
     }
 
+    /**
+     * @param rs
+     * @return MovieSession
+     */
     private MovieSession buildMovieSession(ResultSet rs) {
         try {
             Film film = filmService.getFilm(rs.getLong("film_id"));

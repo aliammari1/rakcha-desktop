@@ -3,8 +3,6 @@ package com.esprit.models.cinemas;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.*;
-
 import com.esprit.models.users.CinemaManager;
 
 import lombok.AllArgsConstructor;
@@ -15,8 +13,7 @@ import lombok.NoArgsConstructor;
 /**
  * Represents a cinema.
  */
-@Entity
-@Table(name = "cinema")
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -31,40 +28,35 @@ import lombok.NoArgsConstructor;
  */
 public class Cinema {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "address", nullable = false)
     private String address;
 
-    @Column(name = "logo_path")
     private String logoPath;
 
-    @Column(name = "status")
     private String status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "manager_id")
     private CinemaManager manager;
 
-    @OneToMany(mappedBy = "cinema", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<CinemaHall> cinemaHalls = new ArrayList<>();
 
-    @OneToMany(mappedBy = "cinema", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<CinemaRating> ratings = new ArrayList<>();
 
-    @OneToMany(mappedBy = "cinema", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<CinemaComment> comments = new ArrayList<>();
 
     /**
      * Constructor without id for creating new cinema instances.
+     *
+     * @param name     the name of the cinema
+     * @param address  the address of the cinema
+     * @param manager  the cinema manager
+     * @param logoPath the path to the cinema's logo
+     * @param status   the current status of the cinema
      */
     public Cinema(final String name, final String address, final CinemaManager manager, final String logoPath,
             final String status) {
@@ -80,6 +72,8 @@ public class Cinema {
 
     /**
      * Get all movie sessions for this cinema across all halls.
+     *
+     * @return a list of all movie sessions in this cinema
      */
     public List<MovieSession> getMovieSessions() {
         List<MovieSession> allSessions = new ArrayList<>();

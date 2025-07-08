@@ -31,9 +31,8 @@ public class FilmRatingService implements IService<FilmRating> {
     private final FilmService filmService;
 
     /**
-     * Performs FilmRatingService operation.
-     *
-     * @return the result of the operation
+     * Constructs a new FilmRatingService instance.
+     * Initializes database connection and related services.
      */
     public FilmRatingService() {
         this.connection = DataSource.getInstance().getConnection();

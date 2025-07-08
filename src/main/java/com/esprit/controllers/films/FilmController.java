@@ -23,6 +23,7 @@ import com.esprit.models.cinemas.Cinema;
 import com.esprit.models.films.*;
 import com.esprit.services.cinemas.CinemaService;
 import com.esprit.services.films.*;
+import com.esprit.utils.CloudinaryStorage;
 
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleLongProperty;
@@ -91,6 +92,7 @@ public class FilmController {
     private final List<CheckBox> addressCheckBoxes = new ArrayList<>();
     private final List<CheckBox> yearsCheckBoxes = new ArrayList<>();
     Validator validator;
+    private String cloudinaryImageUrl;
     @FXML
     private Button ajouterCinema_Button;
     @FXML
@@ -232,6 +234,10 @@ public class FilmController {
         });
     }
 
+    /**
+     * @param searchText
+     * @return Predicate<Film>
+     */
     private Predicate<Film> createSearchPredicate(String searchText) {
         return film -> {
             if (searchText == null || searchText.isEmpty()) {
@@ -975,7 +981,7 @@ public class FilmController {
                              * @return the result of the operation
                              */
                             public void handle(final ActionEvent event) {
-                                FilmController.this.deleteFilm(filmcategoryButtonCellDataFeatures.getValue().getId());
+                                deleteFilm(filmcategoryButtonCellDataFeatures.getValue().getId());
                             }
                         });
                         return new SimpleObjectProperty<Button>(button);
@@ -1092,7 +1098,7 @@ public class FilmController {
                                             hBox.getChildren().add(imageView);
                                             final Film film = param.getValue();
                                             film.setImage(file.toURI().toURL().toString());
-                                            FilmController.this.updateFilm(film);
+                                            updateFilm(film);
                                         }
                                     } catch (final Exception e) {
                                         FilmController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
@@ -1369,8 +1375,8 @@ public class FilmController {
                      *                                           cell data features of a table
                      *                                           column that contains the cinema
                      *                                           category string values, which are
-                     *                                           used to populate the
-                     *                                           CheckComboBox and update the
+                     *                                           used to populate the CheckComboBox
+                     *                                           and update the
                      *                                           cinemas in the database.
                      *
                      * @returns a `SimpleObjectProperty` of a `CheckComboBox` object containing the
@@ -1596,23 +1602,21 @@ public class FilmController {
             final File selectedFile = fileChooser.showOpenDialog(null);
             if (null != selectedFile) {
                 try {
-                    final String destinationDirectory1 = "./src/main/resources/img/films/";
-                    final String destinationDirectory2 = "C:\\xampp\\htdocs\\Rakcha\\rakcha-web\\public\\img\\films\\";
-                    final Path destinationPath1 = Paths.get(destinationDirectory1);
-                    final Path destinationPath2 = Paths.get(destinationDirectory2);
-                    final String uniqueFileName = System.currentTimeMillis() + "_" + selectedFile.getName();
-                    final Path destinationFilePath1 = destinationPath1.resolve(uniqueFileName);
-                    final Path destinationFilePath2 = destinationPath2.resolve(uniqueFileName);
-                    Files.copy(selectedFile.toPath(), destinationFilePath1);
-                    Files.copy(selectedFile.toPath(), destinationFilePath2);
-                    final Image selectedImage = new Image(destinationFilePath1.toUri().toString());
+                    // Use the CloudinaryStorage service to upload the image
+                    CloudinaryStorage cloudinaryStorage = CloudinaryStorage.getInstance();
+                    cloudinaryImageUrl = cloudinaryStorage.uploadImage(selectedFile);
+
+                    // Display the image in the ImageView
+                    final Image selectedImage = new Image(cloudinaryImageUrl);
                     this.imageFilm_ImageView.setImage(selectedImage);
+
+                    LOGGER.info("Image uploaded to Cloudinary: " + cloudinaryImageUrl);
                 } catch (final IOException e) {
-                    FilmController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                    LOGGER.log(Level.SEVERE, "Error uploading image to Cloudinary", e);
                 }
             }
         } catch (final Exception e) {
-            FilmController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            LOGGER.log(Level.SEVERE, "Error in file chooser", e);
         }
     }
 

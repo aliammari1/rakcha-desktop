@@ -28,9 +28,8 @@ public class IServiceSeriesImpl implements IService<Series> {
     private final Connection connection;
 
     /**
-     * Performs IServiceSeriesImpl operation.
-     *
-     * @return the result of the operation
+     * Constructs a new IServiceSeriesImpl instance.
+     * Initializes database connection.
      */
     public IServiceSeriesImpl() {
         this.connection = DataSource.getInstance().getConnection();
@@ -109,9 +108,9 @@ public class IServiceSeriesImpl implements IService<Series> {
 
     @Override
     /**
-     * Performs read operation.
+     * Reads all series from the database.
      *
-     * @return the result of the operation
+     * @return list of all series
      */
     public List<Series> read() {
         final List<Series> serieDto = new ArrayList<>();
@@ -132,9 +131,11 @@ public class IServiceSeriesImpl implements IService<Series> {
     }
 
     /**
-     * Performs retrieveByCategory operation.
-     *
-     * @return the result of the operation
+     * Retrieves series by category.
+     * 
+     * @param categoryId the ID of the category to filter by
+     * @return list of series in the specified category
+     * @throws SQLException if there is an error querying the database
      */
     public List<Series> retrieveByCategory(final Long categoryId) throws SQLException {
         final List<Series> series = new ArrayList<>();
@@ -160,9 +161,10 @@ public class IServiceSeriesImpl implements IService<Series> {
     }
 
     /**
-     * Performs addLike operation.
-     *
-     * @return the result of the operation
+     * Adds a like to the specified series.
+     * 
+     * @param serie the series to add a like to
+     * @throws SQLException if there is an error updating the database
      */
     public void addLike(final Series serie) throws SQLException {
         final String req = "UPDATE serie SET liked = ?, number_of_likes = ? WHERE id = ?";
@@ -175,9 +177,10 @@ public class IServiceSeriesImpl implements IService<Series> {
     }
 
     /**
-     * Performs removeLike operation.
-     *
-     * @return the result of the operation
+     * Removes a like from the specified series.
+     * 
+     * @param serie the series to remove a like from
+     * @throws SQLException if there is an error updating the database
      */
     public void removeLike(final Series serie) throws SQLException {
         final String req = "UPDATE serie SET liked = ?, number_of_likes = ? WHERE id = ?";
@@ -190,9 +193,10 @@ public class IServiceSeriesImpl implements IService<Series> {
     }
 
     /**
-     * Performs addDislike operation.
-     *
-     * @return the result of the operation
+     * Adds a dislike to the specified series.
+     * 
+     * @param serie the series to add a dislike to
+     * @throws SQLException if there is an error updating the database
      */
     public void addDislike(final Series serie) throws SQLException {
         final String req = "UPDATE serie SET disliked = ?, number_of_dislikes = ? WHERE id = ?";
@@ -205,9 +209,10 @@ public class IServiceSeriesImpl implements IService<Series> {
     }
 
     /**
-     * Performs removeDislike operation.
-     *
-     * @return the result of the operation
+     * Removes a dislike from the specified series.
+     * 
+     * @param serie the series to remove a dislike from
+     * @throws SQLException if there is an error updating the database
      */
     public void removeDislike(final Series serie) throws SQLException {
         final String req = "UPDATE serie SET disliked = ?, number_of_dislikes = ? WHERE id = ?";
@@ -220,9 +225,9 @@ public class IServiceSeriesImpl implements IService<Series> {
     }
 
     /**
-     * Performs findMostLiked operation.
+     * Finds the most liked series.
      *
-     * @return the result of the operation
+     * @return list of the most liked series (top 3)
      */
     public List<Series> findMostLiked() {
         final List<Series> series = new ArrayList<>();

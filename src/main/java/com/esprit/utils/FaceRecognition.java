@@ -32,9 +32,8 @@ public class FaceRecognition {
     }
 
     /**
-     * Performs FaceRecognition operation.
-     *
-     * @return the result of the operation
+     * Constructs a new FaceRecognition instance.
+     * Initializes the LBPH face recognizer.
      */
     public FaceRecognition() {
         this.faceRecognizer = LBPHFaceRecognizer.create();

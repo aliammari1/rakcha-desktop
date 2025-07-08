@@ -16,45 +16,50 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.esprit.controllers.cinemas.DashboardAdminController"
-            stylesheets="@styles/dashboard.css">
+    fx:controller="com.esprit.controllers.cinemas.DashboardAdminController"
+    stylesheets="@../styles/dashboard.css">
     <children>
         <HBox AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"
-              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <!-- Sidebar -->
             <children>
-                <fx:include source="/ui/adminSideBar.fxml"/>
+                <fx:include source="/ui/adminSideBar.fxml" />
                 <!-- Main Content -->
                 <AnchorPane fx:id="cinemasList" HBox.hgrow="ALWAYS">
                     <children>
                         <VBox spacing="20" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                              AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0"
-                              styleClass="bg-white">
+                            AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0"
+                            styleClass="bg-white">
                             <padding>
-                                <Insets top="25" right="25" bottom="25" left="25"/>
+                                <Insets top="25" right="25" bottom="25" left="25" />
                             </padding>
                             <!-- Header Section using GridPane for responsiveness -->
                             <GridPane hgap="10" vgap="10">
                                 <columnConstraints>
-                                    <ColumnConstraints hgrow="ALWAYS"/>
-                                    <ColumnConstraints minWidth="100"/>
-                                    <ColumnConstraints minWidth="200"/>
-                                    <ColumnConstraints minWidth="50"/>
+                                    <ColumnConstraints hgrow="ALWAYS" />
+                                    <ColumnConstraints minWidth="100" />
+                                    <ColumnConstraints minWidth="200" />
+                                    <ColumnConstraints minWidth="50" />
                                 </columnConstraints>
                                 <children>
-                                    <Label text="Cinema List:" textFill="#030303" GridPane.columnIndex="0">
+                                    <Label text="Cinema List:" textFill="#030303"
+                                        GridPane.columnIndex="0">
                                         <font>
-                                            <Font name="Arial Rounded MT Bold" size="48.0"/>
+                                            <Font name="Arial Rounded MT Bold" size="48.0" />
                                         </font>
                                     </Label>
-                                    <Button mnemonicParsing="false" onAction="#filtrer" styleClass="sale" 
-                                            text="Filter" GridPane.columnIndex="1"/>
-                                    <TextField fx:id="tfSearch" promptText="Search here ...." prefHeight="42.0"
-                                               GridPane.columnIndex="2"/>
-                                    <Button mnemonicParsing="false" style="-fx-background-color: AE2D3C;" 
-                                            GridPane.columnIndex="3">
+                                    <Button mnemonicParsing="false" onAction="#filtrer"
+                                        styleClass="sale"
+                                        text="Filter" GridPane.columnIndex="1" />
+                                    <TextField fx:id="tfSearch" promptText="Search here ...."
+                                        prefHeight="42.0"
+                                        GridPane.columnIndex="2" />
+                                    <Button mnemonicParsing="false"
+                                        style="-fx-background-color: AE2D3C;"
+                                        GridPane.columnIndex="3">
                                         <graphic>
-                                            <FontAwesomeIconView fill="#f5f5f5" glyphName="SEARCH" size="19"/>
+                                            <FontAwesomeIconView fill="#f5f5f5" glyphName="SEARCH"
+                                                size="19" />
                                         </graphic>
                                     </Button>
                                 </children>
@@ -62,24 +67,25 @@
                             <!-- Content Area -->
                             <TableView fx:id="listCinema" VBox.vgrow="ALWAYS">
                                 <columns>
-                                    <TableColumn fx:id="colCinema" text="Name"/>
-                                    <TableColumn fx:id="colAdresse" text="Address"/>
-                                    <TableColumn fx:id="colResponsable" text="Responsible"/>
-                                    <TableColumn fx:id="colLogo" text="Logo"/>
-                                    <TableColumn fx:id="colStatut" text="Status"/>
-                                    <TableColumn fx:id="colAction" text="Actions"/>
+                                    <TableColumn fx:id="colCinema" text="Name" />
+                                    <TableColumn fx:id="colAdresse" text="Address" />
+                                    <TableColumn fx:id="colResponsable" text="Responsible" />
+                                    <TableColumn fx:id="colLogo" text="Logo" />
+                                    <TableColumn fx:id="colStatut" text="Status" />
+                                    <TableColumn fx:id="colAction" text="Actions" />
                                 </columns>
                             </TableView>
                         </VBox>
                         <!-- Filter Dialog placed responsively -->
                         <AnchorPane fx:id="filterAnchor" styleClass="bg-white" visible="false"
-                                    AnchorPane.topAnchor="50.0" AnchorPane.leftAnchor="50.0">
+                            AnchorPane.topAnchor="50.0" AnchorPane.leftAnchor="50.0">
                             <children>
                                 <VBox spacing="15">
                                     <padding>
-                                        <Insets top="20" right="20" bottom="20" left="20"/>
+                                        <Insets top="20" right="20" bottom="20" left="20" />
                                     </padding>
-                                    <Button mnemonicParsing="false" onAction="#filtrercinema" styleClass="sale" text="Apply Filter"/>
+                                    <Button mnemonicParsing="false" onAction="#filtrercinema"
+                                        styleClass="sale" text="Apply Filter" />
                                 </VBox>
                             </children>
                         </AnchorPane>

@@ -1,7 +1,5 @@
 package com.esprit.models.products;
 
-import jakarta.persistence.*;
-
 import com.esprit.models.users.Client;
 
 import lombok.AllArgsConstructor;
@@ -12,8 +10,7 @@ import lombok.NoArgsConstructor;
 /**
  * The Review class represents a user's review of a product.
  */
-@Entity
-@Table(name = "reviews")
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -28,19 +25,12 @@ import lombok.NoArgsConstructor;
  */
 public class Review {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
     private Client client;
 
-    @Column(name = "rating", nullable = false)
     private int rating;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     /**

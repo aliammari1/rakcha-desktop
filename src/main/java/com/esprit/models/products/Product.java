@@ -3,8 +3,6 @@ package com.esprit.models.products;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.*;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,8 +11,7 @@ import lombok.NoArgsConstructor;
 /**
  * The `Product` class represents a product.
  */
-@Entity
-@Table(name = "products")
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -29,39 +26,26 @@ import lombok.NoArgsConstructor;
  */
 public class Product {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "price", nullable = false)
     private int price;
 
-    @Column(name = "image")
     private String image;
 
-    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "product_category", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
     private List<ProductCategory> categories = new ArrayList<>();
 
-    @Column(name = "quantity", nullable = false)
     private int quantity;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Review> reviews = new ArrayList<>();
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ShoppingCart> shoppingCarts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<OrderItem> orderItems = new ArrayList<>();
 
     /**

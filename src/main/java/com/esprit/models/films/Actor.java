@@ -3,8 +3,6 @@ package com.esprit.models.films;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.*;
-
 import lombok.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -12,8 +10,7 @@ import lombok.NoArgsConstructor;
 /**
  * The Actor class represents an actor in a film.
  */
-@Entity
-@Table(name = "actors")
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -28,33 +25,28 @@ import lombok.NoArgsConstructor;
  */
 public class Actor {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
     private String name;
 
-    @Column(name = "image")
     private String image;
 
-    @Column(name = "biography", columnDefinition = "TEXT")
     private String biography;
 
-    @Column(name = "number_of_appearances")
     private int numberOfAppearances;
 
-    @ManyToMany(mappedBy = "actors", fetch = FetchType.LAZY)
     @Builder.Default
     private List<Film> films = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "actor_category", joinColumns = @JoinColumn(name = "actor_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
     @Builder.Default
     private List<Category> categories = new ArrayList<>();
 
     /**
      * Constructor without id for creating new actor instances.
+     * 
+     * @param name      the name of the actor
+     * @param image     the image path or URL for the actor
+     * @param biography the biographical text about the actor
      */
     public Actor(final String name, final String image, final String biography) {
         this.name = name;
@@ -66,6 +58,11 @@ public class Actor {
 
     /**
      * Constructor with id for existing actor instances.
+     * 
+     * @param id        the unique identifier for the actor
+     * @param name      the name of the actor
+     * @param image     the image path or URL for the actor
+     * @param biography the biographical text about the actor
      */
     public Actor(final Long id, final String name, final String image, final String biography) {
         this.id = id;
@@ -78,6 +75,8 @@ public class Actor {
 
     /**
      * Constructor with only id.
+     * 
+     * @param id the unique identifier for the actor
      */
     public Actor(final Long id) {
         this.id = id;

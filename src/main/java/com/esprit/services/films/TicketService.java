@@ -32,9 +32,8 @@ public class TicketService implements IService<Ticket> {
     private final MovieSessionService moviesessionService;
 
     /**
-     * Performs TicketService operation.
-     *
-     * @return the result of the operation
+     * Constructs a new TicketService instance.
+     * Initializes database connection and related services.
      */
     public TicketService() {
         this.connection = DataSource.getInstance().getConnection();

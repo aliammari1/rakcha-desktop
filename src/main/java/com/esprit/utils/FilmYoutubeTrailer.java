@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.esprit.Config;
+import io.github.cdimascio.dotenv.Dotenv;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.youtube.YouTube;
@@ -31,15 +31,14 @@ public class FilmYoutubeTrailer {
     private final YouTube youtube;
 
     /**
-     * Performs FilmYoutubeTrailer operation.
-     *
-     * @return the result of the operation
+     * Constructs a new FilmYoutubeTrailer instance.
+     * Initializes YouTube API service.
      */
     public FilmYoutubeTrailer() {
-        Config config = Config.getInstance();
-        this.apiKey = config.get("youtube.api.key");
+        Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+        this.apiKey = dotenv.get("YOUTUBE_API_KEY");
         if (this.apiKey == null) {
-            throw new IllegalStateException("YouTube API key not found in config");
+            throw new IllegalStateException("YouTube API key not found in .env file");
         }
 
         this.youtube = new YouTube.Builder(new NetHttpTransport(), new GsonFactory(), request -> {

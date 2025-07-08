@@ -30,9 +30,8 @@ public class OrderService implements IService<Order> {
     private final Connection connection;
 
     /**
-     * Performs OrderService operation.
-     *
-     * @return the result of the operation
+     * Constructs a new OrderService instance.
+     * Initializes database connection and user service.
      */
     public OrderService() {
         this.connection = DataSource.getInstance().getConnection();

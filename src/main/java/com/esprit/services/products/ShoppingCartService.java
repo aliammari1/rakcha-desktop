@@ -30,9 +30,8 @@ public class ShoppingCartService implements IService<ShoppingCart> {
     private final Connection connection;
 
     /**
-     * Performs ShoppingCartService operation.
-     *
-     * @return the result of the operation
+     * Constructs a new ShoppingCartService instance.
+     * Initializes database connection.
      */
     public ShoppingCartService() {
         this.connection = DataSource.getInstance().getConnection();

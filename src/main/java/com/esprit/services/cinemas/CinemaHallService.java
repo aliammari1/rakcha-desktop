@@ -13,8 +13,10 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 /**
- * Service class providing business logic for the RAKCHA application. Implements
- * CRUD operations and business rules for data management.
+ * Service class providing business logic for cinema halls in the RAKCHA
+ * application.
+ * Implements CRUD operations and business rules for cinema hall data
+ * management.
  *
  * @author RAKCHA Team
  * @version 1.0.0
@@ -25,9 +27,8 @@ public class CinemaHallService implements IService<CinemaHall> {
     private final CinemaService cinemaService;
 
     /**
-     * Performs CinemaHallService operation.
-     *
-     * @return the result of the operation
+     * Constructs a new CinemaHallService with database connection and required
+     * services.
      */
     public CinemaHallService() {
         this.connection = DataSource.getInstance().getConnection();
@@ -117,9 +118,10 @@ public class CinemaHallService implements IService<CinemaHall> {
     }
 
     /**
-     * Retrieves the CinemaHallById value.
+     * Retrieves a cinema hall by its ID.
      *
-     * @return the CinemaHallById value
+     * @param id the ID of the cinema hall to retrieve
+     * @return the cinema hall with the specified ID, or null if not found
      */
     public CinemaHall getCinemaHallById(Long id) {
         String query = "SELECT * FROM cinema_hall WHERE id = ?";
@@ -136,9 +138,10 @@ public class CinemaHallService implements IService<CinemaHall> {
     }
 
     /**
-     * Retrieves the CinemaHallByName value.
+     * Retrieves a cinema hall by its name.
      *
-     * @return the CinemaHallByName value
+     * @param name the name of the cinema hall to retrieve
+     * @return the cinema hall with the specified name, or null if not found
      */
     public CinemaHall getCinemaHallByName(String name) {
         String query = "SELECT * FROM cinema_hall WHERE name = ?";
@@ -155,9 +158,10 @@ public class CinemaHallService implements IService<CinemaHall> {
     }
 
     /**
-     * Retrieves the CinemaHallsByCinemaId value.
+     * Retrieves cinema halls by cinema ID.
      *
-     * @return the CinemaHallsByCinemaId value
+     * @param cinemaId the ID of the cinema to get halls for
+     * @return list of cinema halls for the specified cinema
      */
     public List<CinemaHall> getCinemaHallsByCinemaId(Long cinemaId) {
         List<CinemaHall> cinemaHalls = new ArrayList<>();
@@ -178,6 +182,10 @@ public class CinemaHallService implements IService<CinemaHall> {
         return cinemaHalls;
     }
 
+    /**
+     * @param rs
+     * @return CinemaHall
+     */
     private CinemaHall buildCinemaHall(ResultSet rs) {
         try {
             Cinema cinema = cinemaService.getCinemaById(rs.getLong("cinema_id"));

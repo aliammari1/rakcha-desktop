@@ -1,7 +1,5 @@
 package com.esprit;
 
-import com.esprit.utils.DatabaseManager;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,11 +18,8 @@ public class MainApp extends Application {
      * @param args
      */
     public static void main(final String[] args) {
-        DatabaseManager.switchToSQLite();
-        if (DatabaseManager.testConnection()) {
-            DatabaseManager.initializeSchema();
             Application.launch(args);
-        }
+
     }
 
     /**

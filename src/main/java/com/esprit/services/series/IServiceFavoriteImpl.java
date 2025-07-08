@@ -27,9 +27,8 @@ public class IServiceFavoriteImpl implements IService<Favorite> {
     public Statement statement;
 
     /**
-     * Performs IServiceFavoriteImpl operation.
-     *
-     * @return the result of the operation
+     * Constructs a new IServiceFavoriteImpl instance.
+     * Initializes database connection.
      */
     public IServiceFavoriteImpl() {
         this.connection = DataSource.getInstance().getConnection();

@@ -1,7 +1,5 @@
 package com.esprit.models.films;
 
-import jakarta.persistence.*;
-
 import com.esprit.models.users.Client;
 
 import lombok.AllArgsConstructor;
@@ -12,8 +10,6 @@ import lombok.NoArgsConstructor;
 /**
  * Represents a film comment.
  */
-@Entity
-@Table(name = "film_comments")
 @Data
 @NoArgsConstructor
 @Builder
@@ -28,19 +24,12 @@ import lombok.NoArgsConstructor;
  */
 public class FilmComment {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "comment", columnDefinition = "TEXT")
     private String comment;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
     private Client client;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "film_id", nullable = false)
     private Film film;
 
     /**

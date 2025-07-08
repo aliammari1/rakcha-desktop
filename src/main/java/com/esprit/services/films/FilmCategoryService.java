@@ -29,18 +29,18 @@ public class FilmCategoryService {
     private final Connection connection;
 
     /**
-     * Performs FilmCategoryService operation.
-     *
-     * @return the result of the operation
+     * Constructs a new FilmCategoryService instance.
+     * Initializes database connection.
      */
     public FilmCategoryService() {
         this.connection = DataSource.getInstance().getConnection();
     }
 
     /**
-     * Performs createFilmCategoryAssociation operation.
+     * Creates associations between a film and multiple categories.
      *
-     * @return the result of the operation
+     * @param film          the film to associate with categories
+     * @param categoryNames the list of category names to associate with the film
      */
     public void createFilmCategoryAssociation(Film film, List<String> categoryNames) {
         final String req = "INSERT INTO film_category (film_id, category_id) VALUES (?,?)";
@@ -103,9 +103,12 @@ public class FilmCategoryService {
     }
 
     /**
-     * Performs updateCategories operation.
+     * Updates the categories associated with a film.
+     * Removes existing associations and creates new ones.
      *
-     * @return the result of the operation
+     * @param film          the film whose categories to update
+     * @param categoryNames the new list of category names to associate with the
+     *                      film
      */
     public void updateCategories(final Film film, final List<String> categoryNames) {
         // Delete existing associations
@@ -142,9 +145,10 @@ public class FilmCategoryService {
     }
 
     /**
-     * Performs deleteFilmCategoryAssociation operation.
+     * Deletes the association between a specific film and category.
      *
-     * @return the result of the operation
+     * @param filmId     the ID of the film
+     * @param categoryId the ID of the category
      */
     public void deleteFilmCategoryAssociation(int filmId, int categoryId) {
         final String req = "DELETE FROM film_category WHERE film_id = ? AND category_id = ?";

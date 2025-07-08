@@ -189,8 +189,8 @@ public class DesignCategorieAdminController {
                                     .get(this.getIndex());
                             final CategoryService cs = new CategoryService();
                             cs.delete(categorieProduct);
-                            DesignCategorieAdminController.this.categorie_tableview.getItems().remove(categorieProduct);
-                            DesignCategorieAdminController.this.categorie_tableview.refresh();
+                            categorie_tableview.getItems().remove(categorieProduct);
+                            categorie_tableview.refresh();
                         });
                     }
 

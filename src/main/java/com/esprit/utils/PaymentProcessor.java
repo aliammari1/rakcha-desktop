@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.esprit.Config;
+import io.github.cdimascio.dotenv.Dotenv;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
@@ -19,10 +19,10 @@ public enum PaymentProcessor {
     private static final int CENTS_MULTIPLIER = 100;
 
     static {
-        Config config = Config.getInstance();
-        String apiKey = config.get("stripe.api.key");
+        Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+        String apiKey = dotenv.get("STRIPE_API_KEY");
         if (apiKey == null) {
-            LOGGER.severe("Stripe API key not found in config");
+            LOGGER.severe("Stripe API key not found in .env file");
             throw new ExceptionInInitializerError("Stripe API key is required");
         }
         Stripe.apiKey = apiKey;

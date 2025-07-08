@@ -30,18 +30,18 @@ public class FilmCinemaService {
     private final Connection connection;
 
     /**
-     * Performs FilmCinemaService operation.
-     *
-     * @return the result of the operation
+     * Constructs a new FilmCinemaService instance.
+     * Initializes database connection.
      */
     public FilmCinemaService() {
         this.connection = DataSource.getInstance().getConnection();
     }
 
     /**
-     * Performs createFilmCinemaAssociation operation.
+     * Creates associations between a film and multiple cinemas.
      *
-     * @return the result of the operation
+     * @param film        the film to associate with cinemas
+     * @param cinemaNames the list of cinema names to associate with the film
      */
     public void createFilmCinemaAssociation(Film film, List<String> cinemaNames) {
         final String req = "INSERT INTO film_cinema (film_id, cinema_id) VALUES (?,?)";
@@ -105,9 +105,11 @@ public class FilmCinemaService {
     }
 
     /**
-     * Performs updateCinemas operation.
+     * Updates the cinemas associated with a film.
+     * Removes existing associations and creates new ones.
      *
-     * @return the result of the operation
+     * @param film        the film whose cinemas to update
+     * @param cinemaNames the new list of cinema names to associate with the film
      */
     public void updateCinemas(final Film film, final List<String> cinemaNames) {
         // Update film first
@@ -150,16 +152,20 @@ public class FilmCinemaService {
     /**
      * Performs readMoviesForCinema operation.
      *
-     * @return the result of the operation
+     * Retrieves all films associated with a specific cinema.
+     *
+     * @param cinemaId the ID of the cinema
+     * @return list of films shown at the cinema
      */
     public List<Film> readMoviesForCinema(final Long cinemaId) {
         return getFilmsForCinema(cinemaId);
     }
 
     /**
-     * Performs deleteFilmCinemaAssociation operation.
+     * Deletes the association between a specific film and cinema.
      *
-     * @return the result of the operation
+     * @param filmId   the ID of the film
+     * @param cinemaId the ID of the cinema
      */
     public void deleteFilmCinemaAssociation(int filmId, int cinemaId) {
         final String req = "DELETE FROM film_cinema WHERE film_id = ? AND cinema_id = ?";

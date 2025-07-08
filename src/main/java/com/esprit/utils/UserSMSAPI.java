@@ -2,7 +2,7 @@ package com.esprit.utils;
 
 import java.util.logging.Logger;
 
-import com.esprit.Config;
+import io.github.cdimascio.dotenv.Dotenv;
 import com.vonage.client.VonageClient;
 import com.vonage.client.sms.MessageStatus;
 import com.vonage.client.sms.SmsSubmissionResponse;
@@ -18,12 +18,12 @@ public enum UserSMSAPI {
      * @param messageBody
      */
     public static void sendSMS(final int number, final String senderName, final String messageBody) {
-        final Config config = Config.getInstance();
-        final String apiKey = config.get("vonage.api.key");
-        final String apiSecret = config.get("vonage.api.secret");
+        final Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+        final String apiKey = dotenv.get("VONAGE_API_KEY");
+        final String apiSecret = dotenv.get("VONAGE_API_SECRET");
 
         if (apiKey == null || apiSecret == null) {
-            LOGGER.severe("Vonage API credentials not found in config");
+            LOGGER.severe("Vonage API credentials not found in .env file");
             return;
         }
 

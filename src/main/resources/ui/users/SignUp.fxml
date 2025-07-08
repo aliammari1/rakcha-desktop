@@ -6,116 +6,395 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.effect.*?>
 
-<HBox prefHeight="820.0" prefWidth="1229.0"
-    stylesheets="@styles/signup.css"
+<StackPane prefHeight="900.0" prefWidth="1400.0"
+    stylesheets="@../styles/signup.css"
     xmlns="http://javafx.com/javafx/21"
     xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="com.esprit.controllers.users.SignUpController">
 
-    <!-- Left Side - Form -->
-    <VBox spacing="20" minWidth="661.0" styleClass="form-section">
-        <padding>
-            <Insets top="40" right="40" bottom="40" left="40"/>
-        </padding>
+    <!-- Animated Background -->
+    <AnchorPane styleClass="signup-animated-background">
+        <!-- Floating elements -->
+        <Circle radius="8" layoutX="200" layoutY="100" styleClass="float-element float-1" />
+        <Rectangle width="15" height="15" layoutX="400" layoutY="150"
+            styleClass="float-element float-2" />
+        <Circle radius="6" layoutX="600" layoutY="80" styleClass="float-element float-3" />
+        <Rectangle width="12" height="12" layoutX="800" layoutY="200"
+            styleClass="float-element float-4" />
+        <Circle radius="10" layoutX="1000" layoutY="120" styleClass="float-element float-5" />
+        <Rectangle width="18" height="18" layoutX="1200" layoutY="180"
+            styleClass="float-element float-6" />
+        <Circle radius="5" layoutX="150" layoutY="400" styleClass="float-element float-7" />
+        <Rectangle width="20" height="20" layoutX="350" layoutY="500"
+            styleClass="float-element float-8" />
+        <Circle radius="7" layoutX="550" layoutY="600" styleClass="float-element float-9" />
+        <Rectangle width="14" height="14" layoutX="750" layoutY="450"
+            styleClass="float-element float-10" />
+    </AnchorPane>
 
-        <!-- Form Title -->
-        <Label text="Sign Up" styleClass="title-label">
-            <font>
-                <Font name="Outfit SemiBold" size="36.0"/>
-            </font>
-        </Label>
+    <HBox spacing="0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+        <!-- Left Side - Registration Form -->
+        <VBox styleClass="modern-signup-section" minWidth="800.0" spacing="25" HBox.hgrow="ALWAYS">
+            <padding>
+                <Insets top="40" right="50" bottom="40" left="50" />
+            </padding>
 
-        <!-- Form Fields -->
-        <GridPane hgap="20" vgap="15">
-            <columnConstraints>
-                <ColumnConstraints hgrow="ALWAYS" percentWidth="50"/>
-                <ColumnConstraints hgrow="ALWAYS" percentWidth="50"/>
-            </columnConstraints>
-
-            <!-- First Name -->
-            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                <Label text="First Name" styleClass="field-label"/>
-                <TextField fx:id="nomTextField" styleClass="text-input"/>
+            <!-- Header -->
+            <VBox spacing="10" alignment="CENTER">
+                <HBox alignment="CENTER" spacing="15">
+                    <FontIcon iconLiteral="fa-user-plus" iconSize="32"
+                        styleClass="signup-header-icon" />
+                    <Label text="Create Account" styleClass="signup-title">
+                        <font>
+                            <Font name="Outfit Bold" size="32.0" />
+                        </font>
+                    </Label>
+                </HBox>
+                <Label text="Join the Rakcha community today" styleClass="signup-subtitle">
+                    <font>
+                        <Font name="Outfit Regular" size="16.0" />
+                    </font>
+                </Label>
             </VBox>
 
-            <!-- Last Name -->
-            <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                <Label text="Last Name" styleClass="field-label"/>
-                <TextField fx:id="prenomTextField" styleClass="text-input"/>
+            <!-- Progress Indicator -->
+            <HBox spacing="10" alignment="CENTER" styleClass="progress-container">
+                <Circle radius="8" styleClass="progress-step active-step" />
+                <Line endX="30" styleClass="progress-line" />
+                <Circle radius="8" styleClass="progress-step" />
+                <Line endX="30" styleClass="progress-line" />
+                <Circle radius="8" styleClass="progress-step" />
+                <Label text="Personal Info" styleClass="progress-label" />
+            </HBox>
+
+            <ScrollPane fitToWidth="true" styleClass="transparent-scroll" VBox.vgrow="ALWAYS">
+                <VBox spacing="25">
+                    <!-- Personal Information Section -->
+                    <VBox spacing="20" styleClass="form-section-container">
+                        <Label text="Personal Information" styleClass="section-header">
+                            <graphic>
+                                <FontIcon iconLiteral="fa-user" iconSize="18" />
+                            </graphic>
+                        </Label>
+
+                        <GridPane hgap="20" vgap="18">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                                <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                            </columnConstraints>
+
+                            <!-- First Name -->
+                            <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                <Label text="First Name" styleClass="modern-field-label">
+                                    <font>
+                                        <Font name="Outfit Medium" size="14.0" />
+                                    </font>
+                                </Label>
+                                <HBox styleClass="modern-input-container">
+                                    <FontIcon iconLiteral="fa-user" iconSize="14"
+                                        styleClass="input-icon" />
+                                    <TextField fx:id="nomTextField"
+                                        promptText="Enter your first name"
+                                        styleClass="modern-text-field" HBox.hgrow="ALWAYS" />
+                                </HBox>
+                            </VBox>
+
+                            <!-- Last Name -->
+                            <VBox spacing="8" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                <Label text="Last Name" styleClass="modern-field-label">
+                                    <font>
+                                        <Font name="Outfit Medium" size="14.0" />
+                                    </font>
+                                </Label>
+                                <HBox styleClass="modern-input-container">
+                                    <FontIcon iconLiteral="fa-user" iconSize="14"
+                                        styleClass="input-icon" />
+                                    <TextField fx:id="prenomTextField"
+                                        promptText="Enter your last name"
+                                        styleClass="modern-text-field" HBox.hgrow="ALWAYS" />
+                                </HBox>
+                            </VBox>
+
+                            <!-- Email -->
+                            <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                <Label text="Email Address" styleClass="modern-field-label">
+                                    <font>
+                                        <Font name="Outfit Medium" size="14.0" />
+                                    </font>
+                                </Label>
+                                <HBox styleClass="modern-input-container">
+                                    <FontIcon iconLiteral="fa-envelope" iconSize="14"
+                                        styleClass="input-icon" />
+                                    <TextField fx:id="emailTextField"
+                                        promptText="your.email@example.com"
+                                        styleClass="modern-text-field" HBox.hgrow="ALWAYS" />
+                                </HBox>
+                            </VBox>
+
+                            <!-- Phone Number -->
+                            <VBox spacing="8" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                <Label text="Phone Number" styleClass="modern-field-label">
+                                    <font>
+                                        <Font name="Outfit Medium" size="14.0" />
+                                    </font>
+                                </Label>
+                                <HBox styleClass="modern-input-container">
+                                    <FontIcon iconLiteral="fa-phone" iconSize="14"
+                                        styleClass="input-icon" />
+                                    <TextField fx:id="num_telephoneTextField"
+                                        promptText="+1 (555) 123-4567"
+                                        styleClass="modern-text-field" HBox.hgrow="ALWAYS" />
+                                </HBox>
+                            </VBox>
+
+                            <!-- Birth Date -->
+                            <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                                <Label text="Date of Birth" styleClass="modern-field-label">
+                                    <font>
+                                        <Font name="Outfit Medium" size="14.0" />
+                                    </font>
+                                </Label>
+                                <HBox styleClass="modern-input-container">
+                                    <FontIcon iconLiteral="fa-calendar" iconSize="14"
+                                        styleClass="input-icon" />
+                                    <DatePicker fx:id="dateDeNaissanceDatePicker"
+                                        promptText="Select date"
+                                        styleClass="modern-date-picker" maxWidth="Infinity" />
+                                </HBox>
+                            </VBox>
+
+                            <!-- Address -->
+                            <VBox spacing="8" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                <Label text="Address" styleClass="modern-field-label">
+                                    <font>
+                                        <Font name="Outfit Medium" size="14.0" />
+                                    </font>
+                                </Label>
+                                <HBox styleClass="modern-input-container">
+                                    <FontIcon iconLiteral="fa-map-marker" iconSize="14"
+                                        styleClass="input-icon" />
+                                    <TextField fx:id="adresseTextField" promptText="Your address"
+                                        styleClass="modern-text-field" HBox.hgrow="ALWAYS" />
+                                </HBox>
+                            </VBox>
+                        </GridPane>
+                    </VBox>
+
+                    <!-- Account Security Section -->
+                    <VBox spacing="20" styleClass="form-section-container">
+                        <Label text="Account Security" styleClass="section-header">
+                            <graphic>
+                                <FontIcon iconLiteral="fa-shield" iconSize="18" />
+                            </graphic>
+                        </Label>
+
+                        <GridPane hgap="20" vgap="18">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                                <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                            </columnConstraints>
+
+                            <!-- Password -->
+                            <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                <Label text="Password" styleClass="modern-field-label">
+                                    <font>
+                                        <Font name="Outfit Medium" size="14.0" />
+                                    </font>
+                                </Label>
+                                <HBox styleClass="modern-input-container">
+                                    <FontIcon iconLiteral="fa-lock" iconSize="14"
+                                        styleClass="input-icon" />
+                                    <PasswordField fx:id="passwordTextField"
+                                        promptText="Create a strong password"
+                                        styleClass="modern-text-field" HBox.hgrow="ALWAYS" />
+                                </HBox>
+                                <Label text="Use 8+ characters with letters, numbers &amp; symbols"
+                                    styleClass="helper-text" />
+                            </VBox>
+
+                            <!-- Role -->
+                            <VBox spacing="8" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                <Label text="Account Type" styleClass="modern-field-label">
+                                    <font>
+                                        <Font name="Outfit Medium" size="14.0" />
+                                    </font>
+                                </Label>
+                                <HBox styleClass="modern-input-container">
+                                    <FontIcon iconLiteral="fa-users" iconSize="14"
+                                        styleClass="input-icon" />
+                                    <ComboBox fx:id="roleComboBox" promptText="Select your role"
+                                        styleClass="modern-combo-box" maxWidth="Infinity" />
+                                </HBox>
+                            </VBox>
+                        </GridPane>
+                    </VBox>
+
+                    <!-- Profile Picture Section -->
+                    <VBox spacing="20" styleClass="form-section-container" alignment="CENTER">
+                        <Label text="Profile Picture" styleClass="section-header">
+                            <graphic>
+                                <FontIcon iconLiteral="fa-camera" iconSize="18" />
+                            </graphic>
+                        </Label>
+
+                        <VBox spacing="15" alignment="CENTER">
+                            <StackPane styleClass="profile-image-container">
+                                <Circle radius="60" styleClass="profile-image-border" />
+                                <ImageView fx:id="photoDeProfilImageView" fitHeight="120.0"
+                                    fitWidth="120.0"
+                                    pickOnBounds="true" preserveRatio="true"
+                                    styleClass="profile-image-view">
+                                    <clip>
+                                        <Circle radius="60" centerX="60" centerY="60" />
+                                    </clip>
+                                </ImageView>
+                                <VBox alignment="CENTER" spacing="5" styleClass="upload-overlay">
+                                    <FontIcon iconLiteral="fa-camera" iconSize="24"
+                                        styleClass="upload-icon" />
+                                    <Label text="Upload" styleClass="upload-text" />
+                                </VBox>
+                            </StackPane>
+                            <Button onAction="#importImage" styleClass="modern-upload-btn">
+                                <graphic>
+                                    <HBox spacing="8" alignment="CENTER">
+                                        <FontIcon iconLiteral="fa-upload" iconSize="14" />
+                                        <Label text="Choose Profile Picture" />
+                                    </HBox>
+                                </graphic>
+                            </Button>
+                        </VBox>
+                    </VBox>
+
+                    <!-- Terms and Actions -->
+                    <VBox spacing="20" alignment="CENTER">
+                        <CheckBox text="I agree to the Terms of Service and Privacy Policy"
+                            styleClass="terms-checkbox" />
+
+                        <HBox spacing="15" alignment="CENTER">
+                            <Button fx:id="signUpButton" onAction="#signup"
+                                styleClass="modern-primary-btn">
+                                <graphic>
+                                    <HBox spacing="10" alignment="CENTER">
+                                        <FontIcon iconLiteral="fa-user-plus" iconSize="16" />
+                                        <Label text="Create Account" styleClass="btn-text" />
+                                    </HBox>
+                                </graphic>
+                                <padding>
+                                    <Insets top="15" right="30" bottom="15" left="30" />
+                                </padding>
+                            </Button>
+                            <Button fx:id="loginButton" onAction="#switchToLogin"
+                                styleClass="modern-secondary-btn">
+                                <graphic>
+                                    <HBox spacing="8" alignment="CENTER">
+                                        <FontIcon iconLiteral="fa-sign-in" iconSize="14" />
+                                        <Label text="Back to Login" />
+                                    </HBox>
+                                </graphic>
+                            </Button>
+                        </HBox>
+                    </VBox>
+                </VBox>
+            </ScrollPane>
+        </VBox>
+
+        <!-- Right Side - Welcome & Features -->
+        <VBox styleClass="welcome-features-section" minWidth="600.0" alignment="CENTER" spacing="35"
+            HBox.hgrow="ALWAYS">
+            <padding>
+                <Insets top="50" right="50" bottom="50" left="50" />
+            </padding>
+
+            <!-- Welcome Message -->
+            <VBox alignment="CENTER" spacing="20">
+                <ImageView fitHeight="80.0" fitWidth="80.0" preserveRatio="true"
+                    styleClass="welcome-logo">
+                    <Image url="@Logo.png" />
+                </ImageView>
+                <Label text="Join Rakcha Today!" styleClass="welcome-title">
+                    <font>
+                        <Font name="Outfit Bold" size="38.0" />
+                    </font>
+                </Label>
+                <Label text="Experience the future of cinema entertainment"
+                    styleClass="welcome-subtitle">
+                    <font>
+                        <Font name="Outfit Regular" size="18.0" />
+                    </font>
+                </Label>
             </VBox>
 
-            <!-- Email -->
-            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
-                <Label text="Email" styleClass="field-label"/>
-                <TextField fx:id="emailTextField" styleClass="text-input"/>
+            <!-- Feature Benefits -->
+            <VBox spacing="25" maxWidth="450">
+                <VBox spacing="15" styleClass="benefit-card">
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <Circle radius="25" styleClass="benefit-icon-circle">
+                            <effect>
+                                <DropShadow color="#e74141" radius="8" offsetX="0" offsetY="2" />
+                            </effect>
+                        </Circle>
+                        <FontIcon iconLiteral="fa-ticket" iconSize="20" styleClass="benefit-icon" />
+                    </HBox>
+                    <VBox spacing="8">
+                        <Label text="Smart Booking System" styleClass="benefit-title" />
+                        <Label
+                            text="Book tickets with AI-powered seat recommendations and real-time availability"
+                            styleClass="benefit-description" wrapText="true" />
+                    </VBox>
+                </VBox>
+
+                <VBox spacing="15" styleClass="benefit-card">
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <Circle radius="25" styleClass="benefit-icon-circle">
+                            <effect>
+                                <DropShadow color="#e74141" radius="8" offsetX="0" offsetY="2" />
+                            </effect>
+                        </Circle>
+                        <FontIcon iconLiteral="fa-star" iconSize="20" styleClass="benefit-icon" />
+                    </HBox>
+                    <VBox spacing="8">
+                        <Label text="Premium Content Access" styleClass="benefit-title" />
+                        <Label
+                            text="Exclusive series, early movie releases, and behind-the-scenes content"
+                            styleClass="benefit-description" wrapText="true" />
+                    </VBox>
+                </VBox>
+
+                <VBox spacing="15" styleClass="benefit-card">
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <Circle radius="25" styleClass="benefit-icon-circle">
+                            <effect>
+                                <DropShadow color="#e74141" radius="8" offsetX="0" offsetY="2" />
+                            </effect>
+                        </Circle>
+                        <FontIcon iconLiteral="fa-gift" iconSize="20" styleClass="benefit-icon" />
+                    </HBox>
+                    <VBox spacing="8">
+                        <Label text="Loyalty Rewards" styleClass="benefit-title" />
+                        <Label text="Earn points with every purchase and unlock exclusive discounts"
+                            styleClass="benefit-description" wrapText="true" />
+                    </VBox>
+                </VBox>
             </VBox>
 
-            <!-- Phone Number -->
-            <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                <Label text="Phone Number" styleClass="field-label"/>
-                <TextField fx:id="num_telephoneTextField" styleClass="text-input"/>
+            <!-- Social Proof -->
+            <VBox spacing="15" alignment="CENTER" styleClass="social-proof">
+                <HBox spacing="10" alignment="CENTER">
+                    <FontIcon iconLiteral="fa-users" iconSize="20" styleClass="social-icon" />
+                    <Label text="Join 10,000+ happy customers" styleClass="social-text" />
+                </HBox>
+                <HBox spacing="5" alignment="CENTER">
+                    <FontIcon iconLiteral="fa-star" iconSize="16" styleClass="star-icon" />
+                    <FontIcon iconLiteral="fa-star" iconSize="16" styleClass="star-icon" />
+                    <FontIcon iconLiteral="fa-star" iconSize="16" styleClass="star-icon" />
+                    <FontIcon iconLiteral="fa-star" iconSize="16" styleClass="star-icon" />
+                    <FontIcon iconLiteral="fa-star" iconSize="16" styleClass="star-icon" />
+                    <Label text="4.9/5 rating" styleClass="rating-text" />
+                </HBox>
             </VBox>
-
-            <!-- Password -->
-            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="2">
-                <Label text="Password" styleClass="field-label"/>
-                <TextField fx:id="passwordTextField" styleClass="text-input"/>
-            </VBox>
-
-            <!-- Role -->
-            <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                <Label text="Role" styleClass="field-label"/>
-                <ComboBox fx:id="roleComboBox" styleClass="combo-input" maxWidth="Infinity"/>
-            </VBox>
-
-            <!-- Address -->
-            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="3">
-                <Label text="Address" styleClass="field-label"/>
-                <TextField fx:id="adresseTextField" styleClass="text-input"/>
-            </VBox>
-
-            <!-- Birth Date -->
-            <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                <Label text="Birth Date" styleClass="field-label"/>
-                <DatePicker fx:id="dateDeNaissanceDatePicker" styleClass="date-input" maxWidth="Infinity"/>
-            </VBox>
-
-            <!-- Profile Picture -->
-            <VBox spacing="10" GridPane.columnSpan="2" GridPane.rowIndex="4" alignment="CENTER">
-                <ImageView fx:id="photoDeProfilImageView" fitHeight="150.0" fitWidth="150.0" 
-                          pickOnBounds="true" preserveRatio="true"/>
-                <Button onAction="#importImage" styleClass="secondary-button" text="Upload Profile Picture"/>
-            </VBox>
-        </GridPane>
-
-        <Region VBox.vgrow="ALWAYS"/>
-
-        <!-- Actions -->
-        <HBox spacing="15" alignment="CENTER">
-            <Button fx:id="signUpButton" onAction="#signup" styleClass="primary-button" text="Sign Up"/>
-            <Button fx:id="loginButton" onAction="#switchToLogin" styleClass="secondary-button" text="Back to Login"/>
-        </HBox>
-    </VBox>
-
-    <!-- Right Side - Banner -->
-    <VBox styleClass="banner-section" HBox.hgrow="ALWAYS">
-        <padding>
-            <Insets top="40" right="40" bottom="40" left="40"/>
-        </padding>
-
-        <!-- Welcome Text -->
-        <Label text="Welcome to Rakcha" styleClass="banner-title">
-            <font>
-                <Font name="Outfit SemiBold" size="35.0"/>
-            </font>
-        </Label>
-
-        <!-- Logo -->
-        <ImageView fitHeight="325.0" fitWidth="299.0" 
-                   pickOnBounds="true" preserveRatio="true">
-            <Image url="@Logo.png"/>
-        </ImageView>
-    </VBox>
-
-</HBox>
+        </VBox>
+    </HBox>
+</StackPane>

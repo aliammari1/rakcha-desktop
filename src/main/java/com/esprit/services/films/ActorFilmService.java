@@ -15,32 +15,45 @@ import com.esprit.utils.DataSource;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 /**
- * Service class providing business logic for the RAKCHA application. Implements
- * CRUD operations and business rules for data management.
+ * Service class providing business logic for managing associations between
+ * actors and films in the RAKCHA application.
+ * This class handles the many-to-many relationship between actors and films,
+ * allowing for creating, retrieving,
+ * updating, and deleting these associations.
+ *
+ * 
+ * Key features include:
+ * <ul>
+ * <li>Creating actor-film associations</li>
+ * <li>Retrieving actors for a specific film</li>
+ * <li>Retrieving films for a specific actor</li>
+ * <li>Updating actor associations for a film</li>
+ * <li>Getting actor names as a formatted string</li>
+ * <li>Deleting specific actor-film associations</li>
+ * </ul>
  *
  * @author RAKCHA Team
  * @version 1.0.0
  * @since 1.0.0
  */
+@Slf4j
 public class ActorFilmService {
     private static final Logger LOGGER = Logger.getLogger(ActorFilmService.class.getName());
     private final Connection connection;
 
     /**
-     * Performs ActorFilmService operation.
-     *
-     * @return the result of the operation
+     * Constructor that initializes the database connection.
      */
     public ActorFilmService() {
         this.connection = DataSource.getInstance().getConnection();
     }
 
     /**
-     * Performs createFilmActorAssociation operation.
-     *
-     * @return the result of the operation
+     * Creates associations between a film and multiple actors based on actor names.
+     * 
+     * @param film       the film to associate actors with
+     * @param actorNames list of actor names to be associated with the film
      */
     public void createFilmActorAssociation(Film film, List<String> actorNames) {
         final String req = "INSERT INTO actor_film (film_id, actor_id) VALUES (?,?)";
@@ -60,9 +73,10 @@ public class ActorFilmService {
     }
 
     /**
-     * Retrieves the ActorsForFilm value.
+     * Retrieves the list of actors associated with a specific film.
      *
-     * @return the ActorsForFilm value
+     * @param filmId the ID of the film to get actors for
+     * @return the list of actors associated with the film
      */
     public List<Actor> getActorsForFilm(int filmId) {
         final List<Actor> actors = new ArrayList<>();
@@ -81,9 +95,10 @@ public class ActorFilmService {
     }
 
     /**
-     * Retrieves the FilmsForActor value.
+     * Retrieves the list of films associated with a specific actor.
      *
-     * @return the FilmsForActor value
+     * @param actorId the ID of the actor to get films for
+     * @return the list of films the actor has appeared in
      */
     public List<Film> getFilmsForActor(int actorId) {
         final List<Film> films = new ArrayList<>();
@@ -103,9 +118,12 @@ public class ActorFilmService {
     }
 
     /**
-     * Performs updateActors operation.
+     * Updates the actors associated with a film by first removing all existing
+     * associations
+     * and then creating new ones based on the provided actor names.
      *
-     * @return the result of the operation
+     * @param film       the film to update actor associations for
+     * @param actorNames list of actor names to be associated with the film
      */
     public void updateActors(final Film film, final List<String> actorNames) {
         // Delete existing associations
@@ -123,9 +141,10 @@ public class ActorFilmService {
     }
 
     /**
-     * Retrieves the ActorsNames value.
+     * Gets a comma-separated string of actor names for a specific film.
      *
-     * @return the ActorsNames value
+     * @param filmId the ID of the film to get actor names for
+     * @return a comma-separated string of actor names
      */
     public String getActorsNames(final Long filmId) {
         final String req = "SELECT GROUP_CONCAT(a.name SEPARATOR ', ') AS actorNames FROM actors a JOIN actor_film af ON a.id = af.actor_id WHERE af.film_id = ?";
@@ -142,9 +161,10 @@ public class ActorFilmService {
     }
 
     /**
-     * Performs deleteFilmActorAssociation operation.
+     * Deletes the association between a specific film and actor.
      *
-     * @return the result of the operation
+     * @param filmId  the ID of the film to remove from the association
+     * @param actorId the ID of the actor to remove from the association
      */
     public void deleteFilmActorAssociation(int filmId, int actorId) {
         final String req = "DELETE FROM actor_film WHERE film_id = ? AND actor_id = ?";

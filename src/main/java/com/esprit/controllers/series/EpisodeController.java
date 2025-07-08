@@ -16,6 +16,7 @@ import com.esprit.models.series.Episode;
 import com.esprit.models.series.Series;
 import com.esprit.services.series.IServiceEpisodeImpl;
 import com.esprit.services.series.IServiceSeriesImpl;
+import com.esprit.utils.CloudinaryStorage;
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
@@ -71,6 +72,7 @@ public class EpisodeController {
     private ComboBox<String> serieF;
     private String imgpath;
     private String videopath;
+    private String cloudinaryImageUrl;
     private List<Series> serieList;
     @FXML
     private TableView<Episode> tableView;
@@ -120,12 +122,12 @@ public class EpisodeController {
                     final Episode episode = this.getTableView().getItems().get(this.getIndex());
                     try {
                         iServiceEpisode.delete(episode);
-                        EpisodeController.this.tableView.getItems().remove(episode);
-                        EpisodeController.this.showAlert("OK", "Deleted successfully !");
-                        EpisodeController.this.tableView.refresh();
+                        tableView.getItems().remove(episode);
+                        showAlert("OK", "Deleted successfully !");
+                        tableView.refresh();
                     } catch (final Exception e) {
                         EpisodeController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
-                        EpisodeController.this.showAlert("Error", e.getMessage());
+                        showAlert("Error", e.getMessage());
                     }
                 });
             }
@@ -162,8 +164,8 @@ public class EpisodeController {
                     this.clickCount++;
                     if (2 == clickCount) {
                         final Episode episode = this.getTableView().getItems().get(this.getIndex());
-                        EpisodeController.this.modifierEpisode(episode);
-                        EpisodeController.this.tableView.refresh();
+                        modifierEpisode(episode);
+                        tableView.refresh();
                         this.clickCount = 0;
                     }
                 });
@@ -354,19 +356,18 @@ public class EpisodeController {
         final File selectedFile = fileChooser.showOpenDialog(null);
         if (null != selectedFile) {
             try {
-                final String destinationDirectory1 = "./src/main/resources/img/series/";
-                final String destinationDirectory2 = "C:\\xampp\\htdocs\\Rakcha\\rakcha-web\\public\\img\\series\\";
-                final Path destinationPath1 = Paths.get(destinationDirectory1);
-                final Path destinationPath2 = Paths.get(destinationDirectory2);
-                final String uniqueFileName = System.currentTimeMillis() + "_" + selectedFile.getName();
-                final Path destinationFilePath1 = destinationPath1.resolve(uniqueFileName);
-                final Path destinationFilePath2 = destinationPath2.resolve(uniqueFileName);
-                Files.copy(selectedFile.toPath(), destinationFilePath1);
-                Files.copy(selectedFile.toPath(), destinationFilePath2);
-                final Image selectedImage = new Image(destinationFilePath1.toUri().toString());
+                // Use the CloudinaryStorage service to upload the image
+                CloudinaryStorage cloudinaryStorage = CloudinaryStorage.getInstance();
+                cloudinaryImageUrl = cloudinaryStorage.uploadImage(selectedFile);
+
+                // Display the image in the ImageView
+                final Image selectedImage = new Image(cloudinaryImageUrl);
                 this.episodeImageView.setImage(selectedImage);
+                this.imgpath = cloudinaryImageUrl;
+
+                LOGGER.info("Image uploaded to Cloudinary: " + cloudinaryImageUrl);
             } catch (final IOException e) {
-                EpisodeController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                LOGGER.log(Level.SEVERE, "Error uploading image to Cloudinary", e);
             }
         }
     }

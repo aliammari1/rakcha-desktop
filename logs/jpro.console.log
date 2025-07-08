@@ -1,0 +1,32 @@
+2025-07-08 14:19:19,883 [ERROR] in Thread-0 - java.lang.reflect.InvocationTargetException - Thread-0
+2025-07-08 14:19:19,889 [ERROR] in Thread-0 - 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:118) - Thread-0
+2025-07-08 14:19:19,891 [ERROR] in Thread-0 - 	at java.base/java.lang.reflect.Method.invoke(Method.java:580) - Thread-0
+2025-07-08 14:19:19,892 [ERROR] in Thread-0 - 	at com.jpro.boot.JProBoot.callMain(JProBoot.java:99) - Thread-0
+2025-07-08 14:19:19,892 [ERROR] in Thread-0 - 	at com.jpro.boot.JProBoot.lambda$startInThread$0(JProBoot.java:110) - Thread-0
+2025-07-08 14:19:19,892 [ERROR] in Thread-0 - 	at java.base/java.lang.Thread.run(Thread.java:1583) - Thread-0
+2025-07-08 14:23:25,363 [ERROR] in Thread-0 - java.lang.reflect.InvocationTargetException - Thread-0
+2025-07-08 14:23:25,364 [ERROR] in Thread-0 - 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:118) - Thread-0
+2025-07-08 14:27:58,317 [ERROR] in Thread-0 - java.lang.reflect.InvocationTargetException - Thread-0
+2025-07-08 14:27:58,318 [ERROR] in Thread-0 - 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:118) - Thread-0
+2025-07-08 14:27:58,318 [ERROR] in Thread-0 - 	at java.base/java.lang.reflect.Method.invoke(Method.java:580) - Thread-0
+2025-07-08 14:29:09,020 [ERROR] in Thread-0 - java.lang.reflect.InvocationTargetException - Thread-0
+2025-07-08 14:35:21,178 [ERROR] in Thread-0 - java.lang.reflect.InvocationTargetException - Thread-0
+2025-07-08 14:35:21,180 [ERROR] in Thread-0 - 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:118) - Thread-0
+2025-07-08 14:35:21,180 [ERROR] in Thread-0 - 	at java.base/java.lang.reflect.Method.invoke(Method.java:580) - Thread-0
+2025-07-08 14:35:21,180 [ERROR] in Thread-0 - 	at com.jpro.boot.JProBoot.callMain(JProBoot.java:99) - Thread-0
+2025-07-08 14:35:21,180 [ERROR] in Thread-0 - 	at com.jpro.boot.JProBoot.lambda$startInThread$0(JProBoot.java:110) - Thread-0
+2025-07-08 14:35:21,180 [ERROR] in Thread-0 - 	at java.base/java.lang.Thread.run(Thread.java:1583) - Thread-0
+2025-07-08 14:35:21,180 [ERROR] in Thread-0 - Caused by: java.lang.UnsupportedClassVersionError: javafx/scene/Node has been compiled by a more recent version of the Java Runtime (class file version 66.0), this version of the Java Runtime only recognizes class file versions up to 65.0 - Thread-0
+2025-07-08 14:35:21,180 [ERROR] in Thread-0 - 	at java.base/java.lang.ClassLoader.defineClass1(Native Method) - Thread-0
+2025-07-08 14:35:21,180 [ERROR] in Thread-0 - 	at java.base/java.lang.ClassLoader.defineClass(ClassLoader.java:1027) - Thread-0
+2025-07-08 14:35:21,181 [ERROR] in Thread-0 - 	at java.base/java.security.SecureClassLoader.defineClass(SecureClassLoader.java:150) - Thread-0
+2025-07-08 14:35:21,181 [ERROR] in Thread-0 - 	at java.base/jdk.internal.loader.BuiltinClassLoader.defineClass(BuiltinClassLoader.java:862) - Thread-0
+2025-07-08 14:35:21,181 [ERROR] in Thread-0 - 	at java.base/jdk.internal.loader.BuiltinClassLoader.findClassOnClassPathOrNull(BuiltinClassLoader.java:760) - Thread-0
+2025-07-08 14:35:21,181 [ERROR] in Thread-0 - 	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClassOrNull(BuiltinClassLoader.java:681) - Thread-0
+2025-07-08 14:35:21,181 [ERROR] in Thread-0 - 	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:639) - Thread-0
+2025-07-08 14:35:21,181 [ERROR] in Thread-0 - 	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188) - Thread-0
+2025-07-08 14:35:21,181 [ERROR] in Thread-0 - 	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526) - Thread-0
+2025-07-08 14:35:21,181 [ERROR] in Thread-0 - 	at com.jpro.boot.SpecialClassLoader.findClass(SpecialClassLoader.java:24) - Thread-0
+2025-07-08 14:35:21,181 [ERROR] in Thread-0 - 	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:593) - Thread-0
+2025-07-08 14:35:21,181 [ERROR] in Thread-0 - 	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:580) - Thread-0
+2025-07-08 14:49:08,379 [ERROR] in Thread-0 - java.lang.reflect.InvocationTargetException - Thread-0

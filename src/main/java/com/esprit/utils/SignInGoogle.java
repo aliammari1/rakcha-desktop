@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 
 import org.asynchttpclient.DefaultAsyncHttpClientConfig;
 
-import com.esprit.Config;
+import io.github.cdimascio.dotenv.Dotenv;
 import com.github.scribejava.apis.GoogleApi20;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.httpclient.HttpClientConfig;
@@ -35,21 +35,20 @@ public enum SignInGoogle {
      *
      * @return Authorization URL for the user to visit
      * @throws InterruptedException
-     *                               if the operation is interrupted
+     *                              if the operation is interrupted
      * @throws ExecutionException
-     *                               if the operation fails
+     *                              if the operation fails
      * @throws IOException
-     *                               if there's an I/O error
-     * @throws IllegalStateException
-     *                               if required environment variables are missing
+     *                              if there's an I/O error
+     *                              if required environment variables are missing
      */
     public static String signInWithGoogle() throws InterruptedException, ExecutionException, IOException {
-        Config config = Config.getInstance();
-        String clientId = config.get("google.client.id");
-        String clientSecret = config.get("google.client.secret");
+        Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+        String clientId = dotenv.get("GOOGLE_CLIENT_ID");
+        String clientSecret = dotenv.get("GOOGLE_CLIENT_SECRET");
 
         if (clientId == null || clientSecret == null) {
-            throw new IllegalStateException("Google OAuth credentials not found in config");
+            throw new IllegalStateException("Google OAuth credentials not found in .env file");
         }
 
         HttpClientConfig clientConfig = new AhcHttpClientConfig(new DefaultAsyncHttpClientConfig.Builder()

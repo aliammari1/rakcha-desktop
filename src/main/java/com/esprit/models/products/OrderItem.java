@@ -1,7 +1,5 @@
 package com.esprit.models.products;
 
-import jakarta.persistence.*;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,8 +8,7 @@ import lombok.NoArgsConstructor;
 /**
  * Represents an item in an order.
  */
-@Entity
-@Table(name = "order_items")
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -26,19 +23,12 @@ import lombok.NoArgsConstructor;
  */
 public class OrderItem {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "quantity", nullable = false)
     private int quantity;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
     /**

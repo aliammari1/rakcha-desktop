@@ -8,18 +8,19 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 
-<VBox prefHeight="855.0" prefWidth="1507.0" stylesheets="@styles/filmStyle.css"
+<VBox prefHeight="855.0" prefWidth="1507.0" stylesheets="@../styles/filmStyle.css"
     xmlns="http://javafx.com/javafx/21"
-    xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.esprit.controllers.cinemas.DashboardClientController">
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.esprit.controllers.cinemas.DashboardClientController">
 
     <HBox VBox.vgrow="ALWAYS">
         <!-- SideBar -->
         <fx:include source="../clientSideBar.fxml" />
-        
+
         <!-- Main Content -->
         <VBox spacing="20" HBox.hgrow="ALWAYS">
             <padding>
-                <Insets top="25" right="25" bottom="25" left="25"/>
+                <Insets top="25" right="25" bottom="25" left="25" />
             </padding>
 
             <!-- Header Section -->
@@ -33,7 +34,8 @@
                 </VBox>
                 <Region HBox.hgrow="ALWAYS" />
                 <ComboBox fx:id="tricomboBox" prefHeight="40.0" prefWidth="139.0" styleClass="sale" />
-                <TextField fx:id="searchbar1" prefHeight="42.0" prefWidth="248.0" promptText="Search here ......................" />
+                <TextField fx:id="searchbar1" prefHeight="42.0" prefWidth="248.0"
+                    promptText="Search here ......................" />
                 <Button mnemonicParsing="false" onAction="#filtrer" styleClass="sale" text="Filter" />
             </HBox>
 
@@ -41,7 +43,7 @@
             <HBox VBox.vgrow="ALWAYS" spacing="20">
                 <!-- Left Side - Cinema List -->
                 <ScrollPane fitToWidth="true" HBox.hgrow="ALWAYS">
-                    <FlowPane fx:id="cinemaFlowPane" styleClass="bg-white" VBox.vgrow="ALWAYS"/>
+                    <FlowPane fx:id="cinemaFlowPane" styleClass="bg-white" VBox.vgrow="ALWAYS" />
                 </ScrollPane>
 
                 <!-- Right Side - Top 3 -->
@@ -79,7 +81,7 @@
     <!-- Filter Anchor -->
     <AnchorPane fx:id="filterAnchor" styleClass="bg-white" visible="false">
         <VBox spacing="10">
-            <Button text="Apply Filter" onAction="#filtrercinema"/>
+            <Button text="Apply Filter" onAction="#filtrercinema" />
         </VBox>
     </AnchorPane>
 
@@ -90,28 +92,31 @@
                 <FontAwesomeIconView glyphName="CLOSE" onMouseClicked="#closeCommets" size="20" />
             </HBox>
             <ScrollPane fx:id="ScrollPaneComments" VBox.vgrow="ALWAYS">
-                <VBox spacing="5"/>
+                <VBox spacing="5" />
             </ScrollPane>
             <HBox spacing="10" alignment="CENTER">
-                <TextArea fx:id="txtAreaComments" HBox.hgrow="ALWAYS" promptText="Write your comment..."/>
-                <FontAwesomeIconView fill="#ab3a3a" glyphName="SEND" onMouseClicked="#AddComment" size="30" />
+                <TextArea fx:id="txtAreaComments" HBox.hgrow="ALWAYS"
+                    promptText="Write your comment..." />
+                <FontAwesomeIconView fill="#ab3a3a" glyphName="SEND" onMouseClicked="#AddComment"
+                    size="30" />
             </HBox>
         </VBox>
     </AnchorPane>
 
     <!-- List Cinema Client -->
-    <AnchorPane fx:id="listCinemaClient" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" 
-                AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0">
+    <AnchorPane fx:id="listCinemaClient" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0"
+        AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0">
         <VBox spacing="20">
             <!-- Header Section -->
             <HBox spacing="15" alignment="CENTER_LEFT">
                 <ComboBox fx:id="tricomboBox" prefHeight="40.0" prefWidth="139.0" styleClass="sale" />
-                <TextField fx:id="searchbar1" prefHeight="42.0" prefWidth="248.0" promptText="Search here ...." />
+                <TextField fx:id="searchbar1" prefHeight="42.0" prefWidth="248.0"
+                    promptText="Search here ...." />
                 <Button mnemonicParsing="false" onAction="#filtrer" styleClass="sale" text="Filter" />
             </HBox>
 
             <!-- Cinema Flow Pane -->
-            <FlowPane fx:id="cinemaFlowPane" styleClass="bg-white" VBox.vgrow="ALWAYS"/>
+            <FlowPane fx:id="cinemaFlowPane" styleClass="bg-white" VBox.vgrow="ALWAYS" />
 
             <!-- Top 3 Section -->
             <AnchorPane fx:id="Anchortop3" VBox.vgrow="ALWAYS" />

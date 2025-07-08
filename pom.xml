@@ -8,18 +8,18 @@
   <artifactId>RAKCHA</artifactId>
   <version>1.0.6</version>
   <properties>
-    <maven.compiler.source>17</maven.compiler.source>
-    <maven.compiler.target>17</maven.compiler.target>
-    <maven.compiler.release>17</maven.compiler.release>
+    <maven.compiler.source>21</maven.compiler.source>
+    <maven.compiler.target>21</maven.compiler.target>
+    <maven.compiler.release>21</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     <junit.version>5.10.0</junit.version>
-    <hibernate.version>7.0.2.Final</hibernate.version>
     <lombok.version>1.18.28</lombok.version>
     <slf4j.version>2.0.9</slf4j.version>
     <logback.version>1.4.12</logback.version>
     <h2.version>2.2.224</h2.version>
     <testfx.version>4.0.18</testfx.version>
+    <javafx.version>20.0.2</javafx.version>
   </properties>
 
   <repositories>
@@ -31,27 +31,25 @@
       <id>maven-central</id>
       <url>https://repo.maven.apache.org/maven2</url>
     </repository>
+    <repository>
+      <id>jpro - sandec repository</id>
+      <url>https://sandec.jfrog.io/artifactory/repo</url>
+    </repository>
   </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>jpro - sandec repository</id>
+      <url>https://sandec.jfrog.io/artifactory/repo</url>
+    </pluginRepository>
+  </pluginRepositories>
 
   <dependencies>
-
-    <!-- Hibernate ORM Dependencies -->
     <dependency>
-      <groupId>org.hibernate.orm</groupId>
-      <artifactId>hibernate-core</artifactId>
-      <version>${hibernate.version}</version>
+      <groupId>one.jpro</groupId>
+      <artifactId>jpro-webapi</artifactId>
+      <version>2025.2.1</version>
+      <scope>compile</scope>
     </dependency>
-    <dependency>
-      <groupId>org.hibernate.orm</groupId>
-      <artifactId>hibernate-hikaricp</artifactId>
-      <version>${hibernate.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.hibernate.orm</groupId>
-      <artifactId>hibernate-community-dialects</artifactId>
-      <version>${hibernate.version}</version>
-    </dependency>
-
     <!-- H2 Database for development -->
     <dependency>
       <groupId>com.h2database</groupId>
@@ -94,23 +92,6 @@
       <groupId>org.eclipse.angus</groupId>
       <artifactId>angus-activation</artifactId>
       <version>1.0.0</version>
-    </dependency>
-
-    <!-- StAX API and implementations -->
-    <dependency>
-      <groupId>javax.xml.stream</groupId>
-      <artifactId>stax-api</artifactId>
-      <version>1.0-2</version>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.woodstox</groupId>
-      <artifactId>stax2-api</artifactId>
-      <version>4.2.1</version>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.woodstox</groupId>
-      <artifactId>woodstox-core</artifactId>
-      <version>6.4.0</version>
     </dependency>
 
     <!-- Additional XML support -->
@@ -231,12 +212,12 @@
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
-      <version>21.0.2</version>
+      <version>${javafx.version}</version>
     </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>
-      <version>21.0.2</version>
+      <version>${javafx.version}</version>
     </dependency>
     <dependency>
       <groupId>de.jensd</groupId>
@@ -251,7 +232,7 @@
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-base</artifactId>
-      <version>21.0.2</version>
+      <version>${javafx.version}</version>
     </dependency>
     <dependency>
       <groupId>com.google.http-client</groupId>
@@ -361,17 +342,17 @@
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-web</artifactId>
-      <version>21.0.2</version>
+      <version>${javafx.version}</version>
     </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-swing</artifactId>
-      <version>21.0.2</version>
+      <version>${javafx.version}</version>
     </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-media</artifactId>
-      <version>21.0.2</version>
+      <version>${javafx.version}</version>
     </dependency>
     <dependency>
       <groupId>org.kordamp.ikonli</groupId>
@@ -455,9 +436,9 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.11.0</version>
         <configuration>
-          <source>17</source>
-          <target>17</target>
-          <release>17</release>
+          <source>21</source>
+          <target>21</target>
+          <release>21</release>
           <annotationProcessorPaths>
             <path>
               <groupId>org.projectlombok</groupId>
@@ -466,27 +447,6 @@
             </path>
           </annotationProcessorPaths>
         </configuration>
-      </plugin>      <!--
-      Maven Dependency Plugin to copy dependencies -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <version>3.6.1</version>
-        <executions>
-          <execution>
-            <id>copy-dependencies</id>
-            <phase>prepare-package</phase>
-            <goals>
-              <goal>copy-dependencies</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/lib</outputDirectory>
-              <overWriteReleases>false</overWriteReleases>
-              <overWriteSnapshots>false</overWriteSnapshots>
-              <overWriteIfNewer>true</overWriteIfNewer>
-            </configuration>
-          </execution>
-        </executions>
       </plugin>
 
       <!-- JavaFX Maven Plugin -->
@@ -496,124 +456,6 @@
         <version>0.0.8</version>
         <configuration>
           <mainClass>com.esprit.MainApp</mainClass>
-          <commandlineArgs>-Dfile.encoding=UTF-8</commandlineArgs>
-          <includePathExceptionsInClasspath>true</includePathExceptionsInClasspath>
-          <options>
-            <option>-Djavax.xml.stream.XMLInputFactory=com.ctc.wstx.stax.WstxInputFactory</option>
-            <option>-Djavax.xml.stream.XMLOutputFactory=com.ctc.wstx.stax.WstxOutputFactory</option>
-            <option>-Djavax.xml.stream.XMLEventFactory=com.ctc.wstx.stax.WstxEventFactory</option>
-            <option>
-              -Djakarta.xml.bind.JAXBContextFactory=org.glassfish.jaxb.runtime.v2.JAXBContextFactory</option>
-            <option>-Djdk.module.illegalAccess=deny</option>
-            <option>--add-opens</option>
-            <option>java.base/java.lang=ALL-UNNAMED</option>
-            <option>--add-opens</option>
-            <option>java.base/java.nio=ALL-UNNAMED</option>
-            <option>--add-opens</option>
-            <option>java.base/java.util=ALL-UNNAMED</option>
-            <option>--add-exports</option>
-            <option>java.base/sun.nio.ch=ALL-UNNAMED</option>
-            <option>--add-exports</option>
-            <option>java.management/sun.management=ALL-UNNAMED</option>
-            <option>--add-exports</option>
-            <option>jdk.unsupported/sun.misc=ALL-UNNAMED</option>
-            <option>--add-exports</option>
-            <option>java.xml/com.sun.org.apache.xerces.internal.dom=ALL-UNNAMED</option>
-            <option>--add-opens</option>
-            <option>java.xml/com.sun.org.apache.xerces.internal.util=ALL-UNNAMED</option>
-            <option>--add-opens</option>
-            <option>java.xml/com.sun.org.apache.xerces.internal.parsers=ALL-UNNAMED</option>
-            <option>--add-opens</option>
-            <option>java.xml/com.sun.org.apache.xerces.internal.impl=ALL-UNNAMED</option>
-            <option>--add-opens</option>
-            <option>java.xml/com.sun.org.apache.xerces.internal.impl.dtd=ALL-UNNAMED</option>
-            <option>--add-opens</option>
-            <option>java.xml/com.sun.org.apache.xerces.internal.impl.xs=ALL-UNNAMED</option>
-            <option>--add-opens</option>
-            <option>java.xml/com.sun.org.apache.xml.internal.serialize=ALL-UNNAMED</option>
-            <option>--add-opens</option>
-            <option>java.base/java.io=ALL-UNNAMED</option>
-            <option>--add-opens</option>
-            <option>java.base/java.util.regex=ALL-UNNAMED</option>
-          </options>
-          <stripDebug>true</stripDebug>
-          <compress>2</compress>
-          <noHeaderFiles>true</noHeaderFiles>
-          <noManPages>true</noManPages>
-          <launcher>rakcha</launcher>
-          <jlinkImageName>rakcha-app</jlinkImageName>
-          <jlinkZipName>rakcha-app</jlinkZipName>
-        </configuration>
-      </plugin>
-
-      <!-- Maven Exec Plugin for running the application -->
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>3.1.1</version>
-        <configuration>
-          <mainClass>com.esprit.MainApp</mainClass>
-          <classpathScope>runtime</classpathScope>
-          <cleanupDaemonThreads>false</cleanupDaemonThreads>
-          <systemProperties>
-            <systemProperty>
-              <key>javax.xml.stream.XMLInputFactory</key>
-              <value>com.ctc.wstx.stax.WstxInputFactory</value>
-            </systemProperty>
-            <systemProperty>
-              <key>javax.xml.stream.XMLOutputFactory</key>
-              <value>com.ctc.wstx.stax.WstxOutputFactory</value>
-            </systemProperty>
-            <systemProperty>
-              <key>javax.xml.stream.XMLEventFactory</key>
-              <value>com.ctc.wstx.stax.WstxEventFactory</value>
-            </systemProperty>
-            <systemProperty>
-              <key>jakarta.xml.bind.JAXBContextFactory</key>
-              <value>org.glassfish.jaxb.runtime.v2.JAXBContextFactory</value>
-            </systemProperty>
-            <systemProperty>
-              <key>hibernate.jakarta.xml.bind.JAXBContextFactory</key>
-              <value>org.glassfish.jaxb.runtime.v2.JAXBContextFactory</value>
-            </systemProperty>
-          </systemProperties>
-        </configuration>
-      </plugin>
-
-      <!-- Maven Shade Plugin for fat JAR -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-shade-plugin</artifactId>
-        <version>3.6.0</version>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-            <configuration>
-              <createDependencyReducedPom>false</createDependencyReducedPom>
-              <transformers>
-                <transformer
-                  implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <mainClass>com.esprit.MainApp</mainClass>
-                </transformer>
-              </transformers>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-      <!-- Surefire Plugin for Testing -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.1.2</version>
-        <configuration>
-          <argLine>
-            --add-opens javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
-            --add-exports javafx.graphics/com.sun.glass.ui=ALL-UNNAMED
-          </argLine>
         </configuration>
       </plugin>
 
@@ -654,67 +496,14 @@
             <version>1.12.0</version>
           </dependency>
         </dependencies>
-      </plugin>      <!--
-      Javadoc Plugin for Documentation Generation -->
-      <!-- <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.6.3</version>
-        <configuration>
-          <source>17</source>
-          <encoding>UTF-8</encoding>
-          <docencoding>UTF-8</docencoding>
-          <charset>UTF-8</charset>
-          <show>private</show>
-          <nohelp>true</nohelp>
-          <failOnError>false</failOnError>
-          <failOnWarnings>false</failOnWarnings>
-          <quiet>true</quiet>
-          <reportOutputDirectory>${project.build.directory}/reports</reportOutputDirectory>
-          <destDir>apidocs</destDir>
-          <additionalJOptions>
-            <additionalJOption>-Xdoclint:none</additionalJOption>
-          </additionalJOptions>
-          <tags>
-            <tag>
-              <name>apiNote</name>
-              <placement>a</placement>
-              <head>API Note:</head>
-            </tag>
-            <tag>
-              <name>implSpec</name>
-              <placement>a</placement>
-              <head>Implementation Requirements:</head>
-            </tag>
-            <tag>
-              <name>implNote</name>
-              <placement>a</placement>
-              <head>Implementation Note:</head>
-            </tag>
-          </tags>
-        </configuration>
-        <executions>
-          <execution>
-            <id>attach-javadocs</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>generate-docs</id>
-            <phase>package</phase>
-            <goals>
-              <goal>javadoc</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin> -->
+      </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>3.6.3</version>
         <configuration>
-          <source>17</source>
+          <source>21</source>
           <encoding>UTF-8</encoding>
           <docencoding>UTF-8</docencoding>
           <charset>UTF-8</charset>
@@ -766,7 +555,14 @@
         </executions>
       </plugin>
 
-
+      <plugin>
+        <groupId>one.jpro</groupId>
+        <artifactId>jpro-maven-plugin</artifactId>
+        <version>2025.2.1</version>
+        <configuration>
+          <mainClassName>com.esprit.MainApp</mainClassName>
+        </configuration>
+      </plugin>
       <!-- Maven Deploy Plugin -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -779,35 +575,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
         <version>4.0.0-M13</version>
-      </plugin>
-
-      <!-- Maven Project Info Reports Plugin -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>3.4.5</version>
-      </plugin>
-
-      <!-- JaCoCo Plugin for code coverage -->
-      <plugin>
-        <groupId>org.jacoco</groupId>
-        <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.8.11</version>
-        <executions>
-          <execution>
-            <id>prepare-agent</id>
-            <goals>
-              <goal>prepare-agent</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>report</id>
-            <phase>prepare-package</phase>
-            <goals>
-              <goal>report</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>

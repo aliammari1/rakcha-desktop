@@ -15,8 +15,10 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 /**
- * Service class providing business logic for the RAKCHA application. Implements
- * CRUD operations and business rules for data management.
+ * Service class providing business logic for cinema comments in the RAKCHA
+ * application.
+ * Implements CRUD operations and business rules for cinema comment data
+ * management.
  *
  * @author RAKCHA Team
  * @version 1.0.0
@@ -28,9 +30,8 @@ public class CinemaCommentService implements IService<CinemaComment> {
     private final UserService userService;
 
     /**
-     * Performs CinemaCommentService operation.
-     *
-     * @return the result of the operation
+     * Constructs a new CinemaCommentService with database connection and required
+     * services.
      */
     public CinemaCommentService() {
         this.connection = DataSource.getInstance().getConnection();
@@ -121,9 +122,10 @@ public class CinemaCommentService implements IService<CinemaComment> {
     }
 
     /**
-     * Retrieves the CommentsByCinemaId value.
+     * Retrieves comments by cinema ID.
      *
-     * @return the CommentsByCinemaId value
+     * @param cinemaId the ID of the cinema to get comments for
+     * @return list of comments for the specified cinema
      */
     public List<CinemaComment> getCommentsByCinemaId(Long cinemaId) {
         List<CinemaComment> comments = new ArrayList<>();
@@ -144,6 +146,10 @@ public class CinemaCommentService implements IService<CinemaComment> {
         return comments;
     }
 
+    /**
+     * @param rs
+     * @return CinemaComment
+     */
     private CinemaComment buildCinemaComment(ResultSet rs) {
         try {
             Cinema cinema = cinemaService.getCinemaById(rs.getLong("cinema_id"));

@@ -12,7 +12,7 @@
         <AnchorPane layoutX="557.0" layoutY="213.0" maxHeight="-Infinity" maxWidth="-Infinity"
             minHeight="-Infinity"
             minWidth="-Infinity" prefHeight="446.0" prefWidth="748.0" styleClass="bg-white"
-            stylesheets="@styles/filmStyle.css">
+            stylesheets="@../styles/filmStyle.css">
             <children>
                 <VBox alignment="CENTER" spacing="20.0">
                     <children>

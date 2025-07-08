@@ -33,6 +33,7 @@ import com.esprit.services.cinemas.CinemaService;
 import com.esprit.services.cinemas.MovieSessionService;
 import com.esprit.services.films.FilmCinemaService;
 import com.esprit.services.films.FilmService;
+import com.esprit.utils.CloudinaryStorage;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.property.SimpleStringProperty;
@@ -97,6 +98,7 @@ public class DashboardResponsableController implements Initializable {
     private static final Logger LOGGER = Logger.getLogger(DashboardResponsableController.class.getName());
 
     CinemaManager cinemaManager;
+    private String cloudinaryImageUrl;
     @FXML
     private ImageView image;
     @FXML
@@ -206,6 +208,7 @@ public class DashboardResponsableController implements Initializable {
      *              <p>
      *              - `tfNom`: A text field containing the name of the cinema. -
      *              `tfAdresse`: A text field containing the address of the cinema.
+     *              </p>
      */
     @FXML
     void addCinema(final ActionEvent event) {
@@ -245,6 +248,7 @@ public class DashboardResponsableController implements Initializable {
      *              <p>
      *              - `event`: A `MouseEvent` object representing the user's action
      *              that triggered the function.
+     *              </p>
      */
     @FXML
     void selectImage(final MouseEvent event) {
@@ -280,12 +284,7 @@ public class DashboardResponsableController implements Initializable {
      *                 application. - `resources`: A `ResourceBundle` object
      *                 containing
      *                 localized messages and data for the application.
-     *                 <p>
-     *                 - `location`: represents the URL of the web page being
-     *                 loaded. -
-     *                 `resources`: contains resource bundles for displaying
-     *                 messages and
-     *                 other information to the user.
+     *                 </p>
      */
     @Override
     /**
@@ -366,6 +365,7 @@ public class DashboardResponsableController implements Initializable {
      *          The list of cinemas is collected from the `read()` method of the
      *          `CinemaService` class. - The `HBox` objects created for each cinema
      *          are added to the `cinemaFlowPane` component.
+     *          </p>
      */
     private HashSet<Cinema> loadAcceptedCinemas() {
         final CinemaService cinemaService = new CinemaService();
@@ -395,6 +395,7 @@ public class DashboardResponsableController implements Initializable {
      *          the filter condition. 3/ The size of the `HashSet` is either zero or
      *          the number of cinemas that meet the filter condition, depending on
      *          whether any cinemas have a `Statut` equal to "Accepted".
+     *          </p>
      */
     private HashSet<Cinema> chargerAcceptedCinemas() {
         final CinemaService cinemaService = new CinemaService();
@@ -420,6 +421,7 @@ public class DashboardResponsableController implements Initializable {
      *               `nom_cinema`:
      *               the name of the cinema - `adresse_cinema`: the address of the
      *               cinema - `capacite_cinema`: the capacity of the cinema.
+     *               </p>
      * @returns a Card object containing a Circle and an FontAwesomeIconView,
      *          representing a cinema.
      *          <p>
@@ -434,6 +436,7 @@ public class DashboardResponsableController implements Initializable {
      *          the building icon used to indicate the cinema's location. -
      *          `cardContainer`: The container element that holds the card
      *          containing information about the cinema.
+     *          </p>
      */
     private HBox createCinemaCard(final Cinema cinema) {
         final HBox cardContainer = new HBox();
@@ -1349,7 +1352,8 @@ public class DashboardResponsableController implements Initializable {
              *
              * @param empty
              *              presence or absence of a value for the item being updated, and
-             *              determines whether the `setText()` method is called with a null
+             *              it determines whether the `setText()` method is called with a
+             *              null
              *              value or the date string representation when the item is empty.
              */
             @Override
@@ -1696,6 +1700,7 @@ public class DashboardResponsableController implements Initializable {
      *          observable list of `MovieSession` objects, which means that the list
      *          can be modified through operations such as adding, removing, or
      *          modifying elements.
+     *          </p>
      */
     private List<MovieSession> loadMovieSessions() {
         final MovieSessionService moviesessionService = new MovieSessionService();
@@ -1717,6 +1722,7 @@ public class DashboardResponsableController implements Initializable {
      *              <p>
      *              - `event` is an `ActionEvent`, indicating that the method was
      *              called as a result of user action.
+     *              </p>
      */
     @FXML
     void AjouterCinemaHall(final ActionEvent event) {
@@ -1788,6 +1794,7 @@ public class DashboardResponsableController implements Initializable {
      *              - `txtareaStatut`: This is a text area where the status message
      *              to
      *              be published is entered by the user.
+     *              </p>
      */
     @FXML
     void PublierStatut(final ActionEvent event) {
@@ -1821,6 +1828,7 @@ public class DashboardResponsableController implements Initializable {
      *              <p>
      *              - `event` represents an ActionEvent object, which carries
      *              information about the action that triggered the function.
+     *              </p>
      */
     @FXML
     void AfficherFilmResponsable(final ActionEvent event) throws IOException {
@@ -1844,6 +1852,7 @@ public class DashboardResponsableController implements Initializable {
      *              mouse event that triggered the execution of the `back` method.
      *              <p>
      *              Event type: `MouseEvent` Target element: `backButton`
+     *              </p>
      */
     @FXML
     void back(final MouseEvent event) {
@@ -1868,6 +1877,7 @@ public class DashboardResponsableController implements Initializable {
      *              - `event` is an `ActionEvent` object representing the user
      *              action
      *              that triggered the function.
+     *              </p>
      */
     @FXML
     void showSessions(final ActionEvent event) {
@@ -1895,6 +1905,7 @@ public class DashboardResponsableController implements Initializable {
      *              `sessionButton`
      *              (depending on the location of the click) - Code: The button that
      *              was clicked (either `cinemaFormPane` or `sessionButton`)
+     *              </p>
      */
     @FXML
     void back2(final MouseEvent event) {
@@ -1917,6 +1928,7 @@ public class DashboardResponsableController implements Initializable {
      *              <p>
      *              - `event` is a `MouseEvent` object representing a user's
      *              interaction with the application.
+     *              </p>
      */
     @FXML
     void importImage(final MouseEvent event) {
@@ -1927,19 +1939,17 @@ public class DashboardResponsableController implements Initializable {
         final File selectedFile = fileChooser.showOpenDialog(null);
         if (null != selectedFile) {
             try {
-                final String destinationDirectory1 = "./src/main/resources/img/cinemas/";
-                final String destinationDirectory2 = "C:\\xampp\\htdocs\\Rakcha\\rakcha-web\\public\\img\\cinemas\\";
-                final Path destinationPath1 = Paths.get(destinationDirectory1);
-                final Path destinationPath2 = Paths.get(destinationDirectory2);
-                final String uniqueFileName = System.currentTimeMillis() + "_" + selectedFile.getName();
-                final Path destinationFilePath1 = destinationPath1.resolve(uniqueFileName);
-                final Path destinationFilePath2 = destinationPath2.resolve(uniqueFileName);
-                Files.copy(selectedFile.toPath(), destinationFilePath1);
-                Files.copy(selectedFile.toPath(), destinationFilePath2);
-                final Image selectedImage = new Image(destinationFilePath1.toUri().toString());
+                // Use the CloudinaryStorage service to upload the image
+                CloudinaryStorage cloudinaryStorage = CloudinaryStorage.getInstance();
+                cloudinaryImageUrl = cloudinaryStorage.uploadImage(selectedFile);
+
+                // Display the image in the ImageView
+                final Image selectedImage = new Image(cloudinaryImageUrl);
                 this.image.setImage(selectedImage);
+
+                LOGGER.info("Image uploaded to Cloudinary: " + cloudinaryImageUrl);
             } catch (final IOException e) {
-                DashboardResponsableController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                LOGGER.log(Level.SEVERE, "Error uploading image to Cloudinary", e);
             }
         }
     }

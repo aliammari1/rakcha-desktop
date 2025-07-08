@@ -25,6 +25,10 @@ import javafx.stage.Stage;
  */
 public class AdminSideBarController implements Initializable {
     private static final Logger LOGGER = Logger.getLogger(AdminSideBarController.class.getName());
+
+    /**
+     * Button for navigating to users management.
+     */
     @FXML
     public Button usersButton;
     Admin admin;

@@ -1,3 +1,368 @@
+/* =======================
+   MODERN SIGNUP STYLES
+   ======================= */
+
+/* Animated Background */
+.signup-animated-background {
+  -fx-background-color: linear-gradient(
+    135deg,
+    #0f0f23 0%,
+    #1a1a2e 50%,
+    #16213e 100%
+  );
+}
+
+.float-element {
+  -fx-fill: linear-gradient(
+    to bottom,
+    rgba(231, 65, 65, 0.4),
+    rgba(231, 65, 65, 0.1)
+  );
+  -fx-effect: dropshadow(gaussian, rgba(231, 65, 65, 0.3), 6, 0, 0, 0);
+}
+
+.float-1 {
+  -fx-translate-x: 0;
+  -fx-translate-y: 0;
+}
+.float-2 {
+  -fx-translate-x: 3;
+  -fx-translate-y: -2;
+}
+.float-3 {
+  -fx-translate-x: -2;
+  -fx-translate-y: 3;
+}
+.float-4 {
+  -fx-translate-x: 4;
+  -fx-translate-y: -1;
+}
+.float-5 {
+  -fx-translate-x: -3;
+  -fx-translate-y: 2;
+}
+.float-6 {
+  -fx-translate-x: 2;
+  -fx-translate-y: -4;
+}
+.float-7 {
+  -fx-translate-x: -1;
+  -fx-translate-y: 3;
+}
+.float-8 {
+  -fx-translate-x: 3;
+  -fx-translate-y: -2;
+}
+.float-9 {
+  -fx-translate-x: -2;
+  -fx-translate-y: 1;
+}
+.float-10 {
+  -fx-translate-x: 1;
+  -fx-translate-y: -3;
+}
+
+/* Modern Signup Section */
+.modern-signup-section {
+  -fx-background-color: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 20, 0, 0, 0);
+}
+
+.signup-title {
+  -fx-text-fill: #2c3e50;
+  -fx-effect: dropshadow(gaussian, rgba(44, 62, 80, 0.1), 5, 0, 0, 0);
+}
+
+.signup-subtitle {
+  -fx-text-fill: #7f8c8d;
+}
+
+.signup-header-icon {
+  -fx-fill: #e74141;
+  -fx-effect: dropshadow(gaussian, rgba(231, 65, 65, 0.3), 5, 0, 0, 0);
+}
+
+/* Progress Indicator */
+.progress-container {
+  -fx-background-color: #f8f9fa;
+  -fx-background-radius: 20;
+  -fx-padding: 15 25;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.05), 5, 0, 0, 1);
+}
+
+.progress-step {
+  -fx-fill: #dee2e6;
+  -fx-stroke: #adb5bd;
+  -fx-stroke-width: 2;
+}
+
+.active-step {
+  -fx-fill: #e74141;
+  -fx-stroke: #e74141;
+  -fx-effect: dropshadow(gaussian, rgba(231, 65, 65, 0.4), 8, 0, 0, 0);
+}
+
+.progress-line {
+  -fx-stroke: #dee2e6;
+  -fx-stroke-width: 2;
+}
+
+.progress-label {
+  -fx-text-fill: #6c757d;
+  -fx-font-family: "Outfit Medium";
+  -fx-font-size: 12px;
+}
+
+/* Form Sections */
+.form-section-container {
+  -fx-background-color: white;
+  -fx-background-radius: 16;
+  -fx-padding: 25;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 12, 0, 0, 2);
+}
+
+.section-header {
+  -fx-text-fill: #495057;
+  -fx-font-family: "Outfit SemiBold";
+  -fx-font-size: 18px;
+  -fx-spacing: 10;
+}
+
+.helper-text {
+  -fx-text-fill: #6c757d;
+  -fx-font-family: "Outfit Regular";
+  -fx-font-size: 11px;
+}
+
+/* Date Picker */
+.modern-date-picker {
+  -fx-background-color: transparent;
+  -fx-text-fill: #495057;
+  -fx-font-family: "Outfit Regular";
+  -fx-font-size: 14px;
+  -fx-border-width: 0;
+  -fx-background-insets: 0;
+  -fx-focus-color: transparent;
+  -fx-faint-focus-color: transparent;
+}
+
+.modern-date-picker .arrow-button {
+  -fx-background-color: transparent;
+  -fx-border-width: 0;
+}
+
+.modern-date-picker .arrow-button .arrow {
+  -fx-background-color: #6c757d;
+}
+
+/* Combo Box */
+.modern-combo-box {
+  -fx-background-color: transparent;
+  -fx-text-fill: #495057;
+  -fx-font-family: "Outfit Regular";
+  -fx-font-size: 14px;
+  -fx-border-width: 0;
+  -fx-background-insets: 0;
+  -fx-focus-color: transparent;
+  -fx-faint-focus-color: transparent;
+}
+
+.modern-combo-box .arrow-button {
+  -fx-background-color: transparent;
+  -fx-border-width: 0;
+}
+
+.modern-combo-box .arrow-button .arrow {
+  -fx-background-color: #6c757d;
+}
+
+/* Profile Picture */
+.profile-image-container {
+  -fx-cursor: hand;
+}
+
+.profile-image-border {
+  -fx-fill: transparent;
+  -fx-stroke: #e74141;
+  -fx-stroke-width: 3;
+  -fx-stroke-dash-array: 8 4;
+  -fx-effect: dropshadow(gaussian, rgba(231, 65, 65, 0.2), 10, 0, 0, 0);
+}
+
+.profile-image-view {
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 8, 0, 0, 2);
+}
+
+.upload-overlay {
+  -fx-background-color: rgba(231, 65, 65, 0.9);
+  -fx-background-radius: 60;
+  -fx-opacity: 0;
+}
+
+.profile-image-container:hover .upload-overlay {
+  -fx-opacity: 1;
+}
+
+.upload-icon {
+  -fx-fill: white;
+}
+
+.upload-text {
+  -fx-text-fill: white;
+  -fx-font-family: "Outfit Medium";
+  -fx-font-size: 12px;
+}
+
+.modern-upload-btn {
+  -fx-background-color: rgba(231, 65, 65, 0.1);
+  -fx-background-radius: 12;
+  -fx-text-fill: #e74141;
+  -fx-font-family: "Outfit Medium";
+  -fx-border-color: #e74141;
+  -fx-border-radius: 12;
+  -fx-border-width: 1;
+  -fx-cursor: hand;
+  -fx-padding: 10 20;
+}
+
+.modern-upload-btn:hover {
+  -fx-background-color: rgba(231, 65, 65, 0.2);
+}
+
+/* Terms Checkbox */
+.terms-checkbox {
+  -fx-text-fill: #6c757d;
+  -fx-font-family: "Outfit Regular";
+  -fx-font-size: 14px;
+}
+
+.terms-checkbox .box {
+  -fx-background-color: #f8f9fa;
+  -fx-border-color: #dee2e6;
+  -fx-border-radius: 4;
+  -fx-background-radius: 4;
+}
+
+.terms-checkbox:selected .box {
+  -fx-background-color: #e74141;
+  -fx-border-color: #e74141;
+}
+
+.terms-checkbox:selected .mark {
+  -fx-background-color: white;
+}
+
+/* Buttons */
+.btn-text {
+  -fx-text-fill: inherit;
+  -fx-font-family: "Outfit SemiBold";
+  -fx-font-size: 16px;
+}
+
+/* Transparent Scroll */
+.transparent-scroll {
+  -fx-background-color: transparent;
+  -fx-border-width: 0;
+}
+
+.transparent-scroll > .viewport {
+  -fx-background-color: transparent;
+}
+
+.transparent-scroll > .scroll-bar {
+  -fx-opacity: 0.3;
+}
+
+.transparent-scroll > .scroll-bar:hover {
+  -fx-opacity: 0.8;
+}
+
+/* Welcome & Features Section */
+.welcome-features-section {
+  -fx-background-color: linear-gradient(
+    45deg,
+    rgba(231, 65, 65, 0.95) 0%,
+    rgba(180, 40, 40, 0.95) 50%,
+    rgba(140, 25, 25, 0.95) 100%
+  );
+  -fx-background-image: url("https://images.unsplash.com/photo-1596727147705-61a532a659bd?auto=format&fit=crop&w=1000&q=80");
+  -fx-background-size: cover;
+  -fx-background-position: center;
+  -fx-background-repeat: no-repeat;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 15, 0, 0, 0);
+}
+
+.welcome-logo {
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0, 0, 0);
+}
+
+.welcome-title {
+  -fx-text-fill: white;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 8, 0, 0, 0);
+}
+
+.welcome-subtitle {
+  -fx-text-fill: rgba(255, 255, 255, 0.9);
+}
+
+/* Benefit Cards */
+.benefit-card {
+  -fx-background-color: rgba(255, 255, 255, 0.15);
+  -fx-background-radius: 16;
+  -fx-padding: 20;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0, 0, 0);
+}
+
+.benefit-icon-circle {
+  -fx-fill: rgba(255, 255, 255, 0.2);
+  -fx-stroke: white;
+  -fx-stroke-width: 2;
+}
+
+.benefit-icon {
+  -fx-fill: white;
+}
+
+.benefit-title {
+  -fx-text-fill: white;
+  -fx-font-family: "Outfit SemiBold";
+  -fx-font-size: 16px;
+}
+
+.benefit-description {
+  -fx-text-fill: rgba(255, 255, 255, 0.8);
+  -fx-font-family: "Outfit Regular";
+  -fx-font-size: 14px;
+}
+
+/* Social Proof */
+.social-proof {
+  -fx-background-color: rgba(255, 255, 255, 0.1);
+  -fx-background-radius: 12;
+  -fx-padding: 15;
+}
+
+.social-icon {
+  -fx-fill: white;
+}
+
+.social-text {
+  -fx-text-fill: white;
+  -fx-font-family: "Outfit Medium";
+  -fx-font-size: 14px;
+}
+
+.star-icon {
+  -fx-fill: #ffd700;
+}
+
+.rating-text {
+  -fx-text-fill: rgba(255, 255, 255, 0.9);
+  -fx-font-family: "Outfit Regular";
+  -fx-font-size: 12px;
+}
+
+/* Legacy Support - keeping old classes for backward compatibility */
 .leftSideBar {
   -fx-background-color: #e74141;
 }

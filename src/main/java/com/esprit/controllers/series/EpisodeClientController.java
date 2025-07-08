@@ -167,7 +167,7 @@ public class EpisodeClientController implements Initializable {
                     this.setStyle("-fx-font-size: 14; -fx-font-family: 'Arial'; -fx-font-weight: bold;"); // Police en
                                                                                                           // gras
                     this.setGraphic(imageView);
-                    EpisodeClientController.this.idep = item.getId();
+                    idep = item.getId();
                 }
             }
         });

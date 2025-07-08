@@ -119,6 +119,9 @@ public class DashboardClientController {
     @FXML
     private AnchorPane Anchortop3;
 
+    /**
+     * @return List<Cinema>
+     */
     // closeDetailFilm.setOnAction(new EventHandler<ActionEvent>() {
     // @Override
     // public void handle(ActionEvent event) {
@@ -140,13 +143,13 @@ public class DashboardClientController {
      *                  search query used to filter the list of cinemas returned by
      *                  the
      *                  function.
-     * @returns a list of `Cinema` objects containing the search query.
-     *          <p>
-     *          - The `List<Cinema>` object `resultats` is initialized and returned
-     *          by the method. - It contains Cinema objects that match the search
-     *          criteria, as determined by the `if` statement in the method body. -
-     *          Each element in the list is a Cinema object with a non-null `nom`
-     *          attribute that contains the search term `recherche`.
+     * @return a list of Cinema objects containing the search query.
+     *         <p>
+     *         - The List of Cinema objects `resultats` is initialized and returned
+     *         by the method. - It contains Cinema objects that match the search
+     *         criteria, as determined by the `if` statement in the method body. -
+     *         Each element in the list is a Cinema object with a non-null `nom`
+     *         attribute that contains the search term `recherche`.
      */
     @FXML
     /**

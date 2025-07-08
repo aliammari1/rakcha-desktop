@@ -27,9 +27,8 @@ public class IServiceFeedbackImpl implements IService<Feedback> {
     public Statement statement;
 
     /**
-     * Performs IServiceFeedbackImpl operation.
-     *
-     * @return the result of the operation
+     * Constructs a new IServiceFeedbackImpl instance.
+     * Initializes database connection.
      */
     public IServiceFeedbackImpl() {
         this.connection = DataSource.getInstance().getConnection();

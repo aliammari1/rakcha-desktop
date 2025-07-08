@@ -15,23 +15,23 @@ import com.esprit.utils.DataSource;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 /**
- * Service class providing business logic for the RAKCHA application. Implements
- * CRUD operations and business rules for data management.
+ * Service class providing business logic for product categories in the RAKCHA
+ * application.
+ * Implements CRUD operations and business rules for category data management.
  *
  * @author RAKCHA Team
  * @version 1.0.0
  * @since 1.0.0
  */
+@Slf4j
 public class CategoryService implements IService<ProductCategory> {
     private static final Logger LOGGER = Logger.getLogger(CategoryService.class.getName());
     private final Connection connection;
 
     /**
-     * Performs CategoryService operation.
-     *
-     * @return the result of the operation
+     * Constructor for CategoryService that initializes the database connection.
+     * Obtains a connection from the DataSource singleton.
      */
     public CategoryService() {
         this.connection = DataSource.getInstance().getConnection();
@@ -121,9 +121,10 @@ public class CategoryService implements IService<ProductCategory> {
     }
 
     /**
-     * Retrieves the Category value.
+     * Retrieves a product category by its ID.
      *
-     * @return the Category value
+     * @param categoryId the ID of the category to retrieve
+     * @return the ProductCategory with the specified ID, or null if not found
      */
     public ProductCategory getCategory(final long categoryId) {
         ProductCategory category = null;
@@ -145,7 +146,10 @@ public class CategoryService implements IService<ProductCategory> {
     /**
      * Retrieves the CategoryByName value.
      *
-     * @return the CategoryByName value
+     * Gets a product category by its name.
+     *
+     * @param categoryName the name of the category to retrieve
+     * @return the ProductCategory with the specified name, or null if not found
      */
     public ProductCategory getCategoryByName(final String categoryName) {
         ProductCategory category = null;
@@ -193,9 +197,10 @@ public class CategoryService implements IService<ProductCategory> {
     }
 
     /**
-     * Performs searchCategoriesByName operation.
+     * Searches for categories by name using a keyword.
      *
-     * @return the result of the operation
+     * @param searchKeyword the keyword to search for in category names
+     * @return a list of categories that match the search criteria
      */
     public List<ProductCategory> searchCategoriesByName(final String searchKeyword) {
         final List<ProductCategory> result = new ArrayList<>();
@@ -219,9 +224,10 @@ public class CategoryService implements IService<ProductCategory> {
     }
 
     /**
-     * Retrieves the CategoriesForProduct value.
+     * Gets all categories associated with a specific product.
      *
-     * @return the CategoriesForProduct value
+     * @param productId the ID of the product
+     * @return a list of categories associated with the product
      */
     public List<ProductCategory> getCategoriesForProduct(final int productId) {
         final List<ProductCategory> categories = new ArrayList<>();
@@ -242,9 +248,10 @@ public class CategoryService implements IService<ProductCategory> {
     }
 
     /**
-     * Performs addProductToCategory operation.
+     * Adds a product to a category in the database.
      *
-     * @return the result of the operation
+     * @param productId  the ID of the product to add to the category
+     * @param categoryId the ID of the category to add the product to
      */
     public void addProductToCategory(final int productId, final int categoryId) {
         final String req = "INSERT INTO product_category(product_id, category_id) VALUES (?, ?)";
@@ -259,9 +266,10 @@ public class CategoryService implements IService<ProductCategory> {
     }
 
     /**
-     * Performs removeProductFromCategory operation.
+     * Removes a product from a category in the database.
      *
-     * @return the result of the operation
+     * @param productId  the ID of the product to remove from the category
+     * @param categoryId the ID of the category to remove the product from
      */
     public void removeProductFromCategory(final int productId, final int categoryId) {
         final String req = "DELETE FROM product_category WHERE product_id = ? AND category_id = ?";
@@ -276,9 +284,10 @@ public class CategoryService implements IService<ProductCategory> {
     }
 
     /**
-     * Retrieves the ProductCountForCategory value.
+     * Gets the number of products in a specific category.
      *
-     * @return the ProductCountForCategory value
+     * @param categoryId the ID of the category
+     * @return the number of products in the category
      */
     public int getProductCountForCategory(final int categoryId) {
         int count = 0;

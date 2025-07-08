@@ -24,9 +24,8 @@ public class SeatService {
     private final CinemaHallService cinemaHallService;
 
     /**
-     * Performs SeatService operation.
-     *
-     * @return the result of the operation
+     * Constructs a new SeatService instance.
+     * Initializes database connection.
      */
     public SeatService() {
         this.connection = DataSource.getInstance().getConnection();
@@ -78,8 +77,7 @@ public class SeatService {
     /**
      * Creates a new entity in the database.
      *
-     * @param entity
-     *               the entity to create
+     * @param seat the seat entity to create
      */
     public void create(Seat seat) {
         String query = "INSERT INTO seats (seat_number, row_number, is_occupied, cinema_hall_id) VALUES (?, ?, ?, ?)";
@@ -96,6 +94,10 @@ public class SeatService {
         }
     }
 
+    /**
+     * @param rs
+     * @return Seat
+     */
     private Seat buildSeat(ResultSet rs) {
         try {
             CinemaHall cinemaHall = cinemaHallService.getCinemaHallById(rs.getLong("cinema_hall_id"));

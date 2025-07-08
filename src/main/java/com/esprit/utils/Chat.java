@@ -11,7 +11,7 @@ import java.sql.Connection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.esprit.Config;
+import io.github.cdimascio.dotenv.Dotenv;
 
 /**
  * Utility class providing helper methods for the RAKCHA application. Contains
@@ -25,18 +25,21 @@ public class Chat {
     private static final Logger LOGGER = Logger.getLogger(Chat.class.getName());
     private static final String API_URL = "https://api.openai.com/v1/chat/completions";
     private final Connection connection;
-    private final Config config;
+    private final Dotenv dotenv = Dotenv.load();
 
     /**
-     * Performs Chat operation.
-     *
-     * @return the result of the operation
+     * Constructor for Chat class that initializes the database connection.
      */
     public Chat() {
         this.connection = DataSource.getInstance().getConnection();
-        this.config = Config.getInstance();
     }
 
+    /**
+     * Extracts the content from an OpenAI API response.
+     *
+     * @param response The JSON response string from the OpenAI API
+     * @return The extracted content string
+     */
     private static String extractContentFromResponse(final String response) {
         final int startMarker = response.indexOf("content") + 11;
         final int endMarker = response.indexOf('"', startMarker);
@@ -44,13 +47,14 @@ public class Chat {
     }
 
     /**
-     * Performs chatGPT operation.
+     * Sends a message to ChatGPT and returns the response.
      *
-     * @return the result of the operation
+     * @param message the message to send to ChatGPT
+     * @return the ChatGPT response
      */
     public String chatGPT(final String message) {
-        final String apiKey = config.get("openai.api.key");
-        final String model = config.get("openai.model");
+        final String apiKey = dotenv.get("OPENAI_API_KEY");
+        final String model = dotenv.get("OPENAI_MODEL");
 
         if (apiKey == null || model == null) {
             throw new RuntimeException("OpenAI API credentials not found in config");
@@ -97,9 +101,11 @@ public class Chat {
     }
 
     /**
-     * Performs badword operation.
+     * Checks if a message contains inappropriate or hateful content.
      *
-     * @return the result of the operation
+     * @param message the message to check for inappropriate content
+     * @return "1" if content is inappropriate, "0" if appropriate, "-1" if error
+     *         occurred
      */
     public String badword(final String message) {
         final String question = "Is this content hateful or inappropriate? Reply with only '1' for yes or '0' for no: "

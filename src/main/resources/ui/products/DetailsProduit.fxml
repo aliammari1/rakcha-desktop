@@ -11,31 +11,31 @@
 
 <VBox prefHeight="855.0" prefWidth="1507.0"
     xmlns="http://javafx.com/javafx/21"
-    xmlns:fx="http://javafx.com/fxml/1" 
+    xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="com.esprit.controllers.products.DetailsProductClientController">
 
     <HBox VBox.vgrow="ALWAYS">
         <!-- SideBar -->
-        <fx:include source="../clientSideBar.fxml"/>
-        
+        <fx:include source="../clientSideBar.fxml" />
+
         <!-- Main Content -->
         <VBox spacing="20" HBox.hgrow="ALWAYS">
             <padding>
-                <Insets top="25" right="25" bottom="25" left="25"/>
+                <Insets top="25" right="25" bottom="25" left="25" />
             </padding>
 
             <!-- Header -->
             <HBox spacing="15" alignment="CENTER_LEFT">
                 <ImageView fitHeight="69.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
-                    <Image url="@Logo.png"/>
+                    <Image url="@Logo.png" />
                 </ImageView>
                 <VBox>
                     <Label text="Product Details" styleClass="section-title">
                         <font>
-                            <Font name="Arial Rounded MT Bold" size="32.0"/>
+                            <Font name="Arial Rounded MT Bold" size="32.0" />
                         </font>
                     </Label>
-                    <Label text="View detailed product information"/>
+                    <Label text="View detailed product information" />
                 </VBox>
             </HBox>
 
@@ -45,7 +45,7 @@
                 <ScrollPane fitToWidth="true" HBox.hgrow="ALWAYS" styleClass="bg-white">
                     <FlowPane fx:id="detailFlowPane" hgap="20" vgap="20">
                         <padding>
-                            <Insets top="20" right="20" bottom="20" left="20"/>
+                            <Insets top="20" right="20" bottom="20" left="20" />
                         </padding>
                     </FlowPane>
                 </ScrollPane>
@@ -55,45 +55,49 @@
                     <!-- Product Rating -->
                     <VBox styleClass="bg-white" spacing="10">
                         <padding>
-                            <Insets top="15" right="15" bottom="15" left="15"/>
+                            <Insets top="15" right="15" bottom="15" left="15" />
                         </padding>
                         <Label text="Rate Product" styleClass="section-title">
                             <font>
-                                <Font name="Arial" size="18.0"/>
+                                <Font name="Arial" size="18.0" />
                             </font>
                         </Label>
-                        <Rating fx:id="ratingControl" maxWidth="Infinity"/>
-                        <Button onAction="#submitRating" styleClass="primary-button" text="Submit Rating"/>
+                        <Rating fx:id="ratingControl" maxWidth="Infinity" />
+                        <Button onAction="#submitRating" styleClass="primary-button"
+                            text="Submit Rating" />
                     </VBox>
 
                     <!-- Product Comments -->
                     <VBox styleClass="bg-white" spacing="10" VBox.vgrow="ALWAYS">
                         <padding>
-                            <Insets top="15" right="15" bottom="15" left="15"/>
+                            <Insets top="15" right="15" bottom="15" left="15" />
                         </padding>
                         <Label text="Comments" styleClass="section-title">
                             <font>
-                                <Font name="Arial" size="18.0"/>
+                                <Font name="Arial" size="18.0" />
                             </font>
                         </Label>
                         <ScrollPane VBox.vgrow="ALWAYS" fitToWidth="true">
-                            <FlowPane fx:id="commentsFlowPane" styleClass="comments-container"/>
+                            <FlowPane fx:id="commentsFlowPane" styleClass="comments-container" />
                         </ScrollPane>
-                        <TextArea fx:id="commentInput" promptText="Write a comment..." styleClass="comment-input"/>
-                        <Button onAction="#submitComment" styleClass="primary-button" text="Post Comment"/>
+                        <TextArea fx:id="commentInput" promptText="Write a comment..."
+                            styleClass="comment-input" />
+                        <Button onAction="#submitComment" styleClass="primary-button"
+                            text="Post Comment" />
                     </VBox>
 
                     <!-- Actions -->
                     <HBox spacing="10">
-                        <Button onAction="#addToCart" styleClass="sale" maxWidth="Infinity" HBox.hgrow="ALWAYS">
+                        <Button onAction="#addToCart" styleClass="sale" maxWidth="Infinity"
+                            HBox.hgrow="ALWAYS">
                             <graphic>
-                                <FontIcon iconLiteral="fa-shopping-cart"/>
+                                <FontIcon iconLiteral="fa-shopping-cart" />
                             </graphic>
                             <text>Add to Cart</text>
                         </Button>
                         <Button onAction="#navigateBack" styleClass="secondary-button">
                             <graphic>
-                                <FontIcon iconLiteral="fa-arrow-left"/>
+                                <FontIcon iconLiteral="fa-arrow-left" />
                             </graphic>
                             <text>Back</text>
                         </Button>
@@ -104,7 +108,7 @@
     </HBox>
 
     <stylesheets>
-        <URL value="@styles/produitStyle.css"/>
-        <URL value="@styles/filmStyle.css"/>
+        <URL value="@../styles/produitStyle.css" />
+        <URL value="@../styles/filmStyle.css" />
     </stylesheets>
 </VBox>
