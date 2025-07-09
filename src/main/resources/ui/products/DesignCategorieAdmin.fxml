@@ -16,7 +16,7 @@
     xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="com.esprit.controllers.produits.DesignCategorieAdminController">
     <children>
-        <fx:include source="../adminSideBar.fxml" />
+        <fx:include source="/ui/sidebar.fxml" />
         <AnchorPane layoutX="1280.0" prefHeight="707.0" prefWidth="0.0" styleClass="nav-form"
             stylesheets="@../styles/dashboard.css" />
         <AnchorPane fx:id="formulaire" layoutX="320.0" layoutY="75.0" prefHeight="499.0"

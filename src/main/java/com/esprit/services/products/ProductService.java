@@ -14,6 +14,7 @@ import com.esprit.models.products.Product;
 import com.esprit.models.products.ProductCategory;
 import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,10 +33,43 @@ public class ProductService implements IService<Product> {
 
     /**
      * Constructs a new ProductService instance.
-     * Initializes database connection.
+     * Initializes database connection and creates tables if they don't exist.
      */
     public ProductService() {
         this.connection = DataSource.getInstance().getConnection();
+
+        // Create tables if they don't exist
+        TableCreator tableCreator = new TableCreator(connection);
+
+        // Create product categories table
+        tableCreator.createTableIfNotExists("product_categories", """
+                    CREATE TABLE product_categories (
+                        id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                        category_name VARCHAR(50) NOT NULL,
+                        description VARCHAR(255) NOT NULL
+                    )
+                """);
+
+        // Create products table
+        tableCreator.createTableIfNotExists("products", """
+                    CREATE TABLE products (
+                        id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                        name VARCHAR(50) NOT NULL,
+                        price INT NOT NULL,
+                        image VARCHAR(255) NOT NULL,
+                        description VARCHAR(100) NOT NULL,
+                        quantity INT NOT NULL
+                    )
+                """);
+
+        // Create product-category junction table
+        tableCreator.createTableIfNotExists("product_category", """
+                    CREATE TABLE product_category (
+                        product_id BIGINT NOT NULL,
+                        category_id BIGINT NOT NULL,
+                        PRIMARY KEY (product_id, category_id)
+                    )
+                """);
     }
 
     @Override

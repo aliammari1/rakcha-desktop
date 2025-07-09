@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import com.esprit.models.series.Category;
 import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,10 +30,28 @@ public class IServiceCategorieImpl implements IService<Category> {
 
     /**
      * Constructs a new IServiceCategorieImpl instance.
-     * Initializes database connection.
+     * Initializes database connection and creates tables if they don't exist.
      */
     public IServiceCategorieImpl() {
         this.connection = DataSource.getInstance().getConnection();
+
+        // Create tables if they don't exist
+        try {
+            TableCreator tableCreator = new TableCreator(this.connection);
+
+            // Create category table for series
+            String createCategoryTable = """
+                    CREATE TABLE category (
+                        id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                        name VARCHAR(255) NOT NULL UNIQUE,
+                        description TEXT
+                    )
+                    """;
+            tableCreator.createTableIfNotExists("category", createCategoryTable);
+
+        } catch (Exception e) {
+            log.error("Error creating tables for IServiceCategorieImpl", e);
+        }
     }
 
     @Override

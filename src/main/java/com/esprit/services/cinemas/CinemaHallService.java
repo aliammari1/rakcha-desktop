@@ -8,6 +8,7 @@ import com.esprit.models.cinemas.Cinema;
 import com.esprit.models.cinemas.CinemaHall;
 import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,11 +29,32 @@ public class CinemaHallService implements IService<CinemaHall> {
 
     /**
      * Constructs a new CinemaHallService with database connection and required
-     * services.
+     * services. Creates tables if they don't exist.
      */
     public CinemaHallService() {
         this.connection = DataSource.getInstance().getConnection();
         this.cinemaService = new CinemaService();
+
+        // Create tables if they don't exist
+        try {
+            TableCreator tableCreator = new TableCreator(this.connection);
+
+            // Create cinema_hall table
+            String createCinemaHallTable = """
+                    CREATE TABLE cinema_hall (
+                        id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                        cinema_id BIGINT NOT NULL,
+                        seat_capacity INT NOT NULL,
+                        name VARCHAR(255) NOT NULL,
+                        screen_type VARCHAR(100),
+                        is_available BOOLEAN DEFAULT TRUE
+                    )
+                    """;
+            tableCreator.createTableIfNotExists("cinema_hall", createCinemaHallTable);
+
+        } catch (Exception e) {
+            log.error("Error creating tables for CinemaHallService", e);
+        }
     }
 
     @Override

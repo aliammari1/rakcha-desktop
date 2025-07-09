@@ -7,6 +7,7 @@ import java.util.List;
 import com.esprit.models.cinemas.CinemaHall;
 import com.esprit.models.cinemas.Seat;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,11 +26,31 @@ public class SeatService {
 
     /**
      * Constructs a new SeatService instance.
-     * Initializes database connection.
+     * Initializes database connection and creates tables if they don't exist.
      */
     public SeatService() {
         this.connection = DataSource.getInstance().getConnection();
         this.cinemaHallService = new CinemaHallService();
+
+        // Create tables if they don't exist
+        try {
+            TableCreator tableCreator = new TableCreator(this.connection);
+
+            // Create seats table
+            String createSeatsTable = """
+                    CREATE TABLE seats (
+                        id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                        seat_number INT NOT NULL,
+                        row_number INT NOT NULL,
+                        is_occupied BOOLEAN DEFAULT FALSE,
+                        cinema_hall_id BIGINT NOT NULL
+                    )
+                    """;
+            tableCreator.createTableIfNotExists("seats", createSeatsTable);
+
+        } catch (Exception e) {
+            log.error("Error creating tables for SeatService", e);
+        }
     }
 
     /**

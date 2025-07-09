@@ -13,6 +13,7 @@ import com.esprit.models.users.Client;
 import com.esprit.services.IService;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,10 +32,23 @@ public class OrderService implements IService<Order> {
 
     /**
      * Constructs a new OrderService instance.
-     * Initializes database connection and user service.
+     * Initializes database connection and creates tables if they don't exist.
      */
     public OrderService() {
         this.connection = DataSource.getInstance().getConnection();
+
+        // Create tables if they don't exist
+        TableCreator tableCreator = new TableCreator(connection);
+        tableCreator.createTableIfNotExists("orders", """
+                    CREATE TABLE orders (
+                        id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                        order_date DATE NOT NULL,
+                        status VARCHAR(50) NOT NULL DEFAULT 'pending',
+                        phone_number INT NOT NULL,
+                        address VARCHAR(50) NOT NULL,
+                        client_id BIGINT
+                    )
+                """);
     }
 
     @Override

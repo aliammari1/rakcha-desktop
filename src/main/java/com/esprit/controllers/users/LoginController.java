@@ -177,56 +177,59 @@ public class LoginController implements Initializable {
         final User user = userService.login(this.emailTextField.getText(), this.passwordTextField.getText());
         if (null != user) {
             try {
-                final TrayNotification trayNotification = new TrayNotification("users", "the user found",
+                final TrayNotification trayNotification = new TrayNotification("users", "login successful",
                         Notifications.SUCCESS);
                 trayNotification.showAndDismiss(new Duration(3000));
 
                 final Stage stage = (Stage) this.signInButton.getScene().getWindow();
-                stage.setUserData(user);
 
-                final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/users/Profile.fxml"));
+                // Redirect to role-specific home screen
+                String fxmlPath = "";
+                String windowTitle = "RAKCHA";
+                
+                switch (user.getRole().toLowerCase()) {
+                    case "admin":
+                        fxmlPath = "/ui/users/HomeAdmin.fxml";
+                        windowTitle = "RAKCHA - Admin Dashboard";
+                        break;
+                    case "client":
+                        fxmlPath = "/ui/users/HomeClient.fxml";
+                        windowTitle = "RAKCHA - Client Home";
+                        break;
+                    case "responsable de cinema":
+                        fxmlPath = "/ui/users/HomeCinemaManager.fxml";
+                        windowTitle = "RAKCHA - Cinema Manager";
+                        break;
+                    default:
+                        // Fallback to profile page for unknown roles
+                        fxmlPath = "/ui/users/Profile.fxml";
+                        windowTitle = "RAKCHA - Profile";
+                        LOGGER.log(Level.WARNING, "Unknown user role: " + user.getRole() + ". Redirecting to profile page.");
+                        break;
+                }
+
+                final FXMLLoader loader = new FXMLLoader(this.getClass().getResource(fxmlPath));
                 final Parent root = loader.load();
 
-                FXMLLoader loaderSideBar = null;
-                final ProfileController profileController = loader.getController();
-
-                // Load appropriate sidebar based on user role
-                if ("admin".equals(user.getRole())) {
-                    loaderSideBar = new FXMLLoader(this.getClass().getResource("/ui/adminSideBar.fxml"));
-                } else if ("client".equals(user.getRole())) {
-                    loaderSideBar = new FXMLLoader(this.getClass().getResource("/ui/clientSideBar.fxml"));
-                } else if ("responsable de cinema".equals(user.getRole())) {
-                    loaderSideBar = new FXMLLoader(this.getClass().getResource("/ui/cinemaManagerSideBar.fxml"));
-                }
-
-                if (null != loaderSideBar) {
-                    try {
-                        profileController.setLeftPane(loaderSideBar.load());
-                    } catch (IOException e) {
-                        LOGGER.log(Level.SEVERE, "Error loading sidebar", e);
-                        throw e;
-                    }
-                }
-
-                try {
-                    profileController.setData(user);
-                } catch (IllegalArgumentException e) {
-                    LOGGER.log(Level.WARNING, "Error setting user data: " + e.getMessage());
-                    // Continue even if profile image fails to load
-                }
-
+                // Create new scene and set it to the stage
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
+                stage.setTitle(windowTitle);
+                
+                // Set user data on the stage so controllers can access it via getUserData()
+                stage.setUserData(user);
 
                 // Stop animations when navigating away
                 stopAllAnimations();
+
+                LOGGER.log(Level.INFO, "User " + user.getEmail() + " with role " + user.getRole() + " logged in successfully");
 
             } catch (Exception e) {
                 LOGGER.log(Level.SEVERE, "Error during login process", e);
                 throw new IOException("Failed to complete login process", e);
             }
         } else {
-            final Alert alert = new Alert(Alert.AlertType.ERROR, "the user was not found", ButtonType.CLOSE);
+            final Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid email or password", ButtonType.CLOSE);
             alert.show();
         }
     }

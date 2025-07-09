@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import com.esprit.models.series.Series;
 import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,10 +30,39 @@ public class IServiceSeriesImpl implements IService<Series> {
 
     /**
      * Constructs a new IServiceSeriesImpl instance.
-     * Initializes database connection.
+     * Initializes database connection and creates tables if they don't exist.
      */
     public IServiceSeriesImpl() {
         this.connection = DataSource.getInstance().getConnection();
+
+        // Create tables if they don't exist
+        TableCreator tableCreator = new TableCreator(connection);
+
+        // Create series categories table
+        tableCreator.createTableIfNotExists("series_categories", """
+                    CREATE TABLE series_categories (
+                        id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                        name VARCHAR(50) NOT NULL,
+                        description VARCHAR(50) NOT NULL
+                    )
+                """);
+
+        // Create series table
+        tableCreator.createTableIfNotExists("serie", """
+                    CREATE TABLE serie (
+                        id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                        name VARCHAR(30) NOT NULL,
+                        summary VARCHAR(50) NOT NULL,
+                        director VARCHAR(50) NOT NULL,
+                        country VARCHAR(50) NOT NULL,
+                        image VARCHAR(255) NOT NULL,
+                        liked INT DEFAULT NULL,
+                        number_of_likes INT DEFAULT NULL,
+                        disliked INT DEFAULT NULL,
+                        number_of_dislikes INT DEFAULT NULL,
+                        category_id BIGINT
+                    )
+                """);
     }
 
     @Override

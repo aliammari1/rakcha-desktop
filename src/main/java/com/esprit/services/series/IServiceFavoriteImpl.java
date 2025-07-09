@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import com.esprit.models.series.Favorite;
 import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,10 +29,29 @@ public class IServiceFavoriteImpl implements IService<Favorite> {
 
     /**
      * Constructs a new IServiceFavoriteImpl instance.
-     * Initializes database connection.
+     * Initializes database connection and creates tables if they don't exist.
      */
     public IServiceFavoriteImpl() {
         this.connection = DataSource.getInstance().getConnection();
+
+        // Create tables if they don't exist
+        try {
+            TableCreator tableCreator = new TableCreator(this.connection);
+
+            // Create favorites table
+            String createFavoritesTable = """
+                    CREATE TABLE favorites (
+                        id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                        user_id BIGINT NOT NULL,
+                        series_id BIGINT NOT NULL,
+                        UNIQUE(user_id, series_id)
+                    )
+                    """;
+            tableCreator.createTableIfNotExists("favorites", createFavoritesTable);
+
+        } catch (Exception e) {
+            log.error("Error creating tables for IServiceFavoriteImpl", e);
+        }
     }
 
     @Override

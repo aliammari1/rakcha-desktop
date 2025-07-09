@@ -15,7 +15,7 @@
 
     <HBox VBox.vgrow="ALWAYS">
         <!-- SideBar -->
-        <fx:include source="../adminSideBar.fxml" />
+        <fx:include source="/ui/sidebar.fxml" />
 
         <!-- Main Content -->
         <HBox spacing="20" HBox.hgrow="ALWAYS">

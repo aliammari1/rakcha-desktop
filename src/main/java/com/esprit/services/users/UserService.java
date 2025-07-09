@@ -17,6 +17,7 @@ import com.esprit.models.users.Client;
 import com.esprit.models.users.User;
 import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.TableCreator;
 import com.esprit.utils.UserMail;
 import com.esprit.utils.UserPDF;
 
@@ -39,10 +40,30 @@ public class UserService implements IService<User> {
 
     /**
      * Constructs a new UserService instance.
-     * Initializes database connection.
+     * Initializes database connection and creates tables if they don't exist.
      */
     public UserService() {
         con = DataSource.getInstance().getConnection();
+
+        // Create tables if they don't exist
+        TableCreator tableCreator = new TableCreator(con);
+        tableCreator.createTableIfNotExists("users", """
+                    CREATE TABLE users (
+                        id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                        nom VARCHAR(50) NOT NULL,
+                        prenom VARCHAR(50) NOT NULL,
+                        num_telephone INT,
+                        password VARCHAR(180) NOT NULL,
+                        role VARCHAR(50) NOT NULL,
+                        adresse VARCHAR(50),
+                        date_de_naissance DATE,
+                        email VARCHAR(180) NOT NULL UNIQUE,
+                        photo_de_profil VARCHAR(255),
+                        is_verified BOOLEAN NOT NULL DEFAULT TRUE,
+                        roles TEXT NOT NULL,
+                        totp_secret VARCHAR(255)
+                    )
+                """);
     }
 
     /**

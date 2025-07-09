@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import com.esprit.models.films.Category;
 import com.esprit.models.films.Film;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,10 +31,29 @@ public class FilmCategoryService {
 
     /**
      * Constructs a new FilmCategoryService instance.
-     * Initializes database connection.
+     * Initializes database connection and creates tables if they don't exist.
      */
     public FilmCategoryService() {
         this.connection = DataSource.getInstance().getConnection();
+
+        // Create tables if they don't exist
+        try {
+            TableCreator tableCreator = new TableCreator(this.connection);
+
+            // Create film_category junction table
+            String createFilmCategoryTable = """
+                    CREATE TABLE film_category (
+                        id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                        film_id BIGINT NOT NULL,
+                        category_id BIGINT NOT NULL,
+                        UNIQUE(film_id, category_id)
+                    )
+                    """;
+            tableCreator.createTableIfNotExists("film_category", createFilmCategoryTable);
+
+        } catch (Exception e) {
+            log.error("Error creating tables for FilmCategoryService", e);
+        }
     }
 
     /**

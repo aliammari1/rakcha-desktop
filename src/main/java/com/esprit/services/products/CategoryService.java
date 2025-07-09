@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import com.esprit.models.products.ProductCategory;
 import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,10 +32,29 @@ public class CategoryService implements IService<ProductCategory> {
 
     /**
      * Constructor for CategoryService that initializes the database connection.
-     * Obtains a connection from the DataSource singleton.
+     * Obtains a connection from the DataSource singleton and creates tables if they
+     * don't exist.
      */
     public CategoryService() {
         this.connection = DataSource.getInstance().getConnection();
+
+        // Create tables if they don't exist
+        try {
+            TableCreator tableCreator = new TableCreator(this.connection);
+
+            // Create product_categories table
+            String createProductCategoriesTable = """
+                    CREATE TABLE product_categories (
+                        id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                        category_name VARCHAR(255) NOT NULL UNIQUE,
+                        description TEXT
+                    )
+                    """;
+            tableCreator.createTableIfNotExists("product_categories", createProductCategoriesTable);
+
+        } catch (Exception e) {
+            log.error("Error creating tables for CategoryService", e);
+        }
     }
 
     @Override

@@ -429,6 +429,12 @@
       <version>${lombok.version}</version>
       <scope>provided</scope>
     </dependency>
+    <!-- JavaFaker for generating fake data -->
+    <dependency>
+      <groupId>com.github.javafaker</groupId>
+      <artifactId>javafaker</artifactId>
+      <version>1.0.2</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -457,6 +463,16 @@
         <version>0.0.8</version>
         <configuration>
           <mainClass>com.esprit.MainApp</mainClass>
+        </configuration>
+      </plugin>
+
+      <!-- Exec Maven Plugin for running Java applications -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.1.0</version>
+        <configuration>
+          <cleanupDaemonThreads>false</cleanupDaemonThreads>
         </configuration>
       </plugin>
 

@@ -13,6 +13,7 @@ import com.esprit.models.cinemas.Cinema;
 import com.esprit.models.films.Film;
 import com.esprit.services.cinemas.CinemaService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,10 +32,29 @@ public class FilmCinemaService {
 
     /**
      * Constructs a new FilmCinemaService instance.
-     * Initializes database connection.
+     * Initializes database connection and creates tables if they don't exist.
      */
     public FilmCinemaService() {
         this.connection = DataSource.getInstance().getConnection();
+
+        // Create tables if they don't exist
+        try {
+            TableCreator tableCreator = new TableCreator(this.connection);
+
+            // Create film_cinema junction table
+            String createFilmCinemaTable = """
+                    CREATE TABLE film_cinema (
+                        id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                        film_id BIGINT NOT NULL,
+                        cinema_id BIGINT NOT NULL,
+                        UNIQUE(film_id, cinema_id)
+                    )
+                    """;
+            tableCreator.createTableIfNotExists("film_cinema", createFilmCinemaTable);
+
+        } catch (Exception e) {
+            log.error("Error creating tables for FilmCinemaService", e);
+        }
     }
 
     /**

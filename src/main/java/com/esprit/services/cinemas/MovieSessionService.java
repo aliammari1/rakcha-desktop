@@ -12,6 +12,7 @@ import com.esprit.models.films.Film;
 import com.esprit.services.IService;
 import com.esprit.services.films.FilmService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,12 +34,36 @@ public class MovieSessionService implements IService<MovieSession> {
     /**
      * Constructs a new MovieSessionService instance.
      * Initializes database connection and related services.
+     * Creates tables if they don't exist.
      */
     public MovieSessionService() {
         this.connection = DataSource.getInstance().getConnection();
         this.cinemaService = new CinemaService();
         this.cinemaHallService = new CinemaHallService();
         this.filmService = new FilmService();
+
+        // Create tables if they don't exist
+        try {
+            TableCreator tableCreator = new TableCreator(this.connection);
+
+            // Create movie_session table
+            String createMovieSessionTable = """
+                    CREATE TABLE movie_session (
+                        id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                        film_id BIGINT NOT NULL,
+                        cinema_hall_id BIGINT NOT NULL,
+                        start_time TIME NOT NULL,
+                        end_time TIME NOT NULL,
+                        session_date DATE NOT NULL,
+                        price DECIMAL(10,2) NOT NULL,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    )
+                    """;
+            tableCreator.createTableIfNotExists("movie_session", createMovieSessionTable);
+
+        } catch (Exception e) {
+            log.error("Error creating tables for MovieSessionService", e);
+        }
     }
 
     @Override

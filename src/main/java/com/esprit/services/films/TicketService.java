@@ -14,6 +14,7 @@ import com.esprit.services.IService;
 import com.esprit.services.cinemas.MovieSessionService;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,12 +34,35 @@ public class TicketService implements IService<Ticket> {
 
     /**
      * Constructs a new TicketService instance.
-     * Initializes database connection and related services.
+     * Initializes database connection, related services, and creates tables if they
+     * don't exist.
      */
     public TicketService() {
         this.connection = DataSource.getInstance().getConnection();
         this.userService = new UserService();
         this.moviesessionService = new MovieSessionService();
+
+        // Create tables if they don't exist
+        try {
+            TableCreator tableCreator = new TableCreator(this.connection);
+
+            // Create tickets table
+            String createTicketsTable = """
+                    CREATE TABLE tickets (
+                        id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                        client_id BIGINT NOT NULL,
+                        session_id BIGINT NOT NULL,
+                        seat_number VARCHAR(50),
+                        price DECIMAL(10, 2),
+                        purchase_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        status VARCHAR(50) DEFAULT 'ACTIVE'
+                    )
+                    """;
+            tableCreator.createTableIfNotExists("tickets", createTicketsTable);
+
+        } catch (Exception e) {
+            log.error("Error creating tables for TicketService", e);
+        }
     }
 
     @Override

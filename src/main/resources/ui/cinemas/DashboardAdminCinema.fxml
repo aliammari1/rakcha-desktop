@@ -23,7 +23,7 @@
             AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <!-- Sidebar -->
             <children>
-                <fx:include source="/ui/adminSideBar.fxml" />
+                <fx:include source="/ui/sidebar.fxml" />
                 <!-- Main Content -->
                 <AnchorPane fx:id="cinemasList" HBox.hgrow="ALWAYS">
                     <children>

@@ -8,7 +8,7 @@
     prefHeight="855.0" prefWidth="1507.0" xmlns="http://javafx.com/javafx/21"
     fx:controller="com.esprit.controllers.cinemas.CinemaStatisticsController">
     <children>
-        <fx:include source="../cinemaManagerSideBar.fxml" />
+        <fx:include source="/ui/sidebar.fxml" />
         <AnchorPane layoutX="557.0" layoutY="213.0" maxHeight="-Infinity" maxWidth="-Infinity"
             minHeight="-Infinity"
             minWidth="-Infinity" prefHeight="446.0" prefWidth="748.0" styleClass="bg-white"

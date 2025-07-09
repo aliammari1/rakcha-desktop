@@ -323,7 +323,7 @@
                         <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-padding: 0 20 0 20;">
                             <FontIcon iconLiteral="fa-user" iconSize="16"
                                 style="-fx-icon-color: #8b0000;" />
-                            <TextField fx:id="emailTextField" text="aliammari862002@gmail.com"
+                            <TextField fx:id="emailTextField" text="lulu.schoen@yahoo.com"
                                 styleClass="animated-input"
                                 promptText="Enter your email or username"
                                 style="-fx-background-color: transparent;
@@ -362,7 +362,7 @@
                         <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-padding: 0 20 0 20;">
                             <FontIcon iconLiteral="fa-lock" iconSize="16"
                                 style="-fx-icon-color: #8b0000;" />
-                            <PasswordField fx:id="passwordTextField" text="password"
+                            <PasswordField fx:id="passwordTextField" text="password123"
                                 styleClass="animated-input"
                                 promptText="Enter your password"
                                 style="-fx-background-color: transparent;
