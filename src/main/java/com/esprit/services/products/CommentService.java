@@ -14,6 +14,7 @@ import com.esprit.models.users.Client;
 import com.esprit.services.IService;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,10 +33,30 @@ public class CommentService implements IService<Comment> {
 
     /**
      * Constructs a new CommentService instance.
-     * Initializes database connection.
+     * Initializes database connection and creates tables if they don't exist.
      */
     public CommentService() {
         this.connection = DataSource.getInstance().getConnection();
+
+        // Create tables if they don't exist
+        try {
+            TableCreator tableCreator = new TableCreator(this.connection);
+
+            // Create comments table
+            String createCommentsTable = """
+                    CREATE TABLE comments (
+                        id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                        client_id BIGINT NOT NULL,
+                        comment_text TEXT NOT NULL,
+                        product_id BIGINT NOT NULL,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    )
+                    """;
+            tableCreator.createTableIfNotExists("comments", createCommentsTable);
+
+        } catch (Exception e) {
+            log.error("Error creating tables for CommentService", e);
+        }
     }
 
     @Override

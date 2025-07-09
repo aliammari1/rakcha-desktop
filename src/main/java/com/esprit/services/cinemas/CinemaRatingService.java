@@ -11,6 +11,7 @@ import com.esprit.models.users.Client;
 import com.esprit.services.IService;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,12 +31,34 @@ public class CinemaRatingService implements IService<CinemaRating> {
 
     /**
      * Constructs a new CinemaRatingService instance.
-     * Initializes database connection and related services.
+     * Initializes database connection, related services, and creates tables if they
+     * don't exist.
      */
     public CinemaRatingService() {
         this.connection = DataSource.getInstance().getConnection();
         this.cinemaService = new CinemaService();
         this.userService = new UserService();
+
+        // Create tables if they don't exist
+        try {
+            TableCreator tableCreator = new TableCreator(this.connection);
+
+            // Create cinema_rating table
+            String createCinemaRatingTable = """
+                    CREATE TABLE cinema_rating (
+                        id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                        client_id BIGINT NOT NULL,
+                        cinema_id BIGINT NOT NULL,
+                        rating INT NOT NULL CHECK (rating >= 1 AND rating <= 5),
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        UNIQUE(client_id, cinema_id)
+                    )
+                    """;
+            tableCreator.createTableIfNotExists("cinema_rating", createCinemaRatingTable);
+
+        } catch (Exception e) {
+            log.error("Error creating tables for CinemaRatingService", e);
+        }
     }
 
     @Override

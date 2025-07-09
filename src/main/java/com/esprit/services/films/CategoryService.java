@@ -10,6 +10,7 @@ import java.util.List;
 import com.esprit.models.films.Category;
 import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,9 +35,28 @@ public class CategoryService implements IService<Category> {
 
     /**
      * Constructs a new CategoryService and initializes the database connection.
+     * Creates tables if they don't exist.
      */
     public CategoryService() {
         this.connection = DataSource.getInstance().getConnection();
+
+        // Create tables if they don't exist
+        try {
+            TableCreator tableCreator = new TableCreator(this.connection);
+
+            // Create categories table for films
+            String createCategoriesTable = """
+                    CREATE TABLE categories (
+                        id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                        name VARCHAR(255) NOT NULL UNIQUE,
+                        description TEXT
+                    )
+                    """;
+            tableCreator.createTableIfNotExists("categories", createCategoriesTable);
+
+        } catch (Exception e) {
+            log.error("Error creating tables for CategoryService", e);
+        }
     }
 
     /**

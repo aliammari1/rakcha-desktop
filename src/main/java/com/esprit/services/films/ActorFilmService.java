@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import com.esprit.models.films.Actor;
 import com.esprit.models.films.Film;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -43,10 +44,31 @@ public class ActorFilmService {
     private final Connection connection;
 
     /**
-     * Constructor that initializes the database connection.
+     * Constructor that initializes the database connection and creates tables if
+     * they don't exist.
      */
     public ActorFilmService() {
         this.connection = DataSource.getInstance().getConnection();
+
+        // Create tables if they don't exist
+        try {
+            TableCreator tableCreator = new TableCreator(this.connection);
+
+            // Create actor_film junction table
+            String createActorFilmTable = """
+                    CREATE TABLE actor_film (
+                        id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                        actor_id BIGINT NOT NULL,
+                        film_id BIGINT NOT NULL,
+                        role VARCHAR(255),
+                        UNIQUE(actor_id, film_id)
+                    )
+                    """;
+            tableCreator.createTableIfNotExists("actor_film", createActorFilmTable);
+
+        } catch (Exception e) {
+            log.error("Error creating tables for ActorFilmService", e);
+        }
     }
 
     /**

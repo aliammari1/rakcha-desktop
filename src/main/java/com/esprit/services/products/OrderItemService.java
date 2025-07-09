@@ -15,6 +15,7 @@ import com.esprit.models.products.OrderItem;
 import com.esprit.models.products.Product;
 import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,10 +34,21 @@ public class OrderItemService implements IService<OrderItem> {
 
     /**
      * Constructs a new OrderItemService instance.
-     * Initializes database connection.
+     * Initializes database connection and creates tables if they don't exist.
      */
     public OrderItemService() {
         this.connection = DataSource.getInstance().getConnection();
+
+        // Create tables if they don't exist
+        TableCreator tableCreator = new TableCreator(connection);
+        tableCreator.createTableIfNotExists("order_items", """
+                    CREATE TABLE order_items (
+                        id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                        product_id BIGINT,
+                        quantity INT NOT NULL,
+                        order_id BIGINT
+                    )
+                """);
     }
 
     @Override

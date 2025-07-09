@@ -21,7 +21,7 @@
     <AnchorPane fx:id="anchorPaneFilm" maxHeight="-Infinity" maxWidth="-Infinity"
         minHeight="-Infinity" minWidth="-Infinity" prefHeight="855.0" prefWidth="1507.0"
         stylesheets="@../styles/filmStyle.css">
-        <fx:include source="../clientSideBar.fxml" />
+        <fx:include source="/ui/sidebar.fxml" />
         <Button fx:id="SerieButton" layoutY="271.0" mnemonicParsing="false"
             onAction="#switchtoSerie" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn"
             stylesheets="@../styles/filmStyle.css" text="Series              "

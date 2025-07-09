@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import com.esprit.models.series.Episode;
 import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,10 +27,24 @@ public class IServiceEpisodeImpl implements IService<Episode> {
 
     /**
      * Constructs a new IServiceEpisodeImpl instance.
-     * Initializes database connection.
+     * Initializes database connection and creates tables if they don't exist.
      */
     public IServiceEpisodeImpl() {
         this.connection = DataSource.getInstance().getConnection();
+
+        // Create tables if they don't exist
+        TableCreator tableCreator = new TableCreator(connection);
+        tableCreator.createTableIfNotExists("episode", """
+                    CREATE TABLE episode (
+                        idepisode BIGINT AUTO_INCREMENT PRIMARY KEY,
+                        series_id BIGINT,
+                        title VARCHAR(30) NOT NULL,
+                        episode_number INT NOT NULL,
+                        season INT NOT NULL,
+                        image VARCHAR(255) NOT NULL,
+                        video VARCHAR(255) NOT NULL
+                    )
+                """);
     }
 
     @Override

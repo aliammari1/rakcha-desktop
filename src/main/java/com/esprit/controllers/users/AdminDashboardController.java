@@ -42,7 +42,6 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.Callback;
 import javafx.util.converter.DefaultStringConverter;
-import javafx.util.converter.IntegerStringConverter;
 import net.synedra.validatorfx.Validator;
 
 /**
@@ -59,7 +58,7 @@ public class AdminDashboardController {
     TableColumn<User, HBox> photoDeProfilTableColumn;
     TableColumn<User, String> lastNameTableColumn;
     TableColumn<User, String> passwordTableColumn;
-    TableColumn<User, Integer> numTelTableColumn;
+    TableColumn<User, String> numTelTableColumn;
     TableColumn<User, String> firstNameTableColumn;
     TableColumn<User, DatePicker> dateDeNaissanceTableColumn;
     TableColumn<User, String> adresseTableColumn;
@@ -327,7 +326,7 @@ public class AdminDashboardController {
     private void setupCellValueFactories() {
         this.firstNameTableColumn.setCellValueFactory(new PropertyValueFactory<User, String>("firstName"));
         this.lastNameTableColumn.setCellValueFactory(new PropertyValueFactory<User, String>("lastName"));
-        this.numTelTableColumn.setCellValueFactory(new PropertyValueFactory<User, Integer>("phoneNumber"));
+        this.numTelTableColumn.setCellValueFactory(new PropertyValueFactory<User, String>("phoneNumber"));
         this.passwordTableColumn.setCellValueFactory(new PropertyValueFactory<User, String>("password"));
         this.roleTableColumn.setCellValueFactory(new PropertyValueFactory<User, String>("role"));
         this.adresseTableColumn.setCellValueFactory(new PropertyValueFactory<User, String>("address"));
@@ -635,15 +634,15 @@ public class AdminDashboardController {
                 };
             }
         });
-        this.numTelTableColumn.setCellFactory(new Callback<TableColumn<User, Integer>, TableCell<User, Integer>>() {
+        this.numTelTableColumn.setCellFactory(new Callback<TableColumn<User, String>, TableCell<User, String>>() {
             @Override
             /**
              * Performs call operation.
              *
              * @return the result of the operation
              */
-            public TableCell<User, Integer> call(final TableColumn<User, Integer> param) {
-                return new TextFieldTableCell<User, Integer>(new IntegerStringConverter()) {
+            public TableCell<User, String> call(final TableColumn<User, String> param) {
+                return new TextFieldTableCell<User, String>() {
                     private Validator validator;
 
                     @Override
@@ -971,17 +970,17 @@ public class AdminDashboardController {
                 }
             }
         });
-        this.numTelTableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<User, Integer>>() {
+        this.numTelTableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
             @Override
             /**
              * Performs handle operation.
              *
              * @return the result of the operation
              */
-            public void handle(final TableColumn.CellEditEvent<User, Integer> event) {
+            public void handle(final TableColumn.CellEditEvent<User, String> event) {
                 try {
                     event.getTableView().getItems().get(event.getTablePosition().getRow())
-                            .setPhoneNumber(event.getNewValue().toString());
+                            .setPhoneNumber(event.getNewValue());
                     AdminDashboardController.this
                             .update(event.getTableView().getItems().get(event.getTablePosition().getRow()));
                 } catch (final Exception e) {

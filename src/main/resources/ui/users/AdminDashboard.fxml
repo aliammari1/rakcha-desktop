@@ -19,7 +19,7 @@
             <AnchorPane prefHeight="40.0" prefWidth="1291.0" BorderPane.alignment="CENTER" />
         </top>
         <left>
-            <fx:include source="../adminSideBar.fxml" />
+            <fx:include source="/ui/sidebar.fxml" />
         </left>
         <center>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">

@@ -22,6 +22,7 @@ import com.esprit.models.films.Film;
 import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
 import com.esprit.utils.FilmYoutubeTrailer;
+import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,10 +42,83 @@ public class FilmService implements IService<Film> {
 
     /**
      * Constructs a new FilmService instance.
-     * Initializes database connection and related services.
+     * Initializes database connection and creates tables if they don't exist.
      */
     public FilmService() {
         this.connection = DataSource.getInstance().getConnection();
+
+        // Create tables if they don't exist
+        TableCreator tableCreator = new TableCreator(connection);
+
+        // Create film categories table
+        tableCreator.createTableIfNotExists("film_categories", """
+                    CREATE TABLE film_categories (
+                        id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                        name VARCHAR(255) NOT NULL UNIQUE,
+                        description TEXT NOT NULL
+                    )
+                """);
+
+        // Create actors table
+        tableCreator.createTableIfNotExists("actors", """
+                    CREATE TABLE actors (
+                        id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                        name VARCHAR(255) NOT NULL,
+                        image TEXT NOT NULL,
+                        biography TEXT NOT NULL
+                    )
+                """);
+
+        // Create films table
+        tableCreator.createTableIfNotExists("films", """
+                    CREATE TABLE films (
+                        id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                        name VARCHAR(255) NOT NULL,
+                        image TEXT,
+                        duration TIME NOT NULL,
+                        description TEXT NOT NULL,
+                        release_year INT NOT NULL,
+                        isBookmarked BOOLEAN NOT NULL DEFAULT FALSE
+                    )
+                """);
+
+        // Create film-category junction table
+        tableCreator.createTableIfNotExists("film_category", """
+                    CREATE TABLE film_category (
+                        film_id BIGINT NOT NULL,
+                        category_id BIGINT NOT NULL,
+                        PRIMARY KEY (film_id, category_id)
+                    )
+                """);
+
+        // Create film-actor junction table
+        tableCreator.createTableIfNotExists("film_actor", """
+                    CREATE TABLE film_actor (
+                        film_id BIGINT NOT NULL,
+                        actor_id BIGINT NOT NULL,
+                        PRIMARY KEY (film_id, actor_id)
+                    )
+                """);
+
+        // Create film comments table
+        tableCreator.createTableIfNotExists("film_comments", """
+                    CREATE TABLE film_comments (
+                        id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                        comment VARCHAR(255) NOT NULL,
+                        user_id BIGINT NOT NULL,
+                        film_id BIGINT NOT NULL
+                    )
+                """);
+
+        // Create film ratings table
+        tableCreator.createTableIfNotExists("film_ratings", """
+                    CREATE TABLE film_ratings (
+                        film_id BIGINT NOT NULL,
+                        user_id BIGINT NOT NULL,
+                        rating INT,
+                        PRIMARY KEY (film_id, user_id)
+                    )
+                """);
     }
 
     /**
@@ -113,20 +187,24 @@ public class FilmService implements IService<Film> {
      *               the entity to create
      */
     public void create(final Film film) {
-        final String req = "insert into films (name,image,duration,description,release_year) values (?,?,?,?,?) ";
-        try (final PreparedStatement statement = this.connection.prepareStatement(req)) {
+        final String req = "insert into films (name,image,duration,description,release_year) values (?,?,?,?,?)";
+        try (final PreparedStatement statement = this.connection.prepareStatement(req,
+                PreparedStatement.RETURN_GENERATED_KEYS)) {
+
             statement.setString(1, film.getName());
             statement.setString(2, film.getImage());
             statement.setTime(3, film.getDuration());
             statement.setString(4, film.getDescription());
             statement.setInt(5, film.getReleaseYear());
-            statement.executeUpdate();
-            final String selectSql = "SELECT LAST_INSERT_ID()";
-            try (final PreparedStatement selectPs = this.connection.prepareStatement(selectSql);
-                    final ResultSet rs = selectPs.executeQuery()) {
-                if (rs.next()) {
-                    FilmService.filmLastInsertID = rs.getInt(1);
-                    log.info("Film created with ID: " + FilmService.filmLastInsertID);
+
+            int affectedRows = statement.executeUpdate();
+
+            if (affectedRows > 0) {
+                try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        FilmService.filmLastInsertID = generatedKeys.getInt(1);
+                        log.info("Film created with ID: " + FilmService.filmLastInsertID);
+                    }
                 }
             }
         } catch (final SQLException e) {

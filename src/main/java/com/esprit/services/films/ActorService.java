@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import com.esprit.models.films.Actor;
 import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,10 +40,32 @@ public class ActorService implements IService<Actor> {
     Connection connection;
 
     /**
-     * Constructor that initializes the database connection.
+     * Constructor that initializes the database connection and creates tables if
+     * they don't exist.
      */
     public ActorService() {
         this.connection = DataSource.getInstance().getConnection();
+
+        // Create tables if they don't exist
+        try {
+            TableCreator tableCreator = new TableCreator(this.connection);
+
+            // Create actors table
+            String createActorsTable = """
+                    CREATE TABLE actors (
+                        id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                        name VARCHAR(255) NOT NULL,
+                        bio TEXT,
+                        birth_date DATE,
+                        nationality VARCHAR(100),
+                        placement VARCHAR(100)
+                    )
+                    """;
+            tableCreator.createTableIfNotExists("actors", createActorsTable);
+
+        } catch (Exception e) {
+            log.error("Error creating tables for ActorService", e);
+        }
     }
 
     /**

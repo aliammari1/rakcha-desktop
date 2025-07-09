@@ -35,13 +35,11 @@ public class DataSource {
         // Set default URL based on a database type
         this.url = System.getProperty("db.url", dotenv.get("DB_URL", ""));
 
-
-            this.user = System.getProperty("db.user", dotenv.get("DB_USER", "root"));
-            this.password = System.getProperty("db.password", dotenv.get("DB_PASSWORD", ""));
-
+        this.user = System.getProperty("db.user", dotenv.get("DB_USER", "root"));
+        this.password = System.getProperty("db.password", dotenv.get("DB_PASSWORD", ""));
 
         // Create a data directory for SQLite if needed
-        if (dotenv.get("DB_URL","").toUpperCase().contains("SQLITE")) {
+        if (dotenv.get("DB_URL", "").toUpperCase().contains("SQLITE")) {
             createDataDirectoryIfNeeded();
         }
 
@@ -74,7 +72,7 @@ public class DataSource {
                 this.connection = DriverManager.getConnection(this.url, this.user, this.password);
             }
         } catch (SQLException e) {
-            log.error( "Failed to get database connection", e);
+            log.error("Failed to get database connection", e);
             throw new RuntimeException("Failed to get database connection", e);
         }
         return this.connection;
@@ -88,11 +86,10 @@ public class DataSource {
             try {
                 this.connection.close();
             } catch (SQLException e) {
-                log.warn( "Error closing database connection", e);
+                log.warn("Error closing database connection", e);
             }
         }
     }
-
 
     /**
      * Create data directory for SQLite database if it doesn't exist
@@ -105,14 +102,30 @@ public class DataSource {
                 log.info("Created data directory for SQLite: " + dataDir.toAbsolutePath());
             }
         } catch (Exception e) {
-            log.warn( "Failed to create data directory for SQLite", e);
+            log.warn("Failed to create data directory for SQLite", e);
         }
     }
-    
+
     /**
      * Get database URL being used
      */
     public String getDatabaseUrl() {
         return this.url;
+    }
+
+    /**
+     * Creates all required tables if they don't exist.
+     * This method ensures database schema compatibility across different databases.
+     */
+    public void createTablesIfNotExists() {
+        try {
+            TableCreator tableCreator = new TableCreator(this.getConnection());
+            tableCreator.createAllTablesIfNotExists();
+            log.info("All tables created successfully or already exist");
+        } catch (Exception e) {
+            log.error("Error creating database tables", e);
+            // Don't throw exception here to avoid breaking the application if tables
+            // already exist
+        }
     }
 }

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.image.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<BorderPane fx:id="rootContainer" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.esprit.controllers.users.HomeClientController"
+           style="-fx-background-color: linear-gradient(to bottom, #1a1a1f, #0f0f14);">
+
+    <!-- Sidebar -->
+    <left>
+        <fx:include source="../sidebar.fxml" />
+    </left>
+
+    <!-- Top Header -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-padding: 20; -fx-background-color: rgba(20, 20, 25, 0.9);">
+            <Label fx:id="welcomeLabel" text="Welcome to RAKCHA!"
+                style="-fx-text-fill: #ff6666; -fx-font-family: 'Arial Black'; -fx-font-size: 24px; -fx-font-weight: bold;" />
+            <Region HBox.hgrow="ALWAYS" />
+            <TextField fx:id="searchField" promptText="Search movies, cinemas..."
+                style="-fx-background-color: rgba(40, 40, 40, 0.8); -fx-text-fill: white; -fx-prompt-text-fill: #cccccc; 
+                       -fx-background-radius: 20; -fx-padding: 10; -fx-pref-width: 250;" />
+        </HBox>
+    </top>
+
+    <!-- Main Content -->
+    <center>
+        <ScrollPane fitToWidth="true" fitToHeight="true" 
+            style="-fx-background: transparent; -fx-background-color: transparent;">
+            <VBox spacing="30" style="-fx-padding: 30;">
+                
+                <!-- Featured Section -->
+                <VBox spacing="15">
+                    <Label text="FEATURED TODAY"
+                        style="-fx-text-fill: #ffffff; -fx-font-family: 'Arial Black'; -fx-font-size: 18px;" />
+                    
+                    <HBox spacing="20" alignment="CENTER">
+                        <!-- Featured Movie -->
+                        <VBox spacing="10" alignment="CENTER"
+                            style="-fx-background-color: linear-gradient(to bottom right, rgba(255, 102, 102, 0.2), rgba(139, 0, 0, 0.1)); 
+                                   -fx-background-radius: 15; -fx-padding: 20; -fx-min-width: 200; -fx-min-height: 150;">
+                            <FontIcon iconLiteral="fa-film" iconSize="40" style="-fx-icon-color: #ff6666;" />
+                            <Label text="Latest Movies" style="-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;" />
+                            <Label text="Discover new releases" style="-fx-text-fill: #cccccc; -fx-font-size: 12px;" />
+                        </VBox>
+
+                        <!-- Featured Cinema -->
+                        <VBox spacing="10" alignment="CENTER"
+                            style="-fx-background-color: linear-gradient(to bottom right, rgba(102, 204, 255, 0.2), rgba(74, 144, 226, 0.1)); 
+                                   -fx-background-radius: 15; -fx-padding: 20; -fx-min-width: 200; -fx-min-height: 150;">
+                            <FontIcon iconLiteral="fa-building" iconSize="40" style="-fx-icon-color: #66ccff;" />
+                            <Label text="Top Cinemas" style="-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;" />
+                            <Label text="Find cinemas near you" style="-fx-text-fill: #cccccc; -fx-font-size: 12px;" />
+                        </VBox>
+
+                        <!-- Featured Series -->
+                        <VBox spacing="10" alignment="CENTER"
+                            style="-fx-background-color: linear-gradient(to bottom right, rgba(255, 170, 0, 0.2), rgba(255, 140, 0, 0.1)); 
+                                   -fx-background-radius: 15; -fx-padding: 20; -fx-min-width: 200; -fx-min-height: 150;">
+                            <FontIcon iconLiteral="fa-tv" iconSize="40" style="-fx-icon-color: #ffaa00;" />
+                            <Label text="TV Series" style="-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;" />
+                            <Label text="Binge your favorites" style="-fx-text-fill: #cccccc; -fx-font-size: 12px;" />
+                        </VBox>
+                    </HBox>
+                </VBox>
+
+                <!-- Quick Actions -->
+                <VBox spacing="20">
+                    <Label text="QUICK ACTIONS"
+                        style="-fx-text-fill: #ffffff; -fx-font-family: 'Arial Black'; -fx-font-size: 18px;" />
+                    
+                    <GridPane hgap="15" vgap="15" alignment="CENTER">
+                        <Button text="BROWSE MOVIES" onAction="#browseMovies" 
+                            GridPane.columnIndex="0" GridPane.rowIndex="0"
+                            style="-fx-background-color: linear-gradient(to right, #8b0000, #ff4444); -fx-text-fill: white; 
+                                   -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand; 
+                                   -fx-padding: 15 30 15 30;" />
+                        
+                        <Button text="FIND CINEMAS" onAction="#findCinemas" 
+                            GridPane.columnIndex="1" GridPane.rowIndex="0"
+                            style="-fx-background-color: linear-gradient(to right, #4a90e2, #66ccff); -fx-text-fill: white; 
+                                   -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand; 
+                                   -fx-padding: 15 30 15 30;" />
+                        
+                        <Button text="WATCH SERIES" onAction="#browseSeries" 
+                            GridPane.columnIndex="2" GridPane.rowIndex="0"
+                            style="-fx-background-color: linear-gradient(to right, #ff8c00, #ffaa00); -fx-text-fill: white; 
+                                   -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand; 
+                                   -fx-padding: 15 30 15 30;" />
+                        
+                        <Button text="MY PROFILE" onAction="#viewProfile" 
+                            GridPane.columnIndex="3" GridPane.rowIndex="0"
+                            style="-fx-background-color: linear-gradient(to right, #6a0dad, #9932cc); -fx-text-fill: white; 
+                                   -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand; 
+                                   -fx-padding: 15 30 15 30;" />
+                    </GridPane>
+                </VBox>
+
+                <!-- Trending Now -->
+                <VBox spacing="15">
+                    <Label text="TRENDING NOW"
+                        style="-fx-text-fill: #ffffff; -fx-font-family: 'Arial Black'; -fx-font-size: 18px;" />
+                    
+                    <ScrollPane fx:id="trendingScrollPane" fitToHeight="true" fitToWidth="true"
+                        style="-fx-background: transparent; -fx-background-color: transparent;">
+                        <HBox fx:id="trendingContainer" spacing="15" style="-fx-padding: 10;">
+                            <!-- Trending items will be added dynamically -->
+                        </HBox>
+                    </ScrollPane>
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>
+

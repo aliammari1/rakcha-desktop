@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import com.esprit.models.series.Feedback;
 import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,10 +29,30 @@ public class IServiceFeedbackImpl implements IService<Feedback> {
 
     /**
      * Constructs a new IServiceFeedbackImpl instance.
-     * Initializes database connection.
+     * Initializes database connection and creates tables if they don't exist.
      */
     public IServiceFeedbackImpl() {
         this.connection = DataSource.getInstance().getConnection();
+
+        // Create tables if they don't exist
+        try {
+            TableCreator tableCreator = new TableCreator(this.connection);
+
+            // Create feedback table
+            String createFeedbackTable = """
+                    CREATE TABLE feedback (
+                        id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                        id_user BIGINT NOT NULL,
+                        description TEXT,
+                        date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        id_episode BIGINT NOT NULL
+                    )
+                    """;
+            tableCreator.createTableIfNotExists("feedback", createFeedbackTable);
+
+        } catch (Exception e) {
+            log.error("Error creating tables for IServiceFeedbackImpl", e);
+        }
     }
 
     @Override

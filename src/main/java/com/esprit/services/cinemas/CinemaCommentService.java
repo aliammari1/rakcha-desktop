@@ -10,6 +10,7 @@ import com.esprit.models.users.Client;
 import com.esprit.services.IService;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,12 +32,33 @@ public class CinemaCommentService implements IService<CinemaComment> {
 
     /**
      * Constructs a new CinemaCommentService with database connection and required
-     * services.
+     * services. Creates tables if they don't exist.
      */
     public CinemaCommentService() {
         this.connection = DataSource.getInstance().getConnection();
         this.cinemaService = new CinemaService();
         this.userService = new UserService();
+
+        // Create tables if they don't exist
+        try {
+            TableCreator tableCreator = new TableCreator(this.connection);
+
+            // Create cinema_comment table
+            String createCinemaCommentTable = """
+                    CREATE TABLE cinema_comment (
+                        id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                        cinema_id BIGINT NOT NULL,
+                        client_id BIGINT NOT NULL,
+                        comment_text TEXT NOT NULL,
+                        sentiment VARCHAR(50),
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    )
+                    """;
+            tableCreator.createTableIfNotExists("cinema_comment", createCinemaCommentTable);
+
+        } catch (Exception e) {
+            log.error("Error creating tables for CinemaCommentService", e);
+        }
     }
 
     @Override

@@ -13,6 +13,7 @@ import com.esprit.models.products.ShoppingCart;
 import com.esprit.services.IService;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,10 +32,21 @@ public class ShoppingCartService implements IService<ShoppingCart> {
 
     /**
      * Constructs a new ShoppingCartService instance.
-     * Initializes database connection.
+     * Initializes database connection and creates tables if they don't exist.
      */
     public ShoppingCartService() {
         this.connection = DataSource.getInstance().getConnection();
+
+        // Create tables if they don't exist
+        TableCreator tableCreator = new TableCreator(connection);
+        tableCreator.createTableIfNotExists("shopping_cart", """
+                    CREATE TABLE shopping_cart (
+                        id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                        produit_id BIGINT,
+                        quantity INT,
+                        user_id BIGINT
+                    )
+                """);
     }
 
     @Override

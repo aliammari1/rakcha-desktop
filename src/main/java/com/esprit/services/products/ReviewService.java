@@ -15,6 +15,7 @@ import com.esprit.models.users.Client;
 import com.esprit.services.IService;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,10 +35,31 @@ public class ReviewService implements IService<Review> {
 
     /**
      * Constructs a new ReviewService instance.
-     * Initializes database connection.
+     * Initializes database connection and creates tables if they don't exist.
      */
     public ReviewService() {
         this.connection = DataSource.getInstance().getConnection();
+
+        // Create tables if they don't exist
+        try {
+            TableCreator tableCreator = new TableCreator(this.connection);
+
+            // Create reviews table
+            String createReviewsTable = """
+                    CREATE TABLE reviews (
+                        id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                        user_id BIGINT NOT NULL,
+                        rating INT NOT NULL CHECK (rating >= 1 AND rating <= 5),
+                        product_id BIGINT NOT NULL,
+                        review_text TEXT,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    )
+                    """;
+            tableCreator.createTableIfNotExists("reviews", createReviewsTable);
+
+        } catch (Exception e) {
+            log.error("Error creating tables for ReviewService", e);
+        }
     }
 
     @Override

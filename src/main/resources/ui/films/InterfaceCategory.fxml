@@ -18,7 +18,7 @@
     fx:controller="com.esprit.controllers.films.CategoryController">
 
     <children>
-        <fx:include source="../CinemaManagerSideBar.fxml" />
+        <fx:include source="/ui/sidebar.fxml" />
         <AnchorPane layoutX="313.0" layoutY="180.0" prefHeight="576.0" prefWidth="525.0"
             styleClass="bg-white" stylesheets="@../styles/filmStyle.css">
 

@@ -9,6 +9,7 @@ import com.esprit.models.users.CinemaManager;
 import com.esprit.services.IService;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,11 +28,24 @@ public class CinemaService implements IService<Cinema> {
 
     /**
      * Constructs a new CinemaService instance.
-     * Initializes database connection and user service.
+     * Initializes database connection and creates tables if they don't exist.
      */
     public CinemaService() {
         this.connection = DataSource.getInstance().getConnection();
         this.userService = new UserService();
+
+        // Create tables if they don't exist
+        TableCreator tableCreator = new TableCreator(connection);
+        tableCreator.createTableIfNotExists("cinema", """
+                    CREATE TABLE cinema (
+                        id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                        name VARCHAR(50) NOT NULL,
+                        address VARCHAR(100) NOT NULL,
+                        manager_id BIGINT NOT NULL,
+                        logo_path VARCHAR(1000) NOT NULL,
+                        status VARCHAR(50) NOT NULL
+                    )
+                """);
     }
 
     @Override
@@ -46,13 +60,22 @@ public class CinemaService implements IService<Cinema> {
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, cinema.getName());
             stmt.setString(2, cinema.getAddress());
-            stmt.setLong(3, cinema.getManager().getId());
+
+            // Handle null manager case
+            if (cinema.getManager() != null && cinema.getManager().getId() != null) {
+                stmt.setLong(3, cinema.getManager().getId());
+            } else {
+                log.warn("Cinema manager is null for cinema: " + cinema.getName());
+                throw new IllegalArgumentException("Cinema must have a valid manager with an ID");
+            }
+
             stmt.setString(4, cinema.getLogoPath());
             stmt.setString(5, cinema.getStatus() != null ? cinema.getStatus() : "Pending");
             stmt.executeUpdate();
             log.info("Cinema created successfully");
         } catch (SQLException e) {
             log.error("Error creating cinema", e);
+            throw new RuntimeException("Failed to create cinema", e);
         }
     }
 
