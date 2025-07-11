@@ -10,8 +10,6 @@ import java.util.logging.Logger;
 
 import com.esprit.models.users.User;
 import com.esprit.services.users.UserService;
-import com.github.plushaze.traynotification.notification.Notifications;
-import com.github.plushaze.traynotification.notification.TrayNotification;
 
 import javafx.animation.*;
 import javafx.event.ActionEvent;
@@ -177,9 +175,16 @@ public class LoginController implements Initializable {
         final User user = userService.login(this.emailTextField.getText(), this.passwordTextField.getText());
         if (null != user) {
             try {
-                final TrayNotification trayNotification = new TrayNotification("users", "login successful",
-                        Notifications.SUCCESS);
-                trayNotification.showAndDismiss(new Duration(3000));
+                // Show success notification using built-in JavaFX Alert
+                Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+                successAlert.setTitle("Login Successful");
+                successAlert.setHeaderText(null);
+                successAlert.setContentText("Welcome back! Login successful.");
+                successAlert.show();
+                
+                // Auto-close the alert after 3 seconds
+                Timeline autoClose = new Timeline(new KeyFrame(Duration.seconds(3), e -> successAlert.close()));
+                autoClose.play();
 
                 final Stage stage = (Stage) this.signInButton.getScene().getWindow();
 

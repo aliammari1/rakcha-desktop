@@ -25,8 +25,7 @@ import com.github.scribejava.httpclient.ahc.AhcHttpClientConfig;
 public enum SignInGoogle {
     ;
     private static final Logger LOGGER = Logger.getLogger(SignInGoogle.class.getName());
-    private static final SecureRandom RANDOM = new SecureRandom();
-    private static final String SECRET_STATE = "secret" + RANDOM.nextInt(999_999);
+    private static final String SECRET_STATE = "secret" + new SecureRandom().nextInt(999_999);
     private static final String PROTECTED_RESOURCE_URL = "https://www.googleapis.com/oauth2/v3/userinfo";
     private static OAuth20Service service;
 

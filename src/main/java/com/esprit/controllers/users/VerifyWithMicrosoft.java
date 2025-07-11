@@ -48,7 +48,7 @@ public class VerifyWithMicrosoft {
      */
     @FXML
     void initialize() throws IOException, ExecutionException, InterruptedException {
-        final String link = SignInMicrosoft.SignInWithMicrosoft();
+        final String link = SignInMicrosoft.signInWithMicrosoft();
         Desktop.getDesktop().browse(URI.create(link));
     }
 

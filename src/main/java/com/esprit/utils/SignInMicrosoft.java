@@ -34,7 +34,7 @@ public enum SignInMicrosoft {
      * @throws IllegalStateException
      *                               if required environment variables are missing
      */
-    public static String SignInWithMicrosoft(final String... args)
+    public static String signInWithMicrosoft(final String... args)
             throws IOException, InterruptedException, ExecutionException {
         Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
         String clientId = dotenv.get("MICROSOFT_CLIENT_ID");
