@@ -168,8 +168,7 @@ jobs:
   release:
     needs: [package-windows, package-linux, package-macos]
     runs-on: ubuntu-latest
-    if: github.event_name == 'release'
-    
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'release')    
     steps:
     - name: Download all artifacts
       uses: actions/download-artifact@v4
