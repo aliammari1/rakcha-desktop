@@ -59,10 +59,13 @@ jobs:
         cache: maven
     
     - name: Install WiX Toolset
+      shell: pwsh
       run: |
-        choco install wixtoolset --version=3.14.1 -y
+        if (!(choco list --local-only | Select-String 'wixtoolset')) {
+          choco install wixtoolset -y
+        }
         echo "C:\Program Files (x86)\WiX Toolset v3.14\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-    
+
     - name: Verify WiX installation
       run: light.exe -?
     
