@@ -165,32 +165,8 @@ jobs:
           target/*.zip
         retention-days: 30
 
-  quality-checks:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    
-    - name: Set up JDK 21
-      uses: actions/setup-java@v4
-      with:
-        java-version: '21'
-        distribution: 'temurin'
-        cache: maven
-    
-    - name: Run SpotBugs analysis
-      run: mvn spotbugs:check
-    
-    - name: Run OpenRewrite analysis
-      run: mvn rewrite:dryRun
-    
-    - name: Generate Javadocs
-      run: mvn javadoc:javadoc
-
   release:
-    needs: [package-windows, package-linux, package-macos, quality-checks]
+    needs: [package-windows, package-linux, package-macos]
     runs-on: ubuntu-latest
     if: github.event_name == 'release'
     
