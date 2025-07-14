@@ -71,9 +71,6 @@ public class EnhancedDatabaseSeeder {
     // Series Services
     private final IServiceSeriesImpl seriesService = new IServiceSeriesImpl();
     private final IServiceEpisodeImpl episodeService = new IServiceEpisodeImpl();
-    private final IServiceCategorieImpl seriesCategoryService = new IServiceCategorieImpl();
-    private final IServiceFavoriteImpl favoriteService = new IServiceFavoriteImpl();
-    private final IServiceFeedbackImpl feedbackService = new IServiceFeedbackImpl();
 
     /**
      * Seeds the database with realistic fake data using JavaFaker.
@@ -334,7 +331,7 @@ public class EnhancedDatabaseSeeder {
         log.info("Seeding " + count + " cinemas with JavaFaker...");
 
         // Get available cinema managers
-        List<User> allUsers = userService.read();
+        List<User> allUsers = userService.read(PageRequest.defaultPage()).getContent();
         List<CinemaManager> cinemaManagers = allUsers.stream()
                 .filter(user -> user instanceof CinemaManager)
                 .map(user -> (CinemaManager) user)
@@ -356,7 +353,7 @@ public class EnhancedDatabaseSeeder {
                 userService.create(manager);
 
                 // Refresh the manager to get the ID assigned by the database
-                List<User> updatedUsers = userService.read();
+                List<User> updatedUsers = userService.read(PageRequest.defaultPage()).getContent();
                 CinemaManager createdManager = (CinemaManager) updatedUsers.stream()
                         .filter(user -> user instanceof CinemaManager &&
                                 user.getFirstName().equals(firstName) &&
@@ -410,7 +407,7 @@ public class EnhancedDatabaseSeeder {
     private void seedCinemaHalls() {
         log.info("Seeding cinema halls...");
 
-        List<Cinema> cinemas = cinemaService.read();
+        List<Cinema> cinemas = cinemaService.read(PageRequest.defaultPage()).getContent();
         int hallCount = 0;
 
         for (Cinema cinema : cinemas) {
@@ -437,7 +434,7 @@ public class EnhancedDatabaseSeeder {
     private void seedSeats() {
         log.info("Seeding seats...");
 
-        List<CinemaHall> halls = cinemaHallService.read();
+        List<CinemaHall> halls = cinemaHallService.read(PageRequest.defaultPage()).getContent();
         int totalSeats = 0;
 
         for (CinemaHall hall : halls) {
@@ -498,7 +495,7 @@ public class EnhancedDatabaseSeeder {
     private void seedEpisodes() {
         log.info("Seeding episodes...");
 
-        List<Series> seriesList = seriesService.read();
+        List<Series> seriesList = seriesService.read(PageRequest.defaultPage()).getContent();
         int episodeCount = 0;
 
         for (Series series : seriesList) {
@@ -561,9 +558,9 @@ public class EnhancedDatabaseSeeder {
     private void seedMovieSessions(int count) {
         log.info("Seeding " + count + " movie sessions...");
 
-        List<Film> films = filmService.read();
-        List<Cinema> cinemas = cinemaService.read();
-        List<CinemaHall> halls = cinemaHallService.read();
+        List<Film> films = filmService.read(PageRequest.defaultPage()).getContent();
+        List<Cinema> cinemas = cinemaService.read(PageRequest.defaultPage()).getContent();
+        List<CinemaHall> halls = cinemaHallService.read(PageRequest.defaultPage()).getContent();
 
         if (films.isEmpty() || cinemas.isEmpty() || halls.isEmpty()) {
             log.warning("Need films, cinemas, and halls to create movie sessions");
@@ -604,9 +601,9 @@ public class EnhancedDatabaseSeeder {
     private void seedTickets(int count) {
         log.info("Seeding " + count + " tickets...");
 
-        List<User> users = userService.read();
-        List<MovieSession> sessions = movieSessionService.read();
-        List<CinemaHall> halls = cinemaHallService.read();
+        List<User> users = userService.read(PageRequest.defaultPage()).getContent();
+        List<MovieSession> sessions = movieSessionService.read(PageRequest.defaultPage()).getContent();
+        List<CinemaHall> halls = cinemaHallService.read(PageRequest.defaultPage()).getContent();
 
         if (users.isEmpty() || sessions.isEmpty() || halls.isEmpty()) {
             log.warning("Need users, movie sessions, and cinema halls to create tickets");
@@ -671,8 +668,8 @@ public class EnhancedDatabaseSeeder {
     private void seedOrders(int count) {
         log.info("Seeding " + count + " orders...");
 
-        List<User> users = userService.read();
-        List<Product> products = productService.read();
+        List<User> users = userService.read(PageRequest.defaultPage()).getContent();
+        List<Product> products = productService.read(PageRequest.defaultPage()).getContent();
 
         if (users.isEmpty() || products.isEmpty()) {
             log.warning("Need users and products to create orders");
@@ -740,8 +737,8 @@ public class EnhancedDatabaseSeeder {
     private void seedShoppingCarts(int count) {
         log.info("Seeding " + count + " shopping carts...");
 
-        List<User> users = userService.read();
-        List<Product> products = productService.read();
+        List<User> users = userService.read(PageRequest.defaultPage()).getContent();
+        List<Product> products = productService.read(PageRequest.defaultPage()).getContent();
 
         if (users.isEmpty() || products.isEmpty()) {
             log.warning("Need users and products to create shopping carts");
@@ -781,8 +778,8 @@ public class EnhancedDatabaseSeeder {
     private void seedReviews(int count) {
         log.info("Seeding " + count + " product reviews...");
 
-        List<User> users = userService.read();
-        List<Product> products = productService.read();
+        List<User> users = userService.read(PageRequest.defaultPage()).getContent();
+        List<Product> products = productService.read(PageRequest.defaultPage()).getContent();
 
         if (users.isEmpty() || products.isEmpty()) {
             log.warning("Need users and products to create reviews");
@@ -823,8 +820,8 @@ public class EnhancedDatabaseSeeder {
     private void seedCinemaRatings(int count) {
         log.info("Seeding " + count + " cinema ratings...");
 
-        List<User> users = userService.read();
-        List<Cinema> cinemas = cinemaService.read();
+        List<User> users = userService.read(PageRequest.defaultPage()).getContent();
+        List<Cinema> cinemas = cinemaService.read(PageRequest.defaultPage()).getContent();
 
         if (users.isEmpty() || cinemas.isEmpty()) {
             log.warning("Need users and cinemas to create ratings");
@@ -865,8 +862,8 @@ public class EnhancedDatabaseSeeder {
     private void seedFilmRatings(int count) {
         log.info("Seeding " + count + " film ratings...");
 
-        List<User> users = userService.read();
-        List<Film> films = filmService.read();
+        List<User> users = userService.read(PageRequest.defaultPage()).getContent();
+        List<Film> films = filmService.read(PageRequest.defaultPage()).getContent();
 
         if (users.isEmpty() || films.isEmpty()) {
             log.warning("Need users and films to create ratings");
@@ -907,7 +904,7 @@ public class EnhancedDatabaseSeeder {
     private void seedComments() {
         log.info("Seeding comments for products, films, and cinemas...");
 
-        List<User> users = userService.read();
+        List<User> users = userService.read(PageRequest.defaultPage()).getContent();
         if (users.isEmpty()) {
             log.warning("Need users to create comments");
             return;
@@ -924,7 +921,7 @@ public class EnhancedDatabaseSeeder {
         }
 
         // Product comments
-        List<Product> products = productService.read();
+        List<Product> products = productService.read(PageRequest.defaultPage()).getContent();
         if (!products.isEmpty()) {
             for (int i = 0; i < Math.min(20, products.size()); i++) {
                 User randomClient = clients.get(random.nextInt(clients.size()));
@@ -942,7 +939,7 @@ public class EnhancedDatabaseSeeder {
         }
 
         // Film comments
-        List<Film> films = filmService.read();
+        List<Film> films = filmService.read(PageRequest.defaultPage()).getContent();
         if (!films.isEmpty()) {
             for (int i = 0; i < Math.min(30, films.size()); i++) {
                 User randomClient = clients.get(random.nextInt(clients.size()));
@@ -960,7 +957,7 @@ public class EnhancedDatabaseSeeder {
         }
 
         // Cinema comments
-        List<Cinema> cinemas = cinemaService.read();
+        List<Cinema> cinemas = cinemaService.read(PageRequest.defaultPage()).getContent();
         if (!cinemas.isEmpty()) {
             for (int i = 0; i < Math.min(15, cinemas.size()); i++) {
                 User randomClient = clients.get(random.nextInt(clients.size()));

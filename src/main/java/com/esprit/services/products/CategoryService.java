@@ -12,6 +12,8 @@ import java.util.logging.Logger;
 import com.esprit.models.products.ProductCategory;
 import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.Page;
+import com.esprit.utils.PageRequest;
 import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
@@ -77,7 +79,6 @@ public class CategoryService implements IService<ProductCategory> {
         }
     }
 
-    @Override
     /**
      * Performs read operation.
      *
@@ -322,5 +323,11 @@ public class CategoryService implements IService<ProductCategory> {
             CategoryService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return count;
+    }
+
+    @Override
+    public Page<ProductCategory> read(PageRequest pageRequest) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'read'");
     }
 }

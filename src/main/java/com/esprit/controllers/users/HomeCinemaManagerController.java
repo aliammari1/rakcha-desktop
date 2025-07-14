@@ -15,6 +15,8 @@ import com.esprit.models.users.User;
 import com.esprit.services.films.ActorService;
 import com.esprit.services.films.CategoryService;
 import com.esprit.services.films.FilmService;
+import com.esprit.utils.Page;
+import com.esprit.utils.PageRequest;
 import com.esprit.services.cinemas.MovieSessionService;
 
 import javafx.animation.*;
@@ -96,7 +98,7 @@ public class HomeCinemaManagerController implements Initializable {
             loadTodaySessions();
             loadRecentActivity();
             startBackgroundAnimations();
-            
+
             // Set welcome message using user data from stage
             Timeline delayedInit = new Timeline(new KeyFrame(Duration.millis(100), e -> {
                 try {
@@ -129,20 +131,24 @@ public class HomeCinemaManagerController implements Initializable {
     private void loadDashboardStatistics() {
         try {
             // Load movie count
-            List<Film> films = filmService.read();
-            movieCountLabel.setText(String.valueOf(films.size()));
+            PageRequest pageRequest = new PageRequest(0, 10);
+            Page<Film> films = filmService.read(pageRequest);
+            movieCountLabel.setText(String.valueOf(films.getContent().size()));
 
             // Load actor count
-            List<Actor> actors = actorService.read();
-            actorCountLabel.setText(String.valueOf(actors.size()));
+            PageRequest actorPageRequest = new PageRequest(0, 10);
+            Page<Actor> actors = actorService.read(actorPageRequest);
+            actorCountLabel.setText(String.valueOf(actors.getContent().size()));
 
             // Load category count
-            List<Category> categories = categoryService.read();
-            categoryCountLabel.setText(String.valueOf(categories.size()));
+            PageRequest categoryPageRequest = new PageRequest(0, 10);
+            Page<Category> categories = categoryService.read(categoryPageRequest);
+            categoryCountLabel.setText(String.valueOf(categories.getContent().size()));
 
             // Load session count
-            List<MovieSession> sessions = sessionService.read();
-            sessionCountLabel.setText(String.valueOf(sessions.size()));
+            PageRequest sessionPageRequest = new PageRequest(0, 10);
+            Page<MovieSession> sessions = sessionService.read(sessionPageRequest);
+            sessionCountLabel.setText(String.valueOf(sessions.getContent().size()));
 
         } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error loading dashboard statistics: " + e.getMessage(), e);

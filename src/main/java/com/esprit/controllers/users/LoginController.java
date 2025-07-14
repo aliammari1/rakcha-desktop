@@ -100,7 +100,7 @@ public class LoginController implements Initializable {
             "https://image.tmdb.org/t/p/w500/m2FNRngyJMyxLatBMJR8pbeG2v.jpg", // Arrival
             "https://image.tmdb.org/t/p/w500/q6WREviZ5IYA4mwWKXpvZMvVBGN.jpg", // John Wick
             "https://image.tmdb.org/t/p/w500/br4MHru7Z0x1Uz6CGu8ph6AAlmy.jpg", // Top Gun: Maverick
-            "https://image.tmdb.org/t/p/w500/7Bl4CF3EHz9xZYuVB55hf6SD8hP.jpg"  // Everything Everywhere All at Once
+            "https://image.tmdb.org/t/p/w500/7Bl4CF3EHz9xZYuVB55hf6SD8hP.jpg" // Everything Everywhere All at Once
     };
 
     // Movie titles corresponding to the posters
@@ -122,7 +122,7 @@ public class LoginController implements Initializable {
     private int currentImageIndex = 0;
     private Timeline featuredMovieSwitchTimeline;
     private Timeline particleCreationTimeline;
-    
+
     // Arrays to store dynamic particles and shapes
     private Circle[] dynamicParticles;
     private Polygon[] dynamicShapes;
@@ -186,7 +186,7 @@ public class LoginController implements Initializable {
                 // Redirect to role-specific home screen
                 String fxmlPath = "";
                 String windowTitle = "RAKCHA";
-                
+
                 switch (user.getRole().toLowerCase()) {
                     case "admin":
                         fxmlPath = "/ui/users/HomeAdmin.fxml";
@@ -204,7 +204,8 @@ public class LoginController implements Initializable {
                         // Fallback to profile page for unknown roles
                         fxmlPath = "/ui/users/Profile.fxml";
                         windowTitle = "RAKCHA - Profile";
-                        LOGGER.log(Level.WARNING, "Unknown user role: " + user.getRole() + ". Redirecting to profile page.");
+                        LOGGER.log(Level.WARNING,
+                                "Unknown user role: " + user.getRole() + ". Redirecting to profile page.");
                         break;
                 }
 
@@ -215,14 +216,15 @@ public class LoginController implements Initializable {
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
                 stage.setTitle(windowTitle);
-                
+
                 // Set user data on the stage so controllers can access it via getUserData()
                 stage.setUserData(user);
 
                 // Stop animations when navigating away
                 stopAllAnimations();
 
-                LOGGER.log(Level.INFO, "User " + user.getEmail() + " with role " + user.getRole() + " logged in successfully");
+                LOGGER.log(Level.INFO,
+                        "User " + user.getEmail() + " with role " + user.getRole() + " logged in successfully");
 
             } catch (Exception e) {
                 LOGGER.log(Level.SEVERE, "Error during login process", e);
@@ -273,7 +275,7 @@ public class LoginController implements Initializable {
                 }
             }
         });
-        
+
         this.forgetPasswordEmailHyperlink.setOnAction(new EventHandler<>() {
             @Override
             public void handle(final ActionEvent event) {
@@ -319,75 +321,78 @@ public class LoginController implements Initializable {
      * Creates dynamic animated elements on the screen
      */
     private void createDynamicAnimations() {
-        // Get a reference to the foreground AnchorPane (the last AnchorPane in the StackPane)
+        // Get a reference to the foreground AnchorPane (the last AnchorPane in the
+        // StackPane)
         AnchorPane foregroundPane = (AnchorPane) ((StackPane) anchorPane.getScene().getRoot()).getChildren().get(2);
-        
+
         // Create dynamic particles
         for (int i = 0; i < maxDynamicElements; i++) {
             Circle particle = new Circle();
             particle.setRadius(2 + RANDOM.nextDouble() * 5); // Random size between 2-7
             particle.setLayoutX(RANDOM.nextDouble() * 1150 + 25); // Random X position
             particle.setLayoutY(RANDOM.nextDouble() * 580 + 25); // Random Y position
-            
+
             // Apply styling
             particle.getStyleClass().addAll("floating-particle", "glow-red");
-            
+
             // Random red shade
             int red = 180 + RANDOM.nextInt(75);
             int darkRed = 80 + RANDOM.nextInt(100);
-            particle.setStyle("-fx-fill: radial-gradient(center 50% 50%, radius 50%, #" + 
+            particle.setStyle("-fx-fill: radial-gradient(center 50% 50%, radius 50%, #" +
                     String.format("%02X", red) + "2222, #" + String.format("%02X", darkRed) + "0000); " +
-                    "-fx-effect: dropshadow(gaussian, #ff" + String.format("%02X", red) + 
+                    "-fx-effect: dropshadow(gaussian, #ff" + String.format("%02X", red) +
                     String.format("%02X", red) + ", " + (10 + RANDOM.nextInt(15)) + ", 0, 0, 0); " +
                     "-fx-opacity: " + (0.6 + RANDOM.nextDouble() * 0.4) + ";" +
                     "-fx-z-index: " + (250 + i) + ";");
-            
+
             // Add to parent and store reference
             foregroundPane.getChildren().add(particle);
             dynamicParticles[i] = particle;
-            
+
             // Create animation
             animateParticle(particle, i);
         }
-        
+
         // Create polygons
         for (int i = 0; i < dynamicShapes.length; i++) {
             Polygon shape = new Polygon();
-            
+
             // Create a random polygon with 3-6 points
             int sides = 3 + RANDOM.nextInt(4);
             Double[] points = new Double[sides * 2];
             double radius = 10 + RANDOM.nextDouble() * 20;
             double centerX = RANDOM.nextDouble() * 1120 + 40;
             double centerY = RANDOM.nextDouble() * 550 + 40;
-            
+
             for (int j = 0; j < sides; j++) {
                 double angle = 2 * Math.PI * j / sides;
-                points[j*2] = centerX + radius * Math.cos(angle);
-                points[j*2+1] = centerY + radius * Math.sin(angle);
+                points[j * 2] = centerX + radius * Math.cos(angle);
+                points[j * 2 + 1] = centerY + radius * Math.sin(angle);
             }
-            
+
             shape.getPoints().addAll(points);
-            
+
             // Apply styling
             shape.getStyleClass().addAll("rotating-shape", "pulsing-shape");
             int red = 100 + RANDOM.nextInt(100);
             int darkRed = 40 + RANDOM.nextInt(60);
-            shape.setStyle("-fx-fill: linear-gradient(to bottom right, rgba(" + red + ", 0, 0, 0.5), rgba(" + darkRed + ", 0, 0, 0.3)); " +
+            shape.setStyle("-fx-fill: linear-gradient(to bottom right, rgba(" + red + ", 0, 0, 0.5), rgba(" + darkRed
+                    + ", 0, 0, 0.3)); " +
                     "-fx-stroke: #" + String.format("%02X", red) + "0000; " +
                     "-fx-stroke-width: " + (1 + RANDOM.nextInt(2)) + "; " +
-                    "-fx-effect: dropshadow(gaussian, rgba(" + red + ", 0, 0, 0.7), " + (8 + RANDOM.nextInt(10)) + ", 0, 0, 0); " +
+                    "-fx-effect: dropshadow(gaussian, rgba(" + red + ", 0, 0, 0.7), " + (8 + RANDOM.nextInt(10))
+                    + ", 0, 0, 0); " +
                     "-fx-z-index: " + (300 + i) + ";");
             shape.setOpacity(0.4 + RANDOM.nextDouble() * 0.4);
-            
+
             // Add to parent and store reference
             foregroundPane.getChildren().add(shape);
             dynamicShapes[i] = shape;
-            
+
             // Create animation
             animateShape(shape, i);
         }
-        
+
         // Create rectangles
         for (int i = 0; i < dynamicRectangles.length; i++) {
             Rectangle rect = new Rectangle();
@@ -396,29 +401,31 @@ public class LoginController implements Initializable {
             rect.setLayoutX(RANDOM.nextDouble() * 1150 + 25);
             rect.setLayoutY(RANDOM.nextDouble() * 580 + 25);
             rect.setRotate(RANDOM.nextDouble() * 45);
-            
+
             // Apply styling
             rect.getStyleClass().addAll("rotating-shape", "pulsing-shape");
             int red = 150 + RANDOM.nextInt(100);
             int darkRed = 60 + RANDOM.nextInt(80);
-            rect.setStyle("-fx-fill: linear-gradient(to bottom right, rgba(" + red + ", " + (red/4) + ", " + (red/4) + ", 0.6), rgba(" + darkRed + ", " + (darkRed/6) + ", " + (darkRed/6) + ", 0.4)); " +
+            rect.setStyle("-fx-fill: linear-gradient(to bottom right, rgba(" + red + ", " + (red / 4) + ", " + (red / 4)
+                    + ", 0.6), rgba(" + darkRed + ", " + (darkRed / 6) + ", " + (darkRed / 6) + ", 0.4)); " +
                     "-fx-stroke: #" + String.format("%02X", red) + "2222; " +
                     "-fx-stroke-width: " + (RANDOM.nextDouble() * 2) + "; " +
-                    "-fx-effect: dropshadow(gaussian, rgba(" + red + ", " + (red/4) + ", " + (red/4) + ", 0.6), " + (8 + RANDOM.nextInt(8)) + ", 0, 0, 0); " +
+                    "-fx-effect: dropshadow(gaussian, rgba(" + red + ", " + (red / 4) + ", " + (red / 4) + ", 0.6), "
+                    + (8 + RANDOM.nextInt(8)) + ", 0, 0, 0); " +
                     "-fx-z-index: " + (330 + i) + ";");
             rect.setOpacity(0.3 + RANDOM.nextDouble() * 0.5);
-            
+
             // Add to parent and store reference
             foregroundPane.getChildren().add(rect);
             dynamicRectangles[i] = rect;
-            
+
             // Create animation
             animateRectangle(rect, i);
         }
-        
+
         LOGGER.info("Created " + maxDynamicElements + " dynamic particles and shapes");
     }
-    
+
     /**
      * Creates animations for a particle
      */
@@ -430,7 +437,7 @@ public class LoginController implements Initializable {
         moveX.setCycleCount(Animation.INDEFINITE);
         moveX.setAutoReverse(true);
         moveX.setInterpolator(Interpolator.EASE_BOTH);
-        
+
         // Create Y movement
         TranslateTransition moveY = new TranslateTransition(Duration.seconds(5 + RANDOM.nextDouble() * 10), particle);
         moveY.setFromY(-20 - RANDOM.nextDouble() * 40);
@@ -438,7 +445,7 @@ public class LoginController implements Initializable {
         moveY.setCycleCount(Animation.INDEFINITE);
         moveY.setAutoReverse(true);
         moveY.setInterpolator(Interpolator.EASE_BOTH);
-        
+
         // Create scale pulse
         ScaleTransition scale = new ScaleTransition(Duration.seconds(2 + RANDOM.nextDouble() * 6), particle);
         scale.setFromX(0.7);
@@ -448,7 +455,7 @@ public class LoginController implements Initializable {
         scale.setCycleCount(Animation.INDEFINITE);
         scale.setAutoReverse(true);
         scale.setInterpolator(Interpolator.EASE_BOTH);
-        
+
         // Create fade pulse
         FadeTransition fade = new FadeTransition(Duration.seconds(3 + RANDOM.nextDouble() * 4), particle);
         double baseOpacity = particle.getOpacity();
@@ -457,7 +464,7 @@ public class LoginController implements Initializable {
         fade.setCycleCount(Animation.INDEFINITE);
         fade.setAutoReverse(true);
         fade.setInterpolator(Interpolator.EASE_BOTH);
-        
+
         // Start all animations with small delay for each particle
         PauseTransition delay = new PauseTransition(Duration.millis(index * 50));
         delay.setOnFinished(e -> {
@@ -468,7 +475,7 @@ public class LoginController implements Initializable {
         });
         delay.play();
     }
-    
+
     /**
      * Creates animations for a shape
      */
@@ -478,7 +485,7 @@ public class LoginController implements Initializable {
         rotate.setByAngle(RANDOM.nextBoolean() ? 360 : -360);
         rotate.setCycleCount(Animation.INDEFINITE);
         rotate.setInterpolator(Interpolator.LINEAR);
-        
+
         // Create scale pulse
         ScaleTransition scale = new ScaleTransition(Duration.seconds(4 + RANDOM.nextDouble() * 8), shape);
         scale.setFromX(0.8);
@@ -488,7 +495,7 @@ public class LoginController implements Initializable {
         scale.setCycleCount(Animation.INDEFINITE);
         scale.setAutoReverse(true);
         scale.setInterpolator(Interpolator.EASE_BOTH);
-        
+
         // Create movement
         TranslateTransition move = new TranslateTransition(Duration.seconds(15 + RANDOM.nextDouble() * 15), shape);
         move.setFromX(-30 - RANDOM.nextDouble() * 50);
@@ -498,7 +505,7 @@ public class LoginController implements Initializable {
         move.setCycleCount(Animation.INDEFINITE);
         move.setAutoReverse(true);
         move.setInterpolator(Interpolator.EASE_BOTH);
-        
+
         // Start all animations with small delay for each shape
         PauseTransition delay = new PauseTransition(Duration.millis(index * 200));
         delay.setOnFinished(e -> {
@@ -508,7 +515,7 @@ public class LoginController implements Initializable {
         });
         delay.play();
     }
-    
+
     /**
      * Creates animations for a rectangle
      */
@@ -518,7 +525,7 @@ public class LoginController implements Initializable {
         rotate.setByAngle(RANDOM.nextBoolean() ? 360 : -360);
         rotate.setCycleCount(Animation.INDEFINITE);
         rotate.setInterpolator(Interpolator.LINEAR);
-        
+
         // Create scale pulse
         ScaleTransition scale = new ScaleTransition(Duration.seconds(5 + RANDOM.nextDouble() * 5), rect);
         scale.setFromX(0.7);
@@ -528,7 +535,7 @@ public class LoginController implements Initializable {
         scale.setCycleCount(Animation.INDEFINITE);
         scale.setAutoReverse(true);
         scale.setInterpolator(Interpolator.EASE_BOTH);
-        
+
         // Create fade pulse
         FadeTransition fade = new FadeTransition(Duration.seconds(4 + RANDOM.nextDouble() * 6), rect);
         double baseOpacity = rect.getOpacity();
@@ -537,7 +544,7 @@ public class LoginController implements Initializable {
         fade.setCycleCount(Animation.INDEFINITE);
         fade.setAutoReverse(true);
         fade.setInterpolator(Interpolator.EASE_BOTH);
-        
+
         // Create movement
         TranslateTransition move = new TranslateTransition(Duration.seconds(10 + RANDOM.nextDouble() * 20), rect);
         move.setFromX(-20 - RANDOM.nextDouble() * 40);
@@ -547,7 +554,7 @@ public class LoginController implements Initializable {
         move.setCycleCount(Animation.INDEFINITE);
         move.setAutoReverse(true);
         move.setInterpolator(Interpolator.EASE_BOTH);
-        
+
         // Start all animations with small delay for each rectangle
         PauseTransition delay = new PauseTransition(Duration.millis(index * 150));
         delay.setOnFinished(e -> {
@@ -584,7 +591,8 @@ public class LoginController implements Initializable {
 
                 // Create image switching timeline - switches featured movie every 8 seconds
                 featuredMovieSwitchTimeline = new Timeline();
-                featuredMovieSwitchTimeline.getKeyFrames().add(new KeyFrame(Duration.seconds(8), e -> switchFeaturedMovie()));
+                featuredMovieSwitchTimeline.getKeyFrames()
+                        .add(new KeyFrame(Duration.seconds(8), e -> switchFeaturedMovie()));
                 featuredMovieSwitchTimeline.setCycleCount(Animation.INDEFINITE);
                 featuredMovieSwitchTimeline.play();
 
@@ -655,7 +663,7 @@ public class LoginController implements Initializable {
      */
     private void initializeParticleAnimation() {
         Circle[] particles = { particle1, particle2, particle3, particle4, particle5, particle6,
-                              particle7, particle8, particle9, particle10, particle11, particle12 };
+                particle7, particle8, particle9, particle10, particle11, particle12 };
 
         for (int i = 0; i < particles.length; i++) {
             if (particles[i] != null) {
@@ -714,20 +722,20 @@ public class LoginController implements Initializable {
     private void initializeShapeAnimation() {
         // Array of all existing shapes
         Object[] shapes = { shape1, shape2, shape3, shape4, shape5, shape6 };
-        
+
         for (int i = 0; i < shapes.length; i++) {
             if (shapes[i] != null) {
                 if (shapes[i] instanceof Polygon) {
-                    animatePolygon((Polygon)shapes[i], i);
+                    animatePolygon((Polygon) shapes[i], i);
                 } else if (shapes[i] instanceof Rectangle) {
-                    animateRectangleShape((Rectangle)shapes[i], i);
+                    animateRectangleShape((Rectangle) shapes[i], i);
                 } else if (shapes[i] instanceof Circle) {
-                    animateCircleShape((Circle)shapes[i], i);
+                    animateCircleShape((Circle) shapes[i], i);
                 }
             }
         }
     }
-    
+
     /**
      * Animates a polygon shape
      */
@@ -738,7 +746,7 @@ public class LoginController implements Initializable {
         rotate.setCycleCount(Animation.INDEFINITE);
         rotate.setInterpolator(Interpolator.LINEAR);
         rotate.play();
-        
+
         // Scale animation
         ScaleTransition scale = new ScaleTransition(Duration.seconds(6 + index * 0.5), shape);
         scale.setFromX(0.8);
@@ -749,7 +757,7 @@ public class LoginController implements Initializable {
         scale.setAutoReverse(true);
         scale.setInterpolator(Interpolator.EASE_BOTH);
         scale.play();
-        
+
         // Movement animation
         TranslateTransition move = new TranslateTransition(Duration.seconds(15 + index), shape);
         move.setFromX(-15);
@@ -760,10 +768,10 @@ public class LoginController implements Initializable {
         move.setAutoReverse(true);
         move.setInterpolator(Interpolator.EASE_BOTH);
         move.play();
-        
+
         LOGGER.info("Started animations for polygon shape" + (index + 1));
     }
-    
+
     /**
      * Animates a rectangle shape
      */
@@ -774,7 +782,7 @@ public class LoginController implements Initializable {
         rotate.setCycleCount(Animation.INDEFINITE);
         rotate.setInterpolator(Interpolator.LINEAR);
         rotate.play();
-        
+
         // Fade animation
         FadeTransition fade = new FadeTransition(Duration.seconds(4 + index * 0.3), shape);
         fade.setFromValue(0.3);
@@ -783,7 +791,7 @@ public class LoginController implements Initializable {
         fade.setAutoReverse(true);
         fade.setInterpolator(Interpolator.EASE_BOTH);
         fade.play();
-        
+
         // Movement animation
         TranslateTransition move = new TranslateTransition(Duration.seconds(12 + index), shape);
         move.setFromX(-10);
@@ -794,10 +802,10 @@ public class LoginController implements Initializable {
         move.setAutoReverse(true);
         move.setInterpolator(Interpolator.EASE_BOTH);
         move.play();
-        
+
         LOGGER.info("Started animations for rectangle shape" + (index + 1));
     }
-    
+
     /**
      * Animates a circle shape
      */
@@ -812,7 +820,7 @@ public class LoginController implements Initializable {
         scale.setAutoReverse(true);
         scale.setInterpolator(Interpolator.EASE_BOTH);
         scale.play();
-        
+
         // Glow animation
         FadeTransition glow = new FadeTransition(Duration.seconds(3 + index * 0.2), shape);
         glow.setFromValue(0.4);
@@ -821,7 +829,7 @@ public class LoginController implements Initializable {
         glow.setAutoReverse(true);
         glow.setInterpolator(Interpolator.EASE_BOTH);
         glow.play();
-        
+
         // Movement animation
         TranslateTransition move = new TranslateTransition(Duration.seconds(8 + index), shape);
         move.setFromX(-5);
@@ -832,7 +840,7 @@ public class LoginController implements Initializable {
         move.setAutoReverse(true);
         move.setInterpolator(Interpolator.EASE_BOTH);
         move.play();
-        
+
         LOGGER.info("Started animations for circle shape" + (index + 1));
     }
 
@@ -843,11 +851,11 @@ public class LoginController implements Initializable {
         if (featuredMovieSwitchTimeline != null) {
             featuredMovieSwitchTimeline.stop();
         }
-        
+
         if (particleCreationTimeline != null) {
             particleCreationTimeline.stop();
         }
-        
+
         // Clean up dynamic elements by removing them from the scene
         if (dynamicParticles != null) {
             AnchorPane foregroundPane = null;
@@ -856,7 +864,7 @@ public class LoginController implements Initializable {
             } catch (Exception e) {
                 LOGGER.warning("Could not access foreground pane for cleanup: " + e.getMessage());
             }
-            
+
             if (foregroundPane != null) {
                 for (Circle particle : dynamicParticles) {
                     if (particle != null) {
@@ -869,7 +877,7 @@ public class LoginController implements Initializable {
                 }
             }
         }
-        
+
         // Clean up dynamic shapes
         if (dynamicShapes != null) {
             AnchorPane foregroundPane = null;
@@ -878,7 +886,7 @@ public class LoginController implements Initializable {
             } catch (Exception e) {
                 LOGGER.warning("Could not access foreground pane for cleanup: " + e.getMessage());
             }
-            
+
             if (foregroundPane != null) {
                 for (Polygon shape : dynamicShapes) {
                     if (shape != null) {
@@ -891,7 +899,7 @@ public class LoginController implements Initializable {
                 }
             }
         }
-        
+
         // Clean up dynamic rectangles
         if (dynamicRectangles != null) {
             AnchorPane foregroundPane = null;
@@ -900,7 +908,7 @@ public class LoginController implements Initializable {
             } catch (Exception e) {
                 LOGGER.warning("Could not access foreground pane for cleanup: " + e.getMessage());
             }
-            
+
             if (foregroundPane != null) {
                 for (Rectangle rect : dynamicRectangles) {
                     if (rect != null) {
@@ -913,7 +921,7 @@ public class LoginController implements Initializable {
                 }
             }
         }
-        
+
         LOGGER.info("All animations stopped and dynamic elements cleaned up");
     }
 }

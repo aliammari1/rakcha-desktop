@@ -16,6 +16,7 @@ import com.esprit.models.users.Client;
 import com.esprit.services.series.IServiceCategorieImpl;
 import com.esprit.services.series.IServiceFavoriteImpl;
 import com.esprit.services.series.IServiceSeriesImpl;
+import com.esprit.utils.PageRequest;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -216,7 +217,8 @@ public class SerieClientController {
      */
     public void afficher() throws SQLException {
         final IServiceCategorieImpl iServiceCategorie = new IServiceCategorieImpl();
-        this.categorieList = iServiceCategorie.read();
+        PageRequest pageRequest = new PageRequest(0, 10);
+        this.categorieList = iServiceCategorie.read(pageRequest).getContent();
     }
 
     /**
@@ -634,7 +636,8 @@ public class SerieClientController {
         this.loadSeriesList();
         final IServiceSeriesImpl iServiceSerie = new IServiceSeriesImpl();
         final IServiceCategorieImpl iServiceCategorie = new IServiceCategorieImpl();
-        final List<Category> categorieList = iServiceCategorie.read();
+        PageRequest pageRequest = new PageRequest(0, 10);
+        final List<Category> categorieList = iServiceCategorie.read(pageRequest).getContent();
         final ObservableList<Category> categorieObservableList = FXCollections.observableArrayList();
         if (CamboxCategorie != null) {
             this.CamboxCategorie.setItems(categorieObservableList);
@@ -771,7 +774,8 @@ public class SerieClientController {
     @FXML
     private void loadSeriesList() throws SQLException {
         final IServiceSeriesImpl serieService = new IServiceSeriesImpl();
-        final List<Series> series = serieService.read();
+        PageRequest pageRequest = new PageRequest(0, 10);
+        final List<Series> series = serieService.read(pageRequest).getContent();
         this.afficherliste(series); // Utilisez votre méthode d'affichage pour la ListView
         final IServiceSeriesImpl ss = new IServiceSeriesImpl();
         this.hboxTop3.setSpacing(20); // Set the spacing between VBox instances

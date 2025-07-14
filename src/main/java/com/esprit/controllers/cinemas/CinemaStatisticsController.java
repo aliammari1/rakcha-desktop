@@ -7,6 +7,7 @@ import java.util.Map;
 import com.esprit.models.cinemas.CinemaComment;
 import com.esprit.services.cinemas.CinemaCommentService;
 import com.esprit.services.cinemas.CinemaService;
+import com.esprit.utils.PageRequest;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -58,7 +59,7 @@ public class CinemaStatisticsController {
     void showStatistics(final ActionEvent event) {
         this.statisticsAnchor.getChildren().clear();
         // Récupérer les commentaires de la base de données
-        final List<CinemaComment> comments = this.cinemaCommentService.read();
+        final List<CinemaComment> comments = this.cinemaCommentService.read(PageRequest.defaultPage()).getContent();
         // Générer les statistiques sur l'analyse de sentiment
         final Map<String, Map<String, Integer>> cinemaSentimentStatistics = this.generateSentimentStatistics(comments);
         // Créer un VBox pour contenir les PieCharts

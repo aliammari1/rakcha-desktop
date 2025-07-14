@@ -34,6 +34,7 @@ import com.esprit.services.cinemas.MovieSessionService;
 import com.esprit.services.films.FilmCinemaService;
 import com.esprit.services.films.FilmService;
 import com.esprit.utils.CloudinaryStorage;
+import com.esprit.utils.PageRequest;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.property.SimpleStringProperty;
@@ -369,7 +370,7 @@ public class DashboardResponsableController implements Initializable {
      */
     private HashSet<Cinema> loadAcceptedCinemas() {
         final CinemaService cinemaService = new CinemaService();
-        final List<Cinema> cinemas = cinemaService.read();
+        final List<Cinema> cinemas = cinemaService.read(PageRequest.defaultPage()).getContent();
         final List<Cinema> acceptedCinemasList = cinemas.stream()
                 .filter(cinema -> "Accepted".equals(cinema.getStatus())).collect(Collectors.toList());
         if (acceptedCinemasList.isEmpty()) {
@@ -399,7 +400,7 @@ public class DashboardResponsableController implements Initializable {
      */
     private HashSet<Cinema> chargerAcceptedCinemas() {
         final CinemaService cinemaService = new CinemaService();
-        final List<Cinema> cinemas = cinemaService.read();
+        final List<Cinema> cinemas = cinemaService.read(PageRequest.defaultPage()).getContent();
         final List<Cinema> acceptedCinemasList = cinemas.stream()
                 .filter(cinema -> "Accepted".equals(cinema.getStatus())).collect(Collectors.toList());
         if (acceptedCinemasList.isEmpty()) {
@@ -1704,7 +1705,8 @@ public class DashboardResponsableController implements Initializable {
      */
     private List<MovieSession> loadMovieSessions() {
         final MovieSessionService moviesessionService = new MovieSessionService();
-        final List<MovieSession> moviesessions = moviesessionService.read();
+        PageRequest pageRequest = new PageRequest(0, 10);
+        final List<MovieSession> moviesessions = moviesessionService.read(pageRequest).getContent();
         final ObservableList<MovieSession> moviesessionObservableList = FXCollections
                 .observableArrayList(moviesessions);
         this.SessionTableView.setItems(moviesessionObservableList);
@@ -1758,7 +1760,8 @@ public class DashboardResponsableController implements Initializable {
      */
     private void loadcinemahalls() {
         final CinemaHallService cinemahallService = new CinemaHallService();
-        final List<CinemaHall> cinemahalls = cinemahallService.read();
+        PageRequest pageRequest = new PageRequest(0, 10);
+        final List<CinemaHall> cinemahalls = cinemahallService.read(pageRequest).getContent();
         final List<CinemaHall> cinemahalls_cinema = cinemahalls.stream()
                 .filter(cinemahall -> cinemahall.getCinema().getId().equals(this.cinemaId))
                 .collect(Collectors.toList());

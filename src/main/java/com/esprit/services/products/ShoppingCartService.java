@@ -13,6 +13,8 @@ import com.esprit.models.products.ShoppingCart;
 import com.esprit.services.IService;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.Page;
+import com.esprit.utils.PageRequest;
 import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
@@ -68,16 +70,6 @@ public class ShoppingCartService implements IService<ShoppingCart> {
         } catch (final SQLException e) {
             ShoppingCartService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
-    }
-
-    @Override
-    /**
-     * Performs read operation.
-     *
-     * @return the result of the operation
-     */
-    public List<ShoppingCart> read() {
-        return null;
     }
 
     /**
@@ -143,5 +135,11 @@ public class ShoppingCartService implements IService<ShoppingCart> {
         } catch (final SQLException e) {
             ShoppingCartService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+    }
+
+    @Override
+    public Page<ShoppingCart> read(PageRequest pageRequest) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'read'");
     }
 }

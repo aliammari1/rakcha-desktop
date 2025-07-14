@@ -11,6 +11,9 @@ import java.util.logging.Logger;
 import com.esprit.models.series.Series;
 import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.Page;
+import com.esprit.utils.PageRequest;
+import com.esprit.utils.PaginationQueryBuilder;
 import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +30,12 @@ import lombok.extern.slf4j.Slf4j;
 public class IServiceSeriesImpl implements IService<Series> {
     private static final Logger LOGGER = Logger.getLogger(IServiceSeriesImpl.class.getName());
     private final Connection connection;
+
+    // Allowed columns for sorting to prevent SQL injection
+    private static final String[] ALLOWED_SORT_COLUMNS = {
+            "id", "name", "summary", "director", "country", "image",
+            "liked", "number_of_likes", "disliked", "number_of_dislikes"
+    };
 
     /**
      * Constructs a new IServiceSeriesImpl instance.
@@ -138,26 +147,66 @@ public class IServiceSeriesImpl implements IService<Series> {
 
     @Override
     /**
-     * Reads all series from the database.
+     * Retrieves series with pagination support.
      *
-     * @return list of all series
+     * @param pageRequest the pagination parameters
+     * @return a page of series
      */
-    public List<Series> read() {
-        final List<Series> serieDto = new ArrayList<>();
-        final String req = "SELECT * FROM serie";
-        try (final Statement st = this.connection.createStatement(); final ResultSet rs = st.executeQuery(req)) {
-            while (rs.next()) {
-                final Series s = Series.builder().id(rs.getLong("id")).name(rs.getString("name"))
-                        .summary(rs.getString("summary")).director(rs.getString("director"))
-                        .country(rs.getString("country")).image(rs.getString("image")).liked(rs.getInt("liked"))
-                        .numberOfLikes(rs.getInt("number_of_likes")).disliked(rs.getInt("disliked"))
-                        .numberOfDislikes(rs.getInt("number_of_dislikes")).build();
-                serieDto.add(s);
-            }
-        } catch (final SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error retrieving series: " + e.getMessage(), e);
+    public Page<Series> read(PageRequest pageRequest) {
+        final List<Series> content = new ArrayList<>();
+        final String baseQuery = "SELECT * FROM serie";
+
+        // Validate sort column to prevent SQL injection
+        if (pageRequest.hasSorting() &&
+                !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
+            LOGGER.warning("Invalid sort column: " + pageRequest.getSortBy() + ". Using default sorting.");
+            pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
-        return serieDto;
+
+        try {
+            // Get total count
+            final String countQuery = PaginationQueryBuilder.buildCountQuery(baseQuery);
+            final long totalElements = PaginationQueryBuilder.executeCountQuery(connection, countQuery);
+
+            // Get paginated results
+            final String paginatedQuery = PaginationQueryBuilder.buildPaginatedQuery(baseQuery, pageRequest);
+
+            try (final Statement st = this.connection.createStatement();
+                    final ResultSet rs = st.executeQuery(paginatedQuery)) {
+                while (rs.next()) {
+                    final Series s = buildSeriesFromResultSet(rs);
+                    content.add(s);
+                }
+            }
+
+            return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
+
+        } catch (final SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error retrieving paginated series: " + e.getMessage(), e);
+            return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
+        }
+    }
+
+    /**
+     * Helper method to build Series object from ResultSet.
+     *
+     * @param rs the ResultSet containing series data
+     * @return the Series object
+     * @throws SQLException if there's an error reading from ResultSet
+     */
+    private Series buildSeriesFromResultSet(ResultSet rs) throws SQLException {
+        return Series.builder()
+                .id(rs.getLong("id"))
+                .name(rs.getString("name"))
+                .summary(rs.getString("summary"))
+                .director(rs.getString("director"))
+                .country(rs.getString("country"))
+                .image(rs.getString("image"))
+                .liked(rs.getInt("liked"))
+                .numberOfLikes(rs.getInt("number_of_likes"))
+                .disliked(rs.getInt("disliked"))
+                .numberOfDislikes(rs.getInt("number_of_dislikes"))
+                .build();
     }
 
     /**
@@ -173,16 +222,13 @@ public class IServiceSeriesImpl implements IService<Series> {
                 SELECT s.* FROM serie s
                 JOIN series_categories sc ON s.id = sc.series_id
                 WHERE sc.category_id = ?
+                ORDER BY s.id
                 """;
         try (final PreparedStatement ps = this.connection.prepareStatement(req)) {
             ps.setLong(1, categoryId);
             try (final ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    final Series serie = Series.builder().id(rs.getLong("id")).name(rs.getString("name"))
-                            .summary(rs.getString("summary")).director(rs.getString("director"))
-                            .country(rs.getString("country")).image(rs.getString("image")).liked(rs.getInt("liked"))
-                            .numberOfLikes(rs.getInt("number_of_likes")).disliked(rs.getInt("disliked"))
-                            .numberOfDislikes(rs.getInt("number_of_dislikes")).build();
+                    final Series serie = buildSeriesFromResultSet(rs);
                     series.add(serie);
                 }
             }
@@ -264,11 +310,7 @@ public class IServiceSeriesImpl implements IService<Series> {
         final String sql = "SELECT * FROM serie ORDER BY number_of_likes DESC LIMIT 3";
         try (final Statement st = this.connection.createStatement(); final ResultSet rs = st.executeQuery(sql)) {
             while (rs.next()) {
-                final Series serie = Series.builder().id(rs.getLong("id")).name(rs.getString("name"))
-                        .summary(rs.getString("summary")).director(rs.getString("director"))
-                        .country(rs.getString("country")).image(rs.getString("image")).liked(rs.getInt("liked"))
-                        .numberOfLikes(rs.getInt("number_of_likes")).disliked(rs.getInt("disliked"))
-                        .numberOfDislikes(rs.getInt("number_of_dislikes")).build();
+                final Series serie = buildSeriesFromResultSet(rs);
                 series.add(serie);
             }
         } catch (final SQLException e) {
@@ -285,7 +327,7 @@ public class IServiceSeriesImpl implements IService<Series> {
     public Map<Series, Integer> getLikesStatistics() {
         final Map<Series, Integer> likesStatistics = new HashMap<>();
         try (final Statement statement = this.connection.createStatement();
-                final ResultSet resultSet = statement.executeQuery("SELECT * FROM serie")) {
+                final ResultSet resultSet = statement.executeQuery("SELECT * FROM serie ORDER BY id")) {
             while (resultSet.next()) {
                 final Series serie = Series.builder().id(resultSet.getLong("id")).name(resultSet.getString("name"))
                         .build();
@@ -310,11 +352,7 @@ public class IServiceSeriesImpl implements IService<Series> {
             ps.setLong(1, serieId);
             try (final ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    serie = Series.builder().id(rs.getLong("id")).name(rs.getString("name"))
-                            .summary(rs.getString("summary")).director(rs.getString("director"))
-                            .country(rs.getString("country")).image(rs.getString("image")).liked(rs.getInt("liked"))
-                            .numberOfLikes(rs.getInt("number_of_likes")).disliked(rs.getInt("disliked"))
-                            .numberOfDislikes(rs.getInt("number_of_dislikes")).build();
+                    serie = buildSeriesFromResultSet(rs);
                 }
             }
         }

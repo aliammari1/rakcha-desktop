@@ -20,6 +20,7 @@ import com.esprit.services.products.ProductService;
 import com.esprit.services.products.ShoppingCartService;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.Chat;
+import com.esprit.utils.PageRequest;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -180,7 +181,8 @@ public class AfficherProductClientControllers implements Initializable {
         this.displayAllComments(this.produitId);
         this.loadAcceptedTop3();
         final ProductService produitService = new ProductService();
-        this.l1 = produitService.read();
+        PageRequest pageRequest = new PageRequest(0, 10);
+        this.l1 = produitService.read(pageRequest).getContent();
         this.SearchBar.textProperty().addListener((observable, oldValue, newValue) -> {
             final List<Product> produitsRecherches = AfficherProductClientControllers.rechercher(this.l1, newValue);
             // Effacer la FlowPane actuelle pour afficher les nouveaux résultats
@@ -205,7 +207,8 @@ public class AfficherProductClientControllers implements Initializable {
      */
     private void loadAcceptedProducts() {
         final ProductService produitService = new ProductService();
-        final List<Product> produits = produitService.read();
+        PageRequest pageRequest = new PageRequest(0, 10);
+        final List<Product> produits = produitService.read(pageRequest).getContent();
         // Charger tous les produits dans produitFlowPane
         for (final Product produit : produits) {
             final VBox cardContainer = this.createProductCard(produit);
@@ -729,7 +732,8 @@ public class AfficherProductClientControllers implements Initializable {
      */
     private List<Product> getAllCategories() {
         final ProductService categoryservice = new ProductService();
-        return categoryservice.read();
+        PageRequest pageRequest = new PageRequest(0, 10);
+        return categoryservice.read(pageRequest).getContent();
     }
 
     /**

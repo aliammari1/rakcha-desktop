@@ -16,6 +16,8 @@ import com.esprit.models.users.User;
 import com.esprit.services.films.FilmService;
 import com.esprit.services.products.ProductService;
 import com.esprit.services.series.IServiceSeriesImpl;
+import com.esprit.utils.Page;
+import com.esprit.utils.PageRequest;
 import com.esprit.services.cinemas.CinemaService;
 
 import javafx.animation.*;
@@ -52,7 +54,7 @@ public class HomeClientController implements Initializable {
 
     // FXML injected controls
     @FXML
-    private BorderPane rootContainer;
+    private StackPane rootContainer;
     @FXML
     private TextField searchField;
     @FXML
@@ -284,9 +286,10 @@ public class HomeClientController implements Initializable {
 
                 // Try to get from service first
                 try {
-                    List<Film> films = filmService.read();
-                    if (films != null && !films.isEmpty()) {
-                        recentFilms = films.subList(0, Math.min(films.size(), 10));
+                    PageRequest pageRequest = new PageRequest(0, 10);
+                    Page<Film> films = filmService.read(pageRequest);
+                    if (films != null && !films.getContent().isEmpty()) {
+                        recentFilms = films.getContent();
                         LOGGER.info("Loaded " + recentFilms.size() + " films from service");
 
                         for (Film film : recentFilms) {
@@ -327,9 +330,10 @@ public class HomeClientController implements Initializable {
                 seriesContainer.getChildren().clear();
 
                 try {
-                    List<Series> series = seriesService.read();
-                    if (series != null && !series.isEmpty()) {
-                        recentSeries = series.subList(0, Math.min(series.size(), 10));
+                    PageRequest pageRequest = new PageRequest(0, 10);
+                    Page<Series> series = seriesService.read(pageRequest);
+                    if (series != null && !series.getContent().isEmpty()) {
+                        recentSeries = series.getContent();
                         LOGGER.info("Loaded " + recentSeries.size() + " series from service");
 
                         for (Series serie : recentSeries) {
@@ -370,9 +374,10 @@ public class HomeClientController implements Initializable {
                 productsContainer.getChildren().clear();
 
                 try {
-                    List<Product> products = productService.read();
-                    if (products != null && !products.isEmpty()) {
-                        recentProducts = products.subList(0, Math.min(products.size(), 10));
+                    PageRequest pageRequest = new PageRequest(0, 10);
+                    Page<Product> products = productService.read(pageRequest);
+                    if (products != null && !products.getContent().isEmpty()) {
+                        recentProducts = products.getContent();
                         LOGGER.info("Loaded " + recentProducts.size() + " products from service");
 
                         for (Product product : recentProducts) {
@@ -413,9 +418,10 @@ public class HomeClientController implements Initializable {
                 cinemasContainer.getChildren().clear();
 
                 try {
-                    List<Cinema> cinemas = cinemaService.read();
-                    if (cinemas != null && !cinemas.isEmpty()) {
-                        recentCinemas = cinemas.subList(0, Math.min(cinemas.size(), 10));
+                    PageRequest pageRequest = new PageRequest(0, 10);
+                    Page<Cinema> cinemas = cinemaService.read(pageRequest);
+                    if (cinemas != null && !cinemas.getContent().isEmpty()) {
+                        recentCinemas = cinemas.getContent();
                         LOGGER.info("Loaded " + recentCinemas.size() + " cinemas from service");
 
                         for (Cinema cinema : recentCinemas) {

@@ -10,6 +10,9 @@ import java.util.List;
 import com.esprit.models.films.Category;
 import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.Page;
+import com.esprit.utils.PageRequest;
+import com.esprit.utils.PaginationQueryBuilder;
 import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +35,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CategoryService implements IService<Category> {
     Connection connection;
+
+    // Allowed columns for sorting to prevent SQL injection
+    private static final String[] ALLOWED_SORT_COLUMNS = {
+            "id", "name", "description"
+    };
 
     /**
      * Constructs a new CategoryService and initializes the database connection.
@@ -77,26 +85,46 @@ public class CategoryService implements IService<Category> {
         }
     }
 
-    /**
-     * Retrieves all categories from the database.
-     *
-     * @return A list of all Category objects in the database
-     */
     @Override
-    public List<Category> read() {
-        final List<Category> categoryArrayList = new ArrayList<>();
-        final String req = "SELECT * FROM categories";
-        try (final PreparedStatement statement = this.connection.prepareStatement(req)) {
-            final ResultSet rs = statement.executeQuery();
-            while (rs.next()) {
-                categoryArrayList.add(Category.builder().id(rs.getLong("id")).name(rs.getString("name"))
-                        .description(rs.getString("description")).build());
-            }
-        } catch (final SQLException e) {
-            log.error("Error reading categories", e);
-            throw new RuntimeException(e);
+    /**
+     * Retrieves categories with pagination support.
+     *
+     * @param pageRequest the pagination parameters
+     * @return a page of categories
+     */
+    public Page<Category> read(PageRequest pageRequest) {
+        final List<Category> content = new ArrayList<>();
+        final String baseQuery = "SELECT * FROM categories";
+
+        // Validate sort column to prevent SQL injection
+        if (pageRequest.hasSorting() &&
+                !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
+            log.warn("Invalid sort column: {}. Using default sorting.", pageRequest.getSortBy());
+            pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
-        return categoryArrayList;
+
+        try {
+            // Get total count
+            final String countQuery = PaginationQueryBuilder.buildCountQuery(baseQuery);
+            final long totalElements = PaginationQueryBuilder.executeCountQuery(connection, countQuery);
+
+            // Get paginated results
+            final String paginatedQuery = PaginationQueryBuilder.buildPaginatedQuery(baseQuery, pageRequest);
+
+            try (PreparedStatement stmt = connection.prepareStatement(paginatedQuery);
+                    ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    content.add(Category.builder().id(rs.getLong("id")).name(rs.getString("name"))
+                            .description(rs.getString("description")).build());
+                }
+            }
+
+            return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
+
+        } catch (final SQLException e) {
+            log.error("Error retrieving paginated categories: {}", e.getMessage(), e);
+            return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
+        }
     }
 
     /**

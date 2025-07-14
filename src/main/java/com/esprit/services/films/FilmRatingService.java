@@ -13,6 +13,8 @@ import com.esprit.models.users.Client;
 import com.esprit.services.IService;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.Page;
+import com.esprit.utils.PageRequest;
 import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
@@ -83,12 +85,6 @@ public class FilmRatingService implements IService<FilmRating> {
         }
     }
 
-    @Override
-    /**
-     * Performs read operation.
-     *
-     * @return the result of the operation
-     */
     public List<FilmRating> read() {
         final List<FilmRating> ratings = new ArrayList<>();
         final String req = "SELECT * FROM film_ratings";
@@ -269,5 +265,10 @@ public class FilmRatingService implements IService<FilmRating> {
             log.error("Error getting top rated films", e);
         }
         return topRated;
+    }
+
+    @Override
+    public Page<FilmRating> read(PageRequest pageRequest) {
+        throw new UnsupportedOperationException("Unimplemented method 'read'");
     }
 }

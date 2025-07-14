@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 
 import com.esprit.models.series.Category;
 import com.esprit.services.series.IServiceCategorieImpl;
+import com.esprit.utils.PageRequest;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -157,7 +158,8 @@ public class CategorieController {
         // supprimerCol);
         this.tableView.getColumns().addAll(nomCol, descriptionCol, modifierCol, supprimerCol);
         try {
-            this.tableView.getItems().addAll(categorieserv.read());
+            PageRequest pageRequest = new PageRequest(0,10);
+            this.tableView.getItems().addAll(categorieserv.read(pageRequest).getContent());
         } catch (final Exception e) {
             CategorieController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }

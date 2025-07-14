@@ -9,6 +9,9 @@ import java.util.logging.Logger;
 import com.esprit.models.series.Favorite;
 import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.Page;
+import com.esprit.utils.PageRequest;
+import com.esprit.utils.PaginationQueryBuilder;
 import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +29,9 @@ public class IServiceFavoriteImpl implements IService<Favorite> {
     private static final Logger LOGGER = Logger.getLogger(IServiceFavoriteImpl.class.getName());
     public Connection connection;
     public Statement statement;
+
+    // Allowed columns for sorting to prevent SQL injection
+    private static final String[] ALLOWED_SORT_COLUMNS = { "id", "user_id", "series_id" };
 
     /**
      * Constructs a new IServiceFavoriteImpl instance.
@@ -117,22 +123,59 @@ public class IServiceFavoriteImpl implements IService<Favorite> {
 
     @Override
     /**
-     * Performs read operation.
+     * Retrieves favorites with pagination support.
      *
-     * @return the result of the operation
+     * @param pageRequest the pagination parameters
+     * @return a page of favorites
      */
-    public List<Favorite> read() {
-        final List<Favorite> list = new ArrayList<>();
-        final String req = "SELECT * FROM favorites";
-        try (final Statement st = this.connection.createStatement(); final ResultSet rs = st.executeQuery(req)) {
-            while (rs.next()) {
-                list.add(Favorite.builder().id(rs.getLong("id")).userId(rs.getLong("user_id"))
-                        .seriesId(rs.getLong("series_id")).build());
-            }
-        } catch (final SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+    public Page<Favorite> read(PageRequest pageRequest) {
+        final List<Favorite> content = new ArrayList<>();
+        final String baseQuery = "SELECT * FROM favorites";
+
+        // Validate sort column to prevent SQL injection
+        if (pageRequest.hasSorting() &&
+                !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
+            LOGGER.warning("Invalid sort column: " + pageRequest.getSortBy() + ". Using default sorting.");
+            pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
-        return list;
+
+        try {
+            // Get total count
+            final String countQuery = PaginationQueryBuilder.buildCountQuery(baseQuery);
+            final long totalElements = PaginationQueryBuilder.executeCountQuery(connection, countQuery);
+
+            // Get paginated results
+            final String paginatedQuery = PaginationQueryBuilder.buildPaginatedQuery(baseQuery, pageRequest);
+
+            try (final Statement st = this.connection.createStatement();
+                    final ResultSet rs = st.executeQuery(paginatedQuery)) {
+                while (rs.next()) {
+                    final Favorite favorite = buildFavoriteFromResultSet(rs);
+                    content.add(favorite);
+                }
+            }
+
+            return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
+
+        } catch (final SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error retrieving paginated favorites: " + e.getMessage(), e);
+            return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
+        }
+    }
+
+    /**
+     * Helper method to build Favorite object from ResultSet.
+     *
+     * @param rs the ResultSet containing favorite data
+     * @return the Favorite object
+     * @throws SQLException if there's an error reading from ResultSet
+     */
+    private Favorite buildFavoriteFromResultSet(ResultSet rs) throws SQLException {
+        return Favorite.builder()
+                .id(rs.getLong("id"))
+                .userId(rs.getLong("user_id"))
+                .seriesId(rs.getLong("series_id"))
+                .build();
     }
 
     /**
@@ -148,8 +191,7 @@ public class IServiceFavoriteImpl implements IService<Favorite> {
             ps.setLong(2, serieId);
             try (final ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    favorite = Favorite.builder().id(rs.getLong("id")).userId(rs.getLong("user_id"))
-                            .seriesId(rs.getLong("series_id")).build();
+                    favorite = buildFavoriteFromResultSet(rs);
                 }
             }
         }
@@ -163,13 +205,12 @@ public class IServiceFavoriteImpl implements IService<Favorite> {
      */
     public List<Favorite> showFavoritesList(final int userId) {
         final List<Favorite> list = new ArrayList<>();
-        final String req = "SELECT * FROM favorites WHERE user_id = ?";
+        final String req = "SELECT * FROM favorites WHERE user_id = ? ORDER BY id";
         try (final PreparedStatement ps = this.connection.prepareStatement(req)) {
             ps.setInt(1, userId);
             try (final ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    list.add(Favorite.builder().id(rs.getLong("id")).userId(rs.getLong("user_id"))
-                            .seriesId(rs.getLong("series_id")).build());
+                    list.add(buildFavoriteFromResultSet(rs));
                 }
             }
         } catch (final SQLException e) {

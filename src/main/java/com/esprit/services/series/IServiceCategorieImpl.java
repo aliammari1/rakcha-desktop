@@ -11,6 +11,9 @@ import java.util.logging.Logger;
 import com.esprit.models.series.Category;
 import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.Page;
+import com.esprit.utils.PageRequest;
+import com.esprit.utils.PaginationQueryBuilder;
 import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +30,9 @@ import lombok.extern.slf4j.Slf4j;
 public class IServiceCategorieImpl implements IService<Category> {
     private static final Logger LOGGER = Logger.getLogger(IServiceCategorieImpl.class.getName());
     private final Connection connection;
+
+    // Allowed columns for sorting to prevent SQL injection
+    private static final String[] ALLOWED_SORT_COLUMNS = { "id", "name", "description" };
 
     /**
      * Constructs a new IServiceCategorieImpl instance.
@@ -116,25 +122,59 @@ public class IServiceCategorieImpl implements IService<Category> {
 
     @Override
     /**
-     * Performs read operation.
+     * Retrieves categories with pagination support.
      *
-     * @return the result of the operation
+     * @param pageRequest the pagination parameters
+     * @return a page of categories
      */
-    public List<Category> read() {
-        final List<Category> categories = new ArrayList<>();
-        final String req = "SELECT * FROM category";
-        try (final Statement st = this.connection.createStatement(); final ResultSet rs = st.executeQuery(req)) {
-            while (rs.next()) {
-                final Category category = Category.builder().id(rs.getLong("id")).name(rs.getString("name"))
-                        .description(rs.getString("description")).build();
-                categories.add(category);
-            }
-        } catch (final SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error reading categories: " + e.getMessage(), e);
-            throw new RuntimeException("Failed to read categories", e);
+    public Page<Category> read(PageRequest pageRequest) {
+        final List<Category> content = new ArrayList<>();
+        final String baseQuery = "SELECT * FROM category";
+
+        // Validate sort column to prevent SQL injection
+        if (pageRequest.hasSorting() &&
+                !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
+            LOGGER.warning("Invalid sort column: " + pageRequest.getSortBy() + ". Using default sorting.");
+            pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
-        LOGGER.info(categories.toString());
-        return categories;
+
+        try {
+            // Get total count
+            final String countQuery = PaginationQueryBuilder.buildCountQuery(baseQuery);
+            final long totalElements = PaginationQueryBuilder.executeCountQuery(connection, countQuery);
+
+            // Get paginated results
+            final String paginatedQuery = PaginationQueryBuilder.buildPaginatedQuery(baseQuery, pageRequest);
+
+            try (final Statement st = this.connection.createStatement();
+                    final ResultSet rs = st.executeQuery(paginatedQuery)) {
+                while (rs.next()) {
+                    final Category category = buildCategoryFromResultSet(rs);
+                    content.add(category);
+                }
+            }
+
+            return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
+
+        } catch (final SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error retrieving paginated categories: " + e.getMessage(), e);
+            return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
+        }
+    }
+
+    /**
+     * Helper method to build Category object from ResultSet.
+     *
+     * @param rs the ResultSet containing category data
+     * @return the Category object
+     * @throws SQLException if there's an error reading from ResultSet
+     */
+    private Category buildCategoryFromResultSet(ResultSet rs) throws SQLException {
+        return Category.builder()
+                .id(rs.getLong("id"))
+                .name(rs.getString("name"))
+                .description(rs.getString("description"))
+                .build();
     }
 
     /**

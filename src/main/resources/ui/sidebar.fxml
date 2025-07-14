@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<VBox alignment="TOP_CENTER" spacing="20" prefWidth="248.0" maxWidth="248.0"
+<VBox alignment="TOP_CENTER" spacing="20" prefWidth="200.0" maxWidth="200.0"
     xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" 
     fx:controller="com.esprit.controllers.SidebarController"
     style="-fx-background-color: linear-gradient(to bottom, #140505e6, #280a0acc, #140505e6);

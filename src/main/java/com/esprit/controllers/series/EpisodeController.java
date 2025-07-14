@@ -17,6 +17,7 @@ import com.esprit.models.series.Series;
 import com.esprit.services.series.IServiceEpisodeImpl;
 import com.esprit.services.series.IServiceSeriesImpl;
 import com.esprit.utils.CloudinaryStorage;
+import com.esprit.utils.PageRequest;
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
@@ -94,7 +95,8 @@ public class EpisodeController {
         final IServiceEpisodeImpl iServiceEpisode = new IServiceEpisodeImpl();
         final IServiceSeriesImpl iServiceSerie = new IServiceSeriesImpl();
         try {
-            this.serieList = iServiceSerie.read();
+            PageRequest pageRequest = new PageRequest(0, 10);
+            this.serieList = iServiceSerie.read(pageRequest).getContent();
             for (final Series s : this.serieList) {
                 this.serieF.getItems().add(s.getName());
             }
@@ -201,7 +203,8 @@ public class EpisodeController {
         this.tableView.getColumns().addAll(titreCol, numeroepisodeCol, saisonCol, serieCol, supprimerCol, modifierCol);
         // Récupérer les catégories et les ajouter à la TableView
         try {
-            this.tableView.getItems().addAll(iServiceEpisode.read());
+            PageRequest pageRequest = new PageRequest(0, 10);
+            this.tableView.getItems().addAll(iServiceEpisode.read(pageRequest).getContent());
         } catch (final Exception e) {
             EpisodeController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }

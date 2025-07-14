@@ -128,7 +128,7 @@
 
                     <!-- Action Buttons -->
                     <HBox spacing="10" alignment="CENTER">
-                        <Button onAction="#ajouterFilm" styleClass="sale" text="Add Movie" />
+                        <Button onAction="#insertFilm" styleClass="sale" text="Add Movie" />
                         <Button onAction="#modifier" styleClass="edit-button" text="Update" />
                         <Button onAction="#gotoactor" styleClass="nav-button" text="Manage Actors" />
                         <Button onAction="#gotocategory" styleClass="nav-button"

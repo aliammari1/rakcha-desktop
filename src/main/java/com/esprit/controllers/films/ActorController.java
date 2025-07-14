@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import com.esprit.models.films.Actor;
 import com.esprit.services.films.ActorService;
 import com.esprit.utils.CloudinaryStorage;
+import com.esprit.utils.PageRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -633,7 +634,8 @@ public class ActorController {
                        */
                     );
             final ActorService categoryService = new ActorService();
-            final ObservableList<Actor> obC = FXCollections.observableArrayList(categoryService.read());
+            PageRequest pageRequest = new PageRequest(0, 10);
+            final ObservableList<Actor> obC = FXCollections.observableArrayList(categoryService.read(pageRequest).getContent());
             this.filmActor_tableView11.setItems(obC);
         } catch (final Exception e) {
             ActorController.LOGGER.log(Level.SEVERE, e.getMessage(), e);

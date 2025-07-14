@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import com.esprit.models.films.Category;
 import com.esprit.services.films.CategoryService;
+import com.esprit.utils.PageRequest;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -117,10 +118,11 @@ public class CategoryController {
     private void search(final String keyword) {
         final CategoryService categoryService = new CategoryService();
         final ObservableList<Category> filteredList = FXCollections.observableArrayList();
+        PageRequest pageRequest = new PageRequest(0, 10);
         if (null == keyword || keyword.trim().isEmpty()) {
-            filteredList.addAll(categoryService.read());
+            filteredList.addAll(categoryService.read(pageRequest).getContent());
         } else {
-            for (final Category category : categoryService.read()) {
+            for (final Category category : categoryService.read(pageRequest).getContent()) {
                 if (category.getName().toLowerCase().contains(keyword.toLowerCase())
                         || category.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
                     filteredList.add(category);
@@ -173,7 +175,9 @@ public class CategoryController {
     void readCategoryTable() {
         try {
             final CategoryService categoryService = new CategoryService();
-            final ObservableList<Category> obC = FXCollections.observableArrayList(categoryService.read());
+            PageRequest pageRequest = new PageRequest(0, 10);
+            final ObservableList<Category> obC = FXCollections
+                    .observableArrayList(categoryService.read(pageRequest).getContent());
             this.filmCategory_tableView.setItems(obC);
         } catch (final Exception e) {
             CategoryController.LOGGER.log(Level.SEVERE, e.getMessage(), e);

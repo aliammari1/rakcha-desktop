@@ -26,6 +26,7 @@ import com.esprit.services.series.IServiceCategorieImpl;
 import com.esprit.services.series.IServiceFeedbackImpl;
 import com.esprit.services.series.IServiceSeriesImpl;
 import com.esprit.utils.CloudinaryStorage;
+import com.esprit.utils.PageRequest;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -108,7 +109,8 @@ public class SerieController {
         final IServiceCategorieImpl categorieserv = new IServiceCategorieImpl();
         final IServiceSeriesImpl iServiceSerie = new IServiceSeriesImpl();
         try {
-            this.categorieList = categorieserv.read();
+            PageRequest pageRequest = new PageRequest(0, 10);
+            this.categorieList = categorieserv.read(pageRequest).getContent();
             for (final Category c : this.categorieList) {
                 this.categorieF.getItems().add(c.getName());
             }
@@ -221,7 +223,8 @@ public class SerieController {
                 modifierCol);
         // Récupérer les catégories et les ajouter à la TableView
         try {
-            this.tableView.getItems().addAll(serviceSerie.read());
+            PageRequest pageRequest = new PageRequest(0, 10);
+            this.tableView.getItems().addAll(serviceSerie.read(pageRequest).getContent());
         } catch (final Exception e) {
             SerieController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
@@ -244,7 +247,8 @@ public class SerieController {
         final File selectedFile = fileChooser.showSaveDialog(((Node) event.getSource()).getScene().getWindow());
         if (null != selectedFile) {
             final IServiceFeedbackImpl sf = new IServiceFeedbackImpl();
-            final List<Feedback> feedbackList = sf.read();
+            PageRequest pageRequest = new PageRequest(0, 10);
+            final List<Feedback> feedbackList = sf.read(pageRequest).getContent();
             try {
                 // Créer le document PDF
                 final Document document = new Document();

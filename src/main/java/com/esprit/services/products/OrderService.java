@@ -13,6 +13,8 @@ import com.esprit.models.users.Client;
 import com.esprit.services.IService;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.Page;
+import com.esprit.utils.PageRequest;
 import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
@@ -96,7 +98,6 @@ public class OrderService implements IService<Order> {
         return orderId;
     }
 
-    @Override
     /**
      * Performs read operation.
      *
@@ -258,5 +259,11 @@ public class OrderService implements IService<Order> {
             OrderService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return productPurchases;
+    }
+
+    @Override
+    public Page<Order> read(PageRequest pageRequest) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'read'");
     }
 }

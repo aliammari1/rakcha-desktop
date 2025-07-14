@@ -1,133 +1,533 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.*?>
+
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import org.kordamp.ikonli.javafx.*?>
-<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<BorderPane fx:id="rootContainer" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
-    fx:controller="com.esprit.controllers.users.HomeAdminController"
-    style="-fx-background-color: linear-gradient(to bottom, #1a1a1f, #0f0f14);">
+<StackPane fx:id="rootContainer" maxWidth="1100.0" maxHeight="650.0" minWidth="1100.0" minHeight="650.0"
+           xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.esprit.controllers.users.HomeAdminController"
+           style="-fx-background-color: linear-gradient(to bottom right, #0a0a0a, #1a0a0a, #2a0f0f, #1a0606, #0a0a0a);
+           -fx-effect: dropshadow(gaussian, #8b0000, 50, 0, 0, 0);
+           -fx-background-animation: true;"
+           stylesheets="@../styles/home-animations.css">
 
-    <!-- Sidebar -->
-    <left>
+    <!-- Background Animations Container -->
+    <AnchorPane style="-fx-background-color: transparent;" maxWidth="1100.0" maxHeight="650.0" styleClass="animated-background">
+        
+        <!-- Geometric Shapes for Animation -->
+        <Polygon fx:id="shape1" points="100.0,200.0,120.0,180.0,140.0,200.0,120.0,220.0" 
+            styleClass="rotating-shape, pulsing-shape"
+            style="-fx-fill: linear-gradient(to bottom right, #c8000066, #640000aa); 
+                   -fx-stroke: #8b0000; 
+                   -fx-stroke-width: 2;
+                   -fx-effect: dropshadow(gaussian, #c8000099, 15, 0, 0, 0);" 
+            opacity="0.6" />
+            
+        <Polygon fx:id="shape2" points="950.0,150.0,980.0,130.0,1010.0,150.0,995.0,180.0,965.0,180.0" 
+            styleClass="rotating-shape"
+            style="-fx-fill: linear-gradient(to bottom right, #c8000080, #64000066); 
+                   -fx-stroke: #660000; 
+                   -fx-stroke-width: 2;
+                   -fx-effect: dropshadow(gaussian, #c8000080, 12, 0, 0, 0);" 
+            opacity="0.6" />
+            
+        <Rectangle fx:id="shape3" width="30" height="30" layoutX="800" layoutY="50"
+            styleClass="rotating-shape, pulsing-shape"
+            style="-fx-fill: linear-gradient(to bottom right, #ff444480, #8b000066);
+                   -fx-stroke: #ff4444;
+                   -fx-stroke-width: 2;
+                   -fx-rotate: 45;
+                   -fx-effect: dropshadow(gaussian, #ff444499, 12, 0, 0, 0);"
+            opacity="0.6" />
+            
+        <Circle fx:id="shape4" radius="20" layoutX="900" layoutY="400"
+            styleClass="pulsing-shape, glow-red"
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff6666aa, #8b0000aa);
+                   -fx-stroke: #ff6666;
+                   -fx-stroke-width: 2;
+                   -fx-effect: dropshadow(gaussian, #ff666699, 18, 0, 0, 0);"
+            opacity="0.5" />
+            
+        <!-- Additional shapes -->
+        <Polygon fx:id="shape5" points="300.0,100.0,320.0,70.0,350.0,85.0,335.0,120.0" 
+            styleClass="rotating-shape, pulsing-shape"
+            style="-fx-fill: linear-gradient(to bottom right, #b4000066, #5a0000aa); 
+                   -fx-stroke: #aa0000; 
+                   -fx-stroke-width: 2;
+                   -fx-effect: dropshadow(gaussian, #b4000080, 12, 0, 0, 0);" 
+            opacity="0.5" />
+            
+        <Rectangle fx:id="shape6" width="35" height="12" layoutX="700" layoutY="300"
+            styleClass="rotating-shape"
+            style="-fx-fill: linear-gradient(to bottom right, #dc323266, #78000066);
+                   -fx-stroke: #cc2222;
+                   -fx-stroke-width: 1;
+                   -fx-rotate: 30;
+                   -fx-effect: dropshadow(gaussian, #dc323266, 10, 0, 0, 0);"
+            opacity="0.5" />
+    </AnchorPane>
+    
+    <!-- Main Content Container -->
+    <HBox spacing="0" maxWidth="1100.0" maxHeight="650.0" style="-fx-background-color: transparent;">
+
+        <!-- Left Sidebar -->
         <fx:include source="../sidebar.fxml" />
-    </left>
 
-    <!-- Top Header -->
-    <top>
-        <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-padding: 20; -fx-background-color: rgba(20, 20, 25, 0.9);">
-            <Label fx:id="welcomeLabel" text="Welcome, Admin!"
-                style="-fx-text-fill: #ff6666; -fx-font-family: 'Arial Black'; -fx-font-size: 24px; -fx-font-weight: bold;" />
-            <Region HBox.hgrow="ALWAYS" />
-            <HBox alignment="CENTER_LEFT" spacing="10">
-                <Label text="SYSTEM ONLINE" style="-fx-text-fill: #00ff00; -fx-font-size: 12px; -fx-font-weight: bold;" />
-            </HBox>
-        </HBox>
-    </top>
+        <!-- Main Content Area -->
+        <VBox spacing="0" prefWidth="900.0" maxWidth="900.0" HBox.hgrow="ALWAYS"
+            style="-fx-background-color: radial-gradient(center 50% 50%, radius 80%, rgba(15, 15, 15, 0.95), rgba(5, 5, 5, 0.98));
+                   -fx-background-radius: 25 0 0 25;
+                   -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.3), 30, 0, 0, 0);">
 
-    <!-- Main Content -->
-    <center>
-        <ScrollPane fitToWidth="true" fitToHeight="true" 
-            style="-fx-background: transparent; -fx-background-color: transparent;">
-            <VBox spacing="30" style="-fx-padding: 30;">
-                
-                <!-- Statistics Dashboard -->
-                <VBox spacing="15">
-                    <Label text="SYSTEM OVERVIEW"
-                        style="-fx-text-fill: #ffffff; -fx-font-family: 'Arial Black'; -fx-font-size: 18px;" />
-                    
-                    <GridPane hgap="20" vgap="20" alignment="CENTER">
-                        <!-- Users Card -->
-                        <VBox spacing="10" alignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="0"
-                            style="-fx-background-color: linear-gradient(to bottom right, rgba(102, 204, 255, 0.2), rgba(74, 144, 226, 0.1)); 
-                                   -fx-background-radius: 15; -fx-padding: 20; -fx-min-width: 180; -fx-min-height: 120;">
-                            <FontIcon iconLiteral="fa-users" iconSize="30" style="-fx-icon-color: #66ccff;" />
-                            <Label fx:id="userCountLabel" text="0"
-                                style="-fx-text-fill: white; -fx-font-family: 'Arial Black'; -fx-font-size: 24px;" />
-                            <Label text="Active Users" style="-fx-text-fill: #cccccc; -fx-font-size: 12px;" />
-                        </VBox>
-
-                        <!-- Movies Card -->
-                        <VBox spacing="10" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="0"
-                            style="-fx-background-color: linear-gradient(to bottom right, rgba(255, 102, 102, 0.2), rgba(139, 0, 0, 0.1)); 
-                                   -fx-background-radius: 15; -fx-padding: 20; -fx-min-width: 180; -fx-min-height: 120;">
-                            <FontIcon iconLiteral="fa-film" iconSize="30" style="-fx-icon-color: #ff6666;" />
-                            <Label fx:id="movieCountLabel" text="0"
-                                style="-fx-text-fill: white; -fx-font-family: 'Arial Black'; -fx-font-size: 24px;" />
-                            <Label text="Movies" style="-fx-text-fill: #cccccc; -fx-font-size: 12px;" />
-                        </VBox>
-
-                        <!-- Products Card -->
-                        <VBox spacing="10" alignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="0"
-                            style="-fx-background-color: linear-gradient(to bottom right, rgba(255, 170, 0, 0.2), rgba(255, 140, 0, 0.1)); 
-                                   -fx-background-radius: 15; -fx-padding: 20; -fx-min-width: 180; -fx-min-height: 120;">
-                            <FontIcon iconLiteral="fa-shopping-cart" iconSize="30" style="-fx-icon-color: #ffaa00;" />
-                            <Label fx:id="productCountLabel" text="0"
-                                style="-fx-text-fill: white; -fx-font-family: 'Arial Black'; -fx-font-size: 24px;" />
-                            <Label text="Products" style="-fx-text-fill: #cccccc; -fx-font-size: 12px;" />
-                        </VBox>
-
-                        <!-- Orders Card -->
-                        <VBox spacing="10" alignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="0"
-                            style="-fx-background-color: linear-gradient(to bottom right, rgba(0, 255, 127, 0.2), rgba(34, 139, 34, 0.1)); 
-                                   -fx-background-radius: 15; -fx-padding: 20; -fx-min-width: 180; -fx-min-height: 120;">
-                            <FontIcon iconLiteral="fa-dollar" iconSize="30" style="-fx-icon-color: #00ff7f;" />
-                            <Label fx:id="orderCountLabel" text="0"
-                                style="-fx-text-fill: white; -fx-font-family: 'Arial Black'; -fx-font-size: 24px;" />
-                            <Label text="Orders" style="-fx-text-fill: #cccccc; -fx-font-size: 12px;" />
-                        </VBox>
-                    </GridPane>
+            <!-- Header Section -->
+            <HBox alignment="CENTER_LEFT" spacing="20" 
+                style="-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.2), rgba(50, 0, 0, 0.1));
+                       -fx-background-radius: 25 0 0 0;
+                       -fx-padding: 20 30 20 30;
+                       -fx-border-color: #8b0000;
+                       -fx-border-width: 0 0 1 0;">
+                <VBox spacing="5">
+                    <Label fx:id="welcomeLabel" text="⚡ ADMIN COMMAND CENTER ⚡"
+                        style="-fx-text-fill: #ff6666;
+                               -fx-font-family: 'Arial Black';
+                               -fx-font-size: 24px;
+                               -fx-font-weight: bold;
+                               -fx-effect: dropshadow(gaussian, #8b0000, 6, 0, 1, 1);" />
+                    <Label text="Complete system administration and management dashboard"
+                        style="-fx-text-fill: #cccccc;
+                               -fx-font-family: 'Arial';
+                               -fx-font-size: 14px;
+                               -fx-font-style: italic;" />
                 </VBox>
 
-                <!-- Action Center -->
-                <VBox spacing="20">
-                    <Label text="ADMIN CONTROLS"
-                        style="-fx-text-fill: #ffffff; -fx-font-family: 'Arial Black'; -fx-font-size: 18px;" />
-                    
-                    <GridPane hgap="15" vgap="15" alignment="CENTER">
-                        <Button fx:id="manageUsersBtn" text="MANAGE USERS" onAction="#manageUsers" 
-                            GridPane.columnIndex="0" GridPane.rowIndex="0"
-                            style="-fx-background-color: linear-gradient(to right, #4a90e2, #66ccff); -fx-text-fill: white; 
-                                   -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand; 
-                                   -fx-padding: 15 30 15 30;" />
-                        
-                        <Button fx:id="manageMoviesBtn" text="MANAGE CONTENT" onAction="#manageMovies" 
-                            GridPane.columnIndex="1" GridPane.rowIndex="0"
-                            style="-fx-background-color: linear-gradient(to right, #8b0000, #ff4444); -fx-text-fill: white; 
-                                   -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand; 
-                                   -fx-padding: 15 30 15 30;" />
-                        
-                        <Button fx:id="viewReportsBtn" text="ANALYTICS" onAction="#manageProducts" 
-                            GridPane.columnIndex="2" GridPane.rowIndex="0"
-                            style="-fx-background-color: linear-gradient(to right, #ff8c00, #ffaa00); -fx-text-fill: white; 
-                                   -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand; 
-                                   -fx-padding: 15 30 15 30;" />
-                        
-                        <Button fx:id="systemSettingsBtn" text="ORDERS" onAction="#manageOrders" 
-                            GridPane.columnIndex="3" GridPane.rowIndex="0"
-                            style="-fx-background-color: linear-gradient(to right, #6a0dad, #9932cc); -fx-text-fill: white; 
-                                   -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand; 
-                                   -fx-padding: 15 30 15 30;" />
-                    </GridPane>
-                </VBox>
-
-                <!-- Recent Activity -->
-                <VBox spacing="15">
-                    <HBox alignment="CENTER_LEFT" spacing="10">
-                        <Label text="RECENT ACTIVITY"
-                            style="-fx-text-fill: #ffffff; -fx-font-family: 'Arial Black'; -fx-font-size: 18px;" />
+                <!-- Time and Status -->
+                <Region HBox.hgrow="ALWAYS" />
+                <VBox alignment="CENTER" spacing="5">
+                    <Label fx:id="currentTimeLabel" styleClass="pulse"
+                           style="-fx-text-fill: #00ff00; -fx-font-size: 16px; -fx-font-weight: bold;"
+                           text="Loading..."/>
+                    <HBox alignment="CENTER" spacing="8">
+                        <Circle fx:id="activityIndicator" fill="#00ff00" radius="5.0" styleClass="pulse-dot"/>
+                        <Label fx:id="systemStatusLabel" text="SYSTEM ONLINE"
+                               style="-fx-text-fill: #00ff00; -fx-font-size: 12px; -fx-font-weight: bold;"/>
                     </HBox>
-                    
-                    <VBox fx:id="activityContainer" spacing="10"
-                        style="-fx-background-color: rgba(40, 40, 40, 0.7); -fx-background-radius: 15; -fx-padding: 20;">
-                        <!-- Activity items will be added dynamically -->
-                    </VBox>
                 </VBox>
+                
+                <!-- Quick Search -->
+                <StackPane>
+                    <Rectangle width="300" height="40"
+                        style="-fx-fill: linear-gradient(to bottom, rgba(40, 40, 40, 0.8), rgba(20, 20, 20, 0.9));
+                               -fx-stroke: #8b0000;
+                               -fx-stroke-width: 1;
+                               -fx-background-radius: 20;
+                               -fx-stroke-radius: 20;
+                               -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.3), 8, 0, 0, 0);" />
+                    <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 0 15 0 15;">
+                        <FontIcon iconLiteral="fa-search" iconSize="14" style="-fx-icon-color: #8b0000;" />
+                        <TextField fx:id="quickSearchField" promptText="🔍 Quick Search..."
+                            style="-fx-background-color: transparent;
+                                   -fx-text-fill: white;
+                                   -fx-font-family: 'Arial';
+                                   -fx-font-size: 12px;
+                                   -fx-border-color: transparent;
+                                   -fx-focus-color: transparent;
+                                   -fx-faint-focus-color: transparent;
+                                   -fx-prompt-text-fill: #666666;"
+                            HBox.hgrow="ALWAYS" />
+                    </HBox>
+                </StackPane>
+            </HBox>
 
-            </VBox>
-        </ScrollPane>
-    </center>
+            <!-- Main Content with ScrollPane -->
+            <ScrollPane fx:id="mainScrollPane" fitToWidth="true" VBox.vgrow="ALWAYS"
+                hbarPolicy="AS_NEEDED" vbarPolicy="ALWAYS" pannable="true"
+                style="-fx-background-color: transparent;
+                       -fx-background: transparent;
+                       -fx-background-radius: 0 0 25 0;">
+                <content>
+                    <VBox spacing="30" style="-fx-padding: 30;">
+                        
+                        <!-- Featured Admin Spotlight Section -->
+                        <VBox spacing="20">
+                            <HBox alignment="CENTER_LEFT" spacing="15">
+                                <Label text="🎯 ADMIN SPOTLIGHT"
+                                       styleClass="section-title, glow-text, pulse"
+                                       style="-fx-text-fill: #ffffff; -fx-font-family: 'Arial Black'; -fx-font-size: 22px;"/>
+                                <Circle fill="#ff6666" radius="6.0" styleClass="pulse-dot"/>
+                            </HBox>
+                            
+                            <StackPane style="-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.3), rgba(50, 0, 0, 0.1));
+                                              -fx-background-radius: 20;
+                                              -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.8), 20, 0, 0, 5);
+                                              -fx-min-height: 180;
+                                              -fx-max-height: 180;">
+                                
+                                <HBox spacing="25" alignment="CENTER_LEFT" style="-fx-padding: 25;">
+                                    <VBox spacing="8" alignment="CENTER" style="-fx-min-width: 120;">
+                                        <Circle radius="35" 
+                                            style="-fx-fill: linear-gradient(to bottom right, #ff6666, #cc3333); 
+                                                   -fx-stroke: white; 
+                                                   -fx-stroke-width: 3; 
+                                                   -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 15, 0, 0, 3);"/>
+                                        <Label text="👑" style="-fx-font-size: 24px; -fx-translate-y: -45;"/>
+                                    </VBox>
+                                    
+                                    <VBox spacing="12" HBox.hgrow="ALWAYS">
+                                        <Label text="SYSTEM ADMINISTRATOR"
+                                            style="-fx-text-fill: white;
+                                                   -fx-font-family: 'Arial Black';
+                                                   -fx-font-size: 26px;
+                                                   -fx-font-weight: bold;" />
+                                        <Label text="Complete control center for managing all aspects of the RAKCHA platform. Monitor system health, user activity, content management, and business analytics in real-time."
+                                            wrapText="true"
+                                            style="-fx-text-fill: #cccccc;
+                                                   -fx-font-family: 'Arial';
+                                                   -fx-font-size: 14px;"
+                                            maxWidth="600" />
+                                        <HBox spacing="15">
+                                            <Button text="🚀 SYSTEM STATUS" styleClass="featured-button"
+                                                style="-fx-background-color: linear-gradient(to right, #4caf50, #8bc34a);
+                                                       -fx-text-fill: white; -fx-font-family: 'Arial'; -fx-font-size: 12px;
+                                                       -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand;
+                                                       -fx-padding: 10 20 10 20;" />
+                                            <Button text="📊 ANALYTICS HUB" styleClass="featured-button"
+                                                style="-fx-background-color: transparent; -fx-text-fill: white;
+                                                       -fx-font-family: 'Arial'; -fx-font-size: 12px; -fx-font-weight: bold;
+                                                       -fx-border-color: white; -fx-border-width: 1; -fx-border-radius: 20;
+                                                       -fx-background-radius: 20; -fx-cursor: hand; -fx-padding: 10 20 10 20;" />
+                                        </HBox>
+                                    </VBox>
+                                </HBox>
+                            </StackPane>
+                        </VBox>
 
-</BorderPane>
+                        <!-- Enhanced Statistics Dashboard -->
+                        <VBox spacing="20">
+                            <HBox alignment="CENTER_LEFT" spacing="15">
+                                <Label text="🎯 SYSTEM OVERVIEW"
+                                       styleClass="section-title, glow-text, pulse"
+                                       style="-fx-text-fill: #ffffff; -fx-font-family: 'Arial Black'; -fx-font-size: 22px;"/>
+                                <Circle fill="#2196F3" radius="6.0" styleClass="pulse-dot"/>
+                            </HBox>
+                            <GridPane fx:id="statisticsGrid" hgap="25" vgap="25" alignment="CENTER">
+                                <!-- Enhanced Users Card -->
+                                <VBox fx:id="userStatsCard" spacing="15" alignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="0"
+                                      styleClass="stat-card, hover-scale, glow-card"
+                                      style="-fx-background-color: linear-gradient(to bottom right, rgba(102, 204, 255, 0.3), rgba(74, 144, 226, 0.15));
+                                           -fx-background-radius: 20; -fx-padding: 30; -fx-min-width: 200; -fx-min-height: 150; -fx-effect: dropshadow(gaussian, rgba(102, 204, 255, 0.4), 20, 0, 0, 8);">
+                                    <FontIcon iconLiteral="fa-users" iconSize="40" style="-fx-icon-color: #66ccff;" styleClass="icon-glow"/>
+                                    <Label fx:id="totalUsersLabel" text="0" styleClass="counter-animation"
+                                           style="-fx-text-fill: white; -fx-font-family: 'Arial Black'; -fx-font-size: 36px;"/>
+                                    <Label text="👥 Active Users"
+                                           style="-fx-text-fill: #cccccc; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+                                    <Label fx:id="userGrowthLabel" styleClass="growth-indicator"
+                                           style="-fx-text-fill: #4caf50; -fx-font-size: 12px; -fx-font-weight: bold;"
+                                           text="📈 +0% growth"/>
+                                </VBox>
+
+                                <!-- Enhanced Movies Card -->
+                                <VBox fx:id="movieStatsCard" spacing="15" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                                      styleClass="stat-card, hover-scale, glow-card"
+                                      style="-fx-background-color: linear-gradient(to bottom right, rgba(255, 102, 102, 0.3), rgba(139, 0, 0, 0.15));
+                                           -fx-background-radius: 20; -fx-padding: 30; -fx-min-width: 200; -fx-min-height: 150; -fx-effect: dropshadow(gaussian, rgba(255, 102, 102, 0.4), 20, 0, 0, 8);">
+                                    <FontIcon iconLiteral="fa-film" iconSize="40" style="-fx-icon-color: #ff6666;" styleClass="icon-glow"/>
+                                    <Label fx:id="totalMoviesLabel" text="0" styleClass="counter-animation"
+                                           style="-fx-text-fill: white; -fx-font-family: 'Arial Black'; -fx-font-size: 36px;"/>
+                                    <Label text="🎬 Movies"
+                                           style="-fx-text-fill: #cccccc; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+                                    <Label fx:id="movieGrowthLabel" styleClass="growth-indicator"
+                                           style="-fx-text-fill: #4caf50; -fx-font-size: 12px; -fx-font-weight: bold;"
+                                           text="✨ +0 added"/>
+                                </VBox>
+
+                                <!-- Enhanced Products Card -->
+                                <VBox fx:id="productStatsCard" spacing="15" alignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="0"
+                                      styleClass="stat-card, hover-scale, glow-card"
+                                      style="-fx-background-color: linear-gradient(to bottom right, rgba(255, 170, 0, 0.3), rgba(255, 140, 0, 0.15));
+                                           -fx-background-radius: 20; -fx-padding: 30; -fx-min-width: 200; -fx-min-height: 150; -fx-effect: dropshadow(gaussian, rgba(255, 170, 0, 0.4), 20, 0, 0, 8);">
+                                    <FontIcon iconLiteral="fa-shopping-cart" iconSize="40" style="-fx-icon-color: #ffaa00;" styleClass="icon-glow"/>
+                                    <Label fx:id="totalProductsLabel" text="0" styleClass="counter-animation"
+                                           style="-fx-text-fill: white; -fx-font-family: 'Arial Black'; -fx-font-size: 36px;"/>
+                                    <Label text="🛍️ Products"
+                                           style="-fx-text-fill: #cccccc; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+                                    <Label fx:id="productGrowthLabel" styleClass="growth-indicator"
+                                           style="-fx-text-fill: #4caf50; -fx-font-size: 12px; -fx-font-weight: bold;"
+                                           text="🚀 +0 in stock"/>
+                                </VBox>
+
+                                <!-- Enhanced Orders Card -->
+                                <VBox fx:id="orderStatsCard" spacing="15" alignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="1"
+                                      styleClass="stat-card, hover-scale, glow-card"
+                                      style="-fx-background-color: linear-gradient(to bottom right, rgba(0, 255, 127, 0.3), rgba(34, 139, 34, 0.15));
+                                           -fx-background-radius: 20; -fx-padding: 30; -fx-min-width: 200; -fx-min-height: 150; -fx-effect: dropshadow(gaussian, rgba(0, 255, 127, 0.4), 20, 0, 0, 8);">
+                                    <FontIcon iconLiteral="fa-dollar" iconSize="40" style="-fx-icon-color: #00ff7f;" styleClass="icon-glow"/>
+                                    <Label fx:id="totalOrdersLabel" text="0" styleClass="counter-animation"
+                                           style="-fx-text-fill: white; -fx-font-family: 'Arial Black'; -fx-font-size: 36px;"/>
+                                    <Label text="📦 Orders"
+                                           style="-fx-text-fill: #cccccc; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+                                    <Label fx:id="orderGrowthLabel" styleClass="growth-indicator"
+                                           style="-fx-text-fill: #4caf50; -fx-font-size: 12px; -fx-font-weight: bold;"
+                                           text="💰 +0 today"/>
+                                </VBox>
+
+                                <!-- Enhanced Series Card -->
+                                <VBox fx:id="seriesStatsCard" spacing="15" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1"
+                                      styleClass="stat-card, hover-scale, glow-card"
+                                      style="-fx-background-color: linear-gradient(to bottom right, rgba(156, 39, 176, 0.3), rgba(123, 31, 162, 0.15));
+                                           -fx-background-radius: 20; -fx-padding: 30; -fx-min-width: 200; -fx-min-height: 150; -fx-effect: dropshadow(gaussian, rgba(156, 39, 176, 0.4), 20, 0, 0, 8);">
+                                    <FontIcon iconLiteral="fa-tv" iconSize="40" style="-fx-icon-color: #9c27b0;" styleClass="icon-glow"/>
+                                    <Label fx:id="totalSeriesLabel" text="0" styleClass="counter-animation"
+                                           style="-fx-text-fill: white; -fx-font-family: 'Arial Black'; -fx-font-size: 36px;"/>
+                                    <Label text="📺 Series"
+                                           style="-fx-text-fill: #cccccc; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+                                    <Label fx:id="seriesGrowthLabel" styleClass="growth-indicator"
+                                           style="-fx-text-fill: #4caf50; -fx-font-size: 12px; -fx-font-weight: bold;"
+                                           text="🎭 +0 episodes"/>
+                                </VBox>
+
+                                <!-- Enhanced Cinemas Card -->
+                                <VBox fx:id="cinemaStatsCard" spacing="15" alignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="1"
+                                      styleClass="stat-card, hover-scale, glow-card"
+                                      style="-fx-background-color: linear-gradient(to bottom right, rgba(255, 193, 7, 0.3), rgba(255, 152, 0, 0.15));
+                                           -fx-background-radius: 20; -fx-padding: 30; -fx-min-width: 200; -fx-min-height: 150; -fx-effect: dropshadow(gaussian, rgba(255, 193, 7, 0.4), 20, 0, 0, 8);">
+                                    <FontIcon iconLiteral="fa-home" iconSize="40" style="-fx-icon-color: #ffc107;" styleClass="icon-glow"/>
+                                    <Label fx:id="totalCinemasLabel" text="0" styleClass="counter-animation"
+                                           style="-fx-text-fill: white; -fx-font-family: 'Arial Black'; -fx-font-size: 36px;"/>
+                                    <Label text="🏢 Cinemas"
+                                           style="-fx-text-fill: #cccccc; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+                                    <Label fx:id="cinemaGrowthLabel" styleClass="growth-indicator"
+                                           style="-fx-text-fill: #4caf50; -fx-font-size: 12px; -fx-font-weight: bold;"
+                                           text="🎪 +0 active"/>
+                                </VBox>
+                            </GridPane>
+                        </VBox>
+                        
+                        <!-- Enhanced Action Center -->
+                        <VBox spacing="25">
+                            <HBox alignment="CENTER_LEFT" spacing="15">
+                                <Label text="⚡ ADMIN CONTROLS"
+                                       styleClass="section-title, glow-text, pulse"
+                                       style="-fx-text-fill: #ffffff; -fx-font-family: 'Arial Black'; -fx-font-size: 22px;"/>
+                                <Circle fill="#ff6666" radius="6.0" styleClass="pulse-dot"/>
+                            </HBox>
+                            <GridPane    hgap="20" vgap="20" alignment="CENTER">
+                                <Button fx:id="manageUsersBtn" text="👥 MANAGE USERS" onAction="#manageUsers"
+                                        GridPane.columnIndex="0" GridPane.rowIndex="0"
+                                        styleClass="action-button, glow-button, hover-scale"
+                                        style="-fx-background-color: linear-gradient(to right, #4a90e2, #66ccff); -fx-text-fill: white;
+                                           -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 25; -fx-cursor: hand; 
+                                           -fx-padding: 15 30 15 30; -fx-effect: dropshadow(gaussian, rgba(102, 204, 255, 0.5), 15, 0, 0, 5);"/>
+                                <Button fx:id="manageMoviesBtn" text="🎬 MANAGE CONTENT" onAction="#manageMovies"
+                                        GridPane.columnIndex="1" GridPane.rowIndex="0"
+                                        styleClass="action-button, glow-button, hover-scale"
+                                        style="-fx-background-color: linear-gradient(to right, #8b0000, #ff4444); -fx-text-fill: white;
+                                           -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 25; -fx-cursor: hand; 
+                                           -fx-padding: 15 30 15 30; -fx-effect: dropshadow(gaussian, rgba(255, 68, 68, 0.5), 15, 0, 0, 5);"/>
+                                <Button fx:id="viewReportsBtn" text="📊 ANALYTICS" onAction="#viewReports"
+                                        GridPane.columnIndex="2" GridPane.rowIndex="0"
+                                        styleClass="action-button, glow-button, hover-scale"
+                                        style="-fx-background-color: linear-gradient(to right, #ff8c00, #ffaa00); -fx-text-fill: white;
+                                           -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 25; -fx-cursor: hand; 
+                                           -fx-padding: 15 30 15 30; -fx-effect: dropshadow(gaussian, rgba(255, 170, 0, 0.5), 15, 0, 0, 5);"/>
+                                <Button fx:id="manageOrdersBtn" text="📦 ORDERS" onAction="#manageOrders"
+                                        GridPane.columnIndex="0" GridPane.rowIndex="1"
+                                        styleClass="action-button, glow-button, hover-scale"
+                                        style="-fx-background-color: linear-gradient(to right, #4caf50, #8bc34a); -fx-text-fill: white;
+                                           -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 25; -fx-cursor: hand; 
+                                           -fx-padding: 15 30 15 30; -fx-effect: dropshadow(gaussian, rgba(76, 175, 80, 0.5), 15, 0, 0, 5);"/>
+                                <Button fx:id="manageProductsBtn" text="🛍️ PRODUCTS" onAction="#manageProducts"
+                                        GridPane.columnIndex="1" GridPane.rowIndex="1"
+                                        styleClass="action-button, glow-button, hover-scale"
+                                        style="-fx-background-color: linear-gradient(to right, #6a0dad, #9932cc); -fx-text-fill: white;
+                                           -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 25; -fx-cursor: hand; 
+                                           -fx-padding: 15 30 15 30; -fx-effect: dropshadow(gaussian, rgba(153, 50, 204, 0.5), 15, 0, 0, 5);"/>
+                                <Button fx:id="settingsBtn" text="⚙️ SETTINGS" onAction="#systemSettings"
+                                        GridPane.columnIndex="2" GridPane.rowIndex="1"
+                                        styleClass="action-button, glow-button, hover-scale"
+                                        style="-fx-background-color: linear-gradient(to right, #607d8b, #90a4ae); -fx-text-fill: white;
+                                           -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 25; -fx-cursor: hand; 
+                                           -fx-padding: 15 30 15 30; -fx-effect: dropshadow(gaussian, rgba(96, 125, 139, 0.5), 15, 0, 0, 5);"/>
+                            </GridPane>
+                        </VBox>
+
+                        <!-- Enhanced Recent Activity -->
+                        <VBox spacing="20">
+                            <HBox alignment="CENTER_LEFT" spacing="15">
+                                <Label text="📊 REAL-TIME ACTIVITY"
+                                       styleClass="section-title, glow-text, pulse"
+                                       style="-fx-text-fill: #ffffff; -fx-font-family: 'Arial Black'; -fx-font-size: 22px;"/>
+                                <Circle fx:id="activityIndicator2" fill="#4caf50" radius="6.0" styleClass="pulse-dot"/>
+                            </HBox>
+                            <VBox fx:id="activityContainer" spacing="15" styleClass="activity-feed"
+                                  style="-fx-background-color: linear-gradient(to bottom right, rgba(40, 40, 40, 0.8), rgba(20, 20, 20, 0.9));
+                                         -fx-background-radius: 20; -fx-padding: 25; -fx-max-height: 300;
+                                         -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.8), 15, 0, 0, 5);">
+                                <Label text="🔄 Initializing real-time activity feed..."
+                                       style="-fx-text-fill: #cccccc; -fx-font-size: 14px; -fx-font-style: italic;"/>
+                            </VBox>
+                        </VBox>
+
+                        <!-- Recent Users Section -->
+                        <VBox spacing="20">
+                            <HBox alignment="CENTER_LEFT" spacing="15">
+                                <Label text="👋 RECENT USERS"
+                                       styleClass="section-title, glow-text, pulse"
+                                       style="-fx-text-fill: #ffffff; -fx-font-family: 'Arial Black'; -fx-font-size: 22px;"/>
+                                <Circle fill="#2196F3" radius="6.0" styleClass="pulse-dot"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Button text="MANAGE ALL"
+                                        onAction="#manageUsers"
+                                        styleClass="section-button"
+                                        style="-fx-background-color: transparent; -fx-text-fill: #66ccff;
+                                               -fx-font-family: 'Arial'; -fx-font-size: 12px; -fx-border-color: #66ccff;
+                                               -fx-border-width: 1; -fx-border-radius: 15; -fx-background-radius: 15;
+                                               -fx-cursor: hand; -fx-padding: 8 15 8 15;" />
+                            </HBox>
+                            <ScrollPane fx:id="recentUsersScrollPane" fitToWidth="true" hbarPolicy="AS_NEEDED" vbarPolicy="AS_NEEDED" prefHeight="200"
+                                        style="-fx-background-color: transparent; -fx-background: transparent; -fx-background-radius: 10;">
+                                <VBox fx:id="recentUsersContainer" spacing="12" styleClass="users-container"
+                                      style="-fx-background-color: linear-gradient(to bottom right, rgba(40, 40, 40, 0.8), rgba(20, 20, 20, 0.9));
+                                             -fx-background-radius: 20; -fx-padding: 25;">
+                                    <Label text="👤 Loading recent user activity..."
+                                           style="-fx-text-fill: #cccccc; -fx-font-size: 14px; -fx-font-style: italic;"/>
+                                </VBox>
+                            </ScrollPane>
+                        </VBox>
+
+                        <!-- Recent Content Section -->
+                        <VBox spacing="20">
+                            <HBox alignment="CENTER_LEFT" spacing="15">
+                                <Label text="🎬 RECENT CONTENT"
+                                       styleClass="section-title, glow-text, pulse"
+                                       style="-fx-text-fill: #ffffff; -fx-font-family: 'Arial Black'; -fx-font-size: 22px;"/>
+                                <Circle fill="#e91e63" radius="6.0" styleClass="pulse-dot"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Button text="CONTENT MANAGER"
+                                        onAction="#manageMovies"
+                                        styleClass="section-button"
+                                        style="-fx-background-color: transparent; -fx-text-fill: #e91e63;
+                                               -fx-font-family: 'Arial'; -fx-font-size: 12px; -fx-border-color: #e91e63;
+                                               -fx-border-width: 1; -fx-border-radius: 15; -fx-background-radius: 15;
+                                               -fx-cursor: hand; -fx-padding: 8 15 8 15;" />
+                            </HBox>
+                            <ScrollPane fx:id="recentContentScrollPane" fitToWidth="true" hbarPolicy="AS_NEEDED" vbarPolicy="AS_NEEDED" prefHeight="200"
+                                        style="-fx-background-color: transparent; -fx-background: transparent; -fx-background-radius: 10;">
+                                <VBox fx:id="recentContentContainer" spacing="12" styleClass="content-container"
+                                      style="-fx-background-color: linear-gradient(to bottom right, rgba(40, 40, 40, 0.8), rgba(20, 20, 20, 0.9));
+                                             -fx-background-radius: 20; -fx-padding: 25;">
+                                    <Label text="🎞️ Loading recent content updates..."
+                                           style="-fx-text-fill: #cccccc; -fx-font-size: 14px; -fx-font-style: italic;"/>
+                                </VBox>
+                            </ScrollPane>
+                        </VBox>
+
+                        <!-- System Logs Section -->
+                        <VBox spacing="20">
+                            <HBox alignment="CENTER_LEFT" spacing="15">
+                                <Label text="📋 SYSTEM LOGS"
+                                       styleClass="section-title, glow-text, pulse"
+                                       style="-fx-text-fill: #ffffff; -fx-font-family: 'Arial Black'; -fx-font-size: 22px;"/>
+                                <Circle fill="#9c27b0" radius="6.0" styleClass="pulse-dot"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Button text="FULL LOGS"
+                                        styleClass="section-button"
+                                        style="-fx-background-color: transparent; -fx-text-fill: #9c27b0;
+                                               -fx-font-family: 'Arial'; -fx-font-size: 12px; -fx-border-color: #9c27b0;
+                                               -fx-border-width: 1; -fx-border-radius: 15; -fx-background-radius: 15;
+                                               -fx-cursor: hand; -fx-padding: 8 15 8 15;" />
+                            </HBox>
+                            <ScrollPane fx:id="systemLogsScrollPane" fitToWidth="true" hbarPolicy="AS_NEEDED" vbarPolicy="AS_NEEDED" prefHeight="250"
+                                        style="-fx-background-color: transparent; -fx-background: transparent; -fx-background-radius: 10;">
+                                <VBox fx:id="systemLogsContainer" spacing="10" styleClass="logs-container"
+                                      style="-fx-background-color: linear-gradient(to bottom right, rgba(40, 40, 40, 0.8), rgba(20, 20, 20, 0.9));
+                                             -fx-background-radius: 20; -fx-padding: 25;">
+                                    <Label text="📄 Loading system logs..."
+                                           style="-fx-text-fill: #cccccc; -fx-font-size: 14px; -fx-font-style: italic;"/>
+                                </VBox>
+                            </ScrollPane>
+                        </VBox>
+
+                        <!-- Analytics and Charts Section -->
+                        <VBox spacing="20">
+                            <HBox alignment="CENTER_LEFT" spacing="15">
+                                <Label text="📈 ANALYTICS and INSIGHTS"
+                                       styleClass="section-title, glow-text, pulse"
+                                       style="-fx-text-fill: #ffffff; -fx-font-family: 'Arial Black'; -fx-font-size: 22px;"/>
+                                <Circle fill="#ff9800" radius="6.0" styleClass="pulse-dot"/>
+                            </HBox>
+                            <HBox spacing="20">
+                                <VBox fx:id="performanceMetricsContainer" spacing="15" HBox.hgrow="ALWAYS"
+                                      style="-fx-background-color: linear-gradient(to bottom right, rgba(40, 40, 40, 0.8), rgba(20, 20, 20, 0.9));
+                                             -fx-background-radius: 20; -fx-padding: 25;
+                                             -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.8), 15, 0, 0, 5);">
+                                    <Label text="⚡ SYSTEM PERFORMANCE"
+                                           style="-fx-text-fill: #ffffff; -fx-font-family: 'Arial'; -fx-font-size: 16px; -fx-font-weight: bold;"/>
+                                    <Label text="🔋 CPU Usage: Loading..."
+                                           style="-fx-text-fill: #cccccc; -fx-font-size: 12px;"/>
+                                    <Label text="💾 Memory: Loading..."
+                                           style="-fx-text-fill: #cccccc; -fx-font-size: 12px;"/>
+                                    <Label text="🌐 Network: Loading..."
+                                           style="-fx-text-fill: #cccccc; -fx-font-size: 12px;"/>
+                                </VBox>
+                                <StackPane fx:id="analyticsChartContainer" HBox.hgrow="ALWAYS"
+                                           style="-fx-background-color: linear-gradient(to bottom right, rgba(40, 40, 40, 0.8), rgba(20, 20, 20, 0.9));
+                                                  -fx-background-radius: 20; -fx-padding: 25; -fx-min-height: 200;
+                                                  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.8), 15, 0, 0, 5);">
+                                    <Label text="📊 Analytics Chart Placeholder"
+                                           style="-fx-text-fill: #cccccc; -fx-font-size: 14px; -fx-font-style: italic;"/>
+                                </StackPane>
+                            </HBox>
+                        </VBox>
+
+                    </VBox>
+                </content>
+            </ScrollPane>
+        </VBox>
+    </HBox>
+
+    <!-- Dynamic Particles Array for Animation -->
+    <AnchorPane fx:id="particlesContainer" style="-fx-background-color: transparent;" mouseTransparent="true">
+        <!-- Base particles -->
+        <Circle fx:id="particle1" radius="3" layoutX="150" layoutY="200" 
+            styleClass="floating-particle, floating-particle-1, glow-red"
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff4444, #aa0000); 
+                   -fx-effect: dropshadow(gaussian, #ff0000, 12, 0, 0, 0);
+                   -fx-opacity: 0.6;" />
+                   
+        <Circle fx:id="particle2" radius="4" layoutX="900" layoutY="300" 
+            styleClass="floating-particle, floating-particle-2, glow-red"
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff3333, #880000); 
+                   -fx-effect: dropshadow(gaussian, #ff0000, 15, 0, 0, 0);
+                   -fx-opacity: 0.7;" />
+                   
+        <Circle fx:id="particle3" radius="5" layoutX="400" layoutY="550" 
+            styleClass="floating-particle, floating-particle-3, glow-red"
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff6666, #bb0000); 
+                   -fx-effect: dropshadow(gaussian, #ff3333, 18, 0, 0, 0);
+                   -fx-opacity: 0.8;" />
+                   
+        <Circle fx:id="particle4" radius="2.5" layoutX="800" layoutY="150" 
+            styleClass="floating-particle, floating-particle-4, glow-red"
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff5555, #990000); 
+                   -fx-effect: dropshadow(gaussian, #ff1111, 12, 0, 0, 0);
+                   -fx-opacity: 0.6;" />
+                   
+        <Circle fx:id="particle5" radius="3.5" layoutX="600" layoutY="500" 
+            styleClass="floating-particle, floating-particle-5, glow-red"
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff2222, #770000); 
+                   -fx-effect: dropshadow(gaussian, #ff0000, 14, 0, 0, 0);
+                   -fx-opacity: 0.75;" />
+                   
+        <Circle fx:id="particle6" radius="2" layoutX="800" layoutY="450" 
+            styleClass="floating-particle, floating-particle-6, glow-red"
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff7777, #aa2222); 
+                   -fx-effect: dropshadow(gaussian, #ff4444, 10, 0, 0, 0);
+                   -fx-opacity: 0.6;" />
+                   
+        <!-- Additional dynamic particles will be added via controller -->
+    </AnchorPane>
+
+</StackPane>
 

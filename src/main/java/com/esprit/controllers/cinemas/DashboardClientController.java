@@ -29,6 +29,7 @@ import com.esprit.services.cinemas.CinemaRatingService;
 import com.esprit.services.cinemas.CinemaService;
 import com.esprit.services.cinemas.MovieSessionService;
 import com.esprit.services.users.UserService;
+import com.esprit.utils.PageRequest;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.application.Platform;
@@ -227,7 +228,8 @@ public class DashboardClientController {
      */
     private HashSet<Cinema> loadAcceptedCinemas() {
         final CinemaService cinemaService = new CinemaService();
-        final List<Cinema> cinemas = cinemaService.read();
+        PageRequest pageRequest = new PageRequest(0, 10);
+        final List<Cinema> cinemas = cinemaService.read(pageRequest).getContent();
         final List<Cinema> acceptedCinemasList = cinemas.stream()
                 .filter(cinema -> "Accepted".equals(cinema.getStatus())).collect(Collectors.toList());
         if (acceptedCinemasList.isEmpty()) {
@@ -856,7 +858,8 @@ public class DashboardClientController {
      */
     private List<Cinema> getAllCinemas() {
         final CinemaService cinemaService = new CinemaService();
-        return cinemaService.read();
+        PageRequest pageRequest = new PageRequest(0, 10);
+        return cinemaService.read(pageRequest).getContent();
     }
 
     /**
@@ -1191,7 +1194,8 @@ public class DashboardClientController {
      */
     private List<CinemaComment> getAllComment(final Long cinemaId) {
         final CinemaCommentService cinemaCommentService = new CinemaCommentService();
-        final List<CinemaComment> allComments = cinemaCommentService.read();
+        PageRequest pageRequest = new PageRequest(0, 10);
+        final List<CinemaComment> allComments = cinemaCommentService.read(pageRequest).getContent();
         final List<CinemaComment> cinemaComments = new ArrayList<>();
         for (final CinemaComment comment : allComments) {
             if (comment.getCinema().getId() == cinemaId) {
