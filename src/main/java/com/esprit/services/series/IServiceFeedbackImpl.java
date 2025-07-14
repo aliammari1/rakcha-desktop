@@ -9,6 +9,9 @@ import java.util.logging.Logger;
 import com.esprit.models.series.Feedback;
 import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.Page;
+import com.esprit.utils.PageRequest;
+import com.esprit.utils.PaginationQueryBuilder;
 import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +29,9 @@ public class IServiceFeedbackImpl implements IService<Feedback> {
     private static final Logger LOGGER = Logger.getLogger(IServiceFeedbackImpl.class.getName());
     public Connection connection;
     public Statement statement;
+
+    // Allowed columns for sorting to prevent SQL injection
+    private static final String[] ALLOWED_SORT_COLUMNS = { "id", "id_user", "description", "date", "id_episode" };
 
     /**
      * Constructs a new IServiceFeedbackImpl instance.
@@ -122,22 +128,60 @@ public class IServiceFeedbackImpl implements IService<Feedback> {
 
     @Override
     /**
-     * Performs read operation.
+     * Retrieves feedback with pagination support.
      *
-     * @return the result of the operation
+     * @param pageRequest the pagination parameters
+     * @return a page of feedback
      */
-    public List<Feedback> read() {
-        final List<Feedback> list = new ArrayList<>();
-        final String req = "SELECT * FROM feedback";
-        try (final Statement st = this.connection.createStatement(); final ResultSet rs = st.executeQuery(req)) {
-            while (rs.next()) {
-                list.add(Feedback.builder().id(rs.getLong("id")).userId(rs.getLong("id_user"))
-                        .description(rs.getString("description")).date(rs.getTimestamp("date"))
-                        .episodeId(rs.getLong("id_episode")).build());
-            }
-        } catch (final SQLException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+    public Page<Feedback> read(PageRequest pageRequest) {
+        final List<Feedback> content = new ArrayList<>();
+        final String baseQuery = "SELECT * FROM feedback";
+
+        // Validate sort column to prevent SQL injection
+        if (pageRequest.hasSorting() &&
+                !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
+            LOGGER.warning("Invalid sort column: " + pageRequest.getSortBy() + ". Using default sorting.");
+            pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize(), "date", "DESC");
         }
-        return list;
+
+        try {
+            // Get total count
+            final String countQuery = PaginationQueryBuilder.buildCountQuery(baseQuery);
+            final long totalElements = PaginationQueryBuilder.executeCountQuery(connection, countQuery);
+
+            // Get paginated results
+            final String paginatedQuery = PaginationQueryBuilder.buildPaginatedQuery(baseQuery, pageRequest);
+
+            try (final Statement st = this.connection.createStatement();
+                    final ResultSet rs = st.executeQuery(paginatedQuery)) {
+                while (rs.next()) {
+                    final Feedback feedback = buildFeedbackFromResultSet(rs);
+                    content.add(feedback);
+                }
+            }
+
+            return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
+
+        } catch (final SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error retrieving paginated feedback: " + e.getMessage(), e);
+            return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
+        }
+    }
+
+    /**
+     * Helper method to build Feedback object from ResultSet.
+     *
+     * @param rs the ResultSet containing feedback data
+     * @return the Feedback object
+     * @throws SQLException if there's an error reading from ResultSet
+     */
+    private Feedback buildFeedbackFromResultSet(ResultSet rs) throws SQLException {
+        return Feedback.builder()
+                .id(rs.getLong("id"))
+                .userId(rs.getLong("id_user"))
+                .description(rs.getString("description"))
+                .date(rs.getTimestamp("date"))
+                .episodeId(rs.getLong("id_episode"))
+                .build();
     }
 }

@@ -8,6 +8,9 @@ import java.util.logging.Logger;
 import com.esprit.models.series.Episode;
 import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.Page;
+import com.esprit.utils.PageRequest;
+import com.esprit.utils.PaginationQueryBuilder;
 import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +27,11 @@ import lombok.extern.slf4j.Slf4j;
 public class IServiceEpisodeImpl implements IService<Episode> {
     private static final Logger LOGGER = Logger.getLogger(IServiceEpisodeImpl.class.getName());
     private final Connection connection;
+
+    // Allowed columns for sorting to prevent SQL injection
+    private static final String[] ALLOWED_SORT_COLUMNS = {
+            "idepisode", "title", "episode_number", "season", "series_id"
+    };
 
     /**
      * Constructs a new IServiceEpisodeImpl instance.
@@ -134,26 +142,63 @@ public class IServiceEpisodeImpl implements IService<Episode> {
 
     @Override
     /**
-     * Reads all episodes from the database.
+     * Retrieves episodes with pagination support.
      *
-     * @return list of all episodes
+     * @param pageRequest the pagination parameters
+     * @return a page of episodes
      */
-    public List<Episode> read() {
-        final List<Episode> episodeDtos = new ArrayList<>();
-        final String req = "SELECT * FROM episode";
-        try (final Statement st = this.connection.createStatement(); final ResultSet rs = st.executeQuery(req)) {
-            while (rs.next()) {
-                final Episode e = Episode.builder().id(rs.getLong("idepisode")).title(rs.getString("title"))
-                        .episodeNumber(rs.getInt("episode_number")).season(rs.getInt("season"))
-                        .image(rs.getString("image")).video(rs.getString("video")).seriesId(rs.getInt("series_id"))
-                        .build();
-                episodeDtos.add(e);
-            }
-        } catch (SQLException e) {
-            log.error("Error reading episodes: {}", e.getMessage(), e);
-            throw new RuntimeException("Failed to read episodes", e);
+    public Page<Episode> read(PageRequest pageRequest) {
+        final List<Episode> content = new ArrayList<>();
+        final String baseQuery = "SELECT * FROM episode";
+
+        // Validate sort column to prevent SQL injection
+        if (pageRequest.hasSorting() &&
+                !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
+            log.warn("Invalid sort column: {}. Using default sorting.", pageRequest.getSortBy());
+            pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
-        return episodeDtos;
+
+        try {
+            // Get total count
+            final String countQuery = PaginationQueryBuilder.buildCountQuery(baseQuery);
+            final long totalElements = PaginationQueryBuilder.executeCountQuery(connection, countQuery);
+
+            // Get paginated results
+            final String paginatedQuery = PaginationQueryBuilder.buildPaginatedQuery(baseQuery, pageRequest);
+
+            try (final Statement st = this.connection.createStatement();
+                    final ResultSet rs = st.executeQuery(paginatedQuery)) {
+                while (rs.next()) {
+                    final Episode episode = buildEpisodeFromResultSet(rs);
+                    content.add(episode);
+                }
+            }
+
+            return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
+
+        } catch (final SQLException e) {
+            log.error("Error retrieving paginated episodes: {}", e.getMessage(), e);
+            return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
+        }
+    }
+
+    /**
+     * Helper method to build Episode object from ResultSet.
+     *
+     * @param rs the ResultSet containing episode data
+     * @return the Episode object
+     * @throws SQLException if there's an error reading from ResultSet
+     */
+    private Episode buildEpisodeFromResultSet(ResultSet rs) throws SQLException {
+        return Episode.builder()
+                .id(rs.getLong("idepisode"))
+                .title(rs.getString("title"))
+                .episodeNumber(rs.getInt("episode_number"))
+                .season(rs.getInt("season"))
+                .image(rs.getString("image"))
+                .video(rs.getString("video"))
+                .seriesId(rs.getInt("series_id"))
+                .build();
     }
 
     /**
@@ -164,15 +209,12 @@ public class IServiceEpisodeImpl implements IService<Episode> {
      */
     public List<Episode> retrieveBySeries(final Long seriesId) {
         final List<Episode> episodes = new ArrayList<>();
-        final String req = "SELECT * FROM episode WHERE series_id = ?";
+        final String req = "SELECT * FROM episode WHERE series_id = ? ORDER BY season, episode_number";
         try (final PreparedStatement ps = this.connection.prepareStatement(req)) {
             ps.setLong(1, seriesId);
             try (final ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    final Episode episode = Episode.builder().id(rs.getLong("idepisode")).title(rs.getString("title"))
-                            .episodeNumber(rs.getInt("episode_number")).season(rs.getInt("season"))
-                            .image(rs.getString("image")).video(rs.getString("video")).seriesId(rs.getInt("series_id"))
-                            .build();
+                    final Episode episode = buildEpisodeFromResultSet(rs);
                     episodes.add(episode);
                 }
             }

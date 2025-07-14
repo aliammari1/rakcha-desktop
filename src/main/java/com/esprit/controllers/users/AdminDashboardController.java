@@ -15,6 +15,8 @@ import com.esprit.models.users.Admin;
 import com.esprit.models.users.User;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.CloudinaryStorage;
+import com.esprit.utils.Page;
+import com.esprit.utils.PageRequest;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -235,8 +237,9 @@ public class AdminDashboardController {
     void readUserTable() {
         try {
             final UserService userService = new UserService();
-            final List<User> userList = userService.read();
-            this.userTableView.setItems(FXCollections.observableArrayList(userList));
+            PageRequest pageRequest = new PageRequest(0, 10);
+            final Page<User> userList = userService.read(pageRequest);
+            this.userTableView.setItems(FXCollections.observableArrayList(userList.getContent()));
         } catch (final Exception e) {
             AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }

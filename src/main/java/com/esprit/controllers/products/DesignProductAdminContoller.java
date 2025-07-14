@@ -20,6 +20,7 @@ import com.esprit.services.products.CategoryService;
 import com.esprit.services.products.ProductService;
 import com.esprit.utils.CloudinaryStorage;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.PageRequest;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -499,7 +500,8 @@ public class DesignProductAdminContoller {
         // Utiliser une ObservableList pour stocker les éléments
         final ObservableList<Product> list = FXCollections.observableArrayList();
         final ProductService ps = new ProductService();
-        list.addAll(ps.read());
+        PageRequest pageRequest = new PageRequest(0, 10);
+        list.addAll(ps.read(pageRequest).getContent());
         this.Product_tableview.setItems(list);
         // Activer la sélection de cellules
         this.Product_tableview.getSelectionModel().setCellSelectionEnabled(true);
@@ -672,10 +674,11 @@ public class DesignProductAdminContoller {
     private void search(final String keyword) {
         final ProductService produitservice = new ProductService();
         final ObservableList<Product> filteredList = FXCollections.observableArrayList();
+        PageRequest pageRequest = new PageRequest(0, 10);
         if (null == keyword || keyword.trim().isEmpty()) {
-            filteredList.addAll(produitservice.read());
+            filteredList.addAll(produitservice.read(pageRequest).getContent());
         } else {
-            for (final Product produit : produitservice.read()) {
+            for (final Product produit : produitservice.read(pageRequest).getContent()) {
                 if (produit.getName().toLowerCase().contains(keyword.toLowerCase())
                         || produit.getDescription().toLowerCase().contains(keyword.toLowerCase())
                         || produit.getCategoryNames().toLowerCase().contains(keyword.toLowerCase())) {
@@ -724,7 +727,8 @@ public class DesignProductAdminContoller {
      */
     private List<Product> getAllCategories() {
         final ProductService categoryservice = new ProductService();
-        return categoryservice.read();
+        PageRequest pageRequest = new PageRequest(0, 10);
+        return categoryservice.read(pageRequest).getContent();
     }
 
     /**

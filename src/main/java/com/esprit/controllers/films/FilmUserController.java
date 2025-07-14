@@ -24,6 +24,7 @@ import com.esprit.models.users.Client;
 import com.esprit.services.cinemas.MovieSessionService;
 import com.esprit.services.films.*;
 import com.esprit.services.users.UserService;
+import com.esprit.utils.PageRequest;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
@@ -288,6 +289,7 @@ public class FilmUserController {
     }
 
     private void setupBasicUI() {
+        PageRequest pageRequest = new PageRequest(0, 3);
         this.top3combobox.getItems().addAll("Top 3 Films", "Top 3 Actors");
         this.top3combobox.setValue("Top 3 Films");
         this.top3combobox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -309,13 +311,14 @@ public class FilmUserController {
         this.tricomboBox.setValue("");
         this.tricomboBox.getSelectionModel().selectedItemProperty().addListener((observableValue, s, t1) -> {
             this.flowpaneFilm.getChildren().clear();
-            final List<Film> filmList = new FilmService().sort(t1);
+            final List<Film> filmList = new FilmService().sort(pageRequest, t1).getContent();
             for (final Film film : filmList) {
                 this.flowpaneFilm.getChildren().add(this.createFilmCard(film));
             }
         });
         final FilmService filmService1 = new FilmService();
-        this.l1 = filmService1.read();
+        PageRequest filmPageRequest = new PageRequest(0, 10);
+        this.l1 = filmService1.read(filmPageRequest).getContent();
         this.serach_film_user.textProperty().addListener((observable, oldValue, newValue) -> {
             final List<Film> produitsRecherches = FilmUserController.rechercher(this.l1, newValue);
             // Effacer la FlowPane actuelle pour afficher les nouveaux résultats
@@ -338,7 +341,7 @@ public class FilmUserController {
         });
         // Set the padding
         this.flowpaneFilm.setPadding(new Insets(10, 10, 10, 10));
-        final List<Film> filmList = new FilmService().read();
+        final List<Film> filmList = new FilmService().read(filmPageRequest).getContent();
         for (final Film film : filmList) {
             this.flowpaneFilm.getChildren().add(this.createFilmCard(film));
         }
@@ -820,7 +823,8 @@ public class FilmUserController {
      */
     private List<Integer> getCinemaYears() {
         final FilmService cinemaService = new FilmService();
-        final List<Film> cinemas = cinemaService.read();
+        PageRequest pageRequest = new PageRequest(0, 10);
+        final List<Film> cinemas = cinemaService.read(pageRequest).getContent();
         // Extraire les années de réalisation uniques des films
         return cinemas.stream().map(Film::getReleaseYear).distinct().collect(Collectors.toList());
     }
@@ -1094,7 +1098,7 @@ public class FilmUserController {
         }
     }
 
-    /** 
+    /**
      * @param event
      */
     @FXML
@@ -1222,7 +1226,8 @@ public class FilmUserController {
     public void displayAllComments(final Long filmId) {
         // Get comments from database
         final FilmCommentService cinemaCommentService = new FilmCommentService();
-        final List<FilmComment> allComments = cinemaCommentService.read();
+        PageRequest pageRequest = new PageRequest(0,10);
+        final List<FilmComment> allComments = cinemaCommentService.read(pageRequest).getContent();
         final List<FilmComment> filmComments = new ArrayList<>();
 
         // Filter comments for this film

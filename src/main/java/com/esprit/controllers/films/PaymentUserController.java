@@ -28,6 +28,7 @@ import com.esprit.services.cinemas.SeatService;
 import com.esprit.services.films.FilmService;
 import com.esprit.services.films.TicketService;
 import com.esprit.utils.Paymentuser;
+import com.esprit.utils.PageRequest;
 import com.stripe.exception.StripeException;
 
 import javafx.beans.value.ChangeListener;
@@ -371,7 +372,7 @@ public class PaymentUserController implements Initializable {
             }
         });
         final CinemaService cinemaService = new CinemaService();
-        final List<Cinema> cinemaList = cinemaService.read();
+        final List<Cinema> cinemaList = cinemaService.read(PageRequest.defaultPage()).getContent();
         if (null != cinemaList) {
             for (final Cinema cinema : cinemaList) {
                 this.cinemacombox_res.getItems().add(cinema.getName());

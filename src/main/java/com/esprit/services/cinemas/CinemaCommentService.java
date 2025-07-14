@@ -10,6 +10,9 @@ import com.esprit.models.users.Client;
 import com.esprit.services.IService;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.Page;
+import com.esprit.utils.PageRequest;
+import com.esprit.utils.PaginationQueryBuilder;
 import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +32,11 @@ public class CinemaCommentService implements IService<CinemaComment> {
     private final Connection connection;
     private final CinemaService cinemaService;
     private final UserService userService;
+
+    // Allowed columns for sorting to prevent SQL injection
+    private static final String[] ALLOWED_SORT_COLUMNS = {
+            "id", "cinema_id", "client_id", "comment_text", "sentiment", "created_at"
+    };
 
     /**
      * Constructs a new CinemaCommentService with database connection and required
@@ -122,25 +130,46 @@ public class CinemaCommentService implements IService<CinemaComment> {
 
     @Override
     /**
-     * Performs read operation.
+     * Retrieves cinema comments with pagination support.
      *
-     * @return the result of the operation
+     * @param pageRequest the pagination parameters
+     * @return a page of cinema comments
      */
-    public List<CinemaComment> read() {
-        List<CinemaComment> comments = new ArrayList<>();
-        String query = "SELECT * FROM cinema_comment";
-        try (PreparedStatement stmt = connection.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
+    public Page<CinemaComment> read(PageRequest pageRequest) {
+        final List<CinemaComment> content = new ArrayList<>();
+        final String baseQuery = "SELECT * FROM cinema_comment";
 
-            while (rs.next()) {
-                CinemaComment comment = buildCinemaComment(rs);
-                if (comment != null) {
-                    comments.add(comment);
+        // Validate sort column to prevent SQL injection
+        if (pageRequest.hasSorting() &&
+                !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
+            log.warn("Invalid sort column: {}. Using default sorting.", pageRequest.getSortBy());
+            pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
+        }
+
+        try {
+            // Get total count
+            final String countQuery = PaginationQueryBuilder.buildCountQuery(baseQuery);
+            final long totalElements = PaginationQueryBuilder.executeCountQuery(connection, countQuery);
+
+            // Get paginated results
+            final String paginatedQuery = PaginationQueryBuilder.buildPaginatedQuery(baseQuery, pageRequest);
+
+            try (PreparedStatement stmt = connection.prepareStatement(paginatedQuery);
+                    ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    CinemaComment comment = buildCinemaComment(rs);
+                    if (comment != null) {
+                        content.add(comment);
+                    }
                 }
             }
-        } catch (SQLException e) {
-            log.error("Error reading cinema comments", e);
+
+            return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
+
+        } catch (final SQLException e) {
+            log.error("Error retrieving paginated cinema comments: {}", e.getMessage(), e);
+            return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
         }
-        return comments;
     }
 
     /**

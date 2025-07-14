@@ -14,6 +14,9 @@ import com.esprit.models.products.Product;
 import com.esprit.models.products.ProductCategory;
 import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.Page;
+import com.esprit.utils.PageRequest;
+import com.esprit.utils.PaginationQueryBuilder;
 import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +33,11 @@ import lombok.extern.slf4j.Slf4j;
 public class ProductService implements IService<Product> {
     private static final Logger LOGGER = Logger.getLogger(ProductService.class.getName());
     private final Connection connection;
+
+    // Allowed columns for sorting to prevent SQL injection
+    private static final String[] ALLOWED_SORT_COLUMNS = {
+            "id", "name", "price", "image", "description", "quantity"
+    };
 
     /**
      * Constructs a new ProductService instance.
@@ -127,27 +135,48 @@ public class ProductService implements IService<Product> {
 
     @Override
     /**
-     * Performs read operation.
+     * Retrieves products with pagination support.
      *
-     * @return the result of the operation
+     * @param pageRequest the pagination parameters
+     * @return a page of products
      */
-    public List<Product> read() {
-        final List<Product> products = new ArrayList<>();
-        final String req = "SELECT DISTINCT p.* FROM products p";
-        try {
-            final PreparedStatement pst = this.connection.prepareStatement(req);
-            final ResultSet rs = pst.executeQuery();
-            while (rs.next()) {
-                final Product product = Product.builder().id(rs.getLong("id")).name(rs.getString("name"))
-                        .price(rs.getInt("price")).image(rs.getString("image")).description(rs.getString("description"))
-                        .quantity(rs.getInt("quantity")).categories(getCategoriesForProduct(rs.getLong("id"))).build();
-                products.add(product);
-                ProductService.LOGGER.info(product.toString());
-            }
-        } catch (final SQLException e) {
-            ProductService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
+    public Page<Product> read(PageRequest pageRequest) {
+        final List<Product> content = new ArrayList<>();
+        final String baseQuery = "SELECT DISTINCT p.* FROM products p";
+
+        // Validate sort column to prevent SQL injection
+        if (pageRequest.hasSorting() &&
+                !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
+            log.warn("Invalid sort column: {}. Using default sorting.", pageRequest.getSortBy());
+            pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
-        return products;
+
+        try {
+            // Get total count
+            final String countQuery = PaginationQueryBuilder.buildCountQuery(baseQuery);
+            final long totalElements = PaginationQueryBuilder.executeCountQuery(connection, countQuery);
+
+            // Get paginated results
+            final String paginatedQuery = PaginationQueryBuilder.buildPaginatedQuery(baseQuery, pageRequest);
+
+            try (PreparedStatement stmt = connection.prepareStatement(paginatedQuery);
+                    ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    final Product product = Product.builder().id(rs.getLong("id")).name(rs.getString("name"))
+                            .price(rs.getInt("price")).image(rs.getString("image"))
+                            .description(rs.getString("description"))
+                            .quantity(rs.getInt("quantity")).categories(getCategoriesForProduct(rs.getLong("id")))
+                            .build();
+                    content.add(product);
+                }
+            }
+
+            return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
+
+        } catch (final SQLException e) {
+            log.error("Error retrieving paginated products: {}", e.getMessage(), e);
+            return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
+        }
     }
 
     /**

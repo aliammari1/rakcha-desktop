@@ -9,6 +9,7 @@ import com.esprit.models.cinemas.Cinema;
 import com.esprit.models.films.Film;
 import com.esprit.services.cinemas.CinemaService;
 import com.esprit.services.films.FilmCinemaService;
+import com.esprit.utils.PageRequest;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -269,7 +270,7 @@ public class DashboardAdminController {
      */
     private void loadCinemas() {
         final CinemaService cinemaService = new CinemaService();
-        final List<Cinema> cinemas = cinemaService.read();
+        final List<Cinema> cinemas = cinemaService.read(PageRequest.defaultPage()).getContent();
         final ObservableList<Cinema> cinemaObservableList = FXCollections.observableArrayList(cinemas);
         this.listCinema.setItems(cinemaObservableList);
     }
@@ -282,7 +283,7 @@ public class DashboardAdminController {
      */
     private List<Cinema> getAllCinemas() {
         final CinemaService cinemaService = new CinemaService();
-        return cinemaService.read();
+        return cinemaService.read(PageRequest.defaultPage()).getContent();
     }
 
     /**

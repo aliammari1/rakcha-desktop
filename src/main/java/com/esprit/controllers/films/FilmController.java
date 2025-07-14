@@ -24,6 +24,7 @@ import com.esprit.models.films.*;
 import com.esprit.services.cinemas.CinemaService;
 import com.esprit.services.films.*;
 import com.esprit.utils.CloudinaryStorage;
+import com.esprit.utils.PageRequest;
 
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleLongProperty;
@@ -168,14 +169,16 @@ public class FilmController {
         final FilmService fs = new FilmService();
         final CinemaService cinemaService = new CinemaService();
         final ActorService actorService = new ActorService();
-        final List<Actor> actors = actorService.read();
+        PageRequest actorPageRequest = new PageRequest(0, 10);
+        final List<Actor> actors = actorService.read(actorPageRequest).getContent();
         final List<String> actorNames = actors.stream().map(Actor::getName).collect(Collectors.toList());
         this.Actorcheck_ComboBox1.getItems().addAll(actorNames);
         this.Actorcheck_ComboBox1.getItems().forEach(item -> {
             final Tooltip tooltip2 = new Tooltip("Tooltip text for " + item); // Create a tooltip for each item
             Tooltip.install(this.Actorcheck_ComboBox1, tooltip2); // Set the tooltip for the ComboBox
         });
-        final List<Cinema> cinemaList = cinemaService.read();
+        PageRequest cinemaPageRequest = new PageRequest(0, 10);
+        final List<Cinema> cinemaList = cinemaService.read(cinemaPageRequest).getContent();
         final List<String> cinemaNames = cinemaList.stream().map(Cinema::getName).collect(Collectors.toList());
         this.idcinemaFilm_comboBox.getItems().addAll(cinemaNames);
         this.idcinemaFilm_comboBox.getItems().forEach(item -> {
@@ -184,7 +187,8 @@ public class FilmController {
         });
         // Populate the CheckComboBox with category names
         final CategoryService categoryService = new CategoryService();
-        final List<Category> categories = categoryService.read();
+        PageRequest categoryPageRequest = new PageRequest(0, 10);
+        final List<Category> categories = categoryService.read(categoryPageRequest).getContent();
         final List<String> categoryNames = categories.stream().map(Category::getName).collect(Collectors.toList());
         this.Categorychecj_ComboBox.getItems().addAll(categoryNames);
         this.filteredActors = new FilteredList<>(this.filmCategory_tableView1.getItems());
@@ -469,7 +473,9 @@ public class FilmController {
             this.setupCellFactory();
             this.setupCellOnEditCommit();
             final FilmService filmService = new FilmService();
-            final ObservableList<Film> obF = FXCollections.observableArrayList(filmService.read());
+            PageRequest filmPageRequest = new PageRequest(0, 10);
+            final ObservableList<Film> obF = FXCollections
+                    .observableArrayList(filmService.read(filmPageRequest).getContent());
             this.filmCategory_tableView1.setItems(obF);
         } catch (final Exception e) {
             FilmController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
@@ -1211,8 +1217,9 @@ public class FilmController {
                             final TableColumn.CellDataFeatures<Film, CheckComboBox<String>> p) {
                         final CheckComboBox<String> checkComboBox = new CheckComboBox<>();
                         final List<String> l = new ArrayList<>();
+                        PageRequest categoryPageRequest = new PageRequest(0, 10);
                         final CategoryService cs = new CategoryService();
-                        for (final Category c : cs.read())
+                        for (final Category c : cs.read(categoryPageRequest).getContent())
                             l.add(c.getName());
                         checkComboBox.getItems().addAll(l);
                         final FilmCategoryService fcs = new FilmCategoryService();
@@ -1325,8 +1332,9 @@ public class FilmController {
                             final TableColumn.CellDataFeatures<Film, CheckComboBox<String>> filmcategoryStringCellDataFeatures) {
                         final CheckComboBox<String> checkComboBox = new CheckComboBox<>();
                         final List<String> l = new ArrayList<>();
+                        PageRequest actorPageRequest = new PageRequest(0, 10);
                         final ActorService cs = new ActorService();
-                        for (final Actor a : cs.read())
+                        for (final Actor a : cs.read(actorPageRequest).getContent())
                             l.add(a.getName());
                         checkComboBox.getItems().addAll(l);
                         final ActorFilmService afs = new ActorFilmService();
@@ -1392,8 +1400,9 @@ public class FilmController {
                             final TableColumn.CellDataFeatures<Film, CheckComboBox<String>> filmcategoryStringCellDataFeatures) {
                         final CheckComboBox<String> checkComboBox = new CheckComboBox<>();
                         final List<String> l = new ArrayList<>();
+                        PageRequest pageRequest = new PageRequest(0, 10);
                         final CinemaService cs = new CinemaService();
-                        for (final Cinema c : cs.read())
+                        for (final Cinema c : cs.read(pageRequest).getContent())
                             l.add(c.getName());
                         checkComboBox.getItems().addAll(l);
                         final FilmCinemaService cfs = new FilmCinemaService();

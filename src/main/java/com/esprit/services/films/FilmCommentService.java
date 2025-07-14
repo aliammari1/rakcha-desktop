@@ -14,6 +14,8 @@ import com.esprit.models.users.Client;
 import com.esprit.services.IService;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.Page;
+import com.esprit.utils.PageRequest;
 import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
@@ -82,38 +84,6 @@ public class FilmCommentService implements IService<FilmComment> {
 
     @Override
     /**
-     * Performs read operation.
-     *
-     * @return the result of the operation
-     */
-    public List<FilmComment> read() {
-        final List<FilmComment> commentaire = new ArrayList<>();
-        final String req = "SELECT * FROM film_comments";
-        try (final PreparedStatement pst = this.connection.prepareStatement(req);
-                final ResultSet rs = pst.executeQuery()) {
-            while (rs.next()) {
-                try {
-                    Client client = (Client) new UserService().getUserById(rs.getLong("user_id"));
-                    Film film = new FilmService().getFilm(rs.getLong("film_id"));
-
-                    if (client != null && film != null) {
-                        commentaire.add(FilmComment.builder().id(rs.getLong("id")).comment(rs.getString("comment"))
-                                .client(client).film(film).build());
-                    } else {
-                        log.warn("Missing required entities for comment ID: " + rs.getLong("id"));
-                    }
-                } catch (Exception e) {
-                    log.warn("Error loading comment relationships for comment ID: " + rs.getLong("id"), e);
-                }
-            }
-        } catch (final SQLException e) {
-            log.error("Error reading comments", e);
-        }
-        return commentaire;
-    }
-
-    @Override
-    /**
      * Updates an existing entity in the database.
      *
      * @param entity
@@ -147,5 +117,11 @@ public class FilmCommentService implements IService<FilmComment> {
             log.error("Error deleting comment", e);
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public Page<FilmComment> read(PageRequest pageRequest) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'read'");
     }
 }

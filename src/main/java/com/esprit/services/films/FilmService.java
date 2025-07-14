@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -22,6 +23,9 @@ import com.esprit.models.films.Film;
 import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
 import com.esprit.utils.FilmYoutubeTrailer;
+import com.esprit.utils.Page;
+import com.esprit.utils.PageRequest;
+import com.esprit.utils.PaginationQueryBuilder;
 import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +43,11 @@ public class FilmService implements IService<Film> {
     private static final Logger LOGGER = Logger.getLogger(FilmService.class.getName());
     static private int filmLastInsertID;
     Connection connection;
+
+    // Allowed columns for sorting to prevent SQL injection
+    private static final String[] ALLOWED_SORT_COLUMNS = {
+            "id", "name", "duration", "description", "release_year"
+    };
 
     /**
      * Constructs a new FilmService instance.
@@ -215,24 +224,62 @@ public class FilmService implements IService<Film> {
 
     @Override
     /**
-     * Performs read operation.
+     * Retrieves films with pagination support.
      *
-     * @return the result of the operation
+     * @param pageRequest the pagination parameters
+     * @return a page of films
      */
-    public List<Film> read() {
-        final List<Film> filmArrayList = new ArrayList<>();
-        final String req = "SELECT * from films";
-        try (final PreparedStatement pst = this.connection.prepareStatement(req)) {
-            final ResultSet rs = pst.executeQuery();
-            while (rs.next()) {
-                filmArrayList.add(Film.builder().id(rs.getLong("id")).name(rs.getString("name"))
-                        .image(rs.getString("image")).duration(rs.getTime("duration"))
-                        .description(rs.getString("description")).releaseYear(rs.getInt("release_year")).build());
-            }
-        } catch (final SQLException e) {
-            FilmService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
+    public Page<Film> read(PageRequest pageRequest) {
+        final List<Film> content = new ArrayList<>();
+        final String baseQuery = "SELECT * FROM films";
+
+        // Validate sort column to prevent SQL injection
+        if (pageRequest.hasSorting() &&
+                !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
+            LOGGER.warning("Invalid sort column: " + pageRequest.getSortBy() + ". Using default sorting.");
+            pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
-        return filmArrayList;
+
+        try {
+            // Get total count
+            final String countQuery = PaginationQueryBuilder.buildCountQuery(baseQuery);
+            final long totalElements = PaginationQueryBuilder.executeCountQuery(connection, countQuery);
+
+            // Get paginated results
+            final String paginatedQuery = PaginationQueryBuilder.buildPaginatedQuery(baseQuery, pageRequest);
+
+            try (final PreparedStatement pst = this.connection.prepareStatement(paginatedQuery)) {
+                final ResultSet rs = pst.executeQuery();
+                while (rs.next()) {
+                    final Film film = buildFilmFromResultSet(rs);
+                    content.add(film);
+                }
+            }
+
+            return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
+
+        } catch (final SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error retrieving paginated films: " + e.getMessage(), e);
+            return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
+        }
+    }
+
+    /**
+     * Helper method to build Film object from ResultSet.
+     *
+     * @param rs the ResultSet containing film data
+     * @return the Film object
+     * @throws SQLException if there's an error reading from ResultSet
+     */
+    private Film buildFilmFromResultSet(ResultSet rs) throws SQLException {
+        return Film.builder()
+                .id(rs.getLong("id"))
+                .name(rs.getString("name"))
+                .image(rs.getString("image"))
+                .duration(rs.getTime("duration"))
+                .description(rs.getString("description"))
+                .releaseYear(rs.getInt("release_year"))
+                .build();
     }
 
     /**
@@ -240,20 +287,25 @@ public class FilmService implements IService<Film> {
      *
      * @return the result of the operation
      */
-    public List<Film> sort(final String p) {
+    public Page<Film> sort(PageRequest pageRequest, final String p) {
         final List<Film> filmArrayList = new ArrayList<>();
-        final String req = "SELECT * from films ORDER BY %s".formatted(p);
+
+        // Validate sort column to prevent SQL injection
+        if (!PaginationQueryBuilder.isValidSortColumn(p, ALLOWED_SORT_COLUMNS)) {
+            LOGGER.warning("Invalid sort column: " + p + ". Using default sorting by id.");
+            return read(pageRequest); // Return default sorted results
+        }
+
+        final String req = "SELECT * from films ORDER BY " + p;
         try (final PreparedStatement pst = this.connection.prepareStatement(req)) {
             final ResultSet rs = pst.executeQuery();
             while (rs.next()) {
-                filmArrayList.add(Film.builder().id(rs.getLong("id")).name(rs.getString("name"))
-                        .image(rs.getString("image")).duration(rs.getTime("duration"))
-                        .description(rs.getString("description")).releaseYear(rs.getInt("release_year")).build());
+                filmArrayList.add(buildFilmFromResultSet(rs));
             }
         } catch (final SQLException e) {
             FilmService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
-        return filmArrayList;
+        return new Page<>(filmArrayList, pageRequest.getPage(), pageRequest.getSize(), filmArrayList.size());
     }
 
     /**
@@ -268,9 +320,7 @@ public class FilmService implements IService<Film> {
             pst.setInt(1, id);
             final ResultSet rs = pst.executeQuery();
             if (rs.next()) {
-                film = Film.builder().id(rs.getLong("id")).name(rs.getString("name")).image(rs.getString("image"))
-                        .duration(rs.getTime("duration")).description(rs.getString("description"))
-                        .releaseYear(rs.getInt("release_year")).build();
+                film = buildFilmFromResultSet(rs);
             }
         } catch (final SQLException e) {
             FilmService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
@@ -331,9 +381,7 @@ public class FilmService implements IService<Film> {
             stmt.setLong(1, film_id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return Film.builder().id(rs.getLong("id")).name(rs.getString("name")).image(rs.getString("image"))
-                            .duration(rs.getTime("duration")).description(rs.getString("description"))
-                            .releaseYear(rs.getInt("release_year")).build();
+                    return buildFilmFromResultSet(rs);
                 }
             }
         } catch (SQLException e) {
@@ -354,9 +402,7 @@ public class FilmService implements IService<Film> {
             pst.setString(1, nom_film);
             final ResultSet rs = pst.executeQuery();
             if (rs.next()) {
-                film = Film.builder().id(rs.getLong("id")).name(rs.getString("name")).image(rs.getString("image"))
-                        .duration(rs.getTime("duration")).description(rs.getString("description"))
-                        .releaseYear(rs.getInt("release_year")).build();
+                film = buildFilmFromResultSet(rs);
             }
         } catch (final SQLException e) {
             FilmService.LOGGER.log(Level.SEVERE, e.getMessage(), e);

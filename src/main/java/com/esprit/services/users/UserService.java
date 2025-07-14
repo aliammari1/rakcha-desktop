@@ -17,6 +17,9 @@ import com.esprit.models.users.Client;
 import com.esprit.models.users.User;
 import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.Page;
+import com.esprit.utils.PageRequest;
+import com.esprit.utils.PaginationQueryBuilder;
 import com.esprit.utils.TableCreator;
 import com.esprit.utils.UserMail;
 import com.esprit.utils.UserPDF;
@@ -37,6 +40,11 @@ import lombok.extern.slf4j.Slf4j;
 public class UserService implements IService<User> {
     private static final Logger LOGGER = Logger.getLogger(UserService.class.getName());
     Connection con;
+
+    // Allowed columns for sorting to prevent SQL injection
+    private static final String[] ALLOWED_SORT_COLUMNS = {
+            "id", "nom", "prenom", "num_telephone", "role", "adresse", "date_de_naissance", "email"
+    };
 
     /**
      * Constructs a new UserService instance.
@@ -137,22 +145,42 @@ public class UserService implements IService<User> {
         }
     }
 
+
     @Override
     /**
-     * Performs read operation.
+     * Retrieves users with pagination support.
      *
-     * @return the result of the operation
+     * @param pageRequest the pagination parameters
+     * @return a page of users
      */
-    public List<User> read() {
-        try {
-            final List<User> userList = new ArrayList<>();
-            final String query = "SELECT * FROM users";
-            final PreparedStatement statement = con.prepareStatement(query);
-            return getUsers(userList, statement);
-        } catch (final SQLException e) {
-            UserService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
+    public Page<User> read(PageRequest pageRequest) {
+        final List<User> content = new ArrayList<>();
+        final String baseQuery = "SELECT * FROM users";
+
+        // Validate sort column to prevent SQL injection
+        if (pageRequest.hasSorting() &&
+                !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
+            log.warn("Invalid sort column: {}. Using default sorting.", pageRequest.getSortBy());
+            pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
-        return null;
+
+        try {
+            // Get total count
+            final String countQuery = PaginationQueryBuilder.buildCountQuery(baseQuery);
+            final long totalElements = PaginationQueryBuilder.executeCountQuery(con, countQuery);
+
+            // Get paginated results
+            final String paginatedQuery = PaginationQueryBuilder.buildPaginatedQuery(baseQuery, pageRequest);
+            final PreparedStatement statement = con.prepareStatement(paginatedQuery);
+
+            getUsers(content, statement);
+
+            return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
+
+        } catch (final SQLException e) {
+            log.error("Error retrieving paginated users: {}", e.getMessage(), e);
+            return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
+        }
     }
 
     @Override

@@ -12,6 +12,9 @@ import com.esprit.models.films.Film;
 import com.esprit.services.IService;
 import com.esprit.services.films.FilmService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.Page;
+import com.esprit.utils.PageRequest;
+import com.esprit.utils.PaginationQueryBuilder;
 import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +33,11 @@ public class MovieSessionService implements IService<MovieSession> {
     private final CinemaService cinemaService;
     private final CinemaHallService cinemaHallService;
     private final FilmService filmService;
+
+    // Allowed columns for sorting to prevent SQL injection
+    private static final String[] ALLOWED_SORT_COLUMNS = {
+            "id", "film_id", "cinema_hall_id", "start_time", "end_time", "session_date", "price", "created_at"
+    };
 
     /**
      * Constructs a new MovieSessionService instance.
@@ -133,25 +141,46 @@ public class MovieSessionService implements IService<MovieSession> {
 
     @Override
     /**
-     * Performs read operation.
+     * Retrieves movie sessions with pagination support.
      *
-     * @return the result of the operation
+     * @param pageRequest the pagination parameters
+     * @return a page of movie sessions
      */
-    public List<MovieSession> read() {
-        List<MovieSession> movieSessions = new ArrayList<>();
-        String query = "SELECT * FROM movie_session";
-        try (PreparedStatement stmt = connection.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
+    public Page<MovieSession> read(PageRequest pageRequest) {
+        final List<MovieSession> content = new ArrayList<>();
+        final String baseQuery = "SELECT * FROM movie_session";
 
-            while (rs.next()) {
-                MovieSession session = buildMovieSession(rs);
-                if (session != null) {
-                    movieSessions.add(session);
+        // Validate sort column to prevent SQL injection
+        if (pageRequest.hasSorting() &&
+                !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
+            log.warn("Invalid sort column: {}. Using default sorting.", pageRequest.getSortBy());
+            pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
+        }
+
+        try {
+            // Get total count
+            final String countQuery = PaginationQueryBuilder.buildCountQuery(baseQuery);
+            final long totalElements = PaginationQueryBuilder.executeCountQuery(connection, countQuery);
+
+            // Get paginated results
+            final String paginatedQuery = PaginationQueryBuilder.buildPaginatedQuery(baseQuery, pageRequest);
+
+            try (PreparedStatement stmt = connection.prepareStatement(paginatedQuery);
+                    ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    MovieSession session = buildMovieSession(rs);
+                    if (session != null) {
+                        content.add(session);
+                    }
                 }
             }
-        } catch (SQLException e) {
-            log.error("Error reading movie sessions", e);
+
+            return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
+
+        } catch (final SQLException e) {
+            log.error("Error retrieving paginated movie sessions: {}", e.getMessage(), e);
+            return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
         }
-        return movieSessions;
     }
 
     /**

@@ -43,3 +43,4 @@ build/
 .env
 /logs
 **/examples
+RUNNING_PID

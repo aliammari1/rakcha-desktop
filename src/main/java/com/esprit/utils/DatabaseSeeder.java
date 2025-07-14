@@ -2,11 +2,9 @@ package com.esprit.utils;
 
 import java.sql.Date;
 import java.sql.Time;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 import com.esprit.models.cinemas.Cinema;
 import com.esprit.models.cinemas.CinemaHall;
@@ -259,7 +257,7 @@ public class DatabaseSeeder {
     private void seedCinemaHalls() {
         log.info("Seeding cinema halls...");
 
-        List<Cinema> cinemas = cinemaService.read();
+        List<Cinema> cinemas = cinemaService.read(PageRequest.defaultPage()).getContent();
         int hallCount = 0;
 
         for (Cinema cinema : cinemas) {
@@ -286,7 +284,7 @@ public class DatabaseSeeder {
     private void seedSeats() {
         log.info("Seeding seats...");
 
-        List<CinemaHall> halls = cinemaHallService.read();
+        List<CinemaHall> halls = cinemaHallService.read(PageRequest.defaultPage()).getContent();
         int totalSeats = 0;
 
         for (CinemaHall hall : halls) {
@@ -347,7 +345,7 @@ public class DatabaseSeeder {
     private void seedEpisodes() {
         log.info("Seeding episodes...");
 
-        List<Series> seriesList = seriesService.read();
+        List<Series> seriesList = seriesService.read(PageRequest.defaultPage()).getContent();
         int episodeCount = 0;
 
         for (Series series : seriesList) {

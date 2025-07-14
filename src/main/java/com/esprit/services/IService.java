@@ -2,6 +2,9 @@ package com.esprit.services;
 
 import java.util.List;
 
+import com.esprit.utils.Page;
+import com.esprit.utils.PageRequest;
+
 /**
  * IService class provides functionality for the RAKCHA desktop application.
  * <p>
@@ -24,11 +27,12 @@ public interface IService<T> {
     void create(T t);
 
     /**
-     * Retrieves all entities of type T from the database.
+     * Retrieves entities with pagination support.
      * 
-     * @return a list of all entities
+     * @param pageRequest the pagination parameters
+     * @return a page of entities
      */
-    List<T> read();
+    Page<T> read(PageRequest pageRequest);
 
     /**
      * Updates an existing entity in the database.

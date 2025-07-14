@@ -1,0 +1,256 @@
+name: JavaFX CI/CD Pipeline with JavaPackager
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  release:
+    types: [created]
+
+env:
+  JAVA_VERSION: '21'
+  MAVEN_OPTS: '-Xmx2g'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: maven
+    
+    - name: Verify Maven configuration
+      run: mvn help:effective-pom -q
+    
+    - name: Run tests
+      run: mvn clean test
+    
+    - name: Build JAR
+      run: mvn clean package -DskipTests
+    
+    - name: Upload JAR artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: jar-artifact
+        path: target/*.jar
+        retention-days: 30
+
+  package-windows:
+    needs: build-and-test
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: maven
+    
+    - name: Install WiX Toolset
+      run: |
+        choco install wixtoolset --version=3.14.1 -y
+        echo "C:\Program Files (x86)\WiX Toolset v3.14\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+    
+    - name: Verify WiX installation
+      run: light.exe -?
+    
+    - name: Package Windows application
+      run: |
+        mvn clean package io.github.fvarrui:javapackager:1.7.6:package -DskipTests `
+          -Dplatform=windows `
+          -DbundleJre=true `
+          -DgenerateInstaller=true `
+          -DadministratorRequired=false
+    
+    - name: Upload Windows installer
+      uses: actions/upload-artifact@v4
+      with:
+        name: windows-installer
+        path: target/*.exe
+        retention-days: 30
+    
+    - name: Upload Windows MSI
+      uses: actions/upload-artifact@v4
+      with:
+        name: windows-msi
+        path: target/*.msi
+        retention-days: 30
+      if: always()
+
+  package-linux:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: maven
+    
+    - name: Install Linux packaging tools
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y fakeroot dpkg-dev rpm
+    
+    - name: Package Linux application
+      run: |
+        mvn clean package io.github.fvarrui:javapackager:1.7.6:package -DskipTests \
+          -Dplatform=linux \
+          -DbundleJre=true \
+          -DgenerateInstaller=true \
+          -DcreateZipball=true \
+          -DcreateAppImage=true
+    
+    - name: Upload Linux packages
+      uses: actions/upload-artifact@v4
+      with:
+        name: linux-packages
+        path: |
+          target/*.deb
+          target/*.rpm
+          target/*.zip
+          target/*.tar.gz
+        retention-days: 30
+
+  package-macos:
+    needs: build-and-test
+    runs-on: macos-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: maven
+    
+    - name: Package macOS application
+      run: |
+        mvn clean package io.github.fvarrui:javapackager:1.7.6:package -DskipTests \
+          -Dplatform=mac \
+          -DbundleJre=true \
+          -DgenerateInstaller=true \
+          -DcreateZipball=true
+    
+    - name: Upload macOS packages
+      uses: actions/upload-artifact@v4
+      with:
+        name: macos-packages
+        path: |
+          target/*.dmg
+          target/*.pkg
+          target/*.zip
+        retention-days: 30
+
+  quality-checks:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: maven
+    
+    - name: Run SpotBugs analysis
+      run: mvn spotbugs:check
+    
+    - name: Run OpenRewrite analysis
+      run: mvn rewrite:dryRun
+    
+    - name: Generate Javadocs
+      run: mvn javadoc:javadoc
+
+  release:
+    needs: [package-windows, package-linux, package-macos, quality-checks]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release'
+    
+    steps:
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: ./artifacts
+    
+    - name: Display artifact structure
+      run: find ./artifacts -type f -name "*"
+    
+    - name: Upload Windows installer to release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./artifacts/windows-installer/RakchaDesktop-${{ github.event.release.tag_name }}.exe
+        asset_name: RakchaDesktop-${{ github.event.release.tag_name }}-windows.exe
+        asset_content_type: application/octet-stream
+      continue-on-error: true
+    
+    - name: Upload Windows MSI to release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./artifacts/windows-msi/RakchaDesktop-${{ github.event.release.tag_name }}.msi
+        asset_name: RakchaDesktop-${{ github.event.release.tag_name }}-windows.msi
+        asset_content_type: application/octet-stream
+      continue-on-error: true
+    
+    - name: Upload Linux DEB to release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./artifacts/linux-packages/rakcha-desktop_${{ github.event.release.tag_name }}_amd64.deb
+        asset_name: RakchaDesktop-${{ github.event.release.tag_name }}-linux.deb
+        asset_content_type: application/vnd.debian.binary-package
+      continue-on-error: true
+    
+    - name: Upload macOS DMG to release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./artifacts/macos-packages/RakchaDesktop-${{ github.event.release.tag_name }}.dmg
+        asset_name: RakchaDesktop-${{ github.event.release.tag_name }}-macos.dmg
+        asset_content_type: application/x-apple-diskimage
+      continue-on-error: true
+
+  notify-deployment:
+    needs: release
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release' && success()
+    
+    steps:
+    - name: Notify successful deployment
+      run: |
+        echo "✅ Release ${{ github.event.release.tag_name }} has been successfully deployed!"
+        echo "📦 Windows, Linux, and macOS packages have been created and uploaded."

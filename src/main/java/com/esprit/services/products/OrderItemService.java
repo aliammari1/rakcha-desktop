@@ -15,6 +15,8 @@ import com.esprit.models.products.OrderItem;
 import com.esprit.models.products.Product;
 import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.Page;
+import com.esprit.utils.PageRequest;
 import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
@@ -72,7 +74,6 @@ public class OrderItemService implements IService<OrderItem> {
         }
     }
 
-    @Override
     /**
      * Performs read operation.
      *
@@ -251,5 +252,11 @@ public class OrderItemService implements IService<OrderItem> {
         }
         return averageRated.stream().sorted((OrderItem c1, OrderItem c2) -> c2.getQuantity() - c1.getQuantity())
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<OrderItem> read(PageRequest pageRequest) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'read'");
     }
 }

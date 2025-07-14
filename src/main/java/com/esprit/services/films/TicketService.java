@@ -14,6 +14,8 @@ import com.esprit.services.IService;
 import com.esprit.services.cinemas.MovieSessionService;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.Page;
+import com.esprit.utils.PageRequest;
 import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
@@ -86,7 +88,6 @@ public class TicketService implements IService<Ticket> {
         }
     }
 
-    @Override
     /**
      * Performs read operation.
      *
@@ -156,5 +157,11 @@ public class TicketService implements IService<Ticket> {
             log.error("Error deleting ticket", e);
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public Page<Ticket> read(PageRequest pageRequest) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'read'");
     }
 }

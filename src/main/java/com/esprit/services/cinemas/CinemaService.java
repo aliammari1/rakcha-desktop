@@ -9,6 +9,9 @@ import com.esprit.models.users.CinemaManager;
 import com.esprit.services.IService;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.Page;
+import com.esprit.utils.PageRequest;
+import com.esprit.utils.PaginationQueryBuilder;
 import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +28,11 @@ import lombok.extern.slf4j.Slf4j;
 public class CinemaService implements IService<Cinema> {
     private final Connection connection;
     private final UserService userService;
+
+    // Allowed columns for sorting to prevent SQL injection
+    private static final String[] ALLOWED_SORT_COLUMNS = {
+            "id", "name", "location", "phone", "email", "description"
+    };
 
     /**
      * Constructs a new CinemaService instance.
@@ -121,25 +129,46 @@ public class CinemaService implements IService<Cinema> {
 
     @Override
     /**
-     * Performs read operation.
+     * Retrieves cinemas with pagination support.
      *
-     * @return the result of the operation
+     * @param pageRequest the pagination parameters
+     * @return a page of cinemas
      */
-    public List<Cinema> read() {
-        List<Cinema> cinemas = new ArrayList<>();
-        String query = "SELECT * FROM cinema";
-        try (PreparedStatement stmt = connection.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
+    public Page<Cinema> read(PageRequest pageRequest) {
+        final List<Cinema> content = new ArrayList<>();
+        final String baseQuery = "SELECT * FROM cinema";
 
-            while (rs.next()) {
-                Cinema cinema = buildCinema(rs);
-                if (cinema != null) {
-                    cinemas.add(cinema);
+        // Validate sort column to prevent SQL injection
+        if (pageRequest.hasSorting() &&
+                !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
+            log.warn("Invalid sort column: {}. Using default sorting.", pageRequest.getSortBy());
+            pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
+        }
+
+        try {
+            // Get total count
+            final String countQuery = PaginationQueryBuilder.buildCountQuery(baseQuery);
+            final long totalElements = PaginationQueryBuilder.executeCountQuery(connection, countQuery);
+
+            // Get paginated results
+            final String paginatedQuery = PaginationQueryBuilder.buildPaginatedQuery(baseQuery, pageRequest);
+
+            try (PreparedStatement stmt = connection.prepareStatement(paginatedQuery);
+                    ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Cinema cinema = buildCinema(rs);
+                    if (cinema != null) {
+                        content.add(cinema);
+                    }
                 }
             }
-        } catch (SQLException e) {
-            log.error("Error reading cinemas", e);
+
+            return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
+
+        } catch (final SQLException e) {
+            log.error("Error retrieving paginated cinemas: {}", e.getMessage(), e);
+            return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
         }
-        return cinemas;
     }
 
     /**
@@ -148,10 +177,20 @@ public class CinemaService implements IService<Cinema> {
      * @param orderBy the field to sort by
      * @return sorted list of cinemas
      */
-    public List<Cinema> sort(String orderBy) {
+    public Page<Cinema> sort(PageRequest pageRequest, String orderBy) {
         List<Cinema> cinemas = new ArrayList<>();
-        String query = "SELECT * FROM cinema ORDER BY " + orderBy;
-        try (PreparedStatement stmt = connection.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
+
+        // Validate sort column to prevent SQL injection
+        if (!PaginationQueryBuilder.isValidSortColumn(orderBy, ALLOWED_SORT_COLUMNS)) {
+            log.warn("Invalid sort column: {}. Using default sorting by id.", orderBy);
+            return read(pageRequest); // Return default sorted results
+        }
+
+        String query = "SELECT * FROM cinema ORDER BY " + orderBy + " LIMIT ? OFFSET ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, pageRequest.getSize());
+            stmt.setInt(2, pageRequest.getPage() * pageRequest.getSize());
+            ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
                 Cinema cinema = buildCinema(rs);
@@ -162,7 +201,7 @@ public class CinemaService implements IService<Cinema> {
         } catch (SQLException e) {
             log.error("Error sorting cinemas", e);
         }
-        return cinemas;
+        return new Page<>(cinemas, pageRequest.getPage(), pageRequest.getSize(), cinemas.size());
     }
 
     /**

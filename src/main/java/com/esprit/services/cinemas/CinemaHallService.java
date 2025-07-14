@@ -8,6 +8,9 @@ import com.esprit.models.cinemas.Cinema;
 import com.esprit.models.cinemas.CinemaHall;
 import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.Page;
+import com.esprit.utils.PageRequest;
+import com.esprit.utils.PaginationQueryBuilder;
 import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +29,11 @@ import lombok.extern.slf4j.Slf4j;
 public class CinemaHallService implements IService<CinemaHall> {
     private final Connection connection;
     private final CinemaService cinemaService;
+
+    // Allowed columns for sorting to prevent SQL injection
+    private static final String[] ALLOWED_SORT_COLUMNS = {
+            "id", "cinema_id", "seat_capacity", "name", "screen_type", "is_available"
+    };
 
     /**
      * Constructs a new CinemaHallService with database connection and required
@@ -116,27 +124,49 @@ public class CinemaHallService implements IService<CinemaHall> {
         }
     }
 
+
     @Override
     /**
-     * Performs read operation.
+     * Retrieves cinema halls with pagination support.
      *
-     * @return the result of the operation
+     * @param pageRequest the pagination parameters
+     * @return a page of cinema halls
      */
-    public List<CinemaHall> read() {
-        List<CinemaHall> cinemaHalls = new ArrayList<>();
-        String query = "SELECT * FROM cinema_hall";
-        try (PreparedStatement stmt = connection.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
+    public Page<CinemaHall> read(PageRequest pageRequest) {
+        final List<CinemaHall> content = new ArrayList<>();
+        final String baseQuery = "SELECT * FROM cinema_hall";
 
-            while (rs.next()) {
-                CinemaHall hall = buildCinemaHall(rs);
-                if (hall != null) {
-                    cinemaHalls.add(hall);
+        // Validate sort column to prevent SQL injection
+        if (pageRequest.hasSorting() &&
+                !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
+            log.warn("Invalid sort column: {}. Using default sorting.", pageRequest.getSortBy());
+            pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
+        }
+
+        try {
+            // Get total count
+            final String countQuery = PaginationQueryBuilder.buildCountQuery(baseQuery);
+            final long totalElements = PaginationQueryBuilder.executeCountQuery(connection, countQuery);
+
+            // Get paginated results
+            final String paginatedQuery = PaginationQueryBuilder.buildPaginatedQuery(baseQuery, pageRequest);
+
+            try (PreparedStatement stmt = connection.prepareStatement(paginatedQuery);
+                    ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    CinemaHall hall = buildCinemaHall(rs);
+                    if (hall != null) {
+                        content.add(hall);
+                    }
                 }
             }
-        } catch (SQLException e) {
-            log.error("Error reading cinema halls", e);
+
+            return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
+
+        } catch (final SQLException e) {
+            log.error("Error retrieving paginated cinema halls: {}", e.getMessage(), e);
+            return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
         }
-        return cinemaHalls;
     }
 
     /**

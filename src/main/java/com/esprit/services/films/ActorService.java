@@ -11,6 +11,9 @@ import java.util.logging.Logger;
 import com.esprit.models.films.Actor;
 import com.esprit.services.IService;
 import com.esprit.utils.DataSource;
+import com.esprit.utils.Page;
+import com.esprit.utils.PageRequest;
+import com.esprit.utils.PaginationQueryBuilder;
 import com.esprit.utils.TableCreator;
 
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +41,11 @@ import lombok.extern.slf4j.Slf4j;
 public class ActorService implements IService<Actor> {
     private static final Logger LOGGER = Logger.getLogger(ActorService.class.getName());
     Connection connection;
+
+    // Allowed columns for sorting to prevent SQL injection
+    private static final String[] ALLOWED_SORT_COLUMNS = {
+            "id", "name", "image", "biography", "number_of_appearances"
+    };
 
     /**
      * Constructor that initializes the database connection and creates tables if
@@ -92,32 +100,47 @@ public class ActorService implements IService<Actor> {
         }
     }
 
-    /**
-     * Retrieves all actors from the database.
-     * 
-     * @return a list of all actors
-     */
-    /**
-     * Retrieves all actors from the database.
-     * 
-     * @return a list of all actors
-     */
     @Override
-    public List<Actor> read() {
-        final List<Actor> actorArrayList = new ArrayList<>();
-        final String req = "SELECT * from actors";
-        try (final PreparedStatement pst = this.connection.prepareStatement(req);
-                final ResultSet rs = pst.executeQuery()) {
-            while (rs.next()) {
-                actorArrayList.add(Actor.builder().id(rs.getLong("id")).name(rs.getString("name"))
-                        .image(rs.getString("image")).biography(rs.getString("biography"))
-                        .numberOfAppearances(rs.getInt("number_of_appearances")).build());
-                log.info("Loaded actor: " + actorArrayList.get(actorArrayList.size() - 1).toString());
-            }
-        } catch (final SQLException e) {
-            log.error("Error reading actors", e);
+    /**
+     * Retrieves actors with pagination support.
+     *
+     * @param pageRequest the pagination parameters
+     * @return a page of actors
+     */
+    public Page<Actor> read(PageRequest pageRequest) {
+        final List<Actor> content = new ArrayList<>();
+        final String baseQuery = "SELECT * FROM actors";
+
+        // Validate sort column to prevent SQL injection
+        if (pageRequest.hasSorting() &&
+                !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
+            log.warn("Invalid sort column: {}. Using default sorting.", pageRequest.getSortBy());
+            pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
-        return actorArrayList;
+
+        try {
+            // Get total count
+            final String countQuery = PaginationQueryBuilder.buildCountQuery(baseQuery);
+            final long totalElements = PaginationQueryBuilder.executeCountQuery(connection, countQuery);
+
+            // Get paginated results
+            final String paginatedQuery = PaginationQueryBuilder.buildPaginatedQuery(baseQuery, pageRequest);
+
+            try (PreparedStatement stmt = connection.prepareStatement(paginatedQuery);
+                    ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    content.add(Actor.builder().id(rs.getLong("id")).name(rs.getString("name"))
+                            .image(rs.getString("image")).biography(rs.getString("biography"))
+                            .numberOfAppearances(rs.getInt("number_of_appearances")).build());
+                }
+            }
+
+            return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
+
+        } catch (final SQLException e) {
+            log.error("Error retrieving paginated actors: {}", e.getMessage(), e);
+            return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
+        }
     }
 
     /**

@@ -7,6 +7,7 @@ import java.util.Objects;
 
 import com.esprit.models.series.Category;
 import com.esprit.services.series.IServiceCategorieImpl;
+import com.esprit.utils.PageRequest;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -53,7 +54,8 @@ public class CategoriesClientController {
         // recupuration de liste de plat ajouter au shoppingcart
         List<Category> categories = new ArrayList<>();
         try {
-            categories = iServiceCategorie.read();
+            PageRequest pageRequest = new PageRequest(0, 10);
+            categories = iServiceCategorie.read(pageRequest).getContent();
         } catch (final Exception e) {
             throw new RuntimeException(e);
         }
