@@ -165,10 +165,32 @@ jobs:
           target/*.zip
         retention-days: 30
 
+  collect-artifacts:
+    needs: [package-windows, package-linux, package-macos]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: ./artifacts
+    
+    - name: Display artifact structure
+      run: find ./artifacts -type f -name "*"
+    
+    - name: Archive all artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: all-release-artifacts
+        path: ./artifacts
+        retention-days: 30
+
   release:
     needs: [package-windows, package-linux, package-macos]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'release')    
+    if: github.event_name == 'release'
+    
     steps:
     - name: Download all artifacts
       uses: actions/download-artifact@v4
@@ -232,3 +254,36 @@ jobs:
       run: |
         echo "✅ Release ${{ github.event.release.tag_name }} has been successfully deployed!"
         echo "📦 Windows, Linux, and macOS packages have been created and uploaded."
+
+  auto-release:
+    needs: [collect-artifacts]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+    
+    - name: Install semantic-release
+      run: |
+        npm install -g semantic-release @semantic-release/changelog @semantic-release/git @semantic-release/github
+    
+    - name: Create semantic release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        npx semantic-release
+    
+    - name: Download artifacts for release
+      uses: actions/download-artifact@v4
+      with:
+        name: all-release-artifacts
+        path: ./release-artifacts
