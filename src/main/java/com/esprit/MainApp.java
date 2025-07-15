@@ -33,7 +33,7 @@ public class MainApp extends Application {
      * @return the result of the operation
      */
     public void start(final Stage primaryStage) throws Exception {
-        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/films/InterfaceFilm.fxml"));
+        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/users/Login.fxml"));
         final Parent root = loader.load();
         final Scene scene = new Scene(root);
         primaryStage.setScene(scene);

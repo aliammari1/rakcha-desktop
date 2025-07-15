@@ -10,7 +10,7 @@ on:
 
 env:
   JAVA_VERSION: '21'
-  MAVEN_OPTS: '-Xmx2g'
+  MAVEN_OPTS: '-Xmx3g -Dmaven.repo.local=.m2/repository'
 
 jobs:
   build-and-test:
@@ -27,11 +27,18 @@ jobs:
         distribution: 'temurin'
         cache: maven
     
+    - name: Cache Maven dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
+    
     - name: Verify Maven configuration
       run: mvn help:effective-pom -q
     
-    - name: Run tests
-      run: mvn clean test
+    - name: Run tests with headless mode
+      run: mvn clean test -Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw
     
     - name: Build JAR
       run: mvn clean package -DskipTests
@@ -58,37 +65,60 @@ jobs:
         distribution: 'temurin'
         cache: maven
     
+    - name: Cache Maven dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
+
     - name: Install WiX Toolset
       shell: pwsh
       run: |
-        if (!(choco list --local-only | Select-String 'wixtoolset')) {
+        if (!(Get-Command "light.exe" -ErrorAction SilentlyContinue)) {
           choco install wixtoolset -y
+          echo "C:\Program Files (x86)\WiX Toolset v3.14\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
         }
-        echo "C:\Program Files (x86)\WiX Toolset v3.14\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
     - name: Verify WiX installation
-      run: light.exe -?
+      shell: pwsh
+      run: |
+        $env:PATH += ";C:\Program Files (x86)\WiX Toolset v3.14\bin"
+        light.exe -?
     
     - name: Package Windows application
+      shell: pwsh
       run: |
+        $env:PATH += ";C:\Program Files (x86)\WiX Toolset v3.14\bin"
         mvn clean package io.github.fvarrui:javapackager:1.7.6:package -DskipTests `
           -Dplatform=windows `
           -DbundleJre=true `
           -DgenerateInstaller=true `
-          -DadministratorRequired=false
+          -DadministratorRequired=false `
+          -Dverbose=true
     
-    - name: Upload Windows installer
+    - name: List output files
+      shell: pwsh
+      run: |
+        Get-ChildItem -Recurse target | Where-Object { $_.Extension -in @('.exe', '.msi') } | ForEach-Object { Write-Host $_.FullName }
+    
+    - name: Upload Windows executables
       uses: actions/upload-artifact@v4
       with:
-        name: windows-installer
-        path: target/*.exe
+        name: windows-executables
+        path: |
+          target/*.exe
+          target/**/*.exe
         retention-days: 30
+      if: always()
     
-    - name: Upload Windows MSI
+    - name: Upload Windows MSI installers
       uses: actions/upload-artifact@v4
       with:
         name: windows-msi
-        path: target/*.msi
+        path: |
+          target/*.msi
+          target/**/*.msi
         retention-days: 30
       if: always()
 
@@ -107,10 +137,17 @@ jobs:
         distribution: 'temurin'
         cache: maven
     
+    - name: Cache Maven dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
+    
     - name: Install Linux packaging tools
       run: |
         sudo apt-get update
-        sudo apt-get install -y fakeroot dpkg-dev rpm
+        sudo apt-get install -y fakeroot dpkg-dev rpm binutils
     
     - name: Package Linux application
       run: |
@@ -118,8 +155,11 @@ jobs:
           -Dplatform=linux \
           -DbundleJre=true \
           -DgenerateInstaller=true \
-          -DcreateZipball=true \
-          -DcreateAppImage=true
+          -Dverbose=true
+    
+    - name: List output files
+      run: |
+        find target -type f \( -name "*.deb" -o -name "*.rpm" -o -name "*.tar.gz" -o -name "*.zip" \) -exec ls -la {} \;
     
     - name: Upload Linux packages
       uses: actions/upload-artifact@v4
@@ -130,7 +170,12 @@ jobs:
           target/*.rpm
           target/*.zip
           target/*.tar.gz
+          target/**/*.deb
+          target/**/*.rpm
+          target/**/*.zip
+          target/**/*.tar.gz
         retention-days: 30
+      if: always()
 
   package-macos:
     needs: build-and-test
@@ -147,13 +192,24 @@ jobs:
         distribution: 'temurin'
         cache: maven
     
+    - name: Cache Maven dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
+    
     - name: Package macOS application
       run: |
         mvn clean package io.github.fvarrui:javapackager:1.7.6:package -DskipTests \
           -Dplatform=mac \
           -DbundleJre=true \
           -DgenerateInstaller=true \
-          -DcreateZipball=true
+          -Dverbose=true
+    
+    - name: List output files
+      run: |
+        find target -type f \( -name "*.dmg" -o -name "*.pkg" -o -name "*.zip" \) -exec ls -la {} \;
     
     - name: Upload macOS packages
       uses: actions/upload-artifact@v4
@@ -163,7 +219,11 @@ jobs:
           target/*.dmg
           target/*.pkg
           target/*.zip
+          target/**/*.dmg
+          target/**/*.pkg
+          target/**/*.zip
         retention-days: 30
+      if: always()
 
   collect-artifacts:
     needs: [package-windows, package-linux, package-macos]
@@ -177,7 +237,7 @@ jobs:
         path: ./artifacts
     
     - name: Display artifact structure
-      run: find ./artifacts -type f -name "*"
+      run: find ./artifacts -type f -name "*" -exec ls -la {} \;
     
     - name: Archive all artifacts
       uses: actions/upload-artifact@v4
@@ -198,50 +258,78 @@ jobs:
         path: ./artifacts
     
     - name: Display artifact structure
-      run: find ./artifacts -type f -name "*"
+      run: find ./artifacts -type f -name "*" -exec ls -la {} \;
     
-    - name: Upload Windows installer to release
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ github.event.release.upload_url }}
-        asset_path: ./artifacts/windows-installer/RakchaDesktop-${{ github.event.release.tag_name }}.exe
-        asset_name: RakchaDesktop-${{ github.event.release.tag_name }}-windows.exe
-        asset_content_type: application/octet-stream
+    - name: Find and upload Windows installer
+      shell: bash
+      run: |
+        WIN_EXE=$(find ./artifacts -name "*.exe" -type f | head -1)
+        if [ -n "$WIN_EXE" ]; then
+          echo "Found Windows installer: $WIN_EXE"
+          curl -L \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: application/octet-stream" \
+            "${{ github.event.release.upload_url }}?name=RakchaDesktop-${{ github.event.release.tag_name }}-windows.exe" \
+            --data-binary "@$WIN_EXE" || echo "Failed to upload Windows installer"
+        else
+          echo "No Windows installer found"
+        fi
       continue-on-error: true
     
-    - name: Upload Windows MSI to release
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ github.event.release.upload_url }}
-        asset_path: ./artifacts/windows-msi/RakchaDesktop-${{ github.event.release.tag_name }}.msi
-        asset_name: RakchaDesktop-${{ github.event.release.tag_name }}-windows.msi
-        asset_content_type: application/octet-stream
+    - name: Find and upload Windows MSI
+      shell: bash
+      run: |
+        WIN_MSI=$(find ./artifacts -name "*.msi" -type f | head -1)
+        if [ -n "$WIN_MSI" ]; then
+          echo "Found Windows MSI: $WIN_MSI"
+          curl -L \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: application/octet-stream" \
+            "${{ github.event.release.upload_url }}?name=RakchaDesktop-${{ github.event.release.tag_name }}-windows.msi" \
+            --data-binary "@$WIN_MSI" || echo "Failed to upload Windows MSI"
+        else
+          echo "No Windows MSI found"
+        fi
       continue-on-error: true
     
-    - name: Upload Linux DEB to release
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ github.event.release.upload_url }}
-        asset_path: ./artifacts/linux-packages/rakcha-desktop_${{ github.event.release.tag_name }}_amd64.deb
-        asset_name: RakchaDesktop-${{ github.event.release.tag_name }}-linux.deb
-        asset_content_type: application/vnd.debian.binary-package
+    - name: Find and upload Linux DEB
+      shell: bash
+      run: |
+        LINUX_DEB=$(find ./artifacts -name "*.deb" -type f | head -1)
+        if [ -n "$LINUX_DEB" ]; then
+          echo "Found Linux DEB: $LINUX_DEB"
+          curl -L \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: application/vnd.debian.binary-package" \
+            "${{ github.event.release.upload_url }}?name=RakchaDesktop-${{ github.event.release.tag_name }}-linux.deb" \
+            --data-binary "@$LINUX_DEB" || echo "Failed to upload Linux DEB"
+        else
+          echo "No Linux DEB found"
+        fi
       continue-on-error: true
     
-    - name: Upload macOS DMG to release
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ github.event.release.upload_url }}
-        asset_path: ./artifacts/macos-packages/RakchaDesktop-${{ github.event.release.tag_name }}.dmg
-        asset_name: RakchaDesktop-${{ github.event.release.tag_name }}-macos.dmg
-        asset_content_type: application/x-apple-diskimage
+    - name: Find and upload macOS DMG
+      shell: bash
+      run: |
+        MAC_DMG=$(find ./artifacts -name "*.dmg" -type f | head -1)
+        if [ -n "$MAC_DMG" ]; then
+          echo "Found macOS DMG: $MAC_DMG"
+          curl -L \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: application/x-apple-diskimage" \
+            "${{ github.event.release.upload_url }}?name=RakchaDesktop-${{ github.event.release.tag_name }}-macos.dmg" \
+            --data-binary "@$MAC_DMG" || echo "Failed to upload macOS DMG"
+        else
+          echo "No macOS DMG found"
+        fi
       continue-on-error: true
 
   notify-deployment:
@@ -271,6 +359,7 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '18'
+        cache: 'npm'
     
     - name: Install semantic-release
       run: |
@@ -283,7 +372,30 @@ jobs:
         npx semantic-release
     
     - name: Download artifacts for release
+      if: success()
       uses: actions/download-artifact@v4
       with:
         name: all-release-artifacts
         path: ./release-artifacts
+
+  troubleshoot:
+    runs-on: ubuntu-latest
+    if: failure()
+    needs: [package-windows, package-linux, package-macos]
+    
+    steps:
+    - name: Troubleshoot Java and JavaFX setup
+      run: |
+        echo "=== Java Version ==="
+        java -version
+        echo "=== JavaFX Module Path ==="
+        find /opt/hostedtoolcache/Java_Temurin_jdk -name "*javafx*" 2>/dev/null || echo "JavaFX not found in JDK"
+        echo "=== Maven Version ==="
+        mvn -version
+        echo "=== Available System Tools ==="
+        which jpackage || echo "jpackage not found"
+        echo "=== Memory and Disk Usage ==="
+        free -h
+        df -h
+        echo "=== Environment Variables ==="
+        env | grep -E "(JAVA|PATH|MAVEN)" | sort
