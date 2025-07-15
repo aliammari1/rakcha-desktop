@@ -44,3 +44,4 @@ build/
 /logs
 **/examples
 RUNNING_PID
+build-release.*
