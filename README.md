@@ -5,11 +5,11 @@
 [![JavaFX](https://img.shields.io/badge/javafx-17+-green.svg)](https://openjfx.io/)
 [![SQLite](https://img.shields.io/badge/database-sqlite-blue.svg)](https://www.sqlite.org/)
 
-# 🎬 RAKCHA - Ultimate Entertainment Hub (MVP Ready for Product Hunt)
+# 🎬 RAKCHA - Ultimate Entertainment Hub
 
-![RAKCHA Logo](src/main/resources/Logo.png)
+![RAKCHA Logo](src/main/resources/image.png)
 
-**A sophisticated JavaFX desktop application for managing cinemas, films, series, products, and user experiences - optimized and production-ready for Product Hunt launch.**
+**A sophisticated JavaFX desktop application for managing cinemas, films, series, products, and user experiences - optimized and production-ready.**
 
 [![Version 1.0.1]
 [![Java](https://img.shields.io/badge/Java-17-orange.svg)](https://www.oracle.com/java/)
@@ -17,9 +17,9 @@
 [![Hibernate](https://img.shields.io/badge/Hibernate-6.2.13-green.svg)](https://hibernate.org/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-## 🚀 Product Hunt Launch Ready
+## 🚀 MVP Launch Ready
 
-This MVP has been thoroughly optimized for Product Hunt launch with:
+This MVP has been thoroughly optimized with:
 
 - ✅ **Bug-free codebase** with comprehensive error handling and input validation
 - ✅ **Professional UI/UX** with modern design and smooth animations
@@ -31,30 +31,42 @@ This MVP has been thoroughly optimized for Product Hunt launch with:
 
 ## 📋 Table of Contents
 
-- [🎬 Rakcha Desktop: Your Ultimate Entertainment Hub](#-rakcha-desktop-your-ultimate-entertainment-hub)
+- [RAKCHA Desktop Application](#rakcha-desktop-application)
+- [🎬 RAKCHA - Ultimate Entertainment Hub](#-rakcha---ultimate-entertainment-hub)
+  - [🚀 MVP Launch Ready](#-mvp-launch-ready)
   - [📋 Table of Contents](#-table-of-contents)
   - [✨ Features](#-features)
-    - [🎞️ Film & Cinema Management](#-film--cinema-management)
-    - [📺 Series & Episodes](#-series--episodes)
-    - [🛍️ Product Marketplace](#-product-marketplace)
+    - [🎞️ Film \& Cinema Management](#️-film--cinema-management)
+    - [📺 Series \& Episodes](#-series--episodes)
+    - [🛍️ Product Marketplace](#️-product-marketplace)
     - [👥 User Management](#-user-management)
-    - [🔐 Security & Authentication](#-security--authentication)
+    - [🔐 Security \& Authentication](#-security--authentication)
     - [💳 Payment Processing](#-payment-processing)
-    - [📨 Communication & Notifications](#-communication--notifications)
-  - [🛠️ Technologies Used](#-technologies-used)
-  - [🏗️ Architecture](#-architecture)
+    - [📨 Communication \& Notifications](#-communication--notifications)
+  - [🛠️ Technologies Used](#️-technologies-used)
+  - [🏗️ Architecture](#️-architecture)
   - [🚀 Getting Started](#-getting-started)
     - [📋 Prerequisites](#-prerequisites)
     - [💻 System Requirements](#-system-requirements)
     - [⚡ Performance Optimization](#-performance-optimization)
     - [📥 Installation](#-installation)
-    - [🗄️ Database Setup](#-database-setup)
+    - [🗄️ Database Setup](#️-database-setup)
+      - [🚀 Quick Start (SQLite - Recommended for Development)](#-quick-start-sqlite---recommended-for-development)
+      - [🏭 Production Setup (MySQL)](#-production-setup-mysql)
+      - [🔧 Environment-Based Configuration](#-environment-based-configuration)
+      - [📚 Detailed Configuration](#-detailed-configuration)
   - [📖 Usage](#-usage)
     - [👤 User Roles](#-user-roles)
     - [🔄 Basic Operations](#-basic-operations)
     - [🌟 Advanced Features](#-advanced-features)
   - [🔌 API Integrations](#-api-integrations)
   - [🚀 Deployment](#-deployment)
+    - [🐳 Docker Deployment](#-docker-deployment)
+      - [Prerequisites](#prerequisites)
+      - [Running with Docker Compose](#running-with-docker-compose)
+      - [Docker Configuration](#docker-configuration)
+      - [Accessing the Application GUI](#accessing-the-application-gui)
+      - [Manual Docker Commands](#manual-docker-commands)
     - [🏠 Local Deployment](#-local-deployment)
     - [🌍 Production Deployment](#-production-deployment)
   - [🔨 Building from Source](#-building-from-source)
@@ -63,8 +75,8 @@ This MVP has been thoroughly optimized for Product Hunt launch with:
   - [🧪 Testing](#-testing)
   - [👥 Contributing](#-contributing)
   - [📜 License](#-license)
-  - [✍️ Authors](#-authors)
-  - [🗺️ Future Development Roadmap](#-future-development-roadmap)
+  - [✍️ Authors](#️-authors)
+  - [🗺️ Future Development Roadmap](#️-future-development-roadmap)
     - [📅 Planned Features](#-planned-features)
     - [💭 Under Consideration](#-under-consideration)
   - [🙏 Acknowledgments](#-acknowledgments)

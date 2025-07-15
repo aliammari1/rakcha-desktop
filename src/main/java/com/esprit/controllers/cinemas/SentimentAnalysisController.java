@@ -1,77 +1,169 @@
 package com.esprit.controllers.cinemas;
 
-import java.util.Properties;
-
-import edu.stanford.nlp.ling.CoreAnnotations;
-import edu.stanford.nlp.pipeline.Annotation;
-import edu.stanford.nlp.pipeline.StanfordCoreNLP;
-import edu.stanford.nlp.sentiment.SentimentCoreAnnotations;
-import edu.stanford.nlp.util.CoreMap;
+import com.vader.sentiment.analyzer.SentimentAnalyzer;
+import java.util.HashMap;
 
 /**
- * Controller for analyzing text sentiment using Stanford CoreNLP pipeline.
+ * Lightweight controller for analyzing text sentiment using VADER algorithm.
  * 
  * <p>
- * This class provides functionality to analyze text sentiment by utilizing the
- * Stanford CoreNLP library. It configures a natural language processing
- * pipeline
- * with tokenization, sentence splitting, part-of-speech tagging, lemmatization,
- * parsing, and sentiment analysis capabilities.
+ * This class uses VADER (Valence Aware Dictionary and sEntiment Reasoner) which
+ * is
+ * a lexicon and rule-based sentiment analysis tool that is specifically attuned
+ * to
+ * sentiments expressed in social media, but works well on other domains too.
  * </p>
  * 
  * <p>
- * The sentiment analysis returns classifications such as "Very Positive",
- * "Positive",
- * "Neutral", "Negative", or "Very Negative" for each sentence in the input
- * text.
+ * VADER uses a combination of qualitative and quantitative measures and doesn't
+ * require
+ * manual word list definitions. It's much lighter than Stanford CoreNLP.
  * </p>
  * 
  * @author Esprit Team
- * @version 1.0
- * @since 1.0
- * @see edu.stanford.nlp.pipeline.StanfordCoreNLP
- * @see edu.stanford.nlp.sentiment.SentimentCoreAnnotations
+ * @version 2.0
+ * @since 2.0
  */
 public class SentimentAnalysisController {
+
+    private final SentimentAnalyzer sentimentAnalyzer;
+
     /**
-     * Analyzes the sentiment of the given text using Stanford CoreNLP pipeline.
+     * Constructor initializes VADER sentiment analyzer.
+     */
+    public SentimentAnalysisController() {
+        this.sentimentAnalyzer = new SentimentAnalyzer();
+    }
+
+    /**
+     * Analyzes the sentiment of the given text using VADER algorithm.
      * 
      * <p>
-     * This method configures a Stanford CoreNLP pipeline with tokenization,
-     * sentence splitting,
-     * part-of-speech tagging, lemmatization, parsing, and sentiment analysis. It
-     * processes
-     * the input text and returns sentiment classifications for each sentence.
-     * </p>
-     * 
-     * <p>
-     * The sentiment analysis categorizes text into one of five sentiment classes:
-     * "Very Positive", "Positive", "Neutral", "Negative", or "Very Negative".
+     * VADER returns sentiment scores including compound, positive, neutral, and
+     * negative.
+     * The compound score is normalized between -1 (most extreme negative) and +1
+     * (most extreme positive).
      * </p>
      *
      * @param text the input text to be analyzed for sentiment
-     * @return a string containing sentiment classifications, one per line for each
-     *         sentence
+     * @return a string containing sentiment classification: "Positive", "Negative",
+     *         or "Neutral"
      * @throws IllegalArgumentException if text is null
-     * @since 1.0
+     * @since 2.0
      */
     public String analyzeSentiment(final String text) {
-        // Configure pipeline properties
-        final Properties props = new Properties();
-        props.setProperty("annotators", "tokenize, ssplit, pos, lemma, parse, sentiment");
-        // Initialize StanfordCoreNLP pipeline
-        final StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
-        // Create an annotation with the text
-        final Annotation annotation = new Annotation(text);
-        // Analyze the text
-        pipeline.annotate(annotation);
-        // Extract sentiment annotations
-        final StringBuilder sentimentResult = new StringBuilder();
-        for (final CoreMap sentence : annotation.get(CoreAnnotations.SentencesAnnotation.class)) {
-            final String sentiment = sentence.get(SentimentCoreAnnotations.SentimentClass.class);
-            sentimentResult.append(sentiment).append("\n");
+        if (text == null) {
+            throw new IllegalArgumentException("Text cannot be null");
         }
-        // Retourner le résultat du sentiment
-        return sentimentResult.toString();
+
+        try {
+            // Set the input string and analyze
+            sentimentAnalyzer.setInputString(text);
+            sentimentAnalyzer.setInputStringProperties();
+            sentimentAnalyzer.analyze();
+
+            // Get the polarity scores
+            final HashMap<String, Float> sentimentScores = sentimentAnalyzer.getPolarity();
+            final double compound = sentimentScores.get("compound");
+
+            if (compound >= 0.05) {
+                return "Positive";
+            } else if (compound <= -0.05) {
+                return "Negative";
+            } else {
+                return "Neutral";
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error analyzing sentiment", e);
+        }
+    }
+
+    /**
+     * Analyzes sentiment with detailed scores.
+     * 
+     * @param text the input text to analyze
+     * @return detailed sentiment analysis with scores
+     */
+    public String analyzeSentimentDetailed(final String text) {
+        if (text == null) {
+            throw new IllegalArgumentException("Text cannot be null");
+        }
+
+        try {
+            // Set the input string and analyze
+            sentimentAnalyzer.setInputString(text);
+            sentimentAnalyzer.setInputStringProperties();
+            sentimentAnalyzer.analyze();
+
+            // Get the polarity scores
+            final HashMap<String, Float> sentimentScores = sentimentAnalyzer.getPolarity();
+            final double compound = sentimentScores.get("compound");
+            final double positive = sentimentScores.get("positive");
+            final double negative = sentimentScores.get("negative");
+            final double neutral = sentimentScores.get("neutral");
+
+            String sentiment;
+            if (compound >= 0.05) {
+                sentiment = "Positive";
+            } else if (compound <= -0.05) {
+                sentiment = "Negative";
+            } else {
+                sentiment = "Neutral";
+            }
+
+            return String.format("%s (Compound: %.3f, Pos: %.3f, Neg: %.3f, Neu: %.3f)",
+                    sentiment, compound, positive, negative, neutral);
+        } catch (Exception e) {
+            throw new RuntimeException("Error analyzing detailed sentiment", e);
+        }
+    }
+
+    /**
+     * Gets the raw compound sentiment score.
+     * 
+     * @param text the input text to analyze
+     * @return compound score between -1 (negative) and 1 (positive)
+     */
+    public double getSentimentScore(final String text) {
+        if (text == null) {
+            throw new IllegalArgumentException("Text cannot be null");
+        }
+
+        try {
+            // Set the input string and analyze
+            sentimentAnalyzer.setInputString(text);
+            sentimentAnalyzer.setInputStringProperties();
+            sentimentAnalyzer.analyze();
+
+            // Get the polarity scores and return compound score
+            final HashMap<String, Float> sentimentScores = sentimentAnalyzer.getPolarity();
+            return sentimentScores.get("compound");
+        } catch (Exception e) {
+            throw new RuntimeException("Error getting sentiment score", e);
+        }
+    }
+
+    /**
+     * Gets all sentiment scores as a map.
+     * 
+     * @param text the input text to analyze
+     * @return map containing all sentiment scores (compound, positive, negative,
+     *         neutral)
+     */
+    public HashMap<String, Float> getAllSentimentScores(final String text) {
+        if (text == null) {
+            throw new IllegalArgumentException("Text cannot be null");
+        }
+
+        try {
+            // Set the input string and analyze
+            sentimentAnalyzer.setInputString(text);
+            sentimentAnalyzer.setInputStringProperties();
+            sentimentAnalyzer.analyze();
+
+            return sentimentAnalyzer.getPolarity();
+        } catch (Exception e) {
+            throw new RuntimeException("Error getting all sentiment scores", e);
+        }
     }
 }
