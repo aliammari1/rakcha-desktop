@@ -7,7 +7,7 @@
 
 # 🎬 RAKCHA - Ultimate Entertainment Hub
 
-![RAKCHA Logo](src/main/resources/image.svg)
+![RAKCHA Logo](src/main/resources/image.gif)
 
 **A sophisticated JavaFX desktop application for managing cinemas, films, series, products, and user experiences - optimized and production-ready.**
 

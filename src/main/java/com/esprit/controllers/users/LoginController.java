@@ -87,20 +87,20 @@ public class LoginController implements Initializable {
     @FXML
     private Label featuredMovieTitle;
 
-    // Updated movie poster URLs with new TMDB images
+    // Verified movie poster URLs with correct TMDB images
     private final String[] moviePosters = {
-            "https://image.tmdb.org/t/p/w500/jWZLvnBAjZvpbIJGV1GKK2JqfK3.jpg", // Dune
-            "https://image.tmdb.org/t/p/w500/kAVRgw7GgK1CfYEJq8ME6EvRIgU.jpg", // Joker
-            "https://image.tmdb.org/t/p/w500/6KErczPBROQty7QoIsaa6wJYXZi.jpg", // Oppenheimer
-            "https://image.tmdb.org/t/p/w500/u7SeO6Y42P7VCTWLhpnL96cyOqd.jpg", // Blade Runner 2049
-            "https://image.tmdb.org/t/p/w500/vqzNJRH4YyquRiWxCCOH0aXggHI.jpg", // Shutter Island
+            "https://image.tmdb.org/t/p/w500/d5NXSklXo0qyIYkgV94XAgMIckC.jpg", // Dune (2021)
+            "https://image.tmdb.org/t/p/w500/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg", // Joker (2019)
+            "https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg", // Oppenheimer (2023)
+            "https://image.tmdb.org/t/p/w500/gajva2L0rPYkEWjzgFlBXCAVBE5.jpg", // Blade Runner 2049
+            "https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg", // Inception
             "https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg", // Spider-Man: Across the Spider-Verse
-            "https://image.tmdb.org/t/p/w500/vZloFAK7NmvMGKE7VkF5UHaz0I.jpg", // The Batman
-            "https://image.tmdb.org/t/p/w500/uJYYizSuA9Y3DCs1fFuCc1yGdZP.jpg", // The Departed
-            "https://image.tmdb.org/t/p/w500/m2FNRngyJMyxLatBMJR8pbeG2v.jpg", // Arrival
-            "https://image.tmdb.org/t/p/w500/q6WREviZ5IYA4mwWKXpvZMvVBGN.jpg", // John Wick
-            "https://image.tmdb.org/t/p/w500/br4MHru7Z0x1Uz6CGu8ph6AAlmy.jpg", // Top Gun: Maverick
-            "https://image.tmdb.org/t/p/w500/7Bl4CF3EHz9xZYuVB55hf6SD8hP.jpg" // Everything Everywhere All at Once
+            "https://image.tmdb.org/t/p/w500/74xTEgt7R36Fpooo50r9T25onhq.jpg", // The Batman (2022)
+            "https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg", // Interstellar
+            "https://image.tmdb.org/t/p/w500/or06FN3Dka5tukK1e9sl16pB3iy.jpg", // Avengers: Endgame
+            "https://image.tmdb.org/t/p/w500/vZloFAK7NmvMGKE7VkF5UHaz0I.jpg", // John Wick: Chapter 4
+            "https://image.tmdb.org/t/p/w500/62HCnUTziyWcpDaBO2i1DX17ljH.jpg", // Top Gun: Maverick
+            "https://image.tmdb.org/t/p/w500/w3LxiVYdWWRvEVdn5RYq6jIqkb1.jpg" // Everything Everywhere All at Once
     };
 
     // Movie titles corresponding to the posters
@@ -109,12 +109,12 @@ public class LoginController implements Initializable {
             "Joker",
             "Oppenheimer",
             "Blade Runner 2049",
-            "Shutter Island",
+            "Inception",
             "Spider-Man: Across the Spider-Verse",
             "The Batman",
-            "The Departed",
-            "Arrival",
-            "John Wick",
+            "Interstellar",
+            "Avengers: Endgame",
+            "John Wick: Chapter 4",
             "Top Gun: Maverick",
             "Everything Everywhere All at Once"
     };
