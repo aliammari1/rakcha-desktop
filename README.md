@@ -7,15 +7,9 @@
 
 # 🎬 RAKCHA - Ultimate Entertainment Hub
 
-![RAKCHA Logo](src/main/resources/image.png)
+![RAKCHA Logo](src/main/resources/image.svg)
 
 **A sophisticated JavaFX desktop application for managing cinemas, films, series, products, and user experiences - optimized and production-ready.**
-
-[![Version 1.0.1]
-[![Java](https://img.shields.io/badge/Java-17-orange.svg)](https://www.oracle.com/java/)
-[![JavaFX](https://img.shields.io/badge/JavaFX-21.0.2-blue.svg)](https://openjfx.io/)
-[![Hibernate](https://img.shields.io/badge/Hibernate-6.2.13-green.svg)](https://hibernate.org/)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ## 🚀 MVP Launch Ready
 
