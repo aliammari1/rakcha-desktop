@@ -69,33 +69,60 @@ jobs:
         else
           VERSION="${GITHUB_REF#refs/tags/}"
         fi
+        # Remove 'v' prefix if present and validate version format
+        VERSION_NUMBER=$(echo "$VERSION" | sed 's/^v//')
+        
+        # Validate version format (should be like 1.0.7, not just 1)
+        if [[ ! "$VERSION_NUMBER" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          echo "Error: Invalid version format '$VERSION_NUMBER'. Expected format: X.Y.Z (e.g., 1.0.7)"
+          exit 1
+        fi
+        
         echo "version=${VERSION}" >> $GITHUB_OUTPUT
-        echo "version_number=${VERSION#v}" >> $GITHUB_OUTPUT
+        echo "version_number=${VERSION_NUMBER}" >> $GITHUB_OUTPUT
         echo "Release version: ${VERSION}"
+        echo "Version number: ${VERSION_NUMBER}"
     
     - name: Update version in pom.xml
       run: |
-        mvn versions:set -DnewVersion=${{ steps.version.outputs.version_number }} -DgenerateBackupPoms=false
+        echo "Updating version to: ${{ steps.version.outputs.version_number }}"
+        mvn versions:set -DnewVersion="${{ steps.version.outputs.version_number }}" -DgenerateBackupPoms=false --batch-mode
     
     # Build the application (skip tests on CI for faster builds)
     - name: Build with Maven
       if: matrix.os != 'macos-latest'
-      run: mvn -B clean package -DskipTests --batch-mode
+      run: |
+        echo "Building application..."
+        mvn clean package -DskipTests --batch-mode
       
     # macOS specific build (for future code signing support)  
     - name: Build with Maven (macOS)
       if: matrix.os == 'macos-latest'
-      run: mvn -B clean package -DskipTests --batch-mode
+      run: |
+        echo "Building application for macOS..."
+        mvn clean package -DskipTests --batch-mode
     
     # Create native packages using jpackage
     - name: Create native package
       shell: bash
       run: |
-        # Find the built JAR file
-        JAR_FILE=$(find target -name "RAKCHA-${{ steps.version.outputs.version_number }}.jar" | head -1)
+        echo "Looking for JAR file with version: ${{ steps.version.outputs.version_number }}"
+        
+        # Find the built JAR file - try multiple patterns
+        JAR_FILE=""
+        if [ -f "target/RAKCHA-${{ steps.version.outputs.version_number }}.jar" ]; then
+          JAR_FILE="target/RAKCHA-${{ steps.version.outputs.version_number }}.jar"
+        elif [ -f "target/rakcha-${{ steps.version.outputs.version_number }}.jar" ]; then
+          JAR_FILE="target/rakcha-${{ steps.version.outputs.version_number }}.jar"
+        else
+          # Fallback: find any JAR file in target directory
+          JAR_FILE=$(find target -name "*.jar" -not -name "*-sources.jar" -not -name "*-javadoc.jar" | head -1)
+        fi
         
         if [ ! -f "$JAR_FILE" ]; then
           echo "Error: JAR file not found"
+          echo "Contents of target directory:"
+          ls -la target/ || echo "Target directory not found"
           exit 1
         fi
         
@@ -104,6 +131,10 @@ jobs:
         # Create input directory for jpackage
         mkdir -p target/jpackage-input
         cp "$JAR_FILE" target/jpackage-input/
+        
+        # Get the actual JAR filename for jpackage
+        JAR_FILENAME=$(basename "$JAR_FILE")
+        echo "Using JAR filename: $JAR_FILENAME"
         
         # Platform-specific jpackage commands
         case "${{ matrix.os }}" in
@@ -114,7 +145,7 @@ jobs:
             jpackage \
               --input target/jpackage-input \
               --name "${{ env.APP_NAME }}" \
-              --main-jar "RAKCHA-${{ steps.version.outputs.version_number }}.jar" \
+              --main-jar "$JAR_FILENAME" \
               --main-class "${{ env.MAIN_CLASS }}" \
               --type exe \
               --dest target/installer \
@@ -138,7 +169,7 @@ jobs:
             jpackage \
               --input target/jpackage-input \
               --name "${{ env.APP_NAME }}" \
-              --main-jar "RAKCHA-${{ steps.version.outputs.version_number }}.jar" \
+              --main-jar "$JAR_FILENAME" \
               --main-class "${{ env.MAIN_CLASS }}" \
               --type deb \
               --dest target/installer \
@@ -157,7 +188,7 @@ jobs:
             jpackage \
               --input target/jpackage-input \
               --name "${{ env.APP_NAME }}" \
-              --main-jar "RAKCHA-${{ steps.version.outputs.version_number }}.jar" \
+              --main-jar "$JAR_FILENAME" \
               --main-class "${{ env.MAIN_CLASS }}" \
               --type dmg \
               --dest target/installer \
@@ -184,7 +215,7 @@ jobs:
         name: installer-${{ matrix.os }}
         path: |
           target/installer/*
-          target/RAKCHA-${{ steps.version.outputs.version_number }}.jar
+          target/*.jar
         retention-days: 90
       if: always()
 
@@ -232,8 +263,8 @@ jobs:
         find ./artifacts -name "*.dmg" -exec cp {} release-files/RAKCHA-${{ steps.version.outputs.version_number }}-macos.dmg \; 2>/dev/null || true
         find ./artifacts -name "*.pkg" -exec cp {} release-files/RAKCHA-${{ steps.version.outputs.version_number }}-macos.pkg \; 2>/dev/null || true
         
-        # Copy JAR files
-        find ./artifacts -name "RAKCHA-${{ steps.version.outputs.version_number }}.jar" -exec cp {} release-files/ \; 2>/dev/null || true
+        # Copy JAR files - use flexible pattern
+        find ./artifacts -name "*.jar" -not -name "*-sources.jar" -not -name "*-javadoc.jar" -exec cp {} release-files/ \; 2>/dev/null || true
         
         echo "=== Prepared release files ==="
         ls -la release-files/
