@@ -10,374 +10,47 @@ on:
         required: true
         type: string
 
-env:
-  APP_NAME: 'RAKCHA'
-  VENDOR: 'RAKCHA Team'
-  MAIN_CLASS: 'com.esprit.MainApp'
-
 jobs:
   build:
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
-    
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-    
-    # Setup WiX Toolset for Windows (using PowerShell approach)
-    - name: Setup WiX Toolset
-      if: matrix.os == 'windows-latest'
-      shell: pwsh
-      run: |
-        # Download WiX Toolset directly
-        $wixUrl = "https://github.com/wixtoolset/wix3/releases/download/wix3112rtm/wix311-binaries.zip"
-        $wixZip = "wix311-binaries.zip"
-        $wixDir = "wix-toolset"
-        
-        Write-Host "Downloading WiX Toolset..."
-        Invoke-WebRequest -Uri $wixUrl -OutFile $wixZip
-        
-        Write-Host "Extracting WiX Toolset..."
-        Expand-Archive -Path $wixZip -DestinationPath $wixDir -Force
-        
-        # Add WiX to PATH
-        $wixPath = Join-Path $PWD $wixDir
-        echo "$wixPath" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-        
-        Write-Host "WiX Toolset setup complete"
-        Write-Host "WiX Path: $wixPath"
-    
-    # Set up Java with JavaFX included
-    - name: Set up JDK 21 with JavaFX
-      uses: actions/setup-java@v4
-      with:
-        java-version: '21'
-        distribution: 'liberica'
-        java-package: 'jdk+fx'
-        cache: maven
-    
-    - name: Extract version
-      id: version
-      shell: bash
-      run: |
-        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-          VERSION="${{ github.event.inputs.version }}"
-        else
-          VERSION="${GITHUB_REF#refs/tags/}"
-        fi
-        # Remove 'v' prefix if present and validate version format
-        VERSION_NUMBER=$(echo "$VERSION" | sed 's/^v//')
-        
-        # Validate version format (should be like 1.0.7, not just 1)
-        if [[ ! "$VERSION_NUMBER" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-          echo "Error: Invalid version format '$VERSION_NUMBER'. Expected format: X.Y.Z (e.g., 1.0.7)"
-          exit 1
-        fi
-        
-        echo "version=${VERSION}" >> $GITHUB_OUTPUT
-        echo "version_number=${VERSION_NUMBER}" >> $GITHUB_OUTPUT
-        echo "Release version: ${VERSION}"
-        echo "Version number: ${VERSION_NUMBER}"
-    
-    - name: Update version in pom.xml
-      run: |
-        echo "Updating version to: ${{ steps.version.outputs.version_number }}"
-        mvn versions:set -DnewVersion="${{ steps.version.outputs.version_number }}" -DgenerateBackupPoms=false --batch-mode
-    
-    # Build the application (skip tests on CI for faster builds)
-    - name: Build with Maven
-      if: matrix.os != 'macos-latest'
-      run: |
-        echo "Building application..."
-        mvn clean package -DskipTests --batch-mode
-      
-    # macOS specific build (for future code signing support)  
-    - name: Build with Maven (macOS)
-      if: matrix.os == 'macos-latest'
-      run: |
-        echo "Building application for macOS..."
-        mvn clean package -DskipTests --batch-mode
-    
-    # Create native packages using jpackage
-    - name: Create native package
-      shell: bash
-      run: |
-        echo "Looking for JAR file with version: ${{ steps.version.outputs.version_number }}"
-        
-        # Find the built JAR file - try multiple patterns
-        JAR_FILE=""
-        if [ -f "target/RAKCHA-${{ steps.version.outputs.version_number }}.jar" ]; then
-          JAR_FILE="target/RAKCHA-${{ steps.version.outputs.version_number }}.jar"
-        elif [ -f "target/rakcha-${{ steps.version.outputs.version_number }}.jar" ]; then
-          JAR_FILE="target/rakcha-${{ steps.version.outputs.version_number }}.jar"
-        else
-          # Fallback: find any JAR file in target directory
-          JAR_FILE=$(find target -name "*.jar" -not -name "*-sources.jar" -not -name "*-javadoc.jar" | head -1)
-        fi
-        
-        if [ ! -f "$JAR_FILE" ]; then
-          echo "Error: JAR file not found"
-          echo "Contents of target directory:"
-          ls -la target/ || echo "Target directory not found"
-          exit 1
-        fi
-        
-        echo "Found JAR file: $JAR_FILE"
-        
-        # Create input directory for jpackage
-        mkdir -p target/jpackage-input
-        cp "$JAR_FILE" target/jpackage-input/
-        
-        # Get the actual JAR filename for jpackage
-        JAR_FILENAME=$(basename "$JAR_FILE")
-        echo "Using JAR filename: $JAR_FILENAME"
-        
-        # Platform-specific jpackage commands
-        case "${{ matrix.os }}" in
-          "windows-latest")
-            # Add WiX to PATH for Windows
-            export PATH="$PATH:./wix-toolset"
-            
-            jpackage \
-              --input target/jpackage-input \
-              --name "${{ env.APP_NAME }}" \
-              --main-jar "$JAR_FILENAME" \
-              --main-class "${{ env.MAIN_CLASS }}" \
-              --type exe \
-              --dest target/installer \
-              --app-version "${{ steps.version.outputs.version_number }}" \
-              --vendor "${{ env.VENDOR }}" \
-              --description "RAKCHA Desktop Application" \
-              --copyright "Copyright (c) 2024 RAKCHA Team" \
-              --win-menu \
-              --win-shortcut \
-              --win-per-user-install \
-              --java-options "-Dfile.encoding=UTF-8" \
-              --java-options "-Dsun.jnu.encoding=UTF-8"
-            ;;
-            
-          "ubuntu-latest")
-            # Install Linux packaging tools
-            sudo apt-get update
-            sudo apt-get install -y fakeroot dpkg-dev binutils desktop-file-utils
-            
-            # Create DEB package
-            jpackage \
-              --input target/jpackage-input \
-              --name "${{ env.APP_NAME }}" \
-              --main-jar "$JAR_FILENAME" \
-              --main-class "${{ env.MAIN_CLASS }}" \
-              --type deb \
-              --dest target/installer \
-              --app-version "${{ steps.version.outputs.version_number }}" \
-              --vendor "${{ env.VENDOR }}" \
-              --description "RAKCHA Desktop Application" \
-              --copyright "Copyright (c) 2024 RAKCHA Team" \
-              --linux-menu-group "Office" \
-              --linux-shortcut \
-              --java-options "-Dfile.encoding=UTF-8" \
-              --java-options "-Dsun.jnu.encoding=UTF-8"
-            ;;
-            
-          "macos-latest")
-            # Create DMG package for macOS
-            jpackage \
-              --input target/jpackage-input \
-              --name "${{ env.APP_NAME }}" \
-              --main-jar "$JAR_FILENAME" \
-              --main-class "${{ env.MAIN_CLASS }}" \
-              --type dmg \
-              --dest target/installer \
-              --app-version "${{ steps.version.outputs.version_number }}" \
-              --vendor "${{ env.VENDOR }}" \
-              --description "RAKCHA Desktop Application" \
-              --copyright "Copyright (c) 2024 RAKCHA Team" \
-              --mac-package-name "${{ env.APP_NAME }}" \
-              --java-options "-Dfile.encoding=UTF-8" \
-              --java-options "-Dsun.jnu.encoding=UTF-8"
-            ;;
-        esac
-    
-    - name: List generated files
-      shell: bash
-      run: |
-        echo "=== Generated installer files ==="
-        find target -name "*.exe" -o -name "*.msi" -o -name "*.deb" -o -name "*.rpm" -o -name "*.dmg" -o -name "*.pkg" | sort
-    
-    # Upload platform-specific artifacts
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: installer-${{ matrix.os }}
-        path: |
-          target/installer/*
-          target/*.jar
-        retention-days: 90
-      if: always()
-
-  create-release:
-    name: Create GitHub Release
-    runs-on: ubuntu-latest
-    needs: build
-    if: always() && (needs.build.result == 'success' || contains(needs.build.result, 'success'))
-    
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-    
-    - name: Extract version
-      id: version
-      run: |
-        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-          VERSION="${{ github.event.inputs.version }}"
-        else
-          VERSION="${GITHUB_REF#refs/tags/}"
-        fi
-        echo "version=${VERSION}" >> $GITHUB_OUTPUT
-        echo "version_number=${VERSION#v}" >> $GITHUB_OUTPUT
-        echo "Release version: ${VERSION}"
-    
-    - name: Download all artifacts
-      uses: actions/download-artifact@v4
-      with:
-        path: ./artifacts
-    
-    - name: Display artifact structure
-      run: |
-        echo "=== Downloaded artifacts ==="
-        find ./artifacts -type f -name "*" -exec ls -la {} \;
-    
-    - name: Prepare release files
-      run: |
-        mkdir -p release-files
-        
-        # Copy installers from each platform
-        find ./artifacts -name "*.exe" -exec cp {} release-files/RAKCHA-${{ steps.version.outputs.version_number }}-windows.exe \; 2>/dev/null || true
-        find ./artifacts -name "*.msi" -exec cp {} release-files/RAKCHA-${{ steps.version.outputs.version_number }}-windows.msi \; 2>/dev/null || true
-        find ./artifacts -name "*.deb" -exec cp {} release-files/RAKCHA-${{ steps.version.outputs.version_number }}-linux.deb \; 2>/dev/null || true
-        find ./artifacts -name "*.rpm" -exec cp {} release-files/RAKCHA-${{ steps.version.outputs.version_number }}-linux.rpm \; 2>/dev/null || true
-        find ./artifacts -name "*.dmg" -exec cp {} release-files/RAKCHA-${{ steps.version.outputs.version_number }}-macos.dmg \; 2>/dev/null || true
-        find ./artifacts -name "*.pkg" -exec cp {} release-files/RAKCHA-${{ steps.version.outputs.version_number }}-macos.pkg \; 2>/dev/null || true
-        
-        # Copy JAR files - use flexible pattern
-        find ./artifacts -name "*.jar" -not -name "*-sources.jar" -not -name "*-javadoc.jar" -exec cp {} release-files/ \; 2>/dev/null || true
-        
-        echo "=== Prepared release files ==="
-        ls -la release-files/
-    
-    - name: Generate release notes
-      id: release_notes
-      run: |
-        cat > release_notes.md << EOF
-        # RAKCHA Desktop ${{ steps.version.outputs.version }}
-        
-        ## 📦 Downloads
-        
-        ### Native Installers (Recommended - No Java Required)
-        - **Windows**: \`RAKCHA-${{ steps.version.outputs.version_number }}-windows.exe\`
-        - **Linux (DEB)**: \`RAKCHA-${{ steps.version.outputs.version_number }}-linux.deb\`
-        - **Linux (RPM)**: \`RAKCHA-${{ steps.version.outputs.version_number }}-linux.rpm\`
-        - **macOS**: \`RAKCHA-${{ steps.version.outputs.version_number }}-macos.dmg\`
-        
-        ### JAR Distribution (Requires Java 21+ with JavaFX)
-        - **Cross-Platform JAR**: \`RAKCHA-${{ steps.version.outputs.version_number }}.jar\`
-        
-        ## 🚀 Installation Instructions
-        
-        ### Windows
-        1. Download \`RAKCHA-${{ steps.version.outputs.version_number }}-windows.exe\`
-        2. Run the installer as administrator
-        3. Follow the installation wizard
-        4. Launch from Start Menu or Desktop shortcut
-        
-        ### Linux (Ubuntu/Debian)
-        \`\`\`bash
-        # Download and install DEB package
-        wget https://github.com/${{ github.repository }}/releases/download/${{ steps.version.outputs.version }}/RAKCHA-${{ steps.version.outputs.version_number }}-linux.deb
-        sudo dpkg -i RAKCHA-${{ steps.version.outputs.version_number }}-linux.deb
-        sudo apt-get install -f  # Fix any dependency issues
-        \`\`\`
-        
-        ### Linux (CentOS/RHEL/Fedora)
-        \`\`\`bash
-        # Download and install RPM package
-        wget https://github.com/${{ github.repository }}/releases/download/${{ steps.version.outputs.version }}/RAKCHA-${{ steps.version.outputs.version_number }}-linux.rpm
-        sudo rpm -i RAKCHA-${{ steps.version.outputs.version_number }}-linux.rpm
-        \`\`\`
-        
-        ### macOS
-        1. Download \`RAKCHA-${{ steps.version.outputs.version_number }}-macos.dmg\`
-        2. Open the DMG file
-        3. Drag RAKCHA to Applications folder
-        4. Launch from Applications or Launchpad
-        
-        ### JAR Version (Any OS with Java 21+ and JavaFX)
-        \`\`\`bash
-        # Ensure you have Java 21+ with JavaFX support
-        java -version
-        
-        # Download and run the JAR
-        wget https://github.com/${{ github.repository }}/releases/download/${{ steps.version.outputs.version }}/RAKCHA-${{ steps.version.outputs.version_number }}.jar
-        java -jar RAKCHA-${{ steps.version.outputs.version_number }}.jar
-        \`\`\`
-        
-        ## 📋 System Requirements
-        
-        ### Native Installers
-        - **Windows**: Windows 10 or later (64-bit)
-        - **Linux**: Ubuntu 18.04+ / CentOS 7+ / Fedora 30+ (64-bit)
-        - **macOS**: macOS 10.14+ (64-bit)
-        
-        ### JAR Distribution
-        - **Java**: Liberica JDK 21+ with JavaFX or OpenJDK 21+ with JavaFX separately installed
-        - **RAM**: 2GB minimum, 4GB recommended
-        - **Disk**: 500MB free space
-        
-        ## 🔧 Technical Details
-        - Built with Liberica JDK 21 with JavaFX included
-        - Native packages include embedded JRE (~200-300 MB)
-        - JAR distribution is optimized and lightweight
-        - Cross-platform compatibility ensured
-        
-        ## 📝 Changelog
-        See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for detailed changes.
-        
-        ## 🐛 Issues & Support
-        Report issues at: https://github.com/${{ github.repository }}/issues
-        EOF
-        
-        echo "release_notes_file=release_notes.md" >> $GITHUB_OUTPUT
-    
-    - name: Create Release
-      uses: softprops/action-gh-release@v2
-      with:
-        tag_name: ${{ steps.version.outputs.version }}
-        name: RAKCHA Desktop ${{ steps.version.outputs.version }}
-        body_path: ${{ steps.release_notes.outputs.release_notes_file }}
-        draft: false
-        prerelease: ${{ contains(steps.version.outputs.version, 'alpha') || contains(steps.version.outputs.version, 'beta') || contains(steps.version.outputs.version, 'rc') }}
-        files: |
-          release-files/*
-        token: ${{ secrets.GITHUB_TOKEN }}
-    
-    - name: Deployment Summary
-      run: |
-        echo "## 🎉 Release Deployment Summary" >> $GITHUB_STEP_SUMMARY
-        echo "" >> $GITHUB_STEP_SUMMARY
-        echo "✅ **Version**: ${{ steps.version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
-        echo "✅ **Release Created**: [View Release](https://github.com/${{ github.repository }}/releases/tag/${{ steps.version.outputs.version }})" >> $GITHUB_STEP_SUMMARY
-        echo "" >> $GITHUB_STEP_SUMMARY
-        echo "### 📦 Generated Packages:" >> $GITHUB_STEP_SUMMARY
-        echo "- Windows Installer (EXE)" >> $GITHUB_STEP_SUMMARY
-        echo "- Linux Packages (DEB, RPM)" >> $GITHUB_STEP_SUMMARY
-        echo "- macOS Installer (DMG)" >> $GITHUB_STEP_SUMMARY
-        echo "- Cross-Platform JAR" >> $GITHUB_STEP_SUMMARY
-        echo "" >> $GITHUB_STEP_SUMMARY
-        echo "### 🚀 Next Steps:" >> $GITHUB_STEP_SUMMARY
-        echo "1. Test the released packages on target platforms" >> $GITHUB_STEP_SUMMARY
-        echo "2. Update documentation if needed" >> $GITHUB_STEP_SUMMARY
-        echo "3. Announce the release to your users" >> $GITHUB_STEP_SUMMARY
+      - name: Download Wix
+        uses: i3h/download-release-asset@v1
+        if: matrix.os == 'windows-latest'
+        with:
+          owner: wixtoolset
+          repo: wix3
+          tag: wix3112rtm
+          file: wix311-binaries.zip
+      - name: Decompress Wix
+        uses: DuckSoft/extract-7z-action@v1.0
+        if: matrix.os == 'windows-latest'
+        with:
+          pathSource: wix311-binaries.zip
+          pathTarget: ./target/wix
+      - name: Add Wix to Path
+        run: echo "$HOME/target/wix" >> $GITHUB_PATH
+        if: matrix.os == 'windows-latest'
+      - uses: actions/checkout@v2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: 18.0.2
+          distribution: 'liberica'
+          java-package: jdk+fx
+          cache: 'maven'
+      - name: "Build with Maven"
+        run: mvn -B clean install --file pom.xml
+      - name: Update Automatic Release
+        uses: marvinpinto/action-automatic-releases@latest
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN}}"
+          automatic_release_tag: ${{ matrix.os }}
+          prerelease: true
+          title: ${{ matrix.os }} Development Build
+          files: | 
+            ./target/*.msi
+            ./target/*.deb
