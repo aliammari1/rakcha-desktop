@@ -10,6 +10,12 @@ on:
         required: true
         type: string
 
+env:
+  # Windows installer properties
+  WINDOWS_VENDOR: "RAKCHA Team"
+  WINDOWS_UPGRADE_UUID: "12345678-abcd-1234-abcd-123456789012" # Replace with your own UUID
+  APP_NAME: "RAKCHA"
+
 jobs:
   build:
     strategy:
@@ -25,16 +31,21 @@ jobs:
           repo: wix3
           tag: wix3112rtm
           file: wix311-binaries.zip
+      
       - name: Decompress Wix
         uses: DuckSoft/extract-7z-action@v1.0
         if: matrix.os == 'windows-latest'
         with:
           pathSource: wix311-binaries.zip
           pathTarget: ./target/wix
+      
       - name: Add Wix to Path
-        run: echo "$HOME/target/wix" >> $GITHUB_PATH
         if: matrix.os == 'windows-latest'
+        run: echo "$env:GITHUB_WORKSPACE/target/wix" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        shell: pwsh
+      
       - uses: actions/checkout@v4
+      
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
@@ -42,8 +53,18 @@ jobs:
           distribution: 'liberica'
           java-package: jdk+fx
           cache: 'maven'
+      
       - name: "Build with Maven"
         run: mvn -B clean install --file pom.xml
+      
+      - name: List generated files (Debug)
+        run: |
+          echo "Contents of target directory:"
+          ls -la target/ || dir target\
+          echo "Contents of target/installer directory:"
+          ls -la target/installer/ || dir target\installer\ 2>$null || echo "No installer directory found"
+        shell: bash
+      
       - name: Update Automatic Release
         uses: marvinpinto/action-automatic-releases@latest
         with:
@@ -52,5 +73,8 @@ jobs:
           prerelease: true
           title: ${{ matrix.os }} Development Build
           files: | 
+            ./target/installer/*.msi
+            ./target/installer/*.deb
+            ./target/*.exe
             ./target/*.msi
             ./target/*.deb
