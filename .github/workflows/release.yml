@@ -39,7 +39,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: '21'
-          distribution: 'temurin'
+          distribution: 'liberica'
           java-package: jdk+fx
           cache: 'maven'
       - name: "Build with Maven"
