@@ -13,7 +13,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <file.encoding>UTF-8</file.encoding>
-    <jpro.version>2024.4.1</jpro.version>
+    <jpro.version>2025.2.1</jpro.version>
 
     <!-- JPackage properties -->
     <main-class>com.esprit.MainApp</main-class>
