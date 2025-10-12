@@ -44,6 +44,12 @@ jobs:
           distribution: "temurin"
           cache: maven
 
+      - name: Install Maven
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y maven
+          mvn --version
+
       - name: Cache Maven dependencies
         uses: actions/cache@v4
         with:

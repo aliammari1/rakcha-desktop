@@ -74,10 +74,17 @@ jobs:
 
       - name: Download and setup Conveyor
         run: |
-          # Download Conveyor
-          wget -q https://downloads.hydraulic.dev/conveyor/conveyor-18.1-linux-amd64.tar.gz
-          tar -xzf conveyor-18.1-linux-amd64.tar.gz
-          sudo mv conveyor-18.1-linux-amd64/bin/conveyor /usr/local/bin/
+          echo "⬇️ Downloading Conveyor..."
+
+          # Download and install Conveyor using the official install script
+          curl -L https://downloads.hydraulic.dev/conveyor/install.sh | sh
+
+          # Add Conveyor to PATH
+          export PATH="$HOME/.local/bin:$PATH"
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+          # Verify installation
+          echo "✅ Conveyor installed:"
           conveyor --version
 
       - name: Setup signing key

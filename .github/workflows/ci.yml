@@ -30,6 +30,12 @@ jobs:
           distribution: ${{ env.JAVA_DISTRIBUTION }}
           cache: maven
 
+      - name: Install Maven
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y maven
+          mvn --version
+
       - name: Cache Maven packages
         uses: actions/cache@v4
         with:
@@ -86,6 +92,12 @@ jobs:
           distribution: ${{ env.JAVA_DISTRIBUTION }}
           cache: maven
 
+      - name: Install Maven
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y maven
+          mvn --version
+
       - name: Run SpotBugs
         run: mvn spotbugs:check -B
         continue-on-error: true
@@ -126,6 +138,12 @@ jobs:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: ${{ env.JAVA_DISTRIBUTION }}
           cache: maven
+
+      - name: Install Maven
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y maven
+          mvn --version
 
       - name: OWASP Dependency Check
         run: |
@@ -227,6 +245,12 @@ jobs:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: ${{ env.JAVA_DISTRIBUTION }}
           cache: maven
+
+      - name: Install Maven
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y maven
+          mvn --version
 
       - name: Build release artifacts
         run: mvn clean package -DskipTests -B
