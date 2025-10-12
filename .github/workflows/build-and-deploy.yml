@@ -102,6 +102,14 @@ jobs:
           mvn clean compile package -DskipTests
           copy target\RAKCHA-1.0.6.jar target\classpath-jars\
 
+      - name: Create Windows resources directory
+        run: |
+          mkdir -p src\main\resources\windows
+          echo "app.name=RAKCHA" > src\main\resources\windows\RAKCHA.properties
+          echo "app.description=RAKCHA Desktop - Movie and Cinema Management System" >> src\main\resources\windows\RAKCHA.properties
+          echo "app.vendor=ESPRIT" >> src\main\resources\windows\RAKCHA.properties
+        shell: cmd
+
       - name: Build Windows MSI installer
         run: |
           jpackage --type msi `
@@ -115,6 +123,7 @@ jobs:
             --description "RAKCHA Desktop - Movie and Cinema Management System" `
             --win-menu `
             --win-shortcut `
+            --win-dir-chooser `
             --verbose
 
       - name: Build Windows portable app
@@ -128,10 +137,35 @@ jobs:
             --dest target\app-image `
             --verbose
 
+      - name: Verify Windows app structure
+        run: |
+          dir target\app-image
+          if (Test-Path "target\app-image\RAKCHA") {
+            Write-Host "RAKCHA directory found"
+            dir target\app-image\RAKCHA
+          } else {
+            Write-Host "RAKCHA directory not found, checking alternatives..."
+            dir target\app-image
+          }
+        shell: powershell
+
       - name: Create portable archive
         run: |
           cd target\app-image
-          tar -czf ..\..\RAKCHA-portable-windows.tar.gz RAKCHA\
+          if (Test-Path "RAKCHA") {
+            Compress-Archive -Path "RAKCHA\*" -DestinationPath "..\..\RAKCHA-portable-windows.zip"
+            Write-Host "Created zip archive with RAKCHA directory"
+          } else {
+            $appDir = Get-ChildItem -Directory | Select-Object -First 1
+            if ($appDir) {
+              Compress-Archive -Path "$($appDir.Name)\*" -DestinationPath "..\..\RAKCHA-portable-windows.zip"
+              Write-Host "Created zip archive with $($appDir.Name) directory"
+            } else {
+              Write-Host "No application directory found"
+              exit 1
+            }
+          }
+        shell: powershell
 
       - name: Upload Windows artifacts
         if: success()
@@ -140,7 +174,7 @@ jobs:
           name: windows-distributions
           path: |
             target/dist/*.msi
-            RAKCHA-portable-windows.tar.gz
+            RAKCHA-portable-windows.zip
           retention-days: 30
 
   build-macos:
@@ -258,7 +292,7 @@ jobs:
           cp artifacts/linux/*.deb releases/linux/ 2>/dev/null || true
           cp artifacts/linux/*.tar.gz releases/linux/ 2>/dev/null || true
           cp artifacts/windows/*.msi releases/windows/ 2>/dev/null || true
-          cp artifacts/windows/*.tar.gz releases/windows/ 2>/dev/null || true
+          cp artifacts/windows/*.zip releases/windows/ 2>/dev/null || true
           cp artifacts/macos/*.dmg releases/macos/ 2>/dev/null || true
           cp artifacts/macos/*.tar.gz releases/macos/ 2>/dev/null || true
           
@@ -322,7 +356,7 @@ jobs:
       - name: Collect all artifacts
         run: |
           mkdir -p release-artifacts
-          find artifacts -type f \( -name "*.deb" -o -name "*.msi" -o -name "*.dmg" -o -name "*.tar.gz" \) -exec cp {} release-artifacts/ \;
+          find artifacts -type f \( -name "*.deb" -o -name "*.msi" -o -name "*.dmg" -o -name "*.tar.gz" -o -name "*.zip" \) -exec cp {} release-artifacts/ \;
 
       - name: Generate release notes
         run: |
@@ -356,7 +390,7 @@ jobs:
               
               if [[ $filename == *.msi ]]; then
                 echo "- **$filename** (${size}) - Windows installer package" >> release-notes.md
-              elif [[ $filename == *.tar.gz ]]; then
+              elif [[ $filename == *.zip ]]; then
                 echo "- **$filename** (${size}) - Portable application archive" >> release-notes.md
               fi
             fi
@@ -402,7 +436,7 @@ jobs:
           echo '3. Follow the installation wizard' >> release-notes.md
           echo "" >> release-notes.md
           echo '**Portable:**' >> release-notes.md
-          echo '1. Extract RAKCHA-portable-windows.tar.gz' >> release-notes.md
+          echo '1. Extract RAKCHA-portable-windows.zip' >> release-notes.md
           echo '2. Run RAKCHA\bin\RAKCHA.exe' >> release-notes.md
           echo "" >> release-notes.md
           echo "### 🍎 macOS" >> release-notes.md
