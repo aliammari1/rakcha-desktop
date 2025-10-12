@@ -1,0 +1,55 @@
+[mysqld]
+# Character Set and Collation
+character-set-server = utf8mb4
+collation-server = utf8mb4_unicode_ci
+default-character-set = utf8mb4
+
+# Performance Tuning
+max_connections = 200
+thread_cache_size = 16
+query_cache_size = 32M
+query_cache_limit = 2M
+table_open_cache = 2000
+tmp_table_size = 64M
+max_heap_table_size = 64M
+
+# InnoDB Settings
+innodb_buffer_pool_size = 256M
+innodb_log_file_size = 64M
+innodb_log_buffer_size = 16M
+innodb_flush_log_at_trx_commit = 2
+innodb_file_per_table = 1
+innodb_flush_method = O_DIRECT
+
+# Query Cache (MySQL 5.7)
+# query_cache_type = 1
+
+# Logging
+slow_query_log = 1
+slow_query_log_file = /var/log/mysql/slow-query.log
+long_query_time = 2
+
+# Binary Logging (for replication and point-in-time recovery)
+log_bin = /var/log/mysql/mysql-bin.log
+expire_logs_days = 7
+max_binlog_size = 100M
+
+# Error Logging
+log_error = /var/log/mysql/error.log
+
+# General Query Log (disable in production)
+# general_log = 1
+# general_log_file = /var/log/mysql/general.log
+
+# Security
+# Only allow connections from specific hosts
+# bind-address = 127.0.0.1
+
+# SQL Modes
+sql_mode = STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION
+
+[mysql]
+default-character-set = utf8mb4
+
+[client]
+default-character-set = utf8mb4

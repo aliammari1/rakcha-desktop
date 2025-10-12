@@ -1,0 +1,350 @@
+name: Deploy to GitHub Pages with Conveyor
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      deploy:
+        description: "Deploy to GitHub Pages"
+        required: false
+        default: "true"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages-${{ github.ref }}"
+  cancel-in-progress: false
+
+env:
+  JAVA_VERSION: "21"
+  CONVEYOR_VERSION: "20.0"
+
+jobs:
+  build-conveyor-site:
+    name: Build Conveyor Download Site
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: "temurin"
+          cache: maven
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: Build application with Maven
+        run: |
+          mvn clean package -DskipTests -B -V
+
+          # Verify build artifacts
+          echo "📦 Build artifacts:"
+          ls -lh target/*.jar
+
+          # Create classpath-jars directory if it doesn't exist
+          mkdir -p target/classpath-jars
+
+          # Copy dependencies to classpath-jars
+          mvn dependency:copy-dependencies -DoutputDirectory=target/classpath-jars
+
+      - name: Download and setup Conveyor
+        run: |
+          echo "⬇️ Downloading Conveyor ${{ env.CONVEYOR_VERSION }}..."
+          wget -q https://downloads.hydraulic.dev/conveyor/conveyor-${{ env.CONVEYOR_VERSION }}-linux-amd64.tar.gz
+          tar -xzf conveyor-${{ env.CONVEYOR_VERSION }}-linux-amd64.tar.gz
+          sudo mv conveyor-${{ env.CONVEYOR_VERSION }}-linux-amd64/bin/conveyor /usr/local/bin/
+
+          echo "✅ Conveyor installed:"
+          conveyor --version
+
+      - name: Generate or use signing key
+        id: signing-key
+        run: |
+          if [ -z "${{ secrets.CONVEYOR_SIGNING_KEY }}" ]; then
+            echo "🔑 Generating temporary signing key for development..."
+            TEMP_KEY=$(conveyor keys generate)
+            echo "signing_key=$TEMP_KEY" >> $GITHUB_OUTPUT
+            echo "⚠️ Using temporary signing key. Set CONVEYOR_SIGNING_KEY secret for production."
+          else
+            echo "🔐 Using provided signing key from secrets"
+            echo "signing_key=${{ secrets.CONVEYOR_SIGNING_KEY }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Determine site base URL
+        id: site-url
+        run: |
+          if [ "${{ github.event_name }}" == "push" ] && [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            SITE_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"
+          else
+            # For PRs and feature branches, use localhost for testing
+            SITE_URL="localhost"
+          fi
+          echo "site_url=$SITE_URL" >> $GITHUB_OUTPUT
+          echo "📍 Site URL: $SITE_URL"
+
+      - name: Create CI Conveyor config
+        run: |
+          cat > ci.conveyor.conf << 'EOF'
+          // CI-specific configuration for GitHub Actions
+          include required("conveyor.conf")
+
+          // Override site URL for GitHub Pages
+          app {
+            site {
+              base-url = "${{ steps.site-url.outputs.site_url }}"
+            }
+            
+            // Use version from Maven
+            version = "1.0.6"
+            
+            // VCS information for GitHub
+            vcs-url = "https://github.com/${{ github.repository }}"
+            
+            // Update settings
+            updates = aggressive
+          }
+
+          // Signing key from environment
+          app.signing-key = ${?SIGNING_KEY}
+
+          // Compatibility level
+          conveyor.compatibility-level = 18
+          EOF
+
+          echo "📄 CI Conveyor config created:"
+          cat ci.conveyor.conf
+
+      - name: Build Conveyor packages and site
+        run: |
+          echo "🏗️ Building Conveyor packages..."
+
+          # Create output directory
+          mkdir -p output
+
+          # Build packages using CI config
+          conveyor -f ci.conveyor.conf make site
+
+          echo "✅ Conveyor build complete!"
+        env:
+          SIGNING_KEY: ${{ steps.signing-key.outputs.signing_key }}
+
+      - name: List generated artifacts
+        run: |
+          echo "📦 Generated packages and site:"
+          find output -type f | sort
+
+          echo ""
+          echo "📊 File sizes:"
+          find output -type f -exec ls -lh {} \; | awk '{print $5, $9}'
+
+      - name: Upload Conveyor artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: conveyor-packages-${{ github.sha }}
+          path: output/
+          retention-days: 30
+
+      - name: Setup Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/configure-pages@v4
+
+      - name: Upload Pages artifact
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "output/download-site"
+
+      - name: Create build summary
+        if: always()
+        run: |
+          echo "## 🎉 Conveyor Build Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Build Information" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch:** \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Conveyor Version:** ${{ env.CONVEYOR_VERSION }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Site URL:** ${{ steps.site-url.outputs.site_url }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ github.event_name }}" == "push" ] && [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            echo "### 🌐 Deployment" >> $GITHUB_STEP_SUMMARY
+            echo "Site will be deployed to: **https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}**" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "### 📦 Packages Generated" >> $GITHUB_STEP_SUMMARY
+          echo "- Windows (.msi, .exe)" >> $GITHUB_STEP_SUMMARY
+          echo "- macOS (.dmg)" >> $GITHUB_STEP_SUMMARY
+          echo "- Linux (.deb, .rpm, .tar.gz)" >> $GITHUB_STEP_SUMMARY
+
+  deploy-pages:
+    name: Deploy to GitHub Pages
+    needs: build-conveyor-site
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Create deployment summary
+        run: |
+          echo "## ✅ Deployment Successful!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🌐 Live Site" >> $GITHUB_STEP_SUMMARY
+          echo "**URL:** ${{ steps.deployment.outputs.page_url }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📥 Available Downloads" >> $GITHUB_STEP_SUMMARY
+          echo "Visitors can download RAKCHA Desktop for:" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Windows (MSI installer with auto-updates)" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ macOS (DMG with code signing)" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Linux (DEB, RPM packages)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🔄 Updates" >> $GITHUB_STEP_SUMMARY
+          echo "All packages support automatic updates via Conveyor" >> $GITHUB_STEP_SUMMARY
+
+  create-release:
+    name: Create GitHub Release
+    needs: build-conveyor-site
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: conveyor-packages-${{ github.sha }}
+          path: output/
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: RAKCHA Desktop ${{ github.ref_name }}
+          body: |
+            ## RAKCHA Desktop Release ${{ github.ref_name }}
+
+            ### 📥 Download
+
+            Choose your platform:
+            - **Windows:** Download the `.msi` installer
+            - **macOS:** Download the `.dmg` file
+            - **Linux:** Download `.deb` (Ubuntu/Debian) or `.rpm` (Fedora/RHEL)
+
+            ### ✨ Features
+            - 🎬 Cinema & Film Management
+            - 📺 Series & Episode Tracking
+            - 🛍️ Product Marketplace
+            - 💳 Integrated Payments (Stripe/PayPal)
+            - 🔐 Multi-factor Authentication
+            - 🔄 Automatic Updates
+
+            ### 🔧 Installation
+
+            **Windows:**
+            ```
+            Download RAKCHA-1.0.6.msi
+            Double-click to install
+            ```
+
+            **macOS:**
+            ```
+            Download RAKCHA-1.0.6.dmg
+            Drag to Applications folder
+            ```
+
+            **Linux (Debian/Ubuntu):**
+            ```bash
+            sudo dpkg -i rakcha_1.0.6_amd64.deb
+            ```
+
+            **Linux (Fedora/RHEL):**
+            ```bash
+            sudo rpm -i rakcha-1.0.6.x86_64.rpm
+            ```
+
+            ### 📝 Changelog
+            See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for details.
+
+            ### 🐛 Report Issues
+            Found a bug? [Open an issue](https://github.com/${{ github.repository }}/issues/new)
+
+            ---
+
+            **Built from commit:** `${{ github.sha }}`  
+            **Build date:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')
+          files: |
+            output/**/*.msi
+            output/**/*.dmg
+            output/**/*.deb
+            output/**/*.rpm
+            output/**/*.tar.gz
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  notify:
+    name: Send Notifications
+    needs: [build-conveyor-site, deploy-pages]
+    if: always() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check deployment status
+        run: |
+          if [ "${{ needs.deploy-pages.result }}" == "success" ]; then
+            echo "status=success" >> $GITHUB_OUTPUT
+            echo "✅ Deployment successful"
+          else
+            echo "status=failure" >> $GITHUB_OUTPUT
+            echo "❌ Deployment failed"
+          fi
+        id: status
+
+      - name: Create notification summary
+        run: |
+          echo "## 📢 Deployment Notification" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ steps.status.outputs.status }}" == "success" ]; then
+            echo "✅ **Status:** Deployment completed successfully" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "🌐 **Live Site:** https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Status:** Deployment failed" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Please check the workflow logs for details." >> $GITHUB_STEP_SUMMARY
+          fi
+
+    # Optional: Add Slack, Discord, or email notifications here
+    # - name: Send Slack notification
+    #   uses: 8398a7/action-slack@v3
+    #   with:
+    #     status: ${{ steps.status.outputs.status }}
+    #     webhook_url: ${{ secrets.SLACK_WEBHOOK }}

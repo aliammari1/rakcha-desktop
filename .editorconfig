@@ -1,0 +1,79 @@
+# EditorConfig for RAKCHA Desktop
+# https://editorconfig.org
+
+root = true
+
+# All files
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+# Java files
+[*.java]
+indent_size = 4
+max_line_length = 120
+ij_java_blank_lines_after_class_header = 1
+ij_java_blank_lines_after_package = 1
+ij_java_blank_lines_before_package = 0
+ij_java_class_count_to_use_import_on_demand = 999
+ij_java_names_count_to_use_import_on_demand = 999
+ij_java_use_single_class_imports = true
+ij_java_layout_static_imports_separately = true
+
+# XML files (including pom.xml, FXML)
+[*.{xml,fxml}]
+indent_size = 2
+max_line_length = 120
+
+# YAML files
+[*.{yml,yaml}]
+indent_size = 2
+
+# Properties files
+[*.properties]
+indent_size = 4
+
+# Markdown files
+[*.md]
+trim_trailing_whitespace = false
+max_line_length = 0
+
+# Shell scripts
+[*.sh]
+indent_size = 2
+end_of_line = lf
+
+# Batch scripts
+[*.bat]
+end_of_line = crlf
+
+# JSON files
+[*.json]
+indent_size = 2
+
+# SQL files
+[*.sql]
+indent_size = 2
+
+# Dockerfile
+[Dockerfile]
+indent_size = 2
+
+# Maven wrapper
+[mvnw]
+end_of_line = lf
+
+# POM files
+[pom.xml]
+indent_size = 2
+
+# Git config
+[.gitattributes]
+indent_size = 2
+
+[.gitignore]
+indent_size = 2

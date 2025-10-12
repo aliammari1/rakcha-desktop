@@ -1,0 +1,162 @@
+version: "3.8"
+
+services:
+  # RAKCHA Desktop Application
+  rakcha-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rakcha-desktop
+    environment:
+      # Database Configuration
+      - DB_TYPE=mysql
+      - DB_URL=jdbc:mysql://rakcha-db:3306/rakcha_db?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
+      - DB_USER=rakcha_user
+      - DB_PASSWORD=${DB_PASSWORD:-rakcha_secure_pass_2024}
+
+      # Security
+      - PASSWORD_PEPPER=${PASSWORD_PEPPER:-change_this_to_secure_random_string}
+      - APP_BASE_URL=http://localhost:8080
+
+      # X11 Display for GUI
+      - DISPLAY=${DISPLAY:-:0}
+
+      # Application Settings
+      - APP_ENV=production
+      - DEBUG_MODE=false
+      - LOG_LEVEL=INFO
+    volumes:
+      # Persist data
+      - ./data:/app/data
+      # Persist logs
+      - ./logs:/app/logs
+      # X11 socket for GUI display
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      # Environment file
+      - ./.env:/app/.env:ro
+    depends_on:
+      rakcha-db:
+        condition: service_healthy
+    networks:
+      - rakcha-network
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "pgrep", "-f", "java"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # MySQL Database
+  rakcha-db:
+    image: mysql:8.0
+    container_name: rakcha-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-root_secure_pass_2024}
+      - MYSQL_DATABASE=rakcha_db
+      - MYSQL_USER=rakcha_user
+      - MYSQL_PASSWORD=${DB_PASSWORD:-rakcha_secure_pass_2024}
+      - MYSQL_CHARACTER_SET_SERVER=utf8mb4
+      - MYSQL_COLLATION_SERVER=utf8mb4_unicode_ci
+    volumes:
+      # Persist database data
+      - mysql-data:/var/lib/mysql
+      # Initialize database with schema
+      - ./rakcha_db.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+      # Custom MySQL configuration
+      - ./config/mysql.cnf:/etc/mysql/conf.d/custom.cnf:ro
+    ports:
+      - "3306:3306"
+    networks:
+      - rakcha-network
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "root",
+          "-p${MYSQL_ROOT_PASSWORD:-root_secure_pass_2024}",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-authentication-plugin=mysql_native_password
+
+  # Redis Cache (Optional - for future caching implementation)
+  rakcha-redis:
+    image: redis:7-alpine
+    container_name: rakcha-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - rakcha-network
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-redis_secure_pass}
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  # Adminer - Database Management UI (Development)
+  adminer:
+    image: adminer:latest
+    container_name: rakcha-adminer
+    ports:
+      - "8081:8080"
+    networks:
+      - rakcha-network
+    environment:
+      - ADMINER_DEFAULT_SERVER=rakcha-db
+      - ADMINER_DESIGN=pepa-linha
+    restart: unless-stopped
+    profiles:
+      - dev # Only run in development mode
+
+volumes:
+  mysql-data:
+    driver: local
+    name: rakcha_mysql_data
+  redis-data:
+    driver: local
+    name: rakcha_redis_data
+
+networks:
+  rakcha-network:
+    driver: bridge
+    name: rakcha_network
+# Usage:
+# Development (with Adminer):
+#   docker-compose --profile dev up -d
+#
+# Production:
+#   docker-compose up -d
+#
+# Stop all services:
+#   docker-compose down
+#
+# Stop and remove all data:
+#   docker-compose down -v
+#
+# View logs:
+#   docker-compose logs -f rakcha-app
+#
+# Access Adminer (dev only):
+#   http://localhost:8081
+#   Server: rakcha-db
+#   Username: rakcha_user
+#   Password: (from .env or default)
+#   Database: rakcha_db
