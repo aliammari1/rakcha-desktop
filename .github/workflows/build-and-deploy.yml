@@ -2,52 +2,52 @@ name: Build and Deploy RAKCHA Desktop
 
 on:
   push:
-    branches: [ main, master ]
-    tags: [ 'v*' ]
+    branches: [main, master]
+    tags: ["v*"]
   pull_request:
-    branches: [ main, master ]
+    branches: [main, master]
   workflow_dispatch:
 
 env:
-  JAVA_VERSION: '21'
-  JAVA_DISTRIBUTION: 'temurin'
+  JAVA_VERSION: "21"
+  JAVA_DISTRIBUTION: "temurin"
 
 jobs:
   build-linux:
     runs-on: ubuntu-latest
     name: Build Linux Distribution
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        
+
       - name: Set up JDK ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v4
         with:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: ${{ env.JAVA_DISTRIBUTION }}
-          
+
       - name: Cache Maven dependencies
         uses: actions/cache@v4
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-          
+
       - name: Install Linux dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y fakeroot dpkg-dev
-          
+
       - name: Build application
         run: |
           mvn clean compile package -DskipTests
           cp target/RAKCHA-1.0.6.jar target/classpath-jars/
-          
+
       - name: Build Debian package
         run: |
           mvn jpackage:jpackage
-          
+
       - name: Build portable app
         run: |
           jpackage --type app-image \
@@ -58,12 +58,12 @@ jobs:
             --app-version 1.0.6 \
             --dest target/app-image \
             --verbose
-            
+
       - name: Create portable archive
         run: |
           cd target/app-image
           tar -czf ../../RAKCHA-portable.tar.gz RAKCHA/
-          
+
       - name: Upload Linux artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -78,41 +78,41 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy to GitHub Pages
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/')
-    
+
     permissions:
       contents: read
       pages: write
       id-token: write
-      
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        
+
       - name: Download Linux artifacts
         uses: actions/download-artifact@v4
         with:
           name: linux-distributions
           path: artifacts/
-          
+
       - name: Prepare website
         run: |
           cp -r website/* ./
           mkdir -p releases
           cp artifacts/*.deb releases/ || true
           cp artifacts/*.tar.gz releases/ || true
-          
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
-        
+
       - name: Upload to GitHub Pages
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
-          
+          path: "."
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
@@ -122,20 +122,20 @@ jobs:
     runs-on: ubuntu-latest
     name: Create GitHub Release
     if: startsWith(github.ref, 'refs/tags/')
-    
+
     permissions:
       contents: write
-      
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        
+
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
           name: linux-distributions
           path: artifacts/
-          
+
       - name: Generate release notes
         run: |
           echo "# RAKCHA Desktop ${GITHUB_REF#refs/tags/}" > release-notes.md
@@ -143,7 +143,7 @@ jobs:
           echo "## Downloads" >> release-notes.md
           echo "" >> release-notes.md
           echo "### Linux" >> release-notes.md
-          
+
           for file in artifacts/*; do
             if [[ -f "$file" ]]; then
               filename=$(basename "$file")
@@ -156,7 +156,7 @@ jobs:
               fi
             fi
           done
-          
+
       - name: Create Release
         uses: ncipollo/release-action@v1
         with:
