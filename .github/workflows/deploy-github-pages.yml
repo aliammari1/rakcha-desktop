@@ -87,15 +87,42 @@ jobs:
         run: |
           echo "⬇️ Downloading Conveyor..."
 
-          # Download and install Conveyor using the official install script
-          curl -L https://downloads.hydraulic.dev/conveyor/install.sh | sh
+          # Create local bin directory
+          mkdir -p "$HOME/.local/bin"
 
-          # Add Conveyor to PATH for current session
-          export PATH="$HOME/.local/bin:$PATH"
+          # Try the official install script first
+          echo "🔄 Trying official install script..."
+          if curl -L https://downloads.hydraulic.dev/conveyor/install.sh | bash; then
+            echo "✅ Official install script succeeded"
+          else
+            echo "⚠️ Official script failed, trying manual installation..."
+            
+            # Manual installation as fallback
+            CONVEYOR_URL="https://downloads.hydraulic.dev/conveyor/conveyor-${CONVEYOR_VERSION}-linux-amd64.tar.gz"
+            echo "📥 Downloading from: $CONVEYOR_URL"
+            
+            curl -L "$CONVEYOR_URL" -o conveyor.tar.gz
+            tar -xzf conveyor.tar.gz
+            
+            # Find the conveyor binary
+            CONVEYOR_BIN=$(find . -name "conveyor" -type f -executable | head -1)
+            if [ -n "$CONVEYOR_BIN" ]; then
+              cp "$CONVEYOR_BIN" "$HOME/.local/bin/conveyor"
+              chmod +x "$HOME/.local/bin/conveyor"
+              echo "✅ Manual installation completed"
+            else
+              echo "❌ Could not find conveyor binary"
+              exit 1
+            fi
+            
+            # Cleanup
+            rm -rf conveyor.tar.gz conveyor-*
+          fi
 
           # Verify installation
+          export PATH="$HOME/.local/bin:$PATH"
           echo "✅ Conveyor installed:"
-          conveyor --version
+          "$HOME/.local/bin/conveyor" --version
 
       - name: Add Conveyor to PATH
         run: |
