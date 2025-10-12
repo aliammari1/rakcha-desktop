@@ -27,11 +27,31 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Set up JDK 21
-      uses: actions/setup-java@v4
-      with:
-        java-version: '21'
-        distribution: 'temurin'
+    - name: Setup SDKMAN and Java 21
+      run: |
+        # Install SDKMAN
+        curl -s "https://get.sdkman.io" | bash
+        source "$HOME/.sdkman/bin/sdkman-init.sh"
+        
+        # Install Java 21 and Maven using SDKMAN
+        sdk install java 21.0.2-tem || true
+        sdk install maven 3.9.6 || true
+        
+        # Set as default
+        sdk default java 21.0.2-tem
+        sdk default maven 3.9.6
+        
+        # Verify installation
+        echo "Java version:"
+        java -version
+        echo "Maven version:"
+        mvn --version
+        
+        # Add to GITHUB_ENV for subsequent steps
+        echo "JAVA_HOME=$HOME/.sdkman/candidates/java/current" >> $GITHUB_ENV
+        echo "MAVEN_HOME=$HOME/.sdkman/candidates/maven/current" >> $GITHUB_ENV
+        echo "$HOME/.sdkman/candidates/java/current/bin" >> $GITHUB_PATH
+        echo "$HOME/.sdkman/candidates/maven/current/bin" >> $GITHUB_PATH
 
     - name: Cache Maven dependencies
       uses: actions/cache@v4
@@ -42,8 +62,8 @@ jobs:
 
     - name: Build with Maven
       run: |
-        chmod +x mvnw
-        ./mvnw clean package -DskipTests
+        source "$HOME/.sdkman/bin/sdkman-init.sh"
+        mvn clean package -DskipTests -B -V
 
     - name: Verify build artifacts
       run: |
@@ -75,6 +95,7 @@ jobs:
 
     - name: Build packages with Conveyor
       run: |
+        source "$HOME/.sdkman/bin/sdkman-init.sh"
         # Use CI configuration
         conveyor -f ci.conveyor.conf make site
       env:
