@@ -77,7 +77,7 @@ jobs:
         with:
           path: |
             ~/.cache/hydraulic/conveyor
-            ~/conveyor
+            ~/.local/bin/conveyor
           key: ${{ runner.os }}-conveyor-${{ env.CONVEYOR_VERSION }}
           restore-keys: |
             ${{ runner.os }}-conveyor-
@@ -85,19 +85,21 @@ jobs:
       - name: Download and setup Conveyor
         if: steps.cache-conveyor.outputs.cache-hit != 'true'
         run: |
-          echo "⬇️ Downloading Conveyor ${{ env.CONVEYOR_VERSION }}..."
-          wget -q https://downloads.hydraulic.dev/conveyor/conveyor-${{ env.CONVEYOR_VERSION }}-linux-amd64.tar.gz
-          tar -xzf conveyor-${{ env.CONVEYOR_VERSION }}-linux-amd64.tar.gz
-          mkdir -p ~/conveyor
-          mv conveyor-${{ env.CONVEYOR_VERSION }}-linux-amd64/bin/conveyor ~/conveyor/
-          rm -rf conveyor-${{ env.CONVEYOR_VERSION }}-linux-amd64*
+          echo "⬇️ Downloading Conveyor..."
+
+          # Download and install Conveyor using the official install script
+          curl -L https://downloads.hydraulic.dev/conveyor/install.sh | sh
+
+          # Add Conveyor to PATH for current session
+          export PATH="$HOME/.local/bin:$PATH"
+
+          # Verify installation
+          echo "✅ Conveyor installed:"
+          conveyor --version
 
       - name: Add Conveyor to PATH
         run: |
-          echo "$HOME/conveyor" >> $GITHUB_PATH
-          export PATH="$HOME/conveyor:$PATH"
-          echo "✅ Conveyor ready:"
-          ~/conveyor/conveyor --version || echo "Will be available in next step"
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
 
       - name: Generate or use signing key
         id: signing-key
