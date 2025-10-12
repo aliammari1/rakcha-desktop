@@ -45,3 +45,15 @@ build/
 **/examples
 RUNNING_PID
 build-release.*
+
+# Large distribution files (handled by GitHub Actions)
+website/releases/*.deb
+website/releases/*.tar.gz
+website/releases/*.msi
+website/releases/*.exe
+website/releases/*.dmg
+website/releases/*.pkg
+
+# Build artifacts
+target/dist/
+target/app-image/
