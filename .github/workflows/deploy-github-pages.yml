@@ -71,15 +71,33 @@ jobs:
           # Copy dependencies to classpath-jars
           mvn dependency:copy-dependencies -DoutputDirectory=target/classpath-jars
 
+      - name: Cache Conveyor installation
+        uses: actions/cache@v4
+        id: cache-conveyor
+        with:
+          path: |
+            ~/.cache/hydraulic/conveyor
+            ~/conveyor
+          key: ${{ runner.os }}-conveyor-${{ env.CONVEYOR_VERSION }}
+          restore-keys: |
+            ${{ runner.os }}-conveyor-
+
       - name: Download and setup Conveyor
+        if: steps.cache-conveyor.outputs.cache-hit != 'true'
         run: |
           echo "⬇️ Downloading Conveyor ${{ env.CONVEYOR_VERSION }}..."
           wget -q https://downloads.hydraulic.dev/conveyor/conveyor-${{ env.CONVEYOR_VERSION }}-linux-amd64.tar.gz
           tar -xzf conveyor-${{ env.CONVEYOR_VERSION }}-linux-amd64.tar.gz
-          sudo mv conveyor-${{ env.CONVEYOR_VERSION }}-linux-amd64/bin/conveyor /usr/local/bin/
+          mkdir -p ~/conveyor
+          mv conveyor-${{ env.CONVEYOR_VERSION }}-linux-amd64/bin/conveyor ~/conveyor/
+          rm -rf conveyor-${{ env.CONVEYOR_VERSION }}-linux-amd64*
 
-          echo "✅ Conveyor installed:"
-          conveyor --version
+      - name: Add Conveyor to PATH
+        run: |
+          echo "$HOME/conveyor" >> $GITHUB_PATH
+          export PATH="$HOME/conveyor:$PATH"
+          echo "✅ Conveyor ready:"
+          ~/conveyor/conveyor --version || echo "Will be available in next step"
 
       - name: Generate or use signing key
         id: signing-key
@@ -142,15 +160,16 @@ jobs:
         run: |
           echo "🏗️ Building Conveyor packages..."
 
-          # Create output directory
-          mkdir -p output
+          # Ensure cache directory exists
+          mkdir -p $HOME/.cache/hydraulic/conveyor
 
-          # Build packages using CI config
+          # Build packages using CI config with proper parallelism
           conveyor -f ci.conveyor.conf make site
 
           echo "✅ Conveyor build complete!"
         env:
           SIGNING_KEY: ${{ steps.signing-key.outputs.signing_key }}
+          CONVEYOR_CACHE_DIR: $HOME/.cache/hydraulic/conveyor
 
       - name: List generated artifacts
         run: |
