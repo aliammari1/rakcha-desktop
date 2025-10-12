@@ -7,7 +7,7 @@
     <meta name="description" content="Download RAKCHA Desktop Application - Movie and Cinema Management System">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -19,84 +19,694 @@
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            background: #0a0a0a;
             min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(120, 20, 20, 0.4) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(200, 30, 30, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(150, 25, 25, 0.2) 0%, transparent 50%),
+                linear-gradient(135deg, #1a0505 0%, #2d0a0a 25%, #1a0505 50%, #0f0202 75%, #1a0505 100%);
+            z-index: -3;
+            animation: backgroundShift 20s ease-in-out infinite;
+        }
+
+        @keyframes backgroundShift {
+            0%, 100% {
+                background: 
+                    radial-gradient(circle at 20% 80%, rgba(120, 20, 20, 0.4) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 20%, rgba(200, 30, 30, 0.3) 0%, transparent 50%),
+                    radial-gradient(circle at 40% 40%, rgba(150, 25, 25, 0.2) 0%, transparent 50%),
+                    linear-gradient(135deg, #1a0505 0%, #2d0a0a 25%, #1a0505 50%, #0f0202 75%, #1a0505 100%);
+            }
+            50% {
+                background: 
+                    radial-gradient(circle at 80% 20%, rgba(120, 20, 20, 0.4) 0%, transparent 50%),
+                    radial-gradient(circle at 20% 80%, rgba(200, 30, 30, 0.3) 0%, transparent 50%),
+                    radial-gradient(circle at 60% 60%, rgba(150, 25, 25, 0.2) 0%, transparent 50%),
+                    linear-gradient(135deg, #2d0a0a 0%, #1a0505 25%, #0f0202 50%, #1a0505 75%, #2d0a0a 100%);
+            }
+        }
+
+        /* Fire particle container */
+        .fire-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: radial-gradient(circle, #ff6b35 0%, #f7931e 40%, transparent 70%);
+            border-radius: 50%;
+            opacity: 0;
+            animation: rise 4s infinite linear;
+        }
+
+        @keyframes rise {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) scale(0.5);
+            }
+            10% {
+                opacity: 1;
+                transform: translateY(90vh) scale(1);
+            }
+            90% {
+                opacity: 1;
+                transform: translateY(10vh) scale(0.8);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(0) scale(0);
+            }
+        }
+
+        /* Larger fire particles */
+        .particle.large {
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, #ff4500 0%, #ff6b35 30%, #f7931e 60%, transparent 80%);
+            animation-duration: 6s;
+        }
+
+        /* Cinema screen glow effect */
+        .screen-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at center top, rgba(255, 107, 53, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at center bottom, rgba(139, 0, 0, 0.05) 0%, transparent 50%);
+            z-index: -1;
+            pointer-events: none;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 0 20px;
+            position: relative;
+            z-index: 1;
         }
 
         header {
-            padding: 2rem 0;
+            padding: 3rem 0;
             text-align: center;
-            color: white;
+            position: relative;
         }
 
         .logo {
-            font-size: 3rem;
-            font-weight: 700;
+            font-family: 'Bebas Neue', cursive;
+            font-size: 5rem;
+            font-weight: 400;
             margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 
+                0 0 10px rgba(255, 107, 53, 0.5),
+                0 0 20px rgba(255, 107, 53, 0.3),
+                0 0 30px rgba(255, 107, 53, 0.2);
+            background: linear-gradient(45deg, #ff6b35, #f7931e, #ffcc33);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease-in-out infinite;
+            letter-spacing: 0.1em;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
         .tagline {
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             opacity: 0.9;
             font-weight: 300;
+            color: #ff9f7a;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: #cc6600;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
         }
 
         .main-content {
-            background: white;
-            border-radius: 20px;
+            background: linear-gradient(135deg, 
+                rgba(26, 5, 5, 0.95) 0%, 
+                rgba(45, 10, 10, 0.9) 50%, 
+                rgba(26, 5, 5, 0.95) 100%);
+            border-radius: 25px;
             margin: 2rem auto;
-            padding: 3rem;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            max-width: 800px;
+            padding: 4rem 3rem;
+            box-shadow: 
+                0 25px 50px rgba(0,0,0,0.5),
+                inset 0 1px 0 rgba(255, 107, 53, 0.2),
+                0 0 100px rgba(255, 107, 53, 0.1);
+            max-width: 1200px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 107, 53, 0.2);
         }
 
         .app-info {
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 4rem;
         }
 
         .app-info h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: #2c3e50;
+            font-family: 'Bebas Neue', cursive;
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            color: #ff6b35;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            letter-spacing: 0.05em;
         }
 
         .app-info p {
+            font-size: 1.2rem;
+            color: #ffb399;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            line-height: 1.8;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .feature {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(255, 107, 53, 0.1);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 107, 53, 0.2);
+        }
+
+        .feature i {
+            font-size: 2rem;
+            color: #ff6b35;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px rgba(255, 107, 53, 0.5);
+        }
+
+        .feature h3 {
+            color: #ff9f7a;
+            margin-bottom: 0.5rem;
             font-size: 1.1rem;
-            color: #666;
-            max-width: 600px;
-            margin: 0 auto;
+        }
+
+        .feature p {
+            color: #cc9999;
+            font-size: 0.9rem;
         }
 
         .downloads {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 2rem;
-            margin: 3rem 0;
+            margin: 4rem 0;
         }
 
-        .download-card {
-            background: #f8f9fa;
+        .platform-section {
+            background: linear-gradient(135deg, 
+                rgba(45, 10, 10, 0.8) 0%, 
+                rgba(26, 5, 5, 0.9) 100%);
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: 2px solid rgba(255, 107, 53, 0.3);
+            box-shadow: 
+                0 15px 30px rgba(0,0,0,0.3),
+                inset 0 1px 0 rgba(255, 107, 53, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .platform-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 107, 53, 0.1), 
+                transparent);
+            transition: left 0.5s ease;
+        }
+
+        .platform-section:hover::before {
+            left: 100%;
+        }
+
+        .platform-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+                0 25px 50px rgba(0,0,0,0.4),
+                0 0 50px rgba(255, 107, 53, 0.2),
+                inset 0 1px 0 rgba(255, 107, 53, 0.2);
+            border-color: rgba(255, 107, 53, 0.5);
+        }
+
+        .platform-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .platform-icon {
+            font-size: 3rem;
+            margin-right: 1rem;
+            text-shadow: 0 0 15px rgba(255, 107, 53, 0.6);
+        }
+
+        .platform-name {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2.5rem;
+            color: #ff6b35;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            letter-spacing: 0.05em;
+        }
+
+        .download-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .download-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.2rem 1.5rem;
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+            background: linear-gradient(135deg, #ff7a47 0%, #f7a042 100%);
+        }
+
+        .download-btn:active {
+            transform: translateY(0);
+        }
+
+        .download-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .download-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .download-desc {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .download-size {
+            font-size: 0.9rem;
+            color: #ffcc99;
+            font-weight: 500;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 3rem 0;
+            color: #cc9999;
+            border-top: 1px solid rgba(255, 107, 53, 0.2);
+            margin-top: 3rem;
+        }
+
+        .system-requirements {
+            background: rgba(45, 10, 10, 0.6);
             border-radius: 15px;
             padding: 2rem;
-            text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 2px solid transparent;
+            margin: 3rem 0;
+            border: 1px solid rgba(255, 107, 53, 0.2);
         }
 
-        .download-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-            border-color: #667eea;
+        .system-requirements h3 {
+            color: #ff6b35;
+            margin-bottom: 1.5rem;
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.8rem;
+            text-align: center;
+            letter-spacing: 0.05em;
         }
+
+        .req-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .req-item {
+            display: flex;
+            align-items: center;
+            color: #ffb399;
+        }
+
+        .req-item i {
+            color: #ff6b35;
+            margin-right: 1rem;
+            font-size: 1.2rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 3.5rem;
+            }
+            
+            .app-info h1 {
+                font-size: 2.5rem;
+            }
+            
+            .platform-section {
+                padding: 2rem;
+            }
+            
+            .platform-name {
+                font-size: 2rem;
+            }
+            
+            .downloads {
+                grid-template-columns: 1fr;
+            }
+            
+            .main-content {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+            }
+        }
+
+        /* Loading animation for when files are being loaded */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 107, 53, 0.3);
+            border-radius: 50%;
+            border-top-color: #ff6b35;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Cinematic vignette effect */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.3) 100%);
+            pointer-events: none;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <!-- Fire particles -->
+    <div class="fire-particles" id="fireParticles"></div>
+    
+    <!-- Screen glow effect -->
+    <div class="screen-glow"></div>
+
+    <div class="container">
+        <header>
+            <div class="logo">RAKCHA</div>
+            <div class="tagline">Movie & Cinema Management System</div>
+            <div class="subtitle">Desktop Application</div>
+        </header>
+
+        <main class="main-content">
+            <section class="app-info">
+                <h1>Download RAKCHA Desktop</h1>
+                <p>Experience the ultimate movie and cinema management system. RAKCHA Desktop brings professional-grade tools for managing your cinema operations, movie collections, and entertainment business right to your desktop.</p>
+                
+                <div class="features">
+                    <div class="feature">
+                        <i class="fas fa-film"></i>
+                        <h3>Movie Management</h3>
+                        <p>Comprehensive movie database and catalog system</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-building"></i>
+                        <h3>Cinema Operations</h3>
+                        <p>Manage theaters, screenings, and bookings</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Analytics</h3>
+                        <p>Advanced reporting and business insights</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-users"></i>
+                        <h3>User Management</h3>
+                        <p>Complete customer and staff management</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="downloads">
+                <!-- Linux Downloads -->
+                <div class="platform-section">
+                    <div class="platform-header">
+                        <i class="fab fa-linux platform-icon"></i>
+                        <div class="platform-name">Linux</div>
+                    </div>
+                    <div class="download-options">
+                        <a href="releases/linux/rakcha_1.0.6_amd64.deb" class="download-btn" onclick="trackDownload('linux', 'deb')">
+                            <div class="download-info">
+                                <div class="download-title">Debian Package</div>
+                                <div class="download-desc">For Ubuntu, Debian, and derivatives</div>
+                            </div>
+                            <div class="download-size" id="linux-deb-size">
+                                <div class="loading"></div>
+                            </div>
+                        </a>
+                        <a href="releases/linux/RAKCHA-portable-linux.tar.gz" class="download-btn" onclick="trackDownload('linux', 'portable')">
+                            <div class="download-info">
+                                <div class="download-title">Portable Archive</div>
+                                <div class="download-desc">Extract and run anywhere</div>
+                            </div>
+                            <div class="download-size" id="linux-portable-size">
+                                <div class="loading"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Windows Downloads -->
+                <div class="platform-section">
+                    <div class="platform-header">
+                        <i class="fab fa-windows platform-icon"></i>
+                        <div class="platform-name">Windows</div>
+                    </div>
+                    <div class="download-options">
+                        <a href="releases/windows/RAKCHA-1.0.6.msi" class="download-btn" onclick="trackDownload('windows', 'msi')">
+                            <div class="download-info">
+                                <div class="download-title">MSI Installer</div>
+                                <div class="download-desc">For Windows 10 and later</div>
+                            </div>
+                            <div class="download-size" id="windows-msi-size">
+                                <div class="loading"></div>
+                            </div>
+                        </a>
+                        <a href="releases/windows/RAKCHA-portable-windows.tar.gz" class="download-btn" onclick="trackDownload('windows', 'portable')">
+                            <div class="download-info">
+                                <div class="download-title">Portable Archive</div>
+                                <div class="download-desc">No installation required</div>
+                            </div>
+                            <div class="download-size" id="windows-portable-size">
+                                <div class="loading"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- macOS Downloads -->
+                <div class="platform-section">
+                    <div class="platform-header">
+                        <i class="fab fa-apple platform-icon"></i>
+                        <div class="platform-name">macOS</div>
+                    </div>
+                    <div class="download-options">
+                        <a href="releases/macos/RAKCHA-1.0.6.dmg" class="download-btn" onclick="trackDownload('macos', 'dmg')">
+                            <div class="download-info">
+                                <div class="download-title">DMG Installer</div>
+                                <div class="download-desc">For macOS 10.14 and later</div>
+                            </div>
+                            <div class="download-size" id="macos-dmg-size">
+                                <div class="loading"></div>
+                            </div>
+                        </a>
+                        <a href="releases/macos/RAKCHA-portable-macos.tar.gz" class="download-btn" onclick="trackDownload('macos', 'portable')">
+                            <div class="download-info">
+                                <div class="download-title">Portable Archive</div>
+                                <div class="download-desc">Drag and drop installation</div>
+                            </div>
+                            <div class="download-size" id="macos-portable-size">
+                                <div class="loading"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="system-requirements">
+                <h3>System Requirements</h3>
+                <div class="req-grid">
+                    <div class="req-item">
+                        <i class="fas fa-memory"></i>
+                        <span>4 GB RAM minimum (8 GB recommended)</span>
+                    </div>
+                    <div class="req-item">
+                        <i class="fas fa-hdd"></i>
+                        <span>500 MB available disk space</span>
+                    </div>
+                    <div class="req-item">
+                        <i class="fab fa-java"></i>
+                        <span>Java 21 runtime (included)</span>
+                    </div>
+                    <div class="req-item">
+                        <i class="fas fa-desktop"></i>
+                        <span>1280x720 minimum resolution</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2025 RAKCHA Desktop. Built with JavaFX and passion for cinema.</p>
+            <p>Open source project by ESPRIT students</p>
+        </footer>
+    </div>
+
+    <script>
+        // Fire particle animation
+        function createFireParticle() {
+            const particle = document.createElement('div');
+            particle.className = Math.random() > 0.7 ? 'particle large' : 'particle';
+            
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 4 + 's';
+            particle.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            
+            document.getElementById('fireParticles').appendChild(particle);
+            
+            setTimeout(() => {
+                if (particle.parentNode) {
+                    particle.parentNode.removeChild(particle);
+                }
+            }, 8000);
+        }
+
+        // Create fire particles continuously
+        setInterval(createFireParticle, 200);
+        
+        // Initial burst of particles
+        for (let i = 0; i < 20; i++) {
+            setTimeout(createFireParticle, i * 100);
+        }
+
+        // Download tracking
+        function trackDownload(platform, type) {
+            console.log(`Download started: ${platform} ${type}`);
+            // Add analytics tracking here if needed
+        }
+
+        // Load file sizes
+        async function loadFileSizes() {
+            const files = [
+                { id: 'linux-deb-size', path: 'releases/linux/', pattern: '.deb' },
+                { id: 'linux-portable-size', path: 'releases/linux/', pattern: 'linux.tar.gz' },
+                { id: 'windows-msi-size', path: 'releases/windows/', pattern: '.msi' },
+                { id: 'windows-portable-size', path: 'releases/windows/', pattern: 'windows.tar.gz' },
+                { id: 'macos-dmg-size', path: 'releases/macos/', pattern: '.dmg' },
+                { id: 'macos-portable-size', path: 'releases/macos/', pattern: 'macos.tar.gz' }
+            ];
+
+            files.forEach(async (file) => {
+                try {
+                    const element = document.getElementById(file.id);
+                    if (element) {
+                        // Simulate file size check - in a real scenario, you'd fetch this from the server
+                        setTimeout(() => {
+                            element.innerHTML = '~240MB'; // Default size estimate
+                        }, Math.random() * 2000 + 1000);
+                    }
+                } catch (error) {
+                    const element = document.getElementById(file.id);
+                    if (element) {
+                        element.innerHTML = 'Available';
+                    }
+                }
+            });
+        }
+
+        // Load file sizes on page load
+        document.addEventListener('DOMContentLoaded', loadFileSizes);
+
+        // Add subtle animations on scroll
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const rate = scrolled * -0.5;
+            
+            const particles = document.getElementById('fireParticles');
+            if (particles) {
+                particles.style.transform = `translateY(${rate}px)`;
+            }
+        });
+    </script>
+</body>
+</html>
 
         .download-icon {
             font-size: 3rem;

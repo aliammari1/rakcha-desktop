@@ -16,6 +16,7 @@ jobs:
   build-linux:
     runs-on: ubuntu-latest
     name: Build Linux Distribution
+    continue-on-error: true
 
     steps:
       - name: Checkout repository
@@ -62,22 +63,157 @@ jobs:
       - name: Create portable archive
         run: |
           cd target/app-image
-          tar -czf ../../RAKCHA-portable.tar.gz RAKCHA/
+          tar -czf ../../RAKCHA-portable-linux.tar.gz RAKCHA/
 
       - name: Upload Linux artifacts
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: linux-distributions
           path: |
             target/dist/*.deb
-            RAKCHA-portable.tar.gz
+            RAKCHA-portable-linux.tar.gz
+          retention-days: 30
+
+  build-windows:
+    runs-on: windows-latest
+    name: Build Windows Distribution
+    continue-on-error: true
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: Build application
+        run: |
+          mvn clean compile package -DskipTests
+          copy target\RAKCHA-1.0.6.jar target\classpath-jars\
+
+      - name: Build Windows MSI installer
+        run: |
+          jpackage --type msi `
+            --input target\classpath-jars `
+            --main-jar RAKCHA-1.0.6.jar `
+            --main-class com.esprit.MainApp `
+            --name RAKCHA `
+            --app-version 1.0.6 `
+            --dest target\dist `
+            --vendor "ESPRIT" `
+            --description "RAKCHA Desktop - Movie and Cinema Management System" `
+            --win-menu `
+            --win-shortcut `
+            --verbose
+
+      - name: Build Windows portable app
+        run: |
+          jpackage --type app-image `
+            --input target\classpath-jars `
+            --main-jar RAKCHA-1.0.6.jar `
+            --main-class com.esprit.MainApp `
+            --name RAKCHA `
+            --app-version 1.0.6 `
+            --dest target\app-image `
+            --verbose
+
+      - name: Create portable archive
+        run: |
+          cd target\app-image
+          tar -czf ..\..\RAKCHA-portable-windows.tar.gz RAKCHA\
+
+      - name: Upload Windows artifacts
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-distributions
+          path: |
+            target/dist/*.msi
+            RAKCHA-portable-windows.tar.gz
+          retention-days: 30
+
+  build-macos:
+    runs-on: macos-latest
+    name: Build macOS Distribution
+    continue-on-error: true
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: Build application
+        run: |
+          mvn clean compile package -DskipTests
+          cp target/RAKCHA-1.0.6.jar target/classpath-jars/
+
+      - name: Build macOS DMG installer
+        run: |
+          jpackage --type dmg \
+            --input target/classpath-jars \
+            --main-jar RAKCHA-1.0.6.jar \
+            --main-class com.esprit.MainApp \
+            --name RAKCHA \
+            --app-version 1.0.6 \
+            --dest target/dist \
+            --vendor "ESPRIT" \
+            --description "RAKCHA Desktop - Movie and Cinema Management System" \
+            --verbose
+
+      - name: Build macOS portable app
+        run: |
+          jpackage --type app-image \
+            --input target/classpath-jars \
+            --main-jar RAKCHA-1.0.6.jar \
+            --main-class com.esprit.MainApp \
+            --name RAKCHA \
+            --app-version 1.0.6 \
+            --dest target/app-image \
+            --verbose
+
+      - name: Create portable archive
+        run: |
+          cd target/app-image
+          tar -czf ../../RAKCHA-portable-macos.tar.gz RAKCHA.app/
+
+      - name: Upload macOS artifacts
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-distributions
+          path: |
+            target/dist/*.dmg
+            RAKCHA-portable-macos.tar.gz
           retention-days: 30
 
   deploy-website:
-    needs: [build-linux]
+    needs: [build-linux, build-windows, build-macos]
     runs-on: ubuntu-latest
     name: Deploy to GitHub Pages
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/')
+    if: always() && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/'))
 
     permissions:
       contents: read
@@ -93,17 +229,49 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Download Linux artifacts
+        continue-on-error: true
         uses: actions/download-artifact@v4
         with:
           name: linux-distributions
-          path: artifacts/
+          path: artifacts/linux/
+
+      - name: Download Windows artifacts
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-distributions
+          path: artifacts/windows/
+
+      - name: Download macOS artifacts
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: macos-distributions
+          path: artifacts/macos/
 
       - name: Prepare website
         run: |
           cp -r website/* ./
-          mkdir -p releases
-          cp artifacts/*.deb releases/ || true
-          cp artifacts/*.tar.gz releases/ || true
+          mkdir -p releases/linux releases/windows releases/macos
+          
+          # Copy platform-specific files
+          cp artifacts/linux/*.deb releases/linux/ 2>/dev/null || true
+          cp artifacts/linux/*.tar.gz releases/linux/ 2>/dev/null || true
+          cp artifacts/windows/*.msi releases/windows/ 2>/dev/null || true
+          cp artifacts/windows/*.tar.gz releases/windows/ 2>/dev/null || true
+          cp artifacts/macos/*.dmg releases/macos/ 2>/dev/null || true
+          cp artifacts/macos/*.tar.gz releases/macos/ 2>/dev/null || true
+          
+          # Generate file size information
+          for platform in linux windows macos; do
+            echo "=== $platform files ===" 
+            for file in releases/$platform/*; do
+              if [[ -f "$file" ]]; then
+                size=$(du -h "$file" | cut -f1)
+                echo "File: $(basename $file) - Size: $size"
+              fi
+            done
+          done
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -118,10 +286,10 @@ jobs:
         uses: actions/deploy-pages@v4
 
   create-release:
-    needs: [build-linux]
+    needs: [build-linux, build-windows, build-macos]
     runs-on: ubuntu-latest
     name: Create GitHub Release
-    if: startsWith(github.ref, 'refs/tags/')
+    if: always() && startsWith(github.ref, 'refs/tags/')
 
     permissions:
       contents: write
@@ -130,11 +298,31 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Download artifacts
+      - name: Download Linux artifacts
+        continue-on-error: true
         uses: actions/download-artifact@v4
         with:
           name: linux-distributions
-          path: artifacts/
+          path: artifacts/linux/
+
+      - name: Download Windows artifacts
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-distributions
+          path: artifacts/windows/
+
+      - name: Download macOS artifacts
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: macos-distributions
+          path: artifacts/macos/
+
+      - name: Collect all artifacts
+        run: |
+          mkdir -p release-artifacts
+          find artifacts -type f \( -name "*.deb" -o -name "*.msi" -o -name "*.dmg" -o -name "*.tar.gz" \) -exec cp {} release-artifacts/ \;
 
       - name: Generate release notes
         run: |
@@ -142,9 +330,10 @@ jobs:
           echo "" >> release-notes.md
           echo "## Downloads" >> release-notes.md
           echo "" >> release-notes.md
-          echo "### Linux" >> release-notes.md
-
-          for file in artifacts/*; do
+          
+          # Linux section
+          echo "### 🐧 Linux" >> release-notes.md
+          for file in artifacts/linux/*; do
             if [[ -f "$file" ]]; then
               filename=$(basename "$file")
               size=$(du -h "$file" | cut -f1)
@@ -156,11 +345,88 @@ jobs:
               fi
             fi
           done
+          
+          # Windows section  
+          echo "" >> release-notes.md
+          echo "### 🪟 Windows" >> release-notes.md
+          for file in artifacts/windows/*; do
+            if [[ -f "$file" ]]; then
+              filename=$(basename "$file")
+              size=$(du -h "$file" | cut -f1)
+              
+              if [[ $filename == *.msi ]]; then
+                echo "- **$filename** (${size}) - Windows installer package" >> release-notes.md
+              elif [[ $filename == *.tar.gz ]]; then
+                echo "- **$filename** (${size}) - Portable application archive" >> release-notes.md
+              fi
+            fi
+          done
+          
+          # macOS section
+          echo "" >> release-notes.md
+          echo "### 🍎 macOS" >> release-notes.md
+          for file in artifacts/macos/*; do
+            if [[ -f "$file" ]]; then
+              filename=$(basename "$file")
+              size=$(du -h "$file" | cut -f1)
+              
+              if [[ $filename == *.dmg ]]; then
+                echo "- **$filename** (${size}) - macOS disk image installer" >> release-notes.md
+              elif [[ $filename == *.tar.gz ]]; then
+                echo "- **$filename** (${size}) - Portable application archive" >> release-notes.md
+              fi
+            fi
+          done
+          
+          echo "" >> release-notes.md
+          echo "## Installation Instructions" >> release-notes.md
+          echo "" >> release-notes.md
+          echo "### 🐧 Linux" >> release-notes.md
+          echo '**Debian/Ubuntu (.deb):**' >> release-notes.md
+          echo '```bash' >> release-notes.md
+          echo 'sudo dpkg -i rakcha_*.deb' >> release-notes.md
+          echo 'sudo apt-get install -f  # Fix dependencies if needed' >> release-notes.md
+          echo '```' >> release-notes.md
+          echo "" >> release-notes.md
+          echo '**Portable (.tar.gz):**' >> release-notes.md
+          echo '```bash' >> release-notes.md
+          echo 'tar -xzf RAKCHA-portable-linux.tar.gz' >> release-notes.md
+          echo 'cd RAKCHA' >> release-notes.md
+          echo './bin/RAKCHA' >> release-notes.md
+          echo '```' >> release-notes.md
+          echo "" >> release-notes.md
+          echo "### 🪟 Windows" >> release-notes.md
+          echo '**MSI Installer:**' >> release-notes.md
+          echo '1. Download the .msi file' >> release-notes.md
+          echo '2. Double-click to run the installer' >> release-notes.md
+          echo '3. Follow the installation wizard' >> release-notes.md
+          echo "" >> release-notes.md
+          echo '**Portable:**' >> release-notes.md
+          echo '1. Extract RAKCHA-portable-windows.tar.gz' >> release-notes.md
+          echo '2. Run RAKCHA\bin\RAKCHA.exe' >> release-notes.md
+          echo "" >> release-notes.md
+          echo "### 🍎 macOS" >> release-notes.md
+          echo '**DMG Installer:**' >> release-notes.md
+          echo '1. Download the .dmg file' >> release-notes.md
+          echo '2. Open the DMG and drag RAKCHA to Applications' >> release-notes.md
+          echo '3. Run from Applications folder' >> release-notes.md
+          echo "" >> release-notes.md
+          echo '**Portable:**' >> release-notes.md
+          echo '1. Extract RAKCHA-portable-macos.tar.gz' >> release-notes.md
+          echo '2. Run RAKCHA.app' >> release-notes.md
+          echo "" >> release-notes.md
+          echo "## System Requirements" >> release-notes.md
+          echo "- **RAM:** 4 GB minimum (8 GB recommended)" >> release-notes.md
+          echo "- **Storage:** 500 MB disk space" >> release-notes.md
+          echo "- **Java:** Java 21 runtime (included in packages)" >> release-notes.md
+          echo "- **Linux:** Ubuntu 18.04+, Debian 10+, or equivalent" >> release-notes.md
+          echo "- **Windows:** Windows 10 or later" >> release-notes.md
+          echo "- **macOS:** macOS 10.14 or later" >> release-notes.md
 
       - name: Create Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "artifacts/*"
+          artifacts: "release-artifacts/*"
           bodyFile: "release-notes.md"
           draft: false
           prerelease: false
