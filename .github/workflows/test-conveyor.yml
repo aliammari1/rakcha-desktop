@@ -44,10 +44,10 @@ jobs:
           # Manual installation (official script is unreliable)
           CONVEYOR_URL="https://downloads.hydraulic.dev/conveyor/conveyor-${CONVEYOR_VERSION}-linux-amd64.tar.gz"
           echo "📥 Downloading from: $CONVEYOR_URL"
-          
+
           curl -L "$CONVEYOR_URL" -o conveyor.tar.gz
           tar -xzf conveyor.tar.gz
-          
+
           # Find the conveyor binary
           CONVEYOR_BIN=$(find . -name "conveyor" -type f -executable | head -1)
           if [ -n "$CONVEYOR_BIN" ]; then
@@ -58,16 +58,16 @@ jobs:
             echo "❌ Could not find conveyor binary"
             exit 1
           fi
-          
+
           # Cleanup
           rm -rf conveyor.tar.gz conveyor-*
 
           # Verify installation
           export PATH="$HOME/.local/bin:$PATH"
-          
+
           # Set up Java library path for Conveyor
           export LD_LIBRARY_PATH="$JAVA_HOME/lib/server:$JAVA_HOME/lib:$LD_LIBRARY_PATH"
-          
+
           echo "✅ Conveyor installed:"
           echo "Java Home: $JAVA_HOME"
           echo "LD_LIBRARY_PATH: $LD_LIBRARY_PATH"
@@ -81,10 +81,10 @@ jobs:
         run: |
           # Set up Java library path for Conveyor
           export LD_LIBRARY_PATH="$JAVA_HOME/lib/server:$JAVA_HOME/lib:$LD_LIBRARY_PATH"
-          
+
           echo "🧪 Testing basic Conveyor commands..."
           conveyor --help | head -10
-          
+
           echo ""
           echo "🔍 Testing Conveyor info command..."
           conveyor info || echo "ℹ️ Info command failed (expected for projects without conveyor.conf)"

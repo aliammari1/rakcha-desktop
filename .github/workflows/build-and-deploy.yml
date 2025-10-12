@@ -2,256 +2,256 @@ name: Build and Deploy RAKCHA Desktop
 
 on:
   push:
-    branches: [ main, master ]
-    tags: [ 'v*' ]
+    branches: [main, master]
+    tags: ["v*"]
   pull_request:
-    branches: [ main, master ]
+    branches: [main, master]
   workflow_dispatch:
 
 env:
-  JAVA_VERSION: '21'
-  JAVA_DISTRIBUTION: 'temurin'
+  JAVA_VERSION: "21"
+  JAVA_DISTRIBUTION: "temurin"
 
 jobs:
   build-linux:
     runs-on: ubuntu-latest
     name: Build Linux Distribution
-    
+
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      
-    - name: Set up JDK ${{ env.JAVA_VERSION }}
-      uses: actions/setup-java@v4
-      with:
-        java-version: ${{ env.JAVA_VERSION }}
-        distribution: ${{ env.JAVA_DISTRIBUTION }}
-        
-    - name: Cache Maven dependencies
-      uses: actions/cache@v4
-      with:
-        path: ~/.m2
-        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-        restore-keys: ${{ runner.os }}-m2
-        
-    - name: Install Linux dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y fakeroot dpkg-dev
-        
-    - name: Build application
-      run: |
-        mvn clean compile package -DskipTests
-        cp target/RAKCHA-*.jar target/classpath-jars/
-        
-    - name: Build Debian package
-      run: |
-        mvn jpackage:jpackage
-        
-    - name: Build portable app
-      run: |
-        jpackage --type app-image \
-          --input target/classpath-jars \
-          --main-jar RAKCHA-*.jar \
-          --main-class com.esprit.MainApp \
-          --name RAKCHA \
-          --app-version ${{ github.ref_type == 'tag' && github.ref_name || '1.0.6' }} \
-          --dest target/app-image \
-          --verbose
-          
-    - name: Create portable archive
-      run: |
-        cd target/app-image
-        tar -czf ../../RAKCHA-portable.tar.gz RAKCHA/
-        
-    - name: Upload Linux artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: linux-distributions
-        path: |
-          target/dist/*.deb
-          RAKCHA-portable.tar.gz
-        retention-days: 30
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: Install Linux dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fakeroot dpkg-dev
+
+      - name: Build application
+        run: |
+          mvn clean compile package -DskipTests
+          cp target/RAKCHA-*.jar target/classpath-jars/
+
+      - name: Build Debian package
+        run: |
+          mvn jpackage:jpackage
+
+      - name: Build portable app
+        run: |
+          jpackage --type app-image \
+            --input target/classpath-jars \
+            --main-jar RAKCHA-*.jar \
+            --main-class com.esprit.MainApp \
+            --name RAKCHA \
+            --app-version ${{ github.ref_type == 'tag' && github.ref_name || '1.0.6' }} \
+            --dest target/app-image \
+            --verbose
+
+      - name: Create portable archive
+        run: |
+          cd target/app-image
+          tar -czf ../../RAKCHA-portable.tar.gz RAKCHA/
+
+      - name: Upload Linux artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-distributions
+          path: |
+            target/dist/*.deb
+            RAKCHA-portable.tar.gz
+          retention-days: 30
 
   # Future job for Windows builds
   build-windows:
     runs-on: windows-latest
     name: Build Windows Distribution
-    if: false  # Disabled for now
-    
+    if: false # Disabled for now
+
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      
-    - name: Set up JDK ${{ env.JAVA_VERSION }}
-      uses: actions/setup-java@v4
-      with:
-        java-version: ${{ env.JAVA_VERSION }}
-        distribution: ${{ env.JAVA_DISTRIBUTION }}
-        
-    - name: Build Windows installer
-      run: |
-        # Windows build steps would go here
-        echo "Windows build not implemented yet"
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+
+      - name: Build Windows installer
+        run: |
+          # Windows build steps would go here
+          echo "Windows build not implemented yet"
 
   # Future job for macOS builds
   build-macos:
     runs-on: macos-latest
     name: Build macOS Distribution
-    if: false  # Disabled for now
-    
+    if: false # Disabled for now
+
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      
-    - name: Set up JDK ${{ env.JAVA_VERSION }}
-      uses: actions/setup-java@v4
-      with:
-        java-version: ${{ env.JAVA_VERSION }}
-        distribution: ${{ env.JAVA_DISTRIBUTION }}
-        
-    - name: Build macOS installer
-      run: |
-        # macOS build steps would go here
-        echo "macOS build not implemented yet"
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+
+      - name: Build macOS installer
+        run: |
+          # macOS build steps would go here
+          echo "macOS build not implemented yet"
 
   deploy-website:
     needs: [build-linux]
     runs-on: ubuntu-latest
     name: Deploy to GitHub Pages
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/')
-    
+
     permissions:
       contents: read
       pages: write
       id-token: write
-      
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    
+
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      
-    - name: Download Linux artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: linux-distributions
-        path: artifacts/
-        
-    - name: Prepare website
-      run: |
-        # Copy website files
-        cp -r website/* ./
-        
-        # Update releases directory
-        mkdir -p releases
-        cp artifacts/*.deb releases/ || true
-        cp artifacts/*.tar.gz releases/ || true
-        
-        # Update version in HTML if this is a tag
-        if [[ $GITHUB_REF == refs/tags/* ]]; then
-          VERSION=${GITHUB_REF#refs/tags/}
-          sed -i "s/v1\.0\.6/$VERSION/g" index.html
-          
-          # Update file names if they contain version
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download Linux artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: linux-distributions
+          path: artifacts/
+
+      - name: Prepare website
+        run: |
+          # Copy website files
+          cp -r website/* ./
+
+          # Update releases directory
+          mkdir -p releases
+          cp artifacts/*.deb releases/ || true
+          cp artifacts/*.tar.gz releases/ || true
+
+          # Update version in HTML if this is a tag
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            VERSION=${GITHUB_REF#refs/tags/}
+            sed -i "s/v1\.0\.6/$VERSION/g" index.html
+            
+            # Update file names if they contain version
+            for file in releases/*; do
+              if [[ $file == *"1.0.6"* ]]; then
+                new_name=$(echo $file | sed "s/1\.0\.6/${VERSION#v}/g")
+                mv "$file" "$new_name" || true
+              fi
+            done
+          fi
+
+          # Generate file size information
           for file in releases/*; do
-            if [[ $file == *"1.0.6"* ]]; then
-              new_name=$(echo $file | sed "s/1\.0\.6/${VERSION#v}/g")
-              mv "$file" "$new_name" || true
+            if [[ -f "$file" ]]; then
+              size=$(du -h "$file" | cut -f1)
+              echo "File: $(basename $file) - Size: $size"
             fi
           done
-        fi
-        
-        # Generate file size information
-        for file in releases/*; do
-          if [[ -f "$file" ]]; then
-            size=$(du -h "$file" | cut -f1)
-            echo "File: $(basename $file) - Size: $size"
-          fi
-        done
-        
-    - name: Setup Pages
-      uses: actions/configure-pages@v4
-      
-    - name: Upload to GitHub Pages
-      uses: actions/upload-pages-artifact@v3
-      with:
-        path: '.'
-        
-    - name: Deploy to GitHub Pages
-      id: deployment
-      uses: actions/deploy-pages@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload to GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "."
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
 
   create-release:
     needs: [build-linux]
     runs-on: ubuntu-latest
     name: Create GitHub Release
     if: startsWith(github.ref, 'refs/tags/')
-    
+
     permissions:
       contents: write
-      
+
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      
-    - name: Download artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: linux-distributions
-        path: artifacts/
-        
-    - name: Generate release notes
-      run: |
-        echo "# RAKCHA Desktop ${GITHUB_REF#refs/tags/}" > release-notes.md
-        echo "" >> release-notes.md
-        echo "## Downloads" >> release-notes.md
-        echo "" >> release-notes.md
-        echo "### Linux" >> release-notes.md
-        
-        for file in artifacts/*; do
-          if [[ -f "$file" ]]; then
-            filename=$(basename "$file")
-            size=$(du -h "$file" | cut -f1)
-            
-            if [[ $filename == *.deb ]]; then
-              echo "- **$filename** (${size}) - Debian/Ubuntu package installer" >> release-notes.md
-            elif [[ $filename == *.tar.gz ]]; then
-              echo "- **$filename** (${size}) - Portable application archive" >> release-notes.md
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: linux-distributions
+          path: artifacts/
+
+      - name: Generate release notes
+        run: |
+          echo "# RAKCHA Desktop ${GITHUB_REF#refs/tags/}" > release-notes.md
+          echo "" >> release-notes.md
+          echo "## Downloads" >> release-notes.md
+          echo "" >> release-notes.md
+          echo "### Linux" >> release-notes.md
+
+          for file in artifacts/*; do
+            if [[ -f "$file" ]]; then
+              filename=$(basename "$file")
+              size=$(du -h "$file" | cut -f1)
+              
+              if [[ $filename == *.deb ]]; then
+                echo "- **$filename** (${size}) - Debian/Ubuntu package installer" >> release-notes.md
+              elif [[ $filename == *.tar.gz ]]; then
+                echo "- **$filename** (${size}) - Portable application archive" >> release-notes.md
+              fi
             fi
-          fi
-        done
-        
-        echo "" >> release-notes.md
-        echo "## Installation" >> release-notes.md
-        echo "" >> release-notes.md
-        echo "### Debian/Ubuntu (.deb)" >> release-notes.md
-        echo '```bash' >> release-notes.md
-        echo 'sudo dpkg -i rakcha_*.deb' >> release-notes.md
-        echo 'sudo apt-get install -f  # Fix dependencies if needed' >> release-notes.md
-        echo '```' >> release-notes.md
-        echo "" >> release-notes.md
-        echo "### Portable (.tar.gz)" >> release-notes.md
-        echo '```bash' >> release-notes.md
-        echo 'tar -xzf RAKCHA-portable.tar.gz' >> release-notes.md
-        echo 'cd RAKCHA' >> release-notes.md
-        echo './bin/RAKCHA' >> release-notes.md
-        echo '```' >> release-notes.md
-        echo "" >> release-notes.md
-        echo "## System Requirements" >> release-notes.md
-        echo "- Linux x86_64 (Ubuntu 18.04+, Debian 10+)" >> release-notes.md
-        echo "- 4 GB RAM minimum (8 GB recommended)" >> release-notes.md
-        echo "- 500 MB disk space" >> release-notes.md
-        echo "- Java 21 runtime (included in packages)" >> release-notes.md
-        
-    - name: Create Release
-      uses: ncipollo/release-action@v1
-      with:
-        artifacts: "artifacts/*"
-        bodyFile: "release-notes.md"
-        draft: false
-        prerelease: ${{ contains(github.ref, 'alpha') || contains(github.ref, 'beta') || contains(github.ref, 'rc') }}
-        generateReleaseNotes: true
-        makeLatest: true
+          done
+
+          echo "" >> release-notes.md
+          echo "## Installation" >> release-notes.md
+          echo "" >> release-notes.md
+          echo "### Debian/Ubuntu (.deb)" >> release-notes.md
+          echo '```bash' >> release-notes.md
+          echo 'sudo dpkg -i rakcha_*.deb' >> release-notes.md
+          echo 'sudo apt-get install -f  # Fix dependencies if needed' >> release-notes.md
+          echo '```' >> release-notes.md
+          echo "" >> release-notes.md
+          echo "### Portable (.tar.gz)" >> release-notes.md
+          echo '```bash' >> release-notes.md
+          echo 'tar -xzf RAKCHA-portable.tar.gz' >> release-notes.md
+          echo 'cd RAKCHA' >> release-notes.md
+          echo './bin/RAKCHA' >> release-notes.md
+          echo '```' >> release-notes.md
+          echo "" >> release-notes.md
+          echo "## System Requirements" >> release-notes.md
+          echo "- Linux x86_64 (Ubuntu 18.04+, Debian 10+)" >> release-notes.md
+          echo "- 4 GB RAM minimum (8 GB recommended)" >> release-notes.md
+          echo "- 500 MB disk space" >> release-notes.md
+          echo "- Java 21 runtime (included in packages)" >> release-notes.md
+
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "artifacts/*"
+          bodyFile: "release-notes.md"
+          draft: false
+          prerelease: ${{ contains(github.ref, 'alpha') || contains(github.ref, 'beta') || contains(github.ref, 'rc') }}
+          generateReleaseNotes: true
+          makeLatest: true
