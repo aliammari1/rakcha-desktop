@@ -24,7 +24,7 @@ concurrency:
 
 env:
   JAVA_VERSION: "21"
-  CONVEYOR_VERSION: "20.0"
+  CONVEYOR_VERSION: "21.0"
 
 jobs:
   build-conveyor-site:
@@ -90,38 +90,36 @@ jobs:
           # Create local bin directory
           mkdir -p "$HOME/.local/bin"
 
-          # Try the official install script first
-          echo "🔄 Trying official install script..."
-          if curl -L https://downloads.hydraulic.dev/conveyor/install.sh | bash; then
-            echo "✅ Official install script succeeded"
+          # Manual installation (official script is unreliable)
+          CONVEYOR_URL="https://downloads.hydraulic.dev/conveyor/conveyor-${CONVEYOR_VERSION}-linux-amd64.tar.gz"
+          echo "📥 Downloading from: $CONVEYOR_URL"
+
+          curl -L "$CONVEYOR_URL" -o conveyor.tar.gz
+          tar -xzf conveyor.tar.gz
+
+          # Find the conveyor binary
+          CONVEYOR_BIN=$(find . -name "conveyor" -type f -executable | head -1)
+          if [ -n "$CONVEYOR_BIN" ]; then
+            cp "$CONVEYOR_BIN" "$HOME/.local/bin/conveyor"
+            chmod +x "$HOME/.local/bin/conveyor"
+            echo "✅ Manual installation completed"
           else
-            echo "⚠️ Official script failed, trying manual installation..."
-            
-            # Manual installation as fallback
-            CONVEYOR_URL="https://downloads.hydraulic.dev/conveyor/conveyor-${CONVEYOR_VERSION}-linux-amd64.tar.gz"
-            echo "📥 Downloading from: $CONVEYOR_URL"
-            
-            curl -L "$CONVEYOR_URL" -o conveyor.tar.gz
-            tar -xzf conveyor.tar.gz
-            
-            # Find the conveyor binary
-            CONVEYOR_BIN=$(find . -name "conveyor" -type f -executable | head -1)
-            if [ -n "$CONVEYOR_BIN" ]; then
-              cp "$CONVEYOR_BIN" "$HOME/.local/bin/conveyor"
-              chmod +x "$HOME/.local/bin/conveyor"
-              echo "✅ Manual installation completed"
-            else
-              echo "❌ Could not find conveyor binary"
-              exit 1
-            fi
-            
-            # Cleanup
-            rm -rf conveyor.tar.gz conveyor-*
+            echo "❌ Could not find conveyor binary"
+            exit 1
           fi
+
+          # Cleanup
+          rm -rf conveyor.tar.gz conveyor-*
 
           # Verify installation
           export PATH="$HOME/.local/bin:$PATH"
+
+          # Set up Java library path for Conveyor
+          export LD_LIBRARY_PATH="$JAVA_HOME/lib/server:$JAVA_HOME/lib:$LD_LIBRARY_PATH"
+
           echo "✅ Conveyor installed:"
+          echo "Java Home: $JAVA_HOME"
+          echo "LD_LIBRARY_PATH: $LD_LIBRARY_PATH"
           "$HOME/.local/bin/conveyor" --version
 
       - name: Add Conveyor to PATH
@@ -191,6 +189,9 @@ jobs:
 
           # Ensure cache directory exists
           mkdir -p $HOME/.cache/hydraulic/conveyor
+
+          # Set up Java library path for Conveyor
+          export LD_LIBRARY_PATH="$JAVA_HOME/lib/server:$JAVA_HOME/lib:$LD_LIBRARY_PATH"
 
           # Build packages using CI config with proper parallelism
           conveyor -f ci.conveyor.conf make site

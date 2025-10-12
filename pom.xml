@@ -570,7 +570,45 @@
         </configuration>
       </plugin>
 
-      <!-- Conveyor Maven Plugin -->
+      <!-- JPackage Maven Plugin for Native Installers -->
+      <plugin>
+        <groupId>com.github.akman</groupId>
+        <artifactId>jpackage-maven-plugin</artifactId>
+        <version>0.1.5</version>
+        <configuration>
+          <toolhome>${java.home}</toolhome>
+          <name>${app.name}</name>
+          <appversion>${app.version}</appversion>
+          <vendor>ESPRIT</vendor>
+          <description>RAKCHA Desktop Application - Movie and Cinema Management</description>
+          <copyright>Copyright © 2025 ESPRIT</copyright>
+          <mainjar>${project.build.finalName}.jar</mainjar>
+          <mainclass>${main-class}</mainclass>
+          <dest>target/dist</dest>
+          <verbose>true</verbose>
+          
+          <!-- Input files - include both the main jar and classpath jars -->
+          <input>target/classpath-jars</input>
+          
+          <!-- JVM Options as string -->
+          <javaoptions>-Xms256m -Xmx1024m -Dfile.encoding=UTF-8 --add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED --add-opens=javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED --add-opens=javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED --add-opens=javafx.base/com.sun.javafx.binding=ALL-UNNAMED --add-opens=javafx.base/com.sun.javafx.event=ALL-UNNAMED --add-opens=javafx.graphics/com.sun.javafx.stage=ALL-UNNAMED</javaoptions>
+          
+          <!-- Linux-specific configuration only -->
+          <linuxshortcut>true</linuxshortcut>
+          <linuxmenugroup>Office</linuxmenugroup>
+        </configuration>
+        <executions>
+          <execution>
+            <id>build-installer</id>
+            <phase>install</phase>
+            <goals>
+              <goal>jpackage</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Conveyor Maven Plugin (keeping for comparison) -->
       <plugin>
         <groupId>dev.hydraulic</groupId>
         <artifactId>conveyor-maven-plugin</artifactId>
