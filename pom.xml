@@ -202,7 +202,7 @@
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-base</artifactId>
-      <version>21.0.7</version>
+      <version>26-ea+11</version>
     </dependency>
     <dependency>
       <groupId>com.google.http-client</groupId>
