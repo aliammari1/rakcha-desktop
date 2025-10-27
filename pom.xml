@@ -467,7 +467,7 @@
       <plugin>
         <groupId>org.openrewrite.maven</groupId>
         <artifactId>rewrite-maven-plugin</artifactId>
-        <version>5.36.0</version>
+        <version>6.22.1</version>
         <configuration>
           <exportDatatables>true</exportDatatables>
           <configLocation>rewrite.yml</configLocation>
