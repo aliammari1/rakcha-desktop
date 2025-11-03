@@ -11,12 +11,15 @@ on:
 env:
   JAVA_VERSION: "21"
   JAVA_DISTRIBUTION: "temurin"
+  APP_VERSION: "1.0.6"
+  APP_NAME: "RAKCHA"
+  MAIN_CLASS: "com.esprit.MainApp"
 
 jobs:
   build-linux:
     runs-on: ubuntu-latest
     name: Build Linux Distribution
-    continue-on-error: true
+    continue-on-error: false
 
     steps:
       - name: Checkout repository
@@ -27,58 +30,63 @@ jobs:
         with:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: ${{ env.JAVA_DISTRIBUTION }}
+          cache: maven
 
-      - name: Cache Maven dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-
-      - name: Install Linux dependencies
+      - name: Install Linux dependencies for jpackage
         run: |
           sudo apt-get update
-          sudo apt-get install -y fakeroot dpkg-dev
+          sudo apt-get install -y fakeroot dpkg-dev binutils
 
-      - name: Build application
+      - name: Build application with Maven
         run: |
-          mvn clean compile package -DskipTests
-          cp target/RAKCHA-1.0.6.jar target/classpath-jars/
+          mvn clean compile package -DskipTests -B -V
+          cp target/${{ env.APP_NAME }}-${{ env.APP_VERSION }}.jar target/classpath-jars/
 
-      - name: Build Debian package
-        run: |
-          mvn jpackage:jpackage
+      - name: Build Debian package with jpackage (via Maven)
+        run: mvn jpackage:jpackage -B
 
-      - name: Build portable app
+      - name: Build Linux portable app-image
         run: |
           jpackage --type app-image \
             --input target/classpath-jars \
-            --main-jar RAKCHA-1.0.6.jar \
-            --main-class com.esprit.MainApp \
-            --name RAKCHA \
-            --app-version 1.0.6 \
+            --main-jar ${{ env.APP_NAME }}-${{ env.APP_VERSION }}.jar \
+            --main-class ${{ env.MAIN_CLASS }} \
+            --name ${{ env.APP_NAME }} \
+            --app-version ${{ env.APP_VERSION }} \
             --dest target/app-image \
+            --java-options "-Xms256m" \
+            --java-options "-Xmx1024m" \
+            --java-options "-Dfile.encoding=UTF-8" \
+            --vendor "ESPRIT" \
+            --description "RAKCHA Desktop - Movie and Cinema Management System" \
             --verbose
 
       - name: Create portable archive
         run: |
           cd target/app-image
-          tar -czf ../../RAKCHA-portable-linux.tar.gz RAKCHA/
+          tar -czf ../../${{ env.APP_NAME }}-${{ env.APP_VERSION }}-linux-portable.tar.gz ${{ env.APP_NAME }}/
+
+      - name: Verify Linux artifacts
+        run: |
+          echo "=== Debian Package ===" 
+          ls -lh target/dist/*.deb || echo "No .deb package found"
+          echo "=== Portable Archive ===" 
+          ls -lh ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-linux-portable.tar.gz
 
       - name: Upload Linux artifacts
-        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: linux-distributions
           path: |
             target/dist/*.deb
-            RAKCHA-portable-linux.tar.gz
-          retention-days: 30
+            ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-linux-portable.tar.gz
+          retention-days: 90
+          if-no-files-found: warn
 
   build-windows:
     runs-on: windows-latest
     name: Build Windows Distribution
-    continue-on-error: true
+    continue-on-error: false
 
     steps:
       - name: Checkout repository
@@ -89,98 +97,86 @@ jobs:
         with:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: ${{ env.JAVA_DISTRIBUTION }}
+          cache: maven
 
-      - name: Cache Maven dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-
-      - name: Build application
+      - name: Build application with Maven
         run: |
-          mvn clean compile package -DskipTests
-          copy target\RAKCHA-1.0.6.jar target\classpath-jars\
+          mvn clean compile package -DskipTests -B -V
+          copy target\${{ env.APP_NAME }}-${{ env.APP_VERSION }}.jar target\classpath-jars\
 
-      - name: Create Windows resources directory
-        run: |
-          mkdir -p src\main\resources\windows
-          echo "app.name=RAKCHA" > src\main\resources\windows\RAKCHA.properties
-          echo "app.description=RAKCHA Desktop - Movie and Cinema Management System" >> src\main\resources\windows\RAKCHA.properties
-          echo "app.vendor=ESPRIT" >> src\main\resources\windows\RAKCHA.properties
-        shell: cmd
-
-      - name: Build Windows MSI installer
+      - name: Build Windows MSI installer with jpackage
         run: |
           jpackage --type msi `
             --input target\classpath-jars `
-            --main-jar RAKCHA-1.0.6.jar `
-            --main-class com.esprit.MainApp `
-            --name RAKCHA `
-            --app-version 1.0.6 `
+            --main-jar ${{ env.APP_NAME }}-${{ env.APP_VERSION }}.jar `
+            --main-class ${{ env.MAIN_CLASS }} `
+            --name ${{ env.APP_NAME }} `
+            --app-version ${{ env.APP_VERSION }} `
             --dest target\dist `
             --vendor "ESPRIT" `
             --description "RAKCHA Desktop - Movie and Cinema Management System" `
+            --copyright "Copyright © 2025 ESPRIT" `
             --win-menu `
             --win-shortcut `
             --win-dir-chooser `
+            --win-menu-group "RAKCHA" `
+            --java-options "-Xms256m" `
+            --java-options "-Xmx1024m" `
+            --java-options "-Dfile.encoding=UTF-8" `
             --verbose
+        shell: powershell
 
-      - name: Build Windows portable app
+      - name: Build Windows portable app-image
         run: |
           jpackage --type app-image `
             --input target\classpath-jars `
-            --main-jar RAKCHA-1.0.6.jar `
-            --main-class com.esprit.MainApp `
-            --name RAKCHA `
-            --app-version 1.0.6 `
+            --main-jar ${{ env.APP_NAME }}-${{ env.APP_VERSION }}.jar `
+            --main-class ${{ env.MAIN_CLASS }} `
+            --name ${{ env.APP_NAME }} `
+            --app-version ${{ env.APP_VERSION }} `
             --dest target\app-image `
+            --vendor "ESPRIT" `
+            --description "RAKCHA Desktop - Movie and Cinema Management System" `
+            --java-options "-Xms256m" `
+            --java-options "-Xmx1024m" `
+            --java-options "-Dfile.encoding=UTF-8" `
             --verbose
-
-      - name: Verify Windows app structure
-        run: |
-          dir target\app-image
-          if (Test-Path "target\app-image\RAKCHA") {
-            Write-Host "RAKCHA directory found"
-            dir target\app-image\RAKCHA
-          } else {
-            Write-Host "RAKCHA directory not found, checking alternatives..."
-            dir target\app-image
-          }
         shell: powershell
 
       - name: Create portable archive
         run: |
-          cd target\app-image
-          if (Test-Path "RAKCHA") {
-            Compress-Archive -Path "RAKCHA\*" -DestinationPath "..\..\RAKCHA-portable-windows.zip"
-            Write-Host "Created zip archive with RAKCHA directory"
+          $appImagePath = "target\app-image\${{ env.APP_NAME }}"
+          if (Test-Path $appImagePath) {
+            Compress-Archive -Path "$appImagePath\*" -DestinationPath "${{ env.APP_NAME }}-${{ env.APP_VERSION }}-windows-portable.zip" -Force
+            Write-Host "Created portable archive successfully"
           } else {
-            $appDir = Get-ChildItem -Directory | Select-Object -First 1
-            if ($appDir) {
-              Compress-Archive -Path "$($appDir.Name)\*" -DestinationPath "..\..\RAKCHA-portable-windows.zip"
-              Write-Host "Created zip archive with $($appDir.Name) directory"
-            } else {
-              Write-Host "No application directory found"
-              exit 1
-            }
+            Write-Host "ERROR: App image not found at $appImagePath"
+            exit 1
           }
         shell: powershell
 
+      - name: Verify Windows artifacts
+        run: |
+          Write-Host "=== MSI Installer ===" 
+          Get-ChildItem target\dist\*.msi -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "$($_.Name) - $([math]::Round($_.Length/1MB, 2)) MB" }
+          Write-Host "=== Portable Archive ===" 
+          Get-ChildItem ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-windows-portable.zip -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "$($_.Name) - $([math]::Round($_.Length/1MB, 2)) MB" }
+        shell: powershell
+
       - name: Upload Windows artifacts
-        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: windows-distributions
           path: |
             target/dist/*.msi
-            RAKCHA-portable-windows.zip
-          retention-days: 30
+            ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-windows-portable.zip
+          retention-days: 90
+          if-no-files-found: warn
 
   build-macos:
     runs-on: macos-latest
     name: Build macOS Distribution
-    continue-on-error: true
+    continue-on-error: false
 
     steps:
       - name: Checkout repository
@@ -191,57 +187,68 @@ jobs:
         with:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: ${{ env.JAVA_DISTRIBUTION }}
+          cache: maven
 
-      - name: Cache Maven dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-
-      - name: Build application
+      - name: Build application with Maven
         run: |
-          mvn clean compile package -DskipTests
-          cp target/RAKCHA-1.0.6.jar target/classpath-jars/
+          mvn clean compile package -DskipTests -B -V
+          cp target/${{ env.APP_NAME }}-${{ env.APP_VERSION }}.jar target/classpath-jars/
 
-      - name: Build macOS DMG installer
+      - name: Build macOS DMG installer with jpackage
         run: |
           jpackage --type dmg \
             --input target/classpath-jars \
-            --main-jar RAKCHA-1.0.6.jar \
-            --main-class com.esprit.MainApp \
-            --name RAKCHA \
-            --app-version 1.0.6 \
+            --main-jar ${{ env.APP_NAME }}-${{ env.APP_VERSION }}.jar \
+            --main-class ${{ env.MAIN_CLASS }} \
+            --name ${{ env.APP_NAME }} \
+            --app-version ${{ env.APP_VERSION }} \
             --dest target/dist \
             --vendor "ESPRIT" \
             --description "RAKCHA Desktop - Movie and Cinema Management System" \
+            --copyright "Copyright © 2025 ESPRIT" \
+            --mac-package-name "${{ env.APP_NAME }}" \
+            --java-options "-Xms256m" \
+            --java-options "-Xmx1024m" \
+            --java-options "-Dfile.encoding=UTF-8" \
             --verbose
 
-      - name: Build macOS portable app
+      - name: Build macOS portable app-image
         run: |
           jpackage --type app-image \
             --input target/classpath-jars \
-            --main-jar RAKCHA-1.0.6.jar \
-            --main-class com.esprit.MainApp \
-            --name RAKCHA \
-            --app-version 1.0.6 \
+            --main-jar ${{ env.APP_NAME }}-${{ env.APP_VERSION }}.jar \
+            --main-class ${{ env.MAIN_CLASS }} \
+            --name ${{ env.APP_NAME }} \
+            --app-version ${{ env.APP_VERSION }} \
             --dest target/app-image \
+            --vendor "ESPRIT" \
+            --description "RAKCHA Desktop - Movie and Cinema Management System" \
+            --java-options "-Xms256m" \
+            --java-options "-Xmx1024m" \
+            --java-options "-Dfile.encoding=UTF-8" \
             --verbose
 
       - name: Create portable archive
         run: |
           cd target/app-image
-          tar -czf ../../RAKCHA-portable-macos.tar.gz RAKCHA.app/
+          tar -czf ../../${{ env.APP_NAME }}-${{ env.APP_VERSION }}-macos-portable.tar.gz ${{ env.APP_NAME }}.app/
+
+      - name: Verify macOS artifacts
+        run: |
+          echo "=== DMG Installer ===" 
+          ls -lh target/dist/*.dmg 2>/dev/null || echo "No .dmg installer found"
+          echo "=== Portable Archive ===" 
+          ls -lh ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-macos-portable.tar.gz
 
       - name: Upload macOS artifacts
-        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: macos-distributions
           path: |
             target/dist/*.dmg
-            RAKCHA-portable-macos.tar.gz
-          retention-days: 30
+            ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-macos-portable.tar.gz
+          retention-days: 90
+          if-no-files-found: warn
 
   deploy-website:
     needs: [build-linux, build-windows, build-macos]
@@ -288,23 +295,35 @@ jobs:
           cp -r website/* ./
           mkdir -p releases/linux releases/windows releases/macos
           
-          # Copy platform-specific files
-          cp artifacts/linux/*.deb releases/linux/ 2>/dev/null || true
-          cp artifacts/linux/*.tar.gz releases/linux/ 2>/dev/null || true
-          cp artifacts/windows/*.msi releases/windows/ 2>/dev/null || true
-          cp artifacts/windows/*.zip releases/windows/ 2>/dev/null || true
-          cp artifacts/macos/*.dmg releases/macos/ 2>/dev/null || true
-          cp artifacts/macos/*.tar.gz releases/macos/ 2>/dev/null || true
+          # Copy platform-specific files with version naming
+          if [ -d "artifacts/linux" ]; then
+            find artifacts/linux -type f \( -name "*.deb" -o -name "*.tar.gz" \) -exec cp {} releases/linux/ \;
+          fi
           
-          # Generate file size information
+          if [ -d "artifacts/windows" ]; then
+            find artifacts/windows -type f \( -name "*.msi" -o -name "*.zip" \) -exec cp {} releases/windows/ \;
+          fi
+          
+          if [ -d "artifacts/macos" ]; then
+            find artifacts/macos -type f \( -name "*.dmg" -o -name "*.tar.gz" \) -exec cp {} releases/macos/ \;
+          fi
+          
+          # Generate release information
+          echo "# RAKCHA Desktop Installers" > releases/README.md
+          echo "" >> releases/README.md
+          echo "Built with jpackage for native platform integration." >> releases/README.md
+          echo "" >> releases/README.md
+          
           for platform in linux windows macos; do
-            echo "=== $platform files ===" 
+            echo "## ${platform^} Installers" >> releases/README.md
             for file in releases/$platform/*; do
               if [[ -f "$file" ]]; then
                 size=$(du -h "$file" | cut -f1)
-                echo "File: $(basename $file) - Size: $size"
+                filename=$(basename "$file")
+                echo "- **$filename** - Size: $size" >> releases/README.md
               fi
             done
+            echo "" >> releases/README.md
           done
 
       - name: Setup Pages
@@ -362,7 +381,9 @@ jobs:
         run: |
           echo "# RAKCHA Desktop ${GITHUB_REF#refs/tags/}" > release-notes.md
           echo "" >> release-notes.md
-          echo "## Downloads" >> release-notes.md
+          echo "Built with **jpackage** for native platform installers with integrated Java runtime." >> release-notes.md
+          echo "" >> release-notes.md
+          echo "## 📦 Downloads" >> release-notes.md
           echo "" >> release-notes.md
           
           # Linux section
@@ -373,9 +394,9 @@ jobs:
               size=$(du -h "$file" | cut -f1)
               
               if [[ $filename == *.deb ]]; then
-                echo "- **$filename** (${size}) - Debian/Ubuntu package installer" >> release-notes.md
-              elif [[ $filename == *.tar.gz ]]; then
-                echo "- **$filename** (${size}) - Portable application archive" >> release-notes.md
+                echo "- **$filename** (${size}) - Debian/Ubuntu installer package (recommended)" >> release-notes.md
+              elif [[ $filename == *portable* ]]; then
+                echo "- **$filename** (${size}) - Portable application archive (no installation required)" >> release-notes.md
               fi
             fi
           done
@@ -389,9 +410,9 @@ jobs:
               size=$(du -h "$file" | cut -f1)
               
               if [[ $filename == *.msi ]]; then
-                echo "- **$filename** (${size}) - Windows installer package" >> release-notes.md
-              elif [[ $filename == *.zip ]]; then
-                echo "- **$filename** (${size}) - Portable application archive" >> release-notes.md
+                echo "- **$filename** (${size}) - Windows MSI installer (recommended)" >> release-notes.md
+              elif [[ $filename == *portable* ]]; then
+                echo "- **$filename** (${size}) - Portable application archive (no installation required)" >> release-notes.md
               fi
             fi
           done
@@ -405,57 +426,73 @@ jobs:
               size=$(du -h "$file" | cut -f1)
               
               if [[ $filename == *.dmg ]]; then
-                echo "- **$filename** (${size}) - macOS disk image installer" >> release-notes.md
-              elif [[ $filename == *.tar.gz ]]; then
-                echo "- **$filename** (${size}) - Portable application archive" >> release-notes.md
+                echo "- **$filename** (${size}) - macOS DMG disk image installer (recommended)" >> release-notes.md
+              elif [[ $filename == *portable* ]]; then
+                echo "- **$filename** (${size}) - Portable application archive (no installation required)" >> release-notes.md
               fi
             fi
           done
           
           echo "" >> release-notes.md
-          echo "## Installation Instructions" >> release-notes.md
+          echo "## 📋 Installation Instructions" >> release-notes.md
           echo "" >> release-notes.md
           echo "### 🐧 Linux" >> release-notes.md
+          echo "" >> release-notes.md
           echo '**Debian/Ubuntu (.deb):**' >> release-notes.md
           echo '```bash' >> release-notes.md
-          echo 'sudo dpkg -i rakcha_*.deb' >> release-notes.md
+          echo 'sudo dpkg -i ${{ env.APP_NAME }}-*.deb' >> release-notes.md
           echo 'sudo apt-get install -f  # Fix dependencies if needed' >> release-notes.md
           echo '```' >> release-notes.md
           echo "" >> release-notes.md
           echo '**Portable (.tar.gz):**' >> release-notes.md
           echo '```bash' >> release-notes.md
-          echo 'tar -xzf RAKCHA-portable-linux.tar.gz' >> release-notes.md
-          echo 'cd RAKCHA' >> release-notes.md
-          echo './bin/RAKCHA' >> release-notes.md
+          echo 'tar -xzf ${{ env.APP_NAME }}-*-linux-portable.tar.gz' >> release-notes.md
+          echo 'cd ${{ env.APP_NAME }}' >> release-notes.md
+          echo './bin/${{ env.APP_NAME }}' >> release-notes.md
           echo '```' >> release-notes.md
           echo "" >> release-notes.md
           echo "### 🪟 Windows" >> release-notes.md
-          echo '**MSI Installer:**' >> release-notes.md
-          echo '1. Download the .msi file' >> release-notes.md
-          echo '2. Double-click to run the installer' >> release-notes.md
+          echo "" >> release-notes.md
+          echo '**MSI Installer (Recommended):**' >> release-notes.md
+          echo '1. Download the `.msi` file' >> release-notes.md
+          echo '2. Double-click to launch the installer' >> release-notes.md
           echo '3. Follow the installation wizard' >> release-notes.md
+          echo '4. Application will be added to Start Menu' >> release-notes.md
           echo "" >> release-notes.md
           echo '**Portable:**' >> release-notes.md
-          echo '1. Extract RAKCHA-portable-windows.zip' >> release-notes.md
-          echo '2. Run RAKCHA\bin\RAKCHA.exe' >> release-notes.md
+          echo '1. Extract the ZIP archive' >> release-notes.md
+          echo '2. Navigate to extracted folder' >> release-notes.md
+          echo '3. Run `bin\${{ env.APP_NAME }}.exe`' >> release-notes.md
           echo "" >> release-notes.md
           echo "### 🍎 macOS" >> release-notes.md
-          echo '**DMG Installer:**' >> release-notes.md
-          echo '1. Download the .dmg file' >> release-notes.md
-          echo '2. Open the DMG and drag RAKCHA to Applications' >> release-notes.md
-          echo '3. Run from Applications folder' >> release-notes.md
+          echo "" >> release-notes.md
+          echo '**DMG Installer (Recommended):**' >> release-notes.md
+          echo '1. Download the `.dmg` file' >> release-notes.md
+          echo '2. Open the DMG file' >> release-notes.md
+          echo '3. Drag ${{ env.APP_NAME }} to the Applications folder' >> release-notes.md
+          echo '4. Launch from Applications or Launchpad' >> release-notes.md
           echo "" >> release-notes.md
           echo '**Portable:**' >> release-notes.md
-          echo '1. Extract RAKCHA-portable-macos.tar.gz' >> release-notes.md
-          echo '2. Run RAKCHA.app' >> release-notes.md
+          echo '1. Extract the `.tar.gz` archive' >> release-notes.md
+          echo '2. Run `${{ env.APP_NAME }}.app`' >> release-notes.md
           echo "" >> release-notes.md
-          echo "## System Requirements" >> release-notes.md
+          echo "## ⚙️ System Requirements" >> release-notes.md
+          echo "" >> release-notes.md
           echo "- **RAM:** 4 GB minimum (8 GB recommended)" >> release-notes.md
-          echo "- **Storage:** 500 MB disk space" >> release-notes.md
-          echo "- **Java:** Java 21 runtime (included in packages)" >> release-notes.md
-          echo "- **Linux:** Ubuntu 18.04+, Debian 10+, or equivalent" >> release-notes.md
-          echo "- **Windows:** Windows 10 or later" >> release-notes.md
-          echo "- **macOS:** macOS 10.14 or later" >> release-notes.md
+          echo "- **Storage:** 500 MB available disk space" >> release-notes.md
+          echo "- **Java:** Java 21 runtime **included** (no separate installation needed)" >> release-notes.md
+          echo "- **Linux:** Ubuntu 18.04+, Debian 10+, Fedora 30+, or equivalent" >> release-notes.md
+          echo "- **Windows:** Windows 10 (build 1809) or later" >> release-notes.md
+          echo "- **macOS:** macOS 10.14 (Mojave) or later" >> release-notes.md
+          echo "" >> release-notes.md
+          echo "## 🔧 Built with jpackage" >> release-notes.md
+          echo "" >> release-notes.md
+          echo "All installers are built using **jpackage**, Oracle's native packaging tool for Java applications." >> release-notes.md
+          echo "This ensures:" >> release-notes.md
+          echo "- Native platform integration" >> release-notes.md
+          echo "- Bundled Java runtime (no separate JDK/JRE installation required)" >> release-notes.md
+          echo "- Optimized application startup" >> release-notes.md
+          echo "- Standard installation experience for each platform" >> release-notes.md
 
       - name: Create Release
         uses: ncipollo/release-action@v1

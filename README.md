@@ -19,8 +19,9 @@ This MVP has been thoroughly optimized with:
 - ✅ **Professional UI/UX** with modern design and smooth animations
 - ✅ **Automated demo generation** with screenshot and video utilities
 - ✅ **High-performance architecture** with database optimization and connection pooling
-- ✅ **Cross-platform installers** with native packaging for Windows, macOS, and Linux
-- ✅ **Production-ready deployment** with Docker support and cloud compatibility
+- ✅ **Cross-platform installers** with jpackage for native Windows, macOS, and Linux deployment
+- ✅ **Production-ready application** with bundled Java runtime for seamless end-user experience
+- ✅ **Docker support** for database and development environment setup
 - ✅ **Comprehensive documentation** with user guides and API documentation
 
 ## 📋 Table of Contents
@@ -459,9 +460,81 @@ Rakcha Desktop integrates with several external APIs:
 
 ## 🚀 Deployment
 
-### 🐳 Docker Deployment
+### 📦 Native Installers (jpackage)
 
-Rakcha Desktop can be easily deployed using Docker containers, simplifying the setup process and ensuring consistent environments across different systems.
+RAKCHA Desktop uses **jpackage** to create native platform installers with bundled Java runtime.
+
+#### Building Native Installers
+
+**For all platforms:**
+
+Platform-specific installers are automatically built via GitHub Actions on every release.
+
+**Build locally:**
+
+1. **Linux (Debian/Ubuntu)**:
+   ```bash
+   # Install jpackage dependencies
+   sudo apt-get install -y fakeroot dpkg-dev binutils
+   
+   # Build DEB package
+   mvn clean compile package -DskipTests
+   cp target/RAKCHA-1.0.6.jar target/classpath-jars/
+   mvn jpackage:jpackage
+   
+   # Find your installer in target/dist/
+   ```
+
+2. **Windows**:
+   ```powershell
+   # Build MSI installer
+   mvn clean compile package -DskipTests
+   copy target\RAKCHA-1.0.6.jar target\classpath-jars\
+   
+   jpackage --type msi `
+     --input target\classpath-jars `
+     --main-jar RAKCHA-1.0.6.jar `
+     --main-class com.esprit.MainApp `
+     --name RAKCHA `
+     --app-version 1.0.6 `
+     --dest target\dist `
+     --vendor "ESPRIT" `
+     --win-menu `
+     --win-shortcut
+   
+   # Find your installer in target\dist\
+   ```
+
+3. **macOS**:
+   ```bash
+   # Build DMG installer
+   mvn clean compile package -DskipTests
+   cp target/RAKCHA-1.0.6.jar target/classpath-jars/
+   
+   jpackage --type dmg \
+     --input target/classpath-jars \
+     --main-jar RAKCHA-1.0.6.jar \
+     --main-class com.esprit.MainApp \
+     --name RAKCHA \
+     --app-version 1.0.6 \
+     --dest target/dist \
+     --vendor "ESPRIT"
+   
+   # Find your installer in target/dist/
+   ```
+
+**Benefits of jpackage installers:**
+- ✅ Bundled Java 21 runtime (no separate JDK/JRE installation needed)
+- ✅ Native OS integration (Start Menu, Applications folder, etc.)
+- ✅ File associations and desktop shortcuts
+- ✅ Professional installation experience
+- ✅ Automatic updates support (future enhancement)
+
+### 🐳 Docker Deployment (Development/Database)
+
+Docker is used for **database setup and development environment** only, not for desktop application deployment.
+
+Rakcha Desktop's database can be easily set up using Docker containers.
 
 #### Prerequisites
 
@@ -549,51 +622,43 @@ docker run -d \
   rakcha-app
 ```
 
-### 🏠 Local Deployment
+### 🏠 Local Development
 
 For local development and testing:
 
 ```bash
-# Package the application
-mvn clean package
+# Build the application
+mvn clean compile package -DskipTests
 
-# Run the packaged JAR
-java -jar target/RAKCHA-1.0-SNAPSHOT.jar
+# Run directly with Maven
+mvn javafx:run
+
+# Or run the JAR file
+java -jar target/RAKCHA-1.0.6.jar
 ```
 
 ### 🌍 Production Deployment
 
-For production environments:
+For end-user distribution, use the **jpackage native installers**:
 
-1. **Create a distributable package**:
+1. **Download the installer** for your platform from [GitHub Releases](https://github.com/aliammari1/rakcha-desktop/releases)
 
-   ```bash
-   mvn clean package
-   ```
+2. **Install the application**:
+   - **Windows**: Run the `.msi` installer
+   - **macOS**: Open the `.dmg` and drag to Applications
+   - **Linux**: Install the `.deb` package with `sudo dpkg -i rakcha_*.deb`
 
-2. **Create platform-specific installers** (optional, requires additional plugins):
+3. **Launch the application**:
+   - All platforms: Find RAKCHA in your Applications menu or Start Menu
+   - No Java installation required (runtime is bundled)
 
-   ```bash
-   # For Windows installer
-   mvn jpackage:jpackage@win
+**For CI/CD deployments:**
 
-   # For macOS app bundle
-   mvn jpackage:jpackage@mac
-
-   # For Linux package
-   mvn jpackage:jpackage@linux
-   ```
-
-3. **Database setup for production**:
-
-   - Configure a dedicated MySQL server
-   - Set up database replication if needed
-   - Configure proper backup procedures
-
-4. **Environment configuration**:
-   - Use production API keys and credentials
-   - Configure logging for production environment
-   - Set up monitoring and alerting
+The GitHub Actions workflow automatically:
+- Builds native installers for Windows, macOS, and Linux
+- Creates portable app-images for all platforms
+- Publishes releases to GitHub Pages
+- Creates GitHub releases with all artifacts
 
 ## 🔨 Building from Source
 
@@ -618,7 +683,7 @@ For production environments:
 4. **Run the application**:
 
    ```bash
-   java -jar target/RAKCHA-1.0-SNAPSHOT.jar
+   java -jar target/RAKCHA-1.0.6.jar
    ```
 
    Alternatively, you can use the JavaFX Maven plugin:
@@ -627,10 +692,11 @@ For production environments:
    mvn javafx:run
    ```
 
-5. **Development in IDE**:
-   - Open the project in your preferred IDE (IntelliJ IDEA, Eclipse, etc.)
-   - Ensure you have the JavaFX plugin installed
-   - Run the main class: `com.esprit.MainApp`
+5. **Build native installer** (for distribution):
+   ```bash
+   # See the Native Installers section above for platform-specific commands
+   mvn jpackage:jpackage
+   ```
 
 ## 📁 Project Structure
 

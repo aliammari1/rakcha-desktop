@@ -453,6 +453,29 @@
           </annotationProcessorPaths>
         </configuration>
       </plugin>
+      
+      <!-- Maven JAR Plugin - Create executable JAR -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.3.0</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>${main-class}</mainClass>
+              <addClasspath>true</addClasspath>
+              <classpathPrefix>lib/</classpathPrefix>
+            </manifest>
+            <manifestEntries>
+              <Implementation-Title>${project.name}</Implementation-Title>
+              <Implementation-Version>${project.version}</Implementation-Version>
+              <Implementation-Vendor>ESPRIT</Implementation-Vendor>
+              <Built-By>RAKCHA Team</Built-By>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+      
       <!-- JavaFX Maven Plugin -->
       <plugin>
         <groupId>org.openjfx</groupId>
@@ -576,26 +599,40 @@
         <artifactId>jpackage-maven-plugin</artifactId>
         <version>0.1.5</version>
         <configuration>
+          <!-- JDK Configuration -->
           <toolhome>${java.home}</toolhome>
+          
+          <!-- Application Metadata -->
           <name>${app.name}</name>
           <appversion>${app.version}</appversion>
           <vendor>ESPRIT</vendor>
-          <description>RAKCHA Desktop Application - Movie and Cinema Management</description>
+          <description>RAKCHA Desktop Application - Movie and Cinema Management System</description>
           <copyright>Copyright © 2025 ESPRIT</copyright>
+          
+          <!-- Main Configuration -->
           <mainjar>${project.build.finalName}.jar</mainjar>
           <mainclass>${main-class}</mainclass>
           <dest>target/dist</dest>
+          <temp>target/jpackage-temp</temp>
           <verbose>true</verbose>
           
-          <!-- Input files - include both the main jar and classpath jars -->
+          <!-- Input Directory - contains all JARs (main + dependencies) -->
           <input>target/classpath-jars</input>
           
-          <!-- JVM Options as string -->
-          <javaoptions>-Xms256m -Xmx1024m -Dfile.encoding=UTF-8 --add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED --add-opens=javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED --add-opens=javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED --add-opens=javafx.base/com.sun.javafx.binding=ALL-UNNAMED --add-opens=javafx.base/com.sun.javafx.event=ALL-UNNAMED --add-opens=javafx.graphics/com.sun.javafx.stage=ALL-UNNAMED</javaoptions>
+          <!-- JVM Options -->
+          <javaoptions>-Xms256m -Xmx1024m -Dfile.encoding=UTF-8 -Dlogback.configurationFile=logback.xml --add-opens=javafx.graphics/com.sun.javafx.application=ALL-UNNAMED --add-opens=javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED --add-opens=javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED --add-opens=javafx.base/com.sun.javafx.binding=ALL-UNNAMED --add-opens=javafx.base/com.sun.javafx.event=ALL-UNNAMED --add-opens=javafx.graphics/com.sun.javafx.stage=ALL-UNNAMED</javaoptions>
           
-          <!-- Linux-specific configuration only -->
-          <linuxshortcut>true</linuxshortcut>
-          <linuxmenugroup>Office</linuxmenugroup>
+          <!-- Resource Directory -->
+          <resourcedir>src/packaging</resourcedir>
+          
+          <!-- Windows-Specific Configuration -->
+          <winmenu>true</winmenu>
+          <winshortcut>true</winshortcut>
+          <winupgradeuuid>${windows.upgrade.uuid}</winupgradeuuid>
+          <winmenugroup>RAKCHA</winmenugroup>
+          <windirchooser>true</windirchooser>
+          <winperuserinstall>false</winperuserinstall>
+          <icon>src/main/resources/Logo.ico</icon>
         </configuration>
         <executions>
           <execution>
@@ -606,13 +643,6 @@
             </goals>
           </execution>
         </executions>
-      </plugin>
-
-      <!-- Conveyor Maven Plugin (keeping for comparison) -->
-      <plugin>
-        <groupId>dev.hydraulic</groupId>
-        <artifactId>conveyor-maven-plugin</artifactId>
-        <version>1.11</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

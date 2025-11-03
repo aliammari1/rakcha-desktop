@@ -219,11 +219,14 @@
 ## 🚀 Deployment & Distribution
 
 ### Packaging Options
-- **Native Installers**: Windows MSI, macOS DMG, Linux DEB/RPM
-- **Portable Applications**: Cross-platform JAR files
-- **Container Images**: Docker containerization
-- **App Store Distribution**: Microsoft Store, Mac App Store
-- **Enterprise Packages**: Silent installation for IT departments
+- **Native Installers with jpackage**: 
+  - Windows MSI installers with native integration
+  - macOS DMG disk images with app bundle
+  - Linux DEB/RPM packages for major distributions
+- **Portable Applications**: Self-contained app-images with bundled JRE
+- **Development/Testing**: Docker containerization for database
+- **Future Considerations**: App Store distribution (Microsoft Store, Mac App Store)
+- **Enterprise Packages**: Silent installation options for IT departments
 
 ### Distribution Channels
 - **GitHub Releases**: Open source distribution
