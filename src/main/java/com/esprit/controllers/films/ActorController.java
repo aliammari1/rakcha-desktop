@@ -108,7 +108,7 @@ public class ActorController {
     @FXML
     private Label errorNameActor;
     @FXML
-    private Button AjouterFilm_Button;
+    private Button GoToFilms_Button;
     @FXML
     private TableView<Actor> filmActor_tableView11;
     @FXML
@@ -122,7 +122,7 @@ public class ActorController {
     @FXML
     private TableColumn<Actor, String> nomActor_tableColumn1;
     @FXML
-    private TextArea nomActor_textArea1;
+    private TextField nomActor_textField;
     private FilteredList<Actor> filteredActors;
     @FXML
     private TextField recherche_textField;
@@ -301,7 +301,7 @@ public class ActorController {
         }
 
         final ActorService actorService = new ActorService();
-        final Actor actor = new Actor(this.nomActor_textArea1.getText(), imagePath,
+        final Actor actor = new Actor(this.nomActor_textField.getText(), imagePath,
                 this.bioActor_textArea.getText());
         actorService.create(actor);
 
@@ -678,20 +678,29 @@ public class ActorController {
      */
     @FXML
     /**
-     * Performs switchtoajouterCinema operation.
+     * Navigates to the Films interface.
      *
-     * @return the result of the operation
+     * @param event the action event
      */
-    public void switchtoajouterCinema(final ActionEvent event) {
+    public void switchToFilms(final ActionEvent event) {
         try {
             final FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/ui/films/InterfaceFilm.fxml"));
             final AnchorPane root = fxmlLoader.load();
-            final Stage stage = (Stage) this.AjouterFilm_Button.getScene().getWindow();
+            final Stage stage = (Stage) this.GoToFilms_Button.getScene().getWindow();
             final Scene scene = new Scene(root, 1280, 700);
             stage.setScene(scene);
         } catch (final IOException e) {
             ActorController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+    }
+
+    /**
+     * @deprecated Use {@link #switchToFilms(ActionEvent)} instead.
+     * This method name was misleading as it navigates to Films, not Cinema.
+     */
+    @Deprecated
+    public void switchtoajouterCinema(final ActionEvent event) {
+        switchToFilms(event);
     }
 
     /**

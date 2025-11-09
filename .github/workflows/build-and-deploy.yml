@@ -42,8 +42,21 @@ jobs:
           mvn clean compile package -DskipTests -B -V
           cp target/${{ env.APP_NAME }}-${{ env.APP_VERSION }}.jar target/classpath-jars/
 
-      - name: Build Debian package with jpackage (via Maven)
-        run: mvn jpackage:jpackage -B
+      - name: Build Debian package with jpackage
+        run: |
+          jpackage --type deb \
+            --input target/classpath-jars \
+            --main-jar ${{ env.APP_NAME }}-${{ env.APP_VERSION }}.jar \
+            --main-class ${{ env.MAIN_CLASS }} \
+            --name ${{ env.APP_NAME }} \
+            --app-version ${{ env.APP_VERSION }} \
+            --dest target/dist \
+            --java-options "-Xms256m" \
+            --java-options "-Xmx1024m" \
+            --java-options "-Dfile.encoding=UTF-8" \
+            --vendor "ESPRIT" \
+            --description "RAKCHA Desktop - Movie and Cinema Management System" \
+            --verbose
 
       - name: Build Linux portable app-image
         run: |
@@ -118,7 +131,6 @@ jobs:
             --copyright "Copyright © 2025 ESPRIT" `
             --win-menu `
             --win-shortcut `
-            --win-dir-chooser `
             --win-menu-group "RAKCHA" `
             --java-options "-Xms256m" `
             --java-options "-Xmx1024m" `

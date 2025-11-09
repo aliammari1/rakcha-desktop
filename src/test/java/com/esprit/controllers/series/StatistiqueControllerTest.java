@@ -1,8 +1,5 @@
 package com.esprit.controllers.series;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -14,14 +11,14 @@ import org.junit.jupiter.api.Timeout;
 import java.util.concurrent.TimeUnit;
 import org.testfx.framework.junit5.Start;
 
-import com.esprit.models.series.Category;
-import com.esprit.services.series.IServiceCategorieImpl;
 import com.esprit.utils.TestFXBase;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.PieChart;
+import javafx.scene.chart.XYChart;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -33,8 +30,6 @@ import javafx.stage.Stage;
 @Timeout(value = 10, unit = TimeUnit.SECONDS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class StatistiqueControllerTest extends TestFXBase {
-
-    private IServiceCategorieImpl categoryService;
 
     @Start
     public void start(Stage stage) throws Exception {
@@ -115,7 +110,23 @@ class StatistiqueControllerTest extends TestFXBase {
             waitForFxEvents();
 
             ComboBox<String> comboBox = lookup("#statisticsComboBox").query();
-            assertThat(comboBox).isNotNull();
+            clickOn(comboBox).clickOn("Bar Chart");
+
+            waitForFxEvents();
+
+            BorderPane borderPane = lookup("#borderPane").query();
+            assertThat(borderPane.getCenter()).isInstanceOf(BarChart.class);
+            
+            @SuppressWarnings("unchecked")
+            BarChart<String, Number> barChart = (BarChart<String, Number>) borderPane.getCenter();
+            
+            // Verify bar chart has data
+            assertThat(barChart.getData()).isNotEmpty();
+            
+            // Verify at least one series with data items
+            for (XYChart.Series<String, Number> series : barChart.getData()) {
+                assertThat(series.getData()).isNotEmpty();
+            }
         }
 
         @Test
@@ -129,7 +140,21 @@ class StatistiqueControllerTest extends TestFXBase {
 
             waitForFxEvents();
 
-            // Verify X-axis has category names
+            BorderPane borderPane = lookup("#borderPane").query();
+            assertThat(borderPane.getCenter()).isInstanceOf(BarChart.class);
+            
+            @SuppressWarnings("unchecked")
+            BarChart<String, Number> barChart = (BarChart<String, Number>) borderPane.getCenter();
+            
+            // Verify X-axis exists and is a category axis
+            assertThat(barChart.getXAxis()).isNotNull();
+            
+            // Verify X-axis label (if set)
+            String xAxisLabel = barChart.getXAxis().getLabel();
+            assertThat(xAxisLabel).isNotNull();
+            
+            // Verify categories have been populated
+            assertThat(barChart.getData()).isNotEmpty();
         }
 
         @Test
@@ -143,12 +168,28 @@ class StatistiqueControllerTest extends TestFXBase {
 
             waitForFxEvents();
 
-            // Verify Y-axis has numerical values
+            BorderPane borderPane = lookup("#borderPane").query();
+            assertThat(borderPane.getCenter()).isInstanceOf(BarChart.class);
+            
+            @SuppressWarnings("unchecked")
+            BarChart<String, Number> barChart = (BarChart<String, Number>) borderPane.getCenter();
+            
+            // Verify Y-axis exists and is numeric
+            assertThat(barChart.getYAxis()).isNotNull();
+            assertThat(barChart.getYAxis()).isInstanceOf(NumberAxis.class);
+            
+            // Verify Y-axis label
+            String yAxisLabel = barChart.getYAxis().getLabel();
+            assertThat(yAxisLabel).isNotNull();
+            
+            // Verify Y-axis has proper bounds or auto-ranging
+            NumberAxis yAxis = (NumberAxis) barChart.getYAxis();
+            assertThat(yAxis.getUpperBound()).isGreaterThanOrEqualTo(0);
         }
 
         @Test
         @Order(9)
-        @DisplayName("Should show tooltips on bar hover")
+        @DisplayName("Should display tooltip data on data points")
         void testBarChartTooltips() {
             waitForFxEvents();
 
@@ -157,17 +198,49 @@ class StatistiqueControllerTest extends TestFXBase {
 
             waitForFxEvents();
 
-            // Verify tooltips installed
+            BorderPane borderPane = lookup("#borderPane").query();
+            assertThat(borderPane.getCenter()).isInstanceOf(BarChart.class);
+            
+            @SuppressWarnings("unchecked")
+            BarChart<String, Number> barChart = (BarChart<String, Number>) borderPane.getCenter();
+            
+            // Verify series data contains items with non-null values
+            assertThat(barChart.getData()).isNotEmpty();
+            for (XYChart.Series<String, Number> series : barChart.getData()) {
+                assertThat(series.getData()).isNotEmpty();
+                // Verify each data point has valid X and Y values
+                for (XYChart.Data<String, Number> data : series.getData()) {
+                    assertThat(data.getXValue()).isNotNull();
+                    assertThat(data.getYValue()).isNotNull();
+                    assertThat(data.getYValue().doubleValue()).isGreaterThanOrEqualTo(0);
+                }
+            }
         }
 
         @Test
         @Order(10)
-        @DisplayName("Should limit categories displayed in bar chart")
+        @DisplayName("Should limit displayed categories to max value")
         void testBarChartLimit() {
             waitForFxEvents();
 
             ComboBox<String> comboBox = lookup("#statisticsComboBox").query();
-            assertThat(comboBox).isNotNull();
+            clickOn(comboBox).clickOn("Bar Chart");
+
+            waitForFxEvents();
+
+            BorderPane borderPane = lookup("#borderPane").query();
+            assertThat(borderPane.getCenter()).isInstanceOf(BarChart.class);
+            
+            @SuppressWarnings("unchecked")
+            BarChart<String, Number> barChart = (BarChart<String, Number>) borderPane.getCenter();
+            
+            // Verify category count doesn't exceed limit (default: 10)
+            int displayLimit = 10;
+            assertThat(barChart.getData()).isNotEmpty();
+            for (XYChart.Series<String, Number> series : barChart.getData()) {
+                int categoryCount = series.getData().size();
+                assertThat(categoryCount).isLessThanOrEqualTo(displayLimit);
+            }
         }
     }
 
@@ -371,34 +444,4 @@ class StatistiqueControllerTest extends TestFXBase {
         }
     }
 
-    // Helper methods
-    private Map<Category, Long> createMockStatistics() {
-        Map<Category, Long> stats = new HashMap<>();
-
-        Category c1 = new Category();
-        c1.setName("Action");
-        stats.put(c1, 10L);
-
-        Category c2 = new Category();
-        c2.setName("Drama");
-        stats.put(c2, 15L);
-
-        Category c3 = new Category();
-        c3.setName("Comedy");
-        stats.put(c3, 8L);
-
-        return stats;
-    }
-
-    private Map<Category, Long> createLargeStatistics() {
-        Map<Category, Long> stats = new HashMap<>();
-
-        for (int i = 1; i <= 10; i++) {
-            Category c = new Category();
-            c.setName("Category " + i);
-            stats.put(c, (long) i * 5);
-        }
-
-        return stats;
-    }
 }

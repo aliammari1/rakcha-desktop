@@ -44,8 +44,7 @@
                 <Font size="16.0"/>
               </font>
             </Label>
-            <TextArea fx:id="nomActor_textArea1" styleClass="text-field-red"
-                                                    prefRowCount="2" wrapText="true"
+            <TextField fx:id="nomActor_textField" styleClass="text-field-red"
                                                     GridPane.rowIndex="0" GridPane.columnIndex="1" />
             <Label fx:id="errorNameActor" styleClass="error-label" 
                                                     GridPane.rowIndex="1" GridPane.columnIndex="1" />
@@ -76,7 +75,7 @@
           <!-- Action Buttons -->
           <HBox spacing="10" alignment="CENTER">
             <Button onAction="#insertActor" styleClass="sale" text="Add Actor"/>
-            <Button fx:id="AjouterFilm_Button" onAction="#switchtoajouterCinema" 
+            <Button fx:id="GoToFilms_Button" onAction="#switchToFilms" 
                                                     styleClass="edit-button" text="Go to Films" />
           </HBox>
         </VBox>

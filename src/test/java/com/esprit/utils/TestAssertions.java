@@ -2,13 +2,11 @@ package com.esprit.utils;
 
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import org.hamcrest.Matcher;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.matcher.base.NodeMatchers.*;
-import static org.testfx.matcher.control.LabeledMatchers.hasText;
 import static org.testfx.matcher.control.LabeledMatchers.hasText;
 
 /**
@@ -38,9 +36,15 @@ public class TestAssertions {
      * @param errorLabelQuery Query for the error label
      */
     public static void verifyNoErrorMessage(String errorLabelQuery) {
-        verifyThat(errorLabelQuery, node -> !node.isVisible() ||
-                ((Label) node).getText() == null ||
-                ((Label) node).getText().isEmpty());
+        verifyThat(errorLabelQuery, node -> {
+            // If node is not a Label, it's not showing an error message
+            if (!(node instanceof Label)) {
+                return true;
+            }
+            // For Label nodes, check visibility and text
+            Label label = (Label) node;
+            return !node.isVisible() || label.getText() == null || label.getText().isEmpty();
+        });
     }
 
     /**

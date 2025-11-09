@@ -21,56 +21,34 @@
 
 <StackPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="com.esprit.controllers.films.FilmUserController"
-    style="-fx-background-color: linear-gradient(to bottom right, #0a0a0a, #1a0a0a, #2a0f0f, #1a0606, #0a0a0a);
-           -fx-effect: dropshadow(gaussian, #8b0000, 50, 0, 0, 0);"
+    styleClass="film-root-pane"
     stylesheets="@../styles/filmStyle.css, @../styles/film-animations.css, @../styles/login-animations.css">
 
     <!-- Animated Background Layer -->
-    <AnchorPane style="-fx-background-color: transparent;" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+    <AnchorPane styleClass="animated-shape" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
         
         <!-- Geometric Shapes - Login Theme Style -->
         <Polygon fx:id="filmShape1" points="150.0,300.0,170.0,280.0,190.0,300.0,170.0,320.0" 
-            styleClass="rotating-shape, pulsing-shape"
-            style="-fx-fill: linear-gradient(to bottom right, rgba(200, 0, 0, 0.6), rgba(100, 0, 0, 0.4)); 
-                   -fx-stroke: #8b0000; 
-                   -fx-stroke-width: 2;
-                   -fx-effect: dropshadow(gaussian, rgba(200, 0, 0, 0.8), 15, 0, 0, 0);" 
+            styleClass="rotating-shape, pulsing-shape, rotating-shape-polygon"
             opacity="0.8" />
             
         <Rectangle fx:id="filmShape2" width="35" height="35" layoutX="1350" layoutY="200"
-            styleClass="rotating-shape, pulsing-shape"
-            style="-fx-fill: linear-gradient(to bottom right, rgba(255, 68, 68, 0.7), rgba(139, 0, 0, 0.5));
-                   -fx-stroke: #ff4444;
-                   -fx-stroke-width: 2;
-                   -fx-rotate: 45;
-                   -fx-effect: dropshadow(gaussian, rgba(255, 68, 68, 0.8), 12, 0, 0, 0);" 
+            styleClass="rotating-shape, pulsing-shape, rotating-shape-rectangle"
             opacity="0.8" />
             
         <Circle fx:id="filmShape3" radius="25" layoutX="300" layoutY="700"
-            styleClass="pulsing-shape, glow-red"
-            style="-fx-fill: linear-gradient(center 50% 50%, radius 50%, rgba(255, 102, 102, 0.7), rgba(139, 0, 0, 0.3));
-                   -fx-stroke: #ff6666;
-                   -fx-stroke-width: 2;
-                   -fx-effect: dropshadow(gaussian, rgba(255, 102, 102, 0.8), 18, 0, 0, 0);" 
+            styleClass="pulsing-shape, glow-red, pulsing-circle"
             opacity="0.7" />
             
         <Polygon fx:id="filmShape4" points="1200.0,500.0,1230.0,480.0,1260.0,500.0,1245.0,530.0,1215.0,530.0" 
-            styleClass="rotating-shape"
-            style="-fx-fill: linear-gradient(to bottom right, rgba(200, 0, 0, 0.7), rgba(100, 0, 0, 0.4)); 
-                   -fx-stroke: #660000; 
-                   -fx-stroke-width: 2;
-                   -fx-effect: dropshadow(gaussian, rgba(200, 0, 0, 0.7), 12, 0, 0, 0);" 
+            styleClass="rotating-shape, rotating-shape-pentagon"
             opacity="0.8" />
 
         <!-- Floating Particles -->
-        <Circle fx:id="filmParticle1" radius="4" layoutX="400" layoutY="300" styleClass="film-particle"
-            style="-fx-fill: rgba(174, 45, 60, 0.6);" />
-        <Circle fx:id="filmParticle2" radius="5" layoutX="900" layoutY="500" styleClass="film-particle"
-            style="-fx-fill: rgba(174, 45, 60, 0.6);" />
-        <Circle fx:id="filmParticle3" radius="3" layoutX="1200" layoutY="400" styleClass="film-particle"
-            style="-fx-fill: rgba(174, 45, 60, 0.6);" />
-        <Circle fx:id="filmParticle4" radius="6" layoutX="600" layoutY="600" styleClass="film-particle"
-            style="-fx-fill: rgba(174, 45, 60, 0.6);" />
+        <Circle fx:id="filmParticle1" radius="4" layoutX="400" layoutY="300" styleClass="film-particle, film-particle-style" />
+        <Circle fx:id="filmParticle2" radius="5" layoutX="900" layoutY="500" styleClass="film-particle, film-particle-style" />
+        <Circle fx:id="filmParticle3" radius="3" layoutX="1200" layoutY="400" styleClass="film-particle, film-particle-style" />
+        <Circle fx:id="filmParticle4" radius="6" layoutX="600" layoutY="600" styleClass="film-particle, film-particle-style" />
     </AnchorPane>
 
     <!-- Main Content -->

@@ -10,8 +10,8 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.Timeout;
 import java.util.concurrent.TimeUnit;
 import org.testfx.framework.junit5.Start;
+import org.testfx.util.WaitForAsyncUtils;
 
-import com.esprit.services.films.FilmService;
 import com.esprit.utils.TestFXBase;
 
 import javafx.fxml.FXMLLoader;
@@ -29,8 +29,6 @@ import javafx.stage.Stage;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class PaymentUserControllerTest extends TestFXBase {
 
-    private FilmService filmService;
-
     @Start
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/films/Paymentuser.fxml"));
@@ -39,7 +37,8 @@ class PaymentUserControllerTest extends TestFXBase {
         stage.show();
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Payment Form Tests")
     class PaymentFormTests {
 
@@ -102,7 +101,8 @@ class PaymentUserControllerTest extends TestFXBase {
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Payment Processing Tests")
     class PaymentProcessingTests {
 
@@ -112,6 +112,7 @@ class PaymentUserControllerTest extends TestFXBase {
         void testProcessPayment() {
             waitForFxEvents();
 
+            // Fill in card details
             TextField cardField = lookup("#cardNumberField").query();
             clickOn(cardField).write("1234567812345678");
 
@@ -120,12 +121,36 @@ class PaymentUserControllerTest extends TestFXBase {
 
             Button payButton = lookup("#payButton").query();
             assertThat(payButton).isNotNull();
+            
+            // Click pay button
             clickOn(payButton);
-
             waitForFxEvents();
             
-            // Verify button is responsive
+            // Verify button is still responsive (not permanently broken)
             assertThat(payButton).isNotNull();
+            
+            // Wait for async payment processing to complete
+            try {
+                WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS, () -> {
+                    var successLabel = lookup("#successLabel").tryQuery();
+                    var errorLabel = lookup("#errorLabel").tryQuery();
+                    return (successLabel.isPresent() && successLabel.get().isVisible()) ||
+                           (errorLabel.isPresent() && errorLabel.get().isVisible());
+                });
+            } catch (Exception e) {
+                // Continue even if timeout - check UI state below
+            }
+            waitForFxEvents();
+            
+            // After processing, verify UI reflects payment attempt
+            // Check if either success or error label is visible (indicating payment completed)
+            var successLabel = lookup("#successLabel").tryQuery();
+            var errorLabel = lookup("#errorLabel").tryQuery();
+            
+            // At least one should be present and visible
+            boolean paymentCompleted = (successLabel.isPresent() && successLabel.get().isVisible()) ||
+                                      (errorLabel.isPresent() && errorLabel.get().isVisible());
+            assertThat(paymentCompleted).as("Payment processing should complete with visible status").isTrue();
         }
 
         @Test
@@ -134,11 +159,36 @@ class PaymentUserControllerTest extends TestFXBase {
         void testPaymentSuccess() {
             waitForFxEvents();
 
-            // Verify success label exists and is visible
+            // Fill in card details and trigger payment
+            TextField cardField = lookup("#cardNumberField").query();
+            clickOn(cardField).write("1234567812345678");
+
+            TextField cvvField = lookup("#cvvField").query();
+            clickOn(cvvField).write("123");
+
+            Button payButton = lookup("#payButton").query();
+            clickOn(payButton);
+            
+            // Wait for payment processing
+            try {
+                WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS, () -> {
+                    Label label = lookup("#successLabel").query();
+                    return label != null && label.isVisible();
+                });
+            } catch (Exception e) {
+                // Continue even if timeout - check UI state below
+            }
+            waitForFxEvents();
+
+            // Verify success label exists, is visible, and contains success message
             Label successLabel = lookup("#successLabel").query();
             assertThat(successLabel).isNotNull();
+            assertThat(successLabel.isVisible()).as("Success label should be visible").isTrue();
             
-            waitForFxEvents();
+            String message = successLabel.getText();
+            assertThat(message).isNotNull();
+            assertThat(message.toLowerCase()).as("Success message should contain 'success'")
+                    .contains("success".toLowerCase());
         }
 
         @Test
@@ -147,15 +197,41 @@ class PaymentUserControllerTest extends TestFXBase {
         void testPaymentFailure() {
             waitForFxEvents();
 
-            // Verify error label exists
+            // Fill in card details with intentionally invalid data
+            TextField cardField = lookup("#cardNumberField").query();
+            clickOn(cardField).write("0000000000000000");
+
+            TextField cvvField = lookup("#cvvField").query();
+            clickOn(cvvField).write("000");
+
+            Button payButton = lookup("#payButton").query();
+            clickOn(payButton);
+            
+            // Wait for payment processing
+            try {
+                WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS, () -> {
+                    Label label = lookup("#errorLabel").query();
+                    return label != null && label.isVisible();
+                });
+            } catch (Exception e) {
+                // Continue even if timeout - check UI state below
+            }
+            waitForFxEvents();
+
+            // Verify error label exists, is visible, and contains error message
             Label errorLabel = lookup("#errorLabel").query();
             assertThat(errorLabel).isNotNull();
+            assertThat(errorLabel.isVisible()).as("Error label should be visible").isTrue();
             
-            waitForFxEvents();
+            String message = errorLabel.getText();
+            assertThat(message).isNotNull();
+            assertThat(message.toLowerCase()).as("Error message should contain 'error' or 'failed'")
+                    .containsAnyOf("error", "failed");
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Order Summary Tests")
     class OrderSummaryTests {
 
@@ -181,7 +257,8 @@ class PaymentUserControllerTest extends TestFXBase {
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Cancel Payment Tests")
     class CancelPaymentTests {
 

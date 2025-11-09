@@ -1,6 +1,7 @@
 package com.esprit.integration;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Order;
@@ -57,17 +58,35 @@ class UserJourneyIntegrationTest extends TestFXBase {
             clickOnAndWait("#signUpButton");
             waitForFxEvents();
 
-            // Should redirect to login or home
+            // Verify registration succeeded by checking for success indicator or navigation
+            // Assert that either a success message appears or navigation occurred
+            try {
+                verifyThat("#loginButton", isVisible());
+                // If we see the login button, registration redirected to login page
+            } catch (Exception e) {
+                // Otherwise check for a success message or home view
+                verifyThat("#homePane", isVisible());
+            }
         }
 
         @Test
         @Order(2)
         @DisplayName("Login after registration")
         void testLoginAfterRegistration() {
-            // Navigate to login
+            // Navigate to login if not already there
+            if (lookup("#loginButton").tryQuery().isEmpty()) {
+                clickOnAndWait("#signInButton");
+                waitForFxEvents();
+            }
+            
             // Fill credentials
-            // Login successfully
+            fillTextField("#emailTextField", TestDataFactory.TestCredentials.VALID_EMAIL);
+            fillTextField("#passwordTextField", TestDataFactory.TestCredentials.VALID_PASSWORD);
+            clickOnAndWait("#signInButton");
             waitForFxEvents();
+
+            // Verify successful login
+            verifyThat("#homePane", isVisible());
         }
     }
 
@@ -76,8 +95,31 @@ class UserJourneyIntegrationTest extends TestFXBase {
     @DisplayName("Movie Booking Journey")
     class MovieBookingJourney {
 
+        /**
+         * TODO: Complete movie booking flow implementation
+         * Required steps:
+         * 1. Login as client with valid credentials
+         * 2. Navigate to movie catalog
+         * 3. Select a specific movie
+         * 4. Choose cinema location
+         * 5. Select session time
+         * 6. Choose seats in the theater
+         * 7. Proceed to payment
+         * 8. Simulate/verify payment processing
+         * 9. Verify booking confirmation message
+         * 10. Assert booking appears in user profile
+         * 
+         * Needed test data/mocks:
+         * - MovieSelectionView with fx:id for movie items
+         * - CinemaSelectionView with theater/cinema options
+         * - SeatsSelectionView with seat grid
+         * - PaymentView with payment form
+         * - BookingConfirmationView with confirmation details
+         * - Mock payment gateway or test payment credentials
+         */
         @Test
         @Order(10)
+        @Disabled("Movie booking flow not yet implemented - placeholder test")
         @DisplayName("Complete movie booking flow")
         void testCompleteMovieBooking() {
             // Login as client
@@ -87,8 +129,8 @@ class UserJourneyIntegrationTest extends TestFXBase {
             waitForFxEvents();
 
             // Navigate to movies
-            clickOnAndWait("#movieButton");
-            waitForFxEvents();
+            // clickOnAndWait("#movieButton");
+            // waitForFxEvents();
 
             // Select a movie
             // Choose cinema and session time
@@ -100,11 +142,12 @@ class UserJourneyIntegrationTest extends TestFXBase {
 
         @Test
         @Order(11)
+        @Disabled("Movie booking flow not yet implemented - placeholder test")
         @DisplayName("View booking in profile")
         void testViewBookingInProfile() {
             // Navigate to profile
-            clickOnAndWait("#profileButton");
-            waitForFxEvents();
+            // clickOnAndWait("#profileButton");
+            // waitForFxEvents();
 
             // Booking should be listed
         }

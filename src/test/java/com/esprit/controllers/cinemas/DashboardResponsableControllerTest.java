@@ -39,7 +39,8 @@ class DashboardResponsableControllerTest extends TestFXBase {
         stage.toFront();
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Dashboard Display Tests")
     class DashboardDisplayTests {
 
@@ -66,7 +67,8 @@ class DashboardResponsableControllerTest extends TestFXBase {
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Session Management Tests")
     class SessionManagementTests {
 
@@ -104,21 +106,40 @@ class DashboardResponsableControllerTest extends TestFXBase {
             TableView<?> table = lookup("#sessionsTable").query();
             assertThat(table).isNotNull();
             
-            // Verify table has items that can be deleted
-            if (!table.getItems().isEmpty()) {
-                table.getSelectionModel().selectFirst();
-                waitForFxEvents();
-                
-                Button deleteButton = (Button) lookup("#deleteSessionButton").tryQuery().orElse(null);
-                if (deleteButton != null) {
-                    clickOn(deleteButton);
-                    waitForFxEvents();
-                }
-            }
+            // Verify precondition: table must have items to delete
+            assertThat(table.getItems())
+                    .as("Sessions table must contain at least one session for deletion test")
+                    .isNotEmpty();
+            
+            // Select the first session
+            table.getSelectionModel().selectFirst();
+            waitForFxEvents();
+            
+            // Verify precondition: selected item must exist
+            Object selectedItem = table.getSelectionModel().getSelectedItem();
+            assertThat(selectedItem)
+                    .as("A session must be selected before attempting deletion")
+                    .isNotNull();
+            
+            // Verify precondition: delete button must exist
+            Button deleteButton = lookup("#deleteSessionButton").query();
+            assertThat(deleteButton)
+                    .as("Delete button must exist in the UI for session deletion")
+                    .isNotNull();
+            
+            // Verify precondition: delete button must be visible
+            assertThat(deleteButton.isVisible())
+                    .as("Delete button must be visible to perform deletion")
+                    .isTrue();
+            
+            // Execute the delete action
+            clickOn(deleteButton);
+            waitForFxEvents();
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Statistics Tests")
     class StatisticsTests {
 

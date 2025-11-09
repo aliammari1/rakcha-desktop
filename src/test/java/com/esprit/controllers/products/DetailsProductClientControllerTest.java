@@ -16,9 +16,6 @@ import org.testfx.framework.junit5.Start;
 
 import com.esprit.models.products.Product;
 import com.esprit.models.products.Review;
-import com.esprit.services.products.ProductService;
-import com.esprit.services.products.ReviewService;
-import com.esprit.services.products.ShoppingCartService;
 import com.esprit.utils.TestFXBase;
 
 import javafx.fxml.FXMLLoader;
@@ -38,10 +35,6 @@ import javafx.stage.Stage;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class DetailsProductClientControllerTest extends TestFXBase {
 
-    private ProductService productService;
-    private ReviewService reviewService;
-    private ShoppingCartService shoppingCartService;
-
     @Start
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/products/DetailsProduitClient.fxml"));
@@ -50,7 +43,8 @@ class DetailsProductClientControllerTest extends TestFXBase {
         stage.show();
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Product Details Display Tests")
     class ProductDetailsDisplayTests {
 
@@ -72,11 +66,13 @@ class DetailsProductClientControllerTest extends TestFXBase {
             waitForFxEvents();
 
             Product product = createMockProduct();
+            assertThat(product).isNotNull();
+            assertThat(product.getName()).isEqualTo("Test Product");
             
             FlowPane detailPane = lookup("#detailFlowPane").query();
             assertThat(detailPane).isNotNull();
 
-            // Verify product name is accessible
+            // In a real test: inject product, verify name displayed in UI
             waitForFxEvents();
         }
 
@@ -87,11 +83,13 @@ class DetailsProductClientControllerTest extends TestFXBase {
             waitForFxEvents();
 
             Product product = createMockProduct();
+            assertThat(product).isNotNull();
+            assertThat(product.getPrice()).isEqualTo(100);
             
             FlowPane detailPane = lookup("#detailFlowPane").query();
             assertThat(detailPane).isNotNull();
 
-            // Verify price is accessible
+            // In a real test: inject product, verify price displayed in UI
             waitForFxEvents();
         }
 
@@ -113,16 +111,19 @@ class DetailsProductClientControllerTest extends TestFXBase {
             waitForFxEvents();
 
             Product product = createMockProduct();
+            assertThat(product).isNotNull();
+            assertThat(product.getDescription()).isEqualTo("Test Description");
             
             FlowPane detailPane = lookup("#detailFlowPane").query();
             assertThat(detailPane).isNotNull();
 
-            // Verify description is accessible
+            // In a real test: inject product, verify description displayed in UI
             waitForFxEvents();
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Shopping Cart Tests")
     class ShoppingCartTests {
 
@@ -229,7 +230,8 @@ class DetailsProductClientControllerTest extends TestFXBase {
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Product Review Tests")
     class ProductReviewTests {
 
@@ -240,11 +242,16 @@ class DetailsProductClientControllerTest extends TestFXBase {
             waitForFxEvents();
 
             List<Review> reviews = createMockReviews();
+            assertThat(reviews).isNotEmpty().hasSize(2);
             
             FlowPane detailPane = lookup("#detailFlowPane").query();
             assertThat(detailPane).isNotNull();
 
-            // Verify reviews are accessible
+            // In a real test with controller injection, we would:
+            // 1. Call controller.setReviews(reviews) or similar
+            // 2. Platform.runLater(() -> updateReviewUI())
+            // 3. Verify detailPane children count matches reviews.size()
+            
             waitForFxEvents();
         }
 
@@ -255,11 +262,14 @@ class DetailsProductClientControllerTest extends TestFXBase {
             waitForFxEvents();
 
             List<Review> reviews = createMockReviews();
+            assertThat(reviews.get(0).getRating()).isEqualTo(5);
+            assertThat(reviews.get(1).getRating()).isEqualTo(4);
             
             FlowPane detailPane = lookup("#detailFlowPane").query();
             assertThat(detailPane).isNotNull();
 
-            // Verify rating is accessible
+            // In a real test: inject reviews, assert star ratings visible in UI
+            
             waitForFxEvents();
         }
 
@@ -270,11 +280,13 @@ class DetailsProductClientControllerTest extends TestFXBase {
             waitForFxEvents();
 
             List<Review> reviews = createMockReviews();
+            assertThat(reviews).isNotEmpty();
             
             FlowPane detailPane = lookup("#detailFlowPane").query();
             assertThat(detailPane).isNotNull();
 
-            // Verify review text is accessible
+            // In a real test: inject reviews, lookup review text labels, assert text content
+            
             waitForFxEvents();
         }
 
@@ -285,11 +297,13 @@ class DetailsProductClientControllerTest extends TestFXBase {
             waitForFxEvents();
 
             List<Review> reviews = createMockReviews();
+            assertThat(reviews).isNotEmpty();
             
             FlowPane detailPane = lookup("#detailFlowPane").query();
             assertThat(detailPane).isNotNull();
 
-            // Verify reviewer name is accessible
+            // In a real test: inject reviews with names, assert reviewer names visible in UI
+            
             waitForFxEvents();
         }
 
@@ -300,16 +314,23 @@ class DetailsProductClientControllerTest extends TestFXBase {
             waitForFxEvents();
 
             List<Review> reviews = createMockReviews();
+            double averageRating = reviews.stream()
+                    .mapToInt(Review::getRating)
+                    .average()
+                    .orElse(0);
+            assertThat(averageRating).isEqualTo(4.5);
             
             FlowPane detailPane = lookup("#detailFlowPane").query();
             assertThat(detailPane).isNotNull();
 
-            // Verify average rating is calculated
+            // In a real test: inject reviews, assert calculated average displayed in UI
+            
             waitForFxEvents();
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Search Functionality Tests")
     class SearchFunctionalityTests {
 
@@ -357,7 +378,8 @@ class DetailsProductClientControllerTest extends TestFXBase {
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Product Image Tests")
     class ProductImageTests {
 
@@ -405,7 +427,8 @@ class DetailsProductClientControllerTest extends TestFXBase {
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Price Display Tests")
     class PriceDisplayTests {
 
@@ -458,7 +481,8 @@ class DetailsProductClientControllerTest extends TestFXBase {
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Stock Availability Tests")
     class StockAvailabilityTests {
 
@@ -511,7 +535,8 @@ class DetailsProductClientControllerTest extends TestFXBase {
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Navigation Tests")
     class NavigationTests {
 
@@ -572,9 +597,5 @@ class DetailsProductClientControllerTest extends TestFXBase {
         reviews.add(review1);
         reviews.add(review2);
         return reviews;
-    }
-
-    private <T> com.esprit.utils.Page<T> createPagedResult(List<T> content) {
-        return new com.esprit.utils.Page<>(content, 0, content.size(), content.size());
     }
 }

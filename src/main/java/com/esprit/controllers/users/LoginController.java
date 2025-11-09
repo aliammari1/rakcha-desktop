@@ -337,12 +337,24 @@ public class LoginController implements Initializable {
                             ? (StackPane) anchorPane.getScene().getRoot()
                             : null;
 
-            if (root == null || root.getChildren().size() < 3) {
+            if (root == null || root.getChildren().isEmpty()) {
                 LOGGER.warning("Cannot create dynamic animations: root container not properly initialized");
                 return;
             }
 
-            AnchorPane foregroundPane = (AnchorPane) root.getChildren().get(2);
+            // Robustly find the foreground AnchorPane - look for the last AnchorPane child
+            AnchorPane foregroundPane = null;
+            for (int i = root.getChildren().size() - 1; i >= 0; i--) {
+                if (root.getChildren().get(i) instanceof AnchorPane) {
+                    foregroundPane = (AnchorPane) root.getChildren().get(i);
+                    break;
+                }
+            }
+
+            if (foregroundPane == null) {
+                LOGGER.warning("Cannot create dynamic animations: foreground AnchorPane not found in root container");
+                return;
+            }
 
             // Create dynamic particles
             for (int i = 0; i < maxDynamicElements; i++) {

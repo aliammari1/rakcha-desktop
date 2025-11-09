@@ -1,8 +1,5 @@
 package com.esprit.controllers.series;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -15,7 +12,6 @@ import java.util.concurrent.TimeUnit;
 import org.testfx.framework.junit5.Start;
 
 import com.esprit.models.series.Category;
-import com.esprit.services.series.IServiceCategorieImpl;
 import com.esprit.utils.TestFXBase;
 
 import javafx.fxml.FXMLLoader;
@@ -33,8 +29,6 @@ import javafx.stage.Stage;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CategorieControllerTest extends TestFXBase {
 
-    private IServiceCategorieImpl categoryService;
-
     @Override
     @Start
     public void start(Stage stage) throws Exception {
@@ -44,7 +38,8 @@ class CategorieControllerTest extends TestFXBase {
         stage.show();
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Category Table Tests")
     class CategoryTableTests {
 
@@ -80,7 +75,8 @@ class CategorieControllerTest extends TestFXBase {
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Create Category Tests")
     class CreateCategoryTests {
 
@@ -125,7 +121,8 @@ class CategorieControllerTest extends TestFXBase {
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Update Category Tests")
     class UpdateCategoryTests {
 
@@ -149,7 +146,8 @@ class CategorieControllerTest extends TestFXBase {
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Delete Category Tests")
     class DeleteCategoryTests {
 
@@ -172,7 +170,8 @@ class CategorieControllerTest extends TestFXBase {
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Search Category Tests")
     class SearchCategoryTests {
 
@@ -190,22 +189,5 @@ class CategorieControllerTest extends TestFXBase {
         }
     }
 
-    // Helper methods
-    private List<Category> createMockCategories() {
-        List<Category> categories = new ArrayList<>();
-
-        Category cat1 = new Category();
-        cat1.setName("Drama");
-
-        Category cat2 = new Category();
-        cat2.setName("Comedy");
-
-        categories.add(cat1);
-        categories.add(cat2);
-        return categories;
-    }
-
-    private <T> com.esprit.utils.Page<T> createPagedResult(List<T> content) {
-        return new com.esprit.utils.Page<>(content, 0, content.size(), content.size());
-    }
+    // Helper methods would be implemented when tests are fully developed
 }

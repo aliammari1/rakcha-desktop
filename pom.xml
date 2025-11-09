@@ -684,14 +684,7 @@
           <!-- Resource Directory -->
           <resourcedir>src/packaging</resourcedir>
           
-          <!-- Windows-Specific Configuration -->
-          <winmenu>true</winmenu>
-          <winshortcut>true</winshortcut>
-          <winupgradeuuid>${windows.upgrade.uuid}</winupgradeuuid>
-          <winmenugroup>RAKCHA</winmenugroup>
-          <windirchooser>true</windirchooser>
-          <winperuserinstall>false</winperuserinstall>
-          <icon>src/main/resources/Logo.ico</icon>
+          <!-- NOTE: Windows-specific configuration is handled in the workflow file for platform-specific builds -->
         </configuration>
         <executions>
           <execution>

@@ -37,7 +37,8 @@ class SerieControllerTest extends TestFXBase {
         stage.toFront();
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Series Table Display Tests")
     class SeriesTableDisplayTests {
 
@@ -84,7 +85,8 @@ class SerieControllerTest extends TestFXBase {
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Series Creation Tests")
     class SeriesCreationTests {
 
@@ -132,7 +134,8 @@ class SerieControllerTest extends TestFXBase {
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Episode Management Tests")
     class EpisodeManagementTests {
 
@@ -187,7 +190,8 @@ class SerieControllerTest extends TestFXBase {
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Category Assignment Tests")
     class CategoryAssignmentTests {
 
@@ -220,7 +224,8 @@ class SerieControllerTest extends TestFXBase {
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Series Update Tests")
     class SeriesUpdateTests {
 
@@ -253,7 +258,8 @@ class SerieControllerTest extends TestFXBase {
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Series Deletion Tests")
     class SeriesDeletionTests {
 
@@ -280,7 +286,8 @@ class SerieControllerTest extends TestFXBase {
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Search and Filter Tests")
     class SearchFilterTests {
 
@@ -313,7 +320,8 @@ class SerieControllerTest extends TestFXBase {
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Statistics Tests")
     class StatisticsTests {
 

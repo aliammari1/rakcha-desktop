@@ -17,9 +17,6 @@ import org.testfx.framework.junit5.Start;
 
 import com.esprit.models.films.Film;
 import com.esprit.models.films.FilmComment;
-import com.esprit.services.films.FilmCommentService;
-import com.esprit.services.films.FilmRatingService;
-import com.esprit.services.films.FilmService;
 import com.esprit.utils.TestFXBase;
 
 import javafx.scene.control.Button;
@@ -37,9 +34,6 @@ import javafx.stage.Stage;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class FilmUserControllerTest extends TestFXBase {
 
-    private FilmService filmService;
-    private FilmCommentService commentService;
-    private FilmRatingService ratingService;
     private FilmUserController controller;
 
     @Start

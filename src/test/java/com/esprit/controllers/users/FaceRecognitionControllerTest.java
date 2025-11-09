@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Timeout;
 import java.util.concurrent.TimeUnit;
 import org.testfx.framework.junit5.Start;
 
-import com.esprit.models.users.Client;
 import com.esprit.utils.TestFXBase;
 
 import javafx.scene.control.Button;
@@ -36,7 +35,8 @@ class FaceRecognitionControllerTest extends TestFXBase {
         // TestFXBase handles stage setup
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Camera Initialization Tests")
     class CameraInitializationTests {
 
@@ -82,7 +82,8 @@ class FaceRecognitionControllerTest extends TestFXBase {
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Classifier Selection Tests")
     class ClassifierSelectionTests {
 
@@ -133,7 +134,8 @@ class FaceRecognitionControllerTest extends TestFXBase {
             CheckBox haarCheckbox = lookup("#haarClassifier").query();
             CheckBox lbpCheckbox = lookup("#lbpClassifier").query();
 
-            // Should be disabled during capture
+            assertThat(haarCheckbox.isDisabled()).isTrue();
+            assertThat(lbpCheckbox.isDisabled()).isTrue();
         }
 
         @Test
@@ -161,7 +163,8 @@ class FaceRecognitionControllerTest extends TestFXBase {
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Camera Control Tests")
     class CameraControlTests {
 
@@ -225,15 +228,22 @@ class FaceRecognitionControllerTest extends TestFXBase {
 
             // Simulate camera not available
             Button cameraButton = lookup("#cameraButton").query();
+            String initialText = cameraButton.getText();
             clickOn(cameraButton);
 
             waitForFxEvents();
 
-            // Should log error and remain in stopped state
+            // Assert camera remains in stopped state (button text returns to initial)
+            assertThat(cameraButton.getText()).isEqualTo(initialText);
+            
+            // Verify frame view is not streaming
+            ImageView frameView = lookup("#originalFrame").query();
+            assertThat(frameView).isNotNull();
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Face Detection Tests")
     class FaceDetectionTests {
 
@@ -304,7 +314,8 @@ class FaceRecognitionControllerTest extends TestFXBase {
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Frame Capture Tests")
     class FrameCaptureTests {
 
@@ -343,7 +354,8 @@ class FaceRecognitionControllerTest extends TestFXBase {
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Recognition Status Tests")
     class RecognitionStatusTests {
 
@@ -364,10 +376,15 @@ class FaceRecognitionControllerTest extends TestFXBase {
             waitForFxEvents();
 
             Button cameraButton = lookup("#cameraButton").query();
-            assertThat(cameraButton).isNotNull();
+            clickOn(cameraButton);
+            waitForFxEvents();
 
             Label statusLabel = lookup("#recognitionStatusLabel").query();
             assertThat(statusLabel).isNotNull();
+            // When no camera/face is detected, status should indicate no face or be empty
+            // Note: Actual text depends on controller implementation
+            assertThat(statusLabel.getText())
+                .isNotNull();
         }
 
         @Test
@@ -378,6 +395,9 @@ class FaceRecognitionControllerTest extends TestFXBase {
 
             Label statusLabel = lookup("#recognitionStatusLabel").query();
             assertThat(statusLabel).isNotNull();
+            // Note: Without actual face recognition, we can only verify label exists
+            // In a real scenario, this would mock the face recognition service
+            assertThat(statusLabel.getText()).isNotNull();
         }
 
         @Test
@@ -388,10 +408,13 @@ class FaceRecognitionControllerTest extends TestFXBase {
 
             Label statusLabel = lookup("#recognitionStatusLabel").query();
             assertThat(statusLabel).isNotNull();
+            // Note: Without actual face recognition mock, we verify label is ready
+            assertThat(statusLabel.getText()).isNotNull();
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Resource Cleanup Tests")
     class ResourceCleanupTests {
 
@@ -426,7 +449,8 @@ class FaceRecognitionControllerTest extends TestFXBase {
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Error Handling Tests")
     class ErrorHandlingTests {
 
@@ -460,14 +484,5 @@ class FaceRecognitionControllerTest extends TestFXBase {
             ImageView frameView = lookup("#originalFrame").query();
             assertThat(frameView).isNotNull();
         }
-    }
-
-    // Helper methods
-    private Client createMockClient() {
-        Client client = new Client();
-        client.setId(1L);
-        client.setFirstName("John");
-        client.setLastName("Doe");
-        return client;
     }
 }

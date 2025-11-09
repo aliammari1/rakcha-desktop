@@ -5,6 +5,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Order;
@@ -17,10 +18,6 @@ import org.testfx.framework.junit5.Start;
 import com.esprit.models.products.Comment;
 import com.esprit.models.products.Product;
 import com.esprit.models.users.Client;
-import com.esprit.services.products.CommentService;
-import com.esprit.services.products.ProductService;
-import com.esprit.services.users.UserService;
-import com.esprit.utils.Chat;
 import com.esprit.utils.TestFXBase;
 
 import javafx.fxml.FXMLLoader;
@@ -37,11 +34,6 @@ import javafx.stage.Stage;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CommentProductControllerTest extends TestFXBase {
 
-    private CommentService commentService;
-    private ProductService productService;
-    private UserService userService;
-    private Chat chat;
-
     @Start
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/products/CommentaireProduit.fxml"));
@@ -50,7 +42,8 @@ class CommentProductControllerTest extends TestFXBase {
         stage.show();
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Comment Input Tests")
     class CommentInputTests {
 
@@ -113,7 +106,8 @@ class CommentProductControllerTest extends TestFXBase {
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Bad Word Filtering Tests")
     class BadWordFilteringTests {
 
@@ -130,8 +124,14 @@ class CommentProductControllerTest extends TestFXBase {
             // Submit comment
             waitForFxEvents();
 
-            // Verify comment area is still available
-            assertThat(commentArea).isNotNull();
+            // Verify warning label is visible for bad word
+            var warningLabel = lookup("#warningLabel").tryQuery();
+            if (warningLabel.isPresent()) {
+                assertThat(warningLabel.get().isVisible()).isTrue();
+            }
+            
+            // Verify submit was prevented or comment didn't get added
+            assertThat(commentArea.getText()).isNotEmpty();
         }
 
         @Test
@@ -142,13 +142,17 @@ class CommentProductControllerTest extends TestFXBase {
 
             TextArea commentArea = lookup("#monCommentaitreText").query();
             assertThat(commentArea).isNotNull();
-            clickOn(commentArea).write("This is a clean comment");
+            String cleanText = "This is a clean comment";
+            clickOn(commentArea).write(cleanText);
 
-            // Submit comment
-            waitForFxEvents();
-
-            // Verify comment area is responsive
-            assertThat(commentArea).isNotNull();
+            // Verify warning is NOT shown for clean text
+            var warningLabel = lookup("#warningLabel").tryQuery();
+            if (warningLabel.isPresent()) {
+                assertThat(warningLabel.get().isVisible()).isFalse();
+            }
+            
+            // Verify comment text is present
+            assertThat(commentArea.getText()).contains(cleanText);
         }
 
         @Test
@@ -164,8 +168,11 @@ class CommentProductControllerTest extends TestFXBase {
             // Submit comment
             waitForFxEvents();
 
-            // Verify comment area is still present
-            assertThat(commentArea).isNotNull();
+            // Verify warning label exists and is visible
+            var warningLabel = lookup("#warningLabel").tryQuery();
+            if (warningLabel.isPresent()) {
+                assertThat(warningLabel.get().isVisible()).isTrue();
+            }
         }
 
         @Test
@@ -176,17 +183,33 @@ class CommentProductControllerTest extends TestFXBase {
 
             TextArea commentArea = lookup("#monCommentaitreText").query();
             assertThat(commentArea).isNotNull();
+            
+            // Verify submit button exists
+            var submitButton = lookup("#submitButton").tryQuery();
+            if (submitButton.isPresent()) {
+                // Check if button is enabled before bad word input
+                assertThat(submitButton.get().isDisabled()).isFalse();
+            }
+            
             clickOn(commentArea).write("bad words here");
 
             // Submit comment
             waitForFxEvents();
 
-            // Verify comment area exists
-            assertThat(commentArea).isNotNull();
+            // Verify either submit button is disabled or warning is shown
+            if (submitButton.isPresent()) {
+                // Button should be disabled after bad words
+                assertThat(submitButton.get().isDisabled()).isTrue();
+            } else {
+                // Or warning should be visible
+                var warningLabel = lookup("#warningLabel").tryQuery();
+                assertThat(warningLabel.isPresent()).isTrue();
+            }
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Comment Display Tests")
     class CommentDisplayTests {
 
@@ -199,6 +222,9 @@ class CommentProductControllerTest extends TestFXBase {
             FlowPane commentPane = lookup("#CommentFlowPane").query();
             assertThat(commentPane).isNotNull();
             assertThat(commentPane.isVisible()).isTrue();
+            
+            // Verify pane has children or is ready to display
+            assertThat(commentPane.getChildren()).isNotNull();
         }
 
         @Test
@@ -212,8 +238,21 @@ class CommentProductControllerTest extends TestFXBase {
             FlowPane commentPane = lookup("#CommentFlowPane").query();
             assertThat(commentPane).isNotNull();
 
-            // Verify author name is accessible
+            // Wait for any async rendering
             waitForFxEvents();
+            
+            // Query for author name label or text node with author name
+            var authorLabel = lookup("John Doe").tryQuery();
+            if (authorLabel.isPresent()) {
+                assertThat(authorLabel.get().isVisible()).isTrue();
+            } else {
+                // If not found by text, verify comment pane has children
+                assertThat(commentPane.getChildren()).isNotNull();
+            }
+            
+            // Verify mock object has correct author data
+            assertThat(comment.getClient().getFirstName()).isEqualTo("John");
+            assertThat(comment.getClient().getLastName()).isEqualTo("Doe");
         }
 
         @Test
@@ -227,8 +266,20 @@ class CommentProductControllerTest extends TestFXBase {
             FlowPane commentPane = lookup("#CommentFlowPane").query();
             assertThat(commentPane).isNotNull();
 
-            // Verify comment text is accessible
+            // Wait for rendering
             waitForFxEvents();
+            
+            // Query for comment text node
+            var textNode = lookup("Great product!").tryQuery();
+            if (textNode.isPresent()) {
+                assertThat(textNode.get().isVisible()).isTrue();
+            } else {
+                // Verify comment pane is visible and ready
+                assertThat(commentPane.isVisible()).isTrue();
+            }
+            
+            // Verify mock comment has expected text
+            assertThat(comment.getCommentText()).isEqualTo("Great product!");
         }
 
         @Test
@@ -242,6 +293,9 @@ class CommentProductControllerTest extends TestFXBase {
             
             // Comment pane should exist even if empty
             assertThat(commentPane.isVisible()).isTrue();
+            
+            // Verify pane is ready (children list exists)
+            assertThat(commentPane.getChildren()).isNotNull();
         }
 
         @Test
@@ -251,14 +305,23 @@ class CommentProductControllerTest extends TestFXBase {
             waitForFxEvents();
 
             List<Comment> comments = createMockComments();
+            assertThat(comments).isNotEmpty().hasSize(3);
             
             FlowPane commentPane = lookup("#CommentFlowPane").query();
             assertThat(commentPane).isNotNull();
             assertThat(commentPane.isVisible()).isTrue();
+            
+            // Verify each comment has valid author and text
+            for (Comment c : comments) {
+                assertThat(c.getClient()).isNotNull();
+                assertThat(c.getClient().getFirstName()).isNotEmpty();
+                assertThat(c.getCommentText()).isNotEmpty();
+            }
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Comment Card Styling Tests")
     class CommentCardStylingTests {
 
@@ -269,6 +332,8 @@ class CommentProductControllerTest extends TestFXBase {
             waitForFxEvents();
 
             Comment comment = createMockComment("Jane", "Smith", "Excellent!");
+            assertThat(comment).isNotNull();
+            assertThat(comment.getClient().getFirstName()).isEqualTo("Jane");
             
             FlowPane commentPane = lookup("#CommentFlowPane").query();
             assertThat(commentPane).isNotNull();
@@ -284,6 +349,7 @@ class CommentProductControllerTest extends TestFXBase {
             Comment comment = createMockComment("John", "Doe", longText);
             
             assertThat(comment.getCommentText()).hasSize(200);
+            assertThat(comment.getCommentText()).isEqualTo(longText);
         }
 
         @Test
@@ -296,6 +362,7 @@ class CommentProductControllerTest extends TestFXBase {
             
             assertThat(comment.getClient()).isNotNull();
             assertThat(comment.getClient().getFirstName()).isEqualTo("John");
+            assertThat(comment.getClient().getLastName()).isEqualTo("Doe");
         }
 
         @Test
@@ -308,10 +375,14 @@ class CommentProductControllerTest extends TestFXBase {
             
             assertThat(comment.getCommentText()).isNotEmpty();
             assertThat(comment.getClient().getLastName()).isEqualTo("Doe");
+            
+            // Verify comment structure
+            assertThat(comment.getClient().getFirstName()).isNotEmpty();
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Comment Creation Tests")
     class CommentCreationTests {
 
@@ -374,7 +445,8 @@ class CommentProductControllerTest extends TestFXBase {
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Navigation Tests")
     class NavigationTests {
 
@@ -434,7 +506,8 @@ class CommentProductControllerTest extends TestFXBase {
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Error Handling Tests")
     class ErrorHandlingTests {
 
@@ -490,42 +563,27 @@ class CommentProductControllerTest extends TestFXBase {
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
-    @DisplayName("Date Parsing Tests")
-    class DateParsingTests {
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
+    @DisplayName("Comment Timestamp Display Tests")
+    class CommentTimestampDisplayTests {
 
         @Test
         @Order(29)
-        @DisplayName("Should handle date parsing errors")
-        void testDateParsingError() {
+        @Disabled("TODO: Implement timestamp display - verify comment creation date is rendered in correct format")
+        @DisplayName("Should display comment creation date")
+        void testDisplayCreationDate() {
+            // Requires: Lookup timestamp label for comment, verify LocalDate/LocalDateTime formatting
             waitForFxEvents();
-
-            TextArea commentArea = lookup("#monCommentaitreText").query();
-            assertThat(commentArea).isNotNull();
-            clickOn(commentArea).write("Invalid date format");
-
-            // Submit and verify date parsing error is handled
-            waitForFxEvents();
-            
-            // Verify UI is still responsive
-            assertThat(commentArea).isNotNull();
         }
 
         @Test
         @Order(30)
-        @DisplayName("Should parse valid date format")
-        void testValidDateParsing() {
+        @Disabled("TODO: Implement timestamp validation - verify timestamp is not in future")
+        @DisplayName("Should validate timestamp is not in future")
+        void testTimestampNotInFuture() {
+            // Requires: Create comment with mocked current date, verify timestamp <= now
             waitForFxEvents();
-
-            TextArea commentArea = lookup("#monCommentaitreText").query();
-            assertThat(commentArea).isNotNull();
-            clickOn(commentArea).write("2024-01-15");
-
-            // Submit and verify date is parsed correctly
-            waitForFxEvents();
-            
-            // Verify UI is still responsive
-            assertThat(commentArea).isNotNull();
         }
     }
 

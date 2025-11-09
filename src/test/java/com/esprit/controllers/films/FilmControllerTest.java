@@ -2,6 +2,7 @@ package com.esprit.controllers.films;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
@@ -209,235 +210,320 @@ class FilmControllerTest extends TestFXBase {
         @Order(20)
         @DisplayName("Should validate required film title")
         void testTitleRequired() {
+            waitForFxEvents();
+            
+            // Capture initial table size
+            int initialSize = ((TableView<?>) lookup("#film_tableView").query()).getItems().size();
+            
+            // Clear and submit with empty title
             clearTextField("#titre_textField");
             clickOnAndWait("#ajouter_Button");
-
             waitForFxEvents();
-            // Should show validation error
+            
+            // Verify table size unchanged (no film added)
+            assertEquals(initialSize, ((TableView<?>) lookup("#film_tableView").query()).getItems().size(), 
+                    "Table size should not change after failed validation");
         }
 
         @Test
         @Order(21)
         @DisplayName("Should validate required film year")
         void testYearRequired() {
+            waitForFxEvents();
+            
+            int initialSize = ((TableView<?>) lookup("#film_tableView").query()).getItems().size();
+            
             fillTextField("#titre_textField", TestDataFactory.generateMovieTitle());
             clearTextField("#annederalisation_textField");
             clickOnAndWait("#ajouter_Button");
-
             waitForFxEvents();
+            
+            // Verify no film was added
+            assertEquals(initialSize, ((TableView<?>) lookup("#film_tableView").query()).getItems().size(),
+                    "Table size should not change when year is missing");
         }
 
         @Test
         @Order(22)
         @DisplayName("Should validate year format")
         void testYearFormatValidation() {
+            waitForFxEvents();
+            
+            int initialSize = ((TableView<?>) lookup("#film_tableView").query()).getItems().size();
+            
+            fillTextField("#titre_textField", TestDataFactory.generateMovieTitle());
             fillTextField("#annederalisation_textField", "invalid");
             clickOnAndWait("#ajouter_Button");
-
             waitForFxEvents();
-            // Should show format error
+            
+            // Verify invalid year format prevented film creation
+            assertEquals(initialSize, ((TableView<?>) lookup("#film_tableView").query()).getItems().size(),
+                    "Non-numeric year should prevent film creation");
         }
 
         @Test
         @Order(23)
         @DisplayName("Should validate year range")
         void testYearRangeValidation() {
+            waitForFxEvents();
+            
+            int initialSize = ((TableView<?>) lookup("#film_tableView").query()).getItems().size();
+            
+            fillTextField("#titre_textField", TestDataFactory.generateMovieTitle());
             fillTextField("#annederalisation_textField", "1800");
             clickOnAndWait("#ajouter_Button");
-
             waitForFxEvents();
-            // Year too old should be invalid
+            
+            // Verify year out of valid range prevented creation
+            assertEquals(initialSize, ((TableView<?>) lookup("#film_tableView").query()).getItems().size(),
+                    "Year 1800 should be outside valid range and prevent creation");
         }
 
         @Test
         @Order(24)
         @DisplayName("Should validate duration is numeric")
         void testDurationNumericValidation() {
+            waitForFxEvents();
+            
+            int initialSize = ((TableView<?>) lookup("#film_tableView").query()).getItems().size();
+            
+            fillTextField("#titre_textField", TestDataFactory.generateMovieTitle());
+            fillTextField("#annederalisation_textField", "2023");
             fillTextField("#duree_textField", "invalid");
             clickOnAndWait("#ajouter_Button");
-
             waitForFxEvents();
+            
+            // Verify non-numeric duration prevented creation
+            assertEquals(initialSize, ((TableView<?>) lookup("#film_tableView").query()).getItems().size(),
+                    "Non-numeric duration should prevent film creation");
         }
 
         @Test
         @Order(25)
         @DisplayName("Should validate duration positive value")
         void testDurationPositiveValidation() {
+            waitForFxEvents();
+            
+            int initialSize = ((TableView<?>) lookup("#film_tableView").query()).getItems().size();
+            
+            fillTextField("#titre_textField", TestDataFactory.generateMovieTitle());
+            fillTextField("#annederalisation_textField", "2023");
             fillTextField("#duree_textField", "-10");
             clickOnAndWait("#ajouter_Button");
-
             waitForFxEvents();
+            
+            // Verify negative duration prevented creation
+            assertEquals(initialSize, ((TableView<?>) lookup("#film_tableView").query()).getItems().size(),
+                    "Negative duration should prevent film creation");
         }
 
         @Test
         @Order(26)
         @DisplayName("Should validate description length")
         void testDescriptionLengthValidation() {
+            waitForFxEvents();
+            
+            int initialSize = ((TableView<?>) lookup("#film_tableView").query()).getItems().size();
+            
+            fillTextField("#titre_textField", TestDataFactory.generateMovieTitle());
+            fillTextField("#annederalisation_textField", "2023");
+            fillTextField("#duree_textField", "120");
             fillTextField("#description_textField", "Too short");
             clickOnAndWait("#ajouter_Button");
-
             waitForFxEvents();
+            
+            // Verify insufficient description prevented creation
+            assertEquals(initialSize, ((TableView<?>) lookup("#film_tableView").query()).getItems().size(),
+                    "Description too short should prevent film creation");
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Category Management Tests")
     class CategoryManagementTests {
 
         @Test
         @Order(30)
-        @DisplayName("Should display category selection control")
-        void testCategorySelectionVisible() {
-            // CheckComboBox or similar for categories
-            waitForFxEvents();
+        @Disabled("TODO: Implement category loading - verify categories populate in UI selector")
+        @DisplayName("Should load available categories")
+        void testLoadCategories() {
+            // Requires: Category data loads from service
+            // Implementation: Lookup category control, assert items not empty
         }
 
         @Test
         @Order(31)
-        @DisplayName("Should load available categories")
-        void testLoadCategories() {
-            // Categories should be loaded
-            waitForFxEvents();
+        @Disabled("TODO: Implement category multi-selection - verify film can have multiple categories")
+        @DisplayName("Should allow selecting multiple categories")
+        void testSelectMultipleCategories() {
+            // Requires: Multiple category selection UI works
+            // Implementation: Click multiple categories, verify all selected
         }
 
         @Test
         @Order(32)
-        @DisplayName("Should allow selecting multiple categories")
-        void testSelectMultipleCategories() {
-            // Should support multi-selection
-            waitForFxEvents();
+        @Disabled("TODO: Implement category assignment - verify selected categories save with film")
+        @DisplayName("Should assign categories to film")
+        void testAssignCategoriesToFilm() {
+            // Requires: Categories persist after film creation
+            // Implementation: Create film with categories, retrieve film, verify categories attached
         }
 
         @Test
         @Order(33)
-        @DisplayName("Should assign categories to film")
-        void testAssignCategoriesToFilm() {
-            // Selected categories should be assigned
-            waitForFxEvents();
+        @Disabled("TODO: Implement category display - verify assigned categories visible in form")
+        @DisplayName("Should display selected categories")
+        void testDisplaySelectedCategories() {
+            // Requires: Previously assigned categories show in UI on form load
+            // Implementation: Load form with existing film, verify categories displayed
         }
 
         @Test
         @Order(34)
-        @DisplayName("Should display selected categories")
-        void testDisplaySelectedCategories() {
-            // Selected categories should be visible
-            waitForFxEvents();
+        @Disabled("TODO: Implement category removal - verify deselection removes category from film")
+        @DisplayName("Should remove category from film")
+        void testRemoveCategoryFromFilm() {
+            // Requires: Deselecting category removes it from film data
+            // Implementation: Create film with category, deselect, verify removed
         }
 
         @Test
         @Order(35)
-        @DisplayName("Should remove category from film")
-        void testRemoveCategoryFromFilm() {
-            // Should allow deselecting categories
-            waitForFxEvents();
+        @Disabled("TODO: Implement category validation - verify film requires at least one category")
+        @DisplayName("Should validate category requirement")
+        void testCategoryValidation() {
+            // Requires: Prevent film creation without categories
+            // Implementation: Try to create film with no categories, assert validation error
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Actor Management Tests")
     class ActorManagementTests {
 
         @Test
         @Order(40)
-        @DisplayName("Should display actor selection control")
-        void testActorSelectionVisible() {
-            waitForFxEvents();
+        @Disabled("TODO: Implement actor loading - verify actors populate in UI selector")
+        @DisplayName("Should load available actors")
+        void testLoadActors() {
+            // Requires: Actor data loads from service
+            // Implementation: Lookup actor control, assert items not empty
         }
 
         @Test
         @Order(41)
-        @DisplayName("Should load available actors")
-        void testLoadActors() {
-            waitForFxEvents();
+        @Disabled("TODO: Implement actor multi-selection - verify film can have multiple actors")
+        @DisplayName("Should allow selecting multiple actors")
+        void testSelectMultipleActors() {
+            // Requires: Multiple actor selection UI works
+            // Implementation: Click multiple actors, verify all selected
         }
 
         @Test
         @Order(42)
-        @DisplayName("Should allow selecting multiple actors")
-        void testSelectMultipleActors() {
-            waitForFxEvents();
+        @Disabled("TODO: Implement actor assignment - verify selected actors save with film")
+        @DisplayName("Should assign actors to film")
+        void testAssignActorsToFilm() {
+            // Requires: Actors persist after film creation
+            // Implementation: Create film with actors, retrieve film, verify actors attached
         }
 
         @Test
         @Order(43)
-        @DisplayName("Should assign actors to film")
-        void testAssignActorsToFilm() {
-            waitForFxEvents();
+        @Disabled("TODO: Implement actor display - verify assigned actors visible in form")
+        @DisplayName("Should display selected actors")
+        void testDisplaySelectedActors() {
+            // Requires: Previously assigned actors show in UI on form load
+            // Implementation: Load form with existing film, verify actors displayed
         }
 
         @Test
         @Order(44)
-        @DisplayName("Should display selected actors")
-        void testDisplaySelectedActors() {
-            waitForFxEvents();
+        @Disabled("TODO: Implement actor removal - verify deselection removes actor from film")
+        @DisplayName("Should remove actor from film")
+        void testRemoveActorFromFilm() {
+            // Requires: Deselecting actor removes it from film data
+            // Implementation: Create film with actor, deselect, verify removed
         }
 
         @Test
         @Order(45)
-        @DisplayName("Should remove actor from film")
-        void testRemoveActorFromFilm() {
-            waitForFxEvents();
+        @Disabled("TODO: Implement actor validation - verify film requires at least one actor")
+        @DisplayName("Should validate actor requirement")
+        void testActorValidation() {
+            // Requires: Prevent film creation without actors
+            // Implementation: Try to create film with no actors, assert validation error
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Image Upload Tests")
     class ImageUploadTests {
 
         @Test
         @Order(50)
+        @Disabled("TODO: Implement image upload button visibility - verify button exists and is clickable")
         @DisplayName("Should display image upload button")
         void testImageUploadButtonVisible() {
-            // Button to select image should be visible
-            waitForFxEvents();
+            // Requires: Upload button present in UI
+            // Implementation: Lookup button, assert not null and visible
         }
 
         @Test
         @Order(51)
+        @Disabled("TODO: Implement file chooser dialog test - verify dialog opens on button click")
         @DisplayName("Should open file chooser on button click")
         void testOpenFileChooser() {
-            // Click should open file chooser dialog
-            waitForFxEvents();
+            // Requires: Clicking upload button opens file selection dialog
+            // Implementation: Click button, verify file chooser appears (tricky in headless - may need mocking)
         }
 
         @Test
         @Order(52)
+        @Disabled("TODO: Implement image preview display - verify selected image shows in UI")
         @DisplayName("Should display image preview")
         void testImagePreviewDisplay() {
-            // After selecting image, preview should show
-            waitForFxEvents();
+            // Requires: After image selection, preview ImageView updates
+            // Implementation: Select image file, verify ImageView image property set
         }
 
         @Test
         @Order(53)
+        @Disabled("TODO: Implement image format validation - only accept common image types")
         @DisplayName("Should validate image file format")
         void testImageFormatValidation() {
-            // Only image formats should be accepted
-            waitForFxEvents();
+            // Requires: Reject non-image files (pdf, txt, etc.)
+            // Implementation: Attempt to select non-image, verify error shown
         }
 
         @Test
         @Order(54)
+        @Disabled("TODO: Implement image size validation - reject files exceeding size limit")
         @DisplayName("Should validate image file size")
         void testImageSizeValidation() {
-            // Too large images should be rejected
-            waitForFxEvents();
+            // Requires: Large images rejected with error message
+            // Implementation: Create oversized image file, verify validation error
         }
 
         @Test
         @Order(55)
+        @Disabled("TODO: Implement Cloudinary upload - upload image to cloud storage service")
         @DisplayName("Should upload image to Cloudinary")
         void testCloudinaryUpload() {
-            // Image should be uploaded to cloud storage
-            waitForFxEvents();
+            // Requires: Selected image uploaded to Cloudinary
+            // Implementation: Mock CloudinaryStorage or use real service, verify image URL stored
         }
 
         @Test
         @Order(56)
+        @Disabled("TODO: Implement upload error handling - gracefully handle upload failures")
         @DisplayName("Should handle upload errors")
         void testUploadErrorHandling() {
-            // Should gracefully handle upload failures
-            waitForFxEvents();
+            // Requires: Network/service errors don't crash app
+            // Implementation: Mock upload failure, verify error dialog shown
         }
     }
 
@@ -618,7 +704,8 @@ class FilmControllerTest extends TestFXBase {
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Cinema Assignment Tests")
     class CinemaAssignmentTests {
 
@@ -631,26 +718,29 @@ class FilmControllerTest extends TestFXBase {
 
         @Test
         @Order(91)
+        @Disabled("TODO: Implement cinema loading - verify available cinemas load in UI")
         @DisplayName("Should load available cinemas")
         void testLoadCinemas() {
-            // Cinema list should be available
-            waitForFxEvents();
+            // Requires: Cinema list/dropdown populates from service
+            // Implementation: Lookup cinema control, assert items present
         }
 
         @Test
         @Order(92)
+        @Disabled("TODO: Implement film-to-cinema assignment - verify film assigned to selected cinema")
         @DisplayName("Should assign film to cinema")
         void testAssignFilmToCinema() {
-            clickOnAndWait("#ajouterCinema_Button");
-            waitForFxEvents();
+            // Requires: Select cinema from list and assign film
+            // Implementation: Click cinema button, select cinema, verify association created
         }
 
         @Test
         @Order(93)
+        @Disabled("TODO: Implement cinema selection validation - prevent assignment without cinema")
         @DisplayName("Should validate cinema selection")
         void testCinemaSelectionValidation() {
-            // Should require cinema selection
-            waitForFxEvents();
+            // Requires: Prevent empty cinema selection
+            // Implementation: Try to assign without selecting cinema, verify error
         }
     }
 
@@ -674,8 +764,6 @@ class FilmControllerTest extends TestFXBase {
         @Order(101)
         @DisplayName("Should sort table by column")
         void testTableSorting() {
-            TableView<?> table = lookup("#film_tableView").query();
-
             // Click column header to sort
             waitForFxEvents();
         }

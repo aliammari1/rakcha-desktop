@@ -118,12 +118,21 @@ public abstract class TestFXBase extends ApplicationTest {
 
     /**
      * Clear a text field by selecting all and deleting
+     * Supports macOS by using META key instead of CONTROL
      * 
      * @param query CSS query or node ID
      */
     protected void clearTextField(String query) {
         clickOn(query);
-        push(KeyCode.CONTROL, KeyCode.A);
+        // Detect if running on macOS
+        String osName = System.getProperty("os.name", "").toLowerCase();
+        boolean isMac = osName.contains("mac");
+        
+        if (isMac) {
+            push(KeyCode.META, KeyCode.A);
+        } else {
+            push(KeyCode.CONTROL, KeyCode.A);
+        }
         push(KeyCode.DELETE);
         waitForFxEvents();
     }

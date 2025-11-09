@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Timeout;
 import java.util.concurrent.TimeUnit;
 import org.testfx.framework.junit5.Start;
 
-import com.esprit.services.cinemas.CinemaService;
 import com.esprit.utils.TestFXBase;
 
 import javafx.fxml.FXMLLoader;
@@ -28,8 +27,6 @@ import javafx.stage.Stage;
 @Timeout(value = 10, unit = TimeUnit.SECONDS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class HomeCinemaManagerControllerTest extends TestFXBase {
-
-    private CinemaService cinemaService;
 
     @Start
     public void start(Stage stage) throws Exception {

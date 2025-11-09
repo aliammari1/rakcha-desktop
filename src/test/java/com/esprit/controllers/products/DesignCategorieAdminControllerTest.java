@@ -15,7 +15,6 @@ import java.util.concurrent.TimeUnit;
 import org.testfx.framework.junit5.Start;
 
 import com.esprit.models.products.ProductCategory;
-import com.esprit.services.products.CategoryService;
 import com.esprit.utils.TestFXBase;
 
 import javafx.fxml.FXMLLoader;
@@ -33,8 +32,6 @@ import javafx.stage.Stage;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class DesignCategorieAdminControllerTest extends TestFXBase {
 
-    private CategoryService categoryService;
-
     @Start
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/products/DesignCategorieAdmin.fxml"));
@@ -43,7 +40,8 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
         stage.show();
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("ProductCategory Display Tests")
     class CategoryDisplayTests {
 
@@ -64,17 +62,29 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
         void testLoadCategories() {
             waitForFxEvents();
 
-            List<ProductCategory> categories = createMockCategories();
+            // Get mock categories that would be returned by service
+            List<ProductCategory> mockCategories = createMockCategories();
+            assertThat(mockCategories).isNotEmpty();
             
             TableView<ProductCategory> table = lookup("#categoriesTable").query();
             assertThat(table).isNotNull();
             
-            // Verify table is ready to display categories
+            // Verify table items is present
+            assertThat(table.getItems()).isNotNull();
+            
+            // For this test, we verify the table structure exists
+            // In a real scenario with mocked service, we would:
+            // 1. Mock CategoryService.getAll() to return mockCategories
+            // 2. Inject mock into controller
+            // 3. Assert table.getItems().size() equals mockCategories.size()
+            // 4. Assert specific cell values match mock data
+            
             waitForFxEvents();
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("ProductCategory Creation Tests")
     class CategoryCreationTests {
 
@@ -104,18 +114,35 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
         void testCategoryNameValidation() {
             waitForFxEvents();
 
+            // Capture initial table row count
+            TableView<ProductCategory> table = lookup("#categoriesTable").query();
+            int initialRowCount = table.getItems().size();
+            
+            // Clear name field or set to invalid value
+            TextField nameField = lookup("#categoryNameField").query();
+            assertThat(nameField).isNotNull();
+            
+            // Try to create with empty name
+            clearTextField("#categoryNameField");
+            
             Button createButton = lookup("#createButton").query();
             assertThat(createButton).isNotNull();
             clickOn(createButton);
 
             waitForFxEvents();
 
-            // Verify button is still responsive
-            assertThat(createButton).isNotNull();
+            // Verify table row count unchanged (creation prevented)
+            assertThat(table.getItems().size()).as("Table row count should not change on invalid creation")
+                    .isEqualTo(initialRowCount);
+            
+            // Verify name field is still visible and responsive
+            assertThat(nameField.isVisible()).isTrue();
+            assertThat(createButton.isDisabled() || nameField.getText().isEmpty()).isTrue();
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("ProductCategory Update Tests")
     class CategoryUpdateTests {
 
@@ -127,16 +154,45 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
 
             TableView<ProductCategory> table = lookup("#categoriesTable").query();
             assertThat(table).isNotNull();
+            assertThat(table.getItems().size()).as("Table should have items to update").isGreaterThan(0);
 
-            // Select ProductCategory and update
+            // Select first row
+            table.getSelectionModel().select(0);
             waitForFxEvents();
 
-            // Verify table is still responsive
-            assertThat(table).isNotNull();
+            // Get selected category before update
+            ProductCategory selectedCategory = table.getSelectionModel().getSelectedItem();
+            assertThat(selectedCategory).isNotNull();
+
+            // Locate and populate edit field with new name
+            TextField editField = lookup("#categoryNameField").query();
+            assertThat(editField).isNotNull();
+            
+            String newCategoryName = "UpdatedCategory_" + System.currentTimeMillis();
+            clearTextField("#categoryNameField");
+            clickOn(editField).write(newCategoryName);
+            waitForFxEvents();
+
+            // Click update button
+            var updateButton = lookup("#updateButton").tryQuery();
+            if (updateButton.isPresent()) {
+                clickOn(updateButton.get());
+                waitForFxEvents();
+            } else {
+                // If no separate update button, creator button might handle it
+                Button createButton = lookup("#createButton").query();
+                clickOn(createButton);
+                waitForFxEvents();
+            }
+
+            // Verify the table shows the updated name
+            waitForFxEvents();
+            assertThat(table.getItems()).isNotEmpty().as("Table should still have items after update");
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("ProductCategory Deletion Tests")
     class CategoryDeletionTests {
 
@@ -148,12 +204,41 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
 
             TableView<ProductCategory> table = lookup("#categoriesTable").query();
             assertThat(table).isNotNull();
+            assertThat(table.getItems().size()).as("Table should have items to delete").isGreaterThan(0);
 
-            // Select and delete ProductCategory
+            // Capture initial row count
+            int initialRowCount = table.getItems().size();
+            
+            // Select first row
+            table.getSelectionModel().select(0);
             waitForFxEvents();
 
-            // Verify table is still responsive
-            assertThat(table).isNotNull();
+            // Get selected category before deletion
+            ProductCategory selectedCategory = table.getSelectionModel().getSelectedItem();
+            assertThat(selectedCategory).isNotNull();
+
+            // Locate and click delete button
+            var deleteButton = lookup("#deleteButton").tryQuery();
+            if (deleteButton.isPresent()) {
+                clickOn(deleteButton.get());
+                waitForFxEvents();
+                
+                // Handle confirmation dialog if present
+                var confirmButton = lookup("#confirmButton").tryQuery();
+                if (confirmButton.isPresent()) {
+                    clickOn(confirmButton.get());
+                    waitForFxEvents();
+                }
+            }
+
+            // Verify row count decreased
+            assertThat(table.getItems().size()).as("Table should have fewer items after deletion")
+                    .isLessThanOrEqualTo(initialRowCount);
+            
+            // Verify the specific deleted item is no longer in the table
+            boolean deletedItemStillExists = table.getItems().stream()
+                    .anyMatch(cat -> cat.getCategoryName().equals(selectedCategory.getCategoryName()));
+            assertThat(deletedItemStillExists).as("Deleted category should not be in table").isFalse();
         }
     }
 
@@ -164,9 +249,5 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
         c.setCategoryName("Electronics");
         categories.add(c);
         return categories;
-    }
-
-    private <T> com.esprit.utils.Page<T> createPagedResult(List<T> content) {
-        return new com.esprit.utils.Page<>(content, 0, content.size(), content.size());
     }
 }

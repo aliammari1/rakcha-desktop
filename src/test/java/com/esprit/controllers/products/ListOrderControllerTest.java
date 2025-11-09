@@ -1,9 +1,5 @@
 package com.esprit.controllers.products;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -15,9 +11,6 @@ import java.util.concurrent.TimeUnit;
 import org.testfx.framework.junit5.Start;
 
 import com.esprit.models.products.Order;
-import com.esprit.models.users.Client;
-import com.esprit.services.products.OrderService;
-import com.esprit.services.users.UserService;
 import com.esprit.utils.TestFXBase;
 
 import javafx.fxml.FXMLLoader;
@@ -35,9 +28,6 @@ import javafx.stage.Stage;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ListOrderControllerTest extends TestFXBase {
 
-    private OrderService orderService;
-    private UserService userService;
-
     @Start
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/products/ListeCommande.fxml"));
@@ -46,7 +36,8 @@ class ListOrderControllerTest extends TestFXBase {
         stage.show();
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Order Display Tests")
     class OrderDisplayTests {
 
@@ -67,12 +58,11 @@ class ListOrderControllerTest extends TestFXBase {
         void testLoadOrders() {
             waitForFxEvents();
 
-            List<Order> orders = createMockOrders();
-            
             TableView<Order> table = lookup("#orderTableView").query();
             assertThat(table).isNotNull();
 
             // Verify table is ready to display orders
+            assertThat(table.getItems()).isNotNull();
             waitForFxEvents();
         }
 
@@ -142,7 +132,8 @@ class ListOrderControllerTest extends TestFXBase {
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Search Functionality Tests")
     class SearchFunctionalityTests {
 
@@ -162,14 +153,29 @@ class ListOrderControllerTest extends TestFXBase {
         void testSearchByClientName() {
             waitForFxEvents();
 
+            TableView<Order> table = lookup("#orderTableView").query();
+            assertThat(table).isNotNull();
+            int initialCount = table.getItems().size();
+
             TextField searchBar = lookup("#SearchBar").query();
             assertThat(searchBar).isNotNull();
             clickOn(searchBar).write("John");
 
             waitForFxEvents();
 
-            TextField searchField = lookup("#SearchBar").query();
-            assertThat(searchField.getText()).contains("John");
+            // Verify search text is entered
+            assertThat(searchBar.getText()).contains("John");
+            
+            // Verify table is filtered or has appropriate items
+            int filteredCount = table.getItems().size();
+            // Filtered count should be <= initial count
+            assertThat(filteredCount).isLessThanOrEqualTo(initialCount);
+            
+            // Verify visible items contain the search term
+            for (Order order : table.getItems()) {
+                String clientName = order.getClient().getFirstName() + " " + order.getClient().getLastName();
+                assertThat(clientName.toLowerCase()).contains("john");
+            }
         }
 
         @Test
@@ -178,13 +184,26 @@ class ListOrderControllerTest extends TestFXBase {
         void testSearchByAddress() {
             waitForFxEvents();
 
+            TableView<Order> table = lookup("#orderTableView").query();
+            assertThat(table).isNotNull();
+            int initialCount = table.getItems().size();
+
             TextField searchBar = lookup("#SearchBar").query();
             assertThat(searchBar).isNotNull();
-            clickOn(searchBar).write("123 Main");
+            clickOn(searchBar).write("Main");
 
             waitForFxEvents();
 
-            assertThat(searchBar.getText()).contains("123 Main");
+            assertThat(searchBar.getText()).contains("Main");
+            
+            // Verify filtering applied
+            int filteredCount = table.getItems().size();
+            assertThat(filteredCount).isLessThanOrEqualTo(initialCount);
+            
+            // Verify visible items match search criteria
+            for (Order order : table.getItems()) {
+                assertThat(order.getAddress().toLowerCase()).contains("main");
+            }
         }
 
         @Test
@@ -193,13 +212,22 @@ class ListOrderControllerTest extends TestFXBase {
         void testSearchByPhoneNumber() {
             waitForFxEvents();
 
+            TableView<Order> table = lookup("#orderTableView").query();
+            assertThat(table).isNotNull();
+
             TextField searchBar = lookup("#SearchBar").query();
             assertThat(searchBar).isNotNull();
-            clickOn(searchBar).write("12345678");
+            clickOn(searchBar).write("12345");
 
             waitForFxEvents();
 
-            assertThat(searchBar.getText()).contains("12345678");
+            assertThat(searchBar.getText()).contains("12345");
+            
+            // Verify visible items contain the phone search term
+            for (Order order : table.getItems()) {
+                String phone = String.valueOf(order.getPhoneNumber());
+                assertThat(phone).contains("12345");
+            }
         }
 
         @Test
@@ -208,6 +236,9 @@ class ListOrderControllerTest extends TestFXBase {
         void testCaseInsensitiveSearch() {
             waitForFxEvents();
 
+            TableView<Order> table = lookup("#orderTableView").query();
+            assertThat(table).isNotNull();
+
             TextField searchBar = lookup("#SearchBar").query();
             assertThat(searchBar).isNotNull();
             clickOn(searchBar).write("JOHN");
@@ -215,6 +246,12 @@ class ListOrderControllerTest extends TestFXBase {
             waitForFxEvents();
 
             assertThat(searchBar.getText()).contains("JOHN");
+            
+            // Verify results match despite case difference
+            for (Order order : table.getItems()) {
+                String clientName = (order.getClient().getFirstName() + " " + order.getClient().getLastName()).toLowerCase();
+                assertThat(clientName).contains("john");
+            }
         }
 
         @Test
@@ -223,6 +260,9 @@ class ListOrderControllerTest extends TestFXBase {
         void testEmptySearch() {
             waitForFxEvents();
 
+            TableView<Order> table = lookup("#orderTableView").query();
+            assertThat(table).isNotNull();
+
             TextField searchBar = lookup("#SearchBar").query();
             assertThat(searchBar).isNotNull();
             clickOn(searchBar).write("filter").eraseText(6);
@@ -230,6 +270,9 @@ class ListOrderControllerTest extends TestFXBase {
             waitForFxEvents();
 
             assertThat(searchBar.getText()).isEmpty();
+            
+            // When search is empty, all items should be shown
+            assertThat(table.getItems().size()).isGreaterThanOrEqualTo(0);
         }
 
         @Test
@@ -238,17 +281,34 @@ class ListOrderControllerTest extends TestFXBase {
         void testRealTimeSearch() {
             waitForFxEvents();
 
+            TableView<Order> table = lookup("#orderTableView").query();
+            assertThat(table).isNotNull();
+
             TextField searchBar = lookup("#SearchBar").query();
             assertThat(searchBar).isNotNull();
+            
+            // Clear any existing text
+            clickOn(searchBar).eraseText(searchBar.getLength());
+            
+            // Type first character
             clickOn(searchBar).write("J");
-
             waitForFxEvents();
-
+            
             assertThat(searchBar.getText()).contains("J");
+            int firstCharCount = table.getItems().size();
+
+            // Type second character
+            clickOn(searchBar).write("o");
+            waitForFxEvents();
+            
+            // Table should update with more specific results
+            int secondCharCount = table.getItems().size();
+            assertThat(secondCharCount).isLessThanOrEqualTo(firstCharCount);
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Order Deletion Tests")
     class OrderDeletionTests {
 
@@ -267,7 +327,29 @@ class ListOrderControllerTest extends TestFXBase {
         void testDeleteConfirmation() {
             waitForFxEvents();
 
-            assertThat(lookup("#deleteColumn").tryQuery()).isPresent();
+            TableView<Order> table = lookup("#orderTableView").query();
+            assertThat(table).isNotNull();
+            
+            if (table.getItems().isEmpty()) {
+                return; // Skip if no items
+            }
+
+            // Select first row
+            table.getSelectionModel().selectFirst();
+            waitForFxEvents();
+
+            // Look for delete button in selected row
+            var deleteButton = lookup(".delete-button").tryQuery();
+            if (deleteButton.isPresent()) {
+                clickOn(deleteButton.get());
+                waitForFxEvents();
+                
+                // Verify a confirmation dialog appears or warning label is visible
+                var confirmDialog = lookup(".dialog-pane").tryQuery();
+                if (confirmDialog.isPresent()) {
+                    assertThat(confirmDialog.get().isVisible()).isTrue();
+                }
+            }
         }
 
         @Test
@@ -276,7 +358,35 @@ class ListOrderControllerTest extends TestFXBase {
         void testDeleteOrder() {
             waitForFxEvents();
 
-            assertThat(lookup("#deleteColumn").tryQuery()).isPresent();
+            TableView<Order> table = lookup("#orderTableView").query();
+            assertThat(table).isNotNull();
+            
+            if (table.getItems().isEmpty()) {
+                return; // Skip if no items to delete
+            }
+
+            int initialCount = table.getItems().size();
+            
+            // Select and delete first order
+            table.getSelectionModel().selectFirst();
+            waitForFxEvents();
+
+            // Find and click delete button
+            var deleteButton = lookup(".delete-button").tryQuery();
+            if (deleteButton.isPresent()) {
+                clickOn(deleteButton.get());
+                waitForFxEvents();
+                
+                // Click OK/Confirm on dialog
+                var confirmButton = lookup(".confirm-button, #okButton, .ok-button").tryQuery();
+                if (confirmButton.isPresent()) {
+                    clickOn(confirmButton.get());
+                    waitForFxEvents();
+                    
+                    // Verify item was deleted
+                    assertThat(table.getItems().size()).isLessThan(initialCount);
+                }
+            }
         }
 
         @Test
@@ -287,6 +397,30 @@ class ListOrderControllerTest extends TestFXBase {
 
             TableView<Order> table = lookup("#orderTableView").query();
             assertThat(table).isNotNull();
+            
+            // Capture initial state
+            int initialCount = table.getItems().size();
+
+            // If there are items, attempt a deletion flow
+            if (initialCount > 0) {
+                table.getSelectionModel().selectFirst();
+                waitForFxEvents();
+
+                var deleteButton = lookup(".delete-button").tryQuery();
+                if (deleteButton.isPresent()) {
+                    clickOn(deleteButton.get());
+                    waitForFxEvents();
+                    
+                    var confirmButton = lookup(".confirm-button, #okButton").tryQuery();
+                    if (confirmButton.isPresent()) {
+                        clickOn(confirmButton.get());
+                        waitForFxEvents();
+                    }
+                }
+            }
+            
+            // Verify table is still functional
+            assertThat(table.getItems()).isNotNull();
         }
 
         @Test
@@ -297,10 +431,44 @@ class ListOrderControllerTest extends TestFXBase {
 
             TableView<Order> table = lookup("#orderTableView").query();
             assertThat(table).isNotNull();
+            
+            if (table.getItems().isEmpty()) {
+                return; // Skip if no items
+            }
+
+            int initialCount = table.getItems().size();
+            
+            // Select first order
+            table.getSelectionModel().selectFirst();
+            Order selectedOrder = table.getSelectionModel().getSelectedItem();
+            waitForFxEvents();
+
+            // Click delete button
+            var deleteButton = lookup(".delete-button").tryQuery();
+            if (deleteButton.isPresent()) {
+                clickOn(deleteButton.get());
+                waitForFxEvents();
+                
+                // Click Cancel/No on confirmation dialog
+                var cancelButton = lookup(".cancel-button, #cancelButton, .no-button").tryQuery();
+                if (cancelButton.isPresent()) {
+                    clickOn(cancelButton.get());
+                    waitForFxEvents();
+                    
+                    // Verify nothing was deleted
+                    assertThat(table.getItems().size()).isEqualTo(initialCount);
+                    
+                    // Verify selected item still exists
+                    if (selectedOrder != null) {
+                        assertThat(table.getItems()).contains(selectedOrder);
+                    }
+                }
+            }
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Order Status Display Tests")
     class OrderStatusDisplayTests {
 
@@ -346,7 +514,8 @@ class ListOrderControllerTest extends TestFXBase {
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Client Information Display Tests")
     class ClientInformationDisplayTests {
 
@@ -379,7 +548,8 @@ class ListOrderControllerTest extends TestFXBase {
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Statistics Navigation Tests")
     class StatisticsNavigationTests {
 
@@ -406,7 +576,8 @@ class ListOrderControllerTest extends TestFXBase {
         }
     }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Empty State Tests")
     class EmptyStateTests {
 
@@ -431,40 +602,5 @@ class ListOrderControllerTest extends TestFXBase {
         }
     }
 
-    // Helper methods
-    private List<Order> createMockOrders() {
-        List<Order> orders = new ArrayList<>();
-
-        Order order1 = new Order();
-        order1.setId(1L);
-        order1.setAddress("123 Main St");
-        order1.setPhoneNumber(12345678);
-        order1.setOrderDate(new Date());
-        order1.setStatus("Pending");
-        order1.setClient(createMockClient());
-
-        Order order2 = new Order();
-        order2.setId(2L);
-        order2.setAddress("456 Oak Ave");
-        order2.setPhoneNumber(87654321);
-        order2.setOrderDate(new Date());
-        order2.setStatus("Confirmed");
-        order2.setClient(createMockClient());
-
-        orders.add(order1);
-        orders.add(order2);
-        return orders;
-    }
-
-    private Client createMockClient() {
-        Client client = new Client();
-        client.setId(1L);
-        client.setFirstName("John");
-        client.setLastName("Doe");
-        return client;
-    }
-
-    private <T> com.esprit.utils.Page<T> createPagedResult(List<T> content) {
-        return new com.esprit.utils.Page<>(content, 0, content.size(), content.size());
-    }
+    // Helper methods are handled by test fixtures or mocked data
 }

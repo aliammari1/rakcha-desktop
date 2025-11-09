@@ -474,17 +474,8 @@ public class FilmUserController {
         copyOfAnchorPane.setPrefSize(265, 425); // Better proportions for modern dark cards
         copyOfAnchorPane.setMinSize(240, 405);
         copyOfAnchorPane.setMaxSize(290, 450);
-        copyOfAnchorPane.getStyleClass().addAll("anchorfilm", "animated-button");
+        copyOfAnchorPane.getStyleClass().addAll("anchorfilm", "animated-button", "film-card");
         copyOfAnchorPane.setUserData(film); // Store film data
-
-        // Apply dark theme with red border
-        copyOfAnchorPane.setStyle(
-                "-fx-background-color: linear-gradient(to bottom, rgba(20, 5, 5, 0.95), rgba(30, 10, 10, 0.9));" +
-                        "-fx-background-radius: 15;" +
-                        "-fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.8), 20, 0, 0, 5);" +
-                        "-fx-border-color: rgba(139, 0, 0, 0.3);" +
-                        "-fx-border-width: 1;" +
-                        "-fx-border-radius: 15;");
 
         final ImageView imageView = new ImageView();
         try {
@@ -517,9 +508,7 @@ public class FilmUserController {
             imageView.setSmooth(true);
             imageView.setLayoutX(15);
             imageView.setLayoutY(10);
-            imageView.setStyle(
-                    "-fx-background-radius: 12;" +
-                            "-fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.6), 15, 0, 0, 3);");
+            imageView.getStyleClass().add("film-card-image");
 
         } catch (final Exception e) {
             // Handle exception or set a default image
@@ -539,11 +528,7 @@ public class FilmUserController {
         nomFilm.setMaxWidth(235);
         nomFilm.setWrapText(true);
         nomFilm.setFont(new Font(15));
-        nomFilm.getStyleClass().addAll("labeltext", "animated-text");
-        nomFilm.setStyle(
-                "-fx-font-weight: bold;" +
-                        "-fx-text-fill: #ffffff;" +
-                        "-fx-effect: dropshadow(gaussian, #ff4444, 8, 0, 1, 1);");
+        nomFilm.getStyleClass().addAll("labeltext", "animated-text", "film-card-title");
 
         // Rating with white text
         final Label ratefilm = new Label();
@@ -551,10 +536,7 @@ public class FilmUserController {
         ratefilm.setLayoutY(358);
         ratefilm.setPrefSize(120, 25);
         ratefilm.setFont(new Font(13));
-        ratefilm.getStyleClass().addAll("labeltext");
-        ratefilm.setStyle(
-                "-fx-text-fill: rgba(255, 255, 255, 0.8);" +
-                        "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.8), 2, 0, 0, 0);");
+        ratefilm.getStyleClass().addAll("labeltext", "film-card-rating");
         final double rate = new FilmRatingService().getAvergeRating(film.getId());
         ratefilm.setText(String.format("%.1f/5", rate));
 
@@ -575,37 +557,7 @@ public class FilmUserController {
         button.setLayoutX(15);
         button.setLayoutY(385);
         button.setPrefSize(235, 36);
-        button.getStyleClass().addAll("action-button", "animated-button");
-        button.setStyle(
-                "-fx-background-color: linear-gradient(to bottom right, #8b0000, #b22222);" +
-                        "-fx-background-radius: 20;" +
-                        "-fx-text-fill: white;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-cursor: hand;" +
-                        "-fx-font-size: 13px;" +
-                        "-fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.8), 12, 0, 0, 3);");
-        button.setOnMouseEntered(e -> {
-            button.setStyle(
-                    "-fx-background-color: linear-gradient(to bottom right, #ff4444, #ff6666);" +
-                            "-fx-background-radius: 20;" +
-                            "-fx-text-fill: white;" +
-                            "-fx-font-weight: bold;" +
-                            "-fx-cursor: hand;" +
-                            "-fx-font-size: 13px;" +
-                            "-fx-effect: dropshadow(gaussian, rgba(255, 68, 68, 1.0), 20, 0, 0, 5);" +
-                            "-fx-scale-x: 1.05;" +
-                            "-fx-scale-y: 1.05;");
-        });
-        button.setOnMouseExited(e -> {
-            button.setStyle(
-                    "-fx-background-color: linear-gradient(to bottom right, #8b0000, #b22222);" +
-                            "-fx-background-radius: 20;" +
-                            "-fx-text-fill: white;" +
-                            "-fx-font-weight: bold;" +
-                            "-fx-cursor: hand;" +
-                            "-fx-font-size: 13px;" +
-                            "-fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.8), 12, 0, 0, 3);");
-        });
+        button.getStyleClass().addAll("action-button", "animated-button", "film-reserve-button");
         button.setOnAction(event -> {
             try {
                 this.switchtopayment(nomFilm.getText());
@@ -618,21 +570,7 @@ public class FilmUserController {
         final Hyperlink hyperlink = new Hyperlink("View Details");
         hyperlink.setLayoutX(145);
         hyperlink.setLayoutY(361);
-        hyperlink.setStyle(
-                "-fx-text-fill: #ff6666;" +
-                        "-fx-font-size: 11px;" +
-                        "-fx-underline: false;" +
-                        "-fx-font-weight: 600;");
-        hyperlink.setOnMouseEntered(e -> hyperlink.setStyle(
-                "-fx-text-fill: #ff4444;" +
-                        "-fx-font-size: 11px;" +
-                        "-fx-underline: true;" +
-                        "-fx-font-weight: 600;"));
-        hyperlink.setOnMouseExited(e -> hyperlink.setStyle(
-                "-fx-text-fill: #ff6666;" +
-                        "-fx-font-size: 11px;" +
-                        "-fx-underline: false;" +
-                        "-fx-font-weight: 600;"));
+        hyperlink.getStyleClass().add("film-details-link");
         hyperlink.setOnAction(event -> {
             this.detalAnchorPane.setVisible(true);
             this.anchorPaneFilm.setOpacity(0.26);

@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
@@ -49,9 +50,6 @@ class DashboardAdminControllerTest extends TestFXBase {
         stage.toFront();
         
         // Wait for UI to be fully loaded and initialized
-        waitForFxEvents();
-        // Wait a bit for database operations during initialization
-        org.testfx.util.WaitForAsyncUtils.waitFor(1, java.util.concurrent.TimeUnit.SECONDS, () -> true);
         waitForFxEvents();
     }
 
@@ -199,12 +197,16 @@ class DashboardAdminControllerTest extends TestFXBase {
 
         @Test
         @Order(21)
+        @Disabled("TODO: Implement approval test - should set up pending cinema test data, locate approve button in table action column, click it, verify confirmation dialog appears, and assert cinema status changes to APPROVED")
         @DisplayName("Should approve cinema when button clicked")
         void testApproveCinema() {
-            // Click approve button in action column
-            waitForFxEvents();
-
-            // Cinema status should change to approved
+            // TODO: Implementation required
+            // 1. Set up a pending cinema in the table
+            // 2. Click the approve button in the action column
+            // 3. Verify confirmation dialog appears
+            // 4. Click OK on the dialog
+            // 5. Assert that cinema status changes to APPROVED
+            // 6. Assert that action buttons are hidden for approved cinema
         }
 
         @Test
@@ -217,36 +219,66 @@ class DashboardAdminControllerTest extends TestFXBase {
 
         @Test
         @Order(23)
+        @Disabled("TODO: Implement rejection test - should set up pending cinema test data, locate reject button in table action column, click it, verify confirmation dialog appears, and assert cinema status changes to REJECTED with optional rejection reason")
         @DisplayName("Should reject cinema when button clicked")
         void testRejectCinema() {
-            // Click reject button
-            waitForFxEvents();
-
-            // Cinema status should change to rejected
+            // TODO: Implementation required
+            // 1. Set up a pending cinema in the table
+            // 2. Click the reject button in the action column
+            // 3. Verify confirmation dialog appears (possibly with reason input)
+            // 4. Enter a rejection reason if required
+            // 5. Click OK on the dialog
+            // 6. Assert that cinema status changes to REJECTED
+            // 7. Assert that action buttons are hidden for rejected cinema
         }
 
         @Test
         @Order(24)
+        @Disabled("TODO: Implement test for action button visibility - should verify that approved/rejected cinemas do not display approve/reject buttons in the action column by checking button visibility or through table cell state inspection")
         @DisplayName("Should hide action buttons for approved cinemas")
         void testHideActionsForApproved() {
-            // Approved cinemas should not show approve/reject buttons
-            waitForFxEvents();
+            // TODO: Implementation required
+            // 1. Load a cinema that is already APPROVED
+            // 2. Locate that row in the table
+            // 3. Assert that approve button is NOT visible in the action column
+            // 4. Assert that reject button is NOT visible in the action column
+            // 5. Repeat for REJECTED status
         }
 
         @Test
         @Order(25)
+        @Disabled("TODO: Implement confirmation dialog test - should verify dialog displays correctly with cinema name and confirm/cancel options before approval action is executed")
         @DisplayName("Should show confirmation dialog before approval")
         void testApprovalConfirmation() {
-            // Should display confirmation dialog
-            waitForFxEvents();
+            // TODO: Implementation required
+            // 1. Set up a pending cinema
+            // 2. Click the approve button
+            // 3. Verify a confirmation dialog appears
+            // 4. Assert the dialog contains:
+            //    - Cinema name or identifier
+            //    - Confirmation message about approval
+            //    - OK/Confirm button
+            //    - Cancel button
+            // 5. Assert dialog is modal (blocks interaction with rest of UI)
         }
 
         @Test
         @Order(26)
+        @Disabled("TODO: Implement rejection confirmation dialog test - should verify dialog displays with cinema name, rejection reason field if applicable, and confirm/cancel options")
         @DisplayName("Should show confirmation dialog before rejection")
         void testRejectionConfirmation() {
-            // Should display confirmation dialog
-            waitForFxEvents();
+            // TODO: Implementation required
+            // 1. Set up a pending cinema
+            // 2. Click the reject button
+            // 3. Verify a confirmation dialog appears
+            // 4. Assert the dialog contains:
+            //    - Cinema name or identifier
+            //    - Rejection message
+            //    - Optional rejection reason input field
+            //    - OK/Confirm button
+            //    - Cancel button
+            // 5. If reason field exists, test that a reason is entered
+            // 6. Assert dialog is modal
         }
     }
 
@@ -329,26 +361,46 @@ class DashboardAdminControllerTest extends TestFXBase {
 
         @Test
         @Order(50)
+        @Disabled("TODO: Implement pagination test - should verify that pagination controls (page buttons, next/previous, page info label) exist in the UI and are functional if pagination is implemented in the dashboard")
         @DisplayName("Should handle pagination if implemented")
         void testPagination() {
-            // Check if pagination controls exist
-            waitForFxEvents();
+            // TODO: Implementation required
+            // 1. Verify pagination controls exist (next button, previous button, page indicator)
+            // 2. If pagination controls exist:
+            //    - Verify initial page is correct
+            //    - Verify page indicator shows correct page number
+            //    - Verify row count per page matches implementation
+            // 3. If pagination does not exist, remove this test or mark as skipped
         }
 
         @Test
         @Order(51)
+        @Disabled("TODO: Implement next page navigation test - should verify next button is functional and navigates to the next page with correct data when cinema list spans multiple pages")
         @DisplayName("Should navigate to next page")
         void testNextPage() {
-            // If pagination exists, test navigation
-            waitForFxEvents();
+            // TODO: Implementation required
+            // 1. Ensure table has more data than one page can display
+            // 2. Locate the next page button
+            // 3. Click the next button
+            // 4. Wait for FX events and potential data load
+            // 5. Assert page indicator incremented
+            // 6. Assert table is showing different (next page) data
+            // 7. Assert previous button is now enabled
         }
 
         @Test
         @Order(52)
+        @Disabled("TODO: Implement previous page navigation test - should verify previous button navigates back to previous page with correct data when on a page other than the first")
         @DisplayName("Should navigate to previous page")
         void testPreviousPage() {
-            // If pagination exists, test navigation
-            waitForFxEvents();
+            // TODO: Implementation required
+            // 1. Navigate to page 2 or later using next button
+            // 2. Locate the previous page button
+            // 3. Click the previous button
+            // 4. Wait for FX events and potential data load
+            // 5. Assert page indicator decremented
+            // 6. Assert table is showing previous page data
+            // 7. If on first page, verify previous button is disabled
         }
     }
     @Nested
@@ -368,22 +420,46 @@ class DashboardAdminControllerTest extends TestFXBase {
 
         @Test
         @Order(61)
+        @Disabled("TODO: Implement network error simulation - requires mocking CinemaDAO or CinemaService to throw exception (e.g., SQLException, ConnectException) when loading cinemas; inject mock into controller via reflection or factory pattern; trigger data load; assert error notification/dialog is displayed in UI")
         @DisplayName("Should handle network errors during data load")
         void testNetworkErrorHandling() {
-            // Simulate network error
-            waitForFxEvents();
-
-            // Should display appropriate error message
+            // TODO: Implementation required - needs Mockito or similar mocking framework
+            // 1. Create a mock CinemaDAO or CinemaService
+            // 2. Configure the mock to throw a network exception (e.g., SQLException, ConnectException)
+            // 3. Inject the mock into the DashboardAdminController via:
+            //    a) Reflection on a private field, or
+            //    b) Factory method that provides the mocked service
+            // 4. Trigger the data load (e.g., call controller.loadData() or refresh button)
+            // 5. Wait for FX events and async task completion
+            // 6. Verify error UI state:
+            //    - Error notification is visible
+            //    - Error message contains expected text (e.g., "Network error", "Connection failed")
+            //    - User can retry the action
+            // 7. Reset mock after test to avoid affecting other tests
         }
 
         @Test
         @Order(62)
+        @Disabled("TODO: Implement approval error simulation - requires mocking CinemaDAO or CinemaService to throw exception when approving/rejecting cinema; inject mock into controller; click approve/reject button; verify error notification is displayed and cinema status remains unchanged")
         @DisplayName("Should handle approval errors gracefully")
         void testApprovalErrorHandling() {
-            // Simulate approval error
-            waitForFxEvents();
-
-            // Should show error notification
+            // TODO: Implementation required - needs Mockito or similar mocking framework
+            // 1. Set up a pending cinema in the table
+            // 2. Create a mock CinemaDAO or service
+            // 3. Configure the mock to throw an exception (e.g., SQLException, persistence error)
+            //    when the approve/reject method is called
+            // 4. Inject the mock into the DashboardAdminController via:
+            //    a) Reflection on a private field, or
+            //    b) Factory method that provides the mocked service
+            // 5. Click the approve button for a pending cinema
+            // 6. If a confirmation dialog appears, confirm the action
+            // 7. Wait for FX events and async task completion
+            // 8. Verify error handling:
+            //    - Error notification/dialog is displayed
+            //    - Error message is descriptive (e.g., "Failed to approve cinema: Database error")
+            //    - Cinema status remains PENDING (unchanged)
+            //    - Approve/reject buttons remain visible (can retry)
+            // 9. Reset mock after test to avoid affecting other tests
         }
     }
     @Nested

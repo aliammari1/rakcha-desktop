@@ -1,9 +1,9 @@
 package com.esprit.utils;
 
-import com.esprit.models.users.User;
 import com.esprit.models.users.Client;
 import com.github.javafaker.Faker;
 
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -136,12 +136,13 @@ public class TestDataFactory {
     }
 
     /**
-     * Generate a random year between 1990 and current year
+     * Generate a random release year for a movie
      * 
      * @return Year
      */
     public static int generateMovieYear() {
-        return faker.number().numberBetween(1990, 2025);
+        int currentYear = Year.now().getValue();
+        return faker.number().numberBetween(1990, currentYear + 1);
     }
 
     /**
