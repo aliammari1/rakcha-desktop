@@ -222,14 +222,17 @@
 
 .anchorfilm {
     -fx-background-color: white;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0.5, 0.0, 0.0);
-    -fx-background-radius: 8px;
-    -fx-padding: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(174,45,60,0.25), 12, 0.5, 0.0, 4.0);
+    -fx-background-radius: 15px;
+    -fx-padding: 15px;
+    -fx-cursor: hand;
 }
 
-.anchorfilm ImageView {
-    -fx-background-radius: 4px;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0.2, 0.0, 0.0);
+.anchorfilm:hover {
+    -fx-effect: dropshadow(gaussian, rgba(174,45,60,0.5), 20, 0.5, 0.0, 8.0);
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+    -fx-translate-y: -3;
 }
 
 .meilleurfilm {
@@ -267,6 +270,8 @@
 }
 
 .labeltext {
-    -fx-text-fill: black;
+    -fx-text-fill: #1e242e;
     -fx-alignment: center;
+    -fx-font-weight: 600;
+    -fx-wrap-text: true;
 }

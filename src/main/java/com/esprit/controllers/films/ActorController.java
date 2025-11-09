@@ -34,6 +34,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -97,7 +98,9 @@ public class ActorController {
     private static final Logger LOGGER = Logger.getLogger(ActorController.class.getName());
 
     @FXML
-    private TextArea bioAcotr_textArea;
+    private VBox anchorActor_Form;
+    @FXML
+    private TextArea bioActor_textArea;
     @FXML
     private TableColumn<Actor, Button> DeleteActor_Column1;
     @FXML
@@ -113,13 +116,13 @@ public class ActorController {
     @FXML
     private TableColumn<Actor, String> bioActor_tableColumn1;
     @FXML
-    private ImageView imageAcotr_ImageView1;
+    public ImageView imageActor_ImageView1;
     @FXML
-    private TableColumn<Actor, HBox> imageAcotr_tableColumn1;
+    private TableColumn<Actor, HBox> imageActor_tableColumn1;
     @FXML
-    private TableColumn<Actor, String> nomAcotr_tableColumn1;
+    private TableColumn<Actor, String> nomActor_tableColumn1;
     @FXML
-    private TextArea nomAcotr_textArea1;
+    private TextArea nomActor_textArea1;
     private FilteredList<Actor> filteredActors;
     @FXML
     private TextField recherche_textField;
@@ -229,7 +232,7 @@ public class ActorController {
      * @see #validateImage(File)
      */
     @FXML
-    void importAcotrImage(final ActionEvent event) {
+    void importActorImage(final ActionEvent event) {
         final FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Sélectionner une image");
         final File selectedFile = fileChooser.showOpenDialog(null);
@@ -244,7 +247,7 @@ public class ActorController {
                 final Path destinationFilePath = destinationPath.resolve(uniqueFileName);
                 Files.copy(selectedFile.toPath(), destinationFilePath);
                 final Image selectedImage = new Image(destinationFilePath.toUri().toString());
-                this.imageAcotr_ImageView1.setImage(selectedImage);
+                this.imageActor_ImageView1.setImage(selectedImage);
             } catch (final IOException e) {
                 ActorController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
@@ -280,12 +283,12 @@ public class ActorController {
      */
     @FXML
     void insertActor(final ActionEvent event) {
-        if (this.imageAcotr_ImageView1.getImage() == null) {
+        if (this.imageActor_ImageView1.getImage() == null) {
             showAlert("Please select an image for the actor");
             return;
         }
 
-        final String fullPath = this.imageAcotr_ImageView1.getImage().getUrl();
+        final String fullPath = this.imageActor_ImageView1.getImage().getUrl();
         String imagePath = "";
         try {
             final String requiredPath = fullPath.substring(fullPath.indexOf("/img/actors/"));
@@ -298,8 +301,8 @@ public class ActorController {
         }
 
         final ActorService actorService = new ActorService();
-        final Actor actor = new Actor(this.nomAcotr_textArea1.getText(), imagePath,
-                this.bioAcotr_textArea.getText());
+        final Actor actor = new Actor(this.nomActor_textArea1.getText(), imagePath,
+                this.bioActor_textArea.getText());
         actorService.create(actor);
 
         final Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -315,7 +318,7 @@ public class ActorController {
      * value from the column edit.
      */
     private void setupCellOnEditCommit() {
-        this.nomAcotr_tableColumn1.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Actor, String>>() {
+        this.nomActor_tableColumn1.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Actor, String>>() {
             /**
              * Is called when a cell in a table is edited. It sets the new value of the cell
              * to the nominated value, and then updates the corresponding actor object with
@@ -420,7 +423,7 @@ public class ActorController {
 
                 // Display the image in the ImageView
                 final Image selectedImage = new Image(cloudinaryImageUrl);
-                this.imageAcotr_ImageView1.setImage(selectedImage);
+                this.imageActor_ImageView1.setImage(selectedImage);
 
                 LOGGER.info("Image uploaded to Cloudinary: " + cloudinaryImageUrl);
             } catch (final IOException e) {
@@ -466,7 +469,7 @@ public class ActorController {
             this.filmActor_tableView11.setEditable(true);
             this.idActor_tableColumn1.setVisible(false);
             this.idActor_tableColumn1.setCellValueFactory(new PropertyValueFactory<>("id"));
-            this.nomAcotr_tableColumn1.setCellValueFactory((
+            this.nomActor_tableColumn1.setCellValueFactory((
                     TableColumn.CellDataFeatures<Actor, String> actorStringCellDataFeatures) -> new SimpleStringProperty(
                             actorStringCellDataFeatures.getValue().getName())
             /**
@@ -482,7 +485,7 @@ public class ActorController {
              *          input `Actor` object.
              */
             );
-            this.nomAcotr_tableColumn1.setCellFactory(TextFieldTableCell.forTableColumn());
+            this.nomActor_tableColumn1.setCellFactory(TextFieldTableCell.forTableColumn());
             this.DeleteActor_Column1.setCellValueFactory(filmcategoryButtonCellDataFeatures -> {
                 final Button button = new Button("delete");
                 button.setOnAction((final ActionEvent event) -> {
@@ -548,7 +551,7 @@ public class ActorController {
                                                       */
             );
             this.bioActor_tableColumn1.setCellFactory(TextFieldTableCell.forTableColumn());
-            this.imageAcotr_tableColumn1
+            this.imageActor_tableColumn1
                     .setCellValueFactory((final TableColumn.CellDataFeatures<Actor, HBox> param) -> {
                         final HBox hBox = new HBox();
                         try {
