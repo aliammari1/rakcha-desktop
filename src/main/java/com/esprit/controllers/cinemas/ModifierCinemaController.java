@@ -131,7 +131,7 @@ public class ModifierCinemaController implements Initializable {
         cinemaService.update(cinema);
         showAlert("Les modifications ont été enregistrées avec succès.");
         // Charger la nouvelle interface ListCinemaAdmin.fxml
-        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui//ui/ListCinemaResponsable.fxml"));
+        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/cinemas/DashboardResponsableCinema.fxml"));
         final Parent root = loader.load();
         // Créer une nouvelle scène avec la nouvelle interface
         final Scene scene = new Scene(root);
