@@ -61,6 +61,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.web.WebView;
+import javafx.scene.effect.DropShadow;
 import javafx.stage.Stage;
 
 /**
@@ -329,17 +330,19 @@ public class FilmUserController {
         this.filmScrollPane.setContent(this.flowpaneFilm);
         this.filmScrollPane.setFitToWidth(true);
         this.filmScrollPane.setFitToHeight(true);
-        this.topthreeVbox.setSpacing(10);
+        this.filmScrollPane.setStyle("-fx-background-color: transparent;");
+        this.topthreeVbox.setSpacing(15);
 
-        // String trailerURL = filmService.getTrailerFilm("garfield");
-        this.flowpaneFilm.setHgap(10);
-        this.flowpaneFilm.setVgap(10);
+        // Configure FlowPane for responsive grid layout
+        this.flowpaneFilm.setHgap(15); // Better spacing between cards
+        this.flowpaneFilm.setVgap(20); // Better vertical spacing
+        this.flowpaneFilm.setStyle("-fx-background-color: transparent;");
         this.closeDetailFilm.setOnAction(event -> {
             this.detalAnchorPane.setVisible(false);
             this.anchorPaneFilm.setOpacity(1);
             this.anchorPaneFilm.setDisable(false);
         });
-        // Set the padding
+        // Set better padding for card grid
         this.flowpaneFilm.setPadding(new Insets(10, 10, 10, 10));
         final List<Film> filmList = new FilmService().read(filmPageRequest).getContent();
         for (final Film film : filmList) {
@@ -468,8 +471,11 @@ public class FilmUserController {
         final AnchorPane copyOfAnchorPane = new AnchorPane();
         copyOfAnchorPane.setLayoutX(0);
         copyOfAnchorPane.setLayoutY(0);
-        copyOfAnchorPane.setPrefSize(250, 400); // Increased size for better proportions
-        copyOfAnchorPane.getStyleClass().add("anchorfilm");
+        copyOfAnchorPane.setPrefSize(265, 425); // Better proportions for modern dark cards
+        copyOfAnchorPane.setMinSize(240, 405);
+        copyOfAnchorPane.setMaxSize(290, 450);
+        copyOfAnchorPane.getStyleClass().addAll("anchorfilm", "animated-button", "film-card");
+        copyOfAnchorPane.setUserData(film); // Store film data
 
         final ImageView imageView = new ImageView();
         try {
@@ -478,7 +484,7 @@ public class FilmUserController {
             if (imagePath != null && !imagePath.isEmpty()) {
                 try {
                     // Try loading directly as URL
-                    Image image = new Image(imagePath);
+                    Image image = new Image(imagePath, true); // Enable background loading
                     imageView.setImage(image);
                 } catch (Exception e) {
                     // Fallback to resource if URL fails
@@ -495,13 +501,14 @@ public class FilmUserController {
                 imageView.setImage(new Image(getClass().getResourceAsStream("/img/films/default.jpg")));
             }
 
-            // Set consistent image dimensions
-            imageView.setFitWidth(220); // Slightly smaller than card width
-            imageView.setFitHeight(300); // Taller for movie poster aspect ratio
-            imageView.setPreserveRatio(true); // Maintain aspect ratio
-            imageView.setSmooth(true); // Better image quality
-            imageView.setLayoutX(15); // Center in card
-            imageView.setLayoutY(10); // Small top margin
+            // Set responsive image dimensions with red glow effect
+            imageView.setFitWidth(235);
+            imageView.setFitHeight(295); // Taller for movie poster
+            imageView.setPreserveRatio(true);
+            imageView.setSmooth(true);
+            imageView.setLayoutX(15);
+            imageView.setLayoutY(10);
+            imageView.getStyleClass().add("film-card-image");
 
         } catch (final Exception e) {
             // Handle exception or set a default image
@@ -513,34 +520,44 @@ public class FilmUserController {
             LOGGER.log(Level.WARNING, "Failed to load image for film: " + film.getId(), e);
         }
 
-        // Adjust positions of other elements to account for new image size
+        // Film title with white text and red glow
         final Label nomFilm = new Label(film.getName());
         nomFilm.setLayoutX(15);
-        nomFilm.setLayoutY(320); // Position below image
-        nomFilm.setPrefSize(220, 32);
-        nomFilm.setFont(new Font(18)); // Copy the font size
-        nomFilm.getStyleClass().addAll("labeltext");
+        nomFilm.setLayoutY(315);
+        nomFilm.setPrefSize(235, 40);
+        nomFilm.setMaxWidth(235);
+        nomFilm.setWrapText(true);
+        nomFilm.setFont(new Font(15));
+        nomFilm.getStyleClass().addAll("labeltext", "animated-text", "film-card-title");
 
-        final Label ratefilm = new Label(film.getName());
+        // Rating with white text
+        final Label ratefilm = new Label();
         ratefilm.setLayoutX(15);
-        ratefilm.setLayoutY(350); // Adjust for new layout
-        ratefilm.setPrefSize(176, 32);
-        ratefilm.setFont(new Font(16)); // Copy the font size
-        ratefilm.getStyleClass().addAll("labeltext");
+        ratefilm.setLayoutY(358);
+        ratefilm.setPrefSize(120, 25);
+        ratefilm.setFont(new Font(13));
+        ratefilm.getStyleClass().addAll("labeltext", "film-card-rating");
         final double rate = new FilmRatingService().getAvergeRating(film.getId());
-        ratefilm.setText(rate + "/5");
+        ratefilm.setText(String.format("%.1f/5", rate));
+
         final FilmRating ratingFilm = new FilmRatingService().ratingExists(film.getId(), 2L);
         this.filmRate.setRating(null != ratingFilm ? ratingFilm.getRating() : 0);
+
+        // Golden star icon
         final FontIcon etoile = new FontIcon();
         etoile.setIconLiteral("fa-star");
-        etoile.setLayoutX(128);
-        etoile.setLayoutY(247);
-        etoile.setFill(Color.web("#f2b604"));
-        final Button button = new Button("reserve");
-        button.setLayoutX(39);
-        button.setLayoutY(385); // Move to bottom
-        button.setPrefSize(172, 42);
-        button.getStyleClass().addAll("sale");
+        etoile.setLayoutX(125);
+        etoile.setLayoutY(373);
+        etoile.setIconSize(16);
+        etoile.setFill(Color.web("#ffaa00"));
+        etoile.setEffect(new DropShadow(5, Color.rgb(255, 170, 0, 0.8)));
+
+        // Reserve button with red gradient
+        final Button button = new Button("RESERVE");
+        button.setLayoutX(15);
+        button.setLayoutY(385);
+        button.setPrefSize(235, 36);
+        button.getStyleClass().addAll("action-button", "animated-button", "film-reserve-button");
         button.setOnAction(event -> {
             try {
                 this.switchtopayment(nomFilm.getText());
@@ -548,9 +565,12 @@ public class FilmUserController {
                 throw new RuntimeException(e);
             }
         });
-        final Hyperlink hyperlink = new Hyperlink("Details");
-        hyperlink.setLayoutX(89);
-        hyperlink.setLayoutY(251);
+
+        // View Details hyperlink with red theme
+        final Hyperlink hyperlink = new Hyperlink("View Details");
+        hyperlink.setLayoutX(145);
+        hyperlink.setLayoutY(361);
+        hyperlink.getStyleClass().add("film-details-link");
         hyperlink.setOnAction(event -> {
             this.detalAnchorPane.setVisible(true);
             this.anchorPaneFilm.setOpacity(0.26);
@@ -655,8 +675,17 @@ public class FilmUserController {
         final AnchorPane anchorPane = new AnchorPane();
         anchorPane.setLayoutX(0);
         anchorPane.setLayoutY(0);
-        anchorPane.setPrefSize(244, 226);
-        anchorPane.getStyleClass().add("meilleurfilm");
+        anchorPane.setPrefSize(480, 200);
+        anchorPane.getStyleClass().addAll("top-film-card", "animated-button");
+        anchorPane.setStyle(
+                "-fx-background-color: linear-gradient(to bottom right, rgba(139, 0, 0, 0.95), rgba(178, 34, 34, 0.85));"
+                        +
+                        "-fx-background-radius: 20;" +
+                        "-fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.8), 20, 0, 0, 5);" +
+                        "-fx-border-color: rgba(255, 68, 68, 0.4);" +
+                        "-fx-border-width: 1.5;" +
+                        "-fx-border-radius: 20;");
+
         if (null != actor) {
             final ImageView imageView = new ImageView();
             try {
@@ -684,29 +713,49 @@ public class FilmUserController {
             } catch (final Exception e) {
                 FilmUserController.LOGGER.log(Level.SEVERE, "Error processing actor image", e);
             }
-            imageView.setLayoutX(21);
-            imageView.setLayoutY(21);
-            imageView.setFitHeight(167);
-            imageView.setFitWidth(122);
-            imageView.getStyleClass().addAll("bg-white");
+            imageView.setLayoutX(15);
+            imageView.setLayoutY(10);
+            imageView.setFitHeight(180);
+            imageView.setFitWidth(130);
+            imageView.setPreserveRatio(true);
+            imageView.setSmooth(true);
+            imageView.setStyle(
+                    "-fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.7), 15, 0, 0, 3);" +
+                            "-fx-background-radius: 12;");
+
             // Combine actor name and number of appearances in one label
             final String actorDetailsText = actor.getName().trim() + ": " + actor.getNumberOfAppearances() + " Films";
             FilmUserController.LOGGER.info(actorDetailsText);
             final Label actorDetails = new Label(actorDetailsText);
-            actorDetails.setLayoutX(153);
-            actorDetails.setLayoutY(8); // Adjusted to top, similar to imageView
-            actorDetails.setPrefSize(500, 70);
-            actorDetails.setFont(new Font(22));
+            actorDetails.setLayoutX(160);
+            actorDetails.setLayoutY(15);
+            actorDetails.setPrefSize(300, 40);
+            actorDetails.setMaxWidth(300);
+            actorDetails.setWrapText(true);
+            actorDetails.setFont(new Font(18));
             actorDetails.setTextFill(Color.WHITE);
+            actorDetails.setStyle(
+                    "-fx-font-weight: bold;" +
+                            "-fx-effect: dropshadow(gaussian, #ff4444, 10, 0, 1, 1);");
+
             // Actor biography - fix method name
             final TextArea actorBio = new TextArea(actor.getBiography()); // Changed from getBiographie
-            actorBio.setLayoutX(153);
-            actorBio.setLayoutY(75); // Positioned directly under actorDetails label
-            actorBio.setPrefSize(400, 100); // You can adjust this size as needed
+            actorBio.setLayoutX(160);
+            actorBio.setLayoutY(65);
+            actorBio.setPrefSize(300, 120);
+            actorBio.setMaxWidth(300);
             actorBio.setWrapText(true);
             actorBio.setEditable(false);
-            // Set the background of the TextArea to transparent and text color to white
-            actorBio.setStyle("-fx-control-inner-background:#de3030 ; -fx-text-fill: WHITE; -fx-opacity: 1;");
+            actorBio.setStyle(
+                    "-fx-control-inner-background: rgba(10, 5, 5, 0.6);" +
+                            "-fx-text-fill: rgba(255, 255, 255, 0.9);" +
+                            "-fx-background-color: transparent;" +
+                            "-fx-background-radius: 8;" +
+                            "-fx-border-color: rgba(139, 0, 0, 0.3);" +
+                            "-fx-border-width: 1;" +
+                            "-fx-border-radius: 8;" +
+                            "-fx-font-size: 12px;" +
+                            "-fx-opacity: 1;");
             anchorPane.getChildren().addAll(imageView, actorDetails, actorBio);
         }
         return anchorPane;
@@ -724,8 +773,16 @@ public class FilmUserController {
         if (ratingFilmList.size() > filmRank) {
             anchorPane.setLayoutX(0);
             anchorPane.setLayoutY(0);
-            anchorPane.setPrefSize(544, 226);
-            anchorPane.getStyleClass().add("meilleurfilm");
+            anchorPane.setPrefSize(420, 180); // Better responsive size for top 3
+            anchorPane.getStyleClass().addAll("top-film-card", "animated-button");
+            anchorPane.setStyle(
+                    "-fx-background-color: linear-gradient(to bottom right, rgba(139, 0, 0, 0.95), rgba(178, 34, 34, 0.85));"
+                            +
+                            "-fx-background-radius: 20;" +
+                            "-fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.8), 20, 0, 0, 5);" +
+                            "-fx-border-color: rgba(255, 68, 68, 0.4);" +
+                            "-fx-border-width: 1.5;" +
+                            "-fx-border-radius: 20;");
 
             final FilmRating ratingFilm = ratingFilmList.get(filmRank);
             if (ratingFilm == null || ratingFilm.getFilm() == null) { // Fixed method name
@@ -743,26 +800,30 @@ public class FilmUserController {
                     try {
                         Image image = new Image(imagePath);
                         imageView.setImage(image);
-                        imageView.setFitWidth(180); // Adjusted size for top 3 section
-                        imageView.setFitHeight(260); // Maintain movie poster ratio
+                        imageView.setFitWidth(130); // Adjusted for top 3 section
+                        imageView.setFitHeight(160); // Maintain movie poster ratio
                         imageView.setPreserveRatio(true);
                         imageView.setSmooth(true);
-                        imageView.setLayoutX(21);
-                        imageView.setLayoutY(21);
-                        imageView.getStyleClass().addAll("bg-white");
+                        imageView.setLayoutX(15);
+                        imageView.setLayoutY(10);
+                        imageView.setStyle(
+                                "-fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.7), 15, 0, 0, 3);" +
+                                        "-fx-background-radius: 12;");
                     } catch (Exception e) {
                         LOGGER.warning("Failed to load image from URL: " + imagePath + ", " + e.getMessage());
                         // Try loading default image
                         try {
                             Image defaultImage = new Image(getClass().getResourceAsStream("/img/films/default.jpg"));
                             imageView.setImage(defaultImage);
-                            imageView.setFitWidth(180);
-                            imageView.setFitHeight(260);
+                            imageView.setFitWidth(130);
+                            imageView.setFitHeight(160);
                             imageView.setPreserveRatio(true);
                             imageView.setSmooth(true);
-                            imageView.setLayoutX(21);
-                            imageView.setLayoutY(21);
-                            imageView.getStyleClass().addAll("bg-white");
+                            imageView.setLayoutX(15);
+                            imageView.setLayoutY(10);
+                            imageView.setStyle(
+                                    "-fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.7), 15, 0, 0, 3);" +
+                                            "-fx-background-radius: 12;");
                         } catch (Exception e2) {
                             LOGGER.severe("Failed to load default image: " + e2.getMessage());
                         }
@@ -774,29 +835,78 @@ public class FilmUserController {
 
             try {
                 final Label nomFilm = new Label(film.getName() != null ? film.getName() : "Untitled");
-                nomFilm.setLayoutX(153);
-                nomFilm.setLayoutY(87);
-                nomFilm.setPrefSize(205, 35);
-                nomFilm.setFont(new Font(22));
+                nomFilm.setLayoutX(145);
+                nomFilm.setLayoutY(15);
+                nomFilm.setPrefSize(260, 35);
+                nomFilm.setMaxWidth(280);
+                nomFilm.setWrapText(true);
+                nomFilm.setFont(new Font(20));
                 nomFilm.setTextFill(Color.WHITE);
+                nomFilm.setStyle(
+                        "-fx-font-weight: bold;" +
+                                "-fx-effect: dropshadow(gaussian, #ff4444, 10, 0, 1, 1);");
 
-                final Button button = new Button("reserve");
-                button.setLayoutX(346);
-                button.setLayoutY(154);
-                button.setPrefSize(172, 42);
-                button.getStyleClass().addAll("sale");
+                final Button button = new Button("RESERVE");
+                button.setLayoutX(145);
+                button.setLayoutY(135);
+                button.setPrefSize(260, 38);
+                button.getStyleClass().addAll("action-button", "animated-button");
+                button.setStyle(
+                        "-fx-background-color: linear-gradient(to bottom right, #8b0000, #b22222);" +
+                                "-fx-background-radius: 18;" +
+                                "-fx-text-fill: white;" +
+                                "-fx-font-weight: bold;" +
+                                "-fx-cursor: hand;" +
+                                "-fx-font-size: 13px;" +
+                                "-fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.9), 12, 0, 0, 3);");
+                button.setOnMouseEntered(e -> {
+                    button.setStyle(
+                            "-fx-background-color: linear-gradient(to bottom right, #ff4444, #ff6666);" +
+                                    "-fx-background-radius: 18;" +
+                                    "-fx-text-fill: white;" +
+                                    "-fx-font-weight: bold;" +
+                                    "-fx-cursor: hand;" +
+                                    "-fx-font-size: 13px;" +
+                                    "-fx-effect: dropshadow(gaussian, rgba(255, 68, 68, 1.0), 18, 0, 0, 5);" +
+                                    "-fx-scale-x: 1.05;" +
+                                    "-fx-scale-y: 1.05;");
+                });
+                button.setOnMouseExited(e -> {
+                    button.setStyle(
+                            "-fx-background-color: linear-gradient(to bottom right, #8b0000, #b22222);" +
+                                    "-fx-background-radius: 18;" +
+                                    "-fx-text-fill: white;" +
+                                    "-fx-font-weight: bold;" +
+                                    "-fx-cursor: hand;" +
+                                    "-fx-font-size: 13px;" +
+                                    "-fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.9), 12, 0, 0, 3);");
+                });
 
                 final Rating rating = new Rating();
-                rating.setLayoutX(344);
-                rating.setLayoutY(38);
+                rating.setLayoutX(145);
+                rating.setLayoutY(55);
                 rating.setPrefSize(176, 32);
                 rating.setPartialRating(true);
+                rating.setStyle(
+                        "-fx-rating-fill: #ffaa00;" +
+                                "-fx-rating-empty-fill: rgba(255, 170, 0, 0.2);");
 
                 final double rate = new FilmRatingService().getAvergeRating(film.getId());
                 rating.setRating(rate);
                 rating.setDisable(true);
 
-                anchorPane.getChildren().addAll(nomFilm, button, rating);
+                // Rating label
+                final Label rateLabel = new Label(String.format("%.1f/5", rate));
+                rateLabel.setLayoutX(145);
+                rateLabel.setLayoutY(95);
+                rateLabel.setPrefSize(100, 25);
+                rateLabel.setFont(new Font(16));
+                rateLabel.setTextFill(Color.web("#ffaa00"));
+                rateLabel.setStyle(
+                        "-fx-font-weight: bold;" +
+                                "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.9), 3, 0, 0, 0);");
+
+                anchorPane.getChildren().addAll(nomFilm, button, rating, rateLabel);
                 if (imageView.getImage() != null) {
                     anchorPane.getChildren().add(imageView);
                 }
@@ -1226,7 +1336,7 @@ public class FilmUserController {
     public void displayAllComments(final Long filmId) {
         // Get comments from database
         final FilmCommentService cinemaCommentService = new FilmCommentService();
-        PageRequest pageRequest = new PageRequest(0,10);
+        PageRequest pageRequest = new PageRequest(0, 10);
         final List<FilmComment> allComments = cinemaCommentService.read(pageRequest).getContent();
         final List<FilmComment> filmComments = new ArrayList<>();
 

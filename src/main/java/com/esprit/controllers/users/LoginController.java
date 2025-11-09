@@ -45,6 +45,8 @@ public class LoginController implements Initializable {
     private static final Random RANDOM = new Random();
 
     @FXML
+    private StackPane rootContainer;
+    @FXML
     private AnchorPane anchorPane;
     @FXML
     private Label emailErrorLabel;
@@ -321,109 +323,144 @@ public class LoginController implements Initializable {
      * Creates dynamic animated elements on the screen
      */
     private void createDynamicAnimations() {
-        // Get a reference to the foreground AnchorPane (the last AnchorPane in the
-        // StackPane)
-        AnchorPane foregroundPane = (AnchorPane) ((StackPane) anchorPane.getScene().getRoot()).getChildren().get(2);
-
-        // Create dynamic particles
-        for (int i = 0; i < maxDynamicElements; i++) {
-            Circle particle = new Circle();
-            particle.setRadius(2 + RANDOM.nextDouble() * 5); // Random size between 2-7
-            particle.setLayoutX(RANDOM.nextDouble() * 1150 + 25); // Random X position
-            particle.setLayoutY(RANDOM.nextDouble() * 580 + 25); // Random Y position
-
-            // Apply styling
-            particle.getStyleClass().addAll("floating-particle", "glow-red");
-
-            // Random red shade
-            int red = 180 + RANDOM.nextInt(75);
-            int darkRed = 80 + RANDOM.nextInt(100);
-            particle.setStyle("-fx-fill: radial-gradient(center 50% 50%, radius 50%, #" +
-                    String.format("%02X", red) + "2222, #" + String.format("%02X", darkRed) + "0000); " +
-                    "-fx-effect: dropshadow(gaussian, #ff" + String.format("%02X", red) +
-                    String.format("%02X", red) + ", " + (10 + RANDOM.nextInt(15)) + ", 0, 0, 0); " +
-                    "-fx-opacity: " + (0.6 + RANDOM.nextDouble() * 0.4) + ";" +
-                    "-fx-z-index: " + (250 + i) + ";");
-
-            // Add to parent and store reference
-            foregroundPane.getChildren().add(particle);
-            dynamicParticles[i] = particle;
-
-            // Create animation
-            animateParticle(particle, i);
+        // Check if rootContainer or anchorPane is null
+        if (rootContainer == null && anchorPane == null) {
+            LOGGER.warning("Cannot create dynamic animations: rootContainer and anchorPane are both null");
+            return;
         }
 
-        // Create polygons
-        for (int i = 0; i < dynamicShapes.length; i++) {
-            Polygon shape = new Polygon();
+        try {
+            // Get a reference to the foreground AnchorPane (the last AnchorPane in the
+            // StackPane)
+            StackPane root = (rootContainer != null) ? rootContainer
+                    : (anchorPane != null && anchorPane.getScene() != null)
+                            ? (StackPane) anchorPane.getScene().getRoot()
+                            : null;
 
-            // Create a random polygon with 3-6 points
-            int sides = 3 + RANDOM.nextInt(4);
-            Double[] points = new Double[sides * 2];
-            double radius = 10 + RANDOM.nextDouble() * 20;
-            double centerX = RANDOM.nextDouble() * 1120 + 40;
-            double centerY = RANDOM.nextDouble() * 550 + 40;
-
-            for (int j = 0; j < sides; j++) {
-                double angle = 2 * Math.PI * j / sides;
-                points[j * 2] = centerX + radius * Math.cos(angle);
-                points[j * 2 + 1] = centerY + radius * Math.sin(angle);
+            if (root == null || root.getChildren().isEmpty()) {
+                LOGGER.warning("Cannot create dynamic animations: root container not properly initialized");
+                return;
             }
 
-            shape.getPoints().addAll(points);
+            // Robustly find the foreground AnchorPane - look for the last AnchorPane child
+            AnchorPane foregroundPane = null;
+            for (int i = root.getChildren().size() - 1; i >= 0; i--) {
+                if (root.getChildren().get(i) instanceof AnchorPane) {
+                    foregroundPane = (AnchorPane) root.getChildren().get(i);
+                    break;
+                }
+            }
 
-            // Apply styling
-            shape.getStyleClass().addAll("rotating-shape", "pulsing-shape");
-            int red = 100 + RANDOM.nextInt(100);
-            int darkRed = 40 + RANDOM.nextInt(60);
-            shape.setStyle("-fx-fill: linear-gradient(to bottom right, rgba(" + red + ", 0, 0, 0.5), rgba(" + darkRed
-                    + ", 0, 0, 0.3)); " +
-                    "-fx-stroke: #" + String.format("%02X", red) + "0000; " +
-                    "-fx-stroke-width: " + (1 + RANDOM.nextInt(2)) + "; " +
-                    "-fx-effect: dropshadow(gaussian, rgba(" + red + ", 0, 0, 0.7), " + (8 + RANDOM.nextInt(10))
-                    + ", 0, 0, 0); " +
-                    "-fx-z-index: " + (300 + i) + ";");
-            shape.setOpacity(0.4 + RANDOM.nextDouble() * 0.4);
+            if (foregroundPane == null) {
+                LOGGER.warning("Cannot create dynamic animations: foreground AnchorPane not found in root container");
+                return;
+            }
 
-            // Add to parent and store reference
-            foregroundPane.getChildren().add(shape);
-            dynamicShapes[i] = shape;
+            // Create dynamic particles
+            for (int i = 0; i < maxDynamicElements; i++) {
+                Circle particle = new Circle();
+                particle.setRadius(2 + RANDOM.nextDouble() * 5); // Random size between 2-7
+                particle.setLayoutX(RANDOM.nextDouble() * 1150 + 25); // Random X position
+                particle.setLayoutY(RANDOM.nextDouble() * 580 + 25); // Random Y position
 
-            // Create animation
-            animateShape(shape, i);
+                // Apply styling
+                particle.getStyleClass().addAll("floating-particle", "glow-red");
+
+                // Random red shade
+                int red = 180 + RANDOM.nextInt(75);
+                int darkRed = 80 + RANDOM.nextInt(100);
+                particle.setStyle("-fx-fill: radial-gradient(center 50% 50%, radius 50%, #" +
+                        String.format("%02X", red) + "2222, #" + String.format("%02X", darkRed) + "0000); " +
+                        "-fx-effect: dropshadow(gaussian, #ff" + String.format("%02X", red) +
+                        String.format("%02X", red) + ", " + (10 + RANDOM.nextInt(15)) + ", 0, 0, 0); " +
+                        "-fx-opacity: " + (0.6 + RANDOM.nextDouble() * 0.4) + ";" +
+                        "-fx-z-index: " + (250 + i) + ";");
+
+                // Add to parent and store reference
+                foregroundPane.getChildren().add(particle);
+                dynamicParticles[i] = particle;
+
+                // Create animation
+                animateParticle(particle, i);
+            }
+
+            // Create polygons
+            for (int i = 0; i < dynamicShapes.length; i++) {
+                Polygon shape = new Polygon();
+
+                // Create a random polygon with 3-6 points
+                int sides = 3 + RANDOM.nextInt(4);
+                Double[] points = new Double[sides * 2];
+                double radius = 10 + RANDOM.nextDouble() * 20;
+                double centerX = RANDOM.nextDouble() * 1120 + 40;
+                double centerY = RANDOM.nextDouble() * 550 + 40;
+
+                for (int j = 0; j < sides; j++) {
+                    double angle = 2 * Math.PI * j / sides;
+                    points[j * 2] = centerX + radius * Math.cos(angle);
+                    points[j * 2 + 1] = centerY + radius * Math.sin(angle);
+                }
+
+                shape.getPoints().addAll(points);
+
+                // Apply styling
+                shape.getStyleClass().addAll("rotating-shape", "pulsing-shape");
+                int red = 100 + RANDOM.nextInt(100);
+                int darkRed = 40 + RANDOM.nextInt(60);
+                shape.setStyle("-fx-fill: linear-gradient(to bottom right, rgba(" + red + ", 0, 0, 0.5), rgba("
+                        + darkRed
+                        + ", 0, 0, 0.3)); " +
+                        "-fx-stroke: #" + String.format("%02X", red) + "0000; " +
+                        "-fx-stroke-width: " + (1 + RANDOM.nextInt(2)) + "; " +
+                        "-fx-effect: dropshadow(gaussian, rgba(" + red + ", 0, 0, 0.7), " + (8 + RANDOM.nextInt(10))
+                        + ", 0, 0, 0); " +
+                        "-fx-z-index: " + (300 + i) + ";");
+                shape.setOpacity(0.4 + RANDOM.nextDouble() * 0.4);
+
+                // Add to parent and store reference
+                foregroundPane.getChildren().add(shape);
+                dynamicShapes[i] = shape;
+
+                // Create animation
+                animateShape(shape, i);
+            }
+
+            // Create rectangles
+            for (int i = 0; i < dynamicRectangles.length; i++) {
+                Rectangle rect = new Rectangle();
+                rect.setWidth(10 + RANDOM.nextDouble() * 30);
+                rect.setHeight(10 + RANDOM.nextDouble() * 30);
+                rect.setLayoutX(RANDOM.nextDouble() * 1150 + 25);
+                rect.setLayoutY(RANDOM.nextDouble() * 580 + 25);
+                rect.setRotate(RANDOM.nextDouble() * 45);
+
+                // Apply styling
+                rect.getStyleClass().addAll("rotating-shape", "pulsing-shape");
+                int red = 150 + RANDOM.nextInt(100);
+                int darkRed = 60 + RANDOM.nextInt(80);
+                rect.setStyle("-fx-fill: linear-gradient(to bottom right, rgba(" + red + ", " + (red / 4) + ", "
+                        + (red / 4)
+                        + ", 0.6), rgba(" + darkRed + ", " + (darkRed / 6) + ", " + (darkRed / 6) + ", 0.4)); " +
+                        "-fx-stroke: #" + String.format("%02X", red) + "2222; " +
+                        "-fx-stroke-width: " + (RANDOM.nextDouble() * 2) + "; " +
+                        "-fx-effect: dropshadow(gaussian, rgba(" + red + ", " + (red / 4) + ", " + (red / 4)
+                        + ", 0.6), "
+                        + (8 + RANDOM.nextInt(8)) + ", 0, 0, 0); " +
+                        "-fx-z-index: " + (330 + i) + ";");
+                rect.setOpacity(0.3 + RANDOM.nextDouble() * 0.5);
+
+                // Add to parent and store reference
+                foregroundPane.getChildren().add(rect);
+                dynamicRectangles[i] = rect;
+
+                // Create animation
+                animateRectangle(rect, i);
+            }
+
+            LOGGER.info("Created " + maxDynamicElements + " dynamic particles and shapes");
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Error creating dynamic animations: " + e.getMessage(), e);
         }
-
-        // Create rectangles
-        for (int i = 0; i < dynamicRectangles.length; i++) {
-            Rectangle rect = new Rectangle();
-            rect.setWidth(10 + RANDOM.nextDouble() * 30);
-            rect.setHeight(10 + RANDOM.nextDouble() * 30);
-            rect.setLayoutX(RANDOM.nextDouble() * 1150 + 25);
-            rect.setLayoutY(RANDOM.nextDouble() * 580 + 25);
-            rect.setRotate(RANDOM.nextDouble() * 45);
-
-            // Apply styling
-            rect.getStyleClass().addAll("rotating-shape", "pulsing-shape");
-            int red = 150 + RANDOM.nextInt(100);
-            int darkRed = 60 + RANDOM.nextInt(80);
-            rect.setStyle("-fx-fill: linear-gradient(to bottom right, rgba(" + red + ", " + (red / 4) + ", " + (red / 4)
-                    + ", 0.6), rgba(" + darkRed + ", " + (darkRed / 6) + ", " + (darkRed / 6) + ", 0.4)); " +
-                    "-fx-stroke: #" + String.format("%02X", red) + "2222; " +
-                    "-fx-stroke-width: " + (RANDOM.nextDouble() * 2) + "; " +
-                    "-fx-effect: dropshadow(gaussian, rgba(" + red + ", " + (red / 4) + ", " + (red / 4) + ", 0.6), "
-                    + (8 + RANDOM.nextInt(8)) + ", 0, 0, 0); " +
-                    "-fx-z-index: " + (330 + i) + ";");
-            rect.setOpacity(0.3 + RANDOM.nextDouble() * 0.5);
-
-            // Add to parent and store reference
-            foregroundPane.getChildren().add(rect);
-            dynamicRectangles[i] = rect;
-
-            // Create animation
-            animateRectangle(rect, i);
-        }
-
-        LOGGER.info("Created " + maxDynamicElements + " dynamic particles and shapes");
     }
 
     /**
@@ -860,9 +897,15 @@ public class LoginController implements Initializable {
         if (dynamicParticles != null) {
             AnchorPane foregroundPane = null;
             try {
-                foregroundPane = (AnchorPane) ((StackPane) anchorPane.getScene().getRoot()).getChildren().get(2);
+                StackPane root = rootContainer != null ? rootContainer
+                        : (anchorPane != null && anchorPane.getScene() != null)
+                                ? (StackPane) anchorPane.getScene().getRoot()
+                                : null;
+                if (root != null && root.getChildren().size() > 2) {
+                    foregroundPane = (AnchorPane) root.getChildren().get(2);
+                }
             } catch (Exception e) {
-                LOGGER.warning("Could not access foreground pane for cleanup: " + e.getMessage());
+                LOGGER.fine("Could not access foreground pane for cleanup: " + e.getMessage());
             }
 
             if (foregroundPane != null) {
@@ -882,9 +925,15 @@ public class LoginController implements Initializable {
         if (dynamicShapes != null) {
             AnchorPane foregroundPane = null;
             try {
-                foregroundPane = (AnchorPane) ((StackPane) anchorPane.getScene().getRoot()).getChildren().get(2);
+                StackPane root = rootContainer != null ? rootContainer
+                        : (anchorPane != null && anchorPane.getScene() != null)
+                                ? (StackPane) anchorPane.getScene().getRoot()
+                                : null;
+                if (root != null && root.getChildren().size() > 2) {
+                    foregroundPane = (AnchorPane) root.getChildren().get(2);
+                }
             } catch (Exception e) {
-                LOGGER.warning("Could not access foreground pane for cleanup: " + e.getMessage());
+                LOGGER.fine("Could not access foreground pane for cleanup: " + e.getMessage());
             }
 
             if (foregroundPane != null) {
@@ -904,9 +953,15 @@ public class LoginController implements Initializable {
         if (dynamicRectangles != null) {
             AnchorPane foregroundPane = null;
             try {
-                foregroundPane = (AnchorPane) ((StackPane) anchorPane.getScene().getRoot()).getChildren().get(2);
+                StackPane root = rootContainer != null ? rootContainer
+                        : (anchorPane != null && anchorPane.getScene() != null)
+                                ? (StackPane) anchorPane.getScene().getRoot()
+                                : null;
+                if (root != null && root.getChildren().size() > 2) {
+                    foregroundPane = (AnchorPane) root.getChildren().get(2);
+                }
             } catch (Exception e) {
-                LOGGER.warning("Could not access foreground pane for cleanup: " + e.getMessage());
+                LOGGER.fine("Could not access foreground pane for cleanup: " + e.getMessage());
             }
 
             if (foregroundPane != null) {

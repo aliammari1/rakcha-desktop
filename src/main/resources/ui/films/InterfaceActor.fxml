@@ -11,93 +11,85 @@
     xmlns="http://javafx.com/javafx/21"
     xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="com.esprit.controllers.films.ActorController">
-
-    <HBox VBox.vgrow="ALWAYS">
-        <!-- SideBar -->
-        <fx:include source="/ui/sidebar.fxml" />
-
-        <!-- Main Content -->
-        <VBox spacing="20" HBox.hgrow="ALWAYS">
-            <padding>
-                <Insets top="25" right="25" bottom="25" left="25" />
-            </padding>
-
-            <!-- Header -->
-            <Label text="Actor Management" styleClass="section-title">
-                <font>
-                    <Font name="Arial Rounded MT Bold" size="32.0" />
-                </font>
+  <HBox VBox.vgrow="ALWAYS">
+    <!-- SideBar -->
+    <fx:include source="/ui/sidebar.fxml"/>
+    <!-- Main Content -->
+    <VBox spacing="20" HBox.hgrow="ALWAYS">
+      <padding>
+        <Insets top="25" right="25" bottom="25" left="25"/>
+      </padding>
+      <!-- Header -->
+      <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Actor Management" styleClass="section-title">
+          <font>
+            <Font name="Arial Rounded MT Bold" size="32.0"/>
+          </font>
+        </Label>
+        <Region HBox.hgrow="ALWAYS"/>
+        <TextField fx:id="recherche_textField" promptText="Search actors..." 
+                                    prefWidth="300.0" styleClass="text-field-red" />
+      </HBox>
+      <!-- Content Area -->
+      <HBox spacing="20" VBox.vgrow="ALWAYS">
+        <!-- Left Side - Actor Form -->
+        <VBox fx:id="anchorActor_Form" spacing="15" styleClass="bg-white" maxWidth="400.0">
+          <padding>
+            <Insets top="20" right="20" bottom="20" left="20"/>
+          </padding>
+          <GridPane vgap="15" hgap="10">
+            <!-- Name -->
+            <Label text="Name:" GridPane.rowIndex="0" GridPane.columnIndex="0">
+              <font>
+                <Font size="16.0"/>
+              </font>
             </Label>
-
-            <!-- Content Area -->
-            <HBox spacing="20" VBox.vgrow="ALWAYS">
-                <!-- Left Side - Actor Form -->
-                <VBox fx:id="anchorActor_Form" spacing="15" styleClass="bg-white" maxWidth="400.0">
-                    <padding>
-                        <Insets top="20" right="20" bottom="20" left="20" />
-                    </padding>
-
-                    <GridPane vgap="15" hgap="10">
-                        <!-- Name -->
-                        <Label text="Name:" GridPane.rowIndex="0" GridPane.columnIndex="0">
-                            <font>
-                                <Font size="16.0" />
-                            </font>
-                        </Label>
-                        <TextField fx:id="tfNom" styleClass="text-field-red"
-                            GridPane.rowIndex="0" GridPane.columnIndex="1" />
-
-                        <!-- Age -->
-                        <Label text="Age:" GridPane.rowIndex="1" GridPane.columnIndex="0">
-                            <font>
-                                <Font size="16.0" />
-                            </font>
-                        </Label>
-                        <TextField fx:id="tfAge" styleClass="text-field-red"
-                            GridPane.rowIndex="1" GridPane.columnIndex="1" />
-
-                        <!-- Nationality -->
-                        <Label text="Nationality:" GridPane.rowIndex="2" GridPane.columnIndex="0">
-                            <font>
-                                <Font size="16.0" />
-                            </font>
-                        </Label>
-                        <TextField fx:id="tfNationalite" styleClass="text-field-red"
-                            GridPane.rowIndex="2" GridPane.columnIndex="1" />
-
-                        <!-- Image -->
-                        <Label text="Image:" GridPane.rowIndex="3" GridPane.columnIndex="0">
-                            <font>
-                                <Font size="16.0" />
-                            </font>
-                        </Label>
-                        <VBox spacing="10" GridPane.rowIndex="3" GridPane.columnIndex="1">
-                            <ImageView fx:id="image" fitHeight="150.0" fitWidth="200.0"
-                                pickOnBounds="true" preserveRatio="true" />
-                            <Button onAction="#importImage" styleClass="secondary-button"
-                                text="Upload Image" />
-                        </VBox>
-                    </GridPane>
-
-                    <!-- Action Buttons -->
-                    <HBox spacing="10" alignment="CENTER">
-                        <Button onAction="#insertActor" styleClass="sale" text="Add" />
-                        <Button onAction="#deleteActor" styleClass="delete-button" text="Delete" />
-                        <Button onAction="#updateActor" styleClass="edit-button" text="Update" />
-                    </HBox>
-                </VBox>
-
-                <!-- Right Side - Actors Table -->
-                <TableView fx:id="tvActeurs" HBox.hgrow="ALWAYS" styleClass="table-view">
-                    <columns>
-                        <TableColumn fx:id="colNom" text="Name" />
-                        <TableColumn fx:id="colAge" text="Age" />
-                        <TableColumn fx:id="colNationalite" text="Nationality" />
-                        <TableColumn fx:id="colImage" text="Image" />
-                        <TableColumn fx:id="colAction" text="Action" />
-                    </columns>
-                </TableView>
-            </HBox>
+            <TextField fx:id="nomActor_textField" styleClass="text-field-red"
+                                                    GridPane.rowIndex="0" GridPane.columnIndex="1" />
+            <Label fx:id="errorNameActor" styleClass="error-label" 
+                                                    GridPane.rowIndex="1" GridPane.columnIndex="1" />
+            <!-- Biography -->
+            <Label text="Biography:" GridPane.rowIndex="2" GridPane.columnIndex="0">
+              <font>
+                <Font size="16.0"/>
+              </font>
+            </Label>
+            <TextArea fx:id="bioActor_textArea" styleClass="text-field-red"
+                                                    prefRowCount="5" wrapText="true"
+                                                    GridPane.rowIndex="2" GridPane.columnIndex="1" />
+            <Label fx:id="errorBio" styleClass="error-label" 
+                                                    GridPane.rowIndex="3" GridPane.columnIndex="1" />
+            <!-- Image -->
+            <Label text="Image:" GridPane.rowIndex="4" GridPane.columnIndex="0">
+              <font>
+                <Font size="16.0"/>
+              </font>
+            </Label>
+            <VBox spacing="10" GridPane.rowIndex="4" GridPane.columnIndex="1">
+              <ImageView fx:id="imageActor_ImageView1" fitHeight="150.0" fitWidth="200.0"
+                                                            pickOnBounds="true" preserveRatio="true" />
+              <Button onAction="#importImage" styleClass="secondary-button"
+                                                            text="Upload Image" />
+            </VBox>
+          </GridPane>
+          <!-- Action Buttons -->
+          <HBox spacing="10" alignment="CENTER">
+            <Button onAction="#insertActor" styleClass="sale" text="Add Actor"/>
+            <Button fx:id="GoToFilms_Button" onAction="#switchToFilms" 
+                                                    styleClass="edit-button" text="Go to Films" />
+          </HBox>
         </VBox>
-    </HBox>
+        <!-- Right Side - Actors Table -->
+        <TableView fx:id="filmActor_tableView11" HBox.hgrow="ALWAYS" styleClass="table-view" editable="true">
+          <columns>
+            <TableColumn fx:id="idActor_tableColumn1" text="ID" visible="false"/>
+            <TableColumn fx:id="nomActor_tableColumn1" text="Name" prefWidth="150.0"/>
+            <TableColumn fx:id="bioActor_tableColumn1" text="Biography" prefWidth="250.0"/>
+            <TableColumn fx:id="imageActor_tableColumn1" text="Image" prefWidth="150.0"/>
+            <TableColumn fx:id="DeleteActor_Column1" text="Action" prefWidth="100.0"/>
+          </columns>
+        </TableView>
+      </HBox>
+    </VBox>
+  </HBox>
 </VBox>
