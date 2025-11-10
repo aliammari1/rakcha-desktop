@@ -479,7 +479,7 @@ Platform-specific installers are automatically built via GitHub Actions on every
    
    # Build DEB package
    mvn clean compile package -DskipTests
-   cp target/RAKCHA-1.0.8.jar target/classpath-jars/
+   cp target/RAKCHA-1.0.9.jar target/classpath-jars/
    mvn jpackage:jpackage
    
    # Find your installer in target/dist/
@@ -489,14 +489,14 @@ Platform-specific installers are automatically built via GitHub Actions on every
    ```powershell
    # Build MSI installer
    mvn clean compile package -DskipTests
-   copy target\RAKCHA-1.0.8.jar target\classpath-jars\
+   copy target\RAKCHA-1.0.9.jar target\classpath-jars\
    
    jpackage --type msi `
      --input target\classpath-jars `
-     --main-jar RAKCHA-1.0.8.jar `
+     --main-jar RAKCHA-1.0.9.jar `
      --main-class com.esprit.MainApp `
      --name RAKCHA `
-     --app-version 1.0.8 `
+     --app-version 1.0.9 `
      --dest target\dist `
      --vendor "ESPRIT" `
      --win-menu `
@@ -509,14 +509,14 @@ Platform-specific installers are automatically built via GitHub Actions on every
    ```bash
    # Build DMG installer
    mvn clean compile package -DskipTests
-   cp target/RAKCHA-1.0.8.jar target/classpath-jars/
+   cp target/RAKCHA-1.0.9.jar target/classpath-jars/
    
    jpackage --type dmg \
      --input target/classpath-jars \
-     --main-jar RAKCHA-1.0.8.jar \
+     --main-jar RAKCHA-1.0.9.jar \
      --main-class com.esprit.MainApp \
      --name RAKCHA \
-     --app-version 1.0.8 \
+     --app-version 1.0.9 \
      --dest target/dist \
      --vendor "ESPRIT"
    
@@ -634,7 +634,7 @@ mvn clean compile package -DskipTests
 mvn javafx:run
 
 # Or run the JAR file
-java -jar target/RAKCHA-1.0.8.jar
+java -jar target/RAKCHA-1.0.9.jar
 ```
 
 ### 🌍 Production Deployment
@@ -683,7 +683,7 @@ The GitHub Actions workflow automatically:
 4. **Run the application**:
 
    ```bash
-   java -jar target/RAKCHA-1.0.8.jar
+   java -jar target/RAKCHA-1.0.9.jar
    ```
 
    Alternatively, you can use the JavaFX Maven plugin:
