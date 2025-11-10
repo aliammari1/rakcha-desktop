@@ -8,7 +8,7 @@ This directory contains the GitHub Pages website for distributing RAKCHA Desktop
 website/
 ├── index.html          # Main download page
 ├── releases/           # Distribution files
-│   ├── rakcha_1.0.6_amd64.deb      # Linux Debian package
+│   ├── rakcha_1.0.8_amd64.deb      # Linux Debian package
 │   └── RAKCHA-portable.tar.gz       # Portable app archive
 └── README.md          # This file
 ```
@@ -92,7 +92,7 @@ GitHub has file size limits. For large installers (>100MB):
 
 ### Version Management
 
-- Use semantic versioning (e.g., v1.0.6)
+- Use semantic versioning (e.g., v1.0.8)
 - Keep previous versions available for compatibility
 - Update download links when releasing new versions
 

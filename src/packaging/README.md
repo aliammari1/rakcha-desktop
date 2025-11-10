@@ -74,12 +74,12 @@ src/packaging/
 The native installer will be created in:
 ```
 target/dist/
-├── RAKCHA-1.0.6.msi       # Windows installer
-├── RAKCHA-1.0.6.exe       # Windows executable installer
-├── RAKCHA-1.0.6.deb       # Debian/Ubuntu installer
-├── RAKCHA-1.0.6.rpm       # RedHat/Fedora installer
-├── RAKCHA-1.0.6.dmg       # macOS disk image
-└── RAKCHA-1.0.6.pkg       # macOS package installer
+├── RAKCHA-1.0.8.msi       # Windows installer
+├── RAKCHA-1.0.8.exe       # Windows executable installer
+├── RAKCHA-1.0.8.deb       # Debian/Ubuntu installer
+├── RAKCHA-1.0.8.rpm       # RedHat/Fedora installer
+├── RAKCHA-1.0.8.dmg       # macOS disk image
+└── RAKCHA-1.0.8.pkg       # macOS package installer
 ```
 
 ## Configuration Details

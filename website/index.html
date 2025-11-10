@@ -7,9 +7,24 @@
     <meta name="description" content="Download RAKCHA Desktop Application - Movie and Cinema Management System">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary-red: #b91c1c;
+            --dark-red: #7f1d1d;
+            --crimson: #dc2626;
+            --burgundy: #991b1b;
+            --accent-silver: #e5e7eb;
+            --accent-white: #f9fafb;
+            --gold-accent: #ffd700;
+            --dark-bg: #0a0a0a;
+            --darker-bg: #030303;
+            --card-bg: rgba(15, 5, 5, 0.95);
+            --text-light: #ffffff;
+            --text-muted: #d1d5db;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -17,10 +32,10 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             line-height: 1.6;
-            color: #ffffff;
-            background: #0a0a0a;
+            color: var(--text-light);
+            background: var(--darker-bg);
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
@@ -35,32 +50,32 @@
             width: 100%;
             height: 100%;
             background: 
-                radial-gradient(circle at 20% 80%, rgba(120, 20, 20, 0.4) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(200, 30, 30, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(150, 25, 25, 0.2) 0%, transparent 50%),
-                linear-gradient(135deg, #1a0505 0%, #2d0a0a 25%, #1a0505 50%, #0f0202 75%, #1a0505 100%);
+                radial-gradient(ellipse at 20% 80%, rgba(185, 28, 28, 0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(127, 29, 29, 0.12) 0%, transparent 60%),
+                radial-gradient(ellipse at 50% 50%, rgba(220, 38, 38, 0.08) 0%, transparent 70%),
+                linear-gradient(180deg, #030303 0%, #0a0a0a 50%, #030303 100%);
             z-index: -3;
-            animation: backgroundShift 20s ease-in-out infinite;
+            animation: backgroundShift 30s ease-in-out infinite;
         }
 
         @keyframes backgroundShift {
             0%, 100% {
                 background: 
-                    radial-gradient(circle at 20% 80%, rgba(120, 20, 20, 0.4) 0%, transparent 50%),
-                    radial-gradient(circle at 80% 20%, rgba(200, 30, 30, 0.3) 0%, transparent 50%),
-                    radial-gradient(circle at 40% 40%, rgba(150, 25, 25, 0.2) 0%, transparent 50%),
-                    linear-gradient(135deg, #1a0505 0%, #2d0a0a 25%, #1a0505 50%, #0f0202 75%, #1a0505 100%);
+                    radial-gradient(ellipse at 20% 80%, rgba(185, 28, 28, 0.15) 0%, transparent 60%),
+                    radial-gradient(ellipse at 80% 20%, rgba(127, 29, 29, 0.12) 0%, transparent 60%),
+                    radial-gradient(ellipse at 50% 50%, rgba(220, 38, 38, 0.08) 0%, transparent 70%),
+                    linear-gradient(180deg, #030303 0%, #0a0a0a 50%, #030303 100%);
             }
             50% {
                 background: 
-                    radial-gradient(circle at 80% 20%, rgba(120, 20, 20, 0.4) 0%, transparent 50%),
-                    radial-gradient(circle at 20% 80%, rgba(200, 30, 30, 0.3) 0%, transparent 50%),
-                    radial-gradient(circle at 60% 60%, rgba(150, 25, 25, 0.2) 0%, transparent 50%),
-                    linear-gradient(135deg, #2d0a0a 0%, #1a0505 25%, #0f0202 50%, #1a0505 75%, #2d0a0a 100%);
+                    radial-gradient(ellipse at 80% 20%, rgba(185, 28, 28, 0.15) 0%, transparent 60%),
+                    radial-gradient(ellipse at 20% 80%, rgba(127, 29, 29, 0.12) 0%, transparent 60%),
+                    radial-gradient(ellipse at 50% 50%, rgba(220, 38, 38, 0.08) 0%, transparent 70%),
+                    linear-gradient(180deg, #0a0a0a 0%, #030303 50%, #0a0a0a 100%);
             }
         }
 
-        /* Fire particle container */
+        /* Fire particle container - ENABLED */
         .fire-particles {
             position: fixed;
             top: 0;
@@ -68,18 +83,19 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: -2;
+            z-index: 1;
             overflow: hidden;
         }
 
         .particle {
             position: absolute;
-            width: 4px;
-            height: 4px;
-            background: radial-gradient(circle, #ff6b35 0%, #f7931e 40%, transparent 70%);
+            width: 6px;
+            height: 6px;
+            background: radial-gradient(circle, rgba(220, 38, 38, 1) 0%, rgba(185, 28, 28, 0.8) 40%, transparent 70%);
             border-radius: 50%;
             opacity: 0;
-            animation: rise 4s infinite linear;
+            animation: rise 5s infinite linear;
+            box-shadow: 0 0 10px rgba(220, 38, 38, 0.8);
         }
 
         @keyframes rise {
@@ -103,10 +119,20 @@
 
         /* Larger fire particles */
         .particle.large {
-            width: 8px;
-            height: 8px;
-            background: radial-gradient(circle, #ff4500 0%, #ff6b35 30%, #f7931e 60%, transparent 80%);
-            animation-duration: 6s;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, rgba(220, 38, 38, 1) 0%, rgba(185, 28, 28, 0.9) 30%, transparent 80%);
+            animation-duration: 7s;
+            box-shadow: 0 0 20px rgba(220, 38, 38, 1);
+        }
+
+        /* Spark particles */
+        .particle.spark {
+            width: 3px;
+            height: 3px;
+            background: var(--gold-accent);
+            box-shadow: 0 0 15px var(--gold-accent);
+            animation-duration: 3s;
         }
 
         /* Cinema screen glow effect */
@@ -117,8 +143,8 @@
             width: 100%;
             height: 100%;
             background: 
-                radial-gradient(ellipse at center top, rgba(255, 107, 53, 0.1) 0%, transparent 50%),
-                radial-gradient(ellipse at center bottom, rgba(139, 0, 0, 0.05) 0%, transparent 50%);
+                radial-gradient(ellipse at center top, rgba(185, 28, 28, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at center bottom, rgba(127, 29, 29, 0.05) 0%, transparent 50%);
             z-index: -1;
             pointer-events: none;
         }
@@ -132,141 +158,286 @@
         }
 
         header {
-            padding: 3rem 0;
+            padding: 3rem 0 2rem;
             text-align: center;
             position: relative;
         }
 
+        /* Logo Image Animation */
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .logo-image {
+            width: 200px;
+            height: 200px;
+            animation: logoFloat 4s ease-in-out infinite;
+            filter: drop-shadow(0 0 40px rgba(220, 38, 38, 0.8)) drop-shadow(0 0 80px rgba(185, 28, 28, 0.5));
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            cursor: pointer;
+        }
+
+        .logo-image:hover {
+            transform: scale(1.2);
+            filter: drop-shadow(0 0 60px rgba(220, 38, 38, 1)) drop-shadow(0 0 120px rgba(185, 28, 28, 0.8));
+        }
+
+        @keyframes logoFloat {
+            0%, 100% {
+                transform: translateY(0px) scale(1);
+            }
+            50% {
+                transform: translateY(-15px) scale(1.05);
+            }
+        }
+
+        /* Logo ring effect */
+        .logo-ring {
+            position: absolute;
+            width: 240px;
+            height: 240px;
+            border: 2px solid rgba(220, 38, 38, 0.2);
+            border-radius: 50%;
+            animation: ringPulse 3s ease-in-out infinite;
+        }
+
+        .logo-ring:nth-child(2) {
+            width: 260px;
+            height: 260px;
+            animation-delay: 0.8s;
+            border-color: rgba(185, 28, 28, 0.15);
+        }
+
+        .logo-ring:nth-child(3) {
+            width: 280px;
+            height: 280px;
+            animation-delay: 1.6s;
+            border-color: rgba(127, 29, 29, 0.1);
+        }
+
+        @keyframes ringPulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.3;
+            }
+            50% {
+                transform: scale(1.15);
+                opacity: 0;
+            }
+        }
+
         .logo {
-            font-family: 'Bebas Neue', cursive;
+            font-family: 'Cinzel', serif;
             font-size: 5rem;
-            font-weight: 400;
-            margin-bottom: 0.5rem;
-            text-shadow: 
-                0 0 10px rgba(255, 107, 53, 0.5),
-                0 0 20px rgba(255, 107, 53, 0.3),
-                0 0 30px rgba(255, 107, 53, 0.2);
-            background: linear-gradient(45deg, #ff6b35, #f7931e, #ffcc33);
-            background-size: 300% 300%;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            letter-spacing: 0.15em;
+            background: linear-gradient(135deg, var(--primary-red) 0%, var(--crimson) 50%, var(--dark-red) 100%);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: gradientShift 3s ease-in-out infinite;
-            letter-spacing: 0.1em;
+            filter: drop-shadow(0 0 30px rgba(185, 28, 28, 0.5));
+            animation: logoGlow 4s ease-in-out infinite;
+            text-transform: uppercase;
         }
 
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+        @keyframes logoGlow {
+            0%, 100% { 
+                filter: drop-shadow(0 0 20px rgba(185, 28, 28, 0.4)) drop-shadow(0 0 40px rgba(127, 29, 29, 0.2));
+            }
+            50% { 
+                filter: drop-shadow(0 0 40px rgba(220, 38, 38, 0.6)) drop-shadow(0 0 60px rgba(185, 28, 28, 0.3));
+            }
         }
 
         .tagline {
             font-size: 1.4rem;
-            opacity: 0.9;
             font-weight: 300;
-            color: #ff9f7a;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-            margin-bottom: 1rem;
+            color: var(--accent-silver);
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+            margin-bottom: 0.8rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
         }
 
         .subtitle {
             font-size: 1rem;
-            color: #cc6600;
+            color: var(--text-muted);
             font-weight: 400;
             text-transform: uppercase;
-            letter-spacing: 0.2em;
+            letter-spacing: 0.3em;
+            opacity: 0.8;
         }
 
         .main-content {
             background: linear-gradient(135deg, 
-                rgba(26, 5, 5, 0.95) 0%, 
-                rgba(45, 10, 10, 0.9) 50%, 
-                rgba(26, 5, 5, 0.95) 100%);
-            border-radius: 25px;
-            margin: 2rem auto;
-            padding: 4rem 3rem;
+                var(--card-bg) 0%, 
+                rgba(30, 5, 10, 0.95) 50%, 
+                var(--card-bg) 100%);
+            border-radius: 30px;
+            margin: 3rem auto;
+            padding: 5rem 4rem;
             box-shadow: 
-                0 25px 50px rgba(0,0,0,0.5),
-                inset 0 1px 0 rgba(255, 107, 53, 0.2),
-                0 0 100px rgba(255, 107, 53, 0.1);
-            max-width: 1200px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 107, 53, 0.2);
+                0 30px 60px rgba(0,0,0,0.6),
+                inset 0 1px 0 rgba(185, 28, 28, 0.3),
+                0 0 120px rgba(185, 28, 28, 0.12);
+            max-width: 1300px;
+            border: 1px solid rgba(185, 28, 28, 0.15);
+            position: relative;
+            backdrop-filter: blur(20px);
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-silver), transparent);
+            opacity: 0.3;
         }
 
         .app-info {
             text-align: center;
-            margin-bottom: 4rem;
+            margin-bottom: 5rem;
         }
 
         .app-info h1 {
-            font-family: 'Bebas Neue', cursive;
-            font-size: 3.5rem;
-            margin-bottom: 1.5rem;
-            color: #ff6b35;
-            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
-            letter-spacing: 0.05em;
+            font-family: 'Cinzel', serif;
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            color: var(--accent-white);
+            text-shadow: 0 4px 20px rgba(185, 28, 28, 0.5);
+            letter-spacing: 0.08em;
+            font-weight: 700;
         }
 
         .app-info p {
-            font-size: 1.2rem;
-            color: #ffb399;
-            max-width: 700px;
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 800px;
             margin: 0 auto 2rem;
-            line-height: 1.8;
+            line-height: 1.9;
+            font-weight: 300;
         }
 
         .features {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0 5rem;
         }
 
         .feature {
             text-align: center;
-            padding: 1rem;
-            background: rgba(255, 107, 53, 0.1);
-            border-radius: 15px;
-            border: 1px solid rgba(255, 107, 53, 0.2);
+            padding: 2rem 1.5rem;
+            background: linear-gradient(135deg, rgba(185, 28, 28, 0.12) 0%, rgba(127, 29, 29, 0.08) 100%);
+            border-radius: 20px;
+            border: 1px solid rgba(185, 28, 28, 0.25);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .feature::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(229, 231, 235, 0.08), transparent);
+            transition: left 0.6s;
+        }
+
+        .feature:hover::before {
+            left: 100%;
+        }
+
+        .feature:hover {
+            transform: translateY(-8px) scale(1.05);
+            border-color: var(--crimson);
+            box-shadow: 0 15px 35px rgba(185, 28, 28, 0.3);
+            background: linear-gradient(135deg, rgba(185, 28, 28, 0.18) 0%, rgba(127, 29, 29, 0.12) 100%);
+        }
+
+        /* Gamification: Achievement badge */
+        .feature::after {
+            content: '✓';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            background: var(--gold-accent);
+            color: var(--dark-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            opacity: 0;
+            transform: scale(0) rotate(-180deg);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .feature.unlocked::after {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
         }
 
         .feature i {
-            font-size: 2rem;
-            color: #ff6b35;
-            margin-bottom: 1rem;
-            text-shadow: 0 0 10px rgba(255, 107, 53, 0.5);
+            font-size: 2.5rem;
+            color: var(--crimson);
+            margin-bottom: 1.2rem;
+            filter: drop-shadow(0 0 15px rgba(220, 38, 38, 0.6));
+            transition: transform 0.3s;
+        }
+
+        .feature:hover i {
+            transform: scale(1.2) rotate(360deg);
+            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
 
         .feature h3 {
-            color: #ff9f7a;
-            margin-bottom: 0.5rem;
-            font-size: 1.1rem;
+            color: var(--accent-silver);
+            margin-bottom: 0.8rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+            font-family: 'Cinzel', serif;
         }
 
         .feature p {
-            color: #cc9999;
-            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
         }
 
         .downloads {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-            margin: 4rem 0;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 3rem;
+            margin: 5rem 0;
         }
 
         .platform-section {
             background: linear-gradient(135deg, 
-                rgba(45, 10, 10, 0.8) 0%, 
-                rgba(26, 5, 5, 0.9) 100%);
-            border-radius: 20px;
-            padding: 2.5rem;
-            border: 2px solid rgba(255, 107, 53, 0.3);
+                rgba(30, 5, 10, 0.9) 0%, 
+                rgba(20, 5, 8, 0.95) 100%);
+            border-radius: 25px;
+            padding: 3rem;
+            border: 2px solid rgba(185, 28, 28, 0.35);
             box-shadow: 
-                0 15px 30px rgba(0,0,0,0.3),
-                inset 0 1px 0 rgba(255, 107, 53, 0.1);
-            transition: all 0.3s ease;
+                0 20px 40px rgba(0,0,0,0.4),
+                inset 0 1px 0 rgba(185, 28, 28, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
         }
@@ -280,9 +451,9 @@
             height: 100%;
             background: linear-gradient(90deg, 
                 transparent, 
-                rgba(255, 107, 53, 0.1), 
+                rgba(185, 28, 28, 0.15), 
                 transparent);
-            transition: left 0.5s ease;
+            transition: left 0.6s ease;
         }
 
         .platform-section:hover::before {
@@ -290,134 +461,244 @@
         }
 
         .platform-section:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
             box-shadow: 
-                0 25px 50px rgba(0,0,0,0.4),
-                0 0 50px rgba(255, 107, 53, 0.2),
-                inset 0 1px 0 rgba(255, 107, 53, 0.2);
-            border-color: rgba(255, 107, 53, 0.5);
+                0 30px 60px rgba(0,0,0,0.5),
+                0 0 60px rgba(185, 28, 28, 0.25),
+                inset 0 1px 0 rgba(185, 28, 28, 0.3);
+            border-color: var(--crimson);
         }
 
         .platform-header {
             display: flex;
             align-items: center;
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
         }
 
         .platform-icon {
-            font-size: 3rem;
-            margin-right: 1rem;
-            text-shadow: 0 0 15px rgba(255, 107, 53, 0.6);
+            font-size: 3.5rem;
+            margin-right: 1.5rem;
+            color: var(--crimson);
+            filter: drop-shadow(0 0 20px rgba(220, 38, 38, 0.7));
         }
 
         .platform-name {
-            font-family: 'Bebas Neue', cursive;
-            font-size: 2.5rem;
-            color: #ff6b35;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-            letter-spacing: 0.05em;
+            font-family: 'Cinzel', serif;
+            font-size: 2.8rem;
+            color: var(--accent-white);
+            text-shadow: 0 2px 10px rgba(185, 28, 28, 0.5);
+            letter-spacing: 0.08em;
+            font-weight: 700;
         }
 
         .download-options {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 1.2rem;
         }
 
         .download-btn {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 1.2rem 1.5rem;
-            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            padding: 1.5rem 2rem;
+            background: linear-gradient(135deg, var(--primary-red) 0%, var(--dark-red) 100%);
             color: white;
             text-decoration: none;
-            border-radius: 12px;
+            border-radius: 15px;
             font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 6px 20px rgba(185, 28, 28, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(229, 231, 235, 0.1);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .download-btn:hover::before {
+            width: 500px;
+            height: 500px;
         }
 
         .download-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
-            background: linear-gradient(135deg, #ff7a47 0%, #f7a042 100%);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 30px rgba(185, 28, 28, 0.5);
+            background: linear-gradient(135deg, var(--crimson) 0%, var(--primary-red) 100%);
+            border-color: var(--accent-silver);
         }
 
         .download-btn:active {
-            transform: translateY(0);
+            transform: translateY(-1px) scale(0.98);
+        }
+
+        /* Download counter badge */
+        .download-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: var(--gold-accent);
+            color: var(--dark-bg);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            animation: badgePulse 2s infinite;
+            z-index: 2;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
         }
 
         .download-info {
             display: flex;
             flex-direction: column;
+            z-index: 1;
         }
 
         .download-title {
-            font-size: 1.1rem;
-            margin-bottom: 0.2rem;
+            font-size: 1.15rem;
+            margin-bottom: 0.3rem;
+            font-weight: 600;
         }
 
         .download-desc {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             opacity: 0.9;
         }
 
         .download-size {
-            font-size: 0.9rem;
-            color: #ffcc99;
-            font-weight: 500;
+            font-size: 0.95rem;
+            color: var(--accent-silver);
+            font-weight: 600;
+            z-index: 1;
         }
 
         .footer {
             text-align: center;
             padding: 3rem 0;
-            color: #cc9999;
-            border-top: 1px solid rgba(255, 107, 53, 0.2);
+            color: rgba(229, 231, 235, 0.6);
+            border-top: 1px solid rgba(185, 28, 28, 0.2);
             margin-top: 3rem;
         }
 
         .system-requirements {
-            background: rgba(45, 10, 10, 0.6);
-            border-radius: 15px;
-            padding: 2rem;
-            margin: 3rem 0;
-            border: 1px solid rgba(255, 107, 53, 0.2);
+            background: linear-gradient(135deg, rgba(30, 5, 10, 0.7) 0%, rgba(20, 5, 8, 0.8) 100%);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 5rem 0 4rem;
+            border: 1px solid rgba(185, 28, 28, 0.3);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
         }
 
         .system-requirements h3 {
-            color: #ff6b35;
-            margin-bottom: 1.5rem;
-            font-family: 'Bebas Neue', cursive;
-            font-size: 1.8rem;
+            color: var(--accent-white);
+            margin-bottom: 2.5rem;
+            font-family: 'Cinzel', serif;
+            font-size: 2.2rem;
             text-align: center;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.08em;
+            font-weight: 700;
         }
 
         .req-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
         }
 
         .req-item {
             display: flex;
             align-items: center;
-            color: #ffb399;
+            padding: 1.5rem;
+            background: rgba(185, 28, 28, 0.08);
+            border-radius: 15px;
+            border: 1px solid rgba(185, 28, 28, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .req-item:hover {
+            background: rgba(185, 28, 28, 0.15);
+            border-color: var(--crimson);
+            transform: translateX(5px);
         }
 
         .req-item i {
-            color: #ff6b35;
-            margin-right: 1rem;
-            font-size: 1.2rem;
-            width: 20px;
+            color: var(--crimson);
+            margin-right: 1.5rem;
+            font-size: 1.5rem;
+            width: 30px;
             text-align: center;
+            filter: drop-shadow(0 0 10px rgba(196, 30, 58, 0.5));
+        }
+
+        .req-item span {
+            color: var(--text-muted);
+            line-height: 1.6;
         }
 
         @media (max-width: 768px) {
             .logo {
                 font-size: 3.5rem;
+            }
+
+            .logo-image {
+                width: 150px;
+                height: 150px;
+            }
+
+            .logo-ring {
+                width: 180px;
+                height: 180px;
+            }
+
+            .logo-ring:nth-child(2) {
+                width: 200px;
+                height: 200px;
+            }
+
+            .logo-ring:nth-child(3) {
+                width: 220px;
+                height: 220px;
+            }
+
+            .stats-container {
+                top: 10px;
+                right: 10px;
+                padding: 10px 15px;
+                min-width: 120px;
+            }
+
+            .stat-item {
+                font-size: 0.8rem;
+            }
+
+            .stat-value {
+                font-size: 1rem;
+            }
+
+            .achievement-toast {
+                bottom: 10px;
+                right: 10px;
+                min-width: 250px;
+                padding: 15px 20px;
             }
             
             .app-info h1 {
@@ -434,12 +715,30 @@
             
             .downloads {
                 grid-template-columns: 1fr;
+                gap: 2rem;
             }
             
             .main-content {
-                padding: 2rem 1.5rem;
-                margin: 1rem;
+                padding: 3rem 2rem;
+                margin: 1.5rem;
             }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .footer {
+            text-align: center;
+            padding: 4rem 0 3rem;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(196, 30, 58, 0.25);
+            margin-top: 5rem;
+        }
+
+        .footer p {
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
         }
 
         /* Loading animation for when files are being loaded */
@@ -447,9 +746,9 @@
             display: inline-block;
             width: 20px;
             height: 20px;
-            border: 2px solid rgba(255, 107, 53, 0.3);
+            border: 2px solid rgba(196, 30, 58, 0.4);
             border-radius: 50%;
-            border-top-color: #ff6b35;
+            border-top-color: var(--primary-red);
             animation: spin 1s ease-in-out infinite;
         }
 
@@ -469,9 +768,180 @@
             pointer-events: none;
             z-index: 100;
         }
+
+        /* Gamification Progress Bar */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(185, 28, 28, 0.2);
+            z-index: 1000;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--crimson), var(--gold-accent));
+            transition: width 0.3s ease;
+            box-shadow: 0 0 20px var(--crimson);
+        }
+
+        /* Stats Counter */
+        .stats-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(15, 5, 5, 0.95);
+            padding: 15px 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(220, 38, 38, 0.5);
+            z-index: 999;
+            min-width: 150px;
+            backdrop-filter: blur(10px);
+            animation: slideInRight 0.5s ease;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .stat-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .stat-label {
+            color: var(--accent-silver);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stat-value {
+            color: var(--gold-accent);
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        /* Achievement Toast */
+        .achievement-toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.95), rgba(185, 28, 28, 0.95));
+            padding: 20px 25px;
+            border-radius: 15px;
+            border: 2px solid var(--gold-accent);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            transform: translateX(400px);
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 1001;
+            min-width: 300px;
+        }
+
+        .achievement-toast.show {
+            transform: translateX(0);
+        }
+
+        .achievement-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .achievement-icon {
+            font-size: 2rem;
+            animation: rotate 1s ease-in-out;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg) scale(0); }
+            50% { transform: rotate(180deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        .achievement-text h4 {
+            margin: 0;
+            color: var(--gold-accent);
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .achievement-text p {
+            margin: 5px 0 0 0;
+            color: var(--accent-white);
+            font-size: 0.9rem;
+        }
+
+        /* Cursor trail effect */
+        .cursor-trail {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(220, 38, 38, 0.6), transparent);
+            pointer-events: none;
+            z-index: 9999;
+            animation: cursorFade 1s ease-out forwards;
+        }
+
+        @keyframes cursorFade {
+            to {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Stats Counter -->
+    <div class="stats-container">
+        <div class="stat-item">
+            <span class="stat-label"><i class="fas fa-trophy"></i> Score</span>
+            <span class="stat-value" id="scoreValue">0</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label"><i class="fas fa-star"></i> Level</span>
+            <span class="stat-value" id="levelValue">1</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label"><i class="fas fa-fire"></i> Streak</span>
+            <span class="stat-value" id="streakValue">0</span>
+        </div>
+    </div>
+
+    <!-- Achievement Toast -->
+    <div class="achievement-toast" id="achievementToast">
+        <div class="achievement-content">
+            <div class="achievement-icon">🏆</div>
+            <div class="achievement-text">
+                <h4 id="achievementTitle">Achievement Unlocked!</h4>
+                <p id="achievementDesc">First Visit</p>
+            </div>
+        </div>
+    </div>
+
     <!-- Fire particles -->
     <div class="fire-particles" id="fireParticles"></div>
     
@@ -480,6 +950,12 @@
 
     <div class="container">
         <header>
+            <div class="logo-container">
+                <div class="logo-ring"></div>
+                <div class="logo-ring"></div>
+                <div class="logo-ring"></div>
+                <img src="logo-animated.svg" alt="RAKCHA Logo" class="logo-image" id="logoImage">
+            </div>
             <div class="logo">RAKCHA</div>
             <div class="tagline">Movie & Cinema Management System</div>
             <div class="subtitle">Desktop Application</div>
@@ -522,7 +998,8 @@
                         <div class="platform-name">Linux</div>
                     </div>
                     <div class="download-options">
-                        <a href="releases/linux/rakcha_1.0.6_amd64.deb" class="download-btn" onclick="trackDownload('linux', 'deb')">
+                        <a href="releases/linux/rakcha_1.0.8_amd64.deb" class="download-btn" onclick="trackDownload('linux', 'deb')">
+                            <span class="download-badge">HOT</span>
                             <div class="download-info">
                                 <div class="download-title">Debian Package</div>
                                 <div class="download-desc">For Ubuntu, Debian, and derivatives</div>
@@ -550,7 +1027,8 @@
                         <div class="platform-name">Windows</div>
                     </div>
                     <div class="download-options">
-                        <a href="releases/windows/RAKCHA-1.0.6.msi" class="download-btn" onclick="trackDownload('windows', 'msi')">
+                        <a href="releases/windows/RAKCHA-1.0.8.msi" class="download-btn" onclick="trackDownload('windows', 'msi')">
+                            <span class="download-badge">NEW</span>
                             <div class="download-info">
                                 <div class="download-title">MSI Installer</div>
                                 <div class="download-desc">For Windows 10 and later</div>
@@ -578,7 +1056,8 @@
                         <div class="platform-name">macOS</div>
                     </div>
                     <div class="download-options">
-                        <a href="releases/macos/RAKCHA-1.0.6.dmg" class="download-btn" onclick="trackDownload('macos', 'dmg')">
+                        <a href="releases/macos/RAKCHA-1.0.8.dmg" class="download-btn" onclick="trackDownload('macos', 'dmg')">
+                            <span class="download-badge">⭐</span>
                             <div class="download-info">
                                 <div class="download-title">DMG Installer</div>
                                 <div class="download-desc">For macOS 10.14 and later</div>
@@ -630,14 +1109,108 @@
     </div>
 
     <script>
-        // Fire particle animation
+        // ===== GAMIFICATION SYSTEM =====
+        let score = 0;
+        let level = 1;
+        let streak = 0;
+        let achievements = [];
+        let visitedSections = new Set();
+
+        // Initialize gamification
+        function initGamification() {
+            updateStats();
+            trackScrollProgress();
+            unlockAchievement('first_visit', 'Welcome!', 'Started your RAKCHA journey');
+            setTimeout(() => {
+                addScore(10);
+            }, 2000);
+        }
+
+        // Update stats display
+        function updateStats() {
+            document.getElementById('scoreValue').textContent = score;
+            document.getElementById('levelValue').textContent = level;
+            document.getElementById('streakValue').textContent = streak;
+            
+            // Level up every 100 points
+            const newLevel = Math.floor(score / 100) + 1;
+            if (newLevel > level) {
+                level = newLevel;
+                unlockAchievement('level_up', `Level ${level}!`, 'You\'re progressing!');
+                createConfetti();
+            }
+        }
+
+        // Add score with animation
+        function addScore(points) {
+            score += points;
+            streak++;
+            updateStats();
+            
+            // Animate score increase
+            const scoreEl = document.getElementById('scoreValue');
+            scoreEl.style.transform = 'scale(1.5)';
+            scoreEl.style.color = 'var(--gold-accent)';
+            setTimeout(() => {
+                scoreEl.style.transform = 'scale(1)';
+                scoreEl.style.color = '';
+            }, 300);
+        }
+
+        // Unlock achievement
+        function unlockAchievement(id, title, description) {
+            if (achievements.includes(id)) return;
+            
+            achievements.push(id);
+            
+            const toast = document.getElementById('achievementToast');
+            document.getElementById('achievementTitle').textContent = title;
+            document.getElementById('achievementDesc').textContent = description;
+            
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 4000);
+            
+            addScore(50);
+        }
+
+        // Track scroll progress
+        function trackScrollProgress() {
+            window.addEventListener('scroll', () => {
+                const windowHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const scrolled = (window.pageYOffset / windowHeight) * 100;
+                
+                document.getElementById('progressBar').style.width = scrolled + '%';
+                
+                // Check sections visited
+                const sections = document.querySelectorAll('.platform-section, .feature');
+                sections.forEach((section, index) => {
+                    const rect = section.getBoundingClientRect();
+                    if (rect.top < window.innerHeight && rect.bottom > 0) {
+                        if (!visitedSections.has(index)) {
+                            visitedSections.add(index);
+                            addScore(20);
+                        }
+                    }
+                });
+                
+                // Achievement for scrolling to bottom
+                if (scrolled > 95 && !achievements.includes('explorer')) {
+                    unlockAchievement('explorer', 'Explorer!', 'You\'ve seen everything');
+                }
+            });
+        }
+
+        // ===== FIRE PARTICLES =====
         function createFireParticle() {
             const particle = document.createElement('div');
-            particle.className = Math.random() > 0.7 ? 'particle large' : 'particle';
+            const types = ['particle', 'particle large', 'particle spark'];
+            particle.className = types[Math.floor(Math.random() * types.length)];
             
             particle.style.left = Math.random() * 100 + '%';
             particle.style.animationDelay = Math.random() * 4 + 's';
-            particle.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            particle.style.animationDuration = (Math.random() * 4 + 3) + 's';
             
             document.getElementById('fireParticles').appendChild(particle);
             
@@ -645,414 +1218,183 @@
                 if (particle.parentNode) {
                     particle.parentNode.removeChild(particle);
                 }
-            }, 8000);
+            }, 10000);
         }
 
         // Create fire particles continuously
-        setInterval(createFireParticle, 200);
+        setInterval(createFireParticle, 100);
         
         // Initial burst of particles
-        for (let i = 0; i < 20; i++) {
-            setTimeout(createFireParticle, i * 100);
+        for (let i = 0; i < 30; i++) {
+            setTimeout(createFireParticle, i * 50);
         }
 
-        // Download tracking
-        function trackDownload(platform, type) {
-            console.log(`Download started: ${platform} ${type}`);
-            // Add analytics tracking here if needed
-        }
-
-        // Load file sizes
-        async function loadFileSizes() {
-            const files = [
-                { id: 'linux-deb-size', path: 'releases/linux/', pattern: '.deb' },
-                { id: 'linux-portable-size', path: 'releases/linux/', pattern: 'linux.tar.gz' },
-                { id: 'windows-msi-size', path: 'releases/windows/', pattern: '.msi' },
-                { id: 'windows-portable-size', path: 'releases/windows/', pattern: 'windows.zip' },
-                { id: 'macos-dmg-size', path: 'releases/macos/', pattern: '.dmg' },
-                { id: 'macos-portable-size', path: 'releases/macos/', pattern: 'macos.tar.gz' }
-            ];
-
-            files.forEach(async (file) => {
-                try {
-                    const element = document.getElementById(file.id);
-                    if (element) {
-                        // Simulate file size check - in a real scenario, you'd fetch this from the server
-                        setTimeout(() => {
-                            element.innerHTML = '~240MB'; // Default size estimate
-                        }, Math.random() * 2000 + 1000);
+        // ===== CURSOR TRAIL =====
+        let cursorTrailTimeout;
+        document.addEventListener('mousemove', (e) => {
+            clearTimeout(cursorTrailTimeout);
+            cursorTrailTimeout = setTimeout(() => {
+                const trail = document.createElement('div');
+                trail.className = 'cursor-trail';
+                trail.style.left = e.pageX + 'px';
+                trail.style.top = e.pageY + 'px';
+                document.body.appendChild(trail);
+                
+                setTimeout(() => {
+                    if (trail.parentNode) {
+                        trail.parentNode.removeChild(trail);
                     }
-                } catch (error) {
-                    const element = document.getElementById(file.id);
-                    if (element) {
-                        element.innerHTML = 'Available';
-                    }
-                }
+                }, 1000);
+            }, 50);
+        });
+
+        // ===== LOGO ANIMATION =====
+        const logoImage = document.getElementById('logoImage');
+        if (logoImage) {
+            logoImage.addEventListener('click', () => {
+                addScore(25);
+                unlockAchievement('logo_click', 'Logo Lover!', 'You clicked the logo');
+                
+                // Extra animation on click
+                logoImage.style.animation = 'none';
+                setTimeout(() => {
+                    logoImage.style.animation = 'logoFloat 3s ease-in-out infinite, logoRotate 20s linear infinite';
+                }, 10);
             });
         }
 
-        // Load file sizes on page load
-        document.addEventListener('DOMContentLoaded', loadFileSizes);
+        // ===== FEATURE CARD INTERACTIONS =====
+        document.addEventListener('DOMContentLoaded', () => {
+            const features = document.querySelectorAll('.feature');
+            features.forEach((feature, index) => {
+                feature.addEventListener('click', () => {
+                    feature.classList.add('unlocked');
+                    addScore(15);
+                    
+                    if (document.querySelectorAll('.feature.unlocked').length === features.length) {
+                        unlockAchievement('feature_master', 'Feature Master!', 'Explored all features');
+                    }
+                });
+                
+                // Unlock features gradually
+                setTimeout(() => {
+                    feature.classList.add('unlocked');
+                }, 500 + (index * 300));
+            });
+        });
 
-        // Add subtle animations on scroll
+        // ===== CONFETTI EFFECT =====
+        function createConfetti() {
+            const colors = ['#dc2626', '#ffd700', '#e5e7eb', '#b91c1c'];
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.style.position = 'fixed';
+                    confetti.style.width = '10px';
+                    confetti.style.height = '10px';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.top = '-10px';
+                    confetti.style.zIndex = '9999';
+                    confetti.style.borderRadius = '50%';
+                    confetti.style.pointerEvents = 'none';
+                    
+                    document.body.appendChild(confetti);
+                    
+                    const animation = confetti.animate([
+                        { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+                        { transform: `translateY(${window.innerHeight + 10}px) rotate(${Math.random() * 720}deg)`, opacity: 0 }
+                    ], {
+                        duration: 3000 + Math.random() * 2000,
+                        easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                    });
+                    
+                    animation.onfinish = () => {
+                        if (confetti.parentNode) {
+                            confetti.parentNode.removeChild(confetti);
+                        }
+                    };
+                }, i * 30);
+            }
+        }
+
+        // ===== DOWNLOAD TRACKING =====
+        function trackDownload(platform, type) {
+            console.log(`Download started: ${platform} ${type}`);
+            addScore(100);
+            unlockAchievement(`download_${platform}`, 'Downloaded!', `${platform} version downloaded`);
+            createConfetti();
+            
+            // Add download badge animation
+            const badges = document.querySelectorAll('.download-badge');
+            badges.forEach(badge => {
+                const count = parseInt(badge.textContent) + 1;
+                badge.textContent = count;
+                badge.style.animation = 'none';
+                setTimeout(() => {
+                    badge.style.animation = 'badgePulse 2s infinite';
+                }, 10);
+            });
+        }
+
+        // ===== FILE SIZES =====
+        async function loadFileSizes() {
+            const files = [
+                { id: 'linux-deb-size', size: '~245MB' },
+                { id: 'linux-portable-size', size: '~240MB' },
+                { id: 'windows-msi-size', size: '~250MB' },
+                { id: 'windows-portable-size', size: '~242MB' },
+                { id: 'macos-dmg-size', size: '~255MB' },
+                { id: 'macos-portable-size', size: '~248MB' }
+            ];
+
+            files.forEach((file, index) => {
+                setTimeout(() => {
+                    const element = document.getElementById(file.id);
+                    if (element) {
+                        element.innerHTML = file.size;
+                        element.style.animation = 'fadeIn 0.5s ease';
+                    }
+                }, index * 200);
+            });
+        }
+
+        // ===== PARALLAX EFFECT =====
         window.addEventListener('scroll', () => {
             const scrolled = window.pageYOffset;
-            const rate = scrolled * -0.5;
+            const rate = scrolled * -0.3;
             
             const particles = document.getElementById('fireParticles');
             if (particles) {
                 particles.style.transform = `translateY(${rate}px)`;
             }
-        });
-    </script>
-</body>
-</html>
-
-        .download-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            color: #667eea;
-        }
-
-        .download-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: #2c3e50;
-        }
-
-        .download-desc {
-            color: #666;
-            margin-bottom: 1.5rem;
-            font-size: 0.95rem;
-        }
-
-        .download-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            text-decoration: none;
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-        }
-
-        .download-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-        }
-
-        .download-size {
-            font-size: 0.85rem;
-            color: #888;
-            margin-top: 0.5rem;
-        }
-
-        .features {
-            margin: 3rem 0;
-        }
-
-        .features h2 {
-            text-align: center;
-            font-size: 2rem;
-            margin-bottom: 2rem;
-            color: #2c3e50;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .feature {
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-        }
-
-        .feature-icon {
-            color: #667eea;
-            font-size: 1.5rem;
-            margin-top: 0.2rem;
-        }
-
-        .feature-content h3 {
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: #2c3e50;
-        }
-
-        .feature-content p {
-            color: #666;
-            font-size: 0.95rem;
-        }
-
-        .system-requirements {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 2rem;
-            margin: 3rem 0;
-        }
-
-        .system-requirements h2 {
-            text-align: center;
-            margin-bottom: 1.5rem;
-            color: #2c3e50;
-        }
-
-        .requirements-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .requirement {
-            text-align: center;
-        }
-
-        .requirement h3 {
-            color: #667eea;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-        }
-
-        .requirement p {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        footer {
-            text-align: center;
-            padding: 2rem 0;
-            color: white;
-            opacity: 0.8;
-        }
-
-        .github-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: white;
-            text-decoration: none;
-            background: rgba(255,255,255,0.1);
-            padding: 10px 20px;
-            border-radius: 25px;
-            margin-top: 1rem;
-            transition: background 0.3s ease;
-        }
-
-        .github-link:hover {
-            background: rgba(255,255,255,0.2);
-        }
-
-        @media (max-width: 768px) {
-            .main-content {
-                margin: 1rem;
-                padding: 2rem;
+            
+            const logo = document.querySelector('.logo-image');
+            if (logo) {
+                logo.style.transform = `translateY(${scrolled * 0.2}px)`;
             }
-
-            .app-info h1 {
-                font-size: 2rem;
-            }
-
-            .logo {
-                font-size: 2.5rem;
-            }
-
-            .downloads {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .version-badge {
-            display: inline-block;
-            background: #e74c3c;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            margin-left: 1rem;
-        }
-
-        .beta-notice {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            border-radius: 10px;
-            padding: 1rem;
-            margin: 2rem 0;
-            text-align: center;
-        }
-
-        .beta-notice .icon {
-            color: #f39c12;
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <div class="container">
-            <div class="logo">🎬 RAKCHA</div>
-            <div class="tagline">Professional Movie & Cinema Management</div>
-        </div>
-    </header>
-
-    <main class="container">
-        <div class="main-content">
-            <div class="app-info">
-                <h1>RAKCHA Desktop <span class="version-badge">v1.0.6</span></h1>
-                <p>A comprehensive JavaFX application for managing movies, cinemas, and entertainment content. Built with modern UI components and powerful features for cinema management professionals.</p>
-            </div>
-
-            <div class="beta-notice">
-                <div class="icon"><i class="fas fa-info-circle"></i></div>
-                <strong>Development Release</strong><br>
-                These are development builds created with jpackage. For production use, please verify functionality in your environment.
-            </div>
-
-            <div class="downloads">
-                <div class="download-card">
-                    <div class="download-icon">
-                        <i class="fab fa-linux"></i>
-                    </div>
-                    <div class="download-title">Linux Package</div>
-                    <div class="download-desc">Debian/Ubuntu compatible installer package with automatic dependency resolution</div>
-                    <a href="releases/rakcha_1.0.6_amd64.deb" class="download-btn">
-                        <i class="fas fa-download"></i>
-                        Download .deb
-                    </a>
-                    <div class="download-size">Size: ~241 MB</div>
-                </div>
-
-                <div class="download-card">
-                    <div class="download-icon">
-                        <i class="fas fa-cube"></i>
-                    </div>
-                    <div class="download-title">Portable App</div>
-                    <div class="download-desc">Self-contained application image that runs without installation</div>
-                    <a href="releases/RAKCHA-portable.tar.gz" class="download-btn">
-                        <i class="fas fa-download"></i>
-                        Download Portable
-                    </a>
-                    <div class="download-size">Size: ~395 MB</div>
-                </div>
-            </div>
-
-            <div class="features">
-                <h2>Key Features</h2>
-                <div class="features-grid">
-                    <div class="feature">
-                        <div class="feature-icon"><i class="fas fa-film"></i></div>
-                        <div class="feature-content">
-                            <h3>Movie Management</h3>
-                            <p>Comprehensive movie database with ratings, reviews, and metadata management</p>
-                        </div>
-                    </div>
-                    <div class="feature">
-                        <div class="feature-icon"><i class="fas fa-building"></i></div>
-                        <div class="feature-content">
-                            <h3>Cinema Operations</h3>
-                            <p>Manage multiple cinema locations, screens, and scheduling</p>
-                        </div>
-                    </div>
-                    <div class="feature">
-                        <div class="feature-icon"><i class="fas fa-users"></i></div>
-                        <div class="feature-content">
-                            <h3>User Management</h3>
-                            <p>Role-based access control for staff and customer management</p>
-                        </div>
-                    </div>
-                    <div class="feature">
-                        <div class="feature-icon"><i class="fas fa-chart-bar"></i></div>
-                        <div class="feature-content">
-                            <h3>Analytics</h3>
-                            <p>Detailed reporting and analytics for business insights</p>
-                        </div>
-                    </div>
-                    <div class="feature">
-                        <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
-                        <div class="feature-content">
-                            <h3>Modern UI</h3>
-                            <p>Responsive JavaFX interface with MaterialFX components</p>
-                        </div>
-                    </div>
-                    <div class="feature">
-                        <div class="feature-icon"><i class="fas fa-cloud"></i></div>
-                        <div class="feature-content">
-                            <h3>Cloud Integration</h3>
-                            <p>Cloudinary integration for media management and storage</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="system-requirements">
-                <h2>System Requirements</h2>
-                <div class="requirements-grid">
-                    <div class="requirement">
-                        <h3><i class="fas fa-desktop"></i> Operating System</h3>
-                        <p>Linux (Ubuntu 18.04+, Debian 10+)<br>Windows & macOS support coming soon</p>
-                    </div>
-                    <div class="requirement">
-                        <h3><i class="fas fa-microchip"></i> Processor</h3>
-                        <p>64-bit x86 processor<br>2 GHz or faster recommended</p>
-                    </div>
-                    <div class="requirement">
-                        <h3><i class="fas fa-memory"></i> Memory</h3>
-                        <p>Minimum: 4 GB RAM<br>Recommended: 8 GB RAM</p>
-                    </div>
-                    <div class="requirement">
-                        <h3><i class="fas fa-hdd"></i> Storage</h3>
-                        <p>500 MB available space<br>Additional space for media files</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 ESPRIT - RAKCHA Desktop Application</p>
-            <a href="https://github.com/esprit/rakcha-desktop" class="github-link">
-                <i class="fab fa-github"></i>
-                View on GitHub
-            </a>
-        </div>
-    </footer>
-
-    <script>
-        // Add download tracking
-        document.querySelectorAll('.download-btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                const platform = this.textContent.includes('.deb') ? 'Linux Package' : 'Portable App';
-                console.log(`Download started: ${platform}`);
-                
-                // You can add analytics tracking here
-                if (typeof gtag !== 'undefined') {
-                    gtag('event', 'download', {
-                        'event_category': 'Downloads',
-                        'event_label': platform
-                    });
-                }
-            });
         });
 
-        // Add smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
+        // ===== INITIALIZATION =====
+        document.addEventListener('DOMContentLoaded', () => {
+            initGamification();
+            loadFileSizes();
+            
+            // Welcome confetti after a delay
+            setTimeout(() => {
+                createConfetti();
+            }, 1000);
         });
+
+        // Add CSS animation for fadeIn
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>

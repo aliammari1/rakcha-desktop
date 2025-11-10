@@ -31,7 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added recommendations for password pepper implementation
 - Rate limiting recommendations added
 
-## [1.0.6] - 2024-XX-XX
+## [1.0.8] - 2024-XX-XX
 
 ### Added
 - Multi-database support (SQLite, MySQL, PostgreSQL)
@@ -100,7 +100,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Upgrade Notes
 
-### Upgrading to 1.0.6
+### Upgrading to 1.0.8
 1. Update environment variables in `.env` file
 2. Run database migrations
 3. Clear application cache
