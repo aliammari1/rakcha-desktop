@@ -9,7 +9,7 @@ on:
 
 env:
   JAVA_VERSION: "21"
-  JAVA_DISTRIBUTION: "temurin"
+  JAVA_DISTRIBUTION: "liberica"
   APP_VERSION: "1.0.8"
   APP_NAME: "RAKCHA"
 
@@ -30,6 +30,7 @@ jobs:
         with:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: ${{ env.JAVA_DISTRIBUTION }}
+          java-package: jdk+fx
           cache: maven
 
       - name: Install Maven
@@ -92,6 +93,7 @@ jobs:
         with:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: ${{ env.JAVA_DISTRIBUTION }}
+          java-package: jdk+fx
           cache: maven
 
       - name: Install Maven
@@ -139,6 +141,7 @@ jobs:
         with:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: ${{ env.JAVA_DISTRIBUTION }}
+          java-package: jdk+fx
           cache: maven
 
       - name: Install Maven
@@ -190,6 +193,7 @@ jobs:
         with:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: ${{ env.JAVA_DISTRIBUTION }}
+          java-package: jdk+fx
           cache: maven
 
       - name: Install jpackage dependencies
@@ -246,6 +250,7 @@ jobs:
         with:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: ${{ env.JAVA_DISTRIBUTION }}
+          java-package: jdk+fx
           cache: maven
 
       - name: Build release JAR
