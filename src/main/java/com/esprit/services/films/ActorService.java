@@ -86,10 +86,11 @@ public class ActorService implements IService<Actor> {
      * @param actor the actor entity to create
      */
     /**
-     * Creates a new actor in the database.
-     *
-     * @param actor the actor entity to create
-     */
+         * Insert the given Actor into the actors database table.
+         *
+         * @param actor the Actor to insert; the actor's name, image, and biography fields are persisted
+         * @throws RuntimeException if a database error prevents inserting the actor
+         */
     @Override
     public void create(final Actor actor) {
         final String req = "insert into actors (name,image,biography) values (?,?,?) ";
@@ -107,6 +108,16 @@ public class ActorService implements IService<Actor> {
     }
 
 
+    /**
+     * Retrieve a page of actors according to the provided pagination and optional sorting parameters.
+     *
+     * If the requested sort column is not allowed, the sort is ignored and results use default ordering.
+     * On database errors the method returns a page with whatever content was collected (possibly empty)
+     * and a totalElements value of 0.
+     *
+     * @param pageRequest pagination and sorting parameters; if the sort column is invalid it will be ignored
+     * @return a Page of Actor containing the current page content, page index, page size, and total element count
+     */
     @Override
     /**
      * Retrieves actors with pagination support.
@@ -232,12 +243,12 @@ public class ActorService implements IService<Actor> {
 
 
     /**
-     * Retrieves an actor by their placement ranking (based on number of
-     * appearances).
-     *
-     * @param actorPlacement the placement ranking to search for
-     * @return the actor with the specified placement, or null if not found
-     */
+         * Retrieves an actor by their placement ranking (based on number of appearances).
+         *
+         * @param actorPlacement the 1-based placement to retrieve (1 = most appearances)
+         * @return the actor with the specified placement, or `null` if no actor exists at that placement
+         * @throws RuntimeException if a database error occurs while querying
+         */
     public Actor getActorByPlacement(final int actorPlacement) {
         final String req = """
                 SELECT a.*, COUNT(af.film_id) AS NumberOfAppearances
@@ -268,4 +279,3 @@ public class ActorService implements IService<Actor> {
     }
 
 }
-

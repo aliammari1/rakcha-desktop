@@ -37,8 +37,10 @@ public class CinemaHallService implements IService<CinemaHall> {
 ;
 
     /**
-     * Constructs a new CinemaHallService with database connection and required
-     * services. Creates tables if they don't exist.
+     * Initialize a CinemaHallService and ensure the required database table exists.
+     *
+     * Initializes the JDBC connection and the dependent CinemaService, and creates
+     * the `cinema_hall` table if it does not already exist.
      */
     public CinemaHallService() {
         this.connection = DataSource.getInstance().getConnection();
@@ -69,6 +71,14 @@ public class CinemaHallService implements IService<CinemaHall> {
     }
 
 
+    /**
+     * Insert a CinemaHall record into the database.
+     *
+     * Persists the cinema hall's associated cinema id, seat capacity, and name as a new row
+     * in the cinema_hall table.
+     *
+     * @param cinemaHall the CinemaHall to persist; its associated Cinema must have a valid `id`
+     */
     @Override
     /**
      * Creates a new entity in the database.
@@ -92,6 +102,13 @@ public class CinemaHallService implements IService<CinemaHall> {
     }
 
 
+    /**
+     * Update the database record for the given CinemaHall.
+     *
+     * Updates the cinema_id, seat_capacity, and name columns for the row matching the CinemaHall's id.
+     *
+     * @param cinemaHall the CinemaHall containing the new values; its id identifies which row to update
+     */
     @Override
     /**
      * Updates an existing entity in the database.
@@ -116,6 +133,11 @@ public class CinemaHallService implements IService<CinemaHall> {
     }
 
 
+    /**
+     * Deletes the specified cinema hall from the database.
+     *
+     * @param cinemaHall the cinema hall to delete; its `id` identifies the row to remove
+     */
     @Override
     /**
      * Deletes an entity from the database.
@@ -216,10 +238,10 @@ public class CinemaHallService implements IService<CinemaHall> {
 
 
     /**
-     * Retrieves a cinema hall by its name.
+     * Finds a cinema hall by its exact name.
      *
-     * @param name the name of the cinema hall to retrieve
-     * @return the cinema hall with the specified name, or null if not found
+     * @param name the exact name of the cinema hall to search for
+     * @return the matching CinemaHall, or null if none is found
      */
     public CinemaHall getCinemaHallByName(String name) {
         String query = "SELECT * FROM cinema_hall WHERE name = ?";
@@ -240,10 +262,10 @@ public class CinemaHallService implements IService<CinemaHall> {
 
 
     /**
-     * Retrieves cinema halls by cinema ID.
+     * Retrieve cinema halls for a given cinema.
      *
-     * @param cinemaId the ID of the cinema to get halls for
-     * @return list of cinema halls for the specified cinema
+     * @param cinemaId the ID of the cinema
+     * @return a list of CinemaHall objects belonging to the specified cinema; an empty list if none are found or if an error occurs
      */
     public List<CinemaHall> getCinemaHallsByCinemaId(Long cinemaId) {
         List<CinemaHall> cinemaHalls = new ArrayList<>();
@@ -270,8 +292,10 @@ public class CinemaHallService implements IService<CinemaHall> {
 
 
     /**
-     * @param rs
-     * @return CinemaHall
+     * Builds a CinemaHall from the current row of the given ResultSet.
+     *
+     * @param rs the ResultSet positioned at a row containing cinema_hall columns
+     * @return the constructed CinemaHall, or `null` if the referenced Cinema is not found or a database error occurs
      */
     private CinemaHall buildCinemaHall(ResultSet rs) {
         try {
@@ -293,4 +317,3 @@ public class CinemaHallService implements IService<CinemaHall> {
     }
 
 }
-

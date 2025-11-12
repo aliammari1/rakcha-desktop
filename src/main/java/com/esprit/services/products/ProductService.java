@@ -41,8 +41,9 @@ public class ProductService implements IService<Product> {
 ;
 
     /**
-     * Constructs a new ProductService instance.
-     * Initializes database connection and creates tables if they don't exist.
+     * Initialize the ProductService by opening a database connection and ensuring required product-related tables exist.
+     *
+     * Ensures the presence of the "product_categories", "products", and "product_category" tables, creating them if they are missing.
      */
     public ProductService() {
         this.connection = DataSource.getInstance().getConnection();
@@ -82,6 +83,15 @@ public class ProductService implements IService<Product> {
     }
 
 
+    /**
+     * Inserts the given Product into the database and establishes its category relations.
+     *
+     * This saves the product fields (name, price, image, description, quantity), retrieves
+     * the generated product ID, and creates entries in the product_category join table when
+     * the product has associated categories.
+     *
+     * @param product the product to persist; its assigned database ID is used to create category relations when categories are present
+     */
     @Override
     /**
      * Creates a new entity in the database.
@@ -123,9 +133,11 @@ public class ProductService implements IService<Product> {
 
 
     /**
-     * @param productId
-     * @param categories
-     * @throws SQLException
+     * Create associations between a product and the provided categories by inserting rows into the product_category table.
+     *
+     * @param productId the ID of the product to associate with categories
+     * @param categories the list of categories to link to the product; each category's ID will be used
+     * @throws SQLException if a database access error occurs while persisting the relations
      */
     private void createProductCategoryRelations(final long productId, final List<ProductCategory> categories)
             throws SQLException {
@@ -143,6 +155,12 @@ public class ProductService implements IService<Product> {
     }
 
 
+    /**
+     * Retrieve a paginated Page of products for the requested page index, size, and optional sort.
+     *
+     * @param pageRequest pagination parameters (page index, page size, and optional sort column/direction)
+     * @return a Page<Product> containing the page content, the requested page index and size, and the total number of matching elements
+     */
     @Override
     /**
      * Retrieves products with pagination support.
@@ -198,9 +216,11 @@ public class ProductService implements IService<Product> {
 
 
     /**
-     * @param productId
-     * @return List<ProductCategory>
-     */
+         * Retrieves the categories associated with a given product.
+         *
+         * @param productId the product's ID whose categories should be retrieved
+         * @return a list of ProductCategory objects linked to the product; an empty list if no categories are found or if a SQL error occurs
+         */
     private List<ProductCategory> getCategoriesForProduct(final Long productId) {
         final List<ProductCategory> categories = new ArrayList<>();
         final String req = "SELECT c.* FROM product_categories c "
@@ -224,9 +244,11 @@ public class ProductService implements IService<Product> {
 
 
     /**
-     * Performs sort operation.
+     * Retrieve all products ordered by the specified column.
      *
-     * @return the result of the operation
+     * @param sortBy the column name to sort by; allowed values: "id", "name", "price", "description", "quantity"
+     * @return a list of products ordered by the specified column; empty if no products are found or a database error occurs
+     * @throws IllegalArgumentException if `sortBy` is not one of the allowed column names
      */
     public List<Product> sort(final String sortBy) {
         final List<String> validColumns = Arrays.asList("id", "name", "price", "description", "quantity");
@@ -254,6 +276,11 @@ public class ProductService implements IService<Product> {
     }
 
 
+    /**
+     * Updates the specified product's fields and refreshes its category associations in the database.
+     *
+     * @param product the Product with a non-null id whose name, price, description, image, quantity, and categories will replace the stored values
+     */
     @Override
     /**
      * Updates an existing entity in the database.
@@ -286,9 +313,13 @@ public class ProductService implements IService<Product> {
 
 
     /**
-     * @param productId
-     * @param categories
-     * @throws SQLException
+     * Replaces all category associations for the given product with the supplied categories.
+     *
+     * Deletes existing product–category links for the product and, if the list is non-empty, inserts relations for each category in the provided list.
+     *
+     * @param productId the product id whose category relations will be replaced
+     * @param categories list of categories to associate with the product; if null or empty no new relations are created
+     * @throws SQLException if a database error occurs while deleting or creating relations
      */
     private void updateProductCategoryRelations(final Long productId, final List<ProductCategory> categories)
             throws SQLException {
@@ -308,6 +339,11 @@ public class ProductService implements IService<Product> {
     }
 
 
+    /**
+     * Removes the given product and its product–category associations from the database.
+     *
+     * @param product the product to delete; its `id` identifies the database record to remove
+     */
     @Override
     /**
      * Deletes an entity from the database.
@@ -341,9 +377,10 @@ public class ProductService implements IService<Product> {
 
 
     /**
-     * Retrieves the ProductById value.
+     * Retrieves the product with the specified id.
      *
-     * @return the ProductById value
+     * @param productId the id of the product to retrieve
+     * @return the Product with the given id, or null if no matching product exists or a database error occurs
      */
     public Product getProductById(final Long productId) {
         Product product = null;
@@ -368,9 +405,11 @@ public class ProductService implements IService<Product> {
 
 
     /**
-     * Performs checkAvailableStock operation.
+     * Determine whether a product has at least the requested quantity in stock.
      *
-     * @return the result of the operation
+     * @param productId the ID of the product to check
+     * @param requestedQuantity the quantity to verify is available
+     * @return `true` if the product exists and its quantity is greater than or equal to the requested quantity, `false` otherwise
      */
     public boolean checkAvailableStock(final Long productId, final int requestedQuantity) {
         final Product product = this.getProductById(productId);
@@ -385,9 +424,10 @@ public class ProductService implements IService<Product> {
 
 
     /**
-     * Retrieves the ProductPrice value.
+     * Retrieve the price of the product identified by the given ID.
      *
-     * @return the ProductPrice value
+     * @param productId the product's database identifier
+     * @return the product's price, or 0 if the product is not found or an error occurs
      */
     public double getProductPrice(final Long productId) {
         final String req = "SELECT price FROM products WHERE id = ?";
@@ -410,9 +450,10 @@ public class ProductService implements IService<Product> {
 
 
     /**
-     * Retrieves the ProductsByCategory value.
+     * Retrieve all products associated with the specified category ID.
      *
-     * @return the ProductsByCategory value
+     * @param categoryId the ID of the category to fetch products for
+     * @return a list of products that belong to the category; empty if none are found or an error occurs
      */
     public List<Product> getProductsByCategory(final Long categoryId) {
         final List<Product> products = new ArrayList<>();
@@ -438,9 +479,12 @@ public class ProductService implements IService<Product> {
 
 
     /**
-     * Retrieves the ProductsOrderByQuantityAndStatus value.
+     * Returns products sorted by total quantity sold in paid orders, highest first.
      *
-     * @return the ProductsOrderByQuantityAndStatus value
+     * Each returned Product has its id, name, price, image, description, associated categories,
+     * and its quantity field set to the aggregated total quantity sold.
+     *
+     * @return a list of products ordered by total quantity sold (descending)
      */
     public List<Product> getProductsOrderByQuantityAndStatus() {
         final List<Product> products = new ArrayList<>();
@@ -473,4 +517,3 @@ public class ProductService implements IService<Product> {
     }
 
 }
-

@@ -30,8 +30,11 @@ public class FilmCategoryService {
     private final Connection connection;
 
     /**
-     * Constructs a new FilmCategoryService instance.
-     * Initializes database connection and creates tables if they don't exist.
+     * Initializes the FilmCategoryService and ensures the film_category junction table exists.
+     *
+     * The constructor obtains a database connection from the application's DataSource and
+     * creates the film_category table with a unique constraint on (film_id, category_id)
+     * if it does not already exist.
      */
     public FilmCategoryService() {
         this.connection = DataSource.getInstance().getConnection();
@@ -60,10 +63,13 @@ public class FilmCategoryService {
 
 
     /**
-     * Creates associations between a film and multiple categories.
+     * Create associations between a film and multiple categories.
+     *
+     * Only categories that exist (matching names) are associated; names with no matching category are ignored.
      *
      * @param film          the film to associate with categories
      * @param categoryNames the list of category names to associate with the film
+     * @throws RuntimeException if a database error prevents creating the associations
      */
     public void createFilmCategoryAssociation(Film film, List<String> categoryNames) {
         final String req = "INSERT INTO film_category (film_id, category_id) VALUES (?,?)";
@@ -88,9 +94,10 @@ public class FilmCategoryService {
 
 
     /**
-     * Retrieves the CategoriesForFilm value.
+     * Fetches all categories associated with the specified film.
      *
-     * @return the CategoriesForFilm value
+     * @param filmId the ID of the film whose categories to retrieve
+     * @return a list of Category objects associated with the film; an empty list if none are found or an error occurs
      */
     public List<Category> getCategoriesForFilm(int filmId) {
         final List<Category> categories = new ArrayList<>();
@@ -113,9 +120,10 @@ public class FilmCategoryService {
 
 
     /**
-     * Retrieves the FilmsForCategory value.
+     * Retrieve all films associated with the given category.
      *
-     * @return the FilmsForCategory value
+     * @param categoryId the category database id to fetch films for
+     * @return a list of Film objects linked to the specified category; an empty list if none are found or on error
      */
     public List<Film> getFilmsForCategory(int categoryId) {
         final List<Film> films = new ArrayList<>();
@@ -139,12 +147,13 @@ public class FilmCategoryService {
 
 
     /**
-     * Updates the categories associated with a film.
-     * Removes existing associations and creates new ones.
+     * Replace a film's category associations with the provided list of category names.
      *
-     * @param film          the film whose categories to update
-     * @param categoryNames the new list of category names to associate with the
-     *                      film
+     * Deletes all existing associations for the film and creates new associations for each name in {@code categoryNames}.
+     *
+     * @param film          the film whose category associations will be replaced
+     * @param categoryNames the new category names to associate with the film
+     * @throws RuntimeException if a database error occurs while removing or creating associations
      */
     public void updateCategories(final Film film, final List<String> categoryNames) {
         // Delete existing associations
@@ -165,9 +174,10 @@ public class FilmCategoryService {
 
 
     /**
-     * Retrieves the CategoryNames value.
+     * Fetches comma-separated category names associated with a film.
      *
-     * @return the CategoryNames value
+     * @param filmId the ID of the film to retrieve categories for
+     * @return the category names joined by ", " for the given film, or an empty string if none are found or on error
      */
     public String getCategoryNames(final Long filmId) {
         final String req = "SELECT GROUP_CONCAT(c.name SEPARATOR ', ') AS categoryNames FROM categories c JOIN film_category fc ON c.id = fc.category_id WHERE fc.film_id = ?";
@@ -208,4 +218,3 @@ public class FilmCategoryService {
     }
 
 }
-

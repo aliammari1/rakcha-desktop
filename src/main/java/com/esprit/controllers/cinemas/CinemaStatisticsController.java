@@ -40,20 +40,13 @@ public class CinemaStatisticsController {
     private AnchorPane statisticsAnchor;
 
     /**
-     * Displays sentiment statistics for all cinemas as pie charts.
-     * 
-     * <p>
-     * This method clears the existing statistics display, retrieves all cinema
-     * comments
-     * from the database, generates sentiment statistics for each cinema, and
-     * creates
-     * pie charts to visualize the data. The charts are displayed in a vertical
-     * layout
-     * within the statistics anchor pane.
-     * </p>
+     * Generate and display per-cinema sentiment pie charts in the statistics anchor pane.
      *
-     * @param event the action event triggered by the button click that initiates
-     *              the statistics generation and display process
+     * Clears existing content in the statistics anchor, aggregates sentiment counts from
+     * stored cinema comments, creates a PieChart for each cinema showing its sentiment
+     * distribution, and adds the charts in a vertical layout to the anchor pane.
+     *
+     * @param event the ActionEvent that triggered the statistics display
      */
     @FXML
     void showStatistics(final ActionEvent event) {
@@ -77,22 +70,10 @@ public class CinemaStatisticsController {
 
 
     /**
-     * Generates sentiment statistics for each cinema based on user comments.
-     * 
-     * <p>
-     * This method processes a list of cinema comments and aggregates sentiment
-     * counts
-     * by cinema name. For each cinema, it counts how many comments fall into each
-     * sentiment category (positive, negative, neutral, etc.).
-     * </p>
+     * Aggregate sentiment counts per cinema from a list of comments.
      *
-     * @param comments the list of cinema comments to analyze for sentiment
-     *                 statistics
-     * @return a map where keys are cinema names and values are maps of sentiment
-     *         types
-     *         to their respective counts
-     * @throws IllegalArgumentException if comments list is null
-     * @since 1.0
+     * @param comments list of CinemaComment objects to analyze; each entry contributes one sentiment count for its cinema
+     * @return a map whose keys are cinema names and whose values are maps from sentiment label to the number of comments with that sentiment
      */
     private Map<String, Map<String, Integer>> generateSentimentStatistics(final List<CinemaComment> comments) {
         final Map<String, Map<String, Integer>> cinemaSentimentStatistics = new HashMap<>();
@@ -119,22 +100,11 @@ public class CinemaStatisticsController {
 
 
     /**
-     * Creates a pie chart displaying sentiment statistics for a specific cinema.
-     * 
-     * <p>
-     * This method creates a PieChart object with a title that includes the cinema
-     * name
-     * and populates it with sentiment data. Each sentiment category is represented
-     * as a slice in the pie chart with its corresponding count.
-     * </p>
+     * Create a PieChart showing the sentiment distribution for a cinema.
      *
-     * @param cinemaName          the name of the cinema for which the chart is
-     *                            being created
-     * @param sentimentStatistics a map containing sentiment types as keys and their
-     *                            counts as values for the specified cinema
-     * @return a configured PieChart displaying the sentiment distribution for the
-     *         cinema
-     * @throws IllegalArgumentException if cinemaName is null or empty
+     * @param cinemaName          the cinema's display name used in the chart title
+     * @param sentimentStatistics map of sentiment label to count used to build slices
+     * @return a PieChart titled "<cinemaName> Sentiment Statistics" containing one slice per sentiment with the provided counts
      * @since 1.0
      */
     private PieChart createPieChart(final String cinemaName, final Map<String, Integer> sentimentStatistics) {
@@ -149,4 +119,3 @@ public class CinemaStatisticsController {
     }
 
 }
-

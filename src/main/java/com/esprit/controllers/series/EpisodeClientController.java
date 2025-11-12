@@ -81,27 +81,14 @@ public class EpisodeClientController implements Initializable {
     private List<Episode> episodes = new ArrayList<>();
 
     /**
-     * Sets up the user interface for a media player, initializing buttons and
-     * setting listeners for media playback. It also retrieves episode information
-     * from a database and displays it in a list view.
+     * Initialize the controller UI to display the given series and its episodes, and configure media playback controls.
      *
-     * @param selectedSerie
-     *                      selected series for which the functions initializes the
-     *                      image and
-     *                      video components.
-     *                      <p>
-     *                      - `getImage()`: String representing the image file path
-     *                      -
-     *                      `getName()`: String representing the series name -
-     *                      `getResume()`:
-     *                      String representing the series summary -
-     *                      `getDirecteur()`: String
-     *                      representing the director's name - `getPays()`: String
-     *                      representing the country of origin
-     *                      <p>
-     *                      These properties are used to display the series
-     *                      information in
-     *                      various parts of the user interface.
+     * This sets the series image and metadata, loads episodes for the series into the list view with custom cells
+     * showing thumbnails and basic episode info, and attaches play/pause/stop handlers to the media controls
+     * when an episode is selected.
+     *
+     * @param selectedSerie the series whose details and episodes should populate the UI
+     * @throws RuntimeException if loading episodes for the series fails
      */
     public void initialize(final Series selectedSerie) {
         this.selectedSerie = selectedSerie;
@@ -128,26 +115,16 @@ public class EpisodeClientController implements Initializable {
         this.ListEpisode.getItems().addAll(this.episodes);
         this.ListEpisode.setCellFactory(param -> new ListCell<Episode>() {
             /**
-             * Updates an episode object's text and image based on whether the object is
-             * empty or not, and sets the style of the text to bold Arial font with a
-             * specific size and weight.
+             * Configure the ListCell display for an Episode, showing a thumbnail and a formatted
+             * summary with title, episode number, and season.
              *
-             * @param item
-             *              episode object being updated, which contains information such as
-             *              title, number, season, and image path, that is used to set the
-             *              text and graphic properties of the `ImageView`.
+             * When `item` is null or `empty` is true, the cell is cleared. Otherwise the cell's
+             * graphic is set to the episode thumbnail, the text is set to a short multi-line
+             * summary, the text style is set to bold Arial (14px), and the controller's `idep`
+             * field is updated with the episode's id.
              *
-             *              - `item`: The episode object containing information such as
-             *              title,
-             *              number, season, and image. - `empty`: A boolean indicating
-             *              whether
-             *              the `item` is empty or not. - `img`: The image associated with
-             *              the
-             *              `item`, represented as a string.
-             *
-             * @param empty
-             *              emptiness of the `Episode` object, and determines whether to set
-             *              the `text` property to null or not.
+             * @param item  the Episode to render in this cell
+             * @param empty true if this cell should be empty and display no content
              */
             @Override
             protected void updateItem(final Episode item, final boolean empty) {
@@ -198,16 +175,11 @@ public class EpisodeClientController implements Initializable {
 
 
     /**
-     * Is called when an instance of a class is created and initializes an object's
-     * resources, such as loading data from a URL or database, by calling the
-     * appropriate methods.
+     * Called by JavaFX after the FXML is loaded to perform controller initialization.
+     * Currently this implementation performs no initialization.
      *
-     * @param url
-     *                       URL of the web application being initialized.
-     * @param resourceBundle
-     *                       resource bundle that contains localized data for the
-     *                       component
-     *                       being initialized.
+     * @param url            location used to resolve relative paths for the root object, may be null
+     * @param resourceBundle resources for localized strings, may be null
      */
     @Override
     /**
@@ -219,16 +191,13 @@ public class EpisodeClientController implements Initializable {
 
 
     /**
-     * Takes a `txtDescriptionFeedBack` text input and adds it to an instance of
-     * `IServiceFeedbackImpl`. The date is calculated using the `LocalDate.now()`
-     * method, and the `idep` parameter is included in the feedback object.
+     * Create and persist a Feedback for the currently selected episode using the text entered in the feedback field.
      *
-     * @param event
-     *              user's action of clicking the "Add Feedback" button and triggers
-     *              the execution of the function.
-     *              <p>
-     *              - `txtDescriptionFeedBack`: The text field where the user has
-     *              entered the feedback description.
+     * The created Feedback uses the current user (taken from the window's user data) as the client, the current date as
+     * the feedback date, the text from `txtDescriptionFeedBack` as the description, and `idep` as the episode id.
+     * After persisting the feedback the feedback text field is cleared.
+     *
+     * @param event the ActionEvent triggered by the "Add Feedback" button
      */
     @FXML
     void ajouterFeedBack(final ActionEvent event) {
@@ -252,16 +221,13 @@ public class EpisodeClientController implements Initializable {
 
 
     /**
-     * Loads a FXML file, creates a scene, and displays it on a stage, when a mouse
-     * event occurs.
+     * Display the SeriesClient view in the window that generated the mouse event.
      *
-     * @param event
-     *              mouse event that triggered the function execution, providing
-     *              information about the location and type of the event on the user
-     *              interface.
-     *              <p>
-     *              - `event`: A `javafx.scene.input.MouseEvent` object representing
-     *              the mouse event that triggered the function.
+     * Loads the FXML resource at /ui/series/SeriesClient.fxml, creates a new Scene
+     * from it, and replaces the Scene of the Stage that contains the event's source.
+     *
+     * @param event the MouseEvent whose source Node is used to obtain the current Stage
+     * @throws IOException if the FXML resource cannot be loaded
      */
     @FXML
     /**
@@ -279,4 +245,3 @@ public class EpisodeClientController implements Initializable {
     }
 
 }
-

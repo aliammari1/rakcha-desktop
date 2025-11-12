@@ -58,12 +58,12 @@ public class Actor {
 
 
     /**
-     * Constructor with id for existing actor instances.
-     * 
-     * @param id        the unique identifier for the actor
-     * @param name      the name of the actor
-     * @param image     the image path or URL for the actor
-     * @param biography the biographical text about the actor
+     * Create an Actor with the given id, name, image, and biography.
+     *
+     * @param id        unique identifier of the actor
+     * @param name      the actor's full name
+     * @param image     path or URL to the actor's image
+     * @param biography biographical text describing the actor
      */
     public Actor(final Long id, final String name, final String image, final String biography) {
         this.id = id;
@@ -76,10 +76,10 @@ public class Actor {
 
 
     /**
-     * Constructor with only id.
-     * 
-     * @param id the unique identifier for the actor
-     */
+         * Create an Actor with the given id and initialize films and categories to empty lists.
+         *
+         * @param id the actor's unique identifier
+         */
     public Actor(final Long id) {
         this.id = id;
         this.films = new ArrayList<>();
@@ -87,4 +87,3 @@ public class Actor {
     }
 
 }
-

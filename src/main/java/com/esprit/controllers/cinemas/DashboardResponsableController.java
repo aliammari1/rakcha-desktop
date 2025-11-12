@@ -200,18 +200,15 @@ public class DashboardResponsableController implements Initializable {
 
 
     /**
-     * Allows users to input cinema details, including name and address. If fields
-     * are empty, an alert is displayed. Then, a responsible cinema object is
-     * created based on ID, and the CinemaService creates a new cinema object using
-     * the provided details.
+     * Create a new Cinema from the UI fields and persist it.
      *
-     * @param event
-     *              action event triggered by the user's click on the "Add Cinema"
-     *              button, which initiates the functionality of the function.
-     *              <p>
-     *              - `tfNom`: A text field containing the name of the cinema. -
-     *              `tfAdresse`: A text field containing the address of the cinema.
-     *              </p>
+     * <p>Validates that the name and address fields are filled, shows an alert if they
+     * are not, then builds a Cinema associated with the current CinemaManager (taken
+     * from the window's userData). If an image is present, its resource path is
+     * extracted and set as the cinema logo path. The new Cinema is created with
+     * status "Pending" and persisted via CinemaService; a success alert is shown on completion.</p>
+     *
+     * @param event the ActionEvent triggered by clicking the "Add Cinema" button
      */
     @FXML
     void addCinema(final ActionEvent event) {
@@ -245,17 +242,9 @@ public class DashboardResponsableController implements Initializable {
 
 
     /**
-     * Allows the user to select an image file, which is then copied to a specified
-     * directory and set as the image for a `Image` component.
+     * Open a file chooser to pick an image, copy the selected file into the application's cinema images directory, and display it in the controller's image view.
      *
-     * @param event
-     *              mouse event that triggered the function execution, providing the
-     *              necessary information to determine the appropriate action to
-     *              take.
-     *              <p>
-     *              - `event`: A `MouseEvent` object representing the user's action
-     *              that triggered the function.
-     *              </p>
+     * <p>If the copy operation fails, the error is logged and the displayed image is not changed.</p>
      */
     @FXML
     void selectImage(final MouseEvent event) {
@@ -282,20 +271,11 @@ public class DashboardResponsableController implements Initializable {
 
 
     /**
-     * Loads accepted cinemas and sets pane visibility, adds cinema names to a combo
-     * box, and listens for selection changes to load movies and rooms for the
-     * selected cinema.
+     * Initialize the controller: load accepted cinemas, set initial pane visibility, populate the cinema combo box,
+     * and configure a listener to load movies and rooms when a cinema is selected.
      *
-     * @param location
-     *                 URL of the initial page to load, which in this case is the
-     *                 home
-     *                 page with the list of cinemas.
-     *                 <p>
-     *                 - `location`: A `URL` object representing the location of the
-     *                 application. - `resources`: A `ResourceBundle` object
-     *                 containing
-     *                 localized messages and data for the application.
-     *                 </p>
+     * @param location  the location used to resolve relative paths for the root object, supplied by JavaFX
+     * @param resources the resources used to localize the root object, supplied by JavaFX
      */
     @Override
     /**
@@ -335,13 +315,9 @@ public class DashboardResponsableController implements Initializable {
 
 
     /**
-     * Clears the list of movies for a specified cinema and then reads the movies
-     * from the FilmCinemaService, adding them to the combo movie list.
+     * Populate the movie ComboBox with films available for the specified cinema.
      *
-     * @param cinemaId
-     *                 unique identifier of the cinema for which the movies are to
-     *                 be
-     *                 loaded.
+     * @param cinemaId the unique identifier of the cinema whose films will be loaded into the comboMovie list
      */
     private void loadMoviesForCinema(final Long cinemaId) {
         this.comboMovie.getItems().clear();
@@ -356,12 +332,9 @@ public class DashboardResponsableController implements Initializable {
 
 
     /**
-     * Clears the items of a `JList` called `comboRoom`, then reads the rooms for a
-     * given cinema using the `CinemaHallService`, and adds the room names to the
-     * list.
+     * Loads cinema hall names for the given cinema into the comboRoom control, replacing any existing items.
      *
-     * @param cinemaId
-     *                 id of the cinema for which the rooms are being loaded.
+     * @param cinemaId the identifier of the cinema whose halls will be loaded
      */
     private void loadRoomsForCinema(final Long cinemaId) {
         this.comboRoom.getItems().clear();
@@ -375,17 +348,12 @@ public class DashboardResponsableController implements Initializable {
 
 
     /**
-     * Loads a set of accepted cinemas from a CinemaService and displays them as
-     * cards on a flow pane.
+     * Loads cinemas with status "Accepted" and displays each as a card in the controller's flow pane.
      *
-     * @returns a set of Cinema objects representing the accepted cinemas.
-     *          <p>
-     *          - `HashSet<Cinema>` represents a set of accepted cinemas in the
-     *          system. - The set contains only cinemas with a "Accepted" status. -
-     *          The list of cinemas is collected from the `read()` method of the
-     *          `CinemaService` class. - The `HBox` objects created for each cinema
-     *          are added to the `cinemaFlowPane` component.
-     *          </p>
+     * The method retrieves cinemas from CinemaService, filters for those whose status equals "Accepted",
+     * creates a visual card for each accepted cinema and adds it to the `cinemaFlowPane`.
+     *
+     * @return a HashSet of Cinema instances whose status is "Accepted"
      */
     private HashSet<Cinema> loadAcceptedCinemas() {
         final CinemaService cinemaService = new CinemaService();
@@ -407,18 +375,9 @@ public class DashboardResponsableController implements Initializable {
 
 
     /**
-     * Retrieves a list of cinemas from a service, filters them based on their
-     * status, and returns a set of accepted cinemas.
+     * Collects cinemas with status "Accepted" from the cinema service.
      *
-     * @returns a hash set of Cinema objects that represent accepted cinemas.
-     *          <p>
-     *          1/ The output is a `HashSet` containing only cinemas that have a
-     *          `Statut` equal to "Accepted". 2/ The `HashSet` contains only a
-     *          subset of the original list of cinemas, specifically those that meet
-     *          the filter condition. 3/ The size of the `HashSet` is either zero or
-     *          the number of cinemas that meet the filter condition, depending on
-     *          whether any cinemas have a `Statut` equal to "Accepted".
-     *          </p>
+     * @return a HashSet containing only cinemas whose status equals "Accepted"; the set is empty if no such cinemas exist.
      */
     private HashSet<Cinema> chargerAcceptedCinemas() {
         final CinemaService cinemaService = new CinemaService();
@@ -434,34 +393,13 @@ public class DashboardResponsableController implements Initializable {
 
 
     /**
-     * Creates a card that displays a cinema's details, including its name,
-     * capacity, and delete button. It also includes a Facebook icon and anchor for
-     * opening the cinema's Facebook page.
+     * Create a visual card HBox that displays a cinema's details and exposes actions.
      *
-     * @param cinema
-     *               cinema object that will be deleted or updated, and is used to
-     *               access its properties and methods in the function.
-     *               <p>
-     *               - `id_cinema`: the unique identifier of the cinema -
-     *               `nom_cinema`:
-     *               the name of the cinema - `adresse_cinema`: the address of the
-     *               cinema - `capacite_cinema`: the capacity of the cinema.
-     *               </p>
-     * @returns a Card object containing a Circle and an FontAwesomeIconView,
-     *          representing a cinema.
-     *          <p>
-     *          - `card`: The root element of the card that contains information
-     *          about a cinema. - `CinemaHallCircle`: A circle with a radius of 30
-     *          pixels used to represent the cinema's capacity. - `facebookIcon`: An
-     *          instance of `FontAwesomeIconView` representing the Facebook logo. -
-     *          `facebookAnchor`: An instance of `Hyperlink` that displays the
-     *          Facebook page for the cinema. - `circlefacebook`: A circle with a
-     *          radius of 30 pixels used to represent the Facebook logo. -
-     *          `cinemahallIcon`: An instance of `FontAwesomeIconView` representing
-     *          the building icon used to indicate the cinema's location. -
-     *          `cardContainer`: The container element that holds the card
-     *          containing information about the cinema.
-     *          </p>
+     * The card shows the cinema logo, editable name and address, controls to delete
+     * the cinema, navigate to/manage its halls, and open the cinema's Facebook anchor.
+     *
+     * @param cinema the Cinema to display and manage (used for editing, deletion, and navigation)
+     * @return an HBox containing the constructed cinema card UI
      */
     private HBox createCinemaCard(final Cinema cinema) {
         final HBox cardContainer = new HBox();
@@ -633,6 +571,13 @@ public class DashboardResponsableController implements Initializable {
             this.colNbrPlaces.setCellValueFactory(new PropertyValueFactory<>("seatCapacity"));
             this.colActionRoom
                     .setCellFactory(new Callback<TableColumn<CinemaHall, Void>, TableCell<CinemaHall, Void>>() {
+                        /**
+                         * Create a table cell that renders a "Delete" button which removes the associated CinemaHall
+                         * from persistent storage and from the table view when pressed.
+                         *
+                         * @param param the table column for which the cell is being created
+                         * @return a TableCell that displays a delete button and performs removal of its CinemaHall on action
+                         */
                         @Override
                         /**
                          * Performs call operation.
@@ -677,27 +622,13 @@ public class DashboardResponsableController implements Initializable {
             this.RoomTableView.setEditable(true);
             this.colNbrPlaces.setCellFactory(tc -> new TableCell<CinemaHall, Integer>() {
                 /**
-                 * Updates an item's quantity based on user input. If the quantity is null or
-                 * empty, it sets the text to null. Otherwise, it sets the text to the updated
-                 * quantity.
+                 * Display the number of places in the table cell or clear the cell when empty.
                  *
-                 * @param nb_cinemahalls
-                 *                       number of sales, which is used to set the text value of
-                 *                       the
-                 *                       `setText()` method call.
+                 * If the item is empty or `nb_cinemahalls` is null, the cell text is cleared.
+                 * Otherwise the cell text is set to "`<n> places`".
                  *
-                 *                       - `nb_cinemahalls` represents the number of places
-                 *                       available for
-                 *                       renting. - It can be null or an integer value. - When
-                 *                       it is not
-                 *                       null, it signifies that there are available places for
-                 *                       renting.
-                 *
-                 * @param empty
-                 *                       state of the item, with a value of `true` indicating an
-                 *                       empty item
-                 *                       and a value of `false` indicating an item with a number
-                 *                       of places.
+                 * @param nb_cinemahalls the number of places to display; may be null
+                 * @param empty          whether the cell is empty; when true the cell is cleared
                  */
                 @Override
                 protected void updateItem(final Integer nb_cinemahalls, final boolean empty) {
@@ -713,9 +644,11 @@ public class DashboardResponsableController implements Initializable {
 
 
                 /**
-                 * 1) calls super's `startEdit`, 2) checks if the item is empty, and 3) creates
-                 * a `TextField` with the item's value and sets an `OnAction` listener to commit
-                 * the edit when the user types something.
+                 * Enters edit mode for the table cell and replaces its content with an inline TextField.
+                 *
+                 * <p>If the cell is empty, no edit is started. Otherwise a TextField initialized with the
+                 * cell's current value is shown; when the user submits the field (for example by pressing
+                 * Enter), the entered text is parsed as an Integer and committed as the new cell value.
                  */
                 @Override
                 /**
@@ -740,8 +673,9 @@ public class DashboardResponsableController implements Initializable {
 
 
                 /**
-                 * In Java is used to cancel any ongoing editing activity and reset the text and
-                 * graphic properties of an object to their original values.
+                 * Cancels cell editing and restores the cell's displayed content.
+                 *
+                 * Resets the cell text to the current item followed by " places" and clears any graphic set for editing.
                  */
                 @Override
                 /**
@@ -757,18 +691,12 @@ public class DashboardResponsableController implements Initializable {
 
 
                 /**
-                 * Updates the number of places in a `CinemaHall` object based on a user input,
-                 * then calls the super method to commit the change, and sets the text and
-                 * graphic of the cell to display the updated value.
+                 * Commits an edited seat capacity for the current table row's CinemaHall and persists the change.
                  *
-                 * @param newValue
-                 *                 new value of the number of places for the cinemahall to be
-                 *                 updated
-                 *                 by the `CinemaHallService`.
+                 * Updates the CinemaHall at this cell's row to use the provided seat capacity, saves the updated
+                 * entity via CinemaHallService, and updates the cell display to show the new value.
                  *
-                 *                 - `Integer newValue`: The new value for the number of places
-                 *                 in a
-                 *                 cinemahall.
+                 * @param newValue the updated number of seats for the CinemaHall
                  */
                 @Override
                 /**
@@ -790,19 +718,10 @@ public class DashboardResponsableController implements Initializable {
 );
             this.colNameRoom.setCellFactory(tc -> new TableCell<CinemaHall, String>() {
                 /**
-                 * Updates an item's text based on whether it is empty or not, and sets the text
-                 * to the hall name if it is not empty.
+                 * Sets the cell's text to the provided cinema hall name, or clears the text when the cell is empty or the name is null.
                  *
-                 * @param nom_cinemahall
-                 *                       name of the hall to be updated, which is passed to the
-                 *                       superclass's `updateItem()` method and then further
-                 *                       processed
-                 *                       based on its value.
-                 *
-                 * @param empty
-                 *                       whether the cinemahall is empty or not, and triggers
-                 *                       the
-                 *                       appropriate text display in the `updateItem` method.
+                 * @param nom_cinemahall the cinema hall name to display in the cell; ignored when null
+                 * @param empty          true if the cell is empty and should be cleared
                  */
                 @Override
                 protected void updateItem(final String nom_cinemahall, final boolean empty) {
@@ -818,11 +737,13 @@ public class DashboardResponsableController implements Initializable {
 
 
                 /**
-                 * Initializes a new `TextField` instance and sets its text to the current
-                 * item's value. It also sets an action listener on the `TextField` that calls
-                 * the `commitEdit` method when the user presses enter or clicks outside the
-                 * field. Finally, it replaces the `TextField` with the newly created instance
-                 * in the graphical representation of the editor.
+                 * Enters edit mode for the table cell by replacing its content with a TextField
+                 * pre-filled with the cell's current value.
+                 *
+                 * If the cell is empty, the method returns without entering edit mode. The
+                 * TextField commits the edited value when the user triggers its action (for
+                 * example, presses Enter) and the cell's graphic is set to the TextField while
+                 * the cell's text is cleared.
                  */
                 @Override
                 /**
@@ -847,8 +768,9 @@ public class DashboardResponsableController implements Initializable {
 
 
                 /**
-                 * In Java overrides the parent `cancelEdit()` method and sets the text and
-                 * graphic properties of an object to their original values.
+                 * Restore the cell's display after cancelling an edit.
+                 *
+                 * Replaces the editing UI with the cell's text and clears any graphic, using the cell's current item.
                  */
                 @Override
                 /**
@@ -864,13 +786,12 @@ public class DashboardResponsableController implements Initializable {
 
 
                 /**
-                 * Updates a cinemahall object's nom_cinemahall property by calling the `update`
-                 * method of the CinemaHallService class, and then sets the new value for the
-                 * nom_cinemahall property of the cinemahall object.
+                 * Commits an in-table edit for a CinemaHall's name and persists the change.
                  *
-                 * @param newValue
-                 *                 new value of the `nom_cinemahall` field for the selected
-                 *                 `CinemaHall` object in the `TableView`.
+                 * Updates the selected CinemaHall object's name to the provided value, saves the updated
+                 * object via CinemaHallService.update(...), and updates the cell's displayed text.
+                 *
+                 * @param newValue the new name to set for the selected CinemaHall
                  */
                 @Override
                 /**
@@ -916,9 +837,10 @@ public class DashboardResponsableController implements Initializable {
 
 
     /**
-     * Sets the visible state of various panes and tables within a JavaFX
-     * application, making the cinema list pane visible and the other components
-     * hidden.
+     * Display the cinema list view while hiding session and room management panes and tables.
+     *
+     * Specifically, sets cinemaFormPane and cinemaListPane visible; hides sessionFormPane, SessionTableView,
+     * addRoomForm, and RoomTableView.
      */
     @FXML
     private void showCinemaList() {
@@ -932,9 +854,9 @@ public class DashboardResponsableController implements Initializable {
 
 
     /**
-     * Is responsible for creating and displaying a form within a table cell to
-     * allow users to edit the cinema's information, including its name and address,
-     * as well as the names of the cinemahall and film associated with it.
+     * Display the movie session management view and configure the session table for inline editing.
+     *
+     * Sets the UI to show the session form and initializes the SessionTableView's columns and cell factories so users can edit cinema, hall, film, date, start/end times, and price, delete sessions, and persist changes. Finally, loads current MovieSession entries into the table.
      */
     @FXML
     private void showSessionForm() {
@@ -947,16 +869,10 @@ public class DashboardResponsableController implements Initializable {
         this.colMovie.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<MovieSession, String>, ObservableValue<String>>() {
                     /**
-                     * Generates a `SimpleStringProperty` observable value from the `getValue()` of
-                     * the `MovieSession` object, which contains the film ID as a string.
+                     * Produces an observable string containing the session's film name.
                      *
-                     * @param moviesessionStringCellDataFeatures
-                     *                                           cell data features of a
-                     *                                           MovieSession object, which contains
-                     *                                           the
-                     *                                           value of the film's ID.
-                     *
-                     * @returns a `SimpleStringProperty` object representing the film's ID.
+                     * @param moviesessionStringCellDataFeatures cell data features for the MovieSession row
+                     * @return the film's name as a SimpleStringProperty
                      */
                     @Override
                     /**
@@ -975,16 +891,10 @@ public class DashboardResponsableController implements Initializable {
         this.colCinema.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<MovieSession, String>, ObservableValue<String>>() {
                     /**
-                     * Takes a `TableColumn.CellDataFeatures` object as input and returns an
-                     * `ObservableValue` of type `String`, which represents the cinema ID.
+                     * Provide the cinema name for a MovieSession for table-cell binding.
                      *
-                     * @param moviesessionStringCellDataFeatures
-                     *                                           cell data features of a table
-                     *                                           column containing strings that
-                     *                                           correspond to the cinema ID of the
-                     *                                           movie being displayed.
-                     *
-                     * @returns a `SimpleStringProperty` representing the cinema ID.
+                     * @param moviesessionStringCellDataFeatures cell data features for the table row containing the MovieSession
+                     * @return a SimpleStringProperty containing the session's cinema name
                      */
                     @Override
                     /**
@@ -1007,38 +917,10 @@ public class DashboardResponsableController implements Initializable {
         this.colPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
         this.colAction.setCellFactory(new Callback<TableColumn<MovieSession, Void>, TableCell<MovieSession, Void>>() {
             /**
-             * Generates a `TableCell` that displays a button for deleting a `MovieSession`
-             * object. When the button is clicked, the `MovieSessionService` service is
-             * invoked to delete the `MovieSession`, and the cell's graphic is updated to
-             * show null when there is no item or an icon button when an item exists.
+             * Creates a table cell that displays a "Delete" button for its MovieSession row and deletes that session when clicked.
              *
-             * @param param
-             *              TableColumn that the function is called on, allowing the
-             *              function
-             *              to modify its behavior based on the context of the table it is a
-             *              part of.
-             *
-             *              - `param`: A `TableColumn<MovieSession, Void>` object
-             *              representing
-             *              a table column.
-             *
-             * @returns a `TableCell` object that displays a "Delete" button for each item
-             *          in the table.
-             *
-             *          - `TableCell<MovieSession, Void>`: The type of the cell, indicating
-             *          that it is a table cell for objects of type `MovieSession` and void.
-             *          - `Button deleteButton`: A button with the text "Delete", which when
-             *          clicked will call the `setOnAction` method to delete the
-             *          corresponding `MovieSession` object. - `MovieSessionService
-             *          moviesessionService`: An instance of the `MovieSessionService`
-             *          class, which is used to delete the `MovieSession` object. -
-             *          `getTableView().getItems()`: A method that returns a list of all
-             *          `MovieSession` objects in the table. - `getIndex()`: A method that
-             *          returns the index of the `MovieSession` object in the list. -
-             *          `updateItem(Void item, boolean empty)`: A method that updates the
-             *          graphics of the cell based on whether the `item` is null or not. If
-             *          `item` is null, the graphics are set to null, otherwise they are set
-             *          to a new `HBox` containing the `deleteButton`.
+             * @param param the table column for which this cell factory is being created
+             * @return a TableCell<MovieSession, Void> whose graphic is a delete button that removes the corresponding MovieSession from the table and deletes it via MovieSessionService
              */
             @Override
             /**
@@ -1065,22 +947,9 @@ public class DashboardResponsableController implements Initializable {
 
 
                     /**
-                     * Updates an item's graphic based on whether it is empty or not. If the item is
-                     * empty, the function sets the graphic to null. Otherwise, it sets the graphic
-                     * to a new HBox containing a delete button.
+                     * Set the cell's graphic to an HBox containing the delete button when the cell is not empty; clear it when empty.
                      *
-                     * @param item
-                     *              Void item being updated, which is passed to the superclass's
-                     *              `updateItem()` method along with a boolean value indicating
-                     *              whether the item is empty or not.
-                     *
-                     *              `item`: A Void object representing an item to be updated. Its
-                     *              main
-                     *              property is whether it is empty or not.
-                     *
-                     * @param empty
-                     *              ether the item is empty or not, and it is used to determine the
-                     *              graphics displayed in the updateItem method.
+                     * @param empty whether the cell is empty; if `true` the graphic is cleared, otherwise a delete-button HBox is shown
                      */
                     @Override
                     protected void updateItem(final Void item, final boolean empty) {
@@ -1103,23 +972,13 @@ public class DashboardResponsableController implements Initializable {
         this.SessionTableView.setEditable(true);
         this.colPrice.setCellFactory(tc -> new TableCell<MovieSession, Double>() {
             /**
-             * Updates an item's price and emptiness status. If the item is empty or the
-             * price is null, the text is set to null. Otherwise, the text is set to the
-             * price plus "DT".
+             * Display the cell's price or clear the text when the cell is empty or the price is null.
              *
-             * @param prix
-             *              price of the item being updated, which is used to set the text
-             *              value of the component.
+             * If `empty` is true or `prix` is null, the cell text is cleared; otherwise the text is set
+             * to the price followed by " DT".
              *
-             *              - `prix` is a double value that represents the price of an item.
-             *              -
-             *              It can be either `null` or a non-null value indicating whether
-             *              the
-             *              item is empty or not.
-             *
-             * @param empty
-             *              state of the item, and when it is `true`, the `setText()` method
-             *              sets the text to `null`.
+             * @param prix  the price to display; may be null to indicate no value
+             * @param empty true when the cell should be treated as empty and its text cleared
              */
             @Override
             protected void updateItem(final Double prix, final boolean empty) {
@@ -1135,10 +994,9 @@ public class DashboardResponsableController implements Initializable {
 
 
             /**
-             * Initializes a `TextField` widget with the value of the currently selected
-             * item, sets an `OnAction` listener to commit the edit when the user types
-             * something, and sets the `Text` field to null to indicate that editing is in
-             * progress.
+             * Enables inline editing of the cell by showing a TextField initialized with the cell's current value and committing the edit when the user confirms input.
+             *
+             * If the cell is empty, editing is not started. Confirmed input is parsed as a `double` and committed via `commitEdit`.
              */
             @Override
             /**
@@ -1163,8 +1021,9 @@ public class DashboardResponsableController implements Initializable {
 
 
             /**
-             * In the provided Java code cancels the editing state of an item and sets the
-             * text and graphic properties accordingly.
+             * Cancels editing for this table cell and restores its displayed text and graphic.
+             *
+             * The cell's text is set to the current item value followed by " DT" and the graphic is cleared.
              */
             @Override
             /**
@@ -1180,23 +1039,9 @@ public class DashboardResponsableController implements Initializable {
 
 
             /**
-             * Updates a `MovieSession` object's `prix` field with a new value, and then
-             * calls the `update` method of the `MovieSessionService` class to save the
-             * changes. The function also updates the display value of the cell to show the
-             * new value.
+             * Commits an edited price into the current MovieSession, persists the change, and updates the cell display.
              *
-             * @param newValue
-             *                 updated price of the moviesession that is being edited, which
-             *                 is
-             *                 then set to the `prix` field of the corresponding
-             *                 `MovieSession`
-             *                 object and saved in the database through the `update()`
-             *                 method of
-             *                 the `MovieSessionService`.
-             *
-             *                 - `Double`: `newValue` is a `Double` value representing the
-             *                 new
-             *                 price for the moviesession.
+             * @param newValue the price to set on the MovieSession (in DT)
              */
             @Override
             /**
@@ -1218,23 +1063,12 @@ public class DashboardResponsableController implements Initializable {
 );
         this.colEndTime.setCellFactory(tc -> new TableCell<MovieSession, Time>() {
             /**
-             * Updates an item's text based on whether it is empty or contains a valid value
-             * from the `Time` class.
+             * Update the cell's displayed text to the string form of the Time value or clear it.
              *
-             * @param HF
-             *              time value that is to be updated in the text field, and its
-             *              value
-             *              determines whether the text field's text is set to null or the
-             *              string representation of the time value.
+             * If the cell is empty or the provided Time is null, the cell text is cleared.
              *
-             *              - `HF` is a `Time` object representing a specific moment in
-             *              time.
-             *              - It can be either `null` or a non-`null` value indicating the
-             *              presence of an item at that time.
-             *
-             * @param empty
-             *              state of the item being updated, with `true` indicating an empty
-             *              state and `false` indicating otherwise.
+             * @param HF    the Time value to display; may be null to indicate no value
+             * @param empty true if the cell is empty and should be cleared
              */
             @Override
             protected void updateItem(final Time HF, final boolean empty) {
@@ -1250,9 +1084,10 @@ public class DashboardResponsableController implements Initializable {
 
 
             /**
-             * Initializes a `TextField` component with the value of the current item, sets
-             * an `OnAction` listener to commit the edit when the user types something, and
-             * replaces the text field with the one created.
+             * Enters edit mode for the table cell and replaces its content with an editable TextField.
+             *
+             * When editing is confirmed (Enter), commits the cell value as a java.sql.Time parsed from the
+             * TextField's text. If the cell is empty, the edit is aborted.
              */
             @Override
             /**
@@ -1277,9 +1112,9 @@ public class DashboardResponsableController implements Initializable {
 
 
             /**
-             * In Java overrides the parent method and performs the following actions:
-             * cancels editing, sets the text to the original value, and sets the graphic to
-             * null.
+             * Cancel the current edit and restore the cell's display.
+             *
+             * Restores the cell's text to the item's original value and removes any graphic used for editing.
              */
             @Override
             /**
@@ -1295,19 +1130,11 @@ public class DashboardResponsableController implements Initializable {
 
 
             /**
-             * Updates a moviesession's high fidelity value based on a new value provided,
-             * and saves the changes to the moviesession in the database using the
-             * `MovieSessionService`.
+             * Commits an edited end time for the MovieSession represented by this table row and persists the change.
              *
-             * @param newValue
-             *                 updated value of the `HF` field for the corresponding
-             *                 `MovieSession` object in the `getTableView().getItems()`
-             *                 collection, which is then updated in the database through the
-             *                 `MovieSessionService`.
+             * Updates the MovieSession corresponding to this cell's row with the provided end time, persists the updated session via MovieSessionService, and refreshes the cell display.
              *
-             *                 - `Time newValue`: Represents a time value that represents
-             *                 the
-             *                 updated moviesession duration.
+             * @param newValue the new end time to set on the MovieSession
              */
             @Override
             /**
@@ -1329,23 +1156,10 @@ public class DashboardResponsableController implements Initializable {
 );
         this.colDepartTime.setCellFactory(tc -> new TableCell<MovieSession, Time>() {
             /**
-             * Updates an item's text based on whether it is empty or contains a valid value
-             * from the `Time` object passed as a parameter.
+             * Set the cell's text to the Time's string representation or clear the text when the cell is empty.
              *
-             * @param HD
-             *              time value to be updated, which is passed through to the
-             *              superclass's `updateItem()` method and then processed further in
-             *              the current implementation.
-             *
-             *              - If `empty` is true or `HD` is null, then `setText` method sets
-             *              the text to null. - Otherwise, `setText` method sets the text to
-             *              a
-             *              string representation of `HD`.
-             *
-             * @param empty
-             *              whether the time is empty or not, and determines whether the
-             *              `setText()` method should be called with a null value or the
-             *              string representation of the time.
+             * @param HD    the Time value to display; treated as absent if `null`
+             * @param empty true when the cell is empty, in which case the cell text is cleared
              */
             @Override
             protected void updateItem(final Time HD, final boolean empty) {
@@ -1361,8 +1175,10 @@ public class DashboardResponsableController implements Initializable {
 
 
             /**
-             * 1) calls superclass `startEdit`, 2) checks if the object is empty, and 3)
-             * creates a new `TextField` with the object's value as its text.
+             * Enters edit mode for the table cell and replaces its content with an editable TextField.
+             *
+             * When editing is confirmed (Enter), commits the cell value as a java.sql.Time parsed from the
+             * TextField's text. If the cell is empty, the edit is aborted.
              */
             @Override
             /**
@@ -1387,10 +1203,9 @@ public class DashboardResponsableController implements Initializable {
 
 
             /**
-             * In Java overrides the parent method and performs two actions: first, it calls
-             * the superclass's `cancelEdit` method; second, it sets the text field to the
-             * original value of the item and removes any graphic associated with the
-             * editable component.
+             * Cancel the current edit and restore the cell's display.
+             *
+             * Restores the cell's text to the item's original value and removes any graphic used for editing.
              */
             @Override
             /**
@@ -1406,22 +1221,13 @@ public class DashboardResponsableController implements Initializable {
 
 
             /**
-             * Updates the `HD` field of a `MovieSession` object in a table view, and then
-             * calls the `update` method of the `MovieSessionService` class to persist the
-             * changes.
+             * Set the MovieSession's start time to the edited value and persist the change.
              *
-             * @param newValue
-             *                 new time value that will be assigned to the `HD` field of the
-             *                 `MovieSession` object referenced by the
-             *                 `getTableView().getItems().get(getIndex());` method call.
+             * This commits an edited `Time` value for the table cell by assigning it to the
+             * corresponding MovieSession's start time and calling MovieSessionService.update(...)
+             * to save the modification. The cell's displayed text is updated to reflect the new value.
              *
-             *                 - It represents a time value that has been edited by the
-             *                 user. -
-             *                 It is an instance of the `Time` class in Java, which
-             *                 represents
-             *                 time values in milliseconds since the Unix epoch (January 1,
-             *                 1970,
-             *                 00:00:00 UTC).
+             * @param newValue the new start time to assign to the MovieSession (java.sql.Time)
              */
             @Override
             /**
@@ -1443,27 +1249,13 @@ public class DashboardResponsableController implements Initializable {
 );
         this.colDate.setCellFactory(tc -> new TableCell<MovieSession, Date>() {
             /**
-             * Updates an item's text based on whether it is empty or not, and adds a mouse
-             * click event listener that displays a date picker when clicked twice, allowing
-             * the user to select a date which is then committed as the item's value.
+             * Update the table cell's displayed text and allow committing a new Date by double-clicking to open a DatePicker.
              *
-             * @param date
-             *              date to be updated or retrieved, which is passed to the super
-             *              method `updateItem()` and used to set the text value of the
-             *              item.
+             * When the cell is empty or the provided `date` is null, the cell text is cleared. On a double-click the user can pick
+             * a date in a modal DatePicker; a chosen date is converted to a `java.sql.Date` and committed as the cell's value.
              *
-             *              - `date` can be either `null` or a `Date` object representing a
-             *              specific date and time. - If `empty` is `true`, then `date` will
-             *              be `null`. - The `toString()` method is called on `date` to
-             *              obtain
-             *              its string representation, which is assigned to the `setText()`
-             *              method's argument.
-             *
-             * @param empty
-             *              presence or absence of a value for the item being updated, and
-             *              it determines whether the `setText()` method is called with a
-             *              null
-             *              value or the date string representation when the item is empty.
+             * @param date  the current Date value for the cell; may be null
+             * @param empty true if the cell is considered empty and its display should be cleared
              */
             @Override
             protected void updateItem(final Date date, final boolean empty) {
@@ -1504,18 +1296,9 @@ public class DashboardResponsableController implements Initializable {
 
 
             /**
-             * Updates a `MovieSession` object's `Date` field by calling the superclass's
-             * `commitEdit` method, then setting the updated value to the `MovieSession`
-             * object and saving it to the database using the `MovieSessionService`.
+             * Commits an edited session date into the underlying MovieSession and persists the change.
              *
-             * @param newValue
-             *                 new date to be updated for the corresponding `MovieSession`
-             *                 object
-             *                 in the `getTableView()` method.
-             *
-             *                 - `Date`: represents the date to be updated for the
-             *                 corresponding
-             *                 moviesession in the table view.
+             * @param newValue the new session date to set on the MovieSession
              */
             @Override
             /**
@@ -1536,6 +1319,16 @@ public class DashboardResponsableController implements Initializable {
         }
 );
         this.colCinema.setCellFactory(tc -> new TableCell<MovieSession, String>() {
+            /**
+             * Renders the cell's cinema name and enables inline editing of the associated MovieSession's cinema.
+             *
+             * When the cell is double-clicked it is replaced with a ComboBox containing all accepted cinema names;
+             * selecting a different cinema commits the new name into the table cell and triggers an update call
+             * to persist changes on the underlying MovieSession via MovieSessionService.
+             *
+             * @param cinemaName the cinema name to display in this cell (may be null)
+             * @param empty      true if this cell does not contain data and should be cleared
+             */
             @Override
             protected void updateItem(final String cinemaName, final boolean empty) {
                 super.updateItem(cinemaName, empty);
@@ -1583,26 +1376,13 @@ public class DashboardResponsableController implements Initializable {
 );
         this.colMovieRoom.setCellFactory(tc -> new TableCell<MovieSession, String>() {
             /**
-             * Updates the value of a cell in a table view based on user input. It creates a
-             * ComboBox to display associated cinemahall names and selects the corresponding
-             * cinemahall name upon second click.
+             * Displays the current cinema hall name in the table cell and, on double-click,
+             * replaces the cell with a ComboBox of cinema halls for the same cinema so the user
+             * can select a different hall; the chosen hall is committed to the cell and
+             * persisted to the MovieSessionService.
              *
-             * @param cinemahallName
-             *                       name of the cinemahall to be updated, which is used to
-             *                       set the
-             *                       text value of the cell or to select the corresponding
-             *                       cinemahall
-             *                       from a combo box when the user double-clicks on the
-             *                       cell.
-             *
-             * @param empty
-             *                       absence of a cinemahall name or a null reference, which
-             *                       triggers
-             *                       the corresponding actions in the function, such as
-             *                       setting the
-             *                       text to null or displaying the ComboBox with associated
-             *                       cinemahall
-             *                       names.
+             * @param cinemahallName the current string value of this cell (the cinema hall name)
+             * @param empty          true if this cell does not contain data and should be treated as empty
              */
             @Override
             protected void updateItem(final String cinemahallName, final boolean empty) {
@@ -1662,16 +1442,10 @@ public class DashboardResponsableController implements Initializable {
 
 
             /**
-             * Retrieves a list of `CinemaHall` objects associated with a given cinema ID
-             * using the `CinemaHallService`.
+             * Retrieve the list of cinema halls belonging to the specified cinema.
              *
-             * @param idCinema
-             *                 ID of the cinema for which the associated cinemahalls are to
-             *                 be
-             *                 loaded.
-             *
-             * @returns a list of `CinemaHall` objects associated with the specified cinema
-             *          id.
+             * @param idCinema the ID of the cinema whose halls should be retrieved
+             * @return a list of CinemaHall objects belonging to the specified cinema
              */
             private List<CinemaHall> loadAssociatedCinemaHalls(final Long idCinema) {
                 final CinemaHallService cinemahallService = new CinemaHallService();
@@ -1682,25 +1456,12 @@ public class DashboardResponsableController implements Initializable {
 );
         this.colMovie.setCellFactory(tc -> new TableCell<MovieSession, String>() {
             /**
-             * Updates the item value in a TableView based on user input, and displays a
-             * ComboBox containing film names associated with the selected cinema. When the
-             * user double-clicks on the cell, the ComboBox is displayed, and the user can
-             * select a film name to update the item value and display the corresponding
-             * film name in the TableView.
+             * Presents a ComboBox of films (for the cell's session cinema) on double-click and commits
+             * the selected film to the MovieSession and persistent storage.
              *
-             * @param filmName
-             *                 name of the film to be updated in the cinema's database,
-             *                 which is
-             *                 used to set the value of the `setText()` method and trigger
-             *                 the
-             *                 event handler for the ComboBox.
-             *
-             * @param empty
-             *                 value of the `filmName` field when it is left blank or null,
-             *                 and
-             *                 it determines whether to display a message or not when the
-             *                 user
-             *                 clicks twice on the cell.
+             * <p>When the cell is double-clicked, a ComboBox populated with films associated with the
+             * MovieSession's cinema is shown. Selecting a film commits the cell edit, updates the
+             * MovieSession's film property, and persists the change via MovieSessionService.update(...).
              */
             @Override
             protected void updateItem(final String filmName, final boolean empty) {
@@ -1758,15 +1519,10 @@ public class DashboardResponsableController implements Initializable {
 
 
             /**
-             * Retrieves a list of films associated with a given cinema ID using the
-             * `readMoviesForCinema` method provided by the `FilmCinemaService`.
+             * Load films associated with the specified cinema.
              *
-             * @param idCinema
-             *                 unique identifier of the cinema for which associated films
-             *                 are to
-             *                 be loaded.
-             *
-             * @returns a list of movies associated with the given cinema ID.
+             * @param idCinema the cinema's identifier
+             * @return a list of Film objects linked to the specified cinema
              */
             private List<Film> loadAssociatedFilms(final Long idCinema) {
                 FilmCinemaService filmCinemaService = new FilmCinemaService();
@@ -1780,10 +1536,12 @@ public class DashboardResponsableController implements Initializable {
 
 
     /**
-     * Allows users to input cinema, film and room information, as well as a start
-     * and end time, and price. It then creates a new moviesession in the
-     * MovieSessionService with the relevant details.
-     */
+         * Create and persist a new MovieSession from the controller's form inputs and refresh the session view.
+         *
+         * Validates required fields, the start/end time formats (HH:MM:SS), and that price is a positive number;
+         * shows an alert for any validation failure. On success, constructs a MovieSession, saves it via
+         * MovieSessionService, reloads the session list, and displays the session form.
+         */
     @FXML
     void addMovieSession() {
         final String selectedCinemaName = this.comboCinema.getValue();
@@ -1844,22 +1602,9 @@ public class DashboardResponsableController implements Initializable {
 
 
     /**
-     * Retrieves a list of `MovieSession` objects from an external service, converts
-     * it to an observable list, and sets it as the items of a view.
+     * Loads movie sessions from the service and populates the session table view.
      *
-     * @returns a list of MovieSession objects.
-     *          <p>
-     *          1/ List<MovieSession>: This is the type of the returned output,
-     *          indicating that it is a list of `MovieSession` objects. 2/
-     *          MovieSessionService: The class used to read the moviesession data,
-     *          which is likely a database or API call. 3/ read(): The method called
-     *          on the `MovieSessionService` instance to retrieve the moviesession
-     *          data. 4/ List<MovieSession>: The list of `MovieSession` objects
-     *          returned by the `read()` method. 5/ ObservableList<MovieSession>: An
-     *          observable list of `MovieSession` objects, which means that the list
-     *          can be modified through operations such as adding, removing, or
-     *          modifying elements.
-     *          </p>
+     * @return the list of loaded MovieSession objects
      */
     private List<MovieSession> loadMovieSessions() {
         final MovieSessionService moviesessionService = new MovieSessionService();
@@ -1873,18 +1618,12 @@ public class DashboardResponsableController implements Initializable {
 
 
     /**
-     * Verifies that all fields are filled, and then creates a new room in the
-     * cinema's database with the provided number of places and name, displaying an
-     * alert message after successful creation.
-     *
-     * @param event
-     *              event of a button click and triggers the execution of the code
-     *              within the function.
-     *              <p>
-     *              - `event` is an `ActionEvent`, indicating that the method was
-     *              called as a result of user action.
-     *              </p>
-     */
+         * Create a new cinema hall for the currently selected cinema after validating input.
+         *
+         * Validates that the hall name and number of places are provided and that the
+         * number of places is a positive integer. On success, persists the new
+         * CinemaHall, shows an informational alert, and refreshes the displayed hall list.
+         */
     @FXML
     void AjouterCinemaHall(final ActionEvent event) {
         // Vérifier que tous les champs sont remplis
@@ -1919,8 +1658,11 @@ public class DashboardResponsableController implements Initializable {
 
 
     /**
-     * Reads cinemahall data from a service, filters them based on cinema Id, and
-     * displays the available rooms in a list view.
+     * Load cinema halls for the controller's selected cinema and display them in the room table view.
+     *
+     * Retrieves cinema halls from the service, filters them to entries whose cinema id equals this controller's
+     * {@code cinemaId}, shows an informational alert when no matching halls are found, and otherwise sets the
+     * filtered list as the items of {@code RoomTableView}.
      */
     private void loadcinemahalls() {
         final CinemaHallService cinemahallService = new CinemaHallService();
@@ -1940,12 +1682,7 @@ public class DashboardResponsableController implements Initializable {
 
 
     /**
-     * Makes the `facebookAnchor` component invisible when the `Facebook` button is
-     * clicked.
-     *
-     * @param event
-     *              occurrence of a button click event that triggered the function
-     *              execution.
+     * Hides the facebookAnchor UI component.
      */
     @FXML
     void closeAnchor(final ActionEvent event) {
@@ -1954,17 +1691,9 @@ public class DashboardResponsableController implements Initializable {
 
 
     /**
-     * Posts a status update to Facebook using an access token and message from a
-     * text area.
+     * Publishes the contents of txtareaStatut to the current user's Facebook feed using the access token from the FACEBOOK_API_KEY environment variable.
      *
-     * @param event
-     *              action that triggered the function execution, providing the
-     *              necessary context for the code to perform its intended task.
-     *              <p>
-     *              - `txtareaStatut`: This is a text area where the status message
-     *              to
-     *              be published is entered by the user.
-     *              </p>
+     * Sends a form-encoded POST to the Facebook Graph API /me/feed endpoint with the `message` and `access_token` parameters.
      */
     @FXML
     void PublierStatut(final ActionEvent event) {
@@ -1991,17 +1720,10 @@ public class DashboardResponsableController implements Initializable {
 
 
     /**
-     * Loads an FXML file, creates a new stage and replaces the current stage with
-     * it, displaying the contents of the FXML file on the screen.
+     * Opens the film management interface in a new window and closes the current window.
      *
-     * @param event
-     *              event that triggered the function, specifically the button click
-     *              event that initiates the display of the film management
-     *              interface.
-     *              <p>
-     *              - `event` represents an ActionEvent object, which carries
-     *              information about the action that triggered the function.
-     *              </p>
+     * @param event the ActionEvent that triggered navigation to the film management interface
+     * @throws IOException if the FXML resource for the film interface cannot be loaded
      */
     @FXML
     void AfficherFilmResponsable(final ActionEvent event) throws IOException {
@@ -2018,16 +1740,8 @@ public class DashboardResponsableController implements Initializable {
 
 
     /**
-     * Makes the `addRoomForm`, `backButton`, `RoomTableView`, and `cinemaFormPane`
-     * invisible, while making the `sessionButton` visible, when a user clicks the
-     * back button.
-     *
-     * @param event
-     *              mouse event that triggered the execution of the `back` method.
-     *              <p>
-     *              Event type: `MouseEvent` Target element: `backButton`
-     *              </p>
-     */
+         * Returns the UI to the cinema list and form view by hiding room-management controls.
+         */
     @FXML
     void back(final MouseEvent event) {
         this.addRoomForm.setVisible(false);
@@ -2040,19 +1754,9 @@ public class DashboardResponsableController implements Initializable {
 
 
     /**
-     * Makes the `sessionFormPane`, `SessionTableView`, and `backSession` components
-     * visible, while hiding `cinemaFormPane`, `cinemaListPane`, and
-     * `sessionButton`. It also calls `loadMovieSessions()` and `showSessionForm()`
-     * to display the session form and content.
+     * Switches the UI to the session-management view by showing the session pane, session table, and back button while hiding the cinema form, cinema list, and session button.
      *
-     * @param event
-     *              occurrence of an action, triggering the execution of the
-     *              `showSessions()` method.
-     *              <p>
-     *              - `event` is an `ActionEvent` object representing the user
-     *              action
-     *              that triggered the function.
-     *              </p>
+     * Calls loadMovieSessions() and showSessionForm() to populate and display session data.
      */
     @FXML
     void showSessions(final ActionEvent event) {
@@ -2068,20 +1772,9 @@ public class DashboardResponsableController implements Initializable {
 
 
     /**
-     * Sets the visibility of various components in a JavaFX application, including
-     * the `cinemaFormPane`, `cinemaListPane`, `sessionFormPane`, and
-     * `SessionTableView`. It makes these components visible or invisible based on a
-     * user input event.
+     * Return the UI to the cinema list view by showing cinema-related panes and hiding session-related panes.
      *
-     * @param event
-     *              mouse event that triggered the `back2()` method, providing
-     *              information about the location and type of the event.
-     *              <p>
-     *              - Type: `MouseEvent` - Target: `cinemaFormPane` or
-     *              `sessionButton`
-     *              (depending on the location of the click) - Code: The button that
-     *              was clicked (either `cinemaFormPane` or `sessionButton`)
-     *              </p>
+     * @param event the mouse event that triggered the navigation back to the cinema list view
      */
     @FXML
     void back2(final MouseEvent event) {
@@ -2094,19 +1787,12 @@ public class DashboardResponsableController implements Initializable {
 
 
     /**
-     * Allows the user to select an image file, then copies it to a specified
-     * directory and sets the selected image as the `image` field.
-     *
-     * @param event
-     *              mouse event that triggered the `importImage()` method and
-     *              provides
-     *              the location of the selected file through its `FileChooser`
-     *              object.
-     *              <p>
-     *              - `event` is a `MouseEvent` object representing a user's
-     *              interaction with the application.
-     *              </p>
-     */
+         * Opens a file chooser to select an image, uploads the selected file to Cloudinary,
+         * stores the resulting URL in `cloudinaryImageUrl`, and displays the uploaded image
+         * in the controller's `image` ImageView.
+         *
+         * @param event the MouseEvent that triggered this handler
+         */
     @FXML
     void importImage(final MouseEvent event) {
         final FileChooser fileChooser = new FileChooser();
@@ -2135,4 +1821,3 @@ public class DashboardResponsableController implements Initializable {
     }
 
 }
-

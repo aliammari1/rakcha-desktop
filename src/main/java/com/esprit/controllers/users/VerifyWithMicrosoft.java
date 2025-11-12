@@ -42,9 +42,11 @@ public class VerifyWithMicrosoft {
     private Button sendButton;
 
     /**
-     * @throws IOException
-     * @throws ExecutionException
-     * @throws InterruptedException
+     * Initializes the controller by obtaining a Microsoft sign-in URL and opening it in the system default browser.
+     *
+     * @throws IOException if the system browser cannot be launched or the URL cannot be accessed
+     * @throws ExecutionException if obtaining the sign-in URL fails with an execution error
+     * @throws InterruptedException if the thread is interrupted while obtaining the sign-in URL
      */
     @FXML
     void initialize() throws IOException, ExecutionException, InterruptedException {
@@ -54,7 +56,11 @@ public class VerifyWithMicrosoft {
 
 
     /**
-     * @param event
+     * Verify the authentication code entered and navigate to the user's profile on success.
+     *
+     * Attempts to validate the code from the authTextField; if validation succeeds, replaces the current window's scene with the Profile view. If validation fails, the method logs the failure and leaves the UI unchanged.
+     *
+     * @param event the UI action that triggered verification
      */
     @FXML
     void verifyAuthCode(final ActionEvent event) {
@@ -72,4 +78,3 @@ public class VerifyWithMicrosoft {
     }
 
 }
-

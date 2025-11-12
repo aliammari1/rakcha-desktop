@@ -49,7 +49,7 @@ public abstract class User {
     private String photoDeProfil;
 
     /**
-     * Constructor without id for creating new user instances.
+     * Create a new User instance without an id.
      *
      * @param firstName     the user's first name
      * @param lastName      the user's last name
@@ -76,4 +76,3 @@ public abstract class User {
     }
 
 }
-

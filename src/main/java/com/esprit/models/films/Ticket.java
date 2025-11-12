@@ -44,16 +44,12 @@ public class Ticket {
     private List<Seat> reservedSeats = new ArrayList<>();
 
     /**
-     * Constructor without id for creating new ticket instances.
+     * Create a ticket for a client and movie session with the specified number of seats and price, leaving the id unset.
      *
-     * @param numberOfSeats
-     *                      The number of seats for the ticket.
-     * @param client
-     *                      The client associated with the ticket.
-     * @param movieSession
-     *                      The movie session associated with the ticket.
-     * @param price
-     *                      The price of the ticket.
+     * @param numberOfSeats the number of seats the ticket covers
+     * @param client        the client associated with the ticket
+     * @param movieSession  the movie session associated with the ticket
+     * @param price         the price of the ticket
      */
     public Ticket(final int numberOfSeats, final Client client, final MovieSession movieSession, final float price) {
         this.numberOfSeats = numberOfSeats;
@@ -64,4 +60,3 @@ public class Ticket {
     }
 
 }
-

@@ -119,15 +119,9 @@ public class CommentProductController implements Initializable {
 
 
     /**
-     * Initializes the controller after its root element has been completely
-     * processed.
-     * This method calls loadAcceptedComment() to populate the UI with existing
-     * comments.
+     * Initialize the controller and populate the UI with accepted comments.
      *
-     * @param location  The location used to resolve relative paths for the root
-     *                  object, or null if the location is not known
-     * @param resources The resources used to localize the root object, or null if
-     *                  the root object was not localized
+     * Loads accepted comments and adds a card for each to the CommentFlowPane.
      */
     @Override
     /**
@@ -140,13 +134,10 @@ public class CommentProductController implements Initializable {
 
 
     /**
-     * Loads all accepted comments from the database and displays them in the UI.
-     * 
-     * <p>
-     * This method retrieves comments from the CommentService, creates a card for
-     * each comment using the createcommentcard method, and adds these cards to the
-     * CommentFlowPane.
-     * </p>
+     * Load and display accepted comments in the CommentFlowPane.
+     *
+     * Retrieves comments from CommentService, creates a UI card for each comment via
+     * createcommentcard(Comment), and adds those cards to the CommentFlowPane.
      */
     private void loadAcceptedComment() {
         // Récupérer toutes les produits depuis le service
@@ -207,14 +198,9 @@ public class CommentProductController implements Initializable {
 
 
     /**
-     * Navigates to the cinema client interface.
-     * 
-     * <p>
-     * Loads the CommentProduct.fxml file, creates a new scene and stage,
-     * and replaces the current stage with the new one.
-     * </p>
+     * Open the cinema client view in a new window and close the current window.
      *
-     * @param event The action event that triggered this method
+     * @param event the ActionEvent that triggered the navigation
      */
     @FXML
     void cinemaclient(final ActionEvent event) {
@@ -280,14 +266,9 @@ public class CommentProductController implements Initializable {
 
 
     /**
-     * Navigates to the product client interface.
-     * 
-     * <p>
-     * Loads the AfficherProductClient.fxml file, creates a new scene and stage,
-     * and replaces the current stage with the new one.
-     * </p>
+     * Opens the product client view in a new window and closes the current window.
      *
-     * @param event The action event that triggered this method
+     * @param event the action event that triggered the navigation
      */
     @FXML
     void produitClient(final ActionEvent event) {
@@ -317,9 +298,9 @@ public class CommentProductController implements Initializable {
 
 
     /**
-     * Placeholder for client profile functionality.
-     * 
-     * @param event The action event that triggered this method
+     * No-op handler for client profile action.
+     *
+     * Currently a placeholder and performs no action.
      */
     @FXML
     void profilclient(final ActionEvent event) {
@@ -398,4 +379,3 @@ public class CommentProductController implements Initializable {
     }
 
 }
-

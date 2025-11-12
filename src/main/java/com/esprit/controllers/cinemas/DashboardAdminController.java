@@ -75,17 +75,10 @@ public class DashboardAdminController {
     private AnchorPane filterAnchor;
 
     /**
-     * Configures and displays the cinema table with all necessary columns and
-     * action buttons.
-     * 
-     * <p>
-     * This method sets up a table to display cinemas, including their name,
-     * address, and
-     * responsible person. It configures action buttons for accepting or refusing
-     * cinemas, and a button to show movies. The method also handles the visibility
-     * of action buttons based on cinema status.
-     * </p>
-     * 
+     * Configure the cinema TableView for the admin dashboard, including columns, logo rendering, per-row action controls, and then populates the table.
+     *
+     * <p>Sets up cell value factories, a logo cell renderer, and an action cell that exposes Accept/Refuse or Show Movies controls depending on cinema status.</p>
+     *
      * @since 1.0
      */
     @FXML
@@ -157,6 +150,16 @@ public class DashboardAdminController {
             }
 
 
+            /**
+             * Update the cell's graphic to display action buttons based on the associated cinema's status.
+             *
+             * If the cell is empty the graphic is cleared. Otherwise, the cell's row's Cinema is inspected:
+             * - when the cinema's status equals "Accepted", the "Show Movies" button is shown;
+             * - otherwise the "Accept" and "Refuse" buttons are shown.
+             *
+             * @param item  the cell item (unused for action cells)
+             * @param empty true if the cell does not contain data and should be cleared
+             */
             @Override
             protected void updateItem(final Void item, final boolean empty) {
                 super.updateItem(item, empty);
@@ -283,9 +286,10 @@ public class DashboardAdminController {
 
 
     /**
-     * Creates an observable list of cinemas by reading them from a service and
-     * setting it as the items of a table view.
-     * 
+     * Loads cinemas and populates the table view.
+     *
+     * Reads cinemas from CinemaService and sets them as an ObservableList on listCinema.
+     *
      * @since 1.0
      */
     private void loadCinemas() {
@@ -297,10 +301,9 @@ public class DashboardAdminController {
 
 
     /**
-     * Retrieves a list of cinemas through the use of the CinemaService.
+     * Retrieve all cinemas using the default page request.
      *
-     * @return a list of Cinema objects retrieved from the Cinema Service
-     * @since 1.0
+     * @return a list of Cinema objects retrieved from the data source
      */
     private List<Cinema> getAllCinemas() {
         final CinemaService cinemaService = new CinemaService();
@@ -309,15 +312,12 @@ public class DashboardAdminController {
 
 
     /**
-     * Initializes the JavaFX controller and sets up UI components. This method is
-     * called automatically by JavaFX after loading the FXML file.
-     * 
-     * <p>
-     * This method sets up the search functionality and loads initial cinema data.
-     * </p>
-     * 
-     * @since 1.0
-     */
+         * Perform controller initialization: ensure the cinema list is visible, attach the search listener, load cinemas, and configure the table.
+         *
+         * Initializes UI state after FXML load by making the cinemasList visible (if present), registering a listener on the search field to filter cinemas as text changes, loading cinema data, and setting up the table view.
+         *
+         * @since 1.0
+         */
     @FXML
     public void initialize() {
         if (cinemasList != null) {
@@ -337,13 +337,12 @@ public class DashboardAdminController {
 
 
     /**
-     * Filters a list of cinemas based on a search query, updating the displayed
-     * list in a TableView.
+     * Filter the cinemas displayed in the table by name.
      *
-     * @param searchText
-     *                   search term used to filter the list of cinemas displayed on
-     *                   the
-     *                   screen.
+     * If `searchText` is empty the full cinema list is restored; otherwise the table
+     * is updated to show only cinemas whose name contains `searchText`, case-insensitively.
+     *
+     * @param searchText text to match against cinema names (case-insensitive); an empty string restores the full list
      */
     private void filterCinemas(final String searchText) {
         // Vérifier si le champ de recherche n'est pas vide
@@ -370,18 +369,11 @@ public class DashboardAdminController {
 
 
     /**
-     * Updates the opacity of a container and makes a filter anchor visible, then
-     * clears the lists of check boxes for addresses and statuses, retrieves unique
-     * addresses and statuses from the database, creates VBoxes for each address and
-     * status, adds them to the filter anchor, and sets the filter anchor's
-     * visibility to true.
+     * Reveals the filter panel and populates it with checkboxes for available cinema addresses and statuses.
      *
-     * @param event
-     *              ActionEvent that triggered the filtrer method, providing the
-     *              necessary information to update the UI components accordingly.
-     *              <p>
-     *              - `event`: an ActionEvent object representing the user's action
-     *              that triggered the function execution.
+     * The method dims the main cinema list, makes the filter container visible, clears any previous checkbox state,
+     * retrieves unique addresses and statuses, builds labeled VBox sections with corresponding CheckBox controls,
+     * adds those sections to the filter container, and shows the container.
      */
     @FXML
     void filtrer(final ActionEvent event) {
@@ -427,16 +419,9 @@ public class DashboardAdminController {
 
 
     /**
-     * Retrieves a list of cinema addresses from a database and extracts unique
-     * addresses from the list of cinemas using Stream API.
+     * Retrieves unique addresses of all cinemas.
      *
-     * @returns a list of unique cinema addresses obtained from the database.
-     *          <p>
-     *          - The output is a list of strings representing the unique addresses
-     *          of cinemas. - The list is generated by streaming the `cinemas`
-     *          collection using `map()` and `distinct()` methods to extract the
-     *          addresses. - The `collect()` method is used to collect the distinct
-     *          addresses into a list.
+     * @return a list of unique cinema addresses (each address appears only once)
      */
     public List<String> getCinemaAddresses() {
         // Récupérer tous les cinémas depuis la base de données
@@ -447,13 +432,9 @@ public class DashboardAdminController {
 
 
     /**
-     * Creates a list of predefined cinema statuses, including "Pending" and
-     * "Accepted", and returns it.
+     * Provides predefined cinema statuses used by the dashboard.
      *
-     * @returns a list of predefined cinema statuses: "Pending" and "Accepted".
-     *          <p>
-     *          - The list contains 2 pre-defined statuses: "Pending" and
-     *          "Accepted". - Each status is a unique string in the list.
+     * @return a list containing the statuses "Pending" and "Accepted".
      */
     public List<String> getCinemaStatuses() {
         // Créer une liste de statuts pré-définis
@@ -465,20 +446,7 @@ public class DashboardAdminController {
 
 
     /**
-     * Filters a list of cinemas based on selected addresses and/or statuses, and
-     * updates the TableView with the filtered list.
-     *
-     * @param event
-     *              occurrence of an action event, such as a button press or key
-     *              stroke, that triggers the execution of the `filtrercinema`
-     *              method.
-     *              <p>
-     *              - `Event`: This represents an event object that triggered the
-     *              function to be executed. - `ActionEvent`: This is a specific
-     *              type
-     *              of event object that indicates that a button or other control
-     *              was
-     *              pressed.
+     * Filters cinemas by the currently selected addresses and statuses and updates the cinema table with the filtered list.
      */
     @FXML
     void filtrercinema(final ActionEvent event) {
@@ -500,19 +468,9 @@ public class DashboardAdminController {
 
 
     /**
-     * Streamlines the selected addresses from an `AnchorPane` of filtering, applies
-     * a filter to only include selected checkboxes, and collects the results into a
-     * list of strings.
+     * Collects the texts of address checkboxes that are currently selected.
      *
-     * @returns a list of selected addresses represented as strings.
-     *          <p>
-     *          1/ The output is a list of strings (`List<String>`), indicating that
-     *          each selected address is represented as a string. 2/ The list is
-     *          generated using the `stream()`, `filter()`, and `map()` methods of
-     *          the `Optional` class, which suggests that the function returns a
-     *          stream of filtered and transformed elements. 3/ The `collect()`
-     *          method is used to collect the filtered and transformed elements into
-     *          a list, which is then returned as the output.
+     * @return a List<String> containing the text of each selected address checkbox; empty if none are selected.
      */
     private List<String> getSelectedAddresses() {
         // Récupérer les adresses sélectionnées dans l'AnchorPane de filtrage
@@ -522,15 +480,9 @@ public class DashboardAdminController {
 
 
     /**
-     * Retrieves the selected statuses from an `AnchorPane` of filtering by
-     * streaming the checked checkboxes, filtering the non-checked ones, and
-     * collecting the selected statuses as a list.
+     * Collects the texts of status checkboxes that are currently selected.
      *
-     * @returns a list of selected statuses represented as strings.
-     *          <p>
-     *          - The list contains only selected statuses as determined by the
-     *          `isSelected` method of the `CheckBox` class. - Each element in the
-     *          list is a string representing the text of the selected status.
+     * @return a list of selected status texts; each element is the checkbox label for a selected status.
      */
     private List<String> getSelectedStatuses() {
         // Récupérer les statuts sélectionnés dans l'AnchorPane de filtrage
@@ -540,16 +492,10 @@ public class DashboardAdminController {
 
 
     /**
-     * Loads an fxml file and displays a stage with a scene, changing the current
-     * stage to the new one.
+     * Open the Event administration UI in a new window and close the current stage.
      *
-     * @param event
-     *              event that triggered the function and provides access to its
-     *              related data, allowing the code inside the function to interact
-     *              with it.
-     *              <p>
-     *              - `event`: An `ActionEvent` object representing an action
-     *              performed on the application.
+     * @param event the ActionEvent whose source window will be replaced by the new stage
+     * @throws IOException if the FXML resource cannot be loaded
      */
     @FXML
     void afficherEventsAdmin(final ActionEvent event) throws IOException {
@@ -566,16 +512,12 @@ public class DashboardAdminController {
 
 
     /**
-     * Loads an FXML file, creates a stage and window for film management, and
-     * replaces the current stage with the new one.
+     * Opens the film administration UI in a new window and closes the current window.
      *
-     * @param event
-     *              event that triggered the function execution, specifically an
-     *              `ActionEvent` related to the loading of the FXML file.
-     *              <p>
-     *              Event: An event object that represents a user-initiated action
-     *              or
-     *              event, such as a button click or a key press.
+     * Loads /ui/films/InterfaceFilm.fxml, creates a new Stage with that scene, sets the window title to
+     * "Film Manegement", shows the new stage, and closes the stage that triggered the event.
+     *
+     * @throws IOException if the FXML resource cannot be loaded
      */
     @FXML
     void afficherMovieAdmin(final ActionEvent event) throws IOException {
@@ -592,17 +534,10 @@ public class DashboardAdminController {
 
 
     /**
-     * Loads a FXML file, creates a stage and window for a series management
-     * interface, and replaces the current stage with the new one.
+     * Open the series administration UI in a new window and close the current window.
      *
-     * @param event
-     *              event that triggered the execution of the `afficherserieAdmin()`
-     *              function, which is an action event generated by a user's click
-     *              on
-     *              a button or other element in the FXML file.
-     *              <p>
-     *              - `event` is an `ActionEvent`, indicating that the method was
-     *              called as a result of user action.
+     * @param event the action event whose source window will be closed after the new window is shown
+     * @throws IOException if the FXML resource for the series view cannot be loaded
      */
     @FXML
     void afficherserieAdmin(final ActionEvent event) throws IOException {
@@ -619,16 +554,13 @@ public class DashboardAdminController {
 
 
     /**
-     * Loads an fxml file, creates a scene and stage, and replaces the current stage
-     * with the new one.
+     * Opens the Product administration UI in a new window and closes the current window.
      *
-     * @param event
-     *              ActionEvent object that triggered the execution of the
-     *              `AfficherProductAdmin()` method.
-     *              <p>
-     *              - `event`: An `ActionEvent` object representing a user action
-     *              that
-     *              triggered the function to execute.
+     * Loads the Product admin FXML, creates a new scene and stage for it, shows that stage,
+     * and then closes the window that produced the given event.
+     *
+     * @param event the ActionEvent that triggered opening the Product admin UI
+     * @throws IOException if the FXML resource cannot be loaded
      */
     @FXML
     void AfficherProductAdmin(final ActionEvent event) throws IOException {
@@ -644,4 +576,3 @@ public class DashboardAdminController {
     }
 
 }
-

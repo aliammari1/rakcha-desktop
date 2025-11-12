@@ -42,9 +42,11 @@ public class VerifyWithGoogle {
     private Button sendButton;
 
     /**
-     * @throws IOException
-     * @throws ExecutionException
-     * @throws InterruptedException
+     * Initializes the controller by launching the Google sign-in page in the system default browser.
+     *
+     * @throws IOException if the system default browser cannot be launched or the URI cannot be accessed
+     * @throws ExecutionException if obtaining the sign-in URL fails
+     * @throws InterruptedException if the thread is interrupted while obtaining the sign-in URL
      */
     @FXML
     void initialize() throws IOException, ExecutionException, InterruptedException {
@@ -54,7 +56,11 @@ public class VerifyWithGoogle {
 
 
     /**
-     * @param event
+     * Verifies the authorization code entered in the authTextField and, if valid, replaces the current window's scene with the Profile view.
+     *
+     * If verification fails, the scene is not changed.
+     *
+     * @param event the ActionEvent that triggered the verification
      */
     @FXML
     void verifyAuthCode(final ActionEvent event) {
@@ -72,4 +78,3 @@ public class VerifyWithGoogle {
     }
 
 }
-

@@ -156,12 +156,10 @@ public class ActorFilmService {
 
 
     /**
-     * Updates the actors associated with a film by first removing all existing
-     * associations
-     * and then creating new ones based on the provided actor names.
+     * Replace all actor associations for the given film with associations for the provided actor names.
      *
-     * @param film       the film to update actor associations for
-     * @param actorNames list of actor names to be associated with the film
+     * @param film the film whose actor associations will be replaced
+     * @param actorNames list of actor names to associate with the film; names that do not match an existing actor are ignored
      */
     public void updateActors(final Film film, final List<String> actorNames) {
         // Delete existing associations
@@ -182,10 +180,10 @@ public class ActorFilmService {
 
 
     /**
-     * Gets a comma-separated string of actor names for a specific film.
+     * Retrieve a comma-separated string of actor names for the specified film.
      *
-     * @param filmId the ID of the film to get actor names for
-     * @return a comma-separated string of actor names
+     * @param filmId the film's ID
+     * @return a comma-separated string of actor names, or an empty string if no actors are associated or an error occurs
      */
     public String getActorsNames(final Long filmId) {
         final String req = "SELECT GROUP_CONCAT(a.name SEPARATOR ', ') AS actorNames FROM actors a JOIN actor_film af ON a.id = af.actor_id WHERE af.film_id = ?";
@@ -226,4 +224,3 @@ public class ActorFilmService {
     }
 
 }
-

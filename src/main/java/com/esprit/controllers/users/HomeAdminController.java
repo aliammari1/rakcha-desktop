@@ -201,7 +201,15 @@ public class HomeAdminController implements Initializable {
     private long totalOrders = 0;
 
     /**
-     * Initializes the controller with complex UI setup and advanced animations.
+     * Set up the admin dashboard UI, data, real-time updates, and animations.
+     *
+     * <p>Performs initial data structure creation, configures scroll panes, loads statistics,
+     * recent activity, users, content, and system logs, initializes timelines for clock and
+     * statistics updates, creates animated particles/shapes, wires quick-search and interactive
+     * UI elements, and applies advanced styling.</p>
+     *
+     * @param location  the location used to resolve relative paths for the root object, may be null
+     * @param resources the resources used to localize the root object, may be null
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -253,7 +261,10 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Initialize data structures and collections
+     * Create empty collections used by the controller for runtime animations and recent-data caches.
+     *
+     * Initializes the following fields to new, empty ArrayList instances:
+     * dynamicParticles, dynamicShapes, recentUsers, recentFilms, recentProducts, recentSeries, recentCinemas.
      */
     private void initializeDataStructures() {
         dynamicParticles = new ArrayList<>();
@@ -267,7 +278,11 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Configure ScrollPanes for proper scrollbar visibility and behavior
+     * Configure scroll panes used by the dashboard to standardize scrollbar policies, sizing behavior, pannability, and transparent background styling.
+     *
+     * Applies to mainScrollPane, recentUsersScrollPane, recentContentScrollPane, and systemLogsScrollPane when they are present.
+     * Each configured pane is set to horizontal policy AS_NEEDED, vertical policy ALWAYS, fitToWidth true, fitToHeight false, pannable true,
+     * and a transparent background/focus style.
      */
     private void configureScrollPanes() {
         // Configure main scroll pane
@@ -334,7 +349,13 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Setup advanced welcome message with user context and system status
+     * Sets the dashboard welcome text and system status using the current Stage user context.
+     *
+     * <p>If the current Stage's user data is a User, the welcome label is personalized for that user;
+     * otherwise a generic admin welcome is used. Also updates the system status label to
+     * "SYSTEM OPERATIONAL" and applies the "pulsing-indicator" style. The update is performed after
+     * a short deferred delay; on error the welcome text falls back to the default dashboard message
+     * and the exception is logged.
      */
     private void setupAdvancedWelcomeMessage() {
         Timeline delayedInit = new Timeline(new KeyFrame(Duration.millis(100), e -> {
@@ -374,7 +395,10 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Load comprehensive system statistics with enhanced data visualization
+     * Load and refresh all dashboard statistics and update their corresponding stat cards.
+     *
+     * Fetches totals for users, films, products, series, cinemas, and orders, updates the related
+     * UI labels and growth indicators, and falls back to default values if an error occurs.
      */
     private void loadComprehensiveStatistics() {
         try {
@@ -435,7 +459,12 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Update stat card with animated number counting and growth indicators
+     * Animate and display a statistic value and its growth indicator on a stat card.
+     *
+     * @param countLabel     the Label that will display the animated numeric value; ignored if null
+     * @param value          the target numeric value to animate to
+     * @param growthLabel    the Label that will display the growth percentage text and color; ignored if null
+     * @param growthPercentage the growth percentage to format and display (e.g., 5.2 or -3.4)
      */
     private void updateStatCard(Label countLabel, long value, Label growthLabel, double growthPercentage) {
         if (countLabel != null) {
@@ -465,7 +494,15 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Animate number counting effect for statistics
+     * Animates a Label's displayed value from a starting number to a target number over the given duration.
+     *
+     * The label text is updated progressively to reflect intermediate values; when the final value is reached the
+     * "counter-animation" CSS style class is added to the label.
+     *
+     * @param label      the Label to update; if null the method does nothing
+     * @param startValue the initial numeric value displayed before animation
+     * @param endValue   the final numeric value to display after animation
+     * @param duration   the total duration of the animation
      */
     private void animateNumberCount(Label label, long startValue, long endValue, Duration duration) {
         if (label == null)
@@ -495,7 +532,12 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Calculate growth percentage (simulated with random data for demo)
+     * Compute a simulated growth percentage for the given metric.
+     *
+     * This method generates randomized demo data and does not use historical values.
+     *
+     * @param metric the name of the metric (informational; currently unused)
+     * @return a growth percentage as a double between -10.0 and +10.0 (negative for decline, positive for growth)
      */
     private double calculateGrowthPercentage(String metric) {
         // In a real implementation, this would compare with previous period data
@@ -504,8 +546,10 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Calculate total orders (simulated)
-     */
+         * Compute a simulated total number of orders based on the current product count and a small random offset.
+         *
+         * @return the simulated total orders calculated as `totalProducts * 3` plus a random value >= 0 and < 50
+         */
     private long calculateTotalOrders() {
         // In real implementation, this would query order service
         return totalProducts * 3 + random.nextLong(50);
@@ -513,7 +557,9 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Set default statistics in case of error
+     * Reset all total-statistic labels to "0".
+     *
+     * Used as a fallback to display zeroed totals when loading or calculating statistics fails.
      */
     private void setDefaultStatistics() {
         if (totalUsersLabel != null)
@@ -532,7 +578,9 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Load recent system activity with enhanced details
+     * Populates the activity container with recent, timestamped system activity entries and applies the "activity-feed" style.
+     *
+     * <p>Each entry is added via addEnhancedActivityItem and includes an emoji label and a relative or absolute timestamp.</p>
      */
     private void loadRecentSystemActivity() {
         try {
@@ -568,7 +616,9 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Load recent users with enhanced display
+     * Load and render the dashboard's recent users list.
+     *
+     * Clears the recent users UI container, loads up to 10 users from the user service, stores up to 5 of them in the controller's recentUsers list and renders a card for each. If fewer than 5 real users are available, placeholder users are created, stored, and rendered so the UI always shows five entries. Errors during loading are logged. 
      */
     private void loadRecentUsers() {
         try {
@@ -609,7 +659,13 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Load recent content (movies, series, products)
+     * Populate the UI and internal lists with the latest films, series, products, and cinemas.
+     *
+     * This method clears the recent content container and the internal lists (recentFilms,
+     * recentSeries, recentProducts, recentCinemas), then attempts to load and display a small
+     * number of recent items from the corresponding services. If a service call fails for a
+     * category, a small set of placeholder items for that category is added instead. Any
+     * unexpected error during the overall operation is logged.
      */
     private void loadRecentContent() {
         try {
@@ -732,7 +788,11 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Load system logs with enhanced formatting
+     * Populate the system logs container with recent formatted log entries.
+     *
+     * Clears any existing entries and appends a predefined set of log messages with
+     * human-friendly timestamps and severity types. If the logs container is null,
+     * the method does nothing.
      */
     private void loadSystemLogs() {
         try {
@@ -755,7 +815,11 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Setup real-time updates for dynamic data
+     * Initialize and start recurring timelines that refresh live dashboard data.
+     *
+     * Sets up and starts three indefinite timelines: one that updates the displayed current time every second,
+     * one that refreshes comprehensive statistics every 30 seconds, and one that polls the activity feed every 10 seconds
+     * (each poll has a 30% chance to append a new random activity).
      */
     private void setupRealTimeUpdates() {
         // Update current time every second
@@ -782,7 +846,9 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Update current time display
+     * Updates the currentTimeLabel text to the local time formatted as "HH:mm:ss".
+     *
+     * If the label reference is null, the method performs no action.
      */
     private void updateCurrentTime() {
         if (currentTimeLabel != null) {
@@ -794,7 +860,9 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Add random activity to demonstrate real-time updates
+     * Appends a randomly chosen activity entry to the activity feed and removes the oldest entry when the feed exceeds seven items.
+     *
+     * The added entry is timestamped using the pattern "HH:mm" and is inserted via addEnhancedActivityItem with a type of "info". If the activity container is null, the method has no effect.
      */
     private void addRandomActivity() {
         if (activityContainer != null && activityContainer.getChildren().size() > 7) {
@@ -821,8 +889,17 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Add enhanced activity item with styling and animations
-     */
+         * Insert a styled activity entry into the activity feed and animate its entrance.
+         *
+         * <p>The entry includes a colored status indicator, the activity message, and a timestamp;
+         * visual styling is selected based on the provided `type`. The item is prepended to the
+         * activity container and shown with a fade-and-slide-in animation.</p>
+         *
+         * @param activity  the activity message to display
+         * @param timestamp a formatted timestamp string to display alongside the activity
+         * @param type      visual type for the entry; expected values: "success", "warning", "error",
+         *                  or any other value to use the default styling
+         */
     private void addEnhancedActivityItem(String activity, String timestamp, String type) {
         if (activityContainer == null)
             return;
@@ -902,7 +979,12 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Add recent user card with enhanced design
+     * Creates and appends a styled user card to the recent users container showing the user's name, email,
+     * avatar placeholder, and an "ACTIVE" status badge with hover effects.
+     *
+     * If the container is not available, the method does nothing.
+     *
+     * @param user the User whose information will be displayed in the card
      */
     private void addRecentUserCard(User user) {
         if (recentUsersContainer == null)
@@ -988,7 +1070,13 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Add recent content card
+     * Create and append a styled content card to the recent content container.
+     *
+     * The card contains a left-aligned icon, a bold title, and a smaller type label and is styled for interactive appearance.
+     *
+     * @param name the content title to display
+     * @param type the content category or subtype shown under the title
+     * @param icon a glyph or text icon rendered at the left of the card
      */
     private void addRecentContentCard(String name, String type, String icon) {
         if (recentContentContainer == null)
@@ -1027,7 +1115,15 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Add system log entry
+     * Create and append a styled system log entry to the system logs container.
+     *
+     * The entry includes a level label (colored by severity), the log message, a flexible spacer,
+     * and a timestamp; if the logs container is not initialized, the method does nothing.
+     *
+     * @param message   the log message text to display
+     * @param timestamp a human-readable timestamp string for the log entry
+     * @param level     the log level which determines the level label color; expected values include
+     *                  "error", "warning", "success", "debug", or any other string for a neutral style
      */
     private void addSystemLogEntry(String message, String timestamp, String level) {
         if (systemLogsContainer == null)
@@ -1076,7 +1172,10 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Setup advanced animations similar to HomeClient
+     * Initializes and starts the dashboard's advanced UI animations.
+     *
+     * Applies a background fade-in when the root container is present and triggers
+     * particle, shape, content, and stat-card animation setups.
      */
     private void setupAdvancedAnimations() {
         // Setup background fade-in
@@ -1103,7 +1202,9 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Create dynamic particles for enhanced visual effects
+     * Create and add animated decorative particles to the particles container for background visual effects.
+     *
+     * Does nothing if the particles container is not available.
      */
     private void createDynamicParticles() {
         if (particlesContainer == null)
@@ -1143,7 +1244,14 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Create dynamic shapes for background animation
+     * Creates and adds a set of animated decorative shapes to the particle background.
+     *
+     * <p>If the particle container is not available, the method returns without changes.</p>
+     *
+     * <p>The method creates six geometric shapes (polygons, rectangles, and circles), assigns
+     * randomized positions, translucency, gradient fill, stroke and CSS style classes, adds
+     * them to the container and the controller's dynamicShapes list, and starts their
+     * animations with a small staggered delay.</p>
      */
     private void createDynamicShapes() {
         if (particlesContainer == null)
@@ -1204,7 +1312,14 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Setup advanced particle animation
+     * Animate a particle with coordinated vertical float, horizontal drift, and opacity pulsing.
+     *
+     * Creates and starts a ParallelTransition that applies a vertical translate, a horizontal
+     * translate, and a fade transition to the provided Circle. Each sub-animation cycles
+     * indefinitely and uses randomized durations/amplitudes to produce natural motion.
+     *
+     * @param particle the Circle node to animate
+     * @param delay    initial delay in seconds before the animations start
      */
     private void setupAdvancedParticleAnimation(Circle particle, double delay) {
         // Floating animation
@@ -1237,8 +1352,15 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Setup advanced shape animation
-     */
+         * Applies continuous rotation and pulsing scale animations to the given Node, then starts them.
+         *
+         * The rotation runs continuously (360°) with a randomized duration around 8–12 seconds.
+         * The scale pulses between 0.8 and 1.2 with a randomized duration around 3–5 seconds and auto-reverses.
+         * Both animations repeat indefinitely and honor the provided start delay (scale starts ~1s after rotation).
+         *
+         * @param shape the Node to animate
+         * @param delay the delay, in seconds, before the animations begin
+         */
     private void setupAdvancedShapeAnimation(javafx.scene.Node shape, double delay) {
         // Rotation
         RotateTransition rotate = new RotateTransition(Duration.seconds(8 + random.nextDouble() * 4), shape);
@@ -1263,7 +1385,9 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Setup particle animations for static particles
+     * Applies per-particle visual animations to the six predefined particle nodes, skipping any that are null.
+     *
+     * Each non-null particle receives an animation whose start is staggered by its index.
      */
     private void setupParticleAnimations() {
         Circle[] particles = { particle1, particle2, particle3, particle4, particle5, particle6 }
@@ -1280,8 +1404,11 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Setup individual particle animation
-     */
+         * Applies and starts floating and glow animations on the given particle with an initial delay.
+         *
+         * @param particle the Circle node to animate
+         * @param delay    initial delay in seconds before the animations start
+         */
     private void setupParticleAnimation(Circle particle, double delay) {
         // Floating animation
         TranslateTransition floatTransition = new TranslateTransition(Duration.seconds(4), particle);
@@ -1305,7 +1432,9 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Setup shape animations
+     * Applies rotation and pulsing scale animations to each non-null predefined shape node (shape1..shape6).
+     *
+     * <p>Null shape references are ignored.</p>
      */
     private void setupShapeAnimations() {
         javafx.scene.Node[] shapes = { shape1, shape2, shape3, shape4, shape5, shape6 }
@@ -1323,7 +1452,10 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Setup rotation animation for shapes
+     * Applies a continuous 360° rotation to the given shape.
+     *
+     * @param shape    the Node to rotate
+     * @param duration rotation period in seconds for one full 360° turn
      */
     private void setupRotationAnimation(javafx.scene.Node shape, double duration) {
         RotateTransition rotateTransition = new RotateTransition(Duration.seconds(duration), shape);
@@ -1335,7 +1467,11 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Setup pulsing animation for shapes
+     * Applies a continuous pulsing scale animation to the given node.
+     *
+     * The node is scaled between 0.8 and 1.2 over a 3-second cycle, auto-reverses, and repeats indefinitely.
+     *
+     * @param shape the node to animate with a pulsing scale effect
      */
     private void setupPulsingAnimation(javafx.scene.Node shape) {
         ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(3), shape);
@@ -1350,7 +1486,10 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Setup content animations
+     * Animates the main content container into view with a downward-to-upward slide.
+     *
+     * When the injected content container is present, moves it from 50 pixels below its
+     * final position to its natural position over one second.
      */
     private void setupContentAnimations() {
         if (contentContainer != null) {
@@ -1365,7 +1504,10 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Setup stat card animations
+     * Initialize entrance animations for each statistic card with a staggered delay.
+     *
+     * Applies the per-card animation to each non-null stat card (users, movies, products,
+     * orders, series, cinemas), increasing the start delay by 0.2 seconds for each successive card.
      */
     private void setupStatCardAnimations() {
         VBox[] statCards = { userStatsCard, movieStatsCard, productStatsCard, orderStatsCard, seriesStatsCard,
@@ -1383,8 +1525,13 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Setup individual stat card animation
-     */
+         * Animates a statistic card with a coordinated fade-and-scale entrance and enables a subtle hover scale effect.
+         *
+         * The entrance animation fades the card in and scales it from 0.8 to 1.0, starting after the specified delay.
+         *
+         * @param card  the VBox representing the stat card to animate
+         * @param delay the delay before the entrance animation starts, in seconds
+         */
     private void setupStatCardAnimation(VBox card, double delay) {
         // Fade in
         FadeTransition fadeIn = new FadeTransition(Duration.seconds(0.8), card);
@@ -1423,7 +1570,9 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Setup quick search functionality
+     * Initializes the quick search field: binds Enter to trigger a search and enables live suggestion logging for input longer than two characters.
+     *
+     * <p>If the search field is null, this method returns without side effects.</p>
      */
     private void setupQuickSearchFunctionality() {
         if (quickSearchField != null) {
@@ -1450,7 +1599,12 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Perform quick search across admin data
+     * Execute a quick admin search and present placeholder results.
+     *
+     * If `query` is null or blank the method returns without taking action.
+     * Otherwise it displays an informational alert showing the provided query as a placeholder for real search results.
+     *
+     * @param query the search text to run (leading and trailing whitespace are ignored)
      */
     private void performQuickSearch(String query) {
         if (query == null || query.trim().isEmpty())
@@ -1469,7 +1623,17 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Apply advanced styling to UI elements
+     * Add CSS style classes to key UI containers and labels.
+     *
+     * <p>If the corresponding UI node is present, this method appends a class to its style class list:
+     * <ul>
+     *   <li>`rootContainer` &rarr; "fade-in"</li>
+     *   <li>`mainContainer` &rarr; "glow-container"</li>
+     *   <li>`welcomeLabel` &rarr; "animated-text"</li>
+     * </ul>
+     * </p>
+     *
+     * <p>If any of the nodes are null, they are skipped.</p>
      */
     private void applyAdvancedStyling() {
         // Apply CSS classes for animations
@@ -1491,7 +1655,8 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Setup interactive elements with enhanced functionality
+     * Initializes interactive behaviors for dashboard UI elements, enabling clickable stat cards
+     * and actionable quick-action buttons.
      */
     private void setupInteractiveElements() {
         // Setup stat cards as clickable elements
@@ -1503,7 +1668,9 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Setup stat card interactivity
+     * Enable click handlers and hover-scale styling for the statistics cards so clicking a card navigates to its management view.
+     *
+     * <p>Applies to the user, movie, product, and order stat cards when present.</p>
      */
     private void setupStatCardInteractivity() {
         if (userStatsCard != null) {
@@ -1552,7 +1719,10 @@ public class HomeAdminController implements Initializable {
     // Utility Methods
 
     /**
-     * Generate time ago string
+     * Convert a minutes-since timestamp into a compact human-readable "time ago" string.
+     *
+     * @param minutesAgo number of minutes elapsed since the event
+     * @return a short relative time string: "`N min ago`" when under 60 minutes, "`N hr ago`" when under 1440 minutes (hours truncated), and "`N day ago`" otherwise (days truncated)
      */
     private String getTimeAgo(int minutesAgo) {
         if (minutesAgo < 60) {
@@ -1569,7 +1739,9 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Generate random user name for demo purposes
+     * Produces a pseudo-random full name for demo users.
+     *
+     * @return a full name composed of a randomly selected first name and last name
      */
     private String generateRandomUserName() {
         String[] firstNames = { "John", "Jane", "Alex", "Sarah", "Mike", "Lisa", "David", "Emma" }
@@ -1583,7 +1755,9 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Create placeholder user for demo
+     * Create a placeholder User populated with a random name and a generated email.
+     *
+     * @return a User whose firstName, lastName, and email fields are populated with generated values
      */
     private User createPlaceholderUser() {
         User user = new User() {
@@ -1599,7 +1773,10 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Cleanup method called when controller is destroyed
+     * Stop background timelines used by the controller to prevent them from continuing after disposal.
+     *
+     * <p>Stops any active timelines responsible for updating the clock, statistics, activity feed,
+     * and particle animations so they do not continue running once the controller is destroyed.</p>
      */
     public void cleanup() {
         if (clockUpdateTimeline != null) {
@@ -1622,7 +1799,9 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Get recent users data for external access
+     * Retrieve a snapshot of the most recently loaded users.
+     *
+     * @return a new modifiable List containing the recent users in insertion order; modifying the returned list does not affect the controller's internal state
      */
     public List<User> getRecentUsers() {
         return new ArrayList<>(recentUsers);
@@ -1630,15 +1809,19 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Get recent films data for external access
-     */
+         * Provide a snapshot of recently loaded films.
+         *
+         * @return a new List containing the recent Film objects; modifying the returned list does not affect the controller's internal list
+         */
     public List<Film> getRecentFilms() {
         return new ArrayList<>(recentFilms);
     }
 
 
     /**
-     * Get recent products data for external access
+     * Provide a defensive copy of the most recently loaded products.
+     *
+     * @return a list containing the most recently loaded Product objects; modifying the returned list does not affect the controller's internal list
      */
     public List<Product> getRecentProducts() {
         return new ArrayList<>(recentProducts);
@@ -1646,7 +1829,9 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Get recent series data for external access
+     * Exposes a snapshot of the most recently loaded series.
+     *
+     * @return a new List containing the current recent Series; modifying the returned list does not affect the controller's internal list
      */
     public List<Series> getRecentSeries() {
         return new ArrayList<>(recentSeries);
@@ -1654,7 +1839,9 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Get recent cinemas data for external access
+     * Provide a copy of the most recently loaded cinemas.
+     *
+     * @return a new List containing the recent Cinema objects; modifying this list does not affect the controller's internal state
      */
     public List<Cinema> getRecentCinemas() {
         return new ArrayList<>(recentCinemas);
@@ -1662,7 +1849,10 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Refresh recent data
+     * Reloads the dashboard's recent users, recent content, and recent system activity displays.
+     *
+     * This forces the UI to re-fetch and re-render the collections shown in the recent users,
+     * recent content, and activity feed sections.
      */
     public void refreshRecentData() {
         loadRecentUsers();
@@ -1671,7 +1861,12 @@ public class HomeAdminController implements Initializable {
     }
 
 
-    // Navigation Action Handlers
+    /**
+     * Switches the current window's scene to the admin users dashboard.
+     *
+     * Loads "/ui/users/AdminDashboard.fxml" and applies it to the current stage. If the FXML fails to load,
+     * a SEVERE-level log entry is recorded and the scene is not changed.
+     */
 
     @FXML
     void manageUsers(ActionEvent event) {
@@ -1688,6 +1883,9 @@ public class HomeAdminController implements Initializable {
     }
 
 
+    /**
+     * Opens the movie management view (Film.fxml) and replaces the current scene in the same window.
+     */
     @FXML
     void manageMovies(ActionEvent event) {
         try {
@@ -1703,6 +1901,12 @@ public class HomeAdminController implements Initializable {
     }
 
 
+    /**
+     * Loads the product management UI and replaces the current window's scene with it.
+     *
+     * <p>The method locates and loads "/ui/products/Product.fxml" and sets it as the active Scene
+     * on the current Stage.</p>
+     */
     @FXML
     void manageProducts(ActionEvent event) {
         try {
@@ -1718,6 +1922,11 @@ public class HomeAdminController implements Initializable {
     }
 
 
+    /**
+     * Navigate to the orders management view by loading and displaying the ListOrder FXML scene.
+     *
+     * @param event the action event that triggered the navigation (typically a Button click)
+     */
     @FXML
     void manageOrders(ActionEvent event) {
         try {
@@ -1733,6 +1942,9 @@ public class HomeAdminController implements Initializable {
     }
 
 
+    /**
+     * Navigates to the orders list view by loading its FXML and replacing the current scene.
+     */
     @FXML
     void viewOrders(ActionEvent event) {
         try {
@@ -1748,6 +1960,12 @@ public class HomeAdminController implements Initializable {
     }
 
 
+    /**
+     * Opens the System Settings dialog.
+     *
+     * Displays an informational alert as a placeholder indicating where system settings
+     * functionality will be implemented.
+     */
     @FXML
     void systemSettings(ActionEvent event) {
         try {
@@ -1765,6 +1983,14 @@ public class HomeAdminController implements Initializable {
     }
 
 
+    /**
+     * Shows an informational dialog describing available analytics and reporting options.
+     *
+     * <p>Displays a modal alert that lists report categories (user activity, content performance,
+     * revenue & sales, and system metrics). If opening the dialog fails, the exception is logged.
+     *
+     * @param actionEvent the UI event that triggered this action
+     */
     @FXML
     public void viewReports(ActionEvent actionEvent) {
         try {
@@ -1787,4 +2013,3 @@ public class HomeAdminController implements Initializable {
     }
 
 }
-

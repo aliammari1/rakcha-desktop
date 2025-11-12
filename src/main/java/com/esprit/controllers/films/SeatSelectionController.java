@@ -78,15 +78,11 @@ public class SeatSelectionController {
 
 
     /**
-     * Loads and displays the seat layout for the cinema hall.
-     * 
-     * <p>
-     * Retrieves seat information from the database and creates a visual
-     * representation
-     * of the seating layout in the GridPane. Each seat is represented by a button
-     * with
-     * appropriate styling based on its availability status.
-     * </p>
+     * Populate the seatGrid with buttons representing seats for the current movie session's cinema hall.
+     *
+     * Retrieves seat data for the session's cinema hall, creates a Button for each seat position,
+     * disables and styles buttons for occupied seats, styles available seats, and attaches click
+     * handlers that toggle seat selection and update the UI.
      */
     private void loadSeats() {
         SeatService seatService = new SeatService();
@@ -164,16 +160,12 @@ public class SeatSelectionController {
 
 
     /**
-     * Processes the seat selection and proceeds to payment.
-     * 
-     * <p>
-     * When the user confirms their seat selection, this method transitions to the
-     * payment screen, passing the selected seats, movie session, and client
-     * information.
-     * </p>
+     * Transition to the payment screen using the currently selected seats.
      *
-     * @param event the action event triggered by clicking the confirm button
-     * @throws IOException if there is an error loading the payment view
+     * <p>Loads the payment view and initializes its controller with the current movie session,
+     * client, and selected seats, then replaces the current scene with the payment scene.</p>
+     *
+     * @throws IOException if the payment view cannot be loaded
      */
     @FXML
     private void confirmSelection(ActionEvent event) throws IOException {
@@ -194,4 +186,3 @@ public class SeatSelectionController {
     }
 
 }
-

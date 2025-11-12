@@ -34,16 +34,12 @@ public class Feedback {
     private Episode episode;
 
     /**
-     * Constructor without id for creating new feedback instances.
+     * Create a Feedback instance for a given user, episode, and date without specifying an id.
      *
-     * @param userId
-     *                    the user ID
-     * @param description
-     *                    the feedback description
-     * @param date
-     *                    the date of feedback
-     * @param episodeId
-     *                    the episode ID
+     * @param userId     the id of the user who submitted the feedback
+     * @param description the feedback text
+     * @param date       the date when the feedback was created
+     * @param episodeId  the id of the related episode
      */
     public Feedback(final Long userId, final String description, final Date date, final Long episodeId) {
         this.userId = userId;
@@ -53,4 +49,3 @@ public class Feedback {
     }
 
 }
-

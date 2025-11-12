@@ -36,8 +36,9 @@ public class ReviewService implements IService<Review> {
     private final Connection connection;
 
     /**
-     * Constructs a new ReviewService instance.
-     * Initializes database connection and creates tables if they don't exist.
+     * Initializes the ReviewService by obtaining a JDBC connection and ensuring the reviews table exists.
+     *
+     * <p>If table creation fails, the error is logged.</p>
      */
     public ReviewService() {
         this.connection = DataSource.getInstance().getConnection();
@@ -67,6 +68,13 @@ public class ReviewService implements IService<Review> {
     }
 
 
+    /**
+     * Persist a Review into the reviews table.
+     *
+     * The stored row uses the review's client id, rating, and product id.
+     *
+     * @param review the Review whose client, rating, and product identifiers will be persisted
+     */
     @Override
     /**
      * Creates a new entity in the database.
@@ -92,9 +100,11 @@ public class ReviewService implements IService<Review> {
 
 
     /**
-     * Performs read operation.
+     * Retrieves all reviews from the database.
      *
-     * @return the result of the operation
+     * Each returned Review contains its id, associated Client and Product, and rating.
+     *
+     * @return a list of Review objects; empty if no reviews are found or if an error occurs
      */
     public List<Review> read() {
         final List<Review> reviewsList = new ArrayList<>();
@@ -122,6 +132,11 @@ public class ReviewService implements IService<Review> {
     }
 
 
+    /**
+     * Update the stored rating for the given review record identified by its id.
+     *
+     * @param review the Review whose id identifies the database row and whose rating will replace the stored value
+     */
     @Override
     /**
      * Updates an existing entity in the database.
@@ -144,6 +159,11 @@ public class ReviewService implements IService<Review> {
     }
 
 
+    /**
+     * Deletes the review matching the provided review's client and product identifiers from the database.
+     *
+     * @param review the Review whose client and product IDs identify the row to remove
+     */
     @Override
     /**
      * Deletes an entity from the database.
@@ -168,9 +188,10 @@ public class ReviewService implements IService<Review> {
 
 
     /**
-     * Retrieves the AverageRating value.
+     * Compute the average rating for the specified product.
      *
-     * @return the AverageRating value
+     * @param productId the ID of the product to compute the average rating for
+     * @return the average rating for the product, or 0.0 if the product has no ratings or an error occurs
      */
     public double getAverageRating(final Long productId) {
         final String req = "SELECT AVG(rating) AS averageRate FROM reviews WHERE product_id = ?";
@@ -191,9 +212,13 @@ public class ReviewService implements IService<Review> {
 
 
     /**
-     * Retrieves the AverageRatingSorted value.
+     * Retrieve products paired with their average review ratings, ordered from highest to lowest average.
      *
-     * @return the AverageRatingSorted value
+     * Each returned Review has its product populated and its rating set to the product's average rating
+     * truncated to an integer; the client field is null. The method returns an empty list if no ratings
+     * are found or if an error occurs.
+     *
+     * @return a list of Review objects representing products and their average ratings (sorted descending)
      */
     public List<Review> getAverageRatingSorted() {
         final String req = "SELECT product_id, AVG(rating) AS averageRate FROM reviews GROUP BY product_id ORDER BY averageRate DESC";
@@ -216,9 +241,13 @@ public class ReviewService implements IService<Review> {
 
 
     /**
-     * Performs ratingExists operation.
+     * Finds a review for the specified product by the specified user.
      *
-     * @return the result of the operation
+     * Looks up a review matching the given productId and userId and returns it if present.
+     *
+     * @param productId the ID of the product to check
+     * @param userId the ID of the user who may have created the review
+     * @return the matching Review, or `null` if no review exists for the given product and user
      */
     public Review ratingExists(final Long productId, final Long userId) {
         final String req = "SELECT * FROM reviews WHERE product_id = ? AND user_id = ?";
@@ -243,6 +272,13 @@ public class ReviewService implements IService<Review> {
     }
 
 
+    /**
+     * Retrieves a page of Review objects based on the provided pagination and sorting parameters.
+     *
+     * @param pageRequest the pagination and sorting request used to select which reviews to return
+     * @return a page containing matching reviews
+     * @throws UnsupportedOperationException always thrown as this method is not implemented
+     */
     @Override
     public Page<Review> read(PageRequest pageRequest) {
         // TODO Auto-generated method stub
@@ -250,4 +286,3 @@ public class ReviewService implements IService<Review> {
     }
 
 }
-

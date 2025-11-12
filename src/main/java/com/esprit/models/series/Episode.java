@@ -41,20 +41,16 @@ public class Episode {
     private List<Feedback> feedbacks;
 
     /**
-     * Constructor without id for creating new episode instances.
+     * Create a new Episode populated with title, episode number, season, image, video, and series identifier.
      *
-     * @param title
-     *                      the title of the episode
-     * @param episodeNumber
-     *                      the episode number
-     * @param season
-     *                      the season number
-     * @param image
-     *                      the image URL of the episode
-     * @param video
-     *                      the video URL of the episode
-     * @param seriesId
-     *                      the ID of the series
+     * The constructor does not initialize `id`, `series`, or `feedbacks`.
+     *
+     * @param title         the episode title
+     * @param episodeNumber the episode number within its season
+     * @param season        the season number
+     * @param image         the episode image URL or path
+     * @param video         the episode video URL or path
+     * @param seriesId      the identifier of the series this episode belongs to
      */
     public Episode(final String title, final int episodeNumber, final int season, final String image,
             final String video, final int seriesId) {
@@ -67,4 +63,3 @@ public class Episode {
     }
 
 }
-

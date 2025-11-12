@@ -105,26 +105,13 @@ public class AfficherProductClientControllers implements Initializable {
     private ComboBox<String> tricomboBox;
 
     /**
-     * Searches for products in a list based on a given search term and returns a
-     * list of matching products.
+     * Filter a list of products by checking whether each product's name contains the given search term.
      *
-     * @param liste
-     *                  list of products that will be searched for matches with the
-     *                  given
-     *                  search query.
-     *                  <p>
-     *                  - It is a list of `Product` objects.
-     * @param recherche
-     *                  search query used to filter the list of `Product` objects
-     *                  returned
-     *                  by the function.
-     * @returns a list of `Product` objects that match the given search query.
-     *          <p>
-     *          - The output is a list of `Product` objects, representing the
-     *          matching products in the input list. - The list contains only the
-     *          elements from the input list that match the search query. - Each
-     *          element in the list has a `Nom` attribute that contains the search
-     *          query.
+     * Matches are performed using String.contains on the product name; product entries with a null name are ignored.
+     *
+     * @param liste the list of products to search
+     * @param recherche the substring to match against each product's name (case-sensitive)
+     * @return a list of products whose name contains {@code recherche} (order preserved)
      */
     @FXML
     /**
@@ -150,29 +137,14 @@ public class AfficherProductClientControllers implements Initializable {
 
 
     /**
-     * Sets up UI components for searching and displaying produits, including a
-     * search bar, a filter category combo box, and a flow pane to display results.
-     * It also initializes a produitService object and sets up listeners for the
-     * search bar and category combo box to update the displayed produits.
+     * Initialize the controller UI: load accepted products, display comments and top-three products,
+     * and wire the search bar and sort combo box to update the product view.
      *
-     * @param location
-     *                  URL of the web page that the function is initializing, which
-     *                  is
-     *                  used to load the accepted products and display them on the
-     *                  screen.
-     *                  <p>
-     *                  - `URL location`: This represents a URL that provides
-     *                  information
-     *                  about the accepted products.
-     * @param resources
-     *                  ResourceBundle object that provides localized messages and
-     *                  key for
-     *                  displaying comments and top3 produits.
-     *                  <p>
-     *                  - `location`: The URL of the location where the application
-     *                  is
-     *                  running. - `resources`: A `ResourceBundle` object containing
-     *                  key-value pairs of resources used in the application.
+     * Sets up listeners that filter products as the search text changes and that reorder the displayed
+     * products when a sort option is selected.
+     *
+     * @param location  the location used to resolve relative paths for the root object, may be null
+     * @param resources the ResourceBundle for localized resources, may be null
      */
     @Override
     /**
@@ -209,8 +181,10 @@ public class AfficherProductClientControllers implements Initializable {
 
 
     /**
-     * Loads all products from a service and adds them to a flow pane using a
-     * recursive method.
+     * Populate the produitFlowPane with product cards fetched from the product service.
+     *
+     * Fetches the first page of products, creates a product card node for each product,
+     * attaches the product as node userData, and adds the nodes to produitFlowPane.
      */
     private void loadAcceptedProducts() {
         final ProductService produitService = new ProductService();
@@ -230,46 +204,10 @@ public class AfficherProductClientControllers implements Initializable {
 
 
     /**
-     * Creates a Card component that displays the details of a product, including
-     * its image, name, description, price, and buttons for adding to cart or
-     * viewing comments.
+     * Create a UI card displaying a product's image, name, description, price, and actions for adding to cart or viewing comments.
      *
-     * @param Product
-     *                Product object that contains the details of the product being
-     *                displayed, and it is used to access the product's properties
-     *                and
-     *                methods throughout the function, such as retrieving its name,
-     *                price, and ID.
-     *                <p>
-     *                - `id_produit`: The unique identifier for the product - `nom`:
-     *                The
-     *                product name - `description`: The product description -
-     *                `prix`:
-     *                The product price - `image`: The product image URL
-     * @returns a `Pane` object containing the UI components for displaying a single
-     *          product in a shopping cart.
-     *          <p>
-     *          - `card`: The card container that displays information about the
-     *          selected product, including an image view, name label, description
-     *          label, price label, add to cart button, and chat icon. -
-     *          `imageView`: An image view that displays a picture of the selected
-     *          product. - `nameLabel`: A label that displays the name of the
-     *          selected product. - `descriptionLabel`: A label that displays a
-     *          brief description of the selected product. - `priceLabel`: A label
-     *          that displays the price of the selected product. -
-     *          `addToCartButton`: A button that allows users to add the selected
-     *          product to their cart. - `chatIcon`: An icon that represents the
-     *          chat function, which displays all comments for the selected product
-     *          when clicked.
-     *          <p>
-     *          The main attributes of the returned output are:
-     *          <p>
-     *          - The card container has a white background with a gradient border
-     *          from the top left corner to the bottom right corner. - The image
-     *          view, name label, description label, price label, and add to cart
-     *          button have a font size of 12px, bold font weight, and a padding of
-     *          10px. - The chat icon has an icon literal of "fa-commenting" and an
-     *          icon size of 20px.
+     * @param Product product whose details are shown and whose id is used by action handlers (open details view, add to cart, load comments)
+     * @return a VBox containing the constructed product card node ready to be inserted into the UI
      */
     private VBox createProductCard(final Product Product) {
         // Créer une carte pour le produit avec ses informations
@@ -422,19 +360,13 @@ public class AfficherProductClientControllers implements Initializable {
 
 
     /**
-     * Clears the current pane, adds the newly added product to a new pane, and
-     * makes the updated pane visible while hiding other panes.
+     * Shows the shopping cart with the newly added product and updates pane visibility.
      *
-     * @param produitAjoute
-     *                      product that is being added to the shopping cart, which
-     *                      is used to
-     *                      create a new `HBox` representing the product card and
-     *                      add it to
-     *                      the `shoppingcartFlowPane`.
-     *                      <p>
-     *                      - `Product produitAjoute`: This is an instance of the
-     *                      `Product`
-     *                      class, representing a product added to the cart.
+     * Clears the current shopping cart view, adds a shopping-cart card for the provided product,
+     * makes the shopping cart visible, hides the top-3 anchor pane, and reduces the product
+     * list pane opacity.
+     *
+     * @param produitAjoute the product to display in the shopping cart view
      */
     private void afficherShoppingCart(final Product produitAjoute) {
         // Effacez la FlowPane du shoppingcart actuelle pour afficher les nouveaux
@@ -453,15 +385,13 @@ public class AfficherProductClientControllers implements Initializable {
 
 
     /**
-     * Adds a product to the shopping cart based on the product ID and quantity. It
-     * first verifies if the product is available, then creates a new shoppingcart
-     * object with the product details and user data, and finally adds it to the
-     * shoppingcart service for display in the user interface.
+     * Add a product to the current user's shopping cart if sufficient stock is available.
      *
-     * @param produitId
-     *                  ID of the product to be added to the cart.
-     * @param quantity
-     *                  number of items to be added to the shopping cart.
+     * Verifies available stock for the given product and quantity, creates and persists
+     * a ShoppingCart entry for the current user, and updates the UI to show the added product.
+     *
+     * @param produitId ID of the product to add to the cart.
+     * @param quantity  Number of units to add.
      */
     private void ajouterAuShoppingCart(final long produitId, final int quantity) {
         final ProductService produitService = new ProductService();
@@ -487,17 +417,9 @@ public class AfficherProductClientControllers implements Initializable {
 
 
     /**
-     * Creates a card for each `Product` object in the `produits` list and adds them
-     * to the `produitFlowPane`.
+     * Create and add UI cards for each product in the given list to the produitFlowPane.
      *
-     * @param produits
-     *                 list of products to create cards for, and is used to iterate
-     *                 over
-     *                 the products in the list to create the cards.
-     *                 <p>
-     *                 - `produits`: A list of `Product` objects, containing
-     *                 information
-     *                 about individual products.
+     * @param produits list of products whose cards will be created and appended to produitFlowPane
      */
     private void createProductCards(final List<Product> produits) {
         for (final Product produit : produits) {
@@ -509,40 +431,12 @@ public class AfficherProductClientControllers implements Initializable {
 
 
     /**
-     * Generates a card for the shopping cart, containing the total quantity and
-     * price of each product, a "Continue Shopping" button, and an "Order Now"
-     * button. When the "Continue Shopping" button is clicked, the stage closes and
-     * the order summary is displayed.
+     * Creates a shopping-cart card UI for a single product showing image, name,
+     * quantity, total price, and actions to place the order, continue shopping, or
+     * close the card.
      *
-     * @param produit
-     *                products to be added to the shopping cart, and it is used to
-     *                display the product name and quantity in the
-     *                `ShoppingCartProduct`
-     *                FXML file.
-     *                <p>
-     *                - `name`: the name of the product - `quantite`: the quantity
-     *                of
-     *                the product in the cart - `sommeTotale`: the total cost of the
-     *                product in the cart - `imageView`: an image view of the
-     *                product -
-     *                `orderr`: a button to add the product to the cart or continue
-     *                shopping.
-     * @returns a `Node` object representing a card with the contents of the
-     *          shopping cart.
-     *          <p>
-     *          - `shoppingcartContainer`: The parent Node for the entire card,
-     *          which contains all the children components. - `cartLabel`: A Label
-     *          component displaying the word "ShoppingCart" in bold and a larger
-     *          font size. - `closeIcon`: A FontIcon component displaying an icon of
-     *          a times circle, used for closing the card. - `imageView`: An
-     *          ImageView component displaying a shopping cart icon. - `nameLabel`:
-     *          A Label component displaying the text "Nom du produits". -
-     *          `quantiteLabel`: A Label component displaying the text "Quantité". -
-     *          `sommeTotaleLabel`: A Label component displaying the text "Somme
-     *          totale". - `achatbutton`: A Button component displaying the text
-     *          "Continuer les achats" and used for navigating to the next stage. -
-     *          `orderbutton`: A Button component displaying the text "Order" and
-     *          used for adding an item to the cart.
+     * @param produit the product whose details (image, name, price) are displayed in the card
+     * @return an HBox containing the composed shopping-cart card UI
      */
     private HBox createShoppingCartCard(final Product produit) {
         // Créer une carte pour le produit avec ses informations
@@ -678,17 +572,7 @@ public class AfficherProductClientControllers implements Initializable {
 
 
     /**
-     * Makes a panel invisible and sets another panel's visibility and opacity to 1,
-     * effectively hiding the panel that was previously visible.
-     *
-     * @param shoppingcartContainer
-     *                              HBox component that contains the panel
-     *                              containing the shopping
-     *                              cart.
-     *                              <p>
-     *                              - `shoppingcartContainer`: A `HBox` component
-     *                              representing the
-     *                              container for the shoppingcart (basket) display.
+     * Hides the shopping cart pane and restores the product and top-3 panes to full visibility and full opacity.
      */
     private void fermerShoppingCartCard(final HBox shoppingcartContainer) {
         this.shoppingcartFlowPane.setVisible(false);
@@ -701,16 +585,9 @@ public class AfficherProductClientControllers implements Initializable {
 
 
     /**
-     * Loads a new UI component (`ShoppingCartProduct.fxml`) when a button is
-     * clicked, creates a new scene with the loaded component, and attaches it to a
-     * new stage. The new stage is then displayed and the previous stage is closed.
+     * Opens the ShoppingCartProduct UI in a new window and closes the window that triggered the event.
      *
-     * @param event
-     *              MouseEvent object that triggered the function, providing the
-     *              source of the event and any relevant data.
-     *              <p>
-     *              - Event source: The element that triggered the event (not
-     *              specified).
+     * @param event the MouseEvent whose source stage will be closed after the shopping cart window is shown
      */
     @FXML
     void shoppingcart(final MouseEvent event) {
@@ -740,11 +617,10 @@ public class AfficherProductClientControllers implements Initializable {
 
 
     /**
-     * Filters a list of products based on a search text, by adding to an observable
-     * list only those products whose category name contains the search text.
+     * Filters the products shown in the product flow pane to those whose first category name
+     * contains the given search text (case-insensitive); if the search text is empty, reloads all accepted products.
      *
-     * @param searchText
-     *                   search term used to filter the list of products.
+     * @param searchText text to match against each product's first category name (case-insensitive)
      */
     private void filterCategorieProducts(final String searchText) {
         // Vérifier si le champ de recherche n'est pas vide
@@ -772,10 +648,9 @@ public class AfficherProductClientControllers implements Initializable {
 
 
     /**
-     * Retrieves a list of all product categories from the service layer using the
-     * `ProductService`. The list is then returned to the caller.
+     * Retrieve the first page of products from ProductService (used to obtain category data).
      *
-     * @returns a list of `Product` objects retrieved from the service.
+     * @return a list of Product objects from page 0 with page size 10
      */
     private List<Product> getAllCategories() {
         final ProductService categoryservice = new ProductService();
@@ -785,19 +660,13 @@ public class AfficherProductClientControllers implements Initializable {
 
 
     /**
-     * Sets the opacity of a pane to 0.5, makes a panel visible, clears lists of
-     * check boxes and recieves unique addresses from a database for each category.
-     * It then creates VBoxes for the addresses and adds them to a parent pane,
-     * making the parent pane visible.
+     * Shows the category filter panel and populates it with a checkbox for each unique product category.
      *
-     * @param event
-     *              mouse event that triggered the filtrer method, providing the
-     *              source of the event and any relevant data.
-     *              <p>
-     *              - `event`: A MouseEvent object representing the mouse event that
-     *              triggered the function. - `MouseEvent.getX()` and
-     *              `MouseEvent.getY()`: The coordinates of the mouse event in the
-     *              parent coordinate system.
+     * Sets the product flow pane opacity to 0.5, makes the filter anchor visible, clears existing
+     * checkbox lists, creates a labeled VBox of CheckBox nodes for each category, stores those
+     * checkboxes in `addressCheckBoxes`, and adds the VBox to the filter anchor.
+     *
+     * @param event the MouseEvent that triggered displaying the filter panel
      */
     @FXML
     void filtrer(final MouseEvent event) {
@@ -828,21 +697,11 @@ public class AfficherProductClientControllers implements Initializable {
 
 
     /**
-     * Retrieves a list of category names from a database by mapping the categories
-     * to their respective names using the `getName_categorie()` method.
+     * Get unique product category names present in the stored products.
      *
-     * @returns a list of distinct category names obtained from the database.
-     *          <p>
-     *          The function returns a list of strings, where each string represents
-     *          a category name. The list contains all unique category names that
-     *          were retrieved from the database using the `getAllCategories()`
-     *          method. The categories are obtained by calling the `map()` method on
-     *          Gets a list of unique product category names.
-     *          This method retrieves all products and extracts their category
-     *          names,
-     *          removing duplicates to return a list of unique category names.
+     * Duplicates are removed; the iteration order is unspecified.
      *
-     * @return a list of unique product category names
+     * @return a List of unique category name strings
      */
     public List<String> getProductCategory() {
         // Récupérer tous les cinémas depuis la base de données
@@ -853,16 +712,9 @@ public class AfficherProductClientControllers implements Initializable {
 
 
     /**
-     * Filters a list of products based on selected categories, updates the visible
-     * state of an anchor and a flow pane, and updates the list of displayed
-     * products.
+     * Filter displayed products to those whose first category matches any selected category and update the product view.
      *
-     * @param event
-     *              an action event triggered by the user, which initiates the
-     *              filtering process of products based on selected categories.
-     *              <p>
-     *              - Type: ActionEvent - Target: Unknown (since it's not explicitly
-     *              specified) - Code: Unknown (since it's not explicitly specified)
+     * Updates produitFlowPane visibility and opacity, hides the filterAnchor, and replaces the products shown in the flow pane with the filtered list.
      */
     @FXML
     /**
@@ -886,19 +738,9 @@ public class AfficherProductClientControllers implements Initializable {
 
 
     /**
-     * Clears and re-adds a list of products to a flow pane, using a `VBox`
-     * container for each product.
+     * Replace the produitFlowPane contents with product cards built from the provided list.
      *
-     * @param filteredProducts
-     *                         list of products that have been filtered based on
-     *                         user input, and
-     *                         it is used to populate the `produitFlowPane` with
-     *                         only the
-     *                         relevant products.
-     *                         <p>
-     *                         - `filteredProducts`: A list of `Product` objects
-     *                         that have been
-     *                         filtered based on some criteria.
+     * @param filteredProducts list of Product objects to display as individual cards in the produitFlowPane
      */
     private void updateProductFlowPane(final List<Product> filteredProducts) {
         this.produitFlowPane.getChildren().clear(); // Effacez les éléments existants
@@ -911,17 +753,9 @@ public class AfficherProductClientControllers implements Initializable {
 
 
     /**
-     * Retrieves a list of selected addresses from an `AnchorPane` component and
-     * filters them based on the selected state of CheckBoxes within the pane.
+     * Get the texts of checkboxes currently selected in the category filter.
      *
-     * @returns a list of selected category names.
-     *          <p>
-     *          - The output is a list of strings (type `List<String>`). - The list
-     *          contains the selected addresses from the `addressCheckBoxes` stream,
-     *          where each address is represented by a string. - The addresses are
-     *          filtered based on whether the corresponding CheckBox is selected or
-     *          not using the `filter()` method. - The text of each selected
-     *          CheckBox is mapped to a string using the `map()` method.
+     * @return a List<String> containing the selected category names; an empty list if none are selected.
      */
     private List<String> getSelectedCategories() {
         // Récupérer les adresses sélectionnées dans l'AnchorPane de filtrage
@@ -931,20 +765,10 @@ public class AfficherProductClientControllers implements Initializable {
 
 
     /**
-     * Charges a new FXML interface, creates a new scene, and attaches it to a new
-     * stage, while also closing the current stage.
-     *
-     * @param event
-     *              ActionEvent object that triggered the function execution,
-     *              providing the source of the event and allowing the code to
-     *              determine the appropriate action to take.
-     *              <p>
-     *              - It is an `ActionEvent`, indicating that it represents an
-     *              action
-     *              taken on the user interface. - The source of the event is a
-     *              `Node`, which represents the element in the user interface that
-     *              triggered the event.
-     */
+         * Opens the product comment view (CommentProduct.fxml) in a new window and closes the current window.
+         *
+         * @param event the ActionEvent originating from the UI control that triggered opening the comment view
+         */
     @FXML
     void cinemaclient(final ActionEvent event) {
         try {
@@ -972,21 +796,9 @@ public class AfficherProductClientControllers implements Initializable {
 
 
     /**
-     * Loads a new FXML interface, creates a new scene, and attaches it to a new
-     * stage when an event is triggered. The new stage replaces the current one, and
-     * the previous stage is closed.
+     * Opens the AffichageEvenementClient view in a new window and closes the current window.
      *
-     * @param event
-     *              event that triggered the `eventClient()` method to be called,
-     *              providing the necessary information for the method to perform
-     *              its
-     *              actions.
-     *              <p>
-     *              - Event source: The object that generated the event, which is
-     *              typically a button or other user interface element. - Event
-     *              type:
-     *              The type of event that was generated, such as a click or a key
-     *              press.
+     * @param event the ActionEvent whose source node provides the current window to close and from which the new stage is created
      */
     @FXML
     void eventClient(final ActionEvent event) {
@@ -1016,19 +828,9 @@ public class AfficherProductClientControllers implements Initializable {
 
 
     /**
-     * Loads a new FXML file, creates a new scene and stage, and replaces the
-     * current stage with the new one.
+     * Opens the product listing view (AfficherProductClient.fxml) in a new window and closes the current window.
      *
-     * @param event
-     *              ActionEvent object that triggered the function execution and
-     *              provides access to the source element that caused the event,
-     *              which
-     *              in this case is an button click.
-     *              <p>
-     *              - `event`: This represents an action event that occurred in the
-     *              application. It provides information about the source of the
-     *              event
-     *              and its associated actions.
+     * @param event the ActionEvent from the UI control that triggered this navigation
      */
     @FXML
     void produitClient(final ActionEvent event) {
@@ -1058,13 +860,9 @@ public class AfficherProductClientControllers implements Initializable {
 
 
     /**
-     * Likely profiles a client application, possibly collecting data on its
-     * performance or behavior.
+     * Placeholder action handler for the client profile action; currently a no-op.
      *
-     * @param event
-     *              occurrence of an action event that triggered the execution of
-     *              the
-     *              `profilclient` function.
+     * <p>Implemented later to navigate to or display the client's profile view.</p>
      */
     @FXML
     void profilclient(final ActionEvent event) {
@@ -1072,23 +870,9 @@ public class AfficherProductClientControllers implements Initializable {
 
 
     /**
-     * Loads a new FXML interface using `FXMLLoader`, creates a new scene with it,
-     * and attaches the scene to a new stage. It also closes the current stage.
+     * Opens the film user interface (filmuser.fxml) in a new window and closes the current window.
      *
-     * @param event
-     *              ActionEvent object that triggered the function execution,
-     *              providing the source of the event and allowing the code to
-     *              access
-     *              the relevant information related to the event.
-     *              <p>
-     *              - It is an `ActionEvent` representing a user interaction with
-     *              the
-     *              application. - The source of the event is the `FXMLLoader`
-     *              instance that loaded the `filmuser.fxml` file. - The event
-     *              provides access to the stage and scene associated with the
-     *              event,
-     *              which are used to create a new window and replace the current
-     *              one.
+     * @param event the ActionEvent from the triggering control; used to obtain the current stage to close it
      */
     @FXML
     void MovieClient(final ActionEvent event) {
@@ -1117,20 +901,10 @@ public class AfficherProductClientControllers implements Initializable {
 
 
     /**
-     * Loads a new FXML interface, creates a new scene with it, and attaches the
-     * scene to a new stage, while closing the current stage.
-     *
-     * @param event
-     *              ActionEvent object that triggered the function execution,
-     *              providing information about the source of the event and allowing
-     *              the code to handle the appropriate action.
-     *              <p>
-     *              - It is an `ActionEvent` object representing a user action that
-     *              triggered the function execution. - The source of the event is
-     *              typically a button or other widget in the user interface. - The
-     *              event may carry additional information such as the ID of the
-     *              button pressed, the modifiers used, and so on.
-     */
+         * Opens the "Series" view in a new window and closes the current window.
+         *
+         * @param event the ActionEvent that triggered navigation; used to locate and close the current window
+         */
     @FXML
     void SerieClient(final ActionEvent event) {
         try {
@@ -1158,10 +932,10 @@ public class AfficherProductClientControllers implements Initializable {
 
 
     /**
-     * Allows users to input a comment on a product, checks for bad words and
-     * prevents further processing if found. If no bad words are detected, it
-     * creates a new `Comment` object with the client information and product ID,
-     * and adds it to the database using the `CommentService`.
+     * Submit the current text-area value as a comment for the active product after validating for disallowed words.
+     *
+     * If the message contains prohibited language, a warning alert is shown and the comment is not persisted.
+     * Otherwise a Comment is created using the current window's Client and the active product, and the comment is saved via CommentService.
      */
     @FXML
     void addComment() {
@@ -1190,21 +964,10 @@ public class AfficherProductClientControllers implements Initializable {
 
 
     /**
-     * Retrieves all comments for a given product ID, filters them to keep only
-     * those related to the specified cinema, and returns the filtered list of
-     * comments.
+     * Get all comments associated with the specified product ID.
      *
-     * @param idproduit
-     *                  id of the product for which the comments are to be filtered
-     *                  and
-     *                  returned.
-     * @returns a list of commentaries filtered based on the product ID.
-     *          <p>
-     *          - The `List<Comment>` returned represents all comments for a
-     *          specific product with the provided ID. - The list contains `Comment`
-     *          objects that have been filtered based on the product ID. - Each
-     *          `Comment` object in the list has a `Product` field with the ID of
-     *          the matching product.
+     * @param idproduit the product ID to filter comments by
+     * @return a list of Comment objects whose associated product's id equals {@code idproduit}
      */
     private List<Comment> getAllComment(final Long idproduit) {
         final CommentService commentService = new CommentService();
@@ -1223,12 +986,9 @@ public class AfficherProductClientControllers implements Initializable {
 
 
     /**
-     * Retrieves and displays all comments associated with a product ID using a
-     * `VBox` container to hold the comment views and a `getChildren()` method to
-     * add them.
+     * Populates the comments UI with all comments for the specified product.
      *
-     * @param idproduit
-     *                  product ID used to retrieve all comments associated with it.
+     * @param idproduit the product ID whose comments should be loaded and displayed
      */
     private void displayAllComments(final Long idproduit) {
         final List<Comment> comments = this.getAllComment(idproduit);
@@ -1243,19 +1003,7 @@ public class AfficherProductClientControllers implements Initializable {
 
 
     /**
-     * Adds a new comment to an item and displays all comments for that item upon
-     * button click.
-     *
-     * @param event
-     *              mouse event that triggered the `AddComment` method, providing
-     *              the
-     *              context for the comment creation and display.
-     *              <p>
-     *              - `MouseEvent event`: This parameter represents an event object
-     *              that contains information about the mouse action that triggered
-     *              the function. Specifically, it provides details on the button
-     *              pressed (left or right), the location of the click within the
-     *              parent container, and the state of other buttons.
+     * Add the current comment for the active product and refresh the product's comment list in the UI.
      */
     @FXML
     void AddComment(final MouseEvent event) {
@@ -1265,31 +1013,10 @@ public class AfficherProductClientControllers implements Initializable {
 
 
     /**
-     * Adds an comment to a view by creating an image view with the user's profile
-     * picture, adding it to a container with an image circle and a card for the
-     * comment, and then adding the container to the ScrollPane.
+     * Create a UI node that displays a single comment with the user's avatar, name, and text.
      *
-     * @param comment
-     *                Comment object containing information about the user's
-     *                comment,
-     *                including the client's name and the comment text.
-     *                <p>
-     *                - `client`: The client who made the comment (a
-     *                `CommentClient`) -
-     *                `photo_de_profil`: The image URL of the user who made the
-     *                comment
-     *                (a `String`)
-     * @returns a HBox container containing an ImageView, a Group of images and
-     *          text, and a VBox for the comment text.
-     *          <p>
-     *          1/ `HBox contentContainer`: This is the container that holds the
-     *          image and the text of the comment. It has a prefheight of 50 pixels
-     *          to set the maximum height of the container. 2/ `imageBox`: This is
-     *          the group containing the image of the user and the image view. 3/
-     *          `cardContainer`: This is the group containing the text box with the
-     *          name of the user and the comment, as well as any additional children
-     *          added to it. 4/ `textBox`: This is the VBox that contains the text
-     *          box with the name of the user and the comment.
+     * @param comment the Comment to render; its client provides the user's first/last name and optional profile image, and the comment supplies the text
+     * @return an HBox containing the user's avatar (circle + ImageView) and a card-like container with the user's name and comment text
      */
     private HBox addCommentToView(final Comment comment) {
         // Création du cercle pour l'image de l'utilisateur
@@ -1350,19 +1077,9 @@ public class AfficherProductClientControllers implements Initializable {
 
 
     /**
-     * Sets the opacity and visibility of a `FlowPane` component to control its
-     * appearance and accessibility.
+     * Restore the product list view and hide the comments panel.
      *
-     * @param mouseEvent
-     *                   MouseEvent object that triggered the `Close` method.
-     *                   <p>
-     *                   - The `mouseEvent` instance represents an event triggered
-     *                   by a
-     *                   mouse action, such as a click or a drag. - It contains
-     *                   information
-     *                   about the event, including the location of the event on the
-     *                   screen
-     *                   and the type of event that occurred.
+     * Sets the product flow pane to fully visible (opacity 1) and makes it visible, then hides the comments anchor.
      */
     public void Close(final MouseEvent mouseEvent) {
         this.produitFlowPane.setOpacity(1);
@@ -1372,17 +1089,9 @@ public class AfficherProductClientControllers implements Initializable {
 
 
     /**
-     * Sets the opacity and visibility of a `FlowPane` and its child elements, and
-     * hides an `Anchor` element.
+     * Restores the product flow pane's visibility and opacity and hides the filter pane.
      *
-     * @param mouseEvent
-     *                   mouse event that triggered the `CloseFilter()` method,
-     *                   providing
-     *                   information about the location and nature of the event.
-     *                   <p>
-     *                   - `mouseEvent`: The event object representing the mouse
-     *                   action
-     *                   that triggered the function.
+     * @param mouseEvent the MouseEvent that triggered closing the filter pane
      */
     public void CloseFilter(final MouseEvent mouseEvent) {
         this.produitFlowPane.setOpacity(1);
@@ -1392,9 +1101,13 @@ public class AfficherProductClientControllers implements Initializable {
 
 
     /**
-     * Retrieves and displays the top 3 products with the highest quantity and
-     * status from a service, creating a VBox for each product and adding it to a
-     * parent container.
+     * Load and display the top three products ordered by quantity and status.
+     *
+     * Fetches products from ProductService ordered by quantity and status, takes the
+     * first three results, creates a compact card for each product, and adds those
+     * cards to the controller's topthreeVbox. If fewer than three products are
+     * available the method logs that condition and returns; on error it logs the
+     * exception.
      */
     public void loadAcceptedTop3() {
         final ProductService produitService = new ProductService();
@@ -1425,42 +1138,10 @@ public class AfficherProductClientControllers implements Initializable {
 
 
     /**
-     * Generates a `VBox` container with three components: an image view, a label
-     * with the product name, and a label with the price. The image view displays an
-     * image of the product, while the labels display the product name and price.
+     * Create a compact VBox card displaying a product's image, name, and price for the top-three list.
      *
-     * @param produit
-     *                `Product` object that contains information about the product
-     *                to be
-     *                displayed, including its name, image, and price.
-     *                <p>
-     *                - `nom`: the product name - `image`: the image URL or a
-     *                default
-     *                image if null - `prix`: the product price in DT (Djibouti
-     *                Francs)
-     * @returns a `VBox` container with three elements: an image, a product name,
-     *          and a price label.
-     *          <p>
-     *          1/ `cardContainer`: This is the top-level container for the three
-     *          components that make up the card. It has a style class of
-     *          `-fx-padding: 20px 0 0 30px;` which adds left padding to the
-     *          container. 2/ `imageView`: This is an `ImageView` component that
-     *          displays the image of the product. The image view has a layoutX of 5
-     *          and a layoutY of 21, and its fit width and height are set to 50. It
-     *          also has an OnMouseClicked event listener that triggers when the
-     *          image is clicked. 3/ `nameLabel`: This is a `Label` component that
-     *          displays the name of the product. The label has a font size of 15
-     *          and a style class of `-fx-text-fill: #333333;`, which sets the text
-     *          fill color to black. It also has a layoutX of 60 and a layoutY of
-     *          25. 4/ `priceLabel`: This is another `Label` component that displays
-     *          the price of the product. The label has a font size of 14 and a
-     *          Creates a VBox container for displaying top three products.
-     *          This method creates a styled container with product image, name, and
-     *          price
-     *          components arranged vertically.
-     *
-     * @param produit the product to display in the container
-     * @return a VBox container with the product information displayed
+     * @param produit the Product to display (provides image URL, name, and price)
+     * @return a VBox containing a styled product card with the product image, name, and price
      */
     public VBox createtopthree(final Product produit) {
         final VBox cardContainer = new VBox(5);
@@ -1565,4 +1246,3 @@ public class AfficherProductClientControllers implements Initializable {
     }
 
 }
-

@@ -90,16 +90,13 @@ public class OrderClientController implements Initializable {
     private Button idpaymentenligne;
 
     /**
-     * Sets up the order details and user interface for the selected order.
-     * 
-     * <p>
-     * This method stores the selected order, retrieves the total price from
-     * SharedData,
-     * and creates a label to display the total price in the UI.
-     * </p>
-     *
-     * @param orderselectionner The selected order to be processed
-     */
+         * Initializes the controller with the selected order and prepares the UI's total-price label.
+         *
+         * <p>Stores the provided order, schedules retrieval of the connected user on the JavaFX application thread
+         * (logging the user's email), and creates and adds a label showing the total price to the UI.</p>
+         *
+         * @param orderselectionner the selected order to process and display
+         */
     @FXML
     void initialize(final Order orderselectionner) {
         this.order = orderselectionner;
@@ -164,18 +161,9 @@ public class OrderClientController implements Initializable {
 
 
     /**
-     * Processes the order when the user clicks the order button.
-     * 
-     * <p>
-     * This method:
-     * 1. Validates the phone number and address
-     * 2. Creates the order with customer details
-     * 3. Saves the order to the database
-     * 4. Updates inventory for each ordered item
-     * 5. Makes the payment section visible
-     * </p>
+     * Handle order submission: validate contact details, persist the order and its items, update inventory, and show the payment pane.
      *
-     * @param event The action event that triggered this method
+     * <p>Validates the phone number and address, sets order metadata (client, phone, address, date), saves the order and each order item, decrements corresponding product stock, and makes the online payment section visible.</p>
      */
     @FXML
     void order(final ActionEvent event) {
@@ -278,14 +266,9 @@ public class OrderClientController implements Initializable {
 
 
     /**
-     * Navigates to the shopping cart interface.
-     * 
-     * <p>
-     * Loads the ShoppingCartProduct.fxml file, creates a new scene and stage,
-     * and replaces the current stage with the new one.
-     * </p>
+     * Opens the shopping cart UI in a new window and closes the current window.
      *
-     * @param event The mouse event that triggered this method
+     * <p>Loads /ui/produits/ShoppingCartProduct.fxml, displays it in a new Stage, and closes the originating Stage.</p>
      */
     @FXML
     void shoppingcart(final MouseEvent event) {
@@ -314,17 +297,10 @@ public class OrderClientController implements Initializable {
 
 
     /**
-     * Initiates the PayPal payment process.
-     * 
-     * <p>
-     * This method:
-     * 1. Creates a PayPal API context
-     * 2. Sets up the payment amount and details
-     * 3. Configures redirect URLs for success and cancel scenarios
-     * 4. Creates the payment and redirects the user to PayPal for approval
-     * </p>
+     * Starts the PayPal payment flow for the current order and opens the PayPal approval page.
      *
-     * @param event The action event that triggered this method
+     * <p>Creates a PayPal payment for the controller's total price and, if successful, navigates the user to
+     * PayPal's approval URL for authorization.</p>
      */
     @FXML
     void payment(final ActionEvent event) {
@@ -479,16 +455,11 @@ public class OrderClientController implements Initializable {
 
 
     /**
-     * Completes the payment process after PayPal approval.
-     * 
-     * <p>
-     * This method executes the payment using the PayPal API and updates
-     * the order status in the database based on the payment result.
-     * </p>
-     *
-     * @param paymentId The PayPal payment ID
-     * @param payerId   The PayPal payer ID
-     */
+         * Finalize a PayPal payment and update the associated order's status when the payment is approved.
+         *
+         * @param paymentId the PayPal payment identifier
+         * @param payerId   the PayPal payer identifier
+         */
     private void completePayment(final String paymentId, final String payerId) {
         final APIContext apiContext = new APIContext(OrderClientController.CLIENT_ID,
                 OrderClientController.CLIENT_SECRET, "sandbox");
@@ -515,15 +486,10 @@ public class OrderClientController implements Initializable {
 
 
     /**
-     * Navigates to the cinema client interface.
-     * 
-     * <p>
-     * Loads the CommentaireProduct.fxml file, creates a new scene and stage,
-     * and replaces the current stage with the new one.
-     * </p>
-     *
-     * @param event The action event that triggered this method
-     */
+         * Opens the CommentaireProduct view in a new window and closes the current window.
+         *
+         * @param event the ActionEvent that triggered the navigation
+         */
     @FXML
     void cinemaclient(final ActionEvent event) {
         try {
@@ -551,14 +517,10 @@ public class OrderClientController implements Initializable {
 
 
     /**
-     * Navigates to the event client interface.
-     * 
-     * <p>
-     * Loads the AffichageEvenementClient.fxml file, creates a new scene and stage,
-     * and replaces the current stage with the new one.
-     * </p>
+     * Opens the event client interface in a new window and closes the current window.
      *
-     * @param event The action event that triggered this method
+     * <p>Loads /ui/ui/AffichageEvenementClient.fxml, creates and shows a new Stage containing that scene,
+     * then closes the stage that originated the ActionEvent.</p>
      */
     @FXML
     void eventClient(final ActionEvent event) {
@@ -623,10 +585,10 @@ public class OrderClientController implements Initializable {
 
 
     /**
-     * Placeholder for client profile functionality.
-     * 
-     * @param event The action event that triggered this method
-     */
+         * Reserved handler for client profile actions; currently no behavior is implemented.
+         *
+         * @param event the action event that triggered this handler
+         */
     @FXML
     void profilclient(final ActionEvent event) {
     }
@@ -643,9 +605,7 @@ public class OrderClientController implements Initializable {
 
 
     /**
-     * Placeholder for showing event functionality.
-     * 
-     * @param event The action event that triggered this method
+     * No-op placeholder reserved for future implementation of the event-view navigation.
      */
     @FXML
     void showevenement(final ActionEvent event) {
@@ -653,9 +613,7 @@ public class OrderClientController implements Initializable {
 
 
     /**
-     * Placeholder for showing product functionality.
-     * 
-     * @param event The action event that triggered this method
+     * Placeholder method intended to show the product view; currently has no implementation.
      */
     @FXML
     void showproduit(final ActionEvent event) {
@@ -663,14 +621,9 @@ public class OrderClientController implements Initializable {
 
 
     /**
-     * Navigates to the movie client interface.
-     * 
-     * <p>
-     * Loads the filmuser.fxml file, creates a new scene and stage,
-     * and replaces the current stage with the new one.
-     * </p>
+     * Open the movie client UI in a new window and close the current window.
      *
-     * @param event The action event that triggered this method
+     * @param event the ActionEvent that triggered navigation
      */
     @FXML
     void MovieClient(final ActionEvent event) {
@@ -698,14 +651,9 @@ public class OrderClientController implements Initializable {
 
 
     /**
-     * Navigates to the series client interface.
-     * 
-     * <p>
-     * Loads the Series-view.fxml file, creates a new scene and stage,
-     * and replaces the current stage with the new one.
-     * </p>
+     * Opens the Series client view in a new window and closes the current window.
      *
-     * @param event The action event that triggered this method
+     * <p>Loads /ui/ui/Series-view.fxml, creates and shows a new stage containing that scene, then closes the originating stage.</p>
      */
     @FXML
     void SerieClient(final ActionEvent event) {
@@ -732,4 +680,3 @@ public class OrderClientController implements Initializable {
     }
 
 }
-

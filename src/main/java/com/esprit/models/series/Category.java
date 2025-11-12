@@ -31,12 +31,10 @@ public class Category {
     private List<Series> seriesList;
 
     /**
-     * Constructor without id for creating new category instances.
+     * Create a Category with the given name and description without specifying an id.
      *
-     * @param name
-     *                    the name of the category
-     * @param description
-     *                    the description of the category
+     * @param name        the category's name
+     * @param description the category's description
      */
     public Category(final String name, final String description) {
         this.name = name;
@@ -44,4 +42,3 @@ public class Category {
     }
 
 }
-
