@@ -150,7 +150,9 @@ public class DashboardClientController {
     // listCinemaClient.setOpacity(1);
     // listCinemaClient.setDisable(false);
     // }
-    // });
+
+    // }
+);
 
     /**
      * Searches for Cinema objects in a list based on a search term and returns a
@@ -184,9 +186,12 @@ public class DashboardClientController {
             if (null != element.getName() && element.getName().contains(recherche)) {
                 resultats.add(element);
             }
+
         }
+
         return resultats;
     }
+
 
     /**
      * Sets the visibility of a pane and two lists to false and true, respectively,
@@ -210,6 +215,7 @@ public class DashboardClientController {
         this.listCinemaClient.setVisible(true);
     }
 
+
     /**
      * Clears the children of a `FlowPane`, loads and displays a list of accepted
      * cinemas, and sets the visibility of the `listCinemaClient` and `PlanningPane`
@@ -230,6 +236,7 @@ public class DashboardClientController {
         this.listCinemaClient.setVisible(true);
         this.PlanningPane.setVisible(false);
     }
+
 
     /**
      * Loads a set of cinemas from a service, filters them based on their status,
@@ -255,13 +262,16 @@ public class DashboardClientController {
         if (acceptedCinemasList.isEmpty()) {
             this.showAlert("Aucun cinéma accepté n'est disponible.");
         }
+
         final HashSet<Cinema> acceptedCinemasSet = new HashSet<>(acceptedCinemasList);
         for (final Cinema cinema : acceptedCinemasSet) {
             final HBox cardContainer = this.createCinemaCard(cinema);
             this.cinemaFlowPane.getChildren().add(cardContainer);
         }
+
         return acceptedCinemasSet;
     }
+
 
     /**
      * Creates an Alert object with a title, header text, and content text. It then
@@ -279,6 +289,7 @@ public class DashboardClientController {
         alert.setContentText(message);
         alert.show();
     }
+
 
     // Méthode pour créer les cartes des top 3 cinémas les mieux notés
 
@@ -342,9 +353,11 @@ public class DashboardClientController {
             final String logoString = cinema.getLogoPath();
             final Image logoImage = new Image(logoString);
             logoImageView.setImage(logoImage);
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             DashboardClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         card.getChildren().add(logoImageView);
         final Label NomLabel = new Label("Name: ");
         NomLabel.setLayoutX(155);
@@ -400,7 +413,8 @@ public class DashboardClientController {
             this.AnchorComments.setVisible(true);
             this.displayAllComments(this.cinemaId);
             DashboardClientController.LOGGER.info(String.valueOf(this.cinemaId));
-        });
+        }
+);
         // Ajout du composant de notation (Rating)
         final CinemaRatingService ratingService = new CinemaRatingService();
         final Rating rating = new Rating();
@@ -413,17 +427,20 @@ public class DashboardClientController {
         if (0 <= specificRating) {
             rating.setRating(specificRating);
         }
+
         // Ajout d'un écouteur pour la notation
         rating.ratingProperty().addListener((observable, oldValue, newValue) -> {
             final Client client = (Client) this.AnchorComments.getScene().getWindow().getUserData();
             // Enregistrez le nouveau taux dans la base de données
             final CinemaRating ratingCinema = new CinemaRating(cinema, client, newValue.intValue());
             ratingService.create(ratingCinema);
-        });
+        }
+);
         card.getChildren().add(rating);
         cardContainer.getChildren().add(card);
         return cardContainer;
     }
+
 
     /**
      * Creates and positions top-rated cinema cards within an `AnchorPane`. Each
@@ -470,9 +487,11 @@ public class DashboardClientController {
                 final String logoString = cinema.getLogoPath();
                 final Image logoImage = new Image(logoString);
                 logoImageView.setImage(logoImage);
-            } catch (final Exception e) {
+            }
+ catch (final Exception e) {
                 DashboardClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
+
             card.getChildren().add(logoImageView);
             final Label nomLabel = new Label("Nom: " + cinema.getName());
             nomLabel.setLayoutX(200);
@@ -491,7 +510,9 @@ public class DashboardClientController {
             // Mise à jour de la position Y pour la prochaine carte
             currentY += cardHeight + cardSpacing;
         }
+
     }
+
 
     /**
      * Geocodes a given address by sending a GET request to the OpenStreetMap
@@ -522,6 +543,7 @@ public class DashboardClientController {
                 while (null != (inputLine = in.readLine())) {
                     content.append(inputLine);
                 }
+
                 in.close();
                 connection.disconnect();
                 final JSONArray jsonArray = new JSONArray(content.toString());
@@ -532,11 +554,16 @@ public class DashboardClientController {
                     // Open the dialog with the map on the JavaFX Application Thread
                     Platform.runLater(() -> this.openMapDialog(lat, lon));
                 }
-            } catch (final Exception e) {
+
+            }
+ catch (final Exception e) {
                 DashboardClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
-        }).start();
+
+        }
+).start();
     }
+
 
     /**
      * Creates a new dialog, loads a map into a WebView, updates the marker position
@@ -566,7 +593,9 @@ public class DashboardClientController {
                 // Call JavaScript function to update the marker
                 webEngine.executeScript("updateMarker(" + lat + ", " + lon + ");");
             }
-        });
+
+        }
+);
         // Set the WebView as the dialog content
         dialog.getDialogPane().setContent(webView);
         dialog.getDialogPane().setPrefSize(600, 400); // Set dialog size (adjust as needed)
@@ -576,6 +605,7 @@ public class DashboardClientController {
         // Show the dialog
         dialog.showAndWait();
     }
+
 
     /**
      * Displays a planning page for a cinema, consisting of 7 days of the week, each
@@ -613,6 +643,7 @@ public class DashboardClientController {
             dayLabel.setFont(Font.font("Arial Rounded MT Bold", FontWeight.BOLD, 14));
             this.tilePane.getChildren().add(dayLabel);
         }
+
         VBox.setMargin(this.tilePane, new Insets(0, 0, 0, 50));
         planningContent.getChildren().add(this.tilePane);
         final Separator separator = new Separator(Orientation.HORIZONTAL);
@@ -622,6 +653,7 @@ public class DashboardClientController {
         this.planningFlowPane.getChildren().add(planningContent);
         AnchorPane.setTopAnchor(planningContent, 50.0);
     }
+
 
     /**
      * Loads the planning for the current week (Sunday to Saturday) for a given
@@ -659,6 +691,7 @@ public class DashboardClientController {
         final MovieSessionService moviesessionService = new MovieSessionService();
         return moviesessionService.getSessionsByDateRangeAndCinema(startDate, endDate, cinema);
     }
+
 
     /**
      * Loads the current week's planning data, displays it in a VBox, and adds an
@@ -706,6 +739,7 @@ public class DashboardClientController {
             dayLabel.setFont(Font.font("Arial Rounded MT Bold", FontWeight.BOLD, 14));
             tilePane.getChildren().add(dayLabel);
         }
+
         VBox.setMargin(tilePane, new Insets(0, 0, 0, 50));
         planningContent.getChildren().add(tilePane);
         final Separator separator = new Separator(Orientation.HORIZONTAL);
@@ -722,20 +756,24 @@ public class DashboardClientController {
                 final StackPane moviesessionCard = this.createMovieSessionCard(moviesession);
                 moviesessionsForDateVBox.getChildren().add(moviesessionCard);
             }
+
             // Ajouter le VBox des séances au conteneur principal
             planningContent.getChildren().add(moviesessionsForDateVBox);
-        } else {
+        }
+ else {
             // Afficher un message lorsque aucune séance n'est disponible pour la date
             // spécifiée
             final Label noMovieSessionLabel = new Label("Aucune séance prévue pour cette journée.");
             noMovieSessionLabel.setStyle("-fx-font-size: 16px;");
             planningContent.getChildren().add(noMovieSessionLabel); // Ajouter le message au conteneur principal
         }
+
         // Effacer tout contenu précédent et ajouter le contenu actuel au conteneur
         // principal
         this.planningFlowPane.getChildren().clear();
         this.planningFlowPane.getChildren().add(planningContent);
     }
+
 
     /**
      * Generates a stack pane containing a card with information about a
@@ -790,9 +828,11 @@ public class DashboardClientController {
             final String logoString = moviesession.getFilm().getImage();
             final Image logoImage = new Image(logoString);
             filmImageView.setImage(logoImage);
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             DashboardClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         card.getChildren().add(filmImageView);
         final VBox labelsContainer = new VBox();
         labelsContainer.setSpacing(5);
@@ -812,6 +852,7 @@ public class DashboardClientController {
         return cardContainer;
     }
 
+
     /**
      * Sets up the user interface and connects it to a `CinemaService` for movie
      * data retrieval. It listens for text changes in a search bar, queries the
@@ -825,10 +866,12 @@ public class DashboardClientController {
             createCinemaCards(new ArrayList<>(acceptedCinemas));
         }
 
+
         if (tricomboBox != null) {
             tricomboBox.getItems().addAll("Name", "Address", "Rating");
             tricomboBox.setValue("Name");
         }
+
 
         if (searchbar1 != null) {
             searchbar1.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -837,22 +880,30 @@ public class DashboardClientController {
                     cinemaFlowPane.getChildren().clear();
                     createCinemaCards(searchResults);
                 }
-            });
+
+            }
+);
         }
+
 
         if (listCinemaClient != null) {
             listCinemaClient.setVisible(true);
         }
+
         if (PlanningPane != null) {
             PlanningPane.setVisible(false);
         }
+
         if (AnchorComments != null) {
             AnchorComments.setVisible(false);
         }
+
         if (filterAnchor != null) {
             filterAnchor.setVisible(false);
         }
+
     }
+
 
     /**
      * Creates film cards for a list of cinemas and adds them to a pane containing
@@ -868,7 +919,9 @@ public class DashboardClientController {
             HBox cardContainer = createCinemaCard(cinema);
             cinemaFlowPane.getChildren().add(cardContainer);
         }
+
     }
+
 
     /**
      * Retrieves a list of cinemas through a call to the ` CinemaService`. It then
@@ -881,6 +934,7 @@ public class DashboardClientController {
         PageRequest pageRequest = new PageRequest(0, 10);
         return cinemaService.read(pageRequest).getContent();
     }
+
 
     /**
      * Updates the visibility of the `filterAnchor` pane and adds two VBoxes
@@ -916,6 +970,7 @@ public class DashboardClientController {
             addressCheckBoxesVBox.getChildren().add(checkBox);
             this.addressCheckBoxes.add(checkBox);
         }
+
         addressCheckBoxesVBox.setLayoutX(25);
         addressCheckBoxesVBox.setLayoutY(60);
         // Créer des VBox pour les statuts
@@ -928,12 +983,14 @@ public class DashboardClientController {
             namesCheckBoxesVBox.getChildren().add(checkBox);
             this.namesCheckBoxes.add(checkBox);
         }
+
         namesCheckBoxesVBox.setLayoutX(25);
         namesCheckBoxesVBox.setLayoutY(120);
         // Ajouter les VBox dans le filterAnchor
         this.filterAnchor.getChildren().addAll(addressCheckBoxesVBox, namesCheckBoxesVBox);
         this.filterAnchor.setVisible(true);
     }
+
 
     /**
      * Filters a list of cinemas based on selected addresses and/or names, and
@@ -969,6 +1026,7 @@ public class DashboardClientController {
         this.createCinemaCards(filteredCinemas);
     }
 
+
     /**
      * Streams, filters, and collects the selected addresses from the
      * `addressCheckBoxes` array, returning a list of strings representing the
@@ -989,6 +1047,7 @@ public class DashboardClientController {
                 .collect(Collectors.toList());
     }
 
+
     /**
      * In Java code returns a list of selected names from an `AnchorPane` of
      * filtering by streaming, filtering, and mapping the values of `CheckBox`
@@ -1005,6 +1064,7 @@ public class DashboardClientController {
         return this.namesCheckBoxes.stream().filter(CheckBox::isSelected).map(CheckBox::getText)
                 .collect(Collectors.toList());
     }
+
 
     /**
      * Retrieves all cinemas from a database, extracts unique addresses from them
@@ -1027,6 +1087,7 @@ public class DashboardClientController {
         return cinemas.stream().map(Cinema::getAddress).distinct().collect(Collectors.toList());
     }
 
+
     /**
      * Retrieves a list of unique cinema names from a database by mapping and
      * collecting the `nom` attributes of each `Cinema` object in the list.
@@ -1045,6 +1106,7 @@ public class DashboardClientController {
         // Extraire les noms uniques des cinémas
         return cinemas.stream().map(Cinema::getName).distinct().collect(Collectors.toList());
     }
+
 
     /**
      * Loads an fxml file and displays a stage with the content from the loaded
@@ -1074,6 +1136,7 @@ public class DashboardClientController {
         currentStage.close();
     }
 
+
     /**
      * Displays a FXML user interface for managing movies using an FXMLLoader and a
      * Stage object.
@@ -1097,6 +1160,7 @@ public class DashboardClientController {
         stage.show();
         currentStage.close();
     }
+
 
     /**
      * Loads an FXML file to display a product client interface, creates a new stage
@@ -1125,6 +1189,7 @@ public class DashboardClientController {
         currentStage.close();
     }
 
+
     /**
      * Loads a FXML file "/ui/series/SeriesClient.fxml" and displays it on a new
      * stage, replacing the current stage.
@@ -1152,6 +1217,7 @@ public class DashboardClientController {
         currentStage.close();
     }
 
+
     /**
      * Allows users to add comments to a cinema. When a user clicks on the "Add
      * Comment" button, the function takes the user's comment and analyzes its
@@ -1168,7 +1234,8 @@ public class DashboardClientController {
             alert.setTitle("Commentaire vide");
             alert.setContentText("Add Comment");
             alert.showAndWait();
-        } else {
+        }
+ else {
             final SentimentAnalysisController sentimentAnalysisController = new SentimentAnalysisController();
             final String sentimentResult = sentimentAnalysisController.analyzeSentiment(message);
             DashboardClientController.LOGGER
@@ -1180,7 +1247,9 @@ public class DashboardClientController {
             cinemaCommentService.create(commentaire);
             this.txtAreaComments.clear();
         }
+
     }
+
 
     /**
      * Adds a comment to a cinema and displays all comments for that cinema when the
@@ -1197,6 +1266,7 @@ public class DashboardClientController {
         this.addCommentaire();
         this.displayAllComments(this.cinemaId);
     }
+
 
     /**
      * Retrieves all comments related to a specific cinema, using a service to read
@@ -1221,9 +1291,12 @@ public class DashboardClientController {
             if (comment.getCinema().getId() == cinemaId) {
                 cinemaComments.add(comment);
             }
+
         }
+
         return cinemaComments;
     }
+
 
     /**
      * Creates a container for displaying a user's comment and image, with a
@@ -1281,10 +1354,12 @@ public class DashboardClientController {
         final Image userImage;
         if (null != imageUrl && !imageUrl.isEmpty()) {
             userImage = new Image(imageUrl);
-        } else {
+        }
+ else {
             // Chargement de l'image par défaut
             userImage = new Image(this.getClass().getResourceAsStream("/Logo.png"));
         }
+
         final ImageView imageView = new ImageView(userImage);
         imageView.setFitWidth(50);
         imageView.setFitHeight(50);
@@ -1325,6 +1400,7 @@ public class DashboardClientController {
         return contentContainer;
     }
 
+
     /**
      * Displays all comments associated with a particular cinema ID in a scroll
      * pane.
@@ -1340,8 +1416,10 @@ public class DashboardClientController {
             final HBox commentView = this.addCommentToView(comment);
             allCommentsContainer.getChildren().add(commentView);
         }
+
         this.ScrollPaneComments.setContent(allCommentsContainer);
     }
+
 
     /**
      * Sets the opacity of a component to 1, makes an component invisible and
@@ -1360,4 +1438,6 @@ public class DashboardClientController {
         this.AnchorComments.setVisible(false);
         this.listCinemaClient.setVisible(true);
     }
+
 }
+

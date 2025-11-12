@@ -65,4 +65,6 @@ public class Episode {
         this.video = video;
         this.seriesId = seriesId;
     }
+
 }
+

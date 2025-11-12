@@ -51,6 +51,7 @@ public enum SignInGoogle {
             throw new IllegalStateException("Google OAuth credentials not found in .env file");
         }
 
+
         HttpClientConfig clientConfig = new AhcHttpClientConfig(new DefaultAsyncHttpClientConfig.Builder()
                 .setMaxConnections(5).setRequestTimeout(Duration.ofMillis(10_000))
                 .setPooledConnectionIdleTimeout(Duration.ofMillis(1_000)).setReadTimeout(Duration.ofMillis(1_000))
@@ -69,6 +70,7 @@ public enum SignInGoogle {
         LOGGER.info("Authorization URL generated successfully");
         return authorizationUrl;
     }
+
 
     /**
      * Complete the OAuth flow with the authorization code
@@ -100,14 +102,21 @@ public enum SignInGoogle {
                 if (response.getCode() == 200) {
                     LOGGER.info("User info retrieved successfully");
                     return true;
-                } else {
+                }
+ else {
                     LOGGER.warning("Failed to get user info. Status code: " + response.getCode());
                     return false;
                 }
+
             }
-        } catch (Exception e) {
+
+        }
+ catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Authentication failed", e);
             return false;
         }
+
     }
+
 }
+

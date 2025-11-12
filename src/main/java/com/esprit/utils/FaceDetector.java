@@ -47,6 +47,7 @@
 //         void onFrameProcessed(Mat frame);
 //     }
 
+
 //     /**
 //      * Constructs a new FaceDetector with the specified callback.
 //      *
@@ -68,12 +69,15 @@
 //             throw new RuntimeException("Error loading cascade classifiers");
 //         }
 
+
 //         // Initialize video capture
 //         this.videoCapture = new VideoCapture(0);
 //         if (!this.videoCapture.isOpened()) {
 //             throw new RuntimeException("Error opening video capture device");
 //         }
+
 //     }
+
 
 //     @Override
 //     /**
@@ -112,17 +116,24 @@
 //                         if (eyes.toArray().length > 0) {
 //                             callback.onFaceDetected(faceROI);
 //                         }
+
 //                     }
+
 
 //                     callback.onFrameProcessed(frame);
 //                 }
-//             } catch (Exception e) {
+
+//             }
+ catch (Exception e) {
 //                 LOGGER.log(Level.SEVERE, "Error processing video frame", e);
 //             }
+
 //         }
+
 
 //         cleanup();
 //     }
+
 
 //     /**
 //      * Stops the face detection process.
@@ -131,11 +142,14 @@
 //         running.set(false);
 //     }
 
+
 //     private void cleanup() {
 //         if (videoCapture != null && videoCapture.isOpened()) {
 //             videoCapture.release();
 //         }
+
 //     }
+
 
 //     /**
 //      * Cleans up resources when the object is garbage collected.
@@ -147,4 +161,6 @@
 //         cleanup();
 //         super.finalize();
 //     }
+
 // }
+

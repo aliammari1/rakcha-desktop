@@ -103,14 +103,19 @@ public class StatistiqueController implements Initializable {
                     final Tooltip tooltip = new Tooltip(data.getXValue() + ": " + data.getYValue());
                     Tooltip.install(data.getNode(), tooltip);
                     count++;
-                } else {
+                }
+ else {
                     break; // Interrompre la boucle si la limite est atteinte
                 }
+
             }
+
         }
+
         barChart.getData().add(dataSeries);
         return barChart;
     }
+
 
     /**
      * @param statistics
@@ -160,13 +165,17 @@ public class StatistiqueController implements Initializable {
                 final Tooltip tooltip = new Tooltip(data.getXValue() + ": " + data.getYValue());
                 Tooltip.install(data.getNode(), tooltip);
                 count++;
-            } else {
+            }
+ else {
                 break; // Interrompre la boucle si la limite est atteinte
             }
+
         }
+
         barChart.getData().add(dataSeries);
         this.borderPane.setCenter(barChart);
     }
+
 
     /**
      * Initializes a ComboBox with category options, sets the selected option to
@@ -218,11 +227,14 @@ public class StatistiqueController implements Initializable {
             for (final Map.Entry<Category, Long> entry : statistiques.entrySet()) {
                 this.statistics.put(entry.getKey(), entry.getValue());
             }
+
         }
+
         // Initialiser le graphique en barres avec une limite de 20 catégories
         final BarChart<String, Number> barChart = this.createBarChart(statistiques, 20);
         this.borderPane.setCenter(barChart);
     }
+
 
     /**
      * Handles the display of category statistics when the user selects
@@ -238,7 +250,9 @@ public class StatistiqueController implements Initializable {
             final Map<Category, Long> statistiques = new IServiceCategorieImpl().getCategoriesStatistics();
             this.borderPane.setCenter(this.createBarChart(statistiques, 20));
         }
+
     }
+
 
     /**
      * Displays a bar chart for statistics passed as an argument and with a
@@ -248,6 +262,7 @@ public class StatistiqueController implements Initializable {
     private void handleShowBarChart() {
         this.showBarChart(this.statistics, 20);
     }
+
 
     // ... (Les autres méthodes restent inchangées)
 
@@ -275,6 +290,7 @@ public class StatistiqueController implements Initializable {
         this.showPieChart(statistiques);
     }
 
+
     // Méthode pour afficher le graphique en secteurs
 
     /**
@@ -298,6 +314,7 @@ public class StatistiqueController implements Initializable {
             final Long numberOfCategorys = entry.getValue();
             pieChartData.add(new PieChart.Data(categoryName, numberOfCategorys));
         }
+
         final PieChart pieChart = new PieChart(pieChartData);
         this.createToolTips(pieChart);
         pieChart.setTitle("Statistiques of  categorys");
@@ -315,10 +332,13 @@ public class StatistiqueController implements Initializable {
             if (MouseButton.SECONDARY == event.getButton()) {
                 contextMenu.show(pieChart, event.getScreenX(), event.getScreenY());
             }
-        });
+
+        }
+);
         miSwitchToBarChart.setOnAction(event -> this.showBarChart(statistics));
         this.borderPane.setCenter(pieChart);
     }
+
 
     /**
      * Takes a map of category-specific count data and displays it as a bar chart.
@@ -330,6 +350,7 @@ public class StatistiqueController implements Initializable {
      */
     private void showBarChart(final Map<Category, Long> statistics) {
     }
+
 
     /**
      * Generates and installs tooltips for each data point in a pie chart, updating
@@ -352,9 +373,12 @@ public class StatistiqueController implements Initializable {
             Tooltip.install(data.getNode(), tp);
             data.pieValueProperty().addListener((observable, oldValue, newValue) -> {
                 tp.setText(newValue.toString());
-            });
+            }
+);
         }
+
     }
+
 
     /**
      * Terminates the application by calling `System.exit(0)`.
@@ -369,6 +393,7 @@ public class StatistiqueController implements Initializable {
     public void handleClose(final ActionEvent actionEvent) {
         System.exit(0);
     }
+
 
     /**
      * Updates the value of a pie chart by multiplying its current value by 1.10 and
@@ -393,11 +418,15 @@ public class StatistiqueController implements Initializable {
             pc.getData().get(2).setPieValue(value * 1.10);
             this.createToolTips(pc);
         }
+
     }
+
 
     /**
      * Initializes an unspecified object or system.
      */
     public void initialize() {
     }
+
 }
+

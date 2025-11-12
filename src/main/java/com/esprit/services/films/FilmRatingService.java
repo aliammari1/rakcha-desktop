@@ -60,10 +60,13 @@ public class FilmRatingService implements IService<FilmRating> {
                     """;
             tableCreator.createTableIfNotExists("film_ratings", createFilmRatingsTable);
 
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             log.error("Error creating tables for FilmRatingService", e);
         }
+
     }
+
 
     @Override
     /**
@@ -79,11 +82,14 @@ public class FilmRatingService implements IService<FilmRating> {
             statement.setLong(2, filmRating.getClient().getId());
             statement.setInt(3, filmRating.getRating());
             statement.executeUpdate();
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             log.error("Error creating film rating", e);
             throw new RuntimeException(e);
         }
+
     }
+
 
     public List<FilmRating> read() {
         final List<FilmRating> ratings = new ArrayList<>();
@@ -97,18 +103,26 @@ public class FilmRatingService implements IService<FilmRating> {
                     if (film != null && client != null) {
                         ratings.add(FilmRating.builder().id(rs.getLong("id")).film(film).client(client)
                                 .rating(rs.getInt("rating")).build());
-                    } else {
+                    }
+ else {
                         log.warn("Missing required entities for rating ID: " + rs.getLong("id"));
                     }
-                } catch (Exception e) {
+
+                }
+ catch (Exception e) {
                     log.warn("Error loading rating relationships for rating ID: " + rs.getLong("id"), e);
                 }
+
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             log.error("Error reading ratings", e);
         }
+
         return ratings;
     }
+
 
     @Override
     /**
@@ -124,11 +138,14 @@ public class FilmRatingService implements IService<FilmRating> {
             statement.setLong(2, filmRating.getFilm().getId());
             statement.setLong(3, filmRating.getClient().getId());
             statement.executeUpdate();
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             log.error("Error updating rating", e);
             throw new RuntimeException(e);
         }
+
     }
+
 
     @Override
     /**
@@ -143,11 +160,14 @@ public class FilmRatingService implements IService<FilmRating> {
             preparedStatement.setLong(1, filmRating.getFilm().getId());
             preparedStatement.setLong(2, filmRating.getClient().getId());
             preparedStatement.executeUpdate();
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             log.error("Error deleting rating", e);
             throw new RuntimeException(e);
         }
+
     }
+
 
     /**
      * Retrieves the AvergeRating value.
@@ -162,12 +182,17 @@ public class FilmRatingService implements IService<FilmRating> {
                 if (resultSet.next()) {
                     return resultSet.getDouble("averageRate");
                 }
+
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             log.error("Error getting average rating for film: " + id_film, e);
         }
+
         return 0.0;
     }
+
 
     /**
      * Retrieves the AverageRatingSorted value.
@@ -184,12 +209,17 @@ public class FilmRatingService implements IService<FilmRating> {
                 if (film != null) {
                     aver.add(FilmRating.builder().film(film).rating((int) resultSet.getDouble("averageRate")).build());
                 }
+
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             log.error("Error getting average rating sorted", e);
         }
+
         return aver;
     }
+
 
     /**
      * Performs ratingExists operation.
@@ -209,13 +239,19 @@ public class FilmRatingService implements IService<FilmRating> {
                         return FilmRating.builder().id(resultSet.getLong("id")).film(film).client(client)
                                 .rating(resultSet.getInt("rating")).build();
                     }
+
                 }
+
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             log.error("Error checking if rating exists", e);
         }
+
         return null;
     }
+
 
     /**
      * Retrieves the UserRatings value.
@@ -236,13 +272,19 @@ public class FilmRatingService implements IService<FilmRating> {
                         ratings.add(FilmRating.builder().id(rs.getLong("id")).film(film).client(user)
                                 .rating(rs.getInt("rating")).build());
                     }
+
                 }
+
             }
-        } catch (SQLException e) {
+
+        }
+ catch (SQLException e) {
             log.error("Error getting user ratings: " + userId, e);
         }
+
         return ratings;
     }
+
 
     /**
      * Retrieves the TopRatedFilms value.
@@ -260,15 +302,22 @@ public class FilmRatingService implements IService<FilmRating> {
                     topRated.add(FilmRating.builder().film(film).rating((int) Math.round(rs.getDouble("averageRate")))
                             .build());
                 }
+
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             log.error("Error getting top rated films", e);
         }
+
         return topRated;
     }
+
 
     @Override
     public Page<FilmRating> read(PageRequest pageRequest) {
         throw new UnsupportedOperationException("Unimplemented method 'read'");
     }
+
 }
+

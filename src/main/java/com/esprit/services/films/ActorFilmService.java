@@ -66,10 +66,13 @@ public class ActorFilmService {
                     """;
             tableCreator.createTableIfNotExists("actor_film", createActorFilmTable);
 
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             log.error("Error creating tables for ActorFilmService", e);
         }
+
     }
+
 
     /**
      * Creates associations between a film and multiple actors based on actor names.
@@ -87,12 +90,17 @@ public class ActorFilmService {
                     statement.setLong(2, actor.getId());
                     statement.executeUpdate();
                 }
+
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error creating film-actor associations", e);
             throw new RuntimeException(e);
         }
+
     }
+
 
     /**
      * Retrieves the list of actors associated with a specific film.
@@ -110,11 +118,15 @@ public class ActorFilmService {
                 actors.add(Actor.builder().id(rs.getLong("id")).name(rs.getString("name")).image(rs.getString("image"))
                         .biography(rs.getString("biography")).build());
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error getting actors for film: " + filmId, e);
         }
+
         return actors;
     }
+
 
     /**
      * Retrieves the list of films associated with a specific actor.
@@ -133,11 +145,15 @@ public class ActorFilmService {
                         .duration(rs.getTime("duration")).description(rs.getString("description"))
                         .releaseYear(rs.getInt("release_year")).build());
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error getting films for actor: " + actorId, e);
         }
+
         return films;
     }
+
 
     /**
      * Updates the actors associated with a film by first removing all existing
@@ -153,14 +169,17 @@ public class ActorFilmService {
         try (final PreparedStatement statement = this.connection.prepareStatement(reqDelete)) {
             statement.setLong(1, film.getId());
             statement.executeUpdate();
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error deleting existing actor associations", e);
             throw new RuntimeException(e);
         }
 
+
         // Create new associations
         createFilmActorAssociation(film, actorNames);
     }
+
 
     /**
      * Gets a comma-separated string of actor names for a specific film.
@@ -176,11 +195,15 @@ public class ActorFilmService {
             if (rs.next()) {
                 return rs.getString("actorNames");
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error getting actor names for film: " + filmId, e);
         }
+
         return "";
     }
+
 
     /**
      * Deletes the association between a specific film and actor.
@@ -194,9 +217,13 @@ public class ActorFilmService {
             statement.setInt(1, filmId);
             statement.setInt(2, actorId);
             statement.executeUpdate();
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error deleting film-actor association", e);
             throw new RuntimeException(e);
         }
+
     }
+
 }
+

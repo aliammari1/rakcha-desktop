@@ -244,10 +244,13 @@ public class HomeAdminController implements Initializable {
             setupInteractiveElements();
 
             LOGGER.info("Advanced Admin Dashboard initialized successfully");
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error initializing advanced admin dashboard: " + e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Initialize data structures and collections
@@ -261,6 +264,7 @@ public class HomeAdminController implements Initializable {
         recentSeries = new ArrayList<>();
         recentCinemas = new ArrayList<>();
     }
+
 
     /**
      * Configure ScrollPanes for proper scrollbar visibility and behavior
@@ -281,6 +285,7 @@ public class HomeAdminController implements Initializable {
                             "");
         }
 
+
         // Configure recent users scroll pane
         if (recentUsersScrollPane != null) {
             recentUsersScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
@@ -294,6 +299,7 @@ public class HomeAdminController implements Initializable {
                             "-fx-focus-color: transparent;" +
                             "-fx-faint-focus-color: transparent;");
         }
+
 
         // Configure recent content scroll pane
         if (recentContentScrollPane != null) {
@@ -309,6 +315,7 @@ public class HomeAdminController implements Initializable {
                             "-fx-faint-focus-color: transparent;");
         }
 
+
         // Configure system logs scroll pane
         if (systemLogsScrollPane != null) {
             systemLogsScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
@@ -322,7 +329,9 @@ public class HomeAdminController implements Initializable {
                             "-fx-focus-color: transparent;" +
                             "-fx-faint-focus-color: transparent;");
         }
+
     }
+
 
     /**
      * Setup advanced welcome message with user context and system status
@@ -335,25 +344,34 @@ public class HomeAdminController implements Initializable {
                     if (stage != null && stage.getUserData() instanceof User) {
                         User currentUser = (User) stage.getUserData();
                         welcomeLabel.setText("Welcome back, Admin " + currentUser.getFirstName() + "!");
-                    } else {
+                    }
+ else {
                         welcomeLabel.setText("Welcome back, System Administrator!");
                     }
-                } else {
+
+                }
+ else {
                     welcomeLabel.setText("Welcome to RAKCHA Admin Dashboard!");
                 }
+
 
                 // Update system status
                 if (systemStatusLabel != null) {
                     systemStatusLabel.setText("SYSTEM OPERATIONAL");
                     systemStatusLabel.getStyleClass().add("pulsing-indicator");
                 }
-            } catch (Exception ex) {
+
+            }
+ catch (Exception ex) {
                 LOGGER.log(Level.WARNING, "Error setting welcome message: " + ex.getMessage(), ex);
                 welcomeLabel.setText("Welcome to RAKCHA Admin Dashboard!");
             }
-        }));
+
+        }
+));
         delayedInit.play();
     }
+
 
     /**
      * Load comprehensive system statistics with enhanced data visualization
@@ -382,32 +400,39 @@ public class HomeAdminController implements Initializable {
                 Page<Series> series = seriesService.read(pageRequest);
                 totalSeries = series.getTotalElements();
                 updateStatCard(totalSeriesLabel, totalSeries, seriesGrowthLabel, 0);
-            } catch (Exception e) {
+            }
+ catch (Exception e) {
                 totalSeries = 0;
                 if (totalSeriesLabel != null)
                     totalSeriesLabel.setText("0");
             }
+
 
             // Load cinema statistics
             try {
                 Page<Cinema> cinemas = cinemaService.read(pageRequest);
                 totalCinemas = cinemas.getTotalElements();
                 updateStatCard(totalCinemasLabel, totalCinemas, cinemaGrowthLabel, 0);
-            } catch (Exception e) {
+            }
+ catch (Exception e) {
                 totalCinemas = 0;
                 if (totalCinemasLabel != null)
                     totalCinemasLabel.setText("0");
             }
 
+
             // Calculate orders (simulated for now)
             totalOrders = calculateTotalOrders();
             updateStatCard(totalOrdersLabel, totalOrders, orderGrowthLabel, calculateGrowthPercentage("orders"));
 
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error loading comprehensive statistics: " + e.getMessage(), e);
             setDefaultStatistics();
         }
+
     }
+
 
     /**
      * Update stat card with animated number counting and growth indicators
@@ -424,14 +449,20 @@ public class HomeAdminController implements Initializable {
 
                 if (growthPercentage > 0) {
                     growthLabel.setStyle("-fx-text-fill: #00ff7f; -fx-font-weight: bold;");
-                } else if (growthPercentage < 0) {
+                }
+ else if (growthPercentage < 0) {
                     growthLabel.setStyle("-fx-text-fill: #ff4444; -fx-font-weight: bold;");
-                } else {
+                }
+ else {
                     growthLabel.setStyle("-fx-text-fill: #cccccc; -fx-font-weight: bold;");
                 }
+
             }
+
         }
+
     }
+
 
     /**
      * Animate number counting effect for statistics
@@ -452,12 +483,16 @@ public class HomeAdminController implements Initializable {
                         if (currentValue == endValue) {
                             label.getStyleClass().add("counter-animation");
                         }
-                    });
+
+                    }
+);
             timeline.getKeyFrames().add(keyFrame);
         }
 
+
         timeline.play();
     }
+
 
     /**
      * Calculate growth percentage (simulated with random data for demo)
@@ -467,6 +502,7 @@ public class HomeAdminController implements Initializable {
         return (random.nextDouble() - 0.5) * 20; // Random growth between -10% and +10%
     }
 
+
     /**
      * Calculate total orders (simulated)
      */
@@ -474,6 +510,7 @@ public class HomeAdminController implements Initializable {
         // In real implementation, this would query order service
         return totalProducts * 3 + random.nextLong(50);
     }
+
 
     /**
      * Set default statistics in case of error
@@ -492,6 +529,7 @@ public class HomeAdminController implements Initializable {
         if (totalCinemasLabel != null)
             totalCinemasLabel.setText("0");
     }
+
 
     /**
      * Load recent system activity with enhanced details
@@ -518,11 +556,16 @@ public class HomeAdminController implements Initializable {
                 if (activityContainer.getStyleClass() != null) {
                     activityContainer.getStyleClass().add("activity-feed");
                 }
+
             }
-        } catch (Exception e) {
+
+        }
+ catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error loading recent system activity: " + e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Load recent users with enhanced display
@@ -544,6 +587,7 @@ public class HomeAdminController implements Initializable {
                     addRecentUserCard(user);
                 }
 
+
                 // Add placeholder users if not enough real users
                 if (count < 5) {
                     for (int i = count; i < 5; i++) {
@@ -551,12 +595,18 @@ public class HomeAdminController implements Initializable {
                         recentUsers.add(placeholderUser); // Store placeholder user
                         addRecentUserCard(placeholderUser);
                     }
+
                 }
+
             }
-        } catch (Exception e) {
+
+        }
+ catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error loading recent users: " + e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Load recent content (movies, series, products)
@@ -581,7 +631,9 @@ public class HomeAdminController implements Initializable {
                         recentFilms.add(film); // Store the film
                         addRecentContentCard(film.getName(), "Movie", "🎬");
                     }
-                } catch (Exception e) {
+
+                }
+ catch (Exception e) {
                     // Add placeholder films
                     Film placeholder1 = new Film();
                     placeholder1.setName("The Matrix");
@@ -594,6 +646,7 @@ public class HomeAdminController implements Initializable {
                     addRecentContentCard("Inception", "Movie", "🎬");
                 }
 
+
                 // Load recent series
                 try {
                     PageRequest pageRequest = new PageRequest(0, 10);
@@ -603,7 +656,9 @@ public class HomeAdminController implements Initializable {
                         recentSeries.add(seriesItem); // Store the series
                         addRecentContentCard(seriesItem.getName(), "Series", "📺");
                     }
-                } catch (Exception e) {
+
+                }
+ catch (Exception e) {
                     // Add placeholder series
                     Series placeholder1 = new Series();
                     placeholder1.setName("Breaking Bad");
@@ -616,6 +671,7 @@ public class HomeAdminController implements Initializable {
                     addRecentContentCard("Game of Thrones", "Series", "📺");
                 }
 
+
                 // Load recent products
                 try {
                     PageRequest pageRequest = new PageRequest(0, 10);
@@ -625,7 +681,9 @@ public class HomeAdminController implements Initializable {
                         recentProducts.add(product); // Store the product
                         addRecentContentCard(product.getName(), "Product", "🛍️");
                     }
-                } catch (Exception e) {
+
+                }
+ catch (Exception e) {
                     // Add placeholder products
                     Product placeholder1 = new Product();
                     placeholder1.setName("Premium Popcorn");
@@ -638,6 +696,7 @@ public class HomeAdminController implements Initializable {
                     addRecentContentCard("Movie Tickets", "Product", "🛍️");
                 }
 
+
                 // Load recent cinemas
                 try {
                     PageRequest pageRequest = new PageRequest(0, 10);
@@ -647,7 +706,9 @@ public class HomeAdminController implements Initializable {
                         recentCinemas.add(cinema); // Store the cinema
                         addRecentContentCard(cinema.getName(), "Cinema", "🏢");
                     }
-                } catch (Exception e) {
+
+                }
+ catch (Exception e) {
                     // Add placeholder cinemas
                     Cinema placeholder1 = new Cinema();
                     placeholder1.setName("Grand Cinema");
@@ -659,11 +720,16 @@ public class HomeAdminController implements Initializable {
                     recentCinemas.add(placeholder2);
                     addRecentContentCard("Elite Theater", "Cinema", "🏢");
                 }
+
             }
-        } catch (Exception e) {
+
+        }
+ catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error loading recent content: " + e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Load system logs with enhanced formatting
@@ -679,10 +745,14 @@ public class HomeAdminController implements Initializable {
                 addSystemLogEntry("[INFO] Backup process initiated", getTimeAgo(90), "info");
                 addSystemLogEntry("[SUCCESS] All services operational", getTimeAgo(30), "success");
             }
-        } catch (Exception e) {
+
+        }
+ catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error loading system logs: " + e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Setup real-time updates for dynamic data
@@ -703,10 +773,13 @@ public class HomeAdminController implements Initializable {
             if (random.nextDouble() < 0.3) { // 30% chance to add new activity
                 addRandomActivity();
             }
-        }));
+
+        }
+));
         activityUpdateTimeline.setCycleCount(Timeline.INDEFINITE);
         activityUpdateTimeline.play();
     }
+
 
     /**
      * Update current time display
@@ -716,7 +789,9 @@ public class HomeAdminController implements Initializable {
             String currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
             currentTimeLabel.setText(currentTime);
         }
+
     }
+
 
     /**
      * Add random activity to demonstrate real-time updates
@@ -727,6 +802,7 @@ public class HomeAdminController implements Initializable {
             activityContainer.getChildren().remove(activityContainer.getChildren().size() - 1);
         }
 
+
         String[] activities = {
                 "👤 User login detected",
                 "🎬 New movie added to catalog",
@@ -734,13 +810,15 @@ public class HomeAdminController implements Initializable {
                 "📱 Mobile app access",
                 "🔧 System maintenance check",
                 "📊 Analytics report generated"
-        };
+        }
+;
 
         String activity = activities[random.nextInt(activities.length)];
         String currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"));
 
         addEnhancedActivityItem(activity, currentTime, "info");
     }
+
 
     /**
      * Add enhanced activity item with styling and animations
@@ -758,7 +836,8 @@ public class HomeAdminController implements Initializable {
             case "warning" -> "rgba(255, 170, 0, 0.1)";
             case "error" -> "rgba(255, 68, 68, 0.1)";
             default -> "rgba(102, 204, 255, 0.1)";
-        };
+        }
+;
 
         activityItem.setStyle(String.format(
                 "-fx-padding: 12 15 12 15; " +
@@ -777,7 +856,8 @@ public class HomeAdminController implements Initializable {
             case "warning" -> "#ffaa00";
             case "error" -> "#ff4444";
             default -> "#66ccff";
-        };
+        }
+;
         indicator.setStyle("-fx-fill: " + indicatorColor + "; -fx-effect: dropshadow(gaussian, " + indicatorColor
                 + ", 8, 0, 0, 0);");
         indicator.getStyleClass().add("pulsing-indicator");
@@ -819,6 +899,7 @@ public class HomeAdminController implements Initializable {
         activityContainer.getChildren().add(0, activityItem); // Add to top
         animation.play();
     }
+
 
     /**
      * Add recent user card with enhanced design
@@ -885,7 +966,8 @@ public class HomeAdminController implements Initializable {
         userCard.setOnMouseEntered(e -> {
             userCard.setStyle(userCard.getStyle()
                     + "-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.25), rgba(50, 0, 0, 0.15));");
-        });
+        }
+);
 
         userCard.setOnMouseExited(e -> {
             userCard.setStyle(
@@ -898,10 +980,12 @@ public class HomeAdminController implements Initializable {
                             "-fx-border-radius: 10; " +
                             "-fx-cursor: hand; " +
                             "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 6, 0, 0, 2);");
-        });
+        }
+);
 
         recentUsersContainer.getChildren().add(userCard);
     }
+
 
     /**
      * Add recent content card
@@ -941,6 +1025,7 @@ public class HomeAdminController implements Initializable {
         recentContentContainer.getChildren().add(contentCard);
     }
 
+
     /**
      * Add system log entry
      */
@@ -960,7 +1045,8 @@ public class HomeAdminController implements Initializable {
             case "success" -> "#00ff7f";
             case "debug" -> "#66ccff";
             default -> "#cccccc";
-        };
+        }
+;
 
         levelLabel.setStyle(
                 "-fx-text-fill: " + levelColor + "; " +
@@ -988,6 +1074,7 @@ public class HomeAdminController implements Initializable {
         systemLogsContainer.getChildren().add(logEntry);
     }
 
+
     /**
      * Setup advanced animations similar to HomeClient
      */
@@ -999,6 +1086,7 @@ public class HomeAdminController implements Initializable {
             fadeIn.setToValue(1.0);
             fadeIn.play();
         }
+
 
         // Setup particle animations
         setupParticleAnimations();
@@ -1012,6 +1100,7 @@ public class HomeAdminController implements Initializable {
         // Setup stat card animations
         setupStatCardAnimations();
     }
+
 
     /**
      * Create dynamic particles for enhanced visual effects
@@ -1031,7 +1120,8 @@ public class HomeAdminController implements Initializable {
             String[] colors = {
                     "#ff4444", "#ff6666", "#ff3333", "#ff5555",
                     "#cc3333", "#aa2222", "#ff7777", "#bb0000"
-            };
+            }
+;
             String color = colors[random.nextInt(colors.length)];
 
             particle.setStyle(String.format(
@@ -1048,7 +1138,9 @@ public class HomeAdminController implements Initializable {
             // Setup individual particle animation
             setupAdvancedParticleAnimation(particle, i * 0.5);
         }
+
     }
+
 
     /**
      * Create dynamic shapes for background animation
@@ -1066,24 +1158,29 @@ public class HomeAdminController implements Initializable {
                 Polygon polygon = new Polygon();
                 polygon.getPoints().addAll(new Double[] {
                         0.0, 20.0, 10.0, 0.0, 20.0, 20.0, 10.0, 30.0
-                });
+                }
+);
                 shape = polygon;
-            } else if (i % 3 == 1) {
+            }
+ else if (i % 3 == 1) {
                 // Create rectangle
                 Rectangle rectangle = new Rectangle(15 + random.nextInt(20), 8 + random.nextInt(15));
                 rectangle.setRotate(random.nextDouble() * 45);
                 shape = rectangle;
-            } else {
+            }
+ else {
                 // Create circle
                 Circle circle = new Circle(8 + random.nextDouble() * 12);
                 shape = circle;
             }
 
+
             shape.setLayoutX(random.nextDouble() * 1100);
             shape.setLayoutY(random.nextDouble() * 650);
 
             // Apply styling
-            String[] colors = { "#8b0000", "#a00000", "#660000", "#cc0000" };
+            String[] colors = { "#8b0000", "#a00000", "#660000", "#cc0000" }
+;
             String color = colors[random.nextInt(colors.length)];
 
             shape.setStyle(String.format(
@@ -1102,7 +1199,9 @@ public class HomeAdminController implements Initializable {
             // Setup shape animation
             setupAdvancedShapeAnimation(shape, i * 0.3);
         }
+
     }
+
 
     /**
      * Setup advanced particle animation
@@ -1136,6 +1235,7 @@ public class HomeAdminController implements Initializable {
         animation.play();
     }
 
+
     /**
      * Setup advanced shape animation
      */
@@ -1161,18 +1261,23 @@ public class HomeAdminController implements Initializable {
         animation.play();
     }
 
+
     /**
      * Setup particle animations for static particles
      */
     private void setupParticleAnimations() {
-        Circle[] particles = { particle1, particle2, particle3, particle4, particle5, particle6 };
+        Circle[] particles = { particle1, particle2, particle3, particle4, particle5, particle6 }
+;
 
         for (int i = 0; i < particles.length; i++) {
             if (particles[i] != null) {
                 setupParticleAnimation(particles[i], i * 0.5);
             }
+
         }
+
     }
+
 
     /**
      * Setup individual particle animation
@@ -1198,19 +1303,24 @@ public class HomeAdminController implements Initializable {
         animation.play();
     }
 
+
     /**
      * Setup shape animations
      */
     private void setupShapeAnimations() {
-        javafx.scene.Node[] shapes = { shape1, shape2, shape3, shape4, shape5, shape6 };
+        javafx.scene.Node[] shapes = { shape1, shape2, shape3, shape4, shape5, shape6 }
+;
 
         for (int i = 0; i < shapes.length; i++) {
             if (shapes[i] != null) {
                 setupRotationAnimation(shapes[i], 8 + i * 2);
                 setupPulsingAnimation(shapes[i]);
             }
+
         }
+
     }
+
 
     /**
      * Setup rotation animation for shapes
@@ -1222,6 +1332,7 @@ public class HomeAdminController implements Initializable {
         rotateTransition.setCycleCount(Timeline.INDEFINITE);
         rotateTransition.play();
     }
+
 
     /**
      * Setup pulsing animation for shapes
@@ -1237,6 +1348,7 @@ public class HomeAdminController implements Initializable {
         scaleTransition.play();
     }
 
+
     /**
      * Setup content animations
      */
@@ -1248,21 +1360,27 @@ public class HomeAdminController implements Initializable {
             slideIn.setToY(0);
             slideIn.play();
         }
+
     }
+
 
     /**
      * Setup stat card animations
      */
     private void setupStatCardAnimations() {
         VBox[] statCards = { userStatsCard, movieStatsCard, productStatsCard, orderStatsCard, seriesStatsCard,
-                cinemaStatsCard };
+                cinemaStatsCard }
+;
 
         for (int i = 0; i < statCards.length; i++) {
             if (statCards[i] != null) {
                 setupStatCardAnimation(statCards[i], i * 0.2);
             }
+
         }
+
     }
+
 
     /**
      * Setup individual stat card animation
@@ -1288,18 +1406,21 @@ public class HomeAdminController implements Initializable {
             hoverScale.setToX(1.05);
             hoverScale.setToY(1.05);
             hoverScale.play();
-        });
+        }
+);
 
         card.setOnMouseExited(e -> {
             ScaleTransition hoverScale = new ScaleTransition(Duration.seconds(0.2), card);
             hoverScale.setToX(1.0);
             hoverScale.setToY(1.0);
             hoverScale.play();
-        });
+        }
+);
 
         ParallelTransition animation = new ParallelTransition(fadeIn, scaleIn);
         animation.play();
     }
+
 
     /**
      * Setup quick search functionality
@@ -1310,7 +1431,9 @@ public class HomeAdminController implements Initializable {
                 if (event.getCode().toString().equals("ENTER")) {
                     performQuickSearch(quickSearchField.getText());
                 }
-            });
+
+            }
+);
 
             // Add search suggestion as you type
             quickSearchField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -1318,9 +1441,13 @@ public class HomeAdminController implements Initializable {
                     // In a real implementation, this would show search suggestions
                     LOGGER.info("Searching for: " + newValue);
                 }
-            });
+
+            }
+);
         }
+
     }
+
 
     /**
      * Perform quick search across admin data
@@ -1340,6 +1467,7 @@ public class HomeAdminController implements Initializable {
         alert.showAndWait();
     }
 
+
     /**
      * Apply advanced styling to UI elements
      */
@@ -1349,14 +1477,18 @@ public class HomeAdminController implements Initializable {
             rootContainer.getStyleClass().add("fade-in");
         }
 
+
         if (mainContainer != null) {
             mainContainer.getStyleClass().add("glow-container");
         }
 
+
         if (welcomeLabel != null) {
             welcomeLabel.getStyleClass().add("animated-text");
         }
+
     }
+
 
     /**
      * Setup interactive elements with enhanced functionality
@@ -1369,6 +1501,7 @@ public class HomeAdminController implements Initializable {
         setupQuickActionButtons();
     }
 
+
     /**
      * Setup stat card interactivity
      */
@@ -1378,21 +1511,26 @@ public class HomeAdminController implements Initializable {
             userStatsCard.getStyleClass().add("hover-scale");
         }
 
+
         if (movieStatsCard != null) {
             movieStatsCard.setOnMouseClicked(e -> manageMovies(null));
             movieStatsCard.getStyleClass().add("hover-scale");
         }
+
 
         if (productStatsCard != null) {
             productStatsCard.setOnMouseClicked(e -> manageProducts(null));
             productStatsCard.getStyleClass().add("hover-scale");
         }
 
+
         if (orderStatsCard != null) {
             orderStatsCard.setOnMouseClicked(e -> manageOrders(null));
             orderStatsCard.getStyleClass().add("hover-scale");
         }
+
     }
+
 
     /**
      * Setup quick action buttons with enhanced styling
@@ -1403,9 +1541,13 @@ public class HomeAdminController implements Initializable {
                 if (node instanceof Button button) {
                     button.getStyleClass().addAll("glow-button", "action-button");
                 }
-            });
+
+            }
+);
         }
+
     }
+
 
     // Utility Methods
 
@@ -1415,30 +1557,38 @@ public class HomeAdminController implements Initializable {
     private String getTimeAgo(int minutesAgo) {
         if (minutesAgo < 60) {
             return minutesAgo + " min ago";
-        } else if (minutesAgo < 1440) {
+        }
+ else if (minutesAgo < 1440) {
             return (minutesAgo / 60) + " hr ago";
-        } else {
+        }
+ else {
             return (minutesAgo / 1440) + " day ago";
         }
+
     }
+
 
     /**
      * Generate random user name for demo purposes
      */
     private String generateRandomUserName() {
-        String[] firstNames = { "John", "Jane", "Alex", "Sarah", "Mike", "Lisa", "David", "Emma" };
-        String[] lastNames = { "Smith", "Johnson", "Brown", "Davis", "Wilson", "Miller", "Taylor", "Anderson" };
+        String[] firstNames = { "John", "Jane", "Alex", "Sarah", "Mike", "Lisa", "David", "Emma" }
+;
+        String[] lastNames = { "Smith", "Johnson", "Brown", "Davis", "Wilson", "Miller", "Taylor", "Anderson" }
+;
 
         return firstNames[random.nextInt(firstNames.length)] + " " +
                 lastNames[random.nextInt(lastNames.length)];
     }
+
 
     /**
      * Create placeholder user for demo
      */
     private User createPlaceholderUser() {
         User user = new User() {
-        };
+        }
+;
         String name = generateRandomUserName();
         String[] parts = name.split(" ");
         user.setFirstName(parts[0]);
@@ -1447,6 +1597,7 @@ public class HomeAdminController implements Initializable {
         return user;
     }
 
+
     /**
      * Cleanup method called when controller is destroyed
      */
@@ -1454,16 +1605,21 @@ public class HomeAdminController implements Initializable {
         if (clockUpdateTimeline != null) {
             clockUpdateTimeline.stop();
         }
+
         if (statsUpdateTimeline != null) {
             statsUpdateTimeline.stop();
         }
+
         if (activityUpdateTimeline != null) {
             activityUpdateTimeline.stop();
         }
+
         if (particleAnimationTimeline != null) {
             particleAnimationTimeline.stop();
         }
+
     }
+
 
     /**
      * Get recent users data for external access
@@ -1472,12 +1628,14 @@ public class HomeAdminController implements Initializable {
         return new ArrayList<>(recentUsers);
     }
 
+
     /**
      * Get recent films data for external access
      */
     public List<Film> getRecentFilms() {
         return new ArrayList<>(recentFilms);
     }
+
 
     /**
      * Get recent products data for external access
@@ -1486,6 +1644,7 @@ public class HomeAdminController implements Initializable {
         return new ArrayList<>(recentProducts);
     }
 
+
     /**
      * Get recent series data for external access
      */
@@ -1493,12 +1652,14 @@ public class HomeAdminController implements Initializable {
         return new ArrayList<>(recentSeries);
     }
 
+
     /**
      * Get recent cinemas data for external access
      */
     public List<Cinema> getRecentCinemas() {
         return new ArrayList<>(recentCinemas);
     }
+
 
     /**
      * Refresh recent data
@@ -1509,6 +1670,7 @@ public class HomeAdminController implements Initializable {
         loadRecentSystemActivity();
     }
 
+
     // Navigation Action Handlers
 
     @FXML
@@ -1518,10 +1680,13 @@ public class HomeAdminController implements Initializable {
             Parent root = loader.load();
             Stage stage = (Stage) rootContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
-        } catch (IOException e) {
+        }
+ catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading user management interface: " + e.getMessage(), e);
         }
+
     }
+
 
     @FXML
     void manageMovies(ActionEvent event) {
@@ -1530,10 +1695,13 @@ public class HomeAdminController implements Initializable {
             Parent root = loader.load();
             Stage stage = (Stage) rootContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
-        } catch (IOException e) {
+        }
+ catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading movie management interface: " + e.getMessage(), e);
         }
+
     }
+
 
     @FXML
     void manageProducts(ActionEvent event) {
@@ -1542,10 +1710,13 @@ public class HomeAdminController implements Initializable {
             Parent root = loader.load();
             Stage stage = (Stage) rootContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
-        } catch (IOException e) {
+        }
+ catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading product management interface: " + e.getMessage(), e);
         }
+
     }
+
 
     @FXML
     void manageOrders(ActionEvent event) {
@@ -1554,10 +1725,13 @@ public class HomeAdminController implements Initializable {
             Parent root = loader.load();
             Stage stage = (Stage) rootContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
-        } catch (IOException e) {
+        }
+ catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading orders interface: " + e.getMessage(), e);
         }
+
     }
+
 
     @FXML
     void viewOrders(ActionEvent event) {
@@ -1566,10 +1740,13 @@ public class HomeAdminController implements Initializable {
             Parent root = loader.load();
             Stage stage = (Stage) rootContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
-        } catch (IOException e) {
+        }
+ catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading orders interface: " + e.getMessage(), e);
         }
+
     }
+
 
     @FXML
     void systemSettings(ActionEvent event) {
@@ -1580,10 +1757,13 @@ public class HomeAdminController implements Initializable {
             alert.setHeaderText("System Settings");
             alert.setContentText("System settings functionality will be implemented here.");
             alert.showAndWait();
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error opening system settings: " + e.getMessage(), e);
         }
+
     }
+
 
     @FXML
     public void viewReports(ActionEvent actionEvent) {
@@ -1599,8 +1779,12 @@ public class HomeAdminController implements Initializable {
                     "• Revenue & Sales Reports\n" +
                     "• System Performance Metrics");
             alert.showAndWait();
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error opening reports: " + e.getMessage(), e);
         }
+
     }
+
 }
+

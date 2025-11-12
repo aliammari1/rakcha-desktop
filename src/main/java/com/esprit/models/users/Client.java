@@ -42,4 +42,6 @@ public class Client extends User {
             final String photoDeProfil) {
         super(firstName, lastName, phoneNumber, password, role, address, birthDate, email, photoDeProfil);
     }
+
 }
+

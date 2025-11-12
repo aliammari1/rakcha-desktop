@@ -74,4 +74,6 @@ public abstract class User {
         this.email = email;
         this.photoDeProfil = photoDeProfil;
     }
+
 }
+

@@ -31,6 +31,7 @@ public class TestDataFactory {
         public static final String CINEMA_MANAGER_PASSWORD = "Manager@1234";
     }
 
+
     // Invalid test data
     public static class InvalidData {
         public static final String INVALID_EMAIL = "invalid-email";
@@ -39,6 +40,7 @@ public class TestDataFactory {
         public static final String WEAK_PASSWORD = "password";
         public static final String MISSING_SPECIAL_CHAR_PASSWORD = "Password123";
     }
+
 
     /**
      * Generate a random valid email
@@ -49,6 +51,7 @@ public class TestDataFactory {
         return faker.internet().emailAddress();
     }
 
+
     /**
      * Generate a random valid password
      * Includes uppercase, lowercase, numbers, and special characters
@@ -56,12 +59,17 @@ public class TestDataFactory {
      * @return Valid password
      */
     public static String generateValidPassword() {
-        String upper = faker.regexify("[A-Z]{2}");
-        String lower = faker.regexify("[a-z]{4}");
-        String digits = faker.regexify("[0-9]{2}");
-        String special = faker.regexify("[!@#$%^&*]{2}");
+        String upper = faker.regexify("[A-Z]{2}
+");
+        String lower = faker.regexify("[a-z]{4}
+");
+        String digits = faker.regexify("[0-9]{2}
+");
+        String special = faker.regexify("[!@#$%^&*]{2}
+");
         return upper + lower + digits + special;
     }
+
 
     /**
      * Generate a random username
@@ -72,6 +80,7 @@ public class TestDataFactory {
         return faker.name().username();
     }
 
+
     /**
      * Generate a random first name
      * 
@@ -80,6 +89,7 @@ public class TestDataFactory {
     public static String generateFirstName() {
         return faker.name().firstName();
     }
+
 
     /**
      * Generate a random last name
@@ -90,6 +100,7 @@ public class TestDataFactory {
         return faker.name().lastName();
     }
 
+
     /**
      * Generate a random phone number
      * 
@@ -98,6 +109,7 @@ public class TestDataFactory {
     public static String generatePhoneNumber() {
         return faker.phoneNumber().phoneNumber();
     }
+
 
     /**
      * Generate a random address
@@ -108,6 +120,7 @@ public class TestDataFactory {
         return faker.address().fullAddress();
     }
 
+
     /**
      * Generate a random cinema name
      * 
@@ -116,6 +129,7 @@ public class TestDataFactory {
     public static String generateCinemaName() {
         return faker.company().name() + " Cinema";
     }
+
 
     /**
      * Generate a random movie title
@@ -126,6 +140,7 @@ public class TestDataFactory {
         return faker.book().title();
     }
 
+
     /**
      * Generate a random movie description
      * 
@@ -134,6 +149,7 @@ public class TestDataFactory {
     public static String generateMovieDescription() {
         return faker.lorem().paragraph();
     }
+
 
     /**
      * Generate a random release year for a movie
@@ -145,6 +161,7 @@ public class TestDataFactory {
         return faker.number().numberBetween(1990, currentYear + 1);
     }
 
+
     /**
      * Generate a random duration in minutes
      * 
@@ -153,6 +170,7 @@ public class TestDataFactory {
     public static int generateMovieDuration() {
         return faker.number().numberBetween(80, 180);
     }
+
 
     /**
      * Generate a random rating between 1 and 5
@@ -163,6 +181,7 @@ public class TestDataFactory {
         return 1 + (random.nextDouble() * 4); // 1.0 to 5.0
     }
 
+
     /**
      * Generate a random price
      * 
@@ -171,6 +190,7 @@ public class TestDataFactory {
     public static double generatePrice() {
         return faker.number().randomDouble(2, 5, 50);
     }
+
 
     /**
      * Generate a list of random emails
@@ -183,8 +203,10 @@ public class TestDataFactory {
         for (int i = 0; i < count; i++) {
             emails.add(generateEmail());
         }
+
         return emails;
     }
+
 
     /**
      * Generate a random cinema capacity
@@ -194,6 +216,7 @@ public class TestDataFactory {
     public static int generateCinemaCapacity() {
         return faker.number().numberBetween(50, 500);
     }
+
 
     /**
      * Generate a random seat number
@@ -206,6 +229,7 @@ public class TestDataFactory {
         return row + String.valueOf(number);
     }
 
+
     /**
      * Generate a random genre
      * 
@@ -215,9 +239,11 @@ public class TestDataFactory {
         String[] genres = {
                 "Action", "Comedy", "Drama", "Horror", "Sci-Fi",
                 "Thriller", "Romance", "Animation", "Documentary", "Fantasy"
-        };
+        }
+;
         return genres[random.nextInt(genres.length)];
     }
+
 
     /**
      * Generate a random actor name
@@ -228,6 +254,7 @@ public class TestDataFactory {
         return faker.name().fullName();
     }
 
+
     /**
      * Generate a random director name
      * 
@@ -236,6 +263,7 @@ public class TestDataFactory {
     public static String generateDirectorName() {
         return faker.name().fullName();
     }
+
 
     /**
      * Generate test User object
@@ -258,6 +286,7 @@ public class TestDataFactory {
                 .build();
     }
 
+
     /**
      * Generate a random credit card number (test only)
      * 
@@ -266,6 +295,7 @@ public class TestDataFactory {
     public static String generateCreditCardNumber() {
         return faker.business().creditCardNumber();
     }
+
 
     /**
      * Generate a random CVV
@@ -276,6 +306,7 @@ public class TestDataFactory {
         return String.format("%03d", random.nextInt(1000));
     }
 
+
     /**
      * Generate a random booking reference
      * 
@@ -284,6 +315,7 @@ public class TestDataFactory {
     public static String generateBookingReference() {
         return "BK" + faker.number().digits(8);
     }
+
 
     /**
      * Generate a random comment/review
@@ -294,6 +326,7 @@ public class TestDataFactory {
         return faker.lorem().sentence();
     }
 
+
     /**
      * Generate a random URL
      * 
@@ -302,4 +335,6 @@ public class TestDataFactory {
     public static String generateUrl() {
         return faker.internet().url();
     }
+
 }
+

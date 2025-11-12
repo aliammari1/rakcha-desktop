@@ -56,9 +56,11 @@ public class CategoriesClientController {
         try {
             PageRequest pageRequest = new PageRequest(0, 10);
             categories = iServiceCategorie.read(pageRequest).getContent();
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             throw new RuntimeException(e);
         }
+
         for (final Category c : categories) {
             final String titre = c.getName();
             final String description = c.getDescription();
@@ -73,7 +75,9 @@ public class CategoriesClientController {
             espaceHorizontal.setPrefWidth(10);
             this.tilepane.getChildren().addAll(oeuvreBox, espaceHorizontal);
         }
+
     }
+
 
     /**
      * Displays a message upon launching the application using FXML.
@@ -82,6 +86,7 @@ public class CategoriesClientController {
     private void initialize() {
         this.afficher();
     }
+
 
     /**
      * @param event
@@ -110,6 +115,7 @@ public class CategoriesClientController {
         stage.show();
     }
 
+
     /**
      * Loads a FXML file, creates a scene and stages it.
      *
@@ -130,6 +136,7 @@ public class CategoriesClientController {
         stage.setScene(scene);
         stage.show();
     }
+
 
     /**
      * Loads an FXML file, creates a scene and stages it in a window.
@@ -157,4 +164,6 @@ public class CategoriesClientController {
         stage.setScene(scene);
         stage.show();
     }
+
 }
+

@@ -31,7 +31,8 @@ public class IServiceFavoriteImpl implements IService<Favorite> {
     public Statement statement;
 
     // Allowed columns for sorting to prevent SQL injection
-    private static final String[] ALLOWED_SORT_COLUMNS = { "id", "user_id", "series_id" };
+    private static final String[] ALLOWED_SORT_COLUMNS = { "id", "user_id", "series_id" }
+;
 
     /**
      * Constructs a new IServiceFavoriteImpl instance.
@@ -55,10 +56,13 @@ public class IServiceFavoriteImpl implements IService<Favorite> {
                     """;
             tableCreator.createTableIfNotExists("favorites", createFavoritesTable);
 
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             log.error("Error creating tables for IServiceFavoriteImpl", e);
         }
+
     }
+
 
     @Override
     /**
@@ -78,10 +82,13 @@ public class IServiceFavoriteImpl implements IService<Favorite> {
             ps.setLong(2, favorite.getSeriesId());
             ps.executeUpdate();
             LOGGER.info("Favorite created successfully!");
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     @Override
     /**
@@ -98,10 +105,13 @@ public class IServiceFavoriteImpl implements IService<Favorite> {
             pst.setLong(3, favorite.getId());
             pst.executeUpdate();
             LOGGER.info("Favorite updated successfully!");
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     @Override
     /**
@@ -116,10 +126,13 @@ public class IServiceFavoriteImpl implements IService<Favorite> {
             pst.setLong(1, favorite.getId());
             pst.executeUpdate();
             LOGGER.info("Favorite deleted successfully!");
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     @Override
     /**
@@ -139,6 +152,7 @@ public class IServiceFavoriteImpl implements IService<Favorite> {
             pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
 
+
         try {
             // Get total count
             final String countQuery = PaginationQueryBuilder.buildCountQuery(baseQuery);
@@ -153,15 +167,20 @@ public class IServiceFavoriteImpl implements IService<Favorite> {
                     final Favorite favorite = buildFavoriteFromResultSet(rs);
                     content.add(favorite);
                 }
+
             }
+
 
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
 
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error retrieving paginated favorites: " + e.getMessage(), e);
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
         }
+
     }
+
 
     /**
      * Helper method to build Favorite object from ResultSet.
@@ -178,6 +197,7 @@ public class IServiceFavoriteImpl implements IService<Favorite> {
                 .build();
     }
 
+
     /**
      * Retrieves the ByIdUserAndIdSerie value.
      *
@@ -193,10 +213,14 @@ public class IServiceFavoriteImpl implements IService<Favorite> {
                 if (rs.next()) {
                     favorite = buildFavoriteFromResultSet(rs);
                 }
+
             }
+
         }
+
         return favorite;
     }
+
 
     /**
      * Performs showFavoritesList operation.
@@ -212,10 +236,16 @@ public class IServiceFavoriteImpl implements IService<Favorite> {
                 while (rs.next()) {
                     list.add(buildFavoriteFromResultSet(rs));
                 }
+
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return list;
     }
+
 }
+

@@ -62,4 +62,6 @@ public class Ticket {
         this.price = price;
         this.reservedSeats = new ArrayList<>();
     }
+
 }
+

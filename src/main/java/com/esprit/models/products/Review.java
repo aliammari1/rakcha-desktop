@@ -48,4 +48,6 @@ public class Review {
         this.rating = rating;
         this.product = product;
     }
+
 }
+

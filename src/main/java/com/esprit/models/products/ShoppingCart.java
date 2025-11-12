@@ -48,4 +48,6 @@ public class ShoppingCart {
         this.product = product;
         this.user = user;
     }
+
 }
+

@@ -45,7 +45,8 @@ public class ActorService implements IService<Actor> {
     // Allowed columns for sorting to prevent SQL injection
     private static final String[] ALLOWED_SORT_COLUMNS = {
             "id", "name", "image", "biography", "number_of_appearances"
-    };
+    }
+;
 
     /**
      * Constructor that initializes the database connection and creates tables if
@@ -71,10 +72,13 @@ public class ActorService implements IService<Actor> {
                     """;
             tableCreator.createTableIfNotExists("actors", createActorsTable);
 
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             log.error("Error creating tables for ActorService", e);
         }
+
     }
+
 
     /**
      * Creates a new actor in the database.
@@ -94,11 +98,14 @@ public class ActorService implements IService<Actor> {
             statement.setString(2, actor.getImage());
             statement.setString(3, actor.getBiography());
             statement.executeUpdate();
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             log.error("Error creating actor", e);
             throw new RuntimeException(e);
         }
+
     }
+
 
     @Override
     /**
@@ -114,9 +121,11 @@ public class ActorService implements IService<Actor> {
         // Validate sort column to prevent SQL injection
         if (pageRequest.hasSorting() &&
                 !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
-            log.warn("Invalid sort column: {}. Using default sorting.", pageRequest.getSortBy());
+            log.warn("Invalid sort column: {}
+. Using default sorting.", pageRequest.getSortBy());
             pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
+
 
         try {
             // Get total count
@@ -133,15 +142,21 @@ public class ActorService implements IService<Actor> {
                             .image(rs.getString("image")).biography(rs.getString("biography"))
                             .numberOfAppearances(rs.getInt("number_of_appearances")).build());
                 }
+
             }
+
 
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
 
-        } catch (final SQLException e) {
-            log.error("Error retrieving paginated actors: {}", e.getMessage(), e);
+        }
+ catch (final SQLException e) {
+            log.error("Error retrieving paginated actors: {}
+", e.getMessage(), e);
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
         }
+
     }
+
 
     /**
      * Updates an existing actor in the database.
@@ -157,11 +172,14 @@ public class ActorService implements IService<Actor> {
             statement.setString(3, actor.getBiography());
             statement.setLong(4, actor.getId());
             statement.executeUpdate();
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             log.error("Error updating actor", e);
             throw new RuntimeException(e);
         }
+
     }
+
 
     /**
      * Retrieves an actor by their name.
@@ -181,12 +199,17 @@ public class ActorService implements IService<Actor> {
                             .numberOfAppearances(rs.getInt("number_of_appearances")).build();
                     log.info("Found actor: " + actor);
                 }
+
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             log.error("Error getting actor by name: " + nom, e);
         }
+
         return actor;
     }
+
 
     /**
      * Deletes an actor from the database.
@@ -199,11 +222,14 @@ public class ActorService implements IService<Actor> {
         try (final PreparedStatement statement = this.connection.prepareStatement(req)) {
             statement.setLong(1, actor.getId());
             statement.executeUpdate();
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             log.error("Error deleting actor", e);
             throw new RuntimeException(e);
         }
+
     }
+
 
     /**
      * Retrieves an actor by their placement ranking (based on number of
@@ -229,11 +255,17 @@ public class ActorService implements IService<Actor> {
                             .biography(rs.getString("biography")).numberOfAppearances(rs.getInt("NumberOfAppearances"))
                             .build();
                 }
+
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             log.error("Error getting actor by placement: " + actorPlacement, e);
             throw new RuntimeException(e);
         }
+
         return null;
     }
+
 }
+

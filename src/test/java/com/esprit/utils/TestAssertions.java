@@ -30,6 +30,7 @@ public class TestAssertions {
         verifyThat(errorLabelQuery, hasText(expectedMessage));
     }
 
+
     /**
      * Verify that no error message is displayed
      * 
@@ -41,11 +42,14 @@ public class TestAssertions {
             if (!(node instanceof Label)) {
                 return true;
             }
+
             // For Label nodes, check visibility and text
             Label label = (Label) node;
             return !node.isVisible() || label.getText() == null || label.getText().isEmpty();
-        });
+        }
+);
     }
+
 
     /**
      * Verify that a button is enabled and visible
@@ -57,6 +61,7 @@ public class TestAssertions {
         verifyThat(buttonQuery, isEnabled());
     }
 
+
     /**
      * Verify that a form field is valid (no error shown)
      * 
@@ -66,6 +71,7 @@ public class TestAssertions {
         verifyThat(fieldQuery, isVisible());
         verifyThat(fieldQuery, isEnabled());
     }
+
 
     /**
      * Verify that a text field contains expected text
@@ -77,6 +83,7 @@ public class TestAssertions {
         verifyThat(fieldQuery, hasText(expectedText));
     }
 
+
     /**
      * Verify that a text field is empty
      * 
@@ -85,6 +92,7 @@ public class TestAssertions {
     public static void verifyTextFieldEmpty(String fieldQuery) {
         verifyThat(fieldQuery, hasText(""));
     }
+
 
     /**
      * Verify that multiple nodes are visible
@@ -95,7 +103,9 @@ public class TestAssertions {
         for (String query : queries) {
             verifyThat(query, isVisible());
         }
+
     }
+
 
     /**
      * Verify that a scene/view has loaded successfully
@@ -106,6 +116,7 @@ public class TestAssertions {
         verifyThat(identifyingNodeQuery, isNotNull());
         verifyThat(identifyingNodeQuery, isVisible());
     }
+
 
     /**
      * Verify that a table has data
@@ -118,6 +129,7 @@ public class TestAssertions {
                 greaterThan(0));
     }
 
+
     /**
      * Verify that a table is empty
      * 
@@ -128,6 +140,7 @@ public class TestAssertions {
                 tableView.getItems().size(),
                 equalTo(0));
     }
+
 
     /**
      * Verify that a table has expected row count
@@ -141,6 +154,7 @@ public class TestAssertions {
                 equalTo(expectedCount));
     }
 
+
     /**
      * Verify that a list view has data
      * 
@@ -151,6 +165,7 @@ public class TestAssertions {
                 listView.getItems().size(),
                 greaterThan(0));
     }
+
 
     /**
      * Verify that a combo box has items
@@ -163,6 +178,7 @@ public class TestAssertions {
                 greaterThan(0));
     }
 
+
     /**
      * Verify that a string is a valid email format
      * 
@@ -173,6 +189,7 @@ public class TestAssertions {
                 email,
                 matchesPattern("^[A-Za-z0-9+_.-]+@(.+)$"));
     }
+
 
     /**
      * Verify that a node has a specific style class
@@ -186,6 +203,7 @@ public class TestAssertions {
                 hasItem(styleClass));
     }
 
+
     /**
      * Verify that a notification was shown (can be mocked)
      * This is a placeholder for notification verification
@@ -197,4 +215,6 @@ public class TestAssertions {
         // This is a placeholder for the pattern
         assertThat("Notification should be shown", notificationType, notNullValue());
     }
+
 }
+

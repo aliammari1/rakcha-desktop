@@ -68,7 +68,9 @@ import javafx.stage.Stage;
  * 
  * <p>
  * <strong>Thread Safety:</strong> This controller uses thread-safe collections
- * ({@link ConcurrentHashMap}) and proper JavaFX {@code Platform.runLater()}
+ * ({@link ConcurrentHashMap}
+) and proper JavaFX {@code Platform.runLater()}
+
  * calls
  * for UI updates from background threads.
  * </p>
@@ -83,7 +85,8 @@ import javafx.stage.Stage;
  * controller.searchActor("John");
  * // Export actors
  * controller.exportActors("actors_backup.json");
- * }</pre>
+ * }
+</pre>
  * 
  * 
  * @author RAKCHA Team
@@ -168,7 +171,8 @@ public class ActorController {
         // Appliquer le filtre lorsque le texte de recherche change
         this.recherche_textField.textProperty().addListener((observable, oldValue, newValue) -> {
             this.searchActor(newValue);
-        });
+        }
+);
 
         // Add keyboard shortcuts
         filmActor_tableView11.setOnKeyPressed(event -> {
@@ -180,10 +184,15 @@ public class ActorController {
                     case I -> importActors("actors_import.json");
                     default -> {
                     }
+
                 }
+
             }
-        });
+
+        }
+);
     }
+
 
     /**
      * Filters the actor list based on a provided search text, returning only
@@ -205,12 +214,15 @@ public class ActorController {
             if (null == searchText || searchText.isEmpty()) {
                 return true;
             }
+
             // Vérifier si le nom de l'acteur contient le texte de recherche (en ignorant la
             // casse)
             final String lowerCaseFilter = searchText.toLowerCase();
             return actor.getName().toLowerCase().contains(lowerCaseFilter);
-        });
+        }
+);
     }
+
 
     /**
      * Handles the import actor image action by allowing the user to select an image
@@ -240,6 +252,7 @@ public class ActorController {
             if (!validateImage(selectedFile)) {
                 return;
             }
+
             try {
                 final String destinationDirectory = "./src/main/resources/img/films/";
                 final Path destinationPath = Paths.get(destinationDirectory);
@@ -248,11 +261,15 @@ public class ActorController {
                 Files.copy(selectedFile.toPath(), destinationFilePath);
                 final Image selectedImage = new Image(destinationFilePath.toUri().toString());
                 this.imageActor_ImageView1.setImage(selectedImage);
-            } catch (final IOException e) {
+            }
+ catch (final IOException e) {
                 ActorController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
+
         }
+
     }
+
 
     /**
      * Displays an informational alert dialog to the user with a specified message.
@@ -267,6 +284,7 @@ public class ActorController {
         alert.setContentText(message);
         alert.show();
     }
+
 
     /**
      * Handles the insertion of a new actor into the database.
@@ -288,17 +306,20 @@ public class ActorController {
             return;
         }
 
+
         final String fullPath = this.imageActor_ImageView1.getImage().getUrl();
         String imagePath = "";
         try {
             final String requiredPath = fullPath.substring(fullPath.indexOf("/img/actors/"));
             URI uri = new URI(requiredPath);
             imagePath = uri.getPath();
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             ActorController.LOGGER.warning("Error processing image path: " + e.getMessage());
             // Use the full path if substring fails
             imagePath = fullPath;
         }
+
 
         final ActorService actorService = new ActorService();
         final Actor actor = new Actor(this.nomActor_textField.getText(), imagePath,
@@ -311,6 +332,7 @@ public class ActorController {
         alert.show();
         this.readActorTable();
     }
+
 
     /**
      * Sets up event handlers for two table columns in a `TableView`. When an edit
@@ -347,11 +369,15 @@ public class ActorController {
                     event.getTableView().getItems().get(event.getTablePosition().getRow()).setName(event.getNewValue());
                     ActorController.this
                             .updateActor(event.getTableView().getItems().get(event.getTablePosition().getRow()));
-                } catch (final Exception e) {
+                }
+ catch (final Exception e) {
                     ActorController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
+
             }
-        });
+
+        }
+);
         this.bioActor_tableColumn1.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Actor, String>>() {
             /**
              * In the `TableColumn` class is responsible for handling cell editing events
@@ -385,12 +411,17 @@ public class ActorController {
                             .setBiography(event.getNewValue());
                     ActorController.this
                             .updateActor(event.getTableView().getItems().get(event.getTablePosition().getRow()));
-                } catch (final Exception e) {
+                }
+ catch (final Exception e) {
                     ActorController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
+
             }
-        });
+
+        }
+);
     }
+
 
     /**
      * Allows the user to select an image file from a file chooser, then saves it to
@@ -416,6 +447,7 @@ public class ActorController {
             if (!validateImage(selectedFile)) {
                 return;
             }
+
             try {
                 // Use the CloudinaryStorage service to upload the image
                 CloudinaryStorage cloudinaryStorage = CloudinaryStorage.getInstance();
@@ -426,11 +458,15 @@ public class ActorController {
                 this.imageActor_ImageView1.setImage(selectedImage);
 
                 LOGGER.info("Image uploaded to Cloudinary: " + cloudinaryImageUrl);
-            } catch (final IOException e) {
+            }
+ catch (final IOException e) {
                 LOGGER.log(Level.SEVERE, "Error uploading image to Cloudinary", e);
             }
+
         }
+
     }
+
 
     /**
      * Updates an actor's data in a database by first getting a connection, then
@@ -453,11 +489,14 @@ public class ActorController {
             alert.setTitle("Actor modifiée");
             alert.setContentText("Actor modifiée !");
             alert.show();
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             this.showAlert("Erreur lors de la modification du Actor : " + e.getMessage());
         }
+
         this.readActorTable();
     }
+
 
     /**
      * Reads data from an Actor database, creates a table with columns for actor
@@ -490,7 +529,8 @@ public class ActorController {
                 final Button button = new Button("delete");
                 button.setOnAction((final ActionEvent event) -> {
                     this.deleteFilm(filmcategoryButtonCellDataFeatures.getValue().getId());
-                } /**
+                }
+ /**
                    * Deletes a film based on the ID passed as an event parameter from the
                    * `filmcategoryButtonCellDataFeatures`.
                    *
@@ -502,6 +542,7 @@ public class ActorController {
                 );
                 return new SimpleObjectProperty<>(button);
             }
+
             /**
              * Creates a new button with an `OnAction` event handler that deletes a film
              * when clicked, and returns the button object as an observable value.
@@ -560,9 +601,11 @@ public class ActorController {
                             imageView.setFitHeight(100); // Réglez la hauteur de l'image selon vos préférences
                             try {
                                 loadImage(param.getValue().getImage(), imageView);
-                            } catch (final Exception e) {
+                            }
+ catch (final Exception e) {
                                 ActorController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                             }
+
                             hBox.getChildren().add(imageView);
                             hBox.addEventHandler(MouseEvent.MOUSE_CLICKED, (final MouseEvent event) -> {
                                 try {
@@ -575,6 +618,7 @@ public class ActorController {
                                         if (!validateImage(file)) {
                                             return;
                                         }
+
                                         final String destinationDirectory = "./src/main/resources/img/films/";
                                         final Path destinationPath = Paths.get(destinationDirectory);
                                         final String uniqueFileName = System.currentTimeMillis() + "_" + file.getName();
@@ -587,10 +631,14 @@ public class ActorController {
                                         new ActorService()
                                                 .update(new Actor(null, destinationFilePath.toUri().toString(), null));
                                     }
-                                } catch (final IOException e) {
+
+                                }
+ catch (final IOException e) {
                                     ActorController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                                 }
-                            } /**
+
+                            }
+ /**
                                * Displays an open file dialog, saves the selected file to a designated
                                * directory, creates an image from the saved file, and displays the image in a
                                * graphical user interface.
@@ -603,11 +651,14 @@ public class ActorController {
                                *              with the application.
                                */
                             );
-                        } catch (final Exception e) {
+                        }
+ catch (final Exception e) {
                             ActorController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                         }
+
                         return new SimpleObjectProperty<>(hBox);
-                    } /**
+                    }
+ /**
                        * Generates an `HBox` container that displays an image when clicked, allowing
                        * users to select images from a file system and display them in the
                        * application.
@@ -640,10 +691,13 @@ public class ActorController {
             PageRequest pageRequest = new PageRequest(0, 10);
             final ObservableList<Actor> obC = FXCollections.observableArrayList(categoryService.read(pageRequest).getContent());
             this.filmActor_tableView11.setItems(obC);
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             ActorController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Deletes an actor from a table using the `delete()` method provided by the
@@ -662,6 +716,7 @@ public class ActorController {
         alert.show();
         this.readActorTable();
     }
+
 
     /**
      * Loads an FXML file using the `FXMLLoader` class, creates a new `AnchorPane`
@@ -689,19 +744,24 @@ public class ActorController {
             final Stage stage = (Stage) this.GoToFilms_Button.getScene().getWindow();
             final Scene scene = new Scene(root, 1280, 700);
             stage.setScene(scene);
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             ActorController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
 
+
     /**
-     * @deprecated Use {@link #switchToFilms(ActionEvent)} instead.
+     * @deprecated Use {@link #switchToFilms(ActionEvent)}
+ instead.
      * This method name was misleading as it navigates to Films, not Cinema.
      */
     @Deprecated
     public void switchtoajouterCinema(final ActionEvent event) {
         switchToFilms(event);
     }
+
 
     /**
      * Validates an image file for size and format requirements.
@@ -713,13 +773,17 @@ public class ActorController {
      * </p>
      * 
      * @param file the image file to validate, must not be {@code null}
-     * @return {@code true} if the file meets all validation criteria:
+
+     * @return {@code true}
+ if the file meets all validation criteria:
      *         <ul>
      *         <li>File size is 5MB or less</li>
      *         <li>File is a valid image format that can be loaded by JavaFX</li>
      *         </ul>
-     *         {@code false} otherwise
+     *         {@code false}
+ otherwise
      * @throws IllegalArgumentException if file is {@code null}
+
      * @see Image#Image(String)
      * @since 1.0.0
      */
@@ -733,13 +797,17 @@ public class ActorController {
      * </p>
      * 
      * @param file the image file to validate, must not be {@code null}
-     * @return {@code true} if the file meets all validation criteria:
+
+     * @return {@code true}
+ if the file meets all validation criteria:
      *         <ul>
      *         <li>File size is 5MB or less</li>
      *         <li>File is a valid image format that can be loaded by JavaFX</li>
      *         </ul>
-     *         {@code false} otherwise
+     *         {@code false}
+ otherwise
      * @throws IllegalArgumentException if file is {@code null}
+
      * @see Image#Image(String)
      * @since 1.0.0
      */
@@ -749,15 +817,19 @@ public class ActorController {
             showAlert("Image file is too large. Maximum size is 5MB.");
             return false;
         }
+
         // Validate actual image format
         try {
             Image image = new Image(file.toURI().toString());
             return !image.isError();
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             showAlert("Invalid image file format");
             return false;
         }
+
     }
+
 
     /**
      * Loads an image directly without caching.
@@ -769,19 +841,25 @@ public class ActorController {
      *
      * @param url       the URL or path of the image to load, must not be
      *                  {@code null}
+
      * @param imageView the ImageView component to display the image, must not be
      *                  {@code null}
+
      * @throws IllegalArgumentException if url or imageView is {@code null}
+
      * @since 1.0.0
      */
     private void loadImage(String url, ImageView imageView) {
         try {
             Image image = new Image(url);
             imageView.setImage(image);
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             LOGGER.log(Level.WARNING, "Failed to load image: " + url, e);
         }
+
     }
+
 
     /**
      * Exports actors data to a JSON file.
@@ -794,7 +872,9 @@ public class ActorController {
      * 
      * @param filePath the destination file path for the JSON export, must not be
      *                 {@code null}
-     * @throws IllegalArgumentException if filePath is {@code null} or empty
+
+     * @throws IllegalArgumentException if filePath is {@code null}
+ or empty
      * @see ObjectMapper#writeValue(File, Object)
      * @see #importActors(String)
      * @since 1.0.0
@@ -805,11 +885,14 @@ public class ActorController {
             List<Actor> actors = filmActor_tableView11.getItems();
             mapper.writeValue(new File(filePath), actors);
             showAlert("Export successful");
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Failed to export actors", e);
             showAlert("Export failed: " + e.getMessage());
         }
+
     }
+
 
     /**
      * Imports actors data from a JSON file.
@@ -822,7 +905,9 @@ public class ActorController {
      * 
      * @param filePath the source file path for the JSON import, must not be
      *                 {@code null}
-     * @throws IllegalArgumentException if filePath is {@code null} or empty
+
+     * @throws IllegalArgumentException if filePath is {@code null}
+ or empty
      * @see ObjectMapper#readValue(File, Class)
      * @see #exportActors(String)
      * @see UndoableAction
@@ -839,22 +924,29 @@ public class ActorController {
                 actors.forEach(actor -> {
                     ActorService service = new ActorService();
                     service.create(actor);
-                });
-            }, () -> {
+                }
+);
+            }
+, () -> {
                 filmActor_tableView11.getItems().removeAll(actors);
                 actors.forEach(actor -> {
                     ActorService service = new ActorService();
                     service.delete(actor);
-                });
-            });
+                }
+);
+            }
+);
 
             executeAction(action);
             showAlert("Import successful");
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Failed to import actors", e);
             showAlert("Import failed: " + e.getMessage());
         }
+
     }
+
 
     /**
      * Undoes the last action performed.
@@ -875,7 +967,9 @@ public class ActorController {
             action.undo();
             redoStack.push(action);
         }
+
     }
+
 
     /**
      * Redoes the last undone action.
@@ -896,7 +990,9 @@ public class ActorController {
             action.execute();
             undoStack.push(action);
         }
+
     }
+
 
     /**
      * Executes an action and adds it to the undo history.
@@ -909,7 +1005,9 @@ public class ActorController {
      * 
      * @param action the action to execute and record in the undo history,
      *               must not be {@code null}
+
      * @throws NullPointerException if action is {@code null}
+
      * @see UndoableAction
      * @see #undo()
      */
@@ -918,6 +1016,7 @@ public class ActorController {
         undoStack.push(action);
         redoStack.clear();
     }
+
 
     /**
      * Inner class implementing the Command pattern for undo/redo functionality.
@@ -946,13 +1045,17 @@ public class ActorController {
          * Creates a new undoable action with corresponding do and undo operations.
          *
          * @param doAction   the action to execute, must not be {@code null}
+
          * @param undoAction the action to undo the execution, must not be {@code null}
+
          * @throws NullPointerException if either doAction or undoAction is {@code null}
+
          */
         public UndoableAction(Runnable doAction, Runnable undoAction) {
             this.doAction = doAction;
             this.undoAction = undoAction;
         }
+
 
         /**
          * Executes the action.
@@ -966,6 +1069,7 @@ public class ActorController {
             doAction.run();
         }
 
+
         /**
          * Undoes the action.
          * 
@@ -977,7 +1081,9 @@ public class ActorController {
         public void undo() {
             undoAction.run();
         }
+
     }
+
 
     /**
      * Cleans up resources when the controller is no longer needed.
@@ -993,4 +1099,6 @@ public class ActorController {
     public void close() {
         // Clean up any remaining resources if needed
     }
+
 }
+

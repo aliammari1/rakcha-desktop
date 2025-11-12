@@ -97,7 +97,8 @@ public class CommentProductController implements Initializable {
                 alert.setTitle("Comment non valide");
                 alert.setContentText("Votre comment contient des gros mots et ne peut pas être publié.");
                 alert.showAndWait();
-            } else {
+            }
+ else {
                 // Créez un objet Comment
                 final Comment comment = new Comment((Client) new UserService().getUserById(4L), userMessage,
                         produitService.getProductById(produit.getId()));
@@ -107,11 +108,15 @@ public class CommentProductController implements Initializable {
                 // Mettez à jour l'interface utilisateur
                 // updateCommentFlowPane(comment);
             }
-        } catch (final ParseException e) {
+
+        }
+ catch (final ParseException e) {
             // Gérez l'exception si la conversion échoue
             CommentProductController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Initializes the controller after its root element has been completely
@@ -133,6 +138,7 @@ public class CommentProductController implements Initializable {
         this.loadAcceptedComment();
     }
 
+
     /**
      * Loads all accepted comments from the database and displays them in the UI.
      * 
@@ -151,7 +157,9 @@ public class CommentProductController implements Initializable {
             final HBox cardContainer = this.createcommentcard(comm);
             this.CommentFlowPane.getChildren().add(cardContainer);
         }
+
     }
+
 
     /**
      * Creates a card-like UI component to display a comment.
@@ -197,6 +205,7 @@ public class CommentProductController implements Initializable {
         return commentVBox;
     }
 
+
     /**
      * Navigates to the cinema client interface.
      * 
@@ -224,11 +233,14 @@ public class CommentProductController implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             CommentProductController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                   // d'entrée/sortie
         }
+
     }
+
 
     /**
      * Navigates to the event client interface.
@@ -258,11 +270,14 @@ public class CommentProductController implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             CommentProductController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                   // d'entrée/sortie
         }
+
     }
+
 
     /**
      * Navigates to the product client interface.
@@ -292,11 +307,14 @@ public class CommentProductController implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             CommentProductController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                   // d'entrée/sortie
         }
+
     }
+
 
     /**
      * Placeholder for client profile functionality.
@@ -306,6 +324,7 @@ public class CommentProductController implements Initializable {
     @FXML
     void profilclient(final ActionEvent event) {
     }
+
 
     /**
      * Navigates to the movie client interface.
@@ -334,11 +353,14 @@ public class CommentProductController implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             CommentProductController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                   // d'entrée/sortie
         }
+
     }
+
 
     /**
      * Navigates to the series client interface.
@@ -367,9 +389,13 @@ public class CommentProductController implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             CommentProductController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                   // d'entrée/sortie
         }
+
     }
+
 }
+

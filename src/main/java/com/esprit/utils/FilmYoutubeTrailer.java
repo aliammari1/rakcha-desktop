@@ -41,9 +41,12 @@ public class FilmYoutubeTrailer {
             throw new IllegalStateException("YouTube API key not found in .env file");
         }
 
+
         this.youtube = new YouTube.Builder(new NetHttpTransport(), new GsonFactory(), request -> {
-        }).setApplicationName(APPLICATION_NAME).build();
+        }
+).setApplicationName(APPLICATION_NAME).build();
     }
+
 
     /**
      * Search for and return the trailer URL for a given film
@@ -57,6 +60,7 @@ public class FilmYoutubeTrailer {
             LOGGER.warning("Invalid film name provided");
             return FALLBACK_URL;
         }
+
 
         try {
             LOGGER.info("Searching for trailer: " + filmName);
@@ -75,12 +79,17 @@ public class FilmYoutubeTrailer {
                 return YOUTUBE_BASE_URL + videoId;
             }
 
+
             LOGGER.warning("No trailer found for: " + filmName);
             return FALLBACK_URL;
 
-        } catch (IOException e) {
+        }
+ catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error searching for trailer: " + filmName, e);
             return FALLBACK_URL;
         }
+
     }
+
 }
+

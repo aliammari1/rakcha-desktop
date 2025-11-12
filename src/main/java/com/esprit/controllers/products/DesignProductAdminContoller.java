@@ -107,14 +107,17 @@ public class DesignProductAdminContoller {
         this.SearchBar.textProperty().addListener((observable, oldValue, newValue) -> {
             this.search(newValue);
             this.filterCategorieProducts(newValue.trim());
-        });
+        }
+);
         final CategoryService cs = new CategoryService();
         for (final ProductCategory c : cs.read()) {
             this.nomC_comboBox.getItems().add(c.getCategoryName());
         }
+
         this.afficher_produit();
         this.initDeleteColumn();
     }
+
 
     /**
      * Creates an `Alert` object and displays it with a title, header text, and
@@ -132,6 +135,7 @@ public class DesignProductAdminContoller {
         alert.setContentText(message);
         alert.show();
     }
+
 
     /**
      * Allows the user to select an image file using a FileChooser dialog. If an
@@ -154,7 +158,9 @@ public class DesignProductAdminContoller {
             final Image selectedImage = new Image(this.selectedFile.toURI().toString());
             this.image.setImage(selectedImage);
         }
+
     }
+
 
     /**
      * Allows users to add a new product to a list. It validates user input,
@@ -199,6 +205,7 @@ public class DesignProductAdminContoller {
                 alert.setContentText("Veuillez remplir tous les champs.");
                 alert.show();
             }
+
             try {
                 // Convertir le prix et la quantité en entiers
                 final int prix = Integer.parseInt(prixText);
@@ -211,11 +218,13 @@ public class DesignProductAdminContoller {
                             "Veuillez entrer des valeurs valides pour le prix et la quantité (supérieures à zéro)");
                     alert.show(); // Arrêter l'exécution de la méthode si les valeurs ne sont pas valides
                 }
+
                 // Vérifier si le nom ne contient que des alphabets et des chiffres
                 if (!nomProduct.matches("[a-zA-Z0-9]*")) {
                     this.showAlert("Veuillez entrer un nom valide sans caractères spéciaux.");
                     return; // Arrêter l'exécution de la méthode si le nom n'est pas valide
                 }
+
                 // Vérifier si la description a au moins 20 caractères
                 if (20 > descriptionProduct.length()) {
                     final Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -224,6 +233,7 @@ public class DesignProductAdminContoller {
                     alert.show();
                     return; // Arrêter l'exécution de la méthode si les champs sont vides
                 }
+
                 try {
                     URI uri = null;
                     final String fullPath = this.image.getImage().getUrl();
@@ -246,17 +256,24 @@ public class DesignProductAdminContoller {
                     alert.setTitle("Product ajouté");
                     alert.setContentText("Product ajouté !");
                     alert.show();
-                } catch (final Exception e) {
+                }
+ catch (final Exception e) {
                     DesignProductAdminContoller.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                     this.showAlert("Erreur lors de l'ajout du produit : " + e.getMessage());
                 }
-            } catch (final NumberFormatException e) {
+
+            }
+ catch (final NumberFormatException e) {
                 this.showAlert("Veuillez entrer des valeurs numériques valides pour le prix et la quantité.");
             }
-        } else {
+
+        }
+ else {
             this.showAlert("Veuillez sélectionner une image d'abord !");
         }
+
     }
+
 
     /**
      * Modifies the values of a `Product` object, such as its category, name, price,
@@ -294,6 +311,7 @@ public class DesignProductAdminContoller {
         ps.update(produit);
     }
 
+
     /**
      * 1) sets the style class for the cell containing the Product object, 2)
      * updates the graphic and text of the cell based on the Product object, and 3)
@@ -325,7 +343,8 @@ public class DesignProductAdminContoller {
              * protected void updateItem(String item, boolean empty) {
              * super.updateItem(item, empty);
              *
-             * if (item == null || empty) { setGraphic(null); } else { CategoryService cs =
+             * if (item == null || empty) { setGraphic(null); }
+ else { CategoryService cs =
              * new CategoryService(); ComboBox<String> newComboBox = new ComboBox<>();
              *
              * // Obtenez la liste des noms de catégories List<String> categorieNames =
@@ -345,15 +364,21 @@ public class DesignProductAdminContoller {
              * produit.setCategorie(selectedCategorie); modifier_produit(produit);
              * newComboBox.getStyleClass().add("combo-box-red");
              *
-             * }); } } });
+             * }
+); }
+ }
+ }
+);
              */
             protected void updateItem(final String item, final boolean empty) {
                 super.updateItem(item, empty);
                 if (empty || null == item) {
                     this.setText(null);
-                } else {
+                }
+ else {
                     this.setText(item);
                 }
+
                 this.setOnMouseClicked(event -> {
                     if (2 == event.getClickCount()) {
                         final CategoryService cs = new CategoryService();
@@ -377,43 +402,52 @@ public class DesignProductAdminContoller {
                             this.commitEdit(produitComboBox.getValue());
                             // Rétablir la classe CSS pour afficher le texte
                             this.getStyleClass().remove("cell-hide-text");
-                        });
+                        }
+);
                         // Appliquer la classe CSS pour masquer le texte
                         this.getStyleClass().add("cell-hide-text");
                         // Afficher le ComboBox dans la cellule
                         this.setGraphic(produitComboBox);
                     }
-                });
+
+                }
+);
             }
-        });
+
+        }
+);
         this.nomP_tableC.setCellValueFactory(new PropertyValueFactory<Product, String>("nom"));
         this.nomP_tableC.setCellFactory(TextFieldTableCell.forTableColumn());
         this.nomP_tableC.setOnEditCommit(event -> {
             final Product produit = event.getRowValue();
             produit.setName(event.getNewValue());
             this.modifier_produit(produit);
-        });
+        }
+);
         this.PrixP_tableC.setCellValueFactory(new PropertyValueFactory<Product, Integer>("prix"));
         this.PrixP_tableC.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
         this.PrixP_tableC.setOnEditCommit(event -> {
             final Product produit = event.getRowValue();
             produit.setPrice(event.getNewValue());
             this.modifier_produit(produit);
-        });
+        }
+);
         this.descriptionP_tableC.setCellValueFactory(new PropertyValueFactory<Product, String>("description"));
         this.descriptionP_tableC.setCellFactory(TextFieldTableCell.forTableColumn());
         this.descriptionP_tableC.setOnEditCommit(event -> {
             final Product produit = event.getRowValue();
             produit.setDescription(event.getNewValue());
             this.modifier_produit(produit);
-        });
+        }
+);
         this.quantiteP_tableC.setCellValueFactory(new PropertyValueFactory<Product, Integer>("quantiteP"));
         this.quantiteP_tableC.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
         this.quantiteP_tableC.setOnEditCommit(event -> {
             final Product produit = event.getRowValue();
             produit.setQuantity(event.getNewValue());
             this.modifier_produit(produit);
-        });
+        }
+);
         // Configurer la colonne Logo pour afficher et changer l'image
         this.image_tableC.setCellValueFactory(cellData -> {
             final Product p = cellData.getValue();
@@ -424,17 +458,22 @@ public class DesignProductAdminContoller {
                 if (!pImage.isEmpty()) {
                     final Image image = new Image(pImage);
                     imageView.setImage(image);
-                } else {
+                }
+ else {
                     // Afficher une image par défaut si le logo est null
                     final Image defaultImage = new Image(
                             Objects.requireNonNull(this.getClass().getResourceAsStream("default_image.png")));
                     imageView.setImage(defaultImage);
                 }
-            } catch (final Exception e) {
+
+            }
+ catch (final Exception e) {
                 DesignProductAdminContoller.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
+
             return new SimpleObjectProperty<>(imageView);
-        });
+        }
+);
         // Configurer l'événement de clic pour changer l'image
         this.image_tableC.setCellFactory(col -> new TableCell<Product, ImageView>() {
             private final ImageView imageView = new ImageView();
@@ -446,8 +485,11 @@ public class DesignProductAdminContoller {
                         changerImage(this.produit);
                         afficher_produit();
                     }
-                });
+
+                }
+);
             }
+
 
             /**
              * Updates an item's graphic and text based on its empty or non-empty status,
@@ -475,16 +517,20 @@ public class DesignProductAdminContoller {
                 if (empty || null == item) {
                     this.setGraphic(null);
                     this.setText(null);
-                } else {
+                }
+ else {
                     this.imageView.setImage(item.getImage());
                     this.imageView.setFitWidth(100);
                     this.imageView.setFitHeight(50);
                     this.setGraphic(this.imageView);
                     this.setText(null);
                 }
+
                 this.produit = this.getTableRow().getItem();
             }
-        });
+
+        }
+);
         // Activer l'édition en cliquant sur une ligne
         this.Product_tableview.setEditable(true);
         // Gérer la modification du texte dans une cellule et le valider en appuyant sur
@@ -495,8 +541,11 @@ public class DesignProductAdminContoller {
                 if (null != selectedProduct) {
                     this.modifier_produit(selectedProduct);
                 }
+
             }
-        });
+
+        }
+);
         // Utiliser une ObservableList pour stocker les éléments
         final ObservableList<Product> list = FXCollections.observableArrayList();
         final ProductService ps = new ProductService();
@@ -506,6 +555,7 @@ public class DesignProductAdminContoller {
         // Activer la sélection de cellules
         this.Product_tableview.getSelectionModel().setCellSelectionEnabled(true);
     }
+
 
     /**
      * Sets up a delete button for each item in a table, with the button's on-action
@@ -561,8 +611,10 @@ public class DesignProductAdminContoller {
                             // Mise à jour de la TableView après la suppression de la base de données
                             Product_tableview.getItems().remove(produit);
                             Product_tableview.refresh();
-                        });
+                        }
+);
                     }
+
 
                     /**
                      * Updates an item's graphic based on whether it is empty or not. When the item
@@ -588,16 +640,23 @@ public class DesignProductAdminContoller {
                         super.updateItem(item, empty);
                         if (empty) {
                             this.setGraphic(null);
-                        } else {
+                        }
+ else {
                             this.setGraphic(this.btnDelete);
                         }
+
                     }
-                };
+
+                }
+;
             }
-        };
+
+        }
+;
         this.deleteColumn.setCellFactory(cellFactory);
         // Product_tableview.getColumns().add(deleteColumn);
     }
+
 
     // Méthode pour changer l'image
 
@@ -623,12 +682,16 @@ public class DesignProductAdminContoller {
                 connection = DataSource.getInstance().getConnection();
                 produit.setImage(this.selectedFile.toURI().toURL().toString());
                 this.modifier_produit(produit);
-            } catch (final Exception e) {
+            }
+ catch (final Exception e) {
                 DesignProductAdminContoller.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 this.showAlert("Erreur lors du chargement de la nouvelle image : " + e.getMessage());
             }
+
         }
+
     }
+
 
     /**
      * Loads a new user interface (`DesignCategorieAdmin.fxml`) into a scene,
@@ -660,6 +723,7 @@ public class DesignProductAdminContoller {
         currentStage.close();
     }
 
+
     /**
      * Searches for products based on a given keyword, filtering an observable list
      * of products from the `ProductService`. It adds the filtered products to the
@@ -677,17 +741,22 @@ public class DesignProductAdminContoller {
         PageRequest pageRequest = new PageRequest(0, 10);
         if (null == keyword || keyword.trim().isEmpty()) {
             filteredList.addAll(produitservice.read(pageRequest).getContent());
-        } else {
+        }
+ else {
             for (final Product produit : produitservice.read(pageRequest).getContent()) {
                 if (produit.getName().toLowerCase().contains(keyword.toLowerCase())
                         || produit.getDescription().toLowerCase().contains(keyword.toLowerCase())
                         || produit.getCategoryNames().toLowerCase().contains(keyword.toLowerCase())) {
                     filteredList.add(produit);
                 }
+
             }
+
         }
+
         this.Product_tableview.setItems(filteredList);
     }
+
 
     /**
      * Filters a list of products based on a search query, by adding only the
@@ -709,14 +778,19 @@ public class DesignProductAdminContoller {
                     if (productCategory.getCategoryName().toLowerCase().contains(searchText.toLowerCase())) {
                         filteredList.add(produit);
                     }
+
             }
+
             // Mettre à jour la TableView avec la liste filtrée
             this.Product_tableview.setItems(filteredList);
-        } else {
+        }
+ else {
             // Si le champ de recherche est vide, afficher tous les cinémas
             this.afficher_produit();
         }
+
     }
+
 
     /**
      * Retrieves a list of product categories from the service layer using the
@@ -730,6 +804,7 @@ public class DesignProductAdminContoller {
         PageRequest pageRequest = new PageRequest(0, 10);
         return categoryservice.read(pageRequest).getContent();
     }
+
 
     /**
      * Updates the opacity and visibility of an ancestor element, sets a `CheckBox`
@@ -768,12 +843,14 @@ public class DesignProductAdminContoller {
             addressCheckBoxesVBox.getChildren().add(checkBox);
             this.addressCheckBoxes.add(checkBox);
         }
+
         addressCheckBoxesVBox.setLayoutX(25);
         addressCheckBoxesVBox.setLayoutY(25);
         // Ajouter les VBox dans le filterAnchor
         this.filterAnchor.getChildren().addAll(addressCheckBoxesVBox);
         this.filterAnchor.setVisible(true);
     }
+
 
     /**
      * Retrieves a list of category names from a database and returns it as a list
@@ -793,6 +870,7 @@ public class DesignProductAdminContoller {
         return categories.stream().flatMap(c -> c.getCategories().stream()).map(c -> c.getCategoryName()).distinct()
                 .collect(Collectors.toList());
     }
+
 
     /**
      * Filters a list of cinemas based on selected categories and statuses, updates
@@ -835,6 +913,7 @@ public class DesignProductAdminContoller {
         this.Product_tableview.setItems(filteredList);
     }
 
+
     /**
      * Streams, filters, and collects the selected addresses from the
      * `addressCheckBoxes` array, returning a list of strings representing the
@@ -851,6 +930,7 @@ public class DesignProductAdminContoller {
         return this.addressCheckBoxes.stream().filter(CheckBox::isSelected).map(CheckBox::getText)
                 .collect(Collectors.toList());
     }
+
 
     /**
      * Charges a new FXML file (`CommentaireProduct.fxml`), creates a new scene with
@@ -883,11 +963,14 @@ public class DesignProductAdminContoller {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             DesignProductAdminContoller.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                      // d'entrée/sortie
         }
+
     }
+
 
     /**
      * Loads a new FXML file "/ui//ui/DesignEvenementAdmin.fxml" and creates a new
@@ -921,11 +1004,14 @@ public class DesignProductAdminContoller {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             DesignProductAdminContoller.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                      // d'entrée/sortie
         }
+
     }
+
 
     /**
      * Loads a new FXML interface, creates a new scene, and attaches it to a new
@@ -960,11 +1046,14 @@ public class DesignProductAdminContoller {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             DesignProductAdminContoller.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                      // d'entrée/sortie
         }
+
     }
+
 
     /**
      * Appears to be a handler for an action event, likely related to the execution
@@ -979,6 +1068,7 @@ public class DesignProductAdminContoller {
     @FXML
     void profilclient(final ActionEvent event) {
     }
+
 
     /**
      * Loads a new user interface, creates a new stage with it, and replaces the
@@ -1012,11 +1102,14 @@ public class DesignProductAdminContoller {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             DesignProductAdminContoller.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                      // d'entrée/sortie
         }
+
     }
+
 
     /**
      * Loads a new FXML view, creates a new scene and stage, and replaces the
@@ -1046,11 +1139,14 @@ public class DesignProductAdminContoller {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             DesignProductAdminContoller.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                      // d'entrée/sortie
         }
+
     }
+
 
     /**
      * Allows the user to select an image file from a list of accepted formats,
@@ -1084,10 +1180,15 @@ public class DesignProductAdminContoller {
                 this.image.setImage(selectedImage);
 
                 LOGGER.info("Image uploaded to Cloudinary: " + cloudinaryImageUrl);
-            } catch (final IOException e) {
+            }
+ catch (final IOException e) {
                 LOGGER.log(Level.SEVERE, "Error uploading image to Cloudinary", e);
                 DesignProductAdminContoller.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
+
         }
+
     }
+
 }
+

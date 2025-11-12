@@ -56,10 +56,13 @@ public class CommentService implements IService<Comment> {
                     """;
             tableCreator.createTableIfNotExists("comments", createCommentsTable);
 
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             log.error("Error creating tables for CommentService", e);
         }
+
     }
+
 
     @Override
     /**
@@ -76,10 +79,13 @@ public class CommentService implements IService<Comment> {
             pst.setLong(3, comment.getProduct().getId());
             pst.executeUpdate();
             CommentService.LOGGER.info("Comment added!");
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             CommentService.LOGGER.info("Error adding comment: " + e.getMessage());
         }
+
     }
+
 
     /**
      * Performs read operation.
@@ -100,11 +106,15 @@ public class CommentService implements IService<Comment> {
                         .product(productService.getProductById(rs.getLong("product_id"))).build();
                 comments.add(comment);
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             CommentService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return comments;
     }
+
 
     @Override
     /**
@@ -116,6 +126,7 @@ public class CommentService implements IService<Comment> {
     public void update(final Comment comment) {
     }
 
+
     @Override
     /**
      * Deletes an entity from the database.
@@ -125,6 +136,7 @@ public class CommentService implements IService<Comment> {
      */
     public void delete(final Comment comment) {
     }
+
 
     /**
      * Reads a comment by client ID.
@@ -146,11 +158,15 @@ public class CommentService implements IService<Comment> {
                         .commentText(rs.getString("comment_text"))
                         .product(productService.getProductById(rs.getLong("product_id"))).build();
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             CommentService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return comment;
     }
+
 
     /**
      * Retrieves comments by product ID.
@@ -173,15 +189,21 @@ public class CommentService implements IService<Comment> {
                         .product(productService.getProductById(rs.getLong("product_id"))).build();
                 comments.add(comment);
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             CommentService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return comments;
     }
+
 
     @Override
     public Page<Comment> read(PageRequest pageRequest) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'read'");
     }
+
 }
+

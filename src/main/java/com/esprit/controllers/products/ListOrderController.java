@@ -76,10 +76,12 @@ public class ListOrderController {
     void initialize() {
         this.SearchBar.textProperty().addListener((observable, oldValue, newValue) -> {
             this.search(newValue);
-        });
+        }
+);
         this.afficheOrder();
         this.initDeleteColumn();
     }
+
 
     /**
      * Displays orders in the table view with appropriate column mappings.
@@ -97,13 +99,15 @@ public class ListOrderController {
             final UserService userService = new UserService();
             final Client client = (Client) userService.getUserById(order.getClient().getId());
             return new SimpleStringProperty(client.getFirstName());
-        });
+        }
+);
         this.idprenom.setCellValueFactory(cellData -> {
             final Order order = cellData.getValue();
             final UserService userService = new UserService();
             final Client client = (Client) userService.getUserById(order.getClient().getId());
             return new SimpleStringProperty(client.getLastName());
-        });
+        }
+);
         this.idadresse.setCellValueFactory(new PropertyValueFactory<Order, String>("adresse"));
         this.idnumero.setCellValueFactory(new PropertyValueFactory<Order, Integer>("num_telephone"));
         this.iddate.setCellValueFactory(new PropertyValueFactory<Order, Date>("dateOrder"));
@@ -116,6 +120,7 @@ public class ListOrderController {
         // Activer la sélection de cellules
         this.orderTableView.getSelectionModel().setCellSelectionEnabled(true);
     }
+
 
     /**
      * Filters the orders displayed in the table view based on a search keyword.
@@ -133,7 +138,8 @@ public class ListOrderController {
         final ObservableList<Order> filteredList = FXCollections.observableArrayList();
         if (null == keyword || keyword.trim().isEmpty()) {
             filteredList.addAll(orderservice.read());
-        } else {
+        }
+ else {
             for (final Order order : orderservice.read()) {
                 if (order.getAddress().toLowerCase().contains(keyword.toLowerCase())
                         || order.getClient().getLastName().toLowerCase().contains(keyword.toLowerCase())
@@ -141,10 +147,14 @@ public class ListOrderController {
                         || order.getStatus().toLowerCase().contains(keyword.toLowerCase())) {
                     filteredList.add(order);
                 }
+
             }
+
         }
+
         this.orderTableView.setItems(filteredList);
     }
+
 
     /**
      * Initializes the delete column with a button that allows users to delete
@@ -180,8 +190,10 @@ public class ListOrderController {
                             // Mise à jour de la TableView après la suppression de la base de données
                             orderTableView.getItems().remove(order);
                             orderTableView.refresh();
-                        });
+                        }
+);
                     }
+
 
                     /**
                      * Updates the cell to display the delete button when the cell is not empty.
@@ -194,15 +206,22 @@ public class ListOrderController {
                         super.updateItem(item, empty);
                         if (empty) {
                             this.setGraphic(null);
-                        } else {
+                        }
+ else {
                             this.setGraphic(this.btnDelete);
                         }
+
                     }
-                };
+
+                }
+;
             }
-        };
+
+        }
+;
         this.deleteColumn.setCellFactory(cellFactory);
     }
+
 
     /**
      * Opens the order statistics view in a new window.
@@ -231,8 +250,12 @@ public class ListOrderController {
             stage.setTitle("statisqtisue");
             stage.setOnHidden(e -> currentStage.show()); // Afficher l'ancienne fenêtre lorsque la nouvelle est fermée
             stage.show();
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             ListOrderController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
+
     }
+
 }
+

@@ -49,4 +49,6 @@ public class CinemaComment {
         this.commentText = commentText;
         this.sentiment = sentiment;
     }
+
 }
+

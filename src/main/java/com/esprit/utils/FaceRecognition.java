@@ -31,6 +31,7 @@
 //         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 //     }
 
+
 //     /**
 //      * Constructs a new FaceRecognition instance.
 //      * Initializes the LBPH face recognizer.
@@ -38,6 +39,7 @@
 //     public FaceRecognition() {
 //         this.faceRecognizer = LBPHFaceRecognizer.create();
 //     }
+
 
 //     /**
 //      * Initialize the face recognizer with training data
@@ -51,16 +53,19 @@
 //             return false;
 //         }
 
+
 //         FilenameFilter imgFilter = (dir, name) -> {
 //             String lowercaseName = name.toLowerCase();
 //             return lowercaseName.endsWith(".jpg") || lowercaseName.endsWith(".png");
-//         };
+//         }
+;
 
 //         File[] imageFiles = root.listFiles(imgFilter);
 //         if (imageFiles == null || imageFiles.length == 0) {
 //             LOGGER.severe("No training images found in " + FACES_DIR);
 //             return false;
 //         }
+
 
 //         List<Mat> images = new ArrayList<>();
 //         List<Integer> labels = new ArrayList<>();
@@ -73,16 +78,19 @@
 //                     continue;
 //                 }
 
+
 //                 // Extract label from filename (assumed format: label-name.jpg)
 //                 int label = Integer.parseInt(image.getName().split("-")[0]);
 //                 images.add(img);
 //                 labels.add(label);
 //             }
 
+
 //             if (images.isEmpty()) {
 //                 LOGGER.severe("No valid training images found");
 //                 return false;
 //             }
+
 
 //             MatOfInt labelsMat = new MatOfInt();
 //             labelsMat.fromList(labels);
@@ -92,11 +100,14 @@
 //             LOGGER.info("Face recognition model trained successfully");
 //             return true;
 
-//         } catch (Exception e) {
+//         }
+ catch (Exception e) {
 //             LOGGER.log(Level.SEVERE, "Failed to initialize face recognition", e);
 //             return false;
 //         }
+
 //     }
+
 
 //     /**
 //      * Recognize a face in the given image
@@ -111,13 +122,16 @@
 //             return -1;
 //         }
 
+
 //         try {
 //             Mat grayImage = new Mat();
 //             if (faceImage.channels() > 1) {
 //                 Imgproc.cvtColor(faceImage, grayImage, Imgproc.COLOR_BGR2GRAY);
-//             } else {
+//             }
+ else {
 //                 grayImage = faceImage;
 //             }
+
 
 //             int[] label = new int[1];
 //             double[] confidence = new double[1];
@@ -128,11 +142,16 @@
 //                 return -1; // Unknown face
 //             }
 
+
 //             return label[0];
 
-//         } catch (Exception e) {
+//         }
+ catch (Exception e) {
 //             LOGGER.log(Level.SEVERE, "Error during face recognition", e);
 //             return -1;
 //         }
+
 //     }
+
 // }
+

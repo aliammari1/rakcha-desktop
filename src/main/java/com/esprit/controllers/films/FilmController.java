@@ -176,7 +176,8 @@ public class FilmController {
         this.Actorcheck_ComboBox1.getItems().forEach(item -> {
             final Tooltip tooltip2 = new Tooltip("Tooltip text for " + item); // Create a tooltip for each item
             Tooltip.install(this.Actorcheck_ComboBox1, tooltip2); // Set the tooltip for the ComboBox
-        });
+        }
+);
         PageRequest cinemaPageRequest = new PageRequest(0, 10);
         final List<Cinema> cinemaList = cinemaService.read(cinemaPageRequest).getContent();
         final List<String> cinemaNames = cinemaList.stream().map(Cinema::getName).collect(Collectors.toList());
@@ -184,7 +185,8 @@ public class FilmController {
         this.idcinemaFilm_comboBox.getItems().forEach(item -> {
             final Tooltip tooltip2 = new Tooltip("Tooltip text for " + item); // Create a tooltip for each item
             Tooltip.install(this.idcinemaFilm_comboBox, tooltip2); // Set the tooltip for the ComboBox
-        });
+        }
+);
         // Populate the CheckComboBox with category names
         final CategoryService categoryService = new CategoryService();
         PageRequest categoryPageRequest = new PageRequest(0, 10);
@@ -197,9 +199,11 @@ public class FilmController {
         // Appliquer le filtre lorsque le texte de recherche change
         this.recherche_textField.textProperty().addListener((observable, oldValue, newValue) -> {
             this.searchActor(newValue);
-        });
+        }
+);
         setupAdvancedSearch();
     }
+
 
     /**
      * /** Sets a predicate for the `filteredActors` list to search for an actor
@@ -220,12 +224,15 @@ public class FilmController {
             if (null == searchText || searchText.isEmpty()) {
                 return true;
             }
+
             // Vérifier si le nom de l'acteur contient le texte de recherche (en ignorant la
             // casse)
             final String lowerCaseFilter = searchText.toLowerCase();
             return actor.getName().toLowerCase().contains(lowerCaseFilter);
-        });
+        }
+);
     }
+
 
     private void setupAdvancedSearch() {
         filteredFilms = new FilteredList<>(filmCategory_tableView1.getItems(), p -> true);
@@ -235,8 +242,10 @@ public class FilmController {
 
         recherche_textField.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredFilms.setPredicate(createSearchPredicate(newValue));
-        });
+        }
+);
     }
+
 
     /**
      * @param searchText
@@ -248,6 +257,7 @@ public class FilmController {
                 return true;
             }
 
+
             String lowerCaseFilter = searchText.toLowerCase();
 
             // Search in multiple fields
@@ -256,8 +266,10 @@ public class FilmController {
                     || String.valueOf(film.getReleaseYear()).contains(lowerCaseFilter)
                     || new FilmCategoryService().getCategoryNames(film.getId()).toLowerCase().contains(lowerCaseFilter)
                     || new ActorFilmService().getActorsNames(film.getId()).toLowerCase().contains(lowerCaseFilter);
-        };
+        }
+;
     }
+
 
     /**
      * /** Generates an information alert displaying a provided message.
@@ -273,6 +285,7 @@ public class FilmController {
         alert.setContentText(message);
         alert.show();
     }
+
 
     /**
      * Displays a file chooser dialog to select an image file, reads the selected
@@ -291,7 +304,9 @@ public class FilmController {
             final Image selectedImage = new Image(selectedFile.toURI().toString());
             this.imageFilm_ImageView.setImage(selectedImage);
         }
+
     }
+
 
     /**
      * Deletes a film with the specified ID from the database and displays an
@@ -310,6 +325,7 @@ public class FilmController {
         this.readFilmTable();
     }
 
+
     /**
      * Takes user inputted film data and validates it against predetermined criteria
      * before inserting the film into a database.
@@ -326,38 +342,50 @@ public class FilmController {
                 this.showAlert("Le nom du film est requis.");
                 return;
             }
+
             if (null == imageFilm_ImageView.getImage()) {
                 this.showAlert("Une image pour le film est requise.");
                 return;
             }
+
             if (this.dureeFilm_textArea.getText().isEmpty()
-                    || !this.dureeFilm_textArea.getText().matches("\\d{2}:\\d{2}:\\d{2}")) {
+                    || !this.dureeFilm_textArea.getText().matches("\\d{2}
+:\\d{2}
+:\\d{2}
+")) {
                 this.showAlert("La durée du film est requise au format (HH:MM:SS).");
                 return;
             }
+
             if (this.descriptionFilm_textArea.getText().isEmpty()) {
                 this.showAlert("La description du film est requise.");
                 return;
             }
+
             if (this.annederealisationFilm_textArea.getText().isEmpty()
-                    || !this.annederealisationFilm_textArea.getText().matches("\\d{4}")
+                    || !this.annederealisationFilm_textArea.getText().matches("\\d{4}
+")
                     || 1900 > Integer.parseInt(annederealisationFilm_textArea.getText())) {
                 this.showAlert(
                         "L'année de réalisation du film est requise au format (YYYY) et doit être supérieure ou égale à 1900.");
                 return;
             }
+
             if (this.Categorychecj_ComboBox.getCheckModel().getCheckedItems().isEmpty()) {
                 this.showAlert("Au moins une catégorie doit être sélectionnée.");
                 return;
             }
+
             if (this.Actorcheck_ComboBox1.getCheckModel().getCheckedItems().isEmpty()) {
                 this.showAlert("Au moins un acteur doit être sélectionné.");
                 return;
             }
+
             if (this.idcinemaFilm_comboBox.getCheckModel().getCheckedItems().isEmpty()) {
                 this.showAlert("Au moins un cinéma doit être sélectionné.");
                 return;
             }
+
             final String fullPath = this.imageFilm_ImageView.getImage().getUrl();
             final String requiredPath = fullPath.substring(fullPath.indexOf("/img/films/"));
             final URI uri = new URI(requiredPath);
@@ -387,10 +415,13 @@ public class FilmController {
             alert.show();
             this.readFilmTable();
             this.clear();
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             this.showAlert("Erreur lors de l'ajout du film : " + e.getMessage());
         }
+
     }
+
 
     // Méthode pour afficher les alertes
 
@@ -406,7 +437,9 @@ public class FilmController {
         if (event.getSource() == this.AjouterFilm_Button) {
             this.filmCrudInterface.setVisible(true);
         }
+
     }
+
 
     /**
      * Removes text and image contents from four text areas: `nomFilm`, `dureeFilm`,
@@ -419,6 +452,7 @@ public class FilmController {
         this.descriptionFilm_textArea.setText("");
         this.annederealisationFilm_textArea.setText("");
     }
+
 
     /**
      * Monitors changes to a combo box containing a list of actors and updates the
@@ -450,17 +484,25 @@ public class FilmController {
                         for (final Actor actor : c.getAddedSubList()) {
                             final String sql = "INSERT INTO actorFilm (actor_id, film_id) VALUES (?, ?)";
                         }
+
                     }
+
                     if (c.wasRemoved()) {
                         for (final Actor actor : c.getRemoved()) {
                             // Remove actor from actorFilm table
                             final String sql = "DELETE FROM actorFilm WHERE actor_id = ?";
                         }
+
                     }
+
                 }
+
             }
-        });
+
+        }
+);
     }
+
 
     /**
      * Populates an ObservableList of Films based on data read from the FilmService
@@ -477,10 +519,13 @@ public class FilmController {
             final ObservableList<Film> obF = FXCollections
                     .observableArrayList(filmService.read(filmPageRequest).getContent());
             this.filmCategory_tableView1.setItems(obF);
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             FilmController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Sets up cell factories for the table columns in a `TableView`. It creates
@@ -534,10 +579,13 @@ public class FilmController {
                                 final String input = c.get("nom");
                                 if (null == input || input.trim().isEmpty()) {
                                     c.error("Input cannot be empty.");
-                                } else if (!Character.isUpperCase(input.charAt(0))) {
+                                }
+ else if (!Character.isUpperCase(input.charAt(0))) {
                                     c.error("Please start with an uppercase letter.");
                                 }
-                            }).decorates(textField).immediate();
+
+                            }
+).decorates(textField).immediate();
                             final Window window = getScene().getWindow();
                             final Tooltip tooltip = new Tooltip();
                             final Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
@@ -576,18 +624,28 @@ public class FilmController {
                                         tooltip.setStyle("-fx-background-color: #f00;");
                                         textField.setTooltip(tooltip);
                                         textField.getTooltip().show(window, bounds.getMinX(), bounds.getMinY() - 30);
-                                    } else {
+                                    }
+ else {
                                         if (null != textField.getTooltip()) {
                                             textField.getTooltip().hide();
                                         }
+
                                     }
+
                                 }
-                            });
+
+                            }
+);
                         }
+
                     }
-                };
+
+                }
+;
             }
-        });
+
+        }
+);
         this.annederalisationFilm_tableColumn
                 .setCellFactory(new Callback<TableColumn<Film, Integer>, TableCell<Film, Integer>>() {
                     /**
@@ -633,18 +691,24 @@ public class FilmController {
                                                 final String input = c.get("annederalisation");
                                                 if (null == input || input.trim().isEmpty()) {
                                                     c.error("Input cannot be empty.");
-                                                } else {
+                                                }
+ else {
                                                     try {
                                                         final int year = Integer.parseInt(input);
                                                         if (1800 > year || year > Year.now().getValue()) {
                                                             c.error("Please enter a year between 1800 and "
                                                                     + Year.now().getValue());
                                                         }
-                                                    } catch (final NumberFormatException e) {
+
+                                                    }
+ catch (final NumberFormatException e) {
                                                         c.error("Please enter a valid year.");
                                                     }
+
                                                 }
-                                            }).decorates(textField).immediate();
+
+                                            }
+).decorates(textField).immediate();
                                     final Window window = getScene().getWindow();
                                     final Tooltip tooltip = new Tooltip();
                                     final Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
@@ -683,18 +747,28 @@ public class FilmController {
                                                 textField.setTooltip(tooltip);
                                                 textField.getTooltip().show(window, bounds.getMinX(),
                                                         bounds.getMinY() - 30);
-                                            } else {
+                                            }
+ else {
                                                 if (null != textField.getTooltip()) {
                                                     textField.getTooltip().hide();
                                                 }
+
                                             }
+
                                         }
-                                    });
+
+                                    }
+);
                                 }
+
                             }
-                        };
+
+                        }
+;
                     }
-                });
+
+                }
+);
         // i
         // dcategoryFilm_tableColumn.setCellFactory(ComboBoxTableCell.forTableColumn());
         this.dureeFilm_tableColumn.setCellFactory(new Callback<TableColumn<Film, Time>, TableCell<Film, Time>>() {
@@ -738,6 +812,7 @@ public class FilmController {
                         return time.toString();
                     }
 
+
                     /**
                      * Parses a time string and returns a `Time` object.
                      *
@@ -756,7 +831,9 @@ public class FilmController {
                     public Time fromString(final String s) {
                         return Time.valueOf(s);
                     }
-                }) {
+
+                }
+) {
                     private Validator validator;
 
                     /**
@@ -780,10 +857,13 @@ public class FilmController {
                                 final String timeRegex = "^([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$";
                                 if (null == input || input.trim().isEmpty()) {
                                     c.error("Input cannot be empty.");
-                                } else if (!input.matches(timeRegex)) {
+                                }
+ else if (!input.matches(timeRegex)) {
                                     c.error("Invalid time format. Please enter the time in the format HH:MM:SS (hours:minutes:seconds).");
                                 }
-                            }).decorates(textField).immediate();
+
+                            }
+).decorates(textField).immediate();
                             final Window window = getScene().getWindow();
                             final Tooltip tooltip = new Tooltip();
                             final Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
@@ -823,18 +903,28 @@ public class FilmController {
                                         tooltip.setStyle("-fx-background-color: #f00;");
                                         textField.setTooltip(tooltip);
                                         textField.getTooltip().show(window, bounds.getMinX(), bounds.getMinY() - 30);
-                                    } else {
+                                    }
+ else {
                                         if (null != textField.getTooltip()) {
                                             textField.getTooltip().hide();
                                         }
+
                                     }
+
                                 }
-                            });
+
+                            }
+);
                         }
+
                     }
-                };
+
+                }
+;
             }
-        });
+
+        }
+);
         // nomFilm_tableColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         this.descriptionFilm_tableColumn
                 .setCellFactory(new Callback<TableColumn<Film, String>, TableCell<Film, String>>() {
@@ -878,10 +968,13 @@ public class FilmController {
                                                 final String input = c.get("description");
                                                 if (null == input || input.trim().isEmpty()) {
                                                     c.error("Input cannot be empty.");
-                                                } else if (!Character.isUpperCase(input.charAt(0))) {
+                                                }
+ else if (!Character.isUpperCase(input.charAt(0))) {
                                                     c.error("Please start with an uppercase letter.");
                                                 }
-                                            }).decorates(textField).immediate();
+
+                                            }
+).decorates(textField).immediate();
                                     final Window window = getScene().getWindow();
                                     final Tooltip tooltip = new Tooltip();
                                     final Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
@@ -924,19 +1017,30 @@ public class FilmController {
                                                 textField.setTooltip(tooltip);
                                                 textField.getTooltip().show(window, bounds.getMinX(),
                                                         bounds.getMinY() - 30);
-                                            } else {
+                                            }
+ else {
                                                 if (null != textField.getTooltip()) {
                                                     textField.getTooltip().hide();
                                                 }
+
                                             }
+
                                         }
-                                    });
+
+                                    }
+);
                                 }
+
                             }
-                        };
+
+                        }
+;
                     }
-                });
+
+                }
+);
     }
+
 
     /**
      * Sets up cell value factories for the `id`, `nomFilm`, `idacteurFilm`,
@@ -989,10 +1093,14 @@ public class FilmController {
                             public void handle(final ActionEvent event) {
                                 deleteFilm(filmcategoryButtonCellDataFeatures.getValue().getId());
                             }
-                        });
+
+                        }
+);
                         return new SimpleObjectProperty<Button>(button);
                     }
-                });
+
+                }
+);
         this.annederalisationFilm_tableColumn.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<Film, Integer>, ObservableValue<Integer>>() {
                     /**
@@ -1018,7 +1126,9 @@ public class FilmController {
                         return new SimpleIntegerProperty(
                                 filmcategoryIntegerCellDataFeatures.getValue().getReleaseYear()).asObject();
                     }
-                });
+
+                }
+);
         this.dureeFilm_tableColumn
                 .setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Film, Time>, ObservableValue<Time>>() {
                     /**
@@ -1044,7 +1154,9 @@ public class FilmController {
                         return new SimpleObjectProperty<Time>(
                                 filmcategoryTimeCellDataFeatures.getValue().getDuration());
                     }
-                });
+
+                }
+);
         this.imageFilm_tableColumn
                 .setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Film, HBox>, ObservableValue<HBox>>() {
                     /**
@@ -1106,17 +1218,26 @@ public class FilmController {
                                             film.setImage(file.toURI().toURL().toString());
                                             updateFilm(film);
                                         }
-                                    } catch (final Exception e) {
+
+                                    }
+ catch (final Exception e) {
                                         FilmController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                                     }
+
                                 }
-                            });
-                        } catch (final Exception e) {
+
+                            }
+);
+                        }
+ catch (final Exception e) {
                             FilmController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                         }
+
                         return new SimpleObjectProperty<HBox>(hBox);
                     }
-                });
+
+                }
+);
         this.dureeFilm_tableColumn
                 .setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Film, Time>, ObservableValue<Time>>() {
                     /**
@@ -1141,7 +1262,9 @@ public class FilmController {
                         return new SimpleObjectProperty<Time>(
                                 filmcategoryTimeCellDataFeatures.getValue().getDuration());
                     }
-                });
+
+                }
+);
         this.descriptionFilm_tableColumn.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<Film, String>, ObservableValue<String>>() {
                     /**
@@ -1166,7 +1289,9 @@ public class FilmController {
                             final TableColumn.CellDataFeatures<Film, String> filmcategoryStringCellDataFeatures) {
                         return new SimpleStringProperty(filmcategoryStringCellDataFeatures.getValue().getDescription());
                     }
-                });
+
+                }
+);
         this.annederalisationFilm_tableColumn.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<Film, Integer>, ObservableValue<Integer>>() {
                     /**
@@ -1191,7 +1316,9 @@ public class FilmController {
                         return new SimpleIntegerProperty(
                                 filmcategoryIntegerCellDataFeatures.getValue().getReleaseYear()).asObject();
                     }
-                });
+
+                }
+);
         this.idcategoryFilm_tableColumn.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<Film, CheckComboBox<String>>, ObservableValue<CheckComboBox<String>>>() {
                     /**
@@ -1229,6 +1356,7 @@ public class FilmController {
                             FilmController.LOGGER.info(checkedString);
                             checkComboBox.getCheckModel().check(checkedString);
                         }
+
                         checkComboBox.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
                             /**
                              * Updates Filmcategory Service with the selected category from the ComboBox and
@@ -1250,10 +1378,14 @@ public class FilmController {
                                 final FilmCategoryService fcs = new FilmCategoryService();
                                 fcs.updateCategories(p.getValue(), checkComboBox.getCheckModel().getCheckedItems());
                             }
-                        });
+
+                        }
+);
                         return new SimpleObjectProperty<CheckComboBox<String>>(checkComboBox);
                     }
-                });
+
+                }
+);
         this.idFilm_tableColumn
                 .setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Film, Long>, ObservableValue<Long>>() {
                     /**
@@ -1279,7 +1411,9 @@ public class FilmController {
                             final TableColumn.CellDataFeatures<Film, Long> filmcategoryLongCellDataFeatures) {
                         return new SimpleLongProperty(filmcategoryLongCellDataFeatures.getValue().getId()).asObject();
                     }
-                });
+
+                }
+);
         this.nomFilm_tableColumn.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<Film, String>, ObservableValue<String>>() {
                     /**
@@ -1304,7 +1438,9 @@ public class FilmController {
                             final TableColumn.CellDataFeatures<Film, String> filmcategoryStringCellDataFeatures) {
                         return new SimpleStringProperty(filmcategoryStringCellDataFeatures.getValue().getName());
                     }
-                });
+
+                }
+);
         this.idacteurFilm_tableColumn.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<Film, CheckComboBox<String>>, ObservableValue<CheckComboBox<String>>>() {
                     /**
@@ -1367,10 +1503,14 @@ public class FilmController {
                                 afs.updateActors(filmcategoryStringCellDataFeatures.getValue(),
                                         checkComboBox.getCheckModel().getCheckedItems());
                             }
-                        });
+
+                        }
+);
                         return new SimpleObjectProperty<CheckComboBox<String>>(checkComboBox);
                     }
-                });
+
+                }
+);
         this.idcinemaFilm_tableColumn.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<Film, CheckComboBox<String>>, ObservableValue<CheckComboBox<String>>>() {
                     /**
@@ -1435,11 +1575,16 @@ public class FilmController {
                                 afs.updateCinemas(filmcategoryStringCellDataFeatures.getValue(),
                                         checkComboBox.getCheckModel().getCheckedItems());
                             }
-                        });
+
+                        }
+);
                         return new SimpleObjectProperty<CheckComboBox<String>>(checkComboBox);
                     }
-                });
+
+                }
+);
     }
+
 
     /**
      * Sets event handlers for cell editing events on columns related to film
@@ -1473,11 +1618,15 @@ public class FilmController {
                                     .setReleaseYear(event.getNewValue());
                             FilmController.this
                                     .updateFilm(event.getTableView().getItems().get(event.getTablePosition().getRow()));
-                        } catch (final Exception e) {
+                        }
+ catch (final Exception e) {
                             FilmController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                         }
+
                     }
-                });
+
+                }
+);
         this.nomFilm_tableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Film, String>>() {
             /**
              * Handles cell editing events for a table displaying films. It updates the film
@@ -1501,11 +1650,15 @@ public class FilmController {
                     event.getTableView().getItems().get(event.getTablePosition().getRow()).setName(event.getNewValue());
                     FilmController.this
                             .updateFilm(event.getTableView().getItems().get(event.getTablePosition().getRow()));
-                } catch (final Exception e) {
+                }
+ catch (final Exception e) {
                     FilmController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
+
             }
-        });
+
+        }
+);
         this.descriptionFilm_tableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Film, String>>() {
             /**
              * Modifies a film's description based on a user edit event in a table view.
@@ -1527,11 +1680,15 @@ public class FilmController {
                             .setDescription(event.getNewValue());
                     FilmController.this
                             .updateFilm(event.getTableView().getItems().get(event.getTablePosition().getRow()));
-                } catch (final Exception e) {
+                }
+ catch (final Exception e) {
                     FilmController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
+
             }
-        });
+
+        }
+);
         this.dureeFilm_tableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Film, Time>>() {
             /**
              * Processes a `CellEditEvent` notification by updating the duration of a film
@@ -1556,12 +1713,17 @@ public class FilmController {
                             .setDuration(event.getNewValue());
                     FilmController.this
                             .updateFilm(event.getTableView().getItems().get(event.getTablePosition().getRow()));
-                } catch (final Exception e) {
+                }
+ catch (final Exception e) {
                     FilmController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
+
             }
-        });
+
+        }
+);
     }
+
 
     /**
      * Updates a film in the database using the `FilmService`, and displays an alert
@@ -1583,12 +1745,16 @@ public class FilmController {
             alert.setContentText("Film modifiée !");
             alert.show();
             this.readFilmTable();
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             this.showAlert("Erreur lors de la modification du Film : " + e.getMessage());
         }
+
         // }
+
         this.readFilmTable();
     }
+
 
     /**
      * Imports an image file selected by the user through a file chooser and saves
@@ -1620,14 +1786,20 @@ public class FilmController {
                     this.imageFilm_ImageView.setImage(selectedImage);
 
                     LOGGER.info("Image uploaded to Cloudinary: " + cloudinaryImageUrl);
-                } catch (final IOException e) {
+                }
+ catch (final IOException e) {
                     LOGGER.log(Level.SEVERE, "Error uploading image to Cloudinary", e);
                 }
+
             }
-        } catch (final Exception e) {
+
+        }
+ catch (final Exception e) {
             LOGGER.log(Level.SEVERE, "Error in file chooser", e);
         }
+
     }
+
 
     /**
      * Loads an FXML file and displays it as a stage with a specific size.
@@ -1652,8 +1824,12 @@ public class FilmController {
             final Stage stage = (Stage) this.ajouterCinema_Button.getScene().getWindow();
             final Scene scene = new Scene(root, 1280, 700);
             stage.setScene(scene);
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             FilmController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 }
+

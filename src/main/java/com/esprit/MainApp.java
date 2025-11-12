@@ -22,6 +22,7 @@ public class MainApp extends Application {
 
     }
 
+
     /**
      * @param primaryStage
      * @throws Exception
@@ -39,4 +40,6 @@ public class MainApp extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
+
 }
+

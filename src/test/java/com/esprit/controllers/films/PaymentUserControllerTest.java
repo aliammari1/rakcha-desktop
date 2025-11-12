@@ -37,6 +37,7 @@ class PaymentUserControllerTest extends TestFXBase {
         stage.show();
     }
 
+
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
     @DisplayName("Payment Form Tests")
@@ -52,6 +53,7 @@ class PaymentUserControllerTest extends TestFXBase {
             assertThat(lookup("#paymentForm").query().isVisible()).isTrue();
         }
 
+
         @Test
         @Order(2)
         @DisplayName("Should display card number field")
@@ -62,6 +64,7 @@ class PaymentUserControllerTest extends TestFXBase {
             assertThat(cardField).isNotNull();
             assertThat(cardField.isVisible()).isTrue();
         }
+
 
         @Test
         @Order(3)
@@ -76,6 +79,7 @@ class PaymentUserControllerTest extends TestFXBase {
             assertThat(cardField.getText()).isEqualTo("1234567812345678");
         }
 
+
         @Test
         @Order(4)
         @DisplayName("Should display CVV field")
@@ -86,6 +90,7 @@ class PaymentUserControllerTest extends TestFXBase {
             assertThat(cvvField).isNotNull();
             assertThat(cvvField.isVisible()).isTrue();
         }
+
 
         @Test
         @Order(5)
@@ -99,7 +104,9 @@ class PaymentUserControllerTest extends TestFXBase {
             assertThat(cvvField.getText()).hasSize(3);
             assertThat(cvvField.getText()).isEqualTo("123");
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -136,10 +143,13 @@ class PaymentUserControllerTest extends TestFXBase {
                     var errorLabel = lookup("#errorLabel").tryQuery();
                     return (successLabel.isPresent() && successLabel.get().isVisible()) ||
                            (errorLabel.isPresent() && errorLabel.get().isVisible());
-                });
-            } catch (Exception e) {
+                }
+);
+            }
+ catch (Exception e) {
                 // Continue even if timeout - check UI state below
             }
+
             waitForFxEvents();
             
             // After processing, verify UI reflects payment attempt
@@ -152,6 +162,7 @@ class PaymentUserControllerTest extends TestFXBase {
                                       (errorLabel.isPresent() && errorLabel.get().isVisible());
             assertThat(paymentCompleted).as("Payment processing should complete with visible status").isTrue();
         }
+
 
         @Test
         @Order(7)
@@ -174,10 +185,13 @@ class PaymentUserControllerTest extends TestFXBase {
                 WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS, () -> {
                     Label label = lookup("#successLabel").query();
                     return label != null && label.isVisible();
-                });
-            } catch (Exception e) {
+                }
+);
+            }
+ catch (Exception e) {
                 // Continue even if timeout - check UI state below
             }
+
             waitForFxEvents();
 
             // Verify success label exists, is visible, and contains success message
@@ -190,6 +204,7 @@ class PaymentUserControllerTest extends TestFXBase {
             assertThat(message.toLowerCase()).as("Success message should contain 'success'")
                     .contains("success".toLowerCase());
         }
+
 
         @Test
         @Order(8)
@@ -212,10 +227,13 @@ class PaymentUserControllerTest extends TestFXBase {
                 WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS, () -> {
                     Label label = lookup("#errorLabel").query();
                     return label != null && label.isVisible();
-                });
-            } catch (Exception e) {
+                }
+);
+            }
+ catch (Exception e) {
                 // Continue even if timeout - check UI state below
             }
+
             waitForFxEvents();
 
             // Verify error label exists, is visible, and contains error message
@@ -228,7 +246,9 @@ class PaymentUserControllerTest extends TestFXBase {
             assertThat(message.toLowerCase()).as("Error message should contain 'error' or 'failed'")
                     .containsAnyOf("error", "failed");
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -245,6 +265,7 @@ class PaymentUserControllerTest extends TestFXBase {
             assertThat(lookup("#orderSummary").query().isVisible()).isTrue();
         }
 
+
         @Test
         @Order(10)
         @DisplayName("Should display total amount")
@@ -255,7 +276,9 @@ class PaymentUserControllerTest extends TestFXBase {
             assertThat(totalLabel).isNotNull();
             assertThat(totalLabel.isVisible()).isTrue();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -278,5 +301,8 @@ class PaymentUserControllerTest extends TestFXBase {
             // Verify cancel action completed
             assertThat(cancelButton).isNotNull();
         }
+
     }
+
 }
+

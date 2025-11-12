@@ -46,4 +46,6 @@ public class OrderItem {
         this.product = product;
         this.order = order;
     }
+
 }
+

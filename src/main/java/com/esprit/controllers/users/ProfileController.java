@@ -87,15 +87,19 @@ public class ProfileController {
         // Ensure the UI components exist
         if (imageCircle == null) {
             LOGGER.warning("Image circle is null in initialize()");
-        } else {
+        }
+ else {
             LOGGER.info("Image circle is available, configuring...");
         }
 
+
         if (photoDeProfilImageView == null) {
             LOGGER.warning("Profile image view is null in initialize()");
-        } else {
+        }
+ else {
             LOGGER.info("Profile image view is available, configuring...");
         }
+
 
         configureImageCircle();
         configureImageView();
@@ -104,13 +108,16 @@ public class ProfileController {
         loadAndSetImage(DEFAULT_PROFILE_GIF);
     }
 
+
     private void configureImageCircle() {
         if (imageCircle != null) {
             LOGGER.info("Configuring image circle...");
             // Add any specific circle configuration here
             imageCircle.setSmooth(true);
         }
+
     }
+
 
     private void configureImageView() {
         if (photoDeProfilImageView != null) {
@@ -129,7 +136,9 @@ public class ProfileController {
             Circle clip = new Circle(width / 2, height / 2, radius);
             photoDeProfilImageView.setClip(clip);
         }
+
     }
+
 
     /**
      * @param imageUrl
@@ -142,6 +151,7 @@ public class ProfileController {
                 return;
             }
 
+
             LOGGER.info("Loading image from URL: " + imageUrl);
 
             // Normalize the URL if needed (handle special cases)
@@ -149,6 +159,7 @@ public class ProfileController {
                 LOGGER.info("URL doesn't have a protocol, assuming file: " + imageUrl);
                 imageUrl = "file:" + imageUrl;
             }
+
 
             // Create image with explicit size and background loading disabled
             LOGGER.info("Creating image object for URL: " + imageUrl);
@@ -166,14 +177,18 @@ public class ProfileController {
                     if (image.isError() && image.getException() != null) {
                         LOGGER.warning("Image error details: " + image.getException().getMessage());
                     }
+
                 }
-            });
+
+            }
+);
 
             if (!image.isError()) {
                 // Stop any existing animations
                 if (pulseAnimation != null) {
                     pulseAnimation.stop();
                 }
+
 
                 // Clear existing effects
                 imageCircle.setEffect(null);
@@ -196,9 +211,11 @@ public class ProfileController {
                     photoDeProfilImageView.setClip(clip);
                     photoDeProfilImageView.setPreserveRatio(true);
                     LOGGER.info("Image set to ImageView successfully");
-                } else {
+                }
+ else {
                     LOGGER.warning("photoDeProfilImageView is null");
                 }
+
 
                 // Add subtle glow effect
                 DropShadow glow = new DropShadow();
@@ -206,18 +223,24 @@ public class ProfileController {
                 glow.setRadius(10);
                 glow.setSpread(0.4);
                 imageCircle.setEffect(glow);
-            } else {
+            }
+ else {
                 LOGGER.warning("Image loading failed for URL: " + imageUrl);
                 if (image.getException() != null) {
                     LOGGER.warning("Error details: " + image.getException().getMessage());
                 }
+
                 throw new IllegalArgumentException("Image loading failed");
             }
-        } catch (Exception e) {
+
+        }
+ catch (Exception e) {
             LOGGER.log(Level.WARNING, "Failed to load image: " + imageUrl, e);
             useGradientFallback();
         }
+
     }
+
 
     private void useGradientFallback() {
         // Create a more visually appealing gradient fallback
@@ -241,6 +264,7 @@ public class ProfileController {
         LOGGER.info("Applied gradient fallback for profile image");
     }
 
+
     @FXML
     /**
      * Sets the user data in the form fields and loads the profile image.
@@ -253,6 +277,7 @@ public class ProfileController {
             loadAndSetImage(DEFAULT_PROFILE_GIF);
             return;
         }
+
 
         this.user = user;
         LOGGER.info("Setting user data for: " + user.getEmail());
@@ -267,13 +292,16 @@ public class ProfileController {
             this.phoneNumberTextField.setText(user.getPhoneNumber());
         }
 
+
         if (user.getBirthDate() != null) {
             this.dateDeNaissanceDatePicker.setValue(user.getBirthDate().toLocalDate());
         }
 
+
         // Handle profile image loading
         handleProfileImage(user);
     }
+
 
     /**
      * Sets a text field value if the provided value is not null.
@@ -285,7 +313,9 @@ public class ProfileController {
         if (field != null && value != null) {
             field.setText(value);
         }
+
     }
+
 
     /**
      * Handles loading the profile image from the user object.
@@ -304,32 +334,44 @@ public class ProfileController {
                     Path imagePath = Paths.get(URI.create(imageUrl));
                     if (Files.exists(imagePath)) {
                         loadAndSetImage(imageUrl);
-                    } else {
+                    }
+ else {
                         LOGGER.warning("Local file doesn't exist: " + imagePath);
                         loadAndSetImage(DEFAULT_PROFILE_GIF);
                     }
-                } else if (imageUrl.startsWith("http")) {
+
+                }
+ else if (imageUrl.startsWith("http")) {
                     // Handle URLs directly (like Cloudinary)
                     loadAndSetImage(imageUrl);
-                } else {
+                }
+ else {
                     // Try to interpret as a local path
                     File file = new File(imageUrl);
                     if (file.exists()) {
                         loadAndSetImage(file.toURI().toString());
-                    } else {
+                    }
+ else {
                         // Just try with the raw string
                         loadAndSetImage(imageUrl);
                     }
+
                 }
-            } catch (Exception e) {
+
+            }
+ catch (Exception e) {
                 LOGGER.log(Level.WARNING, "Error loading profile image, using default", e);
                 loadAndSetImage(DEFAULT_PROFILE_GIF);
             }
-        } else {
+
+        }
+ else {
             LOGGER.info("No profile image set, using default");
             loadAndSetImage(DEFAULT_PROFILE_GIF);
         }
+
     }
+
 
     @FXML
     /**
@@ -347,6 +389,7 @@ public class ProfileController {
         stage.setScene(new Scene(root));
     }
 
+
     @FXML
     /**
      * Performs modifyAccount operation.
@@ -361,11 +404,15 @@ public class ProfileController {
                 userService.update(user);
                 showAlert("Success", "Profile updated successfully", Alert.AlertType.INFORMATION);
             }
-        } catch (Exception e) {
+
+        }
+ catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error updating profile", e);
             showAlert("Error", "Could not update profile", Alert.AlertType.ERROR);
         }
+
     }
+
 
     /**
      * @return boolean
@@ -375,8 +422,10 @@ public class ProfileController {
             showAlert("Validation Error", "Please enter a valid email", Alert.AlertType.WARNING);
             return false;
         }
+
         return true;
     }
+
 
     private void updateUserFromFields() {
         user.setFirstName(firstNameTextField.getText());
@@ -387,12 +436,16 @@ public class ProfileController {
         if (dateDeNaissanceDatePicker.getValue() != null) {
             user.setBirthDate(Date.valueOf(dateDeNaissanceDatePicker.getValue()));
         }
+
         try {
             user.setPhoneNumber(phoneNumberTextField.getText());
-        } catch (NumberFormatException e) {
+        }
+ catch (NumberFormatException e) {
             LOGGER.warning("Invalid phone number format");
         }
+
     }
+
 
     @FXML
     /**
@@ -407,6 +460,7 @@ public class ProfileController {
         stage.setScene(new Scene(root));
     }
 
+
     /**
      * Sets the LeftPane value.
      *
@@ -416,6 +470,7 @@ public class ProfileController {
         this.leftPane.getChildren().clear();
         this.leftPane.getChildren().add(leftPane);
     }
+
 
     @FXML
     /**
@@ -457,31 +512,42 @@ public class ProfileController {
                             userService.update(user);
                             LOGGER.info("User profile updated with new image URL");
                             showAlert("Success", "Profile picture updated successfully", Alert.AlertType.INFORMATION);
-                        } catch (Exception e) {
+                        }
+ catch (Exception e) {
                             LOGGER.log(Level.WARNING, "Failed to update user profile in database", e);
                             showAlert("Warning", "Image uploaded but profile not saved. Please save your profile.",
                                     Alert.AlertType.WARNING);
                         }
-                    } else {
+
+                    }
+ else {
                         LOGGER.warning("User object is null, cannot update profile image URL");
                         showAlert("Warning", "Image uploaded but couldn't update your profile. Try again later.",
                                 Alert.AlertType.WARNING);
                     }
-                } catch (IOException e) {
+
+                }
+ catch (IOException e) {
                     LOGGER.log(Level.SEVERE, "Error uploading image to Cloudinary", e);
                     showAlert("Upload Error", "Could not upload image to cloud storage: " + e.getMessage(),
                             Alert.AlertType.ERROR);
                     loadAndSetImage(DEFAULT_PROFILE_GIF);
                 }
-            } else {
+
+            }
+ else {
                 LOGGER.info("User cancelled file selection");
             }
-        } catch (Exception e) {
+
+        }
+ catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error importing photo", e);
             showAlert("Error", "Could not import photo: " + e.getMessage(), Alert.AlertType.ERROR);
             loadAndSetImage(DEFAULT_PROFILE_GIF);
         }
+
     }
+
 
     /**
      * @param title
@@ -494,4 +560,6 @@ public class ProfileController {
         alert.setContentText(content);
         alert.show();
     }
+
 }
+

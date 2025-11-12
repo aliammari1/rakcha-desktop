@@ -56,6 +56,7 @@ public class Category {
         this.actors = new ArrayList<>();
     }
 
+
     /**
      * Constructor without id for creating new category instances.
      *
@@ -70,4 +71,6 @@ public class Category {
         this.films = new ArrayList<>();
         this.actors = new ArrayList<>();
     }
+
 }
+

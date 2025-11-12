@@ -182,6 +182,7 @@ public class DashboardResponsableController implements Initializable {
         cinemaManager = resp;
     }
 
+
     /**
      * Displays an information alert with the provided message.
      *
@@ -196,6 +197,7 @@ public class DashboardResponsableController implements Initializable {
         alert.setContentText(message);
         alert.show();
     }
+
 
     /**
      * Allows users to input cinema details, including name and address. If fields
@@ -217,6 +219,7 @@ public class DashboardResponsableController implements Initializable {
             this.showAlert("Please complete all fields!");
             return;
         }
+
         final String defaultStatut = "Pending";
         // Fetch the responsible cinema by its ID
         final CinemaManager cinemaManager = (CinemaManager) this.tfNom.getScene().getWindow().getUserData();
@@ -225,9 +228,11 @@ public class DashboardResponsableController implements Initializable {
             final String fullPath = this.image.getImage().getUrl();
             final String requiredPath = fullPath.substring(fullPath.indexOf("/img/cinemas/"));
             uri = new URI(requiredPath);
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             DashboardResponsableController.LOGGER.info(e.getMessage());
         }
+
         // Create the cinema object
         final Cinema cinema = new Cinema(this.tfNom.getText(), this.tfAdresse.getText(), cinemaManager,
                 (uri != null ? uri.getPath() : ""), // fix null pointer
@@ -237,6 +242,7 @@ public class DashboardResponsableController implements Initializable {
         cs.create(cinema);
         this.showAlert("Cinema added successfully!");
     }
+
 
     /**
      * Allows the user to select an image file, which is then copied to a specified
@@ -265,11 +271,15 @@ public class DashboardResponsableController implements Initializable {
                 Files.copy(selectedFile.toPath(), destinationFilePath);
                 final Image selectedImage = new Image(destinationFilePath.toUri().toString());
                 this.image.setImage(selectedImage);
-            } catch (final IOException e) {
+            }
+ catch (final IOException e) {
                 DashboardResponsableController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
+
         }
+
     }
+
 
     /**
      * Loads accepted cinemas and sets pane visibility, adds cinema names to a combo
@@ -306,6 +316,7 @@ public class DashboardResponsableController implements Initializable {
         for (final Cinema c : acceptedCinemas) {
             this.comboCinema.getItems().add(c.getName());
         }
+
         this.comboCinema.getSelectionModel().selectedItemProperty().addListener(
                 (final ObservableValue<? extends String> observable, final String oldValue, final String newValue) -> {
                     if (null != newValue) {
@@ -315,9 +326,13 @@ public class DashboardResponsableController implements Initializable {
                             this.loadMoviesForCinema(selectedCinema.getId());
                             this.loadRoomsForCinema(selectedCinema.getId());
                         }
+
                     }
-                });
+
+                }
+);
     }
+
 
     /**
      * Clears the list of movies for a specified cinema and then reads the movies
@@ -336,7 +351,9 @@ public class DashboardResponsableController implements Initializable {
         for (final Film f : moviesForCinema) {
             this.comboMovie.getItems().add(f.getName());
         }
+
     }
+
 
     /**
      * Clears the items of a `JList` called `comboRoom`, then reads the rooms for a
@@ -353,7 +370,9 @@ public class DashboardResponsableController implements Initializable {
         for (final CinemaHall s : roomsForCinema) {
             this.comboRoom.getItems().add(s.getName());
         }
+
     }
+
 
     /**
      * Loads a set of accepted cinemas from a CinemaService and displays them as
@@ -376,13 +395,16 @@ public class DashboardResponsableController implements Initializable {
         if (acceptedCinemasList.isEmpty()) {
             this.showAlert("No accepted cinemas are available.");
         }
+
         final HashSet<Cinema> acceptedCinemasSet = new HashSet<>(acceptedCinemasList);
         for (final Cinema cinema : acceptedCinemasSet) {
             final HBox cardContainer = this.createCinemaCard(cinema);
             this.cinemaFlowPane.getChildren().add(cardContainer);
         }
+
         return acceptedCinemasSet;
     }
+
 
     /**
      * Retrieves a list of cinemas from a service, filters them based on their
@@ -406,8 +428,10 @@ public class DashboardResponsableController implements Initializable {
         if (acceptedCinemasList.isEmpty()) {
             this.showAlert("No accepted cinemas are available.");
         }
+
         return new HashSet<>(acceptedCinemasList);
     }
+
 
     /**
      * Creates a card that displays a cinema's details, including its name,
@@ -456,13 +480,17 @@ public class DashboardResponsableController implements Initializable {
         try {
             if (!cinema.getLogoPath().isEmpty()) {
                 image = new Image(cinema.getLogoPath());
-            } else {
+            }
+ else {
                 image = new Image("Logo.png");
             }
-        } catch (final Exception e) {
+
+        }
+ catch (final Exception e) {
             DashboardResponsableController.LOGGER.info("line 335 " + e.getMessage());
             image = new Image("Logo.png");
         }
+
         logoImageView.setImage(image);
         card.getChildren().add(logoImageView);
         logoImageView.setOnMouseClicked(event -> {
@@ -479,8 +507,11 @@ public class DashboardResponsableController implements Initializable {
                     final Image newImage = new Image(cinema.getLogoPath());
                     logoImageView.setImage(newImage);
                 }
+
             }
-        });
+
+        }
+);
         final Label NomLabel = new Label("Name: ");
         NomLabel.setLayoutX(115);
         NomLabel.setLayoutY(25);
@@ -504,12 +535,15 @@ public class DashboardResponsableController implements Initializable {
                     final CinemaService cinemaService = new CinemaService();
                     cinemaService.update(cinema);
                     card.getChildren().remove(nameTextField);
-                });
+                }
+);
                 card.getChildren().add(nameTextField);
                 nameTextField.requestFocus();
                 nameTextField.selectAll();
             }
-        });
+
+        }
+);
         final Label AdrsLabel = new Label("Address: ");
         AdrsLabel.setLayoutX(115);
         AdrsLabel.setLayoutY(50);
@@ -533,12 +567,15 @@ public class DashboardResponsableController implements Initializable {
                     final CinemaService cinemaService = new CinemaService();
                     cinemaService.update(cinema);
                     card.getChildren().remove(adresseTextField);
-                });
+                }
+);
                 card.getChildren().add(adresseTextField);
                 adresseTextField.requestFocus();
                 adresseTextField.selectAll();
             }
-        });
+
+        }
+);
         final Line verticalLine = new Line();
         verticalLine.setStartX(240);
         verticalLine.setStartY(10);
@@ -569,7 +606,9 @@ public class DashboardResponsableController implements Initializable {
                 cinemaService.delete(cinema);
                 cardContainer.getChildren().remove(card);
             }
-        });
+
+        }
+);
         card.getChildren().addAll(circle, deleteIcon);
         final Circle CinemaHallCircle = new Circle();
         CinemaHallCircle.setRadius(30);
@@ -612,21 +651,29 @@ public class DashboardResponsableController implements Initializable {
                                         final CinemaHallService cinemahallService = new CinemaHallService();
                                         cinemahallService.delete(cinemahall);
                                         this.getTableView().getItems().remove(cinemahall);
-                                    });
+                                    }
+);
                                 }
+
 
                                 @Override
                                 protected void updateItem(final Void item, final boolean empty) {
                                     super.updateItem(item, empty);
                                     if (empty) {
                                         this.setGraphic(null);
-                                    } else {
+                                    }
+ else {
                                         this.setGraphic(new HBox(this.deleteRoomButton));
                                     }
+
                                 }
-                            };
+
+                            }
+;
                         }
-                    });
+
+                    }
+);
             this.RoomTableView.setEditable(true);
             this.colNbrPlaces.setCellFactory(tc -> new TableCell<CinemaHall, Integer>() {
                 /**
@@ -657,10 +704,13 @@ public class DashboardResponsableController implements Initializable {
                     super.updateItem(nb_cinemahalls, empty);
                     if (empty || null == nb_cinemahalls) {
                         this.setText(null);
-                    } else {
+                    }
+ else {
                         this.setText(nb_cinemahalls + " places");
                     }
+
                 }
+
 
                 /**
                  * 1) calls super's `startEdit`, 2) checks if the item is empty, and 3) creates
@@ -678,13 +728,16 @@ public class DashboardResponsableController implements Initializable {
                     if (this.isEmpty()) {
                         return;
                     }
+
                     final TextField textField = new TextField(this.getItem().toString());
                     textField.setOnAction(event -> {
                         this.commitEdit(Integer.parseInt(textField.getText()));
-                    });
+                    }
+);
                     this.setGraphic(textField);
                     this.setText(null);
                 }
+
 
                 /**
                  * In Java is used to cancel any ongoing editing activity and reset the text and
@@ -701,6 +754,7 @@ public class DashboardResponsableController implements Initializable {
                     this.setText(this.getItem() + " places");
                     this.setGraphic(null);
                 }
+
 
                 /**
                  * Updates the number of places in a `CinemaHall` object based on a user input,
@@ -731,7 +785,9 @@ public class DashboardResponsableController implements Initializable {
                     this.setText(newValue + " places");
                     this.setGraphic(null);
                 }
-            });
+
+            }
+);
             this.colNameRoom.setCellFactory(tc -> new TableCell<CinemaHall, String>() {
                 /**
                  * Updates an item's text based on whether it is empty or not, and sets the text
@@ -753,10 +809,13 @@ public class DashboardResponsableController implements Initializable {
                     super.updateItem(nom_cinemahall, empty);
                     if (empty || null == nom_cinemahall) {
                         this.setText(null);
-                    } else {
+                    }
+ else {
                         this.setText(nom_cinemahall);
                     }
+
                 }
+
 
                 /**
                  * Initializes a new `TextField` instance and sets its text to the current
@@ -776,13 +835,16 @@ public class DashboardResponsableController implements Initializable {
                     if (this.isEmpty()) {
                         return;
                     }
+
                     final TextField textField = new TextField(this.getItem());
                     textField.setOnAction(event -> {
                         this.commitEdit((textField.getText()));
-                    });
+                    }
+);
                     this.setGraphic(textField);
                     this.setText(null);
                 }
+
 
                 /**
                  * In Java overrides the parent `cancelEdit()` method and sets the text and
@@ -799,6 +861,7 @@ public class DashboardResponsableController implements Initializable {
                     this.setText(this.getItem());
                     this.setGraphic(null);
                 }
+
 
                 /**
                  * Updates a cinemahall object's nom_cinemahall property by calling the `update`
@@ -824,9 +887,12 @@ public class DashboardResponsableController implements Initializable {
                     this.setText(newValue);
                     this.setGraphic(null);
                 }
-            });
+
+            }
+);
             this.loadcinemahalls();
-        });
+        }
+);
         final Circle circlefacebook = new Circle();
         circlefacebook.setRadius(30);
         circlefacebook.setLayoutX(320);
@@ -840,12 +906,14 @@ public class DashboardResponsableController implements Initializable {
         facebookIcon.setFill(Color.WHITE);
         facebookIcon.setOnMouseClicked(event -> {
             this.facebookAnchor.setVisible(true);
-        });
+        }
+);
         card.getChildren().addAll(circlefacebook, facebookIcon);
         card.getChildren().addAll(CinemaHallCircle, cinemahallIcon);
         cardContainer.getChildren().add(card);
         return cardContainer;
     }
+
 
     /**
      * Sets the visible state of various panes and tables within a JavaFX
@@ -861,6 +929,7 @@ public class DashboardResponsableController implements Initializable {
         this.addRoomForm.setVisible(false);
         this.RoomTableView.setVisible(false);
     }
+
 
     /**
      * Is responsible for creating and displaying a form within a table cell to
@@ -900,7 +969,9 @@ public class DashboardResponsableController implements Initializable {
                         return new SimpleStringProperty(
                                 moviesessionStringCellDataFeatures.getValue().getFilm().getName());
                     }
-                });
+
+                }
+);
         this.colCinema.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<MovieSession, String>, ObservableValue<String>>() {
                     /**
@@ -926,7 +997,9 @@ public class DashboardResponsableController implements Initializable {
                         return new SimpleStringProperty(
                                 moviesessionStringCellDataFeatures.getValue().getCinemaHall().getCinema().getName());
                     }
-                });
+
+                }
+);
         this.colMovieRoom.setCellValueFactory(new PropertyValueFactory<>("cinemaHall"));
         this.colDate.setCellValueFactory(new PropertyValueFactory<>("sessionDate"));
         this.colDepartTime.setCellValueFactory(new PropertyValueFactory<>("startTime"));
@@ -986,8 +1059,10 @@ public class DashboardResponsableController implements Initializable {
                             final MovieSessionService moviesessionService = new MovieSessionService();
                             moviesessionService.delete(ms);
                             this.getTableView().getItems().remove(ms);
-                        });
+                        }
+);
                     }
+
 
                     /**
                      * Updates an item's graphic based on whether it is empty or not. If the item is
@@ -1012,13 +1087,19 @@ public class DashboardResponsableController implements Initializable {
                         super.updateItem(item, empty);
                         if (empty) {
                             this.setGraphic(null);
-                        } else {
+                        }
+ else {
                             this.setGraphic(new HBox(this.deleteButton));
                         }
+
                     }
-                };
+
+                }
+;
             }
-        });
+
+        }
+);
         this.SessionTableView.setEditable(true);
         this.colPrice.setCellFactory(tc -> new TableCell<MovieSession, Double>() {
             /**
@@ -1045,10 +1126,13 @@ public class DashboardResponsableController implements Initializable {
                 super.updateItem(prix, empty);
                 if (empty || null == prix) {
                     this.setText(null);
-                } else {
+                }
+ else {
                     this.setText(prix + " DT");
                 }
+
             }
+
 
             /**
              * Initializes a `TextField` widget with the value of the currently selected
@@ -1067,13 +1151,16 @@ public class DashboardResponsableController implements Initializable {
                 if (this.isEmpty()) {
                     return;
                 }
+
                 final TextField textField = new TextField(this.getItem().toString());
                 textField.setOnAction(event -> {
                     this.commitEdit(Double.parseDouble(textField.getText()));
-                });
+                }
+);
                 this.setGraphic(textField);
                 this.setText(null);
             }
+
 
             /**
              * In the provided Java code cancels the editing state of an item and sets the
@@ -1090,6 +1177,7 @@ public class DashboardResponsableController implements Initializable {
                 this.setText(this.getItem() + " DT");
                 this.setGraphic(null);
             }
+
 
             /**
              * Updates a `MovieSession` object's `prix` field with a new value, and then
@@ -1125,7 +1213,9 @@ public class DashboardResponsableController implements Initializable {
                 this.setText(newValue + " DT");
                 this.setGraphic(null);
             }
-        });
+
+        }
+);
         this.colEndTime.setCellFactory(tc -> new TableCell<MovieSession, Time>() {
             /**
              * Updates an item's text based on whether it is empty or contains a valid value
@@ -1151,10 +1241,13 @@ public class DashboardResponsableController implements Initializable {
                 super.updateItem(HF, empty);
                 if (empty || null == HF) {
                     this.setText(null);
-                } else {
+                }
+ else {
                     this.setText(String.valueOf(HF));
                 }
+
             }
+
 
             /**
              * Initializes a `TextField` component with the value of the current item, sets
@@ -1172,13 +1265,16 @@ public class DashboardResponsableController implements Initializable {
                 if (this.isEmpty()) {
                     return;
                 }
+
                 final TextField textField = new TextField(this.getItem().toString());
                 textField.setOnAction(event -> {
                     this.commitEdit(Time.valueOf((textField.getText())));
-                });
+                }
+);
                 this.setGraphic(textField);
                 this.setText(null);
             }
+
 
             /**
              * In Java overrides the parent method and performs the following actions:
@@ -1196,6 +1292,7 @@ public class DashboardResponsableController implements Initializable {
                 this.setText(String.valueOf(this.getItem()));
                 this.setGraphic(null);
             }
+
 
             /**
              * Updates a moviesession's high fidelity value based on a new value provided,
@@ -1227,7 +1324,9 @@ public class DashboardResponsableController implements Initializable {
                 this.setText(String.valueOf(newValue));
                 this.setGraphic(null);
             }
-        });
+
+        }
+);
         this.colDepartTime.setCellFactory(tc -> new TableCell<MovieSession, Time>() {
             /**
              * Updates an item's text based on whether it is empty or contains a valid value
@@ -1253,10 +1352,13 @@ public class DashboardResponsableController implements Initializable {
                 super.updateItem(HD, empty);
                 if (empty || null == HD) {
                     this.setText(null);
-                } else {
+                }
+ else {
                     this.setText(String.valueOf(HD));
                 }
+
             }
+
 
             /**
              * 1) calls superclass `startEdit`, 2) checks if the object is empty, and 3)
@@ -1273,13 +1375,16 @@ public class DashboardResponsableController implements Initializable {
                 if (this.isEmpty()) {
                     return;
                 }
+
                 final TextField textField = new TextField(this.getItem().toString());
                 textField.setOnAction(event -> {
                     this.commitEdit(Time.valueOf((textField.getText())));
-                });
+                }
+);
                 this.setGraphic(textField);
                 this.setText(null);
             }
+
 
             /**
              * In Java overrides the parent method and performs two actions: first, it calls
@@ -1298,6 +1403,7 @@ public class DashboardResponsableController implements Initializable {
                 this.setText(String.valueOf(this.getItem()));
                 this.setGraphic(null);
             }
+
 
             /**
              * Updates the `HD` field of a `MovieSession` object in a table view, and then
@@ -1332,7 +1438,9 @@ public class DashboardResponsableController implements Initializable {
                 this.setText(String.valueOf(newValue));
                 this.setGraphic(null);
             }
-        });
+
+        }
+);
         this.colDate.setCellFactory(tc -> new TableCell<MovieSession, Date>() {
             /**
              * Updates an item's text based on whether it is empty or not, and adds a mouse
@@ -1362,30 +1470,38 @@ public class DashboardResponsableController implements Initializable {
                 super.updateItem(date, empty);
                 if (empty || null == date) {
                     this.setText(null);
-                } else {
+                }
+ else {
                     this.setText(date.toString());
                 }
+
                 this.setOnMouseClicked(event -> {
                     if (2 == event.getClickCount()) {
                         final DatePicker datePicker = new DatePicker();
                         if (!this.isEmpty() && null != getItem()) {
                             datePicker.setValue(this.getItem().toLocalDate());
                         }
+
                         datePicker.setOnAction(e -> {
                             final LocalDate selectedDate = datePicker.getValue();
                             if (null != selectedDate) {
                                 final Date newDate = Date.valueOf(selectedDate);
                                 this.commitEdit(newDate);
                             }
-                        });
+
+                        }
+);
                         final StackPane root = new StackPane(datePicker);
                         final Stage stage = new Stage();
                         stage.initModality(Modality.APPLICATION_MODAL);
                         stage.setScene(new Scene(root));
                         stage.show();
                     }
-                });
+
+                }
+);
             }
+
 
             /**
              * Updates a `MovieSession` object's `Date` field by calling the superclass's
@@ -1416,16 +1532,20 @@ public class DashboardResponsableController implements Initializable {
                 this.setText(String.valueOf(newValue));
                 this.setGraphic(null);
             }
-        });
+
+        }
+);
         this.colCinema.setCellFactory(tc -> new TableCell<MovieSession, String>() {
             @Override
             protected void updateItem(final String cinemaName, final boolean empty) {
                 super.updateItem(cinemaName, empty);
                 if (empty || null == cinemaName) {
                     this.setText(null);
-                } else {
+                }
+ else {
                     this.setText(cinemaName);
                 }
+
                 this.setOnMouseClicked(event -> {
                     if (2 == event.getClickCount()) {
                         final ComboBox<String> cinemaComboBox = new ComboBox<>();
@@ -1434,6 +1554,7 @@ public class DashboardResponsableController implements Initializable {
                         for (final Cinema cinema : acceptedCinema) {
                             cinemaComboBox.getItems().add(cinema.getName());
                         }
+
                         cinemaComboBox.setValue(cinemaName);
                         cinemaComboBox.setOnAction(e -> {
                             final String selectedCinemaName = cinemaComboBox.getValue();
@@ -1444,15 +1565,22 @@ public class DashboardResponsableController implements Initializable {
                                     // ms.setCinema(cinema); // remove, likely not needed
                                     break;
                                 }
+
                             }
+
                             final MovieSessionService moviesessionService = new MovieSessionService();
                             moviesessionService.update(ms);
-                        });
+                        }
+);
                         this.setGraphic(cinemaComboBox);
                     }
-                });
+
+                }
+);
             }
-        });
+
+        }
+);
         this.colMovieRoom.setCellFactory(tc -> new TableCell<MovieSession, String>() {
             /**
              * Updates the value of a cell in a table view based on user input. It creates a
@@ -1481,9 +1609,11 @@ public class DashboardResponsableController implements Initializable {
                 super.updateItem(cinemahallName, empty);
                 if (empty || null == cinemahallName) {
                     this.setText(null);
-                } else {
+                }
+ else {
                     this.setText(cinemahallName);
                 }
+
                 // Double clic détecté
                 this.setOnMouseClicked(event -> {
                     if (2 == event.getClickCount()) {
@@ -1498,6 +1628,7 @@ public class DashboardResponsableController implements Initializable {
                         for (final CinemaHall cinemahall : associatedCinemaHalls) {
                             cinemahallComboBox.getItems().add(cinemahall.getName());
                         }
+
                         // Sélectionner le nom de la cinemahall correspondant à la valeur actuelle de la
                         // cellule
                         cinemahallComboBox.setValue(cinemahallName);
@@ -1514,15 +1645,21 @@ public class DashboardResponsableController implements Initializable {
                                     moviesession.setCinemaHall(cinemahall);
                                     break;
                                 }
+
                             }
+
                             final MovieSessionService moviesessionService = new MovieSessionService();
                             moviesessionService.update(moviesession);
-                        });
+                        }
+);
                         // Afficher le ComboBox dans la cellule
                         this.setGraphic(cinemahallComboBox);
                     }
-                });
+
+                }
+);
             }
+
 
             /**
              * Retrieves a list of `CinemaHall` objects associated with a given cinema ID
@@ -1540,7 +1677,9 @@ public class DashboardResponsableController implements Initializable {
                 final CinemaHallService cinemahallService = new CinemaHallService();
                 return cinemahallService.getCinemaHallsByCinemaId(idCinema);
             }
-        });
+
+        }
+);
         this.colMovie.setCellFactory(tc -> new TableCell<MovieSession, String>() {
             /**
              * Updates the item value in a TableView based on user input, and displays a
@@ -1568,9 +1707,11 @@ public class DashboardResponsableController implements Initializable {
                 super.updateItem(filmName, empty);
                 if (empty || null == filmName) {
                     this.setText(null);
-                } else {
+                }
+ else {
                     this.setText(filmName);
                 }
+
                 // Double clic détecté
                 this.setOnMouseClicked(event -> {
                     if (2 == event.getClickCount()) {
@@ -1584,6 +1725,7 @@ public class DashboardResponsableController implements Initializable {
                         for (final Film film : associatedFilms) {
                             filmComboBox.getItems().add(film.getName());
                         }
+
                         // Sélectionner le nom de la cinemahall correspondant à la valeur actuelle de la
                         // cellule
                         filmComboBox.setValue(filmName);
@@ -1599,15 +1741,21 @@ public class DashboardResponsableController implements Initializable {
                                     moviesession.setFilm(film);
                                     break;
                                 }
+
                             }
+
                             final MovieSessionService moviesessionService = new MovieSessionService();
                             moviesessionService.update(moviesession);
-                        });
+                        }
+);
                         // Afficher le ComboBox dans la cellule
                         this.setGraphic(filmComboBox);
                     }
-                });
+
+                }
+);
             }
+
 
             /**
              * Retrieves a list of films associated with a given cinema ID using the
@@ -1624,9 +1772,12 @@ public class DashboardResponsableController implements Initializable {
                 FilmCinemaService filmCinemaService = new FilmCinemaService();
                 return filmCinemaService.readMoviesForCinema(idCinema);
             }
-        });
+
+        }
+);
         this.loadMovieSessions();
     }
+
 
     /**
      * Allows users to input cinema, film and room information, as well as a start
@@ -1647,14 +1798,17 @@ public class DashboardResponsableController implements Initializable {
             this.showAlert("Please complete all fields.");
             return;
         }
+
         // Vérifier que les champs de l'heure de début et de fin sont au format heure
         try {
             Time.valueOf(LocalTime.parse(departureTimeText));
             Time.valueOf(LocalTime.parse(endTimeText));
-        } catch (final DateTimeParseException e) {
+        }
+ catch (final DateTimeParseException e) {
             this.showAlert("The Start Time and End Time fields must be in the format HH:MM:SS.");
             return;
         }
+
         // Vérifier que le champ price contient un nombre réel
         try {
             final double price = Double.parseDouble(priceText);
@@ -1662,10 +1816,13 @@ public class DashboardResponsableController implements Initializable {
                 this.showAlert("The price must be a positive number.");
                 return;
             }
-        } catch (final NumberFormatException e) {
+
+        }
+ catch (final NumberFormatException e) {
             this.showAlert("The Price field must be a real number.");
             return;
         }
+
         final CinemaService cinemaService = new CinemaService();
         final Cinema selectedCinema = cinemaService.getCinemaByName(selectedCinemaName);
         final FilmService filmService = new FilmService();
@@ -1684,6 +1841,7 @@ public class DashboardResponsableController implements Initializable {
         this.loadMovieSessions();
         this.showSessionForm();
     }
+
 
     /**
      * Retrieves a list of `MovieSession` objects from an external service, converts
@@ -1713,6 +1871,7 @@ public class DashboardResponsableController implements Initializable {
         return moviesessions;
     }
 
+
     /**
      * Verifies that all fields are filled, and then creates a new room in the
      * cinema's database with the provided number of places and name, displaying an
@@ -1733,16 +1892,20 @@ public class DashboardResponsableController implements Initializable {
             this.showAlert("please complete all fields!");
             return;
         }
+
         try {
             final int nombrePlaces = Integer.parseInt(this.tfNbrPlaces.getText());
             if (0 >= nombrePlaces) {
                 this.showAlert("The number of places must be a positive integer!");
                 return;
             }
-        } catch (final NumberFormatException e) {
+
+        }
+ catch (final NumberFormatException e) {
             this.showAlert("The number of places must be an integer!");
             return;
         }
+
         final CinemaHallService ss = new CinemaHallService();
         final CinemaService cinemaService = new CinemaService();
         final Cinema cinema = cinemaService.getCinemaById(this.cinemaId);
@@ -1753,6 +1916,7 @@ public class DashboardResponsableController implements Initializable {
         alert.show();
         this.loadcinemahalls();
     }
+
 
     /**
      * Reads cinemahall data from a service, filters them based on cinema Id, and
@@ -1769,9 +1933,11 @@ public class DashboardResponsableController implements Initializable {
             this.showAlert("No rooms are available");
             return;
         }
+
         final ObservableList<CinemaHall> cinemahallInfos = FXCollections.observableArrayList(cinemahalls_cinema);
         this.RoomTableView.setItems(cinemahallInfos);
     }
+
 
     /**
      * Makes the `facebookAnchor` component invisible when the `Facebook` button is
@@ -1785,6 +1951,7 @@ public class DashboardResponsableController implements Initializable {
     void closeAnchor(final ActionEvent event) {
         this.facebookAnchor.setVisible(false);
     }
+
 
     /**
      * Posts a status update to Facebook using an access token and message from a
@@ -1815,10 +1982,13 @@ public class DashboardResponsableController implements Initializable {
             os.write(data.getBytes(StandardCharsets.UTF_8));
             os.flush();
             os.close();
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             DashboardResponsableController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Loads an FXML file, creates a new stage and replaces the current stage with
@@ -1846,6 +2016,7 @@ public class DashboardResponsableController implements Initializable {
         currentStage.close();
     }
 
+
     /**
      * Makes the `addRoomForm`, `backButton`, `RoomTableView`, and `cinemaFormPane`
      * invisible, while making the `sessionButton` visible, when a user clicks the
@@ -1866,6 +2037,7 @@ public class DashboardResponsableController implements Initializable {
         this.cinemaListPane.setVisible(true);
         this.sessionButton.setVisible(true);
     }
+
 
     /**
      * Makes the `sessionFormPane`, `SessionTableView`, and `backSession` components
@@ -1894,6 +2066,7 @@ public class DashboardResponsableController implements Initializable {
         this.showSessionForm();
     }
 
+
     /**
      * Sets the visibility of various components in a JavaFX application, including
      * the `cinemaFormPane`, `cinemaListPane`, `sessionFormPane`, and
@@ -1918,6 +2091,7 @@ public class DashboardResponsableController implements Initializable {
         this.SessionTableView.setVisible(false);
         this.sessionButton.setVisible(true);
     }
+
 
     /**
      * Allows the user to select an image file, then copies it to a specified
@@ -1951,9 +2125,14 @@ public class DashboardResponsableController implements Initializable {
                 this.image.setImage(selectedImage);
 
                 LOGGER.info("Image uploaded to Cloudinary: " + cloudinaryImageUrl);
-            } catch (final IOException e) {
+            }
+ catch (final IOException e) {
                 LOGGER.log(Level.SEVERE, "Error uploading image to Cloudinary", e);
             }
+
         }
+
     }
+
 }
+

@@ -97,12 +97,16 @@ public class SidebarController implements Initializable {
         this.currentUser = user;
         if (user instanceof Admin) {
             configureForAdmin();
-        } else if (user instanceof CinemaManager) {
+        }
+ else if (user instanceof CinemaManager) {
             configureForCinemaManager();
-        } else {
+        }
+ else {
             configureForClient();
         }
+
     }
+
 
     /**
      * Sets admin data for backward compatibility.
@@ -112,6 +116,7 @@ public class SidebarController implements Initializable {
         configureForAdmin();
     }
 
+
     /**
      * Sets cinema manager data for backward compatibility.
      */
@@ -119,6 +124,7 @@ public class SidebarController implements Initializable {
         this.currentUser = cinemaManager;
         configureForCinemaManager();
     }
+
 
     /**
      * Configures the sidebar for Admin users.
@@ -146,6 +152,7 @@ public class SidebarController implements Initializable {
         cinemaButton.setVisible(true);
     }
 
+
     /**
      * Configures the sidebar for Cinema Manager users.
      */
@@ -171,6 +178,7 @@ public class SidebarController implements Initializable {
         productButton.setVisible(false); // Cinema managers don't see products
         cinemaButton.setVisible(true);
     }
+
 
     /**
      * Configures the sidebar for Client users.
@@ -198,6 +206,7 @@ public class SidebarController implements Initializable {
         cinemaButton.setVisible(true);
     }
 
+
     // Navigation methods
 
     /**
@@ -210,10 +219,13 @@ public class SidebarController implements Initializable {
             final Parent root = loader.load();
             final Stage stage = (Stage) this.usersButton.getScene().getWindow();
             stage.setScene(new Scene(root));
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             SidebarController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Switches to the events view.
@@ -222,6 +234,7 @@ public class SidebarController implements Initializable {
     void switchToEvent(final ActionEvent event) {
         // Implementation depends on role
     }
+
 
     /**
      * Switches to the movies view.
@@ -232,21 +245,27 @@ public class SidebarController implements Initializable {
             String fxmlPath;
             if (currentUser instanceof Admin) {
                 fxmlPath = "/ui/produits/ListeOrder.fxml";
-            } else if (currentUser instanceof CinemaManager) {
+            }
+ else if (currentUser instanceof CinemaManager) {
                 fxmlPath = "/ui/films/InterfaceFilm.fxml";
-            } else {
+            }
+ else {
                 fxmlPath = "/ui/films/filmuser.fxml";
             }
+
 
             final FXMLLoader loader = new FXMLLoader(this.getClass().getResource(fxmlPath));
             final Parent root = loader.load();
             final Stage stage = (Stage) this.movieButton.getScene().getWindow();
 
             stage.setScene(new Scene(root));
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             SidebarController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Switches to the orders view (Admin only).
@@ -258,10 +277,13 @@ public class SidebarController implements Initializable {
             final Parent root = loader.load();
             final Stage stage = (Stage) this.orderButton.getScene().getWindow();
             stage.setScene(new Scene(root));
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             SidebarController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Switches to the products view.
@@ -272,18 +294,23 @@ public class SidebarController implements Initializable {
             String fxmlPath;
             if (currentUser instanceof Admin) {
                 fxmlPath = "/ui/produits/DesignProductAdmin.fxml";
-            } else {
+            }
+ else {
                 fxmlPath = "/ui/produits/AfficherProductClient.fxml";
             }
+
 
             final FXMLLoader loader = new FXMLLoader(this.getClass().getResource(fxmlPath));
             final Parent root = loader.load();
             final Stage stage = (Stage) this.productButton.getScene().getWindow();
             stage.setScene(new Scene(root));
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             SidebarController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Switches to the series view.
@@ -294,20 +321,26 @@ public class SidebarController implements Initializable {
             String fxmlPath;
             if (currentUser instanceof Admin) {
                 fxmlPath = "/ui/series/Categorie-view.fxml";
-            } else if (currentUser instanceof CinemaManager) {
+            }
+ else if (currentUser instanceof CinemaManager) {
                 fxmlPath = "/ui/series/Categorie-view.fxml";
-            } else {
+            }
+ else {
                 fxmlPath = "/ui/series/SeriesClient.fxml";
             }
+
 
             final FXMLLoader loader = new FXMLLoader(this.getClass().getResource(fxmlPath));
             final Parent root = loader.load();
             final Stage stage = (Stage) this.serieButton.getScene().getWindow();
             stage.setScene(new Scene(root));
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             SidebarController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Switches to the cinema view.
@@ -318,20 +351,26 @@ public class SidebarController implements Initializable {
             String fxmlPath;
             if (currentUser instanceof Admin) {
                 fxmlPath = "/ui/cinemas/DashboardAdminCinema.fxml";
-            } else if (currentUser instanceof CinemaManager) {
+            }
+ else if (currentUser instanceof CinemaManager) {
                 fxmlPath = "/ui/cinemas/DashboardResponsableCinema.fxml";
-            } else {
+            }
+ else {
                 fxmlPath = "/ui/cinemas/DashboardClientCinema.fxml";
             }
+
 
             final FXMLLoader loader = new FXMLLoader(this.getClass().getResource(fxmlPath));
             final Parent root = loader.load();
             final Stage stage = (Stage) this.cinemaButton.getScene().getWindow();
             stage.setScene(new Scene(root));
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             SidebarController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Switches to the actors view (Cinema Manager only).
@@ -343,10 +382,13 @@ public class SidebarController implements Initializable {
             final Parent root = loader.load();
             final Stage stage = (Stage) this.actorButton.getScene().getWindow();
             stage.setScene(new Scene(root));
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             SidebarController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Switches to the film categories view (Cinema Manager only).
@@ -358,10 +400,13 @@ public class SidebarController implements Initializable {
             final Parent root = loader.load();
             final Stage stage = (Stage) this.filmCategorieButton.getScene().getWindow();
             stage.setScene(new Scene(root));
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             SidebarController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Switches to the movie sessions view (Cinema Manager only).
@@ -374,10 +419,13 @@ public class SidebarController implements Initializable {
             final Parent root = loader.load();
             final Stage stage = (Stage) this.moviesessionButton.getScene().getWindow();
             stage.setScene(new Scene(root));
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             SidebarController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Switches to the statistics view (Cinema Manager only).
@@ -389,10 +437,13 @@ public class SidebarController implements Initializable {
             final Parent root = loader.load();
             final Stage stage = (Stage) this.statestique_button.getScene().getWindow();
             stage.setScene(new Scene(root));
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             SidebarController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Switches to the profile view.
@@ -406,20 +457,26 @@ public class SidebarController implements Initializable {
             String fxmlPath;
             if (currentUser instanceof Admin) {
                 fxmlPath = "/ui/users/HomeAdmin.fxml";
-            } else if (currentUser instanceof CinemaManager) {
+            }
+ else if (currentUser instanceof CinemaManager) {
                 fxmlPath = "/ui/users/HomeCinemaManager.fxml";
-            } else {
+            }
+ else {
                 fxmlPath = "/ui/users/HomeClient.fxml";
             }
+
 
             final FXMLLoader loader = new FXMLLoader(this.getClass().getResource(fxmlPath));
             final Parent root = loader.load();
             final Stage stage = (Stage) this.homeButton.getScene().getWindow();
             stage.setScene(new Scene(root));
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             SidebarController.LOGGER.log(Level.SEVERE, "Error navigating to home: " + e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Handles profile navigation.
@@ -431,10 +488,13 @@ public class SidebarController implements Initializable {
             final Parent root = loader.load();
             final Stage stage = (Stage) this.profileButton.getScene().getWindow();
             stage.setScene(new Scene(root));
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             SidebarController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Handles logout functionality.
@@ -447,10 +507,13 @@ public class SidebarController implements Initializable {
             final Stage stage = (Stage) this.logoutButton.getScene().getWindow();
             stage.setUserData(null);
             stage.setScene(new Scene(root));
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             SidebarController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Initializes the controller after FXML loading.
@@ -460,4 +523,6 @@ public class SidebarController implements Initializable {
         // Default configuration for client (will be overridden by setCurrentUser)
         configureForClient();
     }
+
 }
+

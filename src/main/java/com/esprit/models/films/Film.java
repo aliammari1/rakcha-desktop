@@ -79,6 +79,7 @@ public class Film {
         this.ratings = new ArrayList<>();
     }
 
+
     /**
      * Constructor with id for existing film instances.
      * 
@@ -104,6 +105,7 @@ public class Film {
         this.ratings = new ArrayList<>();
     }
 
+
     /**
      * Copy constructor.
      * 
@@ -123,6 +125,7 @@ public class Film {
         this.ratings = new ArrayList<>(f.ratings != null ? f.ratings : new ArrayList<>());
     }
 
+
     /**
      * Constructor for creating a Film with just an ID.
      *
@@ -131,4 +134,6 @@ public class Film {
     public Film(final Long id) {
         this.id = id;
     }
+
 }
+

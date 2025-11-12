@@ -72,4 +72,6 @@ public class Series {
         this.clickDislikes = 0;
         this.clickFavorites = 0;
     }
+
 }
+

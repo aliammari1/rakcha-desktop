@@ -34,25 +34,31 @@ public class UserPDF {
         Document document = new Document();
         try {
             PdfWriter.getInstance(document, new FileOutputStream("iTextTable.pdf"));
-        } catch (DocumentException | FileNotFoundException e) {
+        }
+ catch (DocumentException | FileNotFoundException e) {
             UserPDF.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             throw new RuntimeException(e);
         }
+
         document.open();
         final List<String> attributes = Arrays.asList("id", "nom", "prenom", "num_telephone", "email", "role");
-        float[] widths = { 50, 50, 50, 80, 50, 50 };
+        float[] widths = { 50, 50, 50, 80, 50, 50 }
+;
         PdfPTable table = new PdfPTable(widths);
         addTableHeader(table, attributes);
         addRows(table, userData);
         // addCustomRows(table);
         try {
             document.add(table);
-        } catch (DocumentException e) {
+        }
+ catch (DocumentException e) {
             UserPDF.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             throw new RuntimeException(e);
         }
+
         document.close();
     }
+
 
     /**
      * @param table
@@ -66,8 +72,10 @@ public class UserPDF {
             header.setIndent(10);
             header.setPhrase(new Phrase(columnTitle));
             table.addCell(header);
-        });
+        }
+);
     }
+
 
     /** 
      * @param table
@@ -82,23 +90,29 @@ public class UserPDF {
             table.addCell(user.getEmail());
             table.addCell(user.getRole());
         }
+
     }
+
     //
     // private void addCustomRows(PdfPTable table) {
     // Path path = null;
     // try {
     // path = Paths.get(ClassLoader.getSystemResource("Java_logo.png").toURI());
-    // } catch (URISyntaxException e) {
+    // }
+ catch (URISyntaxException e) {
     // LOGGER.log(Level.SEVERE, e.getMessage(), e);
     // throw new RuntimeException(e);
     // }
+
     // Image img = null;
     // try {
     // img = Image.getInstance(path.toAbsolutePath().toString());
-    // } catch (BadElementException | IOException e) {
+    // }
+ catch (BadElementException | IOException e) {
     // LOGGER.log(Level.SEVERE, e.getMessage(), e);
     // throw new RuntimeException(e);
     // }
+
     // img.scalePercent(10);
     //
     // PdfPCell imageCell = new PdfPCell(img);
@@ -112,4 +126,6 @@ public class UserPDF {
     // verticalAlignCell.setVerticalAlignment(Element.ALIGN_BOTTOM);
     // table.addCell(verticalAlignCell);
     // }
+
 }
+

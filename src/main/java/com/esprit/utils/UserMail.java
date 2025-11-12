@@ -40,7 +40,9 @@ public enum UserMail {
             public PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(username, password);
             }
-        });
+
+        }
+);
         try {
             // Create a default MimeMessage object.
             final Message message = new MimeMessage(session);
@@ -55,10 +57,14 @@ public enum UserMail {
             // Send message
             Transport.send(message);
             UserMail.LOGGER.info("Sent message successfully....");
-        } catch (final MessagingException e) {
+        }
+ catch (final MessagingException e) {
             UserMail.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             throw new RuntimeException(e);
         }
+
     }
 
+
 }
+

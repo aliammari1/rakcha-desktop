@@ -37,4 +37,6 @@ public class MailAdminController {
         final int verificationCode = random.nextInt(999999 - 100000) + 100000;
         UserMail.send(this.mailTextField.getText(), "the mail verification code is " + verificationCode);
     }
+
 }
+

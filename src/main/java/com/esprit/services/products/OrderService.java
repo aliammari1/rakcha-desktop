@@ -53,6 +53,7 @@ public class OrderService implements IService<Order> {
                 """);
     }
 
+
     @Override
     /**
      * Creates a new entity in the database.
@@ -71,10 +72,13 @@ public class OrderService implements IService<Order> {
             pst.setString(5, order.getAddress());
             pst.executeUpdate();
             OrderService.LOGGER.info("order created!");
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             OrderService.LOGGER.info("order not created");
         }
+
     }
+
 
     /**
      * Performs createOrder operation.
@@ -95,8 +99,10 @@ public class OrderService implements IService<Order> {
         if (rs.next()) {
             orderId = rs.getLong(1);
         }
+
         return orderId;
     }
+
 
     /**
      * Performs read operation.
@@ -118,11 +124,15 @@ public class OrderService implements IService<Order> {
                         .orderItems(orderItemService.readOrderItem(rs.getLong("id"))).build();
                 orders.add(order);
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             OrderService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return orders;
     }
+
 
     /**
      * Performs readClientOrders operation.
@@ -144,11 +154,15 @@ public class OrderService implements IService<Order> {
                         .orderItems(orderItemService.readOrderItem(rs.getLong("id"))).build();
                 orders.add(order);
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             OrderService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return orders;
     }
+
 
     @Override
     /**
@@ -168,10 +182,13 @@ public class OrderService implements IService<Order> {
             pst.setLong(5, order.getId());
             pst.executeUpdate();
             OrderService.LOGGER.info("order updated!");
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             OrderService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     @Override
     /**
@@ -187,10 +204,13 @@ public class OrderService implements IService<Order> {
             pst.setLong(1, order.getId());
             pst.executeUpdate();
             OrderService.LOGGER.info("order deleted!");
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             OrderService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Retrieves the OrderById value.
@@ -209,8 +229,10 @@ public class OrderService implements IService<Order> {
                     .status(rs.getString("status")).client((Client) usersService.getUserById(rs.getLong("client_id")))
                     .phoneNumber(rs.getInt("phone_number")).address(rs.getString("address")).build();
         }
+
         return order;
     }
+
 
     /**
      * Retrieves the PaidOrders value.
@@ -233,11 +255,15 @@ public class OrderService implements IService<Order> {
                         .orderItems(orderItemService.readOrderItem(rs.getLong("id"))).build();
                 paidOrders.add(order);
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             OrderService.LOGGER.info("Error retrieving paid orders: " + e.getMessage());
         }
+
         return paidOrders;
     }
+
 
     /**
      * Retrieves the Top3PurchasedProducts value.
@@ -255,15 +281,21 @@ public class OrderService implements IService<Order> {
                 final int purchaseCount = resultSet.getInt("purchaseCount");
                 productPurchases.put(productId, purchaseCount);
             }
-        } catch (final Exception e) {
+
+        }
+ catch (final Exception e) {
             OrderService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return productPurchases;
     }
+
 
     @Override
     public Page<Order> read(PageRequest pageRequest) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'read'");
     }
+
 }
+

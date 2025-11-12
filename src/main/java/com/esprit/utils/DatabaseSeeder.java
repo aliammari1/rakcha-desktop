@@ -80,19 +80,24 @@ public class DatabaseSeeder {
 
             log.info("Enhanced database seeding completed successfully!");
 
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             log.error("Error during enhanced database seeding", e);
             throw new RuntimeException("Enhanced database seeding failed", e);
         }
+
     }
+
 
     /**
      * Seeds users with realistic fake data using JavaFaker.
      */
     private void seedUsers(int count) {
-        log.info("Seeding {} users with JavaFaker...", count);
+        log.info("Seeding {}
+ users with JavaFaker...", count);
 
-        String[] roles = { "client", "admin", "responsable de cinema" };
+        String[] roles = { "client", "admin", "responsable de cinema" }
+;
 
         for (int i = 0; i < count; i++) {
             String firstName = faker.name().firstName();
@@ -113,13 +118,17 @@ public class DatabaseSeeder {
                             birthDate, email, faker.avatar().image());
                 default -> new Client(firstName, lastName, phone, "password123", role, address,
                         birthDate, email, faker.avatar().image());
-            };
+            }
+;
 
             userService.create(user);
         }
 
-        log.info("Created {} users with realistic data", count);
+
+        log.info("Created {}
+ users with realistic data", count);
     }
+
 
     /**
      * Seeds product categories with realistic names.
@@ -128,15 +137,24 @@ public class DatabaseSeeder {
         log.info("Seeding product categories...");
 
         String[][] categories = {
-                { "Electronics", "Electronic devices, gadgets and technology products" },
-                { "Books & Media", "Books, magazines, audiobooks and educational materials" },
-                { "Fashion & Clothing", "Clothing, shoes, accessories and fashion items" },
-                { "Home & Garden", "Home improvement, furniture and gardening supplies" },
-                { "Sports & Fitness", "Sports equipment, fitness gear and outdoor activities" },
-                { "Toys & Games", "Toys, board games, video games and entertainment" },
-                { "Health & Beauty", "Personal care, cosmetics and health products" },
+                { "Electronics", "Electronic devices, gadgets and technology products" }
+,
+                { "Books & Media", "Books, magazines, audiobooks and educational materials" }
+,
+                { "Fashion & Clothing", "Clothing, shoes, accessories and fashion items" }
+,
+                { "Home & Garden", "Home improvement, furniture and gardening supplies" }
+,
+                { "Sports & Fitness", "Sports equipment, fitness gear and outdoor activities" }
+,
+                { "Toys & Games", "Toys, board games, video games and entertainment" }
+,
+                { "Health & Beauty", "Personal care, cosmetics and health products" }
+,
                 { "Automotive", "Car accessories, parts and automotive supplies" }
-        };
+
+        }
+;
 
         for (String[] category : categories) {
             ProductCategory productCategory = ProductCategory.builder()
@@ -146,14 +164,18 @@ public class DatabaseSeeder {
             categoryService.create(productCategory);
         }
 
-        log.info("Created {} realistic product categories", categories.length);
+
+        log.info("Created {}
+ realistic product categories", categories.length);
     }
+
 
     /**
      * Seeds products with realistic fake data using JavaFaker.
      */
     private void seedProducts(int count) {
-        log.info("Seeding {} products with JavaFaker...", count);
+        log.info("Seeding {}
+ products with JavaFaker...", count);
 
         for (int i = 0; i < count; i++) {
             String name = faker.commerce().productName();
@@ -172,14 +194,18 @@ public class DatabaseSeeder {
             productService.create(product);
         }
 
-        log.info("Created {} products with realistic data", count);
+
+        log.info("Created {}
+ products with realistic data", count);
     }
+
 
     /**
      * Seeds actors with realistic fake data using JavaFaker.
      */
     private void seedActors(int count) {
-        log.info("Seeding {} actors with JavaFaker...", count);
+        log.info("Seeding {}
+ actors with JavaFaker...", count);
 
         for (int i = 0; i < count; i++) {
             String name = faker.name().fullName();
@@ -195,14 +221,18 @@ public class DatabaseSeeder {
             actorService.create(actor);
         }
 
-        log.info("Created {} actors with realistic data", count);
+
+        log.info("Created {}
+ actors with realistic data", count);
     }
+
 
     /**
      * Seeds films with realistic fake data using JavaFaker.
      */
     private void seedFilms(int count) {
-        log.info("Seeding {} films with JavaFaker...", count);
+        log.info("Seeding {}
+ films with JavaFaker...", count);
 
         for (int i = 0; i < count; i++) {
             String title = faker.funnyName().name() + ": " + faker.book().title();
@@ -225,14 +255,18 @@ public class DatabaseSeeder {
             filmService.create(film);
         }
 
-        log.info("Created {} films with realistic data", count);
+
+        log.info("Created {}
+ films with realistic data", count);
     }
+
 
     /**
      * Seeds cinemas with realistic fake data using JavaFaker.
      */
     private void seedCinemas(int count) {
-        log.info("Seeding {} cinemas with JavaFaker...", count);
+        log.info("Seeding {}
+ cinemas with JavaFaker...", count);
 
         for (int i = 0; i < count; i++) {
             String name = "Cinema " + faker.company().name();
@@ -248,8 +282,11 @@ public class DatabaseSeeder {
             cinemaService.create(cinema);
         }
 
-        log.info("Created {} cinemas with realistic data", count);
+
+        log.info("Created {}
+ cinemas with realistic data", count);
     }
+
 
     /**
      * Seeds cinema halls for all cinemas.
@@ -273,10 +310,14 @@ public class DatabaseSeeder {
                 cinemaHallService.create(hall);
                 hallCount++;
             }
+
         }
 
-        log.info("Created {} cinema halls", hallCount);
+
+        log.info("Created {}
+ cinema halls", hallCount);
     }
+
 
     /**
      * Seeds seats for all cinema halls.
@@ -306,17 +347,23 @@ public class DatabaseSeeder {
                     seatCounter++;
                     totalSeats++;
                 }
+
             }
+
         }
 
-        log.info("Created {} seats", totalSeats);
+
+        log.info("Created {}
+ seats", totalSeats);
     }
+
 
     /**
      * Seeds series with realistic fake data using JavaFaker.
      */
     private void seedSeries(int count) {
-        log.info("Seeding {} series with JavaFaker...", count);
+        log.info("Seeding {}
+ series with JavaFaker...", count);
 
         for (int i = 0; i < count; i++) {
             String name = faker.book().title() + " Series";
@@ -336,8 +383,11 @@ public class DatabaseSeeder {
             seriesService.create(series);
         }
 
-        log.info("Created {} series with realistic data", count);
+
+        log.info("Created {}
+ series with realistic data", count);
     }
+
 
     /**
      * Seeds episodes for all series.
@@ -369,11 +419,16 @@ public class DatabaseSeeder {
                     episodeService.create(episode);
                     episodeCount++;
                 }
+
             }
+
         }
 
-        log.info("Created {} episodes", episodeCount);
+
+        log.info("Created {}
+ episodes", episodeCount);
     }
+
 
     /**
      * Quick seed method for development/testing with realistic data.
@@ -383,6 +438,7 @@ public class DatabaseSeeder {
         seedDatabase(100, 200, 50, 8, 15);
     }
 
+
     /**
      * Minimal seed for basic testing.
      */
@@ -391,6 +447,7 @@ public class DatabaseSeeder {
         seedDatabase(20, 50, 15, 3, 5);
     }
 
+
     /**
      * Full seed for comprehensive testing.
      */
@@ -398,4 +455,6 @@ public class DatabaseSeeder {
         log.info("Starting full seed...");
         seedDatabase(500, 1000, 200, 20, 50);
     }
+
 }
+

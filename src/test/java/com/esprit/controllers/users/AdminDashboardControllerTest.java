@@ -39,6 +39,7 @@ class AdminDashboardControllerTest extends TestFXBase {
         stage.show();
     }
 
+
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Dashboard Overview Tests")
     class DashboardOverviewTests {
@@ -52,6 +53,7 @@ class AdminDashboardControllerTest extends TestFXBase {
             assertThat(lookup("#dashboardPanel").tryQuery()).isPresent();
         }
 
+
         @Test
         @Order(2)
         @DisplayName("Should display user statistics")
@@ -60,6 +62,7 @@ class AdminDashboardControllerTest extends TestFXBase {
 
             assertThat(lookup("#userStatsPanel").tryQuery()).isPresent();
         }
+
 
         @Test
         @Order(3)
@@ -70,6 +73,7 @@ class AdminDashboardControllerTest extends TestFXBase {
             assertThat(lookup("#cinemaStatsPanel").tryQuery()).isPresent();
         }
 
+
         @Test
         @Order(4)
         @DisplayName("Should display revenue statistics")
@@ -78,7 +82,9 @@ class AdminDashboardControllerTest extends TestFXBase {
 
             assertThat(lookup("#revenueStatsPanel").tryQuery()).isPresent();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("User Management Tests")
@@ -94,6 +100,7 @@ class AdminDashboardControllerTest extends TestFXBase {
             assertThat(table).isNotNull();
         }
 
+
         @Test
         @Order(6)
         @DisplayName("Should search users")
@@ -108,6 +115,7 @@ class AdminDashboardControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(7)
         @DisplayName("Should filter users by role")
@@ -117,7 +125,9 @@ class AdminDashboardControllerTest extends TestFXBase {
             TableView<User> table = lookup("#usersTable").query();
             assertThat(table).isNotNull();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("System Monitoring Tests")
@@ -132,6 +142,7 @@ class AdminDashboardControllerTest extends TestFXBase {
             assertThat(lookup("#systemHealthPanel").tryQuery()).isPresent();
         }
 
+
         @Test
         @Order(9)
         @DisplayName("Should show active sessions")
@@ -140,5 +151,8 @@ class AdminDashboardControllerTest extends TestFXBase {
 
             assertThat(lookup("#activeSessionsLabel").tryQuery()).isPresent();
         }
+
     }
+
 }
+

@@ -44,7 +44,8 @@ public class UserService implements IService<User> {
     // Allowed columns for sorting to prevent SQL injection
     private static final String[] ALLOWED_SORT_COLUMNS = {
             "id", "nom", "prenom", "num_telephone", "role", "adresse", "date_de_naissance", "email"
-    };
+    }
+;
 
     /**
      * Constructs a new UserService instance.
@@ -74,6 +75,7 @@ public class UserService implements IService<User> {
                 """);
     }
 
+
     /**
      * @param id
      * @return User
@@ -85,11 +87,14 @@ public class UserService implements IService<User> {
             final PreparedStatement preparedStatement = this.con.prepareStatement(req);
             preparedStatement.setLong(1, id);
             user = this.getUserRow(preparedStatement);
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             UserService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return user;
     }
+
 
     /**
      * @param email
@@ -102,11 +107,14 @@ public class UserService implements IService<User> {
             final PreparedStatement preparedStatement = this.con.prepareStatement(req);
             preparedStatement.setString(1, email);
             user = this.getUserRow(preparedStatement);
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             UserService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return user;
     }
+
 
     @Override
     /**
@@ -133,17 +141,23 @@ public class UserService implements IService<User> {
             statement.setBoolean(10, true);
             if ("admin".equals(user.getRole())) {
                 statement.setString(11, "[\"ROLE_ADMIN\"]");
-            } else if ("client".equals(user.getRole())) {
+            }
+ else if ("client".equals(user.getRole())) {
                 statement.setString(11, "[\"ROLE_CLIENT\"]");
-            } else if ("responsable de cinema".equals(user.getRole())) {
+            }
+ else if ("responsable de cinema".equals(user.getRole())) {
                 statement.setString(11, "[\"ROLE_CINEMAMANAGER\"]");
             }
+
             statement.executeUpdate();
             UserService.LOGGER.info("user was added");
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             UserService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
 
     @Override
@@ -160,9 +174,11 @@ public class UserService implements IService<User> {
         // Validate sort column to prevent SQL injection
         if (pageRequest.hasSorting() &&
                 !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
-            log.warn("Invalid sort column: {}. Using default sorting.", pageRequest.getSortBy());
+            log.warn("Invalid sort column: {}
+. Using default sorting.", pageRequest.getSortBy());
             pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
+
 
         try {
             // Get total count
@@ -177,11 +193,15 @@ public class UserService implements IService<User> {
 
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
 
-        } catch (final SQLException e) {
-            log.error("Error retrieving paginated users: {}", e.getMessage(), e);
+        }
+ catch (final SQLException e) {
+            log.error("Error retrieving paginated users: {}
+", e.getMessage(), e);
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
         }
+
     }
+
 
     @Override
     /**
@@ -207,10 +227,13 @@ public class UserService implements IService<User> {
             statement.setLong(10, user.getId().longValue());
             statement.executeUpdate();
             UserService.LOGGER.info("user is updated");
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             UserService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     @Override
     /**
@@ -225,10 +248,13 @@ public class UserService implements IService<User> {
             statement.setLong(1, user.getId().intValue());
             statement.executeUpdate();
             UserService.LOGGER.info("user is deleted");
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             UserService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Sends an email to the specified recipient.
@@ -240,6 +266,7 @@ public class UserService implements IService<User> {
         UserMail.send(Recipient, messageToSend);
     }
 
+
     /**
      * Generates a PDF report of all users sorted by role.
      */
@@ -247,6 +274,7 @@ public class UserService implements IService<User> {
         final UserPDF userPDF = new UserPDF();
         userPDF.generate(sort("role"));
     }
+
 
     /**
      * Performs sort operation.
@@ -259,11 +287,14 @@ public class UserService implements IService<User> {
             final String query = "SELECT * FROM users ORDER BY %s".formatted(Option);
             final PreparedStatement statement = con.prepareStatement(query);
             return getUsers(userList, statement);
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             UserService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return null;
     }
+
 
     /**
      * @param userList
@@ -296,14 +327,18 @@ public class UserService implements IService<User> {
                             resultSet.getString("photo_de_profil"));
                 default:
                     yield null;
-            };
+            }
+;
             if (user != null) {
                 user.setId(resultSet.getLong("id"));
                 userList.add(user);
             }
+
         }
+
         return userList;
     }
+
 
     /**
      * Performs checkEmailFound operation.
@@ -318,11 +353,14 @@ public class UserService implements IService<User> {
             statement.setString(1, email);
             final ResultSet resultSet = statement.executeQuery();
             check = resultSet.next();
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             UserService.LOGGER.info("checkEmailFound: " + e.getMessage());
         }
+
         return check;
     }
+
 
     /**
      * Updates the password for a user with the specified email.
@@ -337,10 +375,13 @@ public class UserService implements IService<User> {
             statement.setString(2, email);
             statement.executeUpdate();
             UserService.LOGGER.info("user password is updated");
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             UserService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Handles forgotten password by sending a password reset email.
@@ -356,14 +397,19 @@ public class UserService implements IService<User> {
             final User user = this.getUserRow(preparedStatement);
             if (null != user) {
                 this.sendMail(user.getEmail(), "you forget your password dumbhead hhhh");
-            } else {
+            }
+ else {
                 final Alert alert = new Alert(Alert.AlertType.ERROR, "the user was not found", ButtonType.CLOSE);
                 alert.show();
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             UserService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * @param preparedStatement
@@ -396,14 +442,18 @@ public class UserService implements IService<User> {
                             resultSet.getString("photo_de_profil"));
                 default:
                     yield null;
-            };
+            }
+;
             if (user != null) {
                 user.setId(resultSet.getLong("id"));
             }
+
             return user;
         }
+
         return null;
     }
+
 
     /**
      * Performs login operation.
@@ -415,6 +465,7 @@ public class UserService implements IService<User> {
         if (null == user) {
             return null;
         }
+
         try {
             final String query = "select * from users where (email LIKE ?) and (password LIKE ?)";
             final PreparedStatement statement = con.prepareStatement(query);
@@ -427,15 +478,22 @@ public class UserService implements IService<User> {
                 UserService.LOGGER.info("Invalid stored hash");
                 return null;
             }
+
             if (BCrypt.checkpw(password, storedHash)) {
                 UserService.LOGGER.info("Password matches");
-            } else {
+            }
+ else {
                 UserService.LOGGER.info("Password does not match");
                 return null;
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             UserService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return user;
     }
+
 }
+

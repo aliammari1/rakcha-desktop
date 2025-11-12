@@ -93,6 +93,7 @@ public class DesignCategorieAdminController {
         currentStage.close();
     }
 
+
     /**
      * Sets up listeners for changes to the `SearchBar` text property and triggers
      * actions when the search term changes, including searching the products
@@ -103,10 +104,12 @@ public class DesignCategorieAdminController {
         this.SearchBar.textProperty().addListener((observable, oldValue, newValue) -> {
             this.search(newValue);
             this.filterCategorieProducts(newValue.trim());
-        });
+        }
+);
         this.afficher_categorie();
         this.initDeleteColumn();
     }
+
 
     /**
      * /** Enables user input to create a new category and add it to the existing
@@ -131,6 +134,7 @@ public class DesignCategorieAdminController {
             alert.show();
             return; // Arrêter l'exécution de la méthode si les champs sont vides
         }
+
         // Vérifier si la description a au moins 20 caractères
         if (20 > descriptionCategorie.length()) {
             final Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -139,6 +143,7 @@ public class DesignCategorieAdminController {
             alert.show();
             return; // Arrêter l'exécution de la méthode si les champs sont vides
         }
+
         // Créer l'objet Categorie
         final CategoryService cs = new CategoryService();
         final ProductCategory nouvelleCategorieProduct = new ProductCategory(nomCategorie, descriptionCategorie);
@@ -152,6 +157,7 @@ public class DesignCategorieAdminController {
         alert.setContentText("Categorie ajouté !");
         alert.show();
     }
+
 
     /**
      * Defines a callback to create a table cell that displays a delete button for
@@ -191,8 +197,10 @@ public class DesignCategorieAdminController {
                             cs.delete(categorieProduct);
                             categorie_tableview.getItems().remove(categorieProduct);
                             categorie_tableview.refresh();
-                        });
+                        }
+);
                     }
+
 
                     /**
                      * Updates the graphical representation of an item based on its emptiness
@@ -212,16 +220,23 @@ public class DesignCategorieAdminController {
                         super.updateItem(item, empty);
                         if (empty) {
                             this.setGraphic(null);
-                        } else {
+                        }
+ else {
                             this.setGraphic(this.btnDelete);
                         }
+
                     }
-                };
+
+                }
+;
             }
-        };
+
+        }
+;
         this.deleteColumn.setCellFactory(cellFactory);
         // categorie_tableview.getColumns().add(deleteColumn);
     }
+
 
     /**
      * Modifies the attributes of a `CategorieProduct` object and stores the changes
@@ -243,6 +258,7 @@ public class DesignCategorieAdminController {
         ps.update(categorieProduct);
     }
 
+
     /**
      * Sets up a table view to display and edit category data from a service. It
      * allows for line editing and validation on enter press, and enables cell
@@ -256,14 +272,16 @@ public class DesignCategorieAdminController {
             final ProductCategory categorieProduct = event.getRowValue();
             categorieProduct.setCategoryName(event.getNewValue());
             this.modifier_categorie(categorieProduct);
-        });
+        }
+);
         this.description_tableC.setCellValueFactory(new PropertyValueFactory<ProductCategory, String>("description"));
         this.description_tableC.setCellFactory(TextFieldTableCell.forTableColumn());
         this.description_tableC.setOnEditCommit(event -> {
             final ProductCategory categorieProduct = event.getRowValue();
             categorieProduct.setDescription(event.getNewValue());
             this.modifier_categorie(categorieProduct);
-        });
+        }
+);
         // Activer l'édition en cliquant sur une ligne
         this.categorie_tableview.setEditable(true);
         // Gérer la modification du texte dans une cellule et le valider en appuyant sur
@@ -275,8 +293,11 @@ public class DesignCategorieAdminController {
                 if (null != selectedCategorieProduct) {
                     this.modifier_categorie(selectedCategorieProduct);
                 }
+
             }
-        });
+
+        }
+);
         // Utiliser une ObservableList pour stocker les éléments
         final ObservableList<ProductCategory> list = FXCollections.observableArrayList();
         final CategoryService cs = new CategoryService();
@@ -285,6 +306,7 @@ public class DesignCategorieAdminController {
         // Activer la sélection de cellules
         this.categorie_tableview.getSelectionModel().setCellSelectionEnabled(true);
     }
+
 
     /**
      * Takes a search keyword and searches the `CategoryService` for matching
@@ -301,16 +323,21 @@ public class DesignCategorieAdminController {
         final ObservableList<ProductCategory> filteredList = FXCollections.observableArrayList();
         if (null == keyword || keyword.trim().isEmpty()) {
             filteredList.addAll(categoryService.read());
-        } else {
+        }
+ else {
             for (final ProductCategory category : categoryService.read()) {
                 if (category.getCategoryName().toLowerCase().contains(keyword.toLowerCase())
                         || category.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
                     filteredList.add(category);
                 }
+
             }
+
         }
+
         this.categorie_tableview.setItems(filteredList);
     }
+
 
     /**
      * Takes a search text as input and filters the observable list of
@@ -330,14 +357,19 @@ public class DesignCategorieAdminController {
                 if (categorie.getCategoryName().toLowerCase().contains(searchText.toLowerCase())) {
                     filteredList.add(categorie);
                 }
+
             }
+
             // Mettre à jour la TableView avec la liste filtrée
             this.categorie_tableview.setItems(filteredList);
-        } else {
+        }
+ else {
             // Si le champ de recherche est vide, afficher tous les cinémas
             this.afficher_categorie();
         }
+
     }
+
 
     /**
      * Retrieves all categories from the database through the `CategoryService`. It
@@ -351,6 +383,7 @@ public class DesignCategorieAdminController {
         final CategoryService categoryservice = new CategoryService();
         return categoryservice.read();
     }
+
 
     /**
      * 1) sets the opacity of a category tableview to 0.5, 2) sets a filter anchor's
@@ -382,12 +415,14 @@ public class DesignCategorieAdminController {
             addressCheckBoxesVBox.getChildren().add(checkBox);
             this.addressCheckBoxes.add(checkBox);
         }
+
         addressCheckBoxesVBox.setLayoutX(25);
         addressCheckBoxesVBox.setLayoutY(60);
         // Ajouter les VBox dans le filterAnchor
         this.filterAnchor.getChildren().addAll(addressCheckBoxesVBox);
         this.filterAnchor.setVisible(true);
     }
+
 
     /**
      * Retrieves a list of unique movie theater addresses from the database based on
@@ -401,6 +436,7 @@ public class DesignCategorieAdminController {
         // Extraire les adresses uniques des cinémas
         return categories.stream().map(ProductCategory::getCategoryName).distinct().collect(Collectors.toList());
     }
+
 
     /**
      * Filters cinema list based on selected categories and statuses from the list
@@ -439,6 +475,7 @@ public class DesignCategorieAdminController {
         this.categorie_tableview.setItems(filteredList);
     }
 
+
     /**
      * Streamlines and filters the selected addresses within an AnchorPane
      * component, returning a list of selected categories as strings.
@@ -451,6 +488,7 @@ public class DesignCategorieAdminController {
         return this.addressCheckBoxes.stream().filter(CheckBox::isSelected).map(CheckBox::getText)
                 .collect(Collectors.toList());
     }
+
 
     /**
      * Loads a new user interface "/ui/produits/CommentaireProduct.fxml" using the
@@ -479,11 +517,14 @@ public class DesignCategorieAdminController {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             DesignCategorieAdminController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
+
     }
+
 
     /**
      * Loads a new FXML file, creates a new scene, and attaches it to a new stage
@@ -511,11 +552,14 @@ public class DesignCategorieAdminController {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             DesignCategorieAdminController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
+
     }
+
 
     /**
      * Loads a new FXML file, creates a new scene and attaches it to a new stage,
@@ -545,11 +589,14 @@ public class DesignCategorieAdminController {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             DesignCategorieAdminController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
+
     }
+
 
     /**
      * Likely performs some client-side profiling tasks, such as collecting and
@@ -562,6 +609,7 @@ public class DesignCategorieAdminController {
     @FXML
     void profilclient(final ActionEvent event) {
     }
+
 
     /**
      * Charges a new UI file, creates a new scene, and attaches it to a new stage.
@@ -589,11 +637,14 @@ public class DesignCategorieAdminController {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             DesignCategorieAdminController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
+
     }
+
 
     /**
      * Charges a new UI file "/ui//ui/Series-view.fxml" into an existing scene,
@@ -623,9 +674,13 @@ public class DesignCategorieAdminController {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             DesignCategorieAdminController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
+
     }
+
 }
+

@@ -47,4 +47,6 @@ public class FilmComment {
         this.client = client;
         this.film = film;
     }
+
 }
+

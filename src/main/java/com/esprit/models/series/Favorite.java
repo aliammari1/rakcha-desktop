@@ -39,4 +39,6 @@ public class Favorite {
         this.userId = userId;
         this.seriesId = seriesId;
     }
+
 }
+

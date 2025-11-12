@@ -45,4 +45,6 @@ public class CinemaRating {
         this.client = client;
         this.rating = rating;
     }
+
 }
+

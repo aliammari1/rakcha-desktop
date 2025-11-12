@@ -37,6 +37,7 @@ class SerieControllerTest extends TestFXBase {
         stage.toFront();
     }
 
+
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
     @DisplayName("Series Table Display Tests")
@@ -49,12 +50,14 @@ class SerieControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(2)
         @DisplayName("Should display series title column")
         void testSeriesTitleColumn() {
             waitForFxEvents();
         }
+
 
         @Test
         @Order(3)
@@ -63,12 +66,14 @@ class SerieControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(4)
         @DisplayName("Should display series description column")
         void testSeriesDescriptionColumn() {
             waitForFxEvents();
         }
+
 
         @Test
         @Order(5)
@@ -77,13 +82,16 @@ class SerieControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(6)
         @DisplayName("Should load series data")
         void testLoadSeriesData() {
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -97,6 +105,7 @@ class SerieControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(11)
         @DisplayName("Should display series input fields")
@@ -105,12 +114,14 @@ class SerieControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(12)
         @DisplayName("Should validate series title required")
         void testTitleRequired() {
             waitForFxEvents();
         }
+
 
         @Test
         @Order(13)
@@ -119,6 +130,7 @@ class SerieControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(14)
         @DisplayName("Should accept valid series data")
@@ -126,13 +138,16 @@ class SerieControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(15)
         @DisplayName("Should create new series")
         void testCreateSeries() {
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -146,12 +161,14 @@ class SerieControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(21)
         @DisplayName("Should add new episode to series")
         void testAddEpisode() {
             waitForFxEvents();
         }
+
 
         @Test
         @Order(22)
@@ -160,12 +177,14 @@ class SerieControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(23)
         @DisplayName("Should display season number")
         void testSeasonNumber() {
             waitForFxEvents();
         }
+
 
         @Test
         @Order(24)
@@ -174,12 +193,14 @@ class SerieControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(25)
         @DisplayName("Should delete episode")
         void testDeleteEpisode() {
             waitForFxEvents();
         }
+
 
         @Test
         @Order(26)
@@ -188,7 +209,9 @@ class SerieControllerTest extends TestFXBase {
             // Episodes should be numbered correctly
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -202,12 +225,14 @@ class SerieControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(31)
         @DisplayName("Should assign category to series")
         void testAssignCategory() {
             waitForFxEvents();
         }
+
 
         @Test
         @Order(32)
@@ -216,13 +241,16 @@ class SerieControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(33)
         @DisplayName("Should remove category from series")
         void testRemoveCategory() {
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -236,12 +264,14 @@ class SerieControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(41)
         @DisplayName("Should update series description")
         void testUpdateDescription() {
             waitForFxEvents();
         }
+
 
         @Test
         @Order(42)
@@ -250,13 +280,16 @@ class SerieControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(43)
         @DisplayName("Should save updates")
         void testSaveUpdates() {
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -270,6 +303,7 @@ class SerieControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(51)
         @DisplayName("Should delete series and episodes")
@@ -278,13 +312,16 @@ class SerieControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(52)
         @DisplayName("Should refresh after deletion")
         void testRefreshAfterDelete() {
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -298,12 +335,14 @@ class SerieControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(61)
         @DisplayName("Should filter by category")
         void testFilterByCategory() {
             waitForFxEvents();
         }
+
 
         @Test
         @Order(62)
@@ -312,13 +351,16 @@ class SerieControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(63)
         @DisplayName("Should filter by rating")
         void testFilterByRating() {
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -333,6 +375,7 @@ class SerieControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(71)
         @DisplayName("Should show view count")
@@ -340,11 +383,15 @@ class SerieControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(72)
         @DisplayName("Should display rating distribution")
         void testRatingDistribution() {
             waitForFxEvents();
         }
+
     }
+
 }
+

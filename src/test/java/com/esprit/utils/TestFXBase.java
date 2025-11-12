@@ -51,14 +51,17 @@ public abstract class TestFXBase extends ApplicationTest {
         System.setProperty("java.awt.headless", "true");
     }
 
+
     /**
      * Clean up after each test to ensure test isolation
      */
     @AfterEach
     public void afterEachTest() throws TimeoutException {
         // Release all keys and mouse buttons
-        release(new KeyCode[] {});
-        release(new MouseButton[] {});
+        release(new KeyCode[] {}
+);
+        release(new MouseButton[] {}
+);
 
         // Close all windows except the primary stage
         FxToolkit.cleanupStages();
@@ -67,12 +70,14 @@ public abstract class TestFXBase extends ApplicationTest {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
+
     /**
      * Wait for JavaFX events to complete
      */
     protected void waitForFxEvents() {
         WaitForAsyncUtils.waitForFxEvents();
     }
+
 
     /**
      * Wait for a node to be visible and ready
@@ -87,14 +92,20 @@ public abstract class TestFXBase extends ApplicationTest {
                 try {
                     Node node = lookup(query).query();
                     return node != null && node.isVisible();
-                } catch (Exception e) {
+                }
+ catch (Exception e) {
                     return false;
                 }
-            });
-        } catch (Exception e) {
+
+            }
+);
+        }
+ catch (Exception e) {
             // Node not found or timeout - continue anyway
         }
+
     }
+
 
     /**
      * Click on a node and wait for events to complete
@@ -106,6 +117,7 @@ public abstract class TestFXBase extends ApplicationTest {
         waitForFxEvents();
     }
 
+
     /**
      * Type text in a field and wait for events to complete
      * 
@@ -115,6 +127,7 @@ public abstract class TestFXBase extends ApplicationTest {
         write(text);
         waitForFxEvents();
     }
+
 
     /**
      * Clear a text field by selecting all and deleting
@@ -130,12 +143,15 @@ public abstract class TestFXBase extends ApplicationTest {
         
         if (isMac) {
             push(KeyCode.META, KeyCode.A);
-        } else {
+        }
+ else {
             push(KeyCode.CONTROL, KeyCode.A);
         }
+
         push(KeyCode.DELETE);
         waitForFxEvents();
     }
+
 
     /**
      * Fill a text field with new content
@@ -149,6 +165,7 @@ public abstract class TestFXBase extends ApplicationTest {
         writeAndWait(text);
     }
 
+
     /**
      * Verify that a node is visible
      * 
@@ -157,6 +174,7 @@ public abstract class TestFXBase extends ApplicationTest {
     protected void verifyVisible(String query) {
         verifyThat(query, isVisible());
     }
+
 
     /**
      * Verify that a node is not visible
@@ -169,6 +187,7 @@ public abstract class TestFXBase extends ApplicationTest {
         assertThat(node.isVisible()).isFalse();
     }
 
+
     /**
      * Verify that a node is enabled
      * 
@@ -177,6 +196,7 @@ public abstract class TestFXBase extends ApplicationTest {
     protected void verifyEnabled(String query) {
         verifyThat(query, isEnabled());
     }
+
 
     /**
      * Verify that a node is disabled
@@ -187,6 +207,7 @@ public abstract class TestFXBase extends ApplicationTest {
         verifyThat(query, isDisabled());
     }
 
+
     /**
      * Verify that a labeled node has specific text
      * 
@@ -196,6 +217,7 @@ public abstract class TestFXBase extends ApplicationTest {
     protected void verifyText(String query, String expectedText) {
         verifyThat(query, hasText(expectedText));
     }
+
 
     /**
      * Get a node by its query
@@ -208,6 +230,7 @@ public abstract class TestFXBase extends ApplicationTest {
         return lookup(query).query();
     }
 
+
     /**
      * Get the text from a TextField or TextInputControl
      * 
@@ -218,6 +241,7 @@ public abstract class TestFXBase extends ApplicationTest {
         TextInputControl field = lookup(query).query();
         return field.getText();
     }
+
 
     /**
      * Get the text from a Label
@@ -230,6 +254,7 @@ public abstract class TestFXBase extends ApplicationTest {
         return label.getText();
     }
 
+
     /**
      * Check if a checkbox is selected
      * 
@@ -241,6 +266,7 @@ public abstract class TestFXBase extends ApplicationTest {
         return checkBox.isSelected();
     }
 
+
     /**
      * Select a checkbox
      * 
@@ -251,7 +277,9 @@ public abstract class TestFXBase extends ApplicationTest {
         if (!checkBox.isSelected()) {
             clickOnAndWait(query);
         }
+
     }
+
 
     /**
      * Deselect a checkbox
@@ -263,7 +291,9 @@ public abstract class TestFXBase extends ApplicationTest {
         if (checkBox.isSelected()) {
             clickOnAndWait(query);
         }
+
     }
+
 
     /**
      * Select an item from a ComboBox
@@ -280,6 +310,7 @@ public abstract class TestFXBase extends ApplicationTest {
         waitForFxEvents();
     }
 
+
     /**
      * Press Enter key and wait
      */
@@ -287,6 +318,7 @@ public abstract class TestFXBase extends ApplicationTest {
         push(KeyCode.ENTER);
         waitForFxEvents();
     }
+
 
     /**
      * Press Escape key and wait
@@ -296,6 +328,7 @@ public abstract class TestFXBase extends ApplicationTest {
         waitForFxEvents();
     }
 
+
     /**
      * Press Tab key and wait
      */
@@ -303,6 +336,7 @@ public abstract class TestFXBase extends ApplicationTest {
         push(KeyCode.TAB);
         waitForFxEvents();
     }
+
 
     /**
      * Execute a task on the JavaFX Application Thread
@@ -313,6 +347,7 @@ public abstract class TestFXBase extends ApplicationTest {
         interact(runnable);
         waitForFxEvents();
     }
+
 
     /**
      * Get a test image file for testing image upload functionality
@@ -339,18 +374,25 @@ public abstract class TestFXBase extends ApplicationTest {
                     0x18, (byte) 0xDD, (byte) 0x8D, (byte) 0xB4, 0x00, 0x00,
                     0x00, 0x00, 0x49, 0x45, 0x4E, 0x44, (byte) 0xAE,
                     0x42, 0x60, (byte) 0x82
-                };
+                }
+;
                 
                 try (java.io.FileOutputStream fos = new java.io.FileOutputStream(testImage)) {
                     fos.write(pngHeader);
                     fos.flush();
                 }
+
                 testImage.deleteOnExit();
             }
+
             
             return testImage;
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             throw new RuntimeException("Failed to create test image file", e);
         }
+
     }
+
 }
+

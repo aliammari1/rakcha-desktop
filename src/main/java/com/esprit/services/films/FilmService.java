@@ -47,7 +47,8 @@ public class FilmService implements IService<Film> {
     // Allowed columns for sorting to prevent SQL injection
     private static final String[] ALLOWED_SORT_COLUMNS = {
             "id", "name", "duration", "description", "release_year"
-    };
+    }
+;
 
     /**
      * Constructs a new FilmService instance.
@@ -130,12 +131,14 @@ public class FilmService implements IService<Film> {
                 """);
     }
 
+
     /**
      * @return int
      */
     public static int getFilmLastInsertID() {
         return FilmService.filmLastInsertID;
     }
+
 
     /**
      * @param query
@@ -158,7 +161,8 @@ public class FilmService implements IService<Film> {
                 conn.setRequestMethod("GET");
                 statusCode = conn.getInputStream().read();
                 FilmService.LOGGER.info("Status Code: " + conn.getResponseCode());
-            } while (123 != statusCode);
+            }
+ while (123 != statusCode);
             // Read the response
             final BufferedReader reader = new BufferedReader(
                     new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
@@ -167,7 +171,9 @@ public class FilmService implements IService<Film> {
             while (null != (line = reader.readLine())) {
                 responseBuilder.append(line);
             }
-            final String response = "{" + responseBuilder + "}";
+
+            final String response = "{" + responseBuilder + "}
+";
             reader.close();
             // Parse the JSON response
             FilmService.LOGGER.info(response);
@@ -179,14 +185,19 @@ public class FilmService implements IService<Film> {
                 final String imdbUrl = firstResult.getString("imdb");
                 FilmService.LOGGER.info("IMDb URL of the first result: " + imdbUrl);
                 return imdbUrl;
-            } else {
+            }
+ else {
                 FilmService.LOGGER.info("No results found.");
             }
-        } catch (final Exception e) {
+
+        }
+ catch (final Exception e) {
             FilmService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return "imdb.com";
     }
+
 
     @Override
     /**
@@ -214,13 +225,19 @@ public class FilmService implements IService<Film> {
                         FilmService.filmLastInsertID = generatedKeys.getInt(1);
                         log.info("Film created with ID: " + FilmService.filmLastInsertID);
                     }
+
                 }
+
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             log.error("Error creating film", e);
             throw new RuntimeException(e);
         }
+
     }
+
 
     @Override
     /**
@@ -240,6 +257,7 @@ public class FilmService implements IService<Film> {
             pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
 
+
         try {
             // Get total count
             final String countQuery = PaginationQueryBuilder.buildCountQuery(baseQuery);
@@ -254,15 +272,20 @@ public class FilmService implements IService<Film> {
                     final Film film = buildFilmFromResultSet(rs);
                     content.add(film);
                 }
+
             }
+
 
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
 
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error retrieving paginated films: " + e.getMessage(), e);
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
         }
+
     }
+
 
     /**
      * Helper method to build Film object from ResultSet.
@@ -282,6 +305,7 @@ public class FilmService implements IService<Film> {
                 .build();
     }
 
+
     /**
      * Performs sort operation.
      *
@@ -296,17 +320,22 @@ public class FilmService implements IService<Film> {
             return read(pageRequest); // Return default sorted results
         }
 
+
         final String req = "SELECT * from films ORDER BY " + p;
         try (final PreparedStatement pst = this.connection.prepareStatement(req)) {
             final ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 filmArrayList.add(buildFilmFromResultSet(rs));
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             FilmService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return new Page<>(filmArrayList, pageRequest.getPage(), pageRequest.getSize(), filmArrayList.size());
     }
+
 
     /**
      * Retrieves the Film value.
@@ -322,11 +351,15 @@ public class FilmService implements IService<Film> {
             if (rs.next()) {
                 film = buildFilmFromResultSet(rs);
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             FilmService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return film;
     }
+
 
     @Override
     /**
@@ -346,11 +379,14 @@ public class FilmService implements IService<Film> {
             statement.setInt(5, film.getReleaseYear());
             statement.setLong(6, film.getId());
             statement.executeUpdate();
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             log.error("Error updating film", e);
             throw new RuntimeException(e);
         }
+
     }
+
 
     @Override
     /**
@@ -364,11 +400,14 @@ public class FilmService implements IService<Film> {
         try (final PreparedStatement statement = this.connection.prepareStatement(req)) {
             statement.setLong(1, film.getId());
             statement.executeUpdate();
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             log.error("Error deleting film", e);
             throw new RuntimeException(e);
         }
+
     }
+
 
     /**
      * Retrieves the Film value.
@@ -383,12 +422,17 @@ public class FilmService implements IService<Film> {
                 if (rs.next()) {
                     return buildFilmFromResultSet(rs);
                 }
+
             }
-        } catch (SQLException e) {
+
+        }
+ catch (SQLException e) {
             log.error("Error getting film: " + film_id, e);
         }
+
         return null;
     }
+
 
     /**
      * Retrieves the FilmByName value.
@@ -404,11 +448,15 @@ public class FilmService implements IService<Film> {
             if (rs.next()) {
                 film = buildFilmFromResultSet(rs);
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             FilmService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return film;
     }
+
 
     /**
      * Retrieves the TrailerFilm value.
@@ -420,9 +468,13 @@ public class FilmService implements IService<Film> {
         try {
             final FilmYoutubeTrailer filmYoutubeTrailer = new FilmYoutubeTrailer();
             s = filmYoutubeTrailer.watchTrailer(nomFilm);
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             FilmService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return s;
     }
+
 }
+

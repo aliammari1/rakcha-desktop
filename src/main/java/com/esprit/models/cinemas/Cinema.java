@@ -70,6 +70,7 @@ public class Cinema {
         this.comments = new ArrayList<>();
     }
 
+
     /**
      * Get all movie sessions for this cinema across all halls.
      *
@@ -82,8 +83,13 @@ public class Cinema {
                 if (hall.getMovieSessions() != null) {
                     allSessions.addAll(hall.getMovieSessions());
                 }
+
             }
+
         }
+
         return allSessions;
     }
+
 }
+

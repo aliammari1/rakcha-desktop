@@ -103,7 +103,8 @@ public class LoginController implements Initializable {
             "https://image.tmdb.org/t/p/w500/vZloFAK7NmvMGKE7VkF5UHaz0I.jpg", // John Wick: Chapter 4
             "https://image.tmdb.org/t/p/w500/62HCnUTziyWcpDaBO2i1DX17ljH.jpg", // Top Gun: Maverick
             "https://image.tmdb.org/t/p/w500/w3LxiVYdWWRvEVdn5RYq6jIqkb1.jpg" // Everything Everywhere All at Once
-    };
+    }
+;
 
     // Movie titles corresponding to the posters
     private final String[] movieTitles = {
@@ -119,7 +120,8 @@ public class LoginController implements Initializable {
             "John Wick: Chapter 4",
             "Top Gun: Maverick",
             "Everything Everywhere All at Once"
-    };
+    }
+;
 
     private int currentImageIndex = 0;
     private Timeline featuredMovieSwitchTimeline;
@@ -145,10 +147,13 @@ public class LoginController implements Initializable {
             final Parent root = loader.load();
             final Stage stage = (Stage) this.googleSIgnInButton.getScene().getWindow();
             stage.setScene(new Scene(root));
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             LoginController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * @param event
@@ -164,10 +169,13 @@ public class LoginController implements Initializable {
             final Parent root = loader.load();
             final Stage stage = (Stage) this.microsoftSignInButton.getScene().getWindow();
             stage.setScene(new Scene(root));
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             LoginController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * @param event
@@ -211,6 +219,7 @@ public class LoginController implements Initializable {
                         break;
                 }
 
+
                 final FXMLLoader loader = new FXMLLoader(this.getClass().getResource(fxmlPath));
                 final Parent root = loader.load();
 
@@ -228,15 +237,20 @@ public class LoginController implements Initializable {
                 LOGGER.log(Level.INFO,
                         "User " + user.getEmail() + " with role " + user.getRole() + " logged in successfully");
 
-            } catch (Exception e) {
+            }
+ catch (Exception e) {
                 LOGGER.log(Level.SEVERE, "Error during login process", e);
                 throw new IOException("Failed to complete login process", e);
             }
-        } else {
+
+        }
+ else {
             final Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid email or password", ButtonType.CLOSE);
             alert.show();
         }
+
     }
+
 
     /**
      * @param event
@@ -252,11 +266,14 @@ public class LoginController implements Initializable {
 
             // Stop animations when navigating away
             stopAllAnimations();
-        } catch (IOException e) {
+        }
+ catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error switching to signup view", e);
             throw e;
         }
+
     }
+
 
     @Override
     /**
@@ -272,11 +289,15 @@ public class LoginController implements Initializable {
                     final Parent root = loader.load();
                     final Stage stage = (Stage) forgetPasswordHyperlink.getScene().getWindow();
                     stage.setScene(new Scene(root));
-                } catch (final IOException e) {
+                }
+ catch (final IOException e) {
                     throw new RuntimeException(e);
                 }
+
             }
-        });
+
+        }
+);
 
         this.forgetPasswordEmailHyperlink.setOnAction(new EventHandler<>() {
             @Override
@@ -287,20 +308,27 @@ public class LoginController implements Initializable {
                     final Stage stage = (Stage) forgetPasswordEmailHyperlink.getScene()
                             .getWindow();
                     stage.setScene(new Scene(root));
-                } catch (final IOException e) {
+                }
+ catch (final IOException e) {
                     throw new RuntimeException(e);
                 }
+
             }
-        });
+
+        }
+);
 
         // Ensure signUpButton has its event handler
         signUpButton.setOnAction(event -> {
             try {
                 switchToSignUp(event);
-            } catch (IOException e) {
+            }
+ catch (IOException e) {
                 LOGGER.log(Level.SEVERE, "Error switching to signup view", e);
             }
-        });
+
+        }
+);
 
         // Initialize arrays for dynamic elements
         dynamicParticles = new Circle[maxDynamicElements];
@@ -315,9 +343,11 @@ public class LoginController implements Initializable {
             initializeShapeAnimation();
             createDynamicAnimations();
             LOGGER.info("Animation initialization completed.");
-        }));
+        }
+));
         delayedInit.play();
     }
+
 
     /**
      * Creates dynamic animated elements on the screen
@@ -328,6 +358,7 @@ public class LoginController implements Initializable {
             LOGGER.warning("Cannot create dynamic animations: rootContainer and anchorPane are both null");
             return;
         }
+
 
         try {
             // Get a reference to the foreground AnchorPane (the last AnchorPane in the
@@ -342,6 +373,7 @@ public class LoginController implements Initializable {
                 return;
             }
 
+
             // Robustly find the foreground AnchorPane - look for the last AnchorPane child
             AnchorPane foregroundPane = null;
             for (int i = root.getChildren().size() - 1; i >= 0; i--) {
@@ -349,12 +381,15 @@ public class LoginController implements Initializable {
                     foregroundPane = (AnchorPane) root.getChildren().get(i);
                     break;
                 }
+
             }
+
 
             if (foregroundPane == null) {
                 LOGGER.warning("Cannot create dynamic animations: foreground AnchorPane not found in root container");
                 return;
             }
+
 
             // Create dynamic particles
             for (int i = 0; i < maxDynamicElements; i++) {
@@ -384,6 +419,7 @@ public class LoginController implements Initializable {
                 animateParticle(particle, i);
             }
 
+
             // Create polygons
             for (int i = 0; i < dynamicShapes.length; i++) {
                 Polygon shape = new Polygon();
@@ -400,6 +436,7 @@ public class LoginController implements Initializable {
                     points[j * 2] = centerX + radius * Math.cos(angle);
                     points[j * 2 + 1] = centerY + radius * Math.sin(angle);
                 }
+
 
                 shape.getPoints().addAll(points);
 
@@ -424,6 +461,7 @@ public class LoginController implements Initializable {
                 // Create animation
                 animateShape(shape, i);
             }
+
 
             // Create rectangles
             for (int i = 0; i < dynamicRectangles.length; i++) {
@@ -457,11 +495,15 @@ public class LoginController implements Initializable {
                 animateRectangle(rect, i);
             }
 
+
             LOGGER.info("Created " + maxDynamicElements + " dynamic particles and shapes");
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error creating dynamic animations: " + e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Creates animations for a particle
@@ -509,9 +551,11 @@ public class LoginController implements Initializable {
             moveY.play();
             scale.play();
             fade.play();
-        });
+        }
+);
         delay.play();
     }
+
 
     /**
      * Creates animations for a shape
@@ -549,9 +593,11 @@ public class LoginController implements Initializable {
             rotate.play();
             scale.play();
             move.play();
-        });
+        }
+);
         delay.play();
     }
+
 
     /**
      * Creates animations for a rectangle
@@ -599,9 +645,11 @@ public class LoginController implements Initializable {
             scale.play();
             fade.play();
             move.play();
-        });
+        }
+);
         delay.play();
     }
+
 
     /**
      * Initializes the featured movie display with image switching
@@ -634,13 +682,18 @@ public class LoginController implements Initializable {
                 featuredMovieSwitchTimeline.play();
 
                 LOGGER.info("Initialized featured movie: " + movieTitles[featuredIndex]);
-            } catch (Exception e) {
+            }
+ catch (Exception e) {
                 LOGGER.warning("Failed to load initial featured movie: " + e.getMessage());
             }
-        } else {
+
+        }
+ else {
             LOGGER.warning("Featured movie elements are null");
         }
+
     }
+
 
     /**
      * Switches the featured movie display with fade transitions
@@ -684,23 +737,29 @@ public class LoginController implements Initializable {
 
                     ParallelTransition fadeIn = new ParallelTransition(posterFadeIn, titleFadeIn);
                     fadeIn.play();
-                } catch (Exception ex) {
+                }
+ catch (Exception ex) {
                     LOGGER.warning("Error updating featured movie: " + ex.getMessage());
                 }
-            });
+
+            }
+);
 
             fadeOut.play();
 
             LOGGER.info("Updated featured movie to: " + featuredTitle);
         }
+
     }
+
 
     /**
      * Initializes the particle animation for floating red particles
      */
     private void initializeParticleAnimation() {
         Circle[] particles = { particle1, particle2, particle3, particle4, particle5, particle6,
-                particle7, particle8, particle9, particle10, particle11, particle12 };
+                particle7, particle8, particle9, particle10, particle11, particle12 }
+;
 
         for (int i = 0; i < particles.length; i++) {
             if (particles[i] != null) {
@@ -747,31 +806,42 @@ public class LoginController implements Initializable {
                 particleFade.play();
 
                 LOGGER.info("Started animations for particle" + (i + 1));
-            } else {
+            }
+ else {
                 LOGGER.warning("particle" + (i + 1) + " is null");
             }
+
         }
+
     }
+
 
     /**
      * Initializes the geometric shape animations
      */
     private void initializeShapeAnimation() {
         // Array of all existing shapes
-        Object[] shapes = { shape1, shape2, shape3, shape4, shape5, shape6 };
+        Object[] shapes = { shape1, shape2, shape3, shape4, shape5, shape6 }
+;
 
         for (int i = 0; i < shapes.length; i++) {
             if (shapes[i] != null) {
                 if (shapes[i] instanceof Polygon) {
                     animatePolygon((Polygon) shapes[i], i);
-                } else if (shapes[i] instanceof Rectangle) {
+                }
+ else if (shapes[i] instanceof Rectangle) {
                     animateRectangleShape((Rectangle) shapes[i], i);
-                } else if (shapes[i] instanceof Circle) {
+                }
+ else if (shapes[i] instanceof Circle) {
                     animateCircleShape((Circle) shapes[i], i);
                 }
+
             }
+
         }
+
     }
+
 
     /**
      * Animates a polygon shape
@@ -809,6 +879,7 @@ public class LoginController implements Initializable {
         LOGGER.info("Started animations for polygon shape" + (index + 1));
     }
 
+
     /**
      * Animates a rectangle shape
      */
@@ -842,6 +913,7 @@ public class LoginController implements Initializable {
 
         LOGGER.info("Started animations for rectangle shape" + (index + 1));
     }
+
 
     /**
      * Animates a circle shape
@@ -881,6 +953,7 @@ public class LoginController implements Initializable {
         LOGGER.info("Started animations for circle shape" + (index + 1));
     }
 
+
     /**
      * Stops all animations when leaving the login screen
      */
@@ -889,9 +962,11 @@ public class LoginController implements Initializable {
             featuredMovieSwitchTimeline.stop();
         }
 
+
         if (particleCreationTimeline != null) {
             particleCreationTimeline.stop();
         }
+
 
         // Clean up dynamic elements by removing them from the scene
         if (dynamicParticles != null) {
@@ -904,22 +979,31 @@ public class LoginController implements Initializable {
                 if (root != null && root.getChildren().size() > 2) {
                     foregroundPane = (AnchorPane) root.getChildren().get(2);
                 }
-            } catch (Exception e) {
+
+            }
+ catch (Exception e) {
                 LOGGER.fine("Could not access foreground pane for cleanup: " + e.getMessage());
             }
+
 
             if (foregroundPane != null) {
                 for (Circle particle : dynamicParticles) {
                     if (particle != null) {
                         try {
                             foregroundPane.getChildren().remove(particle);
-                        } catch (Exception e) {
+                        }
+ catch (Exception e) {
                             LOGGER.warning("Could not remove particle: " + e.getMessage());
                         }
+
                     }
+
                 }
+
             }
+
         }
+
 
         // Clean up dynamic shapes
         if (dynamicShapes != null) {
@@ -932,22 +1016,31 @@ public class LoginController implements Initializable {
                 if (root != null && root.getChildren().size() > 2) {
                     foregroundPane = (AnchorPane) root.getChildren().get(2);
                 }
-            } catch (Exception e) {
+
+            }
+ catch (Exception e) {
                 LOGGER.fine("Could not access foreground pane for cleanup: " + e.getMessage());
             }
+
 
             if (foregroundPane != null) {
                 for (Polygon shape : dynamicShapes) {
                     if (shape != null) {
                         try {
                             foregroundPane.getChildren().remove(shape);
-                        } catch (Exception e) {
+                        }
+ catch (Exception e) {
                             LOGGER.warning("Could not remove shape: " + e.getMessage());
                         }
+
                     }
+
                 }
+
             }
+
         }
+
 
         // Clean up dynamic rectangles
         if (dynamicRectangles != null) {
@@ -960,23 +1053,34 @@ public class LoginController implements Initializable {
                 if (root != null && root.getChildren().size() > 2) {
                     foregroundPane = (AnchorPane) root.getChildren().get(2);
                 }
-            } catch (Exception e) {
+
+            }
+ catch (Exception e) {
                 LOGGER.fine("Could not access foreground pane for cleanup: " + e.getMessage());
             }
+
 
             if (foregroundPane != null) {
                 for (Rectangle rect : dynamicRectangles) {
                     if (rect != null) {
                         try {
                             foregroundPane.getChildren().remove(rect);
-                        } catch (Exception e) {
+                        }
+ catch (Exception e) {
                             LOGGER.warning("Could not remove rectangle: " + e.getMessage());
                         }
+
                     }
+
                 }
+
             }
+
         }
+
 
         LOGGER.info("All animations stopped and dynamic elements cleaned up");
     }
+
 }
+

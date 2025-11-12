@@ -74,6 +74,7 @@ public class Product {
         this.quantity = quantity;
     }
 
+
     /**
      * Constructor with only id for creating product references.
      *
@@ -84,6 +85,7 @@ public class Product {
         this.id = productId;
     }
 
+
     /**
      * Returns the categories of the product.
      *
@@ -92,6 +94,7 @@ public class Product {
     public List<ProductCategory> getCategories() {
         return this.categories;
     }
+
 
     /**
      * Sets the categories of the product.
@@ -102,6 +105,7 @@ public class Product {
     public void setCategories(final List<ProductCategory> categories) {
         this.categories = categories;
     }
+
 
     /**
      * Returns the name of the categories of the product, concatenated as a string.
@@ -114,4 +118,6 @@ public class Product {
                         .orElse(null)
                 : null;
     }
+
 }
+

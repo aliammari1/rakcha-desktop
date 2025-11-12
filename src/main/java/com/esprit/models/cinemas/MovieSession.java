@@ -63,6 +63,7 @@ public class MovieSession {
         this.tickets = new ArrayList<>();
     }
 
+
     /**
      * Constructor with LocalDate for creating new movie session instances.
      */
@@ -76,4 +77,6 @@ public class MovieSession {
         this.price = price;
         this.tickets = new ArrayList<>();
     }
+
 }
+

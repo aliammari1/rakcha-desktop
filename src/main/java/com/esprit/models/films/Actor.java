@@ -56,6 +56,7 @@ public class Actor {
         this.categories = new ArrayList<>();
     }
 
+
     /**
      * Constructor with id for existing actor instances.
      * 
@@ -73,6 +74,7 @@ public class Actor {
         this.categories = new ArrayList<>();
     }
 
+
     /**
      * Constructor with only id.
      * 
@@ -83,4 +85,6 @@ public class Actor {
         this.films = new ArrayList<>();
         this.categories = new ArrayList<>();
     }
+
 }
+

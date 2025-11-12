@@ -102,6 +102,7 @@ public class PaymentController {
         this.cvc.setValueFactory(valueFactory_cvc);
     }
 
+
     /**
      * Sets the `MovieSession` object's fields and updates spinner values for the
      * year, month, and cvc based on the `MovieSession` object's `prix` field and
@@ -142,11 +143,15 @@ public class PaymentController {
         this.spinnerTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             try {
                 this.cvc.getValueFactory().setValue(Integer.parseInt(newValue));
-            } catch (final NumberFormatException e) {
+            }
+ catch (final NumberFormatException e) {
                 // Handle invalid input
             }
-        });
+
+        }
+);
     }
+
 
     /**
      * Processes a payment after validating all required input fields.
@@ -177,7 +182,8 @@ public class PaymentController {
             alert.showAndWait();
             this.client_name.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             // new animatefx.animation.Shake(client_name).play();
-        } else if (this.email.getText().isEmpty()) {
+        }
+ else if (this.email.getText().isEmpty()) {
             final Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("You need to input your Email");
             alert.setTitle("Problem");
@@ -185,7 +191,8 @@ public class PaymentController {
             alert.showAndWait();
             this.email.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             // new animatefx.animation.Shake(email).play();
-        } else if (!this.isValidEmail(this.email.getText())) {
+        }
+ else if (!this.isValidEmail(this.email.getText())) {
             final Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Please enter a valid Email address.");
             alert.setTitle("Problem");
@@ -193,7 +200,8 @@ public class PaymentController {
             alert.showAndWait();
             this.email.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             // new animatefx.animation.Shake(email).play();
-        } else if (this.num_card.getText().isEmpty()) {
+        }
+ else if (this.num_card.getText().isEmpty()) {
             final Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("You need to input your Card Number");
             alert.setTitle("Problem");
@@ -201,7 +209,8 @@ public class PaymentController {
             alert.showAndWait();
             this.num_card.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             // new animatefx.animation.Shake(num_card).play();
-        } else if (!this.check_cvc(this.cvc.getValue())) {
+        }
+ else if (!this.check_cvc(this.cvc.getValue())) {
             final Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("The CVC number should contain three digits");
             alert.setTitle("Problem");
@@ -209,7 +218,8 @@ public class PaymentController {
             alert.showAndWait();
             this.cvc.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             // new animatefx.animation.Shake(cvc).play();
-        } else if (!this.check_expDate(this.YY.getValue(), this.MM.getValue())) {
+        }
+ else if (!this.check_expDate(this.YY.getValue(), this.MM.getValue())) {
             final Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Please enter a valid expiration date");
             alert.setTitle("Problem");
@@ -219,7 +229,8 @@ public class PaymentController {
             this.YY.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             // new animatefx.animation.Shake(MM).play();
             // new animatefx.animation.Shake(YY).play();
-        } else {
+        }
+ else {
             this.client_name.setStyle(null);
             this.email.setStyle(null);
             this.num_card.setStyle(null);
@@ -235,7 +246,8 @@ public class PaymentController {
                 alert.showAndWait();
                 this.num_card.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
                 // new animatefx.animation.Shake(num_card).play();
-            } else {
+            }
+ else {
                 this.num_card.setStyle(null);
                 final String name = this.client_name.getText();
                 final String email_txt = this.email.getText();
@@ -256,7 +268,8 @@ public class PaymentController {
                     // ReservationService rs = new ReservationService();
                     // rs.updateEntity(this.reservation);
                     // redirect_to_successPage();
-                } else {
+                }
+ else {
                     final Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setContentText("Payment Failed.");
                     alert.setTitle("Problem");
@@ -264,9 +277,13 @@ public class PaymentController {
                     alert.showAndWait();
                     // redirect_to_FailPage();
                 }
+
             }
+
         }
+
     }
+
 
     /**
      * Verifies if a given integer value can be represented as a three-digit credit
@@ -279,6 +296,7 @@ public class PaymentController {
         final String cvc_txt = String.valueOf(value);
         return 3 == cvc_txt.length();
     }
+
 
     /**
      * Validates if the provided expiration date is in the future.
@@ -299,8 +317,10 @@ public class PaymentController {
         if ((value_y >= date.getYear()) && (value_mm >= date.getMonthValue())) {
             valid = true;
         }
+
         return valid;
     }
+
 
     /**
      * Validates a credit card number using a regular expression pattern.
@@ -323,7 +343,16 @@ public class PaymentController {
         if (13 > length || 19 < length) {
             return false;
         }
-        final String regex = "^(?:(?:4[0-9]{12}(?:[0-9]{3})?)|(?:5[1-5][0-9]{14})|(?:6(?:011|5[0-9][0-9])[0-9]{12})|(?:3[47][0-9]{13})|(?:3(?:0[0-5]|[68][0-9])[0-9]{11})|(?:((?:2131|1800|35[0-9]{3})[0-9]{11})))$";
+
+        final String regex = "^(?:(?:4[0-9]{12}
+(?:[0-9]{3}
+)?)|(?:5[1-5][0-9]{14}
+)|(?:6(?:011|5[0-9][0-9])[0-9]{12}
+)|(?:3[47][0-9]{13}
+)|(?:3(?:0[0-5]|[68][0-9])[0-9]{11}
+)|(?:((?:2131|1800|35[0-9]{3}
+)[0-9]{11}
+)))$";
         // Create a Pattern object with the regular expression
         final Pattern pattern = Pattern.compile(regex);
         // Match the pattern against the credit card number
@@ -331,6 +360,7 @@ public class PaymentController {
         // Return true if the pattern matches, false otherwise
         return matcher.matches();
     }
+
 
     /**
      * Validates an email address using a regular expression pattern.
@@ -347,7 +377,8 @@ public class PaymentController {
         // Trim the input string to remove any leading or trailing whitespace
         email = email.trim();
         // Regular expression pattern to match an email address
-        final String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+        final String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}
+$";
         // Compile the pattern
         final Pattern pattern = Pattern.compile(regex);
         // Match the pattern against the email address
@@ -355,6 +386,7 @@ public class PaymentController {
         // Return true if the pattern matches, false otherwise
         return matcher.matches();
     }
+
 
     /**
      * Redirects the user to a success page with data loaded from an external
@@ -371,10 +403,13 @@ public class PaymentController {
         // Scene scene = new Scene(root);
         // Stage stage = (Stage) pay_btn.getScene().getWindow();
         // stage.setScene(scene);
-        // } catch (IOException ex) {
+        // }
+ catch (IOException ex) {
         // LOGGER.info(ex.getMessage());
         // }
+
     }
+
 
     //
 
@@ -394,10 +429,13 @@ public class PaymentController {
         // Scene scene = new Scene(root);
         // Stage stage = (Stage) pay_btn.getScene().getWindow();
         // stage.setScene(scene);
-        // } catch (IOException ex) {
+        // }
+ catch (IOException ex) {
         // LOGGER.info(ex.getMessage());
         // }
+
     }
+
 
     //
 
@@ -424,8 +462,12 @@ public class PaymentController {
         // Scene scene = new Scene(root);
         // Stage stage = (Stage) back_btn.getScene().getWindow();
         // stage.setScene(scene);
-        // } catch (IOException ex) {
+        // }
+ catch (IOException ex) {
         // LOGGER.info(ex.getMessage());
         // }
+
     }
+
 }
+

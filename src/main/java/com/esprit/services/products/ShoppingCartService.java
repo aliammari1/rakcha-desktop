@@ -51,6 +51,7 @@ public class ShoppingCartService implements IService<ShoppingCart> {
                 """);
     }
 
+
     @Override
     /**
      * Creates a new entity in the database.
@@ -67,10 +68,13 @@ public class ShoppingCartService implements IService<ShoppingCart> {
             pst.setLong(3, shoppingCart.getUser().getId());
             pst.executeUpdate();
             ShoppingCartService.LOGGER.info("ShoppingCart filled!");
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             ShoppingCartService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Performs readUserShoppingCart operation.
@@ -92,8 +96,10 @@ public class ShoppingCartService implements IService<ShoppingCart> {
                     .build();
             shoppingCarts.add(shoppingCart);
         }
+
         return shoppingCarts;
     }
+
 
     @Override
     /**
@@ -112,10 +118,13 @@ public class ShoppingCartService implements IService<ShoppingCart> {
             pst.setLong(4, shoppingCart.getId());
             pst.executeUpdate();
             ShoppingCartService.LOGGER.info("ShoppingCart updated!");
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             ShoppingCartService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     @Override
     /**
@@ -132,14 +141,19 @@ public class ShoppingCartService implements IService<ShoppingCart> {
             pst.setLong(2, shoppingCart.getUser().getId());
             pst.executeUpdate();
             ShoppingCartService.LOGGER.info("ShoppingCart deleted!");
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             ShoppingCartService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     @Override
     public Page<ShoppingCart> read(PageRequest pageRequest) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'read'");
     }
+
 }
+

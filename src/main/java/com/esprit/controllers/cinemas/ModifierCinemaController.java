@@ -74,6 +74,7 @@ public class ModifierCinemaController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
     }
 
+
     /**
      * Initializes the form with cinema data for editing.
      * 
@@ -95,7 +96,9 @@ public class ModifierCinemaController implements Initializable {
             Image image = new Image(logo);
             tfLogo.setImage(image);
         }
+
     }
+
 
     /**
      * Allows users to edit the details of a cinema, including its name and address.
@@ -114,6 +117,7 @@ public class ModifierCinemaController implements Initializable {
             showAlert("Veuillez sélectionner un cinéma.");
             return;
         }
+
         // Récupérer les nouvelles valeurs des champs
         String nouveauNom = tfNom.getText();
         String nouvelleAdresse = tfAdresse.getText();
@@ -122,6 +126,7 @@ public class ModifierCinemaController implements Initializable {
             showAlert("Veuillez remplir tous les champs obligatoires.");
             return;
         }
+
         // Mettre à jour les informations du cinéma
         cinema.setName(nouveauNom);
         cinema.setAddress(nouvelleAdresse);
@@ -140,6 +145,7 @@ public class ModifierCinemaController implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
+
 
     /**
      * Handles file selection for cinema logo images.
@@ -163,7 +169,9 @@ public class ModifierCinemaController implements Initializable {
             final Image selectedImage = new Image(this.selectedFile.toURI().toString());
             this.tfLogo.setImage(selectedImage);
         }
+
     }
+
 
     /**
      * Creates an Alert dialog with an information message.
@@ -180,4 +188,6 @@ public class ModifierCinemaController implements Initializable {
         alert.setContentText(message);
         alert.show();
     }
+
 }
+

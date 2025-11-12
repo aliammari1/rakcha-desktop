@@ -124,6 +124,7 @@ public class PaymentUserController implements Initializable {
         return str.matches(expression);
     }
 
+
     /**
      * Converts a `float` argument into an `int` value by calling the `int` casting
      * operator `(int)`.
@@ -135,6 +136,7 @@ public class PaymentUserController implements Initializable {
     public static int doubleToInt(final double value) {
         return (int) value;
     }
+
 
     /**
      * Sets the `client` field and displays the film name on a label. It also prints
@@ -154,6 +156,7 @@ public class PaymentUserController implements Initializable {
         this.filmLabel_Payment.setText(filmName);
         PaymentUserController.LOGGER.info("payment: " + client);
     }
+
 
     /**
      * Reads the film and cinema data, creates a combobox for selecting cinemas and
@@ -195,7 +198,8 @@ public class PaymentUserController implements Initializable {
     public void initialize(final URL url, final ResourceBundle rb) {
         this.anchorpane_payment.getChildren().forEach(node -> {
             node.setDisable(true);
-        });
+        }
+);
         this.filmm.setDisable(false);
         this.cinemacombox_res.setDisable(false);
         this.cinemacombox_res.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
@@ -260,8 +264,11 @@ public class PaymentUserController implements Initializable {
                             .add("MovieSession " + (i + 1) + " " + moviesessions.get(i).getSessionDate() + " "
                                     + moviesessions.get(i).getStartTime() + "-" + moviesessions.get(i).getEndTime());
                 }
+
             }
-        });
+
+        }
+);
         this.checkcomboboxmoviesession_res.getCheckModel().getCheckedItems()
                 .addListener(new ListChangeListener<String>() {
                     /**
@@ -307,9 +314,13 @@ public class PaymentUserController implements Initializable {
                                         .setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1,
                                                 moviesessions.get(0).getCinemaHall().getSeatCapacity(), 1, 1));
                             }
+
                         }
+
                     }
-                });
+
+                }
+);
         this.nbrplacepPayment_Spinner.valueProperty().addListener(new ChangeListener<Integer>() {
             /**
              * Reads the moviesessions available for a given film and cinema, calculates the
@@ -366,19 +377,25 @@ public class PaymentUserController implements Initializable {
                     totalPrice += moviesessions.get(i).getPrice()
                             * nbrplacepPayment_Spinner.getValue();
                 }
+
                 PaymentUserController.LOGGER.info(String.valueOf(totalPrice));
                 final String total_txt = "Total : " + totalPrice + " Dt.";
                 total.setText(total_txt);
             }
-        });
+
+        }
+);
         final CinemaService cinemaService = new CinemaService();
         final List<Cinema> cinemaList = cinemaService.read(PageRequest.defaultPage()).getContent();
         if (null != cinemaList) {
             for (final Cinema cinema : cinemaList) {
                 this.cinemacombox_res.getItems().add(cinema.getName());
             }
+
         }
+
     }
+
 
     /**
      * Processes a payment for a ticket purchase by first checking if the input is
@@ -405,12 +422,14 @@ public class PaymentUserController implements Initializable {
                 seatService.updateSeatStatus(seat.getId(), true);
             }
 
+
             // Continue with payment processing
             final double f = this.moviesession.getPrice() * 100; // Potential NPE if moviesession is null
             // Add null check:
             if (this.moviesession == null) {
                 return;
             }
+
             final int k = PaymentUserController.doubleToInt(f);
             final String url = Paymentuser.pay(k);
             final Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -423,15 +442,19 @@ public class PaymentUserController implements Initializable {
             // try (InputStream in = new URL(url).openStream()) {
             // Files.copy(in, Paths.get(dest.toUri()));
             // LOGGER.info("PDF downloaded successfully");
-            // } catch (Exception e) {
+            // }
+ catch (Exception e) {
             // LOGGER.log(Level.SEVERE, e.getMessage(), e);
             // }
+
             // try {
             // Desktop.getDesktop().open(new File("stripe.pdf"));
-            // } catch (IOException e) {
+            // }
+ catch (IOException e) {
             // LOGGER.log(Level.SEVERE, e.getMessage(), e);
             // throw new RuntimeException(e);
             // }
+
             webView.getEngine().load(url);
             // create scene
             // stage.getIcons().add(new Image("/Images/logo.png"));
@@ -441,11 +464,13 @@ public class PaymentUserController implements Initializable {
             // show stage
             stage.show();
         }
+
         // long clientId=GuiLoginController.user.getId().intValue();
         long clientId = this.client.getId();
         if (0 == clientId) {
             clientId = 1;
         }
+
         // Creating a product order
         final Ticket ticket = new Ticket();
         ticket.setPrice(ticket.getPrice() * ticket.getNumberOfSeats()); // Replace with actual product price
@@ -457,6 +482,7 @@ public class PaymentUserController implements Initializable {
         // Saving the product order
         scom.create(ticket);
     }
+
 
     /**
      * Validates all payment input fields.
@@ -479,23 +505,28 @@ public class PaymentUserController implements Initializable {
             this.showError("Numéro de carte invalide", "Veuillez entrer un numéro de carte Visa valide.");
             return false;
         }
+
         if (this.moisExp.getText().isEmpty() || !PaymentUserController.isNum(this.moisExp.getText())
                 || 1 > Integer.parseInt(moisExp.getText()) || 12 < Integer.parseInt(moisExp.getText())) {
             this.showError("Mois d'expiration invalide",
                     "Veuillez entrer un mois d'expiration valide (entre 1 et 12).");
             return false;
         }
+
         if (this.anneeExp.getText().isEmpty() || !PaymentUserController.isNum(this.anneeExp.getText())
                 || Integer.parseInt(this.anneeExp.getText()) < LocalDate.now().getYear()) {
             this.showError("Année d'expiration invalide", "Veuillez entrer une année d'expiration valide.");
             return false;
         }
+
         if (this.cvc.getText().isEmpty() || !PaymentUserController.isNum(this.cvc.getText())) {
             this.showError("Code CVC invalide", "Veuillez entrer un code CVC numérique valide.");
             return false;
         }
+
         return true;
     }
+
 
     /**
      * Takes a string as input and checks if it matches the valid Visa card number
@@ -509,18 +540,23 @@ public class PaymentUserController implements Initializable {
      *          <p>
      *          - The function returns a boolean value indicating whether the given
      *          text represents a valid Visa card number or not. - The output is
-     *          based on the pattern `(^4[0-9]{12}(?:[0-9]{3})?$)` which is used to
+     *          based on the pattern `(^4[0-9]{12}
+(?:[0-9]{3}
+)?$)` which is used to
      *          validate the Visa card number. - The pattern checks that the card
      *          number consists of 12 digits, with the first 4 digits being "4", and
      *          optionally followed by a further 3 digits.
      */
     private boolean isValidVisaCardNo(final String text) {
-        final String regex = "^4[0-9]{12}(?:[0-9]{3})?$";
+        final String regex = "^4[0-9]{12}
+(?:[0-9]{3}
+)?$";
         final Pattern p = Pattern.compile(regex);
         final CharSequence cs = text;
         final Matcher m = p.matcher(cs);
         return m.matches();
     }
+
 
     /**
      * Creates an Alert object with an error title and message, displays it using
@@ -543,6 +579,7 @@ public class PaymentUserController implements Initializable {
         alert.showAndWait();
     }
 
+
     /**
      * Sets the values of class variables `client` and `moviesession`, and updates
      * the text of a label `total`.
@@ -559,6 +596,7 @@ public class PaymentUserController implements Initializable {
         moviesession = p;
         this.total.setText("Payer " + p.getPrice() + "dinars");
     }
+
 
     /**
      * Initializes the payment controller with movie session, client, and selected
@@ -589,6 +627,7 @@ public class PaymentUserController implements Initializable {
         nbrplacepPayment_Spinner.getValueFactory().setValue(selectedSeats.size());
     }
 
+
     /**
      * Loads and displays a FXML file named "/ui/films/filmuser.fxml" using Java's
      * `FXMLLoader` class, creating a new stage and scene to display the content.
@@ -607,10 +646,13 @@ public class PaymentUserController implements Initializable {
             final Stage stage = (Stage) this.anchorpane_payment.getScene().getWindow();
             final Scene scene = new Scene(root, 1507, 855);
             stage.setScene(scene);
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             PaymentUserController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Creates a PDF receipt for a ticket purchase.
@@ -639,7 +681,9 @@ public class PaymentUserController implements Initializable {
             contentStream.close();
             document.save(filename);
         }
+
     }
+
 
     /**
      * Opens a PDF file using the desktop application.
@@ -652,5 +696,8 @@ public class PaymentUserController implements Initializable {
             final File myFile = new File(filename);
             Desktop.getDesktop().open(myFile);
         }
+
     }
+
 }
+

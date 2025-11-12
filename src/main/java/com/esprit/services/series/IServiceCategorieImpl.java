@@ -32,7 +32,8 @@ public class IServiceCategorieImpl implements IService<Category> {
     private final Connection connection;
 
     // Allowed columns for sorting to prevent SQL injection
-    private static final String[] ALLOWED_SORT_COLUMNS = { "id", "name", "description" };
+    private static final String[] ALLOWED_SORT_COLUMNS = { "id", "name", "description" }
+;
 
     /**
      * Constructs a new IServiceCategorieImpl instance.
@@ -55,10 +56,13 @@ public class IServiceCategorieImpl implements IService<Category> {
                     """;
             tableCreator.createTableIfNotExists("category", createCategoryTable);
 
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             log.error("Error creating tables for IServiceCategorieImpl", e);
         }
+
     }
+
 
     @Override
     /**
@@ -74,11 +78,14 @@ public class IServiceCategorieImpl implements IService<Category> {
             st.setString(2, category.getDescription());
             st.executeUpdate();
             LOGGER.info("Category added successfully");
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error creating category: " + e.getMessage(), e);
             throw new RuntimeException("Failed to create category", e);
         }
+
     }
+
 
     @Override
     /**
@@ -95,11 +102,14 @@ public class IServiceCategorieImpl implements IService<Category> {
             os.setLong(3, category.getId());
             os.executeUpdate();
             LOGGER.info("Category updated successfully");
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error updating category: " + e.getMessage(), e);
             throw new RuntimeException("Failed to update category", e);
         }
+
     }
+
 
     @Override
     /**
@@ -114,11 +124,14 @@ public class IServiceCategorieImpl implements IService<Category> {
             os.setLong(1, category.getId());
             os.executeUpdate();
             LOGGER.info("Category deleted successfully");
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error deleting category: " + e.getMessage(), e);
             throw new RuntimeException("Failed to delete category", e);
         }
+
     }
+
 
     @Override
     /**
@@ -138,6 +151,7 @@ public class IServiceCategorieImpl implements IService<Category> {
             pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
 
+
         try {
             // Get total count
             final String countQuery = PaginationQueryBuilder.buildCountQuery(baseQuery);
@@ -152,15 +166,20 @@ public class IServiceCategorieImpl implements IService<Category> {
                     final Category category = buildCategoryFromResultSet(rs);
                     content.add(category);
                 }
+
             }
+
 
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
 
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error retrieving paginated categories: " + e.getMessage(), e);
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
         }
+
     }
+
 
     /**
      * Helper method to build Category object from ResultSet.
@@ -176,6 +195,7 @@ public class IServiceCategorieImpl implements IService<Category> {
                 .description(rs.getString("description"))
                 .build();
     }
+
 
     /**
      * Retrieves the CategoriesStatistics value.
@@ -198,9 +218,14 @@ public class IServiceCategorieImpl implements IService<Category> {
                 final long seriesCount = resultSet.getLong("series_count");
                 statistics.put(category, seriesCount);
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return statistics;
     }
+
 }
+

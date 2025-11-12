@@ -120,11 +120,14 @@ public class SignUpController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/users/Login.fxml"));
             Parent root = loader.load();
             stage.setScene(new Scene(root));
-        } catch (IOException e) {
+        }
+ catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error switching to login view", e);
             throw e;
         }
+
     }
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -140,7 +143,8 @@ public class SignUpController implements Initializable {
             initializeShapeAnimation();
             createDynamicAnimations();
             LOGGER.info("Animation initialization completed.");
-        }));
+        }
+));
         delayedInit.play();
 
         // Setup validation and data binding
@@ -150,11 +154,15 @@ public class SignUpController implements Initializable {
         loginButton.setOnAction(event -> {
             try {
                 switchToLogin(event);
-            } catch (IOException e) {
+            }
+ catch (IOException e) {
                 LOGGER.log(Level.SEVERE, "Error switching to login view", e);
             }
-        });
+
+        }
+);
     }
+
 
     /**
      * Set up form validation
@@ -169,25 +177,32 @@ public class SignUpController implements Initializable {
             if (!this.emailTextField.getText().matches(emailRegex)) {
                 this.emailTextField.getStyleClass().removeAll("checked");
                 this.emailTextField.getStyleClass().add("notChecked");
-            } else if (userService.checkEmailFound(newValue)) {
+            }
+ else if (userService.checkEmailFound(newValue)) {
                 this.emailTextField.getStyleClass().removeAll("checked");
                 this.emailTextField.getStyleClass().add("notChecked");
-            } else {
+            }
+ else {
                 this.emailTextField.getStyleClass().removeAll("notChecked");
                 this.emailTextField.getStyleClass().add("checked");
             }
-        });
+
+        }
+);
 
         // Password validation
         this.passwordTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (8 > passwordTextField.getLength()) {
                 this.passwordTextField.getStyleClass().removeAll("checked");
                 this.emailTextField.getStyleClass().add("notChecked");
-            } else {
+            }
+ else {
                 this.passwordTextField.getStyleClass().removeAll("notChecked");
                 this.passwordTextField.getStyleClass().add("checked");
             }
-        });
+
+        }
+);
 
         // Nom validation
         this.nomTextField.textProperty().addListener(new ChangeListener<String>() {
@@ -200,10 +215,13 @@ public class SignUpController implements Initializable {
                             final String userName = c.get("firstName");
                             if (null != userName && !userName.toLowerCase().equals(userName)) {
                                 c.error("Please use only lowercase letters.");
-                            } else if (userName.isEmpty()) {
+                            }
+ else if (userName.isEmpty()) {
                                 c.error("the string is empty");
                             }
-                        }).decorates(nomTextField).immediate();
+
+                        }
+).decorates(nomTextField).immediate();
                 final Window window = nomTextField.getScene().getWindow();
                 final Bounds bounds = nomTextField
                         .localToScreen(nomTextField.getBoundsInLocal());
@@ -217,13 +235,18 @@ public class SignUpController implements Initializable {
                             nomTextField.setTooltip(tooltip);
                             nomTextField.getTooltip().show(window, bounds.getMinX() - 10,
                                     bounds.getMinY() + 30);
-                        } else {
+                        }
+ else {
                             if (null != nomTextField.getTooltip()) {
                                 nomTextField.getTooltip().hide();
                             }
+
                         }
+
                     }
-                });
+
+                }
+);
                 nomTextField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
                     @Override
                     public void handle(final KeyEvent event) {
@@ -231,11 +254,17 @@ public class SignUpController implements Initializable {
                             if (validator.containsErrors()) {
                                 event.consume();
                             }
+
                         }
+
                     }
-                });
+
+                }
+);
             }
-        });
+
+        }
+);
 
         // Prenom validation
         this.prenomTextField.textProperty().addListener(new ChangeListener<String>() {
@@ -248,10 +277,13 @@ public class SignUpController implements Initializable {
                             final String userName = c.get("firstName");
                             if (null != userName && !userName.toLowerCase().equals(userName)) {
                                 c.error("Please use only lowercase letters.");
-                            } else if (userName.isEmpty()) {
+                            }
+ else if (userName.isEmpty()) {
                                 c.error("the string is empty");
                             }
-                        }).decorates(prenomTextField).immediate();
+
+                        }
+).decorates(prenomTextField).immediate();
                 final Window window = prenomTextField.getScene().getWindow();
                 final Bounds bounds = prenomTextField
                         .localToScreen(prenomTextField.getBoundsInLocal());
@@ -265,13 +297,18 @@ public class SignUpController implements Initializable {
                             prenomTextField.setTooltip(tooltip);
                             prenomTextField.getTooltip().show(window, bounds.getMinX() - 10,
                                     bounds.getMinY() + 30);
-                        } else {
+                        }
+ else {
                             if (null != prenomTextField.getTooltip()) {
                                 prenomTextField.getTooltip().hide();
                             }
+
                         }
+
                     }
-                });
+
+                }
+);
                 prenomTextField.addEventFilter(KeyEvent.KEY_PRESSED,
                         new EventHandler<KeyEvent>() {
                             @Override
@@ -280,11 +317,17 @@ public class SignUpController implements Initializable {
                                     if (validator.containsErrors()) {
                                         event.consume();
                                     }
+
                                 }
+
                             }
-                        });
+
+                        }
+);
             }
-        });
+
+        }
+);
 
         // Adresse validation
         this.adresseTextField.textProperty().addListener(new ChangeListener<String>() {
@@ -297,10 +340,13 @@ public class SignUpController implements Initializable {
                             final String userName = c.get("firstName");
                             if (null != userName && !userName.toLowerCase().equals(userName)) {
                                 c.error("Please use only lowercase letters.");
-                            } else if (userName.isEmpty()) {
+                            }
+ else if (userName.isEmpty()) {
                                 c.error("the string is empty");
                             }
-                        }).decorates(adresseTextField).immediate();
+
+                        }
+).decorates(adresseTextField).immediate();
                 final Window window = adresseTextField.getScene().getWindow();
                 final Bounds bounds = adresseTextField
                         .localToScreen(adresseTextField.getBoundsInLocal());
@@ -314,13 +360,18 @@ public class SignUpController implements Initializable {
                             adresseTextField.setTooltip(tooltip);
                             adresseTextField.getTooltip().show(window, bounds.getMinX() - 10,
                                     bounds.getMinY() + 30);
-                        } else {
+                        }
+ else {
                             if (null != adresseTextField.getTooltip()) {
                                 adresseTextField.getTooltip().hide();
                             }
+
                         }
+
                     }
-                });
+
+                }
+);
                 adresseTextField.addEventFilter(KeyEvent.KEY_PRESSED,
                         new EventHandler<KeyEvent>() {
                             @Override
@@ -329,11 +380,17 @@ public class SignUpController implements Initializable {
                                     if (validator.containsErrors()) {
                                         event.consume();
                                     }
+
                                 }
+
                             }
-                        });
+
+                        }
+);
             }
-        });
+
+        }
+);
 
         // Email validation
         this.emailTextField.textProperty().addListener(new ChangeListener<String>() {
@@ -345,14 +402,19 @@ public class SignUpController implements Initializable {
                         .withMethod(c -> {
                             final String userName = c.get("firstName");
                             if (null != userName) {
-                                final String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+                                final String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}
+$";
                                 if (!userName.matches(emailRegex)) {
                                     c.error("Invalid email format.");
                                 }
-                            } else if (userName.isEmpty()) {
+
+                            }
+ else if (userName.isEmpty()) {
                                 c.error("the string is empty");
                             }
-                        }).decorates(emailTextField).immediate();
+
+                        }
+).decorates(emailTextField).immediate();
                 final Window window = emailTextField.getScene().getWindow();
                 final Bounds bounds = emailTextField
                         .localToScreen(emailTextField.getBoundsInLocal());
@@ -366,13 +428,18 @@ public class SignUpController implements Initializable {
                             emailTextField.setTooltip(tooltip);
                             emailTextField.getTooltip().show(window, bounds.getMinX() - 10,
                                     bounds.getMinY() + 30);
-                        } else {
+                        }
+ else {
                             if (null != emailTextField.getTooltip()) {
                                 emailTextField.getTooltip().hide();
                             }
+
                         }
+
                     }
-                });
+
+                }
+);
                 emailTextField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
                     @Override
                     public void handle(final KeyEvent event) {
@@ -380,11 +447,17 @@ public class SignUpController implements Initializable {
                             if (validator.containsErrors()) {
                                 event.consume();
                             }
+
                         }
+
                     }
-                });
+
+                }
+);
             }
-        });
+
+        }
+);
 
         // Password validation
         this.passwordTextField.textProperty().addListener(new ChangeListener<String>() {
@@ -397,10 +470,13 @@ public class SignUpController implements Initializable {
                             final String userName = c.get("firstName");
                             if (null != userName && !userName.toLowerCase().equals(userName)) {
                                 c.error("Please use only lowercase letters.");
-                            } else if (userName.isEmpty()) {
+                            }
+ else if (userName.isEmpty()) {
                                 c.error("the string is empty");
                             }
-                        }).decorates(passwordTextField).immediate();
+
+                        }
+).decorates(passwordTextField).immediate();
                 final Window window = passwordTextField.getScene().getWindow();
                 final Bounds bounds = passwordTextField
                         .localToScreen(passwordTextField.getBoundsInLocal());
@@ -414,13 +490,18 @@ public class SignUpController implements Initializable {
                             passwordTextField.setTooltip(tooltip);
                             passwordTextField.getTooltip().show(window, bounds.getMinX() - 10,
                                     bounds.getMinY() + 30);
-                        } else {
+                        }
+ else {
                             if (null != passwordTextField.getTooltip()) {
                                 passwordTextField.getTooltip().hide();
                             }
+
                         }
+
                     }
-                });
+
+                }
+);
                 passwordTextField.addEventFilter(KeyEvent.KEY_PRESSED,
                         new EventHandler<KeyEvent>() {
                             @Override
@@ -429,11 +510,17 @@ public class SignUpController implements Initializable {
                                     if (validator.containsErrors()) {
                                         event.consume();
                                     }
+
                                 }
+
                             }
-                        });
+
+                        }
+);
             }
-        });
+
+        }
+);
 
         // Phone number validation
         this.num_telephoneTextField.textProperty().addListener(new ChangeListener<String>() {
@@ -450,10 +537,14 @@ public class SignUpController implements Initializable {
                                 if (!userName.matches(numberRegex)) {
                                     c.error("Please use only numbers.");
                                 }
-                            } else if (userName.isEmpty()) {
+
+                            }
+ else if (userName.isEmpty()) {
                                 c.error("the string is empty");
                             }
-                        }).decorates(num_telephoneTextField).immediate();
+
+                        }
+).decorates(num_telephoneTextField).immediate();
                 final Window window = num_telephoneTextField.getScene().getWindow();
                 final Bounds bounds = num_telephoneTextField
                         .localToScreen(num_telephoneTextField.getBoundsInLocal());
@@ -467,13 +558,18 @@ public class SignUpController implements Initializable {
                             num_telephoneTextField.setTooltip(tooltip);
                             num_telephoneTextField.getTooltip().show(window,
                                     bounds.getMinX() - 10, bounds.getMinY() + 30);
-                        } else {
+                        }
+ else {
                             if (null != num_telephoneTextField.getTooltip()) {
                                 num_telephoneTextField.getTooltip().hide();
                             }
+
                         }
+
                     }
-                });
+
+                }
+);
                 num_telephoneTextField.addEventFilter(KeyEvent.KEY_PRESSED,
                         new EventHandler<KeyEvent>() {
                             @Override
@@ -482,18 +578,26 @@ public class SignUpController implements Initializable {
                                     if (validator.containsErrors()) {
                                         event.consume();
                                     }
+
                                 }
+
                             }
-                        });
+
+                        }
+);
             }
-        });
+
+        }
+);
 
         // Initialize role selection combobox
         final List<String> roleList = Arrays.asList("client", "responsable de cinema");
         for (final String role : roleList) {
             this.roleComboBox.getItems().add(role);
         }
+
     }
+
 
     /**
      * @param event
@@ -518,11 +622,15 @@ public class SignUpController implements Initializable {
 
                 LOGGER.info("Image uploaded to Cloudinary: " + cloudinaryImageUrl);
 
-            } catch (final IOException e) {
+            }
+ catch (final IOException e) {
                 SignUpController.LOGGER.log(Level.SEVERE, "Error uploading image to Cloudinary", e);
             }
+
         }
+
     }
+
 
     /**
      * @param event
@@ -545,16 +653,20 @@ public class SignUpController implements Initializable {
             alert.show();
             return;
         }
+
         if (!num_telephone.matches("\\d+")) {
             final Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid phone number format", ButtonType.CLOSE);
             alert.show();
             return;
         }
-        if (!email.matches("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}")) {
+
+        if (!email.matches("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}
+")) {
             final Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid email format", ButtonType.CLOSE);
             alert.show();
             return;
         }
+
         switch (role) {
             case "responsable de cinema":
                 user = new CinemaManager(this.nomTextField.getText(), this.prenomTextField.getText(),
@@ -577,6 +689,7 @@ public class SignUpController implements Initializable {
                 return;
         }
 
+
         try {
             // Stop animations before navigating away
             stopAllAnimations();
@@ -589,11 +702,14 @@ public class SignUpController implements Initializable {
             final ProfileController profileController = loader.getController();
             profileController.setData(user);
             stage.setScene(new Scene(root));
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error during signup process", e);
             throw new IOException("Failed to complete signup process", e);
         }
+
     }
+
 
     /**
      * Stops all animations when leaving the signup screen
@@ -603,81 +719,108 @@ public class SignUpController implements Initializable {
             particleCreationTimeline.stop();
         }
 
+
         // Clean up dynamic elements by removing them from the scene
         if (dynamicParticles != null) {
             AnchorPane foregroundPane = null;
             try {
                 foregroundPane = (AnchorPane) rootContainer.getChildren().get(2);
-            } catch (Exception e) {
+            }
+ catch (Exception e) {
                 LOGGER.warning("Could not access foreground pane for cleanup: " + e.getMessage());
             }
+
 
             if (foregroundPane != null) {
                 for (Circle particle : dynamicParticles) {
                     if (particle != null) {
                         try {
                             foregroundPane.getChildren().remove(particle);
-                        } catch (Exception e) {
+                        }
+ catch (Exception e) {
                             LOGGER.warning("Could not remove particle: " + e.getMessage());
                         }
+
                     }
+
                 }
+
             }
+
         }
+
 
         // Clean up dynamic shapes
         if (dynamicShapes != null) {
             AnchorPane foregroundPane = null;
             try {
                 foregroundPane = (AnchorPane) rootContainer.getChildren().get(2);
-            } catch (Exception e) {
+            }
+ catch (Exception e) {
                 LOGGER.warning("Could not access foreground pane for cleanup: " + e.getMessage());
             }
+
 
             if (foregroundPane != null) {
                 for (Polygon shape : dynamicShapes) {
                     if (shape != null) {
                         try {
                             foregroundPane.getChildren().remove(shape);
-                        } catch (Exception e) {
+                        }
+ catch (Exception e) {
                             LOGGER.warning("Could not remove shape: " + e.getMessage());
                         }
+
                     }
+
                 }
+
             }
+
         }
+
 
         // Clean up dynamic rectangles
         if (dynamicRectangles != null) {
             AnchorPane foregroundPane = null;
             try {
                 foregroundPane = (AnchorPane) rootContainer.getChildren().get(2);
-            } catch (Exception e) {
+            }
+ catch (Exception e) {
                 LOGGER.warning("Could not access foreground pane for cleanup: " + e.getMessage());
             }
+
 
             if (foregroundPane != null) {
                 for (Rectangle rect : dynamicRectangles) {
                     if (rect != null) {
                         try {
                             foregroundPane.getChildren().remove(rect);
-                        } catch (Exception e) {
+                        }
+ catch (Exception e) {
                             LOGGER.warning("Could not remove rectangle: " + e.getMessage());
                         }
+
                     }
+
                 }
+
             }
+
         }
+
 
         LOGGER.info("All animations stopped and dynamic elements cleaned up");
     }
+
 
     /**
      * Initializes the particle animation for floating red particles
      */
     private void initializeParticleAnimation() {
         Circle[] particles = { particle1, particle2, particle3, particle4, particle5, particle6,
-                particle7, particle8, particle9, particle10, particle11, particle12 };
+                particle7, particle8, particle9, particle10, particle11, particle12 }
+;
 
         for (int i = 0; i < particles.length; i++) {
             if (particles[i] != null) {
@@ -724,31 +867,42 @@ public class SignUpController implements Initializable {
                 particleFade.play();
 
                 LOGGER.info("Started animations for particle" + (i + 1));
-            } else {
+            }
+ else {
                 LOGGER.warning("particle" + (i + 1) + " is null");
             }
+
         }
+
     }
+
 
     /**
      * Initializes the geometric shape animations
      */
     private void initializeShapeAnimation() {
         // Array of all existing shapes
-        Object[] shapes = { shape1, shape2, shape3, shape4, shape5, shape6 };
+        Object[] shapes = { shape1, shape2, shape3, shape4, shape5, shape6 }
+;
 
         for (int i = 0; i < shapes.length; i++) {
             if (shapes[i] != null) {
                 if (shapes[i] instanceof Polygon) {
                     animatePolygon((Polygon) shapes[i], i);
-                } else if (shapes[i] instanceof Rectangle) {
+                }
+ else if (shapes[i] instanceof Rectangle) {
                     animateRectangleShape((Rectangle) shapes[i], i);
-                } else if (shapes[i] instanceof Circle) {
+                }
+ else if (shapes[i] instanceof Circle) {
                     animateCircleShape((Circle) shapes[i], i);
                 }
+
             }
+
         }
+
     }
+
 
     /**
      * Animates a polygon shape
@@ -786,6 +940,7 @@ public class SignUpController implements Initializable {
         LOGGER.info("Started animations for polygon shape" + (index + 1));
     }
 
+
     /**
      * Animates a rectangle shape
      */
@@ -819,6 +974,7 @@ public class SignUpController implements Initializable {
 
         LOGGER.info("Started animations for rectangle shape" + (index + 1));
     }
+
 
     /**
      * Animates a circle shape
@@ -858,6 +1014,7 @@ public class SignUpController implements Initializable {
         LOGGER.info("Started animations for circle shape" + (index + 1));
     }
 
+
     /**
      * Creates dynamic animated elements on the screen
      */
@@ -894,6 +1051,7 @@ public class SignUpController implements Initializable {
             animateParticle(particle, i);
         }
 
+
         // Create polygons
         for (int i = 0; i < dynamicShapes.length; i++) {
             Polygon shape = new Polygon();
@@ -910,6 +1068,7 @@ public class SignUpController implements Initializable {
                 points[j * 2] = centerX + radius * Math.cos(angle);
                 points[j * 2 + 1] = centerY + radius * Math.sin(angle);
             }
+
 
             shape.getPoints().addAll(points);
 
@@ -933,6 +1092,7 @@ public class SignUpController implements Initializable {
             // Create animation
             animateShape(shape, i);
         }
+
 
         // Create rectangles
         for (int i = 0; i < dynamicRectangles.length; i++) {
@@ -964,8 +1124,10 @@ public class SignUpController implements Initializable {
             animateRectangle(rect, i);
         }
 
+
         LOGGER.info("Created " + maxDynamicElements + " dynamic particles and shapes");
     }
+
 
     /**
      * Creates animations for a particle
@@ -1013,9 +1175,11 @@ public class SignUpController implements Initializable {
             moveY.play();
             scale.play();
             fade.play();
-        });
+        }
+);
         delay.play();
     }
+
 
     /**
      * Creates animations for a shape
@@ -1053,9 +1217,11 @@ public class SignUpController implements Initializable {
             rotate.play();
             scale.play();
             move.play();
-        });
+        }
+);
         delay.play();
     }
+
 
     /**
      * Creates animations for a rectangle
@@ -1103,7 +1269,10 @@ public class SignUpController implements Initializable {
             scale.play();
             fade.play();
             move.play();
-        });
+        }
+);
         delay.play();
     }
+
 }
+

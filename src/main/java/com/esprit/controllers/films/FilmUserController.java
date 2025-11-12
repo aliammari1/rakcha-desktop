@@ -184,9 +184,12 @@ public class FilmUserController {
             if (null != element.getName() && element.getName().contains(recherche)) {
                 resultats.add(element);
             }
+
         }
+
         return resultats;
     }
+
 
     /**
      * Loads an FXML user interface from a resource file, sets data for the
@@ -208,6 +211,7 @@ public class FilmUserController {
             return;
         }
 
+
         final FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/ui/films/SeatSelection.fxml"));
         final AnchorPane root = fxmlLoader.load();
         final Stage stage = (Stage) this.reserver_Film.getScene().getWindow();
@@ -217,6 +221,7 @@ public class FilmUserController {
         final Scene scene = new Scene(root);
         stage.setScene(scene);
     }
+
 
     /**
      * Displays an error alert with the given title and message.
@@ -240,6 +245,7 @@ public class FilmUserController {
         alert.showAndWait();
     }
 
+
     /**
      * Creates film cards for a list of films by creating an AnchorPane container
      * for each card and adding it to a `FlowPane` containing other cards.
@@ -258,7 +264,9 @@ public class FilmUserController {
             final AnchorPane cardContainer = this.createFilmCard(film);
             this.flowpaneFilm.getChildren().add(cardContainer);
         }
+
     }
+
 
     /**
      * Initializes the JavaFX controller and sets up UI components.
@@ -289,6 +297,7 @@ public class FilmUserController {
         Platform.runLater(this::setupRecommendations);
     }
 
+
     private void setupBasicUI() {
         PageRequest pageRequest = new PageRequest(0, 3);
         this.top3combobox.getItems().addAll("Top 3 Films", "Top 3 Actors");
@@ -297,7 +306,8 @@ public class FilmUserController {
             if ("Top 3 Films".equals(newValue)) {
                 this.topthreeVbox1.setVisible(false);
                 this.topthreeVbox.setVisible(true);
-            } else if ("Top 3 Actors".equals(newValue)) {
+            }
+ else if ("Top 3 Actors".equals(newValue)) {
                 final ObservableList<Node> topthreevboxactorsChildren = this.topthreeVbox1.getChildren();
                 topthreevboxactorsChildren.clear();
                 this.topthreeVbox.setVisible(false);
@@ -305,9 +315,12 @@ public class FilmUserController {
                 for (int i = 1; i < this.flowpaneFilm.getChildren().size() && 4 > i; i++) {
                     topthreevboxactorsChildren.add(this.createActorDetails(i));
                 }
+
                 this.topthreeVbox1.setSpacing(10);
             }
-        });
+
+        }
+);
         this.tricomboBox.getItems().addAll("nom", "annederalisation");
         this.tricomboBox.setValue("");
         this.tricomboBox.getSelectionModel().selectedItemProperty().addListener((observableValue, s, t1) -> {
@@ -316,7 +329,9 @@ public class FilmUserController {
             for (final Film film : filmList) {
                 this.flowpaneFilm.getChildren().add(this.createFilmCard(film));
             }
-        });
+
+        }
+);
         final FilmService filmService1 = new FilmService();
         PageRequest filmPageRequest = new PageRequest(0, 10);
         this.l1 = filmService1.read(filmPageRequest).getContent();
@@ -325,7 +340,8 @@ public class FilmUserController {
             // Effacer la FlowPane actuelle pour afficher les nouveaux résultats
             this.flowpaneFilm.getChildren().clear();
             this.createfilmCards(produitsRecherches);
-        });
+        }
+);
         this.flowpaneFilm = new FlowPane();
         this.filmScrollPane.setContent(this.flowpaneFilm);
         this.filmScrollPane.setFitToWidth(true);
@@ -341,18 +357,22 @@ public class FilmUserController {
             this.detalAnchorPane.setVisible(false);
             this.anchorPaneFilm.setOpacity(1);
             this.anchorPaneFilm.setDisable(false);
-        });
+        }
+);
         // Set better padding for card grid
         this.flowpaneFilm.setPadding(new Insets(10, 10, 10, 10));
         final List<Film> filmList = new FilmService().read(filmPageRequest).getContent();
         for (final Film film : filmList) {
             this.flowpaneFilm.getChildren().add(this.createFilmCard(film));
         }
+
         final ObservableList<Node> topthreevboxChildren = this.topthreeVbox.getChildren();
         for (int i = 0; i < this.flowpaneFilm.getChildren().size() && 3 > i; i++) {
             topthreevboxChildren.add(this.createtopthree(i));
         }
+
     }
+
 
     private void setupRecommendations() {
         if (filmScrollPane.getScene() != null && filmScrollPane.getScene().getWindow() != null) {
@@ -370,7 +390,9 @@ public class FilmUserController {
                             shareAlert.setContentText("Film URL: " + film.getImage());
                             shareAlert.showAndWait();
                         }
-                    });
+
+                    }
+);
                     ((AnchorPane) node).getChildren().add(shareButton);
 
                     // Set up drag and drop for sharing
@@ -383,10 +405,14 @@ public class FilmUserController {
                             content.putString("Film: " + film.getName() + "\nURL: " + film.getImage());
                             db.setContent(content);
                             event.consume();
-                        });
+                        }
+);
                     }
+
                 }
-            });
+
+            }
+);
 
             // Add recommendations section based on user history
             // This is a simplified version; in a real app, this would use actual user data
@@ -402,17 +428,25 @@ public class FilmUserController {
                         if (film != null) {
                             recommendationsBox.getChildren().add(createFilmCard(film));
                         }
+
                     }
+
                     // Add to main flow if there are recommendations
                     if (recommendationsBox.getChildren().size() > 1) {
                         flowpaneFilm.getChildren().add(recommendationsBox);
                     }
+
                 }
-            } catch (Exception e) {
+
+            }
+ catch (Exception e) {
                 LOGGER.log(Level.WARNING, "Failed to load recommendations", e);
             }
+
         }
+
     }
+
 
     /**
      * Filters film cards by name to show only matching films
@@ -429,8 +463,11 @@ public class FilmUserController {
                 filmCard.setVisible(isVisible);
                 filmCard.setManaged(isVisible);
             }
+
         }
+
     }
+
 
     /**
      * Creates a UI component representing a movie card with various details and
@@ -486,20 +523,26 @@ public class FilmUserController {
                     // Try loading directly as URL
                     Image image = new Image(imagePath, true); // Enable background loading
                     imageView.setImage(image);
-                } catch (Exception e) {
+                }
+ catch (Exception e) {
                     // Fallback to resource if URL fails
                     try {
                         imageView.setImage(new Image(getClass().getResourceAsStream("/img/films/default.jpg")));
                         LOGGER.log(Level.WARNING, "Failed to load image URL, using default: " + imagePath, e);
-                    } catch (Exception e2) {
+                    }
+ catch (Exception e2) {
                         LOGGER.log(Level.SEVERE, "Failed to load both URL and default image", e2);
                     }
+
                 }
-            } else {
+
+            }
+ else {
                 LOGGER.log(Level.WARNING, "Image path is null or empty for film ID: " + film.getId());
                 // Set a default image
                 imageView.setImage(new Image(getClass().getResourceAsStream("/img/films/default.jpg")));
             }
+
 
             // Set responsive image dimensions with red glow effect
             imageView.setFitWidth(235);
@@ -510,15 +553,19 @@ public class FilmUserController {
             imageView.setLayoutY(10);
             imageView.getStyleClass().add("film-card-image");
 
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             // Handle exception or set a default image
             try {
                 imageView.setImage(new Image(getClass().getResourceAsStream("/img/films/default.jpg")));
-            } catch (Exception e2) {
+            }
+ catch (Exception e2) {
                 LOGGER.log(Level.SEVERE, "Could not load any image, even default", e2);
             }
+
             LOGGER.log(Level.WARNING, "Failed to load image for film: " + film.getId(), e);
         }
+
 
         // Film title with white text and red glow
         final Label nomFilm = new Label(film.getName());
@@ -561,10 +608,13 @@ public class FilmUserController {
         button.setOnAction(event -> {
             try {
                 this.switchtopayment(nomFilm.getText());
-            } catch (final IOException e) {
+            }
+ catch (final IOException e) {
                 throw new RuntimeException(e);
             }
-        });
+
+        }
+);
 
         // View Details hyperlink with red theme
         final Hyperlink hyperlink = new Hyperlink("View Details");
@@ -586,16 +636,20 @@ public class FilmUserController {
             // Load detail image from URL
             try {
                 this.imagefilmDetail.setImage(new Image(film1.getImage()));
-            } catch (Exception e) {
+            }
+ catch (Exception e) {
                 LOGGER.log(Level.WARNING, "Failed to load detail image URL: " + film1.getImage(), e);
                 try {
                     // Fallback to default
                     this.imagefilmDetail.setImage(
                             new Image(getClass().getResourceAsStream("/img/films/default.jpg")));
-                } catch (Exception e2) {
+                }
+ catch (Exception e2) {
                     LOGGER.log(Level.SEVERE, "Failed to load default detail image", e2);
                 }
+
             }
+
 
             final double rate1 = new FilmRatingService().getAvergeRating(film1.getId());
             this.labelavregeRate.setText(rate1 + "/5");
@@ -612,9 +666,11 @@ public class FilmUserController {
             final BitMatrix bitMatrix;
             try {
                 bitMatrix = qrCodeWriter.encode(url, BarcodeFormat.QR_CODE, 200, 200);
-            } catch (final WriterException e) {
+            }
+ catch (final WriterException e) {
                 throw new RuntimeException(e);
             }
+
             // Convertir la matrice de bits en image BufferedImage
             final BufferedImage bufferedImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
             this.qrcode.setImage(SwingFXUtils.toFXImage(bufferedImage, null));
@@ -626,6 +682,7 @@ public class FilmUserController {
                 if (null != ratingFilm2) {
                     ratingFilmService.delete(ratingFilm2);
                 }
+
                 ratingFilmService
                         .create(new FilmRating(film1, (Client) new UserService().getUserById(2L), t1.intValue()));
                 final double rate2 = new FilmRatingService().getAvergeRating(film1.getId());
@@ -635,16 +692,20 @@ public class FilmUserController {
                 for (int i = 0; 3 > i; i++) {
                     this.topthreeVbox.getChildren().add(this.createtopthree(i));
                 }
-            });
+
+            }
+);
             this.trailer_Button.setOnAction(trailerEvent -> {
                 this.anchorPane_Trailer.getChildren().forEach(node -> {
                     node.setDisable(false);
-                });
+                }
+);
                 final WebView webView = new WebView();
                 FilmUserController.LOGGER.info(film1.getName());
                 Platform.runLater(() -> {
                     webView.getEngine().load(new FilmService().getTrailerFilm(film1.getName()));
-                });
+                }
+);
                 FilmUserController.LOGGER.info("film passed");
                 this.anchorPane_Trailer.setVisible(true);
                 this.anchorPane_Trailer.getChildren().add(webView);
@@ -652,17 +713,23 @@ public class FilmUserController {
                     if (KeyCode.ESCAPE == keyEvent.getCode()) {
                         this.anchorPane_Trailer.getChildren().forEach(node -> {
                             node.setDisable(true);
-                        });
+                        }
+);
                         this.anchorPane_Trailer.setVisible(false);
                     }
-                });
-            });
+
+                }
+);
+            }
+);
             this.detalAnchorPane.getChildren().add(rateFilm);
-        });
+        }
+);
         // Copy CSS classes
         copyOfAnchorPane.getChildren().addAll(imageView, nomFilm, button, hyperlink, ratefilm, etoile);
         return copyOfAnchorPane;
     }
+
 
     /**
      * Performs createActorDetails operation.
@@ -693,26 +760,36 @@ public class FilmUserController {
                     try {
                         // Try loading directly as a URL
                         imageView.setImage(new Image(actor.getImage()));
-                    } catch (Exception e) {
+                    }
+ catch (Exception e) {
                         LOGGER.log(Level.WARNING, "Failed to load actor image URL: " + actor.getImage(), e);
                         try {
                             // Try loading a default image
                             imageView.setImage(new Image(getClass().getResourceAsStream("/img/actors/default.jpg")));
-                        } catch (Exception e2) {
+                        }
+ catch (Exception e2) {
                             LOGGER.log(Level.SEVERE, "Failed to load default actor image", e2);
                         }
+
                     }
-                } else {
+
+                }
+ else {
                     // If image is null or empty, try to load default
                     try {
                         imageView.setImage(new Image(getClass().getResourceAsStream("/img/actors/default.jpg")));
-                    } catch (Exception e) {
+                    }
+ catch (Exception e) {
                         LOGGER.log(Level.WARNING, "Failed to load default actor image", e);
                     }
+
                 }
-            } catch (final Exception e) {
+
+            }
+ catch (final Exception e) {
                 FilmUserController.LOGGER.log(Level.SEVERE, "Error processing actor image", e);
             }
+
             imageView.setLayoutX(15);
             imageView.setLayoutY(10);
             imageView.setFitHeight(180);
@@ -758,8 +835,10 @@ public class FilmUserController {
                             "-fx-opacity: 1;");
             anchorPane.getChildren().addAll(imageView, actorDetails, actorBio);
         }
+
         return anchorPane;
     }
+
 
     /**
      * Performs createtopthree operation.
@@ -790,6 +869,7 @@ public class FilmUserController {
                 return anchorPane;
             }
 
+
             final Film film = ratingFilm.getFilm(); // Fixed method name
             final ImageView imageView = new ImageView();
 
@@ -809,7 +889,8 @@ public class FilmUserController {
                         imageView.setStyle(
                                 "-fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.7), 15, 0, 0, 3);" +
                                         "-fx-background-radius: 12;");
-                    } catch (Exception e) {
+                    }
+ catch (Exception e) {
                         LOGGER.warning("Failed to load image from URL: " + imagePath + ", " + e.getMessage());
                         // Try loading default image
                         try {
@@ -824,14 +905,20 @@ public class FilmUserController {
                             imageView.setStyle(
                                     "-fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.7), 15, 0, 0, 3);" +
                                             "-fx-background-radius: 12;");
-                        } catch (Exception e2) {
+                        }
+ catch (Exception e2) {
                             LOGGER.severe("Failed to load default image: " + e2.getMessage());
                         }
+
                     }
+
                 }
-            } catch (Exception e) {
+
+            }
+ catch (Exception e) {
                 LOGGER.warning("Error loading image for film: " + film.getId() + ", " + e.getMessage());
             }
+
 
             try {
                 final Label nomFilm = new Label(film.getName() != null ? film.getName() : "Untitled");
@@ -870,7 +957,8 @@ public class FilmUserController {
                                     "-fx-effect: dropshadow(gaussian, rgba(255, 68, 68, 1.0), 18, 0, 0, 5);" +
                                     "-fx-scale-x: 1.05;" +
                                     "-fx-scale-y: 1.05;");
-                });
+                }
+);
                 button.setOnMouseExited(e -> {
                     button.setStyle(
                             "-fx-background-color: linear-gradient(to bottom right, #8b0000, #b22222);" +
@@ -880,7 +968,8 @@ public class FilmUserController {
                                     "-fx-cursor: hand;" +
                                     "-fx-font-size: 13px;" +
                                     "-fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.9), 12, 0, 0, 3);");
-                });
+                }
+);
 
                 final Rating rating = new Rating();
                 rating.setLayoutX(145);
@@ -910,12 +999,17 @@ public class FilmUserController {
                 if (imageView.getImage() != null) {
                     anchorPane.getChildren().add(imageView);
                 }
-            } catch (Exception e) {
+
+            }
+ catch (Exception e) {
                 LOGGER.log(Level.WARNING, "Error creating film card components", e);
             }
+
         }
+
         return anchorPane;
     }
+
 
     /**
      * Retrieves a list of unique film release years from a database using
@@ -938,6 +1032,7 @@ public class FilmUserController {
         // Extraire les années de réalisation uniques des films
         return cinemas.stream().map(Film::getReleaseYear).distinct().collect(Collectors.toList());
     }
+
 
     /**
      * Sets the opacity of a panel to 0.5 and makes a pane visible, clears a list of
@@ -971,12 +1066,14 @@ public class FilmUserController {
             yearsCheckBoxesVBox.getChildren().add(checkBox);
             this.yearsCheckBoxes.add(checkBox);
         }
+
         yearsCheckBoxesVBox.setLayoutX(25);
         yearsCheckBoxesVBox.setLayoutY(120);
         // Ajouter les VBox dans le filterAnchor
         this.Anchore_Pane_filtrage.getChildren().addAll(yearsCheckBoxesVBox);
         this.Anchore_Pane_filtrage.setVisible(true);
     }
+
 
     /**
      * Sets the opacity and visibility of an AnchorPane, and also makes a different
@@ -997,6 +1094,7 @@ public class FilmUserController {
         this.AnchorComments.setVisible(false);
         this.detalAnchorPane.setVisible(true);
     }
+
 
     /**
      * Filters a list of cinemas based on user-selected years of release and
@@ -1029,6 +1127,7 @@ public class FilmUserController {
         this.createfilmCards(filteredCinemas);
     }
 
+
     /**
      * Retrieves the selected years from an `AnchorPane` widget, filters out
      * non-selected years using `filter`, maps the selected check boxes to their
@@ -1053,6 +1152,7 @@ public class FilmUserController {
                 .map(checkBox -> Integer.parseInt(checkBox.getText())).collect(Collectors.toList());
     }
 
+
     /**
      * Loads a FXML file "/ui/series/SeriesClient.fxml" into a stage, replacing the
      * current scene.
@@ -1071,10 +1171,13 @@ public class FilmUserController {
             final Stage stage = (Stage) this.product.getScene().getWindow();
             final Scene scene = new Scene(root, 1280, 700);
             stage.setScene(scene);
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             FilmUserController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Loads and displays a FXML file using the `FXMLLoader` class, replacing the
@@ -1099,10 +1202,13 @@ public class FilmUserController {
             final Stage stage = (Stage) this.event_button.getScene().getWindow();
             final Scene scene = new Scene(root, 1280, 700);
             stage.setScene(scene);
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             FilmUserController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Loads a FXML file using the `FXMLLoader` class, creates a new `AnchorPane`
@@ -1126,10 +1232,13 @@ public class FilmUserController {
             final Stage stage = (Stage) this.Cinema_Button.getScene().getWindow();
             final Scene scene = new Scene(root, 1280, 700);
             stage.setScene(scene);
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             FilmUserController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Loads an FXML file, creates a Stage and sets the Scene for displaying a user
@@ -1154,10 +1263,13 @@ public class FilmUserController {
             final Stage stage = (Stage) this.product.getScene().getWindow();
             final Scene scene = new Scene(root, 1280, 700);
             stage.setScene(scene);
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             FilmUserController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Loads and displays a FXML file using the `FXMLLoader` class, replacing the
@@ -1179,10 +1291,13 @@ public class FilmUserController {
             final Stage stage = (Stage) this.SerieButton.getScene().getWindow();
             final Scene scene = new Scene(root, 1280, 700);
             stage.setScene(scene);
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             FilmUserController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Allows users to add comments to a film by providing a text input, displaying
@@ -1197,7 +1312,8 @@ public class FilmUserController {
             alert.setTitle("Commentaire vide");
             alert.setContentText("Add Comment");
             alert.showAndWait();
-        } else {
+        }
+ else {
             final FilmComment commentaire = new FilmComment(message, (Client) new UserService().getUserById(4L), // Fixed
                                                                                                                  // type
                     new FilmService().getFilm(this.filmId));
@@ -1206,7 +1322,9 @@ public class FilmUserController {
             cinemaCommentService.create(commentaire);
             this.txtAreaComments.clear();
         }
+
     }
+
 
     /**
      * @param event
@@ -1216,6 +1334,7 @@ public class FilmUserController {
         this.addCommentaire();
         this.displayAllComments(this.filmId);
     }
+
 
     /**
      * Calculates a similarity score between a film and user preferences based on
@@ -1234,12 +1353,14 @@ public class FilmUserController {
             score += userPreferences.getOrDefault(genre.trim(), 0.0);
         }
 
+
         // Add rating weight
         double avgRating = new FilmRatingService().getAvergeRating(film.getId());
         score += avgRating * 0.3;
 
         return score;
     }
+
 
     /**
      * Creates an HBox containing an ImageView and a VBox with text, image and card
@@ -1265,18 +1386,24 @@ public class FilmUserController {
                 // Load directly from URL
                 userImage = new Image(imageUrl);
             }
-        } catch (Exception e) {
+
+        }
+ catch (Exception e) {
             LOGGER.warning("Failed to load profile image from URL: " + imageUrl);
         }
+
 
         // If loading from URL failed or image was null/empty, use default
         if (userImage == null) {
             try {
                 userImage = new Image(this.getClass().getResourceAsStream("/Logo.png"));
-            } catch (Exception e) {
+            }
+ catch (Exception e) {
                 LOGGER.severe("Failed to load default profile image: " + e.getMessage());
             }
+
         }
+
 
         final ImageView imageView = new ImageView(userImage);
         imageView.setFitWidth(50);
@@ -1327,6 +1454,7 @@ public class FilmUserController {
         return contentContainer;
     }
 
+
     /**
      * Displays all comments associated with a specific film ID in a scroll pane.
      *
@@ -1345,7 +1473,9 @@ public class FilmUserController {
             if (comment.getFilm().getId().equals(filmId)) {
                 filmComments.add(comment);
             }
+
         }
+
 
         // Display comments
         final VBox allCommentsContainer = new VBox();
@@ -1353,8 +1483,10 @@ public class FilmUserController {
             final HBox commentView = this.addCommentToView(comment);
             allCommentsContainer.getChildren().add(commentView);
         }
+
         this.ScrollPaneComments.setContent(allCommentsContainer);
     }
+
 
     /**
      * Shows film comments in a panel.
@@ -1366,4 +1498,6 @@ public class FilmUserController {
         this.AnchorComments.setVisible(true);
         this.displayAllComments(this.filmId);
     }
+
 }
+

@@ -113,12 +113,15 @@ public class OrderClientController implements Initializable {
                 OrderClientController.LOGGER
                         .info("User connected: " + connectedUser.getEmail());
             }
-        });
+
+        }
+);
         // Récupérer le prix total depuis SharedData et créer le Label correspondant
         final Label prixTotalLabel = this.createPrixTotalLabel(this.totalPrix);
         // Ajouter le Label au FlowPane
         this.prixtotaleFlowPane.getChildren().add(prixTotalLabel);
     }
+
 
     /**
      * Initializes the controller after its root element has been completely
@@ -140,6 +143,7 @@ public class OrderClientController implements Initializable {
     public void initialize(final URL url, final ResourceBundle resourceBundle) {
     }
 
+
     /**
      * Creates a styled label to display the total price.
      * 
@@ -157,6 +161,7 @@ public class OrderClientController implements Initializable {
         prixTotalLabel.setStyle("-fx-text-fill: #d72222;");
         return prixTotalLabel;
     }
+
 
     /**
      * Processes the order when the user clicks the order button.
@@ -182,12 +187,14 @@ public class OrderClientController implements Initializable {
                     "Veuillez entrer un numéro de téléphone valide (8 chiffres).");
             return;
         }
+
         // Validation de l'adresse
         final String adresse = this.adresseTextField.getText();
         if (adresse.isEmpty()) {
             this.showAlert("Adresse invalide", "Veuillez entrer une adresse valide.");
             return;
         }
+
         this.order.setAddress(this.adresseTextField.getText());
         this.order.setPhoneNumber(Integer.parseInt(this.numTelephoneTextField.getText()));
         this.order.setClient((Client) this.connectedUser);
@@ -196,17 +203,21 @@ public class OrderClientController implements Initializable {
         try {
             this.orderService.create(this.order);
             this.order.setStatus("en cours");
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             OrderClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         for (final OrderItem orderItem : this.order.getOrderItems()) {
             orderItem.setOrder(this.order);
             orderItemService.create(orderItem);
             // Décrémenter le stock
             this.decrementStock(orderItem.getProduct(), orderItem.getQuantity());
         }
+
         this.paimenet.setVisible(true);
     }
+
 
     /**
      * Displays an alert dialog with the specified title and content.
@@ -227,6 +238,7 @@ public class OrderClientController implements Initializable {
         alert.showAndWait();
     }
 
+
     /**
      * Validates if a given string represents a valid phone number.
      * 
@@ -240,8 +252,10 @@ public class OrderClientController implements Initializable {
     private boolean isValidPhoneNumber(final String phoneNumber) {
         // Vérifier si le numéro de téléphone a exactement 8 chiffres et ne contient que
         // des chiffres
-        return phoneNumber.matches("\\d{8}");
+        return phoneNumber.matches("\\d{8}
+");
     }
+
 
     /**
      * Decrements the stock quantity of a product after an order is placed.
@@ -261,6 +275,7 @@ public class OrderClientController implements Initializable {
         produitService.update(produit); // Assurez-vous que votre service de produit dispose d'une méthode de mise à
         // jour
     }
+
 
     /**
      * Navigates to the shopping cart interface.
@@ -290,10 +305,13 @@ public class OrderClientController implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             OrderClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
+
     }
+
 
     /**
      * Initiates the PayPal payment process.
@@ -343,15 +361,21 @@ public class OrderClientController implements Initializable {
                     approvalUrl = link.getHref();
                     break;
                 }
+
             }
+
             if (null != approvalUrl) {
                 // Redirect to PayPal for payment approval
                 this.redirectToPayPal(approvalUrl);
             }
-        } catch (final PayPalRESTException e) {
+
+        }
+ catch (final PayPalRESTException e) {
             OrderClientController.LOGGER.log(Level.SEVERE, "Error creating PayPal payment", e);
         }
+
     }
+
 
     /**
      * Redirects the user to PayPal for payment approval.
@@ -381,17 +405,22 @@ public class OrderClientController implements Initializable {
                     if (null != paymentId && null != payerId) {
                         this.completePayment(paymentId, payerId);
                     }
+
                     webView.getEngine().loadContent(OrderClientController.SUCCESS_URL);
                     // Close the window after a delay
                     new Thread(() -> {
                         try {
                             Thread.sleep(5000);
                             Platform.runLater(stage::close);
-                        } catch (final InterruptedException e) {
+                        }
+ catch (final InterruptedException e) {
                             Thread.currentThread().interrupt();
                         }
-                    }).start();
-                } else if (newValue.startsWith("http://localhost/cancel")) {
+
+                    }
+).start();
+                }
+ else if (newValue.startsWith("http://localhost/cancel")) {
                     // Payment was canceled
                     OrderClientController.LOGGER.info("Payment canceled");
                     webView.getEngine().loadContent(OrderClientController.CANCEL_URL);
@@ -400,17 +429,24 @@ public class OrderClientController implements Initializable {
                         try {
                             Thread.sleep(5000);
                             Platform.runLater(stage::close);
-                        } catch (final InterruptedException e) {
+                        }
+ catch (final InterruptedException e) {
                             Thread.currentThread().interrupt();
                         }
-                    }).start();
+
+                    }
+).start();
                 }
-            });
+
+            }
+);
             final Scene scene = new Scene(webView, 1024, 768);
             stage.setScene(scene);
             stage.show();
-        });
+        }
+);
     }
+
 
     /**
      * Extracts a query parameter from a URL.
@@ -430,12 +466,17 @@ public class OrderClientController implements Initializable {
                 if (param.getName().equals(parameterName)) {
                     return param.getValue();
                 }
+
             }
-        } catch (final URISyntaxException e) {
+
+        }
+ catch (final URISyntaxException e) {
             OrderClientController.LOGGER.log(Level.SEVERE, "Error parsing URL", e);
         }
+
         return null;
     }
+
 
     /**
      * Completes the payment process after PayPal approval.
@@ -464,10 +505,14 @@ public class OrderClientController implements Initializable {
                 this.orderService.update(this.order);
                 OrderClientController.LOGGER.info("Order status updated to paid");
             }
-        } catch (final PayPalRESTException e) {
+
+        }
+ catch (final PayPalRESTException e) {
             OrderClientController.LOGGER.log(Level.SEVERE, "Error executing payment", e);
         }
+
     }
+
 
     /**
      * Navigates to the cinema client interface.
@@ -497,10 +542,13 @@ public class OrderClientController implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             OrderClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
+
     }
+
 
     /**
      * Navigates to the event client interface.
@@ -530,10 +578,13 @@ public class OrderClientController implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             OrderClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
+
     }
+
 
     /**
      * Navigates to the product client interface.
@@ -563,10 +614,13 @@ public class OrderClientController implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             OrderClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
+
     }
+
 
     /**
      * Placeholder for client profile functionality.
@@ -577,6 +631,7 @@ public class OrderClientController implements Initializable {
     void profilclient(final ActionEvent event) {
     }
 
+
     /**
      * Placeholder for showing cinema functionality.
      * 
@@ -585,6 +640,7 @@ public class OrderClientController implements Initializable {
     @FXML
     void showcinema(final ActionEvent event) {
     }
+
 
     /**
      * Placeholder for showing event functionality.
@@ -595,6 +651,7 @@ public class OrderClientController implements Initializable {
     void showevenement(final ActionEvent event) {
     }
 
+
     /**
      * Placeholder for showing product functionality.
      * 
@@ -603,6 +660,7 @@ public class OrderClientController implements Initializable {
     @FXML
     void showproduit(final ActionEvent event) {
     }
+
 
     /**
      * Navigates to the movie client interface.
@@ -631,10 +689,13 @@ public class OrderClientController implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             OrderClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
+
     }
+
 
     /**
      * Navigates to the series client interface.
@@ -663,8 +724,12 @@ public class OrderClientController implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             OrderClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
+
     }
+
 }
+

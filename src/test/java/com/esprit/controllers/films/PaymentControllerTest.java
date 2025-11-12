@@ -37,6 +37,7 @@ class PaymentControllerTest extends TestFXBase {
         stage.toFront();
     }
 
+
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Payment Form Display Tests")
     class PaymentFormDisplayTests {
@@ -49,6 +50,7 @@ class PaymentControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(2)
         @DisplayName("Should display booking summary")
@@ -56,6 +58,7 @@ class PaymentControllerTest extends TestFXBase {
             // Movie, seats, total price shown
             waitForFxEvents();
         }
+
 
         @Test
         @Order(3)
@@ -65,6 +68,7 @@ class PaymentControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(4)
         @DisplayName("Should display secure payment badges")
@@ -72,7 +76,9 @@ class PaymentControllerTest extends TestFXBase {
             // SSL, PCI compliance badges
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Card Number Validation Tests")
@@ -86,6 +92,7 @@ class PaymentControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(11)
         @DisplayName("Should validate card number length")
@@ -93,6 +100,7 @@ class PaymentControllerTest extends TestFXBase {
             // 13-19 digits typically
             waitForFxEvents();
         }
+
 
         @Test
         @Order(12)
@@ -102,6 +110,7 @@ class PaymentControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(13)
         @DisplayName("Should format card number with spaces")
@@ -109,6 +118,7 @@ class PaymentControllerTest extends TestFXBase {
             // 1234 5678 9012 3456 formatting
             waitForFxEvents();
         }
+
 
         @Test
         @Order(14)
@@ -118,6 +128,7 @@ class PaymentControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(15)
         @DisplayName("Should show card type icon")
@@ -125,7 +136,9 @@ class PaymentControllerTest extends TestFXBase {
             // Display appropriate card logo
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Expiry Date Validation Tests")
@@ -139,6 +152,7 @@ class PaymentControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(21)
         @DisplayName("Should validate expiry date not in past")
@@ -146,6 +160,7 @@ class PaymentControllerTest extends TestFXBase {
             // Cannot be expired card
             waitForFxEvents();
         }
+
 
         @Test
         @Order(22)
@@ -155,6 +170,7 @@ class PaymentControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(23)
         @DisplayName("Should auto-format expiry date")
@@ -162,7 +178,9 @@ class PaymentControllerTest extends TestFXBase {
             // Automatically add slash
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("CVV Validation Tests")
@@ -176,6 +194,7 @@ class PaymentControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(31)
         @DisplayName("Should accept only digits for CVV")
@@ -183,6 +202,7 @@ class PaymentControllerTest extends TestFXBase {
             // Numeric input only
             waitForFxEvents();
         }
+
 
         @Test
         @Order(32)
@@ -192,6 +212,7 @@ class PaymentControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(33)
         @DisplayName("Should show CVV help icon")
@@ -199,7 +220,9 @@ class PaymentControllerTest extends TestFXBase {
             // Explain where CVV is located
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Cardholder Name Validation Tests")
@@ -212,6 +235,7 @@ class PaymentControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(41)
         @DisplayName("Should validate name format")
@@ -220,6 +244,7 @@ class PaymentControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(42)
         @DisplayName("Should convert name to uppercase")
@@ -227,7 +252,9 @@ class PaymentControllerTest extends TestFXBase {
             // As on actual cards
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Payment Method Selection Tests")
@@ -240,6 +267,7 @@ class PaymentControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(51)
         @DisplayName("Should display PayPal option")
@@ -247,12 +275,14 @@ class PaymentControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(52)
         @DisplayName("Should display Stripe option")
         void testStripeOption() {
             waitForFxEvents();
         }
+
 
         @Test
         @Order(53)
@@ -262,13 +292,16 @@ class PaymentControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(54)
         @DisplayName("Should validate based on selected method")
         void testMethodSpecificValidation() {
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Payment Processing Tests")
@@ -281,6 +314,7 @@ class PaymentControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(61)
         @DisplayName("Should disable button during processing")
@@ -288,6 +322,7 @@ class PaymentControllerTest extends TestFXBase {
             // Prevent double submission
             waitForFxEvents();
         }
+
 
         @Test
         @Order(62)
@@ -297,12 +332,14 @@ class PaymentControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(63)
         @DisplayName("Should process payment successfully")
         void testSuccessfulPayment() {
             waitForFxEvents();
         }
+
 
         @Test
         @Order(64)
@@ -312,6 +349,7 @@ class PaymentControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(65)
         @DisplayName("Should generate booking reference")
@@ -320,6 +358,7 @@ class PaymentControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(66)
         @DisplayName("Should send confirmation email")
@@ -327,7 +366,9 @@ class PaymentControllerTest extends TestFXBase {
             // Email with booking details
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Error Handling Tests")
@@ -341,12 +382,14 @@ class PaymentControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(71)
         @DisplayName("Should handle insufficient funds")
         void testInsufficientFunds() {
             waitForFxEvents();
         }
+
 
         @Test
         @Order(72)
@@ -355,12 +398,14 @@ class PaymentControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(73)
         @DisplayName("Should handle invalid card")
         void testInvalidCard() {
             waitForFxEvents();
         }
+
 
         @Test
         @Order(74)
@@ -369,13 +414,16 @@ class PaymentControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(75)
         @DisplayName("Should handle payment gateway errors")
         void testGatewayErrors() {
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Security Tests")
@@ -389,6 +437,7 @@ class PaymentControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(81)
         @DisplayName("Should not store CVV")
@@ -396,6 +445,7 @@ class PaymentControllerTest extends TestFXBase {
             // PCI compliance
             waitForFxEvents();
         }
+
 
         @Test
         @Order(82)
@@ -405,6 +455,7 @@ class PaymentControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(83)
         @DisplayName("Should display security notices")
@@ -412,7 +463,9 @@ class PaymentControllerTest extends TestFXBase {
             // Privacy and security info
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Cancel and Back Tests")
@@ -425,12 +478,14 @@ class PaymentControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(91)
         @DisplayName("Should confirm before canceling")
         void testCancelConfirmation() {
             waitForFxEvents();
         }
+
 
         @Test
         @Order(92)
@@ -439,13 +494,16 @@ class PaymentControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(93)
         @DisplayName("Should navigate back to seat selection")
         void testNavigateBack() {
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Receipt and Confirmation Tests")
@@ -458,6 +516,7 @@ class PaymentControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(101)
         @DisplayName("Should show QR code for booking")
@@ -466,12 +525,14 @@ class PaymentControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(102)
         @DisplayName("Should allow downloading PDF receipt")
         void testDownloadPDFReceipt() {
             waitForFxEvents();
         }
+
 
         @Test
         @Order(103)
@@ -480,6 +541,7 @@ class PaymentControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(104)
         @DisplayName("Should display booking instructions")
@@ -487,5 +549,8 @@ class PaymentControllerTest extends TestFXBase {
             // How to use booking at cinema
             waitForFxEvents();
         }
+
     }
+
 }
+

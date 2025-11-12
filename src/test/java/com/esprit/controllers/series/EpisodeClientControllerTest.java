@@ -46,6 +46,7 @@ class EpisodeClientControllerTest extends TestFXBase {
         stage.show();
     }
 
+
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Episode Display Tests")
     class EpisodeDisplayTests {
@@ -60,6 +61,7 @@ class EpisodeClientControllerTest extends TestFXBase {
             assertThat(flowPane).isNotNull();
         }
 
+
         @Test
         @Order(2)
         @DisplayName("Should load episodes for series")
@@ -69,6 +71,7 @@ class EpisodeClientControllerTest extends TestFXBase {
             FlowPane flowPane = lookup("#episodesFlowPane").query();
             assertThat(flowPane).isNotNull();
         }
+
 
         @Test
         @Order(3)
@@ -80,6 +83,7 @@ class EpisodeClientControllerTest extends TestFXBase {
             assertThat(flowPane).isNotNull();
         }
 
+
         @Test
         @Order(4)
         @DisplayName("Should display episode title")
@@ -89,7 +93,9 @@ class EpisodeClientControllerTest extends TestFXBase {
             Label titleLabel = lookup("#episodeTitleLabel").query();
             assertThat(titleLabel).isNotNull();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Video Player Tests")
@@ -104,6 +110,7 @@ class EpisodeClientControllerTest extends TestFXBase {
             assertThat(lookup("#mediaView").tryQuery()).isPresent();
         }
 
+
         @Test
         @Order(6)
         @DisplayName("Should play episode video")
@@ -112,6 +119,7 @@ class EpisodeClientControllerTest extends TestFXBase {
 
             assertThat(lookup("#playButton").tryQuery()).isPresent();
         }
+
 
         @Test
         @Order(7)
@@ -122,6 +130,7 @@ class EpisodeClientControllerTest extends TestFXBase {
             assertThat(lookup("#pauseButton").tryQuery()).isPresent();
         }
 
+
         @Test
         @Order(8)
         @DisplayName("Should display video controls")
@@ -130,7 +139,9 @@ class EpisodeClientControllerTest extends TestFXBase {
 
             assertThat(lookup("#videoControls").tryQuery()).isPresent();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Episode Selection Tests")
@@ -146,6 +157,7 @@ class EpisodeClientControllerTest extends TestFXBase {
             assertThat(flowPane).isNotNull();
         }
 
+
         @Test
         @Order(10)
         @DisplayName("Should display selected episode details")
@@ -155,7 +167,9 @@ class EpisodeClientControllerTest extends TestFXBase {
             Label detailsLabel = lookup("#episodeDetailsLabel").query();
             assertThat(detailsLabel).isNotNull();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Season Filter Tests")
@@ -169,7 +183,9 @@ class EpisodeClientControllerTest extends TestFXBase {
 
             assertThat(lookup(".button").tryQuery()).isPresent();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Navigation Tests")
@@ -183,7 +199,9 @@ class EpisodeClientControllerTest extends TestFXBase {
 
             assertThat(lookup("#backButton").tryQuery()).isPresent();
         }
+
     }
+
 
     // Helper methods
     private List<Episode> createMockEpisodes() {
@@ -204,7 +222,10 @@ class EpisodeClientControllerTest extends TestFXBase {
         return episodes;
     }
 
+
     private <T> com.esprit.utils.Page<T> createPagedResult(List<T> content) {
         return new com.esprit.utils.Page<>(content, 0, content.size(), content.size());
     }
+
 }
+

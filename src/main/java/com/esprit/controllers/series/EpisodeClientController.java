@@ -120,9 +120,11 @@ public class EpisodeClientController implements Initializable {
         this.payslbl.setText(selectedSerie.getCountry());
         try {
             this.episodes = this.iServiceEpisode.retrieveBySeries(selectedSerie.getId());
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             throw new RuntimeException(e);
         }
+
         this.ListEpisode.getItems().addAll(this.episodes);
         this.ListEpisode.setCellFactory(param -> new ListCell<Episode>() {
             /**
@@ -152,7 +154,8 @@ public class EpisodeClientController implements Initializable {
                 super.updateItem(item, empty);
                 if (empty || null == item) {
                     this.setText(null);
-                } else {
+                }
+ else {
                     final double imageWidth = 50; // Largeur fixe souhaitée
                     final double imageHeight = 90; // Hauteur fixe souhaitée
                     final String img = item.getImage();
@@ -169,8 +172,11 @@ public class EpisodeClientController implements Initializable {
                     this.setGraphic(imageView);
                     idep = item.getId();
                 }
+
             }
-        });
+
+        }
+);
         this.ListEpisode.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
             if (0 <= newValue.intValue()) {
                 final Episode selectedepisode = this.ListEpisode.getItems().get(newValue.intValue());
@@ -185,8 +191,11 @@ public class EpisodeClientController implements Initializable {
                 this.pausebtn.setOnAction(event -> mediaPlayer.pause());
                 this.arreterbtn.setOnAction(event -> mediaPlayer.stop());
             }
-        });
+
+        }
+);
     }
+
 
     /**
      * Is called when an instance of a class is created and initializes an object's
@@ -207,6 +216,7 @@ public class EpisodeClientController implements Initializable {
      */
     public void initialize(final URL url, final ResourceBundle resourceBundle) {
     }
+
 
     /**
      * Takes a `txtDescriptionFeedBack` text input and adds it to an instance of
@@ -229,14 +239,17 @@ public class EpisodeClientController implements Initializable {
             final ZonedDateTime zonedDateTime = currentDate.atStartOfDay(ZoneId.systemDefault());
             final Instant instant = zonedDateTime.toInstant();
             date = Date.from(instant);
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             EpisodeClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         final IServiceFeedbackImpl sf = new IServiceFeedbackImpl();
         final Client client = (Client) this.txtDescriptionFeedBack.getScene().getWindow().getUserData();
         sf.create(new Feedback(client.getId(), description, date, this.idep));
         this.txtDescriptionFeedBack.clear();
     }
+
 
     /**
      * Loads a FXML file, creates a scene, and displays it on a stage, when a mouse
@@ -264,4 +277,6 @@ public class EpisodeClientController implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
+
 }
+

@@ -70,9 +70,11 @@ public class CinemaStatisticsController {
             final PieChart pieChart = this.createPieChart(entry.getKey(), entry.getValue());
             chartContainer.getChildren().add(pieChart);
         }
+
         // Ajouter le VBox à l'AnchorPane
         this.statisticsAnchor.getChildren().add(chartContainer);
     }
+
 
     /**
      * Generates sentiment statistics for each cinema based on user comments.
@@ -103,14 +105,18 @@ public class CinemaStatisticsController {
             if (cinemaSentimentStatistics.containsKey(cinemaName)) {
                 final Map<String, Integer> sentimentStatistics = cinemaSentimentStatistics.get(cinemaName);
                 sentimentStatistics.put(sentiment, sentimentStatistics.getOrDefault(sentiment, 0) + 1);
-            } else {
+            }
+ else {
                 final Map<String, Integer> sentimentStatistics = new HashMap<>();
                 sentimentStatistics.put(sentiment, 1);
                 cinemaSentimentStatistics.put(cinemaName, sentimentStatistics);
             }
+
         }
+
         return cinemaSentimentStatistics;
     }
+
 
     /**
      * Creates a pie chart displaying sentiment statistics for a specific cinema.
@@ -138,6 +144,9 @@ public class CinemaStatisticsController {
         for (final Map.Entry<String, Integer> entry : sentimentStatistics.entrySet()) {
             pieChart.getData().add(new PieChart.Data(entry.getKey(), entry.getValue()));
         }
+
         return pieChart;
     }
+
 }
+

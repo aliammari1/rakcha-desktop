@@ -93,6 +93,7 @@ public class DashboardAdminController {
         if (cinemasList != null) {
             cinemasList.setVisible(true);
         }
+
         // Appelée lorsque le fichier FXML est chargé
         // Configurer les cellules des colonnes pour afficher les données
         this.colCinema.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -108,13 +109,16 @@ public class DashboardAdminController {
             if (!logo.isEmpty()) {
                 final Image image = new Image(logo);
                 imageView.setImage(image);
-            } else {
+            }
+ else {
                 // Afficher une image par défaut si le logo est null
                 final Image defaultImage = new Image(this.getClass().getResourceAsStream("/Logo.png"));
                 imageView.setImage(defaultImage);
             }
+
             return new SimpleObjectProperty<>(imageView);
-        });
+        }
+);
         this.colStatut.setCellValueFactory(new PropertyValueFactory<>("status"));
         // Configurer la cellule de la colonne Action
         this.colAction.setCellFactory((TableColumn<Cinema, Void> param) -> new TableCell<Cinema, Void>() {
@@ -133,7 +137,8 @@ public class DashboardAdminController {
                     CinemaService cinemaService = new CinemaService();
                     cinemaService.update(cinema);
                     getTableView().refresh();
-                });
+                }
+);
 
                 refuseButton.setOnAction(event -> {
                     Cinema cinema = getTableView().getItems().get(getIndex());
@@ -141,34 +146,44 @@ public class DashboardAdminController {
                     CinemaService cinemaService = new CinemaService();
                     cinemaService.update(cinema);
                     getTableView().refresh();
-                });
+                }
+);
 
                 showMoviesButton.setOnAction(event -> {
                     Cinema cinema = getTableView().getItems().get(getIndex());
                     showFilmsInModal(cinema);
-                });
+                }
+);
             }
+
 
             @Override
             protected void updateItem(final Void item, final boolean empty) {
                 super.updateItem(item, empty);
                 if (empty) {
                     this.setGraphic(null);
-                } else {
+                }
+ else {
                     // Récupérer le cinéma associé à cette ligne
                     final Cinema cinema = this.getTableView().getItems().get(this.getIndex());
                     if ("Accepted".equals(cinema.getStatus())) {
                         // Afficher le bouton "Show Movies" si le statut est "Accepted"
                         this.setGraphic(this.showMoviesButton);
-                    } else {
+                    }
+ else {
                         // Afficher les boutons "Accepter" et "Refuser" si le statut est "En attente"
                         this.setGraphic(new HBox(10, this.acceptButton, this.refuseButton));
                     }
+
                 }
+
             }
-        });
+
+        }
+);
         this.loadCinemas();
     }
+
 
     /**
      * Shows movies for a specific cinema in a modal dialog.
@@ -204,11 +219,13 @@ public class DashboardAdminController {
             flowPane.getChildren().add(card);
         }
 
+
         Scene scene = new Scene(scrollPane);
         scene.getStylesheets().add(getClass().getResource("/ui/cinemas/styles/dashboard.css").toExternalForm());
         dialog.setScene(scene);
         dialog.show();
     }
+
 
     /**
      * Creates a film card UI component for a given film.
@@ -234,11 +251,13 @@ public class DashboardAdminController {
         try {
             Image image = new Image(film.getImage());
             imageView.setImage(image);
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             // Use default image if film image fails to load
             Image defaultImage = new Image(getClass().getResourceAsStream("/Logo.png"));
             imageView.setImage(defaultImage);
         }
+
 
         Label titleLabel = new Label(film.getName());
         titleLabel.getStyleClass().add("film-title");
@@ -262,6 +281,7 @@ public class DashboardAdminController {
         return card;
     }
 
+
     /**
      * Creates an observable list of cinemas by reading them from a service and
      * setting it as the items of a table view.
@@ -275,6 +295,7 @@ public class DashboardAdminController {
         this.listCinema.setItems(cinemaObservableList);
     }
 
+
     /**
      * Retrieves a list of cinemas through the use of the CinemaService.
      *
@@ -285,6 +306,7 @@ public class DashboardAdminController {
         final CinemaService cinemaService = new CinemaService();
         return cinemaService.read(PageRequest.defaultPage()).getContent();
     }
+
 
     /**
      * Initializes the JavaFX controller and sets up UI components. This method is
@@ -301,14 +323,18 @@ public class DashboardAdminController {
         if (cinemasList != null) {
             cinemasList.setVisible(true);
         }
+
         if (tfSearch != null) {
             tfSearch.textProperty().addListener((observable, oldValue, newValue) -> {
                 filterCinemas(newValue.trim());
-            });
+            }
+);
         }
+
         loadCinemas();
         afficherCinemas();
     }
+
 
     /**
      * Filters a list of cinemas based on a search query, updating the displayed
@@ -329,14 +355,19 @@ public class DashboardAdminController {
                 if (cinema.getName().toLowerCase().contains(searchText.toLowerCase())) {
                     filteredList.add(cinema);
                 }
+
             }
+
             // Mettre à jour la TableView avec la liste filtrée
             this.listCinema.setItems(filteredList);
-        } else {
+        }
+ else {
             // Si le champ de recherche est vide, afficher tous les cinémas
             this.loadCinemas();
         }
+
     }
+
 
     /**
      * Updates the opacity of a container and makes a filter anchor visible, then
@@ -373,6 +404,7 @@ public class DashboardAdminController {
             addressCheckBoxesVBox.getChildren().add(checkBox);
             this.addressCheckBoxes.add(checkBox);
         }
+
         addressCheckBoxesVBox.setLayoutX(25);
         addressCheckBoxesVBox.setLayoutY(60);
         // Créer des VBox pour les statuts
@@ -385,12 +417,14 @@ public class DashboardAdminController {
             statusCheckBoxesVBox.getChildren().add(checkBox);
             this.statusCheckBoxes.add(checkBox);
         }
+
         statusCheckBoxesVBox.setLayoutX(25);
         statusCheckBoxesVBox.setLayoutY(120);
         // Ajouter les VBox dans le filterAnchor
         this.filterAnchor.getChildren().addAll(addressCheckBoxesVBox, statusCheckBoxesVBox);
         this.filterAnchor.setVisible(true);
     }
+
 
     /**
      * Retrieves a list of cinema addresses from a database and extracts unique
@@ -411,6 +445,7 @@ public class DashboardAdminController {
         return cinemas.stream().map(Cinema::getAddress).distinct().collect(Collectors.toList());
     }
 
+
     /**
      * Creates a list of predefined cinema statuses, including "Pending" and
      * "Accepted", and returns it.
@@ -427,6 +462,7 @@ public class DashboardAdminController {
         statuses.add("Accepted");
         return statuses;
     }
+
 
     /**
      * Filters a list of cinemas based on selected addresses and/or statuses, and
@@ -462,6 +498,7 @@ public class DashboardAdminController {
         this.listCinema.setItems(filteredList);
     }
 
+
     /**
      * Streamlines the selected addresses from an `AnchorPane` of filtering, applies
      * a filter to only include selected checkboxes, and collects the results into a
@@ -483,6 +520,7 @@ public class DashboardAdminController {
                 .collect(Collectors.toList());
     }
 
+
     /**
      * Retrieves the selected statuses from an `AnchorPane` of filtering by
      * streaming the checked checkboxes, filtering the non-checked ones, and
@@ -499,6 +537,7 @@ public class DashboardAdminController {
         return this.statusCheckBoxes.stream().filter(CheckBox::isSelected).map(CheckBox::getText)
                 .collect(Collectors.toList());
     }
+
 
     /**
      * Loads an fxml file and displays a stage with a scene, changing the current
@@ -525,6 +564,7 @@ public class DashboardAdminController {
         currentStage.close();
     }
 
+
     /**
      * Loads an FXML file, creates a stage and window for film management, and
      * replaces the current stage with the new one.
@@ -549,6 +589,7 @@ public class DashboardAdminController {
         stage.show();
         currentStage.close();
     }
+
 
     /**
      * Loads a FXML file, creates a stage and window for a series management
@@ -576,6 +617,7 @@ public class DashboardAdminController {
         currentStage.close();
     }
 
+
     /**
      * Loads an fxml file, creates a scene and stage, and replaces the current stage
      * with the new one.
@@ -600,4 +642,6 @@ public class DashboardAdminController {
         stage.show();
         currentStage.close();
     }
+
 }
+

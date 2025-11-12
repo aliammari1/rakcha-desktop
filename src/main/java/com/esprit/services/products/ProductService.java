@@ -37,7 +37,8 @@ public class ProductService implements IService<Product> {
     // Allowed columns for sorting to prevent SQL injection
     private static final String[] ALLOWED_SORT_COLUMNS = {
             "id", "name", "price", "image", "description", "quantity"
-    };
+    }
+;
 
     /**
      * Constructs a new ProductService instance.
@@ -80,6 +81,7 @@ public class ProductService implements IService<Product> {
                 """);
     }
 
+
     @Override
     /**
      * Creates a new entity in the database.
@@ -108,12 +110,17 @@ public class ProductService implements IService<Product> {
                 if (product.getCategories() != null && !product.getCategories().isEmpty()) {
                     createProductCategoryRelations(productId, product.getCategories());
                 }
+
             }
+
             ProductService.LOGGER.info("Product added!");
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             ProductService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * @param productId
@@ -129,9 +136,12 @@ public class ProductService implements IService<Product> {
                 pst.setLong(2, category.getId());
                 pst.addBatch();
             }
+
             pst.executeBatch();
         }
+
     }
+
 
     @Override
     /**
@@ -147,9 +157,11 @@ public class ProductService implements IService<Product> {
         // Validate sort column to prevent SQL injection
         if (pageRequest.hasSorting() &&
                 !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
-            log.warn("Invalid sort column: {}. Using default sorting.", pageRequest.getSortBy());
+            log.warn("Invalid sort column: {}
+. Using default sorting.", pageRequest.getSortBy());
             pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
+
 
         try {
             // Get total count
@@ -169,15 +181,21 @@ public class ProductService implements IService<Product> {
                             .build();
                     content.add(product);
                 }
+
             }
+
 
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
 
-        } catch (final SQLException e) {
-            log.error("Error retrieving paginated products: {}", e.getMessage(), e);
+        }
+ catch (final SQLException e) {
+            log.error("Error retrieving paginated products: {}
+", e.getMessage(), e);
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
         }
+
     }
+
 
     /**
      * @param productId
@@ -195,11 +213,15 @@ public class ProductService implements IService<Product> {
                         .categoryName(rs.getString("category_name")).description(rs.getString("description")).build();
                 categories.add(category);
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             ProductService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return categories;
     }
+
 
     /**
      * Performs sort operation.
@@ -212,6 +234,7 @@ public class ProductService implements IService<Product> {
         if (!validColumns.contains(sortBy)) {
             throw new IllegalArgumentException("Invalid sort parameter");
         }
+
         final String req = "SELECT * FROM products ORDER BY %s".formatted(sortBy);
         try (final PreparedStatement pst = this.connection.prepareStatement(req)) {
             final ResultSet rs = pst.executeQuery();
@@ -221,11 +244,15 @@ public class ProductService implements IService<Product> {
                         .quantity(rs.getInt("quantity")).categories(getCategoriesForProduct(rs.getLong("id"))).build();
                 products.add(product);
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             ProductService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return products;
     }
+
 
     @Override
     /**
@@ -250,10 +277,13 @@ public class ProductService implements IService<Product> {
             updateProductCategoryRelations(product.getId(), product.getCategories());
 
             ProductService.LOGGER.info("product updated!");
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             ProductService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * @param productId
@@ -269,11 +299,14 @@ public class ProductService implements IService<Product> {
             deletePst.executeUpdate();
         }
 
+
         // Then, create new relationships
         if (categories != null && !categories.isEmpty()) {
             createProductCategoryRelations(productId, categories);
         }
+
     }
+
 
     @Override
     /**
@@ -290,17 +323,22 @@ public class ProductService implements IService<Product> {
                 deleteCatPst.executeUpdate();
             }
 
+
             final String req = "DELETE FROM products WHERE id = ?";
             try (final PreparedStatement pst = this.connection.prepareStatement(req)) {
                 pst.setLong(1, product.getId());
                 pst.executeUpdate();
             }
 
+
             ProductService.LOGGER.info("product deleted!");
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             ProductService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Retrieves the ProductById value.
@@ -319,11 +357,15 @@ public class ProductService implements IService<Product> {
                         .image(rs.getString("image")).description(rs.getString("description"))
                         .quantity(rs.getInt("quantity")).categories(getCategoriesForProduct(productId)).build();
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             ProductService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return product;
     }
+
 
     /**
      * Performs checkAvailableStock operation.
@@ -334,10 +376,13 @@ public class ProductService implements IService<Product> {
         final Product product = this.getProductById(productId);
         if (null != product) {
             return product.getQuantity() >= requestedQuantity;
-        } else {
+        }
+ else {
             return false; // The product doesn't exist
         }
+
     }
+
 
     /**
      * Retrieves the ProductPrice value.
@@ -354,11 +399,15 @@ public class ProductService implements IService<Product> {
             if (rs.next()) {
                 productPrice = rs.getDouble("prix");
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             ProductService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return productPrice;
     }
+
 
     /**
      * Retrieves the ProductsByCategory value.
@@ -378,11 +427,15 @@ public class ProductService implements IService<Product> {
                         .quantity(rs.getInt("quantity")).categories(getCategoriesForProduct(rs.getLong("id"))).build();
                 products.add(product);
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             ProductService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return products;
     }
+
 
     /**
      * Retrieves the ProductsOrderByQuantityAndStatus value.
@@ -410,9 +463,14 @@ public class ProductService implements IService<Product> {
                 product.setCategories(getCategoriesForProduct(product.getId()));
                 products.add(product);
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             ProductService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return products;
     }
+
 }
+

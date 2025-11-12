@@ -46,4 +46,6 @@ public class ProductCategory {
         this.categoryName = categoryName;
         this.description = description;
     }
+
 }
+

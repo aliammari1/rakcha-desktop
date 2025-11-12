@@ -48,4 +48,6 @@ public class FilmRating {
         this.client = client;
         this.rating = rating;
     }
+
 }
+

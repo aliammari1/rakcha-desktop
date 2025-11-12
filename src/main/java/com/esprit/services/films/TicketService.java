@@ -62,10 +62,13 @@ public class TicketService implements IService<Ticket> {
                     """;
             tableCreator.createTableIfNotExists("tickets", createTicketsTable);
 
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             log.error("Error creating tables for TicketService", e);
         }
+
     }
+
 
     @Override
     /**
@@ -82,11 +85,14 @@ public class TicketService implements IService<Ticket> {
             statement.setInt(3, ticket.getNumberOfSeats());
             statement.setFloat(4, ticket.getPrice());
             statement.executeUpdate();
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             log.error("Error creating ticket", e);
             throw new RuntimeException(e);
         }
+
     }
+
 
     /**
      * Performs read operation.
@@ -106,18 +112,26 @@ public class TicketService implements IService<Ticket> {
                     if (client != null && movieSession != null) {
                         tickets.add(Ticket.builder().id(rs.getLong("id")).numberOfSeats(rs.getInt("number_of_seats"))
                                 .client(client).movieSession(movieSession).price(rs.getFloat("price")).build());
-                    } else {
+                    }
+ else {
                         log.warn("Missing required entities for ticket ID: " + rs.getLong("id"));
                     }
-                } catch (Exception e) {
+
+                }
+ catch (Exception e) {
                     log.warn("Error loading ticket relationships for ticket ID: " + rs.getLong("id"), e);
                 }
+
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             log.error("Error reading tickets", e);
         }
+
         return tickets;
     }
+
 
     @Override
     /**
@@ -135,11 +149,14 @@ public class TicketService implements IService<Ticket> {
             statement.setFloat(4, ticket.getPrice());
             statement.setLong(5, ticket.getId());
             statement.executeUpdate();
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             log.error("Error updating ticket", e);
             throw new RuntimeException(e);
         }
+
     }
+
 
     @Override
     /**
@@ -153,15 +170,20 @@ public class TicketService implements IService<Ticket> {
         try (final PreparedStatement statement = this.connection.prepareStatement(req)) {
             statement.setLong(1, ticket.getId());
             statement.executeUpdate();
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             log.error("Error deleting ticket", e);
             throw new RuntimeException(e);
         }
+
     }
+
 
     @Override
     public Page<Ticket> read(PageRequest pageRequest) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'read'");
     }
+
 }
+

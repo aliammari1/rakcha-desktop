@@ -33,7 +33,8 @@ public class CinemaHallService implements IService<CinemaHall> {
     // Allowed columns for sorting to prevent SQL injection
     private static final String[] ALLOWED_SORT_COLUMNS = {
             "id", "cinema_id", "seat_capacity", "name", "screen_type", "is_available"
-    };
+    }
+;
 
     /**
      * Constructs a new CinemaHallService with database connection and required
@@ -60,10 +61,13 @@ public class CinemaHallService implements IService<CinemaHall> {
                     """;
             tableCreator.createTableIfNotExists("cinema_hall", createCinemaHallTable);
 
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             log.error("Error creating tables for CinemaHallService", e);
         }
+
     }
+
 
     @Override
     /**
@@ -80,10 +84,13 @@ public class CinemaHallService implements IService<CinemaHall> {
             stmt.setString(3, cinemaHall.getName());
             stmt.executeUpdate();
             log.info("Cinema hall created successfully");
-        } catch (SQLException e) {
+        }
+ catch (SQLException e) {
             log.error("Error creating cinema hall", e);
         }
+
     }
+
 
     @Override
     /**
@@ -101,10 +108,13 @@ public class CinemaHallService implements IService<CinemaHall> {
             stmt.setLong(4, cinemaHall.getId());
             stmt.executeUpdate();
             log.info("Cinema hall updated successfully");
-        } catch (SQLException e) {
+        }
+ catch (SQLException e) {
             log.error("Error updating cinema hall", e);
         }
+
     }
+
 
     @Override
     /**
@@ -119,10 +129,13 @@ public class CinemaHallService implements IService<CinemaHall> {
             stmt.setLong(1, cinemaHall.getId());
             stmt.executeUpdate();
             log.info("Cinema hall deleted successfully");
-        } catch (SQLException e) {
+        }
+ catch (SQLException e) {
             log.error("Error deleting cinema hall", e);
         }
+
     }
+
 
 
     @Override
@@ -139,9 +152,11 @@ public class CinemaHallService implements IService<CinemaHall> {
         // Validate sort column to prevent SQL injection
         if (pageRequest.hasSorting() &&
                 !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
-            log.warn("Invalid sort column: {}. Using default sorting.", pageRequest.getSortBy());
+            log.warn("Invalid sort column: {}
+. Using default sorting.", pageRequest.getSortBy());
             pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
+
 
         try {
             // Get total count
@@ -158,16 +173,23 @@ public class CinemaHallService implements IService<CinemaHall> {
                     if (hall != null) {
                         content.add(hall);
                     }
+
                 }
+
             }
+
 
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
 
-        } catch (final SQLException e) {
-            log.error("Error retrieving paginated cinema halls: {}", e.getMessage(), e);
+        }
+ catch (final SQLException e) {
+            log.error("Error retrieving paginated cinema halls: {}
+", e.getMessage(), e);
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
         }
+
     }
+
 
     /**
      * Retrieves a cinema hall by its ID.
@@ -183,11 +205,15 @@ public class CinemaHallService implements IService<CinemaHall> {
             if (rs.next()) {
                 return buildCinemaHall(rs);
             }
-        } catch (SQLException e) {
+
+        }
+ catch (SQLException e) {
             log.error("Error getting cinema hall by id: " + id, e);
         }
+
         return null;
     }
+
 
     /**
      * Retrieves a cinema hall by its name.
@@ -203,11 +229,15 @@ public class CinemaHallService implements IService<CinemaHall> {
             if (rs.next()) {
                 return buildCinemaHall(rs);
             }
-        } catch (SQLException e) {
+
+        }
+ catch (SQLException e) {
             log.error("Error getting cinema hall by name: " + name, e);
         }
+
         return null;
     }
+
 
     /**
      * Retrieves cinema halls by cinema ID.
@@ -227,12 +257,17 @@ public class CinemaHallService implements IService<CinemaHall> {
                 if (hall != null) {
                     cinemaHalls.add(hall);
                 }
+
             }
-        } catch (SQLException e) {
+
+        }
+ catch (SQLException e) {
             log.error("Error getting cinema halls by cinema id: " + cinemaId, e);
         }
+
         return cinemaHalls;
     }
+
 
     /**
      * @param rs
@@ -246,11 +281,16 @@ public class CinemaHallService implements IService<CinemaHall> {
                 return null;
             }
 
+
             return CinemaHall.builder().id(rs.getLong("id")).cinema(cinema).seatCapacity(rs.getInt("seat_capacity"))
                     .name(rs.getString("name")).build();
-        } catch (SQLException e) {
+        }
+ catch (SQLException e) {
             log.error("Error building cinema hall from ResultSet", e);
             return null;
         }
+
     }
+
 }
+

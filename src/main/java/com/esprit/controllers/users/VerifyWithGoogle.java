@@ -52,6 +52,7 @@ public class VerifyWithGoogle {
         Desktop.getDesktop().browse(URI.create(link));
     }
 
+
     /**
      * @param event
      */
@@ -63,8 +64,12 @@ public class VerifyWithGoogle {
             final Parent root = loader.load();
             final Stage stage = (Stage) this.sendButton.getScene().getWindow();
             stage.setScene(new Scene(root));
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             VerifyWithGoogle.LOGGER.info("the auth is wrong");
         }
+
     }
+
 }
+

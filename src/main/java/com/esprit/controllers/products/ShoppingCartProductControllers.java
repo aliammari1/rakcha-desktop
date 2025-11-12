@@ -105,8 +105,11 @@ public class ShoppingCartProductControllers implements Initializable {
             public void run() {
                 loadAcceptedShoppingCart();
             }
-        });
+
+        }
+);
     }
+
 
     /**
      * Retrieves a list of products from a service, verifies if each product has
@@ -120,9 +123,11 @@ public class ShoppingCartProductControllers implements Initializable {
         try {
             final Client client = (Client) this.cartFlowPane.getScene().getWindow().getUserData();
             items = shoppingcartService.readUserShoppingCart(client.getId());
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             throw new RuntimeException(e);
         }
+
         for (final ShoppingCart shoppingcart1 : items) {
             // Vérifier si le produit a déjà été ajouté
             if (!this.produitVBoxMap.containsKey(shoppingcart1.getProduct().getId())) {
@@ -131,8 +136,11 @@ public class ShoppingCartProductControllers implements Initializable {
                 // Ajouter le produit à la map pour le marquer comme déjà ajouté
                 this.produitVBoxMap.put(shoppingcart1.getProduct().getId().intValue(), produitVBox);
             }
+
         }
+
     }
+
 
     /**
      * /** Creates a new Label element with the total price displayed as a double
@@ -153,6 +161,7 @@ public class ShoppingCartProductControllers implements Initializable {
         prixTotalLabel.setStyle("-fx-text-fill: #d72222;");
         return prixTotalLabel;
     }
+
 
     /**
      * Generates a `VBox` container for each product in the shopping cart, with
@@ -184,14 +193,18 @@ public class ShoppingCartProductControllers implements Initializable {
             if (null != produitImage) {
                 final Image image = new Image(produitImage);
                 imageView.setImage(image);
-            } else {
+            }
+ else {
                 // Utiliser une image par défaut si le Blob est null
                 final Image defaultImage = new Image(this.getClass().getResourceAsStream("defaultImage.png"));
                 imageView.setImage(defaultImage);
             }
-        } catch (final Exception e) {
+
+        }
+ catch (final Exception e) {
             ShoppingCartProductControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         // Nom du Product
         final Label nameLabel = new Label(ShoppingCart.getProduct().getName());
         nameLabel.setLayoutX(175);
@@ -237,12 +250,15 @@ public class ShoppingCartProductControllers implements Initializable {
                 this.order.getOrderItems().add(orderItem);
                 ShoppingCartProductControllers.LOGGER.info("Product sélectionné");
                 this.updatePrixTotal();
-            } else {
+            }
+ else {
                 this.order.getOrderItems().remove(orderItem);
                 ShoppingCartProductControllers.LOGGER.info("Product non sélectionné");
                 this.updatePrixTotal();
             }
-        });
+
+        }
+);
         // Icône de diminution de quantité
         final FontIcon decreaseIcon = new FontIcon("fa-minus");
         decreaseIcon.setIconSize(15);
@@ -257,7 +273,9 @@ public class ShoppingCartProductControllers implements Initializable {
                         .setQuantity(Integer.parseInt(quantityTextField.getText()));
                 this.updatePrixTotal();
             }
-        });
+
+        }
+);
         // Icône d'augmentation de quantité
         final FontIcon increaseIcon = new FontIcon("fa-plus");
         increaseIcon.setIconSize(15);
@@ -272,7 +290,9 @@ public class ShoppingCartProductControllers implements Initializable {
                         .setQuantity(Integer.parseInt(quantityTextField.getText()));
                 this.updatePrixTotal();
             }
-        });
+
+        }
+);
         final FontIcon deleteIcon = new FontIcon("fa-trash");
         deleteIcon.setIconSize(25);
         deleteIcon.setLayoutX(700); // Définissez la position X selon vos besoins
@@ -290,8 +310,11 @@ public class ShoppingCartProductControllers implements Initializable {
                     // Mettez à jour votre interface utilisateur ici
                     this.refreshUI();
                 }
+
             }
-        });
+
+        }
+);
         card.setStyle("""
                 -fx-background-color:#F6F2F2;
                  -fx-text-fill: #FFFFFF;
@@ -310,6 +333,7 @@ public class ShoppingCartProductControllers implements Initializable {
         return produitVBox;
     }
 
+
     /**
      * Clears the current elements from the shopping cart, reloads the accepted
      * items, and updates the total price.
@@ -323,6 +347,7 @@ public class ShoppingCartProductControllers implements Initializable {
         // Mettre à jour le prix total
         this.updatePrixTotal();
     }
+
 
     /**
      * Decreases the quantity of items in a shopping cart by one unit when the user
@@ -345,7 +370,9 @@ public class ShoppingCartProductControllers implements Initializable {
             quantityTextField.setText(String.valueOf(quantity - 1));
             shoppingcart.setQuantity(shoppingcart.getQuantity() - 1);
         }
+
     }
+
 
     /**
      * Compares the requested quantity with the available quantity of stock for a
@@ -366,6 +393,7 @@ public class ShoppingCartProductControllers implements Initializable {
         return produit.getQuantity() >= quantity;
     }
 
+
     /**
      * Increases the quantity of an item in a shopping cart by 1, checking if the
      * stock is available and displaying an alert if it's not.
@@ -385,7 +413,8 @@ public class ShoppingCartProductControllers implements Initializable {
         if (this.isStockAvailable(shoppingcart.getProduct(), currentQuantity + 1)) {
             quantityTextField.setText(String.valueOf(currentQuantity + 1));
             shoppingcart.setQuantity(shoppingcart.getQuantity() + 1);
-        } else {
+        }
+ else {
             // Afficher une alerte en cas de stock insuffisant
             final Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Stock Insuffisant");
@@ -393,7 +422,9 @@ public class ShoppingCartProductControllers implements Initializable {
             alert.setContentText("Veuillez réduire la quantité demandée.");
             alert.showAndWait();
         }
+
     }
+
 
     /**
      * Updates the total price label based on the items in a given order by
@@ -405,12 +436,14 @@ public class ShoppingCartProductControllers implements Initializable {
         for (final OrderItem orderItem : this.order.getOrderItems()) {
             this.prixTotal += this.prixProduct(orderItem.getProduct().getId(), orderItem.getQuantity());
         }
+
         // Mettez à jour le prix total dans SharedData
         SharedData.getInstance().setTotalPrice(this.prixTotal);
         final Label prixTotalLabel = this.createPrixTotalLabel(this.prixTotal);
         this.prixtotaleFlowPane.getChildren().clear();
         this.prixtotaleFlowPane.getChildren().add(prixTotalLabel);
     }
+
 
     /**
      * Calculates the total price of a product based on its ID and quantity by
@@ -432,6 +465,7 @@ public class ShoppingCartProductControllers implements Initializable {
         return quantity * prixUnitaire;
     }
 
+
     /**
      * Loads a FXML file named `/OrderClient.fxml` into a Stage, initializes a
      * `OrderClientController`, and displays the scene on the Stage.
@@ -452,10 +486,13 @@ public class ShoppingCartProductControllers implements Initializable {
             stage.setTitle("order");
             stage.setScene(scene);
             stage.show();
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             throw new RuntimeException(e);
         }
+
     }
+
 
     /**
      * Is a handling function for mouse events. It does not perform any specific
@@ -467,6 +504,7 @@ public class ShoppingCartProductControllers implements Initializable {
      */
     public void Paiment(final MouseEvent event) {
     }
+
 
     /**
      * Loads a new user interface, creates a new stage and attaches it to the
@@ -496,11 +534,14 @@ public class ShoppingCartProductControllers implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             ShoppingCartProductControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
+
     }
+
 
     /**
      * Loads a new UI fragment (`AffichageEvenementClient.fxml`) and replaces the
@@ -530,11 +571,14 @@ public class ShoppingCartProductControllers implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             ShoppingCartProductControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
+
     }
+
 
     /**
      * Loads a new FXML interface, creates a new scene and stage, and replaces the
@@ -563,11 +607,14 @@ public class ShoppingCartProductControllers implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             ShoppingCartProductControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
+
     }
+
 
     /**
      * Is expected to perform some actions or calculations upon receiving an event
@@ -580,6 +627,7 @@ public class ShoppingCartProductControllers implements Initializable {
     @FXML
     void profilclient(final ActionEvent event) {
     }
+
 
     /**
      * Loads a new FXML interface using `FXMLLoader`, creates a new scene and stage,
@@ -608,11 +656,14 @@ public class ShoppingCartProductControllers implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             ShoppingCartProductControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
+
     }
+
 
     /**
      * Loads a new FXML file, creates a new scene, and attaches it to a new stage.
@@ -640,11 +691,14 @@ public class ShoppingCartProductControllers implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             ShoppingCartProductControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
+
     }
+
 
     /**
      * Returns to the product display interface.
@@ -677,9 +731,13 @@ public class ShoppingCartProductControllers implements Initializable {
             // Fermer la fenêtre actuelle
             final Stage currentStage = (Stage) this.retour.getScene().getWindow();
             currentStage.close();
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             ShoppingCartProductControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception selon vos
                                                                                         // besoins
         }
+
     }
+
 }
+

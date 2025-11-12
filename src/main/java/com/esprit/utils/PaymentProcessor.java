@@ -25,8 +25,10 @@ public enum PaymentProcessor {
             LOGGER.severe("Stripe API key not found in .env file");
             throw new ExceptionInInitializerError("Stripe API key is required");
         }
+
         Stripe.apiKey = apiKey;
     }
+
 
     /**
      * Process a payment with Stripe
@@ -62,39 +64,53 @@ public enum PaymentProcessor {
             final Charge charge = chargeCustomer(customer.getId(), token.getId(), amount);
 
             return "succeeded".equals(charge.getStatus());
-        } catch (StripeException e) {
+        }
+ catch (StripeException e) {
             LOGGER.log(Level.SEVERE, "Stripe payment processing failed", e);
             return false;
-        } catch (IllegalArgumentException e) {
+        }
+ catch (IllegalArgumentException e) {
             LOGGER.log(Level.SEVERE, "Invalid payment parameters", e);
             return false;
         }
+
     }
+
 
     private static void validateInputs(String name, String email, float amount, String cardNumber, int cardExpMonth,
             int cardExpYear, String cardCvc) {
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Name is required");
         }
+
         if (email == null || !email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
             throw new IllegalArgumentException("Valid email is required");
         }
+
         if (amount <= 0) {
             throw new IllegalArgumentException("Amount must be greater than 0");
         }
-        if (cardNumber == null || !cardNumber.matches("\\d{13,19}")) {
+
+        if (cardNumber == null || !cardNumber.matches("\\d{13,19}
+")) {
             throw new IllegalArgumentException("Valid card number is required");
         }
+
         if (cardExpMonth < 1 || cardExpMonth > 12) {
             throw new IllegalArgumentException("Valid expiration month is required (1-12)");
         }
+
         if (cardExpYear < java.time.Year.now().getValue()) {
             throw new IllegalArgumentException("Card is expired");
         }
-        if (cardCvc == null || !cardCvc.matches("\\d{3,4}")) {
+
+        if (cardCvc == null || !cardCvc.matches("\\d{3,4}
+")) {
             throw new IllegalArgumentException("Valid CVC is required");
         }
+
     }
+
 
     private static Customer retrieveOrCreateCustomer(final String name, final String email) throws StripeException {
         final Map<String, Object> customerParams = new HashMap<>();
@@ -102,6 +118,7 @@ public enum PaymentProcessor {
         customerParams.put("email", email);
         return Customer.create(customerParams);
     }
+
 
     private static Token createToken(final String cardNumber, final int expMonth, final int expYear, final String cvc)
             throws StripeException {
@@ -116,6 +133,7 @@ public enum PaymentProcessor {
         return Token.create(tokenParams);
     }
 
+
     private static Charge chargeCustomer(final String customerId, final String tokenId, final float amount)
             throws StripeException {
         final Map<String, Object> chargeParams = new HashMap<>();
@@ -125,4 +143,6 @@ public enum PaymentProcessor {
         chargeParams.put("source", tokenId);
         return Charge.create(chargeParams);
     }
+
 }
+

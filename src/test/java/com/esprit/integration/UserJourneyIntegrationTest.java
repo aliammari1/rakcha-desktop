@@ -32,6 +32,7 @@ class UserJourneyIntegrationTest extends TestFXBase {
         new MainApp().start(stage);
     }
 
+
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @DisplayName("New User Registration Journey")
@@ -63,11 +64,14 @@ class UserJourneyIntegrationTest extends TestFXBase {
             try {
                 verifyThat("#loginButton", isVisible());
                 // If we see the login button, registration redirected to login page
-            } catch (Exception e) {
+            }
+ catch (Exception e) {
                 // Otherwise check for a success message or home view
                 verifyThat("#homePane", isVisible());
             }
+
         }
+
 
         @Test
         @Order(2)
@@ -78,6 +82,7 @@ class UserJourneyIntegrationTest extends TestFXBase {
                 clickOnAndWait("#signInButton");
                 waitForFxEvents();
             }
+
             
             // Fill credentials
             fillTextField("#emailTextField", TestDataFactory.TestCredentials.VALID_EMAIL);
@@ -88,7 +93,9 @@ class UserJourneyIntegrationTest extends TestFXBase {
             // Verify successful login
             verifyThat("#homePane", isVisible());
         }
+
     }
+
 
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -140,6 +147,7 @@ class UserJourneyIntegrationTest extends TestFXBase {
             // Receive confirmation
         }
 
+
         @Test
         @Order(11)
         @Disabled("Movie booking flow not yet implemented - placeholder test")
@@ -151,7 +159,9 @@ class UserJourneyIntegrationTest extends TestFXBase {
 
             // Booking should be listed
         }
+
     }
+
 
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -175,6 +185,7 @@ class UserJourneyIntegrationTest extends TestFXBase {
             // Approve/reject cinemas
         }
 
+
         @Test
         @Order(21)
         @DisplayName("Admin manages users")
@@ -185,7 +196,9 @@ class UserJourneyIntegrationTest extends TestFXBase {
 
             // View users, update roles, etc.
         }
+
     }
+
 
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -209,6 +222,7 @@ class UserJourneyIntegrationTest extends TestFXBase {
             // Add new movie
         }
 
+
         @Test
         @Order(31)
         @DisplayName("Cinema manager views statistics")
@@ -219,7 +233,9 @@ class UserJourneyIntegrationTest extends TestFXBase {
 
             // View cinema performance data
         }
+
     }
+
 
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -240,6 +256,7 @@ class UserJourneyIntegrationTest extends TestFXBase {
             // Watch episode
         }
 
+
         @Test
         @Order(41)
         @DisplayName("Add series to favorites")
@@ -248,7 +265,9 @@ class UserJourneyIntegrationTest extends TestFXBase {
             // View favorites list
             waitForFxEvents();
         }
+
     }
+
 
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -269,6 +288,7 @@ class UserJourneyIntegrationTest extends TestFXBase {
             // Complete payment
         }
 
+
         @Test
         @Order(51)
         @DisplayName("View order history")
@@ -277,7 +297,9 @@ class UserJourneyIntegrationTest extends TestFXBase {
             // View past orders
             waitForFxEvents();
         }
+
     }
+
 
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -297,6 +319,7 @@ class UserJourneyIntegrationTest extends TestFXBase {
             // Save changes
         }
 
+
         @Test
         @Order(61)
         @DisplayName("Change password")
@@ -306,7 +329,9 @@ class UserJourneyIntegrationTest extends TestFXBase {
             // Save
             waitForFxEvents();
         }
+
     }
+
 
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -330,5 +355,8 @@ class UserJourneyIntegrationTest extends TestFXBase {
             clickOnAndWait("#signInButton");
             waitForFxEvents();
         }
+
     }
+
 }
+

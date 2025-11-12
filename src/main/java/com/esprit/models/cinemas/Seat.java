@@ -48,4 +48,6 @@ public class Seat {
         this.cinemaHall = cinemaHall;
         this.tickets = new ArrayList<>();
     }
+
 }
+

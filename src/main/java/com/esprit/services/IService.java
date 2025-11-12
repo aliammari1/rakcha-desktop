@@ -48,3 +48,4 @@ public interface IService<T> {
      */
     void delete(T t);
 }
+

@@ -70,10 +70,12 @@ public class SeatSelectionController {
         if (moviesession == null || client == null) {
             throw new IllegalArgumentException("MovieSession and Client cannot be null");
         }
+
         this.moviesession = moviesession;
         this.client = client;
         loadSeats();
     }
+
 
     /**
      * Loads and displays the seat layout for the cinema hall.
@@ -97,6 +99,7 @@ public class SeatSelectionController {
             maxCol = Math.max(maxCol, seat.getSeatNumber());
         }
 
+
         for (int row = 0; row < maxRow; row++) {
             for (int col = 0; col < maxCol; col++) {
                 Button seatButton = new Button();
@@ -112,10 +115,14 @@ public class SeatSelectionController {
                     seatButton.setOnAction(e -> handleSeatSelection(seatButton, currentSeat));
                 }
 
+
                 seatGrid.add(seatButton, col, row);
             }
+
         }
+
     }
+
 
     /**
      * Finds a specific seat in the list based on row and column coordinates.
@@ -128,6 +135,7 @@ public class SeatSelectionController {
     private Seat findSeat(List<Seat> seats, int row, int col) {
         return seats.stream().filter(s -> s.getRowNumber() == row && s.getSeatNumber() == col).findFirst().orElse(null);
     }
+
 
     /**
      * Handles the selection and deselection of seats.
@@ -146,11 +154,14 @@ public class SeatSelectionController {
         if (selectedSeats.contains(seat)) {
             selectedSeats.remove(seat);
             seatButton.setStyle("-fx-background-color: green;");
-        } else {
+        }
+ else {
             selectedSeats.add(seat);
             seatButton.setStyle("-fx-background-color: yellow;");
         }
+
     }
+
 
     /**
      * Processes the seat selection and proceeds to payment.
@@ -170,6 +181,7 @@ public class SeatSelectionController {
             return;
         }
 
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/films/Paymentuser.fxml"));
         AnchorPane root = loader.load();
 
@@ -180,4 +192,6 @@ public class SeatSelectionController {
         Scene scene = new Scene(root);
         stage.setScene(scene);
     }
+
 }
+

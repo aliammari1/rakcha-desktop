@@ -114,9 +114,12 @@ public class SerieController {
             for (final Category c : this.categorieList) {
                 this.categorieF.getItems().add(c.getName());
             }
-        } catch (final Exception e) {
+
+        }
+ catch (final Exception e) {
             throw new RuntimeException(e);
         }
+
         ///// affichage du tableau
         final IServiceSeriesImpl serviceSerie = new IServiceSeriesImpl();
         // TableColumn<Series, Integer> idCol = new TableColumn<>("ID");
@@ -143,12 +146,16 @@ public class SerieController {
                         tableView.getItems().remove(serieDto);
                         tableView.refresh();
                         showAlert("Succes", "Deleted Successfully!");
-                    } catch (final Exception e) {
+                    }
+ catch (final Exception e) {
                         SerieController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                         showAlert("Succes", "Deleted Successfully!");
                     }
-                });
+
+                }
+);
             }
+
 
             /**
              * Updates a graphical item's state based on a boolean input, setting its
@@ -172,11 +179,15 @@ public class SerieController {
                 super.updateItem(item, empty);
                 if (empty) {
                     this.setGraphic(null);
-                } else {
+                }
+ else {
                     this.setGraphic(this.button);
                 }
+
             }
-        });
+
+        }
+);
         final TableColumn<Series, Void> modifierCol = new TableColumn<>("Edit");
         modifierCol.setCellFactory(param -> new TableCell<>() {
             private final Button button = new Button("Edit");
@@ -190,8 +201,11 @@ public class SerieController {
                         modifierSerie(serie);
                         this.clickCount = 0;
                     }
-                });
+
+                }
+);
             }
+
 
             /**
              * Updates a widget's graphics based on an item's `empty` status, setting the
@@ -212,11 +226,15 @@ public class SerieController {
                 super.updateItem(item, empty);
                 if (empty) {
                     this.setGraphic(null);
-                } else {
+                }
+ else {
                     this.setGraphic(this.button);
                 }
+
             }
-        });
+
+        }
+);
         // tableView.getColumns().addAll(idCol,nomCol,
         // resumeCol,directeurCol,paysCol,categorieCol,supprimerCol,modifierCol);
         this.tableView.getColumns().addAll(nomCol, resumeCol, directeurCol, paysCol, categorieCol, supprimerCol,
@@ -225,10 +243,13 @@ public class SerieController {
         try {
             PageRequest pageRequest = new PageRequest(0, 10);
             this.tableView.getItems().addAll(serviceSerie.read(pageRequest).getContent());
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             SerieController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * /** Generates a PDF document containing a table with columns for description,
@@ -335,15 +356,20 @@ public class SerieController {
                     cellR3.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cellR3);
                 }
+
                 table.setSpacingBefore(20);
                 document.add(table);
                 document.close();
                 SerieController.LOGGER.info("Le Poster a été généré avec succès.");
-            } catch (final Exception e) {
+            }
+ catch (final Exception e) {
                 SerieController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
+
         }
+
     }
+
 
     /**
      * /** Modifies a serie's information by displaying a dialog box to enter and
@@ -368,13 +394,16 @@ public class SerieController {
         for (final Category c : this.categorieList) {
             categorieComboBox.getItems().add(c.getName());
         }
+
         categorieComboBox.setValue(serieDto.getCategories().stream().findFirst().map(Category::getName).orElse(""));
         final Button Ajouterimage = new Button("ADD");
         {
             Ajouterimage.setOnAction(event -> {
                 this.addimg(event);
-            });
+            }
+);
         }
+
         dialog.getDialogPane()
                 .setContent(new VBox(8, new Label("Name:"), nomFild, new Label("Summary:"), resumeFild,
                         new Label("Director :"), directeurFild, new Label("Country :"), paysFild,
@@ -384,8 +413,10 @@ public class SerieController {
             if (dialogButton == ButtonType.OK) {
                 return new Pair<>(nomFild.getText(), resumeFild.getText());
             }
+
             return null;
-        });
+        }
+);
         final Optional<Pair<String, String>> result = dialog.showAndWait();
         final Series serie = new Series();
         result.ifPresent(pair -> {
@@ -399,16 +430,22 @@ public class SerieController {
                 if (Objects.equals(c.getName(), categorieComboBox.getValue())) {
                     serie.setId(c.getId());
                 }
+
             }
+
             try {
                 iServiceSerie.update(serie);
                 this.showAlert("Succes", "Successfully modified!");
                 this.ref();
-            } catch (final Exception e) {
+            }
+ catch (final Exception e) {
                 throw new RuntimeException(e);
             }
-        });
+
+        }
+);
     }
+
 
     /**
      * References a code resource denoted by `ref()`.
@@ -417,6 +454,7 @@ public class SerieController {
     private void initialize() {
         this.ref();
     }
+
 
     /**
      * Creates an alert box with a title and message and displays it using the
@@ -437,6 +475,7 @@ public class SerieController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
 
     /**
      * Enables users to choose an image from their local computer and stores its
@@ -461,10 +500,13 @@ public class SerieController {
             this.imgpath = selectedFile.getAbsolutePath().replace("\\", "/");
             SerieController.LOGGER.info("File path stored: " + this.imgpath);
             final Image image = new Image(selectedFile.toURI().toString());
-        } else {
+        }
+ else {
             SerieController.LOGGER.info("Please select a valid image file.");
         }
+
     }
+
 
     /**
      * Allows the user to select an image file, then saves it in two different
@@ -492,11 +534,15 @@ public class SerieController {
                 this.imgpath = cloudinaryImageUrl;
 
                 LOGGER.info("Image uploaded to Cloudinary: " + cloudinaryImageUrl);
-            } catch (final IOException e) {
+            }
+ catch (final IOException e) {
                 LOGGER.log(Level.SEVERE, "Error uploading image to Cloudinary", e);
             }
+
         }
+
     }
+
 
     // Method to retrieve the stored file path
 
@@ -508,6 +554,7 @@ public class SerieController {
     public String getFilePath() {
         return this.imgpath;
     }
+
 
     // Method to check if the selected file is an image file
 
@@ -526,10 +573,13 @@ public class SerieController {
         try {
             final Image image = new Image(file.toURI().toString());
             return !image.isError();
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             return false;
         }
+
     }
+
 
     ////////////
 
@@ -542,11 +592,14 @@ public class SerieController {
     boolean nomcheck() {
         if (!Objects.equals(this.nomF.getText(), "")) {
             return true;
-        } else {
+        }
+ else {
             this.nomcheck.setText("Please enter a valid Name");
             return false;
         }
+
     }
+
 
     /**
      * Verifies if a category has been selected and returns `true` if it has,
@@ -559,11 +612,14 @@ public class SerieController {
     boolean categoriecheck() {
         if (null != categorieF.getValue()) {
             return true;
-        } else {
+        }
+ else {
             this.categoriecheck.setText("Please select a Category");
             return false;
         }
+
     }
+
 
     /**
      * Verifies if a director's name is provided and returns `true` if it is valid,
@@ -575,11 +631,14 @@ public class SerieController {
     boolean directeurcheck() {
         if ("" != directeurF.getText()) {
             return true;
-        } else {
+        }
+ else {
             this.directeurcheck.setText("Please enter a valid Director");
             return false;
         }
+
     }
+
 
     /**
      * Checks if the user has entered a valid country by comparing the inputted
@@ -592,11 +651,14 @@ public class SerieController {
     boolean payscheck() {
         if ("" != paysF.getText()) {
             return true;
-        } else {
+        }
+ else {
             this.payscheck.setText("Please enter a valid Country");
             return false;
         }
+
     }
+
 
     /**
      * Verifies if the user has entered a non-empty string in the `resumeF` field.
@@ -609,11 +671,14 @@ public class SerieController {
     boolean resumecheck() {
         if ("" != resumeF.getText()) {
             return true;
-        } else {
+        }
+ else {
             this.resumecheck.setText("Please enter a valid Summary");
             return false;
         }
+
     }
+
 
     /**
      * Checks if an input image path is provided, returning `true` if valid and
@@ -624,11 +689,14 @@ public class SerieController {
     boolean imagechek() {
         if (!Objects.equals(this.imgpath, "")) {
             return true;
-        } else {
+        }
+ else {
             this.imagechek.setText("Please select a Picture");
             return false;
         }
+
     }
+
 
     //////////////////////
 
@@ -663,11 +731,14 @@ public class SerieController {
             email.addTo(recipientEmail);
             email.send();
             SerieController.LOGGER.info("Email sent successfully.");
-        } catch (final EmailException e) {
+        }
+ catch (final EmailException e) {
             SerieController.LOGGER.info("Error sending email: " + e.getMessage());
             SerieController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Allows users to create a new serie by inputting necessary information such as
@@ -705,7 +776,9 @@ public class SerieController {
                     if (Objects.equals(c.getName(), this.categorieF.getValue())) {
                         serie.setId(c.getId());
                     }
+
                 }
+
                 serieserv.create(serie);
                 this.showAlert("successfully", "The serie has been successfully saved");
                 this.nomcheck.setText("");
@@ -725,11 +798,14 @@ public class SerieController {
                 final String newSerieDescription = serie.getSummary(); // Vous pouvez personnaliser cela
                 this.sendEmail(recipientEmail, newSerieTitle, message);
                 this.ref();
-            } catch (final Exception e) {
+            }
+ catch (final Exception e) {
                 this.showAlert("Error", "An error occurred while saving the serie: " + e.getMessage());
                 SerieController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
+
         }
+
         ///
         /*
          * private void showStatistics() { IServiceSerieImpl serviceSerie = new
@@ -737,11 +813,15 @@ public class SerieController {
          *
          * try { Map<String, Long> statistics =
          * serviceSerie.getSeriesStatisticsByCategory(); // Handle or display the
-         * statistics as needed LOGGER.info(statistics); } catch (SQLException e) {
-         * LOGGER.log(Level.SEVERE, e.getMessage(), e); // Handle the exception } }
+         * statistics as needed LOGGER.info(statistics); }
+ catch (SQLException e) {
+         * LOGGER.log(Level.SEVERE, e.getMessage(), e); // Handle the exception }
+ }
+
          */
         ///
     }
+
 
     // Gestion du menu
 
@@ -764,6 +844,7 @@ public class SerieController {
         stage.show();
     }
 
+
     /**
      * Loads a FXML file named `"/ui/series/Serie-view.fxml"` and displays it on a
      * Stage, creating a new Scene and setting it as the scene of the Stage.
@@ -783,6 +864,7 @@ public class SerieController {
         stage.show();
     }
 
+
     /**
      * Loads an FXML file, creates a scene from it, and displays the scene on the
      * primary Stage.
@@ -801,6 +883,7 @@ public class SerieController {
         stage.show();
     }
 
+
     /**
      * Displays a list of movies to the user.
      *
@@ -809,6 +892,7 @@ public class SerieController {
      */
     public void showmovies(final ActionEvent actionEvent) {
     }
+
 
     /**
      * Likely displays a list or inventory of products.
@@ -819,6 +903,7 @@ public class SerieController {
      */
     public void showproducts(final ActionEvent actionEvent) {
     }
+
 
     /**
      * Is called when the `ActionEvent` occurs, and it does not provide any
@@ -831,6 +916,7 @@ public class SerieController {
     public void showcinema(final ActionEvent actionEvent) {
     }
 
+
     /**
      * Handles an `ActionEvent`.
      *
@@ -839,6 +925,7 @@ public class SerieController {
      */
     public void showevent(final ActionEvent actionEvent) {
     }
+
 
     /**
      * Likely displays a series of data or elements in a graphical interface.
@@ -849,10 +936,13 @@ public class SerieController {
      */
     public void showseries(final ActionEvent actionEvent) {
     }
+
 }
+
 /*
  * @FXML public void showStatistics(ActionEvent actionEvent) {
  * statstiqueController.handleShowPieChart();
  *
  * }
+
  */

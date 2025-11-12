@@ -102,6 +102,7 @@ public class CategoryController {
         this.filterCriteriaComboBox.setItems(FXCollections.observableArrayList("Name", "Description"));
     }
 
+
     /**
      * Filters and displays categories based on a search keyword.
      * 
@@ -121,16 +122,21 @@ public class CategoryController {
         PageRequest pageRequest = new PageRequest(0, 10);
         if (null == keyword || keyword.trim().isEmpty()) {
             filteredList.addAll(categoryService.read(pageRequest).getContent());
-        } else {
+        }
+ else {
             for (final Category category : categoryService.read(pageRequest).getContent()) {
                 if (category.getName().toLowerCase().contains(keyword.toLowerCase())
                         || category.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
                     filteredList.add(category);
                 }
+
             }
+
         }
+
         this.filmCategory_tableView.setItems(filteredList);
     }
+
 
     /**
      * Creates a new category in the database.
@@ -159,6 +165,7 @@ public class CategoryController {
         this.readCategoryTable();
     }
 
+
     /**
      * Retrieves categories from the database and populates the table view.
      * 
@@ -179,10 +186,13 @@ public class CategoryController {
             final ObservableList<Category> obC = FXCollections
                     .observableArrayList(categoryService.read(pageRequest).getContent());
             this.filmCategory_tableView.setItems(obC);
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             CategoryController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Toggles the visibility of the category CRUD interface.
@@ -198,7 +208,9 @@ public class CategoryController {
         if (event.getSource() == this.AjouterCategory_Button) {
             this.categoryCrudInterface.setVisible(true);
         }
+
     }
+
 
     /**
      * Deletes a category with the given ID from the database.
@@ -224,10 +236,13 @@ public class CategoryController {
             alert.setHeaderText("categorie");
             alert.show();
             this.readCategoryTable();
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             CategoryController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Updates a category in the database.
@@ -251,6 +266,7 @@ public class CategoryController {
         alert.show();
         this.readCategoryTable();
     }
+
 
     /**
      * Sets cell factories for three table columns, `idCategory_tableColumn`,
@@ -319,10 +335,13 @@ public class CategoryController {
                                 final String input = c.get("text");
                                 if (null == input || input.trim().isEmpty()) {
                                     c.error("Input cannot be empty.");
-                                } else if (!Character.isUpperCase(input.charAt(0))) {
+                                }
+ else if (!Character.isUpperCase(input.charAt(0))) {
                                     c.error("Please start with an uppercase letter.");
                                 }
-                            }).decorates(textField).immediate();
+
+                            }
+).decorates(textField).immediate();
                             final Window window = getScene().getWindow();
                             final Tooltip tooltip = new Tooltip();
                             final Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
@@ -371,21 +390,32 @@ public class CategoryController {
                                         tooltip.setStyle("-fx-background-color: #f00;");
                                         textField.setTooltip(tooltip);
                                         textField.getTooltip().show(window, bounds.getMinX(), bounds.getMinY() - 30);
-                                    } else {
+                                    }
+ else {
                                         if (null != textField.getTooltip()) {
                                             textField.getTooltip().hide();
                                         }
+
                                     }
+
                                 }
-                            });
+
+                            }
+);
                         }
+
                     }
-                };
+
+                }
+;
             }
-        };
+
+        }
+;
         this.nomCategory_tableColumn.setCellFactory(stringCellFactory);
         this.descrptionCategory_tableColumn.setCellFactory(stringCellFactory);
     }
+
 
     /**
      * Sets cell values for four table columns in a category list by creating
@@ -416,7 +446,9 @@ public class CategoryController {
                     public ObservableValue<String> call(final TableColumn.CellDataFeatures<Category, String> param) {
                         return new SimpleStringProperty(param.getValue().getDescription());
                     }
-                });
+
+                }
+);
         this.nomCategory_tableColumn.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<Category, String>, ObservableValue<String>>() {
                     /**
@@ -451,7 +483,9 @@ public class CategoryController {
                             final TableColumn.CellDataFeatures<Category, String> filmcategoryStringCellDataFeatures) {
                         return new SimpleStringProperty(filmcategoryStringCellDataFeatures.getValue().getName());
                     }
-                });
+
+                }
+);
         this.delete_tableColumn.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<Category, Button>, ObservableValue<Button>>() {
                     /**
@@ -503,11 +537,16 @@ public class CategoryController {
                             public void handle(final ActionEvent event) {
                                 deleteCategory(param.getValue().getId());
                             }
-                        });
+
+                        }
+);
                         return new SimpleObjectProperty<Button>(button);
                     }
-                });
+
+                }
+);
     }
+
 
     /**
      * Sets cell edit events for two columns of a table to update the corresponding
@@ -543,11 +582,15 @@ public class CategoryController {
                     event.getTableView().getItems().get(event.getTablePosition().getRow()).setName(event.getNewValue());
                     CategoryController.this
                             .updateCategory(event.getTableView().getItems().get(event.getTablePosition().getRow()));
-                } catch (final Exception e) {
+                }
+ catch (final Exception e) {
                     CategoryController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
+
             }
-        });
+
+        }
+);
         this.descrptionCategory_tableColumn
                 .setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Category, String>>() {
                     /**
@@ -577,10 +620,16 @@ public class CategoryController {
                                     .setDescription(event.getNewValue());
                             updateCategory(
                                     event.getTableView().getItems().get(event.getTablePosition().getRow()));
-                        } catch (final Exception e) {
+                        }
+ catch (final Exception e) {
                             CategoryController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                         }
+
                     }
-                });
+
+                }
+);
     }
+
 }
+

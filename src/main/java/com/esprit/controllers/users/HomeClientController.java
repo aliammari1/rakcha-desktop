@@ -126,7 +126,8 @@ public class HomeClientController implements Initializable {
             "Joker|https://image.tmdb.org/t/p/w500/kAVRgw7GgK1CfYEJq8ME6EvRIgU.jpg|During the 1980s, a failed stand-up comedian is driven insane and turns to a life of crime and chaos in Gotham City while becoming an infamous psychopathic crime figure.",
             "Oppenheimer|https://image.tmdb.org/t/p/w500/6KErczPBROQty7QoIsaa6wJYXZi.jpg|The story of J. Robert Oppenheimer's role in the development of the atomic bomb during World War II.",
             "Spider-Man: Across the Spider-Verse|https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg|After reuniting with Gwen Stacy, Brooklyn's full-time, friendly neighborhood Spider-Man is catapulted across the Multiverse."
-    };
+    }
+;
 
     private int currentFeaturedIndex = 0;
     private Timeline featuredRotationTimeline;
@@ -161,6 +162,7 @@ public class HomeClientController implements Initializable {
         LOGGER.info("HomeClient interface initialized successfully");
     }
 
+
     /**
      * Initialize all required services
      */
@@ -182,10 +184,13 @@ public class HomeClientController implements Initializable {
             random = new java.util.Random();
 
             LOGGER.info("Services initialized successfully");
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error initializing services: " + e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Setup welcome message based on logged-in user
@@ -201,22 +206,32 @@ public class HomeClientController implements Initializable {
                             User currentUser = (User) stage.getUserData();
                             welcomeLabel.setText("Welcome back, " + currentUser.getFirstName() + " "
                                     + currentUser.getLastName() + "!");
-                        } else {
+                        }
+ else {
                             welcomeLabel.setText("Welcome to RAKCHA!");
                         }
-                    } else {
+
+                    }
+ else {
                         welcomeLabel.setText("Welcome to RAKCHA!");
                     }
-                } catch (Exception ex) {
+
+                }
+ catch (Exception ex) {
                     LOGGER.log(Level.WARNING, "Error in delayed welcome message setup: " + ex.getMessage(), ex);
                     welcomeLabel.setText("Welcome to RAKCHA!");
                 }
-            });
-        } catch (Exception e) {
+
+            }
+);
+        }
+ catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error setting welcome message: " + e.getMessage(), e);
             welcomeLabel.setText("Welcome to RAKCHA!");
         }
+
     }
+
 
     /**
      * Load and setup featured content rotation
@@ -231,6 +246,7 @@ public class HomeClientController implements Initializable {
         featuredRotationTimeline.setCycleCount(Timeline.INDEFINITE);
         featuredRotationTimeline.play();
     }
+
 
     /**
      * Update featured movie display
@@ -256,14 +272,20 @@ public class HomeClientController implements Initializable {
                         fadeIn.setFromValue(0.0);
                         fadeIn.setToValue(1.0);
                         fadeIn.play();
-                    } catch (Exception ex) {
+                    }
+ catch (Exception ex) {
                         LOGGER.log(Level.WARNING, "Error loading featured image: " + ex.getMessage(), ex);
                     }
-                });
+
+                }
+);
                 fadeOut.play();
             }
+
         }
+
     }
+
 
     /**
      * Rotate to next featured movie
@@ -272,6 +294,7 @@ public class HomeClientController implements Initializable {
         currentFeaturedIndex = (currentFeaturedIndex + 1) % featuredMovies.length;
         updateFeaturedMovie();
     }
+
 
     /**
      * Load movies content into horizontal scroll container
@@ -296,28 +319,39 @@ public class HomeClientController implements Initializable {
                             VBox movieCard = createMovieCard(film);
                             moviesContainer.getChildren().add(movieCard);
                         }
-                    } else {
+
+                    }
+ else {
                         LOGGER.info("No films from service, creating placeholders");
                         createPlaceholderMovies();
                     }
-                } catch (Exception e) {
+
+                }
+ catch (Exception e) {
                     LOGGER.log(Level.WARNING, "Service failed, creating placeholders: " + e.getMessage());
                     createPlaceholderMovies();
                 }
 
+
                 // Setup carousel animation for movies
                 setupCarouselAnimation(moviesContainer, moviesScrollPane);
-            } else {
+            }
+ else {
                 LOGGER.warning("Movies container is null!");
             }
-        } catch (Exception e) {
+
+        }
+ catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error in loadMoviesContent: " + e.getMessage(), e);
             if (moviesContainer != null) {
                 createPlaceholderMovies();
                 setupCarouselAnimation(moviesContainer, moviesScrollPane);
             }
+
         }
+
     }
+
 
     /**
      * Load series content into horizontal scroll container
@@ -340,28 +374,39 @@ public class HomeClientController implements Initializable {
                             VBox seriesCard = createSeriesCard(serie);
                             seriesContainer.getChildren().add(seriesCard);
                         }
-                    } else {
+
+                    }
+ else {
                         LOGGER.info("No series from service, creating placeholders");
                         createPlaceholderSeries();
                     }
-                } catch (Exception e) {
+
+                }
+ catch (Exception e) {
                     LOGGER.log(Level.WARNING, "Service failed, creating placeholders: " + e.getMessage());
                     createPlaceholderSeries();
                 }
 
+
                 // Setup carousel animation for series
                 setupCarouselAnimation(seriesContainer, seriesScrollPane);
-            } else {
+            }
+ else {
                 LOGGER.warning("Series container is null!");
             }
-        } catch (Exception e) {
+
+        }
+ catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error in loadSeriesContent: " + e.getMessage(), e);
             if (seriesContainer != null) {
                 createPlaceholderSeries();
                 setupCarouselAnimation(seriesContainer, seriesScrollPane);
             }
+
         }
+
     }
+
 
     /**
      * Load products content into horizontal scroll container
@@ -384,28 +429,39 @@ public class HomeClientController implements Initializable {
                             VBox productCard = createProductCard(product);
                             productsContainer.getChildren().add(productCard);
                         }
-                    } else {
+
+                    }
+ else {
                         LOGGER.info("No products from service, creating placeholders");
                         createPlaceholderProducts();
                     }
-                } catch (Exception e) {
+
+                }
+ catch (Exception e) {
                     LOGGER.log(Level.WARNING, "Service failed, creating placeholders: " + e.getMessage());
                     createPlaceholderProducts();
                 }
 
+
                 // Setup carousel animation for products
                 setupCarouselAnimation(productsContainer, productsScrollPane);
-            } else {
+            }
+ else {
                 LOGGER.warning("Products container is null!");
             }
-        } catch (Exception e) {
+
+        }
+ catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error in loadProductsContent: " + e.getMessage(), e);
             if (productsContainer != null) {
                 createPlaceholderProducts();
                 setupCarouselAnimation(productsContainer, productsScrollPane);
             }
+
         }
+
     }
+
 
     /**
      * Load cinemas content into horizontal scroll container
@@ -428,28 +484,39 @@ public class HomeClientController implements Initializable {
                             VBox cinemaCard = createCinemaCard(cinema);
                             cinemasContainer.getChildren().add(cinemaCard);
                         }
-                    } else {
+
+                    }
+ else {
                         LOGGER.info("No cinemas from service, creating placeholders");
                         createPlaceholderCinemas();
                     }
-                } catch (Exception e) {
+
+                }
+ catch (Exception e) {
                     LOGGER.log(Level.WARNING, "Service failed, creating placeholders: " + e.getMessage());
                     createPlaceholderCinemas();
                 }
 
+
                 // Setup carousel animation for cinemas
                 setupCarouselAnimation(cinemasContainer, cinemasScrollPane);
-            } else {
+            }
+ else {
                 LOGGER.warning("Cinemas container is null!");
             }
-        } catch (Exception e) {
+
+        }
+ catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error in loadCinemasContent: " + e.getMessage(), e);
             if (cinemasContainer != null) {
                 createPlaceholderCinemas();
                 setupCarouselAnimation(cinemasContainer, cinemasScrollPane);
             }
+
         }
+
     }
+
 
     /**
      * Create a movie card component
@@ -481,7 +548,8 @@ public class HomeClientController implements Initializable {
             String imageUrl = null;
             if (film.getImage() != null && !film.getImage().isEmpty()) {
                 imageUrl = film.getImage();
-            } else {
+            }
+ else {
                 // Use movie placeholder images from TMDB or other sources
                 String[] movieImages = {
                         "https://image.tmdb.org/t/p/w500/vZloFAK7NmvMGKE7VkF5UHaz0I.jpg", // The Batman
@@ -494,18 +562,24 @@ public class HomeClientController implements Initializable {
                         "https://image.tmdb.org/t/p/w500/xLPffWMhMj1l50ND3KchMjYoKmE.jpg", // Iron Man
                         "https://image.tmdb.org/t/p/w500/kqjL17yufvn9OVLyXYpvtyrFfak.jpg", // Thor
                         "https://image.tmdb.org/t/p/w500/A6B6uONhxzYV52M8VaivRrxqBjl.jpg" // Captain America
-                };
+                }
+;
                 imageUrl = movieImages[Math.abs(film.getName().hashCode()) % movieImages.length];
             }
+
             poster.setImage(new Image(imageUrl));
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             try {
                 poster.setImage(new Image("https://via.placeholder.com/140x200/333333/ffffff?text=" +
                         java.net.URLEncoder.encode(film.getName(), "UTF-8")));
-            } catch (Exception ex) {
+            }
+ catch (Exception ex) {
                 poster.setImage(new Image("https://via.placeholder.com/140x200/333333/ffffff?text=No+Image"));
             }
+
         }
+
 
         // Movie title
         Label title = new Label(film.getName());
@@ -536,6 +610,7 @@ public class HomeClientController implements Initializable {
             ratingBox.getChildren().add(star);
         }
 
+
         card.getChildren().addAll(poster, title, year, ratingBox);
 
         // Add hover effect
@@ -544,7 +619,8 @@ public class HomeClientController implements Initializable {
                     card.getStyle() +
                             "-fx-border-color: rgba(139, 0, 0, 0.6);" +
                             "-fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.4), 15, 0, 0, 5);");
-        });
+        }
+);
 
         card.setOnMouseExited(e -> {
             card.setStyle(
@@ -556,13 +632,15 @@ public class HomeClientController implements Initializable {
                             "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0, 0, 3);" +
                             "-fx-padding: 10;" +
                             "-fx-cursor: hand;");
-        });
+        }
+);
 
         // Add click handler
         card.setOnMouseClicked(e -> openMovieDetails(film));
 
         return card;
     }
+
 
     /**
      * Create a series card component
@@ -594,7 +672,8 @@ public class HomeClientController implements Initializable {
             String imageUrl = null;
             if (series.getImage() != null && !series.getImage().isEmpty()) {
                 imageUrl = series.getImage();
-            } else {
+            }
+ else {
                 // Use TV series placeholder images
                 String[] seriesImages = {
                         "https://image.tmdb.org/t/p/w500/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg", // Game of Thrones
@@ -607,18 +686,24 @@ public class HomeClientController implements Initializable {
                         "https://image.tmdb.org/t/p/w500/6LelQ6GzOoSKAj0AQPHRDdPB3Zg.jpg", // Sherlock
                         "https://image.tmdb.org/t/p/w500/sWgBv7LV2PRoQgkxwlibdGXQ6he.jpg", // Squid Game
                         "https://image.tmdb.org/t/p/w500/1BIoJGKbXvdLDVv01hJR4VQ6vTX.jpg" // Wednesday
-                };
+                }
+;
                 imageUrl = seriesImages[Math.abs(series.getName().hashCode()) % seriesImages.length];
             }
+
             poster.setImage(new Image(imageUrl));
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             try {
                 poster.setImage(new Image("https://via.placeholder.com/140x200/444444/ffffff?text=" +
                         java.net.URLEncoder.encode(series.getName(), "UTF-8")));
-            } catch (Exception ex) {
+            }
+ catch (Exception ex) {
                 poster.setImage(new Image("https://via.placeholder.com/140x200/444444/ffffff?text=Series"));
             }
+
         }
+
 
         // Series title
         Label title = new Label(series.getName());
@@ -645,6 +730,7 @@ public class HomeClientController implements Initializable {
 
         return card;
     }
+
 
     /**
      * Create a product card component
@@ -676,7 +762,8 @@ public class HomeClientController implements Initializable {
             String imageUrl = null;
             if (product.getImage() != null && !product.getImage().isEmpty()) {
                 imageUrl = product.getImage();
-            } else {
+            }
+ else {
                 // Use cinema-related product images
                 String[] productImages = {
                         "https://images.unsplash.com/photo-1505686994434-e3cc5abf1330?w=300&h=400&fit=crop", // Popcorn
@@ -698,18 +785,24 @@ public class HomeClientController implements Initializable {
                                                                                                              // snacks
                         "https://images.unsplash.com/photo-1580745313093-4e79b5b3e6c0?w=300&h=400&fit=crop" // Movie
                                                                                                             // memorabilia
-                };
+                }
+;
                 imageUrl = productImages[Math.abs(product.getName().hashCode()) % productImages.length];
             }
+
             image.setImage(new Image(imageUrl));
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             try {
                 image.setImage(new Image("https://via.placeholder.com/140x180/555555/ffffff?text=" +
                         java.net.URLEncoder.encode(product.getName(), "UTF-8")));
-            } catch (Exception ex) {
+            }
+ catch (Exception ex) {
                 image.setImage(new Image("https://via.placeholder.com/140x180/555555/ffffff?text=Product"));
             }
+
         }
+
 
         // Product name
         Label name = new Label(product.getName());
@@ -738,6 +831,7 @@ public class HomeClientController implements Initializable {
         return card;
     }
 
+
     /**
      * Setup card interactions (hover effects and click handlers)
      */
@@ -747,7 +841,8 @@ public class HomeClientController implements Initializable {
                     card.getStyle() +
                             "-fx-border-color: rgba(139, 0, 0, 0.6);" +
                             "-fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.4), 15, 0, 0, 5);");
-        });
+        }
+);
 
         card.setOnMouseExited(e -> {
             card.setStyle(
@@ -759,10 +854,12 @@ public class HomeClientController implements Initializable {
                             "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0, 0, 3);" +
                             "-fx-padding: 10;" +
                             "-fx-cursor: hand;");
-        });
+        }
+);
 
         card.setOnMouseClicked(e -> onClickAction.run());
     }
+
 
     /**
      * Setup all animations for the interface
@@ -775,6 +872,7 @@ public class HomeClientController implements Initializable {
         createDynamicShapes();
     }
 
+
     /**
      * Create additional dynamic particles with randomness
      */
@@ -783,6 +881,7 @@ public class HomeClientController implements Initializable {
             LOGGER.warning("Particles container is null, cannot create dynamic particles");
             return;
         }
+
 
         try {
             // Create 15 additional random particles with more variety
@@ -808,7 +907,8 @@ public class HomeClientController implements Initializable {
                         "#ff1111", "#ff2222", "#ff3333", "#ff4444", "#ff5555", "#ff6666", "#ff7777",
                         "#ee1111", "#ee2222", "#ee3333", "#dd1111", "#dd2222", "#cc1111", "#cc2222",
                         "#bb1111", "#aa1111", "#990000", "#880000", "#770000", "#660000"
-                };
+                }
+;
                 String color = colorPalette[random.nextInt(colorPalette.length)];
 
                 // Randomize gradient direction
@@ -818,7 +918,8 @@ public class HomeClientController implements Initializable {
                         "radial-gradient(center 70% 70%, radius 60%, " + color + "88, #880000aa)",
                         "linear-gradient(45deg, " + color + "aa, #660000aa)",
                         "linear-gradient(135deg, " + color + "88, #440000cc)"
-                };
+                }
+;
                 String gradient = gradientTypes[random.nextInt(gradientTypes.length)];
 
                 double shadowRadius = 6 + random.nextDouble() * 12; // 6-18px shadow
@@ -828,16 +929,20 @@ public class HomeClientController implements Initializable {
                                 "-fx-effect: dropshadow(gaussian, " + color + "99, " + shadowRadius + ", 0, 0, 0);");
 
                 // Assign random animation class combinations
-                String[] animationClasses = { "floating-particle", "glow-red", "pulsing-shape" };
+                String[] animationClasses = { "floating-particle", "glow-red", "pulsing-shape" }
+;
                 StringBuilder classBuilder = new StringBuilder();
                 for (String animClass : animationClasses) {
                     if (random.nextBoolean()) { // 50% chance for each class
                         classBuilder.append(animClass).append(" ");
                     }
+
                 }
+
                 if (classBuilder.length() > 0) {
                     particle.getStyleClass().addAll(classBuilder.toString().trim().split(" "));
                 }
+
 
                 // Add to containers
                 dynamicParticles.add(particle);
@@ -847,11 +952,15 @@ public class HomeClientController implements Initializable {
                 setupAdvancedParticleAnimation(particle, random.nextDouble() * 5);
             }
 
+
             LOGGER.info("Created " + dynamicParticles.size() + " dynamic particles with advanced randomness");
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error creating dynamic particles: " + e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Create additional dynamic shapes with better randomness
@@ -899,7 +1008,8 @@ public class HomeClientController implements Initializable {
                                 0.0, -size,
                                 -size * 0.866, size * 0.5,
                                 size * 0.866, size * 0.5
-                        });
+                        }
+);
                         triangle.setLayoutX(x);
                         triangle.setLayoutY(y);
                         triangle.setOpacity(opacity);
@@ -915,7 +1025,8 @@ public class HomeClientController implements Initializable {
                                 diamondSize, 0.0,
                                 0.0, diamondSize,
                                 -diamondSize, 0.0
-                        });
+                        }
+);
                         diamond.setLayoutX(x);
                         diamond.setLayoutY(y);
                         diamond.setOpacity(opacity);
@@ -924,12 +1035,14 @@ public class HomeClientController implements Initializable {
                         break;
                 }
 
+
                 if (shape != null) {
                     // Enhanced color variety
                     String[] colorPalette = {
                             "#c80000", "#b40000", "#dc3232", "#a00000", "#e04444", "#cc1111",
                             "#d02020", "#b81818", "#f03030", "#c41515", "#e82828", "#bc0c0c"
-                    };
+                    }
+;
                     String primaryColor = colorPalette[random.nextInt(colorPalette.length)];
                     String secondaryColor = colorPalette[random.nextInt(colorPalette.length)];
 
@@ -942,7 +1055,8 @@ public class HomeClientController implements Initializable {
                                     + "66)",
                             "radial-gradient(center 30% 70%, radius 80%, " + primaryColor + "aa, " + secondaryColor
                                     + "44)"
-                    };
+                    }
+;
                     String gradient = gradientPatterns[random.nextInt(gradientPatterns.length)];
 
                     String strokeColor = colorPalette[random.nextInt(colorPalette.length)];
@@ -959,16 +1073,20 @@ public class HomeClientController implements Initializable {
                     shape.setMouseTransparent(true);
 
                     // Random animation class assignments
-                    String[] animationClasses = { "rotating-shape", "pulsing-shape", "glow-red" };
+                    String[] animationClasses = { "rotating-shape", "pulsing-shape", "glow-red" }
+;
                     java.util.List<String> assignedClasses = new ArrayList<>();
                     for (String animClass : animationClasses) {
                         if (random.nextDouble() < 0.7) { // 70% chance for each class
                             assignedClasses.add(animClass);
                         }
+
                     }
+
                     if (!assignedClasses.isEmpty()) {
                         shape.getStyleClass().addAll(assignedClasses);
                     }
+
 
                     dynamicShapes.add(shape);
                     particlesContainer.getChildren().add(shape);
@@ -976,13 +1094,18 @@ public class HomeClientController implements Initializable {
                     // Setup complex animation
                     setupAdvancedShapeAnimation(shape, random.nextDouble() * 3);
                 }
+
             }
 
+
             LOGGER.info("Created " + dynamicShapes.size() + " dynamic shapes with enhanced randomness");
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error creating dynamic shapes: " + e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Setup advanced animation for a dynamic particle
@@ -1031,6 +1154,7 @@ public class HomeClientController implements Initializable {
         fade.play();
         scale.play();
     }
+
 
     /**
      * Setup advanced animation for a dynamic shape
@@ -1084,6 +1208,7 @@ public class HomeClientController implements Initializable {
             drift.play();
         }
 
+
         // Start all animations
         rotation.play();
         scaleX.play();
@@ -1091,18 +1216,23 @@ public class HomeClientController implements Initializable {
         fade.play();
     }
 
+
     /**
      * Setup particle floating animations
      */
     private void setupParticleAnimations() {
-        Circle[] particles = { particle1, particle2, particle3, particle4, particle5, particle6 };
+        Circle[] particles = { particle1, particle2, particle3, particle4, particle5, particle6 }
+;
 
         for (int i = 0; i < particles.length; i++) {
             if (particles[i] != null) {
                 setupParticleAnimation(particles[i], i * 0.5);
             }
+
         }
+
     }
+
 
     /**
      * Setup individual particle animation
@@ -1125,6 +1255,7 @@ public class HomeClientController implements Initializable {
         fadeTransition.play();
     }
 
+
     /**
      * Setup shape rotation and pulsing animations
      */
@@ -1146,6 +1277,7 @@ public class HomeClientController implements Initializable {
             setupPulsingAnimation(shape4);
     }
 
+
     /**
      * Setup rotation animation for a shape
      */
@@ -1156,6 +1288,7 @@ public class HomeClientController implements Initializable {
         rotation.setCycleCount(Timeline.INDEFINITE);
         rotation.play();
     }
+
 
     /**
      * Setup pulsing animation for a shape
@@ -1178,6 +1311,7 @@ public class HomeClientController implements Initializable {
         fade.play();
     }
 
+
     /**
      * Setup content area animations
      */
@@ -1189,7 +1323,9 @@ public class HomeClientController implements Initializable {
             fadeIn.setToValue(1.0);
             fadeIn.play();
         }
+
     }
+
 
     /**
      * Setup search functionality
@@ -1200,9 +1336,13 @@ public class HomeClientController implements Initializable {
                 if (newValue != null && newValue.length() > 2) {
                     performSearch(newValue);
                 }
-            });
+
+            }
+);
         }
+
     }
+
 
     /**
      * Perform search across all content types
@@ -1213,6 +1353,7 @@ public class HomeClientController implements Initializable {
         LOGGER.info("Searching for: " + query);
     }
 
+
     /**
      * Apply initial styling and effects
      */
@@ -1221,7 +1362,9 @@ public class HomeClientController implements Initializable {
         if (rootContainer != null) {
             rootContainer.getStyleClass().add("fade-in");
         }
+
     }
+
 
     // Navigation event handlers
 
@@ -1232,10 +1375,13 @@ public class HomeClientController implements Initializable {
             Parent root = loader.load();
             Stage stage = (Stage) rootContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
-        } catch (IOException e) {
+        }
+ catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading movies interface: " + e.getMessage(), e);
         }
+
     }
+
 
     @FXML
     void showSeries(ActionEvent event) {
@@ -1244,10 +1390,13 @@ public class HomeClientController implements Initializable {
             Parent root = loader.load();
             Stage stage = (Stage) rootContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
-        } catch (IOException e) {
+        }
+ catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading series interface: " + e.getMessage(), e);
         }
+
     }
+
 
     @FXML
     void showProducts(ActionEvent event) {
@@ -1256,10 +1405,13 @@ public class HomeClientController implements Initializable {
             Parent root = loader.load();
             Stage stage = (Stage) rootContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
-        } catch (IOException e) {
+        }
+ catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading products interface: " + e.getMessage(), e);
         }
+
     }
+
 
     @FXML
     void showCinemas(ActionEvent event) {
@@ -1268,10 +1420,13 @@ public class HomeClientController implements Initializable {
             Parent root = loader.load();
             Stage stage = (Stage) rootContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
-        } catch (IOException e) {
+        }
+ catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading cinemas interface: " + e.getMessage(), e);
         }
+
     }
+
 
     @FXML
     void showProfile(ActionEvent event) {
@@ -1280,10 +1435,13 @@ public class HomeClientController implements Initializable {
             Parent root = loader.load();
             Stage stage = (Stage) rootContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
-        } catch (IOException e) {
+        }
+ catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading profile interface: " + e.getMessage(), e);
         }
+
     }
+
 
     @FXML
     void logout(ActionEvent event) {
@@ -1293,10 +1451,13 @@ public class HomeClientController implements Initializable {
             Stage stage = (Stage) rootContainer.getScene().getWindow();
             stage.setUserData(null); // Clear user data
             stage.setScene(new Scene(root));
-        } catch (IOException e) {
+        }
+ catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error during logout: " + e.getMessage(), e);
         }
+
     }
+
 
     // Content detail handlers
 
@@ -1305,30 +1466,39 @@ public class HomeClientController implements Initializable {
         // Navigate to movie details or show movie player
         try {
             showMovies(null);
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error opening movie details: " + e.getMessage(), e);
         }
+
     }
+
 
     private void openSeriesDetails(Series series) {
         LOGGER.info("Opening series details for: " + series.getName());
         // Navigate to series details or episode list
         try {
             showSeries(null);
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error opening series details: " + e.getMessage(), e);
         }
+
     }
+
 
     private void openProductDetails(Product product) {
         LOGGER.info("Opening product details for: " + product.getName());
         // Navigate to product details or add to cart
         try {
             showProducts(null);
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error opening product details: " + e.getMessage(), e);
         }
+
     }
+
 
     // Placeholder content creators (for when services fail)
 
@@ -1336,57 +1506,69 @@ public class HomeClientController implements Initializable {
         String[] placeholderMovies = {
                 "The Batman", "Dune", "Joker", "Oppenheimer", "Spider-Man: Across the Spider-Verse",
                 "Avengers: Endgame", "The Dark Knight", "Inception", "Interstellar", "The Matrix"
-        };
+        }
+;
 
         String[] movieDescriptions = {
                 "2022 • Action", "2021 • Sci-Fi", "2019 • Drama", "2023 • Biography", "2023 • Animation",
                 "2019 • Action", "2008 • Action", "2010 • Sci-Fi", "2014 • Sci-Fi", "1999 • Sci-Fi"
-        };
+        }
+;
 
         moviesContainer.getChildren().clear();
         for (int i = 0; i < placeholderMovies.length; i++) {
             VBox card = createRichPlaceholderCard(placeholderMovies[i], movieDescriptions[i], "Movie");
             moviesContainer.getChildren().add(card);
         }
+
     }
+
 
     private void createPlaceholderSeries() {
         String[] placeholderSeries = {
                 "Breaking Bad", "Game of Thrones", "The Office", "Stranger Things", "The Crown",
                 "The Mandalorian", "House of the Dragon", "Wednesday", "The Witcher", "Peaky Blinders"
-        };
+        }
+;
 
         String[] seriesDescriptions = {
                 "5 Seasons • Drama", "8 Seasons • Fantasy", "9 Seasons • Comedy", "4 Seasons • Sci-Fi",
                 "6 Seasons • Drama",
                 "3 Seasons • Sci-Fi", "1 Season • Fantasy", "1 Season • Comedy", "3 Seasons • Fantasy",
                 "6 Seasons • Crime"
-        };
+        }
+;
 
         seriesContainer.getChildren().clear();
         for (int i = 0; i < placeholderSeries.length; i++) {
             VBox card = createRichPlaceholderCard(placeholderSeries[i], seriesDescriptions[i], "Series");
             seriesContainer.getChildren().add(card);
         }
+
     }
+
 
     private void createPlaceholderProducts() {
         String[] placeholderProducts = {
                 "Premium Popcorn", "VIP Movie Tickets", "Gourmet Candy Mix", "Specialty Drinks", "Movie Merchandise",
                 "Collector's Edition", "Director's Cut", "Limited Edition", "Exclusive Bundle", "Gift Cards"
-        };
+        }
+;
 
         String[] productPrices = {
                 "$8.99", "$15.99", "$6.49", "$4.99", "$12.99",
                 "$24.99", "$19.99", "$29.99", "$39.99", "$25.00"
-        };
+        }
+;
 
         productsContainer.getChildren().clear();
         for (int i = 0; i < placeholderProducts.length; i++) {
             VBox card = createRichPlaceholderCard(placeholderProducts[i], productPrices[i], "Product");
             productsContainer.getChildren().add(card);
         }
+
     }
+
 
     /**
      * Create a rich placeholder card with detailed information
@@ -1418,16 +1600,20 @@ public class HomeClientController implements Initializable {
 
         try {
             imageView.setImage(new Image(imageUrl));
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             // Fallback to a more reliable placeholder
             try {
                 String fallbackUrl = "https://via.placeholder.com/140x200/666666/ffffff?text=" +
                         java.net.URLEncoder.encode(type, "UTF-8");
                 imageView.setImage(new Image(fallbackUrl));
-            } catch (Exception ex) {
+            }
+ catch (Exception ex) {
                 LOGGER.log(Level.WARNING, "Error loading placeholder image: " + ex.getMessage());
             }
+
         }
+
 
         // Enhanced title
         Label titleLabel = new Label(title);
@@ -1468,6 +1654,7 @@ public class HomeClientController implements Initializable {
         return card;
     }
 
+
     /**
      * Get appropriate image URL based on content type and title
      */
@@ -1485,7 +1672,8 @@ public class HomeClientController implements Initializable {
                         "https://image.tmdb.org/t/p/w500/rr7E0NoGKxvbkb89eR1GwfoYjpA.jpg", // Inception
                         "https://image.tmdb.org/t/p/w500/pFlaoHTZeyNkG83vxsAJiGzfSsa.jpg", // Interstellar
                         "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg" // The Matrix
-                };
+                }
+;
                 return movieImages[Math.abs(title.hashCode()) % movieImages.length];
 
             case "Series":
@@ -1500,7 +1688,8 @@ public class HomeClientController implements Initializable {
                         "https://image.tmdb.org/t/p/w500/1BIoJGKbXvdLDVv01hJR4VQ6vTX.jpg", // Wednesday
                         "https://image.tmdb.org/t/p/w500/7WUHnWGx5OO145IRxPDUkQSh4C7.jpg", // The Witcher
                         "https://image.tmdb.org/t/p/w500/mY7SeH4HFFxW1hiI6cWuwCRKptN.jpg" // Peaky Blinders
-                };
+                }
+;
                 return seriesImages[Math.abs(title.hashCode()) % seriesImages.length];
 
             case "Product":
@@ -1524,7 +1713,8 @@ public class HomeClientController implements Initializable {
                                                                                                              // collectibles
                         "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=300&h=400&fit=crop" // Cinema
                                                                                                             // accessories
-                };
+                }
+;
                 return productImages[Math.abs(title.hashCode()) % productImages.length];
 
             case "Cinema":
@@ -1549,13 +1739,16 @@ public class HomeClientController implements Initializable {
                                                                                                              // posters
                         "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=300&h=400&fit=crop" // Cinema
                                                                                                             // exterior
-                };
+                }
+;
                 return cinemaImages[Math.abs(title.hashCode()) % cinemaImages.length];
 
             default:
                 return "https://via.placeholder.com/140x200/555555/ffffff?text=" + type;
         }
+
     }
+
 
     /**
      * Create a cinema card component
@@ -1587,7 +1780,8 @@ public class HomeClientController implements Initializable {
             String imageUrl = null;
             if (cinema.getLogoPath() != null && !cinema.getLogoPath().isEmpty()) {
                 imageUrl = cinema.getLogoPath();
-            } else {
+            }
+ else {
                 // Use cinema-related images
                 String[] cinemaImages = {
                         "https://images.unsplash.com/photo-1489599446190-c9ad1d88c3dc?w=300&h=400&fit=crop", // Cinema
@@ -1610,18 +1804,24 @@ public class HomeClientController implements Initializable {
                                                                                                              // posters
                         "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=300&h=400&fit=crop" // Cinema
                                                                                                             // exterior
-                };
+                }
+;
                 imageUrl = cinemaImages[Math.abs(cinema.getName().hashCode()) % cinemaImages.length];
             }
+
             image.setImage(new Image(imageUrl));
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             try {
                 image.setImage(new Image("https://via.placeholder.com/140x180/555555/ffffff?text=" +
                         java.net.URLEncoder.encode(cinema.getName(), "UTF-8")));
-            } catch (Exception ex) {
+            }
+ catch (Exception ex) {
                 image.setImage(new Image("https://via.placeholder.com/140x180/555555/ffffff?text=Cinema"));
             }
+
         }
+
 
         // Cinema name
         Label name = new Label(cinema.getName());
@@ -1651,6 +1851,7 @@ public class HomeClientController implements Initializable {
         return card;
     }
 
+
     /**
      * Setup carousel animation for content containers
      */
@@ -1665,6 +1866,7 @@ public class HomeClientController implements Initializable {
                 createAdditionalPlaceholderContent(container);
                 LOGGER.info("Added additional content. Container now has " + container.getChildren().size() + " items");
             }
+
 
             // Set up the scroll pane properties for smooth scrolling
             scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -1685,15 +1887,19 @@ public class HomeClientController implements Initializable {
                                             new KeyValue(scrollPane.hvalueProperty(), 0.0, Interpolator.EASE_BOTH)));
                             resetAnimation.play();
                             LOGGER.info("Carousel reset to beginning for container");
-                        } else {
+                        }
+ else {
                             scrollPane.setHvalue(currentHValue + increment);
 
                             // Log progress every 20% for debugging
                             if ((int) (currentHValue * 100) % 20 == 0) {
                                 LOGGER.info("Carousel progress: " + String.format("%.1f%%", currentHValue * 100));
                             }
+
                         }
-                    }));
+
+                    }
+));
             autoScroll.setCycleCount(Timeline.INDEFINITE);
 
             // Enhanced hover interactions with visual feedback
@@ -1708,7 +1914,8 @@ public class HomeClientController implements Initializable {
                 pauseFeedback.play();
 
                 LOGGER.info("Carousel paused on hover");
-            };
+            }
+;
 
             EventHandler<MouseEvent> resumeHandler = e -> {
                 autoScroll.play();
@@ -1721,7 +1928,8 @@ public class HomeClientController implements Initializable {
                 resumeFeedback.play();
 
                 LOGGER.info("Carousel resumed");
-            };
+            }
+;
 
             container.setOnMouseEntered(pauseHandler);
             scrollPane.setOnMouseEntered(pauseHandler);
@@ -1737,17 +1945,23 @@ public class HomeClientController implements Initializable {
                     Thread.sleep(500); // Give more time for layout
                     autoScroll.play();
                     LOGGER.info("Carousel animation started for " + container.getChildren().size() + " items");
-                } catch (InterruptedException ex) {
+                }
+ catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
                 }
-            });
+
+            }
+);
 
             LOGGER.info("Enhanced carousel animation setup for container with " + container.getChildren().size()
                     + " items");
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error setting up carousel animation: " + e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Create additional placeholder content to ensure scrolling is visible
@@ -1760,25 +1974,31 @@ public class HomeClientController implements Initializable {
         String contentType = "Content";
         if (container == moviesContainer) {
             contentType = "Movie";
-        } else if (container == seriesContainer) {
+        }
+ else if (container == seriesContainer) {
             contentType = "Series";
-        } else if (container == productsContainer) {
+        }
+ else if (container == productsContainer) {
             contentType = "Product";
-        } else if (container == cinemasContainer) {
+        }
+ else if (container == cinemasContainer) {
             contentType = "Cinema";
         }
+
 
         String[] contentTitles = {
                 "Featured " + contentType, "Popular " + contentType, "Trending " + contentType,
                 "New Release", "Top Rated", "Editor's Choice", "Premium Selection",
                 "Exclusive Content", "Staff Pick", "Must Watch", "Bestseller", "Award Winner"
-        };
+        }
+;
 
         String[] contentDescriptions = {
                 "Premium Content", "Highly Rated", "Most Watched", "Latest Addition",
                 "Five Stars", "Staff Pick", "VIP Selection", "Exclusive Access",
                 "Curated Choice", "Fan Favorite", "Top Seller", "Critics' Choice"
-        };
+        }
+;
 
         for (int i = currentSize; i < targetSize; i++) {
             String title = contentTitles[i % contentTitles.length] + " " + (i + 1);
@@ -1786,7 +2006,9 @@ public class HomeClientController implements Initializable {
             VBox placeholderCard = createRichPlaceholderCard(title, description, contentType);
             container.getChildren().add(placeholderCard);
         }
+
     }
+
 
     /**
      * Setup visual scroll indicator for the container
@@ -1801,33 +2023,41 @@ public class HomeClientController implements Initializable {
         glowAnimation.play();
     }
 
+
     private void createPlaceholderCinemas() {
         String[] placeholderCinemas = {
                 "CineMax Plaza", "MovieWorld IMAX", "Star Cinema Complex", "Grand Theater", "Royal Movies",
                 "Premiere Cinemas", "Silver Screen", "Diamond Theater", "Elite Cinemas", "Luxury Movies"
-        };
+        }
+;
 
         String[] cinemaLocations = {
                 "Downtown", "Mall District", "City Center", "Uptown", "Suburbs",
                 "Shopping Plaza", "Entertainment Zone", "Metro Center", "Business District", "West Side"
-        };
+        }
+;
 
         cinemasContainer.getChildren().clear();
         for (int i = 0; i < placeholderCinemas.length; i++) {
             VBox card = createRichPlaceholderCard(placeholderCinemas[i], cinemaLocations[i], "Cinema");
             cinemasContainer.getChildren().add(card);
         }
+
     }
+
 
     private void openCinemaDetails(Cinema cinema) {
         LOGGER.info("Opening cinema details for: " + cinema.getName());
         // Navigate to cinema details or show cinema information
         try {
             showCinemas(null);
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error opening cinema details: " + e.getMessage(), e);
         }
+
     }
+
 
     // Additional navigation methods referenced in FXML
     @FXML
@@ -1835,20 +2065,24 @@ public class HomeClientController implements Initializable {
         showMovies(event);
     }
 
+
     @FXML
     void findCinemas(ActionEvent event) {
         showCinemas(event);
     }
+
 
     @FXML
     void browseSeries(ActionEvent event) {
         showSeries(event);
     }
 
+
     @FXML
     void viewProfile(ActionEvent event) {
         showProfile(event);
     }
+
 
     /**
      * Cleanup method called when the controller is destroyed
@@ -1858,21 +2092,29 @@ public class HomeClientController implements Initializable {
             if (featuredRotationTimeline != null) {
                 featuredRotationTimeline.stop();
             }
+
             if (particleAnimationTimeline != null) {
                 particleAnimationTimeline.stop();
             }
+
 
             // Clear dynamic particles and shapes
             if (dynamicParticles != null) {
                 dynamicParticles.clear();
             }
+
             if (dynamicShapes != null) {
                 dynamicShapes.clear();
             }
 
+
             LOGGER.info("HomeClient controller cleanup completed");
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error during cleanup: " + e.getMessage(), e);
         }
+
     }
+
 }
+

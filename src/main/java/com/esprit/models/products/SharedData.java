@@ -28,6 +28,7 @@ public class SharedData {
     private SharedData() {
     }
 
+
     /**
      * Returns the instance of the SharedData class. If the instance does not exist,
      * a new instance is created.
@@ -38,6 +39,9 @@ public class SharedData {
         if (null == instance) {
             SharedData.instance = new SharedData();
         }
+
         return SharedData.instance;
     }
+
 }
+

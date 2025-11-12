@@ -129,7 +129,8 @@ public class AdminDashboardController {
                     "Please use only lowercase letters.");
             this.addValidationListener(this.adresseTextField, newValue -> newValue.toLowerCase().equals(newValue),
                     "Please use only lowercase letters.");
-            final String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+            final String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}
+$";
             this.addValidationListener(this.emailTextField, newValue -> newValue.matches(emailRegex),
                     "Invalid email format.");
             this.addValidationListener(this.passwordTextField, newValue -> newValue.toLowerCase().equals(newValue),
@@ -141,11 +142,15 @@ public class AdminDashboardController {
             for (final String role : roleList) {
                 this.roleComboBox.getItems().add(role);
             }
+
             this.readUserTable();
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * /** Adds a listener to a `TextField` that validates the inputted string using
@@ -204,10 +209,13 @@ public class AdminDashboardController {
                 if (null != newValue) {
                     if (!validationPredicate.test(newValue)) {
                         error = errorMessage;
-                    } else if (newValue.isEmpty()) {
+                    }
+ else if (newValue.isEmpty()) {
                         error = "The string is empty.";
                     }
+
                 }
+
                 final Window window = textField.getScene().getWindow();
                 final Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
                 if (null != error) {
@@ -215,19 +223,27 @@ public class AdminDashboardController {
                     tooltip.setStyle("-fx-background-color: #f00;");
                     textField.setTooltip(tooltip);
                     textField.getTooltip().show(window, bounds.getMinX() - 10, bounds.getMinY() + 30);
-                } else {
+                }
+ else {
                     if (null != textField.getTooltip()) {
                         textField.getTooltip().hide();
                     }
+
                 }
+
             }
-        });
+
+        }
+);
         textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue && null != textField.getTooltip()) {
                 textField.getTooltip().hide();
             }
-        });
+
+        }
+);
     }
+
 
     /**
      * Reads data from a User Service and populates the user table view with the
@@ -240,10 +256,13 @@ public class AdminDashboardController {
             PageRequest pageRequest = new PageRequest(0, 10);
             final Page<User> userList = userService.read(pageRequest);
             this.userTableView.setItems(FXCollections.observableArrayList(userList.getContent()));
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * /** Allows users to create a new admin account by providing their first name,
@@ -279,12 +298,14 @@ public class AdminDashboardController {
                     alert.show();
                     return;
                 }
+
                 // Validate name format
                 if (!firstName.matches("[a-zA-Z]+") || !lastName.matches("[a-zA-Z]+")) {
                     final Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid name format", ButtonType.CLOSE);
                     alert.show();
                     return;
                 }
+
                 // Validate password length
                 if (8 > password.length()) {
                     final Alert alert = new Alert(Alert.AlertType.ERROR, "Password must be at least 8 characters long",
@@ -292,33 +313,43 @@ public class AdminDashboardController {
                     alert.show();
                     return;
                 }
+
                 // Validate phone number format
-                if (!phoneNumber.matches("\\d{10}")) {
+                if (!phoneNumber.matches("\\d{10}
+")) {
                     final Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid phone number format",
                             ButtonType.CLOSE);
                     alert.show();
                     return;
                 }
+
                 // Validate email format
-                if (!email.matches("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}")) {
+                if (!email.matches("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}
+")) {
                     final Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid email format", ButtonType.CLOSE);
                     alert.show();
                     return;
                 }
+
                 user = new Admin(firstName, lastName, phoneNumber, password, role, email, Date.valueOf(dateDeNaissance),
                         email, uri.getPath());
-            } else {
+            }
+ else {
                 final Alert alert = new Alert(Alert.AlertType.ERROR, "the given role is not available",
                         ButtonType.CLOSE);
                 alert.show();
                 return;
             }
+
             final UserService userService = new UserService();
             userService.create(user);
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Sets up cell value factories for each column of a table displaying
@@ -357,9 +388,12 @@ public class AdminDashboardController {
                         if (null != param.getValue().getBirthDate()) {
                             datePicker.setValue(param.getValue().getBirthDate().toLocalDate());
                         }
+
                         return new SimpleObjectProperty<DatePicker>(datePicker);
                     }
-                });
+
+                }
+);
         this.emailTableColumn.setCellValueFactory(new PropertyValueFactory<User, String>("email"));
         this.photoDeProfilTableColumn
                 .setCellValueFactory(new Callback<TableColumn.CellDataFeatures<User, HBox>, ObservableValue<HBox>>() {
@@ -422,17 +456,26 @@ public class AdminDashboardController {
                                             hBox.getChildren().add(imageView);
                                             photoDeProfilImageView.setImage(image);
                                         }
-                                    } catch (final Exception e) {
+
+                                    }
+ catch (final Exception e) {
                                         AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                                     }
+
                                 }
-                            });
-                        } catch (final Exception e) {
+
+                            }
+);
+                        }
+ catch (final Exception e) {
                             AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                         }
+
                         return new SimpleObjectProperty<HBox>(hBox);
                     }
-                });
+
+                }
+);
         this.deleteTableColumn.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<User, Button>, ObservableValue<Button>>() {
                     /**
@@ -476,11 +519,16 @@ public class AdminDashboardController {
                                 delete(param.getValue().getId());
                                 readUserTable();
                             }
-                        });
+
+                        }
+);
                         return new SimpleObjectProperty<Button>(button);
                     }
-                });
+
+                }
+);
     }
+
 
     /**
      * Sets up cell factories for the `adresse` and `email` columns of the user
@@ -517,7 +565,9 @@ public class AdminDashboardController {
                                         if (null != userName && !userName.toLowerCase().equals(userName)) {
                                             c.error("Please use only lowercase letters.");
                                         }
-                                    }).decorates(textField).immediate();
+
+                                    }
+).decorates(textField).immediate();
                             final Window window = getScene().getWindow();
                             final Tooltip tooltip = new Tooltip();
                             final Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
@@ -536,13 +586,18 @@ public class AdminDashboardController {
                                         textField.setTooltip(tooltip);
                                         textField.getTooltip().show(window, bounds.getMinX() - 10,
                                                 bounds.getMinY() + 30);
-                                    } else {
+                                    }
+ else {
                                         if (null != textField.getTooltip()) {
                                             textField.getTooltip().hide();
                                         }
+
                                     }
+
                                 }
-                            });
+
+                            }
+);
                             textField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
                                 @Override
                                 /**
@@ -555,14 +610,23 @@ public class AdminDashboardController {
                                         if (validator.containsErrors()) {
                                             event.consume();
                                         }
+
                                     }
+
                                 }
-                            });
+
+                            }
+);
                         }
+
                     }
-                };
+
+                }
+;
             }
-        });
+
+        }
+);
         this.lastNameTableColumn.setCellFactory(new Callback<TableColumn<User, String>, TableCell<User, String>>() {
             @Override
             /**
@@ -591,7 +655,9 @@ public class AdminDashboardController {
                                         if (null != userName && !userName.toLowerCase().equals(userName)) {
                                             c.error("Please use only lowercase letters.");
                                         }
-                                    }).decorates(textField).immediate();
+
+                                    }
+).decorates(textField).immediate();
                             final Window window = getScene().getWindow();
                             final Tooltip tooltip = new Tooltip();
                             final Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
@@ -610,13 +676,18 @@ public class AdminDashboardController {
                                         textField.setTooltip(tooltip);
                                         textField.getTooltip().show(window, bounds.getMinX() - 10,
                                                 bounds.getMinY() + 30);
-                                    } else {
+                                    }
+ else {
                                         if (null != textField.getTooltip()) {
                                             textField.getTooltip().hide();
                                         }
+
                                     }
+
                                 }
-                            });
+
+                            }
+);
                             textField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
                                 @Override
                                 /**
@@ -629,14 +700,23 @@ public class AdminDashboardController {
                                         if (validator.containsErrors()) {
                                             event.consume();
                                         }
+
                                     }
+
                                 }
-                            });
+
+                            }
+);
                         }
+
                     }
-                };
+
+                }
+;
             }
-        });
+
+        }
+);
         this.numTelTableColumn.setCellFactory(new Callback<TableColumn<User, String>, TableCell<User, String>>() {
             @Override
             /**
@@ -665,7 +745,9 @@ public class AdminDashboardController {
                                         if (null != userName && !userName.toLowerCase().equals(userName)) {
                                             c.error("Please use only lowercase letters.");
                                         }
-                                    }).decorates(textField).immediate();
+
+                                    }
+).decorates(textField).immediate();
                             final Window window = getScene().getWindow();
                             final Tooltip tooltip = new Tooltip();
                             final Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
@@ -684,13 +766,18 @@ public class AdminDashboardController {
                                         textField.setTooltip(tooltip);
                                         textField.getTooltip().show(window, bounds.getMinX() - 10,
                                                 bounds.getMinY() + 30);
-                                    } else {
+                                    }
+ else {
                                         if (null != textField.getTooltip()) {
                                             textField.getTooltip().hide();
                                         }
+
                                     }
+
                                 }
-                            });
+
+                            }
+);
                             textField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
                                 @Override
                                 /**
@@ -703,14 +790,23 @@ public class AdminDashboardController {
                                         if (validator.containsErrors()) {
                                             event.consume();
                                         }
+
                                     }
+
                                 }
-                            });
+
+                            }
+);
                         }
+
                     }
-                };
+
+                }
+;
             }
-        });
+
+        }
+);
         this.passwordTableColumn.setCellFactory(new Callback<TableColumn<User, String>, TableCell<User, String>>() {
             @Override
             /**
@@ -739,7 +835,9 @@ public class AdminDashboardController {
                                         if (null != userName && !userName.toLowerCase().equals(userName)) {
                                             c.error("Please use only lowercase letters.");
                                         }
-                                    }).decorates(textField).immediate();
+
+                                    }
+).decorates(textField).immediate();
                             final Window window = getScene().getWindow();
                             final Tooltip tooltip = new Tooltip();
                             final Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
@@ -758,13 +856,18 @@ public class AdminDashboardController {
                                         textField.setTooltip(tooltip);
                                         textField.getTooltip().show(window, bounds.getMinX() - 10,
                                                 bounds.getMinY() + 30);
-                                    } else {
+                                    }
+ else {
                                         if (null != textField.getTooltip()) {
                                             textField.getTooltip().hide();
                                         }
+
                                     }
+
                                 }
-                            });
+
+                            }
+);
                             textField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
                                 @Override
                                 /**
@@ -777,14 +880,23 @@ public class AdminDashboardController {
                                         if (validator.containsErrors()) {
                                             event.consume();
                                         }
+
                                     }
+
                                 }
-                            });
+
+                            }
+);
                         }
+
                     }
-                };
+
+                }
+;
             }
-        });
+
+        }
+);
         this.roleTableColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new DefaultStringConverter(), "admin",
                 "client", "responsable de cinema"));
         this.adresseTableColumn.setCellFactory(new Callback<TableColumn<User, String>, TableCell<User, String>>() {
@@ -815,7 +927,9 @@ public class AdminDashboardController {
                                         if (null != userName && !userName.toLowerCase().equals(userName)) {
                                             c.error("Please use only lowercase letters.");
                                         }
-                                    }).decorates(textField).immediate();
+
+                                    }
+).decorates(textField).immediate();
                             final Window window = getScene().getWindow();
                             final Tooltip tooltip = new Tooltip();
                             final Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
@@ -834,13 +948,18 @@ public class AdminDashboardController {
                                         textField.setTooltip(tooltip);
                                         textField.getTooltip().show(window, bounds.getMinX() - 10,
                                                 bounds.getMinY() + 30);
-                                    } else {
+                                    }
+ else {
                                         if (null != textField.getTooltip()) {
                                             textField.getTooltip().hide();
                                         }
+
                                     }
+
                                 }
-                            });
+
+                            }
+);
                             textField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
                                 @Override
                                 /**
@@ -853,14 +972,23 @@ public class AdminDashboardController {
                                         if (validator.containsErrors()) {
                                             event.consume();
                                         }
+
                                     }
+
                                 }
-                            });
+
+                            }
+);
                         }
+
                     }
-                };
+
+                }
+;
             }
-        });
+
+        }
+);
         this.emailTableColumn.setCellFactory(new Callback<TableColumn<User, String>, TableCell<User, String>>() {
             @Override
             /**
@@ -888,7 +1016,9 @@ public class AdminDashboardController {
                                 if (null != userName && !userName.toLowerCase().equals(userName)) {
                                     c.error("Please use only lowercase letters.");
                                 }
-                            }).decorates(textField).immediate();
+
+                            }
+).decorates(textField).immediate();
                             final Window window = getScene().getWindow();
                             final Tooltip tooltip = new Tooltip();
                             final Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
@@ -907,13 +1037,18 @@ public class AdminDashboardController {
                                         textField.setTooltip(tooltip);
                                         textField.getTooltip().show(window, bounds.getMinX() - 10,
                                                 bounds.getMinY() + 30);
-                                    } else {
+                                    }
+ else {
                                         if (null != textField.getTooltip()) {
                                             textField.getTooltip().hide();
                                         }
+
                                     }
+
                                 }
-                            });
+
+                            }
+);
                             textField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
                                 @Override
                                 /**
@@ -926,15 +1061,25 @@ public class AdminDashboardController {
                                         if (validator.containsErrors()) {
                                             event.consume();
                                         }
+
                                     }
+
                                 }
-                            });
+
+                            }
+);
                         }
+
                     }
-                };
+
+                }
+;
             }
-        });
+
+        }
+);
     }
+
 
     private void setupCellOnEditCommit() {
         this.firstNameTableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
@@ -950,11 +1095,15 @@ public class AdminDashboardController {
                             .setFirstName(event.getNewValue());
                     AdminDashboardController.this
                             .update(event.getTableView().getItems().get(event.getTablePosition().getRow()));
-                } catch (final Exception e) {
+                }
+ catch (final Exception e) {
                     AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
+
             }
-        });
+
+        }
+);
         this.lastNameTableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
             @Override
             /**
@@ -968,11 +1117,15 @@ public class AdminDashboardController {
                             .setLastName(event.getNewValue());
                     AdminDashboardController.this
                             .update(event.getTableView().getItems().get(event.getTablePosition().getRow()));
-                } catch (final Exception e) {
+                }
+ catch (final Exception e) {
                     AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
+
             }
-        });
+
+        }
+);
         this.numTelTableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
             @Override
             /**
@@ -986,11 +1139,15 @@ public class AdminDashboardController {
                             .setPhoneNumber(event.getNewValue());
                     AdminDashboardController.this
                             .update(event.getTableView().getItems().get(event.getTablePosition().getRow()));
-                } catch (final Exception e) {
+                }
+ catch (final Exception e) {
                     AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
+
             }
-        });
+
+        }
+);
         this.passwordTableColumn.setOnEditStart(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
             @Override
             /**
@@ -1004,11 +1161,15 @@ public class AdminDashboardController {
                             .setPassword(event.getNewValue());
                     AdminDashboardController.this
                             .update(event.getTableView().getItems().get(event.getTablePosition().getRow()));
-                } catch (final Exception e) {
+                }
+ catch (final Exception e) {
                     AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
+
             }
-        });
+
+        }
+);
         this.roleTableColumn.setOnEditStart(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
             @Override
             /**
@@ -1021,11 +1182,15 @@ public class AdminDashboardController {
                     event.getTableView().getItems().get(event.getTablePosition().getRow()).setRole(event.getNewValue());
                     AdminDashboardController.this
                             .update(event.getTableView().getItems().get(event.getTablePosition().getRow()));
-                } catch (final Exception e) {
+                }
+ catch (final Exception e) {
                     AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
+
             }
-        });
+
+        }
+);
         this.adresseTableColumn.setOnEditStart(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
             @Override
             /**
@@ -1039,11 +1204,15 @@ public class AdminDashboardController {
                             .setAddress(event.getNewValue());
                     AdminDashboardController.this
                             .update(event.getTableView().getItems().get(event.getTablePosition().getRow()));
-                } catch (final Exception e) {
+                }
+ catch (final Exception e) {
                     AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
+
             }
-        });
+
+        }
+);
         this.dateDeNaissanceTableColumn.setOnEditStart(new EventHandler<TableColumn.CellEditEvent<User, DatePicker>>() {
             @Override
             /**
@@ -1057,7 +1226,9 @@ public class AdminDashboardController {
                 AdminDashboardController.this
                         .update(event.getTableView().getItems().get(event.getTablePosition().getRow()));
             }
-        });
+
+        }
+);
         this.emailTableColumn.setOnEditStart(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
             @Override
             /**
@@ -1070,8 +1241,11 @@ public class AdminDashboardController {
                 AdminDashboardController.this
                         .update(event.getTableView().getItems().get(event.getTablePosition().getRow()));
             }
-        });
+
+        }
+);
     }
+
 
     /**
      * @param event
@@ -1090,6 +1264,7 @@ public class AdminDashboardController {
         this.photoDeProfilImageView.setImage(null);
     }
 
+
     /**
      * @param id
      */
@@ -1103,30 +1278,36 @@ public class AdminDashboardController {
         // passwordTextField.getText(), roleComboBox.getValue(),
         // emailTextField.getText(), Date.valueOf(dateDeNaissanceDatePicker.getValue()),
         // emailTextField.getText());
-        // } else if (role.equals("responsable de cinema")) {
+        // }
+ else if (role.equals("responsable de cinema")) {
         // user = new CinemaManager(Integer.parseInt(idTextField.getText()),
         // firstNameTextField.getText(), lastNameTextField.getText(),
         // Integer.parseInt(phoneNumberTextField.getText()),
         // passwordTextField.getText(), roleComboBox.getValue(),
         // emailTextField.getText(), Date.valueOf(dateDeNaissanceDatePicker.getValue()),
         // emailTextField.getText());
-        // } else if (role.equals("client")) {
+        // }
+ else if (role.equals("client")) {
         // user = new Client(Integer.parseInt(idTextField.getText()),
         // firstNameTextField.getText(), lastNameTextField.getText(),
         // Integer.parseInt(phoneNumberTextField.getText()),
         // passwordTextField.getText(), roleComboBox.getValue(),
         // emailTextField.getText(), Date.valueOf(dateDeNaissanceDatePicker.getValue()),
         // emailTextField.getText());
-        // } else {
+        // }
+ else {
         // Alert alert = new Alert(Alert.AlertType.ERROR, "the given role is not
         // available", ButtonType.CLOSE);
         // alert.show();
         // return;
         // }
+
         final UserService userService = new UserService();
         userService.delete(new User(id, "", "", "", "", "", "", new Date(0, 0, 0), "", null) {
-        });
+        }
+);
     }
+
 
     /**
      * @param event
@@ -1149,11 +1330,15 @@ public class AdminDashboardController {
                 this.photoDeProfilImageView.setImage(selectedImage);
 
                 LOGGER.info("Image uploaded to Cloudinary: " + cloudinaryImageUrl);
-            } catch (final IOException e) {
+            }
+ catch (final IOException e) {
                 AdminDashboardController.LOGGER.log(Level.SEVERE, "Error uploading image to Cloudinary", e);
             }
+
         }
+
     }
+
 
     /**
      * @param user
@@ -1162,16 +1347,20 @@ public class AdminDashboardController {
         try {
             final UserService userService = new UserService();
             userService.update(user);
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     @FXML
     void generatePDF() {
         final UserService userService = new UserService();
         userService.generateUserPDF();
     }
+
 
     @FXML
     /**
@@ -1187,4 +1376,6 @@ public class AdminDashboardController {
         final Parent root = loader.load();
         stage.setScene(new Scene(root));
     }
+
 }
+

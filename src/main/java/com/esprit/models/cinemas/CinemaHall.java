@@ -54,4 +54,6 @@ public class CinemaHall {
         this.seats = new ArrayList<>();
         this.movieSessions = new ArrayList<>();
     }
+
 }
+

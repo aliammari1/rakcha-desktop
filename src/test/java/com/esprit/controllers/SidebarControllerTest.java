@@ -64,6 +64,7 @@ class SidebarControllerTest extends TestFXBase {
         stage.show();
     }
 
+
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
     @DisplayName("Common UI Elements Tests")
@@ -83,6 +84,7 @@ class SidebarControllerTest extends TestFXBase {
                     "#logoutButton");
         }
 
+
         @Test
         @Order(2)
         @DisplayName("Common buttons should be enabled")
@@ -96,6 +98,7 @@ class SidebarControllerTest extends TestFXBase {
             verifyThat("#logoutButton", isEnabled());
         }
 
+
         @Test
         @Order(3)
         @DisplayName("Should display icons for navigation buttons")
@@ -105,7 +108,9 @@ class SidebarControllerTest extends TestFXBase {
             verifyThat("#productIcon", isNotNull());
             verifyThat("#cinemaIcon", isNotNull());
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -129,12 +134,14 @@ class SidebarControllerTest extends TestFXBase {
             runOnFxThread(() -> controller.setCurrentUser(admin));
         }
 
+
         @Test
         @Order(10)
         @DisplayName("Admin should see users button")
         void testAdminUsersButtonVisible() {
             verifyThat("#usersButton", isVisible());
         }
+
 
         @Test
         @Order(11)
@@ -143,6 +150,7 @@ class SidebarControllerTest extends TestFXBase {
             verifyThat("#orderButton", isVisible());
         }
 
+
         @Test
         @Order(12)
         @DisplayName("Admin buttons should be enabled")
@@ -150,6 +158,7 @@ class SidebarControllerTest extends TestFXBase {
             verifyThat("#usersButton", isEnabled());
             verifyThat("#orderButton", isEnabled());
         }
+
 
         @Test
         @Order(13)
@@ -162,10 +171,13 @@ class SidebarControllerTest extends TestFXBase {
             if (actorButton != null) {
                 assertFalse(actorButton.isVisible() || actorButton.isManaged());
             }
+
             if (filmCategorieButton != null) {
                 assertFalse(filmCategorieButton.isVisible() || filmCategorieButton.isManaged());
             }
+
         }
+
 
         @Test
         @Order(14)
@@ -177,6 +189,7 @@ class SidebarControllerTest extends TestFXBase {
             // Should navigate to users management view
         }
 
+
         @Test
         @Order(15)
         @DisplayName("Admin should be able to navigate to orders")
@@ -186,7 +199,9 @@ class SidebarControllerTest extends TestFXBase {
 
             // Should navigate to orders view
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -209,12 +224,14 @@ class SidebarControllerTest extends TestFXBase {
             runOnFxThread(() -> controller.setCurrentUser(manager));
         }
 
+
         @Test
         @Order(20)
         @DisplayName("Cinema manager should see actor button")
         void testCinemaManagerActorButtonVisible() {
             verifyThat("#actorButton", isVisible());
         }
+
 
         @Test
         @Order(21)
@@ -223,6 +240,7 @@ class SidebarControllerTest extends TestFXBase {
             verifyThat("#filmCategorieButton", isVisible());
         }
 
+
         @Test
         @Order(22)
         @DisplayName("Cinema manager should see movie session button")
@@ -230,12 +248,14 @@ class SidebarControllerTest extends TestFXBase {
             verifyThat("#moviesessionButton", isVisible());
         }
 
+
         @Test
         @Order(23)
         @DisplayName("Cinema manager should see statistics button")
         void testCinemaManagerStatisticsButtonVisible() {
             verifyThat("#statestique_button", isVisible());
         }
+
 
         @Test
         @Order(24)
@@ -247,6 +267,7 @@ class SidebarControllerTest extends TestFXBase {
             verifyThat("#statestique_button", isEnabled());
         }
 
+
         @Test
         @Order(25)
         @DisplayName("Cinema manager should NOT see admin specific buttons")
@@ -257,10 +278,13 @@ class SidebarControllerTest extends TestFXBase {
             if (usersButton != null) {
                 assertFalse(usersButton.isVisible() || usersButton.isManaged());
             }
+
             if (orderButton != null) {
                 assertFalse(orderButton.isVisible() || orderButton.isManaged());
             }
+
         }
+
 
         @Test
         @Order(26)
@@ -270,6 +294,7 @@ class SidebarControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(27)
         @DisplayName("Cinema manager should navigate to film categories")
@@ -278,6 +303,7 @@ class SidebarControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(28)
         @DisplayName("Cinema manager should navigate to statistics")
@@ -285,7 +311,9 @@ class SidebarControllerTest extends TestFXBase {
             clickOnAndWait("#statestique_button");
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -308,6 +336,7 @@ class SidebarControllerTest extends TestFXBase {
             runOnFxThread(() -> controller.setCurrentUser(client));
         }
 
+
         @Test
         @Order(30)
         @DisplayName("Client should see common navigation buttons")
@@ -321,6 +350,7 @@ class SidebarControllerTest extends TestFXBase {
                     "#profileButton");
         }
 
+
         @Test
         @Order(31)
         @DisplayName("Client should NOT see admin buttons")
@@ -331,10 +361,13 @@ class SidebarControllerTest extends TestFXBase {
             if (usersButton != null) {
                 assertFalse(usersButton.isVisible() || usersButton.isManaged());
             }
+
             if (orderButton != null) {
                 assertFalse(orderButton.isVisible() || orderButton.isManaged());
             }
+
         }
+
 
         @Test
         @Order(32)
@@ -346,11 +379,15 @@ class SidebarControllerTest extends TestFXBase {
             if (actorButton != null) {
                 assertFalse(actorButton.isVisible() || actorButton.isManaged());
             }
+
             if (filmCategorieButton != null) {
                 assertFalse(filmCategorieButton.isVisible() || filmCategorieButton.isManaged());
             }
+
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -365,6 +402,7 @@ class SidebarControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(41)
         @DisplayName("Should navigate to movies page")
@@ -372,6 +410,7 @@ class SidebarControllerTest extends TestFXBase {
             clickOnAndWait("#movieButton");
             waitForFxEvents();
         }
+
 
         @Test
         @Order(42)
@@ -381,6 +420,7 @@ class SidebarControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(43)
         @DisplayName("Should navigate to products page")
@@ -388,6 +428,7 @@ class SidebarControllerTest extends TestFXBase {
             clickOnAndWait("#productButton");
             waitForFxEvents();
         }
+
 
         @Test
         @Order(44)
@@ -397,6 +438,7 @@ class SidebarControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(45)
         @DisplayName("Should navigate to profile page")
@@ -404,6 +446,7 @@ class SidebarControllerTest extends TestFXBase {
             clickOnAndWait("#profileButton");
             waitForFxEvents();
         }
+
 
         @Test
         @Order(46)
@@ -414,7 +457,9 @@ class SidebarControllerTest extends TestFXBase {
 
             // Should navigate to login page or show logout confirmation
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -441,25 +486,32 @@ class SidebarControllerTest extends TestFXBase {
             for (int i = 0; i < MAX_RETRIES; i++) {
                 try {
                     Thread.sleep(SLEEP_MS);
-                } catch (InterruptedException e) {
+                }
+ catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     break;
                 }
+
                 waitForFxEvents();
                 
-                final boolean[] stateCheck = { false };
+                final boolean[] stateCheck = { false }
+;
                 runOnFxThread(() -> {
                     stateCheck[0] = homeButton.getPseudoClassStates().contains(hoverPseudoClass);
-                });
+                }
+);
                 
                 if (stateCheck[0]) {
                     hoverApplied = true;
                     break;
                 }
+
             }
+
             
             assertTrue(hoverApplied, "Hover pseudo-class should be applied to homeButton within timeout");
         }
+
 
         @Test
         @Order(51)
@@ -473,6 +525,7 @@ class SidebarControllerTest extends TestFXBase {
             assertNotNull(movieButton);
         }
 
+
         @Test
         @Order(52)
         @DisplayName("Multiple clicks should not break navigation")
@@ -485,7 +538,9 @@ class SidebarControllerTest extends TestFXBase {
             waitForFxEvents();
             // Should handle multiple rapid clicks gracefully
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -522,10 +577,12 @@ class SidebarControllerTest extends TestFXBase {
                 assertFalse(actorButton.isVisible() || actorButton.isManaged(),
                         "Actor button should be hidden for admin user");
             }
+
             if (filmCategorieButton != null) {
                 assertFalse(filmCategorieButton.isVisible() || filmCategorieButton.isManaged(),
                         "Film categories button should be hidden for admin user");
             }
+
 
             // Change to client
             Client client = Client.builder()
@@ -549,16 +606,19 @@ class SidebarControllerTest extends TestFXBase {
                 assertFalse(usersButton.isVisible() || usersButton.isManaged(),
                         "Users button should be hidden for client user");
             }
+
             if (orderButton != null) {
                 assertFalse(orderButton.isVisible() || orderButton.isManaged(),
                         "Order button should be hidden for client user");
             }
+
             
             // Verify common client buttons are still visible
             verifyThat("#homeButton", isVisible());
             verifyThat("#movieButton", isVisible());
             verifyThat("#profileButton", isVisible());
         }
+
 
         @Test
         @Order(61)
@@ -586,7 +646,9 @@ class SidebarControllerTest extends TestFXBase {
             // User context should be maintained
             assertNotNull(controller);
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -608,6 +670,7 @@ class SidebarControllerTest extends TestFXBase {
                     "Focus should move to movieButton after pressing Tab from homeButton");
         }
 
+
         @Test
         @Order(71)
         @DisplayName("Icons should enhance button recognition")
@@ -617,5 +680,8 @@ class SidebarControllerTest extends TestFXBase {
             verifyThat("#productIcon", isNotNull());
             verifyThat("#cinemaIcon", isNotNull());
         }
+
     }
+
 }
+

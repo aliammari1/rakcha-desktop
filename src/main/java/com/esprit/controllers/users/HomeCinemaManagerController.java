@@ -108,22 +108,32 @@ public class HomeCinemaManagerController implements Initializable {
                             User currentUser = (User) stage.getUserData();
                             welcomeLabel.setText("Welcome, " + currentUser.getFirstName() + " "
                                     + currentUser.getLastName() + "!");
-                        } else {
+                        }
+ else {
                             welcomeLabel.setText("Welcome, Cinema Manager!");
                         }
-                    } else {
+
+                    }
+ else {
                         welcomeLabel.setText("Welcome, Cinema Manager!");
                     }
-                } catch (Exception ex) {
+
+                }
+ catch (Exception ex) {
                     LOGGER.log(Level.WARNING, "Error setting welcome message: " + ex.getMessage(), ex);
                     welcomeLabel.setText("Welcome, Cinema Manager!");
                 }
-            }));
+
+            }
+));
             delayedInit.play();
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error initializing cinema manager dashboard: " + e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Loads and displays dashboard statistics.
@@ -150,7 +160,8 @@ public class HomeCinemaManagerController implements Initializable {
             Page<MovieSession> sessions = sessionService.read(sessionPageRequest);
             sessionCountLabel.setText(String.valueOf(sessions.getContent().size()));
 
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error loading dashboard statistics: " + e.getMessage(), e);
             // Set default values in case of error
             movieCountLabel.setText("0");
@@ -158,7 +169,9 @@ public class HomeCinemaManagerController implements Initializable {
             categoryCountLabel.setText("0");
             sessionCountLabel.setText("0");
         }
+
     }
+
 
     /**
      * Loads today's movie sessions.
@@ -173,10 +186,13 @@ public class HomeCinemaManagerController implements Initializable {
             addSessionItem("The Dark Knight", "6:00 PM", "Hall 1");
             addSessionItem("Interstellar", "9:00 PM", "Hall 3");
 
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error loading today's sessions: " + e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Adds a session item to the sessions container.
@@ -202,6 +218,7 @@ public class HomeCinemaManagerController implements Initializable {
         todaySessionsContainer.getChildren().add(sessionItem);
     }
 
+
     /**
      * Loads recent cinema activity.
      */
@@ -215,10 +232,13 @@ public class HomeCinemaManagerController implements Initializable {
             addActivityItem("Category created: Sci-Fi", "1 hour ago");
             addActivityItem("Movie statistics updated", "2 hours ago");
 
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error loading recent activity: " + e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Adds an activity item to the activity container.
@@ -240,6 +260,7 @@ public class HomeCinemaManagerController implements Initializable {
         activityItem.getChildren().addAll(activityLabel, spacer, timestampLabel);
         activityContainer.getChildren().add(activityItem);
     }
+
 
     /**
      * Starts background particle animations.
@@ -268,6 +289,7 @@ public class HomeCinemaManagerController implements Initializable {
             particle2Animation.play();
         }
 
+
         // Add fade-in animation to root container
         if (rootContainer != null) {
             FadeTransition fadeIn = new FadeTransition(Duration.seconds(1), rootContainer);
@@ -275,7 +297,9 @@ public class HomeCinemaManagerController implements Initializable {
             fadeIn.setToValue(1.0);
             fadeIn.play();
         }
+
     }
+
 
     // Navigation Action Handlers
 
@@ -286,10 +310,13 @@ public class HomeCinemaManagerController implements Initializable {
             Parent root = loader.load();
             Stage stage = (Stage) rootContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
-        } catch (IOException e) {
+        }
+ catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading movie management interface: " + e.getMessage(), e);
         }
+
     }
+
 
     @FXML
     void manageSessions(ActionEvent event) {
@@ -298,10 +325,13 @@ public class HomeCinemaManagerController implements Initializable {
             Parent root = loader.load();
             Stage stage = (Stage) rootContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
-        } catch (IOException e) {
+        }
+ catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading session management interface: " + e.getMessage(), e);
         }
+
     }
+
 
     @FXML
     void manageActors(ActionEvent event) {
@@ -310,10 +340,13 @@ public class HomeCinemaManagerController implements Initializable {
             Parent root = loader.load();
             Stage stage = (Stage) rootContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
-        } catch (IOException e) {
+        }
+ catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading actor management interface: " + e.getMessage(), e);
         }
+
     }
+
 
     @FXML
     void viewStatistics(ActionEvent event) {
@@ -322,10 +355,13 @@ public class HomeCinemaManagerController implements Initializable {
             Parent root = loader.load();
             Stage stage = (Stage) rootContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
-        } catch (IOException e) {
+        }
+ catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading statistics interface: " + e.getMessage(), e);
         }
+
     }
+
 
     // Additional methods referenced in FXML
     @FXML
@@ -333,13 +369,17 @@ public class HomeCinemaManagerController implements Initializable {
         manageSessions(event); // Redirect to session management which includes cinema management
     }
 
+
     @FXML
     void viewAnalytics(ActionEvent event) {
         viewStatistics(event); // Redirect to statistics view
     }
 
+
     @FXML
     void generateReports(ActionEvent event) {
         viewStatistics(event); // Redirect to statistics view for now
     }
+
 }
+

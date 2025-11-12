@@ -68,6 +68,7 @@ public class SerieClientController {
      *
      * @Override protected void updateItem(Serie item, boolean empty) {
      * super.updateItem(item, empty); if (empty || item == null) { setText(null); }
+
      * else { double imageWidth = 200; // Largeur fixe souhaitée double imageHeight
      * = 200; // Hauteur fixe souhaitée String img =item.getImage(); File file = new
      * File(img); Image image = new Image(file.toURI().toString()); ImageView
@@ -75,7 +76,11 @@ public class SerieClientController {
      * imageView.setFitHeight(imageHeight); imageView.setPreserveRatio(true);
      * setText("\n   Name :"+item.getName()+"\n  Summary: "+item.getResume()+
      * "\n   Director : "+item.getDirecteur()+"\n   Country: " +item.getPays() );
-     * setGraphic(imageView); } } }); }
+     * setGraphic(imageView); }
+ }
+ }
+); }
+
      */
     /*
      * @Override public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -88,8 +93,10 @@ public class SerieClientController {
      *
      * for (Serie serie : listeTop3) { VBox vbox = createSeriesVBox(serie);
      * hboxTop3.getChildren().add(vbox); }
+
      *
      * }
+
      *
      */
     @FXML
@@ -129,9 +136,12 @@ public class SerieClientController {
             if (element.getName().contains(recherche)) {
                 resultats.add(element);
             }
+
         }
+
         return resultats;
     }
+
 
     /**
      * Loads an FXML file, `EpisodeClient.fxml`, and creates a new stage with its
@@ -152,6 +162,7 @@ public class SerieClientController {
         final Stage stage = (Stage) this.watchEpisode.getScene().getWindow();
         stage.setScene(new Scene(root));
     }
+
 
     /**
      * Creates a Box object with a layout that displays an image and text
@@ -211,6 +222,7 @@ public class SerieClientController {
         return vbox;
     }
 
+
     /**
      * Retrieves a list of categories from an implementation of the
      * `IServiceCategorieImpl` interface.
@@ -220,6 +232,7 @@ public class SerieClientController {
         PageRequest pageRequest = new PageRequest(0, 10);
         this.categorieList = iServiceCategorie.read(pageRequest).getContent();
     }
+
 
     /**
      * Sorts a list of `Serie` objects based on their `nom` attribute, using a
@@ -234,6 +247,7 @@ public class SerieClientController {
     private void trierParNom(final List<Series> series) {
         Collections.sort(series, (serie1, serie2) -> serie1.getName().compareToIgnoreCase(serie2.getName()));
     }
+
 
     /**
      * Displays a list of series from an API, along with buttons to watch or dislike
@@ -303,7 +317,8 @@ public class SerieClientController {
                 super.updateItem(item, empty);
                 if (empty || null == item) {
                     this.setGraphic(null);
-                } else {
+                }
+ else {
                     // Créez un AnchorPane pour chaque série
                     final AnchorPane anchorPane = new AnchorPane();
                     anchorPane.setPrefSize(400, 200); // Définissez la taille souhaitée
@@ -428,22 +443,30 @@ public class SerieClientController {
                                     item.setNumberOfLikes(item.getNumberOfLikes() + 1);
                                     ss.addLike(item);
                                     dislikeButton.setDisable(true);
-                                } else {
+                                }
+ else {
                                     item.setNumberOfLikes(item.getNumberOfLikes() - 1);
                                     if (0 == item.getNumberOfLikes()) {
                                         item.setLiked(0);
                                         ss.removeLike(item);
                                         dislikeButton.setDisable(false);
-                                    } else {
+                                    }
+ else {
                                         ss.addLike(item);
                                         dislikeButton.setDisable(true);
                                     }
+
                                 }
-                            } catch (final SQLException e) {
+
+                            }
+ catch (final SQLException e) {
                                 throw new RuntimeException(e);
                             }
+
                         }
-                    });
+
+                    }
+);
                     dislikeButton.setOnAction(new EventHandler<ActionEvent>() {
                         /**
                          * Increments the number of dislikes for an item when the like button is
@@ -474,22 +497,30 @@ public class SerieClientController {
                                     item.setNumberOfDislikes(item.getNumberOfDislikes() + 1);
                                     ss.addDislike(item);
                                     likeButton.setDisable(true);
-                                } else {
+                                }
+ else {
                                     item.setNumberOfDislikes(item.getNumberOfDislikes() - 1);
                                     if (0 == item.getNumberOfDislikes()) {
                                         item.setDisliked(0);
                                         ss.removeDislike(item);
                                         likeButton.setDisable(false);
-                                    } else {
+                                    }
+ else {
                                         ss.addDislike(item);
                                         likeButton.setDisable(true);
                                     }
+
                                 }
-                            } catch (final SQLException e) {
+
+                            }
+ catch (final SQLException e) {
                                 throw new RuntimeException(e);
                             }
+
                         }
-                    });
+
+                    }
+);
                     favButton.setOnAction(new EventHandler<ActionEvent>() {
                         /**
                          * Is an implementation of an action listener for a favorites button. It
@@ -522,16 +553,22 @@ public class SerieClientController {
                             try {
                                 if ((0 == item.getClickFavorites()) || (0 != item.getClickFavorites() % 2)) {
                                     sf.create(f);
-                                } else {
+                                }
+ else {
                                     final Favorite fav = sf.getByIdUserAndIdSerie(client.getId(), id_serie);
                                     sf.delete(fav);
                                     SerieClientController.LOGGER.info(String.valueOf(fav.getId().intValue()));
                                 }
-                            } catch (final SQLException e) {
+
+                            }
+ catch (final SQLException e) {
                                 throw new RuntimeException(e);
                             }
+
                         }
-                    });
+
+                    }
+);
                     /* Button Watch Episode Declaration */
                     final Image iconImageWatch = new Image("img/films/watch.png");
                     final ImageView iconImageViewWatch = new ImageView(iconImageWatch);
@@ -579,21 +616,28 @@ public class SerieClientController {
                             stage.setTitle("");
                             stage.setScene(scene);
                             stage.show();
-                        } catch (final IOException e) {
+                        }
+ catch (final IOException e) {
                             throw new RuntimeException(e);
                         }
+
                         // Ajoutez un séparateur après chaque élément sauf le dernier
                         final Separator separator = new Separator();
                         separator.setPrefWidth(400); // Ajustez la largeur selon vos besoins
                         separator.setStyle("-fx-border-color: #ae2d3c; -fx-border-width: 2px;");
                         final VBox vBoxWithSeparator = new VBox(anchorPane, separator);
                         this.setGraphic(vBoxWithSeparator);
-                    });
+                    }
+);
                 }
+
             }
-        });
+
+        }
+);
         this.listeSerie.getItems().addAll(series);
     }
+
 
     /**
      * Loads a FXML file named `ListFavoris.fxml`, creates a new stage with the
@@ -616,10 +660,13 @@ public class SerieClientController {
             stage.setTitle("Your Favorits");
             stage.setScene(scene);
             stage.show();
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             throw new RuntimeException(e);
         }
+
     }
+
 
     /**
      * Loads a list of series, sets an observable list of category names, and
@@ -642,6 +689,7 @@ public class SerieClientController {
         if (CamboxCategorie != null) {
             this.CamboxCategorie.setItems(categorieObservableList);
         }
+
         this.CamboxCategorie.setOnAction(event -> {
             final Category selectedCategorie = this.CamboxCategorie.getValue();
             if (!this.selectedCategories.contains(selectedCategorie)) {
@@ -651,19 +699,26 @@ public class SerieClientController {
                             this.listerecherche = iServiceSerie.retrieveByCategory(selectedCategorie.getId());
                             this.trierParNom(this.listerecherche); // Tri des séries par nom
                             this.afficherliste(this.listerecherche);
-                        } catch (final SQLException e) {
+                        }
+ catch (final SQLException e) {
                             throw new RuntimeException(e);
                         }
+
                     }
+
                 }
+
             }
-        });
+
+        }
+);
         /// fonction recherche sur textfiled
         this.recherchefld.textProperty().addListener((observable, oldValue, newValue) -> {
             final List<Series> series;
             series = SerieClientController.rechercher(this.listerecherche, newValue);
             this.afficherliste(series);
-        });
+        }
+);
         this.listeSerie.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
             if (0 <= newValue.intValue()) {
                 final Series selectedSerie = this.listeSerie.getItems().get(newValue.intValue());
@@ -679,12 +734,17 @@ public class SerieClientController {
                     stage.setTitle("");
                     stage.setScene(scene);
                     stage.show();
-                } catch (final IOException e) {
+                }
+ catch (final IOException e) {
                     throw new RuntimeException(e);
                 }
+
             }
-        });
+
+        }
+);
     }
+
 
     /// gestion de menu
     /**
@@ -710,6 +770,7 @@ public class SerieClientController {
         stage.show();
     }
 
+
     /**
      * Loads a FXML file, creates a scene and sets it as the scene of a stage,
      * showing the stage.
@@ -734,6 +795,7 @@ public class SerieClientController {
         stage.setScene(scene);
         stage.show();
     }
+
 
     /**
      * Loads an FXML file, creates a scene, sets it as the scene of a stage, and
@@ -765,6 +827,7 @@ public class SerieClientController {
         stage.show();
     }
 
+
     /**
      * Retrieves a list of series from a database using an implementation of
      * `IServiceSerie`, then displays the list in a `ListView`. It also calls
@@ -785,5 +848,8 @@ public class SerieClientController {
             final VBox vbox = this.createSeriesVBox(serie);
             this.hboxTop3.getChildren().add(vbox);
         }
+
     }
+
 }
+

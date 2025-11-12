@@ -59,10 +59,13 @@ public class ReviewService implements IService<Review> {
                     """;
             tableCreator.createTableIfNotExists("reviews", createReviewsTable);
 
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             log.error("Error creating tables for ReviewService", e);
         }
+
     }
+
 
     @Override
     /**
@@ -80,10 +83,13 @@ public class ReviewService implements IService<Review> {
             pst.setLong(3, review.getProduct().getId());
             pst.executeUpdate();
             ReviewService.LOGGER.info("review added!");
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             ReviewService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Performs read operation.
@@ -106,11 +112,15 @@ public class ReviewService implements IService<Review> {
                         .product(product).build();
                 reviewsList.add(review);
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             ReviewService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return reviewsList;
     }
+
 
     @Override
     /**
@@ -126,10 +136,13 @@ public class ReviewService implements IService<Review> {
             pst.setInt(1, review.getRating());
             pst.executeUpdate();
             ReviewService.LOGGER.info("review updated!");
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             ReviewService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     @Override
     /**
@@ -146,10 +159,13 @@ public class ReviewService implements IService<Review> {
             pst.setLong(2, review.getProduct().getId());
             pst.executeUpdate();
             ReviewService.LOGGER.info("review deleted!");
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             ReviewService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Retrieves the AverageRating value.
@@ -165,11 +181,14 @@ public class ReviewService implements IService<Review> {
             final ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             averageRating = resultSet.getDouble("averageRate");
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             ReviewService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return averageRating;
     }
+
 
     /**
      * Retrieves the AverageRatingSorted value.
@@ -186,11 +205,15 @@ public class ReviewService implements IService<Review> {
                 reviews.add(Review.builder().client(null).rating((int) resultSet.getDouble("averageRate"))
                         .product(new ProductService().getProductById(resultSet.getLong("product_id"))).build());
             }
-        } catch (final Exception e) {
+
+        }
+ catch (final Exception e) {
             ReviewService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return reviews;
     }
+
 
     /**
      * Performs ratingExists operation.
@@ -210,15 +233,21 @@ public class ReviewService implements IService<Review> {
                         .client((Client) new UserService().getUserById(userId)).rating(resultSet.getInt("rating"))
                         .product(new ProductService().getProductById(productId)).build();
             }
-        } catch (final Exception e) {
+
+        }
+ catch (final Exception e) {
             ReviewService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return rating;
     }
+
 
     @Override
     public Page<Review> read(PageRequest pageRequest) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'read'");
     }
+
 }
+

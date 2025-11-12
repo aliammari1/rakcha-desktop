@@ -75,12 +75,16 @@ public class CategorieController {
                         showAlert("Succes", "Deleted successfully !");
                         ref();
                         tableView.refresh();
-                    } catch (final Exception e) {
+                    }
+ catch (final Exception e) {
                         CategorieController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                         showAlert("Error", e.getMessage());
                     }
-                });
+
+                }
+);
             }
+
 
             /**
              * Updates an item's graphic based on whether it is empty or not. If the item is
@@ -106,11 +110,15 @@ public class CategorieController {
                 super.updateItem(item, empty);
                 if (empty) {
                     this.setGraphic(null);
-                } else {
+                }
+ else {
                     this.setGraphic(this.button);
                 }
+
             }
-        });
+
+        }
+);
         final TableColumn<Category, Void> modifierCol = new TableColumn<>("Edit");
         modifierCol.setCellFactory(param -> new TableCell<>() {
             private final Button button = new Button("Edit");
@@ -124,8 +132,11 @@ public class CategorieController {
                         modifierCategorie(category);
                         this.clickCount = 0;
                     }
-                });
+
+                }
+);
             }
+
 
             /**
              * Updates the graphics of an item based on whether it is empty or not. If the
@@ -149,21 +160,28 @@ public class CategorieController {
                 super.updateItem(item, empty);
                 if (empty) {
                     this.setGraphic(null);
-                } else {
+                }
+ else {
                     this.setGraphic(this.button);
                 }
+
             }
-        });
+
+        }
+);
         // tableView.getColumns().addAll(idCol,nomCol, descriptionCol,modifierCol,
         // supprimerCol);
         this.tableView.getColumns().addAll(nomCol, descriptionCol, modifierCol, supprimerCol);
         try {
             PageRequest pageRequest = new PageRequest(0,10);
             this.tableView.getItems().addAll(categorieserv.read(pageRequest).getContent());
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             CategorieController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Creates an Alert object with an informational message and shows it to the
@@ -182,6 +200,7 @@ public class CategorieController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
 
     /**
      * Allows for the modification of a category's name and description through a
@@ -212,8 +231,10 @@ public class CategorieController {
             if (dialogButton == ButtonType.OK) {
                 return new Pair<>(nomFild.getText(), desqFild.getText());
             }
+
             return null;
-        });
+        }
+);
         final Optional<Pair<String, String>> result = dialog.showAndWait();
         result.ifPresent(pair -> {
             categorie.setName(nomFild.getText());
@@ -222,11 +243,15 @@ public class CategorieController {
                 iServiceCategorie.update(categorie);
                 this.showAlert("successfully", "Modified successfully!");
                 this.ref();
-            } catch (final Exception e) {
+            }
+ catch (final Exception e) {
                 throw new RuntimeException(e);
             }
-        });
+
+        }
+);
     }
+
 
     /**
      * References an object called `ref`.
@@ -235,6 +260,7 @@ public class CategorieController {
     private void initialize() {
         this.ref();
     }
+
 
     /**
      * Checks if the user has entered a non-empty string. If so, it returns `true`.
@@ -251,11 +277,14 @@ public class CategorieController {
     boolean checkname() {
         if ("" != nomF.getText()) {
             return true;
-        } else {
+        }
+ else {
             this.checkname.setText("Please enter a valid Name");
             return false;
         }
+
     }
+
 
     /**
      * Checks if the user has entered a non-empty string in the
@@ -274,11 +303,14 @@ public class CategorieController {
     boolean checkdescreption() {
         if ("" != descreptionF.getText()) {
             return true;
-        } else {
+        }
+ else {
             this.checkdescreption.setText("Please enter a valid Description");
             return false;
         }
+
     }
+
 
     /**
      * Allows users to add a new category by validating input fields, saving the
@@ -308,11 +340,15 @@ public class CategorieController {
                 this.checkname.setText("");
                 this.checkdescreption.setText("");
                 this.ref();
-            } catch (final Exception e) {
+            }
+ catch (final Exception e) {
                 this.showAlert("Error", "An error occurred while saving the category : " + e.getMessage());
             }
+
         }
+
     }
+
 
     /// Gestion du menu
     /**
@@ -338,6 +374,7 @@ public class CategorieController {
         stage.setScene(scene);
         stage.show();
     }
+
 
     /**
      * Loads and displays a FXML view named "Serie-view".
@@ -365,6 +402,7 @@ public class CategorieController {
         stage.show();
     }
 
+
     /**
      * Loads an FXML file, creates a scene, and sets it as the scene of a Stage,
      * displaying the content on the stage.
@@ -389,6 +427,7 @@ public class CategorieController {
         stage.setScene(scene);
         stage.show();
     }
+
 
     /**
      * Loads a FXML view and replaces the current scene with it when an action event
@@ -427,14 +466,19 @@ public class CategorieController {
                 // Remplacez la scène actuelle par la nouvelle scène
                 stage.setScene(scene);
                 stage.show();
-            } catch (final IOException e) {
+            }
+ catch (final IOException e) {
                 CategorieController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
-        } else {
+
+        }
+ else {
             // Gérer le cas où actionEvent est nul
             CategorieController.LOGGER.info("actionEvent is null");
         }
+
     }
+
 
     /**
      * Likely displays a list or movies or performs some other movie-related actions
@@ -447,6 +491,7 @@ public class CategorieController {
     public void showmovies(final ActionEvent actionEvent) {
     }
 
+
     /**
      * Displays a list of products.
      *
@@ -455,6 +500,7 @@ public class CategorieController {
      */
     public void showproducts(final ActionEvent actionEvent) {
     }
+
 
     /**
      * Does not have any discernible behavior or functionality as it is empty and
@@ -466,6 +512,7 @@ public class CategorieController {
     public void showcinema(final ActionEvent actionEvent) {
     }
 
+
     /**
      * Is invoked when an event occurs and has no discernible functionality as it
      * only contains a blank implementation.
@@ -475,6 +522,7 @@ public class CategorieController {
      */
     public void showevent(final ActionEvent actionEvent) {
     }
+
 
     /**
      * Is triggered by an `ActionEvent`. It does not provide any information about
@@ -487,4 +535,6 @@ public class CategorieController {
      */
     public void showseries(final ActionEvent actionEvent) {
     }
+
 }
+

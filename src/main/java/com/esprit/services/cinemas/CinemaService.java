@@ -32,7 +32,8 @@ public class CinemaService implements IService<Cinema> {
     // Allowed columns for sorting to prevent SQL injection
     private static final String[] ALLOWED_SORT_COLUMNS = {
             "id", "name", "location", "phone", "email", "description"
-    };
+    }
+;
 
     /**
      * Constructs a new CinemaService instance.
@@ -56,6 +57,7 @@ public class CinemaService implements IService<Cinema> {
                 """);
     }
 
+
     @Override
     /**
      * Creates a new entity in the database.
@@ -72,20 +74,25 @@ public class CinemaService implements IService<Cinema> {
             // Handle null manager case
             if (cinema.getManager() != null && cinema.getManager().getId() != null) {
                 stmt.setLong(3, cinema.getManager().getId());
-            } else {
+            }
+ else {
                 log.warn("Cinema manager is null for cinema: " + cinema.getName());
                 throw new IllegalArgumentException("Cinema must have a valid manager with an ID");
             }
+
 
             stmt.setString(4, cinema.getLogoPath());
             stmt.setString(5, cinema.getStatus() != null ? cinema.getStatus() : "Pending");
             stmt.executeUpdate();
             log.info("Cinema created successfully");
-        } catch (SQLException e) {
+        }
+ catch (SQLException e) {
             log.error("Error creating cinema", e);
             throw new RuntimeException("Failed to create cinema", e);
         }
+
     }
+
 
     @Override
     /**
@@ -104,10 +111,13 @@ public class CinemaService implements IService<Cinema> {
             stmt.setLong(5, cinema.getId());
             stmt.executeUpdate();
             log.info("Cinema updated successfully");
-        } catch (SQLException e) {
+        }
+ catch (SQLException e) {
             log.error("Error updating cinema", e);
         }
+
     }
+
 
     @Override
     /**
@@ -122,10 +132,13 @@ public class CinemaService implements IService<Cinema> {
             stmt.setLong(1, cinema.getId());
             stmt.executeUpdate();
             log.info("Cinema deleted successfully");
-        } catch (SQLException e) {
+        }
+ catch (SQLException e) {
             log.error("Error deleting cinema", e);
         }
+
     }
+
 
     @Override
     /**
@@ -141,9 +154,11 @@ public class CinemaService implements IService<Cinema> {
         // Validate sort column to prevent SQL injection
         if (pageRequest.hasSorting() &&
                 !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
-            log.warn("Invalid sort column: {}. Using default sorting.", pageRequest.getSortBy());
+            log.warn("Invalid sort column: {}
+. Using default sorting.", pageRequest.getSortBy());
             pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
+
 
         try {
             // Get total count
@@ -160,16 +175,23 @@ public class CinemaService implements IService<Cinema> {
                     if (cinema != null) {
                         content.add(cinema);
                     }
+
                 }
+
             }
+
 
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
 
-        } catch (final SQLException e) {
-            log.error("Error retrieving paginated cinemas: {}", e.getMessage(), e);
+        }
+ catch (final SQLException e) {
+            log.error("Error retrieving paginated cinemas: {}
+", e.getMessage(), e);
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
         }
+
     }
+
 
     /**
      * Sorts cinemas by the specified field.
@@ -182,9 +204,11 @@ public class CinemaService implements IService<Cinema> {
 
         // Validate sort column to prevent SQL injection
         if (!PaginationQueryBuilder.isValidSortColumn(orderBy, ALLOWED_SORT_COLUMNS)) {
-            log.warn("Invalid sort column: {}. Using default sorting by id.", orderBy);
+            log.warn("Invalid sort column: {}
+. Using default sorting by id.", orderBy);
             return read(pageRequest); // Return default sorted results
         }
+
 
         String query = "SELECT * FROM cinema ORDER BY " + orderBy + " LIMIT ? OFFSET ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -197,12 +221,17 @@ public class CinemaService implements IService<Cinema> {
                 if (cinema != null) {
                     cinemas.add(cinema);
                 }
+
             }
-        } catch (SQLException e) {
+
+        }
+ catch (SQLException e) {
             log.error("Error sorting cinemas", e);
         }
+
         return new Page<>(cinemas, pageRequest.getPage(), pageRequest.getSize(), cinemas.size());
     }
+
 
     /**
      * Retrieves a cinema by its ID.
@@ -218,11 +247,15 @@ public class CinemaService implements IService<Cinema> {
             if (rs.next()) {
                 return buildCinema(rs);
             }
-        } catch (SQLException e) {
+
+        }
+ catch (SQLException e) {
             log.error("Error getting cinema by id: " + cinemaId, e);
         }
+
         return null;
     }
+
 
     /**
      * Retrieves a cinema by its name.
@@ -238,11 +271,15 @@ public class CinemaService implements IService<Cinema> {
             if (rs.next()) {
                 return buildCinema(rs);
             }
-        } catch (SQLException e) {
+
+        }
+ catch (SQLException e) {
             log.error("Error getting cinema by name: " + name, e);
         }
+
         return null;
     }
+
 
     /**
      * @param rs
@@ -256,11 +293,16 @@ public class CinemaService implements IService<Cinema> {
                 return null;
             }
 
+
             return Cinema.builder().id(rs.getLong("id")).name(rs.getString("name")).address(rs.getString("address"))
                     .manager(manager).logoPath(rs.getString("logo_path")).status(rs.getString("status")).build();
-        } catch (SQLException e) {
+        }
+ catch (SQLException e) {
             log.error("Error building cinema from ResultSet", e);
             return null;
         }
+
     }
+
 }
+

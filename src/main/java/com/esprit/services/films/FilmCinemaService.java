@@ -52,10 +52,13 @@ public class FilmCinemaService {
                     """;
             tableCreator.createTableIfNotExists("film_cinema", createFilmCinemaTable);
 
-        } catch (Exception e) {
+        }
+ catch (Exception e) {
             log.error("Error creating tables for FilmCinemaService", e);
         }
+
     }
+
 
     /**
      * Creates associations between a film and multiple cinemas.
@@ -73,12 +76,17 @@ public class FilmCinemaService {
                     statement.setLong(2, cinema.getId());
                     statement.executeUpdate();
                 }
+
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error creating film-cinema associations", e);
             throw new RuntimeException(e);
         }
+
     }
+
 
     /**
      * Retrieves the CinemasForFilm value.
@@ -96,11 +104,15 @@ public class FilmCinemaService {
                         .address(rs.getString("address")).logoPath(rs.getString("logo_path"))
                         .status(rs.getString("status")).build());
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error getting cinemas for film: " + filmId, e);
         }
+
         return cinemas;
     }
+
 
     /**
      * Retrieves the FilmsForCinema value.
@@ -118,11 +130,15 @@ public class FilmCinemaService {
                         .duration(rs.getTime("duration")).description(rs.getString("description"))
                         .releaseYear(rs.getInt("release_year")).build());
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error getting films for cinema: " + cinemaId, e);
         }
+
         return films;
     }
+
 
     /**
      * Updates the cinemas associated with a film.
@@ -140,14 +156,17 @@ public class FilmCinemaService {
         try (final PreparedStatement statement = this.connection.prepareStatement(reqDelete)) {
             statement.setLong(1, film.getId());
             statement.executeUpdate();
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error deleting existing cinema associations", e);
             throw new RuntimeException(e);
         }
 
+
         // Create new associations
         createFilmCinemaAssociation(film, cinemaNames);
     }
+
 
     /**
      * Retrieves the CinemaNames value.
@@ -162,11 +181,15 @@ public class FilmCinemaService {
             if (rs.next()) {
                 return rs.getString("cinemaNames");
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error getting cinema names for film: " + filmId, e);
         }
+
         return "";
     }
+
 
     // Legacy method for backward compatibility
     /**
@@ -181,6 +204,7 @@ public class FilmCinemaService {
         return getFilmsForCinema(cinemaId);
     }
 
+
     /**
      * Deletes the association between a specific film and cinema.
      *
@@ -193,9 +217,13 @@ public class FilmCinemaService {
             statement.setInt(1, filmId);
             statement.setInt(2, cinemaId);
             statement.executeUpdate();
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error deleting film-cinema association", e);
             throw new RuntimeException(e);
         }
+
     }
+
 }
+

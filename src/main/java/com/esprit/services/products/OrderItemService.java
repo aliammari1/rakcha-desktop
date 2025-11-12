@@ -53,6 +53,7 @@ public class OrderItemService implements IService<OrderItem> {
                 """);
     }
 
+
     @Override
     /**
      * Creates a new entity in the database.
@@ -69,10 +70,13 @@ public class OrderItemService implements IService<OrderItem> {
             pst.setLong(3, orderItem.getOrder().getId());
             pst.executeUpdate();
             OrderItemService.LOGGER.info("order item created!");
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             OrderItemService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Performs read operation.
@@ -93,11 +97,15 @@ public class OrderItemService implements IService<OrderItem> {
                         .order(cs.getOrderById(rs.getInt("order_id"))).build();
                 orderItems.add(orderItem);
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             OrderItemService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return orderItems;
     }
+
 
     /**
      * Performs readOrderItem operation.
@@ -119,11 +127,15 @@ public class OrderItemService implements IService<OrderItem> {
                         .order(cs.getOrderById(rs.getInt("order_id"))).build();
                 orderItems.add(orderItem);
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             OrderItemService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return orderItems;
     }
+
 
     @Override
     /**
@@ -135,6 +147,7 @@ public class OrderItemService implements IService<OrderItem> {
     public void update(final OrderItem orderItem) {
     }
 
+
     @Override
     /**
      * Deletes an entity from the database.
@@ -144,6 +157,7 @@ public class OrderItemService implements IService<OrderItem> {
      */
     public void delete(final OrderItem orderItem) {
     }
+
 
     /**
      * Retrieves the OrderItemsByOrder value.
@@ -165,11 +179,15 @@ public class OrderItemService implements IService<OrderItem> {
                         .order(cs.getOrderById(rs.getInt("order_id"))).build();
                 orderItems.add(orderItem);
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             OrderItemService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return orderItems;
     }
+
 
     /**
      * Retrieves the TotalQuantityByCategoryAndDate value.
@@ -195,11 +213,15 @@ public class OrderItemService implements IService<OrderItem> {
             if (rs.next()) {
                 totalQuantity = rs.getInt("totalQuantity");
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             OrderItemService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return totalQuantity;
     }
+
 
     /**
      * Retrieves the ItemsByOrder value.
@@ -222,11 +244,15 @@ public class OrderItemService implements IService<OrderItem> {
                         .product(product).order(order).build();
                 orderItems.add(orderItem);
             }
-        } catch (final SQLException e) {
+
+        }
+ catch (final SQLException e) {
             OrderItemService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return orderItems;
     }
+
 
     /**
      * Retrieves the AverageRatingSorted value.
@@ -247,16 +273,22 @@ public class OrderItemService implements IService<OrderItem> {
                         .order(cs.getOrderById(rs.getInt("order_id"))).build();
                 averageRated.add(orderItem);
             }
-        } catch (final Exception e) {
+
+        }
+ catch (final Exception e) {
             OrderItemService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return averageRated.stream().sorted((OrderItem c1, OrderItem c2) -> c2.getQuantity() - c1.getQuantity())
                 .collect(Collectors.toList());
     }
+
 
     @Override
     public Page<OrderItem> read(PageRequest pageRequest) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'read'");
     }
+
 }
+

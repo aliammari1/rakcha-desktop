@@ -76,10 +76,13 @@ public class ListFavorisController implements Initializable {
     public void initialize(final URL url, final ResourceBundle resourceBundle) {
         try {
             this.loadSeriesFavList();
-        } catch (final SQLException e) {
+        }
+ catch (final SQLException e) {
             throw new RuntimeException(e);
         }
+
     }
+
 
     /**
      * Displays a list of series with buttons for liking, disliking, and watching
@@ -144,7 +147,8 @@ public class ListFavorisController implements Initializable {
                 super.updateItem(item, empty);
                 if (empty || null == item) {
                     this.setGraphic(null);
-                } else {
+                }
+ else {
                     // Créez un AnchorPane pour chaque série
                     final AnchorPane anchorPane = new AnchorPane();
                     anchorPane.setPrefSize(400, 200); // Définissez la taille souhaitée
@@ -254,22 +258,30 @@ public class ListFavorisController implements Initializable {
                                     item.setNumberOfLikes(item.getNumberOfLikes() + 1);
                                     ss.addLike(item);
                                     dislikeButton.setDisable(true);
-                                } else {
+                                }
+ else {
                                     item.setNumberOfLikes(item.getNumberOfLikes() - 1);
                                     if (0 == item.getNumberOfLikes()) {
                                         item.setLiked(0);
                                         ss.removeLike(item);
                                         dislikeButton.setDisable(false);
-                                    } else {
+                                    }
+ else {
                                         ss.addLike(item);
                                         dislikeButton.setDisable(true);
                                     }
+
                                 }
-                            } catch (final SQLException e) {
+
+                            }
+ catch (final SQLException e) {
                                 throw new RuntimeException(e);
                             }
+
                         }
-                    });
+
+                    }
+);
                     dislikeButton.setOnAction(new EventHandler<ActionEvent>() {
                         /**
                          * Updates the number of dislikes for an item based on a condition, adds or
@@ -302,22 +314,30 @@ public class ListFavorisController implements Initializable {
                                     item.setNumberOfDislikes(item.getNumberOfDislikes() + 1);
                                     ss.addDislike(item);
                                     likeButton.setDisable(true);
-                                } else {
+                                }
+ else {
                                     item.setNumberOfDislikes(item.getNumberOfDislikes() - 1);
                                     if (0 == item.getNumberOfDislikes()) {
                                         item.setDisliked(0);
                                         ss.removeDislike(item);
                                         likeButton.setDisable(false);
-                                    } else {
+                                    }
+ else {
                                         ss.addDislike(item);
                                         likeButton.setDisable(true);
                                     }
+
                                 }
-                            } catch (final SQLException e) {
+
+                            }
+ catch (final SQLException e) {
                                 throw new RuntimeException(e);
                             }
+
                         }
-                    });
+
+                    }
+);
                     favButton.setOnAction(new EventHandler<ActionEvent>() {
                         /**
                          * Updates a `Favoris` object with an id_user and id_serie, adds or removes it
@@ -348,16 +368,22 @@ public class ListFavorisController implements Initializable {
                             try {
                                 if ((0 == item.getClickFavorites()) || (0 != item.getClickFavorites() % 2)) {
                                     sf.create(f);
-                                } else {
+                                }
+ else {
                                     final Favorite fav = sf.getByIdUserAndIdSerie(id_user, id_serie);
                                     sf.delete(fav);
                                     ListFavorisController.LOGGER.info(String.valueOf(fav.getId().intValue()));
                                 }
-                            } catch (final SQLException e) {
+
+                            }
+ catch (final SQLException e) {
                                 throw new RuntimeException(e);
                             }
+
                         }
-                    });
+
+                    }
+);
                     /* Button Watch Episode Declaration */
                     final Image iconImageWatch = new Image("img/films/watch.png");
                     final ImageView iconImageViewWatch = new ImageView(iconImageWatch);
@@ -405,15 +431,22 @@ public class ListFavorisController implements Initializable {
                             stage.setTitle("");
                             stage.setScene(scene);
                             stage.show();
-                        } catch (final IOException e) {
+                        }
+ catch (final IOException e) {
                             throw new RuntimeException(e);
                         }
-                    });
+
+                    }
+);
                 }
+
             }
-        });
+
+        }
+);
         this.listViewFav.getItems().addAll(series);
     }
+
 
     /**
      * Retrieves a list of series from a database based on the current session ID,
@@ -431,6 +464,9 @@ public class ListFavorisController implements Initializable {
             final Series s = ss.getByIdSeries(listFav.get(i).getSeriesId());
             listSerieById.add(s);
         }
+
         this.afficherliste(listSerieById);
     }
+
 }
+

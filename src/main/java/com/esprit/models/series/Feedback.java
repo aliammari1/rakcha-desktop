@@ -51,4 +51,6 @@ public class Feedback {
         this.date = date;
         this.episodeId = episodeId;
     }
+
 }
+

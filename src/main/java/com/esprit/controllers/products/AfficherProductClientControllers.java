@@ -142,9 +142,12 @@ public class AfficherProductClientControllers implements Initializable {
             if (null != element.getName() && element.getName().contains(recherche)) {
                 resultats.add(element);
             }
+
         }
+
         return resultats;
     }
+
 
     /**
      * Sets up UI components for searching and displaying produits, including a
@@ -189,7 +192,8 @@ public class AfficherProductClientControllers implements Initializable {
             this.produitFlowPane.getChildren().clear();
             this.createProductCards(produitsRecherches);
             this.filterCategorieProducts(newValue.trim());
-        });
+        }
+);
         this.tricomboBox.getItems().addAll("nom", "prix");
         this.tricomboBox.setValue("");
         this.tricomboBox.getSelectionModel().selectedItemProperty().addListener((observableValue, s, t1) -> {
@@ -198,8 +202,11 @@ public class AfficherProductClientControllers implements Initializable {
             for (final Product film : filmList) {
                 this.produitFlowPane.getChildren().add(this.createProductCard(film));
             }
-        });
+
+        }
+);
     }
+
 
     /**
      * Loads all products from a service and adds them to a flow pane using a
@@ -218,7 +225,9 @@ public class AfficherProductClientControllers implements Initializable {
             this.produitFlowPane.getChildren().add(produitNode);
             this.produitFlowPane.setPadding(new Insets(10, 10, 10, 10));
         }
+
     }
+
 
     /**
      * Creates a Card component that displays the details of a product, including
@@ -278,14 +287,18 @@ public class AfficherProductClientControllers implements Initializable {
             if (!produitImage.isEmpty()) {
                 final Image image = new Image(produitImage);
                 imageView.setImage(image);
-            } else {
+            }
+ else {
                 // Utiliser une image par défaut si le Blob est null
                 final Image defaultImage = new Image(this.getClass().getResourceAsStream("defaultImage.png"));
                 imageView.setImage(defaultImage);
             }
-        } catch (final Exception e) {
+
+        }
+ catch (final Exception e) {
             AfficherProductClientControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         imageView.setOnMouseClicked(event -> {
             try {
                 final FXMLLoader loader = new FXMLLoader(
@@ -304,10 +317,13 @@ public class AfficherProductClientControllers implements Initializable {
                 stage.setTitle("Détails du Product");
                 stage.show();
                 currentStage.close();
-            } catch (final IOException e) {
+            }
+ catch (final IOException e) {
                 throw new RuntimeException(e);
             }
-        });
+
+        }
+);
         // Prix du Product
         final Label priceLabel = new Label(" " + Product.getPrice() + " DT");
         priceLabel.setLayoutX(20);
@@ -348,10 +364,13 @@ public class AfficherProductClientControllers implements Initializable {
                 stage.setTitle("Détails du Product");
                 stage.show();
                 currentStage.close();
-            } catch (final IOException e) {
+            }
+ catch (final IOException e) {
                 throw new RuntimeException(e);
             }
-        });
+
+        }
+);
         // Bouton Ajouter au ShoppingCart
         final Button addToCartButton = new Button("Add to Cart", new FontIcon("fa-cart-plus"));
         /*
@@ -370,7 +389,8 @@ public class AfficherProductClientControllers implements Initializable {
             this.ajouterAuShoppingCart(produitId, quantity);
             this.top3anchorpane.setVisible(false);
             this.shoppingcartFlowPane.setVisible(true);
-        });
+        }
+);
         final FontIcon chatIcon = new FontIcon();
         chatIcon.setIconLiteral("fa-commenting");
         chatIcon.setIconSize(20);
@@ -382,7 +402,8 @@ public class AfficherProductClientControllers implements Initializable {
             final long produitId = Product.getId();
             this.displayAllComments(produitId);
             this.idcomment.setStyle("-fx-background-color: #fff;");
-        });
+        }
+);
         card.getChildren().addAll(imageView, nameLabel, descriptionLabel, priceLabel, addToCartButton, chatIcon);
         card.setStyle("""
                 -fx-background-color:#F6F2F2;
@@ -398,6 +419,7 @@ public class AfficherProductClientControllers implements Initializable {
         cardContainer.getChildren().add(card);
         return cardContainer;
     }
+
 
     /**
      * Clears the current pane, adds the newly added product to a new pane, and
@@ -429,6 +451,7 @@ public class AfficherProductClientControllers implements Initializable {
         this.produitFlowPane.setOpacity(0.2);
     }
 
+
     /**
      * Adds a product to the shopping cart based on the product ID and quantity. It
      * first verifies if the product is available, then creates a new shoppingcart
@@ -454,11 +477,14 @@ public class AfficherProductClientControllers implements Initializable {
             shoppingcart.setUser(client);
             shoppingcartService.create(shoppingcart);
             this.afficherShoppingCart(produit); // Utilisez le produit ajouté pour afficher dans le shoppingcart
-        } else {
+        }
+ else {
             // Afficher un message d'avertissement sur le stock insuffisant
             AfficherProductClientControllers.LOGGER.info("Stock insuffisant pour le produit avec l'ID : " + produitId);
         }
+
     }
+
 
     /**
      * Creates a card for each `Product` object in the `produits` list and adds them
@@ -478,7 +504,9 @@ public class AfficherProductClientControllers implements Initializable {
             final VBox cardContainer = this.createProductCard(produit);
             this.produitFlowPane.getChildren().add(cardContainer);
         }
+
     }
+
 
     /**
      * Generates a card for the shopping cart, containing the total quantity and
@@ -540,14 +568,18 @@ public class AfficherProductClientControllers implements Initializable {
             if (!produitImage.isEmpty()) {
                 final Image image = new Image(produitImage);
                 imageView.setImage(image);
-            } else {
+            }
+ else {
                 // Utiliser une image par défaut si le Blob est null
                 final Image defaultImage = new Image(this.getClass().getResourceAsStream("defaultImage.png"));
                 imageView.setImage(defaultImage);
             }
-        } catch (final Exception e) {
+
+        }
+ catch (final Exception e) {
             AfficherProductClientControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         // Nom du Product
         final Label nameLabel = new Label(produit.getName());
         nameLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 23));
@@ -596,7 +628,8 @@ public class AfficherProductClientControllers implements Initializable {
                 currentStage.setTitle("my cart");
                 currentStage.show();
                 // Fermer la fenêtre actuelle
-            } catch (final IOException e) {
+            }
+ catch (final IOException e) {
                 AfficherProductClientControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Affiche
                                                                                               // l'erreur dans
                                                                                               // la console
@@ -606,7 +639,9 @@ public class AfficherProductClientControllers implements Initializable {
                 AfficherProductClientControllers.LOGGER
                         .info("Erreur lors du chargement du fichier FXML : " + e.getMessage());
             }
-        });
+
+        }
+);
         // Bouton Ajouter au ShoppingCart
         final Button achatbutton = new Button("continue shopping");
         achatbutton.setLayoutX(50);
@@ -621,7 +656,8 @@ public class AfficherProductClientControllers implements Initializable {
                 """); // Style du bouton
         achatbutton.setOnAction(event -> {
             this.fermerShoppingCartCard(shoppingcartContainer);
-        });
+        }
+);
         // Icône de fermeture (close)
         final FontIcon closeIcon = new FontIcon();
         closeIcon.setIconLiteral("fa-times-circle");
@@ -632,12 +668,14 @@ public class AfficherProductClientControllers implements Initializable {
         // Attachez un gestionnaire d'événements pour fermer la carte du shoppingcart
         closeIcon.setOnMouseClicked(event -> {
             this.fermerShoppingCartCard(shoppingcartContainer);
-        });
+        }
+);
         card.getChildren().addAll(cartLabel, closeIcon, imageView, nameLabel, quantiteLabel, sommeTotaleLabel,
                 achatbutton, orderbutton);
         shoppingcartContainer.getChildren().add(card);
         return shoppingcartContainer;
     }
+
 
     /**
      * Makes a panel invisible and sets another panel's visibility and opacity to 1,
@@ -660,6 +698,7 @@ public class AfficherProductClientControllers implements Initializable {
         this.top3anchorpane.setVisible(true);
         this.top3anchorpane.setOpacity(1);
     }
+
 
     /**
      * Loads a new UI component (`ShoppingCartProduct.fxml`) when a button is
@@ -691,11 +730,14 @@ public class AfficherProductClientControllers implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             AfficherProductClientControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                           // d'entrée/sortie
         }
+
     }
+
 
     /**
      * Filters a list of products based on a search text, by adding to an observable
@@ -715,14 +757,19 @@ public class AfficherProductClientControllers implements Initializable {
                 if (produit.getCategories().get(0).getCategoryName().toLowerCase().contains(searchText.toLowerCase())) {
                     filteredList.add(node);
                 }
+
             }
+
             // Mettre à jour le FlowPane avec la liste filtrée
             this.produitFlowPane.getChildren().setAll(filteredList);
-        } else {
+        }
+ else {
             // Si le champ de recherche est vide, afficher tous les produits
             this.loadAcceptedProducts();
         }
+
     }
+
 
     /**
      * Retrieves a list of all product categories from the service layer using the
@@ -735,6 +782,7 @@ public class AfficherProductClientControllers implements Initializable {
         PageRequest pageRequest = new PageRequest(0, 10);
         return categoryservice.read(pageRequest).getContent();
     }
+
 
     /**
      * Sets the opacity of a pane to 0.5, makes a panel visible, clears lists of
@@ -770,12 +818,14 @@ public class AfficherProductClientControllers implements Initializable {
             addressCheckBoxesVBox.getChildren().add(checkBox);
             this.addressCheckBoxes.add(checkBox);
         }
+
         addressCheckBoxesVBox.setLayoutX(25);
         addressCheckBoxesVBox.setLayoutY(50);
         // Ajouter les VBox dans le filterAnchor
         this.filterAnchor.getChildren().addAll(addressCheckBoxesVBox);
         this.filterAnchor.setVisible(true);
     }
+
 
     /**
      * Retrieves a list of category names from a database by mapping the categories
@@ -800,6 +850,7 @@ public class AfficherProductClientControllers implements Initializable {
         return categories.stream().flatMap(produit -> produit.getCategories().stream()).map(c -> c.getCategoryName())
                 .distinct().collect(Collectors.toList());
     }
+
 
     /**
      * Filters a list of products based on selected categories, updates the visible
@@ -833,6 +884,7 @@ public class AfficherProductClientControllers implements Initializable {
         this.updateProductFlowPane(filteredProducts);
     }
 
+
     /**
      * Clears and re-adds a list of products to a flow pane, using a `VBox`
      * container for each product.
@@ -854,7 +906,9 @@ public class AfficherProductClientControllers implements Initializable {
             final VBox cardContainer = this.createProductCard(produit);
             this.produitFlowPane.getChildren().add(cardContainer);
         }
+
     }
+
 
     /**
      * Retrieves a list of selected addresses from an `AnchorPane` component and
@@ -874,6 +928,7 @@ public class AfficherProductClientControllers implements Initializable {
         return this.addressCheckBoxes.stream().filter(CheckBox::isSelected).map(CheckBox::getText)
                 .collect(Collectors.toList());
     }
+
 
     /**
      * Charges a new FXML interface, creates a new scene, and attaches it to a new
@@ -907,11 +962,14 @@ public class AfficherProductClientControllers implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             AfficherProductClientControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                           // d'entrée/sortie
         }
+
     }
+
 
     /**
      * Loads a new FXML interface, creates a new scene, and attaches it to a new
@@ -948,11 +1006,14 @@ public class AfficherProductClientControllers implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             AfficherProductClientControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                           // d'entrée/sortie
         }
+
     }
+
 
     /**
      * Loads a new FXML file, creates a new scene and stage, and replaces the
@@ -987,11 +1048,14 @@ public class AfficherProductClientControllers implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             AfficherProductClientControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                           // d'entrée/sortie
         }
+
     }
+
 
     /**
      * Likely profiles a client application, possibly collecting data on its
@@ -1005,6 +1069,7 @@ public class AfficherProductClientControllers implements Initializable {
     @FXML
     void profilclient(final ActionEvent event) {
     }
+
 
     /**
      * Loads a new FXML interface using `FXMLLoader`, creates a new scene with it,
@@ -1042,11 +1107,14 @@ public class AfficherProductClientControllers implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             AfficherProductClientControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                           // d'entrée/sortie
         }
+
     }
+
 
     /**
      * Loads a new FXML interface, creates a new scene with it, and attaches the
@@ -1080,11 +1148,14 @@ public class AfficherProductClientControllers implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        } catch (final IOException e) {
+        }
+ catch (final IOException e) {
             AfficherProductClientControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                           // d'entrée/sortie
         }
+
     }
+
 
     /**
      * Allows users to input a comment on a product, checks for bad words and
@@ -1105,7 +1176,8 @@ public class AfficherProductClientControllers implements Initializable {
             alert.setTitle("Comment non valide");
             alert.setContentText("Votre comment contient des gros mots et ne peut pas être publié.");
             alert.showAndWait();
-        } else {
+        }
+ else {
             // Créez un objet Comment
             final Client client = (Client) this.txtAreaComments.getScene().getWindow().getUserData();
             final Comment comment = new Comment(client, userMessage, produitService.getProductById(this.produitId));
@@ -1113,7 +1185,9 @@ public class AfficherProductClientControllers implements Initializable {
             // Ajoutez le comment à la base de données
             commentService.create(comment);
         }
+
     }
+
 
     /**
      * Retrieves all comments for a given product ID, filters them to keep only
@@ -1141,9 +1215,12 @@ public class AfficherProductClientControllers implements Initializable {
             if (comment.getProduct().getId() == idproduit) {
                 comments.add(comment);
             }
+
         }
+
         return comments;
     }
+
 
     /**
      * Retrieves and displays all comments associated with a product ID using a
@@ -1160,8 +1237,10 @@ public class AfficherProductClientControllers implements Initializable {
             final HBox commentView = this.addCommentToView(comment);
             allCommentsContainer.getChildren().add(commentView);
         }
+
         this.idcomment.setContent(allCommentsContainer);
     }
+
 
     /**
      * Adds a new comment to an item and displays all comments for that item upon
@@ -1183,6 +1262,7 @@ public class AfficherProductClientControllers implements Initializable {
         this.addComment();
         this.displayAllComments(this.produitId);
     }
+
 
     /**
      * Adds an comment to a view by creating an image view with the user's profile
@@ -1222,10 +1302,12 @@ public class AfficherProductClientControllers implements Initializable {
         final Image userImage;
         if (null != imageUrl && !imageUrl.isEmpty()) {
             userImage = new Image(imageUrl);
-        } else {
+        }
+ else {
             // Chargement de l'image par défaut
             userImage = new Image(this.getClass().getResourceAsStream("/Logo.png"));
         }
+
         // Création de l'image view avec l'image de l'utilisateur
         final ImageView imageView = new ImageView(userImage);
         imageView.setFitWidth(50); // Ajuster la largeur de l'image
@@ -1266,6 +1348,7 @@ public class AfficherProductClientControllers implements Initializable {
         return contentContainer;
     }
 
+
     /**
      * Sets the opacity and visibility of a `FlowPane` component to control its
      * appearance and accessibility.
@@ -1287,6 +1370,7 @@ public class AfficherProductClientControllers implements Initializable {
         this.AnchorComments.setVisible(false);
     }
 
+
     /**
      * Sets the opacity and visibility of a `FlowPane` and its child elements, and
      * hides an `Anchor` element.
@@ -1306,6 +1390,7 @@ public class AfficherProductClientControllers implements Initializable {
         this.filterAnchor.setVisible(false);
     }
 
+
     /**
      * Retrieves and displays the top 3 products with the highest quantity and
      * status from a service, creating a VBox for each product and adding it to a
@@ -1319,6 +1404,7 @@ public class AfficherProductClientControllers implements Initializable {
                 AfficherProductClientControllers.LOGGER.info("Pas assez de produits disponibles");
                 return;
             }
+
             final List<Product> top3Products = produits.subList(0, 3);
             int j = 0;
             for (final Product produit : top3Products) {
@@ -1328,11 +1414,15 @@ public class AfficherProductClientControllers implements Initializable {
                 this.topthreeVbox.getChildren().add(cardContainer);
                 j++;
             }
-        } catch (final Exception e) {
+
+        }
+ catch (final Exception e) {
             AfficherProductClientControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             AfficherProductClientControllers.LOGGER.info("Une erreur est survenue lors du chargement des produits");
         }
+
     }
+
 
     /**
      * Generates a `VBox` container with three components: an image view, a label
@@ -1392,16 +1482,20 @@ public class AfficherProductClientControllers implements Initializable {
             if (!produitImage.isEmpty()) {
                 final Image image = new Image(produitImage);
                 imageView.setImage(image);
-            } else {
+            }
+ else {
                 // Use a default image if Blob is null
                 final Image defaultImage = new Image(this.getClass().getResourceAsStream("defaultImage.png"));
                 imageView.setImage(defaultImage);
             }
-        } catch (final Exception e) {
+
+        }
+ catch (final Exception e) {
             AfficherProductClientControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             // Handle any exceptions during image loading
             AfficherProductClientControllers.LOGGER.info("Une erreur est survenue lors du chargement de l'image");
         }
+
         imageView.setOnMouseClicked(event -> {
             try {
                 final FXMLLoader loader = new FXMLLoader(
@@ -1420,10 +1514,13 @@ public class AfficherProductClientControllers implements Initializable {
                 stage.setTitle("Détails du Product");
                 stage.show();
                 currentStage.close();
-            } catch (final IOException e) {
+            }
+ catch (final IOException e) {
                 throw new RuntimeException(e);
             }
-        });
+
+        }
+);
         // Product name
         final Label nameLabel = new Label(produit.getName());
         nameLabel.setFont(Font.font("Arial", FontWeight.BOLD, 15));
@@ -1450,10 +1547,13 @@ public class AfficherProductClientControllers implements Initializable {
                 stage.setTitle("Détails du Product");
                 stage.show();
                 currentStage.close();
-            } catch (final IOException e) {
+            }
+ catch (final IOException e) {
                 throw new RuntimeException(e);
             }
-        });
+
+        }
+);
         final Label priceLabel = new Label(" " + produit.getPrice() + " DT");
         priceLabel.setLayoutX(60);
         priceLabel.setLayoutY(55);
@@ -1463,4 +1563,6 @@ public class AfficherProductClientControllers implements Initializable {
         cardContainer.getChildren().addAll(card); // Add vertical space
         return cardContainer;
     }
+
 }
+

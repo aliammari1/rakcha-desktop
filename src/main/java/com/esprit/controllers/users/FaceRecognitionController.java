@@ -46,6 +46,7 @@ public class FaceRecognitionController {
     //// this.faceCascade = new CascadeClassifier();
     //// this.absoluteFaceSize = 0;
     //// }
+
     ////
     ////
     //// @FXML
@@ -75,18 +76,23 @@ public class FaceRecognitionController {
     //// Image imageToShow = grabFrame();
     //// originalFrame.setImage(imageToShow);
     //// }
-    //// };
+
+    //// }
+;
     ////
     //// this.timer = Executors.newSingleThreadScheduledExecutor();
     //// this.timer.scheduleAtFixedRate(frameGrabber, 0, 33, TimeUnit.MILLISECONDS);
     ////
     //// // update the button content
     //// this.cameraButton.setText("Stop Camera");
-    //// } else {
+    //// }
+ else {
     //// // log the error
     //// LOGGER.info("Failed to open the camera connection...");
     //// }
-    //// } else {
+
+    //// }
+ else {
     //// // the camera is not active at this point
     //// this.cameraActive = false;
     //// // update again the button content
@@ -99,23 +105,28 @@ public class FaceRecognitionController {
     //// try {
     //// this.timer.shutdown();
     //// this.timer.awaitTermination(33, TimeUnit.MILLISECONDS);
-    //// } catch (InterruptedException e) {
+    //// }
+ catch (InterruptedException e) {
     //// // log the exception
     //// LOGGER.info("Exception in stopping the frame capture, trying to
     // release the camera now... " + e);
     //// }
+
     ////
     //// // release the camera
     //// this.capture.release();
     //// // clean the frame
     //// this.originalFrame.setImage(null);
     //// }
+
     //// }
+
     ////
     //// /**
     //// * Get a frame from the opened video stream (if any)
     //// *
-    //// * @return the {@link Image} to show
+    //// * @return the {@link Image}
+ to show
     //// */
     //// private Image grabFrame() {
     //// // init everything
@@ -136,15 +147,20 @@ public class FaceRecognitionController {
     //// // convert the Mat object (OpenCV) to Image (JavaFX)
     //// imageToShow = mat2Image(frame);
     //// }
+
     ////
-    //// } catch (Exception e) {
+    //// }
+ catch (Exception e) {
     //// // log the (full) error
     //// LOGGER.info("ERROR: " + e);
     //// }
+
     //// }
+
     ////
     //// return imageToShow;
     //// }
+
     ////
     //// /**
     //// * Method for face detection and tracking
@@ -166,7 +182,9 @@ public class FaceRecognitionController {
     //// if (Math.round(height * 0.2f) > 0) {
     //// this.absoluteFaceSize = Math.round(height * 0.2f);
     //// }
+
     //// }
+
     ////
     //// // detect faces
     //// this.faceCascade.detectMultiScale(grayFrame, faces, 1.1, 2, 0 |
@@ -181,9 +199,11 @@ public class FaceRecognitionController {
     //// LOGGER.info(facesArray[i].tl());
     //// LOGGER.info(facesArray[i].br());
     //// }
+
     ////
     ////
     //// }
+
     ////
     ////
     //// @FXML
@@ -194,6 +214,7 @@ public class FaceRecognitionController {
     ////
     //// this.checkboxSelection("resources/haarcascades/haarcascade_frontalcatface.xml");
     //// }
+
     ////
     ////
     //// @FXML
@@ -204,6 +225,7 @@ public class FaceRecognitionController {
     ////
     //// this.checkboxSelection("resources/lbpcascades/lbpcascade_frontalface.xml");
     //// }
+
     ////
     //// /**
     //// * Method for loading a classifier trained set from disk
@@ -219,12 +241,15 @@ public class FaceRecognitionController {
     //// // now the video capture can start
     //// this.cameraButton.setDisable(false);
     //// }
+
     ////
     //// /**
     //// * Convert a Mat object (OpenCV) in the corresponding Image for JavaFX
     //// *
-    //// * @param frame the {@link Mat} representing the current frame
-    //// * @return the {@link Image} to show
+    //// * @param frame the {@link Mat}
+ representing the current frame
+    //// * @return the {@link Image}
+ to show
     //// */
     //// private Image mat2Image(Mat frame) {
     //// // create a temporary buffer
@@ -235,8 +260,10 @@ public class FaceRecognitionController {
     //// // buffer
     //// return new Image(new ByteArrayInputStream(buffer.toArray()));
     //// }
+
     ////
     //// }
+
     //
     //
     // import com.esprit.utils.FaceDetector;
@@ -271,10 +298,12 @@ public class FaceRecognitionController {
     // public void setData(Client client) {
     // this.client = client;
     // }
+
     //
     // public void setData(Client client) {
     // this.client = client;
     // }
+
     //
     // //**********************************************************************************************
     // //Mention The file location path where the face will be saved & retrieved
@@ -375,6 +404,7 @@ public class FaceRecognitionController {
     // logList.setItems(event);
     //
     // }
+
     //
     // @FXML
     // protected void startCamera() throws SQLException {
@@ -391,10 +421,12 @@ public class FaceRecognitionController {
     //
     // putOnLog("Error: Database Connection Failed ! ");
     //
-    // } else {
+    // }
+ else {
     // isDBready = true;
     // putOnLog("Success: Database Connection Succesful ! ");
     // }
+
     //
     // //*******************************************************************************************
     // //Activating other buttons
@@ -410,6 +442,7 @@ public class FaceRecognitionController {
     // if (isDBready) {
     // recogniseBtn.setDisable(false);
     // }
+
     //
     // dataPane.setDisable(false);
     // // shapeBtn.setDisable(false);
@@ -420,6 +453,7 @@ public class FaceRecognitionController {
     // if (stopRecBtn.isDisable()) {
     // stopRecBtn.setDisable(false);
     // }
+
     // //*******************************************************************************************
     //
     //
@@ -440,10 +474,12 @@ public class FaceRecognitionController {
     // imageView1 = createImageView(file);
     // tile.getChildren().addAll(imageView1);
     // }
+
     // putOnLog(" Real Time WebCam Stream Started !");
     //
     // //**********************************************************************************************
     // }
+
     //
     // @FXML
     // protected void faceRecognise() {
@@ -501,6 +537,7 @@ public class FaceRecognitionController {
     // output.setItems(outEvent);
     //
     // }
+
     //
     // count++;
     //
@@ -509,6 +546,7 @@ public class FaceRecognitionController {
     // stopRecBtn.setDisable(false);
     //
     // }
+
     //
     // @FXML
     // protected void stopRecognise() {
@@ -525,6 +563,7 @@ public class FaceRecognitionController {
     // putOnLog("Face Recognition Deactivated !");
     //
     // }
+
     //
     // @FXML
     // protected void startMotion() {
@@ -533,6 +572,7 @@ public class FaceRecognitionController {
     // putOnLog("motion Detector Activated !");
     //
     // }
+
     //
     // @FXML
     // protected void saveFace() throws SQLException {
@@ -550,12 +590,16 @@ public class FaceRecognitionController {
     //
     // warning.setVisible(false);
     //
-    // } catch (InterruptedException ex) {
     // }
+ catch (InterruptedException ex) {
+    // }
+
     //
-    // }).start();
+    // }
+).start();
     //
-    // } else {
+    // }
+ else {
     // //Progressbar
     // pb.setVisible(true);
     //
@@ -589,7 +633,9 @@ public class FaceRecognitionController {
     // public void run() {
     // pb.setProgress(100);
     // }
-    // });
+
+    // }
+);
     //
     //
     // savedLabel.setVisible(true);
@@ -601,7 +647,9 @@ public class FaceRecognitionController {
     // public void run() {
     // pb.setVisible(false);
     // }
-    // });
+
+    // }
+);
     //
     //
     // javafx.application.Platform.runLater(new Runnable() {
@@ -610,18 +658,25 @@ public class FaceRecognitionController {
     // public void run() {
     // savedLabel.setVisible(false);
     // }
-    // });
-    //
-    // } catch (InterruptedException ex) {
+
     // }
+);
     //
-    // }).start();
+    // }
+ catch (InterruptedException ex) {
+    // }
+
+    //
+    // }
+).start();
     //
     // faceDetect.setSaveFace(true);
     //
     // }
+
     //
     // }
+
     //
     // @FXML
     // protected void stopCam() throws SQLException {
@@ -648,6 +703,7 @@ public class FaceRecognitionController {
     // putOnLog("Database Connection Closed");
     // isDBready = false;
     // }
+
     //
     // @FXML
     // protected void ocrStart() {
@@ -660,12 +716,15 @@ public class FaceRecognitionController {
     //
     // ocr.getChildren().add(text1);
     //
-    // } catch (FontFormatException e) {
+    // }
+ catch (FontFormatException e) {
     //
     // LOGGER.log(Level.SEVERE, e.getMessage(), e);
     // }
+
     //
     // }
+
     //
     // @FXML
     // protected void capture() {
@@ -673,6 +732,7 @@ public class FaceRecognitionController {
     // faceDetect.setOcrMode(true);
     //
     // }
+
     //
     // @FXML
     // protected void startGesture() {
@@ -687,6 +747,7 @@ public class FaceRecognitionController {
     // gestureStop.setVisible(true);
     //
     // }
+
     //
     // @FXML
     // protected void startEyeDetect() {
@@ -695,6 +756,7 @@ public class FaceRecognitionController {
     // eyeBtn.setDisable(true);
     //
     // }
+
     //
     // @FXML
     // protected void upperBodyStart() {
@@ -703,6 +765,7 @@ public class FaceRecognitionController {
     // upperBodyBtn.setDisable(true);
     //
     // }
+
     //
     // @FXML
     // protected void fullBodyStart() {
@@ -711,6 +774,7 @@ public class FaceRecognitionController {
     // fullBodyBtn.setDisable(true);
     //
     // }
+
     //
     // @FXML
     // protected void smileStart() {
@@ -719,6 +783,7 @@ public class FaceRecognitionController {
     // smileBtn.setDisable(true);
     //
     // }
+
     //
     // @FXML
     // protected void stopGesture() {
@@ -730,6 +795,7 @@ public class FaceRecognitionController {
     // gestureStop.setVisible(false);
     //
     // }
+
     //
     // @FXML
     // protected void shapeStart() {
@@ -740,6 +806,7 @@ public class FaceRecognitionController {
     // shapeFrame.loop();
     //
     // }
+
     //
     // private ImageView createImageView(final File imageFile) {
     //
@@ -755,11 +822,15 @@ public class FaceRecognitionController {
     // imageView1.setSmooth(true);
     // imageView1.setCache(true);
     //
-    // } catch (FileNotFoundException e) {
+    // }
+ catch (FileNotFoundException e) {
     // LOGGER.log(Level.SEVERE, e.getMessage(), e);
     // }
+
     //
     // return imageView1;
     // }
+
     //
 }
+

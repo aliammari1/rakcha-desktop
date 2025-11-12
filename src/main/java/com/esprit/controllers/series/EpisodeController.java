@@ -100,9 +100,12 @@ public class EpisodeController {
             for (final Series s : this.serieList) {
                 this.serieF.getItems().add(s.getName());
             }
-        } catch (final Exception e) {
+
+        }
+ catch (final Exception e) {
             throw new RuntimeException(e);
         }
+
         ///// affichage du tableau
         final IServiceSeriesImpl serviceSerie = new IServiceSeriesImpl();
         // TableColumn<EpisodeDto, Integer> idCol = new TableColumn<>("ID");
@@ -127,12 +130,16 @@ public class EpisodeController {
                         tableView.getItems().remove(episode);
                         showAlert("OK", "Deleted successfully !");
                         tableView.refresh();
-                    } catch (final Exception e) {
+                    }
+ catch (final Exception e) {
                         EpisodeController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                         showAlert("Error", e.getMessage());
                     }
-                });
+
+                }
+);
             }
+
 
             /**
              * Updates an item's graphical representation based on its emptiness status.
@@ -151,11 +158,15 @@ public class EpisodeController {
                 super.updateItem(item, empty);
                 if (empty) {
                     this.setGraphic(null);
-                } else {
+                }
+ else {
                     this.setGraphic(this.button);
                 }
+
             }
-        });
+
+        }
+);
         final TableColumn<Episode, Void> modifierCol = new TableColumn<>("Edit");
         modifierCol.setCellFactory(param -> new TableCell<>() {
             private final Button button = new Button("Edit");
@@ -170,8 +181,11 @@ public class EpisodeController {
                         tableView.refresh();
                         this.clickCount = 0;
                     }
-                });
+
+                }
+);
             }
+
 
             /**
              * Updates the graphical representation (graphic) associated with an item based
@@ -193,11 +207,15 @@ public class EpisodeController {
                 super.updateItem(item, empty);
                 if (empty) {
                     this.setGraphic(null);
-                } else {
+                }
+ else {
                     this.setGraphic(this.button);
                 }
+
             }
-        });
+
+        }
+);
         // tableView.getColumns().addAll(idCol, titreCol, numeroepisodeCol, saisonCol,
         // serieCol, supprimerCol, modifierCol);
         this.tableView.getColumns().addAll(titreCol, numeroepisodeCol, saisonCol, serieCol, supprimerCol, modifierCol);
@@ -205,10 +223,13 @@ public class EpisodeController {
         try {
             PageRequest pageRequest = new PageRequest(0, 10);
             this.tableView.getItems().addAll(iServiceEpisode.read(pageRequest).getContent());
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             EpisodeController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * /** Modifies an episode's details through a dialog box, including title,
@@ -233,19 +254,24 @@ public class EpisodeController {
         for (final Series s : this.serieList) {
             serieComboBox.getItems().add(s.getName());
         }
+
         serieComboBox.setValue(episode.getSeries().getName());
         final Button Ajouterimage = new Button("Add");
         {
             Ajouterimage.setOnAction(event -> {
                 this.addimg(event);
-            });
+            }
+);
         }
+
         final Button AJouterVideo = new Button("Add");
         {
             AJouterVideo.setOnAction(event -> {
                 this.addVideo(event);
-            });
+            }
+);
         }
+
         dialog.getDialogPane()
                 .setContent(new VBox(10, new Label("Title:"), titreFild, new Label("Number:"), numeroepisodeFild,
                         new Label("Season :"), saisonFild, new Label("Add picture :"), Ajouterimage,
@@ -255,8 +281,10 @@ public class EpisodeController {
             if (dialogButton == ButtonType.OK) {
                 return new Pair<>(titreFild.getText(), numeroepisodeFild.getText());
             }
+
             return null;
-        });
+        }
+);
         final Optional<Pair<String, String>> result = dialog.showAndWait();
         final Episode episode1 = new Episode();
         result.ifPresent(pair -> {
@@ -270,17 +298,23 @@ public class EpisodeController {
                 if (s.getName().equals(serieComboBox.getValue())) {
                     episode1.setId(s.getId());
                 }
+
             }
+
             try {
                 EpisodeController.LOGGER.info(episode.toString());
                 iServiceEpisode.update(episode);
                 this.showAlert("Succes", "Modified successfully !");
                 this.ref();
-            } catch (final Exception e) {
+            }
+ catch (final Exception e) {
                 throw new RuntimeException(e);
             }
-        });
+
+        }
+);
     }
+
 
     /**
      * References a provided reference.
@@ -289,6 +323,7 @@ public class EpisodeController {
     private void initialize() {
         this.ref();
     }
+
 
     /**
      * /** Creates an `Alert` object and sets its title, header text, and content
@@ -314,6 +349,7 @@ public class EpisodeController {
         alert.showAndWait();
     }
 
+
     /**
      * Allows users to select an image file using a FileChooser, stores the file
      * path in `imgpath`, and sets the image using `Image`.
@@ -337,10 +373,13 @@ public class EpisodeController {
             EpisodeController.LOGGER.info("File path stored: " + this.imgpath);
             final Image image = new Image(selectedFile.toURI().toString());
             // imgoeuvre.setImage(image);
-        } else {
+        }
+ else {
             EpisodeController.LOGGER.info("Please select a valid image file.");
         }
+
     }
+
 
     /**
      * Allows the user to select an image file from a chosen directory, saves it to
@@ -369,11 +408,15 @@ public class EpisodeController {
                 this.imgpath = cloudinaryImageUrl;
 
                 LOGGER.info("Image uploaded to Cloudinary: " + cloudinaryImageUrl);
-            } catch (final IOException e) {
+            }
+ catch (final IOException e) {
                 LOGGER.log(Level.SEVERE, "Error uploading image to Cloudinary", e);
             }
+
         }
+
     }
+
 
     // Method to retrieve the stored file path
 
@@ -385,6 +428,7 @@ public class EpisodeController {
     public String getFilePath() {
         return this.imgpath;
     }
+
 
     // Method to check if the selected file is an image file
 
@@ -403,10 +447,13 @@ public class EpisodeController {
         try {
             final Image image = new Image(file.toURI().toString());
             return !image.isError();
-        } catch (final Exception e) {
+        }
+ catch (final Exception e) {
             return false;
         }
+
     }
+
 
     /////
 
@@ -432,10 +479,13 @@ public class EpisodeController {
             final String videoPath = selectedFile.getAbsolutePath().replace("\\", "/");
             this.videopath = videoPath;
             EpisodeController.LOGGER.info("File path stored: " + videoPath);
-        } else {
+        }
+ else {
             EpisodeController.LOGGER.info("Please select a valid video file.");
         }
+
     }
+
 
     // Method to check if the selected file is a video file
 
@@ -455,6 +505,7 @@ public class EpisodeController {
         return "mp4".equals(extension) || "avi".equals(extension) || "mkv".equals(extension);
     }
 
+
     /////
 
     /**
@@ -471,10 +522,13 @@ public class EpisodeController {
         try {
             Integer.parseInt(s);
             return true;
-        } catch (final NumberFormatException e) {
+        }
+ catch (final NumberFormatException e) {
             return false;
         }
+
     }
+
 
     /**
      * Determines whether a title is provided and returns `true` if it is, else it
@@ -486,11 +540,14 @@ public class EpisodeController {
     boolean titrecheck() {
         if ("" != titreF.getText()) {
             return true;
-        } else {
+        }
+ else {
             this.titrecheck.setText("Please enter a valid Title");
             return false;
         }
+
     }
+
 
     /**
      * Verifies if the user inputted season value is not empty and it's a numerical
@@ -504,11 +561,14 @@ public class EpisodeController {
         final String numero = this.saisonF.getText();
         if (!numero.isEmpty() && this.isStringInt(numero)) {
             return true;
-        } else {
+        }
+ else {
             this.seasoncheck.setText("Please enter a valid Season");
             return false;
         }
+
     }
+
 
     /**
      * Checks if an image file path is provided and returns `true` if yes, otherwise
@@ -520,11 +580,14 @@ public class EpisodeController {
     boolean picturechek() {
         if ("" != imgpath) {
             return true;
-        } else {
+        }
+ else {
             this.picturechek.setText("Please select a Picture");
             return false;
         }
+
     }
+
 
     /**
      * Checks if the user's input is a non-empty, integer-valued string, and returns
@@ -536,11 +599,14 @@ public class EpisodeController {
         final String numero = this.numeroepisodeF.getText();
         if (!numero.isEmpty() && this.isStringInt(numero)) {
             return true;
-        } else {
+        }
+ else {
             this.numbercheck.setText("Please enter a Number ");
             return false;
         }
+
     }
+
 
     /**
      * Verifies if a video summary is entered by the user, and returns `true` if it
@@ -553,11 +619,14 @@ public class EpisodeController {
     boolean videocheck() {
         if ("" != videopath) {
             return true;
-        } else {
+        }
+ else {
             this.videocheck.setText("Please enter a valid Summary");
             return false;
         }
+
     }
+
 
     /**
      * Checks if the value of `serieF` is not null, then returns `true`. Otherwise,
@@ -571,11 +640,14 @@ public class EpisodeController {
     boolean seriecheck() {
         if (null != serieF.getValue()) {
             return true;
-        } else {
+        }
+ else {
             this.seriecheck.setText("Please select a Serie");
             return false;
         }
+
     }
+
 
     // Méthode pour envoyer un SMS avec Twilio
 
@@ -596,6 +668,7 @@ public class EpisodeController {
         final Message message = Message.creator(toPhoneNumber, fromPhoneNumber, messageBody).create();
         EpisodeController.LOGGER.info("SMS sent successfully: " + message.getSid());
     }
+
 
     /**
      * Allows user to add a new episode to their chosen serie by filling in relevant
@@ -636,7 +709,9 @@ public class EpisodeController {
                     if (s.getName() == this.serieF.getValue()) {
                         episode.setId(s.getId());
                     }
+
                 }
+
                 episodeserv.create(episode);
                 // Envoi d'un SMS après avoir ajouté l'épisode avec succès
                 // String message = "A new episode is here : " + episode.getNameSerie();
@@ -650,15 +725,21 @@ public class EpisodeController {
                         this.sendSMS("+21653775010", message);
                         break; // Sortir de la boucle une fois la série trouvée
                     }
+
                 }
+
                 this.tableView.refresh();
                 this.ref();
-            } catch (final Exception e) {
+            }
+ catch (final Exception e) {
                 this.showAlert("Error", "An error occurred while saving the episode. : " + e.getMessage());
                 EpisodeController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
+
         }
+
     }
+
 
     /**
      * Loads a FXML file, creates a scene, and displays it in a Stage, using the
@@ -677,6 +758,7 @@ public class EpisodeController {
         stage.setScene(scene);
         stage.show();
     }
+
 
     /**
      * Loads a FXML file, creates a scene, and sets the scene on a stage, displaying
@@ -697,6 +779,7 @@ public class EpisodeController {
         stage.show();
     }
 
+
     /**
      * Loads and displays an FXML file named "/ui/series/Episode-view.fxml" in a
      * JavaFX application.
@@ -716,6 +799,7 @@ public class EpisodeController {
         stage.show();
     }
 
+
     /**
      * Is called when the 'ActionEvent' occurs and has no defined functionality as
      * of now.
@@ -727,6 +811,7 @@ public class EpisodeController {
     public void showmovies(final ActionEvent actionEvent) {
     }
 
+
     /**
      * Displays a list of products.
      *
@@ -737,6 +822,7 @@ public class EpisodeController {
     public void showproducts(final ActionEvent actionEvent) {
     }
 
+
     /**
      * Likely displays a cinema or movie-related information within an application.
      *
@@ -745,6 +831,7 @@ public class EpisodeController {
      */
     public void showcinema(final ActionEvent actionEvent) {
     }
+
 
     /**
      * Handles an event generated by a user's interaction with a graphical user
@@ -757,6 +844,7 @@ public class EpisodeController {
     public void showevent(final ActionEvent actionEvent) {
     }
 
+
     /**
      * Is triggered when an action event occurs and has no inherent meaning or
      * purpose beyond its activation.
@@ -767,4 +855,6 @@ public class EpisodeController {
      */
     public void showseries(final ActionEvent actionEvent) {
     }
+
 }
+
