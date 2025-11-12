@@ -170,8 +170,7 @@ public class CategoryController {
             final ObservableList<Category> obC = FXCollections
                     .observableArrayList(categoryService.read(pageRequest).getContent());
             this.filmCategory_tableView.setItems(obC);
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             CategoryController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -209,8 +208,7 @@ public class CategoryController {
             alert.setHeaderText("categorie");
             alert.show();
             this.readCategoryTable();
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             CategoryController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -462,8 +460,7 @@ public class CategoryController {
                     event.getTableView().getItems().get(event.getTablePosition().getRow()).setName(event.getNewValue());
                     CategoryController.this
                             .updateCategory(event.getTableView().getItems().get(event.getTablePosition().getRow()));
-                }
- catch (final Exception e) {
+                } catch (final Exception e) {
                     CategoryController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
 
@@ -490,8 +487,7 @@ public class CategoryController {
                                     .setDescription(event.getNewValue());
                             updateCategory(
                                     event.getTableView().getItems().get(event.getTablePosition().getRow()));
-                        }
- catch (final Exception e) {
+                        } catch (final Exception e) {
                             CategoryController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                         }
 

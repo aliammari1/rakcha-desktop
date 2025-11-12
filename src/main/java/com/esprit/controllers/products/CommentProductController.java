@@ -109,8 +109,7 @@ public class CommentProductController implements Initializable {
                 // updateCommentFlowPane(comment);
             }
 
-        }
- catch (final ParseException e) {
+        } catch (final ParseException e) {
             // Gérez l'exception si la conversion échoue
             CommentProductController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
@@ -219,8 +218,7 @@ public class CommentProductController implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             CommentProductController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                   // d'entrée/sortie
         }
@@ -256,8 +254,7 @@ public class CommentProductController implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             CommentProductController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                   // d'entrée/sortie
         }
@@ -288,8 +285,7 @@ public class CommentProductController implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             CommentProductController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                   // d'entrée/sortie
         }
@@ -334,8 +330,7 @@ public class CommentProductController implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             CommentProductController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                   // d'entrée/sortie
         }
@@ -370,8 +365,7 @@ public class CommentProductController implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             CommentProductController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                   // d'entrée/sortie
         }

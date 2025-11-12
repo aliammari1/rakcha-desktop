@@ -75,10 +75,8 @@ public class IServiceEpisodeImpl implements IService<Episode> {
             st.setInt(6, episode.getSeriesId());
             st.executeUpdate();
             LOGGER.info("Episode created successfully");
-        }
- catch (SQLException e) {
-            log.error("Error creating episode: {}
-", e.getMessage(), e);
+        } catch (SQLException e) {
+            log.error("Error creating episode: {}", e.getMessage(), e);
             throw new RuntimeException("Failed to create episode", e);
         }
 
@@ -104,10 +102,8 @@ public class IServiceEpisodeImpl implements IService<Episode> {
             st.setLong(7, episode.getId());
             st.executeUpdate();
             LOGGER.info("Episode updated successfully");
-        }
- catch (SQLException e) {
-            log.error("Error updating episode: {}
-", e.getMessage(), e);
+        } catch (SQLException e) {
+            log.error("Error updating episode: {}", e.getMessage(), e);
             throw new RuntimeException("Failed to update episode", e);
         }
 
@@ -147,10 +143,8 @@ public class IServiceEpisodeImpl implements IService<Episode> {
             ps.setLong(1, id);
             ps.executeUpdate();
             LOGGER.info("Episode deleted successfully");
-        }
- catch (SQLException e) {
-            log.error("Error deleting episode: {}
-", e.getMessage(), e);
+        } catch (SQLException e) {
+            log.error("Error deleting episode: {}", e.getMessage(), e);
             throw new RuntimeException("Failed to delete episode", e);
         }
 
@@ -171,8 +165,7 @@ public class IServiceEpisodeImpl implements IService<Episode> {
         // Validate sort column to prevent SQL injection
         if (pageRequest.hasSorting() &&
                 !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
-            log.warn("Invalid sort column: {}
-. Using default sorting.", pageRequest.getSortBy());
+            log.warn("Invalid sort column: {}. Using default sorting.", pageRequest.getSortBy());
             pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
 
@@ -197,10 +190,8 @@ public class IServiceEpisodeImpl implements IService<Episode> {
 
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
 
-        }
- catch (final SQLException e) {
-            log.error("Error retrieving paginated episodes: {}
-", e.getMessage(), e);
+        } catch (final SQLException e) {
+            log.error("Error retrieving paginated episodes: {}", e.getMessage(), e);
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
         }
 
@@ -246,11 +237,8 @@ public class IServiceEpisodeImpl implements IService<Episode> {
 
             }
 
-        }
- catch (SQLException e) {
-            log.error("Error retrieving episodes by series {}
-: {}
-", seriesId, e.getMessage(), e);
+        } catch (SQLException e) {
+            log.error("Error retrieving episodes by series {}: {}", seriesId, e.getMessage(), e);
             throw new RuntimeException("Failed to retrieve episodes by series", e);
         }
 

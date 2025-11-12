@@ -232,8 +232,7 @@ public class AfficherProductClientControllers implements Initializable {
                 imageView.setImage(defaultImage);
             }
 
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             AfficherProductClientControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -255,8 +254,7 @@ public class AfficherProductClientControllers implements Initializable {
                 stage.setTitle("Détails du Product");
                 stage.show();
                 currentStage.close();
-            }
- catch (final IOException e) {
+            } catch (final IOException e) {
                 throw new RuntimeException(e);
             }
 
@@ -302,8 +300,7 @@ public class AfficherProductClientControllers implements Initializable {
                 stage.setTitle("Détails du Product");
                 stage.show();
                 currentStage.close();
-            }
- catch (final IOException e) {
+            } catch (final IOException e) {
                 throw new RuntimeException(e);
             }
 
@@ -469,8 +466,7 @@ public class AfficherProductClientControllers implements Initializable {
                 imageView.setImage(defaultImage);
             }
 
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             AfficherProductClientControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -522,8 +518,7 @@ public class AfficherProductClientControllers implements Initializable {
                 currentStage.setTitle("my cart");
                 currentStage.show();
                 // Fermer la fenêtre actuelle
-            }
- catch (final IOException e) {
+            } catch (final IOException e) {
                 AfficherProductClientControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Affiche
                                                                                               // l'erreur dans
                                                                                               // la console
@@ -607,8 +602,7 @@ public class AfficherProductClientControllers implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             AfficherProductClientControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                           // d'entrée/sortie
         }
@@ -786,8 +780,7 @@ public class AfficherProductClientControllers implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             AfficherProductClientControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                           // d'entrée/sortie
         }
@@ -818,8 +811,7 @@ public class AfficherProductClientControllers implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             AfficherProductClientControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                           // d'entrée/sortie
         }
@@ -850,8 +842,7 @@ public class AfficherProductClientControllers implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             AfficherProductClientControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                           // d'entrée/sortie
         }
@@ -891,8 +882,7 @@ public class AfficherProductClientControllers implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             AfficherProductClientControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                           // d'entrée/sortie
         }
@@ -922,8 +912,7 @@ public class AfficherProductClientControllers implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             AfficherProductClientControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                           // d'entrée/sortie
         }
@@ -1128,8 +1117,7 @@ public class AfficherProductClientControllers implements Initializable {
                 j++;
             }
 
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             AfficherProductClientControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             AfficherProductClientControllers.LOGGER.info("Une erreur est survenue lors du chargement des produits");
         }
@@ -1170,8 +1158,7 @@ public class AfficherProductClientControllers implements Initializable {
                 imageView.setImage(defaultImage);
             }
 
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             AfficherProductClientControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             // Handle any exceptions during image loading
             AfficherProductClientControllers.LOGGER.info("Une erreur est survenue lors du chargement de l'image");
@@ -1195,8 +1182,7 @@ public class AfficherProductClientControllers implements Initializable {
                 stage.setTitle("Détails du Product");
                 stage.show();
                 currentStage.close();
-            }
- catch (final IOException e) {
+            } catch (final IOException e) {
                 throw new RuntimeException(e);
             }
 
@@ -1228,8 +1214,7 @@ public class AfficherProductClientControllers implements Initializable {
                 stage.setTitle("Détails du Product");
                 stage.show();
                 currentStage.close();
-            }
- catch (final IOException e) {
+            } catch (final IOException e) {
                 throw new RuntimeException(e);
             }
 

@@ -77,8 +77,7 @@ public class ShoppingCartService implements IService<ShoppingCart> {
             pst.setLong(3, shoppingCart.getUser().getId());
             pst.executeUpdate();
             ShoppingCartService.LOGGER.info("ShoppingCart filled!");
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             ShoppingCartService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -134,8 +133,7 @@ public class ShoppingCartService implements IService<ShoppingCart> {
             pst.setLong(4, shoppingCart.getId());
             pst.executeUpdate();
             ShoppingCartService.LOGGER.info("ShoppingCart updated!");
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             ShoppingCartService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -162,8 +160,7 @@ public class ShoppingCartService implements IService<ShoppingCart> {
             pst.setLong(2, shoppingCart.getUser().getId());
             pst.executeUpdate();
             ShoppingCartService.LOGGER.info("ShoppingCart deleted!");
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             ShoppingCartService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 

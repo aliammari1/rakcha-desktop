@@ -151,8 +151,7 @@ public class DashboardClientController {
     // listCinemaClient.setDisable(false);
     // }
 
-    // }
-);
+    // });
 
     /**
          * Finds cinemas whose name contains the given search term.
@@ -277,8 +276,7 @@ public class DashboardClientController {
             final String logoString = cinema.getLogoPath();
             final Image logoImage = new Image(logoString);
             logoImageView.setImage(logoImage);
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             DashboardClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -399,8 +397,7 @@ public class DashboardClientController {
                 final String logoString = cinema.getLogoPath();
                 final Image logoImage = new Image(logoString);
                 logoImageView.setImage(logoImage);
-            }
- catch (final Exception e) {
+            } catch (final Exception e) {
                 DashboardClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
 
@@ -461,8 +458,7 @@ public class DashboardClientController {
                     Platform.runLater(() -> this.openMapDialog(lat, lon));
                 }
 
-            }
- catch (final Exception e) {
+            } catch (final Exception e) {
                 DashboardClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
 
@@ -656,8 +652,7 @@ public class DashboardClientController {
             final String logoString = moviesession.getFilm().getImage();
             final Image logoImage = new Image(logoString);
             filmImageView.setImage(logoImage);
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             DashboardClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 

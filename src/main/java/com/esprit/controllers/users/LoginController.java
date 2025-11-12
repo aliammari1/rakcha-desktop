@@ -149,8 +149,7 @@ public class LoginController implements Initializable {
             final Parent root = loader.load();
             final Stage stage = (Stage) this.googleSIgnInButton.getScene().getWindow();
             stage.setScene(new Scene(root));
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             LoginController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -171,8 +170,7 @@ public class LoginController implements Initializable {
             final Parent root = loader.load();
             final Stage stage = (Stage) this.microsoftSignInButton.getScene().getWindow();
             stage.setScene(new Scene(root));
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             LoginController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -245,8 +243,7 @@ public class LoginController implements Initializable {
                 LOGGER.log(Level.INFO,
                         "User " + user.getEmail() + " with role " + user.getRole() + " logged in successfully");
 
-            }
- catch (Exception e) {
+            } catch (Exception e) {
                 LOGGER.log(Level.SEVERE, "Error during login process", e);
                 throw new IOException("Failed to complete login process", e);
             }
@@ -276,8 +273,7 @@ public class LoginController implements Initializable {
 
             // Stop animations when navigating away
             stopAllAnimations();
-        }
- catch (IOException e) {
+        } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error switching to signup view", e);
             throw e;
         }
@@ -309,8 +305,7 @@ public class LoginController implements Initializable {
                     final Parent root = loader.load();
                     final Stage stage = (Stage) forgetPasswordHyperlink.getScene().getWindow();
                     stage.setScene(new Scene(root));
-                }
- catch (final IOException e) {
+                } catch (final IOException e) {
                     throw new RuntimeException(e);
                 }
 
@@ -328,8 +323,7 @@ public class LoginController implements Initializable {
                     final Stage stage = (Stage) forgetPasswordEmailHyperlink.getScene()
                             .getWindow();
                     stage.setScene(new Scene(root));
-                }
- catch (final IOException e) {
+                } catch (final IOException e) {
                     throw new RuntimeException(e);
                 }
 
@@ -342,8 +336,7 @@ public class LoginController implements Initializable {
         signUpButton.setOnAction(event -> {
             try {
                 switchToSignUp(event);
-            }
- catch (IOException e) {
+            } catch (IOException e) {
                 LOGGER.log(Level.SEVERE, "Error switching to signup view", e);
             }
 
@@ -524,8 +517,7 @@ public class LoginController implements Initializable {
 
 
             LOGGER.info("Created " + maxDynamicElements + " dynamic particles and shapes");
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error creating dynamic animations: " + e.getMessage(), e);
         }
 
@@ -726,8 +718,7 @@ public class LoginController implements Initializable {
                 featuredMovieSwitchTimeline.play();
 
                 LOGGER.info("Initialized featured movie: " + movieTitles[featuredIndex]);
-            }
- catch (Exception e) {
+            } catch (Exception e) {
                 LOGGER.warning("Failed to load initial featured movie: " + e.getMessage());
             }
 
@@ -785,8 +776,7 @@ public class LoginController implements Initializable {
 
                     ParallelTransition fadeIn = new ParallelTransition(posterFadeIn, titleFadeIn);
                     fadeIn.play();
-                }
- catch (Exception ex) {
+                } catch (Exception ex) {
                     LOGGER.warning("Error updating featured movie: " + ex.getMessage());
                 }
 
@@ -1051,8 +1041,7 @@ public class LoginController implements Initializable {
                     foregroundPane = (AnchorPane) root.getChildren().get(2);
                 }
 
-            }
- catch (Exception e) {
+            } catch (Exception e) {
                 LOGGER.fine("Could not access foreground pane for cleanup: " + e.getMessage());
             }
 
@@ -1062,8 +1051,7 @@ public class LoginController implements Initializable {
                     if (particle != null) {
                         try {
                             foregroundPane.getChildren().remove(particle);
-                        }
- catch (Exception e) {
+                        } catch (Exception e) {
                             LOGGER.warning("Could not remove particle: " + e.getMessage());
                         }
 
@@ -1088,8 +1076,7 @@ public class LoginController implements Initializable {
                     foregroundPane = (AnchorPane) root.getChildren().get(2);
                 }
 
-            }
- catch (Exception e) {
+            } catch (Exception e) {
                 LOGGER.fine("Could not access foreground pane for cleanup: " + e.getMessage());
             }
 
@@ -1099,8 +1086,7 @@ public class LoginController implements Initializable {
                     if (shape != null) {
                         try {
                             foregroundPane.getChildren().remove(shape);
-                        }
- catch (Exception e) {
+                        } catch (Exception e) {
                             LOGGER.warning("Could not remove shape: " + e.getMessage());
                         }
 
@@ -1125,8 +1111,7 @@ public class LoginController implements Initializable {
                     foregroundPane = (AnchorPane) root.getChildren().get(2);
                 }
 
-            }
- catch (Exception e) {
+            } catch (Exception e) {
                 LOGGER.fine("Could not access foreground pane for cleanup: " + e.getMessage());
             }
 
@@ -1136,8 +1121,7 @@ public class LoginController implements Initializable {
                     if (rect != null) {
                         try {
                             foregroundPane.getChildren().remove(rect);
-                        }
- catch (Exception e) {
+                        } catch (Exception e) {
                             LOGGER.warning("Could not remove rectangle: " + e.getMessage());
                         }
 

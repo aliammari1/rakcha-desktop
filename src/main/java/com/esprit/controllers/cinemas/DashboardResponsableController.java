@@ -225,8 +225,7 @@ public class DashboardResponsableController implements Initializable {
             final String fullPath = this.image.getImage().getUrl();
             final String requiredPath = fullPath.substring(fullPath.indexOf("/img/cinemas/"));
             uri = new URI(requiredPath);
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             DashboardResponsableController.LOGGER.info(e.getMessage());
         }
 
@@ -260,8 +259,7 @@ public class DashboardResponsableController implements Initializable {
                 Files.copy(selectedFile.toPath(), destinationFilePath);
                 final Image selectedImage = new Image(destinationFilePath.toUri().toString());
                 this.image.setImage(selectedImage);
-            }
- catch (final IOException e) {
+            } catch (final IOException e) {
                 DashboardResponsableController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
 
@@ -423,8 +421,7 @@ public class DashboardResponsableController implements Initializable {
                 image = new Image("Logo.png");
             }
 
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             DashboardResponsableController.LOGGER.info("line 335 " + e.getMessage());
             image = new Image("Logo.png");
         }
@@ -1561,8 +1558,7 @@ public class DashboardResponsableController implements Initializable {
         try {
             Time.valueOf(LocalTime.parse(departureTimeText));
             Time.valueOf(LocalTime.parse(endTimeText));
-        }
- catch (final DateTimeParseException e) {
+        } catch (final DateTimeParseException e) {
             this.showAlert("The Start Time and End Time fields must be in the format HH:MM:SS.");
             return;
         }
@@ -1575,8 +1571,7 @@ public class DashboardResponsableController implements Initializable {
                 return;
             }
 
-        }
- catch (final NumberFormatException e) {
+        } catch (final NumberFormatException e) {
             this.showAlert("The Price field must be a real number.");
             return;
         }
@@ -1639,8 +1634,7 @@ public class DashboardResponsableController implements Initializable {
                 return;
             }
 
-        }
- catch (final NumberFormatException e) {
+        } catch (final NumberFormatException e) {
             this.showAlert("The number of places must be an integer!");
             return;
         }
@@ -1711,8 +1705,7 @@ public class DashboardResponsableController implements Initializable {
             os.write(data.getBytes(StandardCharsets.UTF_8));
             os.flush();
             os.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             DashboardResponsableController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -1811,8 +1804,7 @@ public class DashboardResponsableController implements Initializable {
                 this.image.setImage(selectedImage);
 
                 LOGGER.info("Image uploaded to Cloudinary: " + cloudinaryImageUrl);
-            }
- catch (final IOException e) {
+            } catch (final IOException e) {
                 LOGGER.log(Level.SEVERE, "Error uploading image to Cloudinary", e);
             }
 

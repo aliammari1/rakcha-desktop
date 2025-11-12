@@ -63,8 +63,7 @@ public class IServiceCategorieImpl implements IService<Category> {
                     """;
             tableCreator.createTableIfNotExists("category", createCategoryTable);
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             log.error("Error creating tables for IServiceCategorieImpl", e);
         }
 
@@ -91,8 +90,7 @@ public class IServiceCategorieImpl implements IService<Category> {
             st.setString(2, category.getDescription());
             st.executeUpdate();
             LOGGER.info("Category added successfully");
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error creating category: " + e.getMessage(), e);
             throw new RuntimeException("Failed to create category", e);
         }
@@ -121,8 +119,7 @@ public class IServiceCategorieImpl implements IService<Category> {
             os.setLong(3, category.getId());
             os.executeUpdate();
             LOGGER.info("Category updated successfully");
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error updating category: " + e.getMessage(), e);
             throw new RuntimeException("Failed to update category", e);
         }
@@ -149,8 +146,7 @@ public class IServiceCategorieImpl implements IService<Category> {
             os.setLong(1, category.getId());
             os.executeUpdate();
             LOGGER.info("Category deleted successfully");
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error deleting category: " + e.getMessage(), e);
             throw new RuntimeException("Failed to delete category", e);
         }
@@ -207,8 +203,7 @@ public class IServiceCategorieImpl implements IService<Category> {
 
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error retrieving paginated categories: " + e.getMessage(), e);
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
         }
@@ -254,8 +249,7 @@ public class IServiceCategorieImpl implements IService<Category> {
                 statistics.put(category, seriesCount);
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 

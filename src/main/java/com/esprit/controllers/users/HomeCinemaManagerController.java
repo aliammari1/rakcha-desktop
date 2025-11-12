@@ -118,8 +118,7 @@ public class HomeCinemaManagerController implements Initializable {
                         welcomeLabel.setText("Welcome, Cinema Manager!");
                     }
 
-                }
- catch (Exception ex) {
+                } catch (Exception ex) {
                     LOGGER.log(Level.WARNING, "Error setting welcome message: " + ex.getMessage(), ex);
                     welcomeLabel.setText("Welcome, Cinema Manager!");
                 }
@@ -127,8 +126,7 @@ public class HomeCinemaManagerController implements Initializable {
             }
 ));
             delayedInit.play();
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error initializing cinema manager dashboard: " + e.getMessage(), e);
         }
 
@@ -161,8 +159,7 @@ public class HomeCinemaManagerController implements Initializable {
             Page<MovieSession> sessions = sessionService.read(sessionPageRequest);
             sessionCountLabel.setText(String.valueOf(sessions.getContent().size()));
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error loading dashboard statistics: " + e.getMessage(), e);
             // Set default values in case of error
             movieCountLabel.setText("0");
@@ -187,8 +184,7 @@ public class HomeCinemaManagerController implements Initializable {
             addSessionItem("The Dark Knight", "6:00 PM", "Hall 1");
             addSessionItem("Interstellar", "9:00 PM", "Hall 3");
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error loading today's sessions: " + e.getMessage(), e);
         }
 
@@ -236,8 +232,7 @@ public class HomeCinemaManagerController implements Initializable {
             addActivityItem("Category created: Sci-Fi", "1 hour ago");
             addActivityItem("Movie statistics updated", "2 hours ago");
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error loading recent activity: " + e.getMessage(), e);
         }
 
@@ -322,8 +317,7 @@ public class HomeCinemaManagerController implements Initializable {
             Parent root = loader.load();
             Stage stage = (Stage) rootContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
-        }
- catch (IOException e) {
+        } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading movie management interface: " + e.getMessage(), e);
         }
 
@@ -342,8 +336,7 @@ public class HomeCinemaManagerController implements Initializable {
             Parent root = loader.load();
             Stage stage = (Stage) rootContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
-        }
- catch (IOException e) {
+        } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading session management interface: " + e.getMessage(), e);
         }
 
@@ -362,8 +355,7 @@ public class HomeCinemaManagerController implements Initializable {
             Parent root = loader.load();
             Stage stage = (Stage) rootContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
-        }
- catch (IOException e) {
+        } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading actor management interface: " + e.getMessage(), e);
         }
 
@@ -380,8 +372,7 @@ public class HomeCinemaManagerController implements Initializable {
             Parent root = loader.load();
             Stage stage = (Stage) rootContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
-        }
- catch (IOException e) {
+        } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading statistics interface: " + e.getMessage(), e);
         }
 

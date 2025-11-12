@@ -195,8 +195,7 @@ public class DetailsProductClientController implements Initializable {
                 imageView.setImage(defaultImage);
             }
 
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             DetailsProductClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -355,8 +354,7 @@ public class DetailsProductClientController implements Initializable {
             // Fermer la fenêtre actuelle
             final Stage currentStage = (Stage) this.retour.getScene().getWindow();
             currentStage.close();
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             DetailsProductClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception selon vos
                                                                                         // besoins
         }
@@ -416,8 +414,7 @@ public class DetailsProductClientController implements Initializable {
                 imageView.setImage(defaultImage);
             }
 
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             DetailsProductClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -471,8 +468,7 @@ public class DetailsProductClientController implements Initializable {
                 newStage.show();
                 // Fermer la fenêtre actuelle
                 currentStage.close();
-            }
- catch (final IOException e) {
+            } catch (final IOException e) {
                 DetailsProductClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Affiche l'erreur
                                                                                             // dans la console
                                                                                             // (vous pourriez
@@ -575,8 +571,7 @@ public class DetailsProductClientController implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             DetailsProductClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
@@ -607,8 +602,7 @@ public class DetailsProductClientController implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             DetailsProductClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
@@ -637,8 +631,7 @@ public class DetailsProductClientController implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             DetailsProductClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
@@ -669,8 +662,7 @@ public class DetailsProductClientController implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             DetailsProductClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
@@ -704,8 +696,7 @@ public class DetailsProductClientController implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             DetailsProductClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
@@ -745,8 +736,7 @@ public class DetailsProductClientController implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             DetailsProductClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
@@ -776,8 +766,7 @@ public class DetailsProductClientController implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             DetailsProductClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
@@ -807,17 +796,14 @@ public class DetailsProductClientController implements Initializable {
             for (final Product produit : top3Products) {
                 DetailsProductClientController.LOGGER.info(String.valueOf(produit.getId()));
                 final VBox cardContainer = this.createtopthree(produit);
-                DetailsProductClientController.LOGGER.log(Level.INFO, "------------------{0}
-{1}
-",
+                DetailsProductClientController.LOGGER.log(Level.INFO, "------------------{0}{1}",
                         new Object[] { j, cardContainer.getChildren() }
 );
                 this.topthreeVbox.getChildren().add(cardContainer);
                 j++;
             }
 
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             DetailsProductClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             DetailsProductClientController.LOGGER.info("Une erreur est survenue lors du chargement des produits");
         }
@@ -862,8 +848,7 @@ public class DetailsProductClientController implements Initializable {
                 imageView.setImage(defaultImage);
             }
 
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             DetailsProductClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             // Handle any exceptions during image loading
             DetailsProductClientController.LOGGER.info("Une erreur est survenue lors du chargement de l'image");
@@ -887,8 +872,7 @@ public class DetailsProductClientController implements Initializable {
                 stage.setTitle("Détails du Product");
                 stage.show();
                 currentStage.close();
-            }
- catch (final IOException e) {
+            } catch (final IOException e) {
                 throw new RuntimeException(e);
             }
 
@@ -920,8 +904,7 @@ public class DetailsProductClientController implements Initializable {
                 stage.setTitle("Détails du Product");
                 stage.show();
                 currentStage.close();
-            }
- catch (final IOException e) {
+            } catch (final IOException e) {
                 throw new RuntimeException(e);
             }
 

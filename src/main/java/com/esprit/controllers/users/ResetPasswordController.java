@@ -47,8 +47,7 @@ public class ResetPasswordController {
                 final Parent root = loader.load();
                 final Stage stage = (Stage) this.newPass.getScene().getWindow();
                 stage.setScene(new Scene(root));
-            }
- catch (final Exception e) {
+            } catch (final Exception e) {
                 ResetPasswordController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
 

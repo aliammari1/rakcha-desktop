@@ -66,8 +66,7 @@ public class ImdbAPI {
                         }
 
 
-                        JSONObject jsonResponse = new JSONObject("{" + response + "}
-");
+                        JSONObject jsonResponse = new JSONObject("{" + response + "}");
                         JSONArray results = jsonResponse.getJSONArray("results");
 
                         if (results.length() > 0) {
@@ -95,8 +94,7 @@ public class ImdbAPI {
 
                 throw new IOException("HTTP error code: " + conn.getResponseCode());
 
-            }
- catch (InterruptedException e) {
+            } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 throw new IOException("Search interrupted", e);
             }

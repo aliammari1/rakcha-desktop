@@ -254,8 +254,7 @@ public class ProfileController {
                 throw new IllegalArgumentException("Image loading failed");
             }
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Failed to load image: " + imageUrl, e);
             useGradientFallback();
         }
@@ -387,8 +386,7 @@ public class ProfileController {
 
                 }
 
-            }
- catch (Exception e) {
+            } catch (Exception e) {
                 LOGGER.log(Level.WARNING, "Error loading profile image, using default", e);
                 loadAndSetImage(DEFAULT_PROFILE_GIF);
             }
@@ -451,8 +449,7 @@ public class ProfileController {
                 showAlert("Success", "Profile updated successfully", Alert.AlertType.INFORMATION);
             }
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error updating profile", e);
             showAlert("Error", "Could not update profile", Alert.AlertType.ERROR);
         }
@@ -495,8 +492,7 @@ public class ProfileController {
 
         try {
             user.setPhoneNumber(phoneNumberTextField.getText());
-        }
- catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             LOGGER.warning("Invalid phone number format");
         }
 
@@ -584,8 +580,7 @@ public class ProfileController {
                             userService.update(user);
                             LOGGER.info("User profile updated with new image URL");
                             showAlert("Success", "Profile picture updated successfully", Alert.AlertType.INFORMATION);
-                        }
- catch (Exception e) {
+                        } catch (Exception e) {
                             LOGGER.log(Level.WARNING, "Failed to update user profile in database", e);
                             showAlert("Warning", "Image uploaded but profile not saved. Please save your profile.",
                                     Alert.AlertType.WARNING);
@@ -598,8 +593,7 @@ public class ProfileController {
                                 Alert.AlertType.WARNING);
                     }
 
-                }
- catch (IOException e) {
+                } catch (IOException e) {
                     LOGGER.log(Level.SEVERE, "Error uploading image to Cloudinary", e);
                     showAlert("Upload Error", "Could not upload image to cloud storage: " + e.getMessage(),
                             Alert.AlertType.ERROR);
@@ -611,8 +605,7 @@ public class ProfileController {
                 LOGGER.info("User cancelled file selection");
             }
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error importing photo", e);
             showAlert("Error", "Could not import photo: " + e.getMessage(), Alert.AlertType.ERROR);
             loadAndSetImage(DEFAULT_PROFILE_GIF);

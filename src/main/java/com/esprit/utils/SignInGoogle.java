@@ -110,8 +110,7 @@ public enum SignInGoogle {
 
             }
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Authentication failed", e);
             return false;
         }

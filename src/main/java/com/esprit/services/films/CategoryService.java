@@ -63,8 +63,7 @@ public class CategoryService implements IService<Category> {
                     """;
             tableCreator.createTableIfNotExists("categories", createCategoriesTable);
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             log.error("Error creating tables for CategoryService", e);
         }
 
@@ -85,8 +84,7 @@ public class CategoryService implements IService<Category> {
             statement.setString(1, category.getName());
             statement.setString(2, category.getDescription());
             statement.executeUpdate();
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             throw new RuntimeException(e);
         }
 
@@ -118,8 +116,7 @@ public class CategoryService implements IService<Category> {
         // Validate sort column to prevent SQL injection
         if (pageRequest.hasSorting() &&
                 !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
-            log.warn("Invalid sort column: {}
-. Using default sorting.", pageRequest.getSortBy());
+            log.warn("Invalid sort column: {}. Using default sorting.", pageRequest.getSortBy());
             pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
 
@@ -144,10 +141,8 @@ public class CategoryService implements IService<Category> {
 
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
 
-        }
- catch (final SQLException e) {
-            log.error("Error retrieving paginated categories: {}
-", e.getMessage(), e);
+        } catch (final SQLException e) {
+            log.error("Error retrieving paginated categories: {}", e.getMessage(), e);
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
         }
 
@@ -169,8 +164,7 @@ public class CategoryService implements IService<Category> {
             statement.setString(2, category.getDescription());
             statement.setLong(3, category.getId());
             statement.executeUpdate();
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             throw new RuntimeException(e);
         }
 
@@ -190,8 +184,7 @@ public class CategoryService implements IService<Category> {
             final PreparedStatement statement = this.connection.prepareStatement(req);
             statement.setLong(1, category.getId());
             statement.executeUpdate();
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             throw new RuntimeException(e);
         }
 
@@ -215,10 +208,8 @@ public class CategoryService implements IService<Category> {
                         .description(rs.getString("description")).build();
             }
 
-        }
- catch (final SQLException e) {
-            log.error("Error getting category by id: {}
-", id, e);
+        } catch (final SQLException e) {
+            log.error("Error getting category by id: {}", id, e);
         }
 
         return category;
@@ -242,10 +233,8 @@ public class CategoryService implements IService<Category> {
                         .description(rs.getString("description")).build();
             }
 
-        }
- catch (final SQLException e) {
-            log.error("Error getting category by name: {}
-", nom, e);
+        } catch (final SQLException e) {
+            log.error("Error getting category by name: {}", nom, e);
         }
 
         return category;

@@ -199,8 +199,7 @@ public class HomeClientController implements Initializable {
             random = new java.util.Random();
 
             LOGGER.info("Services initialized successfully");
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error initializing services: " + e.getMessage(), e);
         }
 
@@ -233,16 +232,14 @@ public class HomeClientController implements Initializable {
                         welcomeLabel.setText("Welcome to RAKCHA!");
                     }
 
-                }
- catch (Exception ex) {
+                } catch (Exception ex) {
                     LOGGER.log(Level.WARNING, "Error in delayed welcome message setup: " + ex.getMessage(), ex);
                     welcomeLabel.setText("Welcome to RAKCHA!");
                 }
 
             }
 );
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error setting welcome message: " + e.getMessage(), e);
             welcomeLabel.setText("Welcome to RAKCHA!");
         }
@@ -297,8 +294,7 @@ public class HomeClientController implements Initializable {
                         fadeIn.setFromValue(0.0);
                         fadeIn.setToValue(1.0);
                         fadeIn.play();
-                    }
- catch (Exception ex) {
+                    } catch (Exception ex) {
                         LOGGER.log(Level.WARNING, "Error loading featured image: " + ex.getMessage(), ex);
                     }
 
@@ -353,8 +349,7 @@ public class HomeClientController implements Initializable {
                         createPlaceholderMovies();
                     }
 
-                }
- catch (Exception e) {
+                } catch (Exception e) {
                     LOGGER.log(Level.WARNING, "Service failed, creating placeholders: " + e.getMessage());
                     createPlaceholderMovies();
                 }
@@ -367,8 +362,7 @@ public class HomeClientController implements Initializable {
                 LOGGER.warning("Movies container is null!");
             }
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error in loadMoviesContent: " + e.getMessage(), e);
             if (moviesContainer != null) {
                 createPlaceholderMovies();
@@ -420,8 +414,7 @@ public class HomeClientController implements Initializable {
                         createPlaceholderSeries();
                     }
 
-                }
- catch (Exception e) {
+                } catch (Exception e) {
                     LOGGER.log(Level.WARNING, "Service failed, creating placeholders: " + e.getMessage());
                     createPlaceholderSeries();
                 }
@@ -434,8 +427,7 @@ public class HomeClientController implements Initializable {
                 LOGGER.warning("Series container is null!");
             }
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error in loadSeriesContent: " + e.getMessage(), e);
             if (seriesContainer != null) {
                 createPlaceholderSeries();
@@ -482,8 +474,7 @@ public class HomeClientController implements Initializable {
                         createPlaceholderProducts();
                     }
 
-                }
- catch (Exception e) {
+                } catch (Exception e) {
                     LOGGER.log(Level.WARNING, "Service failed, creating placeholders: " + e.getMessage());
                     createPlaceholderProducts();
                 }
@@ -496,8 +487,7 @@ public class HomeClientController implements Initializable {
                 LOGGER.warning("Products container is null!");
             }
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error in loadProductsContent: " + e.getMessage(), e);
             if (productsContainer != null) {
                 createPlaceholderProducts();
@@ -541,8 +531,7 @@ public class HomeClientController implements Initializable {
                         createPlaceholderCinemas();
                     }
 
-                }
- catch (Exception e) {
+                } catch (Exception e) {
                     LOGGER.log(Level.WARNING, "Service failed, creating placeholders: " + e.getMessage());
                     createPlaceholderCinemas();
                 }
@@ -555,8 +544,7 @@ public class HomeClientController implements Initializable {
                 LOGGER.warning("Cinemas container is null!");
             }
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error in loadCinemasContent: " + e.getMessage(), e);
             if (cinemasContainer != null) {
                 createPlaceholderCinemas();
@@ -621,13 +609,11 @@ public class HomeClientController implements Initializable {
             }
 
             poster.setImage(new Image(imageUrl));
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             try {
                 poster.setImage(new Image("https://via.placeholder.com/140x200/333333/ffffff?text=" +
                         java.net.URLEncoder.encode(film.getName(), "UTF-8")));
-            }
- catch (Exception ex) {
+            } catch (Exception ex) {
                 poster.setImage(new Image("https://via.placeholder.com/140x200/333333/ffffff?text=No+Image"));
             }
 
@@ -748,13 +734,11 @@ public class HomeClientController implements Initializable {
             }
 
             poster.setImage(new Image(imageUrl));
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             try {
                 poster.setImage(new Image("https://via.placeholder.com/140x200/444444/ffffff?text=" +
                         java.net.URLEncoder.encode(series.getName(), "UTF-8")));
-            }
- catch (Exception ex) {
+            } catch (Exception ex) {
                 poster.setImage(new Image("https://via.placeholder.com/140x200/444444/ffffff?text=Series"));
             }
 
@@ -853,13 +837,11 @@ public class HomeClientController implements Initializable {
             }
 
             image.setImage(new Image(imageUrl));
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             try {
                 image.setImage(new Image("https://via.placeholder.com/140x180/555555/ffffff?text=" +
                         java.net.URLEncoder.encode(product.getName(), "UTF-8")));
-            }
- catch (Exception ex) {
+            } catch (Exception ex) {
                 image.setImage(new Image("https://via.placeholder.com/140x180/555555/ffffff?text=Product"));
             }
 
@@ -1031,8 +1013,7 @@ public class HomeClientController implements Initializable {
 
 
             LOGGER.info("Created " + dynamicParticles.size() + " dynamic particles with advanced randomness");
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error creating dynamic particles: " + e.getMessage(), e);
         }
 
@@ -1181,8 +1162,7 @@ public class HomeClientController implements Initializable {
 
 
             LOGGER.info("Created " + dynamicShapes.size() + " dynamic shapes with enhanced randomness");
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error creating dynamic shapes: " + e.getMessage(), e);
         }
 
@@ -1509,8 +1489,7 @@ public class HomeClientController implements Initializable {
             Parent root = loader.load();
             Stage stage = (Stage) rootContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
-        }
- catch (IOException e) {
+        } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading movies interface: " + e.getMessage(), e);
         }
 
@@ -1530,8 +1509,7 @@ public class HomeClientController implements Initializable {
             Parent root = loader.load();
             Stage stage = (Stage) rootContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
-        }
- catch (IOException e) {
+        } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading series interface: " + e.getMessage(), e);
         }
 
@@ -1550,8 +1528,7 @@ public class HomeClientController implements Initializable {
             Parent root = loader.load();
             Stage stage = (Stage) rootContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
-        }
- catch (IOException e) {
+        } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading products interface: " + e.getMessage(), e);
         }
 
@@ -1570,8 +1547,7 @@ public class HomeClientController implements Initializable {
             Parent root = loader.load();
             Stage stage = (Stage) rootContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
-        }
- catch (IOException e) {
+        } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading cinemas interface: " + e.getMessage(), e);
         }
 
@@ -1591,8 +1567,7 @@ public class HomeClientController implements Initializable {
             Parent root = loader.load();
             Stage stage = (Stage) rootContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
-        }
- catch (IOException e) {
+        } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading profile interface: " + e.getMessage(), e);
         }
 
@@ -1614,8 +1589,7 @@ public class HomeClientController implements Initializable {
             Stage stage = (Stage) rootContainer.getScene().getWindow();
             stage.setUserData(null); // Clear user data
             stage.setScene(new Scene(root));
-        }
- catch (IOException e) {
+        } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error during logout: " + e.getMessage(), e);
         }
 
@@ -1633,8 +1607,7 @@ public class HomeClientController implements Initializable {
         // Navigate to movie details or show movie player
         try {
             showMovies(null);
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error opening movie details: " + e.getMessage(), e);
         }
 
@@ -1651,8 +1624,7 @@ public class HomeClientController implements Initializable {
         // Navigate to series details or episode list
         try {
             showSeries(null);
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error opening series details: " + e.getMessage(), e);
         }
 
@@ -1669,8 +1641,7 @@ public class HomeClientController implements Initializable {
         // Navigate to product details or add to cart
         try {
             showProducts(null);
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error opening product details: " + e.getMessage(), e);
         }
 
@@ -1803,15 +1774,13 @@ public class HomeClientController implements Initializable {
 
         try {
             imageView.setImage(new Image(imageUrl));
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             // Fallback to a more reliable placeholder
             try {
                 String fallbackUrl = "https://via.placeholder.com/140x200/666666/ffffff?text=" +
                         java.net.URLEncoder.encode(type, "UTF-8");
                 imageView.setImage(new Image(fallbackUrl));
-            }
- catch (Exception ex) {
+            } catch (Exception ex) {
                 LOGGER.log(Level.WARNING, "Error loading placeholder image: " + ex.getMessage());
             }
 
@@ -2021,13 +1990,11 @@ public class HomeClientController implements Initializable {
             }
 
             image.setImage(new Image(imageUrl));
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             try {
                 image.setImage(new Image("https://via.placeholder.com/140x180/555555/ffffff?text=" +
                         java.net.URLEncoder.encode(cinema.getName(), "UTF-8")));
-            }
- catch (Exception ex) {
+            } catch (Exception ex) {
                 image.setImage(new Image("https://via.placeholder.com/140x180/555555/ffffff?text=Cinema"));
             }
 
@@ -2165,8 +2132,7 @@ public class HomeClientController implements Initializable {
                     Thread.sleep(500); // Give more time for layout
                     autoScroll.play();
                     LOGGER.info("Carousel animation started for " + container.getChildren().size() + " items");
-                }
- catch (InterruptedException ex) {
+                } catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
                 }
 
@@ -2175,8 +2141,7 @@ public class HomeClientController implements Initializable {
 
             LOGGER.info("Enhanced carousel animation setup for container with " + container.getChildren().size()
                     + " items");
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error setting up carousel animation: " + e.getMessage(), e);
         }
 
@@ -2296,8 +2261,7 @@ public class HomeClientController implements Initializable {
         // Navigate to cinema details or show cinema information
         try {
             showCinemas(null);
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error opening cinema details: " + e.getMessage(), e);
         }
 
@@ -2375,8 +2339,7 @@ public class HomeClientController implements Initializable {
 
 
             LOGGER.info("HomeClient controller cleanup completed");
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error during cleanup: " + e.getMessage(), e);
         }
 

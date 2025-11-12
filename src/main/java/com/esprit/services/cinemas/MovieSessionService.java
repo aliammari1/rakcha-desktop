@@ -72,8 +72,7 @@ public class MovieSessionService implements IService<MovieSession> {
                     """;
             tableCreator.createTableIfNotExists("movie_session", createMovieSessionTable);
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             log.error("Error creating tables for MovieSessionService", e);
         }
 
@@ -103,8 +102,7 @@ public class MovieSessionService implements IService<MovieSession> {
             stmt.setDouble(6, movieSession.getPrice());
             stmt.executeUpdate();
             log.info("Movie session created successfully");
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error creating movie session", e);
         }
 
@@ -138,8 +136,7 @@ public class MovieSessionService implements IService<MovieSession> {
             stmt.setLong(7, movieSession.getId());
             stmt.executeUpdate();
             log.info("Movie session updated successfully");
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error updating movie session", e);
         }
 
@@ -164,8 +161,7 @@ public class MovieSessionService implements IService<MovieSession> {
             stmt.setLong(1, movieSession.getId());
             stmt.executeUpdate();
             log.info("Movie session deleted successfully");
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error deleting movie session", e);
         }
 
@@ -194,8 +190,7 @@ public class MovieSessionService implements IService<MovieSession> {
         // Validate sort column to prevent SQL injection
         if (pageRequest.hasSorting() &&
                 !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
-            log.warn("Invalid sort column: {}
-. Using default sorting.", pageRequest.getSortBy());
+            log.warn("Invalid sort column: {}. Using default sorting.", pageRequest.getSortBy());
             pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
 
@@ -223,10 +218,8 @@ public class MovieSessionService implements IService<MovieSession> {
 
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
 
-        }
- catch (final SQLException e) {
-            log.error("Error retrieving paginated movie sessions: {}
-", e.getMessage(), e);
+        } catch (final SQLException e) {
+            log.error("Error retrieving paginated movie sessions: {}", e.getMessage(), e);
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
         }
 
@@ -257,8 +250,7 @@ public class MovieSessionService implements IService<MovieSession> {
 
             }
 
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error getting sessions by film and cinema", e);
         }
 
@@ -301,8 +293,7 @@ public class MovieSessionService implements IService<MovieSession> {
 
             }
 
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error getting sessions by date range and cinema", e);
         }
 
@@ -328,8 +319,7 @@ public class MovieSessionService implements IService<MovieSession> {
 
             }
 
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error getting first session for film: " + filmId, e);
         }
 
@@ -353,8 +343,7 @@ public class MovieSessionService implements IService<MovieSession> {
 
             }
 
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error getting movie session by id: " + id, e);
         }
 
@@ -385,8 +374,7 @@ public class MovieSessionService implements IService<MovieSession> {
             return MovieSession.builder().id(rs.getLong("id")).film(film).cinemaHall(cinemaHall)
                     .startTime(rs.getTime("start_time")).endTime(rs.getTime("end_time"))
                     .sessionDate(rs.getDate("session_date")).price(rs.getDouble("price")).build();
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error building movie session from ResultSet", e);
             return null;
         }

@@ -57,8 +57,7 @@ public class IServiceFeedbackImpl implements IService<Feedback> {
                     """;
             tableCreator.createTableIfNotExists("feedback", createFeedbackTable);
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             log.error("Error creating tables for IServiceFeedbackImpl", e);
         }
 
@@ -85,8 +84,7 @@ public class IServiceFeedbackImpl implements IService<Feedback> {
             ps.setLong(4, feedback.getEpisodeId());
             ps.executeUpdate();
             LOGGER.info("Feedback added successfully!");
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -110,8 +108,7 @@ public class IServiceFeedbackImpl implements IService<Feedback> {
             pst.setLong(5, feedback.getId());
             pst.executeUpdate();
             LOGGER.info("Feedback updated successfully!");
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -131,8 +128,7 @@ public class IServiceFeedbackImpl implements IService<Feedback> {
             pst.setLong(1, feedback.getId());
             pst.executeUpdate();
             LOGGER.info("Feedback deleted successfully!");
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -178,8 +174,7 @@ public class IServiceFeedbackImpl implements IService<Feedback> {
 
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error retrieving paginated feedback: " + e.getMessage(), e);
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
         }

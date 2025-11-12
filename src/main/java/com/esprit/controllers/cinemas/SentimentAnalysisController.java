@@ -78,8 +78,7 @@ public class SentimentAnalysisController {
                 return "Neutral";
             }
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException("Error analyzing sentiment", e);
         }
 
@@ -127,8 +126,7 @@ public class SentimentAnalysisController {
 
             return String.format("%s (Compound: %.3f, Pos: %.3f, Neg: %.3f, Neu: %.3f)",
                     sentiment, compound, positive, negative, neutral);
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException("Error analyzing detailed sentiment", e);
         }
 
@@ -158,8 +156,7 @@ public class SentimentAnalysisController {
             // Get the polarity scores and return compound score
             final HashMap<String, Float> sentimentScores = sentimentAnalyzer.getPolarity();
             return sentimentScores.get("compound");
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException("Error getting sentiment score", e);
         }
 
@@ -187,8 +184,7 @@ public class SentimentAnalysisController {
             sentimentAnalyzer.analyze();
 
             return sentimentAnalyzer.getPolarity();
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException("Error getting all sentiment scores", e);
         }
 

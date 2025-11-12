@@ -92,15 +92,13 @@ public abstract class TestFXBase extends ApplicationTest {
                 try {
                     Node node = lookup(query).query();
                     return node != null && node.isVisible();
-                }
- catch (Exception e) {
+                } catch (Exception e) {
                     return false;
                 }
 
             }
 );
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             // Node not found or timeout - continue anyway
         }
 
@@ -387,8 +385,7 @@ public abstract class TestFXBase extends ApplicationTest {
 
             
             return testImage;
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException("Failed to create test image file", e);
         }
 

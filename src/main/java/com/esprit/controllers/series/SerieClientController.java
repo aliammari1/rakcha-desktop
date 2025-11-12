@@ -362,8 +362,7 @@ public class SerieClientController {
 
                                 }
 
-                            }
- catch (final SQLException e) {
+                            } catch (final SQLException e) {
                                 throw new RuntimeException(e);
                             }
 
@@ -408,8 +407,7 @@ public class SerieClientController {
 
                                 }
 
-                            }
- catch (final SQLException e) {
+                            } catch (final SQLException e) {
                                 throw new RuntimeException(e);
                             }
 
@@ -451,8 +449,7 @@ public class SerieClientController {
                                     SerieClientController.LOGGER.info(String.valueOf(fav.getId().intValue()));
                                 }
 
-                            }
- catch (final SQLException e) {
+                            } catch (final SQLException e) {
                                 throw new RuntimeException(e);
                             }
 
@@ -507,8 +504,7 @@ public class SerieClientController {
                             stage.setTitle("");
                             stage.setScene(scene);
                             stage.show();
-                        }
- catch (final IOException e) {
+                        } catch (final IOException e) {
                             throw new RuntimeException(e);
                         }
 
@@ -543,8 +539,7 @@ public class SerieClientController {
             stage.setTitle("Your Favorits");
             stage.setScene(scene);
             stage.show();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             throw new RuntimeException(e);
         }
 
@@ -589,8 +584,7 @@ public class SerieClientController {
                             this.listerecherche = iServiceSerie.retrieveByCategory(selectedCategorie.getId());
                             this.trierParNom(this.listerecherche); // Tri des séries par nom
                             this.afficherliste(this.listerecherche);
-                        }
- catch (final SQLException e) {
+                        } catch (final SQLException e) {
                             throw new RuntimeException(e);
                         }
 
@@ -624,8 +618,7 @@ public class SerieClientController {
                     stage.setTitle("");
                     stage.setScene(scene);
                     stage.show();
-                }
- catch (final IOException e) {
+                } catch (final IOException e) {
                     throw new RuntimeException(e);
                 }
 

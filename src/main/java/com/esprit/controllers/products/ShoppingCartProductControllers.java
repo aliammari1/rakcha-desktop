@@ -117,8 +117,7 @@ public class ShoppingCartProductControllers implements Initializable {
         try {
             final Client client = (Client) this.cartFlowPane.getScene().getWindow().getUserData();
             items = shoppingcartService.readUserShoppingCart(client.getId());
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             throw new RuntimeException(e);
         }
 
@@ -186,8 +185,7 @@ public class ShoppingCartProductControllers implements Initializable {
                 imageView.setImage(defaultImage);
             }
 
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             ShoppingCartProductControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -447,8 +445,7 @@ public class ShoppingCartProductControllers implements Initializable {
             stage.setTitle("order");
             stage.setScene(scene);
             stage.show();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             throw new RuntimeException(e);
         }
 
@@ -489,8 +486,7 @@ public class ShoppingCartProductControllers implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             ShoppingCartProductControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
@@ -519,8 +515,7 @@ public class ShoppingCartProductControllers implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             ShoppingCartProductControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
@@ -551,8 +546,7 @@ public class ShoppingCartProductControllers implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             ShoppingCartProductControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
@@ -593,8 +587,7 @@ public class ShoppingCartProductControllers implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             ShoppingCartProductControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
@@ -624,8 +617,7 @@ public class ShoppingCartProductControllers implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             ShoppingCartProductControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
@@ -664,8 +656,7 @@ public class ShoppingCartProductControllers implements Initializable {
             // Fermer la fenêtre actuelle
             final Stage currentStage = (Stage) this.retour.getScene().getWindow();
             currentStage.close();
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             ShoppingCartProductControllers.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception selon vos
                                                                                         // besoins
         }

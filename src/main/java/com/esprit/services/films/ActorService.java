@@ -72,8 +72,7 @@ public class ActorService implements IService<Actor> {
                     """;
             tableCreator.createTableIfNotExists("actors", createActorsTable);
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             log.error("Error creating tables for ActorService", e);
         }
 
@@ -99,8 +98,7 @@ public class ActorService implements IService<Actor> {
             statement.setString(2, actor.getImage());
             statement.setString(3, actor.getBiography());
             statement.executeUpdate();
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             log.error("Error creating actor", e);
             throw new RuntimeException(e);
         }
@@ -132,8 +130,7 @@ public class ActorService implements IService<Actor> {
         // Validate sort column to prevent SQL injection
         if (pageRequest.hasSorting() &&
                 !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
-            log.warn("Invalid sort column: {}
-. Using default sorting.", pageRequest.getSortBy());
+            log.warn("Invalid sort column: {}. Using default sorting.", pageRequest.getSortBy());
             pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
 
@@ -159,10 +156,8 @@ public class ActorService implements IService<Actor> {
 
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
 
-        }
- catch (final SQLException e) {
-            log.error("Error retrieving paginated actors: {}
-", e.getMessage(), e);
+        } catch (final SQLException e) {
+            log.error("Error retrieving paginated actors: {}", e.getMessage(), e);
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
         }
 
@@ -183,8 +178,7 @@ public class ActorService implements IService<Actor> {
             statement.setString(3, actor.getBiography());
             statement.setLong(4, actor.getId());
             statement.executeUpdate();
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             log.error("Error updating actor", e);
             throw new RuntimeException(e);
         }
@@ -213,8 +207,7 @@ public class ActorService implements IService<Actor> {
 
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             log.error("Error getting actor by name: " + nom, e);
         }
 
@@ -233,8 +226,7 @@ public class ActorService implements IService<Actor> {
         try (final PreparedStatement statement = this.connection.prepareStatement(req)) {
             statement.setLong(1, actor.getId());
             statement.executeUpdate();
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             log.error("Error deleting actor", e);
             throw new RuntimeException(e);
         }
@@ -269,8 +261,7 @@ public class ActorService implements IService<Actor> {
 
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             log.error("Error getting actor by placement: " + actorPlacement, e);
             throw new RuntimeException(e);
         }

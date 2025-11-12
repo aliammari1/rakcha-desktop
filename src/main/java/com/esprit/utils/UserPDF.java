@@ -34,8 +34,7 @@ public class UserPDF {
         Document document = new Document();
         try {
             PdfWriter.getInstance(document, new FileOutputStream("iTextTable.pdf"));
-        }
- catch (DocumentException | FileNotFoundException e) {
+        } catch (DocumentException | FileNotFoundException e) {
             UserPDF.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             throw new RuntimeException(e);
         }
@@ -50,8 +49,7 @@ public class UserPDF {
         // addCustomRows(table);
         try {
             document.add(table);
-        }
- catch (DocumentException e) {
+        } catch (DocumentException e) {
             UserPDF.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             throw new RuntimeException(e);
         }
@@ -98,8 +96,7 @@ public class UserPDF {
     // Path path = null;
     // try {
     // path = Paths.get(ClassLoader.getSystemResource("Java_logo.png").toURI());
-    // }
- catch (URISyntaxException e) {
+    // } catch (URISyntaxException e) {
     // LOGGER.log(Level.SEVERE, e.getMessage(), e);
     // throw new RuntimeException(e);
     // }
@@ -107,8 +104,7 @@ public class UserPDF {
     // Image img = null;
     // try {
     // img = Image.getInstance(path.toAbsolutePath().toString());
-    // }
- catch (BadElementException | IOException e) {
+    // } catch (BadElementException | IOException e) {
     // LOGGER.log(Level.SEVERE, e.getMessage(), e);
     // throw new RuntimeException(e);
     // }

@@ -126,8 +126,7 @@ public class PaymentController {
         this.spinnerTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             try {
                 this.cvc.getValueFactory().setValue(Integer.parseInt(newValue));
-            }
- catch (final NumberFormatException e) {
+            } catch (final NumberFormatException e) {
                 // Handle invalid input
             }
 
@@ -318,15 +317,7 @@ public class PaymentController {
             return false;
         }
 
-        final String regex = "^(?:(?:4[0-9]{12}
-(?:[0-9]{3}
-)?)|(?:5[1-5][0-9]{14}
-)|(?:6(?:011|5[0-9][0-9])[0-9]{12}
-)|(?:3[47][0-9]{13}
-)|(?:3(?:0[0-5]|[68][0-9])[0-9]{11}
-)|(?:((?:2131|1800|35[0-9]{3}
-)[0-9]{11}
-)))$";
+        final String regex = "^(?:(?:4[0-9]{12}(?:[0-9]{3})?)|(?:5[1-5][0-9]{14})|(?:6(?:011|5[0-9][0-9])[0-9]{12})|(?:3[47][0-9]{13})|(?:3(?:0[0-5]|[68][0-9])[0-9]{11})|(?:((?:2131|1800|35[0-9]{3})[0-9]{11})))$";
         // Create a Pattern object with the regular expression
         final Pattern pattern = Pattern.compile(regex);
         // Match the pattern against the credit card number
@@ -346,8 +337,7 @@ public class PaymentController {
         // Trim the input string to remove any leading or trailing whitespace
         email = email.trim();
         // Regular expression pattern to match an email address
-        final String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}
-$";
+        final String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
         // Compile the pattern
         final Pattern pattern = Pattern.compile(regex);
         // Match the pattern against the email address
@@ -379,8 +369,7 @@ $";
         // Scene scene = new Scene(root);
         // Stage stage = (Stage) pay_btn.getScene().getWindow();
         // stage.setScene(scene);
-        // }
- catch (IOException ex) {
+        // } catch (IOException ex) {
         // LOGGER.info(ex.getMessage());
         // }
 
@@ -405,8 +394,7 @@ $";
         // Scene scene = new Scene(root);
         // Stage stage = (Stage) pay_btn.getScene().getWindow();
         // stage.setScene(scene);
-        // }
- catch (IOException ex) {
+        // } catch (IOException ex) {
         // LOGGER.info(ex.getMessage());
         // }
 
@@ -438,8 +426,7 @@ $";
         // Scene scene = new Scene(root);
         // Stage stage = (Stage) back_btn.getScene().getWindow();
         // stage.setScene(scene);
-        // }
- catch (IOException ex) {
+        // } catch (IOException ex) {
         // LOGGER.info(ex.getMessage());
         // }
 

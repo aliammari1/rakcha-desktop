@@ -97,8 +97,7 @@ public class IServiceSeriesImpl implements IService<Series> {
             ps.setInt(9, 0);
             ps.executeUpdate();
             LOGGER.info("Series created successfully");
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error creating series: " + e.getMessage(), e);
         }
 
@@ -127,8 +126,7 @@ public class IServiceSeriesImpl implements IService<Series> {
             st.setLong(10, serie.getId());
             st.executeUpdate();
             LOGGER.info("Series updated successfully");
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error updating series: " + e.getMessage(), e);
         }
 
@@ -148,8 +146,7 @@ public class IServiceSeriesImpl implements IService<Series> {
             ps.setLong(1, serie.getId());
             ps.executeUpdate();
             LOGGER.info("Series deleted successfully");
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error deleting series: " + e.getMessage(), e);
         }
 
@@ -195,8 +192,7 @@ public class IServiceSeriesImpl implements IService<Series> {
 
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error retrieving paginated series: " + e.getMessage(), e);
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
         }
@@ -344,8 +340,7 @@ public class IServiceSeriesImpl implements IService<Series> {
                 series.add(serie);
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -369,8 +364,7 @@ public class IServiceSeriesImpl implements IService<Series> {
                 likesStatistics.put(serie, nbLikes);
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 

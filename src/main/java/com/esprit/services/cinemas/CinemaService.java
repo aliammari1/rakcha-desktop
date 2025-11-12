@@ -96,8 +96,7 @@ public class CinemaService implements IService<Cinema> {
             stmt.setString(5, cinema.getStatus() != null ? cinema.getStatus() : "Pending");
             stmt.executeUpdate();
             log.info("Cinema created successfully");
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error creating cinema", e);
             throw new RuntimeException("Failed to create cinema", e);
         }
@@ -129,8 +128,7 @@ public class CinemaService implements IService<Cinema> {
             stmt.setLong(5, cinema.getId());
             stmt.executeUpdate();
             log.info("Cinema updated successfully");
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error updating cinema", e);
         }
 
@@ -155,8 +153,7 @@ public class CinemaService implements IService<Cinema> {
             stmt.setLong(1, cinema.getId());
             stmt.executeUpdate();
             log.info("Cinema deleted successfully");
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error deleting cinema", e);
         }
 
@@ -177,8 +174,7 @@ public class CinemaService implements IService<Cinema> {
         // Validate sort column to prevent SQL injection
         if (pageRequest.hasSorting() &&
                 !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
-            log.warn("Invalid sort column: {}
-. Using default sorting.", pageRequest.getSortBy());
+            log.warn("Invalid sort column: {}. Using default sorting.", pageRequest.getSortBy());
             pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
 
@@ -206,10 +202,8 @@ public class CinemaService implements IService<Cinema> {
 
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
 
-        }
- catch (final SQLException e) {
-            log.error("Error retrieving paginated cinemas: {}
-", e.getMessage(), e);
+        } catch (final SQLException e) {
+            log.error("Error retrieving paginated cinemas: {}", e.getMessage(), e);
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
         }
 
@@ -235,8 +229,7 @@ public class CinemaService implements IService<Cinema> {
 
         // Validate sort column to prevent SQL injection
         if (!PaginationQueryBuilder.isValidSortColumn(orderBy, ALLOWED_SORT_COLUMNS)) {
-            log.warn("Invalid sort column: {}
-. Using default sorting by id.", orderBy);
+            log.warn("Invalid sort column: {}. Using default sorting by id.", orderBy);
             return read(pageRequest); // Return default sorted results
         }
 
@@ -255,8 +248,7 @@ public class CinemaService implements IService<Cinema> {
 
             }
 
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error sorting cinemas", e);
         }
 
@@ -279,8 +271,7 @@ public class CinemaService implements IService<Cinema> {
                 return buildCinema(rs);
             }
 
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error getting cinema by id: " + cinemaId, e);
         }
 
@@ -303,8 +294,7 @@ public class CinemaService implements IService<Cinema> {
                 return buildCinema(rs);
             }
 
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error getting cinema by name: " + name, e);
         }
 
@@ -329,8 +319,7 @@ public class CinemaService implements IService<Cinema> {
 
             return Cinema.builder().id(rs.getLong("id")).name(rs.getString("name")).address(rs.getString("address"))
                     .manager(manager).logoPath(rs.getString("logo_path")).status(rs.getString("status")).build();
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error building cinema from ResultSet", e);
             return null;
         }

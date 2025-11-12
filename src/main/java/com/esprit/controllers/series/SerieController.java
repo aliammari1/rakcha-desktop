@@ -113,8 +113,7 @@ public class SerieController {
                 this.categorieF.getItems().add(c.getName());
             }
 
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             throw new RuntimeException(e);
         }
 
@@ -144,8 +143,7 @@ public class SerieController {
                         tableView.getItems().remove(serieDto);
                         tableView.refresh();
                         showAlert("Succes", "Deleted Successfully!");
-                    }
- catch (final Exception e) {
+                    } catch (final Exception e) {
                         SerieController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                         showAlert("Succes", "Deleted Successfully!");
                     }
@@ -222,8 +220,7 @@ public class SerieController {
         try {
             PageRequest pageRequest = new PageRequest(0, 10);
             this.tableView.getItems().addAll(serviceSerie.read(pageRequest).getContent());
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             SerieController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -341,8 +338,7 @@ public class SerieController {
                 document.add(table);
                 document.close();
                 SerieController.LOGGER.info("Le Poster a été généré avec succès.");
-            }
- catch (final Exception e) {
+            } catch (final Exception e) {
                 SerieController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
 
@@ -417,8 +413,7 @@ public class SerieController {
                 iServiceSerie.update(serie);
                 this.showAlert("Succes", "Successfully modified!");
                 this.ref();
-            }
- catch (final Exception e) {
+            } catch (final Exception e) {
                 throw new RuntimeException(e);
             }
 
@@ -504,8 +499,7 @@ public class SerieController {
                 this.imgpath = cloudinaryImageUrl;
 
                 LOGGER.info("Image uploaded to Cloudinary: " + cloudinaryImageUrl);
-            }
- catch (final IOException e) {
+            } catch (final IOException e) {
                 LOGGER.log(Level.SEVERE, "Error uploading image to Cloudinary", e);
             }
 
@@ -540,8 +534,7 @@ public class SerieController {
         try {
             final Image image = new Image(file.toURI().toString());
             return !image.isError();
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             return false;
         }
 
@@ -683,8 +676,7 @@ public class SerieController {
             email.addTo(recipientEmail);
             email.send();
             SerieController.LOGGER.info("Email sent successfully.");
-        }
- catch (final EmailException e) {
+        } catch (final EmailException e) {
             SerieController.LOGGER.info("Error sending email: " + e.getMessage());
             SerieController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
@@ -745,8 +737,7 @@ public class SerieController {
                 final String newSerieDescription = serie.getSummary(); // Vous pouvez personnaliser cela
                 this.sendEmail(recipientEmail, newSerieTitle, message);
                 this.ref();
-            }
- catch (final Exception e) {
+            } catch (final Exception e) {
                 this.showAlert("Error", "An error occurred while saving the serie: " + e.getMessage());
                 SerieController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
@@ -760,8 +751,7 @@ public class SerieController {
          *
          * try { Map<String, Long> statistics =
          * serviceSerie.getSeriesStatisticsByCategory(); // Handle or display the
-         * statistics as needed LOGGER.info(statistics); }
- catch (SQLException e) {
+         * statistics as needed LOGGER.info(statistics); } catch (SQLException e) {
          * LOGGER.log(Level.SEVERE, e.getMessage(), e); // Handle the exception }
  }
 

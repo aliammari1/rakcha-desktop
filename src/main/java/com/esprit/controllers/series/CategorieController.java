@@ -78,8 +78,7 @@ public class CategorieController {
                         showAlert("Succes", "Deleted successfully !");
                         ref();
                         tableView.refresh();
-                    }
- catch (final Exception e) {
+                    } catch (final Exception e) {
                         CategorieController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                         showAlert("Error", e.getMessage());
                     }
@@ -154,8 +153,7 @@ public class CategorieController {
         try {
             PageRequest pageRequest = new PageRequest(0,10);
             this.tableView.getItems().addAll(categorieserv.read(pageRequest).getContent());
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             CategorieController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -208,8 +206,7 @@ public class CategorieController {
                 iServiceCategorie.update(categorie);
                 this.showAlert("successfully", "Modified successfully!");
                 this.ref();
-            }
- catch (final Exception e) {
+            } catch (final Exception e) {
                 throw new RuntimeException(e);
             }
 
@@ -287,8 +284,7 @@ public class CategorieController {
                 this.checkname.setText("");
                 this.checkdescreption.setText("");
                 this.ref();
-            }
- catch (final Exception e) {
+            } catch (final Exception e) {
                 this.showAlert("Error", "An error occurred while saving the category : " + e.getMessage());
             }
 
@@ -385,8 +381,7 @@ public class CategorieController {
                 // Remplacez la scène actuelle par la nouvelle scène
                 stage.setScene(scene);
                 stage.show();
-            }
- catch (final IOException e) {
+            } catch (final IOException e) {
                 CategorieController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
 

@@ -80,8 +80,7 @@ public class DatabaseSeeder {
 
             log.info("Enhanced database seeding completed successfully!");
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             log.error("Error during enhanced database seeding", e);
             throw new RuntimeException("Enhanced database seeding failed", e);
         }
@@ -93,8 +92,7 @@ public class DatabaseSeeder {
      * Seeds users with realistic fake data using JavaFaker.
      */
     private void seedUsers(int count) {
-        log.info("Seeding {}
- users with JavaFaker...", count);
+        log.info("Seeding {} users with JavaFaker...", count);
 
         String[] roles = { "client", "admin", "responsable de cinema" }
 ;
@@ -125,8 +123,7 @@ public class DatabaseSeeder {
         }
 
 
-        log.info("Created {}
- users with realistic data", count);
+        log.info("Created {} users with realistic data", count);
     }
 
 
@@ -165,8 +162,7 @@ public class DatabaseSeeder {
         }
 
 
-        log.info("Created {}
- realistic product categories", categories.length);
+        log.info("Created {} realistic product categories", categories.length);
     }
 
 
@@ -174,8 +170,7 @@ public class DatabaseSeeder {
      * Seeds products with realistic fake data using JavaFaker.
      */
     private void seedProducts(int count) {
-        log.info("Seeding {}
- products with JavaFaker...", count);
+        log.info("Seeding {} products with JavaFaker...", count);
 
         for (int i = 0; i < count; i++) {
             String name = faker.commerce().productName();
@@ -195,8 +190,7 @@ public class DatabaseSeeder {
         }
 
 
-        log.info("Created {}
- products with realistic data", count);
+        log.info("Created {} products with realistic data", count);
     }
 
 
@@ -204,8 +198,7 @@ public class DatabaseSeeder {
      * Seeds actors with realistic fake data using JavaFaker.
      */
     private void seedActors(int count) {
-        log.info("Seeding {}
- actors with JavaFaker...", count);
+        log.info("Seeding {} actors with JavaFaker...", count);
 
         for (int i = 0; i < count; i++) {
             String name = faker.name().fullName();
@@ -222,8 +215,7 @@ public class DatabaseSeeder {
         }
 
 
-        log.info("Created {}
- actors with realistic data", count);
+        log.info("Created {} actors with realistic data", count);
     }
 
 
@@ -231,8 +223,7 @@ public class DatabaseSeeder {
      * Seeds films with realistic fake data using JavaFaker.
      */
     private void seedFilms(int count) {
-        log.info("Seeding {}
- films with JavaFaker...", count);
+        log.info("Seeding {} films with JavaFaker...", count);
 
         for (int i = 0; i < count; i++) {
             String title = faker.funnyName().name() + ": " + faker.book().title();
@@ -256,8 +247,7 @@ public class DatabaseSeeder {
         }
 
 
-        log.info("Created {}
- films with realistic data", count);
+        log.info("Created {} films with realistic data", count);
     }
 
 
@@ -265,8 +255,7 @@ public class DatabaseSeeder {
      * Seeds cinemas with realistic fake data using JavaFaker.
      */
     private void seedCinemas(int count) {
-        log.info("Seeding {}
- cinemas with JavaFaker...", count);
+        log.info("Seeding {} cinemas with JavaFaker...", count);
 
         for (int i = 0; i < count; i++) {
             String name = "Cinema " + faker.company().name();
@@ -283,8 +272,7 @@ public class DatabaseSeeder {
         }
 
 
-        log.info("Created {}
- cinemas with realistic data", count);
+        log.info("Created {} cinemas with realistic data", count);
     }
 
 
@@ -314,8 +302,7 @@ public class DatabaseSeeder {
         }
 
 
-        log.info("Created {}
- cinema halls", hallCount);
+        log.info("Created {} cinema halls", hallCount);
     }
 
 
@@ -353,8 +340,7 @@ public class DatabaseSeeder {
         }
 
 
-        log.info("Created {}
- seats", totalSeats);
+        log.info("Created {} seats", totalSeats);
     }
 
 
@@ -362,8 +348,7 @@ public class DatabaseSeeder {
      * Seeds series with realistic fake data using JavaFaker.
      */
     private void seedSeries(int count) {
-        log.info("Seeding {}
- series with JavaFaker...", count);
+        log.info("Seeding {} series with JavaFaker...", count);
 
         for (int i = 0; i < count; i++) {
             String name = faker.book().title() + " Series";
@@ -384,8 +369,7 @@ public class DatabaseSeeder {
         }
 
 
-        log.info("Created {}
- series with realistic data", count);
+        log.info("Created {} series with realistic data", count);
     }
 
 
@@ -425,8 +409,7 @@ public class DatabaseSeeder {
         }
 
 
-        log.info("Created {}
- episodes", episodeCount);
+        log.info("Created {} episodes", episodeCount);
     }
 
 

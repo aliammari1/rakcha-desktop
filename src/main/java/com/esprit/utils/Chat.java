@@ -73,9 +73,7 @@ public class Chat {
             conn.setDoOutput(true);
 
             final String body = String.format(
-                    "{\"model\": \"%s\", \"messages\": [{\"role\": \"user\", \"content\": \"%s\"}
-]}
-", model,
+                    "{\"model\": \"%s\", \"messages\": [{\"role\": \"user\", \"content\": \"%s\"}]}", model,
                     message.replace("\"", "\\\""));
 
             try (OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream(), StandardCharsets.UTF_8)) {
@@ -101,8 +99,7 @@ public class Chat {
                         "Failed to get response from OpenAI API. HTTP error code: " + conn.getResponseCode());
             }
 
-        }
- catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException("Error communicating with OpenAI API: " + e.getMessage(), e);
         }
  finally {
@@ -127,8 +124,7 @@ public class Chat {
                 + message;
         try {
             return chatGPT(question).trim();
-        }
- catch (RuntimeException e) {
+        } catch (RuntimeException e) {
             LOGGER.log(Level.SEVERE, "Failed to check content for inappropriate language", e);
             return "-1";
         }

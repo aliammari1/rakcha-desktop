@@ -342,15 +342,13 @@ public class PaymentUserController implements Initializable {
             // try (InputStream in = new URL(url).openStream()) {
             // Files.copy(in, Paths.get(dest.toUri()));
             // LOGGER.info("PDF downloaded successfully");
-            // }
- catch (Exception e) {
+            // } catch (Exception e) {
             // LOGGER.log(Level.SEVERE, e.getMessage(), e);
             // }
 
             // try {
             // Desktop.getDesktop().open(new File("stripe.pdf"));
-            // }
- catch (IOException e) {
+            // } catch (IOException e) {
             // LOGGER.log(Level.SEVERE, e.getMessage(), e);
             // throw new RuntimeException(e);
             // }
@@ -448,9 +446,7 @@ public class PaymentUserController implements Initializable {
      *          optionally followed by a further 3 digits.
      */
     private boolean isValidVisaCardNo(final String text) {
-        final String regex = "^4[0-9]{12}
-(?:[0-9]{3}
-)?$";
+        final String regex = "^4[0-9]{12}(?:[0-9]{3})?$";
         final Pattern p = Pattern.compile(regex);
         final CharSequence cs = text;
         final Matcher m = p.matcher(cs);
@@ -546,8 +542,7 @@ public class PaymentUserController implements Initializable {
             final Stage stage = (Stage) this.anchorpane_payment.getScene().getWindow();
             final Scene scene = new Scene(root, 1507, 855);
             stage.setScene(scene);
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             PaymentUserController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 

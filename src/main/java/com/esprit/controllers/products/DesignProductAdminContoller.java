@@ -236,14 +236,12 @@ public class DesignProductAdminContoller {
                     alert.setTitle("Product ajouté");
                     alert.setContentText("Product ajouté !");
                     alert.show();
-                }
- catch (final Exception e) {
+                } catch (final Exception e) {
                     DesignProductAdminContoller.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                     this.showAlert("Erreur lors de l'ajout du produit : " + e.getMessage());
                 }
 
-            }
- catch (final NumberFormatException e) {
+            } catch (final NumberFormatException e) {
                 this.showAlert("Veuillez entrer des valeurs numériques valides pour le prix et la quantité.");
             }
 
@@ -437,8 +435,7 @@ public class DesignProductAdminContoller {
                     imageView.setImage(defaultImage);
                 }
 
-            }
- catch (final Exception e) {
+            } catch (final Exception e) {
                 DesignProductAdminContoller.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
 
@@ -605,8 +602,7 @@ public class DesignProductAdminContoller {
                 connection = DataSource.getInstance().getConnection();
                 produit.setImage(this.selectedFile.toURI().toURL().toString());
                 this.modifier_produit(produit);
-            }
- catch (final Exception e) {
+            } catch (final Exception e) {
                 DesignProductAdminContoller.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 this.showAlert("Erreur lors du chargement de la nouvelle image : " + e.getMessage());
             }
@@ -830,8 +826,7 @@ public class DesignProductAdminContoller {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             DesignProductAdminContoller.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                      // d'entrée/sortie
         }
@@ -864,8 +859,7 @@ public class DesignProductAdminContoller {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             DesignProductAdminContoller.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                      // d'entrée/sortie
         }
@@ -897,8 +891,7 @@ public class DesignProductAdminContoller {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             DesignProductAdminContoller.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                      // d'entrée/sortie
         }
@@ -938,8 +931,7 @@ public class DesignProductAdminContoller {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             DesignProductAdminContoller.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                      // d'entrée/sortie
         }
@@ -967,8 +959,7 @@ public class DesignProductAdminContoller {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             DesignProductAdminContoller.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                      // d'entrée/sortie
         }
@@ -1002,8 +993,7 @@ public class DesignProductAdminContoller {
                 this.image.setImage(selectedImage);
 
                 LOGGER.info("Image uploaded to Cloudinary: " + cloudinaryImageUrl);
-            }
- catch (final IOException e) {
+            } catch (final IOException e) {
                 LOGGER.log(Level.SEVERE, "Error uploading image to Cloudinary", e);
                 DesignProductAdminContoller.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }

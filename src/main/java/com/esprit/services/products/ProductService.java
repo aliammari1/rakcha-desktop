@@ -124,8 +124,7 @@ public class ProductService implements IService<Product> {
             }
 
             ProductService.LOGGER.info("Product added!");
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             ProductService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -175,8 +174,7 @@ public class ProductService implements IService<Product> {
         // Validate sort column to prevent SQL injection
         if (pageRequest.hasSorting() &&
                 !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
-            log.warn("Invalid sort column: {}
-. Using default sorting.", pageRequest.getSortBy());
+            log.warn("Invalid sort column: {}. Using default sorting.", pageRequest.getSortBy());
             pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
 
@@ -205,10 +203,8 @@ public class ProductService implements IService<Product> {
 
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
 
-        }
- catch (final SQLException e) {
-            log.error("Error retrieving paginated products: {}
-", e.getMessage(), e);
+        } catch (final SQLException e) {
+            log.error("Error retrieving paginated products: {}", e.getMessage(), e);
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
         }
 
@@ -234,8 +230,7 @@ public class ProductService implements IService<Product> {
                 categories.add(category);
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             ProductService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -267,8 +262,7 @@ public class ProductService implements IService<Product> {
                 products.add(product);
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             ProductService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -304,8 +298,7 @@ public class ProductService implements IService<Product> {
             updateProductCategoryRelations(product.getId(), product.getCategories());
 
             ProductService.LOGGER.info("product updated!");
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             ProductService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -368,8 +361,7 @@ public class ProductService implements IService<Product> {
 
 
             ProductService.LOGGER.info("product deleted!");
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             ProductService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -395,8 +387,7 @@ public class ProductService implements IService<Product> {
                         .quantity(rs.getInt("quantity")).categories(getCategoriesForProduct(productId)).build();
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             ProductService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -440,8 +431,7 @@ public class ProductService implements IService<Product> {
                 productPrice = rs.getDouble("prix");
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             ProductService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -469,8 +459,7 @@ public class ProductService implements IService<Product> {
                 products.add(product);
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             ProductService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -508,8 +497,7 @@ public class ProductService implements IService<Product> {
                 products.add(product);
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             ProductService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 

@@ -65,8 +65,7 @@ public class CinemaRatingService implements IService<CinemaRating> {
                     """;
             tableCreator.createTableIfNotExists("cinema_rating", createCinemaRatingTable);
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             log.error("Error creating tables for CinemaRatingService", e);
         }
 
@@ -96,8 +95,7 @@ public class CinemaRatingService implements IService<CinemaRating> {
             stmt.setInt(3, cinemaRating.getRating());
             stmt.executeUpdate();
             log.info("Cinema rating created successfully");
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error creating cinema rating", e);
         }
 
@@ -124,8 +122,7 @@ public class CinemaRatingService implements IService<CinemaRating> {
             stmt.setLong(3, cinemaRating.getClient().getId());
             stmt.executeUpdate();
             log.info("Cinema rating updated successfully");
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error updating cinema rating", e);
         }
 
@@ -151,8 +148,7 @@ public class CinemaRatingService implements IService<CinemaRating> {
             stmt.setLong(2, cinemaRating.getClient().getId());
             stmt.executeUpdate();
             log.info("Cinema rating deleted successfully");
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error deleting cinema rating", e);
         }
 
@@ -180,8 +176,7 @@ public class CinemaRatingService implements IService<CinemaRating> {
         // Validate sort column to prevent SQL injection
         if (pageRequest.hasSorting() &&
                 !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
-            log.warn("Invalid sort column: {}
-. Using default sorting.", pageRequest.getSortBy());
+            log.warn("Invalid sort column: {}. Using default sorting.", pageRequest.getSortBy());
             pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
 
@@ -209,10 +204,8 @@ public class CinemaRatingService implements IService<CinemaRating> {
 
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
 
-        }
- catch (final SQLException e) {
-            log.error("Error retrieving paginated cinema ratings: {}
-", e.getMessage(), e);
+        } catch (final SQLException e) {
+            log.error("Error retrieving paginated cinema ratings: {}", e.getMessage(), e);
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
         }
 
@@ -238,8 +231,7 @@ public class CinemaRatingService implements IService<CinemaRating> {
 
             }
 
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error getting rating for client and cinema", e);
         }
 
@@ -264,8 +256,7 @@ public class CinemaRatingService implements IService<CinemaRating> {
 
             }
 
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error getting average rating for cinema: " + cinemaId, e);
         }
 
@@ -291,8 +282,7 @@ public class CinemaRatingService implements IService<CinemaRating> {
 
             }
 
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error getting top rated cinemas", e);
         }
 
@@ -312,8 +302,7 @@ public class CinemaRatingService implements IService<CinemaRating> {
             stmt.setLong(1, cinemaId);
             stmt.setLong(2, clientId);
             stmt.executeUpdate();
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error deleting existing rating", e);
         }
 
@@ -342,8 +331,7 @@ public class CinemaRatingService implements IService<CinemaRating> {
 
             }
 
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error getting comments by cinema id: " + cinemaId, e);
         }
 
@@ -370,8 +358,7 @@ public class CinemaRatingService implements IService<CinemaRating> {
 
             return CinemaRating.builder().id(rs.getLong("id")).cinema(cinema).client(client).rating(rs.getInt("rating"))
                     .build();
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error building cinema rating from ResultSet", e);
             return null;
         }
@@ -398,8 +385,7 @@ public class CinemaRatingService implements IService<CinemaRating> {
 
             return CinemaComment.builder().id(rs.getLong("id")).cinema(cinema).client(client)
                     .commentText(rs.getString("comment_text")).sentiment(rs.getString("sentiment")).build();
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error building cinema comment from ResultSet", e);
             return null;
         }

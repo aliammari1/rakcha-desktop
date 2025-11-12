@@ -333,8 +333,7 @@ public class GenericTableView<T> {
                         return String.format("Year must be between %d and %d", minYear, maxYear);
                     }
 
-                }
- catch (NumberFormatException e) {
+                } catch (NumberFormatException e) {
                     return "Please enter a valid year";
                 }
 

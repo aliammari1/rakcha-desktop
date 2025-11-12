@@ -57,8 +57,7 @@ public class CodeBareProduct {
             LOGGER.info("Barcode generated successfully: " + filePath);
             return true;
 
-        }
- catch (WriterException | IOException e) {
+        } catch (WriterException | IOException e) {
             LOGGER.log(Level.SEVERE, "Failed to generate barcode", e);
             return false;
         }
@@ -86,8 +85,7 @@ public class CodeBareProduct {
             Result result = new MultiFormatReader().decode(bitmap);
             return result.getText();
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Failed to read barcode", e);
             return null;
         }

@@ -129,8 +129,7 @@ public class AdminDashboardController {
                     "Please use only lowercase letters.");
             this.addValidationListener(this.adresseTextField, newValue -> newValue.toLowerCase().equals(newValue),
                     "Please use only lowercase letters.");
-            final String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}
-$";
+            final String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
             this.addValidationListener(this.emailTextField, newValue -> newValue.matches(emailRegex),
                     "Invalid email format.");
             this.addValidationListener(this.passwordTextField, newValue -> newValue.toLowerCase().equals(newValue),
@@ -144,8 +143,7 @@ $";
             }
 
             this.readUserTable();
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -235,8 +233,7 @@ $";
             PageRequest pageRequest = new PageRequest(0, 10);
             final Page<User> userList = userService.read(pageRequest);
             this.userTableView.setItems(FXCollections.observableArrayList(userList.getContent()));
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -294,8 +291,7 @@ $";
                 }
 
                 // Validate phone number format
-                if (!phoneNumber.matches("\\d{10}
-")) {
+                if (!phoneNumber.matches("\\d{10}")) {
                     final Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid phone number format",
                             ButtonType.CLOSE);
                     alert.show();
@@ -303,8 +299,7 @@ $";
                 }
 
                 // Validate email format
-                if (!email.matches("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}
-")) {
+                if (!email.matches("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}")) {
                     final Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid email format", ButtonType.CLOSE);
                     alert.show();
                     return;
@@ -322,8 +317,7 @@ $";
 
             final UserService userService = new UserService();
             userService.create(user);
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -422,8 +416,7 @@ $";
                                             photoDeProfilImageView.setImage(image);
                                         }
 
-                                    }
- catch (final Exception e) {
+                                    } catch (final Exception e) {
                                         AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                                     }
 
@@ -431,8 +424,7 @@ $";
 
                             }
 );
-                        }
- catch (final Exception e) {
+                        } catch (final Exception e) {
                             AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                         }
 
@@ -1152,8 +1144,7 @@ $";
                             .setFirstName(event.getNewValue());
                     AdminDashboardController.this
                             .update(event.getTableView().getItems().get(event.getTablePosition().getRow()));
-                }
- catch (final Exception e) {
+                } catch (final Exception e) {
                     AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
 
@@ -1174,8 +1165,7 @@ $";
                             .setLastName(event.getNewValue());
                     AdminDashboardController.this
                             .update(event.getTableView().getItems().get(event.getTablePosition().getRow()));
-                }
- catch (final Exception e) {
+                } catch (final Exception e) {
                     AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
 
@@ -1196,8 +1186,7 @@ $";
                             .setPhoneNumber(event.getNewValue());
                     AdminDashboardController.this
                             .update(event.getTableView().getItems().get(event.getTablePosition().getRow()));
-                }
- catch (final Exception e) {
+                } catch (final Exception e) {
                     AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
 
@@ -1218,8 +1207,7 @@ $";
                             .setPassword(event.getNewValue());
                     AdminDashboardController.this
                             .update(event.getTableView().getItems().get(event.getTablePosition().getRow()));
-                }
- catch (final Exception e) {
+                } catch (final Exception e) {
                     AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
 
@@ -1239,8 +1227,7 @@ $";
                     event.getTableView().getItems().get(event.getTablePosition().getRow()).setRole(event.getNewValue());
                     AdminDashboardController.this
                             .update(event.getTableView().getItems().get(event.getTablePosition().getRow()));
-                }
- catch (final Exception e) {
+                } catch (final Exception e) {
                     AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
 
@@ -1261,8 +1248,7 @@ $";
                             .setAddress(event.getNewValue());
                     AdminDashboardController.this
                             .update(event.getTableView().getItems().get(event.getTablePosition().getRow()));
-                }
- catch (final Exception e) {
+                } catch (final Exception e) {
                     AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
 
@@ -1339,24 +1325,21 @@ $";
         // passwordTextField.getText(), roleComboBox.getValue(),
         // emailTextField.getText(), Date.valueOf(dateDeNaissanceDatePicker.getValue()),
         // emailTextField.getText());
-        // }
- else if (role.equals("responsable de cinema")) {
+        // } else if (role.equals("responsable de cinema")) {
         // user = new CinemaManager(Integer.parseInt(idTextField.getText()),
         // firstNameTextField.getText(), lastNameTextField.getText(),
         // Integer.parseInt(phoneNumberTextField.getText()),
         // passwordTextField.getText(), roleComboBox.getValue(),
         // emailTextField.getText(), Date.valueOf(dateDeNaissanceDatePicker.getValue()),
         // emailTextField.getText());
-        // }
- else if (role.equals("client")) {
+        // } else if (role.equals("client")) {
         // user = new Client(Integer.parseInt(idTextField.getText()),
         // firstNameTextField.getText(), lastNameTextField.getText(),
         // Integer.parseInt(phoneNumberTextField.getText()),
         // passwordTextField.getText(), roleComboBox.getValue(),
         // emailTextField.getText(), Date.valueOf(dateDeNaissanceDatePicker.getValue()),
         // emailTextField.getText());
-        // }
- else {
+        // } else {
         // Alert alert = new Alert(Alert.AlertType.ERROR, "the given role is not
         // available", ButtonType.CLOSE);
         // alert.show();
@@ -1391,8 +1374,7 @@ $";
                 this.photoDeProfilImageView.setImage(selectedImage);
 
                 LOGGER.info("Image uploaded to Cloudinary: " + cloudinaryImageUrl);
-            }
- catch (final IOException e) {
+            } catch (final IOException e) {
                 AdminDashboardController.LOGGER.log(Level.SEVERE, "Error uploading image to Cloudinary", e);
             }
 
@@ -1408,8 +1390,7 @@ $";
         try {
             final UserService userService = new UserService();
             userService.update(user);
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             AdminDashboardController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 

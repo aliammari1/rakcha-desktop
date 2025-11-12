@@ -64,12 +64,10 @@ public enum PaymentProcessor {
             final Charge charge = chargeCustomer(customer.getId(), token.getId(), amount);
 
             return "succeeded".equals(charge.getStatus());
-        }
- catch (StripeException e) {
+        } catch (StripeException e) {
             LOGGER.log(Level.SEVERE, "Stripe payment processing failed", e);
             return false;
-        }
- catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             LOGGER.log(Level.SEVERE, "Invalid payment parameters", e);
             return false;
         }
@@ -91,8 +89,7 @@ public enum PaymentProcessor {
             throw new IllegalArgumentException("Amount must be greater than 0");
         }
 
-        if (cardNumber == null || !cardNumber.matches("\\d{13,19}
-")) {
+        if (cardNumber == null || !cardNumber.matches("\\d{13,19}")) {
             throw new IllegalArgumentException("Valid card number is required");
         }
 
@@ -104,8 +101,7 @@ public enum PaymentProcessor {
             throw new IllegalArgumentException("Card is expired");
         }
 
-        if (cardCvc == null || !cardCvc.matches("\\d{3,4}
-")) {
+        if (cardCvc == null || !cardCvc.matches("\\d{3,4}")) {
             throw new IllegalArgumentException("Valid CVC is required");
         }
 

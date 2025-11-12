@@ -54,8 +54,7 @@ public class CategoryService implements IService<ProductCategory> {
                     """;
             tableCreator.createTableIfNotExists("product_categories", createProductCategoriesTable);
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             log.error("Error creating tables for CategoryService", e);
         }
 
@@ -82,8 +81,7 @@ public class CategoryService implements IService<ProductCategory> {
             pst.setString(2, productCategory.getDescription());
             pst.executeUpdate();
             CategoryService.LOGGER.info("Category added!");
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             CategoryService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -107,8 +105,7 @@ public class CategoryService implements IService<ProductCategory> {
                 categories.add(category);
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             CategoryService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -137,8 +134,7 @@ public class CategoryService implements IService<ProductCategory> {
             pst.setLong(3, productCategory.getId());
             pst.executeUpdate();
             CategoryService.LOGGER.info("category updated!");
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             CategoryService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -164,8 +160,7 @@ public class CategoryService implements IService<ProductCategory> {
             pst.setLong(1, productCategory.getId());
             pst.executeUpdate();
             CategoryService.LOGGER.info("category deleted!");
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             CategoryService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -190,8 +185,7 @@ public class CategoryService implements IService<ProductCategory> {
                         .description(rs.getString("description")).build();
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             CategoryService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -217,8 +211,7 @@ public class CategoryService implements IService<ProductCategory> {
                         .description(rs.getString("description")).build();
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             CategoryService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -280,8 +273,7 @@ public class CategoryService implements IService<ProductCategory> {
 
             statement.close();
             resultSet.close();
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             CategoryService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -308,8 +300,7 @@ public class CategoryService implements IService<ProductCategory> {
                 categories.add(category);
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             CategoryService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -330,8 +321,7 @@ public class CategoryService implements IService<ProductCategory> {
             pst.setInt(2, categoryId);
             pst.executeUpdate();
             CategoryService.LOGGER.info("Product added to category!");
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             CategoryService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -351,8 +341,7 @@ public class CategoryService implements IService<ProductCategory> {
             pst.setInt(2, categoryId);
             pst.executeUpdate();
             CategoryService.LOGGER.info("Product removed from category!");
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             CategoryService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -375,8 +364,7 @@ public class CategoryService implements IService<ProductCategory> {
                 count = rs.getInt("product_count");
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             CategoryService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 

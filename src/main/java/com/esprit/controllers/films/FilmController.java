@@ -358,10 +358,7 @@ public class FilmController {
             }
 
             if (this.dureeFilm_textArea.getText().isEmpty()
-                    || !this.dureeFilm_textArea.getText().matches("\\d{2}
-:\\d{2}
-:\\d{2}
-")) {
+                    || !this.dureeFilm_textArea.getText().matches("\\d{2}:\\d{2}:\\d{2}")) {
                 this.showAlert("La durée du film est requise au format (HH:MM:SS).");
                 return;
             }
@@ -372,8 +369,7 @@ public class FilmController {
             }
 
             if (this.annederealisationFilm_textArea.getText().isEmpty()
-                    || !this.annederealisationFilm_textArea.getText().matches("\\d{4}
-")
+                    || !this.annederealisationFilm_textArea.getText().matches("\\d{4}")
                     || 1900 > Integer.parseInt(annederealisationFilm_textArea.getText())) {
                 this.showAlert(
                         "L'année de réalisation du film est requise au format (YYYY) et doit être supérieure ou égale à 1900.");
@@ -424,8 +420,7 @@ public class FilmController {
             alert.show();
             this.readFilmTable();
             this.clear();
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             this.showAlert("Erreur lors de l'ajout du film : " + e.getMessage());
         }
 
@@ -526,8 +521,7 @@ public class FilmController {
             final ObservableList<Film> obF = FXCollections
                     .observableArrayList(filmService.read(filmPageRequest).getContent());
             this.filmCategory_tableView1.setItems(obF);
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             FilmController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -692,8 +686,7 @@ public class FilmController {
                                                                     + Year.now().getValue());
                                                         }
 
-                                                    }
- catch (final NumberFormatException e) {
+                                                    } catch (final NumberFormatException e) {
                                                         c.error("Please enter a valid year.");
                                                     }
 
@@ -1138,8 +1131,7 @@ public class FilmController {
                                             updateFilm(film);
                                         }
 
-                                    }
- catch (final Exception e) {
+                                    } catch (final Exception e) {
                                         FilmController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                                     }
 
@@ -1147,8 +1139,7 @@ public class FilmController {
 
                             }
 );
-                        }
- catch (final Exception e) {
+                        } catch (final Exception e) {
                             FilmController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                         }
 
@@ -1473,8 +1464,7 @@ public class FilmController {
                                     .setReleaseYear(event.getNewValue());
                             FilmController.this
                                     .updateFilm(event.getTableView().getItems().get(event.getTablePosition().getRow()));
-                        }
- catch (final Exception e) {
+                        } catch (final Exception e) {
                             FilmController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                         }
 
@@ -1502,8 +1492,7 @@ public class FilmController {
                     event.getTableView().getItems().get(event.getTablePosition().getRow()).setName(event.getNewValue());
                     FilmController.this
                             .updateFilm(event.getTableView().getItems().get(event.getTablePosition().getRow()));
-                }
- catch (final Exception e) {
+                } catch (final Exception e) {
                     FilmController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
 
@@ -1529,8 +1518,7 @@ public class FilmController {
                             .setDescription(event.getNewValue());
                     FilmController.this
                             .updateFilm(event.getTableView().getItems().get(event.getTablePosition().getRow()));
-                }
- catch (final Exception e) {
+                } catch (final Exception e) {
                     FilmController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
 
@@ -1556,8 +1544,7 @@ public class FilmController {
                             .setDuration(event.getNewValue());
                     FilmController.this
                             .updateFilm(event.getTableView().getItems().get(event.getTablePosition().getRow()));
-                }
- catch (final Exception e) {
+                } catch (final Exception e) {
                     FilmController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
 
@@ -1584,8 +1571,7 @@ public class FilmController {
             alert.setContentText("Film modifiée !");
             alert.show();
             this.readFilmTable();
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             this.showAlert("Erreur lors de la modification du Film : " + e.getMessage());
         }
 
@@ -1620,15 +1606,13 @@ public class FilmController {
                     this.imageFilm_ImageView.setImage(selectedImage);
 
                     LOGGER.info("Image uploaded to Cloudinary: " + cloudinaryImageUrl);
-                }
- catch (final IOException e) {
+                } catch (final IOException e) {
                     LOGGER.log(Level.SEVERE, "Error uploading image to Cloudinary", e);
                 }
 
             }
 
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             LOGGER.log(Level.SEVERE, "Error in file chooser", e);
         }
 
@@ -1657,8 +1641,7 @@ public class FilmController {
             final Stage stage = (Stage) this.ajouterCinema_Button.getScene().getWindow();
             final Scene scene = new Scene(root, 1280, 700);
             stage.setScene(scene);
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             FilmController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 

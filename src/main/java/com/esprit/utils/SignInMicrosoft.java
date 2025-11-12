@@ -90,8 +90,7 @@ public enum SignInMicrosoft {
 
             }
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.warning("Authentication failed: " + e.getMessage());
             return false;
         }

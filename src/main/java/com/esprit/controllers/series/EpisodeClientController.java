@@ -107,8 +107,7 @@ public class EpisodeClientController implements Initializable {
         this.payslbl.setText(selectedSerie.getCountry());
         try {
             this.episodes = this.iServiceEpisode.retrieveBySeries(selectedSerie.getId());
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             throw new RuntimeException(e);
         }
 
@@ -208,8 +207,7 @@ public class EpisodeClientController implements Initializable {
             final ZonedDateTime zonedDateTime = currentDate.atStartOfDay(ZoneId.systemDefault());
             final Instant instant = zonedDateTime.toInstant();
             date = Date.from(instant);
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             EpisodeClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 

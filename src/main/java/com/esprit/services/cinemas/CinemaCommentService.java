@@ -67,8 +67,7 @@ public class CinemaCommentService implements IService<CinemaComment> {
                     """;
             tableCreator.createTableIfNotExists("cinema_comment", createCinemaCommentTable);
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             log.error("Error creating tables for CinemaCommentService", e);
         }
 
@@ -98,8 +97,7 @@ public class CinemaCommentService implements IService<CinemaComment> {
             stmt.setString(4, cinemaComment.getSentiment());
             stmt.executeUpdate();
             log.info("Cinema comment created successfully");
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error creating cinema comment", e);
         }
 
@@ -126,8 +124,7 @@ public class CinemaCommentService implements IService<CinemaComment> {
             stmt.setLong(3, cinemaComment.getId());
             stmt.executeUpdate();
             log.info("Cinema comment updated successfully");
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error updating cinema comment", e);
         }
 
@@ -152,8 +149,7 @@ public class CinemaCommentService implements IService<CinemaComment> {
             stmt.setLong(1, cinemaComment.getId());
             stmt.executeUpdate();
             log.info("Cinema comment deleted successfully");
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error deleting cinema comment", e);
         }
 
@@ -174,8 +170,7 @@ public class CinemaCommentService implements IService<CinemaComment> {
         // Validate sort column to prevent SQL injection
         if (pageRequest.hasSorting() &&
                 !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
-            log.warn("Invalid sort column: {}
-. Using default sorting.", pageRequest.getSortBy());
+            log.warn("Invalid sort column: {}. Using default sorting.", pageRequest.getSortBy());
             pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
 
@@ -203,10 +198,8 @@ public class CinemaCommentService implements IService<CinemaComment> {
 
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
 
-        }
- catch (final SQLException e) {
-            log.error("Error retrieving paginated cinema comments: {}
-", e.getMessage(), e);
+        } catch (final SQLException e) {
+            log.error("Error retrieving paginated cinema comments: {}", e.getMessage(), e);
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
         }
 
@@ -234,8 +227,7 @@ public class CinemaCommentService implements IService<CinemaComment> {
 
             }
 
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error getting comments by cinema id: " + cinemaId, e);
         }
 
@@ -265,8 +257,7 @@ public class CinemaCommentService implements IService<CinemaComment> {
 
             return CinemaComment.builder().id(rs.getLong("id")).cinema(cinema).client(client)
                     .commentText(rs.getString("comment_text")).sentiment(rs.getString("sentiment")).build();
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error building cinema comment from ResultSet", e);
             return null;
         }

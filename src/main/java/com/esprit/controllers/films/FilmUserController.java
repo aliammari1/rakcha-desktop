@@ -432,8 +432,7 @@ public class FilmUserController {
 
                 }
 
-            }
- catch (Exception e) {
+            } catch (Exception e) {
                 LOGGER.log(Level.WARNING, "Failed to load recommendations", e);
             }
 
@@ -493,14 +492,12 @@ public class FilmUserController {
                     // Try loading directly as URL
                     Image image = new Image(imagePath, true); // Enable background loading
                     imageView.setImage(image);
-                }
- catch (Exception e) {
+                } catch (Exception e) {
                     // Fallback to resource if URL fails
                     try {
                         imageView.setImage(new Image(getClass().getResourceAsStream("/img/films/default.jpg")));
                         LOGGER.log(Level.WARNING, "Failed to load image URL, using default: " + imagePath, e);
-                    }
- catch (Exception e2) {
+                    } catch (Exception e2) {
                         LOGGER.log(Level.SEVERE, "Failed to load both URL and default image", e2);
                     }
 
@@ -523,13 +520,11 @@ public class FilmUserController {
             imageView.setLayoutY(10);
             imageView.getStyleClass().add("film-card-image");
 
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             // Handle exception or set a default image
             try {
                 imageView.setImage(new Image(getClass().getResourceAsStream("/img/films/default.jpg")));
-            }
- catch (Exception e2) {
+            } catch (Exception e2) {
                 LOGGER.log(Level.SEVERE, "Could not load any image, even default", e2);
             }
 
@@ -578,8 +573,7 @@ public class FilmUserController {
         button.setOnAction(event -> {
             try {
                 this.switchtopayment(nomFilm.getText());
-            }
- catch (final IOException e) {
+            } catch (final IOException e) {
                 throw new RuntimeException(e);
             }
 
@@ -606,15 +600,13 @@ public class FilmUserController {
             // Load detail image from URL
             try {
                 this.imagefilmDetail.setImage(new Image(film1.getImage()));
-            }
- catch (Exception e) {
+            } catch (Exception e) {
                 LOGGER.log(Level.WARNING, "Failed to load detail image URL: " + film1.getImage(), e);
                 try {
                     // Fallback to default
                     this.imagefilmDetail.setImage(
                             new Image(getClass().getResourceAsStream("/img/films/default.jpg")));
-                }
- catch (Exception e2) {
+                } catch (Exception e2) {
                     LOGGER.log(Level.SEVERE, "Failed to load default detail image", e2);
                 }
 
@@ -636,8 +628,7 @@ public class FilmUserController {
             final BitMatrix bitMatrix;
             try {
                 bitMatrix = qrCodeWriter.encode(url, BarcodeFormat.QR_CODE, 200, 200);
-            }
- catch (final WriterException e) {
+            } catch (final WriterException e) {
                 throw new RuntimeException(e);
             }
 
@@ -733,14 +724,12 @@ public class FilmUserController {
                     try {
                         // Try loading directly as a URL
                         imageView.setImage(new Image(actor.getImage()));
-                    }
- catch (Exception e) {
+                    } catch (Exception e) {
                         LOGGER.log(Level.WARNING, "Failed to load actor image URL: " + actor.getImage(), e);
                         try {
                             // Try loading a default image
                             imageView.setImage(new Image(getClass().getResourceAsStream("/img/actors/default.jpg")));
-                        }
- catch (Exception e2) {
+                        } catch (Exception e2) {
                             LOGGER.log(Level.SEVERE, "Failed to load default actor image", e2);
                         }
 
@@ -751,15 +740,13 @@ public class FilmUserController {
                     // If image is null or empty, try to load default
                     try {
                         imageView.setImage(new Image(getClass().getResourceAsStream("/img/actors/default.jpg")));
-                    }
- catch (Exception e) {
+                    } catch (Exception e) {
                         LOGGER.log(Level.WARNING, "Failed to load default actor image", e);
                     }
 
                 }
 
-            }
- catch (final Exception e) {
+            } catch (final Exception e) {
                 FilmUserController.LOGGER.log(Level.SEVERE, "Error processing actor image", e);
             }
 
@@ -867,8 +854,7 @@ public class FilmUserController {
                         imageView.setStyle(
                                 "-fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.7), 15, 0, 0, 3);" +
                                         "-fx-background-radius: 12;");
-                    }
- catch (Exception e) {
+                    } catch (Exception e) {
                         LOGGER.warning("Failed to load image from URL: " + imagePath + ", " + e.getMessage());
                         // Try loading default image
                         try {
@@ -883,8 +869,7 @@ public class FilmUserController {
                             imageView.setStyle(
                                     "-fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.7), 15, 0, 0, 3);" +
                                             "-fx-background-radius: 12;");
-                        }
- catch (Exception e2) {
+                        } catch (Exception e2) {
                             LOGGER.severe("Failed to load default image: " + e2.getMessage());
                         }
 
@@ -892,8 +877,7 @@ public class FilmUserController {
 
                 }
 
-            }
- catch (Exception e) {
+            } catch (Exception e) {
                 LOGGER.warning("Error loading image for film: " + film.getId() + ", " + e.getMessage());
             }
 
@@ -978,8 +962,7 @@ public class FilmUserController {
                     anchorPane.getChildren().add(imageView);
                 }
 
-            }
- catch (Exception e) {
+            } catch (Exception e) {
                 LOGGER.log(Level.WARNING, "Error creating film card components", e);
             }
 
@@ -1100,8 +1083,7 @@ public class FilmUserController {
             final Stage stage = (Stage) this.product.getScene().getWindow();
             final Scene scene = new Scene(root, 1280, 700);
             stage.setScene(scene);
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             FilmUserController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -1121,8 +1103,7 @@ public class FilmUserController {
             final Stage stage = (Stage) this.event_button.getScene().getWindow();
             final Scene scene = new Scene(root, 1280, 700);
             stage.setScene(scene);
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             FilmUserController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -1145,8 +1126,7 @@ public class FilmUserController {
             final Stage stage = (Stage) this.Cinema_Button.getScene().getWindow();
             final Scene scene = new Scene(root, 1280, 700);
             stage.setScene(scene);
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             FilmUserController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -1166,8 +1146,7 @@ public class FilmUserController {
             final Stage stage = (Stage) this.product.getScene().getWindow();
             final Scene scene = new Scene(root, 1280, 700);
             stage.setScene(scene);
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             FilmUserController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -1186,8 +1165,7 @@ public class FilmUserController {
             final Stage stage = (Stage) this.SerieButton.getScene().getWindow();
             final Scene scene = new Scene(root, 1280, 700);
             stage.setScene(scene);
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             FilmUserController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -1284,8 +1262,7 @@ public class FilmUserController {
                 userImage = new Image(imageUrl);
             }
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.warning("Failed to load profile image from URL: " + imageUrl);
         }
 
@@ -1294,8 +1271,7 @@ public class FilmUserController {
         if (userImage == null) {
             try {
                 userImage = new Image(this.getClass().getResourceAsStream("/Logo.png"));
-            }
- catch (Exception e) {
+            } catch (Exception e) {
                 LOGGER.severe("Failed to load default profile image: " + e.getMessage());
             }
 

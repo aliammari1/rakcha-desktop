@@ -54,8 +54,7 @@ public class FilmCategoryService {
                     """;
             tableCreator.createTableIfNotExists("film_category", createFilmCategoryTable);
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             log.error("Error creating tables for FilmCategoryService", e);
         }
 
@@ -84,8 +83,7 @@ public class FilmCategoryService {
 
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error creating film-category associations", e);
             throw new RuntimeException(e);
         }
@@ -110,8 +108,7 @@ public class FilmCategoryService {
                         .description(rs.getString("description")).build());
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error getting categories for film: " + filmId, e);
         }
 
@@ -137,8 +134,7 @@ public class FilmCategoryService {
                         .releaseYear(rs.getInt("release_year")).build());
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error getting films for category: " + categoryId, e);
         }
 
@@ -161,8 +157,7 @@ public class FilmCategoryService {
         try (final PreparedStatement statement = this.connection.prepareStatement(reqDelete)) {
             statement.setLong(1, film.getId());
             statement.executeUpdate();
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error deleting existing category associations", e);
             throw new RuntimeException(e);
         }
@@ -188,8 +183,7 @@ public class FilmCategoryService {
                 return rs.getString("categoryNames");
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error getting category names for film: " + filmId, e);
         }
 
@@ -209,8 +203,7 @@ public class FilmCategoryService {
             statement.setInt(1, filmId);
             statement.setInt(2, categoryId);
             statement.executeUpdate();
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error deleting film-category association", e);
             throw new RuntimeException(e);
         }

@@ -486,8 +486,7 @@ class SidebarControllerTest extends TestFXBase {
             for (int i = 0; i < MAX_RETRIES; i++) {
                 try {
                     Thread.sleep(SLEEP_MS);
-                }
- catch (InterruptedException e) {
+                } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     break;
                 }

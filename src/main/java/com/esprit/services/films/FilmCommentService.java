@@ -58,8 +58,7 @@ public class FilmCommentService implements IService<FilmComment> {
                     """;
             tableCreator.createTableIfNotExists("film_comments", createFilmCommentsTable);
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             log.error("Error creating tables for FilmCommentService", e);
         }
 
@@ -88,8 +87,7 @@ public class FilmCommentService implements IService<FilmComment> {
             pst.setLong(3, filmComment.getFilm().getId());
             pst.executeUpdate();
             log.info("Comment added successfully!");
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             log.error("Error creating comment", e);
             throw new RuntimeException(e);
         }
@@ -116,8 +114,7 @@ public class FilmCommentService implements IService<FilmComment> {
             statement.setString(1, filmComment.getComment());
             statement.setLong(2, filmComment.getId());
             statement.executeUpdate();
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             log.error("Error updating comment", e);
             throw new RuntimeException(e);
         }
@@ -143,8 +140,7 @@ public class FilmCommentService implements IService<FilmComment> {
         try (final PreparedStatement statement = this.connection.prepareStatement(req)) {
             statement.setLong(1, filmComment.getId());
             statement.executeUpdate();
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             log.error("Error deleting comment", e);
             throw new RuntimeException(e);
         }

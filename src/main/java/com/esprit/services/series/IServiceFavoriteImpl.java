@@ -56,8 +56,7 @@ public class IServiceFavoriteImpl implements IService<Favorite> {
                     """;
             tableCreator.createTableIfNotExists("favorites", createFavoritesTable);
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             log.error("Error creating tables for IServiceFavoriteImpl", e);
         }
 
@@ -82,8 +81,7 @@ public class IServiceFavoriteImpl implements IService<Favorite> {
             ps.setLong(2, favorite.getSeriesId());
             ps.executeUpdate();
             LOGGER.info("Favorite created successfully!");
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -105,8 +103,7 @@ public class IServiceFavoriteImpl implements IService<Favorite> {
             pst.setLong(3, favorite.getId());
             pst.executeUpdate();
             LOGGER.info("Favorite updated successfully!");
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -126,8 +123,7 @@ public class IServiceFavoriteImpl implements IService<Favorite> {
             pst.setLong(1, favorite.getId());
             pst.executeUpdate();
             LOGGER.info("Favorite deleted successfully!");
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -173,8 +169,7 @@ public class IServiceFavoriteImpl implements IService<Favorite> {
 
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error retrieving paginated favorites: " + e.getMessage(), e);
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
         }
@@ -239,8 +234,7 @@ public class IServiceFavoriteImpl implements IService<Favorite> {
 
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 

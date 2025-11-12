@@ -252,8 +252,7 @@ public class HomeAdminController implements Initializable {
             setupInteractiveElements();
 
             LOGGER.info("Advanced Admin Dashboard initialized successfully");
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error initializing advanced admin dashboard: " + e.getMessage(), e);
         }
 
@@ -382,8 +381,7 @@ public class HomeAdminController implements Initializable {
                     systemStatusLabel.getStyleClass().add("pulsing-indicator");
                 }
 
-            }
- catch (Exception ex) {
+            } catch (Exception ex) {
                 LOGGER.log(Level.WARNING, "Error setting welcome message: " + ex.getMessage(), ex);
                 welcomeLabel.setText("Welcome to RAKCHA Admin Dashboard!");
             }
@@ -424,8 +422,7 @@ public class HomeAdminController implements Initializable {
                 Page<Series> series = seriesService.read(pageRequest);
                 totalSeries = series.getTotalElements();
                 updateStatCard(totalSeriesLabel, totalSeries, seriesGrowthLabel, 0);
-            }
- catch (Exception e) {
+            } catch (Exception e) {
                 totalSeries = 0;
                 if (totalSeriesLabel != null)
                     totalSeriesLabel.setText("0");
@@ -437,8 +434,7 @@ public class HomeAdminController implements Initializable {
                 Page<Cinema> cinemas = cinemaService.read(pageRequest);
                 totalCinemas = cinemas.getTotalElements();
                 updateStatCard(totalCinemasLabel, totalCinemas, cinemaGrowthLabel, 0);
-            }
- catch (Exception e) {
+            } catch (Exception e) {
                 totalCinemas = 0;
                 if (totalCinemasLabel != null)
                     totalCinemasLabel.setText("0");
@@ -449,8 +445,7 @@ public class HomeAdminController implements Initializable {
             totalOrders = calculateTotalOrders();
             updateStatCard(totalOrdersLabel, totalOrders, orderGrowthLabel, calculateGrowthPercentage("orders"));
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error loading comprehensive statistics: " + e.getMessage(), e);
             setDefaultStatistics();
         }
@@ -607,8 +602,7 @@ public class HomeAdminController implements Initializable {
 
             }
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error loading recent system activity: " + e.getMessage(), e);
         }
 
@@ -650,8 +644,7 @@ public class HomeAdminController implements Initializable {
 
             }
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error loading recent users: " + e.getMessage(), e);
         }
 
@@ -688,8 +681,7 @@ public class HomeAdminController implements Initializable {
                         addRecentContentCard(film.getName(), "Movie", "🎬");
                     }
 
-                }
- catch (Exception e) {
+                } catch (Exception e) {
                     // Add placeholder films
                     Film placeholder1 = new Film();
                     placeholder1.setName("The Matrix");
@@ -713,8 +705,7 @@ public class HomeAdminController implements Initializable {
                         addRecentContentCard(seriesItem.getName(), "Series", "📺");
                     }
 
-                }
- catch (Exception e) {
+                } catch (Exception e) {
                     // Add placeholder series
                     Series placeholder1 = new Series();
                     placeholder1.setName("Breaking Bad");
@@ -738,8 +729,7 @@ public class HomeAdminController implements Initializable {
                         addRecentContentCard(product.getName(), "Product", "🛍️");
                     }
 
-                }
- catch (Exception e) {
+                } catch (Exception e) {
                     // Add placeholder products
                     Product placeholder1 = new Product();
                     placeholder1.setName("Premium Popcorn");
@@ -763,8 +753,7 @@ public class HomeAdminController implements Initializable {
                         addRecentContentCard(cinema.getName(), "Cinema", "🏢");
                     }
 
-                }
- catch (Exception e) {
+                } catch (Exception e) {
                     // Add placeholder cinemas
                     Cinema placeholder1 = new Cinema();
                     placeholder1.setName("Grand Cinema");
@@ -779,8 +768,7 @@ public class HomeAdminController implements Initializable {
 
             }
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error loading recent content: " + e.getMessage(), e);
         }
 
@@ -806,8 +794,7 @@ public class HomeAdminController implements Initializable {
                 addSystemLogEntry("[SUCCESS] All services operational", getTimeAgo(30), "success");
             }
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error loading system logs: " + e.getMessage(), e);
         }
 
@@ -1875,8 +1862,7 @@ public class HomeAdminController implements Initializable {
             Parent root = loader.load();
             Stage stage = (Stage) rootContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
-        }
- catch (IOException e) {
+        } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading user management interface: " + e.getMessage(), e);
         }
 
@@ -1893,8 +1879,7 @@ public class HomeAdminController implements Initializable {
             Parent root = loader.load();
             Stage stage = (Stage) rootContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
-        }
- catch (IOException e) {
+        } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading movie management interface: " + e.getMessage(), e);
         }
 
@@ -1914,8 +1899,7 @@ public class HomeAdminController implements Initializable {
             Parent root = loader.load();
             Stage stage = (Stage) rootContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
-        }
- catch (IOException e) {
+        } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading product management interface: " + e.getMessage(), e);
         }
 
@@ -1934,8 +1918,7 @@ public class HomeAdminController implements Initializable {
             Parent root = loader.load();
             Stage stage = (Stage) rootContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
-        }
- catch (IOException e) {
+        } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading orders interface: " + e.getMessage(), e);
         }
 
@@ -1952,8 +1935,7 @@ public class HomeAdminController implements Initializable {
             Parent root = loader.load();
             Stage stage = (Stage) rootContainer.getScene().getWindow();
             stage.setScene(new Scene(root));
-        }
- catch (IOException e) {
+        } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading orders interface: " + e.getMessage(), e);
         }
 
@@ -1975,8 +1957,7 @@ public class HomeAdminController implements Initializable {
             alert.setHeaderText("System Settings");
             alert.setContentText("System settings functionality will be implemented here.");
             alert.showAndWait();
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error opening system settings: " + e.getMessage(), e);
         }
 
@@ -2005,8 +1986,7 @@ public class HomeAdminController implements Initializable {
                     "• Revenue & Sales Reports\n" +
                     "• System Performance Metrics");
             alert.showAndWait();
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error opening reports: " + e.getMessage(), e);
         }
 

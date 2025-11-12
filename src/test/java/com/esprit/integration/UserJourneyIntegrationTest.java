@@ -64,8 +64,7 @@ class UserJourneyIntegrationTest extends TestFXBase {
             try {
                 verifyThat("#loginButton", isVisible());
                 // If we see the login button, registration redirected to login page
-            }
- catch (Exception e) {
+            } catch (Exception e) {
                 // Otherwise check for a success message or home view
                 verifyThat("#homePane", isVisible());
             }

@@ -59,14 +59,10 @@ public class TestDataFactory {
      * @return Valid password
      */
     public static String generateValidPassword() {
-        String upper = faker.regexify("[A-Z]{2}
-");
-        String lower = faker.regexify("[a-z]{4}
-");
-        String digits = faker.regexify("[0-9]{2}
-");
-        String special = faker.regexify("[!@#$%^&*]{2}
-");
+        String upper = faker.regexify("[A-Z]{2}");
+        String lower = faker.regexify("[a-z]{4}");
+        String digits = faker.regexify("[0-9]{2}");
+        String special = faker.regexify("[!@#$%^&*]{2}");
         return upper + lower + digits + special;
     }
 

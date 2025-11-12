@@ -469,8 +469,7 @@ public class DesignCategorieAdminController {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             DesignCategorieAdminController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
@@ -503,8 +502,7 @@ public class DesignCategorieAdminController {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             DesignCategorieAdminController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
@@ -537,8 +535,7 @@ public class DesignCategorieAdminController {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             DesignCategorieAdminController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
@@ -578,8 +575,7 @@ public class DesignCategorieAdminController {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             DesignCategorieAdminController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
@@ -609,8 +605,7 @@ public class DesignCategorieAdminController {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             DesignCategorieAdminController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }

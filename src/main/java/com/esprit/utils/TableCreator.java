@@ -55,8 +55,7 @@ public class TableCreator {
                 return DatabaseType.SQLITE;
             }
 
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.warn("Could not detect database type", e);
         }
 
@@ -83,8 +82,7 @@ public class TableCreator {
                 return tables.next();
             }
 
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error checking if table exists: " + tableName, e);
             return false;
         }
@@ -97,8 +95,7 @@ public class TableCreator {
      */
     public void createTableIfNotExists(String tableName, String createTableSQL) {
         if (tableExists(tableName)) {
-            log.info("Table {}
- already exists, skipping creation", tableName);
+            log.info("Table {} already exists, skipping creation", tableName);
             return;
         }
 
@@ -107,10 +104,8 @@ public class TableCreator {
 
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(sql);
-            log.info("Successfully created table: {}
-", tableName);
-        }
- catch (SQLException e) {
+            log.info("Successfully created table: {}", tableName);
+        } catch (SQLException e) {
             log.error("Error creating table: " + tableName, e);
             throw new RuntimeException("Failed to create table: " + tableName, e);
         }
@@ -495,8 +490,7 @@ public class TableCreator {
         for (Map.Entry<String, String> entry : tables.entrySet()) {
             try {
                 createTableIfNotExists(entry.getKey(), entry.getValue());
-            }
- catch (Exception e) {
+            } catch (Exception e) {
                 log.error("Failed to create table: " + entry.getKey(), e);
                 // Continue with other tables even if one fails
             }
@@ -521,8 +515,7 @@ public class TableCreator {
 
             }
 
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error listing existing tables", e);
         }
 

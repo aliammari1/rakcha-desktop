@@ -254,8 +254,7 @@ public class DashboardAdminController {
         try {
             Image image = new Image(film.getImage());
             imageView.setImage(image);
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             // Use default image if film image fails to load
             Image defaultImage = new Image(getClass().getResourceAsStream("/Logo.png"));
             imageView.setImage(defaultImage);

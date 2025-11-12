@@ -87,8 +87,7 @@ public class UserService implements IService<User> {
             final PreparedStatement preparedStatement = this.con.prepareStatement(req);
             preparedStatement.setLong(1, id);
             user = this.getUserRow(preparedStatement);
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             UserService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -107,8 +106,7 @@ public class UserService implements IService<User> {
             final PreparedStatement preparedStatement = this.con.prepareStatement(req);
             preparedStatement.setString(1, email);
             user = this.getUserRow(preparedStatement);
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             UserService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -151,8 +149,7 @@ public class UserService implements IService<User> {
 
             statement.executeUpdate();
             UserService.LOGGER.info("user was added");
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             UserService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -174,8 +171,7 @@ public class UserService implements IService<User> {
         // Validate sort column to prevent SQL injection
         if (pageRequest.hasSorting() &&
                 !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
-            log.warn("Invalid sort column: {}
-. Using default sorting.", pageRequest.getSortBy());
+            log.warn("Invalid sort column: {}. Using default sorting.", pageRequest.getSortBy());
             pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
 
@@ -193,10 +189,8 @@ public class UserService implements IService<User> {
 
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
 
-        }
- catch (final SQLException e) {
-            log.error("Error retrieving paginated users: {}
-", e.getMessage(), e);
+        } catch (final SQLException e) {
+            log.error("Error retrieving paginated users: {}", e.getMessage(), e);
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
         }
 
@@ -227,8 +221,7 @@ public class UserService implements IService<User> {
             statement.setLong(10, user.getId().longValue());
             statement.executeUpdate();
             UserService.LOGGER.info("user is updated");
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             UserService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -248,8 +241,7 @@ public class UserService implements IService<User> {
             statement.setLong(1, user.getId().intValue());
             statement.executeUpdate();
             UserService.LOGGER.info("user is deleted");
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             UserService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -287,8 +279,7 @@ public class UserService implements IService<User> {
             final String query = "SELECT * FROM users ORDER BY %s".formatted(Option);
             final PreparedStatement statement = con.prepareStatement(query);
             return getUsers(userList, statement);
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             UserService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -353,8 +344,7 @@ public class UserService implements IService<User> {
             statement.setString(1, email);
             final ResultSet resultSet = statement.executeQuery();
             check = resultSet.next();
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             UserService.LOGGER.info("checkEmailFound: " + e.getMessage());
         }
 
@@ -375,8 +365,7 @@ public class UserService implements IService<User> {
             statement.setString(2, email);
             statement.executeUpdate();
             UserService.LOGGER.info("user password is updated");
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             UserService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -403,8 +392,7 @@ public class UserService implements IService<User> {
                 alert.show();
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             UserService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -487,8 +475,7 @@ public class UserService implements IService<User> {
                 return null;
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             UserService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 

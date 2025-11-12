@@ -111,8 +111,7 @@ public class EnhancedDatabaseSeeder {
 
             log.info("Comprehensive database seeding completed successfully!");
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             log.severe("Error during comprehensive database seeding" + e.getMessage());
             throw new RuntimeException("Comprehensive database seeding failed", e);
         }
@@ -180,8 +179,7 @@ public class EnhancedDatabaseSeeder {
                     log.warning("Unknown entity type: " + entityType);
             }
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             log.severe("Error seeding " + entityType + " entities: " + e.getMessage());
             throw new RuntimeException("Failed to seed " + entityType, e);
         }
@@ -424,8 +422,7 @@ public class EnhancedDatabaseSeeder {
                 cinemaService.create(cinema);
                 log.info("Created cinema: " + name + " with manager: " + manager.getFirstName() + " "
                         + manager.getLastName());
-            }
- catch (Exception e) {
+            } catch (Exception e) {
                 log.severe("Failed to create cinema: " + name + " - " + e.getMessage());
             }
 
@@ -593,8 +590,7 @@ public class EnhancedDatabaseSeeder {
                         .description("Popular " + categoryName.toLowerCase() + " films")
                         .build();
                 filmCategoryService.create(category);
-            }
- catch (Exception e) {
+            } catch (Exception e) {
                 log.warning("Category " + categoryName + " might already exist: " + e.getMessage());
             }
 
@@ -788,8 +784,7 @@ public class EnhancedDatabaseSeeder {
                     orderItemService.create(orderItem);
                 }
 
-            }
- catch (Exception e) {
+            } catch (Exception e) {
                 log.warning("Failed to create order for client " + randomClient.getFirstName() + ": " + e.getMessage());
             }
 

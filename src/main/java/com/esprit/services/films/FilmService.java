@@ -178,8 +178,7 @@ public class FilmService implements IService<Film> {
                 responseBuilder.append(line);
             }
 
-            final String response = "{" + responseBuilder + "}
-";
+            final String response = "{" + responseBuilder + "}";
             reader.close();
             // Parse the JSON response
             FilmService.LOGGER.info(response);
@@ -196,8 +195,7 @@ public class FilmService implements IService<Film> {
                 FilmService.LOGGER.info("No results found.");
             }
 
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             FilmService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -242,8 +240,7 @@ public class FilmService implements IService<Film> {
 
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             log.error("Error creating film", e);
             throw new RuntimeException(e);
         }
@@ -299,8 +296,7 @@ public class FilmService implements IService<Film> {
 
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error retrieving paginated films: " + e.getMessage(), e);
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
         }
@@ -355,8 +351,7 @@ public class FilmService implements IService<Film> {
                 filmArrayList.add(buildFilmFromResultSet(rs));
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             FilmService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -380,8 +375,7 @@ public class FilmService implements IService<Film> {
                 film = buildFilmFromResultSet(rs);
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             FilmService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -414,8 +408,7 @@ public class FilmService implements IService<Film> {
             statement.setInt(5, film.getReleaseYear());
             statement.setLong(6, film.getId());
             statement.executeUpdate();
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             log.error("Error updating film", e);
             throw new RuntimeException(e);
         }
@@ -443,8 +436,7 @@ public class FilmService implements IService<Film> {
         try (final PreparedStatement statement = this.connection.prepareStatement(req)) {
             statement.setLong(1, film.getId());
             statement.executeUpdate();
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             log.error("Error deleting film", e);
             throw new RuntimeException(e);
         }
@@ -469,8 +461,7 @@ public class FilmService implements IService<Film> {
 
             }
 
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error getting film: " + film_id, e);
         }
 
@@ -494,8 +485,7 @@ public class FilmService implements IService<Film> {
                 film = buildFilmFromResultSet(rs);
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             FilmService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -514,8 +504,7 @@ public class FilmService implements IService<Film> {
         try {
             final FilmYoutubeTrailer filmYoutubeTrailer = new FilmYoutubeTrailer();
             s = filmYoutubeTrailer.watchTrailer(nomFilm);
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             FilmService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 

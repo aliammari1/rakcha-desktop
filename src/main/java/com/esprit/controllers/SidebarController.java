@@ -229,8 +229,7 @@ public class SidebarController implements Initializable {
             final Parent root = loader.load();
             final Stage stage = (Stage) this.usersButton.getScene().getWindow();
             stage.setScene(new Scene(root));
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             SidebarController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -273,8 +272,7 @@ public class SidebarController implements Initializable {
             final Stage stage = (Stage) this.movieButton.getScene().getWindow();
 
             stage.setScene(new Scene(root));
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             SidebarController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -293,8 +291,7 @@ public class SidebarController implements Initializable {
             final Parent root = loader.load();
             final Stage stage = (Stage) this.orderButton.getScene().getWindow();
             stage.setScene(new Scene(root));
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             SidebarController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -325,8 +322,7 @@ public class SidebarController implements Initializable {
             final Parent root = loader.load();
             final Stage stage = (Stage) this.productButton.getScene().getWindow();
             stage.setScene(new Scene(root));
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             SidebarController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -355,8 +351,7 @@ public class SidebarController implements Initializable {
             final Parent root = loader.load();
             final Stage stage = (Stage) this.serieButton.getScene().getWindow();
             stage.setScene(new Scene(root));
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             SidebarController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -394,8 +389,7 @@ public class SidebarController implements Initializable {
             final Parent root = loader.load();
             final Stage stage = (Stage) this.cinemaButton.getScene().getWindow();
             stage.setScene(new Scene(root));
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             SidebarController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -412,8 +406,7 @@ public class SidebarController implements Initializable {
             final Parent root = loader.load();
             final Stage stage = (Stage) this.actorButton.getScene().getWindow();
             stage.setScene(new Scene(root));
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             SidebarController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -430,8 +423,7 @@ public class SidebarController implements Initializable {
             final Parent root = loader.load();
             final Stage stage = (Stage) this.filmCategorieButton.getScene().getWindow();
             stage.setScene(new Scene(root));
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             SidebarController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -449,8 +441,7 @@ public class SidebarController implements Initializable {
             final Parent root = loader.load();
             final Stage stage = (Stage) this.moviesessionButton.getScene().getWindow();
             stage.setScene(new Scene(root));
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             SidebarController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -467,8 +458,7 @@ public class SidebarController implements Initializable {
             final Parent root = loader.load();
             final Stage stage = (Stage) this.statestique_button.getScene().getWindow();
             stage.setScene(new Scene(root));
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             SidebarController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -500,8 +490,7 @@ public class SidebarController implements Initializable {
             final Parent root = loader.load();
             final Stage stage = (Stage) this.homeButton.getScene().getWindow();
             stage.setScene(new Scene(root));
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             SidebarController.LOGGER.log(Level.SEVERE, "Error navigating to home: " + e.getMessage(), e);
         }
 
@@ -518,8 +507,7 @@ public class SidebarController implements Initializable {
             final Parent root = loader.load();
             final Stage stage = (Stage) this.profileButton.getScene().getWindow();
             stage.setScene(new Scene(root));
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             SidebarController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -539,8 +527,7 @@ public class SidebarController implements Initializable {
             final Stage stage = (Stage) this.logoutButton.getScene().getWindow();
             stage.setUserData(null);
             stage.setScene(new Scene(root));
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             SidebarController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 

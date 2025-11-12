@@ -101,8 +101,7 @@ public class EpisodeController {
                 this.serieF.getItems().add(s.getName());
             }
 
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             throw new RuntimeException(e);
         }
 
@@ -130,8 +129,7 @@ public class EpisodeController {
                         tableView.getItems().remove(episode);
                         showAlert("OK", "Deleted successfully !");
                         tableView.refresh();
-                    }
- catch (final Exception e) {
+                    } catch (final Exception e) {
                         EpisodeController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                         showAlert("Error", e.getMessage());
                     }
@@ -202,8 +200,7 @@ public class EpisodeController {
         try {
             PageRequest pageRequest = new PageRequest(0, 10);
             this.tableView.getItems().addAll(iServiceEpisode.read(pageRequest).getContent());
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             EpisodeController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -285,8 +282,7 @@ public class EpisodeController {
                 iServiceEpisode.update(episode);
                 this.showAlert("Succes", "Modified successfully !");
                 this.ref();
-            }
- catch (final Exception e) {
+            } catch (final Exception e) {
                 throw new RuntimeException(e);
             }
 
@@ -374,8 +370,7 @@ public class EpisodeController {
                 this.imgpath = cloudinaryImageUrl;
 
                 LOGGER.info("Image uploaded to Cloudinary: " + cloudinaryImageUrl);
-            }
- catch (final IOException e) {
+            } catch (final IOException e) {
                 LOGGER.log(Level.SEVERE, "Error uploading image to Cloudinary", e);
             }
 
@@ -408,8 +403,7 @@ public class EpisodeController {
         try {
             final Image image = new Image(file.toURI().toString());
             return !image.isError();
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             return false;
         }
 
@@ -473,8 +467,7 @@ public class EpisodeController {
         try {
             Integer.parseInt(s);
             return true;
-        }
- catch (final NumberFormatException e) {
+        } catch (final NumberFormatException e) {
             return false;
         }
 
@@ -672,8 +665,7 @@ public class EpisodeController {
 
                 this.tableView.refresh();
                 this.ref();
-            }
- catch (final Exception e) {
+            } catch (final Exception e) {
                 this.showAlert("Error", "An error occurred while saving the episode. : " + e.getMessage());
                 EpisodeController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }

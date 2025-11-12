@@ -83,8 +83,7 @@ public class FilmYoutubeTrailer {
             LOGGER.warning("No trailer found for: " + filmName);
             return FALLBACK_URL;
 
-        }
- catch (IOException e) {
+        } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error searching for trailer: " + filmName, e);
             return FALLBACK_URL;
         }

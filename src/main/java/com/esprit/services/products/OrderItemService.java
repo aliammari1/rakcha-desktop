@@ -79,8 +79,7 @@ public class OrderItemService implements IService<OrderItem> {
             pst.setLong(3, orderItem.getOrder().getId());
             pst.executeUpdate();
             OrderItemService.LOGGER.info("order item created!");
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             OrderItemService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -109,8 +108,7 @@ public class OrderItemService implements IService<OrderItem> {
                 orderItems.add(orderItem);
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             OrderItemService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -140,8 +138,7 @@ public class OrderItemService implements IService<OrderItem> {
                 orderItems.add(orderItem);
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             OrderItemService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -203,8 +200,7 @@ public class OrderItemService implements IService<OrderItem> {
                 orderItems.add(orderItem);
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             OrderItemService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -239,8 +235,7 @@ public class OrderItemService implements IService<OrderItem> {
                 totalQuantity = rs.getInt("totalQuantity");
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             OrderItemService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -271,8 +266,7 @@ public class OrderItemService implements IService<OrderItem> {
                 orderItems.add(orderItem);
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             OrderItemService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -300,8 +294,7 @@ public class OrderItemService implements IService<OrderItem> {
                 averageRated.add(orderItem);
             }
 
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             OrderItemService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 

@@ -253,8 +253,7 @@ public class ActorController {
                 Files.copy(selectedFile.toPath(), destinationFilePath);
                 final Image selectedImage = new Image(destinationFilePath.toUri().toString());
                 this.imageActor_ImageView1.setImage(selectedImage);
-            }
- catch (final IOException e) {
+            } catch (final IOException e) {
                 ActorController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
 
@@ -302,8 +301,7 @@ public class ActorController {
             final String requiredPath = fullPath.substring(fullPath.indexOf("/img/actors/"));
             URI uri = new URI(requiredPath);
             imagePath = uri.getPath();
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             ActorController.LOGGER.warning("Error processing image path: " + e.getMessage());
             // Use the full path if substring fails
             imagePath = fullPath;
@@ -347,8 +345,7 @@ public class ActorController {
                     event.getTableView().getItems().get(event.getTablePosition().getRow()).setName(event.getNewValue());
                     ActorController.this
                             .updateActor(event.getTableView().getItems().get(event.getTablePosition().getRow()));
-                }
- catch (final Exception e) {
+                } catch (final Exception e) {
                     ActorController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
 
@@ -376,8 +373,7 @@ public class ActorController {
                             .setBiography(event.getNewValue());
                     ActorController.this
                             .updateActor(event.getTableView().getItems().get(event.getTablePosition().getRow()));
-                }
- catch (final Exception e) {
+                } catch (final Exception e) {
                     ActorController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
 
@@ -414,8 +410,7 @@ public class ActorController {
                 this.imageActor_ImageView1.setImage(selectedImage);
 
                 LOGGER.info("Image uploaded to Cloudinary: " + cloudinaryImageUrl);
-            }
- catch (final IOException e) {
+            } catch (final IOException e) {
                 LOGGER.log(Level.SEVERE, "Error uploading image to Cloudinary", e);
             }
 
@@ -442,8 +437,7 @@ public class ActorController {
             alert.setTitle("Actor modifiée");
             alert.setContentText("Actor modifiée !");
             alert.show();
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             this.showAlert("Erreur lors de la modification du Actor : " + e.getMessage());
         }
 
@@ -557,8 +551,7 @@ public class ActorController {
                             imageView.setFitHeight(100); // Réglez la hauteur de l'image selon vos préférences
                             try {
                                 loadImage(param.getValue().getImage(), imageView);
-                            }
- catch (final Exception e) {
+                            } catch (final Exception e) {
                                 ActorController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                             }
 
@@ -588,8 +581,7 @@ public class ActorController {
                                                 .update(new Actor(null, destinationFilePath.toUri().toString(), null));
                                     }
 
-                                }
- catch (final IOException e) {
+                                } catch (final IOException e) {
                                     ActorController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                                 }
 
@@ -607,8 +599,7 @@ public class ActorController {
                                *              with the application.
                                */
                             );
-                        }
- catch (final Exception e) {
+                        } catch (final Exception e) {
                             ActorController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                         }
 
@@ -647,8 +638,7 @@ public class ActorController {
             PageRequest pageRequest = new PageRequest(0, 10);
             final ObservableList<Actor> obC = FXCollections.observableArrayList(categoryService.read(pageRequest).getContent());
             this.filmActor_tableView11.setItems(obC);
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             ActorController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -691,8 +681,7 @@ public class ActorController {
             final Stage stage = (Stage) this.GoToFilms_Button.getScene().getWindow();
             final Scene scene = new Scene(root, 1280, 700);
             stage.setScene(scene);
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             ActorController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -753,8 +742,7 @@ public class ActorController {
         try {
             Image image = new Image(file.toURI().toString());
             return !image.isError();
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             showAlert("Invalid image file format");
             return false;
         }
@@ -775,8 +763,7 @@ public class ActorController {
         try {
             Image image = new Image(url);
             imageView.setImage(image);
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Failed to load image: " + url, e);
         }
 
@@ -797,8 +784,7 @@ public class ActorController {
             List<Actor> actors = filmActor_tableView11.getItems();
             mapper.writeValue(new File(filePath), actors);
             showAlert("Export successful");
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Failed to export actors", e);
             showAlert("Export failed: " + e.getMessage());
         }
@@ -837,8 +823,7 @@ public class ActorController {
 
             executeAction(action);
             showAlert("Import successful");
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Failed to import actors", e);
             showAlert("Import failed: " + e.getMessage());
         }

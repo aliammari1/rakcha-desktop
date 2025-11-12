@@ -79,8 +79,7 @@ public class OrderService implements IService<Order> {
             pst.setString(5, order.getAddress());
             pst.executeUpdate();
             OrderService.LOGGER.info("order created!");
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             OrderService.LOGGER.info("order not created");
         }
 
@@ -136,8 +135,7 @@ public class OrderService implements IService<Order> {
                 orders.add(order);
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             OrderService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -166,8 +164,7 @@ public class OrderService implements IService<Order> {
                 orders.add(order);
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             OrderService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -200,8 +197,7 @@ public class OrderService implements IService<Order> {
             pst.setLong(5, order.getId());
             pst.executeUpdate();
             OrderService.LOGGER.info("order updated!");
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             OrderService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -227,8 +223,7 @@ public class OrderService implements IService<Order> {
             pst.setLong(1, order.getId());
             pst.executeUpdate();
             OrderService.LOGGER.info("order deleted!");
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             OrderService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -283,8 +278,7 @@ public class OrderService implements IService<Order> {
                 paidOrders.add(order);
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             OrderService.LOGGER.info("Error retrieving paid orders: " + e.getMessage());
         }
 
@@ -309,8 +303,7 @@ public class OrderService implements IService<Order> {
                 productPurchases.put(productId, purchaseCount);
             }
 
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             OrderService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 

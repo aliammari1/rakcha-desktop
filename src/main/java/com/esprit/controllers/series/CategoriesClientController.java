@@ -59,8 +59,7 @@ public class CategoriesClientController {
         try {
             PageRequest pageRequest = new PageRequest(0, 10);
             categories = iServiceCategorie.read(pageRequest).getContent();
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             throw new RuntimeException(e);
         }
 

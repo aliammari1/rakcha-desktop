@@ -58,8 +58,7 @@ public class CommentService implements IService<Comment> {
                     """;
             tableCreator.createTableIfNotExists("comments", createCommentsTable);
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             log.error("Error creating tables for CommentService", e);
         }
 
@@ -86,8 +85,7 @@ public class CommentService implements IService<Comment> {
             pst.setLong(3, comment.getProduct().getId());
             pst.executeUpdate();
             CommentService.LOGGER.info("Comment added!");
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             CommentService.LOGGER.info("Error adding comment: " + e.getMessage());
         }
 
@@ -116,8 +114,7 @@ public class CommentService implements IService<Comment> {
                 comments.add(comment);
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             CommentService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -178,8 +175,7 @@ public class CommentService implements IService<Comment> {
                         .product(productService.getProductById(rs.getLong("product_id"))).build();
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             CommentService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -209,8 +205,7 @@ public class CommentService implements IService<Comment> {
                 comments.add(comment);
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             CommentService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 

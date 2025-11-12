@@ -48,8 +48,7 @@ public class SeatService {
                     """;
             tableCreator.createTableIfNotExists("seats", createSeatsTable);
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             log.error("Error creating tables for SeatService", e);
         }
 
@@ -79,8 +78,7 @@ public class SeatService {
 
             }
 
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error retrieving seats for cinema hall: " + cinemaHallId, e);
         }
 
@@ -101,8 +99,7 @@ public class SeatService {
             stmt.setBoolean(1, isOccupied);
             stmt.setLong(2, seatId);
             return stmt.executeUpdate() > 0;
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error updating seat status for seat: " + seatId, e);
             return false;
         }
@@ -125,8 +122,7 @@ public class SeatService {
             stmt.setLong(4, seat.getCinemaHall().getId());
             stmt.executeUpdate();
             log.info("Seat created successfully");
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error creating seat", e);
             throw new RuntimeException(e);
         }
@@ -152,8 +148,7 @@ public class SeatService {
             return Seat.builder().id(rs.getLong("id")).seatNumber(rs.getInt("seat_number"))
                     .rowNumber(rs.getInt("row_number")).isOccupied(rs.getBoolean("is_occupied")).cinemaHall(cinemaHall)
                     .build();
-        }
- catch (SQLException e) {
+        } catch (SQLException e) {
             log.error("Error building seat from ResultSet", e);
             return null;
         }

@@ -121,8 +121,7 @@ public class SignUpController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/users/Login.fxml"));
             Parent root = loader.load();
             stage.setScene(new Scene(root));
-        }
- catch (IOException e) {
+        } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error switching to login view", e);
             throw e;
         }
@@ -162,8 +161,7 @@ public class SignUpController implements Initializable {
         loginButton.setOnAction(event -> {
             try {
                 switchToLogin(event);
-            }
- catch (IOException e) {
+            } catch (IOException e) {
                 LOGGER.log(Level.SEVERE, "Error switching to login view", e);
             }
 
@@ -451,8 +449,7 @@ public class SignUpController implements Initializable {
                         .withMethod(c -> {
                             final String userName = c.get("firstName");
                             if (null != userName) {
-                                final String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}
-$";
+                                final String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
                                 if (!userName.matches(emailRegex)) {
                                     c.error("Invalid email format.");
                                 }
@@ -694,8 +691,7 @@ $";
 
                 LOGGER.info("Image uploaded to Cloudinary: " + cloudinaryImageUrl);
 
-            }
- catch (final IOException e) {
+            } catch (final IOException e) {
                 SignUpController.LOGGER.log(Level.SEVERE, "Error uploading image to Cloudinary", e);
             }
 
@@ -738,8 +734,7 @@ $";
             return;
         }
 
-        if (!email.matches("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}
-")) {
+        if (!email.matches("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}")) {
             final Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid email format", ButtonType.CLOSE);
             alert.show();
             return;
@@ -780,8 +775,7 @@ $";
             final ProfileController profileController = loader.getController();
             profileController.setData(user);
             stage.setScene(new Scene(root));
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error during signup process", e);
             throw new IOException("Failed to complete signup process", e);
         }
@@ -807,8 +801,7 @@ $";
             AnchorPane foregroundPane = null;
             try {
                 foregroundPane = (AnchorPane) rootContainer.getChildren().get(2);
-            }
- catch (Exception e) {
+            } catch (Exception e) {
                 LOGGER.warning("Could not access foreground pane for cleanup: " + e.getMessage());
             }
 
@@ -818,8 +811,7 @@ $";
                     if (particle != null) {
                         try {
                             foregroundPane.getChildren().remove(particle);
-                        }
- catch (Exception e) {
+                        } catch (Exception e) {
                             LOGGER.warning("Could not remove particle: " + e.getMessage());
                         }
 
@@ -837,8 +829,7 @@ $";
             AnchorPane foregroundPane = null;
             try {
                 foregroundPane = (AnchorPane) rootContainer.getChildren().get(2);
-            }
- catch (Exception e) {
+            } catch (Exception e) {
                 LOGGER.warning("Could not access foreground pane for cleanup: " + e.getMessage());
             }
 
@@ -848,8 +839,7 @@ $";
                     if (shape != null) {
                         try {
                             foregroundPane.getChildren().remove(shape);
-                        }
- catch (Exception e) {
+                        } catch (Exception e) {
                             LOGGER.warning("Could not remove shape: " + e.getMessage());
                         }
 
@@ -867,8 +857,7 @@ $";
             AnchorPane foregroundPane = null;
             try {
                 foregroundPane = (AnchorPane) rootContainer.getChildren().get(2);
-            }
- catch (Exception e) {
+            } catch (Exception e) {
                 LOGGER.warning("Could not access foreground pane for cleanup: " + e.getMessage());
             }
 
@@ -878,8 +867,7 @@ $";
                     if (rect != null) {
                         try {
                             foregroundPane.getChildren().remove(rect);
-                        }
- catch (Exception e) {
+                        } catch (Exception e) {
                             LOGGER.warning("Could not remove rectangle: " + e.getMessage());
                         }
 

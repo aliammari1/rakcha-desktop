@@ -191,8 +191,7 @@ public class OrderClientController implements Initializable {
         try {
             this.orderService.create(this.order);
             this.order.setStatus("en cours");
-        }
- catch (final Exception e) {
+        } catch (final Exception e) {
             OrderClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
 
@@ -240,8 +239,7 @@ public class OrderClientController implements Initializable {
     private boolean isValidPhoneNumber(final String phoneNumber) {
         // Vérifier si le numéro de téléphone a exactement 8 chiffres et ne contient que
         // des chiffres
-        return phoneNumber.matches("\\d{8}
-");
+        return phoneNumber.matches("\\d{8}");
     }
 
 
@@ -288,8 +286,7 @@ public class OrderClientController implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             OrderClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
 
@@ -345,8 +342,7 @@ public class OrderClientController implements Initializable {
                 this.redirectToPayPal(approvalUrl);
             }
 
-        }
- catch (final PayPalRESTException e) {
+        } catch (final PayPalRESTException e) {
             OrderClientController.LOGGER.log(Level.SEVERE, "Error creating PayPal payment", e);
         }
 
@@ -388,8 +384,7 @@ public class OrderClientController implements Initializable {
                         try {
                             Thread.sleep(5000);
                             Platform.runLater(stage::close);
-                        }
- catch (final InterruptedException e) {
+                        } catch (final InterruptedException e) {
                             Thread.currentThread().interrupt();
                         }
 
@@ -405,8 +400,7 @@ public class OrderClientController implements Initializable {
                         try {
                             Thread.sleep(5000);
                             Platform.runLater(stage::close);
-                        }
- catch (final InterruptedException e) {
+                        } catch (final InterruptedException e) {
                             Thread.currentThread().interrupt();
                         }
 
@@ -445,8 +439,7 @@ public class OrderClientController implements Initializable {
 
             }
 
-        }
- catch (final URISyntaxException e) {
+        } catch (final URISyntaxException e) {
             OrderClientController.LOGGER.log(Level.SEVERE, "Error parsing URL", e);
         }
 
@@ -477,8 +470,7 @@ public class OrderClientController implements Initializable {
                 OrderClientController.LOGGER.info("Order status updated to paid");
             }
 
-        }
- catch (final PayPalRESTException e) {
+        } catch (final PayPalRESTException e) {
             OrderClientController.LOGGER.log(Level.SEVERE, "Error executing payment", e);
         }
 
@@ -508,8 +500,7 @@ public class OrderClientController implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             OrderClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
 
@@ -540,8 +531,7 @@ public class OrderClientController implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             OrderClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
 
@@ -576,8 +566,7 @@ public class OrderClientController implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             OrderClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
 
@@ -642,8 +631,7 @@ public class OrderClientController implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             OrderClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
 
@@ -672,8 +660,7 @@ public class OrderClientController implements Initializable {
             stage.show();
             // Fermer la fenêtre actuelle
             currentStage.close();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             OrderClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
 

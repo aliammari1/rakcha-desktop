@@ -35,8 +35,7 @@ public class CloudinaryStorage {
         try {
             Dotenv dotenv = Dotenv.load();
             cloudinary = new Cloudinary(dotenv.get("CLOUDINARY_URL"));
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Failed to initialize Cloudinary client", e);
             throw new RuntimeException("Failed to initialize Cloudinary storage service", e);
         }
@@ -82,8 +81,7 @@ public class CloudinaryStorage {
 
             LOGGER.info("Image uploaded to Cloudinary: " + imageUrl);
             return imageUrl;
-        }
- catch (IOException e) {
+        } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error uploading image to Cloudinary", e);
             throw e;
         }
@@ -115,8 +113,7 @@ public class CloudinaryStorage {
 
             LOGGER.info("Image uploaded to Cloudinary with custom options: " + imageUrl);
             return imageUrl;
-        }
- catch (IOException e) {
+        } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error uploading image to Cloudinary with custom options", e);
             throw e;
         }
@@ -137,8 +134,7 @@ public class CloudinaryStorage {
                     ObjectUtils.emptyMap());
             String status = (String) result.get("result");
             return "ok".equals(status);
-        }
- catch (IOException e) {
+        } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error deleting image from Cloudinary", e);
             return false;
         }

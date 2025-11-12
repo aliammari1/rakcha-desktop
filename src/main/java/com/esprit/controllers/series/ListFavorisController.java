@@ -57,8 +57,7 @@ public class ListFavorisController implements Initializable {
     public void initialize(final URL url, final ResourceBundle resourceBundle) {
         try {
             this.loadSeriesFavList();
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             throw new RuntimeException(e);
         }
 
@@ -208,8 +207,7 @@ public class ListFavorisController implements Initializable {
 
                                 }
 
-                            }
- catch (final SQLException e) {
+                            } catch (final SQLException e) {
                                 throw new RuntimeException(e);
                             }
 
@@ -254,8 +252,7 @@ public class ListFavorisController implements Initializable {
 
                                 }
 
-                            }
- catch (final SQLException e) {
+                            } catch (final SQLException e) {
                                 throw new RuntimeException(e);
                             }
 
@@ -296,8 +293,7 @@ public class ListFavorisController implements Initializable {
                                     ListFavorisController.LOGGER.info(String.valueOf(fav.getId().intValue()));
                                 }
 
-                            }
- catch (final SQLException e) {
+                            } catch (final SQLException e) {
                                 throw new RuntimeException(e);
                             }
 
@@ -352,8 +348,7 @@ public class ListFavorisController implements Initializable {
                             stage.setTitle("");
                             stage.setScene(scene);
                             stage.show();
-                        }
- catch (final IOException e) {
+                        } catch (final IOException e) {
                             throw new RuntimeException(e);
                         }
 

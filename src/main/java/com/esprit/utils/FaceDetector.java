@@ -123,8 +123,7 @@
 //                     callback.onFrameProcessed(frame);
 //                 }
 
-//             }
- catch (Exception e) {
+//             } catch (Exception e) {
 //                 LOGGER.log(Level.SEVERE, "Error processing video frame", e);
 //             }
 

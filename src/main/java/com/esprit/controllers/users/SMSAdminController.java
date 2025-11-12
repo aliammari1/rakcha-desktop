@@ -55,8 +55,7 @@ public class SMSAdminController implements Initializable {
                 final Parent root = loader.load();
                 final Stage stage = (Stage) this.codeTextField.getScene().getWindow();
                 stage.setScene(new Scene(root));
-            }
- catch (final IOException e) {
+            } catch (final IOException e) {
                 throw new RuntimeException(e);
             }
 

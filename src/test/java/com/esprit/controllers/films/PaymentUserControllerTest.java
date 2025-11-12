@@ -145,8 +145,7 @@ class PaymentUserControllerTest extends TestFXBase {
                            (errorLabel.isPresent() && errorLabel.get().isVisible());
                 }
 );
-            }
- catch (Exception e) {
+            } catch (Exception e) {
                 // Continue even if timeout - check UI state below
             }
 
@@ -187,8 +186,7 @@ class PaymentUserControllerTest extends TestFXBase {
                     return label != null && label.isVisible();
                 }
 );
-            }
- catch (Exception e) {
+            } catch (Exception e) {
                 // Continue even if timeout - check UI state below
             }
 
@@ -229,8 +227,7 @@ class PaymentUserControllerTest extends TestFXBase {
                     return label != null && label.isVisible();
                 }
 );
-            }
- catch (Exception e) {
+            } catch (Exception e) {
                 // Continue even if timeout - check UI state below
             }
 

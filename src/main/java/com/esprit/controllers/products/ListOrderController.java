@@ -252,8 +252,7 @@ public class ListOrderController {
             stage.setTitle("statisqtisue");
             stage.setOnHidden(e -> currentStage.show()); // Afficher l'ancienne fenêtre lorsque la nouvelle est fermée
             stage.show();
-        }
- catch (final IOException e) {
+        } catch (final IOException e) {
             ListOrderController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
 

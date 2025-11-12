@@ -100,8 +100,7 @@
 //             LOGGER.info("Face recognition model trained successfully");
 //             return true;
 
-//         }
- catch (Exception e) {
+//         } catch (Exception e) {
 //             LOGGER.log(Level.SEVERE, "Failed to initialize face recognition", e);
 //             return false;
 //         }
@@ -127,8 +126,7 @@
 //             Mat grayImage = new Mat();
 //             if (faceImage.channels() > 1) {
 //                 Imgproc.cvtColor(faceImage, grayImage, Imgproc.COLOR_BGR2GRAY);
-//             }
- else {
+//             } else {
 //                 grayImage = faceImage;
 //             }
 
@@ -145,8 +143,7 @@
 
 //             return label[0];
 
-//         }
- catch (Exception e) {
+//         } catch (Exception e) {
 //             LOGGER.log(Level.SEVERE, "Error during face recognition", e);
 //             return -1;
 //         }

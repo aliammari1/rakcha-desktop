@@ -77,8 +77,7 @@ class ActorControllerTest extends TestFXBase {
         // In production, this would be injected from the controller
         try {
             actorService = new ActorService();
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             // If ActorService cannot be instantiated, create a minimal mock
             actorService = null;
         }
@@ -286,8 +285,7 @@ class ActorControllerTest extends TestFXBase {
             // Attempt to load as image would fail
             try {
                 Image image = new Image(nonImageFile.toURI().toString());
-            }
- catch (Exception e) {
+            } catch (Exception e) {
                 // Format validation error expected
             }
 

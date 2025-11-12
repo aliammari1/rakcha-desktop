@@ -52,8 +52,7 @@ public class FilmCinemaService {
                     """;
             tableCreator.createTableIfNotExists("film_cinema", createFilmCinemaTable);
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             log.error("Error creating tables for FilmCinemaService", e);
         }
 
@@ -81,8 +80,7 @@ public class FilmCinemaService {
 
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error creating film-cinema associations", e);
             throw new RuntimeException(e);
         }
@@ -108,8 +106,7 @@ public class FilmCinemaService {
                         .status(rs.getString("status")).build());
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error getting cinemas for film: " + filmId, e);
         }
 
@@ -135,8 +132,7 @@ public class FilmCinemaService {
                         .releaseYear(rs.getInt("release_year")).build());
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error getting films for cinema: " + cinemaId, e);
         }
 
@@ -160,8 +156,7 @@ public class FilmCinemaService {
         try (final PreparedStatement statement = this.connection.prepareStatement(reqDelete)) {
             statement.setLong(1, film.getId());
             statement.executeUpdate();
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error deleting existing cinema associations", e);
             throw new RuntimeException(e);
         }
@@ -187,8 +182,7 @@ public class FilmCinemaService {
                 return rs.getString("cinemaNames");
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error getting cinema names for film: " + filmId, e);
         }
 
@@ -220,8 +214,7 @@ public class FilmCinemaService {
             statement.setInt(1, filmId);
             statement.setInt(2, cinemaId);
             statement.executeUpdate();
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error deleting film-cinema association", e);
             throw new RuntimeException(e);
         }

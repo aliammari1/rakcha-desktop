@@ -66,8 +66,7 @@ public class ActorFilmService {
                     """;
             tableCreator.createTableIfNotExists("actor_film", createActorFilmTable);
 
-        }
- catch (Exception e) {
+        } catch (Exception e) {
             log.error("Error creating tables for ActorFilmService", e);
         }
 
@@ -93,8 +92,7 @@ public class ActorFilmService {
 
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error creating film-actor associations", e);
             throw new RuntimeException(e);
         }
@@ -119,8 +117,7 @@ public class ActorFilmService {
                         .biography(rs.getString("biography")).build());
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error getting actors for film: " + filmId, e);
         }
 
@@ -146,8 +143,7 @@ public class ActorFilmService {
                         .releaseYear(rs.getInt("release_year")).build());
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error getting films for actor: " + actorId, e);
         }
 
@@ -167,8 +163,7 @@ public class ActorFilmService {
         try (final PreparedStatement statement = this.connection.prepareStatement(reqDelete)) {
             statement.setLong(1, film.getId());
             statement.executeUpdate();
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error deleting existing actor associations", e);
             throw new RuntimeException(e);
         }
@@ -194,8 +189,7 @@ public class ActorFilmService {
                 return rs.getString("actorNames");
             }
 
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error getting actor names for film: " + filmId, e);
         }
 
@@ -215,8 +209,7 @@ public class ActorFilmService {
             statement.setInt(1, filmId);
             statement.setInt(2, actorId);
             statement.executeUpdate();
-        }
- catch (final SQLException e) {
+        } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error deleting film-actor association", e);
             throw new RuntimeException(e);
         }
