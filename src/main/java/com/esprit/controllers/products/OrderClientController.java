@@ -102,7 +102,9 @@ public class OrderClientController implements Initializable {
         this.order = orderselectionner;
         Platform.runLater(new Runnable() {
             /**
-             * Retrieves connected user information when the UI is ready.
+             * Loads the connected user's information (user id = 4) and assigns it to {@code connectedUser}.
+             *
+             * <p>After retrieving the user, logs the user's email address.</p>
              */
             @Override
             public void run() {
@@ -121,20 +123,10 @@ public class OrderClientController implements Initializable {
 
 
     /**
-     * Initializes the controller after its root element has been completely
-     * processed.
-     * 
-     * <p>
-     * This is a standard initialization method that is called automatically when
-     * the
-     * FXML file is loaded. It can be used to perform any necessary setup
-     * operations.
-     * </p>
+     * No-op implementation of Initializable.initialize; retained to satisfy the interface.
      *
-     * @param url            The location used to resolve relative paths for the
-     *                       root object, or null if the location is not known
-     * @param resourceBundle The resources used to localize the root object, or null
-     *                       if the root object was not localized
+     * <p>Controller initialization is performed by the overloaded {@code initialize(Order)}
+     * method instead.</p>
      */
     @Override
     public void initialize(final URL url, final ResourceBundle resourceBundle) {
@@ -142,16 +134,11 @@ public class OrderClientController implements Initializable {
 
 
     /**
-     * Creates a styled label to display the total price.
-     * 
-     * <p>
-     * This method formats the price with the appropriate currency symbol
-     * and applies styling to make it stand out in the UI.
-     * </p>
-     *
-     * @param prixTotal The total price to display
-     * @return A styled Label component showing the total price
-     */
+         * Create a Label that displays the total price with the "DT" currency suffix and prominent styling.
+         *
+         * @param prixTotal the total price value to display (in DT)
+         * @return the Label showing the formatted price with Verdana 25 font and red text color
+         */
     private Label createPrixTotalLabel(final double prixTotal) {
         final Label prixTotalLabel = new Label(prixTotal + " DT");
         prixTotalLabel.setFont(Font.font("Verdana", 25));
@@ -244,15 +231,10 @@ public class OrderClientController implements Initializable {
 
 
     /**
-     * Decrements the stock quantity of a product after an order is placed.
-     * 
-     * <p>
-     * This method updates the product's quantity in the database to reflect
-     * that items have been purchased.
-     * </p>
+     * Reduce a product's available quantity by the specified amount and persist the change.
      *
-     * @param produit  The product whose stock needs to be updated
-     * @param quantity The quantity to decrement from the stock
+     * @param produit the product to update
+     * @param quantity the number of units to subtract from the product's quantity
      */
     private void decrementStock(final Product produit, final int quantity) {
         // Décrémenter le stock dans la base de données
@@ -294,10 +276,12 @@ public class OrderClientController implements Initializable {
 
 
     /**
-     * Starts the PayPal payment flow for the current order and opens the PayPal approval page.
+     * Initiates a PayPal payment for the controller's total price and navigates the user to PayPal's approval page.
      *
-     * <p>Creates a PayPal payment for the controller's total price and, if successful, navigates the user to
-     * PayPal's approval URL for authorization.</p>
+     * <p>Builds a PayPal payment using the controller's totalPrix as the transaction amount, requests an approval URL,
+     * and, if obtained, opens the approval page for the user to authorize the payment. Logs errors if payment creation fails.</p>
+     *
+     * @param event the UI action event that triggered the payment flow
      */
     @FXML
     void payment(final ActionEvent event) {
@@ -508,11 +492,10 @@ public class OrderClientController implements Initializable {
 
 
     /**
-     * Opens the event client interface in a new window and closes the current window.
-     *
-     * <p>Loads /ui/ui/AffichageEvenementClient.fxml, creates and shows a new Stage containing that scene,
-     * then closes the stage that originated the ActionEvent.</p>
-     */
+         * Open the event client UI in a new window and close the originating window.
+         *
+         * @param event the ActionEvent that triggered this navigation; used to obtain and close the current window
+         */
     @FXML
     void eventClient(final ActionEvent event) {
         try {
@@ -539,14 +522,9 @@ public class OrderClientController implements Initializable {
 
 
     /**
-     * Navigates to the product client interface.
-     * 
-     * <p>
-     * Loads the AfficherProductClient.fxml file, creates a new scene and stage,
-     * and replaces the current stage with the new one.
-     * </p>
+     * Open the product client view in a new window and close the current window.
      *
-     * @param event The action event that triggered this method
+     * @param event the ActionEvent that triggered this navigation
      */
     @FXML
     void produitClient(final ActionEvent event) {
@@ -584,9 +562,7 @@ public class OrderClientController implements Initializable {
 
 
     /**
-     * Placeholder for showing cinema functionality.
-     * 
-     * @param event The action event that triggered this method
+     * Opens the cinema view.
      */
     @FXML
     void showcinema(final ActionEvent event) {

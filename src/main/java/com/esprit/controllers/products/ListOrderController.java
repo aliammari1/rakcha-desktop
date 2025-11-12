@@ -84,14 +84,10 @@ public class ListOrderController {
 
 
     /**
-     * Displays orders in the table view with appropriate column mappings.
-     * 
-     * <p>
-     * This method configures the table columns to display client information
-     * (first name, last name), order address, phone number, date, and status.
-     * It populates the table with data from the OrderService and enables cell
-     * selection.
-     * </p>
+     * Populates the TableView with orders and configures columns to show client and order fields.
+     *
+     * Configures columns for client first name, client last name, address, phone number, date, and status;
+     * loads orders from OrderService into the table and enables cell selection.
      */
     void afficheOrder() {
         this.idnom.setCellValueFactory(cellData -> {
@@ -156,16 +152,10 @@ public class ListOrderController {
 
 
     /**
-     * Initializes the delete column with a button that allows users to delete
-     * orders.
-     * 
-     * <p>
-     * This method creates a custom cell factory for the delete column, adding a
-     * delete
-     * button to each row that, when clicked, removes the corresponding order from
-     * both
-     * the database and the table view.
-     * </p>
+     * Add a per-row delete button to the deleteColumn that removes the corresponding order.
+     *
+     * <p>Each cell produced for the column contains a "Delete" button which, when pressed,
+     * deletes the Order using OrderService and updates the TableView to reflect the removal.</p>
      */
     private void initDeleteColumn() {
         final Callback<TableColumn<Order, Void>, TableCell<Order, Void>> cellFactory = new Callback<>() {

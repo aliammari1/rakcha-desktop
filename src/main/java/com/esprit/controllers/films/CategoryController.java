@@ -151,17 +151,12 @@ public class CategoryController {
 
 
     /**
-     * Retrieves categories from the database and populates the table view.
-     * 
-     * <p>
-     * This method fetches all categories using the CategoryService,
-     * converts them to an ObservableList, and sets this list as the
-     * items source for the category table view. Any exceptions during
-     * this process are logged.
-     * </p>
-     * 
+     * Populate the category TableView with categories loaded from the database.
+     *
+     * Fetches the first page of categories (page 0, size 10) via CategoryService and sets
+     * the resulting list as the TableView's items. Any exceptions during loading are logged.
+     *
      * @see CategoryService#read()
-     * @see FXCollections#observableArrayList(java.util.Collection)
      */
     void readCategoryTable() {
         try {
@@ -245,10 +240,24 @@ public class CategoryController {
         this.idCategory_tableColumn.setVisible(false);
         final Callback<TableColumn<Category, String>, TableCell<Category, String>> stringCellFactory = new Callback<>() {
             /**
-             * Create a table cell that edits Category string values with inline validation and an error tooltip.
+             * Creates an editable table cell for Category string properties that enforces simple inline validation.
              *
-             * @param param the TableColumn for which the cell is created
-             * @return a TableCell that provides an editable text field which enforces that input is not empty and that the first character is an uppercase letter; validation errors are presented to the user as a tooltip on the editing field
+             * @param param the TableColumn this cell factory is associated with
+             * @return a TableCell that provides an editable TextField and displays validation errors as a tooltip on the editing field
+             */
+            /**
+             * Begins editing and installs a validator and an error tooltip on the editing TextField if not already present.
+             *
+             * The validator requires the text to be non-empty and to start with an uppercase letter. While editing,
+             * validation errors are shown in a red-styled tooltip positioned above the TextField; the tooltip is hidden
+             * when the input becomes valid.
+             */
+            /**
+             * Updates the editing TextField's validation tooltip in response to text changes.
+             *
+             * @param observable the observed text property
+             * @param oldValue the previous text value
+             * @param newValue the new text value
              */
             @Override
             /**
@@ -261,12 +270,10 @@ public class CategoryController {
                     private Validator validator;
 
                     /**
-                     * Begins cell editing and, if not already present, installs a validator and error tooltip on
-                     * the editing TextField.
+                     * Begin editing the cell and, if not already present, install a validator and an error tooltip on the editing TextField.
                      *
-                     * <p>The installed validator requires the text to be non-empty and to start with an uppercase
-                     * letter. While editing, validation errors are shown in a red-styled tooltip positioned above
-                     * the TextField; the tooltip is hidden when the input becomes valid.</p>
+                     * <p>The validator requires the text to be non-empty and to start with an uppercase letter. While editing, validation
+                     * errors are shown in a red-styled tooltip positioned above the TextField; the tooltip is hidden when the input becomes valid.</p>
                      */
                     @Override
                     /**
@@ -295,11 +302,12 @@ public class CategoryController {
                             final Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
                             textField.textProperty().addListener(new ChangeListener<String>() {
                                 /**
-                                 * Updates the editing TextField's validation tooltip when the observed text changes.
+                                 * Update the editing TextField's validation tooltip in response to text changes.
                                  *
-                                 * If validation errors exist, sets the tooltip text and displays it above the field; otherwise hides any visible tooltip.
+                                 * If the validator reports errors, set the tooltip text and style and show it above the field;
+                                 * otherwise hide any visible tooltip.
                                  *
-                                 * @param observable the observed String value
+                                 * @param observable the observed string value (the TextField's text property)
                                  * @param oldValue the previous text value
                                  * @param newValue the new text value
                                  */
@@ -345,21 +353,20 @@ public class CategoryController {
 
 
     /**
-     * Configure cell value factories for the category table's ID, description, name, and delete columns.
+     * Configure cell value factories for the category table columns.
      *
-     * The ID column is bound to the Category id property, the name and description columns expose
-     * their values as observable string properties, and the delete column provides a per-row
-     * Button that invokes deleteCategory for the row's category ID when clicked.
+     * Sets the ID column to the Category.id property, exposes name and description as observable
+     * string properties, and supplies a per-row "delete" Button that invokes deleteCategory for that row's category ID.
      */
     private void setupCellValueFactory() {
         this.idCategory_tableColumn.setCellValueFactory(new PropertyValueFactory<Category, Integer>("id"));
         this.descrptionCategory_tableColumn.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<Category, String>, ObservableValue<String>>() {
                     /**
-                     * Create an observable string property containing the category's description.
+                     * Provide an observable string property containing the category's description for the current table row.
                      *
-                     * @param param cell data features that provide the Category for the current table row
-                     * @return a SimpleStringProperty containing the Category's description
+                     * @param param cell data features supplying the Category for the current table row
+                     * @return an ObservableValue<String> containing the category's description
                      */
                     @Override
                     /**
@@ -376,10 +383,10 @@ public class CategoryController {
         this.nomCategory_tableColumn.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<Category, String>, ObservableValue<String>>() {
                     /**
-                     * Create a property holding the category's name.
+                     * Provides an observable string property for a row's category name.
                      *
                      * @param filmcategoryStringCellDataFeatures cell data features whose value is the Category instance for the row
-                     * @return a SimpleStringProperty containing the Category's name
+                     * @return a SimpleStringProperty containing the category's name
                      */
                     @Override
                     /**
@@ -397,10 +404,10 @@ public class CategoryController {
         this.delete_tableColumn.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<Category, Button>, ObservableValue<Button>>() {
                     /**
-                     * Create a cell value that contains a "delete" button for the category in the current table row.
+                     * Creates a table cell value containing a "delete" Button for the row's category.
                      *
-                     * @param param cell data features for the table cell; provides access to the Category instance for this row
-                     * @return an ObservableValue wrapping a Button that, when clicked, deletes the category represented by the row
+                     * @param param cell data features providing access to the Category for this row
+                     * @return an ObservableValue wrapping a Button that deletes the row's category when clicked
                      */
                     @Override
                     /**
@@ -414,7 +421,7 @@ public class CategoryController {
                             /**
                              * Deletes the category represented by the table row that triggered this action.
                              *
-                             * @param event the ActionEvent that triggered the deletion
+                             * @param event the ActionEvent from the row's delete control that triggered the deletion
                              */
                             @Override
                             /**
@@ -444,10 +451,12 @@ public class CategoryController {
     private void setupCellOnEditCommit() {
         this.nomCategory_tableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Category, String>>() {
             /**
-             * Apply the edited cell string to the Category in the edited row and persist the change.
+             * Apply the edited cell value to the Category's name and persist the change.
              *
-             * @param event the CellEditEvent containing the edited value and table position; the event's new value
-             *              will be set as the Category's name for the row identified by event.getTablePosition().getRow()
+             * Updates the Category instance in the edited table row with the event's new value and calls the controller's
+             * updateCategory method to persist the modification.
+             *
+             * @param event the cell edit event whose new string value will be set as the Category's name for the edited row
              */
             @Override
             /**
@@ -471,9 +480,9 @@ public class CategoryController {
         this.descrptionCategory_tableColumn
                 .setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Category, String>>() {
                     /**
-                     * Handle a table-cell edit commit by updating the edited Category's description and persisting the change.
+                     * Update the edited Category's description with the committed cell value and persist the change.
                      *
-                     * @param event the cell edit event containing the new description value and the row position of the edited Category
+                     * @param event the cell edit event containing the committed description and the row index of the edited Category
                      */
                     @Override
                     /**

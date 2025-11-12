@@ -285,9 +285,9 @@ public class DashboardAdminController {
 
 
     /**
-     * Loads cinemas and populates the table view.
+     * Load all cinemas using the default page request and display them in the cinema table.
      *
-     * Reads cinemas from CinemaService and sets them as an ObservableList on listCinema.
+     * Fetches cinemas from CinemaService, wraps the result in an ObservableList, and sets it as the items of listCinema.
      *
      * @since 1.0
      */
@@ -479,9 +479,9 @@ public class DashboardAdminController {
 
 
     /**
-     * Collects the texts of status checkboxes that are currently selected.
+     * Get the labels of status checkboxes that are selected.
      *
-     * @return a list of selected status texts; each element is the checkbox label for a selected status.
+     * @return a list containing the text of each selected status checkbox
      */
     private List<String> getSelectedStatuses() {
         // Récupérer les statuts sélectionnés dans l'AnchorPane de filtrage
@@ -491,9 +491,9 @@ public class DashboardAdminController {
 
 
     /**
-     * Open the Event administration UI in a new window and close the current stage.
+     * Opens the Event administration window and closes the current window.
      *
-     * @param event the ActionEvent whose source window will be replaced by the new stage
+     * @param event the ActionEvent that triggered the navigation
      * @throws IOException if the FXML resource cannot be loaded
      */
     @FXML
@@ -511,11 +511,12 @@ public class DashboardAdminController {
 
 
     /**
-     * Opens the film administration UI in a new window and closes the current window.
+     * Open the film administration window and close the current window.
      *
-     * Loads /ui/films/InterfaceFilm.fxml, creates a new Stage with that scene, sets the window title to
-     * "Film Manegement", shows the new stage, and closes the stage that triggered the event.
+     * Loads the film administration UI, shows it in a new stage titled "Film Management",
+     * and closes the stage that originated the given event.
      *
+     * @param event the ActionEvent that triggered the navigation
      * @throws IOException if the FXML resource cannot be loaded
      */
     @FXML
@@ -553,13 +554,10 @@ public class DashboardAdminController {
 
 
     /**
-     * Opens the Product administration UI in a new window and closes the current window.
+     * Open the Product administration UI in a new window and close the window that produced the event.
      *
-     * Loads the Product admin FXML, creates a new scene and stage for it, shows that stage,
-     * and then closes the window that produced the given event.
-     *
-     * @param event the ActionEvent that triggered opening the Product admin UI
-     * @throws IOException if the FXML resource cannot be loaded
+     * @param event the ActionEvent that triggered the navigation
+     * @throws IOException if the Product admin FXML resource cannot be loaded
      */
     @FXML
     void AfficherProductAdmin(final ActionEvent event) throws IOException {

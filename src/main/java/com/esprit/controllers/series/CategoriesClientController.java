@@ -82,9 +82,9 @@ public class CategoriesClientController {
 
 
     /**
-     * Initializes the controller and populates the category view.
+     * Initialize the controller and populate the category TilePane after FXML loading.
      *
-     * Populates the TilePane with categories retrieved from the category service so the UI is ready after FXML loading.
+     * Calls afficher() to load and render categories into the UI so the view is ready once initialization completes.
      */
     @FXML
     private void initialize() {

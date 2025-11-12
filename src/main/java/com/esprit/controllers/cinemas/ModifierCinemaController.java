@@ -66,12 +66,11 @@ public class ModifierCinemaController implements Initializable {
 
 
     /**
-     * Populate the form fields and logo ImageView from the provided Cinema.
+     * Populate form fields with the given Cinema's data and update the logo preview.
      *
-     * Sets the name and address text fields to the cinema's values and updates the logo ImageView
-     * when the cinema's logo path is non-null and non-empty.
+     * If the cinema has a non-null, non-empty logo path, loads that image and sets it into the logo ImageView.
      *
-     * @param cinema the Cinema whose data will be used to populate the form
+     * @param cinema the Cinema whose values populate the form
      */
     public void initData(Cinema cinema) {
         this.cinema = cinema;
@@ -87,12 +86,12 @@ public class ModifierCinemaController implements Initializable {
 
 
     /**
-     * Saves edits made to the currently selected cinema and opens the cinema dashboard.
+     * Save edits to the currently selected cinema and open the cinema dashboard.
      *
-     * <p>Validates that a cinema is selected and that required fields (name and address)
-     * are filled; shows an informational alert on validation failure or success. Updates
-     * the cinema's name and address, clears its logo path, persists the change via
-     * CinemaService, and loads the DashboardResponsableCinema.fxml interface.</p>
+     * Validates that a cinema is selected and that required fields (name and address)
+     * are filled; updates the cinema's name, address, and logo path, persists the change
+     * via the cinema service, and opens the DashboardResponsableCinema UI. Shows an
+     * informational alert on validation failure or success.
      *
      * @throws IOException if loading the dashboard FXML fails
      * @since 1.0
@@ -134,16 +133,12 @@ public class ModifierCinemaController implements Initializable {
 
 
     /**
-     * Handles file selection for cinema logo images.
-     * 
-     * <p>
-     * This method opens a file chooser dialog allowing users to select an image
-     * file
-     * for the cinema logo. The selected image is then displayed in the logo
-     * ImageView.
-     * </p>
+     * Open a file chooser to select an image for the cinema logo and display it.
      *
-     * @param event the ActionEvent that triggered this method
+     * Stores the chosen file in {@code selectedFile} and sets the {@code tfLogo}
+     * ImageView to the selected image if a file was picked.
+     *
+     * @param event the action event that triggered the file selection
      * @since 1.0
      */
     @FXML

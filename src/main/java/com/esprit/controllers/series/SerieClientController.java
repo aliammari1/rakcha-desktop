@@ -130,9 +130,9 @@ public class SerieClientController {
 
 
     /**
-     * Replaces the current window's scene with the scene defined in EpisodeClient.fxml.
+     * Switches the current window to the scene defined in EpisodeClient.fxml.
      *
-     * @throws IOException if the FXML resource cannot be loaded
+     * @throws IOException if the EpisodeClient.fxml resource cannot be loaded
      */
     @FXML
     void onWatch(final ActionEvent event) throws IOException {
@@ -181,9 +181,10 @@ public class SerieClientController {
 
 
     /**
-     * Load the controller's categorieList with categories fetched from the data source.
+     * Populate the controller's categorieList by fetching categories from the data source.
      *
-     * Fetches page 0 with a size of 10 and assigns the page content to the categorieList field.
+     * Fetches the first page (page 0) with a page size of 10 and assigns the page content to the
+     * categorieList field.
      *
      * @throws SQLException if reading categories from the data source fails
      */
@@ -205,11 +206,14 @@ public class SerieClientController {
 
 
     /**
-     * Populate the ListView with the given series and configure each list cell's UI and action handlers.
+     * Render the provided series into the ListView and configure each cell's display and interactive controls.
      *
-     * @param series list of Series instances to display; each item is rendered with its image, metadata
-     *               (name, director, country, likes/dislikes), and controls for like, dislike, favorite,
-     *               and watch. The method appends separators between items when opening a series for watch.
+     * <p>Each list cell shows the series image and metadata (name, director, country, likes/dislikes) and provides
+     * controls for liking, disliking, favoriting, and watching. Control actions update the cell UI state and persist
+     * changes through the application's services; activating "Watch" opens the episode view for that series and the
+     * cell may include a visual separator when the episode view is opened.</p>
+     *
+     * @param series the list of Series instances to display in the ListView
      */
     public void afficherliste(final List<Series> series) {
         this.listeSerie.getItems().clear();
@@ -327,10 +331,12 @@ public class SerieClientController {
                     /* Button Like + Dislike's Functions */
                     likeButton.setOnAction(new EventHandler<ActionEvent>() {
                         /**
-                         * Toggle and persist a like for the current series item and update the related UI state.
+                         * Toggle the current series' like state, persist the change, and update related UI controls.
                          *
-                         * Increments the item's local click counter, adjusts its number of likes, persists the change
-                         * through the series service, and enables or disables the corresponding dislike button.
+                         * Increments or decrements the series' like count and enables or disables the corresponding dislike button to reflect the new state.
+                         *
+                         * @param event the action event that triggered this handler
+                         * @throws RuntimeException if persisting the like change fails
                          */
                         @Override
                         /**
@@ -372,10 +378,13 @@ public class SerieClientController {
 );
                     dislikeButton.setOnAction(new EventHandler<ActionEvent>() {
                         /**
-                         * Update the item's dislike state and persist the change when the dislike action is invoked.
+                         * Toggle the series item's dislike state, persist the change, and update related UI controls.
                          *
-                         * Increments the item's click-dislike counter, adjusts the item's numberOfDislikes and disliked flag,
-                         * calls the series service to add or remove a dislike as appropriate, and toggles the like button's disabled state.
+                         * Updates the item's internal click counter and dislike count, calls the series service to add or remove a dislike,
+                         * and enables or disables the like button to reflect the current state.
+                         *
+                         * @param event the action event that triggered the dislike handling
+                         * @throws RuntimeException if persisting the dislike change fails
                          */
                         @Override
                         /**
@@ -419,12 +428,11 @@ public class SerieClientController {
                         /**
                          * Toggle the favorite state for the current client on the associated series.
                          *
-                         * Reads the current Client from the window userData, updates the series' local favorite-click counter,
-                         * and creates or removes a Favorite record via the favorite service so the persistent favorite state
-                         * matches the toggled value.
+                         * Updates the series' local favorite click counter and creates or deletes a Favorite record
+                         * so the persistent favorite state matches the toggled value.
                          *
-                         * @param event the ActionEvent that triggered this handler
-                         * @throws RuntimeException if a database error occurs while creating or deleting the favorite
+                         * @param event the ActionEvent triggered by the favorite button
+                         * @throws RuntimeException if a persistence error occurs while creating or deleting the favorite
                          */
                         @Override
                         /**
@@ -554,13 +562,12 @@ public class SerieClientController {
      */
 
     /**
-     * Set up the controller's initial UI state: load series, populate the category combobox,
-     * and attach listeners for category selection, live search, and series selection.
+     * Initialize the controller's UI state by loading series, populating the category ComboBox,
+     * and wiring handlers for category selection, live search, and series selection.
      *
-     * <p>Loads the initial series list and category data, configures the category ComboBox action
-     * to filter series by category, adds a text-change listener on the search field to filter
-     * displayed series, and adds a selection listener on the series ListView to open the
-     * episode view for the selected series.</p>
+     * <p>Loads initial series and category data and configures UI listeners so category changes
+     * filter the displayed series, the search field filters results dynamically, and selecting
+     * a series opens the episode view for that series.</p>
      *
      * @throws SQLException if loading series or category data from the service layer fails
      */
@@ -681,14 +688,13 @@ public class SerieClientController {
 
 
     /**
-     * Load series from the service and populate the main list and top-3 UI area.
-     *
-     * Fetches the first page of series and displays them in the controller's list view,
-     * then retrieves the most-liked series and adds a generated VBox for each into
-     * the top-3 HBox container.
-     *
-     * @throws SQLException if an error occurs while retrieving series from the database
-     */
+         * Load and display the initial series list and populate the top-3 most-liked series area.
+         *
+         * Populates the controller's ListView with the primary series page and fills the top-3 HBox
+         * with VBoxes representing the most-liked series.
+         *
+         * @throws SQLException if an error occurs while retrieving series from the data source
+         */
     @FXML
     private void loadSeriesList() throws SQLException {
         final IServiceSeriesImpl serieService = new IServiceSeriesImpl();
