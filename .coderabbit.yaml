@@ -3,7 +3,7 @@ code_generation:
     path_instructions:
       - path: "src/**/*.java"
         instructions: |
-          Use testfx and junit for testing framework.
+          Use TestFX and JUnit for testing framework.
           do not use mockito and use real classes for testing.
           Test user interactions, accessibility, and error boundaries.
           Generate comprehensive test cases including edge cases and error conditions.
