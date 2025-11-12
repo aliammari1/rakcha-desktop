@@ -79,9 +79,9 @@ public class PaymentController {
     private ComboBox<String> cinemacombox_res;
 
     /**
-     * Initialize the month, year, and CVC spinners used by the payment form.
+     * Initializes the payment form's month, year, and CVC spinners.
      *
-     * Configures MM to accept values 1–12, YY to accept a broad range of years, and cvc to accept values 1–999 by assigning appropriate integer SpinnerValueFactory instances.
+     * Month spinner accepts values 1–12, year spinner accepts a large positive range, and CVC spinner accepts values 1–999.
      */
     @FXML
     void initialize() {
@@ -136,23 +136,17 @@ public class PaymentController {
 
 
     /**
-     * Processes a payment after validating all required input fields.
-     * 
-     * <p>
-     * This method performs comprehensive validation of all payment information
-     * including client name, email, card number, CVC, and expiration date. If all
-     * validations pass, it processes the payment through the PaymentProcessor.
-     * </p>
-     * 
-     * <p>
-     * The method displays appropriate error alerts if any validation fails,
-     * highlighting the problematic field with a red border.
-     * </p>
-     *
-     * @param event the action event that triggered this method
-     * @throws StripeException if there is an error with the Stripe payment
-     *                         processing
-     */
+         * Validate payment inputs and attempt to process the payment.
+         *
+         * <p>
+         * Validates client name, email, card number, CVC, and expiration date; if validation succeeds,
+         * submits the payment via PaymentProcessor. The method presents error alerts and highlights
+         * invalid fields when validation fails, and presents a success or failure alert after attempting payment.
+         * </p>
+         *
+         * @param event the action event that triggered this handler
+         * @throws StripeException if an error occurs during Stripe payment processing
+         */
     @FXML
     private void payment(final ActionEvent event) throws StripeException {
         PaymentController.LOGGER.info(String.valueOf(this.cvc.getValue()));
@@ -268,11 +262,10 @@ public class PaymentController {
 
 
     /**
-     * Verifies if a given integer value can be represented as a three-digit credit
-     * card security code (CVC).
+     * Checks whether the given integer represents a three-digit credit card CVC.
      *
      * @param value the CVC value to check
-     * @return true if the value is a valid three-digit number, false otherwise
+     * @return `true` if the value represents a three-digit number, `false` otherwise
      */
     private boolean check_cvc(final int value) {
         final String cvc_txt = String.valueOf(value);
@@ -281,12 +274,12 @@ public class PaymentController {
 
 
     /**
-         * Checks whether the expiration year and month are not earlier than the current year and month.
-         *
-         * @param value_y  the expiration year
-         * @param value_mm the expiration month (1-12)
-         * @return `true` if `value_y` is greater than or equal to the current year and `value_mm` is greater than or equal to the current month, `false` otherwise
-         */
+     * Determines whether the given expiration year and month are the same as or later than the current year and month.
+     *
+     * @param value_y  the expiration year
+     * @param value_mm the expiration month (1-12)
+     * @return `true` if `value_y` is greater than or equal to the current year and `value_mm` is greater than or equal to the current month, `false` otherwise
+     */
     private boolean check_expDate(final int value_y, final int value_mm) {
         boolean valid = false;
         final LocalDate date = LocalDate.now();
@@ -354,10 +347,10 @@ public class PaymentController {
  * Navigate to the payment failure view and display it on the current stage.
  */ 
 /**
- * Navigate to the reservation list view for the current client and display it on the current stage.
- *
- * @param event the action event that triggered this navigation
- */
+     * Placeholder for navigating to the payment success page.
+     *
+     * <p>Currently a no-op; navigation implementation is commented out and this method does not change application state or UI.</p>
+     */
     private void redirect_to_successPage() {
         // try {
         // FXMLLoader loader = new
@@ -379,9 +372,10 @@ public class PaymentController {
     //
 
     /**
-     * Redirects the user to a "Fail Page" by loading an FXML file, updating the
-     * controller with data from the reservation object, and displaying the scene on
-     * the stage.
+     * Placeholder that would navigate the UI to the payment failure view but currently performs no action.
+     *
+     * <p>The implementation is commented out; its intended behavior is to load the failure FXML, update the
+     * failure controller with reservation data, and replace the current scene.</p>
      */
     private void redirect_to_FailPage() {
         // try {
@@ -404,15 +398,12 @@ public class PaymentController {
     //
 
     /**
-     * Redirects the user to a new scene containing a reservation view client. It
-     * loads the reservation view client fxml file, sets the controller data with
-     * the client ID, and displays the stage in a new window.
+     * Navigate to the client reservation list view for the current reservation's client.
      *
-     * @param event
-     *              triggering of an action, specifically the click on the "Back"
-     *              button, which calls the `redirectToListReservation()` method.
-     *              <p>
-     *              - `event` is an instance of the `ActionEvent` class.
+     * Loads the reservation list FXML, initializes its controller with the current
+     * reservation's client ID, and replaces the current scene to display that view.
+     *
+     * @param event the ActionEvent that triggered the navigation (e.g., Back button click)
      */
     @FXML
     private void redirectToListReservation(final ActionEvent event) {

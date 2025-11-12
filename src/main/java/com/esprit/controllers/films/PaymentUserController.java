@@ -149,16 +149,15 @@ public class PaymentUserController implements Initializable {
 
 
     /**
-     * Initialize the payment UI, populate the cinema selector, and wire listeners that
-     * load movie sessions, enable payment controls, and update the total price.
+     * Initialize UI controls, populate the cinema selector, and wire listeners for session selection and price updates.
      *
-     * <p>Specifically: disables most payment nodes on startup, fills the cinema ComboBox,
-     * adds a listener to load and display movie sessions for the selected cinema, enables
-     * payment controls and configures the seats Spinner when a session is chosen, and
-     * updates the displayed total when the Spinner value changes.</p>
+     * <p>Disables payment controls on startup, enables the film and cinema controls, fills the cinema ComboBox,
+     * adds a listener that loads available movie sessions for the selected film and cinema into the session
+     * CheckComboBox, enables payment-related controls and configures the seat-count spinner when a session is chosen,
+     * and updates the displayed total price when the spinner value changes.</p>
      *
-     * @param url the location used to resolve relative paths for the root object, may be null
-     * @param rb  the ResourceBundle for localized strings used by the UI, may be null
+     * @param url the location used to resolve relative paths for the root object; may be null
+     * @param rb  the ResourceBundle for localized strings used by the UI; may be null
      */
     @Override
     /**
@@ -174,15 +173,15 @@ public class PaymentUserController implements Initializable {
         this.cinemacombox_res.setDisable(false);
         this.cinemacombox_res.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             /**
-             * Populates the session selection control with available movie sessions for the currently selected film and cinema.
+             * Populate the session selector with movie sessions for the film shown in {@code filmLabel_Payment} and the
+             * cinema selected in {@code cinemacombox_res}.
              *
-             * This method clears existing items, enables the session selector, retrieves sessions for the film named in
-             * {@code filmLabel_Payment} and the cinema selected in {@code cinemacombox_res}, and adds a human-readable entry
-             * for each session (index, date, start and end times).
+             * Clears existing session entries, enables the session control, and adds one readable entry per session
+             * (index, date, start–end times).
              *
-             * @param observableValue the observed value that triggered the change (unused by this implementation)
-             * @param s               the previous string value (unused by this implementation)
-             * @param t1              the new string value (unused by this implementation)
+             * @param observableValue the observed value that triggered this change (unused)
+             * @param s               the previous selected cinema name (unused)
+             * @param t1              the newly selected cinema name (unused)
              */
             @Override
             /**
@@ -217,13 +216,11 @@ public class PaymentUserController implements Initializable {
         this.checkcomboboxmoviesession_res.getCheckModel().getCheckedItems()
                 .addListener(new ListChangeListener<String>() {
                     /**
-                     * Updates controller state and UI when a movie-session entry is added to the selection.
+                     * Reacts to additions in the checked session list by selecting the corresponding movie session and enabling payment controls.
                      *
-                     * When invoked for added items, sets the controller's active MovieSession from the
-                     * selected film and cinema, enables payment-related UI nodes, and configures the
-                     * seat-count spinner to the hall's capacity with an initial value of 1.
+                     * When an item is added, sets the controller's active MovieSession for the current film and cinema, enables all nodes in the payment pane, and configures the seat-count spinner with a minimum of 1 and a maximum equal to the session's hall seat capacity (initial value 1).
                      *
-                     * @param change the change event from the checked session list; used to detect added items
+                     * @param change the list-change event for checked session entries; processed to detect added items
                      */
                     @Override
                     /**
@@ -260,11 +257,11 @@ public class PaymentUserController implements Initializable {
 );
         this.nbrplacepPayment_Spinner.valueProperty().addListener(new ChangeListener<Integer>() {
             /**
-             * Update the total price label by reading available movie sessions for the currently
-             * selected film and cinema and multiplying each session's price by the current
-             * number-of-seats spinner value.
+             * Recomputes and updates the total price label for the currently selected film and cinema using the current seat count.
              *
-             * @param observableValue the observed integer property that triggered the change (may be unused)
+             * This reads the movie sessions for the selected film and cinema, multiplies each session's price by the number-of-seats spinner value, and sets the total label text.
+             *
+             * @param observableValue the observable integer property that triggered the change
              * @param integer the previous value reported by the observable
              * @param t1 the new value reported by the observable
              */
@@ -383,21 +380,19 @@ public class PaymentUserController implements Initializable {
 
 
     /**
-     * Validates all payment input fields.
-     * 
-     * <p>
-     * This method performs comprehensive validation of all payment input fields
-     * including:
-     * <ul>
-     * <li>Credit card number validation (must be a valid Visa card format)</li>
-     * <li>Expiration month validation (must be a number between 1-12)</li>
-     * <li>Expiration year validation (must be current year or later)</li>
-     * <li>CVC code validation (must be a valid numeric code)</li>
-     * </ul>
-     * </p>
-     *
-     * @return true if all input fields are valid, false otherwise
-     */
+         * Checks that all payment form fields contain valid values.
+         *
+         * <p>Performs these validations:
+         * <ul>
+         *   <li>Credit card number matches the Visa format (13 or 16 digits, starts with '4').</li>
+         *   <li>Expiration month is numeric and between 1 and 12 inclusive.</li>
+         *   <li>Expiration year is numeric and not earlier than the current year.</li>
+         *   <li>CVC is present and numeric.</li>
+         * </ul>
+         * </p>
+         *
+         * @return true if all input fields are valid, false otherwise
+         */
     private boolean isValidInput() {
         if (!this.isValidVisaCardNo(this.carte.getText())) {
             this.showError("Numéro de carte invalide", "Veuillez entrer un numéro de carte Visa valide.");
@@ -427,23 +422,10 @@ public class PaymentUserController implements Initializable {
 
 
     /**
-     * Takes a string as input and checks if it matches the valid Visa card number
-     * format, which is a 13-digit number consisting of four digits followed by a
-     * hyphen and then another four digits.
+     * Determines whether a string is a valid Visa card number.
      *
-     * @param text
-     *             13-digit credit card number to be validated.
-     * @returns a boolean value indicating whether the given string represents a
-     *          valid Visa card number or not.
-     *          <p>
-     *          - The function returns a boolean value indicating whether the given
-     *          text represents a valid Visa card number or not. - The output is
-     *          based on the pattern `(^4[0-9]{12}
-(?:[0-9]{3}
-)?$)` which is used to
-     *          validate the Visa card number. - The pattern checks that the card
-     *          number consists of 12 digits, with the first 4 digits being "4", and
-     *          optionally followed by a further 3 digits.
+     * @param text the card number string to validate (expected to contain only digits)
+     * @return `true` if the string starts with '4' and contains exactly 13 or 16 digits, `false` otherwise
      */
     private boolean isValidVisaCardNo(final String text) {
         final String regex = "^4[0-9]{12}(?:[0-9]{3})?$";
@@ -455,17 +437,10 @@ public class PaymentUserController implements Initializable {
 
 
     /**
-     * Creates an Alert object with an error title and message, displays it using
-     * the `showAndWait()` method.
+     * Displays an error alert with the given title and message.
      *
-     * @param title
-     *                title of an error message that is displayed in the alert box
-     *                when
-     *                the `showError()` method is called.
-     * @param message
-     *                message to be displayed as the content of an error alert when
-     *                the
-     *                function is called.
+     * @param title   the alert window title
+     * @param message the content text shown in the alert body
      */
     private void showError(final String title, final String message) {
         final Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -477,15 +452,10 @@ public class PaymentUserController implements Initializable {
 
 
     /**
-     * Sets the values of class variables `client` and `moviesession`, and updates
-     * the text of a label `total`.
+     * Initializes the controller for a given movie session and client and updates the total label to show the session price.
      *
-     * @param p
-     *               MovieSession object, which is assigned to the class instance
-     *               variable `moviesession`.
-     * @param client
-     *               Client object that is associated with the MovieSession object
-     *               being initialized.
+     * @param p      the MovieSession to initialize the controller with; its price is displayed in the total label
+     * @param client the Client who will be associated with the purchase
      */
     public void init(final MovieSession p, final Client client) {
         this.client = client;
@@ -495,18 +465,14 @@ public class PaymentUserController implements Initializable {
 
 
     /**
-     * Initializes the payment controller with movie session, client, and selected
-     * seats information.
-     * 
-     * <p>
-     * This method configures the payment view with the selected movie session,
-     * client details,
-     * and calculates the total price based on the number of seats selected.
-     * </p>
+     * Initialize the controller with a movie session, client, and preselected seats.
      *
-     * @param moviesession  the movie session for which tickets are being purchased
-     * @param client        the client who is making the payment
-     * @param selectedSeats the list of seats selected by the client
+     * Sets the film label, computes and displays the total price based on selected seats,
+     * and locks the seat-count spinner to the number of provided seats.
+     *
+     * @param moviesession  the movie session being purchased
+     * @param client        the client making the purchase
+     * @param selectedSeats the list of seats already selected for this purchase
      */
     public void initWithSeats(MovieSession moviesession, Client client, List<Seat> selectedSeats) {
         this.moviesession = moviesession;
@@ -525,15 +491,9 @@ public class PaymentUserController implements Initializable {
 
 
     /**
-     * Loads and displays a FXML file named "/ui/films/filmuser.fxml" using Java's
-     * `FXMLLoader` class, creating a new stage and scene to display the content.
+     * Switches the current window's scene to the film user view defined at "/ui/films/filmuser.fxml".
      *
-     * @param event
-     *              ActionEvent object that triggered the method execution,
-     *              providing
-     *              the necessary information about the action that was performed.
-     *              <p>
-     *              Event: An ActionEvent object representing a user event.
+     * If loading or setting the scene fails, the exception is logged at SEVERE level.
      */
     public void switchtfillmmaa(final ActionEvent event) {
         try {
@@ -550,18 +510,13 @@ public class PaymentUserController implements Initializable {
 
 
     /**
-     * Creates a PDF receipt for a ticket purchase.
-     * 
-     * <p>
-     * This method generates a PDF document containing receipt information for a
-     * ticket purchase.
-     * It creates a new document, adds a page, and writes the ticket details before
-     * saving the file.
-     * </p>
+     * Create a PDF receipt containing the ticket's purchase details.
      *
-     * @param filename the name of the output PDF file
-     * @param ticket   the ticket object containing purchase details
-     * @throws IOException if there is an error creating or writing to the PDF file
+     * <p>The generated PDF is written to the provided filename and includes information derived from the given ticket.</p>
+     *
+     * @param filename the path of the output PDF file
+     * @param ticket   the ticket whose purchase details will be included in the receipt
+     * @throws IOException if an I/O error occurs while writing the PDF file
      */
     public void createReceiptPDF(final String filename, final Ticket ticket) throws IOException {
         try (final PDDocument document = new PDDocument()) {
@@ -581,10 +536,10 @@ public class PaymentUserController implements Initializable {
 
 
     /**
-     * Opens a PDF file using the desktop application.
+     * Open the specified PDF file using the system's default PDF application.
      *
-     * @param filename the name of the PDF file to be opened
-     * @throws IOException if there is an error opening the file
+     * @param filename path to the PDF file to open
+     * @throws IOException if an I/O error occurs while launching the associated application
      */
     public void openPDF(final String filename) throws IOException {
         if (Desktop.isDesktopSupported()) {

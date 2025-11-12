@@ -193,10 +193,9 @@ public class DashboardClientController {
 
 
     /**
-     * Show the list of accepted cinemas and hide the planning pane.
+     * Display accepted cinemas in the main list and hide the planning pane.
      *
-     * Clears the cinema flow pane, reloads and displays accepted cinemas, makes
-     * the client cinema list visible, and hides the planning pane.
+     * Clears the cinema flow pane and reloads accepted cinemas into the view.
      */
     @FXML
     void showListCinema(final ActionEvent event) {
@@ -235,9 +234,9 @@ public class DashboardClientController {
 
 
     /**
-     * Display an information alert dialog containing the given message.
+     * Show an information alert dialog with the specified message.
      *
-     * @param message the text to show as the alert content
+     * @param message the text to display in the alert dialog
      */
     @FXML
     private void showAlert(final String message) {
@@ -468,13 +467,10 @@ public class DashboardClientController {
 
 
     /**
-     * Show a modal dialog containing a WebView map centered at the given coordinates.
+     * Display a modal dialog with an embedded WebView map centered at the given coordinates.
      *
-     * The dialog loads the embedded map page and updates the map marker to the provided
-     * latitude and longitude.
-     *
-     * @param lat latitude of the map marker in decimal degrees
-     * @param lon longitude of the map marker in decimal degrees
+     * @param lat latitude in decimal degrees to position the map marker
+     * @param lon longitude in decimal degrees to position the map marker
      */
     private void openMapDialog(final double lat, final double lon) {
         // Create a new dialog
@@ -545,13 +541,13 @@ public class DashboardClientController {
 
 
     /**
-         * Load movie sessions for the week starting at the given date for the specified cinema.
-         *
-         * @param startDate the first date of the week (inclusive) used to compute the week's range
-         * @param cinema    the cinema whose movie sessions should be loaded
-         * @return a map from each date in the week starting at {@code startDate} to the list of {@code MovieSession}
-         *         scheduled at {@code cinema} on that date
-         */
+     * Retrieve movie sessions for the 7-day period starting at the given date for the specified cinema.
+     *
+     * @param startDate the first date of the 7-day period (inclusive)
+     * @param cinema    the cinema whose sessions are requested
+     * @return a map whose keys are each date in the 7-day period beginning at {@code startDate} and whose values are
+     *         the lists of {@code MovieSession} scheduled at {@code cinema} on those dates
+     */
     private Map<LocalDate, List<MovieSession>> loadCurrentWeekPlanning(final LocalDate startDate, final Cinema cinema) {
         // Obtenir la date de fin de la semaine courante (dimanche)
         final LocalDate endDate = startDate.plusDays(6);
@@ -631,10 +627,10 @@ public class DashboardClientController {
 
 
     /**
-     * Create a StackPane containing a card that summarizes a movie session.
+     * Builds a UI card representing the given movie session.
      *
-     * @param moviesession MovieSession whose film, cinema hall, start/end time, and price populate the card.
-     * @return A StackPane containing a right-aligned card that displays the film name, cinema hall name, screening time, and price.
+     * @param moviesession the MovieSession to represent in the card
+     * @return a StackPane containing a right-aligned card that displays the film name, cinema hall name, screening time, and price
      */
     private StackPane createMovieSessionCard(final MovieSession moviesession) {
         final StackPane cardContainer = new StackPane();
@@ -677,11 +673,11 @@ public class DashboardClientController {
 
 
     /**
-     * Initialize the controller's UI: populate cinema cards, configure controls, and set initial visibility.
+     * Set up the controller UI: populate cinema cards, configure controls, and set initial visibility.
      *
-     * <p>Loads accepted cinemas into the cinemaFlowPane, populates the tricomboBox with sort/filter options,
-     * attaches a listener to the search bar to filter displayed cinemas as the query changes, and sets the
-     * initial visibility state for listCinemaClient, PlanningPane, AnchorComments, and filterAnchor.</p>
+     * Initializes the cinema list with accepted cinemas, fills the tri-state combo box with sorting options,
+     * attaches a live listener to the search field to filter displayed cinemas, and establishes the initial
+     * visibility state for listCinemaClient, PlanningPane, AnchorComments, and filterAnchor.
      */
     public void initialize() {
         if (cinemaFlowPane != null) {
@@ -872,9 +868,9 @@ public class DashboardClientController {
 
 
     /**
-     * Retrieve unique cinema names.
+     * Return the unique cinema names from all cinemas.
      *
-     * @return a list of unique cinema names.
+     * @return the list of unique cinema names in encounter order.
      */
     public List<String> getCinemaNames() {
         // Récupérer tous les cinémas depuis la base de données
@@ -909,11 +905,11 @@ public class DashboardClientController {
 
 
     /**
-         * Open the movies UI (filmuser.fxml) in a new window and close the current window.
-         *
-         * @param event the triggering ActionEvent; the source node's window will be closed after the new window opens
-         * @throws IOException if the FXML resource cannot be loaded
-         */
+     * Display the movies UI (filmuser.fxml) in a new window and close the current window.
+     *
+     * @param event the ActionEvent whose source window will be closed after the new window opens
+     * @throws IOException if the FXML resource cannot be loaded
+     */
     @FXML
     void afficherMoviesClient(final ActionEvent event) throws IOException {
         final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/films/filmuser.fxml"));
@@ -1013,10 +1009,10 @@ public class DashboardClientController {
 
 
     /**
-     * Retrieve all comments for the specified cinema.
+     * Get all comments for the specified cinema.
      *
-     * @param cinemaId the ID of the cinema whose comments to retrieve
-     * @return a list of CinemaComment objects belonging to the specified cinema ID
+     * @param cinemaId the cinema's identifier
+     * @return a List of CinemaComment objects belonging to the specified cinema
      */
     private List<CinemaComment> getAllComment(final Long cinemaId) {
         final CinemaCommentService cinemaCommentService = new CinemaCommentService();
@@ -1118,10 +1114,8 @@ public class DashboardClientController {
 
 
     /**
-     * Close the comments overlay and restore the main cinema list view.
-     *
-     * @param event the MouseEvent that triggered closing the comments view
-     */
+         * Close the comments overlay and restore visibility of the main cinema list.
+         */
     @FXML
     void closeCommets(final MouseEvent event) {
         this.listCinemaClient.setOpacity(1);

@@ -29,7 +29,9 @@ public class SentimentAnalysisController {
     private final SentimentAnalyzer sentimentAnalyzer;
 
     /**
-     * Creates a SentimentAnalysisController and initializes the internal VADER SentimentAnalyzer.
+     * Construct a SentimentAnalysisController and initialize its internal VADER SentimentAnalyzer.
+     *
+     * The controller is created with a ready-to-use SentimentAnalyzer instance for subsequent sentiment operations.
      */
     public SentimentAnalysisController() {
         this.sentimentAnalyzer = new SentimentAnalyzer();
@@ -37,18 +39,10 @@ public class SentimentAnalysisController {
 
 
     /**
-     * Analyzes the sentiment of the given text using VADER algorithm.
-     * 
-     * <p>
-     * VADER returns sentiment scores including compound, positive, neutral, and
-     * negative.
-     * The compound score is normalized between -1 (most extreme negative) and +1
-     * (most extreme positive).
-     * </p>
+     * Classifies the sentiment of the given text as Positive, Negative, or Neutral.
      *
-     * @param text the input text to be analyzed for sentiment
-     * @return a string containing sentiment classification: "Positive", "Negative",
-     *         or "Neutral"
+     * @param text the input text to analyze
+     * @return `Positive`, `Negative`, or `Neutral` based on the text's sentiment
      * @throws IllegalArgumentException if text is null
      * @since 2.0
      */
@@ -86,10 +80,10 @@ public class SentimentAnalysisController {
 
 
     /**
-     * Produce a formatted sentiment label and polarity scores for the given text.
+     * Return a formatted sentiment label and polarity scores for the given text.
      *
      * @param text the text to analyze; must not be null
-     * @return a string in the form "<Sentiment> (Compound: <compound>, Pos: <positive>, Neg: <negative>, Neu: <neutral>)"
+     * @return a string formatted as "<Sentiment> (Compound: <compound>, Pos: <positive>, Neg: <negative>, Neu: <neutral>)" with numeric scores rounded to three decimals
      * @throws IllegalArgumentException if {@code text} is null
      * @throws RuntimeException if an error occurs during analysis
      */
@@ -164,11 +158,11 @@ public class SentimentAnalysisController {
 
 
     /**
-     * Return a map of sentiment polarity scores for the provided text.
+     * Obtain sentiment polarity scores for the provided text.
      *
-     * @param text the input text to analyze
-     * @return a map with keys "compound", "positive", "negative", and "neutral" mapped to their corresponding scores
-     * @throws IllegalArgumentException if {@code text} is null
+     * @param text the input text to analyze; must not be null
+     * @return a map with keys "compound", "positive", "negative", and "neutral" mapped to their respective float scores
+     * @throws IllegalArgumentException if text is null
      * @throws RuntimeException if an error occurs while performing sentiment analysis
      */
     public HashMap<String, Float> getAllSentimentScores(final String text) {

@@ -79,9 +79,15 @@ public class EpisodeController {
     private TableView<Episode> tableView;
 
     /**
-     * Clears existing data in the `tableView`, then retrieves new data from an API
-     * and displays it in the table with buttons for deleting and editing each
-     * episode.
+     * Refreshes the episode management view by clearing input fields and UI state,
+     * loading the latest series into the series dropdown, and loading episodes into
+     * the table with per-row Delete and Edit controls.
+     *
+     * <p>After calling this method the UI inputs (title, number, season, image and
+     * video paths) are reset, the serie combo box is repopulated from the series
+     * service, and the table is rebuilt. Each table row includes a Delete button
+     * that removes the episode and shows a confirmation alert, and an Edit button
+     * that opens the episode editor dialog.</p>
      */
     private void ref() {
         this.tableView.getItems().clear();
@@ -140,7 +146,10 @@ public class EpisodeController {
 
 
             /**
-             * Sets the graphic of this cell based on its empty state.
+             * Update the cell's graphic: clear it when the cell is empty, otherwise display the cell's button.
+             *
+             * @param item unused cell item (always null for this Void cell)
+             * @param empty true if the cell is empty and should show no graphic, false otherwise
              */
             @Override
             protected void updateItem(final Void item, final boolean empty) {
@@ -177,7 +186,10 @@ public class EpisodeController {
 
 
             /**
-             * Sets the graphic of this cell based on its empty state.
+             * Update the cell's graphic: clear it when the cell is empty, otherwise display the cell's button.
+             *
+             * @param item unused cell item (always null for this Void cell)
+             * @param empty true if the cell is empty and should show no graphic, false otherwise
              */
             @Override
             protected void updateItem(final Void item, final boolean empty) {
@@ -208,14 +220,13 @@ public class EpisodeController {
 
 
     /**
-     * Open an edit dialog prefilled from the given episode, allow the user to modify
-     * title, episode number, season, image, video, and series, and persist the changes.
+     * Open a dialog to edit the provided Episode and save the changes.
      *
-     * The dialog is populated with the episode's current values; when the user
-     * confirms, the episode is updated via the episode service, the view is
-     * refreshed, and a success alert is shown.
+     * The dialog is prefilled with the episode's title, number, season, image, video, and series.
+     * If the user confirms, the episode is updated via the episode service, the view is refreshed,
+     * and a success alert is shown.
      *
-     * @param episode the Episode whose values will be edited and persisted
+     * @param episode the Episode whose values are used to prefill the dialog and will be persisted if confirmed
      */
     private void modifierEpisode(final Episode episode) {
         final IServiceEpisodeImpl iServiceEpisode = new IServiceEpisodeImpl();
@@ -443,10 +454,9 @@ public class EpisodeController {
     // Method to check if the selected file is a video file
 
     /**
-     * Checks whether the file is a video based on its file-name extension.
-     * Recognizes `mp4`, `avi`, and `mkv` extensions (case-insensitive).
+     * Determines whether a file is a supported video based on its filename extension.
      *
-     * @return `true` if the file extension is `mp4`, `avi`, or `mkv`, `false` otherwise.
+     * @return `true` if the file extension is `mp4`, `avi`, or `mkv` (case-insensitive), `false` otherwise.
      */
     private boolean isVideoFile(final File file) {
         final String fileName = file.getName();
@@ -475,11 +485,11 @@ public class EpisodeController {
 
 
     /**
-     * Validate that the title field contains text.
+     * Check whether the title input contains text.
      *
-     * If the title field is empty, sets the validation label to "Please enter a valid Title".
+     * If the title field is empty, sets the controller's `titrecheck` label to "Please enter a valid Title".
      *
-     * @return `true` if the title field contains non-empty text, `false` otherwise.
+     * @return true if the title field contains non-empty text, false otherwise.
      */
     boolean titrecheck() {
         if ("" != titreF.getText()) {
@@ -515,9 +525,9 @@ public class EpisodeController {
 
 
     /**
-     * Validate that an image path has been selected.
+     * Checks whether an image path has been set for the episode.
      *
-     * If no image path is set, updates the `picturechek` label with "Please select a Picture".
+     * If no image path is present, updates the `picturechek` label to "Please select a Picture".
      *
      * @return `true` if an image path is present, `false` otherwise.
      */
@@ -573,11 +583,11 @@ public class EpisodeController {
 
 
     /**
-     * Validate that a series is selected in the series ComboBox.
+     * Checks whether a series is selected in the series ComboBox.
      *
      * If no series is selected, sets the `seriecheck` label text to "Please select a Serie".
      *
-     * @return true if a series is selected, false otherwise.
+     * @return `true` if a series is selected, `false` otherwise.
      */
     boolean seriecheck() {
         if (null != serieF.getValue()) {
@@ -608,9 +618,9 @@ public class EpisodeController {
 
 
     /**
-     * Creates a new Episode from the current form values, persists it, and notifies a configured phone number via SMS.
+     * Create an Episode from current form values, persist it, send an SMS notification to a configured number, and refresh the view.
      *
-     * Performs form validation before saving and refreshes the view on success.
+     * Validates form inputs before saving; on success clears validation messages, persists the episode, sends a notification SMS, refreshes the table and UI.
      *
      * @param event the ActionEvent that triggered this handler
      */
@@ -730,11 +740,9 @@ public class EpisodeController {
 
 
     /**
-     * Placeholder event handler invoked when the UI action to show movies is triggered.
-     * Currently has no implementation and is reserved for future handling (e.g., navigation
-     * to a movies view or loading movie data).
+     * Handle the UI action that requests showing the movies view.
      *
-     * @param actionEvent the event that triggered this handler
+     * @param actionEvent the event that triggered this action
      */
     public void showmovies(final ActionEvent actionEvent) {
     }

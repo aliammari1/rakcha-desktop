@@ -91,7 +91,7 @@ public class DesignCategorieAdminController {
 
 
     /**
-     * Initializes the controller: attaches a listener to the SearchBar to update table contents on text change, populates the category table, and initializes the delete column.
+     * Initialize the controller by setting up the search bar listener, populating the category table, and configuring the delete column.
      */
     @FXML
     void initialize() {
@@ -106,9 +106,13 @@ public class DesignCategorieAdminController {
 
 
     /**
-     * Create a new product category from the current form values, validate the input,
-     * persist the category, and add it to the table view; displays validation errors
-     * or a confirmation alert as appropriate.
+     * Create and persist a product category from the current form inputs and add it to the table view.
+     *
+     * Validates that name and description are not empty and that description has at least 20 characters;
+     * shows an error Alert on validation failure. On success, persists the new ProductCategory via
+     * CategoryService, adds it to the table view, refreshes the view, and shows a confirmation Alert.
+     *
+     * @param event the action event that triggered the handler
      */
     @FXML
     void ajouter_categorie(final ActionEvent event) {
@@ -157,10 +161,12 @@ public class DesignCategorieAdminController {
     private void initDeleteColumn() {
         final Callback<TableColumn<ProductCategory, Void>, TableCell<ProductCategory, Void>> cellFactory = new Callback<>() {
             /**
-             * Creates a table cell that contains a "Delete" button which removes the corresponding
-             * ProductCategory from the underlying data store and the table when clicked.
+             * Create a TableCell containing a "Delete" button that removes the row's ProductCategory.
              *
-             * @param param the table column used to create the cell
+             * The button deletes the associated ProductCategory via CategoryService, removes the item
+             * from the table's items, and refreshes the table view.
+             *
+             * @param param the TableColumn for which the cell is being created
              * @return a TableCell whose graphic is a "Delete" button that deletes the row's ProductCategory
              */
             @Override
@@ -355,9 +361,9 @@ public class DesignCategorieAdminController {
 
 
     /**
-     * Show the category filter panel and populate it with a checkbox for each available category.
+     * Reveals the category filter panel and populates it with a CheckBox for each available category.
      *
-     * Sets the category table view opacity to 0.5, makes the filter anchor visible, clears previously stored checkboxes, retrieves unique category names via getProductCategory(), creates a VBox containing a label and a CheckBox for each category (adding each CheckBox to addressCheckBoxes), and adds the VBox to filterAnchor.
+     * The category table is dimmed (opacity set to 0.5), any previously stored checkboxes are cleared, and a VBox containing a "Category" label and one CheckBox per category is added to the filter anchor.
      */
     @FXML
     void filtrer(final MouseEvent event) {
@@ -401,11 +407,13 @@ public class DesignCategorieAdminController {
 
 
     /**
-     * Apply checkbox-based filters to the category table and restore the view layout.
+     * Apply category checkbox filters to the table and restore the main view layout.
      *
-     * Reads selected category names from the UI checkboxes, filters all ProductCategory
-     * items to those whose name is selected, sets the filtered items on the
-     * categorie_tableview, and adjusts visibility/opacity of related panes.
+     * Reads selected category names from the UI checkboxes, filters all available
+     * ProductCategory items to those whose name is selected, updates the table's
+     * items with the filtered list, and restores visibility and opacity of related panes.
+     *
+     * @param event the ActionEvent that triggered the filter action
      */
     @FXML
     /**
@@ -478,13 +486,10 @@ public class DesignCategorieAdminController {
 
 
     /**
-         * Open the event UI in a new window and close the window that triggered the action.
-         *
-         * Loads the FXML resource at "/ui//ui/.fxml", shows it in a new Stage, and closes the Stage
-         * obtained from the provided ActionEvent's source node.
-         *
-         * @param event the ActionEvent whose source window will be closed after the new window opens
-         */
+     * Open the Event UI in a new window and close the window that triggered the action.
+     *
+     * @param event the ActionEvent whose source window will be closed after the new window opens
+     */
     @FXML
     void eventClient(final ActionEvent event) {
         try {

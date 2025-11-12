@@ -52,19 +52,11 @@ public class SeatSelectionController {
     private List<Seat> selectedSeats = new ArrayList<>();
 
     /**
-     * Initializes the seat selection controller with movie session and client
-     * information.
-     * 
-     * <p>
-     * This method configures the controller with the provided movie session and
-     * client
-     * data, then loads the seat layout based on the cinema hall associated with the
-     * session.
-     * </p>
+     * Initialize the controller with the specified movie session and client and load the seat layout.
      *
-     * @param moviesession the movie session for which seats are being selected
-     * @param client       the client who is selecting the seats
-     * @throws IllegalArgumentException if either moviesession or client is null
+     * @param moviesession the MovieSession whose cinema hall seats should be displayed
+     * @param client       the Client performing the selection
+     * @throws IllegalArgumentException if {@code moviesession} or {@code client} is {@code null}
      */
     public void initialize(MovieSession moviesession, Client client) {
         if (moviesession == null || client == null) {
@@ -80,9 +72,8 @@ public class SeatSelectionController {
     /**
      * Populate the seatGrid with buttons representing seats for the current movie session's cinema hall.
      *
-     * Retrieves seat data for the session's cinema hall, creates a Button for each seat position,
-     * disables and styles buttons for occupied seats, styles available seats, and attaches click
-     * handlers that toggle seat selection and update the UI.
+     * Occupied seats are disabled and styled red; available seats are styled green. Clicking a seat
+     * toggles its selection state and updates the controller's selectedSeats list.
      */
     private void loadSeats() {
         SeatService seatService = new SeatService();
@@ -160,10 +151,11 @@ public class SeatSelectionController {
 
 
     /**
-     * Transition to the payment screen using the currently selected seats.
+     * Navigate to the payment screen for the currently selected seats.
      *
-     * <p>Loads the payment view and initializes its controller with the current movie session,
-     * client, and selected seats, then replaces the current scene with the payment scene.</p>
+     * <p>If no seats are selected this method returns without changing the UI.
+     * Otherwise it loads the payment view, initializes its controller with the current
+     * movie session, client, and selected seats, and replaces the current scene with the payment scene.</p>
      *
      * @throws IOException if the payment view cannot be loaded
      */

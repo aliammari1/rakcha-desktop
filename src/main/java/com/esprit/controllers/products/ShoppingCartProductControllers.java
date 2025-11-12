@@ -70,10 +70,9 @@ public class ShoppingCartProductControllers implements Initializable {
     private FontIcon retour;
 
     /**
-     * Load and display the current user's shopping cart once the FXML UI has been initialized.
+     * Initialize the controller and schedule loading of the current user's shopping cart on the JavaFX application thread.
      *
-     * This method schedules loading on the JavaFX application thread so UI components
-     * are populated after the root element is fully processed.
+     * Scheduling the load with Platform.runLater ensures cart UI components are populated after the FXML root is fully processed.
      *
      * @param url            location used to resolve relative paths for the root object, or null if unknown
      * @param resourceBundle resources used to localize the root object, or null if not localized
@@ -104,11 +103,9 @@ public class ShoppingCartProductControllers implements Initializable {
 
 
     /**
-     * Load the current user's shopping cart items into the UI.
+     * Populate the cartFlowPane with the current window user's shopping cart items and record added product nodes in produitVBoxMap.
      *
-     * Fetches shopping cart entries for the window's current Client, creates a product VBox
-     * for each product that is not already present in the UI, adds the VBox to `cartFlowPane`,
-     * and records the mapping from product ID to its VBox in `produitVBoxMap`.
+     * @throws RuntimeException if the user's shopping cart cannot be read from the service
      */
     private void loadAcceptedShoppingCart() {
         // Récupérer toutes les produits depuis le service
@@ -136,12 +133,12 @@ public class ShoppingCartProductControllers implements Initializable {
 
 
     /**
-     * Create a JavaFX Label that displays the total price.
+     * Creates a JavaFX Label that shows the given total price followed by " DT".
      *
-     * The label's text is formatted as "{prixTotal} DT" and styled with Verdana 20 font and a red text color.
+     * The label's text is formatted as "{prixTotal} DT", uses Verdana 20 font, and is styled with red text color.
      *
      * @param prixTotal the total price value to display
-     * @return a Label containing the formatted total price with applied font and color styling
+     * @return a Label containing the formatted total price
      */
     private Label createPrixTotalLabel(final double prixTotal) {
         // Créez le Label du prix total ici
@@ -354,12 +351,12 @@ public class ShoppingCartProductControllers implements Initializable {
 
 
     /**
-         * Check whether the product has at least the requested quantity in stock.
-         *
-         * @param produit the product whose stock is being checked
-         * @param quantity the number of units requested
-         * @return `true` if the product's stock quantity is greater than or equal to `quantity`, `false` otherwise
-         */
+     * Determine if a product has at least the requested quantity in stock.
+     *
+     * @param produit the product to check
+     * @param quantity the number of units requested
+     * @return `true` if the product has at least `quantity` units available, `false` otherwise
+     */
     private boolean isStockAvailable(final Product produit, final int quantity) {
         // Comparer la quantité demandée avec la quantité disponible en stock
         return produit.getQuantity() >= quantity;
@@ -367,13 +364,10 @@ public class ShoppingCartProductControllers implements Initializable {
 
 
     /**
-     * Increment the shopping cart item's quantity by one if stock permits.
+     * Increase the displayed quantity and the ShoppingCart entry's quantity by one if stock is available; otherwise show a warning alert.
      *
-     * Updates the provided quantity TextField and the ShoppingCart's quantity when
-     * stock is sufficient; otherwise displays a warning alert.
-     *
-     * @param quantityTextField the TextField that displays the current quantity for the item
-     * @param shoppingcart      the ShoppingCart entry whose quantity will be incremented
+     * @param quantityTextField the TextField showing the current item quantity; will be updated on success
+     * @param shoppingcart the ShoppingCart entry to increment
      */
     private void increaseQuantity(final TextField quantityTextField, final ShoppingCart shoppingcart) {
         final int currentQuantity = Integer.parseInt(quantityTextField.getText());
@@ -415,12 +409,12 @@ public class ShoppingCartProductControllers implements Initializable {
 
 
     /**
-         * Compute the total price for a product given its ID and quantity.
-         *
-         * @param idProduct ID of the product.
-         * @param quantity  Number of units to price.
-         * @return the total price for the specified quantity of the product.
-         */
+     * Computes the total price for the given product ID and quantity.
+     *
+     * @param idProduct the product ID
+     * @param quantity  the number of units
+     * @return the total price for the specified product quantity
+     */
     private double prixProduct(final Long idProduct, final int quantity) {
         final ProductService produitService = new ProductService();
         final double prixUnitaire = produitService.getProductPrice(idProduct);
@@ -429,10 +423,10 @@ public class ShoppingCartProductControllers implements Initializable {
 
 
     /**
-         * Open the order screen and pass the controller the current order.
-         *
-         * @param event the ActionEvent that triggered navigation to the order screen
-         */
+     * Open the order screen and initialize its controller with the current order.
+     *
+     * @throws RuntimeException if the order view FXML cannot be loaded
+     */
     @FXML
     void order(final ActionEvent event) {
         final FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/ui/produits/OrderClient.fxml"));
@@ -596,9 +590,9 @@ public class ShoppingCartProductControllers implements Initializable {
 
 
     /**
-     * Opens the series view in a new window and closes the current window.
+     * Open the series view in a new window and close the current window.
      *
-     * @param event the action event whose source is used to locate and close the current window
+     * @param event the ActionEvent whose source node is used to locate and close the current window
      */
     @FXML
     void SerieClient(final ActionEvent event) {
@@ -626,14 +620,10 @@ public class ShoppingCartProductControllers implements Initializable {
 
 
     /**
-     * Open the product display UI in a modal window and close the current window.
+     * Open the product display UI as an application-modal dialog and then close the current window.
      *
-     * <p>
-     * Loads the product-listing FXML, presents it as an application-modal dialog owned by the current window,
-     * and then closes the current stage after the dialog is dismissed.
-     * </p>
-     *
-     * @param mouseEvent the mouse event that triggered this action
+     * Loads "AfficherProductClient.fxml", shows it modally owned by the current window and waits for it to close;
+     * after the modal dialog is dismissed the current stage is closed.
      */
     public void afficherProduct(final MouseEvent mouseEvent) {
         // Obtenir la fenêtre précédente

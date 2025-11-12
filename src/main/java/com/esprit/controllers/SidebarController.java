@@ -120,7 +120,7 @@ public class SidebarController implements Initializable {
 
 
     /**
-     * Set the current user to the provided CinemaManager and configure the sidebar for the cinema manager role.
+     * Sets the current user to the provided CinemaManager and configures the sidebar for the cinema manager role.
      *
      * @param cinemaManager the CinemaManager to set as the current user
      */
@@ -131,7 +131,9 @@ public class SidebarController implements Initializable {
 
 
     /**
-     * Configures the sidebar for Admin users.
+     * Adjusts sidebar control visibility for an Admin user.
+     *
+     * Shows admin-specific navigation controls, hides cinema-manager specific controls, and ensures common navigation buttons are visible.
      */
     private void configureForAdmin() {
         // Show admin-specific buttons
@@ -246,12 +248,12 @@ public class SidebarController implements Initializable {
 
 
     /**
-     * Navigates the application to the role-specific movies view.
-     *
-     * For Admin users this opens the admin products/orders list view, for CinemaManager users this opens the film management view, and for other users this opens the public film listing.
-     *
-     * @param event the action event that triggered the navigation
-     */
+         * Navigate to the movies view appropriate for the current user's role.
+         *
+         * Chooses the FXML view for the current user (Admin, CinemaManager, or other) and replaces the current stage scene with that view.
+         *
+         * @param event the action event that triggered the navigation
+         */
     @FXML
     void switchToMovies(final ActionEvent event) {
         try {
@@ -280,9 +282,7 @@ public class SidebarController implements Initializable {
 
 
     /**
-     * Navigate to the orders view for administrators.
-     *
-     * @param event the ActionEvent that triggered this navigation
+     * Switches the current scene to the orders view for administrators.
      */
     @FXML
     void switchToOrders(final ActionEvent event) {
@@ -299,12 +299,10 @@ public class SidebarController implements Initializable {
 
 
     /**
-     * Navigate to the products screen appropriate for the current user role.
+     * Open the products view appropriate for the current user's role.
      *
-     * Loads the products FXML for administrators ("/ui/produits/DesignProductAdmin.fxml")
-     * or for non-admin users ("/ui/produits/AfficherProductClient.fxml") and replaces
-     * the current stage scene with the loaded view. If loading or scene switching
-     * fails, the exception is logged and the current scene is left unchanged.
+     * Loads the administrator product editor for admins or the client product list for other users,
+     * then replaces the current window's scene with the loaded view.
      */
     @FXML
     void switchToProducts(final ActionEvent event) {
@@ -330,7 +328,11 @@ public class SidebarController implements Initializable {
 
 
     /**
-     * Switches to the series view.
+     * Switches the application's scene to the role-appropriate series view.
+     *
+     * Loads the series FXML for the current user role (admin/cinema manager use the
+     * category view; clients use the client series view) and replaces the current
+     * stage's scene. Loading errors are logged at SEVERE level.
      */
     @FXML
     void switchToSeries(final ActionEvent event) {
@@ -397,7 +399,9 @@ public class SidebarController implements Initializable {
 
 
     /**
-     * Switches to the actors view (Cinema Manager only).
+     * Switches the UI to the actors view intended for cinema managers.
+     *
+     * @param event the action event that triggered the navigation
      */
     @FXML
     void switchToActor(final ActionEvent event) {
@@ -414,7 +418,9 @@ public class SidebarController implements Initializable {
 
 
     /**
-     * Switches to the film categories view (Cinema Manager only).
+     * Navigate the application to the film categories view for cinema managers.
+     *
+     * @param event the action event that triggered the navigation
      */
     @FXML
     void switchToFilmCategorie(final ActionEvent event) {
@@ -431,7 +437,9 @@ public class SidebarController implements Initializable {
 
 
     /**
-     * Switches to the movie sessions view (Cinema Manager only).
+     * Navigate to the movie sessions dashboard for cinema managers and set it as the current scene.
+     *
+     * @param event the ActionEvent that triggered the navigation
      */
     @FXML
     void switchToMovieSessions(final ActionEvent event) {
@@ -449,7 +457,9 @@ public class SidebarController implements Initializable {
 
 
     /**
-     * Navigates the current window to the cinema statistics view (intended for Cinema Manager).
+     * Navigate the current window to the cinema statistics view for cinema managers.
+     *
+     * @param event the action event that triggered this navigation
      */
     @FXML
     void switchToStatistics(final ActionEvent event) {

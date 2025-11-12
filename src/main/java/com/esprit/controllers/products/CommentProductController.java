@@ -62,18 +62,12 @@ public class CommentProductController implements Initializable {
     private TextArea monCommentaitreText;
 
     /**
-     * Processes a new comment submitted by the user.
-     * 
-     * <p>
-     * This method:
-     * 1. Extracts the comment text from the text area
-     * 2. Validates the content using a bad word filter
-     * 3. If the content is appropriate, creates a new Comment object and saves it
-     * to the database
-     * 4. Otherwise, displays an alert warning the user about inappropriate content
-     * </p>
+     * Handle submission of a new product comment from the UI.
      *
-     * @param actionEvent The action event that triggered this method
+     * <p>Validates the entered text for prohibited words; if valid, creates and persists a Comment,
+     * otherwise shows a warning alert to the user.</p>
+     *
+     * @param actionEvent the ActionEvent that triggered the submission
      */
     @FXML
     void addchat(final ActionEvent actionEvent) {
@@ -118,9 +112,10 @@ public class CommentProductController implements Initializable {
 
 
     /**
-     * Initialize the controller and populate the UI with accepted comments.
+     * Populate the CommentFlowPane with accepted product comments when the controller is initialized.
      *
-     * Loads accepted comments and adds a card for each to the CommentFlowPane.
+     * @param location  the location used to resolve relative paths for the root object, may be null
+     * @param resources the resources used to localize the root object, may be null
      */
     @Override
     /**
@@ -152,15 +147,10 @@ public class CommentProductController implements Initializable {
 
 
     /**
-     * Creates a card-like UI component to display a comment.
-     * 
-     * <p>
-     * The card includes the name of the comment author and the comment text,
-     * with appropriate styling for readability.
-     * </p>
+     * Create an HBox card that displays a comment's author and text.
      *
-     * @param comm The Comment object to create a card for
-     * @return An HBox containing the styled comment card
+     * @param comm the Comment to render; the client's first and last name and the comment text are used
+     * @return an HBox whose children form a styled card showing the comment author's name and the comment text
      */
     public HBox createcommentcard(final Comment comm) {
         // Créer une VBox pour chaque comment
@@ -227,14 +217,9 @@ public class CommentProductController implements Initializable {
 
 
     /**
-     * Navigates to the event client interface.
-     * 
-     * <p>
-     * Loads the AffichageEvenementClient.fxml file, creates a new scene and stage,
-     * and replaces the current stage with the new one.
-     * </p>
+     * Navigate to the event client interface.
      *
-     * @param event The action event that triggered this method
+     * @param event the ActionEvent that triggered the navigation
      */
     @FXML
     void eventClient(final ActionEvent event) {
@@ -304,14 +289,9 @@ public class CommentProductController implements Initializable {
 
 
     /**
-     * Navigates to the movie client interface.
-     * 
-     * <p>
-     * Loads the filmuser.fxml file, creates a new scene and stage,
-     * and replaces the current stage with the new one.
-     * </p>
+     * Open the movie client view in a new window and close the current window.
      *
-     * @param event The action event that triggered this method
+     * @param event the ActionEvent that triggered the navigation
      */
     @FXML
     void MovieClient(final ActionEvent event) {
@@ -339,14 +319,9 @@ public class CommentProductController implements Initializable {
 
 
     /**
-     * Navigates to the series client interface.
-     * 
-     * <p>
-     * Loads the Series-view.fxml file, creates a new scene and stage,
-     * and replaces the current stage with the new one.
-     * </p>
+     * Open the series client view and replace the current window with it.
      *
-     * @param event The action event that triggered this method
+     * @param event the ActionEvent that triggered the navigation
      */
     @FXML
     void SerieClient(final ActionEvent event) {

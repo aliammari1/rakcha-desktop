@@ -195,18 +195,11 @@ public class ActorController {
 
 
     /**
-     * Filters the actor list based on a provided search text, returning only
-     * actors whose name contains the searched text (case-insensitive).
-     * 
-     * <p>
-     * This method updates the predicate of the filtered list to show only
-     * matching actors. If the search text is null or empty, all actors are shown.
-     * </p>
+     * Filter the displayed actor list to only those whose name contains the given text (case-insensitive).
      *
-     * @param searchText the search query used to filter actors in the
-     *                   filteredActors list.
-     *                   If null or empty, no filtering is applied.
-     * @see FilteredList#setPredicate(java.util.function.Predicate)
+     * If {@code searchText} is null or empty, the filter is cleared so all actors are shown.
+     *
+     * @param searchText the query used to filter actors by name; matching is case-insensitive
      */
     private void searchActor(final String searchText) {
         this.filteredActors.setPredicate(actor -> {
@@ -278,15 +271,14 @@ public class ActorController {
 
 
     /**
-     * Insert a new Actor using the values from the controller's form fields and refresh the table.
-     *
-     * <p>Requires an image to be selected in imageActor_ImageView1. Creates an Actor with the name
-     * from nomActor_textField, the image path derived from the ImageView's URL, and the biography from
-     * bioActor_textArea, persists it via ActorService.create, shows an informational alert, and reloads
-     * the actor table.</p>
-     *
-     * @param event the ActionEvent that triggered the insert
-     */
+         * Create and persist a new Actor from the controller's form fields and refresh the actors table.
+         *
+         * <p>The method requires an image to be present in {@code imageActor_ImageView1}; if none is set,
+         * an informational alert is shown and no actor is created. The actor's name and biography are taken
+         * from {@code nomActor_textField} and {@code bioActor_textArea}. The image path is derived from the
+         * ImageView's URL, with a best-effort fallback to the full URL if path extraction fails. After
+         * persisting the actor, the method shows a confirmation alert and reloads the actor table.</p>
+         */
     @FXML
     void insertActor(final ActionEvent event) {
         if (this.imageActor_ImageView1.getImage() == null) {
@@ -329,10 +321,9 @@ public class ActorController {
     private void setupCellOnEditCommit() {
         this.nomActor_tableColumn1.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Actor, String>>() {
             /**
-             * Handles an inline edit of an actor-name cell by applying the edited text to the corresponding Actor
-             * and persisting the change.
+             * Apply an edited actor name from an inline table cell and persist the change.
              *
-             * @param event the cell edit event containing the table position and the new `String` value to set as the actor's name
+             * @param event the cell edit event for the actor-name column containing the row position and the new name
              */
             @Override
             /**
@@ -355,11 +346,9 @@ public class ActorController {
 );
         this.bioActor_tableColumn1.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Actor, String>>() {
             /**
-             * Update an Actor's biography when a table cell edit is committed.
+             * Apply an in-table biography edit to the Actor and persist the change.
              *
-             * Updates the underlying Actor object's biography with the edited string and persists the change.
-             *
-             * @param event the cell edit event providing the edited row and new String value for the biography
+             * @param event cell edit event containing the edited Actor row and the new biography value
              */
             @Override
             /**
@@ -385,8 +374,12 @@ public class ActorController {
 
 
     /**
-     * Lets the user pick an image file, validates it, uploads it to the configured remote image storage,
-     * stores the returned image URL in `cloudinaryImageUrl`, and displays the image in `imageActor_ImageView1`.
+     * Open a file chooser to select an image, validate and upload it to the configured cloud storage,
+     * store the returned image URL in {@code cloudinaryImageUrl}, and display the uploaded image in {@code imageActor_ImageView1}.
+     *
+     * If validation fails or an upload error occurs, the current image is left unchanged.
+     *
+     * @param event the ActionEvent that triggered the image import
      */
     @FXML
     void importImage(final ActionEvent event) {
@@ -420,13 +413,13 @@ public class ActorController {
 
 
     /**
-         * Persist the provided Actor's updated data, show a success or error alert, and refresh the actor table.
-         *
-         * <p>On success an informational alert with the message "Actor modifiée !" is shown. On failure an error
-         * alert is displayed with the exception message. The actor table is reloaded after the operation.</p>
-         *
-         * @param actor the Actor instance containing updated fields to persist
-         */
+     * Persist the updated fields of the given Actor, display a success or error alert, and refresh the actor table.
+     *
+     * <p>On success an informational alert with the message "Actor modifiée !" is shown. On failure an error alert
+     * is displayed containing the exception message. The actor table is reloaded after the operation.</p>
+     *
+     * @param actor the Actor instance containing updated values to persist
+     */
     void updateActor(final Actor actor) {
         try {
             final ActorService actorService = new ActorService();
@@ -446,12 +439,11 @@ public class ActorController {
 
 
     /**
-         * Populate the actor TableView with actors from the database and configure its columns and row interactions.
-         *
-         * <p>Configures hidden id, editable name and biography columns, a per-row delete button, and an image cell
-         * that displays the actor image and supports replacement via a file chooser; then loads the first page of
-         * actors into the table.</p>
-         */
+     * Populate the actor TableView with actors from the database and configure its columns and row interactions.
+     *
+     * <p>Configures the table for editing and binds columns for id (hidden), name, biography, an image cell that displays
+     * the actor image and supports replacement, and a per-row delete button; then loads the first page of actors into the table.</p>
+     */
     @FXML
     void readActorTable() {
         try {
@@ -664,10 +656,12 @@ public class ActorController {
 
 
     /**
-     * Switches the current stage's scene to the Films interface.
-     *
-     * @param event the ActionEvent that triggered the navigation
-     */
+         * Replaces the current window's scene with the Films interface.
+         *
+         * Loads the Films FXML and sets it as the scene on the current stage.
+         *
+         * @param event the ActionEvent that triggered the navigation
+         */
     @FXML
     /**
      * Navigates to the Films interface.
@@ -793,7 +787,11 @@ public class ActorController {
 
 
     /**
-     * Imports actors from the specified JSON file and adds them to the UI table and the database while recording the operation as an undoable action.
+     * Import actors from a JSON file into the application and record the operation for undo/redo.
+     *
+     * Parses the specified file as a JSON array of Actor objects, adds the parsed actors to the table view
+     * and persists them to the database, and registers a corresponding undo action that removes those actors
+     * from the table and deletes them from the database.
      *
      * @param filePath path to a JSON file containing an array of Actor objects
      */

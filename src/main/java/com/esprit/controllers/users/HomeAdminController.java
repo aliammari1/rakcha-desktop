@@ -260,10 +260,10 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Create empty collections used by the controller for runtime animations and recent-data caches.
+     * Creates empty ArrayList instances used at runtime for particle/shape animations and recent-data caches.
      *
-     * Initializes the following fields to new, empty ArrayList instances:
-     * dynamicParticles, dynamicShapes, recentUsers, recentFilms, recentProducts, recentSeries, recentCinemas.
+     * Initializes the following fields: dynamicParticles, dynamicShapes, recentUsers, recentFilms, recentProducts,
+     * recentSeries, and recentCinemas.
      */
     private void initializeDataStructures() {
         dynamicParticles = new ArrayList<>();
@@ -348,13 +348,13 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Sets the dashboard welcome text and system status using the current Stage user context.
+     * Initialize the dashboard's welcome text and system status labels based on the current Stage user.
      *
-     * <p>If the current Stage's user data is a User, the welcome label is personalized for that user;
-     * otherwise a generic admin welcome is used. Also updates the system status label to
-     * "SYSTEM OPERATIONAL" and applies the "pulsing-indicator" style. The update is performed after
-     * a short deferred delay; on error the welcome text falls back to the default dashboard message
-     * and the exception is logged.
+     * <p>If the Stage's user data is a {@code User}, the welcome label is personalized with the user's
+     * first name; otherwise a generic administrator greeting is shown. Also updates the system status
+     * label to "SYSTEM OPERATIONAL" and applies the "pulsing-indicator" style. The update is applied
+     * after a short deferred delay; on error the welcome label falls back to the default dashboard
+     * message.
      */
     private void setupAdvancedWelcomeMessage() {
         Timeline delayedInit = new Timeline(new KeyFrame(Duration.millis(100), e -> {
@@ -393,10 +393,10 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Load and refresh all dashboard statistics and update their corresponding stat cards.
+     * Load all dashboard totals and update the corresponding statistic cards.
      *
-     * Fetches totals for users, films, products, series, cinemas, and orders, updates the related
-     * UI labels and growth indicators, and falls back to default values if an error occurs.
+     * Fetches totals for users, films, products, series, cinemas, and orders, updates each stat
+     * label and its growth indicator, and resets statistics to defaults if an error occurs.
      */
     private void loadComprehensiveStatistics() {
         try {
@@ -489,16 +489,16 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Animates a Label's displayed value from a starting number to a target number over the given duration.
-     *
-     * The label text is updated progressively to reflect intermediate values; when the final value is reached the
-     * "counter-animation" CSS style class is added to the label.
-     *
-     * @param label      the Label to update; if null the method does nothing
-     * @param startValue the initial numeric value displayed before animation
-     * @param endValue   the final numeric value to display after animation
-     * @param duration   the total duration of the animation
-     */
+         * Animate a label's numeric display from a starting value to a target value over the specified duration.
+         *
+         * The label's text is updated to intermediate integer values during the animation; when the final value is displayed
+         * the "counter-animation" CSS style class is added to the label.
+         *
+         * @param label      the Label to update; if null the method returns without action
+         * @param startValue the value at which the animation starts
+         * @param endValue   the value at which the animation ends
+         * @param duration   total duration of the animation
+         */
     private void animateNumberCount(Label label, long startValue, long endValue, Duration duration) {
         if (label == null)
             return;
@@ -541,10 +541,10 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-         * Compute a simulated total number of orders based on the current product count and a small random offset.
-         *
-         * @return the simulated total orders calculated as `totalProducts * 3` plus a random value >= 0 and < 50
-         */
+     * Computes a simulated total number of orders based on the current product count and a small random offset.
+     *
+     * @return the simulated total orders equal to `totalProducts * 3` plus a random integer between 0 (inclusive) and 50 (exclusive)
+     */
     private long calculateTotalOrders() {
         // In real implementation, this would query order service
         return totalProducts * 3 + random.nextLong(50);
@@ -552,9 +552,7 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Reset all total-statistic labels to "0".
-     *
-     * Used as a fallback to display zeroed totals when loading or calculating statistics fails.
+     * Resets all total statistic labels to "0" as a fallback when loading or calculating statistics fails.
      */
     private void setDefaultStatistics() {
         if (totalUsersLabel != null)
@@ -573,9 +571,7 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Populates the activity container with recent, timestamped system activity entries and applies the "activity-feed" style.
-     *
-     * <p>Each entry is added via addEnhancedActivityItem and includes an emoji label and a relative or absolute timestamp.</p>
+     * Populate the activity container with recent timestamped system activity entries and apply the "activity-feed" style.
      */
     private void loadRecentSystemActivity() {
         try {
@@ -802,11 +798,10 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Initialize and start recurring timelines that refresh live dashboard data.
+     * Starts recurring timelines to keep the dashboard's clock, statistics, and activity feed up to date.
      *
-     * Sets up and starts three indefinite timelines: one that updates the displayed current time every second,
-     * one that refreshes comprehensive statistics every 30 seconds, and one that polls the activity feed every 10 seconds
-     * (each poll has a 30% chance to append a new random activity).
+     * The clock is refreshed every second, statistics are refreshed every 30 seconds, and the activity poll runs every 10 seconds
+     * with each poll having a 30% chance to append a new random activity.
      */
     private void setupRealTimeUpdates() {
         // Update current time every second
@@ -833,9 +828,9 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Updates the currentTimeLabel text to the local time formatted as "HH:mm:ss".
+     * Update the currentTimeLabel with the local time formatted as "HH:mm:ss".
      *
-     * If the label reference is null, the method performs no action.
+     * If currentTimeLabel is null, this method does nothing.
      */
     private void updateCurrentTime() {
         if (currentTimeLabel != null) {
@@ -847,9 +842,10 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Appends a randomly chosen activity entry to the activity feed and removes the oldest entry when the feed exceeds seven items.
+     * Prepends a timestamped random activity to the activity feed and keeps the feed to at most seven items.
      *
-     * The added entry is timestamped using the pattern "HH:mm" and is inserted via addEnhancedActivityItem with a type of "info". If the activity container is null, the method has no effect.
+     * Chooses one of several predefined activity messages, timestamps it using the pattern "HH:mm", and inserts it as an "info" entry.
+     * If the activity container is null, the method does nothing.
      */
     private void addRandomActivity() {
         if (activityContainer != null && activityContainer.getChildren().size() > 7) {
@@ -966,10 +962,9 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Creates and appends a styled user card to the recent users container showing the user's name, email,
-     * avatar placeholder, and an "ACTIVE" status badge with hover effects.
+     * Creates a styled user card showing the user's full name, email, avatar placeholder, and an "ACTIVE" badge, then appends it to the recent users container.
      *
-     * If the container is not available, the method does nothing.
+     * If the recent users container is null, the method returns without modifying the UI.
      *
      * @param user the User whose information will be displayed in the card
      */
@@ -1057,13 +1052,12 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Create and append a styled content card to the recent content container.
-     *
-     * The card contains a left-aligned icon, a bold title, and a smaller type label and is styled for interactive appearance.
+     * Adds a styled content card to the recent content container showing an icon, title, and type.
+     * Does nothing if the recent content container is not initialized.
      *
      * @param name the content title to display
      * @param type the content category or subtype shown under the title
-     * @param icon a glyph or text icon rendered at the left of the card
+     * @param icon a glyph or text rendered at the left of the card
      */
     private void addRecentContentCard(String name, String type, String icon) {
         if (recentContentContainer == null)
@@ -1189,10 +1183,13 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Create and add animated decorative particles to the particles container for background visual effects.
-     *
-     * Does nothing if the particles container is not available.
-     */
+         * Add decorative animated particles to the background particles container.
+         *
+         * Creates eight circular particle nodes, configures their visual appearance and opacity,
+         * appends them to both the particles container and the internal dynamicParticles list,
+         * and schedules each particle's animation. If the particles container is not available,
+         * the method returns without performing any action.
+         */
     private void createDynamicParticles() {
         if (particlesContainer == null)
             return;
@@ -1231,14 +1228,13 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Creates and adds a set of animated decorative shapes to the particle background.
+     * Adds six decorative animated shapes to the particle background.
      *
-     * <p>If the particle container is not available, the method returns without changes.</p>
+     * <p>If the particle container is not available, the method returns without modifying state.</p>
      *
-     * <p>The method creates six geometric shapes (polygons, rectangles, and circles), assigns
-     * randomized positions, translucency, gradient fill, stroke and CSS style classes, adds
-     * them to the container and the controller's dynamicShapes list, and starts their
-     * animations with a small staggered delay.</p>
+     * <p>The method creates several geometric shapes with randomized positions and visual styles,
+     * appends them to the particles container and the controller's dynamicShapes list, and starts
+     * staggered animations for each shape.</p>
      */
     private void createDynamicShapes() {
         if (particlesContainer == null)
@@ -1299,11 +1295,10 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Animate a particle with coordinated vertical float, horizontal drift, and opacity pulsing.
+     * Apply a continuous, natural floating animation to the given particle.
      *
-     * Creates and starts a ParallelTransition that applies a vertical translate, a horizontal
-     * translate, and a fade transition to the provided Circle. Each sub-animation cycles
-     * indefinitely and uses randomized durations/amplitudes to produce natural motion.
+     * Starts coordinated vertical float, horizontal drift, and opacity pulse animations
+     * that run indefinitely with slight randomization and a staggered start based on the delay.
      *
      * @param particle the Circle node to animate
      * @param delay    initial delay in seconds before the animations start
@@ -1372,9 +1367,9 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Applies per-particle visual animations to the six predefined particle nodes, skipping any that are null.
+     * Initializes visual animations for the six predefined particle nodes, skipping any that are null.
      *
-     * Each non-null particle receives an animation whose start is staggered by its index.
+     * Each non-null particle receives an animation with its start delayed by 0.5 seconds multiplied by the particle's index.
      */
     private void setupParticleAnimations() {
         Circle[] particles = { particle1, particle2, particle3, particle4, particle5, particle6 }
@@ -1391,11 +1386,14 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-         * Applies and starts floating and glow animations on the given particle with an initial delay.
-         *
-         * @param particle the Circle node to animate
-         * @param delay    initial delay in seconds before the animations start
-         */
+     * Applies a continuous floating and glow animation to the specified particle and starts it.
+     *
+     * The animations run indefinitely: a vertical float and an opacity pulse. The float begins after
+     * the given delay (in seconds); the glow animation is staggered by an additional one-second offset.
+     *
+     * @param particle the Circle node to animate
+     * @param delay    initial delay in seconds before the animations start
+     */
     private void setupParticleAnimation(Circle particle, double delay) {
         // Floating animation
         TranslateTransition floatTransition = new TranslateTransition(Duration.seconds(4), particle);
@@ -1419,9 +1417,10 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Applies rotation and pulsing scale animations to each non-null predefined shape node (shape1..shape6).
+     * Applies continuous rotation and puling scale animations to the predefined shape nodes (shape1..shape6).
      *
-     * <p>Null shape references are ignored.</p>
+     * <p>Null shape references are ignored. Rotation duration is staggered by index (8 + index*2 seconds)
+     * to create a layered motion effect.</p>
      */
     private void setupShapeAnimations() {
         javafx.scene.Node[] shapes = { shape1, shape2, shape3, shape4, shape5, shape6 }
@@ -1473,10 +1472,9 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Animates the main content container into view with a downward-to-upward slide.
+     * Slides the content container upward into its final position when present.
      *
-     * When the injected content container is present, moves it from 50 pixels below its
-     * final position to its natural position over one second.
+     * If `contentContainer` is non-null, moves it from 50 pixels below to its natural Y coordinate over one second.
      */
     private void setupContentAnimations() {
         if (contentContainer != null) {
@@ -1586,13 +1584,12 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Execute a quick admin search and present placeholder results.
-     *
-     * If `query` is null or blank the method returns without taking action.
-     * Otherwise it displays an informational alert showing the provided query as a placeholder for real search results.
-     *
-     * @param query the search text to run (leading and trailing whitespace are ignored)
-     */
+         * Perform a quick admin search and display a placeholder informational alert containing the query.
+         *
+         * If the provided query is null or blank no action is taken. Leading and trailing whitespace are ignored.
+         *
+         * @param query the search text to run; leading and trailing whitespace are ignored and a null or blank value results in no action
+         */
     private void performQuickSearch(String query) {
         if (query == null || query.trim().isEmpty())
             return;
@@ -1610,17 +1607,15 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Add CSS style classes to key UI containers and labels.
+     * Apply predefined CSS classes to key UI containers and labels.
      *
-     * <p>If the corresponding UI node is present, this method appends a class to its style class list:
+     * <p>Adds the following style classes when the corresponding node is present:
      * <ul>
-     *   <li>`rootContainer` &rarr; "fade-in"</li>
-     *   <li>`mainContainer` &rarr; "glow-container"</li>
-     *   <li>`welcomeLabel` &rarr; "animated-text"</li>
+     *   <li>rootContainer → "fade-in"</li>
+     *   <li>mainContainer → "glow-container"</li>
+     *   <li>welcomeLabel → "animated-text"</li>
      * </ul>
      * </p>
-     *
-     * <p>If any of the nodes are null, they are skipped.</p>
      */
     private void applyAdvancedStyling() {
         // Apply CSS classes for animations
@@ -1687,7 +1682,10 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Setup quick action buttons with enhanced styling
+     * Apply visual styling to every button inside the quick actions container.
+     *
+     * Adds the CSS classes "glow-button" and "action-button" to each child that is a Button.
+     * If the container is null or contains no buttons, the method does nothing.
      */
     private void setupQuickActionButtons() {
         if (quickActionsContainer != null) {
@@ -1706,10 +1704,9 @@ public class HomeAdminController implements Initializable {
     // Utility Methods
 
     /**
-     * Convert a minutes-since timestamp into a compact human-readable "time ago" string.
+     * Produce a compact human-readable "time ago" string for a duration given in minutes.
      *
-     * @param minutesAgo number of minutes elapsed since the event
-     * @return a short relative time string: "`N min ago`" when under 60 minutes, "`N hr ago`" when under 1440 minutes (hours truncated), and "`N day ago`" otherwise (days truncated)
+     * @return A short relative time string: "N min ago" for less than 60 minutes, "N hr ago" for less than 1440 minutes (hours truncated), or "N day ago" otherwise (days truncated).
      */
     private String getTimeAgo(int minutesAgo) {
         if (minutesAgo < 60) {
@@ -1742,9 +1739,9 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Create a placeholder User populated with a random name and a generated email.
+     * Create a placeholder User with a generated name and email.
      *
-     * @return a User whose firstName, lastName, and email fields are populated with generated values
+     * @return a User whose firstName and lastName are set to a generated full name and whose email is generated as `first.last@example.com`
      */
     private User createPlaceholderUser() {
         User user = new User() {
@@ -1796,10 +1793,10 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-         * Provide a snapshot of recently loaded films.
-         *
-         * @return a new List containing the recent Film objects; modifying the returned list does not affect the controller's internal list
-         */
+     * Return a snapshot of the controller's recently loaded films.
+     *
+     * @return a new List containing the recent Film objects; modifying the returned list does not affect the controller's internal list
+     */
     public List<Film> getRecentFilms() {
         return new ArrayList<>(recentFilms);
     }
@@ -1849,10 +1846,12 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Switches the current window's scene to the admin users dashboard.
+     * Navigate the current window to the admin users dashboard.
      *
-     * Loads "/ui/users/AdminDashboard.fxml" and applies it to the current stage. If the FXML fails to load,
-     * a SEVERE-level log entry is recorded and the scene is not changed.
+     * Loads the admin users dashboard FXML and replaces the current stage's scene. If the FXML fails to load,
+     * a SEVERE-level log entry is recorded and the scene is left unchanged.
+     *
+     * @param event the ActionEvent that triggered this navigation
      */
 
     @FXML
@@ -1887,10 +1886,9 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Loads the product management UI and replaces the current window's scene with it.
+     * Open the product management view and replace the current window's scene with it.
      *
-     * <p>The method locates and loads "/ui/products/Product.fxml" and sets it as the active Scene
-     * on the current Stage.</p>
+     * @param event the action event that triggered the navigation
      */
     @FXML
     void manageProducts(ActionEvent event) {
@@ -1943,10 +1941,7 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Opens the System Settings dialog.
-     *
-     * Displays an informational alert as a placeholder indicating where system settings
-     * functionality will be implemented.
+     * Opens a placeholder System Settings dialog that informs the user where system settings will be implemented.
      */
     @FXML
     void systemSettings(ActionEvent event) {
@@ -1965,12 +1960,10 @@ public class HomeAdminController implements Initializable {
 
 
     /**
-     * Shows an informational dialog describing available analytics and reporting options.
+     * Opens an informational dialog describing available analytics and reporting options.
      *
-     * <p>Displays a modal alert that lists report categories (user activity, content performance,
-     * revenue & sales, and system metrics). If opening the dialog fails, the exception is logged.
-     *
-     * @param actionEvent the UI event that triggered this action
+     * <p>The modal dialog lists available report categories such as user activity, content performance,
+     * revenue & sales, and system performance metrics.
      */
     @FXML
     public void viewReports(ActionEvent actionEvent) {

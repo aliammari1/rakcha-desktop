@@ -158,13 +158,12 @@ public class FilmController {
     private SortedList<Film> sortedFilms;
 
     /**
-     * Initialize the controller UI by populating actor, cinema, and category selectors,
-     * attaching per-item tooltips, wiring the actor search/filter behavior, and setting up advanced search.
+     * Initialize UI controls: populate actor, cinema, and category selectors, install per-item tooltips,
+     * bind the film table to a filtered view driven by the actor search field, and configure advanced search and sorting.
      *
-     * Populates Actorcheck_ComboBox1, idcinemaFilm_comboBox, and Categorychecj_ComboBox with names
-     * retrieved from their respective services, installs a tooltip for each combo-box item,
-     * replaces the film table items with a filtered list bound to recherche_textField for live actor filtering,
-     * and calls setupAdvancedSearch() to configure table search/sorting.
+     * Populates Actorcheck_ComboBox1, idcinemaFilm_comboBox, and Categorychecj_ComboBox with names from their services,
+     * installs a tooltip for each combo-box item, replaces the film table items with a filtered list bound to recherche_textField,
+     * and invokes setupAdvancedSearch() to configure table search and sorting.
      */
     @FXML
     void initialize() {
@@ -231,11 +230,11 @@ public class FilmController {
 
 
     /**
-     * Initializes advanced search and sorting for the film table and connects the search field to update the filter.
+     * Sets up live filtering and sorting for the film table and binds the search field to update the filter predicate.
      *
-     * Creates a filtered view of the table's items, wraps it in a sorted list bound to the table's comparator,
-     * sets the table's items to the sorted list, and installs a listener on the search text field that updates
-     * the filter predicate using {@code createSearchPredicate}.
+     * Wraps the table's items in a filtered list, exposes that via a sorted list bound to the table comparator,
+     * sets the table's items to the sorted list, and installs a listener on the search text field to update the
+     * filtered list's predicate when the user changes the search text.
      */
     private void setupAdvancedSearch() {
         filteredFilms = new FilteredList<>(filmCategory_tableView1.getItems(), p -> true);
@@ -251,15 +250,12 @@ public class FilmController {
 
 
     /**
-     * Creates a predicate that tests whether a film matches the given search text across multiple fields.
-     *
-     * The predicate checks the film's name, description, release year, associated category names,
-     * and associated actor names using case-insensitive containment. If `searchText` is null or empty,
-     * the predicate always matches.
-     *
-     * @param searchText text to search for within film properties; may be null or empty
-     * @return `true` if the film's name, description, release year, category names, or actor names contain `searchText` (case-insensitive); `false` otherwise
-     */
+         * Create a predicate that checks whether a film matches the given search text across name,
+         * description, release year, category names, and actor names.
+         *
+         * @param searchText the text to match; may be null or empty. Matching is case-insensitive.
+         * @return `true` if the film contains `searchText` in any of the checked fields (case-insensitive), `false` otherwise
+         */
     private Predicate<Film> createSearchPredicate(String searchText) {
         return film -> {
             if (searchText == null || searchText.isEmpty()) {
@@ -296,13 +292,10 @@ public class FilmController {
 
 
     /**
-     * Displays a file chooser dialog to select an image file, reads the selected
-     * file, and sets the image as the Image component's source.
-     *
-     * @param event
-     *              ActionEvent that triggered the execution of the
-     *              `importFilmImage()` method.
-     */
+         * Opens a file chooser to pick an image file and sets the chosen image into imageFilm_ImageView.
+         *
+         * If the user cancels the dialog, the currently displayed image is left unchanged.
+         */
     @FXML
     void importFilmImage(final ActionEvent event) {
         final FileChooser fileChooser = new FileChooser();
@@ -317,11 +310,11 @@ public class FilmController {
 
 
     /**
-     * Delete the film identified by the given ID and refresh the film table view.
+     * Delete the film with the given ID and refresh the film table view.
      *
-     * <p>An information alert is shown to confirm the deletion.</p>
+     * Shows an information alert confirming the deletion.
      *
-     * @param id the unique identifier of the film to delete
+     * @param id the film's unique identifier
      */
     void deleteFilm(final Long id) {
         final FilmService fs = new FilmService();
@@ -443,7 +436,7 @@ public class FilmController {
 
 
     /**
-     * Clears the film input fields in the form.
+     * Clears all film input fields in the form.
      *
      * Resets the name, duration, description, and release year text areas to empty strings.
      */
@@ -457,20 +450,19 @@ public class FilmController {
 
 
     /**
-     * Monitors changes to a combo box containing a list of actors and updates the
-     * actor film table accordingly, by inserting or removing actors based on the
-     * changed selection.
+     * Listen for selection changes in an actor CheckComboBox and apply corresponding actor–film association updates.
+     *
+     * When actors are checked the method will add association records for those actors; when actors are unchecked it will remove their association records.
      */
     void updateActorlist() {
         final CheckComboBox<Actor> checkComboBox = new CheckComboBox<>(FXCollections.observableArrayList());
         checkComboBox.getCheckModel().getCheckedItems().addListener(new ListChangeListener<Actor>() {
             /**
-             * Applies additions and removals from an actor change to the actor–film associations.
+             * Applies an observed change in the actor list to the actor–film associations for the current film.
              *
-             * Processes the provided Change by inserting association records for actors that were
-             * added and deleting association records for actors that were removed.
+             * For each actor added in the provided Change, creates a link between that actor and the film; for each actor removed, deletes the existing link.
              *
-             * @param c change describing the actors that were added or removed to be applied to the actor–film associations
+             * @param c the change describing actors that were added or removed
              */
             @Override
             /**
@@ -539,11 +531,10 @@ public class FilmController {
         this.idFilm_tableColumn.setVisible(false);
         this.nomFilm_tableColumn.setCellFactory(new Callback<TableColumn<Film, String>, TableCell<Film, String>>() {
             /**
-             * Creates a TableCell for editable string film fields that validates user input and shows
-             * a tooltip with validation errors while editing.
+             * Create a TableCell for editable film string fields that validates user input and shows an inline error tooltip when invalid.
              *
-             * @param param the table column for which the cell is created
-             * @return a TextFieldTableCell that enforces: input must not be empty and must start with an uppercase letter; validation errors are shown in a tooltip positioned near the editor
+             * @param param the TableColumn for which the cell is created
+             * @return the TableCell configured to enforce that the input is not empty and begins with an uppercase letter; validation errors are shown in a tooltip positioned near the editor
              */
             @Override
             /**
@@ -556,9 +547,9 @@ public class FilmController {
                     private Validator validator;
 
                     /**
-                     * Prepare inline text editing by attaching and configuring a validator and error tooltip to the cell's TextField.
+                     * Attach a Validator to the cell's inline TextField to enforce that the value is not empty and starts with an uppercase letter, and show or hide an adjacent error tooltip while the cell is being edited.
                      *
-                     * Initializes a validator for the cell's TextField (if present) that enforces the field is not empty and starts with an uppercase letter, decorates the TextField with the validator, and displays or hides an error tooltip adjacent to the field as the text changes.
+                     * When editing starts, this initializes a Validator (if needed), binds it to the TextField's text property, decorates the field with validation, and registers a listener that updates an on-screen Tooltip with the current validation message positioned near the TextField when errors are present; the Tooltip is hidden when the value becomes valid.
                      */
                     @Override
                     /**
@@ -587,14 +578,14 @@ public class FilmController {
                             final Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
                             textField.textProperty().addListener(new ChangeListener<String>() {
                                 /**
-                                 * Update the text field's tooltip to display current validation errors when its observed value changes.
+                                 * Update the text field's tooltip to reflect current validation errors and show or hide it near the field.
                                  *
-                                 * If the validator reports errors, the tooltip is populated with the validator message, styled to indicate
-                                 * an error, and shown near the text field; if there are no errors any visible tooltip is hidden.
+                                 * When validation errors are present, the tooltip is populated with the validator message and displayed near the
+                                 * observed text field; when there are no errors any visible tooltip is hidden.
                                  *
-                                 * @param observable the observable value representing the text being observed
-                                 * @param oldValue the previous text value before the change
-                                 * @param newValue the new text value after the change
+                                 * @param observable the observable value being monitored for changes
+                                 * @param oldValue the previous text value
+                                 * @param newValue the new text value
                                  */
                                 @Override
                                 /**
@@ -635,13 +626,14 @@ public class FilmController {
         this.annederalisationFilm_tableColumn
                 .setCellFactory(new Callback<TableColumn<Film, Integer>, TableCell<Film, Integer>>() {
                     /**
-                     * Creates a table cell for editing a film's release year with inline validation.
+                     * Create a table cell that edits a film's release year and provides inline validation with tooltip feedback.
                      *
-                     * <p>The returned cell provides a text-field editor that validates the input is an integer
-                     * between 1800 and the current year and surfaces validation errors via the cell's tooltip.</p>
+                     * <p>The cell uses a text editor that enforces the value is a non-empty integer between 1800 and the current year.
+                     * When validation fails, a red tooltip containing the validation message is shown adjacent to the editor.</p>
                      *
                      * @param param the table column associated with the created cell
-                     * @return a TableCell configured to edit and validate a film's release year
+                     * @return the TableCell configured to edit a film's release year; it validates the year (1800..current year)
+                     *         and displays validation errors in a tooltip near the editor
                      */
                     @Override
                     /**
@@ -654,12 +646,9 @@ public class FilmController {
                             private Validator validator;
 
                             /**
-                             * Prepares the cell for editing by attaching a year validator to the cell's text field and showing
-                             * a live tooltip with any validation errors.
+                             * Prepares the cell for inline editing by attaching a year validator and displaying a live tooltip with validation errors.
                              *
-                             * The validator enforces that the field is not empty and that the entered year is between 1800
-                             * and the current year. When validation errors exist, a red tooltip containing the error message
-                             * is shown near the text field; the tooltip is hidden when the field becomes valid.
+                             * The validator requires a non-empty value that parses to an integer between 1800 and the current year. When validation errors are present a red tooltip containing the error message is shown near the editor; the tooltip is hidden when the value becomes valid.
                              */
                             @Override
                             /**
@@ -699,11 +688,14 @@ public class FilmController {
                                     final Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
                                     textField.textProperty().addListener(new ChangeListener<String>() {
                                         /**
-                                         * Updates the text field's tooltip to reflect current validator errors and shows or hides the tooltip.
+                                         * Update the TextField's tooltip to reflect current validator messages and show or hide it.
                                          *
-                                         * @param observable the observable value being listened to (text field value)
-                                         * @param oldValue   the previous value before the change
-                                         * @param newValue   the new value after the change; used to determine and display validation messages
+                                         * If the validator reports errors, the tooltip text and style are updated, the tooltip is attached
+                                         * to the TextField and shown near the field; if there are no errors, any visible tooltip is hidden.
+                                         *
+                                         * @param observable the observable value being listened to (the TextField's text)
+                                         * @param oldValue   the previous text value
+                                         * @param newValue   the new text value that triggered validation and tooltip update
                                          */
                                         @Override
                                         /**
@@ -762,10 +754,10 @@ public class FilmController {
             public TableCell<Film, Time> call(final TableColumn<Film, Time> filmcategoryTimeTableColumn) {
                 return new TextFieldTableCell<Film, Time>(new StringConverter<Time>() {
                     /**
-                     * Convert a Time value to its string representation.
+                     * Get the string representation of the given Time.
                      *
-                     * @param time the Time instance to convert
-                     * @return the string representation of the provided time
+                     * @param time the Time to convert to a string
+                     * @return the time formatted as a string (for example "HH:MM:SS")
                      */
                     @Override
                     /**
@@ -779,9 +771,9 @@ public class FilmController {
 
 
                     /**
-                     * Parse a string formatted as "HH:MM:SS" into a corresponding time value.
+                     * Parse a time string in "HH:MM:SS" format.
                      *
-                     * @param s the time string in "HH:MM:SS" format
+                     * @param s the time string in "HH:MM:SS" format (hours:minutes:seconds)
                      * @return a Time representing the parsed time
                      */
                     @Override
@@ -799,12 +791,11 @@ public class FilmController {
                     private Validator validator;
 
                     /**
-                     * Begins in-place editing and attaches live validation for a time value in HH:MM:SS format.
+                     * Begins editing the cell and installs live validation for a duration in HH:MM:SS format.
                      *
-                     * While the cell's TextField is active this method installs a validator that checks the field
-                     * against the time pattern "HH:MM:SS". If the value is empty or does not match the pattern,
-                     * a tooltip displaying the validation message is shown above the field; the tooltip is hidden
-                     * when the value becomes valid.
+                     * While editing, validates the cell's text field against the pattern `HH:MM:SS` and, when the value is empty or
+                     * incorrectly formatted, shows a tooltip with the validation message positioned above the field; the tooltip is
+                     * hidden when the value becomes valid.
                      */
                     @Override
                     /**
@@ -834,14 +825,14 @@ public class FilmController {
                             final Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
                             textField.textProperty().addListener(new ChangeListener<String>() {
                                 /**
-                                 * Update the text field's tooltip to display current validation errors when its observed value changes.
+                                 * Update the text field's tooltip to reflect current validation errors and show or hide it near the field.
                                  *
-                                 * If the validator reports errors, the tooltip is populated with the validator message, styled to indicate
-                                 * an error, and shown near the text field; if there are no errors any visible tooltip is hidden.
+                                 * When validation errors are present, the tooltip is populated with the validator message and displayed near the
+                                 * observed text field; when there are no errors any visible tooltip is hidden.
                                  *
-                                 * @param observable the observable value representing the text being observed
-                                 * @param oldValue the previous text value before the change
-                                 * @param newValue the new text value after the change
+                                 * @param observable the observable value being monitored for changes
+                                 * @param oldValue the previous text value
+                                 * @param newValue the new text value
                                  */
                                 @Override
                                 /**
@@ -883,10 +874,10 @@ public class FilmController {
         this.descriptionFilm_tableColumn
                 .setCellFactory(new Callback<TableColumn<Film, String>, TableCell<Film, String>>() {
                     /**
-                     * Creates a TableCell for editing string values that validates the input starts with an uppercase letter and displays an inline error tooltip when validation fails.
+                     * Create a table cell for editing film string fields that enforces the edited text to begin with an uppercase letter and displays an inline error tooltip when validation fails.
                      *
                      * @param param the table column for which the cell is created
-                     * @return a TableCell that enforces an uppercase-start validation on edited text and shows an error tooltip when the value is invalid
+                     * @return a TableCell that enforces an uppercase-start validation on edited text and shows an inline error tooltip when the value is invalid
                      */
                     @Override
                     /**
@@ -899,9 +890,9 @@ public class FilmController {
                             private Validator validator;
 
                             /**
-                             * Begins inline editing for the cell and attaches a validator that ensures the edited text is not empty
-                             * and begins with an uppercase letter; when validation fails an error tooltip is shown next to the
-                             * input field.
+                             * Begin inline editing of the cell and attach a validator that requires the edited text to be non-empty and to start with an uppercase letter.
+                             *
+                             * The validator is bound to the cell's TextField and will show a styled tooltip positioned near the field when validation errors are present and hide it when the value becomes valid.
                              */
                             @Override
                             /**
@@ -931,11 +922,11 @@ public class FilmController {
                                     final Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
                                     textField.textProperty().addListener(new ChangeListener<String>() {
                                         /**
-                                         * Responds to changes of the observed text value by showing a validation tooltip when errors exist or hiding it otherwise.
+                                         * Show or hide a validation tooltip for the associated text field based on the validator's current state.
                                          *
-                                         * When invoked, the method evaluates current validation state; if validation errors are present it sets the tooltip text and style, attaches the tooltip to the field and displays it near the field. If there are no validation errors, it hides any currently shown tooltip.
+                                         * Displays the validator's message near the text field when validation errors exist; hides any shown tooltip when no errors remain.
                                          *
-                                         * @param observable the observed String property whose changes triggered this call
+                                         * @param observable the observed String property that triggered this change
                                          * @param oldValue the previous value of the observed property
                                          * @param newValue the new value of the observed property
                                          */
@@ -995,10 +986,10 @@ public class FilmController {
         this.Delete_Column.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<Film, Button>, ObservableValue<Button>>() {
                     /**
-                     * Create an ObservableValue that holds a delete Button for the film row.
+                     * Create an observable holding a delete Button for the given film row.
                      *
-                     * @param filmcategoryButtonCellDataFeatures the table cell context for the film row; used to obtain the film's id
-                     * @return an ObservableValue containing a Button labeled "delete" that, when activated, deletes the film for that row
+                     * @param filmcategoryButtonCellDataFeatures the table cell context for the film row; used to obtain the film's id when the button is activated
+                     * @return an ObservableValue containing a Button labeled "delete" that removes the associated film when clicked
                      */
                     @Override
                     /**
@@ -1012,9 +1003,9 @@ public class FilmController {
                         button.getStyleClass().add("sale");
                         button.setOnAction(new EventHandler<ActionEvent>() {
                             /**
-                             * Deletes the film associated with the invoked table cell action.
+                             * Delete the film associated with the invoked table-cell action.
                              *
-                             * @param event the action event triggered by selecting the film's table-cell button
+                             * @param event the ActionEvent triggered by clicking the table-cell button
                              */
                             @Override
                             /**
@@ -1036,10 +1027,10 @@ public class FilmController {
         this.annederalisationFilm_tableColumn.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<Film, Integer>, ObservableValue<Integer>>() {
                     /**
-                     * Provide an observable integer value representing the film's release year for a table cell.
+                     * Provides an observable integer representing the film's release year for the given table row.
                      *
-                     * @param filmcategoryIntegerCellDataFeatures the cell data features containing the Film instance for the current row
-                     * @return an ObservableValue<Integer> containing the film's release year
+                     * @param filmcategoryIntegerCellDataFeatures the cell data features for the row's Film
+                     * @return the film's release year as an ObservableValue<Integer>
                      */
                     @Override
                     /**
@@ -1058,10 +1049,10 @@ public class FilmController {
         this.dureeFilm_tableColumn
                 .setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Film, Time>, ObservableValue<Time>>() {
                     /**
-                     * Exposes the film row's duration as an observable value for the table cell.
+                     * Provide an observable holding the film's duration for a table cell.
                      *
-                     * @param filmcategoryTimeCellDataFeatures table cell data features for a row, providing the Film whose duration is shown
-                     * @return a `SimpleObjectProperty<Time>` containing the film's duration
+                     * @param filmcategoryTimeCellDataFeatures table cell data features whose associated Film supplies the duration
+                     * @return an ObservableValue containing the film's duration as a `Time`
                      */
                     @Override
                     /**
@@ -1080,14 +1071,12 @@ public class FilmController {
         this.imageFilm_tableColumn
                 .setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Film, HBox>, ObservableValue<HBox>>() {
                     /**
-                     * Create an HBox containing the film's image and a clickable ImageView that lets the user select
-                     * a new image for that film.
+                     * Create an HBox containing the film's image with a clickable ImageView that lets the user select and persist a replacement image.
                      *
-                     * The ImageView is sized for table display; clicking it opens a file chooser, replaces the shown
-                     * image, sets the selected image URL on the Film, and persists the change via updateFilm(...).
+                     * The ImageView is sized for table display. Clicking it opens a file chooser for PNG/JPG files; if the user selects an image, the view is updated, the Film's image URI is set, and the change is persisted via updateFilm(...).
                      *
-                     * @param param cell data features providing the Film whose image will be displayed and editable
-                     * @return an ObservableValue containing an HBox with the film's ImageView (ready for table cell use)
+                     * @param param the table cell data features for the row; provides the Film whose image is displayed and editable
+                     * @return an ObservableValue containing an HBox whose ImageView displays the film image and supports selecting and saving a new image
                      */
                     @Override
                     /**
@@ -1104,9 +1093,9 @@ public class FilmController {
                             imageView.setFitHeight(50);
                             hBox.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
                                 /**
-                                 * Opens a file chooser to select a PNG or JPG image, displays the chosen image in the controller's ImageView, sets the image URI on the selected Film, and persists the updated Film.
+                                 * Open a file chooser for PNG/JPG selection, display the chosen image in the controller's ImageView, set the film's image URI to the chosen file, and persist the updated film.
                                  *
-                                 * @param event the mouse event that triggered the file selection action
+                                 * @param event the MouseEvent that triggered the image selection
                                  */
                                 @Override
                                 /**
@@ -1151,10 +1140,10 @@ public class FilmController {
         this.dureeFilm_tableColumn
                 .setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Film, Time>, ObservableValue<Time>>() {
                     /**
-                     * Exposes the film row's duration as an observable value for the table cell.
+                     * Provide an observable holding the film's duration for a table cell.
                      *
-                     * @param filmcategoryTimeCellDataFeatures table cell data features for a row, providing the Film whose duration is shown
-                     * @return a `SimpleObjectProperty<Time>` containing the film's duration
+                     * @param filmcategoryTimeCellDataFeatures table cell data features whose associated Film supplies the duration
+                     * @return an ObservableValue containing the film's duration as a `Time`
                      */
                     @Override
                     /**
@@ -1173,10 +1162,10 @@ public class FilmController {
         this.descriptionFilm_tableColumn.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<Film, String>, ObservableValue<String>>() {
                     /**
-                     * Provides the film's description as an observable string property for a table cell.
+                     * Exposes the film's description for a table cell as an observable string property.
                      *
-                     * @param filmcategoryStringCellDataFeatures cell data features for the table row containing the Film
-                     * @return an ObservableValue containing the film's description
+                     * @param filmcategoryStringCellDataFeatures cell data features whose row's Film provides the description
+                     * @return the film's description as an ObservableValue<String>
                      */
                     @Override
                     /**
@@ -1194,10 +1183,10 @@ public class FilmController {
         this.annederalisationFilm_tableColumn.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<Film, Integer>, ObservableValue<Integer>>() {
                     /**
-                     * Provide an observable integer value representing the film's release year for a table cell.
+                     * Provides an observable integer representing the film's release year for the given table row.
                      *
-                     * @param filmcategoryIntegerCellDataFeatures the cell data features containing the Film instance for the current row
-                     * @return an ObservableValue<Integer> containing the film's release year
+                     * @param filmcategoryIntegerCellDataFeatures the cell data features for the row's Film
+                     * @return the film's release year as an ObservableValue<Integer>
                      */
                     @Override
                     /**
@@ -1216,9 +1205,10 @@ public class FilmController {
         this.idcategoryFilm_tableColumn.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<Film, CheckComboBox<String>>, ObservableValue<CheckComboBox<String>>>() {
                     /**
-                     * Creates a CheckComboBox populated with all category names and pre-checks the categories associated with the given film.
+                     * Create a CheckComboBox of category names that reflects and updates a film's category associations.
                      *
-                     * The returned observable wraps the CheckComboBox whose checked items are kept in sync with the film's categories: when the user changes selections the FilmCategoryService is updated accordingly for that film.
+                     * The CheckComboBox is pre-checked for the categories currently associated with the film provided in the cell data features;
+                     * when the user changes selections the film's associations are updated via the FilmCategoryService.
                      *
                      * @param p table cell data features containing the film whose categories should be displayed and edited
                      * @return a SimpleObjectProperty containing the configured CheckComboBox of category names
@@ -1248,9 +1238,9 @@ public class FilmController {
 
                         checkComboBox.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
                             /**
-                             * Updates the film's category associations to match the CheckComboBox checked items.
+                             * Synchronizes a film's category associations with the current checked items in the CheckComboBox.
                              *
-                             * @param change the change event describing modifications to the CheckComboBox checked items
+                             * @param change the change event for the CheckComboBox's checked items
                              */
                             @Override
                             /**
@@ -1274,9 +1264,9 @@ public class FilmController {
         this.idFilm_tableColumn
                 .setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Film, Long>, ObservableValue<Long>>() {
                     /**
-                     * Provide the film's id as an observable long value for a table cell.
+                     * Provide an observable value representing the film's id for the current table row.
                      *
-                     * @param filmcategoryLongCellDataFeatures cell data features for the current Film row
+                     * @param filmcategoryLongCellDataFeatures cell data features for the current Film row, used to obtain the Film instance
                      * @return an ObservableValue<Long> containing the film's id
                      */
                     @Override
@@ -1295,10 +1285,10 @@ public class FilmController {
         this.nomFilm_tableColumn.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<Film, String>, ObservableValue<String>>() {
                     /**
-                     * Provides an observable string property containing the film's name for the given table cell.
+                     * Provide an observable property representing the film's name for the table cell.
                      *
-                     * @param filmcategoryStringCellDataFeatures cell data features for the table cell; supplies the Film instance for this row
-                     * @return an ObservableValue<String> containing the Film's name
+                     * @param filmcategoryStringCellDataFeatures table cell data features supplying the Film instance for this row
+                     * @return an ObservableValue<String> containing the film's name
                      */
                     @Override
                     /**
@@ -1316,13 +1306,13 @@ public class FilmController {
         this.idacteurFilm_tableColumn.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<Film, CheckComboBox<String>>, ObservableValue<CheckComboBox<String>>>() {
                     /**
-                     * Create a CheckComboBox populated with actor names for the film represented by the given cell and keep the
-                     * control synchronized with the application's actor–film associations.
+                     * Create a CheckComboBox of actor names for the film represented by the given cell and keep the control synchronized
+                     * with that film's actor selections.
                      *
-                     * @param filmcategoryStringCellDataFeatures cell data features that provide the Film whose actor selections
-                     *                                           should be displayed and updated
-                     * @return an ObservableValue containing a CheckComboBox<String> pre-populated with actor names; changes to
-                     *         the checked items are propagated to the ActorFilmService to update the film's actor associations
+                     * @param filmcategoryStringCellDataFeatures cell data features that provide the Film whose actor selection is shown
+                     *                                           and updated
+                     * @return an ObservableValue containing a CheckComboBox<String> whose checked items reflect and update the film's
+                     *         associated actors
                      */
                     @Override
                     /**
@@ -1350,9 +1340,9 @@ public class FilmController {
                             checkComboBox.getCheckModel().check(checkedString);
                         checkComboBox.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
                             /**
-                             * Update the film's actor associations when the actor selection changes.
+                             * Handle updates to a film's actor associations when the CheckComboBox checked items change.
                              *
-                             * @param change a Change describing the modifications to the checked actor items
+                             * @param change the Change describing modifications to the checked actor items
                              */
                             @Override
                             /**
@@ -1377,13 +1367,12 @@ public class FilmController {
         this.idcinemaFilm_tableColumn.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<Film, CheckComboBox<String>>, ObservableValue<CheckComboBox<String>>>() {
                     /**
-                     * Creates a CheckComboBox of cinema names for a film and binds selection changes to persist cinema associations.
+                     * Create a CheckComboBox populated with all cinema names for a film and persist selection changes to that film's cinema associations.
                      *
-                     * @param filmcategoryStringCellDataFeatures cell data features for the table row; the film obtained from this
-                     *                                           object determines which cinemas are pre-checked and which film the
-                     *                                           selection updates will be applied to.
-                     * @return a SimpleObjectProperty containing the configured CheckComboBox of cinema names; the box's checked items
-                     *         reflect the film's current cinema associations and any changes are propagated to the FilmCinemaService.
+                     * The control pre-selects cinemas already linked to the film and updates persistence via FilmCinemaService when the checked items change.
+                     *
+                     * @param filmcategoryStringCellDataFeatures cell data features whose film determines which cinemas are pre-selected and which film will be updated
+                     * @return a SimpleObjectProperty containing the configured CheckComboBox; its checked items reflect and update the film's cinema associations
                      */
                     @Override
                     /**
@@ -1408,10 +1397,9 @@ public class FilmController {
                             checkComboBox.getCheckModel().check(checkedString);
                         checkComboBox.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
                             /**
-                             * Handle changes to the combo-box selection by logging the currently checked items
-                             * and updating the cinemas associated with the current film entry.
+                             * Reacts to changes in the CheckComboBox selection: logs the currently checked items and persists the updated cinema associations for the film.
                              *
-                             * @param change the change event describing the updated value(s) of the combo box
+                             * @param change the change event describing the updated checked values
                              */
                             @Override
                             /**
@@ -1448,9 +1436,9 @@ public class FilmController {
         this.annederalisationFilm_tableColumn
                 .setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Film, Integer>>() {
                     /**
-                     * Updates a film's release year when an edit is committed in the table and persists the change.
+                     * Persist the edited release year for the film represented by the edited table row.
                      *
-                     * @param event the cell edit event containing the film row and the new release year
+                     * @param event the cell edit event whose row identifies the Film and whose new value is the updated release year
                      */
                     @Override
                     /**
@@ -1474,10 +1462,10 @@ public class FilmController {
 );
         this.nomFilm_tableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Film, String>>() {
             /**
-             * Update a Film's name from an edited table cell and persist the change.
+             * Apply an edited name from a table cell to the corresponding Film and persist the change.
              *
-             * <p>Extracts the new name from the provided cell edit event, sets it on the corresponding
-             * Film object in the table's items, and persists the updated Film.</p>
+             * <p>Sets the Film's name using the cell edit event's new value, then calls the controller's
+             * update method to save the modified Film. Any exception during update is logged.</p>
              *
              * @param event the cell edit event containing the edited row position and the new name value
              */
@@ -1502,9 +1490,11 @@ public class FilmController {
 );
         this.descriptionFilm_tableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Film, String>>() {
             /**
-             * Commits an edited description into the corresponding Film and persists the change.
+             * Persist the edited description to the Film associated with the edited table row.
              *
-             * @param event the cell edit event containing the new description value and the table position
+             * Updates the Film object's description with the cell's new value and invokes persistence.
+             *
+             * @param event the table cell edit event containing the new description and the edited row position
              */
             @Override
             /**
@@ -1528,9 +1518,9 @@ public class FilmController {
 );
         this.dureeFilm_tableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Film, Time>>() {
             /**
-             * Updates a film's duration from an edited table cell and saves the modified film.
+             * Set the edited duration on the corresponding film row and persist the change.
              *
-             * @param event the cell edit event containing the new Time value and the row position of the edited film
+             * @param event the cell edit event carrying the new duration value and the row position of the edited film
              */
             @Override
             /**
@@ -1582,9 +1572,9 @@ public class FilmController {
 
 
     /**
-     * Uploads a user-selected PNG or JPG image and updates imageFilm_ImageView with the uploaded image.
+     * Opens a file chooser to select a PNG or JPG, uploads the chosen file to the configured image storage, and sets imageFilm_ImageView to the uploaded image.
      *
-     * <p>The selected file is uploaded to the configured image storage and the ImageView is set to the uploaded image's URL.</p>
+     * <p>On success updates {@code cloudinaryImageUrl} and the ImageView; upload or chooser errors are logged.</p>
      */
     @FXML
     void importImage(final ActionEvent event) {

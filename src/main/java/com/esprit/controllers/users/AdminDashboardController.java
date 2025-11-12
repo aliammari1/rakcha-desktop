@@ -164,15 +164,14 @@ public class AdminDashboardController {
         final Tooltip tooltip = new Tooltip();
         textField.textProperty().addListener(new ChangeListener<String>() {
             /**
-             * Validate changes to the associated TextField and show or hide an inline tooltip error.
+             * Validates a text change for the associated TextField and shows or hides an inline tooltip.
              *
-             * When the new text is empty or fails the configured validation predicate, a tooltip
-             * containing the appropriate error message is displayed near the TextField; when the
-             * new text is valid the tooltip is hidden.
+             * When the new value is empty or fails the configured predicate, a red tooltip with the
+             * error message is shown near the TextField; when valid, any shown tooltip is hidden.
              *
-             * @param observable the observable emitting the text changes
-             * @param oldValue   the previous text value before the change
-             * @param newValue   the new text value to validate
+             * @param observable the observable emitting text changes
+             * @param oldValue the previous text value
+             * @param newValue the new text value to validate
              */
             @Override
             /**
@@ -325,10 +324,15 @@ public class AdminDashboardController {
 
 
     /**
-     * Sets up cell value factories for each column of a table displaying
-     * information about users. These factories provide the content for each cell,
-     * such as a user's first or last name, phone number, password, role, address,
-     * date of birth, email, and photo profile picture.
+     * Configure how each table column obtains the value displayed for a User row.
+     *
+     * <p>Sets PropertyValueFactory mappings for simple string properties (first name, last name,
+     * phone, password, role, address, email). For the date-of-birth column it provides a
+     * DatePicker initialized from the user's birth date. For the profile-photo column it supplies
+     * an HBox containing an ImageView sourced from the user's photo URL and attaches a click
+     * handler that opens a FileChooser to replace the image and update the controller's
+     * photoDeProfilImageView. For the delete column it provides a Button that deletes the row's
+     * user and refreshes the table.</p>
      */
     private void setupCellValueFactories() {
         this.firstNameTableColumn.setCellValueFactory(new PropertyValueFactory<User, String>("firstName"));
@@ -340,9 +344,9 @@ public class AdminDashboardController {
         this.dateDeNaissanceTableColumn.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<User, DatePicker>, ObservableValue<DatePicker>>() {
                     /**
-                     * Create a DatePicker initialized to the user's birth date for use as a cell value.
+                     * Create a DatePicker initialized from the row user's birth date for use as the table cell value.
                      *
-                     * @param param cell data features containing the User whose birth date will initialize the DatePicker
+                     * @param param cell data features containing the User for the current row
                      * @return an ObservableValue containing a DatePicker set to the user's birth date if present, otherwise a DatePicker with no value
                      */
                     @Override
@@ -367,11 +371,10 @@ public class AdminDashboardController {
         this.photoDeProfilTableColumn
                 .setCellValueFactory(new Callback<TableColumn.CellDataFeatures<User, HBox>, ObservableValue<HBox>>() {
                     /**
-                     * Create an HBox containing the user's profile ImageView and attach a click handler
-                     * that opens a file chooser to select and display a new profile image.
+                     * Creates an HBox containing the user's profile ImageView and attaches a click handler that opens a file chooser to replace the image and update the controller's profile image view.
                      *
-                     * @param param provides the User whose `photoDeProfil` URL is used to populate the ImageView
-                     * @return an ObservableValue wrapping an HBox that contains the user's profile ImageView
+                     * @param param provides the TableColumn.CellDataFeatures for the row; its User's `photoDeProfil` URL is used to populate the ImageView and the selected replacement image (if any) is applied to the controller's `photoDeProfilImageView`
+                     * @return an ObservableValue that wraps an HBox containing the user's profile ImageView
                      */
                     @Override
                     /**
@@ -388,12 +391,12 @@ public class AdminDashboardController {
                             hBox.getChildren().add(imageView);
                             hBox.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
                                 /**
-                                 * Open a file chooser to select a PNG or JPG image and display it in the controller.
+                                 * Opens a file chooser for PNG/JPG images and, if a file is selected, displays it in the controller.
                                  *
-                                 * If the user selects an image file, the method sets that image on `imageView` and
-                                 * `photoDeProfilImageView` and replaces the contents of `hBox` with the image.
+                                 * If the user selects a file the image is loaded and set on `imageView` and `photoDeProfilImageView`, and
+                                 * the `hBox` children are replaced with the `imageView`.
                                  *
-                                 * @param event the mouse event that triggered the file chooser
+                                 * @param event the MouseEvent that triggered the file chooser
                                  */
                                 @Override
                                 /**
@@ -436,10 +439,10 @@ public class AdminDashboardController {
         this.deleteTableColumn.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<User, Button>, ObservableValue<Button>>() {
                     /**
-                     * Create a table-cell value containing a "delete" button for the row's user.
+                     * Creates a table-cell value containing a "delete" button for the row's user.
                      *
-                     * @param param provides the table cell context from which the row's {@code User} (and its id) can be obtained
-                     * @return an {@code ObservableValue<Button>} wrapping a button that deletes the row's user and reloads the user table when clicked
+                     * @param param table cell context used to obtain the row's User and its id
+                     * @return an ObservableValue containing a Button that, when clicked, deletes the row's user and reloads the user table
                      */
                     @Override
                     /**
@@ -451,9 +454,9 @@ public class AdminDashboardController {
                         final Button button = new Button("delete");
                         button.setOnAction(new EventHandler<ActionEvent>() {
                             /**
-                             * Deletes the user associated with the triggered delete action and refreshes the user table.
+                             * Delete the user associated with the triggering action and refresh the user table.
                              *
-                             * @param event the ActionEvent from the delete control that triggered this handler
+                             * @param event the ActionEvent that triggered the delete
                              */
                             @Override
                             /**
@@ -506,10 +509,11 @@ public class AdminDashboardController {
              * @param newValue   the current text value
              */
             /**
-             * Intercepts key presses in the cell's text field and prevents committing the edit
-             * when validation errors are present (for example when Enter is pressed).
+             * Create a TableCell for editing User string properties that enforces lowercase input
+             * and prevents committing edits while validation errors are present.
              *
-             * @param event the key event received from the text field
+             * @param param the table column for which the cell factory is created
+             * @return a TableCell configured with an inline text editor that validates input is lowercase and blocks commit (for example via Enter) when validation fails
              */
             @Override
             /**
@@ -521,6 +525,13 @@ public class AdminDashboardController {
                 return new TextFieldTableCell<User, String>(new DefaultStringConverter()) {
                     private Validator validator;
 
+                    /**
+                     * Enters edit mode and attaches lowercase validation and inline feedback to the cell's text editor.
+                     *
+                     * <p>If the cell's graphic is a {@code TextField} and no validator is present, installs a validator
+                     * that requires all-lowercase input, shows a red tooltip near the editor when validation fails,
+                     * and prevents committing the edit with Enter while validation errors exist.</p>
+                     */
                     @Override
                     /**
                      * Performs startEdit operation.
@@ -621,10 +632,11 @@ public class AdminDashboardController {
              * @param newValue the new text value
              */
             /**
-             * Handles key events on the TextField and consumes Enter key presses when validation errors exist
-             * to prevent committing invalid input.
+             * Creates a table cell that provides an inline TextField editor which enforces lowercase input
+             * and prevents committing edits when validation errors are present.
              *
-             * @param event the KeyEvent to handle
+             * @param param the table column for which the cell is created
+             * @return a configured TableCell that validates input (shows a red tooltip on error) and consumes Enter key presses while errors exist
              */
             @Override
             /**
@@ -636,6 +648,11 @@ public class AdminDashboardController {
                 return new TextFieldTableCell<User, String>(new DefaultStringConverter()) {
                     private Validator validator;
 
+                    /**
+                     * Initializes inline editing for the cell: adds a lowercase-only validator to the cell's TextField, displays a red tooltip near the field when validation fails, and prevents committing the edit with Enter while validation errors exist.
+                     *
+                     * <p>The validator is created once per cell when editing starts and attaches listeners to update tooltip visibility and to consume Enter key events while the input is invalid.</p>
+                     */
                     @Override
                     /**
                      * Performs startEdit operation.
@@ -733,9 +750,11 @@ public class AdminDashboardController {
              * @param newValue   the new text value
              */
             /**
-             * Intercepts key presses in the editor and prevents committing the edit when validation errors exist.
+             * Creates an editable TableCell for the given column that enforces lowercase validation on its text editor,
+             * shows a red tooltip for validation errors, and prevents committing edits when validation errors exist.
              *
-             * @param event the key event received by the editor
+             * @param param the TableColumn for which the cell is created
+             * @return the configured TableCell instance
              */
             @Override
             /**
@@ -747,6 +766,9 @@ public class AdminDashboardController {
                 return new TextFieldTableCell<User, String>() {
                     private Validator validator;
 
+                    /**
+                     * Prepare the table cell for inline editing by attaching a lowercase-only validator, displaying a red tooltip near the editor when validation fails, and preventing Enter commits while errors exist.
+                     */
                     @Override
                     /**
                      * Performs startEdit operation.
@@ -828,12 +850,13 @@ public class AdminDashboardController {
 );
         this.passwordTableColumn.setCellFactory(new Callback<TableColumn<User, String>, TableCell<User, String>>() {
             /**
-             * Creates a table cell that provides an editable text field which enforces lowercase-only input and shows a validation tooltip.
+             * Creates a TableCell that provides an editable text field enforcing lowercase-only input with inline validation feedback.
              *
-             * <p>The cell uses a TextField for in-place editing, validates the entered text to ensure it is all lowercase, displays a red tooltip with an error message when validation fails, and suppresses commit of the edit when the Enter key is pressed while validation errors exist.</p>
+             * When the cell is edited, it displays a red tooltip with an error message if the input contains characters that are not lowercase
+             * and prevents committing the edit via Enter while the validation error is present.
              *
-             * @param param the table column for which the cell is created
-             * @return a configured TableCell<User, String> that validates input to lowercase and presents inline validation feedback
+             * @param param the TableColumn for which the cell is created
+             * @return a configured TableCell<User, String> that validates edits to lowercase and shows inline error tooltip
              */
             @Override
             /**
@@ -845,6 +868,13 @@ public class AdminDashboardController {
                 return new TextFieldTableCell<User, String>(new DefaultStringConverter()) {
                     private Validator validator;
 
+                    /**
+                     * Begins editing this table cell and attaches inline validation and UI feedback for the editor.
+                     *
+                     * If the cell's graphic is a TextField and no validator is present, a validator is added that requires
+                     * the field's text to be all lowercase. When validation fails a red tooltip is shown near the editor,
+                     * and pressing Enter to commit the edit is prevented while validation errors exist.
+                     */
                     @Override
                     /**
                      * Performs startEdit operation.
@@ -928,10 +958,10 @@ public class AdminDashboardController {
                 "client", "responsable de cinema"));
         this.adresseTableColumn.setCellFactory(new Callback<TableColumn<User, String>, TableCell<User, String>>() {
             /**
-             * Creates editable table cells for the address column that enforce lowercase input and show a red tooltip when validation fails.
+             * Creates a TableCell for editing a user's address that enforces lowercase input and shows a red tooltip when validation fails.
              *
-             * @param param the table column for which the cell is being created
-             * @return a TableCell configured to edit address values, validate that the edited text is all lowercase, prevent commit on validation errors, and display a tooltip with the validation message
+             * @param param the table column for which the cell is created
+             * @return a TableCell configured for editing address values; commits are prevented while validation errors exist
              */
             @Override
             /**
@@ -943,6 +973,13 @@ public class AdminDashboardController {
                 return new TextFieldTableCell<User, String>(new DefaultStringConverter()) {
                     private Validator validator;
 
+                    /**
+                     * Prepares the cell's inline editor for editing an address and attaches lowercase validation.
+                     *
+                     * <p>When the cell's TextField editor is present, installs a Validator that requires the text
+                     * to be all lowercase, displays a red tooltip with validation messages near the field when
+                     * validation fails, and prevents committing the edit via Enter while validation errors exist.</p>
+                     */
                     @Override
                     /**
                      * Performs startEdit operation.
@@ -1024,10 +1061,10 @@ public class AdminDashboardController {
 );
         this.emailTableColumn.setCellFactory(new Callback<TableColumn<User, String>, TableCell<User, String>>() {
             /**
-             * Creates a TableCell for string editing that validates input as lowercase and shows an inline tooltip for errors.
+             * Creates a TableCell that enables in-place string editing, enforces lowercase input, and shows an inline red tooltip for validation errors.
              *
-             * @param param the table column this cell factory is associated with
-             * @return a TableCell configured for in-place text editing with lowercase validation and user feedback
+             * @param param the TableColumn this cell factory is associated with
+             * @return a TableCell configured for text editing with lowercase validation and inline error feedback
              */
             @Override
             /**
@@ -1039,6 +1076,14 @@ public class AdminDashboardController {
                 return new TextFieldTableCell<User, String>(new DefaultStringConverter()) {
                     private Validator validator;
 
+                    /**
+                     * Prepares the cell for inline editing by initializing a lowercase-only validator for the
+                     * email editor, showing a red tooltip near the editor when validation fails, and preventing
+                     * commit via Enter while there are validation errors.
+                     *
+                     * <p>The validator is attached to the TextField used as the cell's graphic; it displays
+                     * real-time validation feedback and consumes Enter key events if the current input is invalid.</p>
+                     */
                     @Override
                     /**
                      * Performs startEdit operation.
@@ -1132,6 +1177,11 @@ public class AdminDashboardController {
      */
     private void setupCellOnEditCommit() {
         this.firstNameTableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
+            /**
+             * Applies the edited first name from the table cell to the corresponding User and persists the change.
+             *
+             * @param event the cell edit event containing the affected row and the new first-name value
+             */
             @Override
             /**
              * Performs handle operation.
@@ -1153,6 +1203,11 @@ public class AdminDashboardController {
         }
 );
         this.lastNameTableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
+            /**
+             * Applies the edited last name from the given cell edit event to the corresponding User and persists the change.
+             *
+             * @param event the table cell edit event containing the new last name and the affected row
+             */
             @Override
             /**
              * Performs handle operation.
@@ -1174,6 +1229,11 @@ public class AdminDashboardController {
         }
 );
         this.numTelTableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
+            /**
+             * Update the edited user's phone number and persist the change.
+             *
+             * @param event the cell edit event containing the new phone number and the target row
+             */
             @Override
             /**
              * Performs handle operation.
@@ -1195,6 +1255,11 @@ public class AdminDashboardController {
         }
 );
         this.passwordTableColumn.setOnEditStart(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
+            /**
+             * Handles a password cell edit by applying the new value to the corresponding user and persisting the change.
+             *
+             * @param event the cell edit event containing the new password value and the table row context
+             */
             @Override
             /**
              * Performs handle operation.
@@ -1216,6 +1281,11 @@ public class AdminDashboardController {
         }
 );
         this.roleTableColumn.setOnEditStart(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
+            /**
+             * Applies the edited role value to the user in the edited table row and persists the update.
+             *
+             * @param event the table cell edit event containing the new role value and the edited row information
+             */
             @Override
             /**
              * Performs handle operation.
@@ -1236,6 +1306,11 @@ public class AdminDashboardController {
         }
 );
         this.adresseTableColumn.setOnEditStart(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
+            /**
+             * Commits an edited address cell to the corresponding User and persists the update.
+             *
+             * @param event the cell edit event carrying the new address value and target row
+             */
             @Override
             /**
              * Performs handle operation.
@@ -1257,6 +1332,11 @@ public class AdminDashboardController {
         }
 );
         this.dateDeNaissanceTableColumn.setOnEditStart(new EventHandler<TableColumn.CellEditEvent<User, DatePicker>>() {
+            /**
+             * Handles a committed edit from a DatePicker cell by updating the corresponding user's birth date and persisting the change.
+             *
+             * @param event the cell edit event containing the new DatePicker value and the row for the edited user
+             */
             @Override
             /**
              * Performs handle operation.
@@ -1273,6 +1353,11 @@ public class AdminDashboardController {
         }
 );
         this.emailTableColumn.setOnEditStart(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
+            /**
+             * Updates the edited user's email from the table cell edit and persists the change.
+             *
+             * @param event the cell edit event containing the new email value and the affected row
+             */
             @Override
             /**
              * Performs handle operation.
@@ -1291,9 +1376,7 @@ public class AdminDashboardController {
 
 
     /**
-     * Clears all user input controls, resetting text fields, the role selection, the date picker to a minimal date, and removing the profile image.
-     *
-     * @param event the action event that triggered the clear operation
+     * Clears all form inputs: empties text fields, clears the role selection, sets the date picker to a minimal date, and removes the profile image.
      */
     @FXML
     void clearTextFields(final ActionEvent event) {
@@ -1311,10 +1394,10 @@ public class AdminDashboardController {
 
 
     /**
- * Delete the user with the given identifier from the data store.
- *
- * @param id the identifier of the user to delete
- */
+     * Remove the user with the specified identifier from persistent storage.
+     *
+     * @param id the identifier of the user to remove
+     */
     void delete(final Long id) {
         // String role = roleComboBox.getValue();
         // User user = null;
@@ -1354,7 +1437,10 @@ public class AdminDashboardController {
 
 
     /**
-     * @param event
+     * Opens a file chooser to select a PNG or JPG image, uploads the selected file to Cloudinary,
+     * sets the uploaded image into the profile ImageView, and stores the resulting URL.
+     *
+     * @param event the ActionEvent triggered by the import image control
      */
     @FXML
     void importImage(final ActionEvent event) {
@@ -1384,7 +1470,9 @@ public class AdminDashboardController {
 
 
     /**
-     * @param user
+     * Persist updates for the specified user to the data store.
+     *
+     * @param user the User whose updated state should be saved
      */
     void update(final User user) {
         try {
@@ -1397,6 +1485,12 @@ public class AdminDashboardController {
     }
 
 
+    /**
+     * Generate a PDF report containing the application's users.
+     *
+     * <p>Triggers creation of the user PDF report and persists or exports it according
+     * to application configuration.</p>
+     */
     @FXML
     void generatePDF() {
         final UserService userService = new UserService();
@@ -1404,6 +1498,12 @@ public class AdminDashboardController {
     }
 
 
+    /**
+     * Sign out the current user and display the sign-up screen.
+     *
+     * @param event the triggering ActionEvent
+     * @throws IOException if loading the sign-up FXML fails
+     */
     @FXML
     /**
      * Performs signOut operation.
