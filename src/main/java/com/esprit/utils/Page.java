@@ -25,47 +25,60 @@ public class Page<T> {
         this.totalPages = (int) Math.ceil((double) totalElements / size);
     }
 
+
     public List<T> getContent() {
         return content;
     }
+
 
     public int getPage() {
         return page;
     }
 
+
     public int getSize() {
         return size;
     }
+
 
     public long getTotalElements() {
         return totalElements;
     }
 
+
     public int getTotalPages() {
         return totalPages;
     }
+
 
     public boolean hasNext() {
         return page < totalPages - 1;
     }
 
+
     public boolean hasPrevious() {
         return page > 0;
     }
+
 
     public boolean isFirst() {
         return page == 0;
     }
 
+
     public boolean isLast() {
         return page == totalPages - 1;
     }
+
 
     public int getNumberOfElements() {
         return content.size();
     }
 
+
     public boolean isEmpty() {
         return content.isEmpty();
     }
+
 }
+

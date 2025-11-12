@@ -37,6 +37,7 @@ class ResetPasswordControllerTest extends TestFXBase {
         stage.toFront();
     }
 
+
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("UI Elements Tests")
     class UIElementsTests {
@@ -49,12 +50,14 @@ class ResetPasswordControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(2)
         @DisplayName("Should display new password field")
         void testNewPasswordFieldVisible() {
             waitForFxEvents();
         }
+
 
         @Test
         @Order(3)
@@ -63,13 +66,16 @@ class ResetPasswordControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(4)
         @DisplayName("Should display reset button")
         void testResetButtonVisible() {
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Password Validation Tests")
@@ -83,6 +89,7 @@ class ResetPasswordControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(11)
         @DisplayName("Should require minimum password length")
@@ -90,6 +97,7 @@ class ResetPasswordControllerTest extends TestFXBase {
             // Password too short should be invalid
             waitForFxEvents();
         }
+
 
         @Test
         @Order(12)
@@ -99,6 +107,7 @@ class ResetPasswordControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(13)
         @DisplayName("Should require lowercase letter")
@@ -106,6 +115,7 @@ class ResetPasswordControllerTest extends TestFXBase {
             // Password without lowercase should be invalid
             waitForFxEvents();
         }
+
 
         @Test
         @Order(14)
@@ -115,6 +125,7 @@ class ResetPasswordControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(15)
         @DisplayName("Should require special character")
@@ -122,6 +133,7 @@ class ResetPasswordControllerTest extends TestFXBase {
             // Password without special char should be invalid
             waitForFxEvents();
         }
+
 
         @Test
         @Order(16)
@@ -131,6 +143,7 @@ class ResetPasswordControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(17)
         @DisplayName("Should show error for mismatched passwords")
@@ -138,7 +151,9 @@ class ResetPasswordControllerTest extends TestFXBase {
             // Different passwords should show error
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Password Reset Flow Tests")
@@ -152,6 +167,7 @@ class ResetPasswordControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(21)
         @DisplayName("Should verify code input")
@@ -159,6 +175,7 @@ class ResetPasswordControllerTest extends TestFXBase {
             // Correct code should be accepted
             waitForFxEvents();
         }
+
 
         @Test
         @Order(22)
@@ -168,6 +185,7 @@ class ResetPasswordControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(23)
         @DisplayName("Should reset password successfully")
@@ -175,6 +193,7 @@ class ResetPasswordControllerTest extends TestFXBase {
             // Valid inputs should reset password
             waitForFxEvents();
         }
+
 
         @Test
         @Order(24)
@@ -184,6 +203,7 @@ class ResetPasswordControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(25)
         @DisplayName("Should show success notification")
@@ -191,7 +211,9 @@ class ResetPasswordControllerTest extends TestFXBase {
             // Success message should be displayed
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Security Tests")
@@ -205,6 +227,7 @@ class ResetPasswordControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(31)
         @DisplayName("Should prevent brute force attempts")
@@ -212,6 +235,7 @@ class ResetPasswordControllerTest extends TestFXBase {
             // Multiple failed attempts should be limited
             waitForFxEvents();
         }
+
 
         @Test
         @Order(32)
@@ -221,6 +245,7 @@ class ResetPasswordControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(33)
         @DisplayName("Should not accept same password as current")
@@ -228,7 +253,9 @@ class ResetPasswordControllerTest extends TestFXBase {
             // New password should differ from current
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Error Handling Tests")
@@ -242,6 +269,7 @@ class ResetPasswordControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(41)
         @DisplayName("Should handle email sending failure")
@@ -250,6 +278,7 @@ class ResetPasswordControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(42)
         @DisplayName("Should handle network errors")
@@ -257,5 +286,8 @@ class ResetPasswordControllerTest extends TestFXBase {
             // Network issues should show appropriate message
             waitForFxEvents();
         }
+
     }
+
 }
+

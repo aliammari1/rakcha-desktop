@@ -34,18 +34,16 @@ public class ShoppingCart {
     private User user;
 
     /**
-     * Constructor without id for creating new shopping cart instances.
+     * Create a ShoppingCart instance for a new (not yet persisted) cart without an id.
      *
-     * @param quantity
-     *                 The quantity of the product in the cart.
-     * @param product
-     *                 The product associated with the cart.
-     * @param user
-     *                 The user associated with the cart.
+     * @param quantity the quantity of the product in the cart
+     * @param product  the product added to the cart
+     * @param user     the owner of the cart
      */
     public ShoppingCart(final int quantity, final Product product, final User user) {
         this.quantity = quantity;
         this.product = product;
         this.user = user;
     }
+
 }

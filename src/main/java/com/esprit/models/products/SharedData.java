@@ -28,16 +28,18 @@ public class SharedData {
     private SharedData() {
     }
 
+
     /**
-     * Returns the instance of the SharedData class. If the instance does not exist,
-     * a new instance is created.
+     * Get the singleton SharedData instance, creating it if necessary.
      *
-     * @return The instance of the SharedData class.
+     * @return the current SharedData singleton instance
      */
     public static SharedData getInstance() {
         if (null == instance) {
             SharedData.instance = new SharedData();
         }
+
         return SharedData.instance;
     }
+
 }

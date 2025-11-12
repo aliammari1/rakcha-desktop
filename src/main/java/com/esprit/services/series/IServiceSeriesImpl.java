@@ -35,7 +35,8 @@ public class IServiceSeriesImpl implements IService<Series> {
     private static final String[] ALLOWED_SORT_COLUMNS = {
             "id", "name", "summary", "director", "country", "image",
             "liked", "number_of_likes", "disliked", "number_of_dislikes"
-    };
+    }
+;
 
     /**
      * Constructs a new IServiceSeriesImpl instance.
@@ -74,6 +75,7 @@ public class IServiceSeriesImpl implements IService<Series> {
                 """);
     }
 
+
     @Override
     /**
      * Creates a new entity in the database.
@@ -98,7 +100,9 @@ public class IServiceSeriesImpl implements IService<Series> {
         } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error creating series: " + e.getMessage(), e);
         }
+
     }
+
 
     @Override
     /**
@@ -125,7 +129,9 @@ public class IServiceSeriesImpl implements IService<Series> {
         } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error updating series: " + e.getMessage(), e);
         }
+
     }
+
 
     @Override
     /**
@@ -143,7 +149,9 @@ public class IServiceSeriesImpl implements IService<Series> {
         } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error deleting series: " + e.getMessage(), e);
         }
+
     }
+
 
     @Override
     /**
@@ -163,6 +171,7 @@ public class IServiceSeriesImpl implements IService<Series> {
             pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
 
+
         try {
             // Get total count
             final String countQuery = PaginationQueryBuilder.buildCountQuery(baseQuery);
@@ -177,7 +186,9 @@ public class IServiceSeriesImpl implements IService<Series> {
                     final Series s = buildSeriesFromResultSet(rs);
                     content.add(s);
                 }
+
             }
+
 
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
 
@@ -185,7 +196,9 @@ public class IServiceSeriesImpl implements IService<Series> {
             LOGGER.log(Level.SEVERE, "Error retrieving paginated series: " + e.getMessage(), e);
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
         }
+
     }
+
 
     /**
      * Helper method to build Series object from ResultSet.
@@ -209,6 +222,7 @@ public class IServiceSeriesImpl implements IService<Series> {
                 .build();
     }
 
+
     /**
      * Retrieves series by category.
      * 
@@ -231,10 +245,14 @@ public class IServiceSeriesImpl implements IService<Series> {
                     final Series serie = buildSeriesFromResultSet(rs);
                     series.add(serie);
                 }
+
             }
+
         }
+
         return series;
     }
+
 
     /**
      * Adds a like to the specified series.
@@ -250,7 +268,9 @@ public class IServiceSeriesImpl implements IService<Series> {
             ps.setLong(3, serie.getId());
             ps.executeUpdate();
         }
+
     }
+
 
     /**
      * Removes a like from the specified series.
@@ -266,7 +286,9 @@ public class IServiceSeriesImpl implements IService<Series> {
             ps.setLong(3, serie.getId());
             ps.executeUpdate();
         }
+
     }
+
 
     /**
      * Adds a dislike to the specified series.
@@ -282,7 +304,9 @@ public class IServiceSeriesImpl implements IService<Series> {
             ps.setLong(3, serie.getId());
             ps.executeUpdate();
         }
+
     }
+
 
     /**
      * Removes a dislike from the specified series.
@@ -298,7 +322,9 @@ public class IServiceSeriesImpl implements IService<Series> {
             ps.setLong(3, serie.getId());
             ps.executeUpdate();
         }
+
     }
+
 
     /**
      * Finds the most liked series.
@@ -313,11 +339,14 @@ public class IServiceSeriesImpl implements IService<Series> {
                 final Series serie = buildSeriesFromResultSet(rs);
                 series.add(serie);
             }
+
         } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return series;
     }
+
 
     /**
      * Retrieves the LikesStatistics value.
@@ -334,11 +363,14 @@ public class IServiceSeriesImpl implements IService<Series> {
                 final int nbLikes = resultSet.getInt("number_of_likes");
                 likesStatistics.put(serie, nbLikes);
             }
+
         } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return likesStatistics;
     }
+
 
     /**
      * Retrieves the ByIdSeries value.
@@ -354,8 +386,13 @@ public class IServiceSeriesImpl implements IService<Series> {
                 if (rs.next()) {
                     serie = buildSeriesFromResultSet(rs);
                 }
+
             }
+
         }
+
         return serie;
     }
+
 }
+

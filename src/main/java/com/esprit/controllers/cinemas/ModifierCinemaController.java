@@ -55,36 +55,23 @@ public class ModifierCinemaController implements Initializable {
     private File selectedFile;
 
     /**
-     * Initializes the JavaFX controller and sets up UI components. This method is
-     * called automatically by JavaFX after loading the FXML file.
-     * 
-     * <p>
-     * This method is a no-op implementation as no specific initialization is
-     * required.
-     * </p>
+     * Called by the JavaFX runtime after the FXML is loaded; performs no additional initialization.
      *
-     * @param location  the location used to resolve relative paths for the root
-     *                  object,
-     *                  or null if the location is not known
-     * @param resources the resources used to localize the root object,
-     *                  or null if the root object was not localized
-     * @since 1.0
+     * @param location  the location used to resolve relative paths for the root object, or null if unknown
+     * @param resources the resources used to localize the root object, or null if not localized
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
     }
 
+
     /**
-     * Initializes the form with cinema data for editing.
-     * 
-     * <p>
-     * This method sets the text fields and image view with the current cinema's
-     * information including name, address, and logo image.
-     * </p>
+     * Populate the form fields and logo ImageView from the provided Cinema.
      *
-     * @param cinema the Cinema object containing the data to populate the form
-     * @throws IllegalArgumentException if cinema is null
-     * @since 1.0
+     * Sets the name and address text fields to the cinema's values and updates the logo ImageView
+     * when the cinema's logo path is non-null and non-empty.
+     *
+     * @param cinema the Cinema whose data will be used to populate the form
      */
     public void initData(Cinema cinema) {
         this.cinema = cinema;
@@ -95,17 +82,19 @@ public class ModifierCinemaController implements Initializable {
             Image image = new Image(logo);
             tfLogo.setImage(image);
         }
+
     }
 
+
     /**
-     * Allows users to edit the details of a cinema, including its name and address.
-     * It updates the cinema's information in the database and displays an alert
-     * message upon successful completion.
+     * Saves edits made to the currently selected cinema and opens the cinema dashboard.
      *
-     * @param event ActionEvent object that triggered the method execution,
-     *              providing
-     *              the source of the event and any related data
-     * @throws IOException if an I/O error occurs during FXML loading
+     * <p>Validates that a cinema is selected and that required fields (name and address)
+     * are filled; shows an informational alert on validation failure or success. Updates
+     * the cinema's name and address, clears its logo path, persists the change via
+     * CinemaService, and loads the DashboardResponsableCinema.fxml interface.</p>
+     *
+     * @throws IOException if loading the dashboard FXML fails
      * @since 1.0
      */
     @FXML
@@ -114,6 +103,7 @@ public class ModifierCinemaController implements Initializable {
             showAlert("Veuillez sélectionner un cinéma.");
             return;
         }
+
         // Récupérer les nouvelles valeurs des champs
         String nouveauNom = tfNom.getText();
         String nouvelleAdresse = tfAdresse.getText();
@@ -122,6 +112,7 @@ public class ModifierCinemaController implements Initializable {
             showAlert("Veuillez remplir tous les champs obligatoires.");
             return;
         }
+
         // Mettre à jour les informations du cinéma
         cinema.setName(nouveauNom);
         cinema.setAddress(nouvelleAdresse);
@@ -140,6 +131,7 @@ public class ModifierCinemaController implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
+
 
     /**
      * Handles file selection for cinema logo images.
@@ -163,14 +155,14 @@ public class ModifierCinemaController implements Initializable {
             final Image selectedImage = new Image(this.selectedFile.toURI().toString());
             this.tfLogo.setImage(selectedImage);
         }
+
     }
 
+
     /**
-     * Creates an Alert dialog with an information message.
+     * Displays an information alert containing the provided message.
      *
-     * @param message
-     *                text to be displayed as an information message when the
-     *                `showAlert()` method is called.
+     * @param message the text to display in the alert dialog
      */
     @FXML
     private void showAlert(final String message) {
@@ -180,4 +172,5 @@ public class ModifierCinemaController implements Initializable {
         alert.setContentText(message);
         alert.show();
     }
+
 }

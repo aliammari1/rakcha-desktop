@@ -39,6 +39,7 @@ class StatistiqueControllerTest extends TestFXBase {
         stage.show();
     }
 
+
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Statistics View Tests")
     class StatisticsViewTests {
@@ -53,6 +54,7 @@ class StatistiqueControllerTest extends TestFXBase {
             assertThat(borderPane).isNotNull();
         }
 
+
         @Test
         @Order(2)
         @DisplayName("Should display statistics combo box")
@@ -62,6 +64,7 @@ class StatistiqueControllerTest extends TestFXBase {
             ComboBox<String> comboBox = lookup("#statisticsComboBox").query();
             assertThat(comboBox).isNotNull();
         }
+
 
         @Test
         @Order(3)
@@ -73,6 +76,7 @@ class StatistiqueControllerTest extends TestFXBase {
             assertThat(comboBox.getItems()).isNotEmpty();
         }
 
+
         @Test
         @Order(4)
         @DisplayName("Should load category statistics on init")
@@ -82,7 +86,9 @@ class StatistiqueControllerTest extends TestFXBase {
             ComboBox<String> comboBox = lookup("#statisticsComboBox").query();
             assertThat(comboBox).isNotNull();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Bar Chart Tests")
@@ -102,6 +108,7 @@ class StatistiqueControllerTest extends TestFXBase {
             BorderPane borderPane = lookup("#borderPane").query();
             assertThat(borderPane.getCenter()).isInstanceOf(BarChart.class);
         }
+
 
         @Test
         @Order(6)
@@ -127,7 +134,9 @@ class StatistiqueControllerTest extends TestFXBase {
             for (XYChart.Series<String, Number> series : barChart.getData()) {
                 assertThat(series.getData()).isNotEmpty();
             }
+
         }
+
 
         @Test
         @Order(7)
@@ -156,6 +165,7 @@ class StatistiqueControllerTest extends TestFXBase {
             // Verify categories have been populated
             assertThat(barChart.getData()).isNotEmpty();
         }
+
 
         @Test
         @Order(8)
@@ -187,6 +197,7 @@ class StatistiqueControllerTest extends TestFXBase {
             assertThat(yAxis.getUpperBound()).isGreaterThanOrEqualTo(0);
         }
 
+
         @Test
         @Order(9)
         @DisplayName("Should display tooltip data on data points")
@@ -214,8 +225,11 @@ class StatistiqueControllerTest extends TestFXBase {
                     assertThat(data.getYValue()).isNotNull();
                     assertThat(data.getYValue().doubleValue()).isGreaterThanOrEqualTo(0);
                 }
+
             }
+
         }
+
 
         @Test
         @Order(10)
@@ -241,8 +255,11 @@ class StatistiqueControllerTest extends TestFXBase {
                 int categoryCount = series.getData().size();
                 assertThat(categoryCount).isLessThanOrEqualTo(displayLimit);
             }
+
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Pie Chart Tests")
@@ -263,6 +280,7 @@ class StatistiqueControllerTest extends TestFXBase {
             assertThat(borderPane.getCenter()).isInstanceOf(PieChart.class);
         }
 
+
         @Test
         @Order(12)
         @DisplayName("Should create pie chart with category data")
@@ -272,6 +290,7 @@ class StatistiqueControllerTest extends TestFXBase {
             ComboBox<String> comboBox = lookup("#statisticsComboBox").query();
             assertThat(comboBox).isNotNull();
         }
+
 
         @Test
         @Order(13)
@@ -287,6 +306,7 @@ class StatistiqueControllerTest extends TestFXBase {
             // Verify labels displayed
         }
 
+
         @Test
         @Order(14)
         @DisplayName("Should show percentages in pie chart")
@@ -301,6 +321,7 @@ class StatistiqueControllerTest extends TestFXBase {
             // Verify percentages calculated
         }
 
+
         @Test
         @Order(15)
         @DisplayName("Should show tooltips on pie slice hover")
@@ -314,7 +335,9 @@ class StatistiqueControllerTest extends TestFXBase {
 
             // Verify tooltips on slices
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Chart Switching Tests")
@@ -337,6 +360,7 @@ class StatistiqueControllerTest extends TestFXBase {
             assertThat(borderPane.getCenter()).isInstanceOf(PieChart.class);
         }
 
+
         @Test
         @Order(17)
         @DisplayName("Should switch from pie to bar chart")
@@ -354,6 +378,7 @@ class StatistiqueControllerTest extends TestFXBase {
             assertThat(borderPane.getCenter()).isInstanceOf(BarChart.class);
         }
 
+
         @Test
         @Order(18)
         @DisplayName("Should preserve data when switching charts")
@@ -363,7 +388,9 @@ class StatistiqueControllerTest extends TestFXBase {
             ComboBox<String> comboBox = lookup("#statisticsComboBox").query();
             assertThat(comboBox).isNotNull();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Context Menu Tests")
@@ -383,6 +410,7 @@ class StatistiqueControllerTest extends TestFXBase {
             // Verify context menu appears
         }
 
+
         @Test
         @Order(20)
         @DisplayName("Should provide export option in context menu")
@@ -392,7 +420,9 @@ class StatistiqueControllerTest extends TestFXBase {
             // Right click
             // Verify "Export" menu item
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Empty Data Tests")
@@ -408,6 +438,7 @@ class StatistiqueControllerTest extends TestFXBase {
             assertThat(comboBox).isNotNull();
         }
 
+
         @Test
         @Order(22)
         @DisplayName("Should display no data message")
@@ -417,7 +448,9 @@ class StatistiqueControllerTest extends TestFXBase {
             ComboBox<String> comboBox = lookup("#statisticsComboBox").query();
             assertThat(comboBox).isNotNull();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Data Update Tests")
@@ -433,6 +466,7 @@ class StatistiqueControllerTest extends TestFXBase {
             assertThat(comboBox).isNotNull();
         }
 
+
         @Test
         @Order(24)
         @DisplayName("Should update chart when data changes")
@@ -442,6 +476,9 @@ class StatistiqueControllerTest extends TestFXBase {
             ComboBox<String> comboBox = lookup("#statisticsComboBox").query();
             assertThat(comboBox).isNotNull();
         }
+
     }
 
+
 }
+

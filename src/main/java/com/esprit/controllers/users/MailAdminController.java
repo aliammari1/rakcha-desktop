@@ -29,7 +29,9 @@ public class MailAdminController {
     private Button sendButton;
 
     /**
-     * @param event
+     * Sends a 6-digit verification code to the email address currently entered in the mailTextField.
+     *
+     * @param event the ActionEvent that triggered the send action
      */
     @FXML
     void sendMail(final ActionEvent event) {
@@ -37,4 +39,5 @@ public class MailAdminController {
         final int verificationCode = random.nextInt(999999 - 100000) + 100000;
         UserMail.send(this.mailTextField.getText(), "the mail verification code is " + verificationCode);
     }
+
 }

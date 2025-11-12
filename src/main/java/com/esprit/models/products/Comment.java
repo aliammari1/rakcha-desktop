@@ -34,18 +34,16 @@ public class Comment {
     private Product product;
 
     /**
-     * Constructor without id for creating new comment instances.
+     * Create a Comment for a product without an id.
      *
-     * @param client
-     *                    The client who made the comment.
-     * @param commentText
-     *                    The comment text.
-     * @param product
-     *                    The product associated with the comment.
+     * @param client      the client who created the comment
+     * @param commentText the comment text
+     * @param product     the product the comment refers to
      */
     public Comment(final Client client, final String commentText, final Product product) {
         this.client = client;
         this.commentText = commentText;
         this.product = product;
     }
+
 }

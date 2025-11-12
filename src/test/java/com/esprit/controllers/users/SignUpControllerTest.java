@@ -59,6 +59,7 @@ class SignUpControllerTest extends TestFXBase {
         stage.toFront();
     }
 
+
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @DisplayName("UI Elements Tests")
@@ -81,12 +82,14 @@ class SignUpControllerTest extends TestFXBase {
                     "#loginButton");
         }
 
+
         @Test
         @Order(2)
         @DisplayName("Should display profile photo placeholder")
         void testProfilePhotoVisible() {
             verifyThat("#photoDeProfilImageView", isVisible());
         }
+
 
         @Test
         @Order(3)
@@ -95,7 +98,9 @@ class SignUpControllerTest extends TestFXBase {
             ComboBox<String> roleComboBox = lookup("#roleComboBox").query();
             TestAssertions.verifyComboBoxHasItems(roleComboBox);
         }
+
     }
+
 
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -118,6 +123,7 @@ class SignUpControllerTest extends TestFXBase {
             // Should show validation error
         }
 
+
         @Test
         @Order(11)
         @DisplayName("Should validate required last name field")
@@ -133,6 +139,7 @@ class SignUpControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(12)
         @DisplayName("Should validate email format")
@@ -143,6 +150,7 @@ class SignUpControllerTest extends TestFXBase {
             waitForFxEvents();
             // Should show email format error
         }
+
 
         @Test
         @Order(13)
@@ -158,6 +166,7 @@ class SignUpControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(14)
         @DisplayName("Should validate password strength")
@@ -169,6 +178,7 @@ class SignUpControllerTest extends TestFXBase {
             // Should show weak password error
         }
 
+
         @Test
         @Order(15)
         @DisplayName("Should validate phone number format")
@@ -179,6 +189,7 @@ class SignUpControllerTest extends TestFXBase {
             waitForFxEvents();
             // Should show phone format error
         }
+
 
         @Test
         @Order(16)
@@ -193,6 +204,7 @@ class SignUpControllerTest extends TestFXBase {
             // Should show date validation error
         }
 
+
         @Test
         @Order(17)
         @DisplayName("Should validate minimum age requirement")
@@ -205,7 +217,9 @@ class SignUpControllerTest extends TestFXBase {
             waitForFxEvents();
             // Should show age requirement error
         }
+
     }
+
 
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -222,6 +236,7 @@ class SignUpControllerTest extends TestFXBase {
             assertEquals(firstName, getTextFieldValue("#prenomTextField"));
         }
 
+
         @Test
         @Order(21)
         @DisplayName("Should accept valid last name")
@@ -231,6 +246,7 @@ class SignUpControllerTest extends TestFXBase {
 
             assertEquals(lastName, getTextFieldValue("#nomTextField"));
         }
+
 
         @Test
         @Order(22)
@@ -242,6 +258,7 @@ class SignUpControllerTest extends TestFXBase {
             TestAssertions.verifyTextFieldContains("#emailTextField", email);
         }
 
+
         @Test
         @Order(23)
         @DisplayName("Should accept valid phone number")
@@ -251,6 +268,7 @@ class SignUpControllerTest extends TestFXBase {
 
             assertEquals(phone, getTextFieldValue("#num_telephoneTextField"));
         }
+
 
         @Test
         @Order(24)
@@ -262,6 +280,7 @@ class SignUpControllerTest extends TestFXBase {
             assertEquals(address, getTextFieldValue("#adresseTextField"));
         }
 
+
         @Test
         @Order(25)
         @DisplayName("Should accept valid password")
@@ -271,6 +290,7 @@ class SignUpControllerTest extends TestFXBase {
 
             assertNotEquals("", getTextFieldValue("#passwordTextField"));
         }
+
 
         @Test
         @Order(26)
@@ -282,7 +302,9 @@ class SignUpControllerTest extends TestFXBase {
             assertEquals("O'Brien", getTextFieldValue("#nomTextField"));
             assertEquals("Jean-Pierre", getTextFieldValue("#prenomTextField"));
         }
+
     }
+
 
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -300,6 +322,7 @@ class SignUpControllerTest extends TestFXBase {
             assertEquals("Client", roleComboBox.getValue());
         }
 
+
         @Test
         @Order(31)
         @DisplayName("Should allow selecting Cinema Manager role")
@@ -310,6 +333,7 @@ class SignUpControllerTest extends TestFXBase {
             waitForFxEvents();
             assertEquals("Cinema Manager", roleComboBox.getValue());
         }
+
 
         @Test
         @Order(32)
@@ -325,7 +349,9 @@ class SignUpControllerTest extends TestFXBase {
             waitForFxEvents();
             // Should show role required error
         }
+
     }
+
 
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -342,6 +368,7 @@ class SignUpControllerTest extends TestFXBase {
             // Calendar should be displayed
         }
 
+
         @Test
         @Order(41)
         @DisplayName("Should select valid birth date")
@@ -354,6 +381,7 @@ class SignUpControllerTest extends TestFXBase {
             assertEquals(validDate, datePicker.getValue());
         }
 
+
         @Test
         @Order(42)
         @DisplayName("Should handle manual date input")
@@ -365,7 +393,9 @@ class SignUpControllerTest extends TestFXBase {
 
             waitForFxEvents();
         }
+
     }
+
 
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -398,6 +428,7 @@ class SignUpControllerTest extends TestFXBase {
             // Should navigate to success page or login
         }
 
+
         @Test
         @Order(51)
         @DisplayName("Should register new cinema manager successfully")
@@ -418,6 +449,7 @@ class SignUpControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(52)
         @DisplayName("Should handle registration with all optional fields")
@@ -437,7 +469,9 @@ class SignUpControllerTest extends TestFXBase {
             clickOnAndWait("#signUpButton");
             waitForFxEvents();
         }
+
     }
+
 
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -455,6 +489,7 @@ class SignUpControllerTest extends TestFXBase {
             // Should navigate to login page
         }
 
+
         @Test
         @Order(61)
         @DisplayName("Should support tab navigation through form fields")
@@ -468,6 +503,7 @@ class SignUpControllerTest extends TestFXBase {
             pressTab();
             assertTrue(lookup("#emailTextField").query().isFocused());
         }
+
 
         @Test
         @Order(62)
@@ -484,7 +520,9 @@ class SignUpControllerTest extends TestFXBase {
 
             waitForFxEvents();
         }
+
     }
+
 
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -502,6 +540,7 @@ class SignUpControllerTest extends TestFXBase {
             // All required field errors should be visible
         }
 
+
         @Test
         @Order(71)
         @DisplayName("Should clear errors when correcting inputs")
@@ -517,6 +556,7 @@ class SignUpControllerTest extends TestFXBase {
             waitForFxEvents();
             // Errors should clear as fields are corrected
         }
+
 
         @Test
         @Order(72)
@@ -534,7 +574,9 @@ class SignUpControllerTest extends TestFXBase {
 
             // Should show appropriate error message
         }
+
     }
+
 
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -558,6 +600,7 @@ class SignUpControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(81)
         @DisplayName("Form should have proper focus indicators")
@@ -568,5 +611,8 @@ class SignUpControllerTest extends TestFXBase {
             clickOn("#emailTextField");
             assertTrue(lookup("#emailTextField").query().isFocused());
         }
+
     }
+
 }
+

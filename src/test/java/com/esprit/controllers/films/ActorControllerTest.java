@@ -62,6 +62,7 @@ class ActorControllerTest extends TestFXBase {
         stage.toFront();
     }
 
+
     @BeforeEach
     public void setUp() {
         // Initialize ObjectMapper
@@ -80,7 +81,9 @@ class ActorControllerTest extends TestFXBase {
             // If ActorService cannot be instantiated, create a minimal mock
             actorService = null;
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -117,11 +120,14 @@ class ActorControllerTest extends TestFXBase {
                 Actor created = actorService.getActorByNom("Tom Hanks");
                 assertThat(created).isNotNull();
                 assertThat(created.getBiography()).isEqualTo("Award-winning American actor");
-            } else {
+            }
+ else {
                 // Verify UI feedback instead
                 assertThat(nameArea.getText()).isNotEmpty();
             }
+
         }
+
 
         @Test
         @Order(2)
@@ -145,6 +151,7 @@ class ActorControllerTest extends TestFXBase {
             // Verify error alert is displayed
             assertThat(lookup(".alert").tryQuery()).isPresent();
         }
+
 
         @Test
         @Order(3)
@@ -180,7 +187,9 @@ class ActorControllerTest extends TestFXBase {
                 assertThat(created).isNotNull();
                 assertThat(created.getBiography()).isEqualTo("Test Biography");
             }
+
         }
+
 
         @Test
         @Order(4)
@@ -217,7 +226,10 @@ class ActorControllerTest extends TestFXBase {
                 assertThat(created).isNotNull();
                 assertThat(created.getBiography()).isEqualTo("Test Biography");
             }
-        }    }
+
+        }
+    }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -242,6 +254,7 @@ class ActorControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(6)
         @DisplayName("Should validate image file size")
@@ -259,6 +272,7 @@ class ActorControllerTest extends TestFXBase {
             assertThat(lookup(".alert").tryQuery()).isEmpty();
         }
 
+
         @Test
         @Order(7)
         @DisplayName("Should validate image format")
@@ -274,9 +288,11 @@ class ActorControllerTest extends TestFXBase {
             } catch (Exception e) {
                 // Format validation error expected
             }
+
             
             waitForFxEvents();
         }
+
 
         @Test
         @Order(8)
@@ -296,6 +312,7 @@ class ActorControllerTest extends TestFXBase {
             assertThat(imageView.getImage()).isNotNull();
         }
 
+
         @Test
         @Order(9)
         @DisplayName("Should accept JPG images")
@@ -313,6 +330,7 @@ class ActorControllerTest extends TestFXBase {
             ImageView imageView = lookup("#imageActor_ImageView1").query();
             assertThat(imageView.getImage()).isNotNull();
         }
+
 
         @Test
         @Order(10)
@@ -332,7 +350,9 @@ class ActorControllerTest extends TestFXBase {
             assertThat(imageView.getImage()).isNotNull();
             assertThat(imageView.getImage()).isEqualTo(image);
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Actor Table Display Tests")
@@ -352,6 +372,7 @@ class ActorControllerTest extends TestFXBase {
             assertThat(table.getItems()).isNotNull();
         }
 
+
         @Test
         @Order(12)
         @DisplayName("Should hide ID column")
@@ -366,6 +387,7 @@ class ActorControllerTest extends TestFXBase {
             assertThat(idCol.isVisible()).isFalse();
         }
 
+
         @Test
         @Order(13)
         @DisplayName("Should display name column")
@@ -378,6 +400,7 @@ class ActorControllerTest extends TestFXBase {
                     .findFirst().orElse(null);
             assertThat(nameCol).isNotNull();
         }
+
 
         @Test
         @Order(14)
@@ -392,6 +415,7 @@ class ActorControllerTest extends TestFXBase {
             assertThat(bioCol).isNotNull();
         }
 
+
         @Test
         @Order(15)
         @DisplayName("Should display image column with ImageView")
@@ -405,6 +429,7 @@ class ActorControllerTest extends TestFXBase {
             assertThat(imageCol).isNotNull();
         }
 
+
         @Test
         @Order(16)
         @DisplayName("Should display delete button column")
@@ -417,7 +442,9 @@ class ActorControllerTest extends TestFXBase {
                     .findFirst().orElse(null);
             assertThat(deleteCol).isNotNull();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Actor Search Tests")
@@ -438,6 +465,7 @@ class ActorControllerTest extends TestFXBase {
             // Verify filtered results
         }
 
+
         @Test
         @Order(18)
         @DisplayName("Should perform case-insensitive search")
@@ -451,6 +479,7 @@ class ActorControllerTest extends TestFXBase {
 
             // Verify "Tom" matches "TOM"
         }
+
 
         @Test
         @Order(19)
@@ -484,6 +513,7 @@ class ActorControllerTest extends TestFXBase {
             assertThat(finalCount).isEqualTo(initialCount);
         }
 
+
         @Test
         @Order(20)
         @DisplayName("Should handle no search results")
@@ -498,6 +528,7 @@ class ActorControllerTest extends TestFXBase {
             TableView<Actor> table = lookup("#filmActor_tableView11").query();
             assertThat(table.getItems()).isEmpty();
         }
+
 
         @Test
         @Order(21)
@@ -515,7 +546,9 @@ class ActorControllerTest extends TestFXBase {
 
             // Verify search updates as user types
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Actor Update Tests")
@@ -537,7 +570,9 @@ class ActorControllerTest extends TestFXBase {
                 Actor actor = table.getItems().get(0);
                 assertThat(actor).isNotNull();
             }
+
         }
+
 
         @Test
         @Order(23)
@@ -556,6 +591,7 @@ class ActorControllerTest extends TestFXBase {
                     .findFirst().orElse(null);
             assertThat(bioCol).isNotNull();
         }
+
 
         @Test
         @Order(24)
@@ -576,6 +612,7 @@ class ActorControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(25)
         @DisplayName("Should show confirmation after update")
@@ -590,7 +627,9 @@ class ActorControllerTest extends TestFXBase {
             // Verify table is ready for updates
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Actor Delete Tests")
@@ -615,6 +654,7 @@ class ActorControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(27)
         @DisplayName("Should show confirmation after deletion")
@@ -634,6 +674,7 @@ class ActorControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(28)
         @DisplayName("Should refresh table after deletion")
@@ -651,7 +692,9 @@ class ActorControllerTest extends TestFXBase {
             
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -687,7 +730,9 @@ class ActorControllerTest extends TestFXBase {
                 // The undo action should have changed the state if there was an action to undo
                 assertThat(table.getItems()).isNotNull();
             }
+
         }
+
 
         @Test
         @Order(30)
@@ -719,7 +764,9 @@ class ActorControllerTest extends TestFXBase {
                 assertThat(table.getItems()).isNotNull();
                 assertThat(table.getItems().size()).isGreaterThanOrEqualTo(0);
             }
+
         }
+
 
         @Test
         @Order(31)
@@ -751,7 +798,9 @@ class ActorControllerTest extends TestFXBase {
                 waitForFxEvents();
                 assertThat(table.getItems()).isNotNull();
             }
+
         }
+
 
         @Test
         @Order(32)
@@ -785,9 +834,13 @@ class ActorControllerTest extends TestFXBase {
                     // Verify table state remains consistent
                     assertThat(table.getItems()).isNotNull();
                 }
+
             }
+
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -813,6 +866,7 @@ class ActorControllerTest extends TestFXBase {
             assertThat(table.isVisible()).isTrue();
         }
 
+
         @Test
         @Order(34)
         @DisplayName("Should import actors from JSON with Ctrl+I")
@@ -830,6 +884,7 @@ class ActorControllerTest extends TestFXBase {
             assertThat(table).isNotNull();
             assertThat(table.isVisible()).isTrue();
         }
+
 
         @Test
         @Order(35)
@@ -850,7 +905,9 @@ class ActorControllerTest extends TestFXBase {
                 assertThat(actor.getId()).isNotNull();
                 assertThat(actor.getName()).isNotNull();
             }
+
         }
+
 
         @Test
         @Order(36)
@@ -870,9 +927,11 @@ class ActorControllerTest extends TestFXBase {
                 Actor actor = table.getItems().get(0);
                 assertThat(actor).isNotNull();
             }
+
             
             waitForFxEvents();
         }
+
 
         @Test
         @Order(37)
@@ -891,6 +950,7 @@ class ActorControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(38)
         @DisplayName("Should handle import errors gracefully")
@@ -906,7 +966,9 @@ class ActorControllerTest extends TestFXBase {
             
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Table Editing Tests")
@@ -922,6 +984,7 @@ class ActorControllerTest extends TestFXBase {
             assertThat(table.isEditable()).isTrue();
         }
 
+
         @Test
         @Order(40)
         @DisplayName("Should use TextFieldTableCell for name column")
@@ -936,6 +999,7 @@ class ActorControllerTest extends TestFXBase {
             // Verify cell factory is TextFieldTableCell
         }
 
+
         @Test
         @Order(41)
         @DisplayName("Should use TextFieldTableCell for biography column")
@@ -949,7 +1013,9 @@ class ActorControllerTest extends TestFXBase {
             assertThat(bioCol).isNotNull();
             // Verify cell factory is TextFieldTableCell
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Navigation Tests")
@@ -968,7 +1034,9 @@ class ActorControllerTest extends TestFXBase {
 
             // Verify navigation to InterfaceFilm.fxml
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Error Handling Tests")
@@ -990,6 +1058,7 @@ class ActorControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(44)
         @DisplayName("Should handle image loading errors")
@@ -1004,6 +1073,7 @@ class ActorControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(45)
         @DisplayName("Should handle Cloudinary upload errors")
@@ -1017,7 +1087,9 @@ class ActorControllerTest extends TestFXBase {
             // Attempt to upload would handle errors gracefully
             waitForFxEvents();
         }
+
     }
+
 
     // Helper methods
     private List<Actor> createMockActors() {
@@ -1028,7 +1100,10 @@ class ActorControllerTest extends TestFXBase {
         return actors;
     }
 
+
     private com.esprit.utils.Page<Actor> createPagedResult(List<Actor> actors) {
         return new com.esprit.utils.Page<>(actors, 0, actors.size(), actors.size());
     }
+
 }
+

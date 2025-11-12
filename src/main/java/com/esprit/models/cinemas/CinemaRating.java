@@ -34,10 +34,10 @@ public class CinemaRating {
     private Integer rating;
 
     /**
-     * Constructor without id for creating new rating instances.
-     * 
+     * Create a new CinemaRating for the given cinema and client with the specified rating.
+     *
      * @param cinema the cinema being rated
-     * @param client the client giving the rating
+     * @param client the client who provided the rating
      * @param rating the rating value
      */
     public CinemaRating(final Cinema cinema, final Client client, final Integer rating) {
@@ -45,4 +45,5 @@ public class CinemaRating {
         this.client = client;
         this.rating = rating;
     }
+
 }

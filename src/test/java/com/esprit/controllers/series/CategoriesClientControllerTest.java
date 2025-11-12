@@ -42,6 +42,7 @@ class CategoriesClientControllerTest extends TestFXBase {
         stage.show();
     }
 
+
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Categories Display Tests")
     class CategoriesDisplayTests {
@@ -56,6 +57,7 @@ class CategoriesClientControllerTest extends TestFXBase {
             assertThat(flowPane).isNotNull();
         }
 
+
         @Test
         @Order(2)
         @DisplayName("Should load categories from service")
@@ -66,6 +68,7 @@ class CategoriesClientControllerTest extends TestFXBase {
             assertThat(flowPane).isNotNull();
         }
 
+
         @Test
         @Order(3)
         @DisplayName("Should display category cards")
@@ -75,7 +78,9 @@ class CategoriesClientControllerTest extends TestFXBase {
             FlowPane flowPane = lookup("#categoriesFlowPane").query();
             assertThat(flowPane).isNotNull();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Category Selection Tests")
@@ -91,6 +96,7 @@ class CategoriesClientControllerTest extends TestFXBase {
             assertThat(flowPane).isNotNull();
         }
 
+
         @Test
         @Order(5)
         @DisplayName("Should navigate to category series")
@@ -100,7 +106,9 @@ class CategoriesClientControllerTest extends TestFXBase {
             FlowPane flowPane = lookup("#categoriesFlowPane").query();
             assertThat(flowPane).isNotNull();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Navigation Tests")
@@ -114,7 +122,9 @@ class CategoriesClientControllerTest extends TestFXBase {
 
             assertThat(lookup(".button").tryQuery()).isPresent();
         }
+
     }
+
 
     // Helper methods
     private List<Category> createMockCategories() {
@@ -131,7 +141,10 @@ class CategoriesClientControllerTest extends TestFXBase {
         return categories;
     }
 
+
     private <T> com.esprit.utils.Page<T> createPagedResult(List<T> content) {
         return new com.esprit.utils.Page<>(content, 0, content.size(), content.size());
     }
+
 }
+

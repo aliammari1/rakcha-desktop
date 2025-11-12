@@ -148,29 +148,11 @@ public class FilmUserController {
     private MovieSession moviesession;
 
     /**
-     * Queries a list of films for any that contain a specified search term in their
-     * name, and returns a list of matches.
+     * Finds films whose name contains the given search string.
      *
-     * @param liste
-     *                  list of films that will be searched for matching titles
-     *                  within the
-     *                  provided `recherche` parameter.
-     *                  <p>
-     *                  - It is a list of `Film` objects - Each element in the list
-     *                  has a
-     *                  `nom` attribute that can contain the search query
-     * @param recherche
-     *                  search query, which is used to filter the list of films in
-     *                  the
-     *                  function.
-     * @returns a list of `Film` objects that contain the searched string in their
-     *          name.
-     *          <p>
-     *          - The list of films is filtered based on the search query, resulting
-     *          in a subset of films that match the query. - The list contains only
-     *          films with a non-null `nom` attribute and containing the search
-     *          query in their name. - The list is returned as a new list of films,
-     *          which can be used for further processing or analysis.
+     * @param liste   the list of films to search; elements with a null name are ignored
+     * @param recherche the substring to look for in each film's name
+     * @return a new list of films from {@code liste} whose names contain {@code recherche}, preserving their original order
      */
     @FXML
     /**
@@ -184,17 +166,22 @@ public class FilmUserController {
             if (null != element.getName() && element.getName().contains(recherche)) {
                 resultats.add(element);
             }
+
         }
+
         return resultats;
     }
 
+
     /**
-     * Loads an FXML user interface from a resource file, sets data for the
-     * controller, and displays the stage with the loaded scene.
+     * Open the seat selection UI for the given film and display it in the current stage.
      *
-     * @param nom
-     *            name of the client for which the payment user interface is to be
-     *            displayed.
+     * If a MovieSession exists for the film, initializes the SeatSelectionController with
+     * that session and the current client, then replaces the current scene with the loaded UI.
+     * If no MovieSession is available, shows an error alert and leaves the current scene unchanged.
+     *
+     * @param nom the name of the film to open seat selection for
+     * @throws IOException if loading the SeatSelection FXML or its controller fails
      */
     public void switchtopayment(final String nom) throws IOException {
         // Remove unused variable
@@ -208,6 +195,7 @@ public class FilmUserController {
             return;
         }
 
+
         final FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/ui/films/SeatSelection.fxml"));
         final AnchorPane root = fxmlLoader.load();
         final Stage stage = (Stage) this.reserver_Film.getScene().getWindow();
@@ -217,6 +205,7 @@ public class FilmUserController {
         final Scene scene = new Scene(root);
         stage.setScene(scene);
     }
+
 
     /**
      * Displays an error alert with the given title and message.
@@ -240,25 +229,20 @@ public class FilmUserController {
         alert.showAndWait();
     }
 
+
     /**
-     * Creates film cards for a list of films by creating an AnchorPane container
-     * for each card and adding it to a `FlowPane` containing other cards.
+     * Create and add a UI card to the flow pane for each film in the provided list.
      *
-     * @param Films
-     *              list of films to create film cards for, which are then added as
-     *              children of the `flowpaneFilm`.
-     *              <p>
-     *              - `Film` objects are contained in the list. - Each `Film` object
-     *              has various attributes, such as title, director, year of
-     *              release,
-     *              etc.
+     * @param Films list of films whose cards will be created and appended to {@code flowpaneFilm}
      */
     private void createfilmCards(final List<Film> Films) {
         for (final Film film : Films) {
             final AnchorPane cardContainer = this.createFilmCard(film);
             this.flowpaneFilm.getChildren().add(cardContainer);
         }
+
     }
+
 
     /**
      * Initializes the JavaFX controller and sets up UI components.
@@ -289,6 +273,14 @@ public class FilmUserController {
         Platform.runLater(this::setupRecommendations);
     }
 
+
+    /**
+     * Initializes and configures the controller's primary user-interface elements and their listeners.
+     *
+     * Sets up the "Top 3" selector and its view toggles, sorting selector, search field listener, the film
+     * FlowPane inside the ScrollPane (layout, spacing and padding), the detail-close action, and populates
+     * the initial film cards and top-three displays from the film service.
+     */
     private void setupBasicUI() {
         PageRequest pageRequest = new PageRequest(0, 3);
         this.top3combobox.getItems().addAll("Top 3 Films", "Top 3 Actors");
@@ -297,7 +289,8 @@ public class FilmUserController {
             if ("Top 3 Films".equals(newValue)) {
                 this.topthreeVbox1.setVisible(false);
                 this.topthreeVbox.setVisible(true);
-            } else if ("Top 3 Actors".equals(newValue)) {
+            }
+ else if ("Top 3 Actors".equals(newValue)) {
                 final ObservableList<Node> topthreevboxactorsChildren = this.topthreeVbox1.getChildren();
                 topthreevboxactorsChildren.clear();
                 this.topthreeVbox.setVisible(false);
@@ -305,9 +298,12 @@ public class FilmUserController {
                 for (int i = 1; i < this.flowpaneFilm.getChildren().size() && 4 > i; i++) {
                     topthreevboxactorsChildren.add(this.createActorDetails(i));
                 }
+
                 this.topthreeVbox1.setSpacing(10);
             }
-        });
+
+        }
+);
         this.tricomboBox.getItems().addAll("nom", "annederalisation");
         this.tricomboBox.setValue("");
         this.tricomboBox.getSelectionModel().selectedItemProperty().addListener((observableValue, s, t1) -> {
@@ -316,7 +312,9 @@ public class FilmUserController {
             for (final Film film : filmList) {
                 this.flowpaneFilm.getChildren().add(this.createFilmCard(film));
             }
-        });
+
+        }
+);
         final FilmService filmService1 = new FilmService();
         PageRequest filmPageRequest = new PageRequest(0, 10);
         this.l1 = filmService1.read(filmPageRequest).getContent();
@@ -325,7 +323,8 @@ public class FilmUserController {
             // Effacer la FlowPane actuelle pour afficher les nouveaux résultats
             this.flowpaneFilm.getChildren().clear();
             this.createfilmCards(produitsRecherches);
-        });
+        }
+);
         this.flowpaneFilm = new FlowPane();
         this.filmScrollPane.setContent(this.flowpaneFilm);
         this.filmScrollPane.setFitToWidth(true);
@@ -341,19 +340,34 @@ public class FilmUserController {
             this.detalAnchorPane.setVisible(false);
             this.anchorPaneFilm.setOpacity(1);
             this.anchorPaneFilm.setDisable(false);
-        });
+        }
+);
         // Set better padding for card grid
         this.flowpaneFilm.setPadding(new Insets(10, 10, 10, 10));
         final List<Film> filmList = new FilmService().read(filmPageRequest).getContent();
         for (final Film film : filmList) {
             this.flowpaneFilm.getChildren().add(this.createFilmCard(film));
         }
+
         final ObservableList<Node> topthreevboxChildren = this.topthreeVbox.getChildren();
         for (int i = 0; i < this.flowpaneFilm.getChildren().size() && 3 > i; i++) {
             topthreevboxChildren.add(this.createtopthree(i));
         }
+
     }
 
+
+    /**
+     * Augments the film list UI by adding per-card sharing controls and appending a
+     * "Recommended for You" section populated from top-rated films.
+     *
+     * <p>When the film scroll pane is attached to a window, this method:
+     * - Adds a "Share" button to each film card that opens a simple share dialog for that film.
+     * - Enables drag-and-drop on each film card to copy the film's name and image URL.
+     * - Builds a recommendations VBox titled "Recommended for You" using up to three films
+     *   from FilmRatingService.getAverageRatingSorted() and appends it to the main flow pane
+     *   when recommendations are available.</p>
+     */
     private void setupRecommendations() {
         if (filmScrollPane.getScene() != null && filmScrollPane.getScene().getWindow() != null) {
             // Add sharing button to film cards
@@ -370,7 +384,9 @@ public class FilmUserController {
                             shareAlert.setContentText("Film URL: " + film.getImage());
                             shareAlert.showAndWait();
                         }
-                    });
+
+                    }
+);
                     ((AnchorPane) node).getChildren().add(shareButton);
 
                     // Set up drag and drop for sharing
@@ -383,10 +399,14 @@ public class FilmUserController {
                             content.putString("Film: " + film.getName() + "\nURL: " + film.getImage());
                             db.setContent(content);
                             event.consume();
-                        });
+                        }
+);
                     }
+
                 }
-            });
+
+            }
+);
 
             // Add recommendations section based on user history
             // This is a simplified version; in a real app, this would use actual user data
@@ -402,23 +422,30 @@ public class FilmUserController {
                         if (film != null) {
                             recommendationsBox.getChildren().add(createFilmCard(film));
                         }
+
                     }
+
                     // Add to main flow if there are recommendations
                     if (recommendationsBox.getChildren().size() > 1) {
                         flowpaneFilm.getChildren().add(recommendationsBox);
                     }
+
                 }
+
             } catch (Exception e) {
                 LOGGER.log(Level.WARNING, "Failed to load recommendations", e);
             }
+
         }
+
     }
 
+
     /**
-     * Filters film cards by name to show only matching films
-     * 
-     * @param keyword The search term to filter by
-     */
+         * Show only film cards whose title contains the given keyword (case-insensitive).
+         *
+         * @param keyword the substring to match against each film's title (case-insensitive)
+         */
     @FXML
     public void filterByKeyword(final String keyword) {
         for (final Node node : this.flowpaneFilm.getChildren()) {
@@ -429,43 +456,22 @@ public class FilmUserController {
                 filmCard.setVisible(isVisible);
                 filmCard.setManaged(isVisible);
             }
+
         }
+
     }
 
+
     /**
-     * Creates a UI component representing a movie card with various details and
-     * ratings. It generates a QR code for the movie's IMDB page, which can be
-     * scanned to open the page in a browser. The function also adds event listeners
-     * to handle clicks on the movie card and the QR code.
+     * Create a JavaFX AnchorPane representing a film card with poster, title,
+     * displayed rating, and actions for reserving and viewing details.
      *
-     * @param film
-     *             film object that will be displayed in the anchor pane, and is
-     *             used
-     *             to retrieve the film's information such as title, image, rating,
-     *             and trailer link.
-     *             <p>
-     *             - `id`: a unique identifier for the film - `nom`: the film's
-     *             title
-     *             - `description`: a brief description of the film - `duree`: the
-     *             film's duration - `annderalisation`: the film's release date -
-     *             `categories`: an array of categories the film belongs to -
-     *             `actors`: an array of actors appearing in the film.
-     * @returns an AnchorPane with a QR code generator, trailer player, and rating
-     *          system for a given film.
-     *          <p>
-     *          - `hyperlink`: A Hyperlink component that displays the film's title
-     *          and opens the IMDB page when clicked. - `imagefilmDetail`: An Image
-     *          component that displays the film's poster image. -
-     *          `descriptionDETAILfilm`: A Text component that displays the film's
-     *          detailed description. - `labelavregeRate`: A Label component that
-     *          displays the average rating of the film. - `ratefilm`: A Text
-     *          component that displays the current rating of the film. -
-     *          `topthreeVbox`: A VBox component that displays the top three actors
-     *          of the film. - `trailer_Button`: A Button component that plays the
-     *          film's trailer when clicked.
-     *          <p>
-     *          Note: The output is a JavaFX AnchorPane that contains all the
-     *          components explained above.
+     * @param film the film to display in the card; its metadata (id, name, image,
+     *             ratings and related links) will be used to populate the UI
+     * @return an AnchorPane containing the film poster, title label, current
+     *         average rating label, a Reserve button, a View Details hyperlink and
+     *         associated UI for QR-code generation, trailer playback, and user
+     *         rating interaction for the provided film
      */
     private AnchorPane createFilmCard(final Film film) {
         final AnchorPane copyOfAnchorPane = new AnchorPane();
@@ -494,12 +500,16 @@ public class FilmUserController {
                     } catch (Exception e2) {
                         LOGGER.log(Level.SEVERE, "Failed to load both URL and default image", e2);
                     }
+
                 }
-            } else {
+
+            }
+ else {
                 LOGGER.log(Level.WARNING, "Image path is null or empty for film ID: " + film.getId());
                 // Set a default image
                 imageView.setImage(new Image(getClass().getResourceAsStream("/img/films/default.jpg")));
             }
+
 
             // Set responsive image dimensions with red glow effect
             imageView.setFitWidth(235);
@@ -517,8 +527,10 @@ public class FilmUserController {
             } catch (Exception e2) {
                 LOGGER.log(Level.SEVERE, "Could not load any image, even default", e2);
             }
+
             LOGGER.log(Level.WARNING, "Failed to load image for film: " + film.getId(), e);
         }
+
 
         // Film title with white text and red glow
         final Label nomFilm = new Label(film.getName());
@@ -564,7 +576,9 @@ public class FilmUserController {
             } catch (final IOException e) {
                 throw new RuntimeException(e);
             }
-        });
+
+        }
+);
 
         // View Details hyperlink with red theme
         final Hyperlink hyperlink = new Hyperlink("View Details");
@@ -595,7 +609,9 @@ public class FilmUserController {
                 } catch (Exception e2) {
                     LOGGER.log(Level.SEVERE, "Failed to load default detail image", e2);
                 }
+
             }
+
 
             final double rate1 = new FilmRatingService().getAvergeRating(film1.getId());
             this.labelavregeRate.setText(rate1 + "/5");
@@ -615,6 +631,7 @@ public class FilmUserController {
             } catch (final WriterException e) {
                 throw new RuntimeException(e);
             }
+
             // Convertir la matrice de bits en image BufferedImage
             final BufferedImage bufferedImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
             this.qrcode.setImage(SwingFXUtils.toFXImage(bufferedImage, null));
@@ -626,6 +643,7 @@ public class FilmUserController {
                 if (null != ratingFilm2) {
                     ratingFilmService.delete(ratingFilm2);
                 }
+
                 ratingFilmService
                         .create(new FilmRating(film1, (Client) new UserService().getUserById(2L), t1.intValue()));
                 final double rate2 = new FilmRatingService().getAvergeRating(film1.getId());
@@ -635,16 +653,20 @@ public class FilmUserController {
                 for (int i = 0; 3 > i; i++) {
                     this.topthreeVbox.getChildren().add(this.createtopthree(i));
                 }
-            });
+
+            }
+);
             this.trailer_Button.setOnAction(trailerEvent -> {
                 this.anchorPane_Trailer.getChildren().forEach(node -> {
                     node.setDisable(false);
-                });
+                }
+);
                 final WebView webView = new WebView();
                 FilmUserController.LOGGER.info(film1.getName());
                 Platform.runLater(() -> {
                     webView.getEngine().load(new FilmService().getTrailerFilm(film1.getName()));
-                });
+                }
+);
                 FilmUserController.LOGGER.info("film passed");
                 this.anchorPane_Trailer.setVisible(true);
                 this.anchorPane_Trailer.getChildren().add(webView);
@@ -652,22 +674,31 @@ public class FilmUserController {
                     if (KeyCode.ESCAPE == keyEvent.getCode()) {
                         this.anchorPane_Trailer.getChildren().forEach(node -> {
                             node.setDisable(true);
-                        });
+                        }
+);
                         this.anchorPane_Trailer.setVisible(false);
                     }
-                });
-            });
+
+                }
+);
+            }
+);
             this.detalAnchorPane.getChildren().add(rateFilm);
-        });
+        }
+);
         // Copy CSS classes
         copyOfAnchorPane.getChildren().addAll(imageView, nomFilm, button, hyperlink, ratefilm, etoile);
         return copyOfAnchorPane;
     }
 
+
     /**
-     * Performs createActorDetails operation.
+     * Create a styled AnchorPane containing an actor's image, name with film count, and biography for the actor at the given placement.
      *
-     * @return the result of the operation
+     * <p>If no actor exists for the provided placement, an empty styled AnchorPane with the same layout is returned.</p>
+     *
+     * @param actorPlacement the placement or ranking used to look up the actor (e.g., 1 for top actor)
+     * @return an AnchorPane populated with the actor's image, name and number of appearances, and biography, or an empty styled AnchorPane when the actor is not found
      */
     public AnchorPane createActorDetails(final int actorPlacement) {
         final ActorService as = new ActorService();
@@ -701,18 +732,24 @@ public class FilmUserController {
                         } catch (Exception e2) {
                             LOGGER.log(Level.SEVERE, "Failed to load default actor image", e2);
                         }
+
                     }
-                } else {
+
+                }
+ else {
                     // If image is null or empty, try to load default
                     try {
                         imageView.setImage(new Image(getClass().getResourceAsStream("/img/actors/default.jpg")));
                     } catch (Exception e) {
                         LOGGER.log(Level.WARNING, "Failed to load default actor image", e);
                     }
+
                 }
+
             } catch (final Exception e) {
                 FilmUserController.LOGGER.log(Level.SEVERE, "Error processing actor image", e);
             }
+
             imageView.setLayoutX(15);
             imageView.setLayoutY(10);
             imageView.setFitHeight(180);
@@ -758,13 +795,20 @@ public class FilmUserController {
                             "-fx-opacity: 1;");
             anchorPane.getChildren().addAll(imageView, actorDetails, actorBio);
         }
+
         return anchorPane;
     }
 
+
     /**
-     * Performs createtopthree operation.
+     * Builds a styled UI card for the film at the given rank in the average-rating leaderboard.
      *
-     * @return the result of the operation
+     * The returned pane contains the film poster (if available), title, a disabled average-rating control,
+     * a numeric rating label, and a "RESERVE" button; if no film exists at the specified rank the method
+     * returns an empty styled AnchorPane.
+     *
+     * @param filmRank zero-based index into the average-rating-sorted film list (0 returns the top film)
+     * @return an AnchorPane containing the top-film card UI for the specified rank, or an empty styled pane when no film is available
      */
     public AnchorPane createtopthree(final int filmRank) {
         final List<FilmRating> ratingFilmList = new FilmRatingService().getAverageRatingSorted(); // Fixed method name
@@ -789,6 +833,7 @@ public class FilmUserController {
                 LOGGER.warning("Invalid rating film data at rank: " + filmRank);
                 return anchorPane;
             }
+
 
             final Film film = ratingFilm.getFilm(); // Fixed method name
             final ImageView imageView = new ImageView();
@@ -827,11 +872,15 @@ public class FilmUserController {
                         } catch (Exception e2) {
                             LOGGER.severe("Failed to load default image: " + e2.getMessage());
                         }
+
                     }
+
                 }
+
             } catch (Exception e) {
                 LOGGER.warning("Error loading image for film: " + film.getId() + ", " + e.getMessage());
             }
+
 
             try {
                 final Label nomFilm = new Label(film.getName() != null ? film.getName() : "Untitled");
@@ -870,7 +919,8 @@ public class FilmUserController {
                                     "-fx-effect: dropshadow(gaussian, rgba(255, 68, 68, 1.0), 18, 0, 0, 5);" +
                                     "-fx-scale-x: 1.05;" +
                                     "-fx-scale-y: 1.05;");
-                });
+                }
+);
                 button.setOnMouseExited(e -> {
                     button.setStyle(
                             "-fx-background-color: linear-gradient(to bottom right, #8b0000, #b22222);" +
@@ -880,7 +930,8 @@ public class FilmUserController {
                                     "-fx-cursor: hand;" +
                                     "-fx-font-size: 13px;" +
                                     "-fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.9), 12, 0, 0, 3);");
-                });
+                }
+);
 
                 final Rating rating = new Rating();
                 rating.setLayoutX(145);
@@ -910,26 +961,21 @@ public class FilmUserController {
                 if (imageView.getImage() != null) {
                     anchorPane.getChildren().add(imageView);
                 }
+
             } catch (Exception e) {
                 LOGGER.log(Level.WARNING, "Error creating film card components", e);
             }
+
         }
+
         return anchorPane;
     }
 
+
     /**
-     * Retrieves a list of unique film release years from a database using
-     * `FilmService`.
+     * Returns the distinct release years present among the retrieved films.
      *
-     * @returns a list of unique cinema years obtained from the films' release
-     *          dates.
-     *          <p>
-     *          1/ The list contains unique `Integer` objects representing the
-     *          cinema years. 2/ The list is generated by transforming the original
-     *          list of films using a series of methods, specifically `map`,
-     *          `distinct`, and `collect`. 3/ The transformation involves extracting
-     *          the year of release from each film object using the `getReleaseYear`
-     *          method.
+     * @return a list of unique release years as Integer objects, in the order they were encountered
      */
     private List<Integer> getCinemaYears() {
         final FilmService cinemaService = new FilmService();
@@ -939,19 +985,14 @@ public class FilmUserController {
         return cinemas.stream().map(Film::getReleaseYear).distinct().collect(Collectors.toList());
     }
 
+
     /**
-     * Sets the opacity of a panel to 0.5 and makes a pane visible, clears a list of
-     * checkboxes, recieves unique cinema years from a database, creates a VBox for
-     * each year, adds the VBox to an anchor pane, and makes the anchor pane
-     * visible.
+     * Displays the year filter pane, dims the main film view, and populates the pane with
+     * checkboxes for each available film release year.
      *
-     * @param event
-     *              action event that triggered the filtration process.
-     *              <p>
-     *              - Event type: `ActionEvent` - Target: `Anchore_Pane_filtrage` (a
-     *              pane in the scene) - Command: Unspecified (as the function does
-     *              not use a specific command)
-     *              </p>
+     * The created checkboxes are stored in the controller's `yearsCheckBoxes` list for later use.
+     *
+     * @param event the ActionEvent that triggered showing the filter pane
      */
     @FXML
     void filtrer(final ActionEvent event) {
@@ -971,6 +1012,7 @@ public class FilmUserController {
             yearsCheckBoxesVBox.getChildren().add(checkBox);
             this.yearsCheckBoxes.add(checkBox);
         }
+
         yearsCheckBoxesVBox.setLayoutX(25);
         yearsCheckBoxesVBox.setLayoutY(120);
         // Ajouter les VBox dans le filterAnchor
@@ -978,18 +1020,11 @@ public class FilmUserController {
         this.Anchore_Pane_filtrage.setVisible(true);
     }
 
+
     /**
-     * Sets the opacity and visibility of an AnchorPane, and also makes a different
-     * AnchorPane visible.
+     * Restores the film detail pane and hides the comments pane.
      *
-     * @param event
-     *              user interaction that triggered the execution of the
-     *              `closercommets` method.
-     *              <p>
-     *              - Target: detalAnchorPane - Action: setOpacity() and
-     *              setVisible()
-     *              methods
-     *              </p>
+     * Sets the detail anchor pane's opacity to 1 and makes it visible, and hides the comments anchor pane.
      */
     @FXML
     void closercommets(final ActionEvent event) {
@@ -998,21 +1033,11 @@ public class FilmUserController {
         this.detalAnchorPane.setVisible(true);
     }
 
+
     /**
-     * Filters a list of cinemas based on user-selected years of release and
-     * displays the filtered cinemas in a flow pane.
+     * Apply the selected release-year filters to the current film list and update the UI with the matching films.
      *
-     * @param event
-     *              occurrence of an action event, such as clicking on the "Filtrer"
-     *              button, that triggers the execution of the `filtrercinema()`
-     *              method.
-     *              <p>
-     *              - `event` is an `ActionEvent`, indicating that the function was
-     *              called as a result of user action. - The `event` object contains
-     *              information about the source of the action, such as the button
-     *              or
-     *              link that was clicked.
-     *              </p>
+     * If no years are selected, all films from the current list are displayed.
      */
     @FXML
     void filtrercinema(final ActionEvent event) {
@@ -1029,22 +1054,13 @@ public class FilmUserController {
         this.createfilmCards(filteredCinemas);
     }
 
+
     /**
-     * Retrieves the selected years from an `AnchorPane` widget, filters out
-     * non-selected years using `filter`, maps the selected check boxes to their
-     * corresponding integers using `map`, and collects the list of integers
-     * representing the selected years.
+     * Collects the years selected by the user from the filter checkboxes.
      *
-     * @returns a list of integer values representing the selected years.
-     *          <p>
-     *          The output is a list of integers representing the selected years
-     *          from the check boxes in the AnchorPane.
-     *          <p>
-     *          Each integer in the list corresponds to an individual check box that
-     *          was selected by the user.
-     *          <p>
-     *          The list contains only the unique years that were selected by the
-     *          user, without duplicates or invalid input.
+     * Parses the text of each selected checkbox as an integer and returns them.
+     *
+     * @return a list of integers corresponding to the selected year checkboxes; empty if none are selected
      */
     private List<Integer> getSelectedYears() {
         // Récupérer les années de réalisation sélectionnées dans l'AnchorPane de
@@ -1053,16 +1069,12 @@ public class FilmUserController {
                 .map(checkBox -> Integer.parseInt(checkBox.getText())).collect(Collectors.toList());
     }
 
+
     /**
-     * Loads a FXML file "/ui/series/SeriesClient.fxml" into a stage, replacing the
-     * current scene.
+     * Switches the application view to the series client UI by loading
+     * "/ui/series/SeriesClient.fxml" and replacing the current stage scene.
      *
-     * @param event
-     *              event that triggered the execution of the
-     *              `switchtoajouterCinema()` method.
-     *              <p>
-     *              - `event`: An `ActionEvent` object representing a user action.
-     *              </p>
+     * @param event the action event that triggered the view change
      */
     public void switchtoajouterCinema(final ActionEvent event) {
         try {
@@ -1074,22 +1086,14 @@ public class FilmUserController {
         } catch (final Exception e) {
             FilmUserController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
 
+
     /**
-     * Loads and displays a FXML file using the `FXMLLoader` class, replacing the
-     * current scene with the new one.
+     * Opens the event-listing view and replaces the current scene with that UI.
      *
-     * @param event
-     *              event that triggered the call to the `switchtevent()`
-     *              method.
-     *              <p>
-     *              - Type: ActionEvent - indicates that the event was triggered by
-     *              an
-     *              action (e.g., button click) - Target: null - indicates that the
-     *              event did not originate from a specific component or element -
-     *              Code: 0 - no code is provided with this event
-     *              </p>
+     * @param event the ActionEvent that triggered the navigation
      */
     public void switchtevent(final ActionEvent event) {
         try {
@@ -1102,21 +1106,17 @@ public class FilmUserController {
         } catch (final Exception e) {
             FilmUserController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
 
+
     /**
-     * Loads a FXML file using the `FXMLLoader` class, creates a new `AnchorPane`
-     * root element, sets it as the scene of a stage, and displays the stage in a
-     * window with a specified size.
+     * Switches the current window to the cinema dashboard view.
      *
-     * @param event
-     *              ActionEvent that triggered the call to the `switchtcinemaaa()`
-     *              method.
-     *              <p>
-     *              - `ActionEvent event`: Represents an action that occurred in the
-     *              application, carrying information about the source of the action
-     *              and the type of action performed.
-     *              </p>
+     * Loads the cinema dashboard FXML and replaces the scene on the current stage,
+     * sizing the new scene to 1280x700.
+     *
+     * @param event the ActionEvent that triggered the navigation
      */
     public void switchtcinemaaa(final ActionEvent event) {
         try {
@@ -1129,22 +1129,14 @@ public class FilmUserController {
         } catch (final Exception e) {
             FilmUserController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
 
+
     /**
-     * Loads an FXML file, creates a Stage and sets the Scene for displaying a user
-     * interface.
+     * Loads the product listing UI (AfficherProductClient.fxml) and replaces the current window's scene with it.
      *
-     * @param event
-     *              event that triggered the call to the `switchtoajouterproduct()`
-     *              method.
-     *              <p>
-     *              - Type: ActionEvent - indicates that the event was triggered by
-     *              an
-     *              action (e.g., button click) - Target: null - indicates that the
-     *              event did not originate from a specific component or element -
-     *              Code: 0 - no code is provided with this event
-     *              </p>
+     * @param event the UI action event that triggered the scene switch
      */
     public void switchtoajouterproduct(final ActionEvent event) {
         try {
@@ -1157,20 +1149,14 @@ public class FilmUserController {
         } catch (final Exception e) {
             FilmUserController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
 
+
     /**
-     * Loads and displays a FXML file using the `FXMLLoader` class, replacing the
-     * current scene with the new one.
+     * Replace the current window's scene with the Series client UI loaded from FXML.
      *
-     * @param event
-     *              ActionEvent that triggered the call to the `switchtoSerie()`
-     *              method.
-     *              <p>
-     *              - Type: ActionEvent, indicating that the event was triggered by
-     *              a
-     *              user action.
-     *              </p>
+     * @param event the ActionEvent that triggered the navigation
      */
     public void switchtoSerie(final ActionEvent event) {
         try {
@@ -1182,12 +1168,17 @@ public class FilmUserController {
         } catch (final Exception e) {
             FilmUserController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
 
+
     /**
-     * Allows users to add comments to a film by providing a text input, displaying
-     * an alert if the comment is empty, and then creating a new FilmComment object
-     * with the provided message, user ID, and film ID using the FilmCommentService.
+     * Add the current text in the comment input as a persisted comment for the currently selected film.
+     *
+     * <p>If the input is empty a warning alert is shown and no comment is created. Otherwise a
+     * FilmComment is constructed using the entered text, the user returned by
+     * UserService.getUserById(4L), and the film identified by this.filmId; the comment is persisted
+     * via FilmCommentService.create, logged, and the input field is cleared.
      */
     @FXML
     void addCommentaire() {
@@ -1197,7 +1188,8 @@ public class FilmUserController {
             alert.setTitle("Commentaire vide");
             alert.setContentText("Add Comment");
             alert.showAndWait();
-        } else {
+        }
+ else {
             final FilmComment commentaire = new FilmComment(message, (Client) new UserService().getUserById(4L), // Fixed
                                                                                                                  // type
                     new FilmService().getFilm(this.filmId));
@@ -1206,10 +1198,12 @@ public class FilmUserController {
             cinemaCommentService.create(commentaire);
             this.txtAreaComments.clear();
         }
+
     }
 
+
     /**
-     * @param event
+     * Add the current comment for the selected film and refresh the displayed comment list.
      */
     @FXML
     void AddComment(final MouseEvent event) {
@@ -1217,14 +1211,16 @@ public class FilmUserController {
         this.displayAllComments(this.filmId);
     }
 
+
     /**
-     * Calculates a similarity score between a film and user preferences based on
-     * genre preferences
-     * and average rating
-     * 
-     * @param film            The film to score
-     * @param userPreferences Map of genre preferences
-     * @return A similarity score
+     * Computes a numeric similarity score between a film and a user's genre preferences.
+     *
+     * The score combines the sum of the user's weights for the film's genres and a contribution
+     * based on the film's average rating (weighted by 0.3) so that higher values indicate a closer match.
+     *
+     * @param film            the film to score
+     * @param userPreferences a map from genre name to preference weight used when scoring genres
+     * @return                a numeric similarity score; larger values indicate greater similarity to the user's preferences
      */
     private double calculateSimilarityScore(Film film, Map<String, Double> userPreferences) {
         double score = 0.0;
@@ -1234,6 +1230,7 @@ public class FilmUserController {
             score += userPreferences.getOrDefault(genre.trim(), 0.0);
         }
 
+
         // Add rating weight
         double avgRating = new FilmRatingService().getAvergeRating(film.getId());
         score += avgRating * 0.3;
@@ -1241,13 +1238,12 @@ public class FilmUserController {
         return score;
     }
 
+
     /**
-     * Creates an HBox containing an ImageView and a VBox with text, image and card
-     * container. It adds the HBox to a ScrollPaneComments.
+     * Builds a horizontal comment card containing the commenter's profile image and the comment text.
      *
-     * @param commentaire FilmComment object containing information about a comment
-     * @returns a HBox container that displays an image and text related to a
-     *          comment.
+     * @param commentaire the FilmComment whose author, profile image, and text will be displayed
+     * @return an HBox containing the profile image and a VBox with the commenter name and comment text
      */
     private HBox addCommentToView(final FilmComment commentaire) {
         // Création du cercle pour l'image de l'utilisateur
@@ -1265,9 +1261,11 @@ public class FilmUserController {
                 // Load directly from URL
                 userImage = new Image(imageUrl);
             }
+
         } catch (Exception e) {
             LOGGER.warning("Failed to load profile image from URL: " + imageUrl);
         }
+
 
         // If loading from URL failed or image was null/empty, use default
         if (userImage == null) {
@@ -1276,7 +1274,9 @@ public class FilmUserController {
             } catch (Exception e) {
                 LOGGER.severe("Failed to load default profile image: " + e.getMessage());
             }
+
         }
+
 
         final ImageView imageView = new ImageView(userImage);
         imageView.setFitWidth(50);
@@ -1327,10 +1327,11 @@ public class FilmUserController {
         return contentContainer;
     }
 
+
     /**
-     * Displays all comments associated with a specific film ID in a scroll pane.
+     * Populates the controller's ScrollPaneComments with UI views for all comments belonging to the given film.
      *
-     * @param filmId identifier of the film to display all comments for.
+     * @param filmId the id of the film whose comments will be displayed
      */
     @FXML
     public void displayAllComments(final Long filmId) {
@@ -1345,7 +1346,9 @@ public class FilmUserController {
             if (comment.getFilm().getId().equals(filmId)) {
                 filmComments.add(comment);
             }
+
         }
+
 
         // Display comments
         final VBox allCommentsContainer = new VBox();
@@ -1353,8 +1356,10 @@ public class FilmUserController {
             final HBox commentView = this.addCommentToView(comment);
             allCommentsContainer.getChildren().add(commentView);
         }
+
         this.ScrollPaneComments.setContent(allCommentsContainer);
     }
+
 
     /**
      * Shows film comments in a panel.
@@ -1366,4 +1371,5 @@ public class FilmUserController {
         this.AnchorComments.setVisible(true);
         this.displayAllComments(this.filmId);
     }
+
 }

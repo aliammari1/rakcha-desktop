@@ -28,15 +28,14 @@ public class Favorite {
     private Series series;
 
     /**
-     * Constructor without id for creating new favorite instances.
+     * Creates a Favorite that links a user to a series and leaves the `id` and `series` fields unset.
      *
-     * @param userId
-     *                 the user ID
-     * @param seriesId
-     *                 the series ID
+     * @param userId  the identifier of the user
+     * @param seriesId the identifier of the series
      */
     public Favorite(final Long userId, final Long seriesId) {
         this.userId = userId;
         this.seriesId = seriesId;
     }
+
 }

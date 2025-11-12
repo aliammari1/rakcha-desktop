@@ -27,6 +27,7 @@ public enum UserSMSAPI {
             return;
         }
 
+
         final VonageClient client = VonageClient.builder().apiKey(apiKey).apiSecret(apiSecret).build();
 
         final TextMessage message = new TextMessage("Vonage APIs", "216" + number, messageBody);
@@ -34,8 +35,12 @@ public enum UserSMSAPI {
         final SmsSubmissionResponse response = client.getSmsClient().submitMessage(message);
         if (MessageStatus.OK == response.getMessages().get(0).getStatus()) {
             LOGGER.info("Message sent successfully.");
-        } else {
+        }
+ else {
             LOGGER.info("Message failed with error: " + response.getMessages().get(0).getErrorText());
         }
+
     }
+
 }
+

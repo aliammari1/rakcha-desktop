@@ -42,6 +42,7 @@ class OrderClientControllerTest extends TestFXBase {
         stage.show();
     }
 
+
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Phone Number Validation Tests")
     class PhoneNumberValidationTests {
@@ -59,6 +60,7 @@ class OrderClientControllerTest extends TestFXBase {
             assertThat(phoneField.getText()).hasSize(8);
         }
 
+
         @Test
         @org.junit.jupiter.api.Order(2)
         @DisplayName("Should reject phone number with letters")
@@ -74,6 +76,7 @@ class OrderClientControllerTest extends TestFXBase {
             if (errorLabel.isPresent()) {
                 assertThat(errorLabel.get().isVisible()).isTrue();
             }
+
             
             // Verify order button is disabled or error styling applied
             Button orderBtn = lookup("#idpaymentenligne").query();
@@ -84,7 +87,9 @@ class OrderClientControllerTest extends TestFXBase {
                 // If validation adds error class, it should be present
                 assertThat(phoneField.getText()).contains("abcd");
             }
+
         }
+
 
         @Test
         @org.junit.jupiter.api.Order(3)
@@ -101,6 +106,7 @@ class OrderClientControllerTest extends TestFXBase {
             if (errorLabel.isPresent()) {
                 assertThat(errorLabel.get().isVisible()).isTrue();
             }
+
             
             Button orderBtn = lookup("#idpaymentenligne").query();
             assertThat(orderBtn).isNotNull();
@@ -108,6 +114,7 @@ class OrderClientControllerTest extends TestFXBase {
             // Verify special character was not accepted or error shown
             assertThat(phoneField.getText()).contains("-");
         }
+
 
         @Test
         @org.junit.jupiter.api.Order(4)
@@ -124,11 +131,13 @@ class OrderClientControllerTest extends TestFXBase {
             if (errorLabel.isPresent()) {
                 assertThat(errorLabel.get().isVisible()).isTrue();
             }
+
             
             Button orderBtn = lookup("#idpaymentenligne").query();
             assertThat(orderBtn).isNotNull();
             assertThat(orderBtn.isDisabled()).isTrue();
         }
+
 
         @Test
         @org.junit.jupiter.api.Order(5)
@@ -145,12 +154,15 @@ class OrderClientControllerTest extends TestFXBase {
             if (errorLabel.isPresent()) {
                 assertThat(errorLabel.get().isVisible()).isTrue();
             }
+
             
             Button orderBtn = lookup("#idpaymentenligne").query();
             assertThat(orderBtn).isNotNull();
             assertThat(orderBtn.isDisabled()).isTrue();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -169,6 +181,7 @@ class OrderClientControllerTest extends TestFXBase {
 
             assertThat(addressField.getText()).isNotEmpty();
         }
+
 
         @Test
         @org.junit.jupiter.api.Order(7)
@@ -197,15 +210,18 @@ class OrderClientControllerTest extends TestFXBase {
             if (addressErrorLabel.isPresent()) {
                 assertThat(addressErrorLabel.get().isVisible()).isTrue();
             }
+
             
             // Verify address field has error state
             if (addressField.getStyleClass() != null) {
                 // Check if error styling is applied
             }
+
             
             // Verify order button is still present (order wasn't created)
             assertThat(orderBtn).isNotNull();
         }
+
 
         @Test
         @org.junit.jupiter.api.Order(8)
@@ -219,7 +235,9 @@ class OrderClientControllerTest extends TestFXBase {
 
             assertThat(addressField.getText()).contains("123 Main Street");
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -244,6 +262,7 @@ class OrderClientControllerTest extends TestFXBase {
             assertThat(orderBtn).isNotNull();
         }
 
+
         @Test
         @org.junit.jupiter.api.Order(10)
         @DisplayName("Should set order date to current date")
@@ -262,6 +281,7 @@ class OrderClientControllerTest extends TestFXBase {
             assertThat(orderBtn).isNotNull();
         }
 
+
         @Test
         @org.junit.jupiter.api.Order(11)
         @DisplayName("Should set order status to 'en cours'")
@@ -279,7 +299,9 @@ class OrderClientControllerTest extends TestFXBase {
             Button orderBtn = lookup("#idpaymentenligne").query();
             assertThat(orderBtn).isNotNull();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Product Stock Management Tests")
@@ -303,6 +325,7 @@ class OrderClientControllerTest extends TestFXBase {
             assertThat(orderBtn).isNotNull();
         }
 
+
         @Test
         @org.junit.jupiter.api.Order(13)
         @DisplayName("Should handle multiple order items")
@@ -320,7 +343,9 @@ class OrderClientControllerTest extends TestFXBase {
             Button orderBtn = lookup("#idpaymentenligne").query();
             assertThat(orderBtn).isNotNull();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Price Display Tests")
@@ -336,6 +361,7 @@ class OrderClientControllerTest extends TestFXBase {
             assertThat(pricePane).isNotNull();
         }
 
+
         @Test
         @org.junit.jupiter.api.Order(15)
         @DisplayName("Should format price with DT currency")
@@ -347,6 +373,7 @@ class OrderClientControllerTest extends TestFXBase {
             assertThat(pricePane.getChildren()).isNotEmpty();
         }
 
+
         @Test
         @org.junit.jupiter.api.Order(16)
         @DisplayName("Should use red color for price display")
@@ -357,7 +384,9 @@ class OrderClientControllerTest extends TestFXBase {
             assertThat(pricePane).isNotNull();
             assertThat(pricePane.getChildren()).isNotEmpty();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("PayPal Integration Tests")
@@ -381,6 +410,7 @@ class OrderClientControllerTest extends TestFXBase {
             assertThat(orderBtn).isNotNull();
         }
 
+
         @Test
         @org.junit.jupiter.api.Order(18)
         @DisplayName("Should use sandbox PayPal environment")
@@ -389,6 +419,7 @@ class OrderClientControllerTest extends TestFXBase {
 
             assertThat(lookup(".button").tryQuery()).isPresent();
         }
+
 
         @Test
         @org.junit.jupiter.api.Order(19)
@@ -399,6 +430,7 @@ class OrderClientControllerTest extends TestFXBase {
             assertThat(lookup(".button").tryQuery()).isPresent();
         }
 
+
         @Test
         @org.junit.jupiter.api.Order(20)
         @DisplayName("Should set correct redirect URLs")
@@ -407,7 +439,9 @@ class OrderClientControllerTest extends TestFXBase {
 
             assertThat(lookup(".button").tryQuery()).isPresent();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Navigation Tests")
@@ -422,6 +456,7 @@ class OrderClientControllerTest extends TestFXBase {
             assertThat(lookup(".button").tryQuery()).isPresent();
         }
 
+
         @Test
         @org.junit.jupiter.api.Order(22)
         @DisplayName("Should navigate to cinema client interface")
@@ -430,6 +465,7 @@ class OrderClientControllerTest extends TestFXBase {
 
             assertThat(lookup(".button").tryQuery()).isPresent();
         }
+
 
         @Test
         @org.junit.jupiter.api.Order(23)
@@ -440,6 +476,7 @@ class OrderClientControllerTest extends TestFXBase {
             assertThat(lookup(".button").tryQuery()).isPresent();
         }
 
+
         @Test
         @org.junit.jupiter.api.Order(24)
         @DisplayName("Should navigate to movie client interface")
@@ -449,6 +486,7 @@ class OrderClientControllerTest extends TestFXBase {
             assertThat(lookup(".button").tryQuery()).isPresent();
         }
 
+
         @Test
         @org.junit.jupiter.api.Order(25)
         @DisplayName("Should navigate to series client interface")
@@ -457,7 +495,9 @@ class OrderClientControllerTest extends TestFXBase {
 
             assertThat(lookup(".button").tryQuery()).isPresent();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Error Handling Tests")
@@ -481,6 +521,7 @@ class OrderClientControllerTest extends TestFXBase {
             assertThat(orderBtn).isNotNull();
         }
 
+
         @Test
         @org.junit.jupiter.api.Order(27)
         @DisplayName("Should handle PayPal API errors")
@@ -490,6 +531,7 @@ class OrderClientControllerTest extends TestFXBase {
             assertThat(lookup(".button").tryQuery()).isPresent();
         }
 
+
         @Test
         @org.junit.jupiter.api.Order(28)
         @DisplayName("Should handle network errors")
@@ -498,7 +540,9 @@ class OrderClientControllerTest extends TestFXBase {
 
             assertThat(lookup(".button").tryQuery()).isPresent();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -517,6 +561,7 @@ class OrderClientControllerTest extends TestFXBase {
             assertThat(SharedData.getInstance().getTotalPrice()).isEqualTo(testPrice);
         }
 
+
         @Test
         @org.junit.jupiter.api.Order(30)
         @DisplayName("Should handle empty SharedData")
@@ -527,5 +572,8 @@ class OrderClientControllerTest extends TestFXBase {
 
             assertThat(SharedData.getInstance().getTotalPrice()).isEqualTo(0.0);
         }
+
     }
+
 }
+

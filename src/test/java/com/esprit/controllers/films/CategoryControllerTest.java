@@ -50,6 +50,7 @@ class CategoryControllerTest extends TestFXBase {
         stage.toFront();
     }
 
+
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Category Creation Tests")
     class CategoryCreationTests {
@@ -78,6 +79,7 @@ class CategoryControllerTest extends TestFXBase {
             assertThat(table.getItems()).isNotEmpty();
         }
 
+
         @Test
         @Order(2)
         @DisplayName("Should show confirmation after category creation")
@@ -100,6 +102,7 @@ class CategoryControllerTest extends TestFXBase {
             // Verify confirmation alert is displayed
             assertThat(lookup(".alert").tryQuery()).isPresent();
         }
+
 
         @Test
         @Order(3)
@@ -124,7 +127,9 @@ class CategoryControllerTest extends TestFXBase {
             TableView<Category> table = lookup("#filmCategory_tableView").query();
             assertThat(table.getItems()).isNotEmpty();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Category Input Validation Tests")
@@ -146,6 +151,7 @@ class CategoryControllerTest extends TestFXBase {
             assertThat(nameArea.getTooltip()).isNotNull();
         }
 
+
         @Test
         @Order(5)
         @DisplayName("Should accept name starting with uppercase")
@@ -158,6 +164,7 @@ class CategoryControllerTest extends TestFXBase {
             // Verify no validation error
             waitForFxEvents();
         }
+
 
         @Test
         @Order(6)
@@ -174,6 +181,7 @@ class CategoryControllerTest extends TestFXBase {
             // Verify validation error
         }
 
+
         @Test
         @Order(7)
         @DisplayName("Should reject whitespace-only name")
@@ -188,6 +196,7 @@ class CategoryControllerTest extends TestFXBase {
 
             // Verify validation error is shown
         }
+
 
         @Test
         @Order(8)
@@ -204,7 +213,9 @@ class CategoryControllerTest extends TestFXBase {
             // Verify error tooltip appears
             assertThat(nameArea.getTooltip()).isNotNull();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Category Table Display Tests")
@@ -224,6 +235,7 @@ class CategoryControllerTest extends TestFXBase {
             assertThat(table.getItems()).isNotNull();
         }
 
+
         @Test
         @Order(10)
         @DisplayName("Should hide ID column")
@@ -237,6 +249,7 @@ class CategoryControllerTest extends TestFXBase {
             assertThat(idColumn).isNotNull();
             assertThat(idColumn.isVisible()).isFalse();
         }
+
 
         @Test
         @Order(11)
@@ -252,6 +265,7 @@ class CategoryControllerTest extends TestFXBase {
             assertThat(nameCol.isVisible()).isTrue();
         }
 
+
         @Test
         @Order(12)
         @DisplayName("Should display description column")
@@ -266,6 +280,7 @@ class CategoryControllerTest extends TestFXBase {
             assertThat(descCol.isVisible()).isTrue();
         }
 
+
         @Test
         @Order(13)
         @DisplayName("Should display delete button column")
@@ -278,7 +293,9 @@ class CategoryControllerTest extends TestFXBase {
                     .findFirst().orElse(null);
             assertThat(deleteCol).isNotNull();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Category Update Tests")
@@ -300,7 +317,9 @@ class CategoryControllerTest extends TestFXBase {
                 Category category = table.getItems().get(0);
                 assertThat(category).isNotNull();
             }
+
         }
+
 
         @Test
         @Order(15)
@@ -320,6 +339,7 @@ class CategoryControllerTest extends TestFXBase {
             assertThat(descCol).isNotNull();
         }
 
+
         @Test
         @Order(16)
         @DisplayName("Should show confirmation after update")
@@ -334,6 +354,7 @@ class CategoryControllerTest extends TestFXBase {
             // Verify table is ready for updates
             waitForFxEvents();
         }
+
 
         @Test
         @Order(17)
@@ -352,7 +373,9 @@ class CategoryControllerTest extends TestFXBase {
             
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Category Delete Tests")
@@ -377,6 +400,7 @@ class CategoryControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(19)
         @DisplayName("Should show confirmation after deletion")
@@ -396,6 +420,7 @@ class CategoryControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(20)
         @DisplayName("Should refresh table after deletion")
@@ -414,6 +439,7 @@ class CategoryControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(21)
         @DisplayName("Should handle deletion errors gracefully")
@@ -429,7 +455,9 @@ class CategoryControllerTest extends TestFXBase {
             
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Category Search Tests")
@@ -450,6 +478,7 @@ class CategoryControllerTest extends TestFXBase {
             // Verify filtered results
         }
 
+
         @Test
         @Order(23)
         @DisplayName("Should filter by description")
@@ -465,6 +494,7 @@ class CategoryControllerTest extends TestFXBase {
             // Verify filtered results
         }
 
+
         @Test
         @Order(24)
         @DisplayName("Should perform case-insensitive search")
@@ -478,6 +508,7 @@ class CategoryControllerTest extends TestFXBase {
 
             // Verify results include "Action" category
         }
+
 
         @Test
         @Order(25)
@@ -497,6 +528,7 @@ class CategoryControllerTest extends TestFXBase {
             assertThat(table.getItems()).isNotEmpty();
         }
 
+
         @Test
         @Order(26)
         @DisplayName("Should handle no search results")
@@ -511,7 +543,9 @@ class CategoryControllerTest extends TestFXBase {
             TableView<Category> table = lookup("#filmCategory_tableView").query();
             assertThat(table.getItems()).isEmpty();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Filter Criteria Tests")
@@ -527,6 +561,7 @@ class CategoryControllerTest extends TestFXBase {
             assertThat(filterCombo.getItems()).contains("Name", "Description");
         }
 
+
         @Test
         @Order(28)
         @DisplayName("Should filter by selected criteria")
@@ -539,7 +574,9 @@ class CategoryControllerTest extends TestFXBase {
             waitForFxEvents();
             // Verify filtering works
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Table Editing Tests")
@@ -555,6 +592,7 @@ class CategoryControllerTest extends TestFXBase {
             assertThat(table.isEditable()).isTrue();
         }
 
+
         @Test
         @Order(30)
         @DisplayName("Should validate input during inline editing")
@@ -567,6 +605,7 @@ class CategoryControllerTest extends TestFXBase {
             // Verify validation error is shown
             waitForFxEvents();
         }
+
 
         @Test
         @Order(31)
@@ -584,7 +623,9 @@ class CategoryControllerTest extends TestFXBase {
                 Category category = table.getItems().get(0);
                 assertThat(category).isNotNull();
             }
+
         }
+
 
         @Test
         @Order(32)
@@ -600,7 +641,9 @@ class CategoryControllerTest extends TestFXBase {
             // Table is ready for edits
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("UI Form Toggle Tests")
@@ -620,6 +663,7 @@ class CategoryControllerTest extends TestFXBase {
             // Verify CRUD interface is visible
         }
 
+
         @Test
         @Order(34)
         @DisplayName("Should hide CRUD interface initially")
@@ -628,7 +672,9 @@ class CategoryControllerTest extends TestFXBase {
 
             // Verify CRUD interface is hidden initially
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Error Handling Tests")
@@ -650,6 +696,7 @@ class CategoryControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(36)
         @DisplayName("Should handle null values safely")
@@ -663,7 +710,9 @@ class CategoryControllerTest extends TestFXBase {
             
             waitForFxEvents();
         }
+
     }
+
 
     // Helper methods
     private List<Category> createMockCategories() {
@@ -674,7 +723,10 @@ class CategoryControllerTest extends TestFXBase {
         return categories;
     }
 
+
     private com.esprit.utils.Page<Category> createPagedResult(List<Category> categories) {
         return new com.esprit.utils.Page<>(categories, 0, categories.size(), categories.size());
     }
+
 }
+

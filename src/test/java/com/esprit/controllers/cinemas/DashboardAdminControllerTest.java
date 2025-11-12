@@ -53,6 +53,7 @@ class DashboardAdminControllerTest extends TestFXBase {
         waitForFxEvents();
     }
 
+
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @DisplayName("Cinema List Display Tests")
@@ -72,6 +73,7 @@ class DashboardAdminControllerTest extends TestFXBase {
                     "#colAction");
         }
 
+
         @Test
         @Order(2)
         @DisplayName("Should load cinema data into table")
@@ -83,6 +85,7 @@ class DashboardAdminControllerTest extends TestFXBase {
             // Table should contain data or be empty initially
             assertNotNull(table.getItems());
         }
+
 
         @Test
         @Order(3)
@@ -96,6 +99,7 @@ class DashboardAdminControllerTest extends TestFXBase {
                     .anyMatch(col -> col.getId().contains("Adresse")));
         }
 
+
         @Test
         @Order(4)
         @DisplayName("Should display cinema logos in table")
@@ -103,13 +107,16 @@ class DashboardAdminControllerTest extends TestFXBase {
             verifyThat("#colLogo", isNotNull());
         }
 
+
         @Test
         @Order(5)
         @DisplayName("Should display action buttons for each cinema")
         void testActionButtonsDisplay() {
             verifyThat("#colAction", isNotNull());
         }
+
     }
+
 
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -124,6 +131,7 @@ class DashboardAdminControllerTest extends TestFXBase {
             verifyThat("#tfSearch", isEnabled());
         }
 
+
         @Test
         @Order(11)
         @DisplayName("Should filter cinemas by search query")
@@ -135,6 +143,7 @@ class DashboardAdminControllerTest extends TestFXBase {
             assertEquals(searchQuery, getTextFieldValue("#tfSearch"));
         }
 
+
         @Test
         @Order(12)
         @DisplayName("Should clear search results")
@@ -145,12 +154,14 @@ class DashboardAdminControllerTest extends TestFXBase {
             TestAssertions.verifyTextFieldEmpty("#tfSearch");
         }
 
+
         @Test
         @Order(13)
         @DisplayName("Should display filter panel")
         void testFilterPanelVisible() {
             verifyThat("#filterAnchor", isNotNull());
         }
+
 
         @Test
         @Order(14)
@@ -160,6 +171,7 @@ class DashboardAdminControllerTest extends TestFXBase {
             verifyThat("#filterAnchor", isNotNull());
         }
 
+
         @Test
         @Order(15)
         @DisplayName("Should filter by status using checkboxes")
@@ -167,6 +179,7 @@ class DashboardAdminControllerTest extends TestFXBase {
             // Status filter checkboxes should be available
             verifyThat("#filterAnchor", isNotNull());
         }
+
 
         @Test
         @Order(16)
@@ -176,7 +189,9 @@ class DashboardAdminControllerTest extends TestFXBase {
             // Additional filter selections would be tested here
             waitForFxEvents();
         }
+
     }
+
 
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -193,7 +208,9 @@ class DashboardAdminControllerTest extends TestFXBase {
                 // Approve buttons should be in action column
                 assertNotNull(table);
             }
+
         }
+
 
         @Test
         @Order(21)
@@ -209,6 +226,7 @@ class DashboardAdminControllerTest extends TestFXBase {
             // 6. Assert that action buttons are hidden for approved cinema
         }
 
+
         @Test
         @Order(22)
         @DisplayName("Should display reject button for pending cinemas")
@@ -216,6 +234,7 @@ class DashboardAdminControllerTest extends TestFXBase {
             TableView<Cinema> table = lookup("#listCinema").query();
             assertNotNull(table);
         }
+
 
         @Test
         @Order(23)
@@ -232,6 +251,7 @@ class DashboardAdminControllerTest extends TestFXBase {
             // 7. Assert that action buttons are hidden for rejected cinema
         }
 
+
         @Test
         @Order(24)
         @Disabled("TODO: Implement test for action button visibility - should verify that approved/rejected cinemas do not display approve/reject buttons in the action column by checking button visibility or through table cell state inspection")
@@ -244,6 +264,7 @@ class DashboardAdminControllerTest extends TestFXBase {
             // 4. Assert that reject button is NOT visible in the action column
             // 5. Repeat for REJECTED status
         }
+
 
         @Test
         @Order(25)
@@ -261,6 +282,7 @@ class DashboardAdminControllerTest extends TestFXBase {
             //    - Cancel button
             // 5. Assert dialog is modal (blocks interaction with rest of UI)
         }
+
 
         @Test
         @Order(26)
@@ -280,7 +302,9 @@ class DashboardAdminControllerTest extends TestFXBase {
             // 5. If reason field exists, test that a reason is entered
             // 6. Assert dialog is modal
         }
+
     }
+
 
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -297,7 +321,9 @@ class DashboardAdminControllerTest extends TestFXBase {
                 Cinema cinema = table.getItems().get(0);
                 assertNotNull(cinema.getName());
             }
+
         }
+
 
         @Test
         @Order(31)
@@ -309,7 +335,9 @@ class DashboardAdminControllerTest extends TestFXBase {
                 Cinema cinema = table.getItems().get(0);
                 assertNotNull(cinema.getAddress());
             }
+
         }
+
 
         @Test
         @Order(32)
@@ -321,7 +349,9 @@ class DashboardAdminControllerTest extends TestFXBase {
                 Cinema cinema = table.getItems().get(0);
                 assertNotNull(cinema.getManager());
             }
+
         }
+
 
         @Test
         @Order(33)
@@ -333,7 +363,9 @@ class DashboardAdminControllerTest extends TestFXBase {
                 // Status column should display cinema status
                 assertNotNull(table.getColumns());
             }
+
         }
+
 
         @Test
         @Order(34)
@@ -342,6 +374,7 @@ class DashboardAdminControllerTest extends TestFXBase {
             // Each cinema row should have a show movies button
             waitForFxEvents();
         }
+
 
         @Test
         @Order(35)
@@ -352,7 +385,9 @@ class DashboardAdminControllerTest extends TestFXBase {
 
             // Should navigate to movies view
         }
+
     }
+
 
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -373,6 +408,7 @@ class DashboardAdminControllerTest extends TestFXBase {
             // 3. If pagination does not exist, remove this test or mark as skipped
         }
 
+
         @Test
         @Order(51)
         @Disabled("TODO: Implement next page navigation test - should verify next button is functional and navigates to the next page with correct data when cinema list spans multiple pages")
@@ -388,6 +424,7 @@ class DashboardAdminControllerTest extends TestFXBase {
             // 7. Assert previous button is now enabled
         }
 
+
         @Test
         @Order(52)
         @Disabled("TODO: Implement previous page navigation test - should verify previous button navigates back to previous page with correct data when on a page other than the first")
@@ -402,7 +439,9 @@ class DashboardAdminControllerTest extends TestFXBase {
             // 6. Assert table is showing previous page data
             // 7. If on first page, verify previous button is disabled
         }
+
     }
+
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @DisplayName("Error Handling Tests")
@@ -417,6 +456,7 @@ class DashboardAdminControllerTest extends TestFXBase {
             // Should handle empty state without errors
             assertNotNull(table);
         }
+
 
         @Test
         @Order(61)
@@ -437,6 +477,7 @@ class DashboardAdminControllerTest extends TestFXBase {
             //    - User can retry the action
             // 7. Reset mock after test to avoid affecting other tests
         }
+
 
         @Test
         @Order(62)
@@ -461,7 +502,9 @@ class DashboardAdminControllerTest extends TestFXBase {
             //    - Approve/reject buttons remain visible (can retry)
             // 9. Reset mock after test to avoid affecting other tests
         }
+
     }
+
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @DisplayName("UI Responsiveness Tests")
@@ -475,6 +518,7 @@ class DashboardAdminControllerTest extends TestFXBase {
             assertNotNull(table);
         }
 
+
         @Test
         @Order(71)
         @DisplayName("Should handle table row selection")
@@ -486,7 +530,9 @@ class DashboardAdminControllerTest extends TestFXBase {
 
                 assertNotNull(table.getSelectionModel().getSelectedItem());
             }
+
         }
+
 
         @Test
         @Order(72)
@@ -498,6 +544,10 @@ class DashboardAdminControllerTest extends TestFXBase {
                 doubleClickOn(table);
                 waitForFxEvents();
             }
+
         }
+
     }
+
 }
+

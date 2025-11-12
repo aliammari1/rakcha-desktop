@@ -103,7 +103,8 @@ public class LoginController implements Initializable {
             "https://image.tmdb.org/t/p/w500/vZloFAK7NmvMGKE7VkF5UHaz0I.jpg", // John Wick: Chapter 4
             "https://image.tmdb.org/t/p/w500/62HCnUTziyWcpDaBO2i1DX17ljH.jpg", // Top Gun: Maverick
             "https://image.tmdb.org/t/p/w500/w3LxiVYdWWRvEVdn5RYq6jIqkb1.jpg" // Everything Everywhere All at Once
-    };
+    }
+;
 
     // Movie titles corresponding to the posters
     private final String[] movieTitles = {
@@ -119,7 +120,8 @@ public class LoginController implements Initializable {
             "John Wick: Chapter 4",
             "Top Gun: Maverick",
             "Everything Everywhere All at Once"
-    };
+    }
+;
 
     private int currentImageIndex = 0;
     private Timeline featuredMovieSwitchTimeline;
@@ -132,11 +134,13 @@ public class LoginController implements Initializable {
     private int maxDynamicElements = 15; // Number of dynamic elements to create
 
     /**
-     * @param event
-     * @throws IOException
-     * @throws ExecutionException
-     * @throws InterruptedException
-     */
+         * Stops active UI animations and switches the current stage's scene to the Google verification view.
+         *
+         * @param event the action event that triggered the Google sign-in
+         * @throws IOException if the Google verification FXML resource cannot be loaded
+         * @throws ExecutionException if an asynchronous verification task fails
+         * @throws InterruptedException if the thread is interrupted while waiting for an asynchronous task
+         */
     @FXML
     void signInWithGoogle(final ActionEvent event) throws IOException, ExecutionException, InterruptedException {
         try {
@@ -148,13 +152,15 @@ public class LoginController implements Initializable {
         } catch (final Exception e) {
             LoginController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
 
+
     /**
-     * @param event
-     * @throws IOException
-     * @throws ExecutionException
-     * @throws InterruptedException
+     * Handle the Microsoft sign-in action by stopping animations and switching the current stage's scene
+     * to the VerifyWithMicrosoft view.
+     *
+     * @param event the ActionEvent that triggered this handler
      */
     @FXML
     void signInWithMicrosoft(final ActionEvent event) throws IOException, ExecutionException, InterruptedException {
@@ -167,12 +173,20 @@ public class LoginController implements Initializable {
         } catch (final Exception e) {
             LoginController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
 
+
     /**
-     * @param event
-     * @throws IOException
-     */
+         * Authenticate the user with the provided email and password and navigate to the appropriate role-specific home view.
+         *
+         * On successful authentication this method displays a brief success notification, loads and shows the FXML corresponding
+         * to the user's role, stores the authenticated User object in the stage's userData for downstream controllers, and
+         * stops any ongoing login-view animations. If authentication fails it shows an error alert indicating invalid credentials.
+         *
+         * @param event the action event that triggered the login (typically the sign-in button press)
+         * @throws IOException if an error occurs while loading or switching to the target FXML view
+         */
     @FXML
     void login(final ActionEvent event) throws IOException {
         final UserService userService = new UserService();
@@ -211,6 +225,7 @@ public class LoginController implements Initializable {
                         break;
                 }
 
+
                 final FXMLLoader loader = new FXMLLoader(this.getClass().getResource(fxmlPath));
                 final Parent root = loader.load();
 
@@ -232,15 +247,21 @@ public class LoginController implements Initializable {
                 LOGGER.log(Level.SEVERE, "Error during login process", e);
                 throw new IOException("Failed to complete login process", e);
             }
-        } else {
+
+        }
+ else {
             final Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid email or password", ButtonType.CLOSE);
             alert.show();
         }
+
     }
 
+
     /**
-     * @param event
-     * @throws IOException
+     * Navigate to the Sign Up view and stop ongoing animations.
+     *
+     * @param event the action event that triggered the navigation
+     * @throws IOException if loading the SignUp FXML or setting the new scene fails
      */
     @FXML
     void switchToSignUp(ActionEvent event) throws IOException {
@@ -256,8 +277,20 @@ public class LoginController implements Initializable {
             LOGGER.log(Level.SEVERE, "Error switching to signup view", e);
             throw e;
         }
+
     }
 
+
+    /**
+     * Configure UI event handlers, initialize dynamic element arrays, and schedule startup of visual animations.
+     *
+     * Sets action handlers for the forget-password links and the sign-up button, allocates arrays for dynamic
+     * particles, shapes, and rectangles, and starts a short delayed Timeline that initializes the featured
+     * movie display and various particle/shape animations.
+     *
+     * @param location  the location used to resolve relative paths for the root object, or null if unknown
+     * @param resources the ResourceBundle for localization, or null if none provided
+     */
     @Override
     /**
      * Initializes the JavaFX controller and sets up UI components. This method is
@@ -275,8 +308,11 @@ public class LoginController implements Initializable {
                 } catch (final IOException e) {
                     throw new RuntimeException(e);
                 }
+
             }
-        });
+
+        }
+);
 
         this.forgetPasswordEmailHyperlink.setOnAction(new EventHandler<>() {
             @Override
@@ -290,8 +326,11 @@ public class LoginController implements Initializable {
                 } catch (final IOException e) {
                     throw new RuntimeException(e);
                 }
+
             }
-        });
+
+        }
+);
 
         // Ensure signUpButton has its event handler
         signUpButton.setOnAction(event -> {
@@ -300,7 +339,9 @@ public class LoginController implements Initializable {
             } catch (IOException e) {
                 LOGGER.log(Level.SEVERE, "Error switching to signup view", e);
             }
-        });
+
+        }
+);
 
         // Initialize arrays for dynamic elements
         dynamicParticles = new Circle[maxDynamicElements];
@@ -315,12 +356,21 @@ public class LoginController implements Initializable {
             initializeShapeAnimation();
             createDynamicAnimations();
             LOGGER.info("Animation initialization completed.");
-        }));
+        }
+));
         delayedInit.play();
     }
 
+
     /**
-     * Creates dynamic animated elements on the screen
+     * Adds and animates a set of dynamic decorative elements (particles, polygons, rectangles)
+     * onto the current foreground pane of the login view.
+     *
+     * <p>The method locates the topmost AnchorPane in the scene root, creates a configurable
+     * number of particle circles, polygon shapes, and rectangles, adds them to that pane,
+     * and starts their corresponding animations. If the UI root or foreground pane cannot
+     * be found the method returns without modifying the scene. Any runtime errors during
+     * creation are logged and suppressed.
      */
     private void createDynamicAnimations() {
         // Check if rootContainer or anchorPane is null
@@ -328,6 +378,7 @@ public class LoginController implements Initializable {
             LOGGER.warning("Cannot create dynamic animations: rootContainer and anchorPane are both null");
             return;
         }
+
 
         try {
             // Get a reference to the foreground AnchorPane (the last AnchorPane in the
@@ -342,6 +393,7 @@ public class LoginController implements Initializable {
                 return;
             }
 
+
             // Robustly find the foreground AnchorPane - look for the last AnchorPane child
             AnchorPane foregroundPane = null;
             for (int i = root.getChildren().size() - 1; i >= 0; i--) {
@@ -349,12 +401,15 @@ public class LoginController implements Initializable {
                     foregroundPane = (AnchorPane) root.getChildren().get(i);
                     break;
                 }
+
             }
+
 
             if (foregroundPane == null) {
                 LOGGER.warning("Cannot create dynamic animations: foreground AnchorPane not found in root container");
                 return;
             }
+
 
             // Create dynamic particles
             for (int i = 0; i < maxDynamicElements; i++) {
@@ -384,6 +439,7 @@ public class LoginController implements Initializable {
                 animateParticle(particle, i);
             }
 
+
             // Create polygons
             for (int i = 0; i < dynamicShapes.length; i++) {
                 Polygon shape = new Polygon();
@@ -400,6 +456,7 @@ public class LoginController implements Initializable {
                     points[j * 2] = centerX + radius * Math.cos(angle);
                     points[j * 2 + 1] = centerY + radius * Math.sin(angle);
                 }
+
 
                 shape.getPoints().addAll(points);
 
@@ -424,6 +481,7 @@ public class LoginController implements Initializable {
                 // Create animation
                 animateShape(shape, i);
             }
+
 
             // Create rectangles
             for (int i = 0; i < dynamicRectangles.length; i++) {
@@ -457,14 +515,20 @@ public class LoginController implements Initializable {
                 animateRectangle(rect, i);
             }
 
+
             LOGGER.info("Created " + maxDynamicElements + " dynamic particles and shapes");
         } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error creating dynamic animations: " + e.getMessage(), e);
         }
+
     }
 
+
     /**
-     * Creates animations for a particle
+     * Configure and start continuous movement, scale, and fade animations for a particle circle.
+     *
+     * @param particle the Circle node to animate
+     * @param index    zero-based index used to stagger the animation start (delay = index * 50 ms)
      */
     private void animateParticle(Circle particle, int index) {
         // Create X movement
@@ -509,12 +573,20 @@ public class LoginController implements Initializable {
             moveY.play();
             scale.play();
             fade.play();
-        });
+        }
+);
         delay.play();
     }
 
+
     /**
-     * Creates animations for a shape
+     * Attach rotation, scale (pulsing), and translate (drift) animations to a Polygon and start them with a staggered delay.
+     *
+     * The animations run indefinitely; the scale and translate animations auto-reverse. The initial delay before starting
+     * is computed from the provided index (index * 200 milliseconds).
+     *
+     * @param shape the Polygon to animate
+     * @param index the zero-based index used to compute a staggered start delay (index * 200 ms)
      */
     private void animateShape(Polygon shape, int index) {
         // Create rotation
@@ -549,12 +621,18 @@ public class LoginController implements Initializable {
             rotate.play();
             scale.play();
             move.play();
-        });
+        }
+);
         delay.play();
     }
 
+
     /**
-     * Creates animations for a rectangle
+     * Starts continuous visual animations on the given rectangle: continuous rotation, pulsing scale,
+     * pulsing opacity, and drifting translation, with a staggered start delay.
+     *
+     * @param rect  the Rectangle to animate
+     * @param index zero-based index used to stagger the start; the animation start is delayed by index * 150 ms
      */
     private void animateRectangle(Rectangle rect, int index) {
         // Create rotation
@@ -599,12 +677,18 @@ public class LoginController implements Initializable {
             scale.play();
             fade.play();
             move.play();
-        });
+        }
+);
         delay.play();
     }
 
+
     /**
-     * Initializes the featured movie display with image switching
+     * Sets the initial featured movie image and title, starts a subtle poster scale animation,
+     * and begins an automatic 8-second cycle to switch featured movies.
+     *
+     * <p>If the featured image or title UI nodes are null this method logs a warning and does nothing.
+     * Any exceptions encountered while loading the initial image are logged and do not propagate.</p>
      */
     private void initializeFeaturedMovie() {
         if (featuredMovieImage != null && featuredMovieTitle != null) {
@@ -637,13 +721,21 @@ public class LoginController implements Initializable {
             } catch (Exception e) {
                 LOGGER.warning("Failed to load initial featured movie: " + e.getMessage());
             }
-        } else {
+
+        }
+ else {
             LOGGER.warning("Featured movie elements are null");
         }
+
     }
 
+
     /**
-     * Switches the featured movie display with fade transitions
+     * Advances the featured movie carousel and updates the on-screen poster and title with fade transitions.
+     *
+     * <p>If both featuredMovieImage and featuredMovieTitle are present, increments the internal image index,
+     * selects the next poster and title, fades the current content out, replaces the image and text, then fades them back in.
+     * The method logs the new featured title and handles internal exceptions by logging a warning.</p>
      */
     private void switchFeaturedMovie() {
         // Increment the current image index
@@ -687,20 +779,29 @@ public class LoginController implements Initializable {
                 } catch (Exception ex) {
                     LOGGER.warning("Error updating featured movie: " + ex.getMessage());
                 }
-            });
+
+            }
+);
 
             fadeOut.play();
 
             LOGGER.info("Updated featured movie to: " + featuredTitle);
         }
+
     }
 
+
     /**
-     * Initializes the particle animation for floating red particles
+     * Initialize and start motion, scale, and fade animations for the predefined particle circles.
+     *
+     * For each non-null particle circle this creates and plays X/Y translate transitions, a scale
+     * transition and a fade transition to produce floating and pulsing effects; logs a warning for
+     * any particle that is null.
      */
     private void initializeParticleAnimation() {
         Circle[] particles = { particle1, particle2, particle3, particle4, particle5, particle6,
-                particle7, particle8, particle9, particle10, particle11, particle12 };
+                particle7, particle8, particle9, particle10, particle11, particle12 }
+;
 
         for (int i = 0; i < particles.length; i++) {
             if (particles[i] != null) {
@@ -747,34 +848,51 @@ public class LoginController implements Initializable {
                 particleFade.play();
 
                 LOGGER.info("Started animations for particle" + (i + 1));
-            } else {
+            }
+ else {
                 LOGGER.warning("particle" + (i + 1) + " is null");
             }
+
         }
+
     }
+
 
     /**
      * Initializes the geometric shape animations
      */
     private void initializeShapeAnimation() {
         // Array of all existing shapes
-        Object[] shapes = { shape1, shape2, shape3, shape4, shape5, shape6 };
+        Object[] shapes = { shape1, shape2, shape3, shape4, shape5, shape6 }
+;
 
         for (int i = 0; i < shapes.length; i++) {
             if (shapes[i] != null) {
                 if (shapes[i] instanceof Polygon) {
                     animatePolygon((Polygon) shapes[i], i);
-                } else if (shapes[i] instanceof Rectangle) {
+                }
+ else if (shapes[i] instanceof Rectangle) {
                     animateRectangleShape((Rectangle) shapes[i], i);
-                } else if (shapes[i] instanceof Circle) {
+                }
+ else if (shapes[i] instanceof Circle) {
                     animateCircleShape((Circle) shapes[i], i);
                 }
+
             }
+
         }
+
     }
 
+
     /**
-     * Animates a polygon shape
+     * Starts continuous visual animations for the given polygon.
+     *
+     * Applies an indefinite rotation, pulsing scale, and oscillating translation to the shape.
+     * The `index` alters animation timing and alternates rotation direction to produce variation.
+     *
+     * @param shape the Polygon to animate
+     * @param index an integer used to stagger durations and to determine rotation direction
      */
     private void animatePolygon(Polygon shape, int index) {
         // Rotation animation
@@ -809,8 +927,12 @@ public class LoginController implements Initializable {
         LOGGER.info("Started animations for polygon shape" + (index + 1));
     }
 
+
     /**
-     * Animates a rectangle shape
+     * Applies continuous rotation, fade (opacity pulse), and drifting movement animations to the given rectangle.
+     *
+     * @param shape the Rectangle to animate
+     * @param index zero-based index used to vary animation timing, direction, and staggering for this rectangle
      */
     private void animateRectangleShape(Rectangle shape, int index) {
         // Rotation animation
@@ -843,8 +965,15 @@ public class LoginController implements Initializable {
         LOGGER.info("Started animations for rectangle shape" + (index + 1));
     }
 
+
     /**
-     * Animates a circle shape
+     * Start continuous scale, glow (fade) and translation animations on the given circle.
+     *
+     * <p>The animations run indefinitely and use the provided index to vary durations and timing,
+     * creating a staggered visual effect between multiple shapes.</p>
+     *
+     * @param shape the Circle to animate
+     * @param index zero-based index used to vary animation durations and staggering for this shape
      */
     private void animateCircleShape(Circle shape, int index) {
         // Scale animation
@@ -881,17 +1010,24 @@ public class LoginController implements Initializable {
         LOGGER.info("Started animations for circle shape" + (index + 1));
     }
 
+
     /**
-     * Stops all animations when leaving the login screen
+     * Stop and clean up all visual animations and dynamic elements used by the login view.
+     *
+     * Stops any active timelines controlling the featured movie and particle creation, and
+     * removes dynamically created particles, shapes, and rectangles from the scene graph.
+     * Logs completion and any non-fatal issues encountered during cleanup.
      */
     private void stopAllAnimations() {
         if (featuredMovieSwitchTimeline != null) {
             featuredMovieSwitchTimeline.stop();
         }
 
+
         if (particleCreationTimeline != null) {
             particleCreationTimeline.stop();
         }
+
 
         // Clean up dynamic elements by removing them from the scene
         if (dynamicParticles != null) {
@@ -904,9 +1040,11 @@ public class LoginController implements Initializable {
                 if (root != null && root.getChildren().size() > 2) {
                     foregroundPane = (AnchorPane) root.getChildren().get(2);
                 }
+
             } catch (Exception e) {
                 LOGGER.fine("Could not access foreground pane for cleanup: " + e.getMessage());
             }
+
 
             if (foregroundPane != null) {
                 for (Circle particle : dynamicParticles) {
@@ -916,10 +1054,15 @@ public class LoginController implements Initializable {
                         } catch (Exception e) {
                             LOGGER.warning("Could not remove particle: " + e.getMessage());
                         }
+
                     }
+
                 }
+
             }
+
         }
+
 
         // Clean up dynamic shapes
         if (dynamicShapes != null) {
@@ -932,9 +1075,11 @@ public class LoginController implements Initializable {
                 if (root != null && root.getChildren().size() > 2) {
                     foregroundPane = (AnchorPane) root.getChildren().get(2);
                 }
+
             } catch (Exception e) {
                 LOGGER.fine("Could not access foreground pane for cleanup: " + e.getMessage());
             }
+
 
             if (foregroundPane != null) {
                 for (Polygon shape : dynamicShapes) {
@@ -944,10 +1089,15 @@ public class LoginController implements Initializable {
                         } catch (Exception e) {
                             LOGGER.warning("Could not remove shape: " + e.getMessage());
                         }
+
                     }
+
                 }
+
             }
+
         }
+
 
         // Clean up dynamic rectangles
         if (dynamicRectangles != null) {
@@ -960,9 +1110,11 @@ public class LoginController implements Initializable {
                 if (root != null && root.getChildren().size() > 2) {
                     foregroundPane = (AnchorPane) root.getChildren().get(2);
                 }
+
             } catch (Exception e) {
                 LOGGER.fine("Could not access foreground pane for cleanup: " + e.getMessage());
             }
+
 
             if (foregroundPane != null) {
                 for (Rectangle rect : dynamicRectangles) {
@@ -972,11 +1124,17 @@ public class LoginController implements Initializable {
                         } catch (Exception e) {
                             LOGGER.warning("Could not remove rectangle: " + e.getMessage());
                         }
+
                     }
+
                 }
+
             }
+
         }
+
 
         LOGGER.info("All animations stopped and dynamic elements cleaned up");
     }
+
 }

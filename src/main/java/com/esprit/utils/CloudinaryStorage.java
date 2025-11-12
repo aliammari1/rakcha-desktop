@@ -39,7 +39,9 @@ public class CloudinaryStorage {
             LOGGER.log(Level.SEVERE, "Failed to initialize Cloudinary client", e);
             throw new RuntimeException("Failed to initialize Cloudinary storage service", e);
         }
+
     }
+
 
     /**
      * Gets the singleton instance of CloudinaryStorage.
@@ -50,8 +52,10 @@ public class CloudinaryStorage {
         if (instance == null) {
             instance = new CloudinaryStorage();
         }
+
         return instance;
     }
+
 
     /**
      * Uploads an image file to Cloudinary.
@@ -64,6 +68,7 @@ public class CloudinaryStorage {
         if (imageFile == null) {
             throw new IllegalArgumentException("Image file cannot be null");
         }
+
 
         try {
             // Upload the file to Cloudinary
@@ -80,7 +85,9 @@ public class CloudinaryStorage {
             LOGGER.log(Level.SEVERE, "Error uploading image to Cloudinary", e);
             throw e;
         }
+
     }
+
 
     /**
      * Uploads an image file to Cloudinary with custom options.
@@ -94,6 +101,7 @@ public class CloudinaryStorage {
         if (imageFile == null) {
             throw new IllegalArgumentException("Image file cannot be null");
         }
+
 
         try {
             // Upload the file to Cloudinary with the provided options
@@ -109,7 +117,9 @@ public class CloudinaryStorage {
             LOGGER.log(Level.SEVERE, "Error uploading image to Cloudinary with custom options", e);
             throw e;
         }
+
     }
+
 
     /**
      * Deletes an image from Cloudinary by its public ID.
@@ -128,7 +138,9 @@ public class CloudinaryStorage {
             LOGGER.log(Level.SEVERE, "Error deleting image from Cloudinary", e);
             return false;
         }
+
     }
+
 
     /**
      * Extracts the public ID from a Cloudinary URL.
@@ -141,12 +153,16 @@ public class CloudinaryStorage {
             return null;
         }
 
+
         // Extract the filename without extension
         String filename = cloudinaryUrl.substring(cloudinaryUrl.lastIndexOf("/") + 1);
         if (filename.contains(".")) {
             filename = filename.substring(0, filename.lastIndexOf("."));
         }
 
+
         return filename;
     }
+
 }
+

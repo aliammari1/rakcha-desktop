@@ -115,7 +115,9 @@ public class EnhancedDatabaseSeeder {
             log.severe("Error during comprehensive database seeding" + e.getMessage());
             throw new RuntimeException("Comprehensive database seeding failed", e);
         }
+
     }
+
 
     /**
      * Seeds specific entity types based on user choice
@@ -176,11 +178,14 @@ public class EnhancedDatabaseSeeder {
                 default:
                     log.warning("Unknown entity type: " + entityType);
             }
+
         } catch (Exception e) {
             log.severe("Error seeding " + entityType + " entities: " + e.getMessage());
             throw new RuntimeException("Failed to seed " + entityType, e);
         }
+
     }
+
 
     /**
      * Seeds users with realistic fake data using JavaFaker.
@@ -188,7 +193,8 @@ public class EnhancedDatabaseSeeder {
     private void seedUsers(int count) {
         log.info("Seeding " + count + " users with JavaFaker...");
 
-        String[] roles = { "client", "admin", "responsable de cinema" };
+        String[] roles = { "client", "admin", "responsable de cinema" }
+;
 
         for (int i = 0; i < count; i++) {
             String firstName = faker.name().firstName();
@@ -209,13 +215,16 @@ public class EnhancedDatabaseSeeder {
                             birthDate, email, faker.avatar().image());
                 default -> new Client(firstName, lastName, phone, "password123", role, address,
                         birthDate, email, faker.avatar().image());
-            };
+            }
+;
 
             userService.create(user);
         }
 
+
         log.info("Created " + count + " users with realistic data");
     }
+
 
     /**
      * Seeds product categories with realistic names.
@@ -224,15 +233,24 @@ public class EnhancedDatabaseSeeder {
         log.info("Seeding product categories...");
 
         String[][] categories = {
-                { "Electronics", "Electronic devices, gadgets and technology products" },
-                { "Books & Media", "Books, magazines, audiobooks and educational materials" },
-                { "Fashion & Clothing", "Clothing, shoes, accessories and fashion items" },
-                { "Home & Garden", "Home improvement, furniture and gardening supplies" },
-                { "Sports & Fitness", "Sports equipment, fitness gear and outdoor activities" },
-                { "Toys & Games", "Toys, board games, video games and entertainment" },
-                { "Health & Beauty", "Personal care, cosmetics and health products" },
+                { "Electronics", "Electronic devices, gadgets and technology products" }
+,
+                { "Books & Media", "Books, magazines, audiobooks and educational materials" }
+,
+                { "Fashion & Clothing", "Clothing, shoes, accessories and fashion items" }
+,
+                { "Home & Garden", "Home improvement, furniture and gardening supplies" }
+,
+                { "Sports & Fitness", "Sports equipment, fitness gear and outdoor activities" }
+,
+                { "Toys & Games", "Toys, board games, video games and entertainment" }
+,
+                { "Health & Beauty", "Personal care, cosmetics and health products" }
+,
                 { "Automotive", "Car accessories, parts and automotive supplies" }
-        };
+
+        }
+;
 
         for (String[] category : categories) {
             ProductCategory productCategory = ProductCategory.builder()
@@ -242,8 +260,10 @@ public class EnhancedDatabaseSeeder {
             productCategoryService.create(productCategory);
         }
 
+
         log.info("Created " + categories.length + " realistic product categories");
     }
+
 
     /**
      * Seeds products with realistic fake data using JavaFaker.
@@ -268,8 +288,10 @@ public class EnhancedDatabaseSeeder {
             productService.create(product);
         }
 
+
         log.info("Created " + count + " products with realistic data");
     }
+
 
     /**
      * Seeds actors with realistic fake data using JavaFaker.
@@ -291,8 +313,10 @@ public class EnhancedDatabaseSeeder {
             actorService.create(actor);
         }
 
+
         log.info("Created " + count + " actors with realistic data");
     }
+
 
     /**
      * Seeds films with realistic fake data using JavaFaker.
@@ -321,8 +345,10 @@ public class EnhancedDatabaseSeeder {
             filmService.create(film);
         }
 
+
         log.info("Created " + count + " films with realistic data");
     }
+
 
     /**
      * Seeds cinemas with realistic fake data using JavaFaker.
@@ -364,8 +390,10 @@ public class EnhancedDatabaseSeeder {
 
                 cinemaManagers.add(createdManager);
             }
+
             log.info("Created " + cinemaManagers.size() + " cinema managers");
         }
+
 
         for (int i = 0; i < count; i++) {
             String name = "Cinema " + faker.company().name();
@@ -380,6 +408,7 @@ public class EnhancedDatabaseSeeder {
                         + " has no ID, skipping cinema creation");
                 continue;
             }
+
 
             Cinema cinema = Cinema.builder()
                     .name(name)
@@ -396,10 +425,13 @@ public class EnhancedDatabaseSeeder {
             } catch (Exception e) {
                 log.severe("Failed to create cinema: " + name + " - " + e.getMessage());
             }
+
         }
+
 
         log.info("Created " + count + " cinemas with realistic data");
     }
+
 
     /**
      * Seeds cinema halls for all cinemas.
@@ -423,10 +455,13 @@ public class EnhancedDatabaseSeeder {
                 cinemaHallService.create(hall);
                 hallCount++;
             }
+
         }
+
 
         log.info("Created " + hallCount + " cinema halls");
     }
+
 
     /**
      * Seeds seats for all cinema halls.
@@ -456,11 +491,15 @@ public class EnhancedDatabaseSeeder {
                     seatCounter++;
                     totalSeats++;
                 }
+
             }
+
         }
+
 
         log.info("Created " + totalSeats + " seats");
     }
+
 
     /**
      * Seeds series with realistic fake data using JavaFaker.
@@ -486,8 +525,10 @@ public class EnhancedDatabaseSeeder {
             seriesService.create(series);
         }
 
+
         log.info("Created " + count + " series with realistic data");
     }
+
 
     /**
      * Seeds episodes for all series.
@@ -519,11 +560,15 @@ public class EnhancedDatabaseSeeder {
                     episodeService.create(episode);
                     episodeCount++;
                 }
+
             }
+
         }
+
 
         log.info("Created " + episodeCount + " episodes");
     }
+
 
     /**
      * Seeds film categories with realistic data.
@@ -535,7 +580,8 @@ public class EnhancedDatabaseSeeder {
                 "Action", "Comedy", "Drama", "Horror", "Sci-Fi", "Fantasy",
                 "Thriller", "Romance", "Animation", "Documentary", "Adventure",
                 "Crime", "Family", "Musical", "Mystery", "War", "Western", "Biography"
-        };
+        }
+;
 
         for (String categoryName : categories) {
             try {
@@ -547,10 +593,13 @@ public class EnhancedDatabaseSeeder {
             } catch (Exception e) {
                 log.warning("Category " + categoryName + " might already exist: " + e.getMessage());
             }
+
         }
+
 
         log.info("Created " + categories.length + " film categories");
     }
+
 
     /**
      * Seeds movie sessions with realistic data.
@@ -566,6 +615,7 @@ public class EnhancedDatabaseSeeder {
             log.warning("Need films, cinemas, and halls to create movie sessions");
             return;
         }
+
 
         for (int i = 0; i < count; i++) {
             Film randomFilm = films.get(random.nextInt(films.size()));
@@ -592,8 +642,10 @@ public class EnhancedDatabaseSeeder {
             movieSessionService.create(session);
         }
 
+
         log.info("Created " + count + " movie sessions");
     }
+
 
     /**
      * Seeds tickets with realistic data.
@@ -610,16 +662,19 @@ public class EnhancedDatabaseSeeder {
             return;
         }
 
+
         // Get seats from all cinema halls
         List<Seat> seats = new ArrayList<>();
         for (CinemaHall hall : halls) {
             seats.addAll(seatService.getSeatsByCinemaHallId(hall.getId()));
         }
 
+
         if (seats.isEmpty()) {
             log.warning("No seats found to create tickets");
             return;
         }
+
 
         // Filter for clients only
         List<User> clients = users.stream()
@@ -630,6 +685,7 @@ public class EnhancedDatabaseSeeder {
             log.warning("No client users found for ticket creation");
             return;
         }
+
 
         for (int i = 0; i < count; i++) {
             User randomClient = clients.get(random.nextInt(clients.size()));
@@ -659,8 +715,10 @@ public class EnhancedDatabaseSeeder {
             ticketService.create(ticket);
         }
 
+
         log.info("Created " + count + " tickets");
     }
+
 
     /**
      * Seeds orders with realistic data.
@@ -676,6 +734,7 @@ public class EnhancedDatabaseSeeder {
             return;
         }
 
+
         // Filter for clients only
         List<User> clients = users.stream()
                 .filter(user -> "client".equals(user.getRole()))
@@ -685,6 +744,7 @@ public class EnhancedDatabaseSeeder {
             log.warning("No client users found for order creation");
             return;
         }
+
 
         for (int i = 0; i < count; i++) {
             User randomClient = clients.get(random.nextInt(clients.size()));
@@ -723,13 +783,17 @@ public class EnhancedDatabaseSeeder {
 
                     orderItemService.create(orderItem);
                 }
+
             } catch (Exception e) {
                 log.warning("Failed to create order for client " + randomClient.getFirstName() + ": " + e.getMessage());
             }
+
         }
+
 
         log.info("Created " + count + " orders with items");
     }
+
 
     /**
      * Seeds shopping carts with realistic data.
@@ -745,6 +809,7 @@ public class EnhancedDatabaseSeeder {
             return;
         }
 
+
         // Filter for clients only
         List<User> clients = users.stream()
                 .filter(user -> "client".equals(user.getRole()))
@@ -754,6 +819,7 @@ public class EnhancedDatabaseSeeder {
             log.warning("No client users found for shopping cart creation");
             return;
         }
+
 
         for (int i = 0; i < count; i++) {
             User randomClient = clients.get(random.nextInt(clients.size()));
@@ -769,8 +835,10 @@ public class EnhancedDatabaseSeeder {
             shoppingCartService.create(cart);
         }
 
+
         log.info("Created " + count + " shopping cart items");
     }
+
 
     /**
      * Seeds product reviews with realistic data.
@@ -786,6 +854,7 @@ public class EnhancedDatabaseSeeder {
             return;
         }
 
+
         // Filter for clients only
         List<User> clients = users.stream()
                 .filter(user -> "client".equals(user.getRole()))
@@ -795,6 +864,7 @@ public class EnhancedDatabaseSeeder {
             log.warning("No client users found for review creation");
             return;
         }
+
 
         for (int i = 0; i < count; i++) {
             User randomClient = clients.get(random.nextInt(clients.size()));
@@ -811,8 +881,10 @@ public class EnhancedDatabaseSeeder {
             reviewService.create(review);
         }
 
+
         log.info("Created " + count + " product reviews");
     }
+
 
     /**
      * Seeds cinema ratings with realistic data.
@@ -828,6 +900,7 @@ public class EnhancedDatabaseSeeder {
             return;
         }
 
+
         // Filter for clients only
         List<User> clients = users.stream()
                 .filter(user -> "client".equals(user.getRole()))
@@ -837,6 +910,7 @@ public class EnhancedDatabaseSeeder {
             log.warning("No client users found for cinema rating creation");
             return;
         }
+
 
         for (int i = 0; i < count; i++) {
             User randomClient = clients.get(random.nextInt(clients.size()));
@@ -853,8 +927,10 @@ public class EnhancedDatabaseSeeder {
             cinemaRatingService.create(cinemaRating);
         }
 
+
         log.info("Created " + count + " cinema ratings");
     }
+
 
     /**
      * Seeds film ratings with realistic data.
@@ -870,6 +946,7 @@ public class EnhancedDatabaseSeeder {
             return;
         }
 
+
         // Filter for clients only
         List<User> clients = users.stream()
                 .filter(user -> "client".equals(user.getRole()))
@@ -879,6 +956,7 @@ public class EnhancedDatabaseSeeder {
             log.warning("No client users found for film rating creation");
             return;
         }
+
 
         for (int i = 0; i < count; i++) {
             User randomClient = clients.get(random.nextInt(clients.size()));
@@ -895,8 +973,10 @@ public class EnhancedDatabaseSeeder {
             filmRatingService.create(filmRating);
         }
 
+
         log.info("Created " + count + " film ratings");
     }
+
 
     /**
      * Seeds various comments (product, film, cinema).
@@ -910,6 +990,7 @@ public class EnhancedDatabaseSeeder {
             return;
         }
 
+
         // Filter for clients only
         List<User> clients = users.stream()
                 .filter(user -> "client".equals(user.getRole()))
@@ -919,6 +1000,7 @@ public class EnhancedDatabaseSeeder {
             log.warning("No client users found for comment creation");
             return;
         }
+
 
         // Product comments
         List<Product> products = productService.read(PageRequest.defaultPage()).getContent();
@@ -935,8 +1017,10 @@ public class EnhancedDatabaseSeeder {
 
                 productCommentService.create(productComment);
             }
+
             log.info("Created product comments");
         }
+
 
         // Film comments
         List<Film> films = filmService.read(PageRequest.defaultPage()).getContent();
@@ -953,8 +1037,10 @@ public class EnhancedDatabaseSeeder {
 
                 filmCommentService.create(filmComment);
             }
+
             log.info("Created film comments");
         }
+
 
         // Cinema comments
         List<Cinema> cinemas = cinemaService.read(PageRequest.defaultPage()).getContent();
@@ -972,11 +1058,14 @@ public class EnhancedDatabaseSeeder {
 
                 cinemaCommentService.create(cinemaComment);
             }
+
             log.info("Created cinema comments");
         }
 
+
         log.info("Completed seeding all comments");
     }
+
 
     /**
      * Quick seed method for development/testing with realistic data.
@@ -986,6 +1075,7 @@ public class EnhancedDatabaseSeeder {
         seedDatabase(100, 200, 50, 8, 15);
     }
 
+
     /**
      * Minimal seed for basic testing.
      */
@@ -994,6 +1084,7 @@ public class EnhancedDatabaseSeeder {
         seedDatabase(20, 50, 15, 3, 5);
     }
 
+
     /**
      * Full seed for comprehensive testing.
      */
@@ -1001,6 +1092,7 @@ public class EnhancedDatabaseSeeder {
         log.info("Starting full seed...");
         seedDatabase(500, 1000, 200, 20, 50);
     }
+
 
     /**
      * Seeds series categories data.
@@ -1011,6 +1103,7 @@ public class EnhancedDatabaseSeeder {
         log.info("Series categories seeding completed");
     }
 
+
     /**
      * Seeds favorites data.
      */
@@ -1019,6 +1112,7 @@ public class EnhancedDatabaseSeeder {
         // Implementation to be added based on your requirements
         log.info("Favorites seeding completed");
     }
+
 
     /**
      * Seeds feedbacks data.
@@ -1029,6 +1123,7 @@ public class EnhancedDatabaseSeeder {
         log.info("Feedbacks seeding completed");
     }
 
+
     /**
      * Seeds actor-film associations.
      */
@@ -1038,6 +1133,7 @@ public class EnhancedDatabaseSeeder {
         log.info("Actor-film associations seeding completed");
     }
 
+
     /**
      * Seeds film-cinema associations.
      */
@@ -1046,4 +1142,6 @@ public class EnhancedDatabaseSeeder {
         // Implementation to be added based on your requirements
         log.info("Film-cinema associations seeding completed");
     }
+
 }
+

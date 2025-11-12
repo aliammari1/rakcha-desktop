@@ -33,9 +33,9 @@ public class CategoryService implements IService<ProductCategory> {
     private final Connection connection;
 
     /**
-     * Constructor for CategoryService that initializes the database connection.
-     * Obtains a connection from the DataSource singleton and creates tables if they
-     * don't exist.
+     * Initialize a CategoryService by obtaining a JDBC connection and ensuring the product_categories table exists.
+     *
+     * The created table contains columns for id, category_name, and description.
      */
     public CategoryService() {
         this.connection = DataSource.getInstance().getConnection();
@@ -57,8 +57,15 @@ public class CategoryService implements IService<ProductCategory> {
         } catch (Exception e) {
             log.error("Error creating tables for CategoryService", e);
         }
+
     }
 
+
+    /**
+     * Insert a new product category into the product_categories table.
+     *
+     * @param productCategory the ProductCategory whose `categoryName` and `description` will be persisted
+     */
     @Override
     /**
      * Creates a new entity in the database.
@@ -77,12 +84,14 @@ public class CategoryService implements IService<ProductCategory> {
         } catch (final SQLException e) {
             CategoryService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
 
+
     /**
-     * Performs read operation.
+     * Retrieve all product categories from the database.
      *
-     * @return the result of the operation
+     * @return a list of ProductCategory objects for every row in the product_categories table; returns an empty list if no categories are found or if a database error occurs
      */
     public List<ProductCategory> read() {
         final List<ProductCategory> categories = new ArrayList<>();
@@ -95,12 +104,20 @@ public class CategoryService implements IService<ProductCategory> {
                         .categoryName(rs.getString("category_name")).description(rs.getString("description")).build();
                 categories.add(category);
             }
+
         } catch (final SQLException e) {
             CategoryService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return categories;
     }
 
+
+    /**
+     * Updates the database record for the given ProductCategory using its id, setting its name and description.
+     *
+     * @param productCategory the category whose id identifies the row to update and whose fields provide the new values
+     */
     @Override
     /**
      * Updates an existing entity in the database.
@@ -120,8 +137,15 @@ public class CategoryService implements IService<ProductCategory> {
         } catch (final SQLException e) {
             CategoryService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
 
+
+    /**
+     * Removes the product category identified by the given object's ID from the database.
+     *
+     * @param productCategory the ProductCategory whose ID will be used to delete the corresponding record
+     */
     @Override
     /**
      * Deletes an entity from the database.
@@ -139,7 +163,9 @@ public class CategoryService implements IService<ProductCategory> {
         } catch (final SQLException e) {
             CategoryService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Retrieves a product category by its ID.
@@ -158,18 +184,19 @@ public class CategoryService implements IService<ProductCategory> {
                 category = ProductCategory.builder().id(rs.getLong("id")).categoryName(rs.getString("category_name"))
                         .description(rs.getString("description")).build();
             }
+
         } catch (final SQLException e) {
             CategoryService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return category;
     }
 
+
     /**
-     * Retrieves the CategoryByName value.
+     * Retrieves a product category by its name.
      *
-     * Gets a product category by its name.
-     *
-     * @param categoryName the name of the category to retrieve
+     * @param categoryName the category name to look up
      * @return the ProductCategory with the specified name, or null if not found
      */
     public ProductCategory getCategoryByName(final String categoryName) {
@@ -183,16 +210,19 @@ public class CategoryService implements IService<ProductCategory> {
                 category = ProductCategory.builder().id(rs.getLong("id")).categoryName(rs.getString("category_name"))
                         .description(rs.getString("description")).build();
             }
+
         } catch (final SQLException e) {
             CategoryService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return category;
     }
 
+
     /**
-     * Retrieves the AllCategoriesNames value.
+     * Gets all product category names.
      *
-     * @return the AllCategoriesNames value
+     * @return a list containing the category name for each product category; empty list if there are no categories
      */
     public List<String> getAllCategoriesNames() {
         final List<String> categoryNames = new ArrayList<>();
@@ -200,13 +230,15 @@ public class CategoryService implements IService<ProductCategory> {
         for (final ProductCategory productCategory : categories) {
             categoryNames.add(productCategory.getCategoryName());
         }
+
         return categoryNames;
     }
 
+
     /**
-     * Retrieves the AllCategories value.
+     * Retrieve all category names.
      *
-     * @return the AllCategories value
+     * @return a list of category name strings; empty list if there are no categories
      */
     public List<String> getAllCategories() {
         final List<String> categoryNames = new ArrayList<>();
@@ -214,14 +246,16 @@ public class CategoryService implements IService<ProductCategory> {
         for (final ProductCategory productCategory : categories) {
             categoryNames.add(productCategory.getCategoryName());
         }
+
         return categoryNames;
     }
 
+
     /**
-     * Searches for categories by name using a keyword.
+     * Finds product categories whose names contain the specified keyword.
      *
-     * @param searchKeyword the keyword to search for in category names
-     * @return a list of categories that match the search criteria
+     * @param searchKeyword the substring to match within category names
+     * @return a list of ProductCategory objects whose categoryName contains the keyword; empty list if no matches
      */
     public List<ProductCategory> searchCategoriesByName(final String searchKeyword) {
         final List<ProductCategory> result = new ArrayList<>();
@@ -236,19 +270,22 @@ public class CategoryService implements IService<ProductCategory> {
                         .description(resultSet.getString("description")).build();
                 result.add(category);
             }
+
             statement.close();
             resultSet.close();
         } catch (final SQLException e) {
             CategoryService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return result;
     }
 
+
     /**
-     * Gets all categories associated with a specific product.
+     * Retrieve the ProductCategory objects linked to the given product.
      *
-     * @param productId the ID of the product
-     * @return a list of categories associated with the product
+     * @param productId the product's id to look up categories for
+     * @return a list of ProductCategory instances associated with the product; an empty list if none are found
      */
     public List<ProductCategory> getCategoriesForProduct(final int productId) {
         final List<ProductCategory> categories = new ArrayList<>();
@@ -262,11 +299,14 @@ public class CategoryService implements IService<ProductCategory> {
                         .categoryName(rs.getString("category_name")).description(rs.getString("description")).build();
                 categories.add(category);
             }
+
         } catch (final SQLException e) {
             CategoryService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return categories;
     }
+
 
     /**
      * Adds a product to a category in the database.
@@ -284,7 +324,9 @@ public class CategoryService implements IService<ProductCategory> {
         } catch (final SQLException e) {
             CategoryService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Removes a product from a category in the database.
@@ -302,7 +344,9 @@ public class CategoryService implements IService<ProductCategory> {
         } catch (final SQLException e) {
             CategoryService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Gets the number of products in a specific category.
@@ -319,15 +363,29 @@ public class CategoryService implements IService<ProductCategory> {
             if (rs.next()) {
                 count = rs.getInt("product_count");
             }
+
         } catch (final SQLException e) {
             CategoryService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return count;
     }
 
+
+    /**
+     * Retrieves a paginated page of product categories according to the supplied page request.
+     *
+     * <p>The returned page contains the categories for the requested page number and size, and
+     * may include pagination metadata such as total elements and total pages.</p>
+     *
+     * @param pageRequest pagination and sorting parameters for the query
+     * @return a {@code Page<ProductCategory>} containing the categories and pagination metadata
+     * @throws UnsupportedOperationException if pagination is not implemented by this service
+     */
     @Override
     public Page<ProductCategory> read(PageRequest pageRequest) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'read'");
     }
+
 }

@@ -76,10 +76,12 @@ public class ListOrderController {
     void initialize() {
         this.SearchBar.textProperty().addListener((observable, oldValue, newValue) -> {
             this.search(newValue);
-        });
+        }
+);
         this.afficheOrder();
         this.initDeleteColumn();
     }
+
 
     /**
      * Displays orders in the table view with appropriate column mappings.
@@ -97,13 +99,15 @@ public class ListOrderController {
             final UserService userService = new UserService();
             final Client client = (Client) userService.getUserById(order.getClient().getId());
             return new SimpleStringProperty(client.getFirstName());
-        });
+        }
+);
         this.idprenom.setCellValueFactory(cellData -> {
             final Order order = cellData.getValue();
             final UserService userService = new UserService();
             final Client client = (Client) userService.getUserById(order.getClient().getId());
             return new SimpleStringProperty(client.getLastName());
-        });
+        }
+);
         this.idadresse.setCellValueFactory(new PropertyValueFactory<Order, String>("adresse"));
         this.idnumero.setCellValueFactory(new PropertyValueFactory<Order, Integer>("num_telephone"));
         this.iddate.setCellValueFactory(new PropertyValueFactory<Order, Date>("dateOrder"));
@@ -117,15 +121,15 @@ public class ListOrderController {
         this.orderTableView.getSelectionModel().setCellSelectionEnabled(true);
     }
 
+
     /**
-     * Filters the orders displayed in the table view based on a search keyword.
-     * 
-     * <p>
-     * This method searches for orders that match the keyword in client name,
-     * address, or status fields. If the keyword is empty, all orders are displayed.
-     * </p>
+     * Filter orders shown in the table by a search keyword.
      *
-     * @param keyword The search term to filter orders by
+     * If `keyword` is null or empty, all orders are displayed. Otherwise the table
+     * is updated to show orders whose address, client's first name, client's
+     * last name, or status contain the keyword (case-insensitive).
+     *
+     * @param keyword the search term used to filter orders; may be null or empty
      */
     @FXML
     private void search(final String keyword) {
@@ -133,7 +137,8 @@ public class ListOrderController {
         final ObservableList<Order> filteredList = FXCollections.observableArrayList();
         if (null == keyword || keyword.trim().isEmpty()) {
             filteredList.addAll(orderservice.read());
-        } else {
+        }
+ else {
             for (final Order order : orderservice.read()) {
                 if (order.getAddress().toLowerCase().contains(keyword.toLowerCase())
                         || order.getClient().getLastName().toLowerCase().contains(keyword.toLowerCase())
@@ -141,10 +146,14 @@ public class ListOrderController {
                         || order.getStatus().toLowerCase().contains(keyword.toLowerCase())) {
                     filteredList.add(order);
                 }
+
             }
+
         }
+
         this.orderTableView.setItems(filteredList);
     }
+
 
     /**
      * Initializes the delete column with a button that allows users to delete
@@ -161,10 +170,13 @@ public class ListOrderController {
     private void initDeleteColumn() {
         final Callback<TableColumn<Order, Void>, TableCell<Order, Void>> cellFactory = new Callback<>() {
             /**
-             * Creates a new TableCell instance with a delete button.
+             * Create a TableCell that renders a delete button for its Order row.
              *
-             * @param param The TableColumn to which the cell belongs
-             * @return A TableCell containing a delete button
+             * <p>Pressing the button deletes the corresponding Order via OrderService and removes
+             * the Order from the table view.</p>
+             *
+             * @param param the TableColumn to which the cell belongs
+             * @return a TableCell containing a delete button that removes the row's Order from the data source and table
              */
             @Override
             public TableCell<Order, Void> call(TableColumn<Order, Void> param) {
@@ -180,29 +192,38 @@ public class ListOrderController {
                             // Mise à jour de la TableView après la suppression de la base de données
                             orderTableView.getItems().remove(order);
                             orderTableView.refresh();
-                        });
+                        }
+);
                     }
 
+
                     /**
-                     * Updates the cell to display the delete button when the cell is not empty.
+                     * Set the cell's graphic to the row delete button when the cell contains data; clear the graphic when empty.
                      *
-                     * @param item  The item to update
-                     * @param empty Whether the cell is empty
+                     * @param item  unused placeholder for the cell value (always null for a `Void` cell)
+                     * @param empty `true` if the cell does not contain data, `false` otherwise
                      */
                     @Override
                     protected void updateItem(final Void item, final boolean empty) {
                         super.updateItem(item, empty);
                         if (empty) {
                             this.setGraphic(null);
-                        } else {
+                        }
+ else {
                             this.setGraphic(this.btnDelete);
                         }
+
                     }
-                };
+
+                }
+;
             }
-        };
+
+        }
+;
         this.deleteColumn.setCellFactory(cellFactory);
     }
+
 
     /**
      * Opens the order statistics view in a new window.
@@ -234,5 +255,7 @@ public class ListOrderController {
         } catch (final IOException e) {
             ListOrderController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
+
     }
+
 }

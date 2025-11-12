@@ -44,6 +44,7 @@ public enum SignInMicrosoft {
             throw new IllegalStateException("Microsoft OAuth credentials not found in .env file");
         }
 
+
         service = new ServiceBuilder(clientId).apiSecret(clientSecret).defaultScope("wl.basic wl.emails")
                 .callback("https://login.microsoftonline.com/common/oauth2/nativeclient").build(LiveApi.instance());
 
@@ -52,6 +53,7 @@ public enum SignInMicrosoft {
         LOGGER.info("Authorization URL generated successfully");
         return authorizationUrl;
     }
+
 
     /**
      * Complete the OAuth flow with the authorization code
@@ -80,14 +82,20 @@ public enum SignInMicrosoft {
                 if (response.getCode() == 200) {
                     LOGGER.info("User info retrieved successfully");
                     return true;
-                } else {
+                }
+ else {
                     LOGGER.warning("Failed to get user info. Status code: " + response.getCode());
                     return false;
                 }
+
             }
+
         } catch (Exception e) {
             LOGGER.warning("Authentication failed: " + e.getMessage());
             return false;
         }
+
     }
+
 }
+

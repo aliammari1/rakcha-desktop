@@ -79,6 +79,7 @@ public class Film {
         this.ratings = new ArrayList<>();
     }
 
+
     /**
      * Constructor with id for existing film instances.
      * 
@@ -104,10 +105,15 @@ public class Film {
         this.ratings = new ArrayList<>();
     }
 
+
     /**
-     * Copy constructor.
-     * 
-     * @param f the Film object to copy from
+     * Create a new Film initialized with the same field values as the given Film.
+     *
+     * Primitive and object fields are copied directly. Each collection field is set to a new ArrayList
+     * containing the same elements as the source (shallow copy). If a source list is null, the corresponding
+     * field is initialized to an empty list.
+     *
+     * @param f the source Film to copy
      */
     public Film(Film f) {
         this.id = f.id;
@@ -123,6 +129,7 @@ public class Film {
         this.ratings = new ArrayList<>(f.ratings != null ? f.ratings : new ArrayList<>());
     }
 
+
     /**
      * Constructor for creating a Film with just an ID.
      *
@@ -131,4 +138,5 @@ public class Film {
     public Film(final Long id) {
         this.id = id;
     }
+
 }

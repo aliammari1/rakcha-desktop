@@ -126,12 +126,23 @@ public class HomeClientController implements Initializable {
             "Joker|https://image.tmdb.org/t/p/w500/kAVRgw7GgK1CfYEJq8ME6EvRIgU.jpg|During the 1980s, a failed stand-up comedian is driven insane and turns to a life of crime and chaos in Gotham City while becoming an infamous psychopathic crime figure.",
             "Oppenheimer|https://image.tmdb.org/t/p/w500/6KErczPBROQty7QoIsaa6wJYXZi.jpg|The story of J. Robert Oppenheimer's role in the development of the atomic bomb during World War II.",
             "Spider-Man: Across the Spider-Verse|https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg|After reuniting with Gwen Stacy, Brooklyn's full-time, friendly neighborhood Spider-Man is catapulted across the Multiverse."
-    };
+    }
+;
 
     private int currentFeaturedIndex = 0;
     private Timeline featuredRotationTimeline;
     private Timeline particleAnimationTimeline;
 
+    /**
+     * Initialize the controller and prepare the HomeClient user interface.
+     *
+     * <p>Performs startup tasks required for the view: initializes backend services, configures the
+     * welcome message, loads featured content and the movies/series/products/cinemas sections,
+     * sets up animations and search behavior, and applies initial styling.</p>
+     *
+     * @param location  the location used to resolve relative paths for the root object, may be null
+     * @param resources the resources used to localize the root object, may be null
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         LOGGER.info("Initializing HomeClient interface...");
@@ -161,9 +172,15 @@ public class HomeClientController implements Initializable {
         LOGGER.info("HomeClient interface initialized successfully");
     }
 
+
     /**
-     * Initialize all required services
-     */
+         * Initialize backend services and the controller's in-memory collections used for content and animations.
+         *
+         * Instantiates service clients (filmService, productService, seriesService, cinemaService),
+         * creates lists for recent items (recentFilms, recentSeries, recentProducts, recentCinemas),
+         * initializes dynamic animation collections (dynamicParticles, dynamicShapes) and the Random instance.
+         * Logs successful initialization and records a warning if an initialization error occurs.
+         */
     private void initializeServices() {
         try {
             filmService = new FilmService();
@@ -185,10 +202,14 @@ public class HomeClientController implements Initializable {
         } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error initializing services: " + e.getMessage(), e);
         }
+
     }
 
+
     /**
-     * Setup welcome message based on logged-in user
+     * Sets the welcome label text to the logged-in user's first and last name when available; otherwise sets a default welcome.
+     *
+     * Attempts to read a User object from the window's userData and updates the welcomeLabel. If no user is present or an error occurs, the label is set to "Welcome to RAKCHA!".
      */
     private void setupWelcomeMessage() {
         try {
@@ -201,25 +222,36 @@ public class HomeClientController implements Initializable {
                             User currentUser = (User) stage.getUserData();
                             welcomeLabel.setText("Welcome back, " + currentUser.getFirstName() + " "
                                     + currentUser.getLastName() + "!");
-                        } else {
+                        }
+ else {
                             welcomeLabel.setText("Welcome to RAKCHA!");
                         }
-                    } else {
+
+                    }
+ else {
                         welcomeLabel.setText("Welcome to RAKCHA!");
                     }
+
                 } catch (Exception ex) {
                     LOGGER.log(Level.WARNING, "Error in delayed welcome message setup: " + ex.getMessage(), ex);
                     welcomeLabel.setText("Welcome to RAKCHA!");
                 }
-            });
+
+            }
+);
         } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error setting welcome message: " + e.getMessage(), e);
             welcomeLabel.setText("Welcome to RAKCHA!");
         }
+
     }
 
+
     /**
-     * Load and setup featured content rotation
+     * Initialize the featured content display and start its automatic rotation.
+     *
+     * Calls updateFeaturedMovie to set the initial featured entry, then starts a Timeline
+     * that advances the featured item every 8 seconds and stores it in featuredRotationTimeline.
      */
     private void loadFeaturedContent() {
         // Start with first featured movie
@@ -232,8 +264,14 @@ public class HomeClientController implements Initializable {
         featuredRotationTimeline.play();
     }
 
+
     /**
-     * Update featured movie display
+     * Update the featured banner to display the movie at the current featured index.
+     *
+     * Sets the featured title and description from the selected entry and, if the image control is available,
+     * replaces the banner image with a cross-fade transition. If there are no featured entries or the
+     * selected entry is malformed, the method returns without changing the UI. Image loading errors are
+     * logged but do not throw.
      */
     private void updateFeaturedMovie() {
         if (featuredMovies.length == 0)
@@ -259,22 +297,30 @@ public class HomeClientController implements Initializable {
                     } catch (Exception ex) {
                         LOGGER.log(Level.WARNING, "Error loading featured image: " + ex.getMessage(), ex);
                     }
-                });
+
+                }
+);
                 fadeOut.play();
             }
+
         }
+
     }
 
+
     /**
-     * Rotate to next featured movie
+     * Advance the featured index to the next entry and refresh the featured display.
      */
     private void rotateFeaturedMovie() {
         currentFeaturedIndex = (currentFeaturedIndex + 1) % featuredMovies.length;
         updateFeaturedMovie();
     }
 
+
     /**
-     * Load movies content into horizontal scroll container
+     * Populates the movies horizontal container with movie cards and initializes its carousel animation.
+     *
+     * Attempts to load recent films from the film service and create a card for each; if no films are available or loading fails, populates the container with placeholder movie cards. Always sets up the carousel animation for the movies container and logs errors or a missing container.
      */
     private void loadMoviesContent() {
         try {
@@ -296,31 +342,52 @@ public class HomeClientController implements Initializable {
                             VBox movieCard = createMovieCard(film);
                             moviesContainer.getChildren().add(movieCard);
                         }
-                    } else {
+
+                    }
+ else {
                         LOGGER.info("No films from service, creating placeholders");
                         createPlaceholderMovies();
                     }
+
                 } catch (Exception e) {
                     LOGGER.log(Level.WARNING, "Service failed, creating placeholders: " + e.getMessage());
                     createPlaceholderMovies();
                 }
 
+
                 // Setup carousel animation for movies
                 setupCarouselAnimation(moviesContainer, moviesScrollPane);
-            } else {
+            }
+ else {
                 LOGGER.warning("Movies container is null!");
             }
+
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error in loadMoviesContent: " + e.getMessage(), e);
             if (moviesContainer != null) {
                 createPlaceholderMovies();
                 setupCarouselAnimation(moviesContainer, moviesScrollPane);
             }
+
         }
+
     }
 
+
     /**
-     * Load series content into horizontal scroll container
+     * Populate the series horizontal container with series cards and configure its carousel.
+     *
+     * Attempts to load up to 10 series from the configured series service and replaces the
+     * contents of {@code seriesContainer} with a card for each returned series. If the service
+     * returns no data or an error occurs, placeholder series cards are created instead. After
+     * populating the container the method initializes the carousel animation for the container
+     * and associated scroll pane.
+     *
+     * Side effects:
+     * - Updates the controller field {@code recentSeries} when real data is loaded.
+     * - Calls {@code createPlaceholderSeries()} when no data is available or on service failure.
+     * - Calls {@code setupCarouselAnimation(Node, ScrollPane)} to start the horizontal carousel.
+     * - Logs progress, warnings, and errors; handles exceptions internally and does not propagate them.
      */
     private void loadSeriesContent() {
         try {
@@ -340,31 +407,47 @@ public class HomeClientController implements Initializable {
                             VBox seriesCard = createSeriesCard(serie);
                             seriesContainer.getChildren().add(seriesCard);
                         }
-                    } else {
+
+                    }
+ else {
                         LOGGER.info("No series from service, creating placeholders");
                         createPlaceholderSeries();
                     }
+
                 } catch (Exception e) {
                     LOGGER.log(Level.WARNING, "Service failed, creating placeholders: " + e.getMessage());
                     createPlaceholderSeries();
                 }
 
+
                 // Setup carousel animation for series
                 setupCarouselAnimation(seriesContainer, seriesScrollPane);
-            } else {
+            }
+ else {
                 LOGGER.warning("Series container is null!");
             }
+
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error in loadSeriesContent: " + e.getMessage(), e);
             if (seriesContainer != null) {
                 createPlaceholderSeries();
                 setupCarouselAnimation(seriesContainer, seriesScrollPane);
             }
+
         }
+
     }
 
+
     /**
-     * Load products content into horizontal scroll container
+     * Populate the products container with product cards and initialize its horizontal carousel.
+     *
+     * Attempts to load up to 10 products from the product service and, if products are available,
+     * creates and adds a card for each product to the products container. If the service returns no
+     * products or an error occurs, placeholder product cards are created instead. After populating
+     * the container, the method configures the carousel animation using the products scroll pane.
+     *
+     * If the products container is null, the method logs a warning and performs no UI updates.
      */
     private void loadProductsContent() {
         try {
@@ -384,31 +467,44 @@ public class HomeClientController implements Initializable {
                             VBox productCard = createProductCard(product);
                             productsContainer.getChildren().add(productCard);
                         }
-                    } else {
+
+                    }
+ else {
                         LOGGER.info("No products from service, creating placeholders");
                         createPlaceholderProducts();
                     }
+
                 } catch (Exception e) {
                     LOGGER.log(Level.WARNING, "Service failed, creating placeholders: " + e.getMessage());
                     createPlaceholderProducts();
                 }
 
+
                 // Setup carousel animation for products
                 setupCarouselAnimation(productsContainer, productsScrollPane);
-            } else {
+            }
+ else {
                 LOGGER.warning("Products container is null!");
             }
+
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error in loadProductsContent: " + e.getMessage(), e);
             if (productsContainer != null) {
                 createPlaceholderProducts();
                 setupCarouselAnimation(productsContainer, productsScrollPane);
             }
+
         }
+
     }
 
+
     /**
-     * Load cinemas content into horizontal scroll container
+     * Populates the horizontal cinemas container with cinema cards retrieved from the cinema service.
+     *
+     * Attempts to read a page of cinemas from the configured service and add a card for each result to the cinemas container.
+     * If the service call fails or returns no content, the method populates the container with placeholder cinema cards.
+     * After filling the container it initializes the container's carousel scrolling animation.
      */
     private void loadCinemasContent() {
         try {
@@ -428,31 +524,43 @@ public class HomeClientController implements Initializable {
                             VBox cinemaCard = createCinemaCard(cinema);
                             cinemasContainer.getChildren().add(cinemaCard);
                         }
-                    } else {
+
+                    }
+ else {
                         LOGGER.info("No cinemas from service, creating placeholders");
                         createPlaceholderCinemas();
                     }
+
                 } catch (Exception e) {
                     LOGGER.log(Level.WARNING, "Service failed, creating placeholders: " + e.getMessage());
                     createPlaceholderCinemas();
                 }
 
+
                 // Setup carousel animation for cinemas
                 setupCarouselAnimation(cinemasContainer, cinemasScrollPane);
-            } else {
+            }
+ else {
                 LOGGER.warning("Cinemas container is null!");
             }
+
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error in loadCinemasContent: " + e.getMessage(), e);
             if (cinemasContainer != null) {
                 createPlaceholderCinemas();
                 setupCarouselAnimation(cinemasContainer, cinemasScrollPane);
             }
+
         }
+
     }
 
+
     /**
-     * Create a movie card component
+     * Create a UI card representing a Film with its poster, title, release year, and a generated rating.
+     *
+     * @param film the Film to represent in the card (used for image, title, year, and rating)
+     * @return a VBox containing the styled movie card node ready to be added to the scene graph
      */
     private VBox createMovieCard(Film film) {
         VBox card = new VBox(8);
@@ -481,7 +589,8 @@ public class HomeClientController implements Initializable {
             String imageUrl = null;
             if (film.getImage() != null && !film.getImage().isEmpty()) {
                 imageUrl = film.getImage();
-            } else {
+            }
+ else {
                 // Use movie placeholder images from TMDB or other sources
                 String[] movieImages = {
                         "https://image.tmdb.org/t/p/w500/vZloFAK7NmvMGKE7VkF5UHaz0I.jpg", // The Batman
@@ -494,9 +603,11 @@ public class HomeClientController implements Initializable {
                         "https://image.tmdb.org/t/p/w500/xLPffWMhMj1l50ND3KchMjYoKmE.jpg", // Iron Man
                         "https://image.tmdb.org/t/p/w500/kqjL17yufvn9OVLyXYpvtyrFfak.jpg", // Thor
                         "https://image.tmdb.org/t/p/w500/A6B6uONhxzYV52M8VaivRrxqBjl.jpg" // Captain America
-                };
+                }
+;
                 imageUrl = movieImages[Math.abs(film.getName().hashCode()) % movieImages.length];
             }
+
             poster.setImage(new Image(imageUrl));
         } catch (Exception e) {
             try {
@@ -505,7 +616,9 @@ public class HomeClientController implements Initializable {
             } catch (Exception ex) {
                 poster.setImage(new Image("https://via.placeholder.com/140x200/333333/ffffff?text=No+Image"));
             }
+
         }
+
 
         // Movie title
         Label title = new Label(film.getName());
@@ -536,6 +649,7 @@ public class HomeClientController implements Initializable {
             ratingBox.getChildren().add(star);
         }
 
+
         card.getChildren().addAll(poster, title, year, ratingBox);
 
         // Add hover effect
@@ -544,7 +658,8 @@ public class HomeClientController implements Initializable {
                     card.getStyle() +
                             "-fx-border-color: rgba(139, 0, 0, 0.6);" +
                             "-fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.4), 15, 0, 0, 5);");
-        });
+        }
+);
 
         card.setOnMouseExited(e -> {
             card.setStyle(
@@ -556,7 +671,8 @@ public class HomeClientController implements Initializable {
                             "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0, 0, 3);" +
                             "-fx-padding: 10;" +
                             "-fx-cursor: hand;");
-        });
+        }
+);
 
         // Add click handler
         card.setOnMouseClicked(e -> openMovieDetails(film));
@@ -564,8 +680,12 @@ public class HomeClientController implements Initializable {
         return card;
     }
 
+
     /**
-     * Create a series card component
+     * Builds a UI card for a TV series containing a poster image, title, and director label, and wires hover and click interactions.
+     *
+     * @param series the Series whose data populates the card (name, director, image)
+     * @return a configured VBox containing the series poster, title, and director label
      */
     private VBox createSeriesCard(Series series) {
         VBox card = new VBox(8);
@@ -594,7 +714,8 @@ public class HomeClientController implements Initializable {
             String imageUrl = null;
             if (series.getImage() != null && !series.getImage().isEmpty()) {
                 imageUrl = series.getImage();
-            } else {
+            }
+ else {
                 // Use TV series placeholder images
                 String[] seriesImages = {
                         "https://image.tmdb.org/t/p/w500/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg", // Game of Thrones
@@ -607,9 +728,11 @@ public class HomeClientController implements Initializable {
                         "https://image.tmdb.org/t/p/w500/6LelQ6GzOoSKAj0AQPHRDdPB3Zg.jpg", // Sherlock
                         "https://image.tmdb.org/t/p/w500/sWgBv7LV2PRoQgkxwlibdGXQ6he.jpg", // Squid Game
                         "https://image.tmdb.org/t/p/w500/1BIoJGKbXvdLDVv01hJR4VQ6vTX.jpg" // Wednesday
-                };
+                }
+;
                 imageUrl = seriesImages[Math.abs(series.getName().hashCode()) % seriesImages.length];
             }
+
             poster.setImage(new Image(imageUrl));
         } catch (Exception e) {
             try {
@@ -618,7 +741,9 @@ public class HomeClientController implements Initializable {
             } catch (Exception ex) {
                 poster.setImage(new Image("https://via.placeholder.com/140x200/444444/ffffff?text=Series"));
             }
+
         }
+
 
         // Series title
         Label title = new Label(series.getName());
@@ -646,8 +771,15 @@ public class HomeClientController implements Initializable {
         return card;
     }
 
+
     /**
-     * Create a product card component
+     * Create a visual card representing a product for display in the UI.
+     *
+     * The card shows the product image (falls back to a selection of themed images or a text placeholder if missing),
+     * the product name, and the formatted price, and it attaches hover styling and a click handler that opens product details.
+     *
+     * @param product the product to render in the card
+     * @return a VBox node containing the product image, name, price, and interaction handlers
      */
     private VBox createProductCard(Product product) {
         VBox card = new VBox(8);
@@ -676,7 +808,8 @@ public class HomeClientController implements Initializable {
             String imageUrl = null;
             if (product.getImage() != null && !product.getImage().isEmpty()) {
                 imageUrl = product.getImage();
-            } else {
+            }
+ else {
                 // Use cinema-related product images
                 String[] productImages = {
                         "https://images.unsplash.com/photo-1505686994434-e3cc5abf1330?w=300&h=400&fit=crop", // Popcorn
@@ -698,9 +831,11 @@ public class HomeClientController implements Initializable {
                                                                                                              // snacks
                         "https://images.unsplash.com/photo-1580745313093-4e79b5b3e6c0?w=300&h=400&fit=crop" // Movie
                                                                                                             // memorabilia
-                };
+                }
+;
                 imageUrl = productImages[Math.abs(product.getName().hashCode()) % productImages.length];
             }
+
             image.setImage(new Image(imageUrl));
         } catch (Exception e) {
             try {
@@ -709,7 +844,9 @@ public class HomeClientController implements Initializable {
             } catch (Exception ex) {
                 image.setImage(new Image("https://via.placeholder.com/140x180/555555/ffffff?text=Product"));
             }
+
         }
+
 
         // Product name
         Label name = new Label(product.getName());
@@ -738,8 +875,15 @@ public class HomeClientController implements Initializable {
         return card;
     }
 
+
     /**
-     * Setup card interactions (hover effects and click handlers)
+     * Attach hover visual effects and a click handler to a card VBox.
+     *
+     * Applies styling changes for mouse enter/exit to indicate hover state and executes
+     * the provided action when the card is clicked.
+     *
+     * @param card the VBox that represents the interactive card
+     * @param onClickAction the runnable to execute when the card is clicked
      */
     private void setupCardInteractions(VBox card, Runnable onClickAction) {
         card.setOnMouseEntered(e -> {
@@ -747,7 +891,8 @@ public class HomeClientController implements Initializable {
                     card.getStyle() +
                             "-fx-border-color: rgba(139, 0, 0, 0.6);" +
                             "-fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.4), 15, 0, 0, 5);");
-        });
+        }
+);
 
         card.setOnMouseExited(e -> {
             card.setStyle(
@@ -759,13 +904,18 @@ public class HomeClientController implements Initializable {
                             "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0, 0, 3);" +
                             "-fx-padding: 10;" +
                             "-fx-cursor: hand;");
-        });
+        }
+);
 
         card.setOnMouseClicked(e -> onClickAction.run());
     }
 
+
     /**
-     * Setup all animations for the interface
+     * Initialize and start all visual animations and dynamic decorative elements used by the home interface.
+     *
+     * Configures predefined particle and shape animations, applies content animations (such as fade-ins and rotations),
+     * and generates additional randomized dynamic particles and shapes added to the scene.
      */
     private void setupAnimations() {
         setupParticleAnimations();
@@ -775,14 +925,22 @@ public class HomeClientController implements Initializable {
         createDynamicShapes();
     }
 
+
     /**
-     * Create additional dynamic particles with randomness
+     * Generates and adds a set of randomized decorative particle nodes to the particles container.
+     *
+     * Creates multiple Circle particles with varied radius, position, opacity, color/gradient fills,
+     * drop shadows, and style classes, adds each to the controller's dynamicParticles list and the
+     * particlesContainer node, and starts per-particle advanced animations. The method logs the
+     * number of particles created and will log a warning if particle creation fails or the container
+     * is unavailable.
      */
     private void createDynamicParticles() {
         if (particlesContainer == null) {
             LOGGER.warning("Particles container is null, cannot create dynamic particles");
             return;
         }
+
 
         try {
             // Create 15 additional random particles with more variety
@@ -808,7 +966,8 @@ public class HomeClientController implements Initializable {
                         "#ff1111", "#ff2222", "#ff3333", "#ff4444", "#ff5555", "#ff6666", "#ff7777",
                         "#ee1111", "#ee2222", "#ee3333", "#dd1111", "#dd2222", "#cc1111", "#cc2222",
                         "#bb1111", "#aa1111", "#990000", "#880000", "#770000", "#660000"
-                };
+                }
+;
                 String color = colorPalette[random.nextInt(colorPalette.length)];
 
                 // Randomize gradient direction
@@ -818,7 +977,8 @@ public class HomeClientController implements Initializable {
                         "radial-gradient(center 70% 70%, radius 60%, " + color + "88, #880000aa)",
                         "linear-gradient(45deg, " + color + "aa, #660000aa)",
                         "linear-gradient(135deg, " + color + "88, #440000cc)"
-                };
+                }
+;
                 String gradient = gradientTypes[random.nextInt(gradientTypes.length)];
 
                 double shadowRadius = 6 + random.nextDouble() * 12; // 6-18px shadow
@@ -828,16 +988,20 @@ public class HomeClientController implements Initializable {
                                 "-fx-effect: dropshadow(gaussian, " + color + "99, " + shadowRadius + ", 0, 0, 0);");
 
                 // Assign random animation class combinations
-                String[] animationClasses = { "floating-particle", "glow-red", "pulsing-shape" };
+                String[] animationClasses = { "floating-particle", "glow-red", "pulsing-shape" }
+;
                 StringBuilder classBuilder = new StringBuilder();
                 for (String animClass : animationClasses) {
                     if (random.nextBoolean()) { // 50% chance for each class
                         classBuilder.append(animClass).append(" ");
                     }
+
                 }
+
                 if (classBuilder.length() > 0) {
                     particle.getStyleClass().addAll(classBuilder.toString().trim().split(" "));
                 }
+
 
                 // Add to containers
                 dynamicParticles.add(particle);
@@ -847,14 +1011,22 @@ public class HomeClientController implements Initializable {
                 setupAdvancedParticleAnimation(particle, random.nextDouble() * 5);
             }
 
+
             LOGGER.info("Created " + dynamicParticles.size() + " dynamic particles with advanced randomness");
         } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error creating dynamic particles: " + e.getMessage(), e);
         }
+
     }
 
+
     /**
-     * Create additional dynamic shapes with better randomness
+     * Generates and adds randomized decorative shapes to the particlesContainer and starts their animations.
+     *
+     * Creates rectangles, circles, triangles, and diamonds with randomized position, size, rotation,
+     * opacity, gradient fill, stroke, and drop shadow; assigns optional CSS animation classes,
+     * stores each shape in the dynamicShapes list, appends it to the particlesContainer, and
+     * invokes the advanced shape animation setup for each created shape.
      */
     private void createDynamicShapes() {
         if (particlesContainer == null)
@@ -899,7 +1071,8 @@ public class HomeClientController implements Initializable {
                                 0.0, -size,
                                 -size * 0.866, size * 0.5,
                                 size * 0.866, size * 0.5
-                        });
+                        }
+);
                         triangle.setLayoutX(x);
                         triangle.setLayoutY(y);
                         triangle.setOpacity(opacity);
@@ -915,7 +1088,8 @@ public class HomeClientController implements Initializable {
                                 diamondSize, 0.0,
                                 0.0, diamondSize,
                                 -diamondSize, 0.0
-                        });
+                        }
+);
                         diamond.setLayoutX(x);
                         diamond.setLayoutY(y);
                         diamond.setOpacity(opacity);
@@ -924,12 +1098,14 @@ public class HomeClientController implements Initializable {
                         break;
                 }
 
+
                 if (shape != null) {
                     // Enhanced color variety
                     String[] colorPalette = {
                             "#c80000", "#b40000", "#dc3232", "#a00000", "#e04444", "#cc1111",
                             "#d02020", "#b81818", "#f03030", "#c41515", "#e82828", "#bc0c0c"
-                    };
+                    }
+;
                     String primaryColor = colorPalette[random.nextInt(colorPalette.length)];
                     String secondaryColor = colorPalette[random.nextInt(colorPalette.length)];
 
@@ -942,7 +1118,8 @@ public class HomeClientController implements Initializable {
                                     + "66)",
                             "radial-gradient(center 30% 70%, radius 80%, " + primaryColor + "aa, " + secondaryColor
                                     + "44)"
-                    };
+                    }
+;
                     String gradient = gradientPatterns[random.nextInt(gradientPatterns.length)];
 
                     String strokeColor = colorPalette[random.nextInt(colorPalette.length)];
@@ -959,16 +1136,20 @@ public class HomeClientController implements Initializable {
                     shape.setMouseTransparent(true);
 
                     // Random animation class assignments
-                    String[] animationClasses = { "rotating-shape", "pulsing-shape", "glow-red" };
+                    String[] animationClasses = { "rotating-shape", "pulsing-shape", "glow-red" }
+;
                     java.util.List<String> assignedClasses = new ArrayList<>();
                     for (String animClass : animationClasses) {
                         if (random.nextDouble() < 0.7) { // 70% chance for each class
                             assignedClasses.add(animClass);
                         }
+
                     }
+
                     if (!assignedClasses.isEmpty()) {
                         shape.getStyleClass().addAll(assignedClasses);
                     }
+
 
                     dynamicShapes.add(shape);
                     particlesContainer.getChildren().add(shape);
@@ -976,16 +1157,24 @@ public class HomeClientController implements Initializable {
                     // Setup complex animation
                     setupAdvancedShapeAnimation(shape, random.nextDouble() * 3);
                 }
+
             }
+
 
             LOGGER.info("Created " + dynamicShapes.size() + " dynamic shapes with enhanced randomness");
         } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error creating dynamic shapes: " + e.getMessage(), e);
         }
+
     }
 
+
     /**
-     * Setup advanced animation for a dynamic particle
+     * Applies a composite floating animation to a particle, combining vertical and horizontal drift,
+     * pulsing scale, and fading effects that run indefinitely.
+     *
+     * @param particle the Circle node to animate
+     * @param delay initial delay in seconds before the animations begin
      */
     private void setupAdvancedParticleAnimation(Circle particle, double delay) {
         // Complex floating animation with multiple axes
@@ -1032,8 +1221,18 @@ public class HomeClientController implements Initializable {
         scale.play();
     }
 
+
     /**
-     * Setup advanced animation for a dynamic shape
+     * Attach and start a set of continuous visual animations on the given node.
+     *
+     * Applies independent rotation, horizontal and vertical scaling, and opacity
+     * oscillation to the provided node, and optionally a gentle translational
+     * drift. Each animation uses randomized durations, targets, and direction and
+     * runs indefinitely (with auto-reverse where applicable). Animations begin
+     * after the specified delay.
+     *
+     * @param shape the node to animate (e.g., a Shape, Group, or Region)
+     * @param delay initial delay in seconds before animations start
      */
     private void setupAdvancedShapeAnimation(javafx.scene.Node shape, double delay) {
         // Complex rotation animation
@@ -1084,6 +1283,7 @@ public class HomeClientController implements Initializable {
             drift.play();
         }
 
+
         // Start all animations
         rotation.play();
         scaleX.play();
@@ -1091,21 +1291,32 @@ public class HomeClientController implements Initializable {
         fade.play();
     }
 
+
     /**
-     * Setup particle floating animations
+     * Initializes and starts floating animations for the particle nodes.
+     *
+     * Attaches a looping floating animation to each of the six particle Circle fields (if present)
+     * and staggers their start times by 0.5 seconds per particle index to create a natural, offset motion.
      */
     private void setupParticleAnimations() {
-        Circle[] particles = { particle1, particle2, particle3, particle4, particle5, particle6 };
+        Circle[] particles = { particle1, particle2, particle3, particle4, particle5, particle6 }
+;
 
         for (int i = 0; i < particles.length; i++) {
             if (particles[i] != null) {
                 setupParticleAnimation(particles[i], i * 0.5);
             }
+
         }
+
     }
 
+
     /**
-     * Setup individual particle animation
+     * Applies a vertical floating translation and a pulsing fade animation to the given particle.
+     *
+     * @param particle the Circle node to animate
+     * @param delay    initial delay in seconds before the animation starts
      */
     private void setupParticleAnimation(Circle particle, double delay) {
         TranslateTransition moveTransition = new TranslateTransition(Duration.seconds(4), particle);
@@ -1125,9 +1336,23 @@ public class HomeClientController implements Initializable {
         fadeTransition.play();
     }
 
+
     /**
-     * Setup shape rotation and pulsing animations
-     */
+         * Apply animated effects to decorative shape nodes in the UI.
+         *
+         * <p>Starts continuous rotation on the available shape nodes used for background decoration and
+         * starts a pulsing scale/fade animation for the designated pulsing shape.</p>
+         *
+         * <p>Specifically:
+         * - shape1: continuous rotation with a 10-second cycle
+         * - shape2: continuous rotation with a 15-second cycle
+         * - shape3: continuous rotation with an 8-second cycle
+         * - shape5: continuous rotation with a 12-second cycle
+         * - shape6: continuous rotation with a 6-second cycle
+         * - shape4: pulsing (scale and fade) animation</p>
+         *
+         * <p>The method is null-safe and will skip any shape nodes that are not present.</p>
+         */
     private void setupShapeAnimations() {
         // Rotation animations
         if (shape1 != null)
@@ -1146,8 +1371,12 @@ public class HomeClientController implements Initializable {
             setupPulsingAnimation(shape4);
     }
 
+
     /**
-     * Setup rotation animation for a shape
+     * Applies a continuous 360-degree rotation to the specified node.
+     *
+     * @param shape    the node to animate
+     * @param duration the rotation period in seconds for one full 360° cycle
      */
     private void setupRotationAnimation(javafx.scene.Node shape, double duration) {
         RotateTransition rotation = new RotateTransition(Duration.seconds(duration), shape);
@@ -1157,8 +1386,13 @@ public class HomeClientController implements Initializable {
         rotation.play();
     }
 
+
     /**
-     * Setup pulsing animation for a shape
+     * Applies a continuous pulsing scale and fade animation to the given node.
+     *
+     * The animation scales the node up and down and adjusts its opacity in a repeating cycle (~3 seconds per cycle).
+     *
+     * @param shape the JavaFX Node to animate with a pulsing effect
      */
     private void setupPulsingAnimation(javafx.scene.Node shape) {
         ScaleTransition scale = new ScaleTransition(Duration.seconds(3), shape);
@@ -1178,8 +1412,11 @@ public class HomeClientController implements Initializable {
         fade.play();
     }
 
+
     /**
-     * Setup content area animations
+     * Applies a fade-in animation to the main scrollable content area when available.
+     *
+     * <p>If {@code mainScrollPane} is non-null, its opacity is animated from 0.0 to 1.0 over 800 milliseconds.</p>
      */
     private void setupContentAnimations() {
         // Fade in the main content
@@ -1189,10 +1426,15 @@ public class HomeClientController implements Initializable {
             fadeIn.setToValue(1.0);
             fadeIn.play();
         }
+
     }
 
+
     /**
-     * Setup search functionality
+     * Attach a listener to the search field that triggers searches for queries longer than two characters.
+     *
+     * <p>If the injected `searchField` is non-null, a listener is added to its text property which calls
+     * {@code performSearch(String)} whenever the new text length exceeds 2 characters.</p>
      */
     private void setupSearchFunctionality() {
         if (searchField != null) {
@@ -1200,12 +1442,18 @@ public class HomeClientController implements Initializable {
                 if (newValue != null && newValue.length() > 2) {
                     performSearch(newValue);
                 }
-            });
+
+            }
+);
         }
+
     }
 
+
     /**
-     * Perform search across all content types
+     * Filter the currently displayed content using the provided search text.
+     *
+     * @param query the text used to filter visible movies, series, products, and cinemas
      */
     private void performSearch(String query) {
         // This would filter the displayed content based on the search query
@@ -1213,17 +1461,26 @@ public class HomeClientController implements Initializable {
         LOGGER.info("Searching for: " + query);
     }
 
+
     /**
-     * Apply initial styling and effects
+     * Applies initial UI styling by adding the "fade-in" CSS class to the root container.
+     *
+     * This triggers the initial load animation when the root container is available.
      */
     private void applyInitialStyling() {
         // Add CSS classes for animations
         if (rootContainer != null) {
             rootContainer.getStyleClass().add("fade-in");
         }
+
     }
 
-    // Navigation event handlers
+
+    /**
+     * Loads the movies view (filmuser.fxml) and replaces the current window's scene with it.
+     *
+     * @param event the ActionEvent that triggered this navigation
+     */
 
     @FXML
     void showMovies(ActionEvent event) {
@@ -1235,8 +1492,16 @@ public class HomeClientController implements Initializable {
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading movies interface: " + e.getMessage(), e);
         }
+
     }
 
+
+    /**
+     * Navigates the application to the Series client view by loading and setting "SeriesClient.fxml"
+     * as the current scene on the existing stage.
+     *
+     * @param event the action event that triggered the navigation
+     */
     @FXML
     void showSeries(ActionEvent event) {
         try {
@@ -1247,8 +1512,15 @@ public class HomeClientController implements Initializable {
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading series interface: " + e.getMessage(), e);
         }
+
     }
 
+
+    /**
+     * Loads the product listing UI (AfficherProduitClient.fxml) into the current window.
+     *
+     * @param event the ActionEvent that triggered the navigation
+     */
     @FXML
     void showProducts(ActionEvent event) {
         try {
@@ -1259,8 +1531,15 @@ public class HomeClientController implements Initializable {
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading products interface: " + e.getMessage(), e);
         }
+
     }
 
+
+    /**
+     * Navigates the application to the cinemas dashboard view by loading and setting DashboardClientCinema.fxml as the current scene.
+     *
+     * If loading the FXML fails, the error is logged and the current scene is left unchanged.
+     */
     @FXML
     void showCinemas(ActionEvent event) {
         try {
@@ -1271,8 +1550,16 @@ public class HomeClientController implements Initializable {
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading cinemas interface: " + e.getMessage(), e);
         }
+
     }
 
+
+    /**
+     * Navigates the application to the user's profile view by loading the Profile.fxml
+     * and replacing the current scene with the loaded content.
+     *
+     * @param event the ActionEvent that triggered the navigation
+     */
     @FXML
     void showProfile(ActionEvent event) {
         try {
@@ -1283,8 +1570,17 @@ public class HomeClientController implements Initializable {
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading profile interface: " + e.getMessage(), e);
         }
+
     }
 
+
+    /**
+     * Clears the current user's session data and navigates the application back to the login screen.
+     *
+     * Loads the login FXML, clears the stage's user data, and replaces the scene with the login scene.
+     *
+     * @param event the ActionEvent that triggered the logout
+     */
     @FXML
     void logout(ActionEvent event) {
         try {
@@ -1296,9 +1592,15 @@ public class HomeClientController implements Initializable {
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error during logout: " + e.getMessage(), e);
         }
+
     }
 
-    // Content detail handlers
+
+    /**
+     * Open the movie details view for the given film and navigate to the movies screen.
+     *
+     * @param film the Film whose details should be displayed
+     */
 
     private void openMovieDetails(Film film) {
         LOGGER.info("Opening movie details for: " + film.getName());
@@ -1308,8 +1610,15 @@ public class HomeClientController implements Initializable {
         } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error opening movie details: " + e.getMessage(), e);
         }
+
     }
 
+
+    /**
+     * Open the detail view for the given series and navigate to the series screen.
+     *
+     * @param series the series whose details should be displayed
+     */
     private void openSeriesDetails(Series series) {
         LOGGER.info("Opening series details for: " + series.getName());
         // Navigate to series details or episode list
@@ -1318,8 +1627,15 @@ public class HomeClientController implements Initializable {
         } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error opening series details: " + e.getMessage(), e);
         }
+
     }
 
+
+    /**
+     * Initiates navigation to the products view for the given product (for viewing details or adding to cart).
+     *
+     * @param product the product to present in the products view
+     */
     private void openProductDetails(Product product) {
         LOGGER.info("Opening product details for: " + product.getName());
         // Navigate to product details or add to cart
@@ -1328,68 +1644,108 @@ public class HomeClientController implements Initializable {
         } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error opening product details: " + e.getMessage(), e);
         }
+
     }
 
-    // Placeholder content creators (for when services fail)
+
+    /**
+     * Populate the movies container with a predefined set of placeholder movie cards.
+     *
+     * This method clears the current movies container and fills it with a fixed list
+     * of popular movie titles and short descriptors to display when the film service
+     * fails or returns no data.
+     */
 
     private void createPlaceholderMovies() {
         String[] placeholderMovies = {
                 "The Batman", "Dune", "Joker", "Oppenheimer", "Spider-Man: Across the Spider-Verse",
                 "Avengers: Endgame", "The Dark Knight", "Inception", "Interstellar", "The Matrix"
-        };
+        }
+;
 
         String[] movieDescriptions = {
                 "2022 • Action", "2021 • Sci-Fi", "2019 • Drama", "2023 • Biography", "2023 • Animation",
                 "2019 • Action", "2008 • Action", "2010 • Sci-Fi", "2014 • Sci-Fi", "1999 • Sci-Fi"
-        };
+        }
+;
 
         moviesContainer.getChildren().clear();
         for (int i = 0; i < placeholderMovies.length; i++) {
             VBox card = createRichPlaceholderCard(placeholderMovies[i], movieDescriptions[i], "Movie");
             moviesContainer.getChildren().add(card);
         }
+
     }
 
+
+    /**
+     * Populates the series container with a fixed set of rich placeholder series cards.
+     *
+     * Creates a predefined list of series titles and short descriptions, builds a rich placeholder
+     * card for each via createRichPlaceholderCard, and adds them to the seriesContainer.
+     */
     private void createPlaceholderSeries() {
         String[] placeholderSeries = {
                 "Breaking Bad", "Game of Thrones", "The Office", "Stranger Things", "The Crown",
                 "The Mandalorian", "House of the Dragon", "Wednesday", "The Witcher", "Peaky Blinders"
-        };
+        }
+;
 
         String[] seriesDescriptions = {
                 "5 Seasons • Drama", "8 Seasons • Fantasy", "9 Seasons • Comedy", "4 Seasons • Sci-Fi",
                 "6 Seasons • Drama",
                 "3 Seasons • Sci-Fi", "1 Season • Fantasy", "1 Season • Comedy", "3 Seasons • Fantasy",
                 "6 Seasons • Crime"
-        };
+        }
+;
 
         seriesContainer.getChildren().clear();
         for (int i = 0; i < placeholderSeries.length; i++) {
             VBox card = createRichPlaceholderCard(placeholderSeries[i], seriesDescriptions[i], "Series");
             seriesContainer.getChildren().add(card);
         }
+
     }
 
+
+    /**
+     * Populate the products container with a predefined set of placeholder product cards.
+     *
+     * Clears the container and adds rich placeholder cards for a fixed list of product names
+     * paired with example prices to be shown when real product data is unavailable.
+     */
     private void createPlaceholderProducts() {
         String[] placeholderProducts = {
                 "Premium Popcorn", "VIP Movie Tickets", "Gourmet Candy Mix", "Specialty Drinks", "Movie Merchandise",
                 "Collector's Edition", "Director's Cut", "Limited Edition", "Exclusive Bundle", "Gift Cards"
-        };
+        }
+;
 
         String[] productPrices = {
                 "$8.99", "$15.99", "$6.49", "$4.99", "$12.99",
                 "$24.99", "$19.99", "$29.99", "$39.99", "$25.00"
-        };
+        }
+;
 
         productsContainer.getChildren().clear();
         for (int i = 0; i < placeholderProducts.length; i++) {
             VBox card = createRichPlaceholderCard(placeholderProducts[i], productPrices[i], "Product");
             productsContainer.getChildren().add(card);
         }
+
     }
 
+
     /**
-     * Create a rich placeholder card with detailed information
+     * Builds a styled placeholder card to represent content when real data is unavailable.
+     *
+     * The card includes an image (selected by title and type with a network fallback), a title,
+     * a short description, a type label, and wired hover/click interactions for user feedback.
+     *
+     * @param title       the display title for the placeholder card
+     * @param description a short descriptive text to show under the title
+     * @param type        the content category (for example "Movie", "Series", or "Product") used to choose an appropriate image and label
+     * @return            a configured VBox representing the rich placeholder card
      */
     private VBox createRichPlaceholderCard(String title, String description, String type) {
         VBox card = new VBox(8);
@@ -1427,7 +1783,9 @@ public class HomeClientController implements Initializable {
             } catch (Exception ex) {
                 LOGGER.log(Level.WARNING, "Error loading placeholder image: " + ex.getMessage());
             }
+
         }
+
 
         // Enhanced title
         Label titleLabel = new Label(title);
@@ -1468,8 +1826,13 @@ public class HomeClientController implements Initializable {
         return card;
     }
 
+
     /**
-     * Get appropriate image URL based on content type and title
+     * Selects a stable placeholder image URL for a given content item.
+     *
+     * @param title the content title used to deterministically choose an image
+     * @param type  the content category such as "Movie", "Series", "Product", or "Cinema"
+     * @return      a URL string pointing to an image appropriate for the given type (or a generic placeholder URL if the type is unrecognized)
      */
     private String getImageUrlForType(String title, String type) {
         switch (type) {
@@ -1485,7 +1848,8 @@ public class HomeClientController implements Initializable {
                         "https://image.tmdb.org/t/p/w500/rr7E0NoGKxvbkb89eR1GwfoYjpA.jpg", // Inception
                         "https://image.tmdb.org/t/p/w500/pFlaoHTZeyNkG83vxsAJiGzfSsa.jpg", // Interstellar
                         "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg" // The Matrix
-                };
+                }
+;
                 return movieImages[Math.abs(title.hashCode()) % movieImages.length];
 
             case "Series":
@@ -1500,7 +1864,8 @@ public class HomeClientController implements Initializable {
                         "https://image.tmdb.org/t/p/w500/1BIoJGKbXvdLDVv01hJR4VQ6vTX.jpg", // Wednesday
                         "https://image.tmdb.org/t/p/w500/7WUHnWGx5OO145IRxPDUkQSh4C7.jpg", // The Witcher
                         "https://image.tmdb.org/t/p/w500/mY7SeH4HFFxW1hiI6cWuwCRKptN.jpg" // Peaky Blinders
-                };
+                }
+;
                 return seriesImages[Math.abs(title.hashCode()) % seriesImages.length];
 
             case "Product":
@@ -1524,7 +1889,8 @@ public class HomeClientController implements Initializable {
                                                                                                              // collectibles
                         "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=300&h=400&fit=crop" // Cinema
                                                                                                             // accessories
-                };
+                }
+;
                 return productImages[Math.abs(title.hashCode()) % productImages.length];
 
             case "Cinema":
@@ -1549,16 +1915,23 @@ public class HomeClientController implements Initializable {
                                                                                                              // posters
                         "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=300&h=400&fit=crop" // Cinema
                                                                                                             // exterior
-                };
+                }
+;
                 return cinemaImages[Math.abs(title.hashCode()) % cinemaImages.length];
 
             default:
                 return "https://via.placeholder.com/140x200/555555/ffffff?text=" + type;
         }
+
     }
 
+
     /**
-     * Create a cinema card component
+     * Builds a styled VBox representing a cinema card with image, name, and address,
+     * and attaches hover and click interactions that open the cinema details view.
+     *
+     * @param cinema the Cinema whose data (name, address, logo path) populates the card
+     * @return a configured VBox node that visually represents the cinema and handles user interaction
      */
     private VBox createCinemaCard(Cinema cinema) {
         VBox card = new VBox(8);
@@ -1587,7 +1960,8 @@ public class HomeClientController implements Initializable {
             String imageUrl = null;
             if (cinema.getLogoPath() != null && !cinema.getLogoPath().isEmpty()) {
                 imageUrl = cinema.getLogoPath();
-            } else {
+            }
+ else {
                 // Use cinema-related images
                 String[] cinemaImages = {
                         "https://images.unsplash.com/photo-1489599446190-c9ad1d88c3dc?w=300&h=400&fit=crop", // Cinema
@@ -1610,9 +1984,11 @@ public class HomeClientController implements Initializable {
                                                                                                              // posters
                         "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=300&h=400&fit=crop" // Cinema
                                                                                                             // exterior
-                };
+                }
+;
                 imageUrl = cinemaImages[Math.abs(cinema.getName().hashCode()) % cinemaImages.length];
             }
+
             image.setImage(new Image(imageUrl));
         } catch (Exception e) {
             try {
@@ -1621,7 +1997,9 @@ public class HomeClientController implements Initializable {
             } catch (Exception ex) {
                 image.setImage(new Image("https://via.placeholder.com/140x180/555555/ffffff?text=Cinema"));
             }
+
         }
+
 
         // Cinema name
         Label name = new Label(cinema.getName());
@@ -1651,8 +2029,18 @@ public class HomeClientController implements Initializable {
         return card;
     }
 
+
     /**
-     * Setup carousel animation for content containers
+     * Configures and starts an enhanced horizontal carousel auto-scroll for a content HBox and its ScrollPane.
+     *
+     * This method ensures the container has enough items (adds placeholders when needed), adjusts scroll pane
+     * policies for smooth auto-scrolling, creates a continuous Timeline to advance the horizontal scroll value
+     * with a graceful reset near the end, and installs hover interactions that pause the auto-scroll, enable
+     * manual panning, and provide brief scale-based visual feedback. It also adds a subtle scroll indicator
+     * animation and schedules the animation to start after layout completion. Errors are caught and logged.
+     *
+     * @param container the HBox containing the horizontal content items to be scrolled
+     * @param scrollPane the ScrollPane that displays the container and will be driven by the carousel animation
      */
     private void setupCarouselAnimation(HBox container, ScrollPane scrollPane) {
         if (container == null || scrollPane == null)
@@ -1665,6 +2053,7 @@ public class HomeClientController implements Initializable {
                 createAdditionalPlaceholderContent(container);
                 LOGGER.info("Added additional content. Container now has " + container.getChildren().size() + " items");
             }
+
 
             // Set up the scroll pane properties for smooth scrolling
             scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -1685,15 +2074,19 @@ public class HomeClientController implements Initializable {
                                             new KeyValue(scrollPane.hvalueProperty(), 0.0, Interpolator.EASE_BOTH)));
                             resetAnimation.play();
                             LOGGER.info("Carousel reset to beginning for container");
-                        } else {
+                        }
+ else {
                             scrollPane.setHvalue(currentHValue + increment);
 
                             // Log progress every 20% for debugging
                             if ((int) (currentHValue * 100) % 20 == 0) {
                                 LOGGER.info("Carousel progress: " + String.format("%.1f%%", currentHValue * 100));
                             }
+
                         }
-                    }));
+
+                    }
+));
             autoScroll.setCycleCount(Timeline.INDEFINITE);
 
             // Enhanced hover interactions with visual feedback
@@ -1708,7 +2101,8 @@ public class HomeClientController implements Initializable {
                 pauseFeedback.play();
 
                 LOGGER.info("Carousel paused on hover");
-            };
+            }
+;
 
             EventHandler<MouseEvent> resumeHandler = e -> {
                 autoScroll.play();
@@ -1721,7 +2115,8 @@ public class HomeClientController implements Initializable {
                 resumeFeedback.play();
 
                 LOGGER.info("Carousel resumed");
-            };
+            }
+;
 
             container.setOnMouseEntered(pauseHandler);
             scrollPane.setOnMouseEntered(pauseHandler);
@@ -1740,18 +2135,31 @@ public class HomeClientController implements Initializable {
                 } catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
                 }
-            });
+
+            }
+);
 
             LOGGER.info("Enhanced carousel animation setup for container with " + container.getChildren().size()
                     + " items");
         } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error setting up carousel animation: " + e.getMessage(), e);
         }
+
     }
 
+
     /**
-     * Create additional placeholder content to ensure scrolling is visible
-     */
+         * Populate the given horizontal container with rich placeholder cards until it contains at least twelve items.
+         *
+         * <p>The method inspects the provided container to infer a content type (Movie, Series, Product, or Cinema)
+         * and appends rich placeholder cards created via {@code createRichPlaceholderCard} until the container's
+         * child count reaches a minimum of 12. Placeholder titles and descriptions are chosen cyclically from
+         * predefined arrays and numbered to produce distinct entries.</p>
+         *
+         * @param container the HBox to populate (expected to be one of moviesContainer, seriesContainer,
+         *                  productsContainer, or cinemasContainer); additional children will be appended to
+         *                  enable visible horizontal scrolling
+         */
     private void createAdditionalPlaceholderContent(HBox container) {
         int currentSize = container.getChildren().size();
         int targetSize = Math.max(12, currentSize); // Ensure at least 12 items for very visible scrolling
@@ -1760,25 +2168,31 @@ public class HomeClientController implements Initializable {
         String contentType = "Content";
         if (container == moviesContainer) {
             contentType = "Movie";
-        } else if (container == seriesContainer) {
+        }
+ else if (container == seriesContainer) {
             contentType = "Series";
-        } else if (container == productsContainer) {
+        }
+ else if (container == productsContainer) {
             contentType = "Product";
-        } else if (container == cinemasContainer) {
+        }
+ else if (container == cinemasContainer) {
             contentType = "Cinema";
         }
+
 
         String[] contentTitles = {
                 "Featured " + contentType, "Popular " + contentType, "Trending " + contentType,
                 "New Release", "Top Rated", "Editor's Choice", "Premium Selection",
                 "Exclusive Content", "Staff Pick", "Must Watch", "Bestseller", "Award Winner"
-        };
+        }
+;
 
         String[] contentDescriptions = {
                 "Premium Content", "Highly Rated", "Most Watched", "Latest Addition",
                 "Five Stars", "Staff Pick", "VIP Selection", "Exclusive Access",
                 "Curated Choice", "Fan Favorite", "Top Seller", "Critics' Choice"
-        };
+        }
+;
 
         for (int i = currentSize; i < targetSize; i++) {
             String title = contentTitles[i % contentTitles.length] + " " + (i + 1);
@@ -1786,11 +2200,18 @@ public class HomeClientController implements Initializable {
             VBox placeholderCard = createRichPlaceholderCard(title, description, contentType);
             container.getChildren().add(placeholderCard);
         }
+
     }
 
+
     /**
-     * Setup visual scroll indicator for the container
-     */
+         * Apply a subtle pulsing glow to indicate that the horizontal container is scrollable.
+         *
+         * Adds a repeating Timeline that animates the container's opacity to create a gentle visual hint
+         * that the HBox can be scrolled horizontally.
+         *
+         * @param container the HBox to receive the pulsing glow indicator
+         */
     private void setupScrollIndicator(HBox container) {
         // Add subtle glow effect that pulses to indicate scrolling
         Timeline glowAnimation = new Timeline(
@@ -1801,24 +2222,40 @@ public class HomeClientController implements Initializable {
         glowAnimation.play();
     }
 
+
+    /**
+     * Populates the cinemas container with a fixed set of placeholder cinema cards.
+     *
+     * Clears any existing children from the cinemas container and adds ten placeholder
+     * cinema cards using predefined names and locations for display when real data is unavailable.
+     */
     private void createPlaceholderCinemas() {
         String[] placeholderCinemas = {
                 "CineMax Plaza", "MovieWorld IMAX", "Star Cinema Complex", "Grand Theater", "Royal Movies",
                 "Premiere Cinemas", "Silver Screen", "Diamond Theater", "Elite Cinemas", "Luxury Movies"
-        };
+        }
+;
 
         String[] cinemaLocations = {
                 "Downtown", "Mall District", "City Center", "Uptown", "Suburbs",
                 "Shopping Plaza", "Entertainment Zone", "Metro Center", "Business District", "West Side"
-        };
+        }
+;
 
         cinemasContainer.getChildren().clear();
         for (int i = 0; i < placeholderCinemas.length; i++) {
             VBox card = createRichPlaceholderCard(placeholderCinemas[i], cinemaLocations[i], "Cinema");
             cinemasContainer.getChildren().add(card);
         }
+
     }
 
+
+    /**
+     * Navigates to the cinemas view and attempts to display details for the specified cinema.
+     *
+     * @param cinema the cinema whose details should be presented
+     */
     private void openCinemaDetails(Cinema cinema) {
         LOGGER.info("Opening cinema details for: " + cinema.getName());
         // Navigate to cinema details or show cinema information
@@ -1827,52 +2264,85 @@ public class HomeClientController implements Initializable {
         } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error opening cinema details: " + e.getMessage(), e);
         }
+
     }
 
-    // Additional navigation methods referenced in FXML
+
+    /**
+     * Navigate to the Movies view.
+     *
+     * @param event the action event that triggered this handler
+     */
     @FXML
     void browseMovies(ActionEvent event) {
         showMovies(event);
     }
 
+
+    /**
+     * Navigate to the cinemas view.
+     *
+     * @param event the action event that triggered the navigation
+     */
     @FXML
     void findCinemas(ActionEvent event) {
         showCinemas(event);
     }
 
+
+    /**
+     * Navigates the application to the series listing view.
+     *
+     * @param event the action event that triggered the navigation
+     */
     @FXML
     void browseSeries(ActionEvent event) {
         showSeries(event);
     }
 
+
+    /**
+     * Navigate to the user's profile view.
+     *
+     * @param event the action event that triggered the navigation
+     */
     @FXML
     void viewProfile(ActionEvent event) {
         showProfile(event);
     }
 
+
     /**
-     * Cleanup method called when the controller is destroyed
+     * Stop animation timelines and clear dynamic particle and shape collections used by the controller.
+     *
+     * Performs a best-effort cleanup of resources created by this controller and logs outcome; exceptions are caught and logged.
      */
     public void cleanup() {
         try {
             if (featuredRotationTimeline != null) {
                 featuredRotationTimeline.stop();
             }
+
             if (particleAnimationTimeline != null) {
                 particleAnimationTimeline.stop();
             }
+
 
             // Clear dynamic particles and shapes
             if (dynamicParticles != null) {
                 dynamicParticles.clear();
             }
+
             if (dynamicShapes != null) {
                 dynamicShapes.clear();
             }
+
 
             LOGGER.info("HomeClient controller cleanup completed");
         } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error during cleanup: " + e.getMessage(), e);
         }
+
     }
+
 }

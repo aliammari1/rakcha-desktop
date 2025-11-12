@@ -49,6 +49,7 @@ public class CodeBareProduct {
                 throw new IllegalArgumentException("Product code cannot be empty");
             }
 
+
             BitMatrix matrix = new MultiFormatWriter().encode(productCode, BarcodeFormat.CODE_128, DEFAULT_WIDTH,
                     DEFAULT_HEIGHT);
 
@@ -60,7 +61,9 @@ public class CodeBareProduct {
             LOGGER.log(Level.SEVERE, "Failed to generate barcode", e);
             return false;
         }
+
     }
+
 
     /**
      * Read a barcode from an image file
@@ -76,6 +79,7 @@ public class CodeBareProduct {
                 throw new IOException("Failed to read image file");
             }
 
+
             BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(new BufferedImageLuminanceSource(image)));
 
             Result result = new MultiFormatReader().decode(bitmap);
@@ -85,5 +89,8 @@ public class CodeBareProduct {
             LOGGER.log(Level.SEVERE, "Failed to read barcode", e);
             return null;
         }
+
     }
+
 }
+

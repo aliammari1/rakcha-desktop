@@ -31,7 +31,8 @@ public class IServiceEpisodeImpl implements IService<Episode> {
     // Allowed columns for sorting to prevent SQL injection
     private static final String[] ALLOWED_SORT_COLUMNS = {
             "idepisode", "title", "episode_number", "season", "series_id"
-    };
+    }
+;
 
     /**
      * Constructs a new IServiceEpisodeImpl instance.
@@ -55,6 +56,7 @@ public class IServiceEpisodeImpl implements IService<Episode> {
                 """);
     }
 
+
     @Override
     /**
      * Creates a new entity in the database.
@@ -77,7 +79,9 @@ public class IServiceEpisodeImpl implements IService<Episode> {
             log.error("Error creating episode: {}", e.getMessage(), e);
             throw new RuntimeException("Failed to create episode", e);
         }
+
     }
+
 
     @Override
     /**
@@ -102,7 +106,9 @@ public class IServiceEpisodeImpl implements IService<Episode> {
             log.error("Error updating episode: {}", e.getMessage(), e);
             throw new RuntimeException("Failed to update episode", e);
         }
+
     }
+
 
     @Override
     /**
@@ -116,12 +122,15 @@ public class IServiceEpisodeImpl implements IService<Episode> {
             log.error("Cannot delete null episode");
             throw new IllegalArgumentException("Episode cannot be null");
         }
+
         if (episode.getId() == null) {
             log.error("Cannot delete episode with null ID");
             throw new IllegalArgumentException("Episode ID cannot be null");
         }
+
         deleteById(episode.getId());
     }
+
 
     /**
      * Deletes an episode by its ID.
@@ -138,7 +147,9 @@ public class IServiceEpisodeImpl implements IService<Episode> {
             log.error("Error deleting episode: {}", e.getMessage(), e);
             throw new RuntimeException("Failed to delete episode", e);
         }
+
     }
+
 
     @Override
     /**
@@ -158,6 +169,7 @@ public class IServiceEpisodeImpl implements IService<Episode> {
             pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
 
+
         try {
             // Get total count
             final String countQuery = PaginationQueryBuilder.buildCountQuery(baseQuery);
@@ -172,7 +184,9 @@ public class IServiceEpisodeImpl implements IService<Episode> {
                     final Episode episode = buildEpisodeFromResultSet(rs);
                     content.add(episode);
                 }
+
             }
+
 
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
 
@@ -180,7 +194,9 @@ public class IServiceEpisodeImpl implements IService<Episode> {
             log.error("Error retrieving paginated episodes: {}", e.getMessage(), e);
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
         }
+
     }
+
 
     /**
      * Helper method to build Episode object from ResultSet.
@@ -201,6 +217,7 @@ public class IServiceEpisodeImpl implements IService<Episode> {
                 .build();
     }
 
+
     /**
      * Retrieves episodes by series ID.
      *
@@ -217,11 +234,16 @@ public class IServiceEpisodeImpl implements IService<Episode> {
                     final Episode episode = buildEpisodeFromResultSet(rs);
                     episodes.add(episode);
                 }
+
             }
+
         } catch (SQLException e) {
             log.error("Error retrieving episodes by series {}: {}", seriesId, e.getMessage(), e);
             throw new RuntimeException("Failed to retrieve episodes by series", e);
         }
+
         return episodes;
     }
+
 }
+

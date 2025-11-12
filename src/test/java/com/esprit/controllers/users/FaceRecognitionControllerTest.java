@@ -35,6 +35,7 @@ class FaceRecognitionControllerTest extends TestFXBase {
         // TestFXBase handles stage setup
     }
 
+
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
     @DisplayName("Camera Initialization Tests")
@@ -51,6 +52,7 @@ class FaceRecognitionControllerTest extends TestFXBase {
             assertThat(cameraButton.getText()).contains("Camera");
         }
 
+
         @Test
         @Order(2)
         @DisplayName("Should display video frame area")
@@ -60,6 +62,7 @@ class FaceRecognitionControllerTest extends TestFXBase {
             ImageView frameView = lookup("#originalFrame").query();
             assertThat(frameView).isNotNull();
         }
+
 
         @Test
         @Order(3)
@@ -71,6 +74,7 @@ class FaceRecognitionControllerTest extends TestFXBase {
             assertThat(frameView.getFitWidth()).isEqualTo(600);
         }
 
+
         @Test
         @Order(4)
         @DisplayName("Should preserve image ratio")
@@ -80,7 +84,9 @@ class FaceRecognitionControllerTest extends TestFXBase {
             ImageView frameView = lookup("#originalFrame").query();
             assertThat(frameView.isPreserveRatio()).isTrue();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -97,6 +103,7 @@ class FaceRecognitionControllerTest extends TestFXBase {
             assertThat(haarCheckbox).isNotNull();
         }
 
+
         @Test
         @Order(6)
         @DisplayName("Should display LBP classifier checkbox")
@@ -106,6 +113,7 @@ class FaceRecognitionControllerTest extends TestFXBase {
             CheckBox lbpCheckbox = lookup("#lbpClassifier").query();
             assertThat(lbpCheckbox).isNotNull();
         }
+
 
         @Test
         @Order(7)
@@ -119,6 +127,7 @@ class FaceRecognitionControllerTest extends TestFXBase {
             assertThat(haarCheckbox.isDisabled()).isFalse();
             assertThat(lbpCheckbox.isDisabled()).isFalse();
         }
+
 
         @Test
         @Order(8)
@@ -138,6 +147,7 @@ class FaceRecognitionControllerTest extends TestFXBase {
             assertThat(lbpCheckbox.isDisabled()).isTrue();
         }
 
+
         @Test
         @Order(9)
         @DisplayName("Should select Haar classifier")
@@ -150,6 +160,7 @@ class FaceRecognitionControllerTest extends TestFXBase {
             assertThat(haarCheckbox.isSelected()).isTrue();
         }
 
+
         @Test
         @Order(10)
         @DisplayName("Should select LBP classifier")
@@ -161,7 +172,9 @@ class FaceRecognitionControllerTest extends TestFXBase {
 
             assertThat(lbpCheckbox.isSelected()).isTrue();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -183,6 +196,7 @@ class FaceRecognitionControllerTest extends TestFXBase {
             assertThat(cameraButton.getText()).contains("Stop");
         }
 
+
         @Test
         @Order(12)
         @DisplayName("Should stop camera on second button click")
@@ -198,6 +212,7 @@ class FaceRecognitionControllerTest extends TestFXBase {
 
             assertThat(cameraButton.getText()).contains("Start");
         }
+
 
         @Test
         @Order(13)
@@ -220,6 +235,7 @@ class FaceRecognitionControllerTest extends TestFXBase {
             assertThat(cameraButton.getText()).isEqualTo(initialText);
         }
 
+
         @Test
         @Order(14)
         @DisplayName("Should handle camera connection failure")
@@ -240,7 +256,9 @@ class FaceRecognitionControllerTest extends TestFXBase {
             ImageView frameView = lookup("#originalFrame").query();
             assertThat(frameView).isNotNull();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -259,6 +277,7 @@ class FaceRecognitionControllerTest extends TestFXBase {
             assertThat(cameraButton.isDisabled()).isFalse();
         }
 
+
         @Test
         @Order(16)
         @DisplayName("Should detect faces in frame")
@@ -272,6 +291,7 @@ class FaceRecognitionControllerTest extends TestFXBase {
             assertThat(cameraButton).isNotNull();
             assertThat(frameView).isNotNull();
         }
+
 
         @Test
         @Order(17)
@@ -287,6 +307,7 @@ class FaceRecognitionControllerTest extends TestFXBase {
             assertThat(cameraButton).isNotNull();
         }
 
+
         @Test
         @Order(18)
         @DisplayName("Should calculate absolute face size")
@@ -298,6 +319,7 @@ class FaceRecognitionControllerTest extends TestFXBase {
             assertThat(frameView).isNotNull();
             assertThat(frameView.getFitWidth()).isEqualTo(600);
         }
+
 
         @Test
         @Order(19)
@@ -312,7 +334,9 @@ class FaceRecognitionControllerTest extends TestFXBase {
             ImageView frameView = lookup("#originalFrame").query();
             assertThat(frameView).isNotNull();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -329,6 +353,7 @@ class FaceRecognitionControllerTest extends TestFXBase {
             assertThat(cameraButton).isNotNull();
         }
 
+
         @Test
         @Order(21)
         @DisplayName("Should grab frames from video capture")
@@ -342,6 +367,7 @@ class FaceRecognitionControllerTest extends TestFXBase {
             assertThat(frameView).isNotNull();
         }
 
+
         @Test
         @Order(22)
         @DisplayName("Should display captured frames")
@@ -352,7 +378,9 @@ class FaceRecognitionControllerTest extends TestFXBase {
             assertThat(frameView).isNotNull();
             assertThat(frameView.getFitWidth()).isEqualTo(600);
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -368,6 +396,7 @@ class FaceRecognitionControllerTest extends TestFXBase {
             Label statusLabel = lookup("#recognitionStatusLabel").query();
             assertThat(statusLabel).isNotNull();
         }
+
 
         @Test
         @Order(24)
@@ -387,6 +416,7 @@ class FaceRecognitionControllerTest extends TestFXBase {
                 .isNotNull();
         }
 
+
         @Test
         @Order(25)
         @DisplayName("Should show user name when face recognized")
@@ -400,6 +430,7 @@ class FaceRecognitionControllerTest extends TestFXBase {
             assertThat(statusLabel.getText()).isNotNull();
         }
 
+
         @Test
         @Order(26)
         @DisplayName("Should show 'Unknown user' when face not recognized")
@@ -411,7 +442,9 @@ class FaceRecognitionControllerTest extends TestFXBase {
             // Note: Without actual face recognition mock, we verify label is ready
             assertThat(statusLabel.getText()).isNotNull();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -428,6 +461,7 @@ class FaceRecognitionControllerTest extends TestFXBase {
             assertThat(cameraButton).isNotNull();
         }
 
+
         @Test
         @Order(28)
         @DisplayName("Should release camera resources on stop")
@@ -438,6 +472,7 @@ class FaceRecognitionControllerTest extends TestFXBase {
             assertThat(cameraButton).isNotNull();
         }
 
+
         @Test
         @Order(29)
         @DisplayName("Should await timer termination")
@@ -447,7 +482,9 @@ class FaceRecognitionControllerTest extends TestFXBase {
             Button cameraButton = lookup("#cameraButton").query();
             assertThat(cameraButton).isNotNull();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -465,6 +502,7 @@ class FaceRecognitionControllerTest extends TestFXBase {
             assertThat(cameraButton).isNotNull();
         }
 
+
         @Test
         @Order(31)
         @DisplayName("Should handle camera not available")
@@ -475,6 +513,7 @@ class FaceRecognitionControllerTest extends TestFXBase {
             assertThat(cameraButton).isNotNull();
         }
 
+
         @Test
         @Order(32)
         @DisplayName("Should handle frame capture errors")
@@ -484,5 +523,8 @@ class FaceRecognitionControllerTest extends TestFXBase {
             ImageView frameView = lookup("#originalFrame").query();
             assertThat(frameView).isNotNull();
         }
+
     }
+
 }
+

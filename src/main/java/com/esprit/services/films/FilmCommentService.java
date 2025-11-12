@@ -34,8 +34,10 @@ public class FilmCommentService implements IService<FilmComment> {
     private final Connection connection;
 
     /**
-     * Constructs a new FilmCommentService instance.
-     * Initializes database connection and creates tables if they don't exist.
+     * Initialize the FilmCommentService and ensure required database tables exist.
+     *
+     * Obtains a JDBC connection from DataSource and creates the `film_comments` table
+     * if it does not already exist.
      */
     public FilmCommentService() {
         this.connection = DataSource.getInstance().getConnection();
@@ -59,8 +61,17 @@ public class FilmCommentService implements IService<FilmComment> {
         } catch (Exception e) {
             log.error("Error creating tables for FilmCommentService", e);
         }
+
     }
 
+
+    /**
+     * Insert a new FilmComment record into the film_comments table.
+     *
+     * Persists the comment text together with the associated client's id and film's id extracted from the supplied FilmComment.
+     *
+     * @param filmComment the FilmComment whose comment, client id, and film id will be persisted
+     */
     @Override
     /**
      * Creates a new entity in the database.
@@ -80,8 +91,16 @@ public class FilmCommentService implements IService<FilmComment> {
             log.error("Error creating comment", e);
             throw new RuntimeException(e);
         }
+
     }
 
+
+    /**
+     * Update the stored film comment identified by the comment's id.
+     *
+     * @param filmComment the film comment containing the updated values; its `id` is used to locate the row to update
+     * @throws RuntimeException if a database error prevents applying the update
+     */
     @Override
     /**
      * Updates an existing entity in the database.
@@ -99,8 +118,16 @@ public class FilmCommentService implements IService<FilmComment> {
             log.error("Error updating comment", e);
             throw new RuntimeException(e);
         }
+
     }
 
+
+    /**
+     * Delete the specified film comment from the database.
+     *
+     * @param filmComment the FilmComment to delete; its `id` must be set
+     * @throws RuntimeException if a database error occurs while deleting the comment
+     */
     @Override
     /**
      * Deletes an entity from the database.
@@ -117,11 +144,21 @@ public class FilmCommentService implements IService<FilmComment> {
             log.error("Error deleting comment", e);
             throw new RuntimeException(e);
         }
+
     }
 
+
+    /**
+     * Retrieve a paginated page of film comments based on the provided pagination and sorting parameters.
+     *
+     * @param pageRequest pagination and sorting parameters for the query
+     * @return a Page of FilmComment containing the requested page of comments
+     * @throws UnsupportedOperationException always; this method is not implemented
+     */
     @Override
     public Page<FilmComment> read(PageRequest pageRequest) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'read'");
     }
+
 }

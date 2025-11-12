@@ -30,12 +30,14 @@ public class PaginationQueryBuilder {
                     .append(" ").append(pageRequest.getSortDirection());
         }
 
+
         // Add LIMIT and OFFSET
         query.append(" LIMIT ").append(pageRequest.getSize())
                 .append(" OFFSET ").append(pageRequest.getOffset());
 
         return query.toString();
     }
+
 
     /**
      * Builds a COUNT query from a base query to get total elements.
@@ -52,6 +54,7 @@ public class PaginationQueryBuilder {
             throw new IllegalArgumentException("Invalid query: FROM clause not found");
         }
 
+
         String fromClause = baseQuery.substring(fromIndex);
 
         // Remove ORDER BY clause if present for count query
@@ -60,8 +63,10 @@ public class PaginationQueryBuilder {
             fromClause = fromClause.substring(0, orderByIndex);
         }
 
+
         return "SELECT COUNT(*) " + fromClause;
     }
+
 
     /**
      * Executes a count query to get the total number of elements.
@@ -77,9 +82,12 @@ public class PaginationQueryBuilder {
             if (rs.next()) {
                 return rs.getLong(1);
             }
+
             return 0;
         }
+
     }
+
 
     /**
      * Validates a column name for sorting to prevent SQL injection.
@@ -93,11 +101,16 @@ public class PaginationQueryBuilder {
             return false;
         }
 
+
         for (String allowed : allowedColumns) {
             if (allowed.equalsIgnoreCase(columnName)) {
                 return true;
             }
+
         }
+
         return false;
     }
+
 }
+

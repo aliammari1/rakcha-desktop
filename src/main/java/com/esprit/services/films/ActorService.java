@@ -45,7 +45,8 @@ public class ActorService implements IService<Actor> {
     // Allowed columns for sorting to prevent SQL injection
     private static final String[] ALLOWED_SORT_COLUMNS = {
             "id", "name", "image", "biography", "number_of_appearances"
-    };
+    }
+;
 
     /**
      * Constructor that initializes the database connection and creates tables if
@@ -74,7 +75,9 @@ public class ActorService implements IService<Actor> {
         } catch (Exception e) {
             log.error("Error creating tables for ActorService", e);
         }
+
     }
+
 
     /**
      * Creates a new actor in the database.
@@ -82,10 +85,11 @@ public class ActorService implements IService<Actor> {
      * @param actor the actor entity to create
      */
     /**
-     * Creates a new actor in the database.
-     *
-     * @param actor the actor entity to create
-     */
+         * Insert the given Actor into the actors database table.
+         *
+         * @param actor the Actor to insert; the actor's name, image, and biography fields are persisted
+         * @throws RuntimeException if a database error prevents inserting the actor
+         */
     @Override
     public void create(final Actor actor) {
         final String req = "insert into actors (name,image,biography) values (?,?,?) ";
@@ -98,8 +102,20 @@ public class ActorService implements IService<Actor> {
             log.error("Error creating actor", e);
             throw new RuntimeException(e);
         }
+
     }
 
+
+    /**
+     * Retrieve a page of actors according to the provided pagination and optional sorting parameters.
+     *
+     * If the requested sort column is not allowed, the sort is ignored and results use default ordering.
+     * On database errors the method returns a page with whatever content was collected (possibly empty)
+     * and a totalElements value of 0.
+     *
+     * @param pageRequest pagination and sorting parameters; if the sort column is invalid it will be ignored
+     * @return a Page of Actor containing the current page content, page index, page size, and total element count
+     */
     @Override
     /**
      * Retrieves actors with pagination support.
@@ -118,6 +134,7 @@ public class ActorService implements IService<Actor> {
             pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
 
+
         try {
             // Get total count
             final String countQuery = PaginationQueryBuilder.buildCountQuery(baseQuery);
@@ -133,7 +150,9 @@ public class ActorService implements IService<Actor> {
                             .image(rs.getString("image")).biography(rs.getString("biography"))
                             .numberOfAppearances(rs.getInt("number_of_appearances")).build());
                 }
+
             }
+
 
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
 
@@ -141,7 +160,9 @@ public class ActorService implements IService<Actor> {
             log.error("Error retrieving paginated actors: {}", e.getMessage(), e);
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
         }
+
     }
+
 
     /**
      * Updates an existing actor in the database.
@@ -161,7 +182,9 @@ public class ActorService implements IService<Actor> {
             log.error("Error updating actor", e);
             throw new RuntimeException(e);
         }
+
     }
+
 
     /**
      * Retrieves an actor by their name.
@@ -181,12 +204,16 @@ public class ActorService implements IService<Actor> {
                             .numberOfAppearances(rs.getInt("number_of_appearances")).build();
                     log.info("Found actor: " + actor);
                 }
+
             }
+
         } catch (final SQLException e) {
             log.error("Error getting actor by name: " + nom, e);
         }
+
         return actor;
     }
+
 
     /**
      * Deletes an actor from the database.
@@ -203,15 +230,17 @@ public class ActorService implements IService<Actor> {
             log.error("Error deleting actor", e);
             throw new RuntimeException(e);
         }
+
     }
 
+
     /**
-     * Retrieves an actor by their placement ranking (based on number of
-     * appearances).
-     *
-     * @param actorPlacement the placement ranking to search for
-     * @return the actor with the specified placement, or null if not found
-     */
+         * Retrieves an actor by their placement ranking (based on number of appearances).
+         *
+         * @param actorPlacement the 1-based placement to retrieve (1 = most appearances)
+         * @return the actor with the specified placement, or `null` if no actor exists at that placement
+         * @throws RuntimeException if a database error occurs while querying
+         */
     public Actor getActorByPlacement(final int actorPlacement) {
         final String req = """
                 SELECT a.*, COUNT(af.film_id) AS NumberOfAppearances
@@ -229,11 +258,15 @@ public class ActorService implements IService<Actor> {
                             .biography(rs.getString("biography")).numberOfAppearances(rs.getInt("NumberOfAppearances"))
                             .build();
                 }
+
             }
+
         } catch (final SQLException e) {
             log.error("Error getting actor by placement: " + actorPlacement, e);
             throw new RuntimeException(e);
         }
+
         return null;
     }
+
 }

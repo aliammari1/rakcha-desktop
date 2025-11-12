@@ -47,11 +47,14 @@ public class FilmService implements IService<Film> {
     // Allowed columns for sorting to prevent SQL injection
     private static final String[] ALLOWED_SORT_COLUMNS = {
             "id", "name", "duration", "description", "release_year"
-    };
+    }
+;
 
     /**
-     * Constructs a new FilmService instance.
-     * Initializes database connection and creates tables if they don't exist.
+     * Initialize the FilmService by establishing a database connection and ensuring required schema exists.
+     *
+     * <p>Creates the following tables if they do not already exist: {@code film_categories}, {@code actors},
+     * {@code films}, {@code film_category}, {@code film_actor}, {@code film_comments}, and {@code film_ratings}.</p>
      */
     public FilmService() {
         this.connection = DataSource.getInstance().getConnection();
@@ -130,16 +133,22 @@ public class FilmService implements IService<Film> {
                 """);
     }
 
+
     /**
-     * @return int
+     * Retrieve the last inserted film ID.
+     *
+     * @return the ID of the most recently created film, or 0 if no film has been inserted yet
      */
     public static int getFilmLastInsertID() {
         return FilmService.filmLastInsertID;
     }
 
+
     /**
-     * @param query
-     * @return String
+     * Retrieves the IMDb URL for the first search result matching the given query.
+     *
+     * @param query the search string (e.g., a film title) used to find IMDb results
+     * @return the IMDb URL of the first match, or the fallback string "imdb.com" if no result is found or an error occurs
      */
     public static String getIMDBUrlbyNom(final String query) {
         try {
@@ -158,7 +167,8 @@ public class FilmService implements IService<Film> {
                 conn.setRequestMethod("GET");
                 statusCode = conn.getInputStream().read();
                 FilmService.LOGGER.info("Status Code: " + conn.getResponseCode());
-            } while (123 != statusCode);
+            }
+ while (123 != statusCode);
             // Read the response
             final BufferedReader reader = new BufferedReader(
                     new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
@@ -167,6 +177,7 @@ public class FilmService implements IService<Film> {
             while (null != (line = reader.readLine())) {
                 responseBuilder.append(line);
             }
+
             final String response = "{" + responseBuilder + "}";
             reader.close();
             // Parse the JSON response
@@ -179,15 +190,25 @@ public class FilmService implements IService<Film> {
                 final String imdbUrl = firstResult.getString("imdb");
                 FilmService.LOGGER.info("IMDb URL of the first result: " + imdbUrl);
                 return imdbUrl;
-            } else {
+            }
+ else {
                 FilmService.LOGGER.info("No results found.");
             }
+
         } catch (final Exception e) {
             FilmService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return "imdb.com";
     }
 
+
+    /**
+     * Insert the given Film into the database and record its generated primary key.
+     *
+     * @param film the Film to persist; its generated ID is stored in {@code FilmService.filmLastInsertID} when available
+     * @throws RuntimeException if a database error occurs while inserting the film
+     */
     @Override
     /**
      * Creates a new entity in the database.
@@ -214,14 +235,28 @@ public class FilmService implements IService<Film> {
                         FilmService.filmLastInsertID = generatedKeys.getInt(1);
                         log.info("Film created with ID: " + FilmService.filmLastInsertID);
                     }
+
                 }
+
             }
+
         } catch (final SQLException e) {
             log.error("Error creating film", e);
             throw new RuntimeException(e);
         }
+
     }
 
+
+    /**
+     * Retrieve a page of films according to the given pagination and optional sorting parameters.
+     *
+     * The method returns a Page containing the films for the requested page along with pagination
+     * metadata. If a database error occurs, an empty Page is returned with total elements set to 0.
+     *
+     * @param pageRequest pagination parameters (page index, page size, and optional sort column/direction)
+     * @return a Page of Film objects for the requested page and pagination metadata; an empty Page with total 0 on error
+     */
     @Override
     /**
      * Retrieves films with pagination support.
@@ -240,6 +275,7 @@ public class FilmService implements IService<Film> {
             pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
 
+
         try {
             // Get total count
             final String countQuery = PaginationQueryBuilder.buildCountQuery(baseQuery);
@@ -254,7 +290,9 @@ public class FilmService implements IService<Film> {
                     final Film film = buildFilmFromResultSet(rs);
                     content.add(film);
                 }
+
             }
+
 
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
 
@@ -262,14 +300,16 @@ public class FilmService implements IService<Film> {
             LOGGER.log(Level.SEVERE, "Error retrieving paginated films: " + e.getMessage(), e);
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
         }
+
     }
 
+
     /**
-     * Helper method to build Film object from ResultSet.
+     * Constructs a Film from the current row of the given ResultSet.
      *
-     * @param rs the ResultSet containing film data
-     * @return the Film object
-     * @throws SQLException if there's an error reading from ResultSet
+     * @param rs the ResultSet positioned at a film row
+     * @return the Film populated with values from the ResultSet row
+     * @throws SQLException if reading any column from the ResultSet fails
      */
     private Film buildFilmFromResultSet(ResultSet rs) throws SQLException {
         return Film.builder()
@@ -282,10 +322,17 @@ public class FilmService implements IService<Film> {
                 .build();
     }
 
+
     /**
-     * Performs sort operation.
+     * Returns a page of films sorted by the specified column.
      *
-     * @return the result of the operation
+     * The method validates the provided sort column against allowed columns; if the column is not allowed,
+     * it returns results using the service's default sorting. On SQL errors it logs the failure and returns
+     * a page containing any films successfully read before the error.
+     *
+     * @param pageRequest pagination parameters (page index and page size)
+     * @param p the column name to sort by; must be one of the allowed sort columns
+     * @return a Page of Film objects sorted by the specified column (or by default ordering if `p` is invalid)
      */
     public Page<Film> sort(PageRequest pageRequest, final String p) {
         final List<Film> filmArrayList = new ArrayList<>();
@@ -296,22 +343,27 @@ public class FilmService implements IService<Film> {
             return read(pageRequest); // Return default sorted results
         }
 
+
         final String req = "SELECT * from films ORDER BY " + p;
         try (final PreparedStatement pst = this.connection.prepareStatement(req)) {
             final ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 filmArrayList.add(buildFilmFromResultSet(rs));
             }
+
         } catch (final SQLException e) {
             FilmService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return new Page<>(filmArrayList, pageRequest.getPage(), pageRequest.getSize(), filmArrayList.size());
     }
 
+
     /**
-     * Retrieves the Film value.
+     * Fetches the film with the given id from the database.
      *
-     * @return the Film value
+     * @param id the film's primary key
+     * @return the Film with the specified id, or {@code null} if no film was found
      */
     public Film getFilm(final int id) {
         Film film = null;
@@ -322,12 +374,22 @@ public class FilmService implements IService<Film> {
             if (rs.next()) {
                 film = buildFilmFromResultSet(rs);
             }
+
         } catch (final SQLException e) {
             FilmService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return film;
     }
 
+
+    /**
+     * Update the database record for the given film using its id.
+     *
+     * The film's name, image, duration, description, and release year are written to the row identified by film.getId().
+     *
+     * @param film the Film whose id selects the row to update; its name, image, duration, description, and releaseYear are applied
+     */
     @Override
     /**
      * Updates an existing entity in the database.
@@ -350,8 +412,18 @@ public class FilmService implements IService<Film> {
             log.error("Error updating film", e);
             throw new RuntimeException(e);
         }
+
     }
 
+
+    /**
+     * Remove the database record for the given film.
+     *
+     * Deletes the row from the `films` table identified by the film's id.
+     *
+     * @param film the Film whose persistent record should be removed
+     * @throws RuntimeException if a database error prevents deletion
+     */
     @Override
     /**
      * Deletes an entity from the database.
@@ -368,12 +440,15 @@ public class FilmService implements IService<Film> {
             log.error("Error deleting film", e);
             throw new RuntimeException(e);
         }
+
     }
 
+
     /**
-     * Retrieves the Film value.
+     * Retrieves the film with the specified database ID.
      *
-     * @return the Film value
+     * @param film_id the film's database ID
+     * @return the Film for the specified ID, or null if no matching record exists
      */
     public Film getFilm(final Long film_id) {
         String query = "SELECT * FROM films WHERE id = ?";
@@ -383,17 +458,22 @@ public class FilmService implements IService<Film> {
                 if (rs.next()) {
                     return buildFilmFromResultSet(rs);
                 }
+
             }
+
         } catch (SQLException e) {
             log.error("Error getting film: " + film_id, e);
         }
+
         return null;
     }
 
+
     /**
-     * Retrieves the FilmByName value.
+     * Finds a film by its exact name.
      *
-     * @return the FilmByName value
+     * @param nom_film the exact film name to search for
+     * @return the Film with the given name, or {@code null} if no matching film exists
      */
     public Film getFilmByName(final String nom_film) {
         Film film = null;
@@ -404,16 +484,20 @@ public class FilmService implements IService<Film> {
             if (rs.next()) {
                 film = buildFilmFromResultSet(rs);
             }
+
         } catch (final SQLException e) {
             FilmService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return film;
     }
 
+
     /**
-     * Retrieves the TrailerFilm value.
+     * Retrieve the YouTube trailer URL for a film by its name.
      *
-     * @return the TrailerFilm value
+     * @param nomFilm the film name to search for a trailer
+     * @return the trailer URL if available, or an empty string when no trailer is found or an error occurs
      */
     public String getTrailerFilm(final String nomFilm) {
         String s = "";
@@ -423,6 +507,8 @@ public class FilmService implements IService<Film> {
         } catch (final Exception e) {
             FilmService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return s;
     }
+
 }

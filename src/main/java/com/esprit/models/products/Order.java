@@ -44,18 +44,13 @@ public class Order {
     private String address;
 
     /**
-     * Constructor without id for creating new order instances.
+     * Create a new Order instance without an identifier.
      *
-     * @param orderDate
-     *                    The date of the order.
-     * @param status
-     *                    The status of the order.
-     * @param client
-     *                    The client associated with the order.
-     * @param phoneNumber
-     *                    The telephone number associated with the order.
-     * @param address
-     *                    The address associated with the order.
+     * @param orderDate  the date when the order was placed
+     * @param status     the order's current status (e.g., pending, completed)
+     * @param client     the client who placed the order
+     * @param phoneNumber the contact telephone number for the order
+     * @param address    the delivery or billing address for the order
      */
     public Order(final Date orderDate, final String status, final Client client, final int phoneNumber,
             final String address) {
@@ -65,4 +60,5 @@ public class Order {
         this.phoneNumber = phoneNumber;
         this.address = address;
     }
+
 }

@@ -40,6 +40,7 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
         stage.show();
     }
 
+
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
     @DisplayName("ProductCategory Display Tests")
@@ -55,6 +56,7 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
             assertThat(table).isNotNull();
             assertThat(table.isVisible()).isTrue();
         }
+
 
         @Test
         @Order(2)
@@ -81,7 +83,9 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
             
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -107,6 +111,7 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
             // Verify button and fields are still responsive
             assertThat(createButton).isNotNull();
         }
+
 
         @Test
         @Order(4)
@@ -139,7 +144,9 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
             assertThat(nameField.isVisible()).isTrue();
             assertThat(createButton.isDisabled() || nameField.getText().isEmpty()).isTrue();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -178,18 +185,22 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
             if (updateButton.isPresent()) {
                 clickOn(updateButton.get());
                 waitForFxEvents();
-            } else {
+            }
+ else {
                 // If no separate update button, creator button might handle it
                 Button createButton = lookup("#createButton").query();
                 clickOn(createButton);
                 waitForFxEvents();
             }
 
+
             // Verify the table shows the updated name
             waitForFxEvents();
             assertThat(table.getItems()).isNotEmpty().as("Table should still have items after update");
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -229,7 +240,9 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
                     clickOn(confirmButton.get());
                     waitForFxEvents();
                 }
+
             }
+
 
             // Verify row count decreased
             assertThat(table.getItems().size()).as("Table should have fewer items after deletion")
@@ -240,7 +253,9 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
                     .anyMatch(cat -> cat.getCategoryName().equals(selectedCategory.getCategoryName()));
             assertThat(deletedItemStillExists).as("Deleted category should not be in table").isFalse();
         }
+
     }
+
 
     // Helper methods
     private List<ProductCategory> createMockCategories() {
@@ -250,4 +265,6 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
         categories.add(c);
         return categories;
     }
+
 }
+

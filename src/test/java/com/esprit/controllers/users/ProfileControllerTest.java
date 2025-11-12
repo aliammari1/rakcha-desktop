@@ -37,6 +37,7 @@ class ProfileControllerTest extends TestFXBase {
         stage.toFront();
     }
 
+
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Profile Display Tests")
     class ProfileDisplayTests {
@@ -49,12 +50,14 @@ class ProfileControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(2)
         @DisplayName("Should display profile photo")
         void testDisplayProfilePhoto() {
             waitForFxEvents();
         }
+
 
         @Test
         @Order(3)
@@ -63,13 +66,16 @@ class ProfileControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(4)
         @DisplayName("Should display account creation date")
         void testDisplayCreationDate() {
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Profile Edit Tests")
@@ -83,12 +89,14 @@ class ProfileControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(11)
         @DisplayName("Should update first name")
         void testUpdateFirstName() {
             waitForFxEvents();
         }
+
 
         @Test
         @Order(12)
@@ -97,12 +105,14 @@ class ProfileControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(13)
         @DisplayName("Should update phone number")
         void testUpdatePhoneNumber() {
             waitForFxEvents();
         }
+
 
         @Test
         @Order(14)
@@ -111,6 +121,7 @@ class ProfileControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(15)
         @DisplayName("Should save profile changes")
@@ -118,13 +129,16 @@ class ProfileControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(16)
         @DisplayName("Should cancel profile edit")
         void testCancelProfileEdit() {
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Photo Upload Tests")
@@ -137,12 +151,14 @@ class ProfileControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(21)
         @DisplayName("Should open file chooser")
         void testOpenFileChooser() {
             waitForFxEvents();
         }
+
 
         @Test
         @Order(22)
@@ -151,6 +167,7 @@ class ProfileControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(23)
         @DisplayName("Should upload new photo")
@@ -158,13 +175,16 @@ class ProfileControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(24)
         @DisplayName("Should display uploaded photo")
         void testDisplayUploadedPhoto() {
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Password Change Tests")
@@ -177,12 +197,14 @@ class ProfileControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(31)
         @DisplayName("Should verify current password")
         void testVerifyCurrentPassword() {
             waitForFxEvents();
         }
+
 
         @Test
         @Order(32)
@@ -191,13 +213,16 @@ class ProfileControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(33)
         @DisplayName("Should change password successfully")
         void testChangePassword() {
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Account Settings Tests")
@@ -210,12 +235,14 @@ class ProfileControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(41)
         @DisplayName("Should toggle email notifications")
         void testToggleEmailNotifications() {
             waitForFxEvents();
         }
+
 
         @Test
         @Order(42)
@@ -224,11 +251,15 @@ class ProfileControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(43)
         @DisplayName("Should save settings changes")
         void testSaveSettings() {
             waitForFxEvents();
         }
+
     }
+
 }
+

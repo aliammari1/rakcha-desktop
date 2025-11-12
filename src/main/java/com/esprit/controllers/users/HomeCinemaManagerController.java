@@ -108,25 +108,34 @@ public class HomeCinemaManagerController implements Initializable {
                             User currentUser = (User) stage.getUserData();
                             welcomeLabel.setText("Welcome, " + currentUser.getFirstName() + " "
                                     + currentUser.getLastName() + "!");
-                        } else {
+                        }
+ else {
                             welcomeLabel.setText("Welcome, Cinema Manager!");
                         }
-                    } else {
+
+                    }
+ else {
                         welcomeLabel.setText("Welcome, Cinema Manager!");
                     }
+
                 } catch (Exception ex) {
                     LOGGER.log(Level.WARNING, "Error setting welcome message: " + ex.getMessage(), ex);
                     welcomeLabel.setText("Welcome, Cinema Manager!");
                 }
-            }));
+
+            }
+));
             delayedInit.play();
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error initializing cinema manager dashboard: " + e.getMessage(), e);
         }
+
     }
 
+
     /**
-     * Loads and displays dashboard statistics.
+     * Populates the dashboard statistic labels with counts retrieved from the film, actor,
+     * category, and session services; on error logs a warning and sets all statistic labels to "0".
      */
     private void loadDashboardStatistics() {
         try {
@@ -158,7 +167,9 @@ public class HomeCinemaManagerController implements Initializable {
             categoryCountLabel.setText("0");
             sessionCountLabel.setText("0");
         }
+
     }
+
 
     /**
      * Loads today's movie sessions.
@@ -176,7 +187,9 @@ public class HomeCinemaManagerController implements Initializable {
         } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error loading today's sessions: " + e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Adds a session item to the sessions container.
@@ -202,8 +215,12 @@ public class HomeCinemaManagerController implements Initializable {
         todaySessionsContainer.getChildren().add(sessionItem);
     }
 
+
     /**
-     * Loads recent cinema activity.
+     * Populate the recent activity section of the dashboard.
+     *
+     * Clears the activity container and appends recent activity entries for display.
+     * If an error occurs while loading entries, a warning is logged and the container remains cleared.
      */
     private void loadRecentActivity() {
         try {
@@ -218,10 +235,15 @@ public class HomeCinemaManagerController implements Initializable {
         } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error loading recent activity: " + e.getMessage(), e);
         }
+
     }
 
+
     /**
-     * Adds an activity item to the activity container.
+     * Appends a styled activity entry (description and timestamp) to the recent activity list.
+     *
+     * @param activity  human-readable description of the activity
+     * @param timestamp text representing when the activity occurred
      */
     private void addActivityItem(String activity, String timestamp) {
         HBox activityItem = new HBox(10);
@@ -241,8 +263,12 @@ public class HomeCinemaManagerController implements Initializable {
         activityContainer.getChildren().add(activityItem);
     }
 
+
     /**
-     * Starts background particle animations.
+     * Starts the dashboard's background animations.
+     *
+     * Initiates continuous floating animations for the particle nodes (if present)
+     * and applies a one-second fade-in to the root container (if present).
      */
     private void startBackgroundAnimations() {
         if (particle1 != null && particle2 != null) {
@@ -268,6 +294,7 @@ public class HomeCinemaManagerController implements Initializable {
             particle2Animation.play();
         }
 
+
         // Add fade-in animation to root container
         if (rootContainer != null) {
             FadeTransition fadeIn = new FadeTransition(Duration.seconds(1), rootContainer);
@@ -275,9 +302,13 @@ public class HomeCinemaManagerController implements Initializable {
             fadeIn.setToValue(1.0);
             fadeIn.play();
         }
+
     }
 
-    // Navigation Action Handlers
+
+    /**
+     * Navigate to the film management screen by replacing the current window's scene with the film management UI.
+     */
 
     @FXML
     void manageMovies(ActionEvent event) {
@@ -289,8 +320,15 @@ public class HomeCinemaManagerController implements Initializable {
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading movie management interface: " + e.getMessage(), e);
         }
+
     }
 
+
+    /**
+     * Navigates the application to the session management dashboard.
+     *
+     * Loads the FXML at "/ui/cinemas/DashboardResponsable.fxml" and replaces the current stage's scene with the loaded root.
+     */
     @FXML
     void manageSessions(ActionEvent event) {
         try {
@@ -301,8 +339,15 @@ public class HomeCinemaManagerController implements Initializable {
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading session management interface: " + e.getMessage(), e);
         }
+
     }
 
+
+    /**
+     * Navigate the application to the actor management screen.
+     *
+     * Loads the Actor.fxml layout and replaces the current stage's scene with it.
+     */
     @FXML
     void manageActors(ActionEvent event) {
         try {
@@ -313,8 +358,13 @@ public class HomeCinemaManagerController implements Initializable {
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading actor management interface: " + e.getMessage(), e);
         }
+
     }
 
+
+    /**
+     * Loads the statistics view FXML and replaces the current window's scene with it.
+     */
     @FXML
     void viewStatistics(ActionEvent event) {
         try {
@@ -325,21 +375,38 @@ public class HomeCinemaManagerController implements Initializable {
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Error loading statistics interface: " + e.getMessage(), e);
         }
+
     }
 
-    // Additional methods referenced in FXML
+
+    /**
+     * Redirects the user to the session management view (which includes cinema management).
+     *
+     * @param event the action event triggered by the UI control invoking this handler
+     */
     @FXML
     void manageCinemas(ActionEvent event) {
         manageSessions(event); // Redirect to session management which includes cinema management
     }
 
+
+    /**
+     * Navigate to the statistics view.
+     */
     @FXML
     void viewAnalytics(ActionEvent event) {
         viewStatistics(event); // Redirect to statistics view
     }
 
+
+    /**
+     * Navigate to the statistics view.
+     *
+     * @param event the action event that triggered this handler
+     */
     @FXML
     void generateReports(ActionEvent event) {
         viewStatistics(event); // Redirect to statistics view for now
     }
+
 }

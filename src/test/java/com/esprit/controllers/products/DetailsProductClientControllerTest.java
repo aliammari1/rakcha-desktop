@@ -43,6 +43,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
         stage.show();
     }
 
+
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
     @DisplayName("Product Details Display Tests")
@@ -58,6 +59,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
             assertThat(detailPane).isNotNull();
             assertThat(detailPane.isVisible()).isTrue();
         }
+
 
         @Test
         @Order(2)
@@ -76,6 +78,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(3)
         @DisplayName("Should display product price")
@@ -93,6 +96,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(4)
         @DisplayName("Should display product image")
@@ -103,6 +107,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
             assertThat(productImage).isNotNull();
             assertThat(productImage.isVisible()).isTrue();
         }
+
 
         @Test
         @Order(5)
@@ -120,7 +125,9 @@ class DetailsProductClientControllerTest extends TestFXBase {
             // In a real test: inject product, verify description displayed in UI
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -138,6 +145,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
             assertThat(cartPane.isVisible()).isTrue();
         }
 
+
         @Test
         @Order(7)
         @DisplayName("Should add product to cart")
@@ -154,6 +162,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
             assertThat(addButton).isNotNull();
         }
 
+
         @Test
         @Order(8)
         @DisplayName("Should display quantity selector")
@@ -163,6 +172,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
             assertThat(lookup("#quantitySelector").tryQuery()).isPresent();
             assertThat(lookup("#quantitySelector").query().isVisible()).isTrue();
         }
+
 
         @Test
         @Order(9)
@@ -176,6 +186,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
             // Verify quantity selector is accessible
             waitForFxEvents();
         }
+
 
         @Test
         @Order(10)
@@ -192,6 +203,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
             // Verify button is still responsive
             assertThat(incrementButton).isNotNull();
         }
+
 
         @Test
         @Order(11)
@@ -213,6 +225,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
             assertThat(decrementButton).isNotNull();
         }
 
+
         @Test
         @Order(12)
         @DisplayName("Should not go below minimum quantity")
@@ -228,7 +241,9 @@ class DetailsProductClientControllerTest extends TestFXBase {
             // Verify button is still responsive
             assertThat(decrementButton).isNotNull();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -255,6 +270,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(14)
         @DisplayName("Should display review rating")
@@ -273,6 +289,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(15)
         @DisplayName("Should display review text")
@@ -290,6 +307,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(16)
         @DisplayName("Should display reviewer name")
@@ -306,6 +324,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
             
             waitForFxEvents();
         }
+
 
         @Test
         @Order(17)
@@ -327,7 +346,9 @@ class DetailsProductClientControllerTest extends TestFXBase {
             
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -345,6 +366,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
             assertThat(searchBar.isVisible()).isTrue();
         }
 
+
         @Test
         @Order(19)
         @DisplayName("Should filter products by search term")
@@ -361,6 +383,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
             assertThat(searchBar).isNotNull();
         }
 
+
         @Test
         @Order(20)
         @DisplayName("Should perform case-insensitive search")
@@ -376,7 +399,9 @@ class DetailsProductClientControllerTest extends TestFXBase {
             // Verify search bar is responsive
             assertThat(searchBar).isNotNull();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -394,6 +419,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
             assertThat(imageView.isVisible()).isTrue();
         }
 
+
         @Test
         @Order(22)
         @DisplayName("Should handle missing product image")
@@ -410,6 +436,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(23)
         @DisplayName("Should zoom image on click")
@@ -425,7 +452,9 @@ class DetailsProductClientControllerTest extends TestFXBase {
             // Verify image view is still responsive
             assertThat(imageView).isNotNull();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -448,6 +477,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(25)
         @DisplayName("Should display total price based on quantity")
@@ -464,6 +494,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(26)
         @DisplayName("Should format price with currency")
@@ -479,7 +510,9 @@ class DetailsProductClientControllerTest extends TestFXBase {
             // Verify price formatting is accessible
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -502,6 +535,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(28)
         @DisplayName("Should disable add to cart when out of stock")
@@ -518,6 +552,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(29)
         @DisplayName("Should limit quantity to available stock")
@@ -533,7 +568,9 @@ class DetailsProductClientControllerTest extends TestFXBase {
             // Try to set quantity > 5
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -556,6 +593,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
             assertThat(backButton).isNotNull();
         }
 
+
         @Test
         @Order(31)
         @DisplayName("Should navigate to shopping cart")
@@ -571,7 +609,9 @@ class DetailsProductClientControllerTest extends TestFXBase {
             // Verify navigation completed
             assertThat(cartButton).isNotNull();
         }
+
     }
+
 
     // Helper methods
     private Product createMockProduct() {
@@ -584,6 +624,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
         product.setImage("product-image.jpg");
         return product;
     }
+
 
     private List<Review> createMockReviews() {
         List<Review> reviews = new ArrayList<>();
@@ -598,4 +639,6 @@ class DetailsProductClientControllerTest extends TestFXBase {
         reviews.add(review2);
         return reviews;
     }
+
 }
+

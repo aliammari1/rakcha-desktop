@@ -39,6 +39,7 @@ class DashboardResponsableControllerTest extends TestFXBase {
         stage.toFront();
     }
 
+
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
     @DisplayName("Dashboard Display Tests")
@@ -55,6 +56,7 @@ class DashboardResponsableControllerTest extends TestFXBase {
             assertThat(dashboard.isVisible()).isTrue();
         }
 
+
         @Test
         @Order(2)
         @DisplayName("Should display cinema info")
@@ -65,7 +67,9 @@ class DashboardResponsableControllerTest extends TestFXBase {
             assertThat(cinemaLabel).isNotNull();
             assertThat(cinemaLabel.getText()).isNotBlank();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -83,6 +87,7 @@ class DashboardResponsableControllerTest extends TestFXBase {
             assertThat(table.isVisible()).isTrue();
         }
 
+
         @Test
         @Order(4)
         @DisplayName("Should add new session")
@@ -96,6 +101,7 @@ class DashboardResponsableControllerTest extends TestFXBase {
             clickOn(addButton);
             waitForFxEvents();
         }
+
 
         @Test
         @Order(5)
@@ -136,7 +142,9 @@ class DashboardResponsableControllerTest extends TestFXBase {
             clickOn(deleteButton);
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -155,6 +163,7 @@ class DashboardResponsableControllerTest extends TestFXBase {
             assertThat(statsLabel.isVisible()).isTrue();
         }
 
+
         @Test
         @Order(7)
         @DisplayName("Should display revenue")
@@ -166,6 +175,9 @@ class DashboardResponsableControllerTest extends TestFXBase {
             assertThat(revenueLabel.getText()).isNotBlank();
             assertThat(revenueLabel.isVisible()).isTrue();
         }
+
     }
 
+
 }
+

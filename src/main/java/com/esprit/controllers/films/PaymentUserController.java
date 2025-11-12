@@ -111,43 +111,35 @@ public class PaymentUserController implements Initializable {
     private Button viewPDF;
 
     /**
-     * Checks if a given string is a numerical value by matching it against a
-     * regular expression pattern of one or more digits.
+     * Determines whether the given string consists only of one or more decimal digits.
      *
-     * @param str
-     *            String to be checked for matching the regular expression `\d+`.
-     * @returns a `Boolean` value indicating whether the input string matches the
-     *          regular expression for a number.
+     * @param str the string to test
+     * @return `true` if the string contains one or more digits and nothing else, `false` otherwise
      */
     public static boolean isNum(final String str) {
         final String expression = "\\d+";
         return str.matches(expression);
     }
 
+
     /**
-     * Converts a `float` argument into an `int` value by calling the `int` casting
-     * operator `(int)`.
+     * Convert a double to an int by discarding its fractional part.
      *
-     * @param value
-     *              floating-point number to be converted to an integer.
-     * @returns an integer value equivalent to the provided floating-point number.
+     * @param value the double value to convert; its fractional part will be discarded
+     * @return the value's integer part with any fractional component removed (truncated toward zero)
      */
     public static int doubleToInt(final double value) {
         return (int) value;
     }
 
+
     /**
-     * Sets the `client` field and displays the film name on a label. It also prints
-     * the value of `client` to the console.
+     * Initialize the controller with the given client and display the film name on the payment view.
      *
-     * @param client
-     *                 Client object that provides the payment details for the film
-     *                 name
-     *                 set by the `filmName` parameter.
-     * @param filmName
-     *                 name of a film that is being associated with the `Client`
-     *                 object
-     *                 passed as an argument to the `setData()` method.
+     * Stores the provided client for later use and sets the film label to the supplied filmName.
+     *
+     * @param client   the client performing the payment
+     * @param filmName the film name to display in the payment UI
      */
     public void setData(final Client client, final String filmName) {
         this.client = client;
@@ -155,37 +147,18 @@ public class PaymentUserController implements Initializable {
         PaymentUserController.LOGGER.info("payment: " + client);
     }
 
+
     /**
-     * Reads the film and cinema data, creates a combobox for selecting cinemas and
-     * initializes the payment panel with disabled options. When the user selects a
-     * cinema, it calls the `readLoujain` method to retrieve the moviesession list
-     * for that cinema, which is then displayed in a spinner.
+     * Initialize the payment UI, populate the cinema selector, and wire listeners that
+     * load movie sessions, enable payment controls, and update the total price.
      *
-     * @param url
-     *            URL of a resource bundle that provides localization keys for the
-     *            function's output, such as film and cinema names.
-     *            <p>
-     *            - `url`: The URL provided by the user, which contains information
-     *            about the film and cinema. - `rb`: A `ResourceBundle` object
-     *            containing key-value pairs of localized messages and resource
-     *            keys.
-     * @param rb
-     *            ResourceBundle object, which provides localized messages and
-     *            values for the Java application.
-     *            <p>
-     *            - `rb`: A `ResourceBundle` object containing key-value pairs for
-     *            resource string messages.
-     *            <p>
-     *            The main properties of `rb` are:
-     *            <p>
-     *            - Key-value pairs: Contains key-value pairs in the form of `(key,
-     *            value)`, where `key` is a unique identifier for a message, and
-     *            `value` is the corresponding message text. - Messages: `rb`
-     *            provides a collection of messages that can be used to localize
-     *            user interface elements, such as labels, buttons, and menus. -
-     *            Culture-specific messages: `rb` allows developers to create
-     *            culture-specific messages by providing separate key-value pairs
-     *            for each culture.
+     * <p>Specifically: disables most payment nodes on startup, fills the cinema ComboBox,
+     * adds a listener to load and display movie sessions for the selected cinema, enables
+     * payment controls and configures the seats Spinner when a session is chosen, and
+     * updates the displayed total when the Spinner value changes.</p>
+     *
+     * @param url the location used to resolve relative paths for the root object, may be null
+     * @param rb  the ResourceBundle for localized strings used by the UI, may be null
      */
     @Override
     /**
@@ -195,45 +168,21 @@ public class PaymentUserController implements Initializable {
     public void initialize(final URL url, final ResourceBundle rb) {
         this.anchorpane_payment.getChildren().forEach(node -> {
             node.setDisable(true);
-        });
+        }
+);
         this.filmm.setDisable(false);
         this.cinemacombox_res.setDisable(false);
         this.cinemacombox_res.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             /**
-             * Reads movie and cinema information to populate a combobox with moviesession
-             * options for a given film and cinema. It clears the existing items, retrieves
-             * new moviesession data, and adds it to the combobox.
+             * Populates the session selection control with available movie sessions for the currently selected film and cinema.
              *
-             * @param observableValue
-             *                        observable value that has been changed, providing the
-             *                        updated
-             *                        value and the previous value (in `s` and `t1`).
+             * This method clears existing items, enables the session selector, retrieves sessions for the film named in
+             * {@code filmLabel_Payment} and the cinema selected in {@code cinemacombox_res}, and adds a human-readable entry
+             * for each session (index, date, start and end times).
              *
-             *                        - `observableValue` is an `ObservableValue` object
-             *                        that represents
-             *                        changes to the `MovieSession` list in the UI. - The
-             *                        type of the
-             *                        value being observed is a `String`, indicating that
-             *                        the list
-             *                        contains strings representing the names of
-             *                        `MovieSession` objects.
-             *                        - The third argument, `t1`, is not used in this
-             *                        implementation.
-             *
-             * @param s
-             *                        string value of a film label, which is used to
-             *                        retrieve the id of
-             *                        the corresponding film and cinema id for displaying
-             *                        moviesession
-             *                        options in the combobox.
-             *
-             * @param t1
-             *                        2nd string value passed to the function, which is used
-             *                        to populate
-             *                        the `checkcomboboxmoviesession_res` widget with
-             *                        available
-             *                        moviesession options based on the selected film and
-             *                        cinema.
+             * @param observableValue the observed value that triggered the change (unused by this implementation)
+             * @param s               the previous string value (unused by this implementation)
+             * @param t1              the new string value (unused by this implementation)
              */
             @Override
             /**
@@ -260,26 +209,21 @@ public class PaymentUserController implements Initializable {
                             .add("MovieSession " + (i + 1) + " " + moviesessions.get(i).getSessionDate() + " "
                                     + moviesessions.get(i).getStartTime() + "-" + moviesessions.get(i).getEndTime());
                 }
+
             }
-        });
+
+        }
+);
         this.checkcomboboxmoviesession_res.getCheckModel().getCheckedItems()
                 .addListener(new ListChangeListener<String>() {
                     /**
-                     * Updates the spinner value based on the change in the film and cinema
-                     * comboboxes, retrieves the seating information for the selected film and
-                     * cinema, and sets the disable status of the payment nodes to false.
+                     * Updates controller state and UI when a movie-session entry is added to the selection.
                      *
-                     * @param change
-                     *               change event that occurs when the user interacts with the
-                     *               `Loujain` list, providing the opportunity to process the
-                     *               changes
-                     *               and update the `MovieSession` objects accordingly.
+                     * When invoked for added items, sets the controller's active MovieSession from the
+                     * selected film and cinema, enables payment-related UI nodes, and configures the
+                     * seat-count spinner to the hall's capacity with an initial value of 1.
                      *
-                     *               - `change.next()` returns true if there are more changes to
-                     *               iterate over. - `change.wasAdded()` indicates whether a new
-                     *               element was added to the list or not. If true, the code inside
-                     *               the
-                     *               `if` statement is executed.
+                     * @param change the change event from the checked session list; used to detect added items
                      */
                     @Override
                     /**
@@ -307,47 +251,22 @@ public class PaymentUserController implements Initializable {
                                         .setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1,
                                                 moviesessions.get(0).getCinemaHall().getSeatCapacity(), 1, 1));
                             }
+
                         }
+
                     }
-                });
+
+                }
+);
         this.nbrplacepPayment_Spinner.valueProperty().addListener(new ChangeListener<Integer>() {
             /**
-             * Reads the moviesessions available for a given film and cinema, calculates the
-             * total price based on the number of places paid, and displays the total price
-             * to the user.
+             * Update the total price label by reading available movie sessions for the currently
+             * selected film and cinema and multiplying each session's price by the current
+             * number-of-seats spinner value.
              *
-             * @param observableValue
-             *                        observeable value that has changed, providing the new
-             *                        value and
-             *                        the old value for the method to operate on.
-             *
-             *                        - `observableValue`: An observable value of type
-             *                        `Integer`, which
-             *                        represents the selected payment method. - `integer`:
-             *                        The current
-             *                        value of the `observableValue`.
-             *
-             * @param integer
-             *                        2nd value passed to the `changed()` method, which is
-             *                        the `t1`
-             *                        value from the observable value notification.
-             *
-             *                        - `t1`: The value of `t1` is not explicitly mentioned
-             *                        in the
-             *                        provided code snippet. However, based on the context,
-             *                        it can be
-             *                        inferred that `t1` represents a time interval or a
-             *                        timestamp.
-             *
-             * @param t1
-             *                        2nd value passed to the `readLoujain()` method, which
-             *                        is used to
-             *                        retrieve the film and cinema information for the
-             *                        payment
-             *                        calculation.
-             *
-             *                        - `t1`: An `Integer` variable representing the ID of
-             *                        the film.
+             * @param observableValue the observed integer property that triggered the change (may be unused)
+             * @param integer the previous value reported by the observable
+             * @param t1 the new value reported by the observable
              */
             @Override
             /**
@@ -366,34 +285,32 @@ public class PaymentUserController implements Initializable {
                     totalPrice += moviesessions.get(i).getPrice()
                             * nbrplacepPayment_Spinner.getValue();
                 }
+
                 PaymentUserController.LOGGER.info(String.valueOf(totalPrice));
                 final String total_txt = "Total : " + totalPrice + " Dt.";
                 total.setText(total_txt);
             }
-        });
+
+        }
+);
         final CinemaService cinemaService = new CinemaService();
         final List<Cinema> cinemaList = cinemaService.read(PageRequest.defaultPage()).getContent();
         if (null != cinemaList) {
             for (final Cinema cinema : cinemaList) {
                 this.cinemacombox_res.getItems().add(cinema.getName());
             }
+
         }
+
     }
 
+
     /**
-     * Processes a payment for a ticket purchase by first checking if the input is
-     * valid, then calculating and charging the correct amount based on the ticket's
-     * price and quantity, and finally saving the order to the database.
-     *
-     * @param event
-     *              Pay action event, which triggers the execution of the function
-     *              and
-     *              enables the processing of the payment request.
-     *              <p>
-     *              - `event` is an ActionEvent that represents a user's action on
-     *              the
-     *              Pay button.
-     */
+ * Process the user's payment for the selected movie session, charge the card, update seat status, and persist the ticket order.
+ *
+ * @param event the ActionEvent triggered by the Pay button
+ * @throws StripeException if the payment provider reports an error while processing the charge
+ */
     @FXML
     private void Pay(final ActionEvent event) throws StripeException {
         final TicketService scom = new TicketService();
@@ -405,12 +322,14 @@ public class PaymentUserController implements Initializable {
                 seatService.updateSeatStatus(seat.getId(), true);
             }
 
+
             // Continue with payment processing
             final double f = this.moviesession.getPrice() * 100; // Potential NPE if moviesession is null
             // Add null check:
             if (this.moviesession == null) {
                 return;
             }
+
             final int k = PaymentUserController.doubleToInt(f);
             final String url = Paymentuser.pay(k);
             final Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -426,12 +345,14 @@ public class PaymentUserController implements Initializable {
             // } catch (Exception e) {
             // LOGGER.log(Level.SEVERE, e.getMessage(), e);
             // }
+
             // try {
             // Desktop.getDesktop().open(new File("stripe.pdf"));
             // } catch (IOException e) {
             // LOGGER.log(Level.SEVERE, e.getMessage(), e);
             // throw new RuntimeException(e);
             // }
+
             webView.getEngine().load(url);
             // create scene
             // stage.getIcons().add(new Image("/Images/logo.png"));
@@ -441,11 +362,13 @@ public class PaymentUserController implements Initializable {
             // show stage
             stage.show();
         }
+
         // long clientId=GuiLoginController.user.getId().intValue();
         long clientId = this.client.getId();
         if (0 == clientId) {
             clientId = 1;
         }
+
         // Creating a product order
         final Ticket ticket = new Ticket();
         ticket.setPrice(ticket.getPrice() * ticket.getNumberOfSeats()); // Replace with actual product price
@@ -457,6 +380,7 @@ public class PaymentUserController implements Initializable {
         // Saving the product order
         scom.create(ticket);
     }
+
 
     /**
      * Validates all payment input fields.
@@ -479,23 +403,28 @@ public class PaymentUserController implements Initializable {
             this.showError("Numéro de carte invalide", "Veuillez entrer un numéro de carte Visa valide.");
             return false;
         }
+
         if (this.moisExp.getText().isEmpty() || !PaymentUserController.isNum(this.moisExp.getText())
                 || 1 > Integer.parseInt(moisExp.getText()) || 12 < Integer.parseInt(moisExp.getText())) {
             this.showError("Mois d'expiration invalide",
                     "Veuillez entrer un mois d'expiration valide (entre 1 et 12).");
             return false;
         }
+
         if (this.anneeExp.getText().isEmpty() || !PaymentUserController.isNum(this.anneeExp.getText())
                 || Integer.parseInt(this.anneeExp.getText()) < LocalDate.now().getYear()) {
             this.showError("Année d'expiration invalide", "Veuillez entrer une année d'expiration valide.");
             return false;
         }
+
         if (this.cvc.getText().isEmpty() || !PaymentUserController.isNum(this.cvc.getText())) {
             this.showError("Code CVC invalide", "Veuillez entrer un code CVC numérique valide.");
             return false;
         }
+
         return true;
     }
+
 
     /**
      * Takes a string as input and checks if it matches the valid Visa card number
@@ -509,7 +438,9 @@ public class PaymentUserController implements Initializable {
      *          <p>
      *          - The function returns a boolean value indicating whether the given
      *          text represents a valid Visa card number or not. - The output is
-     *          based on the pattern `(^4[0-9]{12}(?:[0-9]{3})?$)` which is used to
+     *          based on the pattern `(^4[0-9]{12}
+(?:[0-9]{3}
+)?$)` which is used to
      *          validate the Visa card number. - The pattern checks that the card
      *          number consists of 12 digits, with the first 4 digits being "4", and
      *          optionally followed by a further 3 digits.
@@ -521,6 +452,7 @@ public class PaymentUserController implements Initializable {
         final Matcher m = p.matcher(cs);
         return m.matches();
     }
+
 
     /**
      * Creates an Alert object with an error title and message, displays it using
@@ -543,6 +475,7 @@ public class PaymentUserController implements Initializable {
         alert.showAndWait();
     }
 
+
     /**
      * Sets the values of class variables `client` and `moviesession`, and updates
      * the text of a label `total`.
@@ -559,6 +492,7 @@ public class PaymentUserController implements Initializable {
         moviesession = p;
         this.total.setText("Payer " + p.getPrice() + "dinars");
     }
+
 
     /**
      * Initializes the payment controller with movie session, client, and selected
@@ -589,6 +523,7 @@ public class PaymentUserController implements Initializable {
         nbrplacepPayment_Spinner.getValueFactory().setValue(selectedSeats.size());
     }
 
+
     /**
      * Loads and displays a FXML file named "/ui/films/filmuser.fxml" using Java's
      * `FXMLLoader` class, creating a new stage and scene to display the content.
@@ -610,7 +545,9 @@ public class PaymentUserController implements Initializable {
         } catch (final Exception e) {
             PaymentUserController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     /**
      * Creates a PDF receipt for a ticket purchase.
@@ -639,7 +576,9 @@ public class PaymentUserController implements Initializable {
             contentStream.close();
             document.save(filename);
         }
+
     }
+
 
     /**
      * Opens a PDF file using the desktop application.
@@ -652,5 +591,7 @@ public class PaymentUserController implements Initializable {
             final File myFile = new File(filename);
             Desktop.getDesktop().open(myFile);
         }
+
     }
+
 }

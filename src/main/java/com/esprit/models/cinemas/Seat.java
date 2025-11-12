@@ -39,7 +39,12 @@ public class Seat {
     private List<Ticket> tickets = new ArrayList<>();
 
     /**
-     * Constructor without id for creating new seat instances.
+     * Create a Seat instance without an id for use when creating new seats.
+     *
+     * @param seatNumber the seat's number within its row
+     * @param rowNumber the row index for the seat
+     * @param isOccupied whether the seat is currently occupied
+     * @param cinemaHall the cinema hall that contains this seat
      */
     public Seat(Integer seatNumber, Integer rowNumber, Boolean isOccupied, CinemaHall cinemaHall) {
         this.seatNumber = seatNumber;
@@ -48,4 +53,5 @@ public class Seat {
         this.cinemaHall = cinemaHall;
         this.tickets = new ArrayList<>();
     }
+
 }

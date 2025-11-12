@@ -38,6 +38,7 @@ class MailAdminControllerTest extends TestFXBase {
         stage.toFront();
     }
 
+
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Email Input Tests")
     class EmailInputTests {
@@ -52,6 +53,7 @@ class MailAdminControllerTest extends TestFXBase {
             assertThat(emailField).isNotNull();
         }
 
+
         @Test
         @Order(2)
         @DisplayName("Should accept valid email address")
@@ -63,6 +65,7 @@ class MailAdminControllerTest extends TestFXBase {
 
             assertThat(emailField.getText()).isEqualTo("user@example.com");
         }
+
 
         @Test
         @Order(3)
@@ -76,7 +79,9 @@ class MailAdminControllerTest extends TestFXBase {
 
             assertThat(emailField.getText()).isEmpty();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Send Email Tests")
@@ -92,6 +97,7 @@ class MailAdminControllerTest extends TestFXBase {
             assertThat(sendButton).isNotNull();
         }
 
+
         @Test
         @Order(5)
         @DisplayName("Should send verification email on button click")
@@ -105,6 +111,7 @@ class MailAdminControllerTest extends TestFXBase {
             assertThat(sendButton).isNotNull();
         }
 
+
         @Test
         @Order(6)
         @DisplayName("Should generate 6-digit verification code")
@@ -114,6 +121,7 @@ class MailAdminControllerTest extends TestFXBase {
             TextField emailField = lookup("#mailTextField").query();
             assertThat(emailField).isNotNull();
         }
+
 
         @Test
         @Order(7)
@@ -128,6 +136,7 @@ class MailAdminControllerTest extends TestFXBase {
             assertThat(sendButton).isNotNull();
         }
 
+
         @Test
         @Order(8)
         @DisplayName("Should use SecureRandom for code generation")
@@ -138,6 +147,7 @@ class MailAdminControllerTest extends TestFXBase {
             assertThat(sendButton).isNotNull();
         }
 
+
         @Test
         @Order(9)
         @DisplayName("Should generate code in range 100000-999999")
@@ -147,7 +157,9 @@ class MailAdminControllerTest extends TestFXBase {
             TextField emailField = lookup("#mailTextField").query();
             assertThat(emailField).isNotNull();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Error Label Tests")
@@ -163,6 +175,7 @@ class MailAdminControllerTest extends TestFXBase {
             assertThat(emailError).isNotNull();
         }
 
+
         @Test
         @Order(11)
         @DisplayName("Should display password error label")
@@ -172,6 +185,7 @@ class MailAdminControllerTest extends TestFXBase {
             Label passwordError = lookup("#passwordErrorLabel").query();
             assertThat(passwordError).isNotNull();
         }
+
 
         @Test
         @Order(12)
@@ -187,6 +201,7 @@ class MailAdminControllerTest extends TestFXBase {
             // Should show validation error
         }
 
+
         @Test
         @Order(13)
         @DisplayName("Should show error for empty email")
@@ -201,7 +216,9 @@ class MailAdminControllerTest extends TestFXBase {
             Label emailError = lookup("#emailErrorLabel").query();
             // Should show error
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Email Validation Tests")
@@ -217,7 +234,8 @@ class MailAdminControllerTest extends TestFXBase {
                     "test@example.com",
                     "user.name@domain.co.uk",
                     "name123@test-domain.org"
-            };
+            }
+;
 
             TextField emailField = lookup("#mailTextField").query();
             for (String email : validEmails) {
@@ -225,7 +243,9 @@ class MailAdminControllerTest extends TestFXBase {
                 clickOn(emailField).write(email);
                 assertThat(emailField.getText()).isEqualTo(email);
             }
+
         }
+
 
         @Test
         @Order(15)
@@ -238,7 +258,9 @@ class MailAdminControllerTest extends TestFXBase {
 
             assertThat(emailField.getText()).contains("+");
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Button State Tests")
@@ -254,6 +276,7 @@ class MailAdminControllerTest extends TestFXBase {
             assertThat(sendButton.isDisabled()).isFalse();
         }
 
+
         @Test
         @Order(17)
         @DisplayName("Should handle multiple sends")
@@ -266,7 +289,9 @@ class MailAdminControllerTest extends TestFXBase {
             assertThat(emailField).isNotNull();
             assertThat(sendButton).isNotNull();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Error Handling Tests")
@@ -285,6 +310,7 @@ class MailAdminControllerTest extends TestFXBase {
             assertThat(sendButton).isNotNull();
         }
 
+
         @Test
         @Order(19)
         @DisplayName("Should handle null email")
@@ -294,7 +320,9 @@ class MailAdminControllerTest extends TestFXBase {
             Button sendButton = lookup("#sendButton").query();
             assertThat(sendButton).isNotNull();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Security Tests")
@@ -313,6 +341,7 @@ class MailAdminControllerTest extends TestFXBase {
             assertThat(sendButton).isNotNull();
         }
 
+
         @Test
         @Order(21)
         @DisplayName("Should not expose code in UI")
@@ -325,5 +354,8 @@ class MailAdminControllerTest extends TestFXBase {
             assertThat(emailField).isNotNull();
             assertThat(sendButton).isNotNull();
         }
+
     }
+
 }
+

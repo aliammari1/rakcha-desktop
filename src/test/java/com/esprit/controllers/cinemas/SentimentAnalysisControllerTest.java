@@ -32,6 +32,7 @@ class SentimentAnalysisControllerTest {
             assertThat(result).isEqualTo("Positive");
         }
 
+
         @Test
         @Order(2)
         @DisplayName("Should analyze negative sentiment correctly")
@@ -39,6 +40,7 @@ class SentimentAnalysisControllerTest {
             String result = controller.analyzeSentiment("This movie is terrible and boring. Worst film ever!");
             assertThat(result).isEqualTo("Negative");
         }
+
 
         @Test
         @Order(3)
@@ -48,6 +50,7 @@ class SentimentAnalysisControllerTest {
             assertThat(result).isEqualTo("Neutral");
         }
 
+
         @Test
         @Order(4)
         @DisplayName("Should get sentiment score between -1 and 1")
@@ -56,6 +59,7 @@ class SentimentAnalysisControllerTest {
             assertThat(score).isBetween(-1.0, 1.0);
             assertThat(score).isGreaterThan(0.0); // Should be positive
         }
+
 
         @Test
         @Order(5)
@@ -68,6 +72,7 @@ class SentimentAnalysisControllerTest {
             assertThat(detailed).contains("Neg:");
             assertThat(detailed).contains("Neu:");
         }
+
 
         @Test
         @Order(6)
@@ -83,6 +88,7 @@ class SentimentAnalysisControllerTest {
             assertThat(scores.get("neutral")).isBetween(0f, 1f);
         }
 
+
         @Test
         @Order(7)
         @DisplayName("Should handle mixed sentiments")
@@ -91,6 +97,7 @@ class SentimentAnalysisControllerTest {
             // This might be Neutral or Positive depending on the compound score
             assertThat(result).isIn("Positive", "Neutral", "Negative");
         }
+
 
         @Test
         @Order(8)
@@ -103,6 +110,7 @@ class SentimentAnalysisControllerTest {
             assertThat(score).isGreaterThan(0.5);
         }
 
+
         @Test
         @Order(9)
         @DisplayName("Should handle very strong negative sentiment")
@@ -114,6 +122,7 @@ class SentimentAnalysisControllerTest {
             assertThat(score).isLessThan(-0.5);
         }
 
+
         @Test
         @Order(10)
         @DisplayName("Should handle empty strings near threshold")
@@ -122,7 +131,9 @@ class SentimentAnalysisControllerTest {
             String result = controller.analyzeSentiment("ok");
             assertThat(result).isIn("Positive", "Neutral", "Negative");
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Error Handling Tests")
@@ -137,6 +148,7 @@ class SentimentAnalysisControllerTest {
                 .hasMessage("Text cannot be null");
         }
 
+
         @Test
         @Order(12)
         @DisplayName("Should throw IllegalArgumentException for null input to getSentimentScore")
@@ -145,6 +157,7 @@ class SentimentAnalysisControllerTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Text cannot be null");
         }
+
 
         @Test
         @Order(13)
@@ -155,6 +168,7 @@ class SentimentAnalysisControllerTest {
                 .hasMessage("Text cannot be null");
         }
 
+
         @Test
         @Order(14)
         @DisplayName("Should throw IllegalArgumentException for null input to analyzeSentimentDetailed")
@@ -164,6 +178,7 @@ class SentimentAnalysisControllerTest {
                 .hasMessage("Text cannot be null");
         }
 
+
         @Test
         @Order(15)
         @DisplayName("Should handle empty strings without throwing")
@@ -171,6 +186,7 @@ class SentimentAnalysisControllerTest {
             String result = controller.analyzeSentiment("");
             assertThat(result).isIn("Positive", "Neutral", "Negative");
         }
+
 
         @Test
         @Order(16)
@@ -180,10 +196,12 @@ class SentimentAnalysisControllerTest {
             for (int i = 0; i < 100; i++) {
                 longText.append("This is a great movie! ");
             }
+
             
             String result = controller.analyzeSentiment(longText.toString());
             assertThat(result).isIn("Positive", "Neutral", "Negative");
         }
+
 
         @Test
         @Order(17)
@@ -192,7 +210,9 @@ class SentimentAnalysisControllerTest {
             String result = controller.analyzeSentiment("@#$% !!! *** ???");
             assertThat(result).isIn("Positive", "Neutral", "Negative");
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Sentiment Score Range Tests")
@@ -206,7 +226,9 @@ class SentimentAnalysisControllerTest {
                 double score = controller.getSentimentScore("Wonderful! Excellent! Great!");
                 assertThat(score).isGreaterThan(0.0);
             }
+
         }
+
 
         @Test
         @Order(19)
@@ -216,7 +238,9 @@ class SentimentAnalysisControllerTest {
                 double score = controller.getSentimentScore("Awful! Terrible! Horrible!");
                 assertThat(score).isLessThan(0.0);
             }
+
         }
+
 
         @Test
         @Order(20)
@@ -225,6 +249,9 @@ class SentimentAnalysisControllerTest {
             double score = controller.getSentimentScore("The movie has actors");
             assertThat(score).isBetween(-0.05, 0.05);
         }
+
     }
 
+
 }
+

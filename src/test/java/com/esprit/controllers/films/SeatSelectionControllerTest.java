@@ -38,6 +38,7 @@ class SeatSelectionControllerTest extends TestFXBase {
         stage.toFront();
     }
 
+
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
     @DisplayName("Seat Grid Display Tests")
@@ -52,6 +53,7 @@ class SeatSelectionControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(2)
         @Disabled("TODO: Implement available seat display - verify available seats have specific styling/css")
@@ -60,6 +62,7 @@ class SeatSelectionControllerTest extends TestFXBase {
             // Requires: Verify available seat buttons have 'available' CSS class or green styling
             waitForFxEvents();
         }
+
 
         @Test
         @Order(3)
@@ -70,6 +73,7 @@ class SeatSelectionControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(4)
         @Disabled("TODO: Implement selected seat display - verify selected seats have different style than available")
@@ -78,6 +82,7 @@ class SeatSelectionControllerTest extends TestFXBase {
             // Requires: Select a seat and verify CSS class changes to 'selected'
             waitForFxEvents();
         }
+
 
         @Test
         @Order(5)
@@ -88,6 +93,7 @@ class SeatSelectionControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(6)
         @Disabled("TODO: Implement screen indicator - verify 'SCREEN' label visible at top of grid")
@@ -96,7 +102,9 @@ class SeatSelectionControllerTest extends TestFXBase {
             // Requires: Lookup screen indicator label, assert visible
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -112,6 +120,7 @@ class SeatSelectionControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(11)
         @Disabled("TODO: Implement seat deselection - click selected seat and verify CSS class removed")
@@ -120,6 +129,7 @@ class SeatSelectionControllerTest extends TestFXBase {
             // Requires: Select seat, click again, verify CSS class removed
             waitForFxEvents();
         }
+
 
         @Test
         @Order(12)
@@ -130,6 +140,7 @@ class SeatSelectionControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(13)
         @Disabled("TODO: Implement multi-seat selection - verify multiple seats can be selected simultaneously")
@@ -138,6 +149,7 @@ class SeatSelectionControllerTest extends TestFXBase {
             // Requires: Select multiple seats, verify all have 'selected' class
             waitForFxEvents();
         }
+
 
         @Test
         @Order(14)
@@ -148,6 +160,7 @@ class SeatSelectionControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(15)
         @Disabled("TODO: Implement max seat limit - prevent selection beyond limit (e.g., 6 seats)")
@@ -157,6 +170,7 @@ class SeatSelectionControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(16)
         @Disabled("TODO: Implement seat display list - verify selected seat labels show in display area")
@@ -165,7 +179,9 @@ class SeatSelectionControllerTest extends TestFXBase {
             // Requires: Lookup seat list label/text area, assert contains seat IDs
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -181,6 +197,7 @@ class SeatSelectionControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(21)
         @Disabled("TODO: Implement total price calculation - verify price updates as seats selected")
@@ -189,6 +206,7 @@ class SeatSelectionControllerTest extends TestFXBase {
             // Requires: Select seats, verify total = price_per_seat * seat_count
             waitForFxEvents();
         }
+
 
         @Test
         @Order(22)
@@ -199,6 +217,7 @@ class SeatSelectionControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(23)
         @Disabled("TODO: Implement discount application - verify discount reduces total")
@@ -208,6 +227,7 @@ class SeatSelectionControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(24)
         @Disabled("TODO: Implement tax display - show tax amount in price breakdown")
@@ -216,7 +236,9 @@ class SeatSelectionControllerTest extends TestFXBase {
             // Requires: Lookup tax label, assert contains tax percentage/amount
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -232,6 +254,7 @@ class SeatSelectionControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(31)
         @Disabled("TODO: Implement cinema name display - verify cinema name visible")
@@ -240,6 +263,7 @@ class SeatSelectionControllerTest extends TestFXBase {
             // Requires: Lookup cinema name label, assert not null and visible
             waitForFxEvents();
         }
+
 
         @Test
         @Order(32)
@@ -250,6 +274,7 @@ class SeatSelectionControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(33)
         @Disabled("TODO: Implement duration display - show movie length in minutes")
@@ -259,6 +284,7 @@ class SeatSelectionControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(34)
         @Disabled("TODO: Implement hall number display - show cinema hall/screen number")
@@ -267,7 +293,9 @@ class SeatSelectionControllerTest extends TestFXBase {
             // Requires: Lookup hall label, assert shows hall ID
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -283,6 +311,7 @@ class SeatSelectionControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(41)
         @Disabled("TODO: Implement payment button disabling - disable if no seats selected")
@@ -291,6 +320,7 @@ class SeatSelectionControllerTest extends TestFXBase {
             // Requires: Verify button disabled when no seats selected
             waitForFxEvents();
         }
+
 
         @Test
         @Order(42)
@@ -301,6 +331,7 @@ class SeatSelectionControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(43)
         @Disabled("TODO: Implement booking summary - show confirmation dialog")
@@ -309,6 +340,7 @@ class SeatSelectionControllerTest extends TestFXBase {
             // Requires: Display summary with selected seats, price, datetime
             waitForFxEvents();
         }
+
 
         @Test
         @Order(44)
@@ -319,6 +351,7 @@ class SeatSelectionControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(45)
         @Disabled("TODO: Implement cancellation - clear selection and return to seating")
@@ -327,7 +360,9 @@ class SeatSelectionControllerTest extends TestFXBase {
             // Requires: Click cancel button, verify seats deselected and counters reset
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -343,6 +378,7 @@ class SeatSelectionControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(51)
         @Disabled("TODO: Implement temporary seat hold - prevent others from booking")
@@ -351,6 +387,7 @@ class SeatSelectionControllerTest extends TestFXBase {
             // Requires: Verify selected seats marked as 'held' in database
             waitForFxEvents();
         }
+
 
         @Test
         @Order(52)
@@ -361,6 +398,7 @@ class SeatSelectionControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(53)
         @Disabled("TODO: Implement expiry warning - show alert before timeout")
@@ -370,6 +408,7 @@ class SeatSelectionControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(54)
         @Disabled("TODO: Implement timer extension - allow user to extend hold")
@@ -378,7 +417,9 @@ class SeatSelectionControllerTest extends TestFXBase {
             // Requires: Click extend button, verify new countdown duration
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -394,6 +435,7 @@ class SeatSelectionControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(61)
         @Disabled("TODO: Implement help button - trigger help modal")
@@ -403,6 +445,7 @@ class SeatSelectionControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(62)
         @Disabled("TODO: Implement help dialog - show seat selection instructions")
@@ -411,7 +454,9 @@ class SeatSelectionControllerTest extends TestFXBase {
             // Requires: Click help button, verify dialog appears with instructions
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -427,6 +472,7 @@ class SeatSelectionControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(71)
         @Disabled("TODO: Implement Enter key selection - select focused seat")
@@ -436,6 +482,7 @@ class SeatSelectionControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(72)
         @Disabled("TODO: Implement accessible seat indicators - mark wheelchair friendly seats")
@@ -444,7 +491,9 @@ class SeatSelectionControllerTest extends TestFXBase {
             // Requires: Verify accessible seats marked with icon/label
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -460,6 +509,7 @@ class SeatSelectionControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(81)
         @Disabled("TODO: Implement full session handling - show 'no seats available' message")
@@ -468,6 +518,7 @@ class SeatSelectionControllerTest extends TestFXBase {
             // Requires: Load cinema with no available seats, verify message displayed
             waitForFxEvents();
         }
+
 
         @Test
         @Order(82)
@@ -478,6 +529,7 @@ class SeatSelectionControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(83)
         @Disabled("TODO: Implement session expiry handling - redirect to cinema list")
@@ -486,5 +538,8 @@ class SeatSelectionControllerTest extends TestFXBase {
             // Requires: Verify expired session returns to cinema selection
             waitForFxEvents();
         }
+
     }
+
 }
+

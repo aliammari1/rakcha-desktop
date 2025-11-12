@@ -55,6 +55,7 @@ class LoginControllerTest extends TestFXBase {
         waitForFxEvents();
     }
 
+
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("UI Elements Tests")
     class UIElementsTests {
@@ -75,6 +76,7 @@ class LoginControllerTest extends TestFXBase {
             verifyThat("#signUpButton", hasText("Sign Up"));
         }
 
+
         @Test
         @Order(2)
         @DisplayName("Should display forgot password links")
@@ -82,6 +84,7 @@ class LoginControllerTest extends TestFXBase {
             verifyThat("#forgetPasswordHyperlink", isVisible());
             verifyThat("#forgetPasswordEmailHyperlink", isVisible());
         }
+
 
         @Test
         @Order(3)
@@ -91,6 +94,7 @@ class LoginControllerTest extends TestFXBase {
             verifyThat("#microsoftSignInButton", isVisible());
         }
 
+
         @Test
         @Order(4)
         @DisplayName("Should have featured movie display")
@@ -98,6 +102,7 @@ class LoginControllerTest extends TestFXBase {
             verifyThat("#featuredMovieImage", isVisible());
             verifyThat("#featuredMovieTitle", isVisible());
         }
+
 
         @Test
         @Order(5)
@@ -107,7 +112,9 @@ class LoginControllerTest extends TestFXBase {
             TestAssertions.verifyNoErrorMessage("#emailErrorLabel");
             TestAssertions.verifyNoErrorMessage("#passwordErrorLabel");
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Input Validation Tests")
@@ -125,6 +132,7 @@ class LoginControllerTest extends TestFXBase {
             verifyThat("#emailErrorLabel", isVisible());
         }
 
+
         @Test
         @Order(11)
         @DisplayName("Should validate invalid email format")
@@ -137,6 +145,7 @@ class LoginControllerTest extends TestFXBase {
             verifyThat("#emailErrorLabel", isVisible());
         }
 
+
         @Test
         @Order(12)
         @DisplayName("Should validate empty password field")
@@ -147,6 +156,7 @@ class LoginControllerTest extends TestFXBase {
             // Verify password error is shown
             verifyThat("#passwordErrorLabel", isVisible());
         }
+
 
         @Test
         @Order(13)
@@ -160,6 +170,7 @@ class LoginControllerTest extends TestFXBase {
             verifyThat("#passwordErrorLabel", isVisible());
         }
 
+
         @Test
         @Order(14)
         @DisplayName("Should accept valid email format")
@@ -171,6 +182,7 @@ class LoginControllerTest extends TestFXBase {
             TestAssertions.verifyTextFieldContains("#emailTextField", validEmail);
         }
 
+
         @Test
         @Order(15)
         @DisplayName("Should accept password input")
@@ -181,7 +193,9 @@ class LoginControllerTest extends TestFXBase {
             // Verify password field is not empty (actual value is masked)
             assertNotEquals("", getTextFieldValue("#passwordTextField"));
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Form Interaction Tests")
@@ -198,6 +212,7 @@ class LoginControllerTest extends TestFXBase {
             assertTrue(lookup("#passwordTextField").query().isFocused());
         }
 
+
         @Test
         @Order(21)
         @DisplayName("Should submit form on Enter key in password field")
@@ -211,6 +226,7 @@ class LoginControllerTest extends TestFXBase {
             // Form submission should be triggered
             // (In real scenario, this would navigate away or show loading)
         }
+
 
         @Test
         @Order(22)
@@ -228,6 +244,7 @@ class LoginControllerTest extends TestFXBase {
             TestAssertions.verifyTextFieldEmpty("#passwordTextField");
         }
 
+
         @Test
         @Order(23)
         @DisplayName("Should allow multiple character inputs")
@@ -237,7 +254,9 @@ class LoginControllerTest extends TestFXBase {
 
             assertEquals(longEmail, getTextFieldValue("#emailTextField"));
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Button Interaction Tests")
@@ -254,6 +273,7 @@ class LoginControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(31)
         @DisplayName("Sign up button should navigate to registration")
@@ -265,6 +285,7 @@ class LoginControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(32)
         @DisplayName("Google sign-in button should be clickable")
@@ -274,6 +295,7 @@ class LoginControllerTest extends TestFXBase {
 
             waitForFxEvents();
         }
+
 
         @Test
         @Order(33)
@@ -285,6 +307,7 @@ class LoginControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(34)
         @DisplayName("Forgot password link should be clickable")
@@ -294,7 +317,9 @@ class LoginControllerTest extends TestFXBase {
 
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Authentication Flow Tests")
@@ -315,6 +340,7 @@ class LoginControllerTest extends TestFXBase {
             // For now, we verify the form was submitted without validation errors
         }
 
+
         @Test
         @Order(41)
         @Timeout(value = 30, unit = TimeUnit.SECONDS)
@@ -327,6 +353,7 @@ class LoginControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(42)
         @Timeout(value = 30, unit = TimeUnit.SECONDS)
@@ -338,6 +365,7 @@ class LoginControllerTest extends TestFXBase {
 
             waitForFxEvents();
         }
+
 
         @Test
         @Order(43)
@@ -352,6 +380,7 @@ class LoginControllerTest extends TestFXBase {
 
             // Should show error (in real implementation)
         }
+
 
         @Test
         @Order(44)
@@ -376,6 +405,7 @@ class LoginControllerTest extends TestFXBase {
                 .isNotEmpty();
         }
 
+
         @Test
         @Order(45)
         @Timeout(value = 30, unit = TimeUnit.SECONDS)
@@ -399,7 +429,9 @@ class LoginControllerTest extends TestFXBase {
                 .as("XSS attempt should be sanitized and stored safely")
                 .isNotEmpty();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Accessibility Tests")
@@ -420,6 +452,7 @@ class LoginControllerTest extends TestFXBase {
             // Next focusable element (button or link)
         }
 
+
         @Test
         @Order(51)
         @DisplayName("Should support screen reader labels")
@@ -429,7 +462,9 @@ class LoginControllerTest extends TestFXBase {
             assertNotNull(lookup("#emailTextField").query());
             assertNotNull(lookup("#passwordTextField").query());
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Error Recovery Tests")
@@ -448,6 +483,7 @@ class LoginControllerTest extends TestFXBase {
             // Error should be cleared (in proper implementation)
             waitForFxEvents();
         }
+
 
         @Test
         @Order(61)
@@ -468,7 +504,9 @@ class LoginControllerTest extends TestFXBase {
 
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Visual and Animation Tests")
@@ -483,6 +521,7 @@ class LoginControllerTest extends TestFXBase {
             verifyThat("#shape1", isNotNull());
         }
 
+
         @Test
         @Order(71)
         @DisplayName("Featured movie should display")
@@ -495,5 +534,8 @@ class LoginControllerTest extends TestFXBase {
             assertNotNull(movieTitle);
             assertFalse(movieTitle.isEmpty());
         }
+
     }
+
 }
+

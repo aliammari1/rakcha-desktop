@@ -39,6 +39,7 @@ class ModifierCinemaControllerTest extends TestFXBase {
         stage.toFront();
     }
 
+
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Cinema Update Tests")
     class CinemaUpdateTests {
@@ -53,6 +54,7 @@ class ModifierCinemaControllerTest extends TestFXBase {
             assertThat(nameField).isNotNull();
             assertThat(nameField.isVisible()).isTrue();
         }
+
 
         @Test
         @Order(2)
@@ -76,6 +78,7 @@ class ModifierCinemaControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(3)
         @DisplayName("Should validate required fields")
@@ -98,7 +101,9 @@ class ModifierCinemaControllerTest extends TestFXBase {
             assertThat(errorLabel).isNotNull();
             assertThat(errorLabel.getText()).isNotEmpty();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Form Validation Tests")
@@ -120,6 +125,7 @@ class ModifierCinemaControllerTest extends TestFXBase {
             assertThat(addressField.getText()).isEqualTo("123 Main St");
         }
 
+
         @Test
         @Order(5)
         @DisplayName("Should validate phone number")
@@ -135,7 +141,9 @@ class ModifierCinemaControllerTest extends TestFXBase {
             assertThat(phoneField.getText()).hasSize(8);
             assertThat(phoneField.getText()).isEqualTo("12345678");
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Cancel Operation Tests")
@@ -157,6 +165,9 @@ class ModifierCinemaControllerTest extends TestFXBase {
             // Verify button was clicked and no update occurred
             assertThat(cancelButton.isVisible()).isTrue();
         }
+
     }
 
+
 }
+

@@ -36,11 +36,14 @@ public class CinemaCommentService implements IService<CinemaComment> {
     // Allowed columns for sorting to prevent SQL injection
     private static final String[] ALLOWED_SORT_COLUMNS = {
             "id", "cinema_id", "client_id", "comment_text", "sentiment", "created_at"
-    };
+    }
+;
 
     /**
-     * Constructs a new CinemaCommentService with database connection and required
-     * services. Creates tables if they don't exist.
+     * Initializes the service by obtaining a database connection, creating required service clients,
+     * and ensuring the `cinema_comment` table exists.
+     *
+     * <p>Any exceptions raised while creating database tables are logged.</p>
      */
     public CinemaCommentService() {
         this.connection = DataSource.getInstance().getConnection();
@@ -67,8 +70,17 @@ public class CinemaCommentService implements IService<CinemaComment> {
         } catch (Exception e) {
             log.error("Error creating tables for CinemaCommentService", e);
         }
+
     }
 
+
+    /**
+     * Persists a CinemaComment to the database.
+     *
+     * Stores the cinema id, client id, comment text, and sentiment in the cinema_comment table.
+     *
+     * @param cinemaComment the CinemaComment to persist; its `cinema` and `client` must have non-null IDs
+     */
     @Override
     /**
      * Creates a new entity in the database.
@@ -88,8 +100,15 @@ public class CinemaCommentService implements IService<CinemaComment> {
         } catch (SQLException e) {
             log.error("Error creating cinema comment", e);
         }
+
     }
 
+
+    /**
+     * Updates the stored cinema comment to match the provided CinemaComment's text and sentiment.
+     *
+     * @param cinemaComment the CinemaComment whose comment text and sentiment will be updated; its `id` identifies the row to modify
+     */
     @Override
     /**
      * Updates an existing entity in the database.
@@ -108,8 +127,15 @@ public class CinemaCommentService implements IService<CinemaComment> {
         } catch (SQLException e) {
             log.error("Error updating cinema comment", e);
         }
+
     }
 
+
+    /**
+     * Delete the specified cinema comment from the database using its identifier.
+     *
+     * @param cinemaComment the CinemaComment to remove; its `id` field identifies the row to delete
+     */
     @Override
     /**
      * Deletes an entity from the database.
@@ -126,7 +152,9 @@ public class CinemaCommentService implements IService<CinemaComment> {
         } catch (SQLException e) {
             log.error("Error deleting cinema comment", e);
         }
+
     }
+
 
     @Override
     /**
@@ -146,6 +174,7 @@ public class CinemaCommentService implements IService<CinemaComment> {
             pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
 
+
         try {
             // Get total count
             final String countQuery = PaginationQueryBuilder.buildCountQuery(baseQuery);
@@ -161,8 +190,11 @@ public class CinemaCommentService implements IService<CinemaComment> {
                     if (comment != null) {
                         content.add(comment);
                     }
+
                 }
+
             }
+
 
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
 
@@ -170,13 +202,15 @@ public class CinemaCommentService implements IService<CinemaComment> {
             log.error("Error retrieving paginated cinema comments: {}", e.getMessage(), e);
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
         }
+
     }
 
+
     /**
-     * Retrieves comments by cinema ID.
+     * Retrieve all comments associated with the specified cinema.
      *
-     * @param cinemaId the ID of the cinema to get comments for
-     * @return list of comments for the specified cinema
+     * @param cinemaId the ID of the cinema whose comments should be returned
+     * @return a list of {@link CinemaComment} for the specified cinema; an empty list if none are found or if an error occurs
      */
     public List<CinemaComment> getCommentsByCinemaId(Long cinemaId) {
         List<CinemaComment> comments = new ArrayList<>();
@@ -190,16 +224,25 @@ public class CinemaCommentService implements IService<CinemaComment> {
                 if (comment != null) {
                     comments.add(comment);
                 }
+
             }
+
         } catch (SQLException e) {
             log.error("Error getting comments by cinema id: " + cinemaId, e);
         }
+
         return comments;
     }
 
+
     /**
-     * @param rs
-     * @return CinemaComment
+     * Builds a CinemaComment from the current row of the provided ResultSet.
+     *
+     * <p>Resolves the referenced Cinema and Client; if either referenced entity is not found or a
+     * SQLException occurs while reading the row, the method returns {@code null}.</p>
+     *
+     * @param rs the ResultSet positioned at the row to map
+     * @return the constructed CinemaComment, or {@code null} if required referenced entities are missing or an error occurs
      */
     private CinemaComment buildCinemaComment(ResultSet rs) {
         try {
@@ -211,11 +254,14 @@ public class CinemaCommentService implements IService<CinemaComment> {
                 return null;
             }
 
+
             return CinemaComment.builder().id(rs.getLong("id")).cinema(cinema).client(client)
                     .commentText(rs.getString("comment_text")).sentiment(rs.getString("sentiment")).build();
         } catch (SQLException e) {
             log.error("Error building cinema comment from ResultSet", e);
             return null;
         }
+
     }
+
 }

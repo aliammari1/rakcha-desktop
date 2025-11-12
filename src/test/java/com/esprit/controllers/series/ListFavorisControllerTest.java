@@ -47,6 +47,7 @@ class ListFavorisControllerTest extends TestFXBase {
         stage.show();
     }
 
+
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Favorites Display Tests")
     class FavoritesDisplayTests {
@@ -61,6 +62,7 @@ class ListFavorisControllerTest extends TestFXBase {
             assertThat(table).isNotNull();
         }
 
+
         @Test
         @Order(2)
         @DisplayName("Should load user favorites")
@@ -71,6 +73,7 @@ class ListFavorisControllerTest extends TestFXBase {
             assertThat(table).isNotNull();
         }
 
+
         @Test
         @Order(3)
         @DisplayName("Should display series title in table")
@@ -80,7 +83,9 @@ class ListFavorisControllerTest extends TestFXBase {
             TableView<Favorite> table = lookup("#favoritesTable").query();
             assertThat(table).isNotNull();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Remove Favorite Tests")
@@ -96,6 +101,7 @@ class ListFavorisControllerTest extends TestFXBase {
             assertThat(table).isNotNull();
         }
 
+
         @Test
         @Order(5)
         @DisplayName("Should confirm before removing")
@@ -105,7 +111,9 @@ class ListFavorisControllerTest extends TestFXBase {
             Button removeButton = lookup("#removeButton").query();
             assertThat(removeButton).isNotNull();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("View Series Tests")
@@ -120,7 +128,9 @@ class ListFavorisControllerTest extends TestFXBase {
             TableView<Favorite> table = lookup("#favoritesTable").query();
             assertThat(table).isNotNull();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Empty State Tests")
@@ -135,7 +145,9 @@ class ListFavorisControllerTest extends TestFXBase {
             Label emptyLabel = lookup("#emptyStateLabel").query();
             assertThat(emptyLabel).isNotNull();
         }
+
     }
+
 
     // Helper methods
     private List<Favorite> createMockFavorites() {
@@ -150,7 +162,10 @@ class ListFavorisControllerTest extends TestFXBase {
         return favorites;
     }
 
+
     private <T> com.esprit.utils.Page<T> createPagedResult(List<T> content) {
         return new com.esprit.utils.Page<>(content, 0, content.size(), content.size());
     }
+
 }
+
