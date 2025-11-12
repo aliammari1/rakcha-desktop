@@ -136,7 +136,8 @@ public class HomeCinemaManagerController implements Initializable {
 
 
     /**
-     * Loads and displays dashboard statistics.
+     * Populates the dashboard statistic labels with counts retrieved from the film, actor,
+     * category, and session services; on error logs a warning and sets all statistic labels to "0".
      */
     private void loadDashboardStatistics() {
         try {
@@ -220,7 +221,10 @@ public class HomeCinemaManagerController implements Initializable {
 
 
     /**
-     * Loads recent cinema activity.
+     * Populate the recent activity section of the dashboard.
+     *
+     * Clears the activity container and appends recent activity entries for display.
+     * If an error occurs while loading entries, a warning is logged and the container remains cleared.
      */
     private void loadRecentActivity() {
         try {
@@ -241,7 +245,10 @@ public class HomeCinemaManagerController implements Initializable {
 
 
     /**
-     * Adds an activity item to the activity container.
+     * Appends a styled activity entry (description and timestamp) to the recent activity list.
+     *
+     * @param activity  human-readable description of the activity
+     * @param timestamp text representing when the activity occurred
      */
     private void addActivityItem(String activity, String timestamp) {
         HBox activityItem = new HBox(10);
@@ -263,7 +270,10 @@ public class HomeCinemaManagerController implements Initializable {
 
 
     /**
-     * Starts background particle animations.
+     * Starts the dashboard's background animations.
+     *
+     * Initiates continuous floating animations for the particle nodes (if present)
+     * and applies a one-second fade-in to the root container (if present).
      */
     private void startBackgroundAnimations() {
         if (particle1 != null && particle2 != null) {
@@ -301,7 +311,9 @@ public class HomeCinemaManagerController implements Initializable {
     }
 
 
-    // Navigation Action Handlers
+    /**
+     * Navigate to the film management screen by replacing the current window's scene with the film management UI.
+     */
 
     @FXML
     void manageMovies(ActionEvent event) {
@@ -318,6 +330,11 @@ public class HomeCinemaManagerController implements Initializable {
     }
 
 
+    /**
+     * Navigates the application to the session management dashboard.
+     *
+     * Loads the FXML at "/ui/cinemas/DashboardResponsable.fxml" and replaces the current stage's scene with the loaded root.
+     */
     @FXML
     void manageSessions(ActionEvent event) {
         try {
@@ -333,6 +350,11 @@ public class HomeCinemaManagerController implements Initializable {
     }
 
 
+    /**
+     * Navigate the application to the actor management screen.
+     *
+     * Loads the Actor.fxml layout and replaces the current stage's scene with it.
+     */
     @FXML
     void manageActors(ActionEvent event) {
         try {
@@ -348,6 +370,9 @@ public class HomeCinemaManagerController implements Initializable {
     }
 
 
+    /**
+     * Loads the statistics view FXML and replaces the current window's scene with it.
+     */
     @FXML
     void viewStatistics(ActionEvent event) {
         try {
@@ -363,23 +388,34 @@ public class HomeCinemaManagerController implements Initializable {
     }
 
 
-    // Additional methods referenced in FXML
+    /**
+     * Redirects the user to the session management view (which includes cinema management).
+     *
+     * @param event the action event triggered by the UI control invoking this handler
+     */
     @FXML
     void manageCinemas(ActionEvent event) {
         manageSessions(event); // Redirect to session management which includes cinema management
     }
 
 
+    /**
+     * Navigate to the statistics view.
+     */
     @FXML
     void viewAnalytics(ActionEvent event) {
         viewStatistics(event); // Redirect to statistics view
     }
 
 
+    /**
+     * Navigate to the statistics view.
+     *
+     * @param event the action event that triggered this handler
+     */
     @FXML
     void generateReports(ActionEvent event) {
         viewStatistics(event); // Redirect to statistics view for now
     }
 
 }
-

@@ -134,11 +134,13 @@ public class LoginController implements Initializable {
     private int maxDynamicElements = 15; // Number of dynamic elements to create
 
     /**
-     * @param event
-     * @throws IOException
-     * @throws ExecutionException
-     * @throws InterruptedException
-     */
+         * Stops active UI animations and switches the current stage's scene to the Google verification view.
+         *
+         * @param event the action event that triggered the Google sign-in
+         * @throws IOException if the Google verification FXML resource cannot be loaded
+         * @throws ExecutionException if an asynchronous verification task fails
+         * @throws InterruptedException if the thread is interrupted while waiting for an asynchronous task
+         */
     @FXML
     void signInWithGoogle(final ActionEvent event) throws IOException, ExecutionException, InterruptedException {
         try {
@@ -156,10 +158,10 @@ public class LoginController implements Initializable {
 
 
     /**
-     * @param event
-     * @throws IOException
-     * @throws ExecutionException
-     * @throws InterruptedException
+     * Handle the Microsoft sign-in action by stopping animations and switching the current stage's scene
+     * to the VerifyWithMicrosoft view.
+     *
+     * @param event the ActionEvent that triggered this handler
      */
     @FXML
     void signInWithMicrosoft(final ActionEvent event) throws IOException, ExecutionException, InterruptedException {
@@ -178,9 +180,15 @@ public class LoginController implements Initializable {
 
 
     /**
-     * @param event
-     * @throws IOException
-     */
+         * Authenticate the user with the provided email and password and navigate to the appropriate role-specific home view.
+         *
+         * On successful authentication this method displays a brief success notification, loads and shows the FXML corresponding
+         * to the user's role, stores the authenticated User object in the stage's userData for downstream controllers, and
+         * stops any ongoing login-view animations. If authentication fails it shows an error alert indicating invalid credentials.
+         *
+         * @param event the action event that triggered the login (typically the sign-in button press)
+         * @throws IOException if an error occurs while loading or switching to the target FXML view
+         */
     @FXML
     void login(final ActionEvent event) throws IOException {
         final UserService userService = new UserService();
@@ -253,8 +261,10 @@ public class LoginController implements Initializable {
 
 
     /**
-     * @param event
-     * @throws IOException
+     * Navigate to the Sign Up view and stop ongoing animations.
+     *
+     * @param event the action event that triggered the navigation
+     * @throws IOException if loading the SignUp FXML or setting the new scene fails
      */
     @FXML
     void switchToSignUp(ActionEvent event) throws IOException {
@@ -275,6 +285,16 @@ public class LoginController implements Initializable {
     }
 
 
+    /**
+     * Configure UI event handlers, initialize dynamic element arrays, and schedule startup of visual animations.
+     *
+     * Sets action handlers for the forget-password links and the sign-up button, allocates arrays for dynamic
+     * particles, shapes, and rectangles, and starts a short delayed Timeline that initializes the featured
+     * movie display and various particle/shape animations.
+     *
+     * @param location  the location used to resolve relative paths for the root object, or null if unknown
+     * @param resources the ResourceBundle for localization, or null if none provided
+     */
     @Override
     /**
      * Initializes the JavaFX controller and sets up UI components. This method is
@@ -350,7 +370,14 @@ public class LoginController implements Initializable {
 
 
     /**
-     * Creates dynamic animated elements on the screen
+     * Adds and animates a set of dynamic decorative elements (particles, polygons, rectangles)
+     * onto the current foreground pane of the login view.
+     *
+     * <p>The method locates the topmost AnchorPane in the scene root, creates a configurable
+     * number of particle circles, polygon shapes, and rectangles, adds them to that pane,
+     * and starts their corresponding animations. If the UI root or foreground pane cannot
+     * be found the method returns without modifying the scene. Any runtime errors during
+     * creation are logged and suppressed.
      */
     private void createDynamicAnimations() {
         // Check if rootContainer or anchorPane is null
@@ -506,7 +533,10 @@ public class LoginController implements Initializable {
 
 
     /**
-     * Creates animations for a particle
+     * Configure and start continuous movement, scale, and fade animations for a particle circle.
+     *
+     * @param particle the Circle node to animate
+     * @param index    zero-based index used to stagger the animation start (delay = index * 50 ms)
      */
     private void animateParticle(Circle particle, int index) {
         // Create X movement
@@ -558,7 +588,13 @@ public class LoginController implements Initializable {
 
 
     /**
-     * Creates animations for a shape
+     * Attach rotation, scale (pulsing), and translate (drift) animations to a Polygon and start them with a staggered delay.
+     *
+     * The animations run indefinitely; the scale and translate animations auto-reverse. The initial delay before starting
+     * is computed from the provided index (index * 200 milliseconds).
+     *
+     * @param shape the Polygon to animate
+     * @param index the zero-based index used to compute a staggered start delay (index * 200 ms)
      */
     private void animateShape(Polygon shape, int index) {
         // Create rotation
@@ -600,7 +636,11 @@ public class LoginController implements Initializable {
 
 
     /**
-     * Creates animations for a rectangle
+     * Starts continuous visual animations on the given rectangle: continuous rotation, pulsing scale,
+     * pulsing opacity, and drifting translation, with a staggered start delay.
+     *
+     * @param rect  the Rectangle to animate
+     * @param index zero-based index used to stagger the start; the animation start is delayed by index * 150 ms
      */
     private void animateRectangle(Rectangle rect, int index) {
         // Create rotation
@@ -652,7 +692,11 @@ public class LoginController implements Initializable {
 
 
     /**
-     * Initializes the featured movie display with image switching
+     * Sets the initial featured movie image and title, starts a subtle poster scale animation,
+     * and begins an automatic 8-second cycle to switch featured movies.
+     *
+     * <p>If the featured image or title UI nodes are null this method logs a warning and does nothing.
+     * Any exceptions encountered while loading the initial image are logged and do not propagate.</p>
      */
     private void initializeFeaturedMovie() {
         if (featuredMovieImage != null && featuredMovieTitle != null) {
@@ -696,7 +740,11 @@ public class LoginController implements Initializable {
 
 
     /**
-     * Switches the featured movie display with fade transitions
+     * Advances the featured movie carousel and updates the on-screen poster and title with fade transitions.
+     *
+     * <p>If both featuredMovieImage and featuredMovieTitle are present, increments the internal image index,
+     * selects the next poster and title, fades the current content out, replaces the image and text, then fades them back in.
+     * The method logs the new featured title and handles internal exceptions by logging a warning.</p>
      */
     private void switchFeaturedMovie() {
         // Increment the current image index
@@ -754,7 +802,11 @@ public class LoginController implements Initializable {
 
 
     /**
-     * Initializes the particle animation for floating red particles
+     * Initialize and start motion, scale, and fade animations for the predefined particle circles.
+     *
+     * For each non-null particle circle this creates and plays X/Y translate transitions, a scale
+     * transition and a fade transition to produce floating and pulsing effects; logs a warning for
+     * any particle that is null.
      */
     private void initializeParticleAnimation() {
         Circle[] particles = { particle1, particle2, particle3, particle4, particle5, particle6,
@@ -844,7 +896,13 @@ public class LoginController implements Initializable {
 
 
     /**
-     * Animates a polygon shape
+     * Starts continuous visual animations for the given polygon.
+     *
+     * Applies an indefinite rotation, pulsing scale, and oscillating translation to the shape.
+     * The `index` alters animation timing and alternates rotation direction to produce variation.
+     *
+     * @param shape the Polygon to animate
+     * @param index an integer used to stagger durations and to determine rotation direction
      */
     private void animatePolygon(Polygon shape, int index) {
         // Rotation animation
@@ -881,7 +939,10 @@ public class LoginController implements Initializable {
 
 
     /**
-     * Animates a rectangle shape
+     * Applies continuous rotation, fade (opacity pulse), and drifting movement animations to the given rectangle.
+     *
+     * @param shape the Rectangle to animate
+     * @param index zero-based index used to vary animation timing, direction, and staggering for this rectangle
      */
     private void animateRectangleShape(Rectangle shape, int index) {
         // Rotation animation
@@ -916,7 +977,13 @@ public class LoginController implements Initializable {
 
 
     /**
-     * Animates a circle shape
+     * Start continuous scale, glow (fade) and translation animations on the given circle.
+     *
+     * <p>The animations run indefinitely and use the provided index to vary durations and timing,
+     * creating a staggered visual effect between multiple shapes.</p>
+     *
+     * @param shape the Circle to animate
+     * @param index zero-based index used to vary animation durations and staggering for this shape
      */
     private void animateCircleShape(Circle shape, int index) {
         // Scale animation
@@ -955,7 +1022,11 @@ public class LoginController implements Initializable {
 
 
     /**
-     * Stops all animations when leaving the login screen
+     * Stop and clean up all visual animations and dynamic elements used by the login view.
+     *
+     * Stops any active timelines controlling the featured movie and particle creation, and
+     * removes dynamically created particles, shapes, and rectangles from the scene graph.
+     * Logs completion and any non-fatal issues encountered during cleanup.
      */
     private void stopAllAnimations() {
         if (featuredMovieSwitchTimeline != null) {
@@ -1083,4 +1154,3 @@ public class LoginController implements Initializable {
     }
 
 }
-

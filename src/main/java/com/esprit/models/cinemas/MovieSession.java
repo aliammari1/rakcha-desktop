@@ -65,7 +65,14 @@ public class MovieSession {
 
 
     /**
-     * Constructor with LocalDate for creating new movie session instances.
+     * Create a MovieSession for the given hall, film, time range, date, and price.
+     *
+     * @param cinemaHall the hall where the session will take place
+     * @param film the film to be shown
+     * @param startTime the session start time
+     * @param endTime the session end time
+     * @param sessionDate the date of the session
+     * @param price the ticket price for the session
      */
     public MovieSession(final CinemaHall cinemaHall, final Film film, final Time startTime, final Time endTime,
             final LocalDate sessionDate, final Double price) {
@@ -79,4 +86,3 @@ public class MovieSession {
     }
 
 }
-

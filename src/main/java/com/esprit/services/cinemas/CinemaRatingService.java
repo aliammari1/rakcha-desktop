@@ -39,9 +39,9 @@ public class CinemaRatingService implements IService<CinemaRating> {
 ;
 
     /**
-     * Constructs a new CinemaRatingService instance.
-     * Initializes database connection, related services, and creates tables if they
-     * don't exist.
+     * Initialize the service by obtaining a database connection, constructing dependent services, and ensuring the cinema_rating table exists.
+     *
+     * The constructor obtains a JDBC connection, instantiates Cinema and User service dependencies, and creates the cinema_rating table with the required schema and constraints if it does not already exist.
      */
     public CinemaRatingService() {
         this.connection = DataSource.getInstance().getConnection();
@@ -73,6 +73,11 @@ public class CinemaRatingService implements IService<CinemaRating> {
     }
 
 
+    /**
+     * Create a cinema rating and persist it to the database, replacing any existing rating by the same client for the same cinema.
+     *
+     * @param cinemaRating the CinemaRating to persist; its client and cinema references must be set
+     */
     @Override
     /**
      * Creates a new entity in the database.
@@ -99,6 +104,11 @@ public class CinemaRatingService implements IService<CinemaRating> {
     }
 
 
+    /**
+     * Update the cinema rating identified by the rating's cinema and client to the provided rating value.
+     *
+     * @param cinemaRating the CinemaRating containing the cinema, client, and new rating value
+     */
     @Override
     /**
      * Updates an existing entity in the database.
@@ -122,6 +132,11 @@ public class CinemaRatingService implements IService<CinemaRating> {
     }
 
 
+    /**
+     * Deletes the cinema rating identified by the provided CinemaRating's cinema and client.
+     *
+     * @param cinemaRating the CinemaRating whose cinema and client determine which row to delete
+     */
     @Override
     /**
      * Deletes an entity from the database.
@@ -145,6 +160,12 @@ public class CinemaRatingService implements IService<CinemaRating> {
 
 
     
+    /**
+     * Retrieves cinema ratings for the specified page and optional sorting.
+     *
+     * @param pageRequest pagination and optional sorting parameters
+     * @return a Page containing the CinemaRating entries for the requested page and the total number of matching elements
+     */
     @Override
     /**
      * Retrieves cinema ratings with pagination support.
@@ -199,12 +220,12 @@ public class CinemaRatingService implements IService<CinemaRating> {
 
 
     /**
-     * Retrieves the rating for a specific client and cinema.
-     *
-     * @param clientId the ID of the client
-     * @param cinemaId the ID of the cinema
-     * @return the rating value, or null if not found
-     */
+         * Retrieve the rating given by a specific client to a specific cinema.
+         *
+         * @param clientId the client's database identifier
+         * @param cinemaId the cinema's database identifier
+         * @return the rating value if present, or `null` if no rating exists or an error occurs
+         */
     public Integer getRatingForClientAndCinema(Long clientId, Long cinemaId) {
         String query = "SELECT rating FROM cinema_rating WHERE cinema_id = ? AND client_id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -227,10 +248,10 @@ public class CinemaRatingService implements IService<CinemaRating> {
 
 
     /**
-     * Retrieves the average rating for a cinema.
+     * Compute the average rating for the specified cinema.
      *
-     * @param cinemaId the ID of the cinema
-     * @return the average rating for the cinema
+     * @param cinemaId the cinema's id
+     * @return the average rating as a Double, or 0.0 if there are no ratings or an error occurs
      */
     public Double getAverageRating(Long cinemaId) {
         String query = "SELECT AVG(rating) as average FROM cinema_rating WHERE cinema_id = ?";
@@ -253,9 +274,9 @@ public class CinemaRatingService implements IService<CinemaRating> {
 
 
     /**
-     * Retrieves the TopRatedCinemas value.
+     * Returns cinemas ordered by their average rating in descending order.
      *
-     * @return the TopRatedCinemas value
+     * @return a list of cinemas sorted from highest to lowest average rating; empty if no ratings are available or on error
      */
     public List<Cinema> getTopRatedCinemas() {
         List<Cinema> topRatedCinemas = new ArrayList<>();
@@ -280,8 +301,10 @@ public class CinemaRatingService implements IService<CinemaRating> {
 
 
     /**
-     * @param clientId
-     * @param cinemaId
+     * Removes the rating record for the specified client and cinema if present.
+     *
+     * @param clientId the client's identifier
+     * @param cinemaId the cinema's identifier
      */
     private void deleteByClientAndCinema(Long clientId, Long cinemaId) {
         String query = "DELETE FROM cinema_rating WHERE cinema_id = ? AND client_id = ?";
@@ -329,8 +352,10 @@ public class CinemaRatingService implements IService<CinemaRating> {
 
 
     /**
-     * @param rs
-     * @return CinemaRating
+     * Builds a CinemaRating from the current row of the given ResultSet.
+     *
+     * @param rs the ResultSet positioned at a row from the `cinema_rating` query containing columns `id`, `cinema_id`, `client_id`, and `rating`
+     * @return a CinemaRating populated from the current row, or `null` if the referenced Cinema or Client cannot be found or a SQL error occurs
      */
     private CinemaRating buildCinemaRating(ResultSet rs) {
         try {
@@ -355,8 +380,10 @@ public class CinemaRatingService implements IService<CinemaRating> {
 
 
     /**
-     * @param rs
-     * @return CinemaComment
+     * Builds a CinemaComment from the current row of the provided ResultSet.
+     *
+     * @param rs the ResultSet positioned at a row containing cinema_comment columns (`id`, `cinema_id`, `client_id`, `comment_text`, `sentiment`)
+     * @return the constructed CinemaComment, or `null` if required related entities are missing or if a database error occurs
      */
     private CinemaComment buildCinemaComment(ResultSet rs) {
         try {
@@ -380,4 +407,3 @@ public class CinemaRatingService implements IService<CinemaRating> {
     }
 
 }
-

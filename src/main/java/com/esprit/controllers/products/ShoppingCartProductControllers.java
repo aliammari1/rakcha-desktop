@@ -70,21 +70,13 @@ public class ShoppingCartProductControllers implements Initializable {
     private FontIcon retour;
 
     /**
-     * Initializes the controller after its root element has been completely
-     * processed.
-     * This method loads the shopping cart contents from the database and displays
-     * them in the UI.
-     * 
-     * <p>
-     * The method uses Platform.runLater to ensure that the UI loading happens on
-     * the JavaFX
-     * application thread after the FXML has been fully loaded.
-     * </p>
+     * Load and display the current user's shopping cart once the FXML UI has been initialized.
      *
-     * @param url            The location used to resolve relative paths for the
-     *                       root object, or null if the location is not known
-     * @param resourceBundle The resources used to localize the root object, or null
-     *                       if the root object was not localized
+     * This method schedules loading on the JavaFX application thread so UI components
+     * are populated after the root element is fully processed.
+     *
+     * @param url            location used to resolve relative paths for the root object, or null if unknown
+     * @param resourceBundle resources used to localize the root object, or null if not localized
      */
     @Override
     /**
@@ -94,7 +86,7 @@ public class ShoppingCartProductControllers implements Initializable {
     public void initialize(final URL url, final ResourceBundle resourceBundle) {
         Platform.runLater(new Runnable() {
             /**
-             * Loads accepted shopping cart items when the UI is ready.
+             * Loads accepted shopping cart items into the UI.
              */
             @Override
             /**
@@ -112,9 +104,11 @@ public class ShoppingCartProductControllers implements Initializable {
 
 
     /**
-     * Retrieves a list of products from a service, verifies if each product has
-     * already been added to the cart, and adds it to the cart if not. It also marks
-     * the product as added in a map for future reference.
+     * Load the current user's shopping cart items into the UI.
+     *
+     * Fetches shopping cart entries for the window's current Client, creates a product VBox
+     * for each product that is not already present in the UI, adds the VBox to `cartFlowPane`,
+     * and records the mapping from product ID to its VBox in `produitVBoxMap`.
      */
     private void loadAcceptedShoppingCart() {
         // Récupérer toutes les produits depuis le service
@@ -143,14 +137,12 @@ public class ShoppingCartProductControllers implements Initializable {
 
 
     /**
-     * /** Creates a new Label element with the total price displayed as a double
-     * value, using the specified font size, position, and styling options.
+     * Create a JavaFX Label that displays the total price.
      *
-     * @param prixTotal
-     *                  total price of the product, which is used to create and set
-     *                  the
-     *                  label's text value.
-     * @returns a label with the price total value displayed in bold font.
+     * The label's text is formatted as "{prixTotal} DT" and styled with Verdana 20 font and a red text color.
+     *
+     * @param prixTotal the total price value to display
+     * @return a Label containing the formatted total price with applied font and color styling
      */
     private Label createPrixTotalLabel(final double prixTotal) {
         // Créez le Label du prix total ici
@@ -164,19 +156,13 @@ public class ShoppingCartProductControllers implements Initializable {
 
 
     /**
-     * Generates a `VBox` container for each product in the shopping cart, with
-     * buttons to decrease or increase the quantity and a label to display the total
-     * price. It also provides delete confirmation pop-up for removing items from
-     * the cart.
+     * Create a VBox card presenting a shopping-cart item with controls to adjust quantity,
+     * select the item for ordering, view its total price, and delete it from the cart.
      *
-     * @param ShoppingCart
-     *                     shoppingcart object that contains the details of the
-     *                     products,
-     *                     quantities, and total price, which are used to populate
-     *                     the UI
-     *                     elements in the `generateProductCard()` function.
-     * @returns a VBox container that displays a product's details and allows users
-     *          to select it for their order.
+     * @param ShoppingCart the ShoppingCart entry whose product, quantity, and related data
+     *                     are displayed and manipulated by the returned UI card
+     * @return a configured VBox containing the product image, labels, quantity controls,
+     *         selection checkbox, and delete action
      */
     private VBox createProductVBox(final ShoppingCart ShoppingCart) {
         final VBox produitVBox = new VBox();
@@ -350,18 +336,13 @@ public class ShoppingCartProductControllers implements Initializable {
 
 
     /**
-     * Decreases the quantity of items in a shopping cart by one unit when the user
-     * types a negative value into a text field. The updated quantity is then saved
-     * in the shoppingcart object and reflected in the cart's total quantity.
+     * Decrements the displayed and stored quantity for a cart item by one, respecting a minimum of 1.
      *
-     * @param quantityTextField
-     *                          quantity to be decreased, which is obtained from the
-     *                          text field of
-     *                          the same name.
-     * @param shoppingcart
-     *                          ShoppingCart object whose quantity is being updated
-     *                          by the
-     *                          function.
+     * If the current quantity shown in the provided TextField is greater than 1, this method
+     * reduces that value by one and updates the corresponding ShoppingCart object's quantity.
+     *
+     * @param quantityTextField the TextField that displays the current quantity for the cart item
+     * @param shoppingcart the ShoppingCart item to update
      */
     private void decreaseQuantity(final TextField quantityTextField, final ShoppingCart shoppingcart) {
         // Diminuer la quantité
@@ -375,19 +356,12 @@ public class ShoppingCartProductControllers implements Initializable {
 
 
     /**
-     * Compares the requested quantity with the available quantity of stock for a
-     * given product and returns true if there is enough stock, otherwise false.
-     *
-     * @param produit
-     *                 product for which the availability of stock is being checked.
-     * @param quantity
-     *                 amount of units of the product that are required or desired
-     *                 by the
-     *                 user, which is compared with the available stock quantity to
-     *                 determine if the product is available for purchase.
-     * @returns a boolean value indicating whether the requested quantity of stock
-     *          is available or not.
-     */
+         * Check whether the product has at least the requested quantity in stock.
+         *
+         * @param produit the product whose stock is being checked
+         * @param quantity the number of units requested
+         * @return `true` if the product's stock quantity is greater than or equal to `quantity`, `false` otherwise
+         */
     private boolean isStockAvailable(final Product produit, final int quantity) {
         // Comparer la quantité demandée avec la quantité disponible en stock
         return produit.getQuantity() >= quantity;
@@ -395,17 +369,13 @@ public class ShoppingCartProductControllers implements Initializable {
 
 
     /**
-     * Increases the quantity of an item in a shopping cart by 1, checking if the
-     * stock is available and displaying an alert if it's not.
+     * Increment the shopping cart item's quantity by one if stock permits.
      *
-     * @param quantityTextField
-     *                          quantity of the product to be updated in the
-     *                          shoppingcart, as
-     *                          indicated by its name.
-     * @param shoppingcart
-     *                          containing the products that the user wishes to
-     *                          increase the
-     *                          quantity of.
+     * Updates the provided quantity TextField and the ShoppingCart's quantity when
+     * stock is sufficient; otherwise displays a warning alert.
+     *
+     * @param quantityTextField the TextField that displays the current quantity for the item
+     * @param shoppingcart      the ShoppingCart entry whose quantity will be incremented
      */
     private void increaseQuantity(final TextField quantityTextField, final ShoppingCart shoppingcart) {
         final int currentQuantity = Integer.parseInt(quantityTextField.getText());
@@ -427,9 +397,10 @@ public class ShoppingCartProductControllers implements Initializable {
 
 
     /**
-     * Updates the total price label based on the items in a given order by
-     * multiplying the product prices by their quantities and storing the result in
-     * a shared data instance, then adding it to the flow pane with a created label.
+     * Recomputes the order's total price and updates the displayed total.
+     *
+     * Updates the shared total in SharedData and replaces the price label shown
+     * inside prixtotaleFlowPane to reflect the newly computed total.
      */
     private void updatePrixTotal() {
         this.prixTotal = 0.0;
@@ -446,19 +417,12 @@ public class ShoppingCartProductControllers implements Initializable {
 
 
     /**
-     * Calculates the total price of a product based on its ID and quantity by
-     * multiplying the unitaire price fetched from the `ProductService`.
-     *
-     * @param idProduct
-     *                  ID of the product for which the price is being calculated.
-     * @param quantity
-     *                  number of units of the product to be priced, which is
-     *                  multiplied
-     *                  by the unit price returned by the `ProductService` to
-     *                  compute the
-     *                  total price.
-     * @returns the total price of a product in units of quantity.
-     */
+         * Compute the total price for a product given its ID and quantity.
+         *
+         * @param idProduct ID of the product.
+         * @param quantity  Number of units to price.
+         * @return the total price for the specified quantity of the product.
+         */
     private double prixProduct(final Long idProduct, final int quantity) {
         final ProductService produitService = new ProductService();
         final double prixUnitaire = produitService.getProductPrice(idProduct);
@@ -467,13 +431,10 @@ public class ShoppingCartProductControllers implements Initializable {
 
 
     /**
-     * Loads a FXML file named `/OrderClient.fxml` into a Stage, initializes a
-     * `OrderClientController`, and displays the scene on the Stage.
-     *
-     * @param event
-     *              order action event that triggered the function, providing the
-     *              necessary context for the code to operate properly.
-     */
+         * Open the order screen and pass the controller the current order.
+         *
+         * @param event the ActionEvent that triggered navigation to the order screen
+         */
     @FXML
     void order(final ActionEvent event) {
         final FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/ui/produits/OrderClient.fxml"));
@@ -495,26 +456,20 @@ public class ShoppingCartProductControllers implements Initializable {
 
 
     /**
-     * Is a handling function for mouse events. It does not perform any specific
-     * action or have any distinctive features beyond processing mouse input.
+     * Placeholder handler for mouse events related to initiating payment.
      *
-     * @param event
-     *              mouse event that triggered the execution of the `Paiment()`
-     *              function.
+     * <p>Currently no action is performed; implement payment UI behavior here when needed.</p>
+     *
+     * @param event the MouseEvent that triggered this handler
      */
     public void Paiment(final MouseEvent event) {
     }
 
 
     /**
-     * Loads a new user interface, creates a new stage and attaches it to the
-     * existing stage, replacing the original interface, and finally closes the
-     * original stage.
+     * Opens the product comment UI in a new window and closes the current window.
      *
-     * @param event
-     *              ActionEvent object that triggered the `cinemaclient` method,
-     *              providing the necessary information to update the FXML layout of
-     *              the stage.
+     * @param event the ActionEvent that triggered this navigation; used to locate the current window to close
      */
     @FXML
     void cinemaclient(final ActionEvent event) {
@@ -544,14 +499,7 @@ public class ShoppingCartProductControllers implements Initializable {
 
 
     /**
-     * Loads a new UI fragment (`AffichageEvenementClient.fxml`) and replaces the
-     * current scene with it, creating a new stage and closing the original one.
-     *
-     * @param event
-     *              event object that triggered the function, providing information
-     *              about the event, such as its source and details, which can be
-     *              used
-     *              to handle the event appropriately.
+     * Opens the event display UI (AffichageEvenementClient.fxml) in a new window and closes the current window.
      */
     @FXML
     void eventClient(final ActionEvent event) {
@@ -581,13 +529,9 @@ public class ShoppingCartProductControllers implements Initializable {
 
 
     /**
-     * Loads a new FXML interface, creates a new scene and stage, and replaces the
-     * current stage with the new one, closing the old stage upon execution.
+     * Open the product listing view (AfficherProductClient.fxml) in a new window and close the current window.
      *
-     * @param event
-     *              ActionEvent that triggers the function and provides access to
-     *              information about the action that was performed, such as the
-     *              source of the event and the stage where the action occurred.
+     * @param event the ActionEvent whose source node identifies the current window to be closed
      */
     @FXML
     void produitClient(final ActionEvent event) {
@@ -617,12 +561,7 @@ public class ShoppingCartProductControllers implements Initializable {
 
 
     /**
-     * Is expected to perform some actions or calculations upon receiving an event
-     * call.
-     *
-     * @param event
-     *              triggered event that initiated the call to the `profilclient`
-     *              function.
+     * No-op event handler for the profile client action; reserved for future implementation.
      */
     @FXML
     void profilclient(final ActionEvent event) {
@@ -630,14 +569,12 @@ public class ShoppingCartProductControllers implements Initializable {
 
 
     /**
-     * Loads a new FXML interface using `FXMLLoader`, creates a new scene and stage,
-     * and replaces the current stage with the new one, closing the previous stage.
+     * Open the film user view and replace the current window with it.
      *
-     * @param event
-     *              ActionEvent object that triggered the function execution,
-     *              providing access to information about the event such as its
-     *              source
-     *              and target.
+     * Loads /ui/films/filmuser.fxml, creates a new stage showing that scene, and closes
+     * the stage associated with the triggering event.
+     *
+     * @param event the ActionEvent that triggered navigation; used to obtain the current window
      */
     @FXML
     void MovieClient(final ActionEvent event) {
@@ -666,13 +603,9 @@ public class ShoppingCartProductControllers implements Initializable {
 
 
     /**
-     * Loads a new FXML file, creates a new scene, and attaches it to a new stage.
-     * It also closes the current stage and shows the new stage.
+     * Opens the series view in a new window and closes the current window.
      *
-     * @param event
-     *              ActionEvent that triggers the `SerieClient()` method and
-     *              provides
-     *              information about the source of the event.
+     * @param event the action event whose source is used to locate and close the current window
      */
     @FXML
     void SerieClient(final ActionEvent event) {
@@ -701,14 +634,14 @@ public class ShoppingCartProductControllers implements Initializable {
 
 
     /**
-     * Returns to the product display interface.
-     * 
+     * Open the product display UI in a modal window and close the current window.
+     *
      * <p>
-     * Loads the AfficherProductClient.fxml file, creates a new scene and stage,
-     * and displays it modally while closing the current stage.
+     * Loads the product-listing FXML, presents it as an application-modal dialog owned by the current window,
+     * and then closes the current stage after the dialog is dismissed.
      * </p>
      *
-     * @param mouseEvent The mouse event that triggered this method
+     * @param mouseEvent the mouse event that triggered this action
      */
     public void afficherProduct(final MouseEvent mouseEvent) {
         // Obtenir la fenêtre précédente
@@ -740,4 +673,3 @@ public class ShoppingCartProductControllers implements Initializable {
     }
 
 }
-

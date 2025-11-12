@@ -31,7 +31,12 @@ public class ResetPasswordController {
     private Label passwordErrorLabel;
 
     /**
-     * @param event
+     * Attempts to switch the UI to the login view when the new password and confirmation match.
+     *
+     * If the two password fields contain identical text, replaces the current stage's scene with the login scene;
+     * otherwise no action is taken. Exceptions raised while loading or setting the view are caught and logged.
+     *
+     * @param event the ActionEvent from the UI control that invoked this handler
      */
     @FXML
     void resetPassword(final ActionEvent event) {
@@ -52,4 +57,3 @@ public class ResetPasswordController {
     }
 
 }
-

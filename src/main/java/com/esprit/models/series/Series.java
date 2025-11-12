@@ -54,7 +54,17 @@ public class Series {
     private int clickFavorites;
 
     /**
-     * Constructor without id for creating new series instances.
+     * Create a Series instance without an id and initialize interaction counters to zero.
+     *
+     * @param name               the series title
+     * @param summary            a short description of the series
+     * @param director           the director's name
+     * @param country            the country of origin
+     * @param image              the image URL or path for the series
+     * @param liked              legacy or initial liked count
+     * @param numberOfLikes      total number of likes
+     * @param disliked           legacy or initial disliked count
+     * @param numberOfDislikes   total number of dislikes
      */
     public Series(final String name, final String summary, final String director, final String country,
             final String image, final int liked, final int numberOfLikes, final int disliked,
@@ -74,4 +84,3 @@ public class Series {
     }
 
 }
-

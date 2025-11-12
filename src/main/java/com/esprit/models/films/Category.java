@@ -39,14 +39,11 @@ public class Category {
     private List<Actor> actors = new ArrayList<>();
 
     /**
-     * Constructor with id, name, and description for database mapping.
+     * Create a Category with the specified id, name, and description.
      *
-     * @param id
-     *                    the id of the category
-     * @param name
-     *                    the name of the category
-     * @param description
-     *                    the description of the category
+     * @param id the category identifier
+     * @param name the category name
+     * @param description the category description
      */
     public Category(final Long id, final String name, final String description) {
         this.id = id;
@@ -58,12 +55,10 @@ public class Category {
 
 
     /**
-     * Constructor without id for creating new category instances.
+     * Creates a Category with the given name and description and initializes film and actor lists as empty.
      *
-     * @param name
-     *                    the name of the category
-     * @param description
-     *                    the description of the category
+     * @param name the category name
+     * @param description the category description
      */
     public Category(final String name, final String description) {
         this.name = name;
@@ -73,4 +68,3 @@ public class Category {
     }
 
 }
-

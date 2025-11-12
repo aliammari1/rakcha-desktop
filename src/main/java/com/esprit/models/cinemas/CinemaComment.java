@@ -36,12 +36,12 @@ public class CinemaComment {
     private String sentiment;
 
     /**
-     * Constructor without id for creating new comment instances.
-     * 
-     * @param cinema      the cinema this comment is for
-     * @param client      the client who made the comment
+     * Create a new CinemaComment instance without an id.
+     *
+     * @param cinema the cinema associated with the comment
+     * @param client the client who authored the comment
      * @param commentText the text content of the comment
-     * @param sentiment   the sentiment of the comment
+     * @param sentiment the sentiment classification of the comment
      */
     public CinemaComment(final Cinema cinema, final Client client, final String commentText, final String sentiment) {
         this.cinema = cinema;
@@ -51,4 +51,3 @@ public class CinemaComment {
     }
 
 }
-

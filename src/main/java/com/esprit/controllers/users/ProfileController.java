@@ -76,6 +76,12 @@ public class ProfileController {
     @FXML
     private Button signOutButton;
 
+    /**
+     * Set up UI components for the profile view and load the default profile image.
+     *
+     * Performs availability checks for image controls, applies image-circle and image-view
+     * configurations, and initializes the displayed profile image with the default placeholder.
+     */
     @FXML
     /**
      * Initializes the JavaFX controller and sets up UI components. This method is
@@ -109,6 +115,11 @@ public class ProfileController {
     }
 
 
+    /**
+     * Applies visual configuration to the profile image circle.
+     *
+     * If the image circle is present, enables smoothing so the displayed avatar is rendered with improved quality.
+     */
     private void configureImageCircle() {
         if (imageCircle != null) {
             LOGGER.info("Configuring image circle...");
@@ -119,6 +130,12 @@ public class ProfileController {
     }
 
 
+    /**
+     * Configure the profile ImageView for circular display and initial hidden state.
+     *
+     * Applies aspect-ratio preservation, makes the ImageView invisible but managed,
+     * and sets a circular clip computed from the ImageView's fitWidth and fitHeight.
+     */
     private void configureImageView() {
         if (photoDeProfilImageView != null) {
             LOGGER.info("Configuring image view...");
@@ -141,7 +158,11 @@ public class ProfileController {
 
 
     /**
-     * @param imageUrl
+     * Loads an image from the given URL or local path and applies it to the profile Circle and ImageView, using a gradient fallback and pulse effect if loading fails.
+     *
+     * <p>The method accepts HTTP URLs, URIs prefixed with `file:`, or plain file system paths (which will be treated as `file:`). On successful load it updates the image displayed in the circular profile UI and applies a glow effect; on failure it applies a visually pleasing gradient fallback and pulse animation.</p>
+     *
+     * @param imageUrl the image location to load; may be an HTTP URL, a `file:` URI, or a filesystem path
      */
     private void loadAndSetImage(String imageUrl) {
         try {
@@ -242,6 +263,11 @@ public class ProfileController {
     }
 
 
+    /**
+     * Apply a visual fallback to the profile image by setting a multi-stop gradient, a glow effect, and a continuous pulse animation.
+     *
+     * This method replaces the image fill of the profile circle with a colorful gradient, adds a prominent glow, and starts an indefinite pulsing animation to draw attention when a profile image cannot be loaded.
+     */
     private void useGradientFallback() {
         // Create a more visually appealing gradient fallback
         LinearGradient gradient = new LinearGradient(0, 0, 1, 1, true, CycleMethod.NO_CYCLE,
@@ -318,9 +344,12 @@ public class ProfileController {
 
 
     /**
-     * Handles loading the profile image from the user object.
-     * 
-     * @param user The user containing the profile image URL
+     * Load and apply the user's profile image to the UI, falling back to the default avatar on missing or invalid sources.
+     *
+     * Supports image sources that are prefixed with "file:" (local files), "http" URLs (remote hosts like Cloudinary), or plain filesystem paths;
+     * any loading error or missing file will cause the controller to apply DEFAULT_PROFILE_GIF and log a warning.
+     *
+     * @param user the User whose `photoDeProfil` value is used to resolve and load the profile image
      */
     private void handleProfileImage(User user) {
         if (user.getPhotoDeProfil() != null && !user.getPhotoDeProfil().isEmpty()) {
@@ -373,6 +402,14 @@ public class ProfileController {
     }
 
 
+    /**
+     * Delete the current user account and switch the UI to the SignUp screen.
+     *
+     * This reads the user stored in the window's userData, deletes it via UserService,
+     * and replaces the current scene with the SignUp view.
+     *
+     * @throws IOException if the SignUp FXML cannot be loaded
+     */
     @FXML
     /**
      * Performs deleteAccount operation.
@@ -390,6 +427,15 @@ public class ProfileController {
     }
 
 
+    /**
+     * Validate input, update the current user's fields, persist the changes, and notify the user.
+     *
+     * <p>If validation succeeds, the controller copies values from the UI into the user model,
+     * calls UserService.update to persist the changes, and displays a success alert. If an error
+     * occurs during the process, an error alert is shown.</p>
+     *
+     * @param event the ActionEvent that triggered this action
+     */
     @FXML
     /**
      * Performs modifyAccount operation.
@@ -415,7 +461,11 @@ public class ProfileController {
 
 
     /**
-     * @return boolean
+     * Validate profile input fields and notify the user when a field is invalid.
+     *
+     * Currently checks that the email field is not empty and contains the '@' character; if the check fails a warning alert is shown.
+     *
+     * @return true if inputs are valid, false otherwise.
      */
     private boolean validateInputs() {
         if (emailTextField.getText().isEmpty() || !emailTextField.getText().contains("@")) {
@@ -427,6 +477,12 @@ public class ProfileController {
     }
 
 
+    /**
+     * Populate the current User object with values taken from the controller's input fields.
+     *
+     * Copies first name, last name, address, email, and password directly; sets birth date when the DatePicker has a value; and attempts to set the phone number from the phone text field.
+     * If the phone number cannot be parsed, a warning is logged and the user's phone number is left unchanged.
+     */
     private void updateUserFromFields() {
         user.setFirstName(firstNameTextField.getText());
         user.setLastName(lastNameTextField.getText());
@@ -447,6 +503,12 @@ public class ProfileController {
     }
 
 
+    /**
+     * Sign out the current user and switch the application's scene to the SignUp view.
+     *
+     * @param event the ActionEvent that triggered the sign-out
+     * @throws IOException if the SignUp FXML resource cannot be loaded
+     */
     @FXML
     /**
      * Performs signOut operation.
@@ -462,9 +524,11 @@ public class ProfileController {
 
 
     /**
-     * Sets the LeftPane value.
+     * Replace the left pane's contents with the supplied pane.
      *
-     * @param leftPane the value to set
+     * Replaces any existing children of the controller's left pane with the provided AnchorPane.
+     *
+     * @param leftPane the AnchorPane to display in the left pane
      */
     public void setLeftPane(final AnchorPane leftPane) {
         this.leftPane.getChildren().clear();
@@ -472,6 +536,14 @@ public class ProfileController {
     }
 
 
+    /**
+     * Lets the user choose an image file, uploads it to Cloudinary, and applies it as the current user's profile picture.
+     *
+     * If an image is selected and the upload succeeds, the controller updates the UI to show the new image, sets
+     * the user's `photoDeProfil` to the returned URL and attempts to persist the change via UserService.
+     * The method displays informative alerts for success, partial success (uploaded but not saved), cancellation,
+     * and error conditions; on error it falls back to the default profile image.
+     */
     @FXML
     /**
      * Allows the user to import a profile photo from their file system.
@@ -550,9 +622,11 @@ public class ProfileController {
 
 
     /**
-     * @param title
-     * @param content
-     * @param type
+     * Display a JavaFX alert dialog with the given title, content text, and alert type.
+     *
+     * @param title   the dialog window title
+     * @param content the message text shown in the dialog
+     * @param type    the Alert.AlertType that determines the dialog's icon and buttons
      */
     private void showAlert(String title, String content, Alert.AlertType type) {
         Alert alert = new Alert(type);
@@ -562,4 +636,3 @@ public class ProfileController {
     }
 
 }
-

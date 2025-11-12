@@ -133,6 +133,16 @@ public class HomeClientController implements Initializable {
     private Timeline featuredRotationTimeline;
     private Timeline particleAnimationTimeline;
 
+    /**
+     * Initialize the controller and prepare the HomeClient user interface.
+     *
+     * <p>Performs startup tasks required for the view: initializes backend services, configures the
+     * welcome message, loads featured content and the movies/series/products/cinemas sections,
+     * sets up animations and search behavior, and applies initial styling.</p>
+     *
+     * @param location  the location used to resolve relative paths for the root object, may be null
+     * @param resources the resources used to localize the root object, may be null
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         LOGGER.info("Initializing HomeClient interface...");
@@ -164,8 +174,13 @@ public class HomeClientController implements Initializable {
 
 
     /**
-     * Initialize all required services
-     */
+         * Initialize backend services and the controller's in-memory collections used for content and animations.
+         *
+         * Instantiates service clients (filmService, productService, seriesService, cinemaService),
+         * creates lists for recent items (recentFilms, recentSeries, recentProducts, recentCinemas),
+         * initializes dynamic animation collections (dynamicParticles, dynamicShapes) and the Random instance.
+         * Logs successful initialization and records a warning if an initialization error occurs.
+         */
     private void initializeServices() {
         try {
             filmService = new FilmService();
@@ -193,7 +208,9 @@ public class HomeClientController implements Initializable {
 
 
     /**
-     * Setup welcome message based on logged-in user
+     * Sets the welcome label text to the logged-in user's first and last name when available; otherwise sets a default welcome.
+     *
+     * Attempts to read a User object from the window's userData and updates the welcomeLabel. If no user is present or an error occurs, the label is set to "Welcome to RAKCHA!".
      */
     private void setupWelcomeMessage() {
         try {
@@ -234,7 +251,10 @@ public class HomeClientController implements Initializable {
 
 
     /**
-     * Load and setup featured content rotation
+     * Initialize the featured content display and start its automatic rotation.
+     *
+     * Calls updateFeaturedMovie to set the initial featured entry, then starts a Timeline
+     * that advances the featured item every 8 seconds and stores it in featuredRotationTimeline.
      */
     private void loadFeaturedContent() {
         // Start with first featured movie
@@ -249,7 +269,12 @@ public class HomeClientController implements Initializable {
 
 
     /**
-     * Update featured movie display
+     * Update the featured banner to display the movie at the current featured index.
+     *
+     * Sets the featured title and description from the selected entry and, if the image control is available,
+     * replaces the banner image with a cross-fade transition. If there are no featured entries or the
+     * selected entry is malformed, the method returns without changing the UI. Image loading errors are
+     * logged but do not throw.
      */
     private void updateFeaturedMovie() {
         if (featuredMovies.length == 0)
@@ -288,7 +313,7 @@ public class HomeClientController implements Initializable {
 
 
     /**
-     * Rotate to next featured movie
+     * Advance the featured index to the next entry and refresh the featured display.
      */
     private void rotateFeaturedMovie() {
         currentFeaturedIndex = (currentFeaturedIndex + 1) % featuredMovies.length;
@@ -297,7 +322,9 @@ public class HomeClientController implements Initializable {
 
 
     /**
-     * Load movies content into horizontal scroll container
+     * Populates the movies horizontal container with movie cards and initializes its carousel animation.
+     *
+     * Attempts to load recent films from the film service and create a card for each; if no films are available or loading fails, populates the container with placeholder movie cards. Always sets up the carousel animation for the movies container and logs errors or a missing container.
      */
     private void loadMoviesContent() {
         try {
@@ -354,7 +381,19 @@ public class HomeClientController implements Initializable {
 
 
     /**
-     * Load series content into horizontal scroll container
+     * Populate the series horizontal container with series cards and configure its carousel.
+     *
+     * Attempts to load up to 10 series from the configured series service and replaces the
+     * contents of {@code seriesContainer} with a card for each returned series. If the service
+     * returns no data or an error occurs, placeholder series cards are created instead. After
+     * populating the container the method initializes the carousel animation for the container
+     * and associated scroll pane.
+     *
+     * Side effects:
+     * - Updates the controller field {@code recentSeries} when real data is loaded.
+     * - Calls {@code createPlaceholderSeries()} when no data is available or on service failure.
+     * - Calls {@code setupCarouselAnimation(Node, ScrollPane)} to start the horizontal carousel.
+     * - Logs progress, warnings, and errors; handles exceptions internally and does not propagate them.
      */
     private void loadSeriesContent() {
         try {
@@ -409,7 +448,14 @@ public class HomeClientController implements Initializable {
 
 
     /**
-     * Load products content into horizontal scroll container
+     * Populate the products container with product cards and initialize its horizontal carousel.
+     *
+     * Attempts to load up to 10 products from the product service and, if products are available,
+     * creates and adds a card for each product to the products container. If the service returns no
+     * products or an error occurs, placeholder product cards are created instead. After populating
+     * the container, the method configures the carousel animation using the products scroll pane.
+     *
+     * If the products container is null, the method logs a warning and performs no UI updates.
      */
     private void loadProductsContent() {
         try {
@@ -464,7 +510,11 @@ public class HomeClientController implements Initializable {
 
 
     /**
-     * Load cinemas content into horizontal scroll container
+     * Populates the horizontal cinemas container with cinema cards retrieved from the cinema service.
+     *
+     * Attempts to read a page of cinemas from the configured service and add a card for each result to the cinemas container.
+     * If the service call fails or returns no content, the method populates the container with placeholder cinema cards.
+     * After filling the container it initializes the container's carousel scrolling animation.
      */
     private void loadCinemasContent() {
         try {
@@ -519,7 +569,10 @@ public class HomeClientController implements Initializable {
 
 
     /**
-     * Create a movie card component
+     * Create a UI card representing a Film with its poster, title, release year, and a generated rating.
+     *
+     * @param film the Film to represent in the card (used for image, title, year, and rating)
+     * @return a VBox containing the styled movie card node ready to be added to the scene graph
      */
     private VBox createMovieCard(Film film) {
         VBox card = new VBox(8);
@@ -643,7 +696,10 @@ public class HomeClientController implements Initializable {
 
 
     /**
-     * Create a series card component
+     * Builds a UI card for a TV series containing a poster image, title, and director label, and wires hover and click interactions.
+     *
+     * @param series the Series whose data populates the card (name, director, image)
+     * @return a configured VBox containing the series poster, title, and director label
      */
     private VBox createSeriesCard(Series series) {
         VBox card = new VBox(8);
@@ -733,7 +789,13 @@ public class HomeClientController implements Initializable {
 
 
     /**
-     * Create a product card component
+     * Create a visual card representing a product for display in the UI.
+     *
+     * The card shows the product image (falls back to a selection of themed images or a text placeholder if missing),
+     * the product name, and the formatted price, and it attaches hover styling and a click handler that opens product details.
+     *
+     * @param product the product to render in the card
+     * @return a VBox node containing the product image, name, price, and interaction handlers
      */
     private VBox createProductCard(Product product) {
         VBox card = new VBox(8);
@@ -833,7 +895,13 @@ public class HomeClientController implements Initializable {
 
 
     /**
-     * Setup card interactions (hover effects and click handlers)
+     * Attach hover visual effects and a click handler to a card VBox.
+     *
+     * Applies styling changes for mouse enter/exit to indicate hover state and executes
+     * the provided action when the card is clicked.
+     *
+     * @param card the VBox that represents the interactive card
+     * @param onClickAction the runnable to execute when the card is clicked
      */
     private void setupCardInteractions(VBox card, Runnable onClickAction) {
         card.setOnMouseEntered(e -> {
@@ -862,7 +930,10 @@ public class HomeClientController implements Initializable {
 
 
     /**
-     * Setup all animations for the interface
+     * Initialize and start all visual animations and dynamic decorative elements used by the home interface.
+     *
+     * Configures predefined particle and shape animations, applies content animations (such as fade-ins and rotations),
+     * and generates additional randomized dynamic particles and shapes added to the scene.
      */
     private void setupAnimations() {
         setupParticleAnimations();
@@ -874,7 +945,13 @@ public class HomeClientController implements Initializable {
 
 
     /**
-     * Create additional dynamic particles with randomness
+     * Generates and adds a set of randomized decorative particle nodes to the particles container.
+     *
+     * Creates multiple Circle particles with varied radius, position, opacity, color/gradient fills,
+     * drop shadows, and style classes, adds each to the controller's dynamicParticles list and the
+     * particlesContainer node, and starts per-particle advanced animations. The method logs the
+     * number of particles created and will log a warning if particle creation fails or the container
+     * is unavailable.
      */
     private void createDynamicParticles() {
         if (particlesContainer == null) {
@@ -963,7 +1040,12 @@ public class HomeClientController implements Initializable {
 
 
     /**
-     * Create additional dynamic shapes with better randomness
+     * Generates and adds randomized decorative shapes to the particlesContainer and starts their animations.
+     *
+     * Creates rectangles, circles, triangles, and diamonds with randomized position, size, rotation,
+     * opacity, gradient fill, stroke, and drop shadow; assigns optional CSS animation classes,
+     * stores each shape in the dynamicShapes list, appends it to the particlesContainer, and
+     * invokes the advanced shape animation setup for each created shape.
      */
     private void createDynamicShapes() {
         if (particlesContainer == null)
@@ -1108,7 +1190,11 @@ public class HomeClientController implements Initializable {
 
 
     /**
-     * Setup advanced animation for a dynamic particle
+     * Applies a composite floating animation to a particle, combining vertical and horizontal drift,
+     * pulsing scale, and fading effects that run indefinitely.
+     *
+     * @param particle the Circle node to animate
+     * @param delay initial delay in seconds before the animations begin
      */
     private void setupAdvancedParticleAnimation(Circle particle, double delay) {
         // Complex floating animation with multiple axes
@@ -1157,7 +1243,16 @@ public class HomeClientController implements Initializable {
 
 
     /**
-     * Setup advanced animation for a dynamic shape
+     * Attach and start a set of continuous visual animations on the given node.
+     *
+     * Applies independent rotation, horizontal and vertical scaling, and opacity
+     * oscillation to the provided node, and optionally a gentle translational
+     * drift. Each animation uses randomized durations, targets, and direction and
+     * runs indefinitely (with auto-reverse where applicable). Animations begin
+     * after the specified delay.
+     *
+     * @param shape the node to animate (e.g., a Shape, Group, or Region)
+     * @param delay initial delay in seconds before animations start
      */
     private void setupAdvancedShapeAnimation(javafx.scene.Node shape, double delay) {
         // Complex rotation animation
@@ -1218,7 +1313,10 @@ public class HomeClientController implements Initializable {
 
 
     /**
-     * Setup particle floating animations
+     * Initializes and starts floating animations for the particle nodes.
+     *
+     * Attaches a looping floating animation to each of the six particle Circle fields (if present)
+     * and staggers their start times by 0.5 seconds per particle index to create a natural, offset motion.
      */
     private void setupParticleAnimations() {
         Circle[] particles = { particle1, particle2, particle3, particle4, particle5, particle6 }
@@ -1235,7 +1333,10 @@ public class HomeClientController implements Initializable {
 
 
     /**
-     * Setup individual particle animation
+     * Applies a vertical floating translation and a pulsing fade animation to the given particle.
+     *
+     * @param particle the Circle node to animate
+     * @param delay    initial delay in seconds before the animation starts
      */
     private void setupParticleAnimation(Circle particle, double delay) {
         TranslateTransition moveTransition = new TranslateTransition(Duration.seconds(4), particle);
@@ -1257,8 +1358,21 @@ public class HomeClientController implements Initializable {
 
 
     /**
-     * Setup shape rotation and pulsing animations
-     */
+         * Apply animated effects to decorative shape nodes in the UI.
+         *
+         * <p>Starts continuous rotation on the available shape nodes used for background decoration and
+         * starts a pulsing scale/fade animation for the designated pulsing shape.</p>
+         *
+         * <p>Specifically:
+         * - shape1: continuous rotation with a 10-second cycle
+         * - shape2: continuous rotation with a 15-second cycle
+         * - shape3: continuous rotation with an 8-second cycle
+         * - shape5: continuous rotation with a 12-second cycle
+         * - shape6: continuous rotation with a 6-second cycle
+         * - shape4: pulsing (scale and fade) animation</p>
+         *
+         * <p>The method is null-safe and will skip any shape nodes that are not present.</p>
+         */
     private void setupShapeAnimations() {
         // Rotation animations
         if (shape1 != null)
@@ -1279,7 +1393,10 @@ public class HomeClientController implements Initializable {
 
 
     /**
-     * Setup rotation animation for a shape
+     * Applies a continuous 360-degree rotation to the specified node.
+     *
+     * @param shape    the node to animate
+     * @param duration the rotation period in seconds for one full 360° cycle
      */
     private void setupRotationAnimation(javafx.scene.Node shape, double duration) {
         RotateTransition rotation = new RotateTransition(Duration.seconds(duration), shape);
@@ -1291,7 +1408,11 @@ public class HomeClientController implements Initializable {
 
 
     /**
-     * Setup pulsing animation for a shape
+     * Applies a continuous pulsing scale and fade animation to the given node.
+     *
+     * The animation scales the node up and down and adjusts its opacity in a repeating cycle (~3 seconds per cycle).
+     *
+     * @param shape the JavaFX Node to animate with a pulsing effect
      */
     private void setupPulsingAnimation(javafx.scene.Node shape) {
         ScaleTransition scale = new ScaleTransition(Duration.seconds(3), shape);
@@ -1313,7 +1434,9 @@ public class HomeClientController implements Initializable {
 
 
     /**
-     * Setup content area animations
+     * Applies a fade-in animation to the main scrollable content area when available.
+     *
+     * <p>If {@code mainScrollPane} is non-null, its opacity is animated from 0.0 to 1.0 over 800 milliseconds.</p>
      */
     private void setupContentAnimations() {
         // Fade in the main content
@@ -1328,7 +1451,10 @@ public class HomeClientController implements Initializable {
 
 
     /**
-     * Setup search functionality
+     * Attach a listener to the search field that triggers searches for queries longer than two characters.
+     *
+     * <p>If the injected `searchField` is non-null, a listener is added to its text property which calls
+     * {@code performSearch(String)} whenever the new text length exceeds 2 characters.</p>
      */
     private void setupSearchFunctionality() {
         if (searchField != null) {
@@ -1345,7 +1471,9 @@ public class HomeClientController implements Initializable {
 
 
     /**
-     * Perform search across all content types
+     * Filter the currently displayed content using the provided search text.
+     *
+     * @param query the text used to filter visible movies, series, products, and cinemas
      */
     private void performSearch(String query) {
         // This would filter the displayed content based on the search query
@@ -1355,7 +1483,9 @@ public class HomeClientController implements Initializable {
 
 
     /**
-     * Apply initial styling and effects
+     * Applies initial UI styling by adding the "fade-in" CSS class to the root container.
+     *
+     * This triggers the initial load animation when the root container is available.
      */
     private void applyInitialStyling() {
         // Add CSS classes for animations
@@ -1366,7 +1496,11 @@ public class HomeClientController implements Initializable {
     }
 
 
-    // Navigation event handlers
+    /**
+     * Loads the movies view (filmuser.fxml) and replaces the current window's scene with it.
+     *
+     * @param event the ActionEvent that triggered this navigation
+     */
 
     @FXML
     void showMovies(ActionEvent event) {
@@ -1383,6 +1517,12 @@ public class HomeClientController implements Initializable {
     }
 
 
+    /**
+     * Navigates the application to the Series client view by loading and setting "SeriesClient.fxml"
+     * as the current scene on the existing stage.
+     *
+     * @param event the action event that triggered the navigation
+     */
     @FXML
     void showSeries(ActionEvent event) {
         try {
@@ -1398,6 +1538,11 @@ public class HomeClientController implements Initializable {
     }
 
 
+    /**
+     * Loads the product listing UI (AfficherProduitClient.fxml) into the current window.
+     *
+     * @param event the ActionEvent that triggered the navigation
+     */
     @FXML
     void showProducts(ActionEvent event) {
         try {
@@ -1413,6 +1558,11 @@ public class HomeClientController implements Initializable {
     }
 
 
+    /**
+     * Navigates the application to the cinemas dashboard view by loading and setting DashboardClientCinema.fxml as the current scene.
+     *
+     * If loading the FXML fails, the error is logged and the current scene is left unchanged.
+     */
     @FXML
     void showCinemas(ActionEvent event) {
         try {
@@ -1428,6 +1578,12 @@ public class HomeClientController implements Initializable {
     }
 
 
+    /**
+     * Navigates the application to the user's profile view by loading the Profile.fxml
+     * and replacing the current scene with the loaded content.
+     *
+     * @param event the ActionEvent that triggered the navigation
+     */
     @FXML
     void showProfile(ActionEvent event) {
         try {
@@ -1443,6 +1599,13 @@ public class HomeClientController implements Initializable {
     }
 
 
+    /**
+     * Clears the current user's session data and navigates the application back to the login screen.
+     *
+     * Loads the login FXML, clears the stage's user data, and replaces the scene with the login scene.
+     *
+     * @param event the ActionEvent that triggered the logout
+     */
     @FXML
     void logout(ActionEvent event) {
         try {
@@ -1459,7 +1622,11 @@ public class HomeClientController implements Initializable {
     }
 
 
-    // Content detail handlers
+    /**
+     * Open the movie details view for the given film and navigate to the movies screen.
+     *
+     * @param film the Film whose details should be displayed
+     */
 
     private void openMovieDetails(Film film) {
         LOGGER.info("Opening movie details for: " + film.getName());
@@ -1474,6 +1641,11 @@ public class HomeClientController implements Initializable {
     }
 
 
+    /**
+     * Open the detail view for the given series and navigate to the series screen.
+     *
+     * @param series the series whose details should be displayed
+     */
     private void openSeriesDetails(Series series) {
         LOGGER.info("Opening series details for: " + series.getName());
         // Navigate to series details or episode list
@@ -1487,6 +1659,11 @@ public class HomeClientController implements Initializable {
     }
 
 
+    /**
+     * Initiates navigation to the products view for the given product (for viewing details or adding to cart).
+     *
+     * @param product the product to present in the products view
+     */
     private void openProductDetails(Product product) {
         LOGGER.info("Opening product details for: " + product.getName());
         // Navigate to product details or add to cart
@@ -1500,7 +1677,13 @@ public class HomeClientController implements Initializable {
     }
 
 
-    // Placeholder content creators (for when services fail)
+    /**
+     * Populate the movies container with a predefined set of placeholder movie cards.
+     *
+     * This method clears the current movies container and fills it with a fixed list
+     * of popular movie titles and short descriptors to display when the film service
+     * fails or returns no data.
+     */
 
     private void createPlaceholderMovies() {
         String[] placeholderMovies = {
@@ -1524,6 +1707,12 @@ public class HomeClientController implements Initializable {
     }
 
 
+    /**
+     * Populates the series container with a fixed set of rich placeholder series cards.
+     *
+     * Creates a predefined list of series titles and short descriptions, builds a rich placeholder
+     * card for each via createRichPlaceholderCard, and adds them to the seriesContainer.
+     */
     private void createPlaceholderSeries() {
         String[] placeholderSeries = {
                 "Breaking Bad", "Game of Thrones", "The Office", "Stranger Things", "The Crown",
@@ -1548,6 +1737,12 @@ public class HomeClientController implements Initializable {
     }
 
 
+    /**
+     * Populate the products container with a predefined set of placeholder product cards.
+     *
+     * Clears the container and adds rich placeholder cards for a fixed list of product names
+     * paired with example prices to be shown when real product data is unavailable.
+     */
     private void createPlaceholderProducts() {
         String[] placeholderProducts = {
                 "Premium Popcorn", "VIP Movie Tickets", "Gourmet Candy Mix", "Specialty Drinks", "Movie Merchandise",
@@ -1571,7 +1766,15 @@ public class HomeClientController implements Initializable {
 
 
     /**
-     * Create a rich placeholder card with detailed information
+     * Builds a styled placeholder card to represent content when real data is unavailable.
+     *
+     * The card includes an image (selected by title and type with a network fallback), a title,
+     * a short description, a type label, and wired hover/click interactions for user feedback.
+     *
+     * @param title       the display title for the placeholder card
+     * @param description a short descriptive text to show under the title
+     * @param type        the content category (for example "Movie", "Series", or "Product") used to choose an appropriate image and label
+     * @return            a configured VBox representing the rich placeholder card
      */
     private VBox createRichPlaceholderCard(String title, String description, String type) {
         VBox card = new VBox(8);
@@ -1656,7 +1859,11 @@ public class HomeClientController implements Initializable {
 
 
     /**
-     * Get appropriate image URL based on content type and title
+     * Selects a stable placeholder image URL for a given content item.
+     *
+     * @param title the content title used to deterministically choose an image
+     * @param type  the content category such as "Movie", "Series", "Product", or "Cinema"
+     * @return      a URL string pointing to an image appropriate for the given type (or a generic placeholder URL if the type is unrecognized)
      */
     private String getImageUrlForType(String title, String type) {
         switch (type) {
@@ -1751,7 +1958,11 @@ public class HomeClientController implements Initializable {
 
 
     /**
-     * Create a cinema card component
+     * Builds a styled VBox representing a cinema card with image, name, and address,
+     * and attaches hover and click interactions that open the cinema details view.
+     *
+     * @param cinema the Cinema whose data (name, address, logo path) populates the card
+     * @return a configured VBox node that visually represents the cinema and handles user interaction
      */
     private VBox createCinemaCard(Cinema cinema) {
         VBox card = new VBox(8);
@@ -1853,7 +2064,16 @@ public class HomeClientController implements Initializable {
 
 
     /**
-     * Setup carousel animation for content containers
+     * Configures and starts an enhanced horizontal carousel auto-scroll for a content HBox and its ScrollPane.
+     *
+     * This method ensures the container has enough items (adds placeholders when needed), adjusts scroll pane
+     * policies for smooth auto-scrolling, creates a continuous Timeline to advance the horizontal scroll value
+     * with a graceful reset near the end, and installs hover interactions that pause the auto-scroll, enable
+     * manual panning, and provide brief scale-based visual feedback. It also adds a subtle scroll indicator
+     * animation and schedules the animation to start after layout completion. Errors are caught and logged.
+     *
+     * @param container the HBox containing the horizontal content items to be scrolled
+     * @param scrollPane the ScrollPane that displays the container and will be driven by the carousel animation
      */
     private void setupCarouselAnimation(HBox container, ScrollPane scrollPane) {
         if (container == null || scrollPane == null)
@@ -1964,8 +2184,17 @@ public class HomeClientController implements Initializable {
 
 
     /**
-     * Create additional placeholder content to ensure scrolling is visible
-     */
+         * Populate the given horizontal container with rich placeholder cards until it contains at least twelve items.
+         *
+         * <p>The method inspects the provided container to infer a content type (Movie, Series, Product, or Cinema)
+         * and appends rich placeholder cards created via {@code createRichPlaceholderCard} until the container's
+         * child count reaches a minimum of 12. Placeholder titles and descriptions are chosen cyclically from
+         * predefined arrays and numbered to produce distinct entries.</p>
+         *
+         * @param container the HBox to populate (expected to be one of moviesContainer, seriesContainer,
+         *                  productsContainer, or cinemasContainer); additional children will be appended to
+         *                  enable visible horizontal scrolling
+         */
     private void createAdditionalPlaceholderContent(HBox container) {
         int currentSize = container.getChildren().size();
         int targetSize = Math.max(12, currentSize); // Ensure at least 12 items for very visible scrolling
@@ -2011,8 +2240,13 @@ public class HomeClientController implements Initializable {
 
 
     /**
-     * Setup visual scroll indicator for the container
-     */
+         * Apply a subtle pulsing glow to indicate that the horizontal container is scrollable.
+         *
+         * Adds a repeating Timeline that animates the container's opacity to create a gentle visual hint
+         * that the HBox can be scrolled horizontally.
+         *
+         * @param container the HBox to receive the pulsing glow indicator
+         */
     private void setupScrollIndicator(HBox container) {
         // Add subtle glow effect that pulses to indicate scrolling
         Timeline glowAnimation = new Timeline(
@@ -2024,6 +2258,12 @@ public class HomeClientController implements Initializable {
     }
 
 
+    /**
+     * Populates the cinemas container with a fixed set of placeholder cinema cards.
+     *
+     * Clears any existing children from the cinemas container and adds ten placeholder
+     * cinema cards using predefined names and locations for display when real data is unavailable.
+     */
     private void createPlaceholderCinemas() {
         String[] placeholderCinemas = {
                 "CineMax Plaza", "MovieWorld IMAX", "Star Cinema Complex", "Grand Theater", "Royal Movies",
@@ -2046,6 +2286,11 @@ public class HomeClientController implements Initializable {
     }
 
 
+    /**
+     * Navigates to the cinemas view and attempts to display details for the specified cinema.
+     *
+     * @param cinema the cinema whose details should be presented
+     */
     private void openCinemaDetails(Cinema cinema) {
         LOGGER.info("Opening cinema details for: " + cinema.getName());
         // Navigate to cinema details or show cinema information
@@ -2059,25 +2304,44 @@ public class HomeClientController implements Initializable {
     }
 
 
-    // Additional navigation methods referenced in FXML
+    /**
+     * Navigate to the Movies view.
+     *
+     * @param event the action event that triggered this handler
+     */
     @FXML
     void browseMovies(ActionEvent event) {
         showMovies(event);
     }
 
 
+    /**
+     * Navigate to the cinemas view.
+     *
+     * @param event the action event that triggered the navigation
+     */
     @FXML
     void findCinemas(ActionEvent event) {
         showCinemas(event);
     }
 
 
+    /**
+     * Navigates the application to the series listing view.
+     *
+     * @param event the action event that triggered the navigation
+     */
     @FXML
     void browseSeries(ActionEvent event) {
         showSeries(event);
     }
 
 
+    /**
+     * Navigate to the user's profile view.
+     *
+     * @param event the action event that triggered the navigation
+     */
     @FXML
     void viewProfile(ActionEvent event) {
         showProfile(event);
@@ -2085,7 +2349,9 @@ public class HomeClientController implements Initializable {
 
 
     /**
-     * Cleanup method called when the controller is destroyed
+     * Stop animation timelines and clear dynamic particle and shape collections used by the controller.
+     *
+     * Performs a best-effort cleanup of resources created by this controller and logs outcome; exceptions are caught and logged.
      */
     public void cleanup() {
         try {
@@ -2117,4 +2383,3 @@ public class HomeClientController implements Initializable {
     }
 
 }
-

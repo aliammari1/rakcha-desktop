@@ -33,8 +33,10 @@ public class ShoppingCartService implements IService<ShoppingCart> {
     private final Connection connection;
 
     /**
-     * Constructs a new ShoppingCartService instance.
-     * Initializes database connection and creates tables if they don't exist.
+     * Creates a ShoppingCartService and prepares required database resources.
+     *
+     * Ensures a JDBC connection is obtained and the `shopping_cart` table exists with columns:
+     * `id` (BIGINT AUTO_INCREMENT PRIMARY KEY), `produit_id` (BIGINT), `quantity` (INT), and `user_id` (BIGINT).
      */
     public ShoppingCartService() {
         this.connection = DataSource.getInstance().getConnection();
@@ -52,6 +54,13 @@ public class ShoppingCartService implements IService<ShoppingCart> {
     }
 
 
+    /**
+     * Inserts a shopping cart entry into the database mapping a product to a user with a quantity.
+     *
+     * Persists the shoppingCart's product id, quantity, and user id into the shopping_cart table. SQL errors are logged and not propagated.
+     *
+     * @param shoppingCart the shopping cart to persist; its product and user must have valid (non-null) IDs
+     */
     @Override
     /**
      * Creates a new entity in the database.
@@ -77,9 +86,11 @@ public class ShoppingCartService implements IService<ShoppingCart> {
 
 
     /**
-     * Performs readUserShoppingCart operation.
+     * Retrieve all shopping cart entries for a given user.
      *
-     * @return the result of the operation
+     * @param userId the identifier of the user whose shopping cart to retrieve
+     * @return a list of ShoppingCart objects belonging to the specified user
+     * @throws SQLException if a database access error occurs
      */
     public List<ShoppingCart> readUserShoppingCart(final Long userId) throws SQLException {
         final UserService usersService = new UserService();
@@ -101,6 +112,11 @@ public class ShoppingCartService implements IService<ShoppingCart> {
     }
 
 
+    /**
+     * Update the shopping cart record identified by its id with the provided product, quantity, and user.
+     *
+     * @param shoppingCart the ShoppingCart whose id identifies the row to update; its product, quantity, and user values replace the existing values in the database
+     */
     @Override
     /**
      * Updates an existing entity in the database.
@@ -126,6 +142,11 @@ public class ShoppingCartService implements IService<ShoppingCart> {
     }
 
 
+    /**
+     * Remove the shopping_cart row identified by the given ShoppingCart's product and user.
+     *
+     * @param shoppingCart the ShoppingCart whose product ID and user ID are used to locate and delete the row
+     */
     @Override
     /**
      * Deletes an entity from the database.
@@ -149,6 +170,13 @@ public class ShoppingCartService implements IService<ShoppingCart> {
     }
 
 
+    /**
+     * Provide paginated access to shopping cart entries based on the given request.
+     *
+     * @param pageRequest pagination and sorting parameters
+     * @return a page containing shopping cart entries matching the request
+     * @throws UnsupportedOperationException always thrown because this method is not implemented
+     */
     @Override
     public Page<ShoppingCart> read(PageRequest pageRequest) {
         // TODO Auto-generated method stub
@@ -156,4 +184,3 @@ public class ShoppingCartService implements IService<ShoppingCart> {
     }
 
 }
-

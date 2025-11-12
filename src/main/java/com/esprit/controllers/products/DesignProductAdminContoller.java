@@ -120,12 +120,11 @@ public class DesignProductAdminContoller {
 
 
     /**
-     * Creates an `Alert` object and displays it with a title, header text, and
-     * content text provided as arguments.
+     * Display an information alert dialog showing the given message.
      *
-     * @param message
-     *                text to be displayed as an information alert when the
-     *                `showAlert()` method is called.
+     * The alert uses the title "Information" and no header text.
+     *
+     * @param message the text to display as the alert's content
      */
     @FXML
     private void showAlert(final String message) {
@@ -138,16 +137,9 @@ public class DesignProductAdminContoller {
 
 
     /**
-     * Allows the user to select an image file using a FileChooser dialog. If an
-     * image is selected, it sets the `image` field to the selected image.
+     * Prompt the user to choose an image file and, if one is selected, store it and display it in the controller's ImageView.
      *
-     * @param event
-     *              MouseEvent object that triggered the function, providing
-     *              information about the mouse event that initiated the image
-     *              selection process.
-     *              <p>
-     *              Event: MouseEvent Type: Input event related to mouse actions
-     *              (clicks, moves, releases, etc.) Parameters: none
+     * @param event the MouseEvent that triggered the file chooser
      */
     @FXML
     void selectImage(final MouseEvent event) {
@@ -163,24 +155,12 @@ public class DesignProductAdminContoller {
 
 
     /**
-     * Allows users to add a new product to a list. It validates user input,
-     * converts prices and quantities to integers, checks for invalid input, and
-     * adds the product to the existing list.
+     * Create and persist a new product from the current form inputs and add it to the table view.
      *
-     * @param actionEvent
-     *                    event that triggered the execution of the `add_produit()`
-     *                    method,
-     *                    which in this case is a button click.
-     *                    <p>
-     *                    - `actionEvent` represents an action event triggered by
-     *                    the user,
-     *                    such as clicking on a button or selecting an image. - The
-     *                    event
-     *                    may contain additional information, such as the source of
-     *                    the
-     *                    action (e.g., a button or a link) and the ID of the
-     *                    element that
-     *                    was activated.
+     * Validates that an image is selected, that required fields are present, that price and quantity
+     * are integers greater than zero, that the name contains only letters and digits, and that the
+     * description is at least 20 characters. On success the product is saved and appended to the
+     * Product_tableview; on failure an alert is shown describing the problem.
      */
     @FXML
     /**
@@ -276,24 +256,12 @@ public class DesignProductAdminContoller {
 
 
     /**
-     * Modifies the values of a `Product` object, such as its category, name, price,
-     * description, image, quantity, and ID, before saving the modified data to the
-     * database using a `ProductService`.
+     * Persist changes of the given Product to the application's data store.
      *
-     * @param produit
-     *                Product object to be modified, containing the product's ID,
-     *                category name, nom, prix, description, image, and quantity.
-     *                <p>
-     *                - `nouvelleCategorie`: The new category name for the product.
-     *                -
-     *                `nouveauNom`: The new product name. - `nouveauPrix`: The new
-     *                price
-     *                of the product. - `nouvelleDescription`: The new product
-     *                description. - `img`: The new image associated with the
-     *                product. -
-     *                `nouvelleQuantite`: The new quantity of the product in stock.
-     *                -
-     *                `id`: The unique identifier for the product in the database.
+     * Updates the stored product record so its fields (category, name, price,
+     * description, image, quantity, etc.) match the provided Product instance.
+     *
+     * @param produit the Product instance whose current field values will be persisted; must have a valid identifier
      */
     @FXML
     void modifier_produit(final Product produit) {
@@ -313,9 +281,18 @@ public class DesignProductAdminContoller {
 
 
     /**
-     * 1) sets the style class for the cell containing the Product object, 2)
-     * updates the graphic and text of the cell based on the Product object, and 3)
-     * makes the cell editable.
+     * Configure the Product_tableview: set up cell value factories, custom cell factories,
+     * and commit handlers for editing product fields; enable per-cell editing and image
+     * interactions; and load the initial page of products into the table.
+     *
+     * <p>Specifically, this method:
+     * - Binds columns to Product properties (category, name, price, description, quantity, image).
+     * - Provides an inline ComboBox edit for a product's category (activated by double-click)
+     *   and commits category changes to persistence.
+     * - Enables in-place editing for name, price, description and quantity and persists commits.
+     * - Renders product images in the image column, shows a placeholder when missing, and
+     *   triggers an image-change flow when an image cell is clicked.
+     * - Commits pending edits when Enter is pressed and populates the table from ProductService.
      */
     void afficher_produit() {
         // Créer un nouveau ComboBox
@@ -323,20 +300,14 @@ public class DesignProductAdminContoller {
         this.nomCP_tableC.setCellValueFactory(new PropertyValueFactory<Product, String>("nom_categorie"));
         this.nomCP_tableC.setCellFactory(column -> new TableCell<Product, String>() {
             /**
-             * Updates an item's graphic and adds an EventHandler to a ComboBox within the
-             * cell, which triggers when the ComboBox selection changes. It sets the
-             * selected category name as the item's category and updates the item's category
-             * in the produits table.
+             * Displays a category ComboBox on double-click and updates the product's category when selection changes.
              *
-             * @param item
-             *              current selected item or value in the `updateItem` function,
-             *              which
-             *              is being updated and processed accordingly.
+             * When the cell is double-clicked, the cell graphic is replaced with a ComboBox populated with category names;
+             * selecting an entry sets the Product's categories to the chosen category, commits the cell edit with the selected
+             * name, and restores the cell display.
              *
-             * @param empty
-             *              empty state of the item being updated, which determines whether
-             *              to
-             *              show or hide the combo box and its content.
+             * @param item the current cell value (category name) being rendered
+             * @param empty true if the cell is empty and should display no content
              */
             @Override
             /*
@@ -492,24 +463,15 @@ public class DesignProductAdminContoller {
 
 
             /**
-             * Updates an item's graphic and text based on its empty or non-empty status,
-             * and sets the corresponding properties of the function's image view.
+             * Update the cell's graphic to show the provided ImageView and record the cell's product.
              *
-             * @param item
-             *              ImageView object that is being updated, and its `Image` property
-             *              is set to the `Image` object of the corresponding table row
-             *              item.
+             * When `item` is non-null and `empty` is false, the cell's internal ImageView is set to
+             * the provided image and resized to 100x50; the cell's graphic is set to that ImageView
+             * and text is cleared. When `empty` is true or `item` is null, the cell's graphic and text
+             * are cleared.
              *
-             *              - `empty`: A boolean indicating whether `item` is empty or not.
-             *              -
-             *              `item`: The ImageView object to be updated, which contains an
-             *              image and other display properties. - `produit`: The product
-             *              associated with the item, which is obtained from the parent
-             *              TableRow object.
-             *
-             * @param empty
-             *              whether the imageView is empty or not and affects whether the
-             *              graphic and text are set to null or not.
+             * @param item  the ImageView whose Image will be displayed in the cell when present
+             * @param empty true if the cell should be cleared (no graphic or text), false otherwise
              */
             @Override
             protected void updateItem(final ImageView item, final boolean empty) {
@@ -558,39 +520,20 @@ public class DesignProductAdminContoller {
 
 
     /**
-     * Sets up a delete button for each item in a table, with the button's on-action
-     * triggering the deletion of the corresponding item from the data source and
-     * updating the table view accordingly.
+     * Configure the delete column so each row shows a "Delete" button that removes
+     * the corresponding product from storage and updates the table view.
+     *
+     * <p>The cell factory created by this method builds a per-row button which,
+     * when pressed, calls ProductService.delete(product), removes the product from
+     * Product_tableview's items, and refreshes the table.</p>
      */
     private void initDeleteColumn() {
         final Callback<TableColumn<Product, Void>, TableCell<Product, Void>> cellFactory = new Callback<>() {
             /**
-             * Generates a TableCell that displays a delete button for each item in a
-             * TableView. When the button is pressed, the corresponding item is deleted from
-             * the TableView and the underlying data source.
+             * Creates a TableCell that renders a "Delete" button which removes the corresponding Product from the table and data store.
              *
-             * @param param
-             *              TableColumn object from which the method is being called, and is
-             *              used to supply the necessary context for the method to work
-             *              properly.
-             *
-             *              - `param`: an instance of `TableColumn<Product, Void>`
-             *              representing the table column that triggered the cell's
-             *              creation.
-             *              - `getIndex()`: returns the index of the row where the cell is
-             *              located in the `produit` list. - `getItems()`: returns a list of
-             *              `Product` objects representing the data displayed in the column.
-             *
-             * @returns a `TableCell` object that displays a delete button for each item in
-             *          the table.
-             *
-             *          - The output is a `TableCell` object with a button graphic that
-             *          displays "Delete". - The button has a style class of
-             *          "delete-button". - When the button is clicked, the `onAction` method
-             *          is triggered, which calls the `delete` method of the
-             *          `ProductService` class to delete the corresponding item from the
-             *          `Product_tableview`. - After deletion, the table view is refreshed
-             *          to update the display.
+             * @param param the TableColumn for which this cell factory is being created; used to access row context when deleting
+             * @return a TableCell whose graphic is a "Delete" button that, when clicked, deletes the cell's Product and refreshes the TableView
              */
             @Override
             /**
@@ -617,23 +560,10 @@ public class DesignProductAdminContoller {
 
 
                     /**
-                     * Updates an item's graphic based on whether it is empty or not. When the item
-                     * is empty, the function sets the graphic to null; otherwise, it sets the
-                     * graphic to a button with the text "Delete".
+                     * Updates the cell's graphic: clears it when empty, otherwise displays the delete button.
                      *
-                     * @param item
-                     *              Void object being updated, which is passed to the superclass's
-                     *              `updateItem()` method and then processed further in the current
-                     *              method based on the value of the `empty` parameter.
-                     *
-                     *              - `item`: The object being updated, which may be `null`. -
-                     *              `empty`: A boolean indicating whether the item is empty or not.
-                     *
-                     * @param empty
-                     *              whether the item is empty or not and affects the graphic
-                     *              displayed
-                     *              in the function, with `true` indicating no item and `false`
-                     *              indicating an item present.
+                     * @param item the cell value (may be null; unused)
+                     * @param empty true if the cell is empty and should have no graphic, false to show the delete button
                      */
                     @Override
                     protected void updateItem(final Void item, final boolean empty) {
@@ -661,16 +591,9 @@ public class DesignProductAdminContoller {
     // Méthode pour changer l'image
 
     /**
-     * Allows the user to select an image, then sets the selected image as the
-     * product's image using a database connection.
+     * Prompts the user to select an image file, sets the selected file's URL as the product's image, and persists the update.
      *
-     * @param produit
-     *                object being updated with the selected image.
-     *                <p>
-     *                - `produit`: A `Product` object representing the product whose
-     *                image is being changed. - `image`: A string containing the URL
-     *                of
-     *                the existing image associated with the product.
+     * @param produit the Product whose image will be replaced; the method updates the product's image field and saves the change
      */
     private void changerImage(final Product produit) {
         final FileChooser fileChooser = new FileChooser();
@@ -694,16 +617,10 @@ public class DesignProductAdminContoller {
 
 
     /**
-     * Loads a new user interface (`DesignCategorieAdmin.fxml`) into a scene,
-     * creates a new stage with the new interface, and replaces the current stage
-     * with it, while closing the original stage.
+     * Open the category management UI (DesignCategorieAdmin.fxml) in a new window and close the current window.
      *
-     * @param event
-     *              event that triggered the function, specifically the button click
-     *              event that initiated the category management process.
-     *              <p>
-     *              - `event` is an `ActionEvent` object representing the triggering
-     *              event for the function.
+     * @param event the ActionEvent that triggered the navigation
+     * @throws IOException if the FXML resource cannot be loaded
      */
     @FXML
     void GestionCategorie(final ActionEvent event) throws IOException {
@@ -725,14 +642,11 @@ public class DesignProductAdminContoller {
 
 
     /**
-     * Searches for products based on a given keyword, filtering an observable list
-     * of products from the `ProductService`. It adds the filtered products to the
-     * `ProductTableView`.
+     * Filter and display products whose name, description, or category names contain the given keyword.
      *
-     * @param keyword
-     *                search query provided by the user and is used to filter the
-     *                list
-     *                of products in the `produitservice.read()` method.
+     * If `keyword` is null or empty, the first page of products is displayed.
+     *
+     * @param keyword search query; matched case-insensitively against product name, description, and category names
      */
     @FXML
     private void search(final String keyword) {
@@ -759,13 +673,11 @@ public class DesignProductAdminContoller {
 
 
     /**
-     * Filters a list of products based on a search query, by adding only the
-     * products that have the searched category name in their name.
+     * Restricts the products shown in the Product_tableview to those that have a category whose name contains the given query (case-insensitive).
      *
-     * @param searchText
-     *                   search query entered by the user, which is used to filter
-     *                   the list
-     *                   of products in the `Product_tableview`.
+     * If the query is empty, restores the full product list by calling afficher_produit().
+     *
+     * @param searchText text to match against product category names (case-insensitive)
      */
     private void filterCategorieProducts(final String searchText) {
         // Vérifier si le champ de recherche n'est pas vide
@@ -793,11 +705,9 @@ public class DesignProductAdminContoller {
 
 
     /**
-     * Retrieves a list of product categories from the service layer using the
-     * `ProductService`. The returned list contains all product categories.
+     * Fetches the first page of products (up to 10 items) from ProductService.
      *
-     * @returns a list of `Product` objects retrieved from the database through the
-     *          `ProductService`.
+     * @return the list of products from page 0, containing at most 10 items
      */
     private List<Product> getAllCategories() {
         final ProductService categoryservice = new ProductService();
@@ -807,22 +717,9 @@ public class DesignProductAdminContoller {
 
 
     /**
-     * Updates the opacity and visibility of an ancestor element, sets a `CheckBox`
-     * list as visible, clears existing check boxes, retrieves unique addresses from
-     * a database, creates a `VBox` for each address, adds the `VBox` to a parent
-     * element, and makes the parent element visible.
+     * Shows the category filter panel, dims the product table, and populates it with a checkbox for each distinct product category.
      *
-     * @param event
-     *              MouseEvent that triggered the function execution and provides
-     *              information about the event, such as the button that was clicked
-     *              or the location of the click within the screen.
-     *              <p>
-     *              - `event` is an instance of `MouseEvent`, which represents a
-     *              mouse
-     *              event such as a click or a drag. - The event may have various
-     *              properties such as the `button` (which button was clicked),
-     *              `clickCount` (the number of times the button was clicked), and
-     *              `location` (the coordinates of the event).
+     * Populates the controller's checkbox lists, adds the created checkboxes to the filterAnchor container, and makes the filter UI visible.
      */
     @FXML
     void filtrer(final MouseEvent event) {
@@ -853,16 +750,9 @@ public class DesignProductAdminContoller {
 
 
     /**
-     * Retrieves a list of category names from a database and returns it as a list
-     * of strings.
+     * Collects and returns distinct product category names present in the database.
      *
-     * @returns a list of distinct category names retrieved from the database.
-     *          <p>
-     *          - The output is a list of strings, representing the categories of
-     *          products obtained from the database. - The list contains distinct
-     *          category names as extracted from the `Categorie` objects in the
-     *          `categories` list. - The categories are determined by the
-     *          `nom_categorie` field of each `Product` object.
+     * @return a list of distinct category names found across all products
      */
     public List<String> getProductCategory() {
         // Récupérer tous les cinémas depuis la base de données
@@ -873,20 +763,11 @@ public class DesignProductAdminContoller {
 
 
     /**
-     * Filters a list of cinemas based on selected categories and statuses, updates
-     * the TableView with the filtered results.
+     * Apply selected category filters, restore UI visibility, and refresh the product table.
      *
-     * @param event
-     *              action event that triggers the execution of the `filtercinema()`
-     *              method.
-     *              <p>
-     *              - Type: ActionEvent, indicating that the event was triggered by
-     *              an
-     *              action (e.g., button click) - Source: the object that generated
-     *              the event (e.g., a button)
-     *              <p>
-     *              In summary, `event` is an instance of the ActionEvent class,
-     *              providing information about the source and type of the event.
+     * Filters the available products to those whose category names include all currently selected
+     * category checkboxes, sets the TableView items to the filtered results, and makes the
+     * filter and form UI components visible as appropriate.
      */
     @FXML
     /**
@@ -915,15 +796,9 @@ public class DesignProductAdminContoller {
 
 
     /**
-     * Streams, filters, and collects the selected addresses from the
-     * `addressCheckBoxes` array, returning a list of strings representing the
-     * selected categories.
+     * Collects the text values of all selected address checkboxes.
      *
-     * @returns a list of selected addresses.
-     *          <p>
-     *          - The list contains only selected addresses from the
-     *          `addressCheckBoxes` stream. - Each element in the list is a string
-     *          representing the text of the corresponding selected address.
+     * @return a list containing the text of each selected checkbox from `addressCheckBoxes`.
      */
     private List<String> getSelectedCategories() {
         // Récupérer les adresses sélectionnées dans l'AnchorPane de filtrage
@@ -933,18 +808,10 @@ public class DesignProductAdminContoller {
 
 
     /**
-     * Charges a new FXML file (`CommentaireProduct.fxml`), creates a new scene with
-     * it, and attaches the scene to a new stage. It then closes the current stage
-     * and shows the new one.
-     *
-     * @param event
-     *              ActionEvent object that triggered the function execution,
-     *              providing information about the source of the event and allowing
-     *              the function to handle the appropriate action.
-     *              <p>
-     *              - `event`: an ActionEvent object representing a user action that
-     *              triggered the function.
-     */
+         * Opens the CommentaireProduct UI in a new window and closes the current window.
+         *
+         * @param event the ActionEvent that triggered the navigation to the CommentaireProduct view
+         */
     @FXML
     void cinemaclient(final ActionEvent event) {
         try {
@@ -973,19 +840,12 @@ public class DesignProductAdminContoller {
 
 
     /**
-     * Loads a new FXML file "/ui//ui/DesignEvenementAdmin.fxml" and creates a new
-     * scene with it, replacing the current stage with the new scene.
+     * Open the DesignEvenementAdmin.fxml UI in a new window and close the current window.
      *
-     * @param event
-     *              ActionEvent object that triggered the event handling, providing
-     *              the source of the event and allowing the code to access the
-     *              relevant information.
-     *              <p>
-     *              - `event` is an `ActionEvent` representing a user action that
-     *              triggered the function execution. - The source of the event is
-     *              the
-     *              element in the UI that was interacted with by the user, which is
-     *              passed as the parameter to the function.
+     * Loads the FXML resource at /ui//ui/DesignEvenementAdmin.fxml, creates and shows a new Stage
+     * containing that scene, then closes the stage from which the action originated.
+     *
+     * @param event the ActionEvent that triggered the navigation; used to locate and close the originating window
      */
     @FXML
     void eventClient(final ActionEvent event) {
@@ -1014,19 +874,10 @@ public class DesignProductAdminContoller {
 
 
     /**
-     * Loads a new FXML interface, creates a new scene, and attaches it to a new
-     * stage, replacing the current stage.
+     * Open the product administration UI in a new window and close the current window.
      *
-     * @param event
-     *              ActionEvent object triggered by the user's action, which
-     *              initiates
-     *              the code execution and loads the new interface in the scene.
-     *              <p>
-     *              - It is an instance of `ActionEvent`, which represents an event
-     *              triggered by a user action on a JavaFX component. - The source
-     *              of
-     *              the event is typically a button or other control that initiated
-     *              the action.
+     * Loads the FXML resource "/ui/produits/DesignProductAdmin.fxml", sets it as the Scene
+     * of a newly created Stage (title "products"), shows that Stage, and closes the originating Stage.
      */
     @FXML
     void produitClient(final ActionEvent event) {
@@ -1056,14 +907,9 @@ public class DesignProductAdminContoller {
 
 
     /**
-     * Appears to be a handler for an action event, likely related to the execution
-     * of client-side code. It does not contain any explicit logic or functionality
-     * beyond calling the default behavior of the `void` return type.
+     * Placeholder handler invoked to open or manage the client profile view.
      *
-     * @param event
-     *              occurrence of an action event that triggered the execution of
-     *              the
-     *              `profilclient` method.
+     * @param event the ActionEvent that triggered this handler
      */
     @FXML
     void profilclient(final ActionEvent event) {
@@ -1071,19 +917,9 @@ public class DesignProductAdminContoller {
 
 
     /**
-     * Loads a new user interface, creates a new stage with it, and replaces the
-     * current stage with the new one.
+     * Opens the movie user interface in a new window and closes the current window.
      *
-     * @param event
-     *              ActionEvent object that triggered the `MovieClient()` method,
-     *              providing information about the action that was performed, such
-     *              as
-     *              the source of the event and the type of event.
-     *              <p>
-     *              - Event type: The event type is `ActionEvent`, indicating that
-     *              the
-     *              event was triggered by an action (such as clicking a button or
-     *              pressing a key).
+     * @param event the ActionEvent that triggered navigation; used to obtain the current window (stage)
      */
     @FXML
     void MovieClient(final ActionEvent event) {
@@ -1112,15 +948,7 @@ public class DesignProductAdminContoller {
 
 
     /**
-     * Loads a new FXML view, creates a new scene and stage, and replaces the
-     * current stage with the new one.
-     *
-     * @param event
-     *              ActionEvent that triggered the function, providing information
-     *              about the source of the event and any relevant data.
-     *              <p>
-     *              - Event source: The object that generated the event. - Type of
-     *              event: The type of event (e.g., button click, window closing).
+     * Opens the Series administration view in a new window and closes the current window.
      */
     @FXML
     void SerieClient(final ActionEvent event) {
@@ -1149,18 +977,12 @@ public class DesignProductAdminContoller {
 
 
     /**
-     * Allows the user to select an image file from a list of accepted formats,
-     * saves it to a specified directory, and sets the selected image as the `image`
-     * field's new image.
+     * Opens a file chooser for PNG/JPG images, uploads the selected file to Cloudinary,
+     * stores the resulting URL in the controller's cloudinaryImageUrl field, and displays
+     * the uploaded image in the controller's ImageView.
      *
-     * @param event
-     *              MouseEvent object that triggered the function's execution and
-     *              provides information about the user's action, such as the button
-     *              that was clicked or the position of the mouse pointer, which is
-     *              not used in this particular function.
-     *              <p>
-     *              - `MouseEvent event`: represents an event generated by a mouse
-     *              button press or release, or a mouse move.
+     * <p>Does nothing if the user cancels the file chooser. Errors during upload are
+     * logged and handled internally.
      */
     @FXML
     void importImage(final MouseEvent event) {
@@ -1191,4 +1013,3 @@ public class DesignProductAdminContoller {
     }
 
 }
-

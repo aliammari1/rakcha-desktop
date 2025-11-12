@@ -30,10 +30,9 @@ public class SharedData {
 
 
     /**
-     * Returns the instance of the SharedData class. If the instance does not exist,
-     * a new instance is created.
+     * Get the singleton SharedData instance, creating it if necessary.
      *
-     * @return The instance of the SharedData class.
+     * @return the current SharedData singleton instance
      */
     public static SharedData getInstance() {
         if (null == instance) {
@@ -44,4 +43,3 @@ public class SharedData {
     }
 
 }
-

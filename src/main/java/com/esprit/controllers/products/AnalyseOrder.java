@@ -50,14 +50,10 @@ public class AnalyseOrder implements Initializable {
     private CategoryAxis xOrderAxis;
 
     /**
-     * Initializes the controller after its root element has been completely
-     * processed.
-     * This method calls updateGraphs() to load and display the order statistics.
+     * Initialize the controller and load order statistics into the charts.
      *
-     * @param location  The location used to resolve relative paths for the root
-     *                  object, or null if the location is not known
-     * @param resources The resources used to localize the root object, or null if
-     *                  the root object was not localized
+     * @param location  the location used to resolve relative paths for the root object, or null if unknown
+     * @param resources the resources used to localize the root object, or null if not localized
      */
     @Override
     /**
@@ -71,17 +67,10 @@ public class AnalyseOrder implements Initializable {
 
 
     /**
-     * Updates the charts with order and category data from the database.
-     * 
-     * <p>
-     * This method:
-     * 1. Clears existing chart data
-     * 2. Retrieves orders, order items, and categories from their respective
-     * services
-     * 3. Analyzes orders by date and status (in progress vs. paid)
-     * 4. Analyzes product categories purchased by date
-     * 5. Configures and populates the charts with the analyzed data
-     * </p>
+     * Refreshes the order and category charts using current data from services.
+     *
+     * <p>Clears both charts and repopulates them with date-grouped counts for orders
+     * ("en cours" and "payee") and per-category purchase counts for paid orders.</p>
      */
     private void updateGraphs() {
         // Mettre à jour les graphiques ici
@@ -181,4 +170,3 @@ public class AnalyseOrder implements Initializable {
     }
 
 }
-

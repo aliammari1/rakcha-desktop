@@ -34,8 +34,10 @@ public class CommentService implements IService<Comment> {
     private final Connection connection;
 
     /**
-     * Constructs a new CommentService instance.
-     * Initializes database connection and creates tables if they don't exist.
+     * Initializes the CommentService by obtaining a JDBC connection and ensuring the comments table exists.
+     *
+     * The ensured table has columns: id (BIGINT primary key auto-increment), client_id (BIGINT not null),
+     * comment_text (TEXT not null), product_id (BIGINT not null), and created_at (TIMESTAMP default current timestamp).
      */
     public CommentService() {
         this.connection = DataSource.getInstance().getConnection();
@@ -64,6 +66,11 @@ public class CommentService implements IService<Comment> {
     }
 
 
+    /**
+     * Inserts the provided Comment into the comments table, persisting its client id, comment text, and product id.
+     *
+     * @param comment the Comment to persist; its client and product must have valid ids
+     */
     @Override
     /**
      * Creates a new entity in the database.
@@ -88,9 +95,11 @@ public class CommentService implements IService<Comment> {
 
 
     /**
-     * Performs read operation.
+     * Retrieve all comments from the data store and return them as Comment objects.
      *
-     * @return the result of the operation
+     * Each returned Comment includes its associated client and product resolved via the user and product services.
+     *
+     * @return a list of all comments; the list is empty if no comments are found or an error occurs
      */
     public List<Comment> read() {
         final List<Comment> comments = new ArrayList<>();
@@ -116,6 +125,11 @@ public class CommentService implements IService<Comment> {
     }
 
 
+    /**
+     * Placeholder for updating an existing comment; currently not implemented.
+     *
+     * @param comment the Comment to update (ignored)
+     */
     @Override
     /**
      * Updates an existing entity in the database.
@@ -127,6 +141,11 @@ public class CommentService implements IService<Comment> {
     }
 
 
+    /**
+     * Removes the specified comment from persistent storage.
+     *
+     * @param comment the Comment whose record should be deleted (identified by its id)
+     */
     @Override
     /**
      * Deletes an entity from the database.
@@ -139,10 +158,10 @@ public class CommentService implements IService<Comment> {
 
 
     /**
-     * Reads a comment by client ID.
+     * Retrieves the first comment found for the given client ID.
      *
-     * @param clientId the ID of the client
-     * @return the comment by the specified client, or null if not found
+     * @param clientId the client's database identifier
+     * @return the first matching Comment, or null if none found
      */
     public Comment readByClientId(final int clientId) {
         Comment comment = null;
@@ -199,6 +218,13 @@ public class CommentService implements IService<Comment> {
     }
 
 
+    /**
+     * Retrieve a page of comments for the given paging request.
+     *
+     * @param pageRequest paging and sorting parameters that specify which page of comments to return
+     * @return a Page of Comment representing the requested page of results
+     * @throws UnsupportedOperationException always; this method is not implemented
+     */
     @Override
     public Page<Comment> read(PageRequest pageRequest) {
         // TODO Auto-generated method stub
@@ -206,4 +232,3 @@ public class CommentService implements IService<Comment> {
     }
 
 }
-

@@ -34,9 +34,11 @@ public class FilmRatingService implements IService<FilmRating> {
     private final FilmService filmService;
 
     /**
-     * Constructs a new FilmRatingService instance.
-     * Initializes database connection, related services, and creates tables if they
-     * don't exist.
+     * Initialize the service by acquiring a database connection, creating required dependent services, and ensuring the film_ratings table exists.
+     *
+     * <p>This constructor obtains a JDBC connection, instantiates UserService and FilmService, and creates the
+     * film_ratings table with columns (id, film_id, user_id, rating, created_at) and a unique constraint on (film_id, user_id)
+     * if the table does not already exist. Errors during table creation are logged.</p>
      */
     public FilmRatingService() {
         this.connection = DataSource.getInstance().getConnection();
@@ -68,6 +70,12 @@ public class FilmRatingService implements IService<FilmRating> {
     }
 
 
+    /**
+     * Persist the given film rating to the database.
+     *
+     * @param filmRating the FilmRating whose film id, user id, and rating will be inserted into the film_ratings table
+     * @throws RuntimeException if a database error prevents inserting the rating
+     */
     @Override
     /**
      * Creates a new entity in the database.
@@ -91,6 +99,13 @@ public class FilmRatingService implements IService<FilmRating> {
     }
 
 
+    /**
+     * Retrieves all film ratings from the database and resolves each rating's associated
+     * Film and Client; ratings whose related Film or Client cannot be loaded are skipped.
+     *
+     * @return a list of FilmRating objects containing id, film, client, and rating;
+     *         returns an empty list if no ratings are found or if an error occurs
+     */
     public List<FilmRating> read() {
         final List<FilmRating> ratings = new ArrayList<>();
         final String req = "SELECT * FROM film_ratings";
@@ -124,6 +139,12 @@ public class FilmRatingService implements IService<FilmRating> {
     }
 
 
+    /**
+     * Updates the stored rating for the given film and client.
+     *
+     * @param filmRating the FilmRating containing the film, client, and new rating to persist
+     * @throws RuntimeException if a database error occurs while updating the rating
+     */
     @Override
     /**
      * Updates an existing entity in the database.
@@ -147,6 +168,12 @@ public class FilmRatingService implements IService<FilmRating> {
     }
 
 
+    /**
+     * Deletes the film rating identified by the film and user contained in the provided object.
+     *
+     * @param filmRating the FilmRating whose film ID and user ID identify the row to remove
+     * @throws RuntimeException if a database access error occurs while deleting the rating
+     */
     @Override
     /**
      * Deletes an entity from the database.
@@ -170,9 +197,10 @@ public class FilmRatingService implements IService<FilmRating> {
 
 
     /**
-     * Retrieves the AvergeRating value.
+     * Fetches the average rating for a film.
      *
-     * @return the AvergeRating value
+     * @param id_film the film's id to compute the average rating for
+     * @return the average rating for the specified film, or 0.0 if no ratings exist or an error occurs
      */
     public double getAvergeRating(final Long id_film) {
         final String req = "SELECT AVG(rating) AS averageRate FROM film_ratings WHERE film_id =?";
@@ -195,9 +223,13 @@ public class FilmRatingService implements IService<FilmRating> {
 
 
     /**
-     * Retrieves the AverageRatingSorted value.
+     * Retrieves films with their average ratings sorted from highest to lowest.
      *
-     * @return the AverageRatingSorted value
+     * <p>Only films that can be resolved via the FilmService are included. Each returned
+     * FilmRating contains the Film and its average rating converted to an integer by
+     * truncating any fractional part.</p>
+     *
+     * @return a list of FilmRating objects ordered by average rating descending
      */
     public List<FilmRating> getAverageRatingSorted() {
         final String req = "SELECT film_id, AVG(rating) AS averageRate FROM film_ratings GROUP BY film_id ORDER BY averageRate DESC ";
@@ -222,10 +254,12 @@ public class FilmRatingService implements IService<FilmRating> {
 
 
     /**
-     * Performs ratingExists operation.
-     *
-     * @return the result of the operation
-     */
+         * Retrieve the film rating for a specific film and user if one exists.
+         *
+         * @param id_film the ID of the film
+         * @param id_user the ID of the user
+         * @return the `FilmRating` for the given film and user, or `null` if no rating exists or related entities cannot be loaded
+         */
     public FilmRating ratingExists(final Long id_film, final Long id_user) {
         final String req = "SELECT * FROM film_ratings WHERE film_id =? AND user_id=? ";
         try (final PreparedStatement preparedStatement = this.connection.prepareStatement(req)) {
@@ -254,9 +288,12 @@ public class FilmRatingService implements IService<FilmRating> {
 
 
     /**
-     * Retrieves the UserRatings value.
+     * Retrieve all film ratings submitted by the specified user.
      *
-     * @return the UserRatings value
+     * Only includes ratings where both the user and the film exist in their respective services.
+     *
+     * @param userId the ID of the user whose ratings to retrieve
+     * @return a list of FilmRating objects for the given user; empty if none are found
      */
     public List<FilmRating> getUserRatings(Long userId) {
         List<FilmRating> ratings = new ArrayList<>();
@@ -287,9 +324,12 @@ public class FilmRatingService implements IService<FilmRating> {
 
 
     /**
-     * Retrieves the TopRatedFilms value.
+     * Retrieve the top 10 films ranked by average user rating.
      *
-     * @return the TopRatedFilms value
+     * Each returned FilmRating contains the Film and its average rating rounded to the nearest integer;
+     * films without any stored ratings are excluded.
+     *
+     * @return a list of FilmRating objects for the top 10 films ordered by descending average rating; an empty list if none are available
      */
     public List<FilmRating> getTopRatedFilms() {
         final String req = "SELECT film_id, AVG(rating) AS averageRate FROM film_ratings GROUP BY film_id ORDER BY averageRate DESC LIMIT 10";
@@ -314,10 +354,15 @@ public class FilmRatingService implements IService<FilmRating> {
     }
 
 
+    /**
+     * Placeholder for paginated retrieval of FilmRating entities; currently unimplemented.
+     *
+     * @param pageRequest pagination and sorting parameters for the requested page
+     * @throws UnsupportedOperationException always thrown with message "Unimplemented method 'read'"
+     */
     @Override
     public Page<FilmRating> read(PageRequest pageRequest) {
         throw new UnsupportedOperationException("Unimplemented method 'read'");
     }
 
 }
-

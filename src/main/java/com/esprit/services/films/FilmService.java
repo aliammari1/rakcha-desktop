@@ -51,8 +51,10 @@ public class FilmService implements IService<Film> {
 ;
 
     /**
-     * Constructs a new FilmService instance.
-     * Initializes database connection and creates tables if they don't exist.
+     * Initialize the FilmService by establishing a database connection and ensuring required schema exists.
+     *
+     * <p>Creates the following tables if they do not already exist: {@code film_categories}, {@code actors},
+     * {@code films}, {@code film_category}, {@code film_actor}, {@code film_comments}, and {@code film_ratings}.</p>
      */
     public FilmService() {
         this.connection = DataSource.getInstance().getConnection();
@@ -133,7 +135,9 @@ public class FilmService implements IService<Film> {
 
 
     /**
-     * @return int
+     * Retrieve the last inserted film ID.
+     *
+     * @return the ID of the most recently created film, or 0 if no film has been inserted yet
      */
     public static int getFilmLastInsertID() {
         return FilmService.filmLastInsertID;
@@ -141,8 +145,10 @@ public class FilmService implements IService<Film> {
 
 
     /**
-     * @param query
-     * @return String
+     * Retrieves the IMDb URL for the first search result matching the given query.
+     *
+     * @param query the search string (e.g., a film title) used to find IMDb results
+     * @return the IMDb URL of the first match, or the fallback string "imdb.com" if no result is found or an error occurs
      */
     public static String getIMDBUrlbyNom(final String query) {
         try {
@@ -199,6 +205,12 @@ public class FilmService implements IService<Film> {
     }
 
 
+    /**
+     * Insert the given Film into the database and record its generated primary key.
+     *
+     * @param film the Film to persist; its generated ID is stored in {@code FilmService.filmLastInsertID} when available
+     * @throws RuntimeException if a database error occurs while inserting the film
+     */
     @Override
     /**
      * Creates a new entity in the database.
@@ -239,6 +251,15 @@ public class FilmService implements IService<Film> {
     }
 
 
+    /**
+     * Retrieve a page of films according to the given pagination and optional sorting parameters.
+     *
+     * The method returns a Page containing the films for the requested page along with pagination
+     * metadata. If a database error occurs, an empty Page is returned with total elements set to 0.
+     *
+     * @param pageRequest pagination parameters (page index, page size, and optional sort column/direction)
+     * @return a Page of Film objects for the requested page and pagination metadata; an empty Page with total 0 on error
+     */
     @Override
     /**
      * Retrieves films with pagination support.
@@ -288,11 +309,11 @@ public class FilmService implements IService<Film> {
 
 
     /**
-     * Helper method to build Film object from ResultSet.
+     * Constructs a Film from the current row of the given ResultSet.
      *
-     * @param rs the ResultSet containing film data
-     * @return the Film object
-     * @throws SQLException if there's an error reading from ResultSet
+     * @param rs the ResultSet positioned at a film row
+     * @return the Film populated with values from the ResultSet row
+     * @throws SQLException if reading any column from the ResultSet fails
      */
     private Film buildFilmFromResultSet(ResultSet rs) throws SQLException {
         return Film.builder()
@@ -307,9 +328,15 @@ public class FilmService implements IService<Film> {
 
 
     /**
-     * Performs sort operation.
+     * Returns a page of films sorted by the specified column.
      *
-     * @return the result of the operation
+     * The method validates the provided sort column against allowed columns; if the column is not allowed,
+     * it returns results using the service's default sorting. On SQL errors it logs the failure and returns
+     * a page containing any films successfully read before the error.
+     *
+     * @param pageRequest pagination parameters (page index and page size)
+     * @param p the column name to sort by; must be one of the allowed sort columns
+     * @return a Page of Film objects sorted by the specified column (or by default ordering if `p` is invalid)
      */
     public Page<Film> sort(PageRequest pageRequest, final String p) {
         final List<Film> filmArrayList = new ArrayList<>();
@@ -338,9 +365,10 @@ public class FilmService implements IService<Film> {
 
 
     /**
-     * Retrieves the Film value.
+     * Fetches the film with the given id from the database.
      *
-     * @return the Film value
+     * @param id the film's primary key
+     * @return the Film with the specified id, or {@code null} if no film was found
      */
     public Film getFilm(final int id) {
         Film film = null;
@@ -361,6 +389,13 @@ public class FilmService implements IService<Film> {
     }
 
 
+    /**
+     * Update the database record for the given film using its id.
+     *
+     * The film's name, image, duration, description, and release year are written to the row identified by film.getId().
+     *
+     * @param film the Film whose id selects the row to update; its name, image, duration, description, and releaseYear are applied
+     */
     @Override
     /**
      * Updates an existing entity in the database.
@@ -388,6 +423,14 @@ public class FilmService implements IService<Film> {
     }
 
 
+    /**
+     * Remove the database record for the given film.
+     *
+     * Deletes the row from the `films` table identified by the film's id.
+     *
+     * @param film the Film whose persistent record should be removed
+     * @throws RuntimeException if a database error prevents deletion
+     */
     @Override
     /**
      * Deletes an entity from the database.
@@ -410,9 +453,10 @@ public class FilmService implements IService<Film> {
 
 
     /**
-     * Retrieves the Film value.
+     * Retrieves the film with the specified database ID.
      *
-     * @return the Film value
+     * @param film_id the film's database ID
+     * @return the Film for the specified ID, or null if no matching record exists
      */
     public Film getFilm(final Long film_id) {
         String query = "SELECT * FROM films WHERE id = ?";
@@ -435,9 +479,10 @@ public class FilmService implements IService<Film> {
 
 
     /**
-     * Retrieves the FilmByName value.
+     * Finds a film by its exact name.
      *
-     * @return the FilmByName value
+     * @param nom_film the exact film name to search for
+     * @return the Film with the given name, or {@code null} if no matching film exists
      */
     public Film getFilmByName(final String nom_film) {
         Film film = null;
@@ -459,9 +504,10 @@ public class FilmService implements IService<Film> {
 
 
     /**
-     * Retrieves the TrailerFilm value.
+     * Retrieve the YouTube trailer URL for a film by its name.
      *
-     * @return the TrailerFilm value
+     * @param nomFilm the film name to search for a trailer
+     * @return the trailer URL if available, or an empty string when no trailer is found or an error occurs
      */
     public String getTrailerFilm(final String nomFilm) {
         String s = "";
@@ -477,4 +523,3 @@ public class FilmService implements IService<Film> {
     }
 
 }
-

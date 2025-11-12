@@ -40,8 +40,10 @@ public class CinemaCommentService implements IService<CinemaComment> {
 ;
 
     /**
-     * Constructs a new CinemaCommentService with database connection and required
-     * services. Creates tables if they don't exist.
+     * Initializes the service by obtaining a database connection, creating required service clients,
+     * and ensuring the `cinema_comment` table exists.
+     *
+     * <p>Any exceptions raised while creating database tables are logged.</p>
      */
     public CinemaCommentService() {
         this.connection = DataSource.getInstance().getConnection();
@@ -73,6 +75,13 @@ public class CinemaCommentService implements IService<CinemaComment> {
     }
 
 
+    /**
+     * Persists a CinemaComment to the database.
+     *
+     * Stores the cinema id, client id, comment text, and sentiment in the cinema_comment table.
+     *
+     * @param cinemaComment the CinemaComment to persist; its `cinema` and `client` must have non-null IDs
+     */
     @Override
     /**
      * Creates a new entity in the database.
@@ -97,6 +106,11 @@ public class CinemaCommentService implements IService<CinemaComment> {
     }
 
 
+    /**
+     * Updates the stored cinema comment to match the provided CinemaComment's text and sentiment.
+     *
+     * @param cinemaComment the CinemaComment whose comment text and sentiment will be updated; its `id` identifies the row to modify
+     */
     @Override
     /**
      * Updates an existing entity in the database.
@@ -120,6 +134,11 @@ public class CinemaCommentService implements IService<CinemaComment> {
     }
 
 
+    /**
+     * Delete the specified cinema comment from the database using its identifier.
+     *
+     * @param cinemaComment the CinemaComment to remove; its `id` field identifies the row to delete
+     */
     @Override
     /**
      * Deletes an entity from the database.
@@ -195,10 +214,10 @@ public class CinemaCommentService implements IService<CinemaComment> {
 
 
     /**
-     * Retrieves comments by cinema ID.
+     * Retrieve all comments associated with the specified cinema.
      *
-     * @param cinemaId the ID of the cinema to get comments for
-     * @return list of comments for the specified cinema
+     * @param cinemaId the ID of the cinema whose comments should be returned
+     * @return a list of {@link CinemaComment} for the specified cinema; an empty list if none are found or if an error occurs
      */
     public List<CinemaComment> getCommentsByCinemaId(Long cinemaId) {
         List<CinemaComment> comments = new ArrayList<>();
@@ -225,8 +244,13 @@ public class CinemaCommentService implements IService<CinemaComment> {
 
 
     /**
-     * @param rs
-     * @return CinemaComment
+     * Builds a CinemaComment from the current row of the provided ResultSet.
+     *
+     * <p>Resolves the referenced Cinema and Client; if either referenced entity is not found or a
+     * SQLException occurs while reading the row, the method returns {@code null}.</p>
+     *
+     * @param rs the ResultSet positioned at the row to map
+     * @return the constructed CinemaComment, or {@code null} if required referenced entities are missing or an error occurs
      */
     private CinemaComment buildCinemaComment(ResultSet rs) {
         try {
@@ -250,4 +274,3 @@ public class CinemaCommentService implements IService<CinemaComment> {
     }
 
 }
-

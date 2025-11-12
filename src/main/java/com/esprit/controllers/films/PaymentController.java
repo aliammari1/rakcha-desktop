@@ -79,15 +79,9 @@ public class PaymentController {
     private ComboBox<String> cinemacombox_res;
 
     /**
-     * Sets up three SpinnerValueFactories for month, year, and CVC input fields.
-     * 
-     * <p>
-     * This method initializes the month spinner with values 1-12, the year spinner
-     * with a wide range of valid years, and the CVC spinner with values 1-999. Each
-     * spinner is configured with appropriate minimum and maximum values, initial
-     * values,
-     * and increment steps.
-     * </p>
+     * Initialize the month, year, and CVC spinners used by the payment form.
+     *
+     * Configures MM to accept values 1–12, YY to accept a broad range of years, and cvc to accept values 1–999 by assigning appropriate integer SpinnerValueFactory instances.
      */
     @FXML
     void initialize() {
@@ -104,22 +98,11 @@ public class PaymentController {
 
 
     /**
-     * Sets the `MovieSession` object's fields and updates spinner values for the
-     * year, month, and cvc based on the `MovieSession` object's `prix` field and
-     * sets the text of a text field with the total amount.
+     * Binds the given MovieSession to the controller, sets the total payment amount, and initializes the month, year, and CVC spinners.
      *
-     * @param s
-     *          MovieSession object passed into the function, which is used to set
-     *          the values of various fields within the `MovieSession` object.
-     *          <p>
-     *          - `moviesession`: represents an object of the MovieSession class,
-     *          containing information about a moviesession. - `prix`: a float
-     *          representing the price of the moviesession. - `terrain_id`: an
-     *          integer representing the terrain ID for display purposes. -
-     *          `monthValue` and `year`: integers representing the current month
-     *          and year respectively. - `cvc`: an object of the CVC class, used
-     *          to display a spinner for the number of seats available in the
-     *          moviesession.
+     * <p>Also attaches a listener to the CVC spinner's editor to update the spinner value when the user edits the text field.</p>
+     *
+     * @param s the MovieSession to display and use for initializing payment fields
      */
     public void setData(final MovieSession s) {
         moviesession = s;
@@ -299,18 +282,12 @@ public class PaymentController {
 
 
     /**
-     * Validates if the provided expiration date is in the future.
-     * 
-     * <p>
-     * Checks that the year and month combination represents a date that
-     * is not in the past compared to the current date.
-     * </p>
-     *
-     * @param value_y  the year value of the expiration date
-     * @param value_mm the month value of the expiration date (1-12)
-     * @return true if the expiration date is valid and in the future, false
-     *         otherwise
-     */
+         * Checks whether the expiration year and month are not earlier than the current year and month.
+         *
+         * @param value_y  the expiration year
+         * @param value_mm the expiration month (1-12)
+         * @return `true` if `value_y` is greater than or equal to the current year and `value_mm` is greater than or equal to the current month, `false` otherwise
+         */
     private boolean check_expDate(final int value_y, final int value_mm) {
         boolean valid = false;
         final LocalDate date = LocalDate.now();
@@ -323,17 +300,14 @@ public class PaymentController {
 
 
     /**
-     * Validates a credit card number using a regular expression pattern.
-     * 
-     * <p>
-     * This method validates whether the provided string represents a valid
-     * credit card number by checking its format against standard patterns for
-     * major credit card providers including Visa, MasterCard, American Express,
-     * and others.
-     * </p>
+     * Determine whether a string is a valid credit card number format.
      *
-     * @param cardNumber the credit card number to validate
-     * @return true if the card number matches a valid pattern, false otherwise
+     * <p>Checks that the input, after trimming, has length between 13 and 19 and
+     * matches common issuer patterns such as Visa, MasterCard, American Express,
+     * Discover, Diners Club, and JCB.</p>
+     *
+     * @param cardNumber the credit card number string to validate (whitespace will be trimmed)
+     * @return true if the input has 13–19 characters and matches a common card issuer pattern, false otherwise
      */
     private boolean check_card_num(String cardNumber) {
         // Trim the input string to remove any leading or trailing whitespace
@@ -363,15 +337,10 @@ public class PaymentController {
 
 
     /**
-     * Validates an email address using a regular expression pattern.
-     * 
-     * <p>
-     * Checks if the provided string follows the standard email format
-     * with a username portion, @ symbol, and domain portion with TLD.
-     * </p>
+     * Determines whether the given string is a valid email address.
      *
-     * @param email the email address to validate
-     * @return true if the email address is valid, false otherwise
+     * @param email the email address to validate; leading and trailing whitespace are ignored
+     * @return true if the email contains a valid local part, an '@' separator, and a domain with a top-level domain, false otherwise
      */
     public boolean isValidEmail(String email) {
         // Trim the input string to remove any leading or trailing whitespace
@@ -389,9 +358,16 @@ $";
 
 
     /**
-     * Redirects the user to a success page with data loaded from an external
-     * resource.
-     */
+ * Navigate to the payment success view and display it on the current stage.
+ */ 
+/**
+ * Navigate to the payment failure view and display it on the current stage.
+ */ 
+/**
+ * Navigate to the reservation list view for the current client and display it on the current stage.
+ *
+ * @param event the action event that triggered this navigation
+ */
     private void redirect_to_successPage() {
         // try {
         // FXMLLoader loader = new
@@ -470,4 +446,3 @@ $";
     }
 
 }
-

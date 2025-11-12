@@ -61,10 +61,12 @@ public class FilmCinemaService {
 
 
     /**
-     * Creates associations between a film and multiple cinemas.
+     * Creates associations between the given film and the cinemas named in {@code cinemaNames}.
+     * Cinema names that cannot be resolved to an existing cinema are ignored.
      *
-     * @param film        the film to associate with cinemas
-     * @param cinemaNames the list of cinema names to associate with the film
+     * @param film         the film to associate with cinemas
+     * @param cinemaNames  the list of cinema names to associate with the film
+     * @throws RuntimeException if a database error occurs while creating associations
      */
     public void createFilmCinemaAssociation(Film film, List<String> cinemaNames) {
         final String req = "INSERT INTO film_cinema (film_id, cinema_id) VALUES (?,?)";
@@ -89,9 +91,10 @@ public class FilmCinemaService {
 
 
     /**
-     * Retrieves the CinemasForFilm value.
+     * Retrieves all cinemas associated with the specified film.
      *
-     * @return the CinemasForFilm value
+     * @param filmId the database id of the film to look up
+     * @return a list of Cinema objects associated with the film; empty list if none or on error
      */
     public List<Cinema> getCinemasForFilm(int filmId) {
         final List<Cinema> cinemas = new ArrayList<>();
@@ -115,9 +118,10 @@ public class FilmCinemaService {
 
 
     /**
-     * Retrieves the FilmsForCinema value.
+     * Retrieves all films associated with the specified cinema.
      *
-     * @return the FilmsForCinema value
+     * @param cinemaId the ID of the cinema whose films to retrieve
+     * @return a list of Film objects associated with the cinema; empty list if no associations are found or on error
      */
     public List<Film> getFilmsForCinema(Long cinemaId) {
         final List<Film> films = new ArrayList<>();
@@ -141,11 +145,11 @@ public class FilmCinemaService {
 
 
     /**
-     * Updates the cinemas associated with a film.
-     * Removes existing associations and creates new ones.
+     * Replace the cinemas associated with a film by deleting existing associations and creating new ones.
      *
-     * @param film        the film whose cinemas to update
-     * @param cinemaNames the new list of cinema names to associate with the film
+     * @param film the film to update
+     * @param cinemaNames the list of cinema names to associate with the film
+     * @throws RuntimeException if a database error occurs while removing existing associations
      */
     public void updateCinemas(final Film film, final List<String> cinemaNames) {
         // Update film first
@@ -169,9 +173,10 @@ public class FilmCinemaService {
 
 
     /**
-     * Retrieves the CinemaNames value.
+     * Returns a comma-separated list of cinema names that are associated with the given film.
      *
-     * @return the CinemaNames value
+     * @param filmId the ID of the film whose associated cinema names should be retrieved
+     * @return a comma-separated string of cinema names for the film, or an empty string if none are found
      */
     public String getCinemaNames(final Long filmId) {
         final String req = "SELECT GROUP_CONCAT(c.name SEPARATOR ', ') AS cinemaNames FROM cinema c JOIN film_cinema fc ON c.id = fc.cinema_id WHERE fc.film_id = ?";
@@ -193,12 +198,10 @@ public class FilmCinemaService {
 
     // Legacy method for backward compatibility
     /**
-     * Performs readMoviesForCinema operation.
+     * Retrieves films associated with the specified cinema.
      *
-     * Retrieves all films associated with a specific cinema.
-     *
-     * @param cinemaId the ID of the cinema
-     * @return list of films shown at the cinema
+     * @param cinemaId the cinema's identifier
+     * @return a list of films associated with the cinema, possibly empty
      */
     public List<Film> readMoviesForCinema(final Long cinemaId) {
         return getFilmsForCinema(cinemaId);
@@ -226,4 +229,3 @@ public class FilmCinemaService {
     }
 
 }
-

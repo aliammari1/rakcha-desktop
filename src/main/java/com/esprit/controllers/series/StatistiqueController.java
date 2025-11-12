@@ -49,36 +49,11 @@ public class StatistiqueController implements Initializable {
     // Méthode pour créer un BarChart avec une limite de catégories
 
     /**
-     * Creates a bar chart based on category-related data, limiting the number of
-     * categorys displayed to a specified value. It generates XY chart data series
-     * and installs tooltips for each data point.
+     * Create a bar chart that displays category counts and limits the number of categories shown.
      *
-     * @param statistics
-     *                   map of categorys and their corresponding number of
-     *                   occurrences,
-     *                   which is used to generate the data series for the bar
-     *                   chart.
-     *                   <p>
-     *                   - `statistics`: a map containing category-wise statistical
-     *                   data,
-     *                   where each key is a category and the value is the number of
-     *                   occurrences of that category.
-     * @param limit
-     *                   maximum number of categorys to be plotted on the graph, and
-     *                   it is
-     *                   used to control the amount of data added to the chart
-     *                   through the
-     *                   `XYChart.Data` array.
-     * @returns a Bar Chart representing the number of categorys in a given set of
-     *          statistics, with each category represented by a bar.
-     *          <p>
-     *          - `BarChart<String, Number> barChart`: A chart object that
-     *          represents a bar chart with two axes - a category axis and a
-     *          numerical axis. - `XYChart.Series<String, Number> dataSeries`: A
-     *          series of data points represented as bars on the chart, where each
-     *          point is associated with a category name and a corresponding number
-     *          value. - `int count`: The number of data points added to the chart,
-     *          which represents the number of categorys that have been classified.
+     * @param statistics map from Category to its count; if null the chart will be empty
+     * @param limit      maximum number of categories to include in the chart
+     * @return           a BarChart<String, Number> where each bar represents a category count; tooltips are attached to each bar showing "category: count"
      */
     private BarChart<String, Number> createBarChart(final Map<Category, Long> statistics, final int limit) {
         final CategoryAxis xAxis = new CategoryAxis();
@@ -124,25 +99,14 @@ public class StatistiqueController implements Initializable {
     // Méthode pour afficher le BarChart avec une limite de catégories
 
     /**
-     * Creates a bar chart from a map of category-related data, limiting the number
-     * of categorys displayed based on an input parameter. It adds data points to
-     * the chart and displays tooltips for each point.
+     * Display a bar chart of category counts limited to a specified number of bars.
      *
-     * @param statistics
-     *                   Map containing statistics of categorys, where each key is a
-     *                   category and value is the number of occurrences of that
-     *                   category.
-     *                   <p>
-     *                   - `Map<Category, Long> statistics`: A map containing
-     *                   categorys as
-     *                   keys and their corresponding number of occurrences as
-     *                   values.
-     * @param limit
-     *                   maximum number of categorys to be displayed on the bar
-     *                   chart, and
-     *                   it is used to control the number of data points added to
-     *                   the graph
-     *                   during the loop.
+     * Builds a BarChart from the provided category→count map, installs a tooltip for
+     * each bar showing "category: count", and places the chart in the controller's
+     * borderPane center.
+     *
+     * @param statistics map of Category to count used to populate the chart
+     * @param limit maximum number of categories (bars) to display; remaining entries are ignored
      */
     private void showBarChart(final Map<Category, Long> statistics, final int limit) {
         final CategoryAxis xAxis = new CategoryAxis();
@@ -178,36 +142,12 @@ public class StatistiqueController implements Initializable {
 
 
     /**
-     * Initializes a ComboBox with category options, sets the selected option to
-     * "Statistiques of category", and retrieves and maps category statistics from
-     * an service implementation to display in a bar chart with a limit of 20
-     * categorys.
+     * Initialize the controller: populate the statisticsComboBox with "Statistiques of category",
+     * load category statistics into the controller's statistics map from IServiceCategorieImpl,
+     * and display a bar chart (up to 20 categories) in the borderPane center.
      *
-     * @param url
-     *                       URL of a resource that provides the statistics data to
-     *                       be
-     *                       displayed in the graphical user interface.
-     *                       <p>
-     *                       - Type: URL representing a web page with category
-     *                       statistics data.
-     * @param resourceBundle
-     *                       application's resource bundle, which contains key-value
-     *                       pairs of
-     *                       localized messages and resources that can be used to
-     *                       display text
-     *                       and other data to the user.
-     *                       <p>
-     *                       - `resourceBundle`: A ResourceBundle object containing
-     *                       key-value
-     *                       pairs representing category names and their
-     *                       corresponding
-     *                       statistics.
-     *                       <p>
-     *                       Note: The `resourceBundle` is not explicitly mentioned
-     *                       in the code
-     *                       snippet provided, but it is implied based on the
-     *                       context of the
-     *                       function.
+     * @param url            location used to resolve relative paths for the root object, may be null
+     * @param resourceBundle resources used to localize the root object, may be null
      */
     @Override
     /**
@@ -237,11 +177,9 @@ public class StatistiqueController implements Initializable {
 
 
     /**
-     * Handles the display of category statistics when the user selects
-     * "Statistiques de catégorie" from the combo box. It retrieves the category
-     * statistics from an implementation of an interface `IServiceCategoryImpl`,
-     * maps them to a bar chart, and displays the chart in the center of the border
-     * pane.
+     * Display category statistics as a bar chart when the combo box selection equals "Statistiques of category".
+     *
+     * Retrieves current category statistics and sets a bar chart (limited to 20 entries) into the center of the border pane.
      */
     @FXML
     private void handleShowStatistics() {
@@ -255,8 +193,7 @@ public class StatistiqueController implements Initializable {
 
 
     /**
-     * Displays a bar chart for statistics passed as an argument and with a
-     * specified limit of 20.
+     * Show the controller's bar chart view using the current statistics limited to 20 categories.
      */
     @FXML
     private void handleShowBarChart() {
@@ -267,18 +204,7 @@ public class StatistiqueController implements Initializable {
     // ... (Les autres méthodes restent inchangées)
 
     /**
-     * 1) retrieves category statistics from an implementation class, 2) prints the
-     * statistics to the console, and 3) creates and displays a pie chart
-     * representing the data using the `showPieChart()` method.
-     *
-     * @param event
-     *              occurrence of a button press event that triggers the execution
-     *              of
-     *              the function.
-     *              <p>
-     *              - Event type: `ActionEvent` - Target object: Undefined (as
-     *              `event`
-     *              is not referenced directly in the function body)
+     * Fetches category statistics, logs the retrieved data, and displays a pie chart.
      */
     @FXML
     private void handleShowPieChart(final ActionEvent event) {
@@ -294,17 +220,9 @@ public class StatistiqueController implements Initializable {
     // Méthode pour afficher le graphique en secteurs
 
     /**
-     * Generates a pie chart based on map data, adds tooltips and menu items to the
-     * chart, and displays it in the center of a BorderPane.
+     * Display a PieChart in the controller's center using the provided category counts.
      *
-     * @param statistics
-     *                   map of categorys and their corresponding counts, which is
-     *                   used to
-     *                   populate the data list for the pie chart.
-     *                   <p>
-     *                   - `Map<Category, Long> statistics`: A map that associates a
-     *                   category with its count. The categorys are identified by
-     *                   `Category`, and the count is represented by a long value.
+     * @param statistics map associating each Category with its count; each entry becomes a pie slice labeled by the category's name and sized by its count
      */
     private void showPieChart(final Map<Category, Long> statistics) {
         final ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
@@ -341,29 +259,18 @@ public class StatistiqueController implements Initializable {
 
 
     /**
-     * Takes a map of category-specific count data and displays it as a bar chart.
+     * Displays the provided category-to-count mapping as a bar chart placed in the controller's center BorderPane.
      *
-     * @param statistics
-     *                   map of category-specific long values that will be displayed
-     *                   as
-     *                   bars on the bar chart.
+     * @param statistics mapping from Category to its count used to build and render the bar chart; may be null or empty
      */
     private void showBarChart(final Map<Category, Long> statistics) {
     }
 
 
     /**
-     * Generates and installs tooltips for each data point in a pie chart, updating
-     * the text within the tooltip whenever the pie value changes.
+     * Attach a tooltip to each slice of the given PieChart that displays the slice's current numeric value and keeps that text synchronized when the value changes.
      *
-     * @param pc
-     *           PieChart object that the function operates on, providing the data
-     *           and nodes to create tooltips for.
-     *           <p>
-     *           - `PieChart`: Represents a pie chart component - `getData()`:
-     *           Returns a list of data points for the pie chart -
-     *           `pieValueProperty()`: A property that holds the value of each data
-     *           point as a double value.
+     * @param pc the PieChart whose slice nodes will receive tooltips showing each slice's current value
      */
     private void createToolTips(final PieChart pc) {
         for (final PieChart.Data data : pc.getData()) {
@@ -381,14 +288,9 @@ public class StatistiqueController implements Initializable {
 
 
     /**
-     * Terminates the application by calling `System.exit(0)`.
+     * Exit the application immediately.
      *
-     * @param actionEvent
-     *                    event that triggered the `handleClose()` function to
-     *                    execute, and
-     *                    it is passed as an argument to the function for further
-     *                    processing
-     *                    or handling.
+     * @param actionEvent the event that triggered this handler (ignored)
      */
     public void handleClose(final ActionEvent actionEvent) {
         System.exit(0);
@@ -396,20 +298,10 @@ public class StatistiqueController implements Initializable {
 
 
     /**
-     * Updates the value of a pie chart by multiplying its current value by 1.10 and
-     * setting it back to the chart. Additionally, it creates tooltips for the
-     * chart.
+     * Increases the third slice's value in the center PieChart by 10% and refreshes its tooltips.
      *
-     * @param actionEvent
-     *                    event that triggered the `handleUpdatePieData()` method to
-     *                    be
-     *                    executed.
-     *                    <p>
-     *                    - `actionEvent` represents an event related to a user
-     *                    interaction
-     *                    with the application. - It is an instance of the
-     *                    `ActionEvent`
-     *                    class in Java.
+     * If the center node of the border pane is not a PieChart or has fewer than three slices,
+     * the method performs no action.
      */
     public void handleUpdatePieData(final ActionEvent actionEvent) {
         final Node node = this.borderPane.getCenter();
@@ -423,10 +315,11 @@ public class StatistiqueController implements Initializable {
 
 
     /**
-     * Initializes an unspecified object or system.
+     * No-op initialization method retained for lifecycle compatibility.
+     *
+     * <p>This method intentionally performs no action.</p>
      */
     public void initialize() {
     }
 
 }
-

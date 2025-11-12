@@ -29,7 +29,7 @@ public class SentimentAnalysisController {
     private final SentimentAnalyzer sentimentAnalyzer;
 
     /**
-     * Constructor initializes VADER sentiment analyzer.
+     * Creates a SentimentAnalysisController and initializes the internal VADER SentimentAnalyzer.
      */
     public SentimentAnalysisController() {
         this.sentimentAnalyzer = new SentimentAnalyzer();
@@ -87,10 +87,12 @@ public class SentimentAnalysisController {
 
 
     /**
-     * Analyzes sentiment with detailed scores.
-     * 
-     * @param text the input text to analyze
-     * @return detailed sentiment analysis with scores
+     * Produce a formatted sentiment label and polarity scores for the given text.
+     *
+     * @param text the text to analyze; must not be null
+     * @return a string in the form "<Sentiment> (Compound: <compound>, Pos: <positive>, Neg: <negative>, Neu: <neutral>)"
+     * @throws IllegalArgumentException if {@code text} is null
+     * @throws RuntimeException if an error occurs during analysis
      */
     public String analyzeSentimentDetailed(final String text) {
         if (text == null) {
@@ -134,10 +136,12 @@ public class SentimentAnalysisController {
 
 
     /**
-     * Gets the raw compound sentiment score.
-     * 
-     * @param text the input text to analyze
-     * @return compound score between -1 (negative) and 1 (positive)
+     * Retrieve the compound sentiment score for the input text.
+     *
+     * @param text the input text to analyze; must not be null
+     * @return the compound score between -1.0 (negative) and 1.0 (positive)
+     * @throws IllegalArgumentException if {@code text} is null
+     * @throws RuntimeException if an error occurs during analysis
      */
     public double getSentimentScore(final String text) {
         if (text == null) {
@@ -163,11 +167,12 @@ public class SentimentAnalysisController {
 
 
     /**
-     * Gets all sentiment scores as a map.
-     * 
+     * Return a map of sentiment polarity scores for the provided text.
+     *
      * @param text the input text to analyze
-     * @return map containing all sentiment scores (compound, positive, negative,
-     *         neutral)
+     * @return a map with keys "compound", "positive", "negative", and "neutral" mapped to their corresponding scores
+     * @throws IllegalArgumentException if {@code text} is null
+     * @throws RuntimeException if an error occurs while performing sentiment analysis
      */
     public HashMap<String, Float> getAllSentimentScores(final String text) {
         if (text == null) {

@@ -41,7 +41,11 @@ public class SMSAdminController implements Initializable {
     private Button sendSMS;
 
     /**
-     * @param event
+     * Handle the verification-code submission; if the entered code matches the generated code,
+     * replace the current scene with the ResetPasswordlogin view.
+     *
+     * @param event the UI action event that triggered this handler
+     * @throws RuntimeException if loading the ResetPasswordlogin view fails
      */
     public void sendSMS(final ActionEvent event) {
         if (this.verificationCode == Integer.parseInt(this.codeTextField.getText())) {
@@ -62,8 +66,14 @@ public class SMSAdminController implements Initializable {
 
 
     /**
-     * @param location
-     * @param resources
+     * Initialize the controller and attach a listener to the phone number field.
+     *
+     * <p>When the phoneNumberTextfield's trimmed text reaches exactly 8 characters, a 6-digit
+     * verification code is generated, stored in the controller's {@code verificationCode}
+     * field, and sent via {@code UserSMSAPI.sendSMS} to the entered phone number.</p>
+     *
+     * @param location  the location used to resolve relative paths for the root object, may be null
+     * @param resources the resources used to localize the root object, may be null
      */
     @Override
     /**
@@ -85,4 +95,3 @@ public class SMSAdminController implements Initializable {
     }
 
 }
-

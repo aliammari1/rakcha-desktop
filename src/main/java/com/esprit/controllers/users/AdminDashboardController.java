@@ -153,49 +153,28 @@ $";
 
 
     /**
-     * /** Adds a listener to a `TextField` that validates the inputted string using
-     * a provided `Predicate<String>`. If the string is invalid, a tooltip with an
-     * error message is displayed near the text field.
+     * Attaches a listener to a TextField that validates user input and shows a tooltip with an error message when the value is invalid.
      *
-     * @param textField
-     *                            TextField component whose text value will be
-     *                            validated and whose
-     *                            tooltip will be updated accordingly.
-     * @param validationPredicate
-     *                            function that determines whether or not a given
-     *                            string is valid,
-     *                            and it is used to determine whether an error
-     *                            message should be
-     *                            displayed when the user types something into the
-     *                            text field.
-     * @param errorMessage
-     *                            message to be displayed as a tooltip when the user
-     *                            enters an
-     *                            invalid value in the text field.
+     * The tooltip is displayed near the TextField while the value fails the predicate and is hidden when the field loses focus or the value becomes valid.
+     *
+     * @param textField           the TextField to validate and to which the tooltip will be attached
+     * @param validationPredicate a predicate that returns `true` for valid input and `false` for invalid input
+     * @param errorMessage        the message shown in the tooltip when the input does not satisfy the predicate
      */
     private void addValidationListener(final TextField textField, final Predicate<String> validationPredicate,
             final String errorMessage) {
         final Tooltip tooltip = new Tooltip();
         textField.textProperty().addListener(new ChangeListener<String>() {
             /**
-             * Detects changes to the `textField`'s value and displays an error message in a
-             * tooltip if the new value does not meet a validation predicate or is empty.
+             * Validate changes to the associated TextField and show or hide an inline tooltip error.
              *
-             * @param observable
-             *                   ObservableValue object that emits changes to its value,
-             *                   allowing
-             *                   the function to detect and respond to those changes.
+             * When the new text is empty or fails the configured validation predicate, a tooltip
+             * containing the appropriate error message is displayed near the TextField; when the
+             * new text is valid the tooltip is hidden.
              *
-             * @param oldValue
-             *                   previous value of the observable variable before the change
-             *                   occurred, which is used to validate the new value and
-             *                   determine if
-             *                   an error message should be displayed.
-             *
-             * @param newValue
-             *                   updated value of the `TextField`, which is used to validate
-             *                   and
-             *                   display an error message if necessary.
+             * @param observable the observable emitting the text changes
+             * @param oldValue   the previous text value before the change
+             * @param newValue   the new text value to validate
              */
             @Override
             /**
@@ -265,14 +244,14 @@ $";
 
 
     /**
-     * /** Allows users to create a new admin account by providing their first name,
-     * last name, phone number, password, email, and role. It then validates the
-     * input and creates a new admin user using the provided information.
+     * Create a new admin user from the current form inputs and persist it after validation.
      *
-     * @param event
-     *              `addAdmin` action, triggering the execution of the code within
-     *              the
-     *              function.
+     * <p>Validates required fields (first name, last name, phone number, password, role, email,
+     * and birth date). If validation fails, displays an error Alert with a descriptive message.
+     * On success, constructs an Admin using the provided values (including the selected profile
+     * image path) and delegates persistence to UserService.create.</p>
+     *
+     * @param event the ActionEvent that triggered the add action
      */
     @FXML
     void addAdmin(final ActionEvent event) {
@@ -367,14 +346,10 @@ $";
         this.dateDeNaissanceTableColumn.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<User, DatePicker>, ObservableValue<DatePicker>>() {
                     /**
-                     * Creates a new `DatePicker` object and sets its value to the local date of the
-                     * user's birth date if it is not null.
+                     * Create a DatePicker initialized to the user's birth date for use as a cell value.
                      *
-                     * @param param
-                     *              value of a table cell, which contains the birth date of a user.
-                     *
-                     * @returns a `SimpleObjectProperty` of a `DatePicker` object initialized with
-                     *          the birth date value from the input `User` object, if available.
+                     * @param param cell data features containing the User whose birth date will initialize the DatePicker
+                     * @return an ObservableValue containing a DatePicker set to the user's birth date if present, otherwise a DatePicker with no value
                      */
                     @Override
                     /**
@@ -398,19 +373,11 @@ $";
         this.photoDeProfilTableColumn
                 .setCellValueFactory(new Callback<TableColumn.CellDataFeatures<User, HBox>, ObservableValue<HBox>>() {
                     /**
-                     * Takes a `TableColumn.CellDataFeatures` parameter and generates an `HBox`
-                     * widget with an image view containing the user's profile picture. The image
-                     * view is customized to fit a specified size, and an event handler is added to
-                     * handle mouse clicks on the image view, opening a file chooser to allow the
-                     * user to select a new profile picture.
+                     * Create an HBox containing the user's profile ImageView and attach a click handler
+                     * that opens a file chooser to select and display a new profile image.
                      *
-                     * @param param
-                     *              value of the `User` object being processed, which provides the
-                     *              `photo_de_profil` property that is used to display the photo of
-                     *              the profile in the `ImageView`.
-                     *
-                     * @returns an `ObservableValue` of type `HBox`, which contains a single
-                     *          `ImageView` component that displays the user's profile picture.
+                     * @param param provides the User whose `photoDeProfil` URL is used to populate the ImageView
+                     * @return an ObservableValue wrapping an HBox that contains the user's profile ImageView
                      */
                     @Override
                     /**
@@ -427,14 +394,12 @@ $";
                             hBox.getChildren().add(imageView);
                             hBox.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
                                 /**
-                                 * Displays a file open dialog box, selects an image file using FileChooser,
-                                 * sets the selected image as the viewable image in the stage, and clears any
-                                 * previous images in the container.
+                                 * Open a file chooser to select a PNG or JPG image and display it in the controller.
                                  *
-                                 * @param event
-                                 *              mouse event that triggered the function's execution, providing
-                                 *              no
-                                 *              further context beyond that.
+                                 * If the user selects an image file, the method sets that image on `imageView` and
+                                 * `photoDeProfilImageView` and replaces the contents of `hBox` with the image.
+                                 *
+                                 * @param event the mouse event that triggered the file chooser
                                  */
                                 @Override
                                 /**
@@ -479,16 +444,10 @@ $";
         this.deleteTableColumn.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<User, Button>, ObservableValue<Button>>() {
                     /**
-                     * Creates a new `Button` element with the text "delete". The button's
-                     * `onAction` event handler is set to delete the corresponding user's ID when
-                     * clicked, and then reads the entire user table.
+                     * Create a table-cell value containing a "delete" button for the row's user.
                      *
-                     * @param param
-                     *              `CellDataFeatures` of a table column, providing the current cell
-                     *              value and related data.
-                     *
-                     * @returns a `SimpleObjectProperty` of a `Button` object with an action to
-                     *          delete the corresponding user ID.
+                     * @param param provides the table cell context from which the row's {@code User} (and its id) can be obtained
+                     * @return an {@code ObservableValue<Button>} wrapping a button that deletes the row's user and reloads the user table when clicked
                      */
                     @Override
                     /**
@@ -500,14 +459,9 @@ $";
                         final Button button = new Button("delete");
                         button.setOnAction(new EventHandler<ActionEvent>() {
                             /**
-                             * Deletes a record with the specified ID from a data storage and subsequently
-                             * reloads the user table.
+                             * Deletes the user associated with the triggered delete action and refreshes the user table.
                              *
-                             * @param event
-                             *              deleting event triggered by the user's action, and it is passed
-                             *              to
-                             *              the `handle()` method as an argument to enable the appropriate
-                             *              actions to be taken.
+                             * @param event the ActionEvent from the delete control that triggered this handler
                              */
                             @Override
                             /**
@@ -531,13 +485,40 @@ $";
 
 
     /**
-     * Sets up cell factories for the `adresse` and `email` columns of the user
-     * table, which will display a text field for each column. The `cellFactory`
-     * method is used to create TableCells that can display text data in a formatted
-     * way.
+     * Configures table cell factories to enable in-place editing and validation for user fields.
+     *
+     * <p>Sets up editable text-cell behavior for first name, last name, phone number, password,
+     * address, and email columns (each showing a TextField during edit) and a ComboBox cell for role.
+     * Each editable text cell performs lowercase validation, displays an inline tooltip with validation
+     * errors positioned near the editor, and prevents committing edits with the Enter key while errors
+     * are present.</p>
      */
     private void setupCellFactories() {
         this.firstNameTableColumn.setCellFactory(new Callback<TableColumn<User, String>, TableCell<User, String>>() {
+            /**
+             * Creates and returns a editable TableCell for the given column that enforces a lowercase
+             * validation rule and shows a tooltip with validation messages during in-place editing.
+             *
+             * @param param the table column for which the cell is being created
+             * @return a configured TableCell instance for editing `User` string properties
+             */
+            /**
+             * Begins editing the cell and attaches a lowercase validator and tooltip-driven feedback
+             * to the cell's text field if not already attached.
+             */
+            /**
+             * Reacts to changes in the cell's text field and shows or hides the validation tooltip.
+             *
+             * @param observable the observable text property being observed
+             * @param oldValue   the previous text value
+             * @param newValue   the current text value
+             */
+            /**
+             * Intercepts key presses in the cell's text field and prevents committing the edit
+             * when validation errors are present (for example when Enter is pressed).
+             *
+             * @param event the key event received from the text field
+             */
             @Override
             /**
              * Performs call operation.
@@ -628,6 +609,31 @@ $";
         }
 );
         this.lastNameTableColumn.setCellFactory(new Callback<TableColumn<User, String>, TableCell<User, String>>() {
+            /**
+             * Creates a TableCell configured for inline editing of a user's last name with lowercase validation,
+             * tooltip feedback, and Enter-key commit prevention while validation errors exist.
+             *
+             * @param param the table column for which the cell factory is being created
+             * @return a configured TextFieldTableCell for editing the column's String values
+             */
+            /**
+             * Begins in-place editing for the cell and attaches a lowercase validator, a tooltip for errors,
+             * and event handlers that manage tooltip display and commit prevention.
+             */
+            /**
+             * Invoked when the TextField's text changes; updates the tooltip text and visibility based on
+             * the validator's current errors.
+             *
+             * @param observable the observed text property
+             * @param oldValue the previous text value
+             * @param newValue the new text value
+             */
+            /**
+             * Handles key events on the TextField and consumes Enter key presses when validation errors exist
+             * to prevent committing invalid input.
+             *
+             * @param event the KeyEvent to handle
+             */
             @Override
             /**
              * Performs call operation.
@@ -718,6 +724,27 @@ $";
         }
 );
         this.numTelTableColumn.setCellFactory(new Callback<TableColumn<User, String>, TableCell<User, String>>() {
+            /**
+             * Creates and returns a table cell configured for inline text editing of a user's phone number.
+             *
+             * @param param the table column requesting the cell
+             * @return a configured TextFieldTableCell for editing phone-number strings
+             */
+            /**
+             * Begins in-place editing of the cell and attaches a validator and tooltip for the editor TextField.
+             */
+            /**
+             * Validates editor text and shows or hides a tooltip describing validation errors when the text changes.
+             *
+             * @param observable the observable value being observed
+             * @param oldValue   the previous text value
+             * @param newValue   the new text value
+             */
+            /**
+             * Intercepts key presses in the editor and prevents committing the edit when validation errors exist.
+             *
+             * @param event the key event received by the editor
+             */
             @Override
             /**
              * Performs call operation.
@@ -808,6 +835,14 @@ $";
         }
 );
         this.passwordTableColumn.setCellFactory(new Callback<TableColumn<User, String>, TableCell<User, String>>() {
+            /**
+             * Creates a table cell that provides an editable text field which enforces lowercase-only input and shows a validation tooltip.
+             *
+             * <p>The cell uses a TextField for in-place editing, validates the entered text to ensure it is all lowercase, displays a red tooltip with an error message when validation fails, and suppresses commit of the edit when the Enter key is pressed while validation errors exist.</p>
+             *
+             * @param param the table column for which the cell is created
+             * @return a configured TableCell<User, String> that validates input to lowercase and presents inline validation feedback
+             */
             @Override
             /**
              * Performs call operation.
@@ -900,6 +935,12 @@ $";
         this.roleTableColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new DefaultStringConverter(), "admin",
                 "client", "responsable de cinema"));
         this.adresseTableColumn.setCellFactory(new Callback<TableColumn<User, String>, TableCell<User, String>>() {
+            /**
+             * Creates editable table cells for the address column that enforce lowercase input and show a red tooltip when validation fails.
+             *
+             * @param param the table column for which the cell is being created
+             * @return a TableCell configured to edit address values, validate that the edited text is all lowercase, prevent commit on validation errors, and display a tooltip with the validation message
+             */
             @Override
             /**
              * Performs call operation.
@@ -990,6 +1031,12 @@ $";
         }
 );
         this.emailTableColumn.setCellFactory(new Callback<TableColumn<User, String>, TableCell<User, String>>() {
+            /**
+             * Creates a TableCell for string editing that validates input as lowercase and shows an inline tooltip for errors.
+             *
+             * @param param the table column this cell factory is associated with
+             * @return a TableCell configured for in-place text editing with lowercase validation and user feedback
+             */
             @Override
             /**
              * Performs call operation.
@@ -1081,6 +1128,16 @@ $";
     }
 
 
+    /**
+     * Configure table column edit handlers to apply in-place edits to User objects and persist those changes.
+     *
+     * <p>Registers commit or start edit handlers for the table columns (first name, last name, phone number,
+     * password, role, address, birth date, and email). Each handler updates the corresponding property on the
+     * edited User instance and calls update(user) to persist the change. The birth date handler reads the
+     * DatePicker value and converts it to an SQL Date before updating.</p>
+     *
+     * <p>Exceptions thrown during handler execution are caught and logged; they do not propagate from this method.</p>
+     */
     private void setupCellOnEditCommit() {
         this.firstNameTableColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<User, String>>() {
             @Override
@@ -1248,7 +1305,9 @@ $";
 
 
     /**
-     * @param event
+     * Clears all user input controls, resetting text fields, the role selection, the date picker to a minimal date, and removing the profile image.
+     *
+     * @param event the action event that triggered the clear operation
      */
     @FXML
     void clearTextFields(final ActionEvent event) {
@@ -1266,8 +1325,10 @@ $";
 
 
     /**
-     * @param id
-     */
+ * Delete the user with the given identifier from the data store.
+ *
+ * @param id the identifier of the user to delete
+ */
     void delete(final Long id) {
         // String role = roleComboBox.getValue();
         // User user = null;
@@ -1378,4 +1439,3 @@ $";
     }
 
 }
-

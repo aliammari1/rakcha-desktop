@@ -34,14 +34,11 @@ public class Review {
     private Product product;
 
     /**
-     * Constructor without id for creating new review instances.
+     * Create a Review for a given client, rating, and product without setting an id.
      *
-     * @param client
-     *                the client who gave the review
-     * @param rating
-     *                the rating given by the client
-     * @param product
-     *                the product associated with the review
+     * @param client  the client who submitted the review
+     * @param rating  the rating value assigned by the client
+     * @param product the product being reviewed
      */
     public Review(final Client client, final int rating, final Product product) {
         this.client = client;
@@ -50,4 +47,3 @@ public class Review {
     }
 
 }
-
