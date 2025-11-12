@@ -1,0 +1,19 @@
+code_generation:
+  unit_tests:
+    path_instructions:
+      - path: "src/**/*.java"
+        instructions: |
+          Use testfx and junit for testing framework.
+          do not use mockito and use real classes for testing.
+          Test user interactions, accessibility, and error boundaries.
+          Generate comprehensive test cases including edge cases and error conditions.
+  docstrings:
+    path_instructions:
+      - path: "src/**/*.java"
+        instructions: |
+          Use javadoc format.
+          Focus on behavior and edge cases.
+      - path: "**/*test*"
+        instructions: |
+          Describe test purpose and expected behavior.
+          Keep docstrings concise - focus on what is being tested.
