@@ -34,18 +34,16 @@ public class FilmRating {
     private int rating;
 
     /**
-     * Constructor without id for creating new rating instances.
+     * Create a FilmRating for a given film and client without specifying an id.
      *
-     * @param film
-     *               The film being rated.
-     * @param client
-     *               The user who is rating the film.
-     * @param rating
-     *               The rating given to the film.
+     * @param film   the film being rated
+     * @param client the user who gives the rating
+     * @param rating the rating value assigned to the film
      */
     public FilmRating(final Film film, final Client client, final int rating) {
         this.film = film;
         this.client = client;
         this.rating = rating;
     }
+
 }

@@ -42,9 +42,12 @@ public class CategoriesClientController {
     private TilePane tilepane;
 
     /**
-     * Clears the children of a `tilepane`, retrieves a list of categories from an
-     * `IServiceCategorieImpl`, loops through the list and adds a `VBox` for each
-     * category, displaying its name and description.
+     * Populate the controller's TilePane with category entries retrieved from the service.
+     *
+     * Retrieves the first page of categories (page 0, size 10), clears the TilePane, and for each
+     * category adds a VBox containing labels for its name and description.
+     *
+     * @throws RuntimeException if category retrieval fails
      */
     public void afficher() {
         this.tilepane.getChildren().clear();
@@ -59,6 +62,7 @@ public class CategoriesClientController {
         } catch (final Exception e) {
             throw new RuntimeException(e);
         }
+
         for (final Category c : categories) {
             final String titre = c.getName();
             final String description = c.getDescription();
@@ -73,15 +77,20 @@ public class CategoriesClientController {
             espaceHorizontal.setPrefWidth(10);
             this.tilepane.getChildren().addAll(oeuvreBox, espaceHorizontal);
         }
+
     }
 
+
     /**
-     * Displays a message upon launching the application using FXML.
+     * Initialize the controller and populate the category TilePane after FXML loading.
+     *
+     * Calls afficher() to load and render categories into the UI so the view is ready once initialization completes.
      */
     @FXML
     private void initialize() {
         this.afficher();
     }
+
 
     /**
      * @param event
@@ -89,16 +98,10 @@ public class CategoriesClientController {
      */
     /// gestion de menu
     /**
-     * Loads a FXML file named "/ui//ui/CategorieClient.fxml", creates a scene with
-     * the root node, sets the scene on a stage, and displays the stage.
+     * Navigates to the Categorie client view by loading its FXML and replacing the current stage's scene.
      *
-     * @param event
-     *              event that triggered the function, specifically the opening of a
-     *              JavaFX application.
-     *              <p>
-     *              - `event`: An `ActionEvent` object representing the user's
-     *              action
-     *              that triggered the function execution.
+     * @param event the ActionEvent that triggered the navigation
+     * @throws IOException if the FXML resource cannot be loaded
      */
     @FXML
     void Ocategories(final ActionEvent event) throws IOException {
@@ -110,16 +113,12 @@ public class CategoriesClientController {
         stage.show();
     }
 
+
     /**
-     * Loads a FXML file, creates a scene and stages it.
+     * Switches the current window to the series client view.
      *
-     * @param event
-     *              event that triggered the function execution, which in this case
-     *              is
-     *              a user action on the SeriesClient.fxml file.
-     *              <p>
-     *              - `event`: An `ActionEvent` object representing the user action
-     *              that triggered the function.
+     * @param event the ActionEvent from the control that triggered the navigation
+     * @throws IOException if the FXML resource for the series client cannot be loaded
      */
     @FXML
     void Oseries(final ActionEvent event) throws IOException {
@@ -131,22 +130,12 @@ public class CategoriesClientController {
         stage.show();
     }
 
+
     /**
-     * Loads an FXML file, creates a scene and stages it in a window.
+     * Open the Episode client view by loading its FXML and replacing the current stage's scene.
      *
-     * @param event
-     *              EventObject that triggered the execution of the `Oepisode()`
-     *              method, providing information about the source of the event and
-     *              its associated data.
-     *              <p>
-     *              Event: `ActionEvent event`
-     *              <p>
-     *              Main properties:
-     *              <p>
-     *              - Source: The object that triggered the action (not shown) -
-     *              Event
-     *              type: The specific action that was triggered (e.g., "SELECT",
-     *              "SAVE")
+     * @param event the ActionEvent from the triggering UI control
+     * @throws IOException if the EpisodeClient FXML resource cannot be loaded
      */
     @FXML
     void Oepisode(final ActionEvent event) throws IOException {
@@ -157,4 +146,5 @@ public class CategoriesClientController {
         stage.setScene(scene);
         stage.show();
     }
+
 }

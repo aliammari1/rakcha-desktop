@@ -32,18 +32,16 @@ public class OrderItem {
     private Order order;
 
     /**
-     * Constructor without id for creating new order item instances.
+     * Create a new OrderItem with the specified quantity, product, and order; the `id` remains unset.
      *
-     * @param quantity
-     *                 The quantity of the item.
-     * @param product
-     *                 The product associated with the item.
-     * @param order
-     *                 The order associated with the item.
+     * @param quantity the number of product units for this item
+     * @param product  the associated Product
+     * @param order    the associated Order
      */
     public OrderItem(final int quantity, final Product product, final Order order) {
         this.quantity = quantity;
         this.product = product;
         this.order = order;
     }
+
 }

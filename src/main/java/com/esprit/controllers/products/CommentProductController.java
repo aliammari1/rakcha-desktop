@@ -62,18 +62,12 @@ public class CommentProductController implements Initializable {
     private TextArea monCommentaitreText;
 
     /**
-     * Processes a new comment submitted by the user.
-     * 
-     * <p>
-     * This method:
-     * 1. Extracts the comment text from the text area
-     * 2. Validates the content using a bad word filter
-     * 3. If the content is appropriate, creates a new Comment object and saves it
-     * to the database
-     * 4. Otherwise, displays an alert warning the user about inappropriate content
-     * </p>
+     * Handle submission of a new product comment from the UI.
      *
-     * @param actionEvent The action event that triggered this method
+     * <p>Validates the entered text for prohibited words; if valid, creates and persists a Comment,
+     * otherwise shows a warning alert to the user.</p>
+     *
+     * @param actionEvent the ActionEvent that triggered the submission
      */
     @FXML
     void addchat(final ActionEvent actionEvent) {
@@ -97,7 +91,8 @@ public class CommentProductController implements Initializable {
                 alert.setTitle("Comment non valide");
                 alert.setContentText("Votre comment contient des gros mots et ne peut pas être publié.");
                 alert.showAndWait();
-            } else {
+            }
+ else {
                 // Créez un objet Comment
                 final Comment comment = new Comment((Client) new UserService().getUserById(4L), userMessage,
                         produitService.getProductById(produit.getId()));
@@ -107,22 +102,20 @@ public class CommentProductController implements Initializable {
                 // Mettez à jour l'interface utilisateur
                 // updateCommentFlowPane(comment);
             }
+
         } catch (final ParseException e) {
             // Gérez l'exception si la conversion échoue
             CommentProductController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
 
+
     /**
-     * Initializes the controller after its root element has been completely
-     * processed.
-     * This method calls loadAcceptedComment() to populate the UI with existing
-     * comments.
+     * Populate the CommentFlowPane with accepted product comments when the controller is initialized.
      *
-     * @param location  The location used to resolve relative paths for the root
-     *                  object, or null if the location is not known
-     * @param resources The resources used to localize the root object, or null if
-     *                  the root object was not localized
+     * @param location  the location used to resolve relative paths for the root object, may be null
+     * @param resources the resources used to localize the root object, may be null
      */
     @Override
     /**
@@ -133,14 +126,12 @@ public class CommentProductController implements Initializable {
         this.loadAcceptedComment();
     }
 
+
     /**
-     * Loads all accepted comments from the database and displays them in the UI.
-     * 
-     * <p>
-     * This method retrieves comments from the CommentService, creates a card for
-     * each comment using the createcommentcard method, and adds these cards to the
-     * CommentFlowPane.
-     * </p>
+     * Load and display accepted comments in the CommentFlowPane.
+     *
+     * Retrieves comments from CommentService, creates a UI card for each comment via
+     * createcommentcard(Comment), and adds those cards to the CommentFlowPane.
      */
     private void loadAcceptedComment() {
         // Récupérer toutes les produits depuis le service
@@ -151,18 +142,15 @@ public class CommentProductController implements Initializable {
             final HBox cardContainer = this.createcommentcard(comm);
             this.CommentFlowPane.getChildren().add(cardContainer);
         }
+
     }
 
+
     /**
-     * Creates a card-like UI component to display a comment.
-     * 
-     * <p>
-     * The card includes the name of the comment author and the comment text,
-     * with appropriate styling for readability.
-     * </p>
+     * Create an HBox card that displays a comment's author and text.
      *
-     * @param comm The Comment object to create a card for
-     * @return An HBox containing the styled comment card
+     * @param comm the Comment to render; the client's first and last name and the comment text are used
+     * @return an HBox whose children form a styled card showing the comment author's name and the comment text
      */
     public HBox createcommentcard(final Comment comm) {
         // Créer une VBox pour chaque comment
@@ -197,15 +185,11 @@ public class CommentProductController implements Initializable {
         return commentVBox;
     }
 
+
     /**
-     * Navigates to the cinema client interface.
-     * 
-     * <p>
-     * Loads the CommentProduct.fxml file, creates a new scene and stage,
-     * and replaces the current stage with the new one.
-     * </p>
+     * Open the cinema client view in a new window and close the current window.
      *
-     * @param event The action event that triggered this method
+     * @param event the ActionEvent that triggered the navigation
      */
     @FXML
     void cinemaclient(final ActionEvent event) {
@@ -228,17 +212,14 @@ public class CommentProductController implements Initializable {
             CommentProductController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                   // d'entrée/sortie
         }
+
     }
 
+
     /**
-     * Navigates to the event client interface.
-     * 
-     * <p>
-     * Loads the AffichageEvenementClient.fxml file, creates a new scene and stage,
-     * and replaces the current stage with the new one.
-     * </p>
+     * Navigate to the event client interface.
      *
-     * @param event The action event that triggered this method
+     * @param event the ActionEvent that triggered the navigation
      */
     @FXML
     void eventClient(final ActionEvent event) {
@@ -262,17 +243,14 @@ public class CommentProductController implements Initializable {
             CommentProductController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                   // d'entrée/sortie
         }
+
     }
 
+
     /**
-     * Navigates to the product client interface.
-     * 
-     * <p>
-     * Loads the AfficherProductClient.fxml file, creates a new scene and stage,
-     * and replaces the current stage with the new one.
-     * </p>
+     * Opens the product client view in a new window and closes the current window.
      *
-     * @param event The action event that triggered this method
+     * @param event the action event that triggered the navigation
      */
     @FXML
     void produitClient(final ActionEvent event) {
@@ -296,26 +274,24 @@ public class CommentProductController implements Initializable {
             CommentProductController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                   // d'entrée/sortie
         }
+
     }
 
+
     /**
-     * Placeholder for client profile functionality.
-     * 
-     * @param event The action event that triggered this method
+     * No-op handler for client profile action.
+     *
+     * Currently a placeholder and performs no action.
      */
     @FXML
     void profilclient(final ActionEvent event) {
     }
 
+
     /**
-     * Navigates to the movie client interface.
-     * 
-     * <p>
-     * Loads the filmuser.fxml file, creates a new scene and stage,
-     * and replaces the current stage with the new one.
-     * </p>
+     * Open the movie client view in a new window and close the current window.
      *
-     * @param event The action event that triggered this method
+     * @param event the ActionEvent that triggered the navigation
      */
     @FXML
     void MovieClient(final ActionEvent event) {
@@ -338,17 +314,14 @@ public class CommentProductController implements Initializable {
             CommentProductController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                   // d'entrée/sortie
         }
+
     }
 
+
     /**
-     * Navigates to the series client interface.
-     * 
-     * <p>
-     * Loads the Series-view.fxml file, creates a new scene and stage,
-     * and replaces the current stage with the new one.
-     * </p>
+     * Open the series client view and replace the current window with it.
      *
-     * @param event The action event that triggered this method
+     * @param event the ActionEvent that triggered the navigation
      */
     @FXML
     void SerieClient(final ActionEvent event) {
@@ -371,5 +344,7 @@ public class CommentProductController implements Initializable {
             CommentProductController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                   // d'entrée/sortie
         }
+
     }
+
 }

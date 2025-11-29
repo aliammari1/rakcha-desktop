@@ -29,25 +29,20 @@ public class SentimentAnalysisController {
     private final SentimentAnalyzer sentimentAnalyzer;
 
     /**
-     * Constructor initializes VADER sentiment analyzer.
+     * Construct a SentimentAnalysisController and initialize its internal VADER SentimentAnalyzer.
+     *
+     * The controller is created with a ready-to-use SentimentAnalyzer instance for subsequent sentiment operations.
      */
     public SentimentAnalysisController() {
         this.sentimentAnalyzer = new SentimentAnalyzer();
     }
 
+
     /**
-     * Analyzes the sentiment of the given text using VADER algorithm.
-     * 
-     * <p>
-     * VADER returns sentiment scores including compound, positive, neutral, and
-     * negative.
-     * The compound score is normalized between -1 (most extreme negative) and +1
-     * (most extreme positive).
-     * </p>
+     * Classifies the sentiment of the given text as Positive, Negative, or Neutral.
      *
-     * @param text the input text to be analyzed for sentiment
-     * @return a string containing sentiment classification: "Positive", "Negative",
-     *         or "Neutral"
+     * @param text the input text to analyze
+     * @return `Positive`, `Negative`, or `Neutral` based on the text's sentiment
      * @throws IllegalArgumentException if text is null
      * @since 2.0
      */
@@ -55,6 +50,7 @@ public class SentimentAnalysisController {
         if (text == null) {
             throw new IllegalArgumentException("Text cannot be null");
         }
+
 
         try {
             // Set the input string and analyze
@@ -68,26 +64,34 @@ public class SentimentAnalysisController {
 
             if (compound >= 0.05) {
                 return "Positive";
-            } else if (compound <= -0.05) {
+            }
+ else if (compound <= -0.05) {
                 return "Negative";
-            } else {
+            }
+ else {
                 return "Neutral";
             }
+
         } catch (Exception e) {
             throw new RuntimeException("Error analyzing sentiment", e);
         }
+
     }
 
+
     /**
-     * Analyzes sentiment with detailed scores.
-     * 
-     * @param text the input text to analyze
-     * @return detailed sentiment analysis with scores
+     * Return a formatted sentiment label and polarity scores for the given text.
+     *
+     * @param text the text to analyze; must not be null
+     * @return a string formatted as "<Sentiment> (Compound: <compound>, Pos: <positive>, Neg: <negative>, Neu: <neutral>)" with numeric scores rounded to three decimals
+     * @throws IllegalArgumentException if {@code text} is null
+     * @throws RuntimeException if an error occurs during analysis
      */
     public String analyzeSentimentDetailed(final String text) {
         if (text == null) {
             throw new IllegalArgumentException("Text cannot be null");
         }
+
 
         try {
             // Set the input string and analyze
@@ -105,29 +109,37 @@ public class SentimentAnalysisController {
             String sentiment;
             if (compound >= 0.05) {
                 sentiment = "Positive";
-            } else if (compound <= -0.05) {
+            }
+ else if (compound <= -0.05) {
                 sentiment = "Negative";
-            } else {
+            }
+ else {
                 sentiment = "Neutral";
             }
+
 
             return String.format("%s (Compound: %.3f, Pos: %.3f, Neg: %.3f, Neu: %.3f)",
                     sentiment, compound, positive, negative, neutral);
         } catch (Exception e) {
             throw new RuntimeException("Error analyzing detailed sentiment", e);
         }
+
     }
 
+
     /**
-     * Gets the raw compound sentiment score.
-     * 
-     * @param text the input text to analyze
-     * @return compound score between -1 (negative) and 1 (positive)
+     * Retrieve the compound sentiment score for the input text.
+     *
+     * @param text the input text to analyze; must not be null
+     * @return the compound score between -1.0 (negative) and 1.0 (positive)
+     * @throws IllegalArgumentException if {@code text} is null
+     * @throws RuntimeException if an error occurs during analysis
      */
     public double getSentimentScore(final String text) {
         if (text == null) {
             throw new IllegalArgumentException("Text cannot be null");
         }
+
 
         try {
             // Set the input string and analyze
@@ -141,19 +153,23 @@ public class SentimentAnalysisController {
         } catch (Exception e) {
             throw new RuntimeException("Error getting sentiment score", e);
         }
+
     }
 
+
     /**
-     * Gets all sentiment scores as a map.
-     * 
-     * @param text the input text to analyze
-     * @return map containing all sentiment scores (compound, positive, negative,
-     *         neutral)
+     * Obtain sentiment polarity scores for the provided text.
+     *
+     * @param text the input text to analyze; must not be null
+     * @return a map with keys "compound", "positive", "negative", and "neutral" mapped to their respective float scores
+     * @throws IllegalArgumentException if text is null
+     * @throws RuntimeException if an error occurs while performing sentiment analysis
      */
     public HashMap<String, Float> getAllSentimentScores(final String text) {
         if (text == null) {
             throw new IllegalArgumentException("Text cannot be null");
         }
+
 
         try {
             // Set the input string and analyze
@@ -165,5 +181,7 @@ public class SentimentAnalysisController {
         } catch (Exception e) {
             throw new RuntimeException("Error getting all sentiment scores", e);
         }
+
     }
+
 }

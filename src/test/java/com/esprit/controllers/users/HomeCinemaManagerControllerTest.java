@@ -36,6 +36,7 @@ class HomeCinemaManagerControllerTest extends TestFXBase {
         stage.show();
     }
 
+
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Manager Dashboard Tests")
     class ManagerDashboardTests {
@@ -50,6 +51,7 @@ class HomeCinemaManagerControllerTest extends TestFXBase {
             assertThat(dashboard).isNotNull();
         }
 
+
         @Test
         @Order(2)
         @DisplayName("Should display welcome message")
@@ -59,7 +61,9 @@ class HomeCinemaManagerControllerTest extends TestFXBase {
             Label welcomeLabel = lookup("#welcomeLabel").query();
             assertThat(welcomeLabel).isNotNull();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Cinema Overview Tests")
@@ -74,6 +78,7 @@ class HomeCinemaManagerControllerTest extends TestFXBase {
             assertThat(lookup("#cinemaOverview").tryQuery()).isPresent();
         }
 
+
         @Test
         @Order(4)
         @DisplayName("Should navigate to cinema details")
@@ -86,7 +91,9 @@ class HomeCinemaManagerControllerTest extends TestFXBase {
 
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Session Management Tests")
@@ -101,6 +108,7 @@ class HomeCinemaManagerControllerTest extends TestFXBase {
             assertThat(lookup("#sessionManagementSection").tryQuery()).isPresent();
         }
 
+
         @Test
         @Order(6)
         @DisplayName("Should navigate to add session")
@@ -113,7 +121,9 @@ class HomeCinemaManagerControllerTest extends TestFXBase {
 
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Statistics Tests")
@@ -128,6 +138,7 @@ class HomeCinemaManagerControllerTest extends TestFXBase {
             assertThat(lookup("#statisticsPanel").tryQuery()).isPresent();
         }
 
+
         @Test
         @Order(8)
         @DisplayName("Should show total bookings")
@@ -137,5 +148,8 @@ class HomeCinemaManagerControllerTest extends TestFXBase {
             Label bookingsLabel = lookup("#totalBookingsLabel").query();
             assertThat(bookingsLabel).isNotNull();
         }
+
     }
+
 }
+

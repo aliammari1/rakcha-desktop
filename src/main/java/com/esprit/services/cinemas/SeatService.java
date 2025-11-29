@@ -51,12 +51,15 @@ public class SeatService {
         } catch (Exception e) {
             log.error("Error creating tables for SeatService", e);
         }
+
     }
 
+
     /**
-     * Retrieves the SeatsByCinemaHallId value.
+     * Retrieves all seats that belong to the specified cinema hall.
      *
-     * @return the SeatsByCinemaHallId value
+     * @param cinemaHallId the ID of the cinema hall whose seats should be returned
+     * @return a list of Seat objects associated with the specified cinema hall; empty if none are found
      */
     public List<Seat> getSeatsByCinemaHallId(Long cinemaHallId) {
         List<Seat> seats = new ArrayList<>();
@@ -70,18 +73,25 @@ public class SeatService {
                     if (seat != null) {
                         seats.add(seat);
                     }
+
                 }
+
             }
+
         } catch (SQLException e) {
             log.error("Error retrieving seats for cinema hall: " + cinemaHallId, e);
         }
+
         return seats;
     }
 
+
     /**
-     * Performs updateSeatStatus operation.
+     * Update the occupied status of a seat identified by its ID.
      *
-     * @return the result of the operation
+     * @param seatId    the identifier of the seat to update
+     * @param isOccupied the new occupied status for the seat
+     * @return `true` if a row was updated (status changed), `false` otherwise
      */
     public boolean updateSeatStatus(Long seatId, Boolean isOccupied) {
         String query = "UPDATE seats SET is_occupied = ? WHERE id = ?";
@@ -93,12 +103,15 @@ public class SeatService {
             log.error("Error updating seat status for seat: " + seatId, e);
             return false;
         }
+
     }
 
+
     /**
-     * Creates a new entity in the database.
+     * Inserts the given Seat into the database seats table.
      *
-     * @param seat the seat entity to create
+     * @param seat the Seat to insert; its associated CinemaHall must have a valid id
+     * @throws RuntimeException if a database error prevents the seat from being created
      */
     public void create(Seat seat) {
         String query = "INSERT INTO seats (seat_number, row_number, is_occupied, cinema_hall_id) VALUES (?, ?, ?, ?)";
@@ -113,11 +126,15 @@ public class SeatService {
             log.error("Error creating seat", e);
             throw new RuntimeException(e);
         }
+
     }
 
+
     /**
-     * @param rs
-     * @return Seat
+     * Constructs a Seat object from the current row of the provided ResultSet.
+     *
+     * @param rs the ResultSet positioned at a valid seat row
+     * @return the Seat built from the current row, or `null` if the referenced CinemaHall cannot be found or a SQL error occurs
      */
     private Seat buildSeat(ResultSet rs) {
         try {
@@ -127,6 +144,7 @@ public class SeatService {
                 return null;
             }
 
+
             return Seat.builder().id(rs.getLong("id")).seatNumber(rs.getInt("seat_number"))
                     .rowNumber(rs.getInt("row_number")).isOccupied(rs.getBoolean("is_occupied")).cinemaHall(cinemaHall)
                     .build();
@@ -134,5 +152,7 @@ public class SeatService {
             log.error("Error building seat from ResultSet", e);
             return null;
         }
+
     }
+
 }

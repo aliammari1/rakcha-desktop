@@ -47,6 +47,7 @@ class FilmControllerTest extends TestFXBase {
         stage.toFront();
     }
 
+
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Film Table Display Tests")
     class FilmTableDisplayTests {
@@ -59,6 +60,7 @@ class FilmControllerTest extends TestFXBase {
             verifyThat("#film_tableView", isVisible());
         }
 
+
         @Test
         @Order(2)
         @DisplayName("Should display film title column")
@@ -67,12 +69,14 @@ class FilmControllerTest extends TestFXBase {
             assertNotNull(table);
         }
 
+
         @Test
         @Order(3)
         @DisplayName("Should display film year column")
         void testFilmYearColumnDisplay() {
             verifyThat("#annederalisationFilm_tableColumn", isNotNull());
         }
+
 
         @Test
         @Order(4)
@@ -83,6 +87,7 @@ class FilmControllerTest extends TestFXBase {
             assertNotNull(table);
         }
 
+
         @Test
         @Order(5)
         @DisplayName("Should display film description column")
@@ -90,6 +95,7 @@ class FilmControllerTest extends TestFXBase {
             TableView<?> table = lookup("#film_tableView").query();
             assertNotNull(table.getColumns());
         }
+
 
         @Test
         @Order(6)
@@ -99,6 +105,7 @@ class FilmControllerTest extends TestFXBase {
             assertNotNull(table.getColumns());
         }
 
+
         @Test
         @Order(7)
         @DisplayName("Should load film data into table")
@@ -106,7 +113,9 @@ class FilmControllerTest extends TestFXBase {
             TableView<?> table = lookup("#film_tableView").query();
             assertNotNull(table.getItems());
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Film Creation Tests")
@@ -120,12 +129,14 @@ class FilmControllerTest extends TestFXBase {
             verifyThat("#ajouter_Button", isEnabled());
         }
 
+
         @Test
         @Order(11)
         @DisplayName("Should display film title input field")
         void testFilmTitleFieldVisible() {
             verifyThat("#titre_textField", isVisible());
         }
+
 
         @Test
         @Order(12)
@@ -134,6 +145,7 @@ class FilmControllerTest extends TestFXBase {
             verifyThat("#annederalisation_textField", isVisible());
         }
 
+
         @Test
         @Order(13)
         @DisplayName("Should display film duration input field")
@@ -141,12 +153,14 @@ class FilmControllerTest extends TestFXBase {
             verifyThat("#duree_textField", isVisible());
         }
 
+
         @Test
         @Order(14)
         @DisplayName("Should display film description input field")
         void testFilmDescriptionFieldVisible() {
             verifyThat("#description_textField", isVisible());
         }
+
 
         @Test
         @Order(15)
@@ -158,6 +172,7 @@ class FilmControllerTest extends TestFXBase {
             assertEquals(filmTitle, getTextFieldValue("#titre_textField"));
         }
 
+
         @Test
         @Order(16)
         @DisplayName("Should accept valid film year")
@@ -167,6 +182,7 @@ class FilmControllerTest extends TestFXBase {
 
             assertEquals(year, getTextFieldValue("#annederalisation_textField"));
         }
+
 
         @Test
         @Order(17)
@@ -178,6 +194,7 @@ class FilmControllerTest extends TestFXBase {
             assertEquals(duration, getTextFieldValue("#duree_textField"));
         }
 
+
         @Test
         @Order(18)
         @DisplayName("Should accept valid film description")
@@ -187,6 +204,7 @@ class FilmControllerTest extends TestFXBase {
 
             assertEquals(description, getTextFieldValue("#description_textField"));
         }
+
 
         @Test
         @Order(19)
@@ -200,7 +218,9 @@ class FilmControllerTest extends TestFXBase {
             clickOnAndWait("#ajouter_Button");
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Film Validation Tests")
@@ -225,6 +245,7 @@ class FilmControllerTest extends TestFXBase {
                     "Table size should not change after failed validation");
         }
 
+
         @Test
         @Order(21)
         @DisplayName("Should validate required film year")
@@ -242,6 +263,7 @@ class FilmControllerTest extends TestFXBase {
             assertEquals(initialSize, ((TableView<?>) lookup("#film_tableView").query()).getItems().size(),
                     "Table size should not change when year is missing");
         }
+
 
         @Test
         @Order(22)
@@ -261,6 +283,7 @@ class FilmControllerTest extends TestFXBase {
                     "Non-numeric year should prevent film creation");
         }
 
+
         @Test
         @Order(23)
         @DisplayName("Should validate year range")
@@ -278,6 +301,7 @@ class FilmControllerTest extends TestFXBase {
             assertEquals(initialSize, ((TableView<?>) lookup("#film_tableView").query()).getItems().size(),
                     "Year 1800 should be outside valid range and prevent creation");
         }
+
 
         @Test
         @Order(24)
@@ -298,6 +322,7 @@ class FilmControllerTest extends TestFXBase {
                     "Non-numeric duration should prevent film creation");
         }
 
+
         @Test
         @Order(25)
         @DisplayName("Should validate duration positive value")
@@ -316,6 +341,7 @@ class FilmControllerTest extends TestFXBase {
             assertEquals(initialSize, ((TableView<?>) lookup("#film_tableView").query()).getItems().size(),
                     "Negative duration should prevent film creation");
         }
+
 
         @Test
         @Order(26)
@@ -336,7 +362,9 @@ class FilmControllerTest extends TestFXBase {
             assertEquals(initialSize, ((TableView<?>) lookup("#film_tableView").query()).getItems().size(),
                     "Description too short should prevent film creation");
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -352,6 +380,7 @@ class FilmControllerTest extends TestFXBase {
             // Implementation: Lookup category control, assert items not empty
         }
 
+
         @Test
         @Order(31)
         @Disabled("TODO: Implement category multi-selection - verify film can have multiple categories")
@@ -360,6 +389,7 @@ class FilmControllerTest extends TestFXBase {
             // Requires: Multiple category selection UI works
             // Implementation: Click multiple categories, verify all selected
         }
+
 
         @Test
         @Order(32)
@@ -370,6 +400,7 @@ class FilmControllerTest extends TestFXBase {
             // Implementation: Create film with categories, retrieve film, verify categories attached
         }
 
+
         @Test
         @Order(33)
         @Disabled("TODO: Implement category display - verify assigned categories visible in form")
@@ -378,6 +409,7 @@ class FilmControllerTest extends TestFXBase {
             // Requires: Previously assigned categories show in UI on form load
             // Implementation: Load form with existing film, verify categories displayed
         }
+
 
         @Test
         @Order(34)
@@ -388,6 +420,7 @@ class FilmControllerTest extends TestFXBase {
             // Implementation: Create film with category, deselect, verify removed
         }
 
+
         @Test
         @Order(35)
         @Disabled("TODO: Implement category validation - verify film requires at least one category")
@@ -396,7 +429,9 @@ class FilmControllerTest extends TestFXBase {
             // Requires: Prevent film creation without categories
             // Implementation: Try to create film with no categories, assert validation error
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -412,6 +447,7 @@ class FilmControllerTest extends TestFXBase {
             // Implementation: Lookup actor control, assert items not empty
         }
 
+
         @Test
         @Order(41)
         @Disabled("TODO: Implement actor multi-selection - verify film can have multiple actors")
@@ -420,6 +456,7 @@ class FilmControllerTest extends TestFXBase {
             // Requires: Multiple actor selection UI works
             // Implementation: Click multiple actors, verify all selected
         }
+
 
         @Test
         @Order(42)
@@ -430,6 +467,7 @@ class FilmControllerTest extends TestFXBase {
             // Implementation: Create film with actors, retrieve film, verify actors attached
         }
 
+
         @Test
         @Order(43)
         @Disabled("TODO: Implement actor display - verify assigned actors visible in form")
@@ -438,6 +476,7 @@ class FilmControllerTest extends TestFXBase {
             // Requires: Previously assigned actors show in UI on form load
             // Implementation: Load form with existing film, verify actors displayed
         }
+
 
         @Test
         @Order(44)
@@ -448,6 +487,7 @@ class FilmControllerTest extends TestFXBase {
             // Implementation: Create film with actor, deselect, verify removed
         }
 
+
         @Test
         @Order(45)
         @Disabled("TODO: Implement actor validation - verify film requires at least one actor")
@@ -456,7 +496,9 @@ class FilmControllerTest extends TestFXBase {
             // Requires: Prevent film creation without actors
             // Implementation: Try to create film with no actors, assert validation error
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -472,6 +514,7 @@ class FilmControllerTest extends TestFXBase {
             // Implementation: Lookup button, assert not null and visible
         }
 
+
         @Test
         @Order(51)
         @Disabled("TODO: Implement file chooser dialog test - verify dialog opens on button click")
@@ -480,6 +523,7 @@ class FilmControllerTest extends TestFXBase {
             // Requires: Clicking upload button opens file selection dialog
             // Implementation: Click button, verify file chooser appears (tricky in headless - may need mocking)
         }
+
 
         @Test
         @Order(52)
@@ -490,6 +534,7 @@ class FilmControllerTest extends TestFXBase {
             // Implementation: Select image file, verify ImageView image property set
         }
 
+
         @Test
         @Order(53)
         @Disabled("TODO: Implement image format validation - only accept common image types")
@@ -498,6 +543,7 @@ class FilmControllerTest extends TestFXBase {
             // Requires: Reject non-image files (pdf, txt, etc.)
             // Implementation: Attempt to select non-image, verify error shown
         }
+
 
         @Test
         @Order(54)
@@ -508,6 +554,7 @@ class FilmControllerTest extends TestFXBase {
             // Implementation: Create oversized image file, verify validation error
         }
 
+
         @Test
         @Order(55)
         @Disabled("TODO: Implement Cloudinary upload - upload image to cloud storage service")
@@ -517,6 +564,7 @@ class FilmControllerTest extends TestFXBase {
             // Implementation: Mock CloudinaryStorage or use real service, verify image URL stored
         }
 
+
         @Test
         @Order(56)
         @Disabled("TODO: Implement upload error handling - gracefully handle upload failures")
@@ -525,7 +573,9 @@ class FilmControllerTest extends TestFXBase {
             // Requires: Network/service errors don't crash app
             // Implementation: Mock upload failure, verify error dialog shown
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Film Update Tests")
@@ -538,6 +588,7 @@ class FilmControllerTest extends TestFXBase {
             verifyThat("#modifier_Button", isVisible());
         }
 
+
         @Test
         @Order(61)
         @DisplayName("Should enable inline table editing")
@@ -548,7 +599,9 @@ class FilmControllerTest extends TestFXBase {
                 doubleClickOn(table);
                 waitForFxEvents();
             }
+
         }
+
 
         @Test
         @Order(62)
@@ -558,6 +611,7 @@ class FilmControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(63)
         @DisplayName("Should update film year")
@@ -565,6 +619,7 @@ class FilmControllerTest extends TestFXBase {
             // Edit year in table
             waitForFxEvents();
         }
+
 
         @Test
         @Order(64)
@@ -574,6 +629,7 @@ class FilmControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(65)
         @DisplayName("Should save updates to database")
@@ -581,7 +637,9 @@ class FilmControllerTest extends TestFXBase {
             clickOnAndWait("#modifier_Button");
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Film Deletion Tests")
@@ -594,6 +652,7 @@ class FilmControllerTest extends TestFXBase {
             verifyThat("#supprimer_Button", isVisible());
         }
 
+
         @Test
         @Order(71)
         @DisplayName("Should require film selection for deletion")
@@ -603,6 +662,7 @@ class FilmControllerTest extends TestFXBase {
 
             // Should show message to select film first
         }
+
 
         @Test
         @Order(72)
@@ -614,6 +674,7 @@ class FilmControllerTest extends TestFXBase {
             // Should show confirmation dialog
         }
 
+
         @Test
         @Order(73)
         @DisplayName("Should delete film on confirmation")
@@ -623,6 +684,7 @@ class FilmControllerTest extends TestFXBase {
 
             // Film should be removed
         }
+
 
         @Test
         @Order(74)
@@ -634,6 +696,7 @@ class FilmControllerTest extends TestFXBase {
             // Film should remain
         }
 
+
         @Test
         @Order(75)
         @DisplayName("Should refresh table after deletion")
@@ -641,7 +704,9 @@ class FilmControllerTest extends TestFXBase {
             // Table should update after deletion
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Search and Filter Tests")
@@ -654,6 +719,7 @@ class FilmControllerTest extends TestFXBase {
             verifyThat("#rechercher_textField", isVisible());
         }
 
+
         @Test
         @Order(81)
         @DisplayName("Should filter films by title")
@@ -661,6 +727,7 @@ class FilmControllerTest extends TestFXBase {
             fillTextField("#rechercher_textField", "Action");
             waitForFxEvents();
         }
+
 
         @Test
         @Order(82)
@@ -670,6 +737,7 @@ class FilmControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(83)
         @DisplayName("Should filter by category")
@@ -677,6 +745,7 @@ class FilmControllerTest extends TestFXBase {
             // Category filter
             waitForFxEvents();
         }
+
 
         @Test
         @Order(84)
@@ -687,6 +756,7 @@ class FilmControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(85)
         @DisplayName("Should clear all filters")
@@ -695,6 +765,7 @@ class FilmControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(86)
         @DisplayName("Should show no results message")
@@ -702,7 +773,9 @@ class FilmControllerTest extends TestFXBase {
             fillTextField("#rechercher_textField", "NonexistentFilm12345");
             waitForFxEvents();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -716,6 +789,7 @@ class FilmControllerTest extends TestFXBase {
             verifyThat("#ajouterCinema_Button", isVisible());
         }
 
+
         @Test
         @Order(91)
         @Disabled("TODO: Implement cinema loading - verify available cinemas load in UI")
@@ -724,6 +798,7 @@ class FilmControllerTest extends TestFXBase {
             // Requires: Cinema list/dropdown populates from service
             // Implementation: Lookup cinema control, assert items present
         }
+
 
         @Test
         @Order(92)
@@ -734,6 +809,7 @@ class FilmControllerTest extends TestFXBase {
             // Implementation: Click cinema button, select cinema, verify association created
         }
 
+
         @Test
         @Order(93)
         @Disabled("TODO: Implement cinema selection validation - prevent assignment without cinema")
@@ -742,7 +818,9 @@ class FilmControllerTest extends TestFXBase {
             // Requires: Prevent empty cinema selection
             // Implementation: Try to assign without selecting cinema, verify error
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Table Operations Tests")
@@ -758,7 +836,9 @@ class FilmControllerTest extends TestFXBase {
                 runOnFxThread(() -> table.getSelectionModel().select(0));
                 assertNotNull(table.getSelectionModel().getSelectedItem());
             }
+
         }
+
 
         @Test
         @Order(101)
@@ -768,6 +848,7 @@ class FilmControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(102)
         @DisplayName("Should handle empty table")
@@ -776,6 +857,7 @@ class FilmControllerTest extends TestFXBase {
             assertNotNull(table.getItems());
         }
 
+
         @Test
         @Order(103)
         @DisplayName("Should refresh table data")
@@ -783,5 +865,8 @@ class FilmControllerTest extends TestFXBase {
             clickOnAndWait("#afficher_Button");
             waitForFxEvents();
         }
+
     }
+
 }
+

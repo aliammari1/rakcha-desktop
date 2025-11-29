@@ -36,6 +36,7 @@ class HomeAdminControllerTest extends TestFXBase {
         stage.show();
     }
 
+
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Admin Dashboard Tests")
     class AdminDashboardTests {
@@ -50,6 +51,7 @@ class HomeAdminControllerTest extends TestFXBase {
             assertThat(dashboard).isNotNull();
         }
 
+
         @Test
         @Order(2)
         @DisplayName("Should display welcome message")
@@ -61,6 +63,7 @@ class HomeAdminControllerTest extends TestFXBase {
             assertThat(welcomeLabel.getText()).contains("Admin");
         }
 
+
         @Test
         @Order(3)
         @DisplayName("Should load admin statistics")
@@ -70,7 +73,9 @@ class HomeAdminControllerTest extends TestFXBase {
             VBox dashboard = lookup("#adminDashboard").query();
             assertThat(dashboard).isNotNull();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("User Management Tests")
@@ -84,6 +89,7 @@ class HomeAdminControllerTest extends TestFXBase {
 
             assertThat(lookup("#userManagementSection").tryQuery()).isPresent();
         }
+
 
         @Test
         @Order(5)
@@ -102,6 +108,7 @@ class HomeAdminControllerTest extends TestFXBase {
             assertThat(lookup("#adminDashboard").tryQuery()).as("Admin dashboard should be loaded").isPresent();
         }
 
+
         @Test
         @Order(6)
         @DisplayName("Should display total users count")
@@ -111,7 +118,9 @@ class HomeAdminControllerTest extends TestFXBase {
             Label totalUsers = lookup("#totalUsersLabel").query();
             assertThat(totalUsers).isNotNull();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Cinema Management Tests")
@@ -125,6 +134,7 @@ class HomeAdminControllerTest extends TestFXBase {
 
             assertThat(lookup("#cinemaManagementSection").tryQuery()).isPresent();
         }
+
 
         @Test
         @Order(8)
@@ -144,7 +154,9 @@ class HomeAdminControllerTest extends TestFXBase {
                     .as("Cinema management section should be visible after navigation")
                     .isPresent();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Reports Tests")
@@ -158,6 +170,7 @@ class HomeAdminControllerTest extends TestFXBase {
 
             assertThat(lookup("#reportsSection").tryQuery()).isPresent();
         }
+
 
         @Test
         @Order(10)
@@ -178,7 +191,9 @@ class HomeAdminControllerTest extends TestFXBase {
                     .as("Generate report button should remain visible and functional")
                     .isPresent();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Quick Actions Tests")
@@ -192,6 +207,7 @@ class HomeAdminControllerTest extends TestFXBase {
 
             assertThat(lookup("#quickActionsPanel").tryQuery()).isPresent();
         }
+
 
         @Test
         @Order(12)
@@ -215,6 +231,7 @@ class HomeAdminControllerTest extends TestFXBase {
             // to confirm it was called with the correct parameters
         }
 
+
         @Test
         @Order(13)
         @DisplayName("Should send email to users")
@@ -236,5 +253,8 @@ class HomeAdminControllerTest extends TestFXBase {
             // In a real scenario, you would verify a success message or mock the email service
             // to confirm it was called with the correct parameters
         }
+
     }
+
 }
+

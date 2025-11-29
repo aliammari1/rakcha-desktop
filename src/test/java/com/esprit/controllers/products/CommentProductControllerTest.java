@@ -42,6 +42,7 @@ class CommentProductControllerTest extends TestFXBase {
         stage.show();
     }
 
+
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
     @DisplayName("Comment Input Tests")
@@ -60,6 +61,7 @@ class CommentProductControllerTest extends TestFXBase {
             assertThat(commentArea.getText()).isEqualTo("This is a great product!");
         }
 
+
         @Test
         @Order(2)
         @DisplayName("Should handle multi-line comments")
@@ -74,6 +76,7 @@ class CommentProductControllerTest extends TestFXBase {
             assertThat(commentArea.getText()).contains("\n");
         }
 
+
         @Test
         @Order(3)
         @DisplayName("Should accept long comments")
@@ -87,6 +90,7 @@ class CommentProductControllerTest extends TestFXBase {
 
             assertThat(commentArea.getText()).hasSize(500);
         }
+
 
         @Test
         @Order(4)
@@ -104,7 +108,9 @@ class CommentProductControllerTest extends TestFXBase {
             // Verify text area is empty
             assertThat(commentArea.getText()).isEmpty();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -129,10 +135,12 @@ class CommentProductControllerTest extends TestFXBase {
             if (warningLabel.isPresent()) {
                 assertThat(warningLabel.get().isVisible()).isTrue();
             }
+
             
             // Verify submit was prevented or comment didn't get added
             assertThat(commentArea.getText()).isNotEmpty();
         }
+
 
         @Test
         @Order(6)
@@ -150,10 +158,12 @@ class CommentProductControllerTest extends TestFXBase {
             if (warningLabel.isPresent()) {
                 assertThat(warningLabel.get().isVisible()).isFalse();
             }
+
             
             // Verify comment text is present
             assertThat(commentArea.getText()).contains(cleanText);
         }
+
 
         @Test
         @Order(7)
@@ -173,7 +183,9 @@ class CommentProductControllerTest extends TestFXBase {
             if (warningLabel.isPresent()) {
                 assertThat(warningLabel.get().isVisible()).isTrue();
             }
+
         }
+
 
         @Test
         @Order(8)
@@ -190,6 +202,7 @@ class CommentProductControllerTest extends TestFXBase {
                 // Check if button is enabled before bad word input
                 assertThat(submitButton.get().isDisabled()).isFalse();
             }
+
             
             clickOn(commentArea).write("bad words here");
 
@@ -200,13 +213,17 @@ class CommentProductControllerTest extends TestFXBase {
             if (submitButton.isPresent()) {
                 // Button should be disabled after bad words
                 assertThat(submitButton.get().isDisabled()).isTrue();
-            } else {
+            }
+ else {
                 // Or warning should be visible
                 var warningLabel = lookup("#warningLabel").tryQuery();
                 assertThat(warningLabel.isPresent()).isTrue();
             }
+
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -227,6 +244,7 @@ class CommentProductControllerTest extends TestFXBase {
             assertThat(commentPane.getChildren()).isNotNull();
         }
 
+
         @Test
         @Order(10)
         @DisplayName("Should display comment author name")
@@ -245,15 +263,18 @@ class CommentProductControllerTest extends TestFXBase {
             var authorLabel = lookup("John Doe").tryQuery();
             if (authorLabel.isPresent()) {
                 assertThat(authorLabel.get().isVisible()).isTrue();
-            } else {
+            }
+ else {
                 // If not found by text, verify comment pane has children
                 assertThat(commentPane.getChildren()).isNotNull();
             }
+
             
             // Verify mock object has correct author data
             assertThat(comment.getClient().getFirstName()).isEqualTo("John");
             assertThat(comment.getClient().getLastName()).isEqualTo("Doe");
         }
+
 
         @Test
         @Order(11)
@@ -273,14 +294,17 @@ class CommentProductControllerTest extends TestFXBase {
             var textNode = lookup("Great product!").tryQuery();
             if (textNode.isPresent()) {
                 assertThat(textNode.get().isVisible()).isTrue();
-            } else {
+            }
+ else {
                 // Verify comment pane is visible and ready
                 assertThat(commentPane.isVisible()).isTrue();
             }
+
             
             // Verify mock comment has expected text
             assertThat(comment.getCommentText()).isEqualTo("Great product!");
         }
+
 
         @Test
         @Order(12)
@@ -297,6 +321,7 @@ class CommentProductControllerTest extends TestFXBase {
             // Verify pane is ready (children list exists)
             assertThat(commentPane.getChildren()).isNotNull();
         }
+
 
         @Test
         @Order(13)
@@ -317,8 +342,11 @@ class CommentProductControllerTest extends TestFXBase {
                 assertThat(c.getClient().getFirstName()).isNotEmpty();
                 assertThat(c.getCommentText()).isNotEmpty();
             }
+
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -339,6 +367,7 @@ class CommentProductControllerTest extends TestFXBase {
             assertThat(commentPane).isNotNull();
         }
 
+
         @Test
         @Order(15)
         @DisplayName("Should wrap long comment text")
@@ -352,6 +381,7 @@ class CommentProductControllerTest extends TestFXBase {
             assertThat(comment.getCommentText()).isEqualTo(longText);
         }
 
+
         @Test
         @Order(16)
         @DisplayName("Should style author name in bold")
@@ -364,6 +394,7 @@ class CommentProductControllerTest extends TestFXBase {
             assertThat(comment.getClient().getFirstName()).isEqualTo("John");
             assertThat(comment.getClient().getLastName()).isEqualTo("Doe");
         }
+
 
         @Test
         @Order(17)
@@ -379,7 +410,9 @@ class CommentProductControllerTest extends TestFXBase {
             // Verify comment structure
             assertThat(comment.getClient().getFirstName()).isNotEmpty();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -407,6 +440,7 @@ class CommentProductControllerTest extends TestFXBase {
             assertThat(commentArea).isNotNull();
         }
 
+
         @Test
         @Order(19)
         @DisplayName("Should associate comment with product")
@@ -427,6 +461,7 @@ class CommentProductControllerTest extends TestFXBase {
             assertThat(commentArea).isNotNull();
         }
 
+
         @Test
         @Order(20)
         @DisplayName("Should clear comment field after submission")
@@ -443,7 +478,9 @@ class CommentProductControllerTest extends TestFXBase {
             // Verify field is ready for next comment
             assertThat(commentArea).isNotNull();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -461,6 +498,7 @@ class CommentProductControllerTest extends TestFXBase {
             assertThat(commentPane).isNotNull();
         }
 
+
         @Test
         @Order(22)
         @DisplayName("Should navigate to product client interface")
@@ -471,6 +509,7 @@ class CommentProductControllerTest extends TestFXBase {
             FlowPane commentPane = lookup("#CommentFlowPane").query();
             assertThat(commentPane).isNotNull();
         }
+
 
         @Test
         @Order(23)
@@ -483,6 +522,7 @@ class CommentProductControllerTest extends TestFXBase {
             assertThat(commentPane).isNotNull();
         }
 
+
         @Test
         @Order(24)
         @DisplayName("Should navigate to series client interface")
@@ -494,6 +534,7 @@ class CommentProductControllerTest extends TestFXBase {
             assertThat(commentPane).isNotNull();
         }
 
+
         @Test
         @Order(25)
         @DisplayName("Should navigate to event client interface")
@@ -504,7 +545,9 @@ class CommentProductControllerTest extends TestFXBase {
             FlowPane commentPane = lookup("#CommentFlowPane").query();
             assertThat(commentPane).isNotNull();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -528,6 +571,7 @@ class CommentProductControllerTest extends TestFXBase {
             assertThat(commentArea).isNotNull();
         }
 
+
         @Test
         @Order(27)
         @DisplayName("Should handle null user gracefully")
@@ -545,6 +589,7 @@ class CommentProductControllerTest extends TestFXBase {
             assertThat(commentArea).isNotNull();
         }
 
+
         @Test
         @Order(28)
         @DisplayName("Should handle bad word detection service errors")
@@ -561,7 +606,9 @@ class CommentProductControllerTest extends TestFXBase {
             // Verify UI is still responsive
             assertThat(commentArea).isNotNull();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -577,6 +624,7 @@ class CommentProductControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
+
         @Test
         @Order(30)
         @Disabled("TODO: Implement timestamp validation - verify timestamp is not in future")
@@ -585,7 +633,9 @@ class CommentProductControllerTest extends TestFXBase {
             // Requires: Create comment with mocked current date, verify timestamp <= now
             waitForFxEvents();
         }
+
     }
+
 
     // Helper methods
     private List<Comment> createMockComments() {
@@ -595,6 +645,7 @@ class CommentProductControllerTest extends TestFXBase {
         comments.add(createMockComment("Bob", "Johnson", "Highly recommended!"));
         return comments;
     }
+
 
     private Comment createMockComment(String firstName, String lastName, String text) {
         Client client = new Client();
@@ -607,4 +658,6 @@ class CommentProductControllerTest extends TestFXBase {
 
         return comment;
     }
+
 }
+

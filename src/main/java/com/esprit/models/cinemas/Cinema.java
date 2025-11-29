@@ -70,10 +70,11 @@ public class Cinema {
         this.comments = new ArrayList<>();
     }
 
+
     /**
-     * Get all movie sessions for this cinema across all halls.
+     * Retrieve all movie sessions for this cinema across all halls.
      *
-     * @return a list of all movie sessions in this cinema
+     * @return a list of all MovieSession objects for this cinema; the list will be empty if there are no sessions
      */
     public List<MovieSession> getMovieSessions() {
         List<MovieSession> allSessions = new ArrayList<>();
@@ -82,8 +83,12 @@ public class Cinema {
                 if (hall.getMovieSessions() != null) {
                     allSessions.addAll(hall.getMovieSessions());
                 }
+
             }
+
         }
+
         return allSessions;
     }
+
 }

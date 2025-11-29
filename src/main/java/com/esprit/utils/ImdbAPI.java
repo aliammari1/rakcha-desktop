@@ -40,6 +40,7 @@ public class ImdbAPI {
             throw new IllegalArgumentException("Search query cannot be empty");
         }
 
+
         final String encodedQuery = URLEncoder.encode(query.trim(), StandardCharsets.UTF_8);
         final String scriptUrl = API_URL + "?query=" + encodedQuery;
 
@@ -64,6 +65,7 @@ public class ImdbAPI {
                             response.append(line);
                         }
 
+
                         JSONObject jsonResponse = new JSONObject("{" + response + "}");
                         JSONArray results = jsonResponse.getJSONArray("results");
 
@@ -73,30 +75,41 @@ public class ImdbAPI {
                             return imdbUrl;
                         }
 
+
                         LOGGER.info("No results found for: " + query);
                         return null;
                     }
-                } else if (conn.getResponseCode() == 429) {
+
+                }
+ else if (conn.getResponseCode() == 429) {
                     // Too Many Requests - implement retry with backoff
                     retries++;
                     if (retries < MAX_RETRIES) {
                         Thread.sleep(RETRY_DELAY_MS * retries);
                         continue;
                     }
+
                 }
+
 
                 throw new IOException("HTTP error code: " + conn.getResponseCode());
 
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 throw new IOException("Search interrupted", e);
-            } finally {
+            }
+ finally {
                 if (conn != null) {
                     conn.disconnect();
                 }
+
             }
+
         }
+
 
         throw new IOException("Max retries exceeded while searching IMDb");
     }
+
 }
+

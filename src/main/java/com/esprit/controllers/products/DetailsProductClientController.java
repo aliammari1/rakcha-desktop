@@ -96,13 +96,10 @@ public class DetailsProductClientController implements Initializable {
     // Méthode pour initialiser l'ID du produit
 
     /**
-     * Sets the `produitId` field to a given value, then initializes details of the
-     * product based on the set ID.
+     * Set the current product ID and initialize the product details view for that product.
      *
-     * @param produitId
-     *                  ID of the product to which the method is being called, and
-     *                  it is
-     *                  used to store the value in the field `this.produitId`.
+     * @param produitId the product identifier to display
+     * @throws IOException if an I/O error occurs while initializing product details
      */
     public void setProductId(final Long produitId) throws IOException {
         this.produitId = produitId;
@@ -110,31 +107,12 @@ public class DetailsProductClientController implements Initializable {
         this.initDetailsProduct();
     }
 
+
     /**
-     * Loads a list of top-3 accepted products and attaches an event handler to the
-     * icon's mouse click, which displays the product when clicked.
+     * Initialize the controller by loading the top-three accepted products and wiring the back icon to show the product list.
      *
-     * @param location
-     *                  URL of the resource to be initialized, which is used to load
-     *                  the
-     *                  accepted top-3 products when the function is called.
-     *                  <p>
-     *                  Location refers to an URL that provides the root resource of
-     *                  the
-     *                  application. It represents the base URL of the application
-     *                  and is
-     *                  used in loading accepted top 3.
-     * @param resources
-     *                  ResourceBundle containing keys for localized strings, which
-     *                  are
-     *                  used to display product information when the user clicks on
-     *                  the
-     *                  icon.
-     *                  <p>
-     *                  - `location`: A URL object representing the location of the
-     *                  application. - `resources`: A ResourceBundle object
-     *                  providing
-     *                  key-value pairs of resource strings in different languages.
+     * @param location  the location used to resolve relative paths, may be null
+     * @param resources the ResourceBundle for localized strings, may be null
      */
     @Override
     /**
@@ -148,19 +126,22 @@ public class DetailsProductClientController implements Initializable {
         this.retour.setOnMouseClicked(event -> this.afficherProduct());
     }
 
+
     /**
-     * Returns the value of the `quantiteSelectionnee` field.
+     * Retrieve the selected quantity.
      *
-     * @returns the value of the `quantiteSelectionnee` variable.
+     * @return the currently selected quantity
      */
     public int getQuantiteSelectionnee() {
         return this.quantiteSelectionnee;
     }
 
+
     /**
-     * Retrieves a product from a service using its ID, verifies if the product is
-     * found, and adds a card for the product to a `FlowPane` if it exists, and also
-     * adds a card for the product's cart to another `FlowPane`.
+     * Load the product identified by this.produitId and populate the UI with its detail and shopping-cart cards.
+     *
+     * Clears existing children from the detail FlowPane, adds a product detail card and a shopping-cart card when the
+     * product is found, and logs an informational message if no product matches the ID.
      */
     private void initDetailsProduct() {
         // Récupérer le produit depuis le service en utilisant l'ID
@@ -175,51 +156,21 @@ public class DetailsProductClientController implements Initializable {
             final HBox shoppingcartContainer = this.createShoppingCartCard(produit);
             this.detailFlowPane.getChildren().add(cardContainer);
             this.shoppingcartFlowPane.getChildren().add(shoppingcartContainer);
-        }, () -> DetailsProductClientController.LOGGER.info("Product non trouvé avec l'ID : " + this.produitId));
+        }
+, () -> DetailsProductClientController.LOGGER.info("Product non trouvé avec l'ID : " + this.produitId));
     }
 
+
     /**
-     * Creates a scene containing a card for a product, with an image, name,
-     * description, price, rating, and a "Add to Cart" button. The rating is
-     * calculated based on the average rating of the product and displayed as a
-     * number of stars out of 5. When the "Add to Cart" button is clicked, the
-     * function deletes any existing rating for the product and creates a new rating
-     * with the current rating value.
+     * Create an HBox containing a product detail card with image, name, description,
+     * price, a star rating control, and an "Add to Cart" button.
      *
-     * @param produit
-     *                Product object that is being displayed in the detail view, and
-     *                it
-     *                is used to retrieve the product's ID, name, image URL, price,
-     *                and
-     *                rating for display in the corresponding Card element.
-     *                <p>
-     *                - `id_produit`: an integer representing the product ID -
-     *                `nom`: a
-     *                string representing the product name - `description`: a string
-     *                representing the product description - `prix`: a double
-     *                representing the product price - `imagePath`: a string
-     *                representing the path to the product image
-     *                <p>
-     *                Note: These properties are not explained in detail as they are
-     *                already defined in the function.
-     * @returns a stage with a card containing information about a product,
-     *          including an image, name, description, price, and rating.
-     *          <p>
-     *          - `card`: The `Card` object that represents the product card,
-     *          containing various elements such as an image view, name label,
-     *          description label, price label, rating, and a "Add to cart" button.
-     *          - `imageView`: An `Image` view that displays the product image. -
-     *          `nameLabel`: A `Label` that displays the product name. -
-     *          `descriptionLabel`: A `Label` that displays the product description.
-     *          - `priceLabel`: A `Label` that displays the product price. -
-     *          `rating`: A `Rating` widget that displays the average rating of the
-     *          product based on customer reviews. - `etoilelabel`: A `Label` that
-     *          displays the current rating out of 5, using a yellow font and
-     *          formatting. - `addToCartButton`: An `Hyperlink` button that allows
-     *          users to add the product to their cart. - `iconeetoile`: A
-     *          `FontIcon` widget that displays an orange "star" icon when the
-     *          product has no reviews, and a yellow "star" icon when the product
-     *          has at least one review.
+     * The rating control reflects the product's average rating and lets the current
+     * user submit or update their rating; the "Add to Cart" button adds one unit
+     * of the product to the shopping cart and updates the visible cart/detail panes.
+     *
+     * @param produit the Product to display (used to populate image, text, price, and rating)
+     * @return an HBox containing the assembled product detail card
      */
     private HBox createProductCard(final Product produit) {
         // Créer une carte pour le produit avec ses informations
@@ -237,14 +188,17 @@ public class DetailsProductClientController implements Initializable {
             if (null != produitImage) {
                 final Image image = new Image(produitImage);
                 imageView.setImage(image);
-            } else {
+            }
+ else {
                 // Utiliser une image par défaut si le Blob est null
                 final Image defaultImage = new Image(this.getClass().getResourceAsStream("defaultImage.png"));
                 imageView.setImage(defaultImage);
             }
+
         } catch (final Exception e) {
             DetailsProductClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         // Nom du Product
         final Label nameLabel = new Label(produit.getName());
         nameLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 24));
@@ -285,7 +239,8 @@ public class DetailsProductClientController implements Initializable {
             this.detailFlowPane.setVisible(true);
             this.detailFlowPane.setOpacity(0.2);
             this.top3anchorpane.setVisible(false);
-        });
+        }
+);
         final Review avis = new Review();
         final double rate = new ReviewService().getAverageRating(produit.getId());
         DetailsProductClientController.LOGGER.info(BigDecimal.valueOf(rate).setScale(1, RoundingMode.FLOOR).toString());
@@ -317,6 +272,7 @@ public class DetailsProductClientController implements Initializable {
             if (null != avi) {
                 avisService.delete(avi1);
             }
+
             avisService.create(new Review(/* (Client) stage.getUserData() */(Client) new UserService().getUserById(4L),
                     t1.intValue(), produit));
             final double rate1 = new ReviewService().getAverageRating(produit.getId());
@@ -325,24 +281,24 @@ public class DetailsProductClientController implements Initializable {
                     .formatted(BigDecimal.valueOf(rate1).setScale(1, RoundingMode.FLOOR).doubleValue());
             DetailsProductClientController.LOGGER.info(formattedRate);
             etoilelabel.setText(formattedRate);
-        });
+        }
+);
         card.getChildren().addAll(imageView, nameLabel, descriptionLabel, priceLabel, rating, etoilelabel,
                 addToCartButton, iconeetoile);
         cardContainer.getChildren().add(card);
         return cardContainer;
     }
 
+
     /**
-     * Adds a product to the shopping cart based on available stock, retrieves
-     * product details and user information, creates a new shoppingcart object, and
-     * displays the updated shoppingcart.
-     *
-     * @param produitId
-     *                  ID of the product to be added to the cart.
-     * @param quantity
-     *                  quantity of the product that the user wants to add to the
-     *                  cart.
-     */
+         * Add the specified product and quantity to the shopping cart when stock is available.
+         *
+         * Creates and persists a ShoppingCart entry associated with the product and a user (ID 4),
+         * then updates the shopping cart view. If available stock is insufficient, logs an informational message and does not modify the cart.
+         *
+         * @param produitId ID of the product to add
+         * @param quantity  Quantity to add to the cart
+         */
     private void ajouterAuShoppingCart(final long produitId, final int quantity) {
         final ProductService produitService = new ProductService();
         final ShoppingCartService shoppingcartService = new ShoppingCartService();
@@ -356,15 +312,20 @@ public class DetailsProductClientController implements Initializable {
             shoppingcart.setUser(usersService.getUserById(4L));
             shoppingcartService.create(shoppingcart);
             this.affichershoppingcart(); // Utilisez le produit ajouté pour afficher dans le shoppingcart
-        } else {
+        }
+ else {
             // Afficher un message d'avertissement sur le stock insuffisant
             DetailsProductClientController.LOGGER.info("Stock insuffisant pour le produit avec l'ID : " + produitId);
         }
+
     }
 
+
     /**
-     * Loads an FXML page, creates a new stage for it, and shows it modally, closing
-     * the previous stage.
+     * Open the product listing view as a modal window, wait for it to close, then close the current window.
+     *
+     * Loads the product listing FXML, shows it in an application-modal stage owned by the current window,
+     * blocks until that stage is closed, and then closes the originating stage.
      */
     @FXML
     /**
@@ -397,11 +358,14 @@ public class DetailsProductClientController implements Initializable {
             DetailsProductClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception selon vos
                                                                                         // besoins
         }
+
     }
 
+
     /**
-     * Sets the visibility of a `FlowPane` and its child elements to true, with the
-     * `opacity` of one of the child elements set to 0.2.
+     * Display the shopping cart pane and dim the product details pane.
+     *
+     * Makes the shopping cart and details FlowPanes visible and sets the details pane opacity to 0.2.
      */
     private void affichershoppingcart() {
         // Initialiser la visibilité des AnchorPane
@@ -411,43 +375,12 @@ public class DetailsProductClientController implements Initializable {
         // top3anchorpane.setVisible(false);
     }
 
+
     /**
-     * Creates a `Card` object that displays the cart contents, includes a "Continue
-     * Shopping" button and an icon for closing the card. It also sets up event
-     * handlers for closing the card and the "Continue Shopping" button.
+     * Creates an HBox containing a shopping-cart card for the given product with image, name, price, quantity, total, and action controls.
      *
-     * @param produit
-     *                product to be displayed in the shopping cart card, which is
-     *                used
-     *                to set the corresponding labels and images for each product in
-     *                the
-     *                shoppingcart.
-     *                <p>
-     *                - `name`: The name of the product. - `imageUrl`: The URL of
-     *                the
-     *                product image. - `price`: The price of the product in euros. -
-     *                `quantite`: The quantity of the product in stock. -
-     *                `sommeTotale`:
-     *                The total cost of the product in euros, calculated by
-     *                multiplying
-     *                the quantity by the price.
-     * @returns a `Pane` object containing all the elements of the shopping cart.
-     *          <p>
-     *          - `shoppingcartContainer`: The Parent Node that holds all the
-     *          children components for the shoppingcart card. - `card`: A `Node`
-     *          object that represents the shoppingcart card component. -
-     *          `cartLabel`: A `Text` object that displays the total number of items
-     *          in the shoppingcart. - `imageView`: An `Image` object that displays
-     *          a cart icon. - `nameLabel`: A `Text` object that displays the name
-     *          of the product. - `priceLabel`: A `Text` object that displays the
-     *          price of the product. - `quantiteLabel`: A `Text` object that
-     *          displays the quantity of the product in the shoppingcart. -
-     *          `sommeTotaleLabel`: A `Text` object that displays the total cost of
-     *          the products in the shoppingcart. - `achatbutton`: A `Button` object
-     *          that allows the user to continue shopping. - `orderbutton`: A
-     *          `Button` object that allows the user to add the product to the
-     *          shoppingcart. - `closeIcon`: A `FontIcon` object that displays a
-     *          close icon for the shoppingcart card.
+     * @param produit the product used to populate the card (image, name, price)
+     * @return an HBox containing the assembled shopping-cart card and its event handlers
      */
     private HBox createShoppingCartCard(final Product produit) {
         // Créer une carte pour le produit avec ses informations
@@ -473,14 +406,17 @@ public class DetailsProductClientController implements Initializable {
             if (null != produitImage) {
                 final Image image = new Image(produitImage);
                 imageView.setImage(image);
-            } else {
+            }
+ else {
                 // Utiliser une image par défaut si le Blob est null
                 final Image defaultImage = new Image(this.getClass().getResourceAsStream("defaultImage.png"));
                 imageView.setImage(defaultImage);
             }
+
         } catch (final Exception e) {
             DetailsProductClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         // Nom du Product
         final Label nameLabel = new Label(produit.getName());
         nameLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
@@ -540,7 +476,9 @@ public class DetailsProductClientController implements Initializable {
                 DetailsProductClientController.LOGGER
                         .info("Erreur lors du chargement du fichier FXML : " + e.getMessage());
             }
-        });
+
+        }
+);
         // Bouton Ajouter au ShoppingCart
         final Button achatbutton = new Button("continue shopping");
         achatbutton.setLayoutX(50);
@@ -555,7 +493,8 @@ public class DetailsProductClientController implements Initializable {
                 """);
         achatbutton.setOnAction(event -> {
             this.fermerShoppingCartCard(shoppingcartContainer);
-        });
+        }
+);
         // Icône de fermeture (close)
         final FontIcon closeIcon = new FontIcon();
         closeIcon.setIconLiteral("fa-times-circle");
@@ -571,21 +510,13 @@ public class DetailsProductClientController implements Initializable {
         return shoppingcartContainer;
     }
 
+
     /**
-     * Calculates the total price of a product based on its ID and quantity. It
-     * retrieves the unitarian price of the product from the `ProductService` class
-     * and multiplies it by the input quantity to obtain the total price.
+     * Compute the total price for a product given its ID and quantity.
      *
-     * @param idProduct
-     *                  ID of the product for which the price is being calculated.
-     * @param quantity
-     *                  number of products to be priced, and is multiplied by the
-     *                  unit
-     *                  price returned by the `getPriceProduct()` method to
-     *                  calculate the
-     *                  total price for the specified quantity of products.
-     * @returns the product of the quantity and the price of the product for the
-     *          given ID.
+     * @param idProduct ID of the product to price
+     * @param quantity  number of units to purchase
+     * @return total price as unit price multiplied by quantity
      */
     private double prixProduct(final Long idProduct, final int quantity) {
         final ProductService produitService = new ProductService();
@@ -593,21 +524,11 @@ public class DetailsProductClientController implements Initializable {
         return quantity * prixUnitaire;
     }
 
+
     /**
-     * Renders the cart card invisible, makes the `shoppingcartFlowPane` and
-     * `detailFlowPane` visible and sets their opacity to 1. Additionally, it makes
-     * the `anchordetail` and `top3anchorpane` visible and sets their opacity to 1.
+     * Restore the main product/detail view and hide the shopping cart panel.
      *
-     * @param shoppingcartContainer
-     *                              `HBox` container that holds the `FlowPane`
-     *                              representing the
-     *                              shopping cart, which is rendered invisible when
-     *                              the function is
-     *                              called.
-     *                              <p>
-     *                              - `shoppingcartContainer` is an instance of
-     *                              `HBox`. - It contains
-     *                              a `FlowPane` and other components.
+     * @param shoppingcartContainer the HBox that contains the shopping cart panel being closed
      */
     private void fermerShoppingCartCard(final HBox shoppingcartContainer) {
         // Rendre la carte du shoppingcart invisible
@@ -622,19 +543,14 @@ public class DetailsProductClientController implements Initializable {
         this.top3anchorpane.setOpacity(1);
     }
 
+
     /**
-     * Loads a new FXML interface, creates a new scene and attaches it to a new
-     * stage, replacing the current stage, and closes the original stage.
+     * Open the shopping cart view in a new window and close the current window.
      *
-     * @param event
-     *              MouseEvent object that triggered the function execution,
-     *              providing
-     *              information about the mouse click or other event that occurred.
-     *              <p>
-     *              - Event source: The element that triggered the event (not shown)
-     *              -
-     *              Type: The type of event (not shown) - X and Y coordinates: The
-     *              position of the event relative to the element (not shown)
+     * Loads the ShoppingCartProduct.fxml UI, displays it in a new Stage titled
+     * "ShoppingCart des produits", and closes the stage that contains the event's source.
+     *
+     * @param event the MouseEvent that triggered this navigation; its source is used to locate and close the current window
      */
     @FXML
     void shoppingcart(final MouseEvent event) {
@@ -658,23 +574,14 @@ public class DetailsProductClientController implements Initializable {
             DetailsProductClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
+
     }
 
+
     /**
-     * Loads a new user interface using an FXML loader, creates a new scene, and
-     * attaches it to a new stage when an event is triggered. It also closes the
-     * current stage upon execution.
+     * Opens the product comments view in a new window and closes the current window.
      *
-     * @param event
-     *              MouseEvent that triggered the function execution, providing
-     *              information about the mouse click or other event that occurred
-     *              in
-     *              the FXML document.
-     *              <p>
-     *              - It is a `MouseEvent` object representing a mouse event that
-     *              triggered the function's execution. - The source of the event is
-     *              the element that was clicked or hovered over, which is not
-     *              explicitly stated in the code snippet provided.
+     * @param event the MouseEvent that triggered this navigation
      */
     @FXML
     void commentaire(final MouseEvent event) {
@@ -698,23 +605,12 @@ public class DetailsProductClientController implements Initializable {
             DetailsProductClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
+
     }
 
+
     /**
-     * Loads a new UI scene (`CommentaireProduct.fxml`) into an existing stage when
-     * an action event is triggered, replacing the current scene and closing the
-     * previous stage.
-     *
-     * @param event
-     *              ActionEvent object that triggered the function execution,
-     *              providing the source of the event and allowing the code to
-     *              access
-     *              its related information.
-     *              <p>
-     *              - `event`: an ActionEvent object representing the event
-     *              triggered
-     *              by the user's action, such as clicking on a button or entering
-     *              text in a field.
+     * Opens the product comment view (CommentaireProduct.fxml) in a new window titled "cinema" and closes the current window.
      */
     @FXML
     void cinemaclient(final ActionEvent event) {
@@ -738,22 +634,15 @@ public class DetailsProductClientController implements Initializable {
             DetailsProductClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
+
     }
 
+
     /**
-     * Loads a new FXML file, creates a new scene and stage, and replaces the
-     * current stage with the new one.
-     *
-     * @param event
-     *              EventObject that triggered the method, providing access to
-     *              information about the event, such as its source and details,
-     *              which
-     *              can be used to handle the event appropriately.
-     *              <p>
-     *              - Event object contains information about the event that
-     *              triggered
-     *              the function, such as the source element and the type of event.
-     */
+         * Open the "AffichageEvenementClient" view in a new window and close the current window.
+         *
+         * @param event the ActionEvent whose source node is used to obtain and close the current Stage
+         */
     @FXML
     void eventClient(final ActionEvent event) {
         try {
@@ -776,22 +665,17 @@ public class DetailsProductClientController implements Initializable {
             DetailsProductClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
+
     }
 
+
     /**
-     * Loads a new FXML file, creates a new scene, and attaches it to a new stage,
-     * replacing the current stage. It also closes the current stage.
+     * Open the product listing view in a new window and close the current window.
      *
-     * @param event
-     *              ActionEvent object that triggered the function execution,
-     *              providing the source of the action and allowing the code to
-     *              access
-     *              the event details.
-     *              <p>
-     *              - Event source: The object that triggered the event (in this
-     *              case,
-     *              a button press) - Type of event: The type of event that was
-     *              triggered (in this case, an action event)
+     * Loads "AfficherProductClient.fxml", attaches it to a new Stage titled "products",
+     * shows that stage, and closes the stage obtained from the provided event's source.
+     *
+     * @param event the ActionEvent whose source node provides the current Window to be closed
      */
     @FXML
     void produitClient(final ActionEvent event) {
@@ -815,33 +699,24 @@ public class DetailsProductClientController implements Initializable {
             DetailsProductClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
+
     }
 
+
     /**
-     * Appears to be a Java method that handles an `ActionEvent`. It does not
-     * provide any information about the code author or licensing, and its purpose
-     * is not explicitly stated in the provided code snippet.
+     * Handle the client profile action triggered by the UI.
      *
-     * @param event
-     *              client profile data that triggered the execution of the
-     *              `profilclient` method.
+     * @param event the ActionEvent that triggered this handler
      */
     @FXML
     void profilclient(final ActionEvent event) {
     }
 
+
     /**
-     * Loads a new user interface (`filmuser.fxml`) using the `FXMLLoader`, creates
-     * a new scene with it, and attaches it to a new stage. It also closes the
-     * current stage and displays the new one.
+     * Opens the film user view (filmuser.fxml) in a new window and closes the current window.
      *
-     * @param event
-     *              ActionEvent object that triggered the function execution,
-     *              providing information about the source of the event and the type
-     *              of action performed.
-     *              <p>
-     *              - Event source: The object that generated the event, which is
-     *              typically a button or other user interface element.
+     * @param event the action event that triggered the navigation
      */
     @FXML
     void MovieClient(final ActionEvent event) {
@@ -864,21 +739,15 @@ public class DetailsProductClientController implements Initializable {
             DetailsProductClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
+
     }
 
+
     /**
-     * Loads a new FXML file, creates a new scene and attaches it to a new stage,
-     * replacing the current stage.
-     *
-     * @param event
-     *              ActionEvent object that triggered the `SeriesClient()` method,
-     *              providing information about the source of the event and allowing
-     *              the method to determine the appropriate action to take.
-     *              <p>
-     *              - Event source: The origin of the event, which is an instance of
-     *              the `ActionEvent` class. - Parameter: An optional parameter
-     *              associated with the event, which can be of any type.
-     */
+         * Opens the Series view in a new window and closes the current stage.
+         *
+         * @param event the ActionEvent that triggered navigation to the Series view
+         */
     @FXML
     void SerieClient(final ActionEvent event) {
         try {
@@ -900,12 +769,17 @@ public class DetailsProductClientController implements Initializable {
             DetailsProductClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
+
     }
 
+
     /**
-     * Retrieves and displays a list of the top 3 best-selling products based on
-     * their quantity and status, using a ProductService instance to retrieve the
-     * data and create card containers for each product.
+     * Load and display the top three best-selling products with accepted status into the controller's topthreeVbox.
+     *
+     * <p>The method queries ProductService for products ordered by quantity and status, creates a UI card for each
+     * of the first three products via createtopthree(...), and appends those cards to topthreeVbox. If fewer than
+     * three products are available, the method logs an informational message and returns without modifying the UI.
+     * Any exceptions encountered during loading are logged at SEVERE level.</p>
      */
     public void loadAcceptedTop3() {
         final ProductService produitService = new ProductService();
@@ -915,49 +789,36 @@ public class DetailsProductClientController implements Initializable {
                 DetailsProductClientController.LOGGER.info("Pas assez de produits disponibles");
                 return;
             }
+
             final List<Product> top3Products = produits.subList(0, 3);
             int j = 0;
             for (final Product produit : top3Products) {
                 DetailsProductClientController.LOGGER.info(String.valueOf(produit.getId()));
                 final VBox cardContainer = this.createtopthree(produit);
                 DetailsProductClientController.LOGGER.log(Level.INFO, "------------------{0}{1}",
-                        new Object[] { j, cardContainer.getChildren() });
+                        new Object[] { j, cardContainer.getChildren() }
+);
                 this.topthreeVbox.getChildren().add(cardContainer);
                 j++;
             }
+
         } catch (final Exception e) {
             DetailsProductClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             DetailsProductClientController.LOGGER.info("Une erreur est survenue lors du chargement des produits");
         }
+
     }
 
+
     /**
-     * Generates a `VBox` container that displays a product's name, price, and
-     * image. The image is loaded from an URL or a default image if null, and the
-     * name and price are displayed with font style and size. When the product name
-     * is clicked, a new stage displaying details of the product is opened.
+     * Creates a compact top-three product card showing the product image, name, and price.
      *
-     * @param produit
-     *                Product object that contains information about the product,
-     *                including its name, image, and price, which are used to create
-     *                the
-     *                UI elements and display them in the card container.
-     *                <p>
-     *                - `id_produit`: an integer representing the product ID. -
-     *                `nom`:
-     *                the product name. - `prix`: the product price. - `image`: a
-     *                Blob
-     *                object containing the image of the product (optional).
-     * @returns a `VBox` container containing an `ImageView`, a `Label`, and a
-     *          `Label`, representing the product's name, price, and image.
-     *          <p>
-     *          1/ `cardContainer`: A `VBox` object that contains three components:
-     *          an `Label`, an `ImageView`, and another `Label`. 2/ `imageView`: An
-     *          `ImageView` component that displays an image of the product. 3/
-     *          `nameLabel`: A `Label` component that displays the product name. 4/
-     *          `priceLabel`: A `Label` component that displays the product price.
-     *          5/ `card`: The root `Node` of the `VBox` container, which contains
-     *          the three components mentioned above.
+     * The card displays a product image (falls back to a default image if the product image is unavailable)
+     * and shows the product name and price. Clicking the image or the name opens the product details view
+     * for this product in a new window.
+     *
+     * @param produit the product to represent; its id, name, price, and image URL are used to populate the card
+     * @return a VBox containing the assembled product card (image, name label, and price label)
      */
     public VBox createtopthree(final Product produit) {
         final VBox cardContainer = new VBox(5);
@@ -979,16 +840,19 @@ public class DetailsProductClientController implements Initializable {
             if (null != produitImage) {
                 final Image image = new Image(produitImage);
                 imageView.setImage(image);
-            } else {
+            }
+ else {
                 // Use a default image if Blob is null
                 final Image defaultImage = new Image(this.getClass().getResourceAsStream("defaultImage.png"));
                 imageView.setImage(defaultImage);
             }
+
         } catch (final Exception e) {
             DetailsProductClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             // Handle any exceptions during image loading
             DetailsProductClientController.LOGGER.info("Une erreur est survenue lors du chargement de l'image");
         }
+
         imageView.setOnMouseClicked(event -> {
             try {
                 final FXMLLoader loader = new FXMLLoader(
@@ -1010,7 +874,9 @@ public class DetailsProductClientController implements Initializable {
             } catch (final IOException e) {
                 throw new RuntimeException(e);
             }
-        });
+
+        }
+);
         // Product name
         final Label nameLabel = new Label(produit.getName());
         nameLabel.setFont(Font.font("Arial", FontWeight.BOLD, 15));
@@ -1040,7 +906,9 @@ public class DetailsProductClientController implements Initializable {
             } catch (final IOException e) {
                 throw new RuntimeException(e);
             }
-        });
+
+        }
+);
         final Label priceLabel = new Label(" " + produit.getPrice() + " DT");
         priceLabel.setLayoutX(60);
         priceLabel.setLayoutY(55);
@@ -1050,4 +918,5 @@ public class DetailsProductClientController implements Initializable {
         cardContainer.getChildren().addAll(card); // Add vertical space
         return cardContainer;
     }
+
 }

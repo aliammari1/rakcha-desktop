@@ -90,22 +90,21 @@ public class OrderClientController implements Initializable {
     private Button idpaymentenligne;
 
     /**
-     * Sets up the order details and user interface for the selected order.
-     * 
-     * <p>
-     * This method stores the selected order, retrieves the total price from
-     * SharedData,
-     * and creates a label to display the total price in the UI.
-     * </p>
-     *
-     * @param orderselectionner The selected order to be processed
-     */
+         * Initializes the controller with the selected order and prepares the UI's total-price label.
+         *
+         * <p>Stores the provided order, schedules retrieval of the connected user on the JavaFX application thread
+         * (logging the user's email), and creates and adds a label showing the total price to the UI.</p>
+         *
+         * @param orderselectionner the selected order to process and display
+         */
     @FXML
     void initialize(final Order orderselectionner) {
         this.order = orderselectionner;
         Platform.runLater(new Runnable() {
             /**
-             * Retrieves connected user information when the UI is ready.
+             * Loads the connected user's information (user id = 4) and assigns it to {@code connectedUser}.
+             *
+             * <p>After retrieving the user, logs the user's email address.</p>
              */
             @Override
             public void run() {
@@ -113,44 +112,33 @@ public class OrderClientController implements Initializable {
                 OrderClientController.LOGGER
                         .info("User connected: " + connectedUser.getEmail());
             }
-        });
+
+        }
+);
         // Récupérer le prix total depuis SharedData et créer le Label correspondant
         final Label prixTotalLabel = this.createPrixTotalLabel(this.totalPrix);
         // Ajouter le Label au FlowPane
         this.prixtotaleFlowPane.getChildren().add(prixTotalLabel);
     }
 
+
     /**
-     * Initializes the controller after its root element has been completely
-     * processed.
-     * 
-     * <p>
-     * This is a standard initialization method that is called automatically when
-     * the
-     * FXML file is loaded. It can be used to perform any necessary setup
-     * operations.
-     * </p>
+     * No-op implementation of Initializable.initialize; retained to satisfy the interface.
      *
-     * @param url            The location used to resolve relative paths for the
-     *                       root object, or null if the location is not known
-     * @param resourceBundle The resources used to localize the root object, or null
-     *                       if the root object was not localized
+     * <p>Controller initialization is performed by the overloaded {@code initialize(Order)}
+     * method instead.</p>
      */
     @Override
     public void initialize(final URL url, final ResourceBundle resourceBundle) {
     }
 
+
     /**
-     * Creates a styled label to display the total price.
-     * 
-     * <p>
-     * This method formats the price with the appropriate currency symbol
-     * and applies styling to make it stand out in the UI.
-     * </p>
-     *
-     * @param prixTotal The total price to display
-     * @return A styled Label component showing the total price
-     */
+         * Create a Label that displays the total price with the "DT" currency suffix and prominent styling.
+         *
+         * @param prixTotal the total price value to display (in DT)
+         * @return the Label showing the formatted price with Verdana 25 font and red text color
+         */
     private Label createPrixTotalLabel(final double prixTotal) {
         final Label prixTotalLabel = new Label(prixTotal + " DT");
         prixTotalLabel.setFont(Font.font("Verdana", 25));
@@ -158,19 +146,11 @@ public class OrderClientController implements Initializable {
         return prixTotalLabel;
     }
 
+
     /**
-     * Processes the order when the user clicks the order button.
-     * 
-     * <p>
-     * This method:
-     * 1. Validates the phone number and address
-     * 2. Creates the order with customer details
-     * 3. Saves the order to the database
-     * 4. Updates inventory for each ordered item
-     * 5. Makes the payment section visible
-     * </p>
+     * Handle order submission: validate contact details, persist the order and its items, update inventory, and show the payment pane.
      *
-     * @param event The action event that triggered this method
+     * <p>Validates the phone number and address, sets order metadata (client, phone, address, date), saves the order and each order item, decrements corresponding product stock, and makes the online payment section visible.</p>
      */
     @FXML
     void order(final ActionEvent event) {
@@ -182,12 +162,14 @@ public class OrderClientController implements Initializable {
                     "Veuillez entrer un numéro de téléphone valide (8 chiffres).");
             return;
         }
+
         // Validation de l'adresse
         final String adresse = this.adresseTextField.getText();
         if (adresse.isEmpty()) {
             this.showAlert("Adresse invalide", "Veuillez entrer une adresse valide.");
             return;
         }
+
         this.order.setAddress(this.adresseTextField.getText());
         this.order.setPhoneNumber(Integer.parseInt(this.numTelephoneTextField.getText()));
         this.order.setClient((Client) this.connectedUser);
@@ -199,14 +181,17 @@ public class OrderClientController implements Initializable {
         } catch (final Exception e) {
             OrderClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         for (final OrderItem orderItem : this.order.getOrderItems()) {
             orderItem.setOrder(this.order);
             orderItemService.create(orderItem);
             // Décrémenter le stock
             this.decrementStock(orderItem.getProduct(), orderItem.getQuantity());
         }
+
         this.paimenet.setVisible(true);
     }
+
 
     /**
      * Displays an alert dialog with the specified title and content.
@@ -227,6 +212,7 @@ public class OrderClientController implements Initializable {
         alert.showAndWait();
     }
 
+
     /**
      * Validates if a given string represents a valid phone number.
      * 
@@ -243,16 +229,12 @@ public class OrderClientController implements Initializable {
         return phoneNumber.matches("\\d{8}");
     }
 
+
     /**
-     * Decrements the stock quantity of a product after an order is placed.
-     * 
-     * <p>
-     * This method updates the product's quantity in the database to reflect
-     * that items have been purchased.
-     * </p>
+     * Reduce a product's available quantity by the specified amount and persist the change.
      *
-     * @param produit  The product whose stock needs to be updated
-     * @param quantity The quantity to decrement from the stock
+     * @param produit the product to update
+     * @param quantity the number of units to subtract from the product's quantity
      */
     private void decrementStock(final Product produit, final int quantity) {
         // Décrémenter le stock dans la base de données
@@ -262,15 +244,11 @@ public class OrderClientController implements Initializable {
         // jour
     }
 
+
     /**
-     * Navigates to the shopping cart interface.
-     * 
-     * <p>
-     * Loads the ShoppingCartProduct.fxml file, creates a new scene and stage,
-     * and replaces the current stage with the new one.
-     * </p>
+     * Opens the shopping cart UI in a new window and closes the current window.
      *
-     * @param event The mouse event that triggered this method
+     * <p>Loads /ui/produits/ShoppingCartProduct.fxml, displays it in a new Stage, and closes the originating Stage.</p>
      */
     @FXML
     void shoppingcart(final MouseEvent event) {
@@ -293,20 +271,17 @@ public class OrderClientController implements Initializable {
         } catch (final IOException e) {
             OrderClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
+
     }
 
+
     /**
-     * Initiates the PayPal payment process.
-     * 
-     * <p>
-     * This method:
-     * 1. Creates a PayPal API context
-     * 2. Sets up the payment amount and details
-     * 3. Configures redirect URLs for success and cancel scenarios
-     * 4. Creates the payment and redirects the user to PayPal for approval
-     * </p>
+     * Initiates a PayPal payment for the controller's total price and navigates the user to PayPal's approval page.
      *
-     * @param event The action event that triggered this method
+     * <p>Builds a PayPal payment using the controller's totalPrix as the transaction amount, requests an approval URL,
+     * and, if obtained, opens the approval page for the user to authorize the payment. Logs errors if payment creation fails.</p>
+     *
+     * @param event the UI action event that triggered the payment flow
      */
     @FXML
     void payment(final ActionEvent event) {
@@ -343,15 +318,20 @@ public class OrderClientController implements Initializable {
                     approvalUrl = link.getHref();
                     break;
                 }
+
             }
+
             if (null != approvalUrl) {
                 // Redirect to PayPal for payment approval
                 this.redirectToPayPal(approvalUrl);
             }
+
         } catch (final PayPalRESTException e) {
             OrderClientController.LOGGER.log(Level.SEVERE, "Error creating PayPal payment", e);
         }
+
     }
+
 
     /**
      * Redirects the user to PayPal for payment approval.
@@ -381,6 +361,7 @@ public class OrderClientController implements Initializable {
                     if (null != paymentId && null != payerId) {
                         this.completePayment(paymentId, payerId);
                     }
+
                     webView.getEngine().loadContent(OrderClientController.SUCCESS_URL);
                     // Close the window after a delay
                     new Thread(() -> {
@@ -390,8 +371,11 @@ public class OrderClientController implements Initializable {
                         } catch (final InterruptedException e) {
                             Thread.currentThread().interrupt();
                         }
-                    }).start();
-                } else if (newValue.startsWith("http://localhost/cancel")) {
+
+                    }
+).start();
+                }
+ else if (newValue.startsWith("http://localhost/cancel")) {
                     // Payment was canceled
                     OrderClientController.LOGGER.info("Payment canceled");
                     webView.getEngine().loadContent(OrderClientController.CANCEL_URL);
@@ -403,14 +387,20 @@ public class OrderClientController implements Initializable {
                         } catch (final InterruptedException e) {
                             Thread.currentThread().interrupt();
                         }
-                    }).start();
+
+                    }
+).start();
                 }
-            });
+
+            }
+);
             final Scene scene = new Scene(webView, 1024, 768);
             stage.setScene(scene);
             stage.show();
-        });
+        }
+);
     }
+
 
     /**
      * Extracts a query parameter from a URL.
@@ -430,24 +420,23 @@ public class OrderClientController implements Initializable {
                 if (param.getName().equals(parameterName)) {
                     return param.getValue();
                 }
+
             }
+
         } catch (final URISyntaxException e) {
             OrderClientController.LOGGER.log(Level.SEVERE, "Error parsing URL", e);
         }
+
         return null;
     }
 
+
     /**
-     * Completes the payment process after PayPal approval.
-     * 
-     * <p>
-     * This method executes the payment using the PayPal API and updates
-     * the order status in the database based on the payment result.
-     * </p>
-     *
-     * @param paymentId The PayPal payment ID
-     * @param payerId   The PayPal payer ID
-     */
+         * Finalize a PayPal payment and update the associated order's status when the payment is approved.
+         *
+         * @param paymentId the PayPal payment identifier
+         * @param payerId   the PayPal payer identifier
+         */
     private void completePayment(final String paymentId, final String payerId) {
         final APIContext apiContext = new APIContext(OrderClientController.CLIENT_ID,
                 OrderClientController.CLIENT_SECRET, "sandbox");
@@ -464,21 +453,19 @@ public class OrderClientController implements Initializable {
                 this.orderService.update(this.order);
                 OrderClientController.LOGGER.info("Order status updated to paid");
             }
+
         } catch (final PayPalRESTException e) {
             OrderClientController.LOGGER.log(Level.SEVERE, "Error executing payment", e);
         }
+
     }
 
+
     /**
-     * Navigates to the cinema client interface.
-     * 
-     * <p>
-     * Loads the CommentaireProduct.fxml file, creates a new scene and stage,
-     * and replaces the current stage with the new one.
-     * </p>
-     *
-     * @param event The action event that triggered this method
-     */
+         * Opens the CommentaireProduct view in a new window and closes the current window.
+         *
+         * @param event the ActionEvent that triggered the navigation
+         */
     @FXML
     void cinemaclient(final ActionEvent event) {
         try {
@@ -500,18 +487,15 @@ public class OrderClientController implements Initializable {
         } catch (final IOException e) {
             OrderClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
+
     }
 
+
     /**
-     * Navigates to the event client interface.
-     * 
-     * <p>
-     * Loads the AffichageEvenementClient.fxml file, creates a new scene and stage,
-     * and replaces the current stage with the new one.
-     * </p>
-     *
-     * @param event The action event that triggered this method
-     */
+         * Open the event client UI in a new window and close the originating window.
+         *
+         * @param event the ActionEvent that triggered this navigation; used to obtain and close the current window
+         */
     @FXML
     void eventClient(final ActionEvent event) {
         try {
@@ -533,17 +517,14 @@ public class OrderClientController implements Initializable {
         } catch (final IOException e) {
             OrderClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
+
     }
 
+
     /**
-     * Navigates to the product client interface.
-     * 
-     * <p>
-     * Loads the AfficherProductClient.fxml file, creates a new scene and stage,
-     * and replaces the current stage with the new one.
-     * </p>
+     * Open the product client view in a new window and close the current window.
      *
-     * @param event The action event that triggered this method
+     * @param event the ActionEvent that triggered this navigation
      */
     @FXML
     void produitClient(final ActionEvent event) {
@@ -566,53 +547,48 @@ public class OrderClientController implements Initializable {
         } catch (final IOException e) {
             OrderClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
+
     }
 
+
     /**
-     * Placeholder for client profile functionality.
-     * 
-     * @param event The action event that triggered this method
-     */
+         * Reserved handler for client profile actions; currently no behavior is implemented.
+         *
+         * @param event the action event that triggered this handler
+         */
     @FXML
     void profilclient(final ActionEvent event) {
     }
 
+
     /**
-     * Placeholder for showing cinema functionality.
-     * 
-     * @param event The action event that triggered this method
+     * Opens the cinema view.
      */
     @FXML
     void showcinema(final ActionEvent event) {
     }
 
+
     /**
-     * Placeholder for showing event functionality.
-     * 
-     * @param event The action event that triggered this method
+     * No-op placeholder reserved for future implementation of the event-view navigation.
      */
     @FXML
     void showevenement(final ActionEvent event) {
     }
 
+
     /**
-     * Placeholder for showing product functionality.
-     * 
-     * @param event The action event that triggered this method
+     * Placeholder method intended to show the product view; currently has no implementation.
      */
     @FXML
     void showproduit(final ActionEvent event) {
     }
 
+
     /**
-     * Navigates to the movie client interface.
-     * 
-     * <p>
-     * Loads the filmuser.fxml file, creates a new scene and stage,
-     * and replaces the current stage with the new one.
-     * </p>
+     * Open the movie client UI in a new window and close the current window.
      *
-     * @param event The action event that triggered this method
+     * @param event the ActionEvent that triggered navigation
      */
     @FXML
     void MovieClient(final ActionEvent event) {
@@ -634,17 +610,14 @@ public class OrderClientController implements Initializable {
         } catch (final IOException e) {
             OrderClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
+
     }
 
+
     /**
-     * Navigates to the series client interface.
-     * 
-     * <p>
-     * Loads the Series-view.fxml file, creates a new scene and stage,
-     * and replaces the current stage with the new one.
-     * </p>
+     * Opens the Series client view in a new window and closes the current window.
      *
-     * @param event The action event that triggered this method
+     * <p>Loads /ui/ui/Series-view.fxml, creates and shows a new stage containing that scene, then closes the originating stage.</p>
      */
     @FXML
     void SerieClient(final ActionEvent event) {
@@ -666,5 +639,7 @@ public class OrderClientController implements Initializable {
         } catch (final IOException e) {
             OrderClientController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception d'entrée/sortie
         }
+
     }
+
 }

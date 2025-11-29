@@ -45,6 +45,7 @@ public class GenericTableView<T> {
         tableView.setEditable(true);
     }
 
+
     /**
      * Configuration class for table columns
      */
@@ -60,26 +61,32 @@ public class GenericTableView<T> {
             return this;
         }
 
+
         public ColumnConfig<T, S> withValueSetter(BiConsumer<T, S> setter) {
             this.valueSetter = setter;
             return this;
         }
+
 
         public ColumnConfig<T, S> withValidator(Function<S, String> validator) {
             this.validator = validator;
             return this;
         }
 
+
         public ColumnConfig<T, S> withConverter(StringConverter<S> converter) {
             this.converter = converter;
             return this;
         }
 
+
         public ColumnConfig<T, S> withEditable(boolean editable) {
             this.editable = editable;
             return this;
         }
+
     }
+
 
     /**
      * Configure a text column with validation
@@ -93,12 +100,15 @@ public class GenericTableView<T> {
             public ObservableValue<S> call(TableColumn.CellDataFeatures<T, S> param) {
                 return new SimpleObjectProperty<>(config.valueExtractor.apply(param.getValue()));
             }
-        });
+
+        }
+);
 
         // Set cell factory with validation
         if (config.editable && config.converter != null) {
             column.setCellFactory(createValidatingCellFactory(config));
         }
+
 
         // Set on edit commit
         if (config.valueSetter != null) {
@@ -109,11 +119,15 @@ public class GenericTableView<T> {
                     config.valueSetter.accept(item, event.getNewValue());
                     tableView.refresh();
                 }
-            });
+
+            }
+);
         }
+
 
         column.setEditable(config.editable);
     }
+
 
     /**
      * Create a cell factory with validation support
@@ -135,6 +149,7 @@ public class GenericTableView<T> {
                         errorTooltip.setStyle("-fx-background-color: #f00; -fx-text-fill: white;");
                     }
 
+
                     validator.createCheck()
                             .dependsOn("value", textField.textProperty())
                             .withMethod(c -> {
@@ -143,7 +158,9 @@ public class GenericTableView<T> {
                                 if (error != null) {
                                     c.error(error);
                                 }
-                            })
+
+                            }
+)
                             .decorates(textField)
                             .immediate();
 
@@ -153,9 +170,13 @@ public class GenericTableView<T> {
                                 String oldValue, String newValue) {
                             updateValidationTooltip(textField);
                         }
-                    });
+
+                    }
+);
                 }
+
             }
+
 
             private void updateValidationTooltip(TextField textField) {
                 if (validator != null && validator.containsErrors()) {
@@ -166,13 +187,18 @@ public class GenericTableView<T> {
                     Window window = getScene().getWindow();
                     Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
                     errorTooltip.show(window, bounds.getMinX(), bounds.getMinY() - 30);
-                } else {
+                }
+ else {
                     errorTooltip.hide();
                     textField.setTooltip(null);
                 }
+
             }
-        };
+
+        }
+;
     }
+
 
     /**
      * Setup filtering and sorting
@@ -184,12 +210,14 @@ public class GenericTableView<T> {
         tableView.setItems(sortedItems);
     }
 
+
     /**
      * Set filter predicate
      */
     public void setFilterPredicate(Predicate<T> predicate) {
         filteredItems.setPredicate(predicate);
     }
+
 
     /**
      * Add search functionality
@@ -201,12 +229,16 @@ public class GenericTableView<T> {
                     return true;
                 }
 
+
                 String lowerCaseFilter = newValue.toLowerCase();
                 String searchableText = searchableFieldsExtractor.apply(item).toLowerCase();
                 return searchableText.contains(lowerCaseFilter);
-            });
-        });
+            }
+);
+        }
+);
     }
+
 
     /**
      * Add items to the table
@@ -214,6 +246,7 @@ public class GenericTableView<T> {
     public void addItem(T item) {
         items.add(item);
     }
+
 
     /**
      * Add multiple items
@@ -223,12 +256,14 @@ public class GenericTableView<T> {
         items.addAll(newItems);
     }
 
+
     /**
      * Remove item
      */
     public void removeItem(T item) {
         items.remove(item);
     }
+
 
     /**
      * Clear all items
@@ -237,6 +272,7 @@ public class GenericTableView<T> {
         items.clear();
     }
 
+
     /**
      * Get filtered items
      */
@@ -244,12 +280,14 @@ public class GenericTableView<T> {
         return filteredItems;
     }
 
+
     /**
      * Refresh the table
      */
     public void refresh() {
         tableView.refresh();
     }
+
 
     /**
      * Common validators
@@ -260,9 +298,12 @@ public class GenericTableView<T> {
                 if (input == null || input.trim().isEmpty()) {
                     return "Field cannot be empty";
                 }
+
                 return null;
-            };
+            }
+;
         }
+
 
         public static Function<String, String> startsWithUppercase() {
             return input -> {
@@ -273,9 +314,12 @@ public class GenericTableView<T> {
                 if (!Character.isUpperCase(input.charAt(0))) {
                     return "Must start with uppercase letter";
                 }
+
                 return null;
-            };
+            }
+;
         }
+
 
         public static Function<String, String> validYear(int minYear, int maxYear) {
             return input -> {
@@ -288,12 +332,16 @@ public class GenericTableView<T> {
                     if (year < minYear || year > maxYear) {
                         return String.format("Year must be between %d and %d", minYear, maxYear);
                     }
+
                 } catch (NumberFormatException e) {
                     return "Please enter a valid year";
                 }
+
                 return null;
-            };
+            }
+;
         }
+
 
         public static Function<String, String> timeFormat() {
             return input -> {
@@ -305,8 +353,12 @@ public class GenericTableView<T> {
                 if (!input.matches(timeRegex)) {
                     return "Invalid time format. Use HH:MM:SS";
                 }
+
                 return null;
-            };
+            }
+;
         }
+
     }
+
 }

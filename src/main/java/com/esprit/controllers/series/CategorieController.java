@@ -45,9 +45,11 @@ public class CategorieController {
     private TableView<Category> tableView;
 
     /**
-     * Updates the table view's contents by clearing its items and columns, then
-     * adding new columns for an "Edit" and "Delete" button, and finally adding the
-     * recovered categories from the database to the table view.
+     * Refreshes the category table, clears input fields, and reloads the current categories.
+     *
+     * Clears the TableView items and columns, resets the name and description input fields,
+     * installs columns for name, description and per-row Edit/Delete actions, and loads the
+     * first page of categories into the table.
      */
     private void ref() {
         this.tableView.getItems().clear();
@@ -79,38 +81,32 @@ public class CategorieController {
                         CategorieController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                         showAlert("Error", e.getMessage());
                     }
-                });
+
+                }
+);
             }
 
+
             /**
-             * Updates an item's graphic based on whether it is empty or not. If the item is
-             * empty, the function sets the graphic to null; otherwise, it sets the graphic
-             * to a button.
+             * Sets the cell's graphic to the configured button when not empty and clears the graphic when empty.
              *
-             * @param item
-             *              Void object that is being updated by the function, and its value
-             *              determines whether the graphic associated with the item should
-             *              be
-             *              set to null or the button provided as an argument to the
-             *              function.
-             *
-             *              - `item`: A Void object representing an item whose graphic is to
-             *              be updated.
-             *
-             * @param empty
-             *              whether the item is empty or not, which determines whether the
-             *              graphic element is set to `null` or `button`.
+             * @param item  unused placeholder (type Void) required by the cell API
+             * @param empty true if the cell should be treated as empty and display no graphic, false to display the button
              */
             @Override
             protected void updateItem(final Void item, final boolean empty) {
                 super.updateItem(item, empty);
                 if (empty) {
                     this.setGraphic(null);
-                } else {
+                }
+ else {
                     this.setGraphic(this.button);
                 }
+
             }
-        });
+
+        }
+);
         final TableColumn<Category, Void> modifierCol = new TableColumn<>("Edit");
         modifierCol.setCellFactory(param -> new TableCell<>() {
             private final Button button = new Button("Edit");
@@ -124,36 +120,32 @@ public class CategorieController {
                         modifierCategorie(category);
                         this.clickCount = 0;
                     }
-                });
+
+                }
+);
             }
 
+
             /**
-             * Updates the graphics of an item based on whether it is empty or not. If the
-             * item is empty, the function sets the graphic to null. Otherwise, it sets the
-             * graphic to a button.
+             * Sets the cell's graphic to the configured button when not empty and clears the graphic when empty.
              *
-             * @param item
-             *              Void object being updated, and its value is passed to the super
-             *              method `updateItem()` for further processing.
-             *
-             *              - `item`: A Void object representing an item to be updated. -
-             *              `empty`: A boolean indicating whether the item is empty or not.
-             *
-             * @param empty
-             *              whether the item is empty or not, and determines whether the
-             *              graphic of the item should be updated to null or the button
-             *              object.
+             * @param item  unused placeholder (type Void) required by the cell API
+             * @param empty true if the cell should be treated as empty and display no graphic, false to display the button
              */
             @Override
             protected void updateItem(final Void item, final boolean empty) {
                 super.updateItem(item, empty);
                 if (empty) {
                     this.setGraphic(null);
-                } else {
+                }
+ else {
                     this.setGraphic(this.button);
                 }
+
             }
-        });
+
+        }
+);
         // tableView.getColumns().addAll(idCol,nomCol, descriptionCol,modifierCol,
         // supprimerCol);
         this.tableView.getColumns().addAll(nomCol, descriptionCol, modifierCol, supprimerCol);
@@ -163,17 +155,15 @@ public class CategorieController {
         } catch (final Exception e) {
             CategorieController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
 
+
     /**
-     * Creates an Alert object with an informational message and shows it to the
-     * user via the `showAndWait()` method.
+     * Display an informational alert with the given window title and content message.
      *
-     * @param title
-     *                title of an alert window that will be displayed when the
-     *                `showAlert` method is called.
-     * @param message
-     *                text to be displayed in the alert box.
+     * @param title   window title shown on the alert dialog
+     * @param message content text shown inside the alert
      */
     private void showAlert(final String title, final String message) {
         final Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -183,21 +173,14 @@ public class CategorieController {
         alert.showAndWait();
     }
 
+
     /**
-     * Allows for the modification of a category's name and description through a
-     * dialogue box interface. The function calls the `iServiceCategorie.modifier()`
-     * method to update the category in the database after the user has entered the
-     * new details and confirmed the modifications.
+     * Opens a modal dialog to edit the category's name and description and saves the updated category.
      *
-     * @param categorie
-     *                  category object that is to be modified through the dialog
-     *                  box, and
-     *                  its properties (name and description) are editable and can
-     *                  be
-     *                  modified by the user through the dialog UI.
-     *                  <p>
-     *                  - `nom`: The name of the category. - `description`: A brief
-     *                  description of the category.
+     * On successful update the method shows a success alert and refreshes the view.
+     *
+     * @param categorie the Category to edit; its name and description are replaced with the user's input
+     * @throws RuntimeException if persisting the updated category fails
      */
     private void modifierCategorie(final Category categorie) {
         final IServiceCategorieImpl iServiceCategorie = new IServiceCategorieImpl();
@@ -212,8 +195,10 @@ public class CategorieController {
             if (dialogButton == ButtonType.OK) {
                 return new Pair<>(nomFild.getText(), desqFild.getText());
             }
+
             return null;
-        });
+        }
+);
         final Optional<Pair<String, String>> result = dialog.showAndWait();
         result.ifPresent(pair -> {
             categorie.setName(nomFild.getText());
@@ -225,73 +210,67 @@ public class CategorieController {
             } catch (final Exception e) {
                 throw new RuntimeException(e);
             }
-        });
+
+        }
+);
     }
 
+
     /**
-     * References an object called `ref`.
+     * Initialize the controller and populate the category table by refreshing view data.
+     *
+     * This method is invoked by the FXML loader after the controller is constructed.
      */
     @FXML
     private void initialize() {
         this.ref();
     }
 
+
     /**
-     * Checks if the user has entered a non-empty string. If so, it returns `true`.
-     * Otherwise, it displays an error message and returns `false`.
+     * Checks that the name input field is not empty.
      *
-     * @returns a boolean value indicating whether a valid name has been entered.
-     *          <p>
-     *          - The function returns a boolean value indicating whether the user
-     *          has entered a valid name or not. - If the input field is not empty,
-     *          the function returns `true`. - If the input field is empty, the
-     *          function returns `false` and sets the `checkname` text to "Please
-     *          enter a valid Name".
+     * If the field is empty, sets the validation label to "Please enter a valid Name".
+     *
+     * @return true if the name field contains at least one character, false otherwise.
      */
     boolean checkname() {
         if ("" != nomF.getText()) {
             return true;
-        } else {
+        }
+ else {
             this.checkname.setText("Please enter a valid Name");
             return false;
         }
+
     }
 
+
     /**
-     * Checks if the user has entered a non-empty string in the
-     * `descreptionF.getText()` field, and returns `true` if so, or `false`
-     * otherwise, along with a message to enter a valid description.
+     * Ensures the description input is not empty and updates the validation label when it is.
      *
-     * @returns a boolean value indicating whether a valid description has been
-     *          entered.
-     *          <p>
-     *          - The function returns a boolean value indicating whether the user
-     *          has entered a valid description or not. - If the description is not
-     *          empty, the function returns `true`. - If the description is empty,
-     *          the function sets the `checkdescreption` text to "Please enter a
-     *          valid Description" and returns `false`.
+     * If the description is empty, sets the `checkdescreption` label to "Please enter a valid Description".
+     *
+     * @return true if the description text is not empty, false otherwise
      */
     boolean checkdescreption() {
         if ("" != descreptionF.getText()) {
             return true;
-        } else {
+        }
+ else {
             this.checkdescreption.setText("Please enter a valid Description");
             return false;
         }
+
     }
 
+
     /**
-     * Allows users to add a new category by validating input fields, saving the
-     * category to a service implementation class, and displaying an alert message
-     * upon successful save.
+     * Create and save a new category from the UI inputs after validating name and description.
      *
-     * @param event
-     *              user's action of clicking the "Add Category" button, which
-     *              triggers the execution of the code within the function.
-     *              <p>
-     *              - Type: `ActionEvent` - Details: Contains information about the
-     *              action that triggered the function, such as the source of the
-     *              event and the identifier of the event.
+     * If validation passes, constructs a Category from the text fields, persists it via the category service,
+     * displays a success alert, clears validation messages, and refreshes the view; on failure displays an error alert
+     * with the exception message.
      */
     @FXML
     void ajouteroeuvre(final ActionEvent event) {
@@ -311,23 +290,18 @@ public class CategorieController {
             } catch (final Exception e) {
                 this.showAlert("Error", "An error occurred while saving the category : " + e.getMessage());
             }
+
         }
+
     }
+
 
     /// Gestion du menu
     /**
-     * Loads a FXML file, creates a scene and sets it as the scene of a stage, and
-     * then shows the stage.
+     * Navigate to and display the Categorie-view.fxml scene.
      *
-     * @param event
-     *              event that triggered the method, specifically the opening of the
-     *              `Categorie-view.fxml` file.
-     *              <p>
-     *              - `Event`: This is the class that represents an event in Java,
-     *              containing information about the source and type of the event. -
-     *              `Object`: The `event` parameter is an instance of the `Object`
-     *              class, which provides no additional information beyond the fact
-     *              that it is an event object.
+     * @param event the ActionEvent that triggered the navigation; used to obtain the current window
+     * @throws IOException if the FXML resource cannot be loaded
      */
     @FXML
     void Ocategories(final ActionEvent event) throws IOException {
@@ -339,21 +313,11 @@ public class CategorieController {
         stage.show();
     }
 
+
     /**
-     * Loads and displays a FXML view named "Serie-view".
+     * Open the "Serie-view.fxml" UI and set it as the scene of the current window.
      *
-     * @param event
-     *              event object that triggered the function, providing information
-     *              about the source of the event and other details.
-     *              <p>
-     *              Event: An ActionEvent object representing an action triggered by
-     *              the user.
-     *              <p>
-     *              Properties:
-     *              <p>
-     *              - `getSource()`: Returns the source of the event (i.e., the
-     *              button
-     *              or menu item that was clicked).
+     * @throws IOException if the FXML resource cannot be loaded
      */
     @FXML
     void Oseriess(final ActionEvent event) throws IOException {
@@ -365,20 +329,15 @@ public class CategorieController {
         stage.show();
     }
 
+
     /**
-     * Loads an FXML file, creates a scene, and sets it as the scene of a Stage,
-     * displaying the content on the stage.
+     * Switches the current window to the Episode view defined by /ui/series/Episode-view.fxml.
      *
-     * @param event
-     *              source of the action that triggered the method, providing a
-     *              reference to the object from which the event originated.
-     *              <p>
-     *              Event: An instance of the `ActionEvent` class that contains
-     *              information about the action performed by the user. Properties:
-     *              <p>
-     *              - `getSource()`: Returns the object that triggered the event. In
-     *              this case, it is a `Node` representing the `Episode-view.fxml`
-     *              stage.
+     * Loads the FXML, creates a Scene from it, and sets that Scene on the Stage obtained
+     * from the event's source node.
+     *
+     * @param event the ActionEvent whose source Node is used to obtain the current Stage
+     * @throws IOException if the FXML resource cannot be loaded
      */
     @FXML
     void Oepisode(final ActionEvent event) throws IOException {
@@ -390,18 +349,13 @@ public class CategorieController {
         stage.show();
     }
 
+
     /**
-     * Loads a FXML view and replaces the current scene with it when an action event
-     * is triggered.
+     * Opens the statistics view in a new window.
      *
-     * @param actionEvent
-     *                    event that triggered the function, which is used to
-     *                    determine what
-     *                    action to take based on the event type.
-     *                    <p>
-     *                    - If `actionEvent` is not null, it represents an action
-     *                    event
-     *                    triggered by the user.
+     * Loads "StatistiquesView.fxml", initializes its controller, creates a new Stage with the loaded scene, and shows it.
+     *
+     * @param actionEvent the triggering ActionEvent; if null the method performs no action
      */
     @FXML
     /**
@@ -430,61 +384,58 @@ public class CategorieController {
             } catch (final IOException e) {
                 CategorieController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
-        } else {
+
+        }
+ else {
             // Gérer le cas où actionEvent est nul
             CategorieController.LOGGER.info("actionEvent is null");
         }
+
     }
 
+
     /**
-     * Likely displays a list or movies or performs some other movie-related actions
-     * when an event is triggered.
+     * Open the movies view in response to a user action.
      *
-     * @param actionEvent
-     *                    event that triggered the execution of the `showMovies`
-     *                    function.
+     * @param actionEvent the event that triggered this handler
      */
     public void showmovies(final ActionEvent actionEvent) {
     }
 
+
     /**
-     * Displays a list of products.
+     * Opens the products view.
      *
-     * @param actionEvent
-     *                    event that triggered the function call.
+     * @param actionEvent the ActionEvent that triggered this handler
      */
     public void showproducts(final ActionEvent actionEvent) {
     }
 
+
     /**
-     * Does not have any discernible behavior or functionality as it is empty and
-     * lacks any statements or actions to perform.
+     * Placeholder event handler for cinema actions.
      *
-     * @param actionEvent
-     *                    event that triggered the function call.
+     * Currently performs no action.
      */
     public void showcinema(final ActionEvent actionEvent) {
     }
 
+
     /**
-     * Is invoked when an event occurs and has no discernible functionality as it
-     * only contains a blank implementation.
+     * Placeholder handler for the "event" UI action; intended to open or update the Event view but currently has no implementation.
      *
-     * @param actionEvent
-     *                    event that triggered the function's execution.
+     * @param actionEvent the ActionEvent that triggered this handler
      */
     public void showevent(final ActionEvent actionEvent) {
     }
 
+
     /**
-     * Is triggered by an `ActionEvent`. It does not provide any information about
-     * the code author or licensing.
+     * Handler invoked when the user activates the "series" UI control.
      *
-     * @param actionEvent
-     *                    event that triggered the `showseries()` function to be
-     *                    called,
-     *                    providing the necessary context for its execution.
+     * @param actionEvent the event that triggered this handler; may be null
      */
     public void showseries(final ActionEvent actionEvent) {
     }
+
 }

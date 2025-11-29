@@ -79,9 +79,15 @@ public class EpisodeController {
     private TableView<Episode> tableView;
 
     /**
-     * Clears existing data in the `tableView`, then retrieves new data from an API
-     * and displays it in the table with buttons for deleting and editing each
-     * episode.
+     * Refreshes the episode management view by clearing input fields and UI state,
+     * loading the latest series into the series dropdown, and loading episodes into
+     * the table with per-row Delete and Edit controls.
+     *
+     * <p>After calling this method the UI inputs (title, number, season, image and
+     * video paths) are reset, the serie combo box is repopulated from the series
+     * service, and the table is rebuilt. Each table row includes a Delete button
+     * that removes the episode and shows a confirmation alert, and an Edit button
+     * that opens the episode editor dialog.</p>
      */
     private void ref() {
         this.tableView.getItems().clear();
@@ -100,9 +106,11 @@ public class EpisodeController {
             for (final Series s : this.serieList) {
                 this.serieF.getItems().add(s.getName());
             }
+
         } catch (final Exception e) {
             throw new RuntimeException(e);
         }
+
         ///// affichage du tableau
         final IServiceSeriesImpl serviceSerie = new IServiceSeriesImpl();
         // TableColumn<EpisodeDto, Integer> idCol = new TableColumn<>("ID");
@@ -131,31 +139,32 @@ public class EpisodeController {
                         EpisodeController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                         showAlert("Error", e.getMessage());
                     }
-                });
+
+                }
+);
             }
 
+
             /**
-             * Updates an item's graphical representation based on its emptiness status.
+             * Update the cell's graphic: clear it when the cell is empty, otherwise display the cell's button.
              *
-             * @param item
-             *              component being updated, which can be either null or a `Button`
-             *              object when the `empty` parameter is false.
-             *
-             * @param empty
-             *              ether value of the item being updated, and determines whether or
-             *              not the button's graphic should be set to `null` or the
-             *              `button`.
+             * @param item unused cell item (always null for this Void cell)
+             * @param empty true if the cell is empty and should show no graphic, false otherwise
              */
             @Override
             protected void updateItem(final Void item, final boolean empty) {
                 super.updateItem(item, empty);
                 if (empty) {
                     this.setGraphic(null);
-                } else {
+                }
+ else {
                     this.setGraphic(this.button);
                 }
+
             }
-        });
+
+        }
+);
         final TableColumn<Episode, Void> modifierCol = new TableColumn<>("Edit");
         modifierCol.setCellFactory(param -> new TableCell<>() {
             private final Button button = new Button("Edit");
@@ -170,34 +179,32 @@ public class EpisodeController {
                         tableView.refresh();
                         this.clickCount = 0;
                     }
-                });
+
+                }
+);
             }
 
+
             /**
-             * Updates the graphical representation (graphic) associated with an item based
-             * on its status as empty or not.
+             * Update the cell's graphic: clear it when the cell is empty, otherwise display the cell's button.
              *
-             * @param item
-             *              Void item being updated, which is passed to the superclass's
-             *              `updateItem` method and then used to set the graphic of the
-             *              button
-             *              in the function.
-             *
-             * @param empty
-             *              state of the item being updated, and sets the graphic of the
-             *              item
-             *              accordingly when it is false.
+             * @param item unused cell item (always null for this Void cell)
+             * @param empty true if the cell is empty and should show no graphic, false otherwise
              */
             @Override
             protected void updateItem(final Void item, final boolean empty) {
                 super.updateItem(item, empty);
                 if (empty) {
                     this.setGraphic(null);
-                } else {
+                }
+ else {
                     this.setGraphic(this.button);
                 }
+
             }
-        });
+
+        }
+);
         // tableView.getColumns().addAll(idCol, titreCol, numeroepisodeCol, saisonCol,
         // serieCol, supprimerCol, modifierCol);
         this.tableView.getColumns().addAll(titreCol, numeroepisodeCol, saisonCol, serieCol, supprimerCol, modifierCol);
@@ -208,17 +215,18 @@ public class EpisodeController {
         } catch (final Exception e) {
             EpisodeController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
 
+
     /**
-     * /** Modifies an episode's details through a dialog box, including title,
-     * number, season, image, and video, and then updates the episode in the
-     * database using an IoC container.
+     * Open a dialog to edit the provided Episode and save the changes.
      *
-     * @param episodeDto
-     *                   data of an episode to be edited, containing information
-     *                   such as
-     *                   title, number, season, image, and video path.
+     * The dialog is prefilled with the episode's title, number, season, image, video, and series.
+     * If the user confirms, the episode is updated via the episode service, the view is refreshed,
+     * and a success alert is shown.
+     *
+     * @param episode the Episode whose values are used to prefill the dialog and will be persisted if confirmed
      */
     private void modifierEpisode(final Episode episode) {
         final IServiceEpisodeImpl iServiceEpisode = new IServiceEpisodeImpl();
@@ -233,19 +241,24 @@ public class EpisodeController {
         for (final Series s : this.serieList) {
             serieComboBox.getItems().add(s.getName());
         }
+
         serieComboBox.setValue(episode.getSeries().getName());
         final Button Ajouterimage = new Button("Add");
         {
             Ajouterimage.setOnAction(event -> {
                 this.addimg(event);
-            });
+            }
+);
         }
+
         final Button AJouterVideo = new Button("Add");
         {
             AJouterVideo.setOnAction(event -> {
                 this.addVideo(event);
-            });
+            }
+);
         }
+
         dialog.getDialogPane()
                 .setContent(new VBox(10, new Label("Title:"), titreFild, new Label("Number:"), numeroepisodeFild,
                         new Label("Season :"), saisonFild, new Label("Add picture :"), Ajouterimage,
@@ -255,8 +268,10 @@ public class EpisodeController {
             if (dialogButton == ButtonType.OK) {
                 return new Pair<>(titreFild.getText(), numeroepisodeFild.getText());
             }
+
             return null;
-        });
+        }
+);
         final Optional<Pair<String, String>> result = dialog.showAndWait();
         final Episode episode1 = new Episode();
         result.ifPresent(pair -> {
@@ -270,7 +285,9 @@ public class EpisodeController {
                 if (s.getName().equals(serieComboBox.getValue())) {
                     episode1.setId(s.getId());
                 }
+
             }
+
             try {
                 EpisodeController.LOGGER.info(episode.toString());
                 iServiceEpisode.update(episode);
@@ -279,31 +296,26 @@ public class EpisodeController {
             } catch (final Exception e) {
                 throw new RuntimeException(e);
             }
-        });
+
+        }
+);
     }
 
+
     /**
-     * References a provided reference.
+     * Initializes the controller state and populates UI components (table, form fields, and series list).
      */
     @FXML
     private void initialize() {
         this.ref();
     }
 
+
     /**
-     * /** Creates an `Alert` object and sets its title, header text, and content
-     * text using the input parameters. The `Alert.AlertType.INFORMATION` is set to
-     * indicate that the alert should be displayed in a neutral manner. Finally, the
-     * `alert.showAndWait()` method displays the alert and waits for the user to
-     * close it.
+     * Display an informational alert dialog with the given title and message.
      *
-     * @param title
-     *                title of an Alert that will be displayed to the user when the
-     *                function is called.
-     * @param message
-     *                content text to be displayed within an alert box when the
-     *                function
-     *                is called.
+     * @param title   the dialog window title
+     * @param message the message text shown in the dialog content area
      */
     @FXML
     private void showAlert(final String title, final String message) {
@@ -314,15 +326,13 @@ public class EpisodeController {
         alert.showAndWait();
     }
 
+
     /**
-     * Allows users to select an image file using a FileChooser, stores the file
-     * path in `imgpath`, and sets the image using `Image`.
-     *
-     * @param event
-     *              action that triggered the function, specifically the opening of
-     *              a
-     *              file using the FileChooser.
-     */
+         * Opens a file chooser restricted to PNG/JPG/GIF images, stores the selected file's normalized path in `imgpath`,
+         * and loads the image.
+         *
+         * <p>If the user cancels or selects a non-image file, no path is stored and an informational log entry is written.</p>
+         */
     @FXML
     void addimg(final ActionEvent event) {
         final FileChooser fileChooser = new FileChooser();
@@ -337,18 +347,20 @@ public class EpisodeController {
             EpisodeController.LOGGER.info("File path stored: " + this.imgpath);
             final Image image = new Image(selectedFile.toURI().toString());
             // imgoeuvre.setImage(image);
-        } else {
+        }
+ else {
             EpisodeController.LOGGER.info("Please select a valid image file.");
         }
+
     }
 
+
     /**
-     * Allows the user to select an image file from a chosen directory, saves it to
-     * two different locations, and displays the image in an `ImageView`.
+     * Prompt the user to choose a PNG or JPG file, upload the selected image to Cloudinary, and show it in the episode ImageView.
      *
-     * @param event
-     *              trigger that initiates the action of importing an image when
-     *              clicked by the user.
+     * <p>If an image is selected and uploaded successfully, the ImageView is updated and the controller's image path is set to the Cloudinary URL; upload failures are logged.</p>
+     *
+     * @param event the JavaFX action event that triggered the import (typically a button click)
      */
     @FXML
     void importImage(final ActionEvent event) {
@@ -372,32 +384,31 @@ public class EpisodeController {
             } catch (final IOException e) {
                 LOGGER.log(Level.SEVERE, "Error uploading image to Cloudinary", e);
             }
+
         }
+
     }
+
 
     // Method to retrieve the stored file path
 
     /**
-     * Retrieves and returns the file path of an image.
+     * Get the stored image file path.
      *
-     * @returns a string representing the path to an image file.
+     * @return the stored image file path, or {@code null} if no path is set
      */
     public String getFilePath() {
         return this.imgpath;
     }
 
+
     // Method to check if the selected file is an image file
 
     /**
-     * Takes a `File` object as input and determines if it represents an image file
-     * or not. It does this by creating an `Image` object from the file's URI, then
-     * checking if the resulting `Image` is not in error. If the image is in error,
-     * the function returns `false`.
+     * Determines whether the given file can be loaded as a JavaFX image.
      *
-     * @param file
-     *             file to be checked for being an image file.
-     * @returns a boolean value indicating whether the provided file is an image
-     *          file or not.
+     * @param file the file to test
+     * @return `true` if the file can be loaded as a JavaFX Image, `false` otherwise
      */
     private boolean isImageFile(final File file) {
         try {
@@ -406,19 +417,19 @@ public class EpisodeController {
         } catch (final Exception e) {
             return false;
         }
+
     }
+
 
     /////
 
     /**
-     * Enables the user to select a video file from their computer, and if a valid
-     * video file is selected, it stores the file path in a variable called
-     * `videopath`.
-     *
-     * @param event
-     *              occurance of a user clicking on the "Choose a video" button and
-     *              triggers the execution of the function.
-     */
+         * Opens a file chooser to select a video file and, if valid, stores its normalized absolute path in {@code videopath}.
+         *
+         * If the selected file has a supported extension (mp4, avi, mkv) its path is saved; otherwise an informational message is logged.
+         *
+         * @param event the ActionEvent that triggered the file chooser
+         */
     @FXML
     void addVideo(final ActionEvent event) {
         final FileChooser fileChooser = new FileChooser();
@@ -432,22 +443,20 @@ public class EpisodeController {
             final String videoPath = selectedFile.getAbsolutePath().replace("\\", "/");
             this.videopath = videoPath;
             EpisodeController.LOGGER.info("File path stored: " + videoPath);
-        } else {
+        }
+ else {
             EpisodeController.LOGGER.info("Please select a valid video file.");
         }
+
     }
+
 
     // Method to check if the selected file is a video file
 
     /**
-     * Determines if a given File is a video file based on its file name extension,
-     * returning `true` if the extension matches "mp4", "avi", or "mkv", and `false`
-     * otherwise.
+     * Determines whether a file is a supported video based on its filename extension.
      *
-     * @param file
-     *             File that needs to be checked for being a video file.
-     * @returns a boolean value indicating whether the provided file is an MP4, AVI,
-     *          or MKV video file.
+     * @return `true` if the file extension is `mp4`, `avi`, or `mkv` (case-insensitive), `false` otherwise.
      */
     private boolean isVideoFile(final File file) {
         final String fileName = file.getName();
@@ -455,17 +464,14 @@ public class EpisodeController {
         return "mp4".equals(extension) || "avi".equals(extension) || "mkv".equals(extension);
     }
 
+
     /////
 
     /**
-     * Checks if a given string can be converted to an integer using
-     * `Integer.parseInt()`. If it can, it returns `true`, otherwise it returns
-     * `false`.
+     * Determines whether the provided string represents a valid integer.
      *
-     * @param s
-     *          String to be parsed as an integer.
-     * @returns a boolean value indicating whether the given string can be parsed as
-     *          an integer.
+     * @param s the string to check; may be null
+     * @return true if s can be parsed as an integer, false otherwise
      */
     boolean isStringInt(final String s) {
         try {
@@ -474,121 +480,134 @@ public class EpisodeController {
         } catch (final NumberFormatException e) {
             return false;
         }
+
     }
 
+
     /**
-     * Determines whether a title is provided and returns `true` if it is, else it
-     * displays an error message and returns `false`.
+     * Check whether the title input contains text.
      *
-     * @returns `true` if a title is provided, otherwise it returns `false` and
-     *          provides an error message.
+     * If the title field is empty, sets the controller's `titrecheck` label to "Please enter a valid Title".
+     *
+     * @return true if the title field contains non-empty text, false otherwise.
      */
     boolean titrecheck() {
         if ("" != titreF.getText()) {
             return true;
-        } else {
+        }
+ else {
             this.titrecheck.setText("Please enter a valid Title");
             return false;
         }
+
     }
 
+
     /**
-     * Verifies if the user inputted season value is not empty and it's a numerical
-     * string, if both conditions are true, it returns `true`, otherwise it displays
-     * an error message and returns `false`.
+     * Validate that the season text field contains an integer value.
      *
-     * @returns `true` if the input string is not empty and can be converted to an
-     *          integer, otherwise it returns `false`.
+     * If the field is empty or not an integer, sets the `seasoncheck` label to
+     * "Please enter a valid Season".
+     *
+     * @return `true` if the season field contains a parsable integer, `false` otherwise.
      */
     boolean seasoncheck() {
         final String numero = this.saisonF.getText();
         if (!numero.isEmpty() && this.isStringInt(numero)) {
             return true;
-        } else {
+        }
+ else {
             this.seasoncheck.setText("Please enter a valid Season");
             return false;
         }
+
     }
 
+
     /**
-     * Checks if an image file path is provided and returns `true` if yes, otherwise
-     * returns `false`.
+     * Checks whether an image path has been set for the episode.
      *
-     * @returns a boolean value indicating whether a picture has been selected or
-     *          not.
+     * If no image path is present, updates the `picturechek` label to "Please select a Picture".
+     *
+     * @return `true` if an image path is present, `false` otherwise.
      */
     boolean picturechek() {
         if ("" != imgpath) {
             return true;
-        } else {
+        }
+ else {
             this.picturechek.setText("Please select a Picture");
             return false;
         }
+
     }
 
+
     /**
-     * Checks if the user's input is a non-empty, integer-valued string, and returns
-     * `true` if it is, else returns `false`.
+     * Validate that the episode number field contains a non-empty integer.
      *
-     * @returns "Please enter a Number".
+     * If validation fails, sets the `numbercheck` label to "Please enter a Number ".
+     *
+     * @return `true` if the episode number field contains an integer, `false` otherwise.
      */
     boolean numbercheck() {
         final String numero = this.numeroepisodeF.getText();
         if (!numero.isEmpty() && this.isStringInt(numero)) {
             return true;
-        } else {
+        }
+ else {
             this.numbercheck.setText("Please enter a Number ");
             return false;
         }
+
     }
 
+
     /**
-     * Verifies if a video summary is entered by the user, and returns `true` if it
-     * is valid, or `false` otherwise, with an appropriate error message displayed
-     * on the UI if it's invalid.
+     * Validates that a video path has been provided.
      *
-     * @returns a boolean value indicating whether a valid video path has been
-     *          provided.
+     * If no video path is set, updates the `videocheck` label with an error message.
+     *
+     * @return `true` if a video path is present, `false` otherwise.
      */
     boolean videocheck() {
         if ("" != videopath) {
             return true;
-        } else {
+        }
+ else {
             this.videocheck.setText("Please enter a valid Summary");
             return false;
         }
+
     }
 
+
     /**
-     * Checks if the value of `serieF` is not null, then returns `true`. Otherwise,
-     * it sets the text of a text field called `seriecheck` to "Please select a
-     * Serie" and returns `false`.
+     * Checks whether a series is selected in the series ComboBox.
      *
-     * @returns `true` if a value is provided for `serieF.getValue()`, otherwise it
-     *          returns `false` with an error message indicating that a serie must
-     *          be selected.
+     * If no series is selected, sets the `seriecheck` label text to "Please select a Serie".
+     *
+     * @return `true` if a series is selected, `false` otherwise.
      */
     boolean seriecheck() {
         if (null != serieF.getValue()) {
             return true;
-        } else {
+        }
+ else {
             this.seriecheck.setText("Please select a Serie");
             return false;
         }
+
     }
+
 
     // Méthode pour envoyer un SMS avec Twilio
 
     /**
-     * Creates an SMS message, specifies the sender's and recipient's phone numbers,
-     * and sends the message using a carrier service.
+     * Send an SMS message to the specified phone number.
      *
-     * @param recipientNumber
-     *                        10-digit phone number of the recipient for whom the
-     *                        SMS message is
-     *                        being sent.
-     * @param messageBody
-     *                        text content of the SMS message to be sent.
+     * @param recipientNumber the recipient's phone number as a dialable string
+     * @param messageBody     the text content to send in the SMS
      */
     private void sendSMS(final String recipientNumber, final String messageBody) {
         final PhoneNumber fromPhoneNumber = new PhoneNumber("+17573640849");
@@ -597,14 +616,13 @@ public class EpisodeController {
         EpisodeController.LOGGER.info("SMS sent successfully: " + message.getSid());
     }
 
+
     /**
-     * Allows user to add a new episode to their chosen serie by filling in relevant
-     * information and saving it to a database. It also sends an SMS to the user's
-     * phone with the details of the added episode.
+     * Create an Episode from current form values, persist it, send an SMS notification to a configured number, and refresh the view.
      *
-     * @param event
-     *              clicked button event on the user interface that triggered the
-     *              function execution.
+     * Validates form inputs before saving; on success clears validation messages, persists the episode, sends a notification SMS, refreshes the table and UI.
+     *
+     * @param event the ActionEvent that triggered this handler
      */
     @FXML
     void ajouterSerie(final ActionEvent event) {
@@ -636,7 +654,9 @@ public class EpisodeController {
                     if (s.getName() == this.serieF.getValue()) {
                         episode.setId(s.getId());
                     }
+
                 }
+
                 episodeserv.create(episode);
                 // Envoi d'un SMS après avoir ajouté l'épisode avec succès
                 // String message = "A new episode is here : " + episode.getNameSerie();
@@ -650,23 +670,28 @@ public class EpisodeController {
                         this.sendSMS("+21653775010", message);
                         break; // Sortir de la boucle une fois la série trouvée
                     }
+
                 }
+
                 this.tableView.refresh();
                 this.ref();
             } catch (final Exception e) {
                 this.showAlert("Error", "An error occurred while saving the episode. : " + e.getMessage());
                 EpisodeController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
+
         }
+
     }
 
+
     /**
-     * Loads a FXML file, creates a scene, and displays it in a Stage, using the
-     * given resources.
+     * Navigates to and displays the Categorie view.
      *
-     * @param event
-     *              event that triggered the `Ocategories` function, providing the
-     *              necessary information for the function to perform its actions.
+     * Loads the Categorie-view FXML, creates a new scene from it, and replaces the current window's scene.
+     *
+     * @param event the ActionEvent that triggered this navigation
+     * @throws IOException if the FXML resource cannot be loaded
      */
     @FXML
     void Ocategories(final ActionEvent event) throws IOException {
@@ -678,14 +703,12 @@ public class EpisodeController {
         stage.show();
     }
 
+
     /**
-     * Loads a FXML file, creates a scene, and sets the scene on a stage, displaying
-     * the stage in the UI.
+     * Displays the series view by loading its FXML and setting it as the current window's scene.
      *
-     * @param event
-     *              Event that triggered the function, and it is used to load the
-     *              FXML
-     *              file for display in the stage.
+     * @param event the action event whose source node provides the current window
+     * @throws IOException if the FXML resource cannot be loaded
      */
     @FXML
     void Oseries(final ActionEvent event) throws IOException {
@@ -697,14 +720,13 @@ public class EpisodeController {
         stage.show();
     }
 
+
     /**
-     * Loads and displays an FXML file named "/ui/series/Episode-view.fxml" in a
-     * JavaFX application.
+     * Opens the episode view UI and replaces the current window's scene with the
+     * content from /ui/series/Episode-view.fxml.
      *
-     * @param event
-     *              event that triggered the method execution, providing the
-     *              necessary
-     *              information for displaying the appropriate episode view.
+     * @param event the action event whose source window will be updated to the new scene
+     * @throws IOException if the FXML resource cannot be loaded
      */
     @FXML
     void Oepisode(final ActionEvent event) throws IOException {
@@ -716,55 +738,51 @@ public class EpisodeController {
         stage.show();
     }
 
+
     /**
-     * Is called when the 'ActionEvent' occurs and has no defined functionality as
-     * of now.
+     * Handle the UI action that requests showing the movies view.
      *
-     * @param actionEvent
-     *                    event that triggered the execution of the `showMovies()`
-     *                    function.
+     * @param actionEvent the event that triggered this action
      */
     public void showmovies(final ActionEvent actionEvent) {
     }
 
+
     /**
-     * Displays a list of products.
+     * Placeholder event handler for showing products; currently unimplemented.
      *
-     * @param actionEvent
-     *                    event that triggered the execution of the `showProducts`
-     *                    function.
+     * @param actionEvent the UI event that triggered this handler
      */
     public void showproducts(final ActionEvent actionEvent) {
     }
 
+
     /**
-     * Likely displays a cinema or movie-related information within an application.
+     * Handler invoked when the user requests the cinema view.
      *
-     * @param actionEvent
-     *                    event that triggered the function call.
+     * @param actionEvent the event that triggered this handler
      */
     public void showcinema(final ActionEvent actionEvent) {
     }
 
+
     /**
-     * Handles an event generated by a user's interaction with a graphical user
-     * interface (GUI).
+     * Placeholder handler for the Events UI action; currently performs no operation.
      *
-     * @param actionEvent
-     *                    occurrence of an event that triggers the function's
-     *                    execution.
+     * Invoked when the associated UI control is activated; retained for future implementation.
+     *
+     * @param actionEvent the ActionEvent generated by the UI control that invoked this handler
      */
     public void showevent(final ActionEvent actionEvent) {
     }
 
+
     /**
-     * Is triggered when an action event occurs and has no inherent meaning or
-     * purpose beyond its activation.
+     * Switches the UI to the Series view.
      *
-     * @param actionEvent
-     *                    event that triggered the call to the `showSeries()`
-     *                    method.
+     * @param actionEvent the ActionEvent that triggered this handler
      */
     public void showseries(final ActionEvent actionEvent) {
     }
+
 }

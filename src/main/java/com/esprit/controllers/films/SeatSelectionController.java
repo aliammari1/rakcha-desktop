@@ -52,39 +52,28 @@ public class SeatSelectionController {
     private List<Seat> selectedSeats = new ArrayList<>();
 
     /**
-     * Initializes the seat selection controller with movie session and client
-     * information.
-     * 
-     * <p>
-     * This method configures the controller with the provided movie session and
-     * client
-     * data, then loads the seat layout based on the cinema hall associated with the
-     * session.
-     * </p>
+     * Initialize the controller with the specified movie session and client and load the seat layout.
      *
-     * @param moviesession the movie session for which seats are being selected
-     * @param client       the client who is selecting the seats
-     * @throws IllegalArgumentException if either moviesession or client is null
+     * @param moviesession the MovieSession whose cinema hall seats should be displayed
+     * @param client       the Client performing the selection
+     * @throws IllegalArgumentException if {@code moviesession} or {@code client} is {@code null}
      */
     public void initialize(MovieSession moviesession, Client client) {
         if (moviesession == null || client == null) {
             throw new IllegalArgumentException("MovieSession and Client cannot be null");
         }
+
         this.moviesession = moviesession;
         this.client = client;
         loadSeats();
     }
 
+
     /**
-     * Loads and displays the seat layout for the cinema hall.
-     * 
-     * <p>
-     * Retrieves seat information from the database and creates a visual
-     * representation
-     * of the seating layout in the GridPane. Each seat is represented by a button
-     * with
-     * appropriate styling based on its availability status.
-     * </p>
+     * Populate the seatGrid with buttons representing seats for the current movie session's cinema hall.
+     *
+     * Occupied seats are disabled and styled red; available seats are styled green. Clicking a seat
+     * toggles its selection state and updates the controller's selectedSeats list.
      */
     private void loadSeats() {
         SeatService seatService = new SeatService();
@@ -96,6 +85,7 @@ public class SeatSelectionController {
             maxRow = Math.max(maxRow, seat.getRowNumber());
             maxCol = Math.max(maxCol, seat.getSeatNumber());
         }
+
 
         for (int row = 0; row < maxRow; row++) {
             for (int col = 0; col < maxCol; col++) {
@@ -112,10 +102,14 @@ public class SeatSelectionController {
                     seatButton.setOnAction(e -> handleSeatSelection(seatButton, currentSeat));
                 }
 
+
                 seatGrid.add(seatButton, col, row);
             }
+
         }
+
     }
+
 
     /**
      * Finds a specific seat in the list based on row and column coordinates.
@@ -128,6 +122,7 @@ public class SeatSelectionController {
     private Seat findSeat(List<Seat> seats, int row, int col) {
         return seats.stream().filter(s -> s.getRowNumber() == row && s.getSeatNumber() == col).findFirst().orElse(null);
     }
+
 
     /**
      * Handles the selection and deselection of seats.
@@ -146,29 +141,30 @@ public class SeatSelectionController {
         if (selectedSeats.contains(seat)) {
             selectedSeats.remove(seat);
             seatButton.setStyle("-fx-background-color: green;");
-        } else {
+        }
+ else {
             selectedSeats.add(seat);
             seatButton.setStyle("-fx-background-color: yellow;");
         }
+
     }
 
+
     /**
-     * Processes the seat selection and proceeds to payment.
-     * 
-     * <p>
-     * When the user confirms their seat selection, this method transitions to the
-     * payment screen, passing the selected seats, movie session, and client
-     * information.
-     * </p>
+     * Navigate to the payment screen for the currently selected seats.
      *
-     * @param event the action event triggered by clicking the confirm button
-     * @throws IOException if there is an error loading the payment view
+     * <p>If no seats are selected this method returns without changing the UI.
+     * Otherwise it loads the payment view, initializes its controller with the current
+     * movie session, client, and selected seats, and replaces the current scene with the payment scene.</p>
+     *
+     * @throws IOException if the payment view cannot be loaded
      */
     @FXML
     private void confirmSelection(ActionEvent event) throws IOException {
         if (selectedSeats.isEmpty()) {
             return;
         }
+
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/films/Paymentuser.fxml"));
         AnchorPane root = loader.load();
@@ -180,4 +176,5 @@ public class SeatSelectionController {
         Scene scene = new Scene(root);
         stage.setScene(scene);
     }
+
 }

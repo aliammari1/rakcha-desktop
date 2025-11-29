@@ -30,10 +30,12 @@ public class TableCreator {
         MYSQL, POSTGRESQL, SQLITE, UNKNOWN
     }
 
+
     public TableCreator(Connection connection) {
         this.connection = connection;
         this.databaseType = detectDatabaseType();
     }
+
 
     /**
      * Detects the database type based on the connection URL
@@ -45,16 +47,21 @@ public class TableCreator {
 
             if (url.contains("mysql") || url.contains("mariadb")) {
                 return DatabaseType.MYSQL;
-            } else if (url.contains("postgresql")) {
+            }
+ else if (url.contains("postgresql")) {
                 return DatabaseType.POSTGRESQL;
-            } else if (url.contains("sqlite")) {
+            }
+ else if (url.contains("sqlite")) {
                 return DatabaseType.SQLITE;
             }
+
         } catch (SQLException e) {
             log.warn("Could not detect database type", e);
         }
+
         return DatabaseType.UNKNOWN;
     }
+
 
     /**
      * Checks if a table exists in the database
@@ -69,14 +76,19 @@ public class TableCreator {
                 tableNameToCheck = tableName.toLowerCase();
             }
 
-            try (ResultSet tables = metaData.getTables(null, null, tableNameToCheck, new String[] { "TABLE" })) {
+
+            try (ResultSet tables = metaData.getTables(null, null, tableNameToCheck, new String[] { "TABLE" }
+)) {
                 return tables.next();
             }
+
         } catch (SQLException e) {
             log.error("Error checking if table exists: " + tableName, e);
             return false;
         }
+
     }
+
 
     /**
      * Creates a table if it doesn't exist using database-specific SQL
@@ -87,6 +99,7 @@ public class TableCreator {
             return;
         }
 
+
         String sql = adaptSQLForDatabase(createTableSQL);
 
         try (Statement statement = connection.createStatement()) {
@@ -96,7 +109,9 @@ public class TableCreator {
             log.error("Error creating table: " + tableName, e);
             throw new RuntimeException("Failed to create table: " + tableName, e);
         }
+
     }
+
 
     /**
      * Adapts SQL syntax for the specific database type
@@ -113,7 +128,9 @@ public class TableCreator {
                 log.warn("Unknown database type, using original SQL");
                 return sql;
         }
+
     }
+
 
     /**
      * Adapts SQL for PostgreSQL
@@ -149,6 +166,7 @@ public class TableCreator {
                 .replaceAll("(?i)\\bTINYINT\\s*\\(\\s*1\\s*\\)", "BOOLEAN");
     }
 
+
     /**
      * Adapts SQL for MySQL
      */
@@ -160,6 +178,7 @@ public class TableCreator {
                 .replaceAll("(?i)\\bBIGSERIAL\\b", "BIGINT AUTO_INCREMENT")
                 .replaceAll("(?i)\\bTIMESTAMP\\b", "DATETIME");
     }
+
 
     /**
      * Adapts SQL for SQLite
@@ -198,6 +217,7 @@ public class TableCreator {
                 .replaceAll("(?i)\\bBOOLEAN\\b", "INTEGER")
                 .replaceAll("(?i)\\bTINYINT\\s*\\(\\s*1\\s*\\)", "INTEGER");
     }
+
 
     /**
      * Gets table creation SQL statements for all required tables
@@ -460,6 +480,7 @@ public class TableCreator {
         return tables;
     }
 
+
     /**
      * Creates all tables required by the application
      */
@@ -473,8 +494,11 @@ public class TableCreator {
                 log.error("Failed to create table: " + entry.getKey(), e);
                 // Continue with other tables even if one fails
             }
+
         }
+
     }
+
 
     /**
      * Lists all existing tables in the database
@@ -483,16 +507,21 @@ public class TableCreator {
         List<String> tables = new ArrayList<>();
         try {
             DatabaseMetaData metaData = connection.getMetaData();
-            try (ResultSet rs = metaData.getTables(null, null, "%", new String[] { "TABLE" })) {
+            try (ResultSet rs = metaData.getTables(null, null, "%", new String[] { "TABLE" }
+)) {
                 while (rs.next()) {
                     tables.add(rs.getString("TABLE_NAME"));
                 }
+
             }
+
         } catch (SQLException e) {
             log.error("Error listing existing tables", e);
         }
+
         return tables;
     }
+
 
     /**
      * Checks which required tables are missing from the database
@@ -505,7 +534,11 @@ public class TableCreator {
             if (!tableExists(tableName)) {
                 missingTables.add(tableName);
             }
+
         }
+
         return missingTables;
     }
+
 }
+

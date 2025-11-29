@@ -15,16 +15,21 @@ import javafx.stage.Stage;
  */
 public class MainApp extends Application {
     /**
-     * @param args
+     * Launches the JavaFX application using the provided command-line arguments.
+     *
+     * @param args command-line arguments passed to the application
      */
     public static void main(final String[] args) {
             Application.launch(args);
 
     }
 
+
     /**
-     * @param primaryStage
-     * @throws Exception
+     * Initialize the primary stage with the login UI and display it.
+     *
+     * @param primaryStage the primary JavaFX Stage to set the login scene on and display
+     * @throws Exception if the login FXML resource cannot be loaded or the scene cannot be created
      */
     @Override
     /**
@@ -39,4 +44,5 @@ public class MainApp extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
+
 }

@@ -49,20 +49,14 @@ public class Product {
     private List<OrderItem> orderItems = new ArrayList<>();
 
     /**
-     * Constructor without id for creating new product instances.
+     * Create a Product instance without an identifier.
      *
-     * @param name
-     *                    the name of the product
-     * @param price
-     *                    the price of the product
-     * @param image
-     *                    the image URL of the product
-     * @param description
-     *                    the description of the product
-     * @param categories
-     *                    the categories of the product
-     * @param quantity
-     *                    the quantity of the product
+     * @param name        the product name
+     * @param price       the product price in cents (or smallest currency unit)
+     * @param image       the image URL or path for the product
+     * @param description the product description
+     * @param categories  the product categories; if `null`, an empty list is used
+     * @param quantity    the available quantity
      */
     public Product(final String name, final int price, final String image, final String description,
             final List<ProductCategory> categories, final int quantity) {
@@ -74,39 +68,43 @@ public class Product {
         this.quantity = quantity;
     }
 
+
     /**
-     * Constructor with only id for creating product references.
+     * Create a Product instance containing only its identifier for use as a reference.
      *
-     * @param productId
-     *                  the ID of the product
+     * @param productId the product identifier
      */
     public Product(final Long productId) {
         this.id = productId;
     }
 
+
     /**
-     * Returns the categories of the product.
+     * Get the product's categories.
      *
-     * @return the categories of the product
+     * @return the list of associated ProductCategory objects (may be empty)
      */
     public List<ProductCategory> getCategories() {
         return this.categories;
     }
 
+
     /**
-     * Sets the categories of the product.
+     * Replace the product's category list.
      *
-     * @param categories
-     *                   the categories of the product
+     * @param categories the new list of categories for the product; may be null
      */
     public void setCategories(final List<ProductCategory> categories) {
         this.categories = categories;
     }
 
+
     /**
-     * Returns the name of the categories of the product, concatenated as a string.
+     * Get the product's category names joined by ", ".
      *
-     * @return the name of the categories of the product
+     * If the product has no categories or the category list is null, returns null.
+     *
+     * @return a single string with category names separated by ", ", or null if there are no categories
      */
     public String getCategoryNames() {
         return this.categories != null && !this.categories.isEmpty()
@@ -114,4 +112,5 @@ public class Product {
                         .orElse(null)
                 : null;
     }
+
 }

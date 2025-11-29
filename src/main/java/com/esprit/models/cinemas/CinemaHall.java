@@ -41,11 +41,11 @@ public class CinemaHall {
     private List<MovieSession> movieSessions = new ArrayList<>();
 
     /**
-     * Constructor without id for creating new cinema hall instances.
-     * 
-     * @param cinema       the cinema this hall belongs to
-     * @param seatCapacity the seating capacity of the hall
-     * @param name         the name of the hall
+     * Create a new cinema hall associated with the given cinema, with the specified seat capacity and name.
+     *
+     * @param cinema the parent Cinema for this hall
+     * @param seatCapacity the number of seats the hall can contain
+     * @param name the human-readable name of the hall
      */
     public CinemaHall(final Cinema cinema, final Integer seatCapacity, final String name) {
         this.cinema = cinema;
@@ -54,4 +54,5 @@ public class CinemaHall {
         this.seats = new ArrayList<>();
         this.movieSessions = new ArrayList<>();
     }
+
 }

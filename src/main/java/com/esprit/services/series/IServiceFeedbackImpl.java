@@ -31,7 +31,8 @@ public class IServiceFeedbackImpl implements IService<Feedback> {
     public Statement statement;
 
     // Allowed columns for sorting to prevent SQL injection
-    private static final String[] ALLOWED_SORT_COLUMNS = { "id", "id_user", "description", "date", "id_episode" };
+    private static final String[] ALLOWED_SORT_COLUMNS = { "id", "id_user", "description", "date", "id_episode" }
+;
 
     /**
      * Constructs a new IServiceFeedbackImpl instance.
@@ -59,7 +60,9 @@ public class IServiceFeedbackImpl implements IService<Feedback> {
         } catch (Exception e) {
             log.error("Error creating tables for IServiceFeedbackImpl", e);
         }
+
     }
+
 
     @Override
     /**
@@ -84,7 +87,9 @@ public class IServiceFeedbackImpl implements IService<Feedback> {
         } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     @Override
     /**
@@ -106,7 +111,9 @@ public class IServiceFeedbackImpl implements IService<Feedback> {
         } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     @Override
     /**
@@ -124,7 +131,9 @@ public class IServiceFeedbackImpl implements IService<Feedback> {
         } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
+
 
     @Override
     /**
@@ -144,6 +153,7 @@ public class IServiceFeedbackImpl implements IService<Feedback> {
             pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize(), "date", "DESC");
         }
 
+
         try {
             // Get total count
             final String countQuery = PaginationQueryBuilder.buildCountQuery(baseQuery);
@@ -158,7 +168,9 @@ public class IServiceFeedbackImpl implements IService<Feedback> {
                     final Feedback feedback = buildFeedbackFromResultSet(rs);
                     content.add(feedback);
                 }
+
             }
+
 
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
 
@@ -166,7 +178,9 @@ public class IServiceFeedbackImpl implements IService<Feedback> {
             LOGGER.log(Level.SEVERE, "Error retrieving paginated feedback: " + e.getMessage(), e);
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
         }
+
     }
+
 
     /**
      * Helper method to build Feedback object from ResultSet.
@@ -184,4 +198,6 @@ public class IServiceFeedbackImpl implements IService<Feedback> {
                 .episodeId(rs.getLong("id_episode"))
                 .build();
     }
+
 }
+

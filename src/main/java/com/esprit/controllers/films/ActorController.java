@@ -68,7 +68,9 @@ import javafx.stage.Stage;
  * 
  * <p>
  * <strong>Thread Safety:</strong> This controller uses thread-safe collections
- * ({@link ConcurrentHashMap}) and proper JavaFX {@code Platform.runLater()}
+ * ({@link ConcurrentHashMap}
+) and proper JavaFX {@code Platform.runLater()}
+
  * calls
  * for UI updates from background threads.
  * </p>
@@ -83,7 +85,8 @@ import javafx.stage.Stage;
  * controller.searchActor("John");
  * // Export actors
  * controller.exportActors("actors_backup.json");
- * }</pre>
+ * }
+</pre>
  * 
  * 
  * @author RAKCHA Team
@@ -168,7 +171,8 @@ public class ActorController {
         // Appliquer le filtre lorsque le texte de recherche change
         this.recherche_textField.textProperty().addListener((observable, oldValue, newValue) -> {
             this.searchActor(newValue);
-        });
+        }
+);
 
         // Add keyboard shortcuts
         filmActor_tableView11.setOnKeyPressed(event -> {
@@ -180,24 +184,22 @@ public class ActorController {
                     case I -> importActors("actors_import.json");
                     default -> {
                     }
+
                 }
+
             }
-        });
+
+        }
+);
     }
 
+
     /**
-     * Filters the actor list based on a provided search text, returning only
-     * actors whose name contains the searched text (case-insensitive).
-     * 
-     * <p>
-     * This method updates the predicate of the filtered list to show only
-     * matching actors. If the search text is null or empty, all actors are shown.
-     * </p>
+     * Filter the displayed actor list to only those whose name contains the given text (case-insensitive).
      *
-     * @param searchText the search query used to filter actors in the
-     *                   filteredActors list.
-     *                   If null or empty, no filtering is applied.
-     * @see FilteredList#setPredicate(java.util.function.Predicate)
+     * If {@code searchText} is null or empty, the filter is cleared so all actors are shown.
+     *
+     * @param searchText the query used to filter actors by name; matching is case-insensitive
      */
     private void searchActor(final String searchText) {
         this.filteredActors.setPredicate(actor -> {
@@ -205,30 +207,25 @@ public class ActorController {
             if (null == searchText || searchText.isEmpty()) {
                 return true;
             }
+
             // Vérifier si le nom de l'acteur contient le texte de recherche (en ignorant la
             // casse)
             final String lowerCaseFilter = searchText.toLowerCase();
             return actor.getName().toLowerCase().contains(lowerCaseFilter);
-        });
+        }
+);
     }
 
+
     /**
-     * Handles the import actor image action by allowing the user to select an image
-     * file,
-     * which is then copied to a specified directory and set as the image for
-     * display.
-     * 
-     * <p>
-     * This method validates the selected image file size and format before copying.
-     * The image is stored in the films directory for consistency with the existing
-     * structure.
-     * </p>
+     * Lets the user choose an image file, validates it, copies it into
+     * ./src/main/resources/img/films/ with a unique filename, and displays it
+     * in the actor ImageView.
      *
-     * @param event the action event triggered by the user clicking the import image
-     *              button.
-     *              This parameter is not directly used but follows JavaFX event
-     *              handling conventions.
-     * @throws IOException if an I/O error occurs during file operations
+     * <p>If the selected file fails validation the method returns without
+     * changing UI state; I/O errors are logged.</p>
+     *
+     * @param event the triggering ActionEvent (not used by this handler)
      * @see #validateImage(File)
      */
     @FXML
@@ -240,6 +237,7 @@ public class ActorController {
             if (!validateImage(selectedFile)) {
                 return;
             }
+
             try {
                 final String destinationDirectory = "./src/main/resources/img/films/";
                 final Path destinationPath = Paths.get(destinationDirectory);
@@ -251,8 +249,11 @@ public class ActorController {
             } catch (final IOException e) {
                 ActorController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
+
         }
+
     }
+
 
     /**
      * Displays an informational alert dialog to the user with a specified message.
@@ -268,25 +269,23 @@ public class ActorController {
         alert.show();
     }
 
+
     /**
-     * Handles the insertion of a new actor into the database.
-     * 
-     * <p>
-     * This method extracts the image path from the ImageView, creates a new Actor
-     * object with the provided name, image path, and biography, and then stores it
-     * in the database using the ActorService. Upon successful insertion, an
-     * informational alert is displayed and the actor table is refreshed.
-     * </p>
-     *
-     * @param event the action event triggered by clicking the insert button
-     * @see ActorService#create(Actor)
-     */
+         * Create and persist a new Actor from the controller's form fields and refresh the actors table.
+         *
+         * <p>The method requires an image to be present in {@code imageActor_ImageView1}; if none is set,
+         * an informational alert is shown and no actor is created. The actor's name and biography are taken
+         * from {@code nomActor_textField} and {@code bioActor_textArea}. The image path is derived from the
+         * ImageView's URL, with a best-effort fallback to the full URL if path extraction fails. After
+         * persisting the actor, the method shows a confirmation alert and reloads the actor table.</p>
+         */
     @FXML
     void insertActor(final ActionEvent event) {
         if (this.imageActor_ImageView1.getImage() == null) {
             showAlert("Please select an image for the actor");
             return;
         }
+
 
         final String fullPath = this.imageActor_ImageView1.getImage().getUrl();
         String imagePath = "";
@@ -300,6 +299,7 @@ public class ActorController {
             imagePath = fullPath;
         }
 
+
         final ActorService actorService = new ActorService();
         final Actor actor = new Actor(this.nomActor_textField.getText(), imagePath,
                 this.bioActor_textArea.getText());
@@ -312,29 +312,18 @@ public class ActorController {
         this.readActorTable();
     }
 
+
     /**
-     * Sets up event handlers for two table columns in a `TableView`. When an edit
-     * is committed, it updates the corresponding actor's property with the new
-     * value from the column edit.
+     * Configures commit handlers on the name and biography table columns so that
+     * cell edits are applied to the underlying Actor instance and persisted via
+     * updateActor.
      */
     private void setupCellOnEditCommit() {
         this.nomActor_tableColumn1.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Actor, String>>() {
             /**
-             * Is called when a cell in a table is edited. It sets the new value of the cell
-             * to the nominated value, and then updates the corresponding actor object with
-             * the new value.
+             * Apply an edited actor name from an inline table cell and persist the change.
              *
-             * @param event
-             *              CellEditEvent object that contains information about the edit
-             *              event occurring on a table column, including the edited cell's
-             *              position and the new value being entered.
-             *
-             *              - `TableColumn.CellEditEvent`: This is the type of event that
-             *              triggered the function's execution. - `Actor`: This is the type
-             *              parameter of the event, which represents the data type of the
-             *              cell
-             *              being edited. - `String`: This is the type of the value being
-             *              edited in the cell.
+             * @param event the cell edit event for the actor-name column containing the row position and the new name
              */
             @Override
             /**
@@ -350,28 +339,16 @@ public class ActorController {
                 } catch (final Exception e) {
                     ActorController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
+
             }
-        });
+
+        }
+);
         this.bioActor_tableColumn1.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Actor, String>>() {
             /**
-             * In the `TableColumn` class is responsible for handling cell editing events
-             * for a column containing a `String` type data. It updates the value of the
-             * `biographie` property of the corresponding actor object in the table view,
-             * and also triggers an update of the actor object itself.
+             * Apply an in-table biography edit to the Actor and persist the change.
              *
-             * @param event
-             *              CellEditEvent of a TableColumn, providing the edited cell and
-             *              its
-             *              new value.
-             *
-             *              - `TableColumn.CellEditEvent`: The event type that indicates
-             *              cell
-             *              editing has occurred on a table column. - `Actor`: The data type
-             *              of the cells being edited, which is an actor object in this
-             *              case.
-             *              - `String`: The type of the value being edited, which is a
-             *              string
-             *              in this case.
+             * @param event cell edit event containing the edited Actor row and the new biography value
              */
             @Override
             /**
@@ -388,22 +365,21 @@ public class ActorController {
                 } catch (final Exception e) {
                     ActorController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
+
             }
-        });
+
+        }
+);
     }
 
+
     /**
-     * Allows the user to select an image file from a file chooser, then saves it to
-     * two different locations and displays the image in an `ImageView`.
+     * Open a file chooser to select an image, validate and upload it to the configured cloud storage,
+     * store the returned image URL in {@code cloudinaryImageUrl}, and display the uploaded image in {@code imageActor_ImageView1}.
      *
-     * @param event
-     *              event of opening a file chooser, which triggers the code inside
-     *              the function to execute when a file is selected.
-     *              <p>
-     *              - `event`: an ActionEvent object representing the user's action
-     *              of
-     *              opening a file from the FileChooser.
-     *              </p>
+     * If validation fails or an upload error occurs, the current image is left unchanged.
+     *
+     * @param event the ActionEvent that triggered the image import
      */
     @FXML
     void importImage(final ActionEvent event) {
@@ -416,6 +392,7 @@ public class ActorController {
             if (!validateImage(selectedFile)) {
                 return;
             }
+
             try {
                 // Use the CloudinaryStorage service to upload the image
                 CloudinaryStorage cloudinaryStorage = CloudinaryStorage.getInstance();
@@ -429,19 +406,19 @@ public class ActorController {
             } catch (final IOException e) {
                 LOGGER.log(Level.SEVERE, "Error uploading image to Cloudinary", e);
             }
+
         }
+
     }
 
+
     /**
-     * Updates an actor's data in a database by first getting a connection, then
-     * calling the `update` method of the `ActorService` class and displaying an
-     * alert with the updated actor's information.
+     * Persist the updated fields of the given Actor, display a success or error alert, and refresh the actor table.
      *
-     * @param actor
-     *              Actor object to be updated.
-     *              <p>
-     *              - `Actor actor`: The actor to be updated.
-     *              </p>
+     * <p>On success an informational alert with the message "Actor modifiée !" is shown. On failure an error alert
+     * is displayed containing the exception message. The actor table is reloaded after the operation.</p>
+     *
+     * @param actor the Actor instance containing updated values to persist
      */
     void updateActor(final Actor actor) {
         try {
@@ -456,12 +433,16 @@ public class ActorController {
         } catch (final Exception e) {
             this.showAlert("Erreur lors de la modification du Actor : " + e.getMessage());
         }
+
         this.readActorTable();
     }
 
+
     /**
-     * Reads data from an Actor database, creates a table with columns for actor
-     * name, nom, bio, and image, and displays the data in the table.
+     * Populate the actor TableView with actors from the database and configure its columns and row interactions.
+     *
+     * <p>Configures the table for editing and binds columns for id (hidden), name, biography, an image cell that displays
+     * the actor image and supports replacement, and a per-row delete button; then loads the first page of actors into the table.</p>
      */
     @FXML
     void readActorTable() {
@@ -490,7 +471,8 @@ public class ActorController {
                 final Button button = new Button("delete");
                 button.setOnAction((final ActionEvent event) -> {
                     this.deleteFilm(filmcategoryButtonCellDataFeatures.getValue().getId());
-                } /**
+                }
+ /**
                    * Deletes a film based on the ID passed as an event parameter from the
                    * `filmcategoryButtonCellDataFeatures`.
                    *
@@ -502,6 +484,7 @@ public class ActorController {
                 );
                 return new SimpleObjectProperty<>(button);
             }
+
             /**
              * Creates a new button with an `OnAction` event handler that deletes a film
              * when clicked, and returns the button object as an observable value.
@@ -563,6 +546,7 @@ public class ActorController {
                             } catch (final Exception e) {
                                 ActorController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                             }
+
                             hBox.getChildren().add(imageView);
                             hBox.addEventHandler(MouseEvent.MOUSE_CLICKED, (final MouseEvent event) -> {
                                 try {
@@ -575,6 +559,7 @@ public class ActorController {
                                         if (!validateImage(file)) {
                                             return;
                                         }
+
                                         final String destinationDirectory = "./src/main/resources/img/films/";
                                         final Path destinationPath = Paths.get(destinationDirectory);
                                         final String uniqueFileName = System.currentTimeMillis() + "_" + file.getName();
@@ -587,10 +572,13 @@ public class ActorController {
                                         new ActorService()
                                                 .update(new Actor(null, destinationFilePath.toUri().toString(), null));
                                     }
+
                                 } catch (final IOException e) {
                                     ActorController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                                 }
-                            } /**
+
+                            }
+ /**
                                * Displays an open file dialog, saves the selected file to a designated
                                * directory, creates an image from the saved file, and displays the image in a
                                * graphical user interface.
@@ -606,8 +594,10 @@ public class ActorController {
                         } catch (final Exception e) {
                             ActorController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
                         }
+
                         return new SimpleObjectProperty<>(hBox);
-                    } /**
+                    }
+ /**
                        * Generates an `HBox` container that displays an image when clicked, allowing
                        * users to select images from a file system and display them in the
                        * application.
@@ -643,15 +633,16 @@ public class ActorController {
         } catch (final Exception e) {
             ActorController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
 
+
     /**
-     * Deletes an actor from a table using the `delete()` method provided by the
-     * `ActorService`. It displays an informational alert and updates the
-     * `readActorTable()` function to reflect the change.
+     * Remove the actor with the given id and refresh the displayed actor list.
      *
-     * @param id
-     *           identifier of the actor to be deleted.
+     * Shows an informational alert confirming the deletion.
+     *
+     * @param id identifier of the actor to delete
      */
     void deleteFilm(final Long id) {
         final ActorService actorService = new ActorService();
@@ -663,19 +654,14 @@ public class ActorController {
         this.readActorTable();
     }
 
+
     /**
-     * Loads an FXML file using the `FXMLLoader` class, creates a new `AnchorPane`
-     * object, and sets it as the scene of a `Stage`.
-     *
-     * @param event
-     *              action event that triggered the function execution, providing
-     *              the
-     *              necessary context for the code to perform its intended task.
-     *              <p>
-     *              - `event`: An instance of `ActionEvent`, representing a user
-     *              action that triggered the function to execute.
-     *              </p>
-     */
+         * Replaces the current window's scene with the Films interface.
+         *
+         * Loads the Films FXML and sets it as the scene on the current stage.
+         *
+         * @param event the ActionEvent that triggered the navigation
+         */
     @FXML
     /**
      * Navigates to the Films interface.
@@ -692,17 +678,22 @@ public class ActorController {
         } catch (final IOException e) {
             ActorController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
 
+
     /**
+     * Navigates to the Films interface.
+     *
+     * @param event the ActionEvent that triggered the navigation
      * @deprecated Use {@link #switchToFilms(ActionEvent)} instead.
-     * This method name was misleading as it navigates to Films, not Cinema.
      */
     @Deprecated
     public void switchtoajouterCinema(final ActionEvent event) {
         switchToFilms(event);
     }
 
+
     /**
      * Validates an image file for size and format requirements.
      * 
@@ -713,35 +704,26 @@ public class ActorController {
      * </p>
      * 
      * @param file the image file to validate, must not be {@code null}
-     * @return {@code true} if the file meets all validation criteria:
+
+     * @return {@code true}
+ if the file meets all validation criteria:
      *         <ul>
      *         <li>File size is 5MB or less</li>
      *         <li>File is a valid image format that can be loaded by JavaFX</li>
      *         </ul>
-     *         {@code false} otherwise
+     *         {@code false}
+ otherwise
      * @throws IllegalArgumentException if file is {@code null}
+
      * @see Image#Image(String)
      * @since 1.0.0
      */
     /**
-     * Validates an image file for size and format requirements.
-     * 
-     * <p>
-     * This method performs comprehensive validation of image files before
-     * allowing them to be uploaded. It checks both file size constraints
-     * and validates that the file is a proper image format.
-     * </p>
-     * 
-     * @param file the image file to validate, must not be {@code null}
-     * @return {@code true} if the file meets all validation criteria:
-     *         <ul>
-     *         <li>File size is 5MB or less</li>
-     *         <li>File is a valid image format that can be loaded by JavaFX</li>
-     *         </ul>
-     *         {@code false} otherwise
-     * @throws IllegalArgumentException if file is {@code null}
-     * @see Image#Image(String)
-     * @since 1.0.0
+     * Validate that a file is an acceptable image for use by the application.
+     *
+     * @param file the image file to validate
+     * @return `true` if the file's size is less than or equal to 5,000,000 bytes and JavaFX can load it; `false` otherwise
+     * @see javafx.scene.image.Image#Image(String)
      */
     private boolean validateImage(File file) {
         // Add size limit (e.g., 5MB)
@@ -749,6 +731,7 @@ public class ActorController {
             showAlert("Image file is too large. Maximum size is 5MB.");
             return false;
         }
+
         // Validate actual image format
         try {
             Image image = new Image(file.toURI().toString());
@@ -757,21 +740,17 @@ public class ActorController {
             showAlert("Invalid image file format");
             return false;
         }
+
     }
 
+
     /**
-     * Loads an image directly without caching.
+     * Load an image from the given URL and set it on the provided ImageView.
      *
-     * <p>
-     * This method loads an image synchronously and sets it directly on the
-     * ImageView.
-     * </p>
+     * <p>If the image cannot be loaded, the ImageView is left unchanged.</p>
      *
-     * @param url       the URL or path of the image to load, must not be
-     *                  {@code null}
-     * @param imageView the ImageView component to display the image, must not be
-     *                  {@code null}
-     * @throws IllegalArgumentException if url or imageView is {@code null}
+     * @param url       the URL or filesystem path of the image; may be a URI string
+     * @param imageView the ImageView to display the loaded image
      * @since 1.0.0
      */
     private void loadImage(String url, ImageView imageView) {
@@ -781,23 +760,17 @@ public class ActorController {
         } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Failed to load image: " + url, e);
         }
+
     }
 
+
     /**
-     * Exports actors data to a JSON file.
-     * 
-     * <p>
-     * This method serializes all actors currently displayed in the table view
-     * to a JSON file using Jackson ObjectMapper. The export operation includes
-     * all actor properties and can be used for backup or data transfer purposes.
-     * </p>
-     * 
-     * @param filePath the destination file path for the JSON export, must not be
-     *                 {@code null}
-     * @throws IllegalArgumentException if filePath is {@code null} or empty
-     * @see ObjectMapper#writeValue(File, Object)
-     * @see #importActors(String)
-     * @since 1.0.0
+     * Writes the actors currently displayed in the table view to a JSON file at the specified path.
+     *
+     * The method serializes the table's current items using Jackson and writes them to the given file path.
+     * On completion it displays an informational alert indicating success or failure and logs errors when they occur.
+     *
+     * @param filePath the destination file path for the JSON export
      */
     public void exportActors(String filePath) {
         try {
@@ -809,24 +782,18 @@ public class ActorController {
             LOGGER.log(Level.SEVERE, "Failed to export actors", e);
             showAlert("Export failed: " + e.getMessage());
         }
+
     }
 
+
     /**
-     * Imports actors data from a JSON file.
-     * 
-     * <p>
-     * This method deserializes actors from a JSON file using Jackson ObjectMapper
-     * and adds them to both the UI table and the database. The operation is wrapped
-     * in an undoable action to support undo/redo functionality.
-     * </p>
-     * 
-     * @param filePath the source file path for the JSON import, must not be
-     *                 {@code null}
-     * @throws IllegalArgumentException if filePath is {@code null} or empty
-     * @see ObjectMapper#readValue(File, Class)
-     * @see #exportActors(String)
-     * @see UndoableAction
-     * @since 1.0.0
+     * Import actors from a JSON file into the application and record the operation for undo/redo.
+     *
+     * Parses the specified file as a JSON array of Actor objects, adds the parsed actors to the table view
+     * and persists them to the database, and registers a corresponding undo action that removes those actors
+     * from the table and deletes them from the database.
+     *
+     * @param filePath path to a JSON file containing an array of Actor objects
      */
     public void importActors(String filePath) {
         try {
@@ -839,14 +806,18 @@ public class ActorController {
                 actors.forEach(actor -> {
                     ActorService service = new ActorService();
                     service.create(actor);
-                });
-            }, () -> {
+                }
+);
+            }
+, () -> {
                 filmActor_tableView11.getItems().removeAll(actors);
                 actors.forEach(actor -> {
                     ActorService service = new ActorService();
                     service.delete(actor);
-                });
-            });
+                }
+);
+            }
+);
 
             executeAction(action);
             showAlert("Import successful");
@@ -854,7 +825,9 @@ public class ActorController {
             LOGGER.log(Level.SEVERE, "Failed to import actors", e);
             showAlert("Import failed: " + e.getMessage());
         }
+
     }
+
 
     /**
      * Undoes the last action performed.
@@ -875,18 +848,15 @@ public class ActorController {
             action.undo();
             redoStack.push(action);
         }
+
     }
 
+
     /**
-     * Redoes the last undone action.
-     * 
-     * <p>
-     * This method pops the most recent action from the redo stack,
-     * re-executes it by calling its execute method, and pushes it
-     * onto the undo stack to enable undoing the action again.
-     * If the redo stack is empty, this method does nothing.
-     * </p>
-     * 
+     * Reapplies the most recently undone action and makes it available for undo again.
+     *
+     * Does nothing if there is no action to redo.
+     *
      * @see #undo()
      * @see UndoableAction#execute()
      */
@@ -896,20 +866,16 @@ public class ActorController {
             action.execute();
             undoStack.push(action);
         }
+
     }
 
+
     /**
-     * Executes an action and adds it to the undo history.
-     * 
-     * <p>
-     * This method executes the provided action, pushes it onto the undo stack
-     * for potential later undoing, and clears the redo stack since a new action
-     * branch has been created.
-     * </p>
-     * 
-     * @param action the action to execute and record in the undo history,
-     *               must not be {@code null}
-     * @throws NullPointerException if action is {@code null}
+     * Execute the given undoable action and record it in the undo history.
+     *
+     * The action is executed, then pushed onto the undo stack; the redo stack is cleared.
+     *
+     * @param action the action to execute and record; must not be {@code null}
      * @see UndoableAction
      * @see #undo()
      */
@@ -918,6 +884,7 @@ public class ActorController {
         undoStack.push(action);
         redoStack.clear();
     }
+
 
     /**
      * Inner class implementing the Command pattern for undo/redo functionality.
@@ -946,38 +913,39 @@ public class ActorController {
          * Creates a new undoable action with corresponding do and undo operations.
          *
          * @param doAction   the action to execute, must not be {@code null}
+
          * @param undoAction the action to undo the execution, must not be {@code null}
+
          * @throws NullPointerException if either doAction or undoAction is {@code null}
+
          */
         public UndoableAction(Runnable doAction, Runnable undoAction) {
             this.doAction = doAction;
             this.undoAction = undoAction;
         }
 
+
         /**
-         * Executes the action.
-         * 
-         * <p>
-         * This method triggers the execution of the action by calling the stored
-         * Runnable's run method.
-         * </p>
+         * Executes the action's do operation.
+         *
+         * <p>Invokes the stored operation to perform the change represented by this UndoableAction.</p>
          */
         public void execute() {
             doAction.run();
         }
 
+
         /**
-         * Undoes the action.
-         * 
-         * <p>
-         * This method reverses the effect of the action by calling the stored
-         * undo Runnable's run method.
-         * </p>
+         * Reverses this undoable action.
+         *
+         * Executes the action's undo operation to restore the previous state.
          */
         public void undo() {
             undoAction.run();
         }
+
     }
+
 
     /**
      * Cleans up resources when the controller is no longer needed.
@@ -993,4 +961,5 @@ public class ActorController {
     public void close() {
         // Clean up any remaining resources if needed
     }
+
 }

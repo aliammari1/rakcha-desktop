@@ -35,10 +35,11 @@ public class TicketService implements IService<Ticket> {
     private final MovieSessionService moviesessionService;
 
     /**
-     * Constructs a new TicketService instance.
-     * Initializes database connection, related services, and creates tables if they
-     * don't exist.
-     */
+     * Initialize the TicketService, its database connection, and required related services.
+     *
+     * Attempts to create the tickets table if it does not exist; any exception raised while
+     * creating tables is caught and logged.
+    **/
     public TicketService() {
         this.connection = DataSource.getInstance().getConnection();
         this.userService = new UserService();
@@ -65,8 +66,18 @@ public class TicketService implements IService<Ticket> {
         } catch (Exception e) {
             log.error("Error creating tables for TicketService", e);
         }
+
     }
 
+
+    /**
+     * Inserts the given Ticket into the tickets table.
+     *
+     * <p>The method persists the ticket's client id, movie session id, number of seats, and price.</p>
+     *
+     * @param ticket the Ticket to persist; its client and movieSession must have valid ids
+     * @throws RuntimeException if a database error occurs while inserting the ticket
+     */
     @Override
     /**
      * Creates a new entity in the database.
@@ -86,12 +97,14 @@ public class TicketService implements IService<Ticket> {
             log.error("Error creating ticket", e);
             throw new RuntimeException(e);
         }
+
     }
 
+
     /**
-     * Performs read operation.
+     * Loads all tickets from the database, resolving each ticket's client and movie session; tickets whose related entities cannot be loaded are omitted.
      *
-     * @return the result of the operation
+     * @return a list of fully populated Ticket objects; empty if no tickets are found or if the query fails
      */
     public List<Ticket> read() {
         final List<Ticket> tickets = new ArrayList<>();
@@ -106,19 +119,31 @@ public class TicketService implements IService<Ticket> {
                     if (client != null && movieSession != null) {
                         tickets.add(Ticket.builder().id(rs.getLong("id")).numberOfSeats(rs.getInt("number_of_seats"))
                                 .client(client).movieSession(movieSession).price(rs.getFloat("price")).build());
-                    } else {
+                    }
+ else {
                         log.warn("Missing required entities for ticket ID: " + rs.getLong("id"));
                     }
+
                 } catch (Exception e) {
                     log.warn("Error loading ticket relationships for ticket ID: " + rs.getLong("id"), e);
                 }
+
             }
+
         } catch (final SQLException e) {
             log.error("Error reading tickets", e);
         }
+
         return tickets;
     }
 
+
+    /**
+     * Update an existing ticket record in the database.
+     *
+     * @param ticket the Ticket whose database row (identified by its `id`) will be updated;
+     *               the row is set to the ticket's client id, movie session id, number of seats, and price
+     */
     @Override
     /**
      * Updates an existing entity in the database.
@@ -139,8 +164,16 @@ public class TicketService implements IService<Ticket> {
             log.error("Error updating ticket", e);
             throw new RuntimeException(e);
         }
+
     }
 
+
+    /**
+     * Delete the given ticket from the database.
+     *
+     * @param ticket the ticket whose record (by id) will be removed from the tickets table
+     * @throws RuntimeException if a database error occurs while deleting the ticket
+     */
     @Override
     /**
      * Deletes an entity from the database.
@@ -157,11 +190,21 @@ public class TicketService implements IService<Ticket> {
             log.error("Error deleting ticket", e);
             throw new RuntimeException(e);
         }
+
     }
 
+
+    /**
+     * Read a paginated page of Ticket entities according to the provided paging and sorting parameters.
+     *
+     * @param pageRequest paging and sorting parameters for the requested page
+     * @return a Page containing the Tickets for the requested page
+     * @throws UnsupportedOperationException always thrown because this method is not implemented
+     */
     @Override
     public Page<Ticket> read(PageRequest pageRequest) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'read'");
     }
+
 }

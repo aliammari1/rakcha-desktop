@@ -53,6 +53,14 @@ public class OrderService implements IService<Order> {
                 """);
     }
 
+
+    /**
+     * Inserts the given Order into the database's orders table.
+     *
+     * If the order's status is null, the status is stored as "in progress".
+     *
+     * @param order the Order to persist (must contain a client with a valid id)
+     */
     @Override
     /**
      * Creates a new entity in the database.
@@ -74,12 +82,18 @@ public class OrderService implements IService<Order> {
         } catch (final SQLException e) {
             OrderService.LOGGER.info("order not created");
         }
+
     }
 
+
     /**
-     * Performs createOrder operation.
+     * Insert the given Order into the database and return its generated primary key.
      *
-     * @return the result of the operation
+     * If the order's status is null, the string "in progress" will be used before insertion.
+     *
+     * @param order the Order to persist
+     * @return the generated order ID, or 0 if no generated key was returned
+     * @throws SQLException if a database access error occurs
      */
     public Long createOrder(final Order order) throws SQLException {
         Long orderId = 0L;
@@ -95,13 +109,15 @@ public class OrderService implements IService<Order> {
         if (rs.next()) {
             orderId = rs.getLong(1);
         }
+
         return orderId;
     }
 
+
     /**
-     * Performs read operation.
+     * Retrieves all orders from the orders table, including each order's client and associated order items.
      *
-     * @return the result of the operation
+     * @return a list of Order objects populated with id, orderDate, status, client, phoneNumber, address, and orderItems; returns an empty list if no orders are found or if an error occurs
      */
     public List<Order> read() {
         final OrderItemService orderItemService = new OrderItemService();
@@ -118,16 +134,19 @@ public class OrderService implements IService<Order> {
                         .orderItems(orderItemService.readOrderItem(rs.getLong("id"))).build();
                 orders.add(order);
             }
+
         } catch (final SQLException e) {
             OrderService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return orders;
     }
 
+
     /**
-     * Performs readClientOrders operation.
+     * Fetches all orders belonging to the currently associated client.
      *
-     * @return the result of the operation
+     * @return a list of Order objects for the current client; an empty list if none are found or if a database error occurs
      */
     public List<Order> readClientOrders() {
         final OrderItemService orderItemService = new OrderItemService();
@@ -144,12 +163,22 @@ public class OrderService implements IService<Order> {
                         .orderItems(orderItemService.readOrderItem(rs.getLong("id"))).build();
                 orders.add(order);
             }
+
         } catch (final SQLException e) {
             OrderService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return orders;
     }
 
+
+    /**
+     * Update the database record for the given order using its `id`.
+     *
+     * Updates the order's order_date, status, phone_number, and address columns to match the provided Order.
+     *
+     * @param order the Order whose database row will be updated (identified by its `id`)
+     */
     @Override
     /**
      * Updates an existing entity in the database.
@@ -171,8 +200,15 @@ public class OrderService implements IService<Order> {
         } catch (final SQLException e) {
             OrderService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
 
+
+    /**
+     * Delete the specified order from the database by its identifier.
+     *
+     * @param order the order to delete (its `id` is used to identify the row)
+     */
     @Override
     /**
      * Deletes an entity from the database.
@@ -190,12 +226,16 @@ public class OrderService implements IService<Order> {
         } catch (final SQLException e) {
             OrderService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
 
+
     /**
-     * Retrieves the OrderById value.
+     * Retrieve an order by its database ID.
      *
-     * @return the OrderById value
+     * @param orderId the ID of the order to retrieve
+     * @return the Order with the specified ID, or null if no matching order is found
+     * @throws SQLException if a database access error occurs
      */
     public Order getOrderById(final int orderId) throws SQLException {
         final UserService usersService = new UserService();
@@ -209,13 +249,17 @@ public class OrderService implements IService<Order> {
                     .status(rs.getString("status")).client((Client) usersService.getUserById(rs.getLong("client_id")))
                     .phoneNumber(rs.getInt("phone_number")).address(rs.getString("address")).build();
         }
+
         return order;
     }
 
+
     /**
-     * Retrieves the PaidOrders value.
+     * Retrieve all orders whose status is 'paid'.
      *
-     * @return the PaidOrders value
+     * Each returned Order includes its associated client and order items where available.
+     *
+     * @return a list of Order objects with status 'paid', or an empty list if none are found
      */
     public List<Order> getPaidOrders() {
         final List<Order> paidOrders = new ArrayList<>();
@@ -233,16 +277,19 @@ public class OrderService implements IService<Order> {
                         .orderItems(orderItemService.readOrderItem(rs.getLong("id"))).build();
                 paidOrders.add(order);
             }
+
         } catch (final SQLException e) {
             OrderService.LOGGER.info("Error retrieving paid orders: " + e.getMessage());
         }
+
         return paidOrders;
     }
 
+
     /**
-     * Retrieves the Top3PurchasedProducts value.
+     * Retrieve the top three most purchased product IDs and their total purchase counts for orders with status "paid".
      *
-     * @return the Top3PurchasedProducts value
+     * @return a map from product ID to total units purchased for the top three products, ordered by decreasing count (may contain fewer than three entries)
      */
     public Map<Integer, Integer> getTop3PurchasedProducts() {
         final String req = "SELECT ci.id_produit, SUM(ci.quantity) AS purchaseCount FROM orderitem ci JOIN order c ON ci.idOrder = c.idOrder WHERE c.statu = 'paid' GROUP BY ci.id_produit ORDER BY purchaseCount DESC LIMIT 3";
@@ -255,15 +302,24 @@ public class OrderService implements IService<Order> {
                 final int purchaseCount = resultSet.getInt("purchaseCount");
                 productPurchases.put(productId, purchaseCount);
             }
+
         } catch (final Exception e) {
             OrderService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return productPurchases;
     }
 
+
+    /**
+     * Placeholder for paginated retrieval of orders; not implemented.
+     *
+     * @throws UnsupportedOperationException always to indicate the method is not implemented
+     */
     @Override
     public Page<Order> read(PageRequest pageRequest) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'read'");
     }
+
 }

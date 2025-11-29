@@ -39,6 +39,7 @@ class CinemaStatisticsControllerTest extends TestFXBase {
         stage.toFront();
     }
 
+
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @DisplayName("Initial UI Tests")
@@ -54,6 +55,7 @@ class CinemaStatisticsControllerTest extends TestFXBase {
             assertThat(statsAnchor).isNotNull();
         }
 
+
         @Test
         @Order(2)
         @DisplayName("Should display show statistics button")
@@ -65,6 +67,7 @@ class CinemaStatisticsControllerTest extends TestFXBase {
             assertThat(showButton.isVisible()).isTrue();
         }
 
+
         @Test
         @Order(3)
         @DisplayName("Should have empty statistics container initially")
@@ -75,7 +78,9 @@ class CinemaStatisticsControllerTest extends TestFXBase {
             assertThat(statsAnchor).isNotNull();
             // Initially should be empty or have minimal content
         }
+
     }
+
 
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -97,6 +102,7 @@ class CinemaStatisticsControllerTest extends TestFXBase {
             assertThat(statsAnchor.getChildren()).isNotEmpty();
         }
 
+
         @Test
         @Order(5)
         @DisplayName("Should display pie charts after clicking show statistics")
@@ -113,7 +119,9 @@ class CinemaStatisticsControllerTest extends TestFXBase {
                 VBox chartContainer = (VBox) statsAnchor.getChildren().get(0);
                 assertThat(chartContainer).isNotNull();
             }
+
         }
+
 
         @Test
         @Order(6)
@@ -130,6 +138,7 @@ class CinemaStatisticsControllerTest extends TestFXBase {
             assertThat(statsAnchor).isNotNull();
         }
 
+
         @Test
         @Order(7)
         @DisplayName("Should handle multiple cinemas")
@@ -143,6 +152,7 @@ class CinemaStatisticsControllerTest extends TestFXBase {
             AnchorPane statsAnchor = lookup("#statisticsAnchor").query();
             assertThat(statsAnchor).isNotNull();
         }
+
 
         @Test
         @Order(8)
@@ -158,7 +168,9 @@ class CinemaStatisticsControllerTest extends TestFXBase {
             AnchorPane statsAnchor = lookup("#statisticsAnchor").query();
             assertThat(statsAnchor.getChildren()).isNotNull();
         }
+
     }
+
 
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -180,6 +192,7 @@ class CinemaStatisticsControllerTest extends TestFXBase {
             assertThat(statsAnchor).isNotNull();
         }
 
+
         @Test
         @Order(10)
         @DisplayName("Should display charts with titles")
@@ -194,6 +207,7 @@ class CinemaStatisticsControllerTest extends TestFXBase {
             AnchorPane statsAnchor = lookup("#statisticsAnchor").query();
             assertThat(statsAnchor.getChildren()).isNotNull();
         }
+
 
         @Test
         @Order(11)
@@ -210,7 +224,9 @@ class CinemaStatisticsControllerTest extends TestFXBase {
                 VBox container = (VBox) statsAnchor.getChildren().get(0);
                 assertThat(container.getSpacing()).isEqualTo(20.0);
             }
+
         }
+
 
         @Test
         @Order(12)
@@ -230,6 +246,7 @@ class CinemaStatisticsControllerTest extends TestFXBase {
             assertThat(statsAnchor).isNotNull();
         }
 
+
         @Test
         @Order(13)
         @DisplayName("Should handle chart data properly")
@@ -244,7 +261,9 @@ class CinemaStatisticsControllerTest extends TestFXBase {
             AnchorPane statsAnchor = lookup("#statisticsAnchor").query();
             assertThat(statsAnchor.getChildren()).isNotNull();
         }
+
     }
+
 
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -266,6 +285,7 @@ class CinemaStatisticsControllerTest extends TestFXBase {
             assertThat(statsAnchor).isNotNull();
         }
 
+
         @Test
         @Order(15)
         @DisplayName("Should create empty VBox when no data")
@@ -281,6 +301,7 @@ class CinemaStatisticsControllerTest extends TestFXBase {
             assertThat(statsAnchor.getChildren()).isNotNull();
         }
 
+
         @Test
         @Order(16)
         @DisplayName("Should not crash with null data")
@@ -295,7 +316,9 @@ class CinemaStatisticsControllerTest extends TestFXBase {
 
             assertThat(showButton).isNotNull();
         }
+
     }
+
 
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -312,6 +335,7 @@ class CinemaStatisticsControllerTest extends TestFXBase {
             assertThat(showButton).isNotNull();
             assertThat(showButton.isDisabled()).isFalse();
         }
+
 
         @Test
         @Order(18)
@@ -330,6 +354,7 @@ class CinemaStatisticsControllerTest extends TestFXBase {
             assertThat(statsAnchor).isNotNull();
         }
 
+
         @Test
         @Order(19)
         @DisplayName("Should allow multiple button clicks")
@@ -346,7 +371,9 @@ class CinemaStatisticsControllerTest extends TestFXBase {
             
             assertThat(showButton).isNotNull();
         }
+
     }
+
 
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -367,6 +394,7 @@ class CinemaStatisticsControllerTest extends TestFXBase {
             assertThat(statsAnchor).isNotNull();
         }
 
+
         @Test
         @Order(21)
         @DisplayName("Should aggregate sentiment counts correctly")
@@ -381,6 +409,7 @@ class CinemaStatisticsControllerTest extends TestFXBase {
             AnchorPane statsAnchor = lookup("#statisticsAnchor").query();
             assertThat(statsAnchor.getChildren()).isNotNull();
         }
+
 
         @Test
         @Order(22)
@@ -397,6 +426,7 @@ class CinemaStatisticsControllerTest extends TestFXBase {
             assertThat(statsAnchor).isNotNull();
         }
 
+
         @Test
         @Order(23)
         @DisplayName("Should include cinema name in chart titles")
@@ -411,7 +441,9 @@ class CinemaStatisticsControllerTest extends TestFXBase {
             AnchorPane statsAnchor = lookup("#statisticsAnchor").query();
             assertThat(statsAnchor.getChildren()).isNotNull();
         }
+
     }
+
 
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -436,6 +468,7 @@ class CinemaStatisticsControllerTest extends TestFXBase {
             assertThat(statsAnchor).isNotNull();
         }
 
+
         @Test
         @Order(25)
         @DisplayName("Should clear old data before generating new")
@@ -454,6 +487,7 @@ class CinemaStatisticsControllerTest extends TestFXBase {
             assertThat(statsAnchor).isNotNull();
         }
 
+
         @Test
         @Order(26)
         @DisplayName("Should fetch fresh data from database")
@@ -468,7 +502,9 @@ class CinemaStatisticsControllerTest extends TestFXBase {
             AnchorPane statsAnchor = lookup("#statisticsAnchor").query();
             assertThat(statsAnchor.getChildren()).isNotNull();
         }
+
     }
+
 
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -486,6 +522,7 @@ class CinemaStatisticsControllerTest extends TestFXBase {
             assertThat(statsAnchor.isVisible()).isTrue();
         }
 
+
         @Test
         @Order(28)
         @DisplayName("Should include sidebar in layout")
@@ -496,6 +533,7 @@ class CinemaStatisticsControllerTest extends TestFXBase {
             // Main anchor pane should contain multiple elements
             assertThat(lookup(".root").queryAll()).isNotEmpty();
         }
+
 
         @Test
         @Order(29)
@@ -513,7 +551,11 @@ class CinemaStatisticsControllerTest extends TestFXBase {
                 VBox container = (VBox) statsAnchor.getChildren().get(0);
                 assertThat(container.getSpacing()).isEqualTo(20.0);
             }
+
         }
+
     }
 
+
 }
+

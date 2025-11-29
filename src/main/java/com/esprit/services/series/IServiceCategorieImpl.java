@@ -32,11 +32,19 @@ public class IServiceCategorieImpl implements IService<Category> {
     private final Connection connection;
 
     // Allowed columns for sorting to prevent SQL injection
-    private static final String[] ALLOWED_SORT_COLUMNS = { "id", "name", "description" };
+    private static final String[] ALLOWED_SORT_COLUMNS = { "id", "name", "description" }
+;
 
     /**
-     * Constructs a new IServiceCategorieImpl instance.
-     * Initializes database connection and creates tables if they don't exist.
+     * Initialize the service by obtaining a database connection and ensuring the category table exists.
+     *
+     * The constructor acquires a JDBC connection from the application's DataSource and creates the
+     * "category" table if it does not already exist. The table schema created contains:
+     * - id: BIGINT primary key with auto-increment
+     * - name: VARCHAR(255) not null unique
+     * - description: TEXT
+     *
+     * Any exception raised while creating tables is caught and logged; it is not propagated.
      */
     public IServiceCategorieImpl() {
         this.connection = DataSource.getInstance().getConnection();
@@ -58,8 +66,16 @@ public class IServiceCategorieImpl implements IService<Category> {
         } catch (Exception e) {
             log.error("Error creating tables for IServiceCategorieImpl", e);
         }
+
     }
 
+
+    /**
+     * Inserts a new category row into the database with the category's name and description.
+     *
+     * @param category the Category to persist; its name must be non-null and unique according to the table constraint
+     * @throws RuntimeException if the database insert fails (for example, due to a SQL error or constraint violation)
+     */
     @Override
     /**
      * Creates a new entity in the database.
@@ -78,8 +94,16 @@ public class IServiceCategorieImpl implements IService<Category> {
             LOGGER.log(Level.SEVERE, "Error creating category: " + e.getMessage(), e);
             throw new RuntimeException("Failed to create category", e);
         }
+
     }
 
+
+    /**
+     * Update the stored category identified by its id with the category's name and description.
+     *
+     * @param category the Category whose id selects the row to update and whose name and description will be persisted
+     * @throws RuntimeException if a database error prevents completing the update
+     */
     @Override
     /**
      * Updates an existing entity in the database.
@@ -99,8 +123,16 @@ public class IServiceCategorieImpl implements IService<Category> {
             LOGGER.log(Level.SEVERE, "Error updating category: " + e.getMessage(), e);
             throw new RuntimeException("Failed to update category", e);
         }
+
     }
 
+
+    /**
+     * Deletes the given category from the database.
+     *
+     * @param category the Category whose record (by id) will be removed
+     * @throws RuntimeException if a database error prevents deletion
+     */
     @Override
     /**
      * Deletes an entity from the database.
@@ -118,8 +150,20 @@ public class IServiceCategorieImpl implements IService<Category> {
             LOGGER.log(Level.SEVERE, "Error deleting category: " + e.getMessage(), e);
             throw new RuntimeException("Failed to delete category", e);
         }
+
     }
 
+
+    /**
+     * Retrieve a paginated list of categories.
+     *
+     * <p>Validates the requested sort column and resets to default sorting if the column is not allowed.
+     * Builds the result page using the total element count and the requested page parameters.
+     *
+     * @param pageRequest pagination parameters (page index, page size, and optional sorting)
+     * @return a Page containing the categories for the requested page and the total number of elements;
+     *         if a database error occurs, returns a Page with the retrieved content and total elements set to 0
+     */
     @Override
     /**
      * Retrieves categories with pagination support.
@@ -138,6 +182,7 @@ public class IServiceCategorieImpl implements IService<Category> {
             pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
 
+
         try {
             // Get total count
             final String countQuery = PaginationQueryBuilder.buildCountQuery(baseQuery);
@@ -152,7 +197,9 @@ public class IServiceCategorieImpl implements IService<Category> {
                     final Category category = buildCategoryFromResultSet(rs);
                     content.add(category);
                 }
+
             }
+
 
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
 
@@ -160,14 +207,16 @@ public class IServiceCategorieImpl implements IService<Category> {
             LOGGER.log(Level.SEVERE, "Error retrieving paginated categories: " + e.getMessage(), e);
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
         }
+
     }
 
+
     /**
-     * Helper method to build Category object from ResultSet.
+     * Constructs a Category from the current row of the given ResultSet.
      *
-     * @param rs the ResultSet containing category data
-     * @return the Category object
-     * @throws SQLException if there's an error reading from ResultSet
+     * @param rs the ResultSet positioned at a row containing `id`, `name`, and `description` columns
+     * @return a Category built from the current ResultSet row
+     * @throws SQLException if reading any of the required columns from the ResultSet fails
      */
     private Category buildCategoryFromResultSet(ResultSet rs) throws SQLException {
         return Category.builder()
@@ -177,10 +226,11 @@ public class IServiceCategorieImpl implements IService<Category> {
                 .build();
     }
 
+
     /**
-     * Retrieves the CategoriesStatistics value.
+     * Returns a mapping of each Category to the number of series associated with it.
      *
-     * @return the CategoriesStatistics value
+     * @return a map where keys are Category objects and values are the corresponding series counts (0 if none)
      */
     public Map<Category, Long> getCategoriesStatistics() {
         final Map<Category, Long> statistics = new HashMap<>();
@@ -198,9 +248,12 @@ public class IServiceCategorieImpl implements IService<Category> {
                 final long seriesCount = resultSet.getLong("series_count");
                 statistics.put(category, seriesCount);
             }
+
         } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return statistics;
     }
+
 }

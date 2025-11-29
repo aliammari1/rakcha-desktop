@@ -66,14 +66,10 @@ public class DesignCategorieAdminController {
     private TableColumn<ProductCategory, String> description_tableC;
 
     /**
-     * /** Loads a new UI component called `DesignProductAdmin.fxml`, creates a new
-     * scene with it, obtains the current stage from the event, and then opens a new
-     * stage with the new scene, closing the previous one.
+     * Opens the DesignProductAdmin view in a new window and closes the current window.
      *
-     * @param event
-     *              ActionEvent object that triggered the method call, providing
-     *              information about the action that was performed, such as the
-     *              source of the event and any associated data.
+     * @param event the ActionEvent that triggered the navigation
+     * @throws IOException if the FXML resource cannot be loaded
      */
     @FXML
     void GestionProduct(final ActionEvent event) throws IOException {
@@ -93,30 +89,30 @@ public class DesignCategorieAdminController {
         currentStage.close();
     }
 
+
     /**
-     * Sets up listeners for changes to the `SearchBar` text property and triggers
-     * actions when the search term changes, including searching the products
-     * database and filtering product categories based on the new value.
+     * Initialize the controller by setting up the search bar listener, populating the category table, and configuring the delete column.
      */
     @FXML
     void initialize() {
         this.SearchBar.textProperty().addListener((observable, oldValue, newValue) -> {
             this.search(newValue);
             this.filterCategorieProducts(newValue.trim());
-        });
+        }
+);
         this.afficher_categorie();
         this.initDeleteColumn();
     }
 
+
     /**
-     * /** Enables user input to create a new category and add it to the existing
-     * list in the `ProductCategory` class.
+     * Create and persist a product category from the current form inputs and add it to the table view.
      *
-     * @param event
-     *              user action that triggered the method, and it is used to
-     *              determine
-     *              the specific action taken by the user, such as clicking on the
-     *              "Ajouter une catégorie" button.
+     * Validates that name and description are not empty and that description has at least 20 characters;
+     * shows an error Alert on validation failure. On success, persists the new ProductCategory via
+     * CategoryService, adds it to the table view, refreshes the view, and shows a confirmation Alert.
+     *
+     * @param event the action event that triggered the handler
      */
     @FXML
     void ajouter_categorie(final ActionEvent event) {
@@ -131,6 +127,7 @@ public class DesignCategorieAdminController {
             alert.show();
             return; // Arrêter l'exécution de la méthode si les champs sont vides
         }
+
         // Vérifier si la description a au moins 20 caractères
         if (20 > descriptionCategorie.length()) {
             final Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -139,6 +136,7 @@ public class DesignCategorieAdminController {
             alert.show();
             return; // Arrêter l'exécution de la méthode si les champs sont vides
         }
+
         // Créer l'objet Categorie
         final CategoryService cs = new CategoryService();
         final ProductCategory nouvelleCategorieProduct = new ProductCategory(nomCategorie, descriptionCategorie);
@@ -153,24 +151,23 @@ public class DesignCategorieAdminController {
         alert.show();
     }
 
+
     /**
-     * Defines a callback to create a table cell that displays a delete button for
-     * each item in a table, and adds an on-click listener to remove the item from
-     * the table when clicked.
+     * Configure the delete table column to render a per-row "Delete" button.
+     *
+     * Clicking the button deletes the corresponding ProductCategory via CategoryService
+     * and removes it from the table view.
      */
     private void initDeleteColumn() {
         final Callback<TableColumn<ProductCategory, Void>, TableCell<ProductCategory, Void>> cellFactory = new Callback<>() {
             /**
-             * Creates a new `TableCell` instance and sets its graphic to a `Button` element
-             * with a delete icon. When clicked, it triggers an event handler that calls the
-             * `delete` method on a `CategoryService` instance, deleting the corresponding
-             * `ProductCategory` item from the table view.
+             * Create a TableCell containing a "Delete" button that removes the row's ProductCategory.
              *
-             * @param param
-             *              TableColumn object that is used to define the appearance and
-             *              behavior of the table cells in the table view.
+             * The button deletes the associated ProductCategory via CategoryService, removes the item
+             * from the table's items, and refreshes the table view.
              *
-             * @returns a `TableCell` object that contains a button with a delete action.
+             * @param param the TableColumn for which the cell is being created
+             * @return a TableCell whose graphic is a "Delete" button that deletes the row's ProductCategory
              */
             @Override
             /**
@@ -191,47 +188,44 @@ public class DesignCategorieAdminController {
                             cs.delete(categorieProduct);
                             categorie_tableview.getItems().remove(categorieProduct);
                             categorie_tableview.refresh();
-                        });
+                        }
+);
                     }
 
+
                     /**
-                     * Updates the graphical representation of an item based on its emptiness
-                     * status. When the item is empty, the graphic is set to null; otherwise, it is
-                     * set to a button representing deletion.
+                     * Set the cell's graphic to null when the cell is empty, otherwise set it to the delete button.
                      *
-                     * @param item
-                     *              Void item that is being updated, and its value is passed to the
-                     *              parent class's `updateItem()` method for further processing.
-                     *
-                     * @param empty
-                     *              whether or not the `item` is empty, and its value is used to
-                     *              control the display of the graphic element `btnDelete`.
+                     * @param item  ignored Void placeholder required by the cell API
+                     * @param empty true if the cell is empty, false otherwise
                      */
                     @Override
                     protected void updateItem(final Void item, final boolean empty) {
                         super.updateItem(item, empty);
                         if (empty) {
                             this.setGraphic(null);
-                        } else {
+                        }
+ else {
                             this.setGraphic(this.btnDelete);
                         }
+
                     }
-                };
+
+                }
+;
             }
-        };
+
+        }
+;
         this.deleteColumn.setCellFactory(cellFactory);
         // categorie_tableview.getColumns().add(deleteColumn);
     }
 
+
     /**
-     * Modifies the attributes of a `CategorieProduct` object and stores the changes
-     * in the database using the `CategoryService`.
+     * Persists updates made to a ProductCategory to the database.
      *
-     * @param categorieProduct
-     *                         categorization information for a product, which is
-     *                         used to update
-     *                         the corresponding record in the database using the
-     *                         `CategoryService`.
+     * @param categorieProduct the ProductCategory whose updated fields should be saved
      */
     @FXML
     void modifier_categorie(final ProductCategory categorieProduct) {
@@ -243,10 +237,13 @@ public class DesignCategorieAdminController {
         ps.update(categorieProduct);
     }
 
+
     /**
-     * Sets up a table view to display and edit category data from a service. It
-     * allows for line editing and validation on enter press, and enables cell
-     * selection.
+     * Initialize and populate the category table view for inline editing and selection.
+     *
+     * Configures the name and description columns as editable text cells, commits edits
+     * to the underlying category objects, loads all categories into the table, and
+     * enables cell selection. Pressing Enter while a row is selected persists that row's changes.
      */
     @FXML
     void afficher_categorie() {
@@ -256,14 +253,16 @@ public class DesignCategorieAdminController {
             final ProductCategory categorieProduct = event.getRowValue();
             categorieProduct.setCategoryName(event.getNewValue());
             this.modifier_categorie(categorieProduct);
-        });
+        }
+);
         this.description_tableC.setCellValueFactory(new PropertyValueFactory<ProductCategory, String>("description"));
         this.description_tableC.setCellFactory(TextFieldTableCell.forTableColumn());
         this.description_tableC.setOnEditCommit(event -> {
             final ProductCategory categorieProduct = event.getRowValue();
             categorieProduct.setDescription(event.getNewValue());
             this.modifier_categorie(categorieProduct);
-        });
+        }
+);
         // Activer l'édition en cliquant sur une ligne
         this.categorie_tableview.setEditable(true);
         // Gérer la modification du texte dans une cellule et le valider en appuyant sur
@@ -275,8 +274,11 @@ public class DesignCategorieAdminController {
                 if (null != selectedCategorieProduct) {
                     this.modifier_categorie(selectedCategorieProduct);
                 }
+
             }
-        });
+
+        }
+);
         // Utiliser une ObservableList pour stocker les éléments
         final ObservableList<ProductCategory> list = FXCollections.observableArrayList();
         final CategoryService cs = new CategoryService();
@@ -286,14 +288,11 @@ public class DesignCategorieAdminController {
         this.categorie_tableview.getSelectionModel().setCellSelectionEnabled(true);
     }
 
+
     /**
-     * Takes a search keyword and searches the `CategoryService` for matching
-     * categories, adding them to an observable list which is then set as the table
-     * view's items.
+     * Filters product categories by a search keyword and updates the table view with the matches.
      *
-     * @param keyword
-     *                search term that filters the data displayed in the
-     *                `categorie_tableview`.
+     * @param keyword text to match against category name or description; if null or empty, all categories are shown
      */
     @FXML
     private void search(final String keyword) {
@@ -301,24 +300,30 @@ public class DesignCategorieAdminController {
         final ObservableList<ProductCategory> filteredList = FXCollections.observableArrayList();
         if (null == keyword || keyword.trim().isEmpty()) {
             filteredList.addAll(categoryService.read());
-        } else {
+        }
+ else {
             for (final ProductCategory category : categoryService.read()) {
                 if (category.getCategoryName().toLowerCase().contains(keyword.toLowerCase())
                         || category.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
                     filteredList.add(category);
                 }
+
             }
+
         }
+
         this.categorie_tableview.setItems(filteredList);
     }
 
+
     /**
-     * Takes a search text as input and filters the observable list of
-     * `ProductCategory` objects in the `categorie_tableview` based on the search
-     * text. It updates the `categorie_tableview` with the filtered list.
+     * Filters the table's product categories to those whose name contains the given text.
      *
-     * @param searchText
-     *                   search term used to filter the list of cinemas.
+     * Performs a case-insensitive match against each category's name and replaces the
+     * TableView items with the matching subset; if the search text is empty, restores
+     * the full category list by calling afficher_categorie().
+     *
+     * @param searchText text to match against category names (case-insensitive)
      */
     private void filterCategorieProducts(final String searchText) {
         // Vérifier si le champ de recherche n'est pas vide
@@ -330,38 +335,35 @@ public class DesignCategorieAdminController {
                 if (categorie.getCategoryName().toLowerCase().contains(searchText.toLowerCase())) {
                     filteredList.add(categorie);
                 }
+
             }
+
             // Mettre à jour la TableView avec la liste filtrée
             this.categorie_tableview.setItems(filteredList);
-        } else {
+        }
+ else {
             // Si le champ de recherche est vide, afficher tous les cinémas
             this.afficher_categorie();
         }
+
     }
 
+
     /**
-     * Retrieves all categories from the database through the `CategoryService`. It
-     * returns a list of `ProductCategory` objects representing the retrieved
-     * categories.
+     * Retrieves all product categories from persistent storage.
      *
-     * @returns a list of `ProductCategory` objects containing all categories for
-     *          which category data is available.
+     * @return a List of ProductCategory objects containing every stored category
      */
     private List<ProductCategory> getAllCategories() {
         final CategoryService categoryservice = new CategoryService();
         return categoryservice.read();
     }
 
+
     /**
-     * 1) sets the opacity of a category tableview to 0.5, 2) sets a filter anchor's
-     * visibility to true, and 3) clears any previously selected addresses from
-     * checkboxes before recurring addresses from a database and displaying them in
-     * a new VBox added to the filter anchor.
+     * Reveals the category filter panel and populates it with a CheckBox for each available category.
      *
-     * @param event
-     *              mouse event that triggered the function execution and is not
-     *              used
-     *              in this specific code snippet.
+     * The category table is dimmed (opacity set to 0.5), any previously stored checkboxes are cleared, and a VBox containing a "Category" label and one CheckBox per category is added to the filter anchor.
      */
     @FXML
     void filtrer(final MouseEvent event) {
@@ -382,6 +384,7 @@ public class DesignCategorieAdminController {
             addressCheckBoxesVBox.getChildren().add(checkBox);
             this.addressCheckBoxes.add(checkBox);
         }
+
         addressCheckBoxesVBox.setLayoutX(25);
         addressCheckBoxesVBox.setLayoutY(60);
         // Ajouter les VBox dans le filterAnchor
@@ -389,11 +392,11 @@ public class DesignCategorieAdminController {
         this.filterAnchor.setVisible(true);
     }
 
+
     /**
-     * Retrieves a list of unique movie theater addresses from the database based on
-     * their names.
+     * Retrieve a list of unique product category names.
      *
-     * @returns a list of unique cinema addresses.
+     * @return a list containing distinct category names from the data source
      */
     public List<String> getProductCategory() {
         // Récupérer tous les cinémas depuis la base de données
@@ -402,16 +405,15 @@ public class DesignCategorieAdminController {
         return categories.stream().map(ProductCategory::getCategoryName).distinct().collect(Collectors.toList());
     }
 
+
     /**
-     * Filters cinema list based on selected categories and statuses from the list
-     * of all cinemas. It retrieves the addresses and/or statuses of the selected
-     * categories, streams them into a list of all cinemas, filters the cinemas
-     * based on the retrieved information, and updates the tableview with the
-     * filtered list.
+     * Apply category checkbox filters to the table and restore the main view layout.
      *
-     * @param event
-     *              ActionEvent that triggered the function, and it is not used or
-     *              referred to within the provided code snippet.
+     * Reads selected category names from the UI checkboxes, filters all available
+     * ProductCategory items to those whose name is selected, updates the table's
+     * items with the filtered list, and restores visibility and opacity of related panes.
+     *
+     * @param event the ActionEvent that triggered the filter action
      */
     @FXML
     /**
@@ -439,12 +441,11 @@ public class DesignCategorieAdminController {
         this.categorie_tableview.setItems(filteredList);
     }
 
+
     /**
-     * Streamlines and filters the selected addresses within an AnchorPane
-     * component, returning a list of selected categories as strings.
+     * Collects the texts of all selected category checkboxes.
      *
-     * @returns a list of selected addresses from an AnchorPane of filtering
-     *          controls.
+     * @return a List<String> containing the text of each selected checkbox
      */
     private List<String> getSelectedCategories() {
         // Récupérer les adresses sélectionnées dans l'AnchorPane de filtrage
@@ -452,14 +453,11 @@ public class DesignCategorieAdminController {
                 .collect(Collectors.toList());
     }
 
+
     /**
-     * Loads a new user interface "/ui/produits/CommentaireProduct.fxml" using the
-     * FXMLLoader, creates a new scene from it, and attaches it to a new stage. It
-     * then closes the current stage and shows the new one.
+     * Opens the product comment view ("/ui/produits/CommentaireProduct.fxml") in a new stage and closes the current stage.
      *
-     * @param event
-     *              ActionEvent that triggered the function, providing information
-     *              about the source of the event and the event itself.
+     * @param event the ActionEvent that triggered the navigation; used to locate the current window
      */
     @FXML
     void cinemaclient(final ActionEvent event) {
@@ -483,16 +481,14 @@ public class DesignCategorieAdminController {
             DesignCategorieAdminController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
+
     }
 
+
     /**
-     * Loads a new FXML file, creates a new scene, and attaches it to a new stage
-     * when an event is triggered. It then closes the current stage.
+     * Open the Event UI in a new window and close the window that triggered the action.
      *
-     * @param event
-     *              ActionEvent that triggered the event handling method, providing
-     *              access to information about the action that occurred and the
-     *              underlying source node.
+     * @param event the ActionEvent whose source window will be closed after the new window opens
      */
     @FXML
     void eventClient(final ActionEvent event) {
@@ -515,17 +511,16 @@ public class DesignCategorieAdminController {
             DesignCategorieAdminController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
+
     }
 
+
     /**
-     * Loads a new FXML file, creates a new scene and attaches it to a new stage,
-     * replacing the current stage.
+     * Open the product administration view in a new window and close the current window.
      *
-     * @param event
-     *              ActionEvent object that triggers the fonction and provides
-     *              access
-     *              to information about the event, such as the source of the event
-     *              and the event's type.
+     * Loads "/ui/produits/DesignProductAdmin.fxml", displays it in a new Stage titled "products",
+     * and closes the stage that originated the action. Any IOExceptions during loading are caught
+     * and logged.
      */
     @FXML
     void produitClient(final ActionEvent event) {
@@ -549,28 +544,24 @@ public class DesignCategorieAdminController {
             DesignCategorieAdminController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
+
     }
 
+
     /**
-     * Likely performs some client-side profiling tasks, such as collecting and
-     * analyzing data on performance metrics for a given application or user
-     * session.
+     * Placeholder event handler invoked when the user triggers the profile action.
      *
-     * @param event
-     *              event that triggered the execution of the `profilclient` method.
+     * @param event the ActionEvent that triggered this handler
      */
     @FXML
     void profilclient(final ActionEvent event) {
     }
 
+
     /**
-     * Charges a new UI file, creates a new scene, and attaches it to a new stage.
-     * It then closes the current stage and displays the new one.
+     * Open the film user view in a new window and close the current window.
      *
-     * @param event
-     *              action event that triggers the function and provides access to
-     *              the
-     *              source node of the event, which is used to load the FXML file.
+     * @param event the triggering ActionEvent whose source Node is used to obtain and close the current Stage
      */
     @FXML
     void MovieClient(final ActionEvent event) {
@@ -593,18 +584,14 @@ public class DesignCategorieAdminController {
             DesignCategorieAdminController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
+
     }
 
+
     /**
-     * Charges a new UI file "/ui//ui/Series-view.fxml" into an existing scene,
-     * creates a new stage with the new interface and attaches it to the current
-     * stage, closing the original stage upon attachment.
+     * Opens the Series view in a new window and closes the current window.
      *
-     * @param event
-     *              ActionEvent object that triggers the method, providing access to
-     *              information about the action that triggered the method call,
-     *              such
-     *              as the source of the action and any related data.
+     * <p>Loads the "/ui/series/Serie-view.fxml" interface, shows it in a new Stage titled "series", and closes the originating Stage.</p>
      */
     @FXML
     void SerieClient(final ActionEvent event) {
@@ -627,5 +614,7 @@ public class DesignCategorieAdminController {
             DesignCategorieAdminController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
                                                                                         // d'entrée/sortie
         }
+
     }
+
 }

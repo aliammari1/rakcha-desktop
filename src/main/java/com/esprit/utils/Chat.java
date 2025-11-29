@@ -34,6 +34,7 @@ public class Chat {
         this.connection = DataSource.getInstance().getConnection();
     }
 
+
     /**
      * Extracts the content from an OpenAI API response.
      *
@@ -45,6 +46,7 @@ public class Chat {
         final int endMarker = response.indexOf('"', startMarker);
         return response.substring(startMarker, endMarker).trim();
     }
+
 
     /**
      * Sends a message to ChatGPT and returns the response.
@@ -59,6 +61,7 @@ public class Chat {
         if (apiKey == null || model == null) {
             throw new RuntimeException("OpenAI API credentials not found in config");
         }
+
 
         HttpURLConnection conn = null;
         try {
@@ -77,6 +80,7 @@ public class Chat {
                 writer.write(body);
             }
 
+
             if (HttpURLConnection.HTTP_OK == conn.getResponseCode()) {
                 try (BufferedReader reader = new BufferedReader(
                         new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
@@ -85,20 +89,28 @@ public class Chat {
                     while ((line = reader.readLine()) != null) {
                         response.append(line);
                     }
+
                     return extractContentFromResponse(response.toString());
                 }
-            } else {
+
+            }
+ else {
                 throw new RuntimeException(
                         "Failed to get response from OpenAI API. HTTP error code: " + conn.getResponseCode());
             }
+
         } catch (IOException e) {
             throw new RuntimeException("Error communicating with OpenAI API: " + e.getMessage(), e);
-        } finally {
+        }
+ finally {
             if (conn != null) {
                 conn.disconnect();
             }
+
         }
+
     }
+
 
     /**
      * Checks if a message contains inappropriate or hateful content.
@@ -116,5 +128,8 @@ public class Chat {
             LOGGER.log(Level.SEVERE, "Failed to check content for inappropriate language", e);
             return "-1";
         }
+
     }
+
 }
+

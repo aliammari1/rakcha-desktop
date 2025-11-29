@@ -43,6 +43,7 @@ public class DataSource {
             createDataDirectoryIfNeeded();
         }
 
+
         try {
             this.connection = DriverManager.getConnection(this.url, this.user, this.password);
             log.info("Database connection established successfully");
@@ -51,7 +52,9 @@ public class DataSource {
                     "Failed to establish database connection", e);
             throw new RuntimeException("Database connection failed", e);
         }
+
     }
+
 
     /**
      * @return DataSource
@@ -60,8 +63,10 @@ public class DataSource {
         if (null == DataSource.instance) {
             DataSource.instance = new DataSource();
         }
+
         return DataSource.instance;
     }
+
 
     /**
      * @return Connection
@@ -71,12 +76,15 @@ public class DataSource {
             if (this.connection == null || this.connection.isClosed()) {
                 this.connection = DriverManager.getConnection(this.url, this.user, this.password);
             }
+
         } catch (SQLException e) {
             log.error("Failed to get database connection", e);
             throw new RuntimeException("Failed to get database connection", e);
         }
+
         return this.connection;
     }
+
 
     /**
      * Close the database connection
@@ -88,8 +96,11 @@ public class DataSource {
             } catch (SQLException e) {
                 log.warn("Error closing database connection", e);
             }
+
         }
+
     }
+
 
     /**
      * Create data directory for SQLite database if it doesn't exist
@@ -101,10 +112,13 @@ public class DataSource {
                 java.nio.file.Files.createDirectories(dataDir);
                 log.info("Created data directory for SQLite: " + dataDir.toAbsolutePath());
             }
+
         } catch (Exception e) {
             log.warn("Failed to create data directory for SQLite", e);
         }
+
     }
+
 
     /**
      * Get database URL being used
@@ -112,6 +126,7 @@ public class DataSource {
     public String getDatabaseUrl() {
         return this.url;
     }
+
 
     /**
      * Creates all required tables if they don't exist.
@@ -127,5 +142,8 @@ public class DataSource {
             // Don't throw exception here to avoid breaking the application if tables
             // already exist
         }
+
     }
+
 }
+

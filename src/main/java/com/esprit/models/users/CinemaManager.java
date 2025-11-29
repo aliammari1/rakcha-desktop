@@ -25,8 +25,8 @@ import lombok.experimental.SuperBuilder;
 public class CinemaManager extends User {
 
     /**
-     * Constructor without id for creating new cinema manager instances.
-     * 
+     * Create a CinemaManager initialized with the provided personal and contact details; the instance has no identifier assigned.
+     *
      * @param firstName     the cinema manager's first name
      * @param lastName      the cinema manager's last name
      * @param phoneNumber   the cinema manager's phone number
@@ -42,4 +42,5 @@ public class CinemaManager extends User {
             final String photoDeProfil) {
         super(firstName, lastName, phoneNumber, password, role, address, birthDate, email, photoDeProfil);
     }
+
 }

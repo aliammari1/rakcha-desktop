@@ -50,14 +50,10 @@ public class AnalyseOrder implements Initializable {
     private CategoryAxis xOrderAxis;
 
     /**
-     * Initializes the controller after its root element has been completely
-     * processed.
-     * This method calls updateGraphs() to load and display the order statistics.
+     * Populate the controller's charts with current order and category statistics.
      *
-     * @param location  The location used to resolve relative paths for the root
-     *                  object, or null if the location is not known
-     * @param resources The resources used to localize the root object, or null if
-     *                  the root object was not localized
+     * @param location  the location used to resolve relative paths for the root object, or null if unknown
+     * @param resources the resources used to localize the root object, or null if not localized
      */
     @Override
     /**
@@ -69,18 +65,12 @@ public class AnalyseOrder implements Initializable {
         this.updateGraphs();
     }
 
+
     /**
-     * Updates the charts with order and category data from the database.
-     * 
-     * <p>
-     * This method:
-     * 1. Clears existing chart data
-     * 2. Retrieves orders, order items, and categories from their respective
-     * services
-     * 3. Analyzes orders by date and status (in progress vs. paid)
-     * 4. Analyzes product categories purchased by date
-     * 5. Configures and populates the charts with the analyzed data
-     * </p>
+     * Refreshes the order and category charts using current data from services.
+     *
+     * <p>Clears both charts and repopulates them with date-grouped counts for orders
+     * ("en cours" and "payee") and per-category purchase counts for paid orders.</p>
      */
     private void updateGraphs() {
         // Mettre à jour les graphiques ici
@@ -107,7 +97,9 @@ public class AnalyseOrder implements Initializable {
             for (final ProductCategory categorie : categories) {
                 categoriesAchatsByDate.get(formattedDate).put(categorie.getCategoryName(), 0);
             }
+
         }
+
         // Compter le nombre de orders par date et par statut
         for (final Order order : orders) {
             final Date dateOrder = order.getOrderDate();
@@ -115,7 +107,8 @@ public class AnalyseOrder implements Initializable {
             final String formattedDate = dateFormat.format(dateOrder);
             if ("en cours".equalsIgnoreCase(order.getStatus())) {
                 enCoursByDate.put(formattedDate, enCoursByDate.get(formattedDate) + 1);
-            } else if ("payee".equalsIgnoreCase(order.getStatus())) {
+            }
+ else if ("payee".equalsIgnoreCase(order.getStatus())) {
                 payeeByDate.put(formattedDate, payeeByDate.get(formattedDate) + 1);
                 // Analyse des catégories achetées
                 final Map<String, Integer> categoriesAchats = categoriesAchatsByDate.get(formattedDate);
@@ -124,9 +117,13 @@ public class AnalyseOrder implements Initializable {
                         final String categorie = orderItem.getProduct().getCategories().get(0).getCategoryName();
                         categoriesAchats.put(categorie, categoriesAchats.get(categorie) + 1);
                     }
+
                 }
+
             }
+
         }
+
         final ObservableList<String> dates = FXCollections.observableArrayList(enCoursByDate.keySet());
         // Configurer l'axe X avec les dates
         this.xAxis.setCategories(dates);
@@ -138,6 +135,7 @@ public class AnalyseOrder implements Initializable {
             enCoursSeries.getData().add(new XYChart.Data<>(date, enCoursByDate.get(date)));
             payeeSeries.getData().add(new XYChart.Data<>(date, payeeByDate.get(date)));
         }
+
         this.TauxOrder.setTitle("Nombre de orders par date");
         // Ajouter les séries au graphique
         this.TauxOrder.getData().addAll(enCoursSeries, payeeSeries);
@@ -148,6 +146,7 @@ public class AnalyseOrder implements Initializable {
             serie.setName(categorie.getCategoryName());
             seriesMap.put(categorie.getCategoryName(), serie);
         }
+
         // Parcourir les dates et ajouter les données aux séries
         for (final Map.Entry<String, Map<String, Integer>> entry : categoriesAchatsByDate.entrySet()) {
             final String date = entry.getKey();
@@ -156,7 +155,9 @@ public class AnalyseOrder implements Initializable {
                 final int nombreAchats = categorieEntry.getValue();
                 seriesMap.get(categorie).getData().add(new XYChart.Data<>(date, nombreAchats));
             }
+
         }
+
         // Afficher les séries sur le graphique
         final ObservableList<XYChart.Series<String, Number>> seriesList = FXCollections
                 .observableArrayList(seriesMap.values());
@@ -167,4 +168,5 @@ public class AnalyseOrder implements Initializable {
         this.TauxCategorie.getYAxis().setLabel("Nombre d'achats");
         this.TauxCategorie.setTitle("Nombre de catégories achetées par date");
     }
+
 }

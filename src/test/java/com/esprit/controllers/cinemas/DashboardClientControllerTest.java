@@ -38,6 +38,7 @@ class DashboardClientControllerTest extends TestFXBase {
         stage.toFront();
     }
 
+
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Cinema Display Tests")
     class CinemaDisplayTests {
@@ -53,6 +54,7 @@ class DashboardClientControllerTest extends TestFXBase {
             assertThat(cinemasPane.isVisible()).isTrue();
         }
 
+
         @Test
         @Order(2)
         @DisplayName("Should load cinemas from service")
@@ -65,7 +67,9 @@ class DashboardClientControllerTest extends TestFXBase {
             // Verify cinemas are loaded in the pane
             assertThat(cinemasPane.getChildren()).isNotEmpty();
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Film Display Tests")
@@ -81,6 +85,7 @@ class DashboardClientControllerTest extends TestFXBase {
             assertThat(filmsPane).isNotNull();
             assertThat(filmsPane.isVisible()).isTrue();
         }
+
 
         @Test
         @Order(4)
@@ -99,8 +104,11 @@ class DashboardClientControllerTest extends TestFXBase {
                 clickOn(filmButton);
                 waitForFxEvents();
             }
+
         }
+
     }
+
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
     @DisplayName("Booking Tests")
@@ -119,6 +127,9 @@ class DashboardClientControllerTest extends TestFXBase {
             clickOn(bookButton);
             waitForFxEvents();
         }
+
     }
 
+
 }
+

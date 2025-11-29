@@ -35,8 +35,10 @@ public class OrderItemService implements IService<OrderItem> {
     private final Connection connection;
 
     /**
-     * Constructs a new OrderItemService instance.
-     * Initializes database connection and creates tables if they don't exist.
+     * Initialize the service by obtaining a database connection and ensuring the `order_items` table exists.
+     *
+     * The constructor obtains a JDBC Connection from the shared DataSource and creates the `order_items`
+     * table with columns `id`, `product_id`, `quantity`, and `order_id` if it does not already exist.
      */
     public OrderItemService() {
         this.connection = DataSource.getInstance().getConnection();
@@ -53,6 +55,14 @@ public class OrderItemService implements IService<OrderItem> {
                 """);
     }
 
+
+    /**
+     * Insert the given OrderItem into the order_items database table.
+     *
+     * The method persists the order item's product id, quantity, and order id as a new row.
+     *
+     * @param orderItem the OrderItem to persist; its product and order must have valid ids that will be stored
+     */
     @Override
     /**
      * Creates a new entity in the database.
@@ -72,12 +82,16 @@ public class OrderItemService implements IService<OrderItem> {
         } catch (final SQLException e) {
             OrderItemService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
     }
 
+
     /**
-     * Performs read operation.
+     * Retrieve all order items from the database.
      *
-     * @return the result of the operation
+     * Each returned OrderItem has its product and order populated.
+     *
+     * @return a list of OrderItem objects from the order_items table; an empty list if no rows are found or an error occurs
      */
     public List<OrderItem> read() {
         final List<OrderItem> orderItems = new ArrayList<>();
@@ -93,16 +107,20 @@ public class OrderItemService implements IService<OrderItem> {
                         .order(cs.getOrderById(rs.getInt("order_id"))).build();
                 orderItems.add(orderItem);
             }
+
         } catch (final SQLException e) {
             OrderItemService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return orderItems;
     }
 
+
     /**
-     * Performs readOrderItem operation.
+     * Retrieve order items associated with a specific order.
      *
-     * @return the result of the operation
+     * @param orderId the identifier of the order whose items should be returned
+     * @return a list of OrderItem objects for the given order id; returns an empty list if no items are found or an SQL error occurs
      */
     public List<OrderItem> readOrderItem(final Long orderId) {
         final List<OrderItem> orderItems = new ArrayList<>();
@@ -119,12 +137,20 @@ public class OrderItemService implements IService<OrderItem> {
                         .order(cs.getOrderById(rs.getInt("order_id"))).build();
                 orderItems.add(orderItem);
             }
+
         } catch (final SQLException e) {
             OrderItemService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return orderItems;
     }
 
+
+    /**
+     * Update the database row for the provided OrderItem.
+     *
+     * @param orderItem the OrderItem containing updated values; its `id` is used to locate the row to update
+     */
     @Override
     /**
      * Updates an existing entity in the database.
@@ -135,6 +161,12 @@ public class OrderItemService implements IService<OrderItem> {
     public void update(final OrderItem orderItem) {
     }
 
+
+    /**
+     * Removes the given OrderItem from persistent storage.
+     *
+     * @param orderItem the OrderItem whose corresponding database record should be deleted; must have a valid id
+     */
     @Override
     /**
      * Deletes an entity from the database.
@@ -145,10 +177,12 @@ public class OrderItemService implements IService<OrderItem> {
     public void delete(final OrderItem orderItem) {
     }
 
+
     /**
-     * Retrieves the OrderItemsByOrder value.
+     * Retrieves all OrderItem entries associated with the specified order ID.
      *
-     * @return the OrderItemsByOrder value
+     * @param orderId the identifier of the order to fetch items for
+     * @return a list of OrderItem objects belonging to the given order, or an empty list if none are found
      */
     public List<OrderItem> getOrderItemsByOrder(final int orderId) {
         final List<OrderItem> orderItems = new ArrayList<>();
@@ -165,16 +199,21 @@ public class OrderItemService implements IService<OrderItem> {
                         .order(cs.getOrderById(rs.getInt("order_id"))).build();
                 orderItems.add(orderItem);
             }
+
         } catch (final SQLException e) {
             OrderItemService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return orderItems;
     }
 
+
     /**
-     * Retrieves the TotalQuantityByCategoryAndDate value.
+     * Compute the total quantity of items sold for a product category on a specific date.
      *
-     * @return the TotalQuantityByCategoryAndDate value
+     * @param categoryName  the product category name to filter by
+     * @param formattedDate the date to filter orders by, formatted as "YYYY-MM-DD"
+     * @return the sum of `quantity` for matching order items, or `0` if no matching rows are found or an error occurs
      */
     public int getTotalQuantityByCategoryAndDate(final String categoryName, final String formattedDate) {
         int totalQuantity = 0;
@@ -195,17 +234,21 @@ public class OrderItemService implements IService<OrderItem> {
             if (rs.next()) {
                 totalQuantity = rs.getInt("totalQuantity");
             }
+
         } catch (final SQLException e) {
             OrderItemService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return totalQuantity;
     }
 
+
     /**
-     * Retrieves the ItemsByOrder value.
-     *
-     * @return the ItemsByOrder value
-     */
+         * Retrieve order items belonging to the specified order.
+         *
+         * @param orderId the identifier of the order whose items should be fetched
+         * @return a list of OrderItem objects for the specified order; an empty list if no items are found
+         */
     public List<OrderItem> getItemsByOrder(final int orderId) {
         final List<OrderItem> orderItems = new ArrayList<>();
         final String req = "SELECT * FROM order_items WHERE order_id = ?";
@@ -222,16 +265,19 @@ public class OrderItemService implements IService<OrderItem> {
                         .product(product).order(order).build();
                 orderItems.add(orderItem);
             }
+
         } catch (final SQLException e) {
             OrderItemService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return orderItems;
     }
 
+
     /**
-     * Retrieves the AverageRatingSorted value.
+     * Retrieves order items associated with orders with status "paid", with each item's product and order populated, sorted by quantity in descending order.
      *
-     * @return the AverageRatingSorted value
+     * @return a list of OrderItem objects with product and order set, sorted by quantity (highest first); empty list if no matching items are found
      */
     public List<OrderItem> getAverageRatingSorted() {
         final String req = "SELECT product_id, quantity, o.id as order_id, oi.id FROM order_items oi join orders o on oi.order_id = o.id join products p on oi.product_id = p.id WHERE status = 'paid' GROUP BY product_id";
@@ -247,16 +293,27 @@ public class OrderItemService implements IService<OrderItem> {
                         .order(cs.getOrderById(rs.getInt("order_id"))).build();
                 averageRated.add(orderItem);
             }
+
         } catch (final Exception e) {
             OrderItemService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+
         return averageRated.stream().sorted((OrderItem c1, OrderItem c2) -> c2.getQuantity() - c1.getQuantity())
                 .collect(Collectors.toList());
     }
 
+
+    /**
+     * Retrieves a page of OrderItem records according to the provided paging and sorting parameters.
+     *
+     * @param pageRequest the paging and sorting parameters that specify page number, size, and sort order
+     * @return a Page containing OrderItem objects for the requested page
+     * @throws UnsupportedOperationException if the method is not implemented
+     */
     @Override
     public Page<OrderItem> read(PageRequest pageRequest) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'read'");
     }
+
 }

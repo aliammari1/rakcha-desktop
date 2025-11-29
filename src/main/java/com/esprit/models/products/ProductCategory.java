@@ -35,15 +35,16 @@ public class ProductCategory {
     private List<Product> products = new ArrayList<>();
 
     /**
-     * Constructor without id for creating new category instances.
+     * Create a product category with the given name and description.
      *
-     * @param categoryName
-     *                     The name of the category.
-     * @param description
-     *                     The description of the category.
+     * <p>The new instance will have its `id` left unset (null) and `products` left as the class default (an empty list).</p>
+     *
+     * @param categoryName the category's name
+     * @param description  a short description of the category
      */
     public ProductCategory(final String categoryName, final String description) {
         this.categoryName = categoryName;
         this.description = description;
     }
+
 }

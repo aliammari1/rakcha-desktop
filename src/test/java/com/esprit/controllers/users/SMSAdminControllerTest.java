@@ -38,6 +38,7 @@ class SMSAdminControllerTest extends TestFXBase {
         stage.toFront();
     }
 
+
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @DisplayName("Phone Number Input Tests")
@@ -53,6 +54,7 @@ class SMSAdminControllerTest extends TestFXBase {
             assertThat(phoneField).isNotNull();
         }
 
+
         @Test
         @Order(2)
         @DisplayName("Should accept numeric input")
@@ -65,6 +67,7 @@ class SMSAdminControllerTest extends TestFXBase {
             assertThat(phoneField.getText()).isEqualTo("12345678");
         }
 
+
         @Test
         @Order(3)
         @DisplayName("Should validate 8-digit phone number")
@@ -76,6 +79,7 @@ class SMSAdminControllerTest extends TestFXBase {
 
             assertThat(phoneField.getText().length()).isEqualTo(8);
         }
+
 
         @Test
         @Order(4)
@@ -91,6 +95,7 @@ class SMSAdminControllerTest extends TestFXBase {
             // SMS should not be sent
         }
 
+
         @Test
         @Order(5)
         @DisplayName("Should clear previous input")
@@ -103,7 +108,9 @@ class SMSAdminControllerTest extends TestFXBase {
 
             assertThat(phoneField.getText()).isEmpty();
         }
+
     }
+
 
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -120,6 +127,7 @@ class SMSAdminControllerTest extends TestFXBase {
             assertThat(phoneField).isNotNull();
         }
 
+
         @Test
         @Order(7)
         @DisplayName("Should display send SMS button")
@@ -130,6 +138,7 @@ class SMSAdminControllerTest extends TestFXBase {
             assertThat(sendButton).isNotNull();
         }
 
+
         @Test
         @Order(8)
         @DisplayName("Should generate 6-digit verification code")
@@ -139,6 +148,7 @@ class SMSAdminControllerTest extends TestFXBase {
             TextField phoneField = lookup("#phoneNumberTextfield").query();
             assertThat(phoneField).isNotNull();
         }
+
 
         @Test
         @Order(9)
@@ -153,6 +163,7 @@ class SMSAdminControllerTest extends TestFXBase {
             assertThat(sendButton).isNotNull();
         }
 
+
         @Test
         @Order(10)
         @DisplayName("Should use Rakcha Admin as sender")
@@ -162,7 +173,9 @@ class SMSAdminControllerTest extends TestFXBase {
             TextField phoneField = lookup("#phoneNumberTextfield").query();
             assertThat(phoneField).isNotNull();
         }
+
     }
+
 
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -179,6 +192,7 @@ class SMSAdminControllerTest extends TestFXBase {
             assertThat(codeField).isNotNull();
         }
 
+
         @Test
         @Order(12)
         @DisplayName("Should accept 6-digit code")
@@ -188,6 +202,7 @@ class SMSAdminControllerTest extends TestFXBase {
             TextField codeField = lookup("#codeTextField").query();
             assertThat(codeField).isNotNull();
         }
+
 
         @Test
         @Order(13)
@@ -201,6 +216,7 @@ class SMSAdminControllerTest extends TestFXBase {
             assertThat(phoneField).isNotNull();
             assertThat(codeField).isNotNull();
         }
+
 
         @Test
         @Order(14)
@@ -217,6 +233,7 @@ class SMSAdminControllerTest extends TestFXBase {
             assertThat(sendButton).isNotNull();
         }
 
+
         @Test
         @Order(15)
         @DisplayName("Should navigate to reset password on success")
@@ -226,7 +243,9 @@ class SMSAdminControllerTest extends TestFXBase {
             Button sendButton = lookup("#sendSMS").query();
             assertThat(sendButton).isNotNull();
         }
+
     }
+
 
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -243,6 +262,7 @@ class SMSAdminControllerTest extends TestFXBase {
             assertThat(emailError).isNotNull();
         }
 
+
         @Test
         @Order(17)
         @DisplayName("Should display password error label")
@@ -252,6 +272,7 @@ class SMSAdminControllerTest extends TestFXBase {
             Label passwordError = lookup("#passwordErrorLabel").query();
             assertThat(passwordError).isNotNull();
         }
+
 
         @Test
         @Order(18)
@@ -266,7 +287,9 @@ class SMSAdminControllerTest extends TestFXBase {
 
             // Should show error
         }
+
     }
+
 
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -283,6 +306,7 @@ class SMSAdminControllerTest extends TestFXBase {
             assertThat(phoneField).isNotNull();
         }
 
+
         @Test
         @Order(20)
         @DisplayName("Should listen to phone number changes")
@@ -295,6 +319,7 @@ class SMSAdminControllerTest extends TestFXBase {
             assertThat(phoneField.textProperty()).isNotNull();
         }
 
+
         @Test
         @Order(21)
         @DisplayName("Should trim whitespace before validation")
@@ -304,7 +329,9 @@ class SMSAdminControllerTest extends TestFXBase {
             TextField phoneField = lookup("#phoneNumberTextfield").query();
             assertThat(phoneField).isNotNull();
         }
+
     }
+
 
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -321,6 +348,7 @@ class SMSAdminControllerTest extends TestFXBase {
             assertThat(phoneField).isNotNull();
         }
 
+
         @Test
         @Order(23)
         @DisplayName("Should generate code in range 100000-999999")
@@ -331,6 +359,7 @@ class SMSAdminControllerTest extends TestFXBase {
             assertThat(phoneField).isNotNull();
         }
 
+
         @Test
         @Order(24)
         @DisplayName("Should not expose code in UI")
@@ -340,7 +369,9 @@ class SMSAdminControllerTest extends TestFXBase {
             TextField phoneField = lookup("#phoneNumberTextfield").query();
             assertThat(phoneField).isNotNull();
         }
+
     }
+
 
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -357,6 +388,7 @@ class SMSAdminControllerTest extends TestFXBase {
             assertThat(sendButton.isDisabled()).isFalse();
         }
 
+
         @Test
         @Order(26)
         @DisplayName("Should handle send button click")
@@ -371,7 +403,9 @@ class SMSAdminControllerTest extends TestFXBase {
             assertThat(codeField).isNotNull();
             assertThat(sendButton).isNotNull();
         }
+
     }
+
 
     @Nested
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -388,6 +422,7 @@ class SMSAdminControllerTest extends TestFXBase {
             assertThat(phoneField).isNotNull();
         }
 
+
         @Test
         @Order(28)
         @DisplayName("Should handle invalid phone number format")
@@ -397,5 +432,8 @@ class SMSAdminControllerTest extends TestFXBase {
             TextField phoneField = lookup("#phoneNumberTextfield").query();
             assertThat(phoneField).isNotNull();
         }
+
     }
+
 }
+
