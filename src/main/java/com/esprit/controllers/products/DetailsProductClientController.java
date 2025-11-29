@@ -96,7 +96,7 @@ public class DetailsProductClientController implements Initializable {
     // Méthode pour initialiser l'ID du produit
 
     /**
-     * Set the current product ID and initialize the product details view for that ID.
+     * Set the current product ID and initialize the product details view for that product.
      *
      * @param produitId the product identifier to display
      * @throws IOException if an I/O error occurs while initializing product details
@@ -111,8 +111,8 @@ public class DetailsProductClientController implements Initializable {
     /**
      * Initialize the controller by loading the top-three accepted products and wiring the back icon to show the product list.
      *
-     * @param location  the location used to resolve relative paths (may be null)
-     * @param resources the ResourceBundle for localized strings (may be null)
+     * @param location  the location used to resolve relative paths, may be null
+     * @param resources the ResourceBundle for localized strings, may be null
      */
     @Override
     /**
@@ -322,10 +322,10 @@ public class DetailsProductClientController implements Initializable {
 
 
     /**
-     * Open the product listing view in a modal window and then close the current window.
+     * Open the product listing view as a modal window, wait for it to close, then close the current window.
      *
-     * Loads the "/ui/produits/AfficherProductClient.fxml" FXML, creates a modal Stage owned by the current window,
-     * shows it blocking (waits until it closes), and closes the original stage afterward.
+     * Loads the product listing FXML, shows it in an application-modal stage owned by the current window,
+     * blocks until that stage is closed, and then closes the originating stage.
      */
     @FXML
     /**
@@ -363,7 +363,7 @@ public class DetailsProductClientController implements Initializable {
 
 
     /**
-     * Show the shopping cart pane and dim the product details pane.
+     * Display the shopping cart pane and dim the product details pane.
      *
      * Makes the shopping cart and details FlowPanes visible and sets the details pane opacity to 0.2.
      */
@@ -377,11 +377,10 @@ public class DetailsProductClientController implements Initializable {
 
 
     /**
-     * Builds a shopping-cart card UI for the given product, including image, name,
-     * price, quantity, total and action controls (order, continue shopping, close).
+     * Creates an HBox containing a shopping-cart card for the given product with image, name, price, quantity, total, and action controls.
      *
-     * @param produit the product whose details (image, name, price) populate the card
-     * @return an HBox containing the shopping-cart card nodes and their event handlers
+     * @param produit the product used to populate the card (image, name, price)
+     * @return an HBox containing the assembled shopping-cart card and its event handlers
      */
     private HBox createShoppingCartCard(final Product produit) {
         // Créer une carte pour le produit avec ses informations

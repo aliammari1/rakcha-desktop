@@ -90,10 +90,10 @@ public class SerieController {
     private TableView<Series> tableView;
 
     /**
-     * Refreshes the controller view: clears form fields and table, reloads categories into the category selector,
-     * configures the table columns (including Edit and Delete actions), and populates the table with current series.
+     * Refreshes the controller's UI state by clearing form inputs and the table, reloading categories into the category selector,
+     * configuring the series table columns (including Edit and Delete action columns), and repopulating the table with current series.
      *
-     * <p>The method updates UI state only; it does not return a value.</p>
+     * <p>This method updates the visual state of the view and table contents; it does not return a value.</p>
      */
     private void ref() {
         this.tableView.getItems().clear();
@@ -228,13 +228,12 @@ public class SerieController {
 
 
     /**
-     * Export feedback entries into a formatted PDF file chosen by the user.
+     * Export feedback entries to a PDF file selected by the user.
      *
-     * Opens a save-file dialog using the event's window, retrieves feedback data,
-     * and writes a PDF containing a header with location and date, a centered title,
-     * and a table with columns "Description", "Date", and "Episode".
+     * The generated PDF contains a header with location and date, a centered title,
+     * and a three-column table with columns "Description", "Date", and "Episode".
      *
-     * @param event the ActionEvent that triggered the export and supplies the owner window for the save dialog
+     * @param event the ActionEvent that triggered the export; its window is used as the owner for the save dialog
      */
     @FXML
     private void exportPdf(final ActionEvent event) {
@@ -348,15 +347,12 @@ public class SerieController {
 
 
     /**
-     * Open a dialog to edit the given Series and apply the updated values to it.
+     * Opens a dialog to edit the provided Series, applies the user's changes,
+     * persists the updated Series while preserving its original id, refreshes the view,
+     * and shows a confirmation alert.
      *
-     * The dialog allows modifying name, summary, director, country, image, and category.
-     * When the user confirms, the method updates the Series (preserving its id),
-     * persists the changes via the series service, refreshes the view, and shows a
-     * confirmation alert.
-     *
-     * @param serieDto the Series instance to edit; its id is preserved and used to
-     *                 identify which Series to update
+     * @param serieDto the Series to edit; its id is preserved and used to identify which Series to update
+     * @throws RuntimeException if persisting the updated Series fails
      */
     private void modifierSerie(final Series serieDto) {
         final IServiceSeriesImpl iServiceSerie = new IServiceSeriesImpl();
@@ -423,9 +419,9 @@ public class SerieController {
 
 
     /**
-     * Initialize the controller and populate UI components after FXML injection.
+     * Configure the controller's UI and load initial data after FXML injection.
      *
-     * Called by the FXMLLoader after field injection to configure table columns, load categories and series, and reset form state.
+     * Invoked by the FXMLLoader once fields are injected; resets form state and populates category and series data in the view.
      */
     @FXML
     private void initialize() {
@@ -544,9 +540,9 @@ public class SerieController {
     ////////////
 
     /**
-     * Validate that the name text field contains a non-empty value.
+     * Checks whether the name text field contains at least one character.
      *
-     * @return `true` if the name field contains at least one character, `false` otherwise.
+     * @return true if the name field contains at least one character, false otherwise.
      */
     boolean nomcheck() {
         if (!Objects.equals(this.nomF.getText(), "")) {
@@ -597,7 +593,7 @@ public class SerieController {
 
 
     /**
-     * Validates that the country input field contains text.
+     * Checks that the country input field contains text.
      *
      * If the field is empty, sets the `payscheck` label to "Please enter a valid Country".
      *
@@ -616,11 +612,11 @@ public class SerieController {
 
 
     /**
-     * Checks whether the summary input field contains text.
+     * Validate that the summary text field is not empty.
      *
-     * If the field is empty, sets the `resumecheck` label to "Please enter a valid Summary".
+     * If the field is empty, sets the controller's `resumecheck` label to "Please enter a valid Summary".
      *
-     * @return `true` if the summary field contains text, `false` otherwise.
+     * @return true if the summary field contains text, false otherwise.
      */
     boolean resumecheck() {
         if ("" != resumeF.getText()) {
@@ -635,12 +631,12 @@ public class SerieController {
 
 
     /**
-         * Validates that an image path has been set for the current form.
-         *
-         * If no image path is set, updates the `imagechek` label with "Please select a Picture".
-         *
-         * @return `true` if an image path has been set, `false` otherwise.
-         */
+     * Check whether an image path has been set for the current form.
+     *
+     * If no image path is set, sets the `imagechek` label text to "Please select a Picture".
+     *
+     * @return true if an image path has been set, false otherwise
+     */
     boolean imagechek() {
         if (!Objects.equals(this.imgpath, "")) {
             return true;
@@ -656,7 +652,7 @@ public class SerieController {
     //////////////////////
 
     /**
-     * Send an HTML-formatted email to a recipient using SMTP with authentication and STARTTLS.
+     * Send an HTML email to the specified recipient.
      *
      * @param recipientEmail the recipient's email address
      * @param subject        the email subject line
@@ -685,11 +681,12 @@ public class SerieController {
 
 
     /**
-     * Create a new Series from the form inputs, persist it, and send a notification email.
+     * Create a new Series from the current form inputs, persist it, send a notification email, and refresh the view.
      *
-     * Validates required form fields, constructs a Series object (including image and selected category),
-     * saves it via the series service, clears validation messages, sends a notification email about the new
-     * series, and refreshes the view. Shows an error alert and logs if saving fails.
+     * Validates required form fields, constructs a Series (including image path and selected category), saves it
+     * via the series service, clears validation messages and shows a success alert on success or an error alert on failure.
+     *
+     * @param event the ActionEvent that triggered this handler
      */
     @FXML
     void ajouterSerie(final ActionEvent event) {
@@ -849,11 +846,9 @@ public class SerieController {
 
 
     /**
-     * Handles the "show series" UI action.
+     * Trigger display of the series view in the UI.
      *
-     * Currently a no-op placeholder for showing series in the UI.
-     *
-     * @param actionEvent the event that triggered this action
+     * @param actionEvent the event that initiated this action
      */
     public void showseries(final ActionEvent actionEvent) {
     }

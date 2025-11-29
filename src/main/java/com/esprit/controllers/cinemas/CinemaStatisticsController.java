@@ -70,10 +70,10 @@ public class CinemaStatisticsController {
 
 
     /**
-     * Aggregate sentiment counts per cinema from a list of comments.
+     * Builds a map of sentiment counts per cinema.
      *
-     * @param comments list of CinemaComment objects to analyze; each entry contributes one sentiment count for its cinema
-     * @return a map whose keys are cinema names and whose values are maps from sentiment label to the number of comments with that sentiment
+     * @param comments list of CinemaComment; each comment increments the count for its cinema's sentiment
+     * @return a map that maps each cinema name to a map from sentiment label to the number of comments with that sentiment
      */
     private Map<String, Map<String, Integer>> generateSentimentStatistics(final List<CinemaComment> comments) {
         final Map<String, Map<String, Integer>> cinemaSentimentStatistics = new HashMap<>();

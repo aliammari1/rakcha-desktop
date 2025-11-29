@@ -44,10 +44,10 @@ public class ListFavorisController implements Initializable {
     private ListView<Series> listViewFav;
 
     /**
-     * Initialize the controller by loading the current session's favorite series into the ListView.
+     * Load the current session's favorite series into the ListView.
      *
-     * @param url             location used to resolve relative paths for the root object, may be null
-     * @param resourceBundle  resources for localization, may be null
+     * @param url            location used to resolve relative paths for the root object, may be null
+     * @param resourceBundle resources for localization, may be null
      */
     @Override
     /**
@@ -65,13 +65,9 @@ public class ListFavorisController implements Initializable {
 
 
     /**
-     * Populate the favorites ListView with the provided series and attach interactive controls for each item.
+     * Render the provided favorite Series objects into the ListView and attach per-item controls for like, dislike, favorite, and watch.
      *
-     * Each series is rendered as a custom cell that displays its metadata (name, poster, likes/dislikes)
-     * and provides controls to like, dislike, toggle favorite, or open the episode viewer; user actions
-     * update the series model and persist the corresponding changes.
-     *
-     * @param series list of Series to display as favorites; each entry becomes a cell with interactive controls
+     * @param series the list of Series to display; each element becomes a ListView cell with interactive controls that update and persist user actions
      */
     public void afficherliste(final List<Series> series) {
         this.listViewFav.getItems().clear();
@@ -169,13 +165,10 @@ public class ListFavorisController implements Initializable {
                     /* Button Like + Dislike's Functions */
                     likeButton.setOnAction(new EventHandler<ActionEvent>() {
                         /**
-                         * Toggle the liked state for the associated item when the like action is triggered.
-                         *
-                         * Increments the item's internal click counter, adjusts its numberOfLikes, persists the like
-                         * or unlike change via the series service, and updates the dislike button's disabled state to
-                         * reflect the new like state.
+                         * Toggle the liked state of the associated series item, update its like count and UI state, and persist the change.
                          *
                          * @param event the ActionEvent that triggered this handler
+                         * @throws RuntimeException if a database error occurs while updating the like state
                          */
                         @Override
                         /**
@@ -217,10 +210,12 @@ public class ListFavorisController implements Initializable {
 );
                     dislikeButton.setOnAction(new EventHandler<ActionEvent>() {
                         /**
-                         * Handles a dislike action for the current item: updates its click and dislike counters,
-                         * persists the dislike state, and enables or disables the like button accordingly.
+                         * Handle a dislike-button action for the current series item.
                          *
-                         * @throws RuntimeException if a database error occurs while updating the dislike state
+                         * Updates the item's click and dislike counters, persists the dislike state to the database,
+                         * and enables or disables the like button to reflect the new state.
+                         *
+                         * @throws RuntimeException if a database error occurs while persisting the dislike state
                          */
                         @Override
                         /**
@@ -262,12 +257,12 @@ public class ListFavorisController implements Initializable {
 );
                     favButton.setOnAction(new EventHandler<ActionEvent>() {
                         /**
-                         * Toggle the favorite status for the current series and persist the change.
+                         * Toggle the favorite state for the current series and persist the change for user ID 1.
                          *
-                         * Increments the series' internal favorite click counter, then either creates or deletes
-                         * a Favorite record for user id 1 and the current series id, and logs the action.
+                         * Increments the series' internal favorite-click counter and either creates or deletes a Favorite
+                         * record for the session user and series; database errors are propagated as a RuntimeException.
                          *
-                         * @param event the ActionEvent that triggered this handler
+                         * @param event the ActionEvent from the favorite button
                          * @throws RuntimeException if a database error occurs while creating or deleting the favorite
                          */
                         @Override

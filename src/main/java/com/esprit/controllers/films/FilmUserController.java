@@ -148,12 +148,14 @@ public class FilmUserController {
     private MovieSession moviesession;
 
     /**
-     * Finds films whose name contains the given search string.
-     *
-     * @param liste   the list of films to search; elements with a null name are ignored
-     * @param recherche the substring to look for in each film's name
-     * @return a new list of films from {@code liste} whose names contain {@code recherche}, preserving their original order
-     */
+         * Finds films whose names contain the given search string.
+         *
+         * <p>Comparison is case-sensitive; films with a null name are ignored.</p>
+         *
+         * @param liste    the list of films to search; may contain films with null names
+         * @param recherche the substring to look for within each film's name
+         * @return a list of films from {@code liste} whose names contain {@code recherche}, in their original order
+         */
     @FXML
     /**
      * Performs rechercher operation.
@@ -245,24 +247,11 @@ public class FilmUserController {
 
 
     /**
-     * Initializes the JavaFX controller and sets up UI components.
-     * 
-     * <p>
-     * This method is called automatically by JavaFX after loading the FXML file.
-     * It configures UI components such as comboboxes, flowpanes, and event handlers
-     * for film display and interaction.
-     * </p>
-     * 
-     * <p>
-     * Specifically, it:
-     * </p>
-     * <ul>
-     * <li>Sets up the top 3 films and actors combobox</li>
-     * <li>Configures sorting options for films</li>
-     * <li>Initializes search functionality</li>
-     * <li>Sets up the film cards display area</li>
-     * <li>Registers event handlers for UI interactions</li>
-     * </ul>
+     * Initialize the controller and configure UI components after the FXML is loaded.
+     *
+     * <p>Configures the top-3 films/actors combobox, film sorting options, search behavior,
+     * film card display area, and related event handlers. Recommendation loading is deferred
+     * to run once the scene is ready.</p>
      */
     @FXML
     public void initialize() {
@@ -275,11 +264,10 @@ public class FilmUserController {
 
 
     /**
-     * Initializes and configures the controller's primary user-interface elements and their listeners.
+     * Initialize and configure primary UI controls, listeners, and populate initial film and top-three views.
      *
-     * Sets up the "Top 3" selector and its view toggles, sorting selector, search field listener, the film
-     * FlowPane inside the ScrollPane (layout, spacing and padding), the detail-close action, and populates
-     * the initial film cards and top-three displays from the film service.
+     * <p>Configures the Top‑3 selector, sorting selector, search field listener, film FlowPane layout and padding,
+     * the detail-close action, and loads the initial film cards and top‑three displays from services.
      */
     private void setupBasicUI() {
         PageRequest pageRequest = new PageRequest(0, 3);
@@ -463,15 +451,13 @@ public class FilmUserController {
 
 
     /**
-     * Create a JavaFX AnchorPane representing a film card with poster, title,
-     * displayed rating, and actions for reserving and viewing details.
+     * Build a film-card UI containing the poster, title, displayed average rating, and actions to reserve or view details.
      *
-     * @param film the film to display in the card; its metadata (id, name, image,
-     *             ratings and related links) will be used to populate the UI
-     * @return an AnchorPane containing the film poster, title label, current
-     *         average rating label, a Reserve button, a View Details hyperlink and
-     *         associated UI for QR-code generation, trailer playback, and user
-     *         rating interaction for the provided film
+     * <p>The created card includes controls for opening the film detail pane (with trailer playback, QR code generation,
+     * and rating interaction) and a Reserve button that initiates the reservation flow for the film.</p>
+     *
+     * @param film the film whose metadata (id, name, image, ratings, etc.) will populate the card's UI
+     * @return an AnchorPane representing the film card with poster, title label, average rating display, and action controls
      */
     private AnchorPane createFilmCard(final Film film) {
         final AnchorPane copyOfAnchorPane = new AnchorPane();
@@ -693,13 +679,13 @@ public class FilmUserController {
 
 
     /**
-     * Create a styled AnchorPane containing an actor's image, name with film count, and biography for the actor at the given placement.
-     *
-     * <p>If no actor exists for the provided placement, an empty styled AnchorPane with the same layout is returned.</p>
-     *
-     * @param actorPlacement the placement or ranking used to look up the actor (e.g., 1 for top actor)
-     * @return an AnchorPane populated with the actor's image, name and number of appearances, and biography, or an empty styled AnchorPane when the actor is not found
-     */
+         * Builds a UI card showing an actor's image, name with film count, and biography for the actor at the given placement.
+         *
+         * <p>If no actor exists for the provided placement, an empty styled pane with the same layout is returned.</p>
+         *
+         * @param actorPlacement the placement or ranking used to look up the actor (e.g., 1 for top actor)
+         * @return an AnchorPane containing the actor's image, a label with name and number of appearances, and a read-only biography TextArea, or an empty styled AnchorPane when the actor is not found
+         */
     public AnchorPane createActorDetails(final int actorPlacement) {
         final ActorService as = new ActorService();
         final Actor actor = as.getActorByPlacement(actorPlacement);
@@ -973,9 +959,11 @@ public class FilmUserController {
 
 
     /**
-     * Returns the distinct release years present among the retrieved films.
+     * Collects distinct release years from films retrieved from FilmService.
      *
-     * @return a list of unique release years as Integer objects, in the order they were encountered
+     * Only films from the first page (10 items) are considered.
+     *
+     * @return a list of unique release years in the order they were encountered
      */
     private List<Integer> getCinemaYears() {
         final FilmService cinemaService = new FilmService();
@@ -1024,7 +1012,7 @@ public class FilmUserController {
     /**
      * Restores the film detail pane and hides the comments pane.
      *
-     * Sets the detail anchor pane's opacity to 1 and makes it visible, and hides the comments anchor pane.
+     * The detail pane is made fully opaque and visible; the comments pane is hidden.
      */
     @FXML
     void closercommets(final ActionEvent event) {
@@ -1111,12 +1099,9 @@ public class FilmUserController {
 
 
     /**
-     * Switches the current window to the cinema dashboard view.
+     * Navigate to the cinema dashboard view and replace the current stage scene.
      *
-     * Loads the cinema dashboard FXML and replaces the scene on the current stage,
-     * sizing the new scene to 1280x700.
-     *
-     * @param event the ActionEvent that triggered the navigation
+     * Loads the FXML resource "/ui/cinemas/DashboardClientCinema.fxml" and sets it as the active scene sized to 1280x700.
      */
     public void switchtcinemaaa(final ActionEvent event) {
         try {
@@ -1173,13 +1158,12 @@ public class FilmUserController {
 
 
     /**
-     * Add the current text in the comment input as a persisted comment for the currently selected film.
-     *
-     * <p>If the input is empty a warning alert is shown and no comment is created. Otherwise a
-     * FilmComment is constructed using the entered text, the user returned by
-     * UserService.getUserById(4L), and the film identified by this.filmId; the comment is persisted
-     * via FilmCommentService.create, logged, and the input field is cleared.
-     */
+         * Persist the text from the comment input as a new comment for the currently selected film.
+         *
+         * <p>If the input is empty a warning alert is shown and no comment is created. Otherwise a
+         * FilmComment is created for the film identified by this controller's current filmId, persisted,
+         * and the comment input field is cleared.
+         */
     @FXML
     void addCommentaire() {
         final String message = this.txtAreaComments.getText();
@@ -1203,7 +1187,7 @@ public class FilmUserController {
 
 
     /**
-     * Add the current comment for the selected film and refresh the displayed comment list.
+     * Adds the current comment for the selected film and refreshes the displayed comments.
      */
     @FXML
     void AddComment(final MouseEvent event) {
@@ -1329,10 +1313,14 @@ public class FilmUserController {
 
 
     /**
-     * Populates the controller's ScrollPaneComments with UI views for all comments belonging to the given film.
-     *
-     * @param filmId the id of the film whose comments will be displayed
-     */
+         * Populate the comments scroll pane with UI nodes for all comments belonging to the specified film.
+         *
+         * <p>This loads the first page of comments (10 items) from FilmCommentService, filters them by the
+         * given film id, creates view nodes for each comment, and replaces the ScrollPaneComments content
+         * with the assembled list.</p>
+         *
+         * @param filmId the id of the film whose comments should be displayed
+         */
     @FXML
     public void displayAllComments(final Long filmId) {
         // Get comments from database
@@ -1362,10 +1350,10 @@ public class FilmUserController {
 
 
     /**
-     * Shows film comments in a panel.
-     *
-     * @param event The mouse event that triggered this action
-     */
+         * Display the comments panel for the currently selected film and load its comments.
+         *
+         * @param event the MouseEvent that triggered showing the comments panel
+         */
     @FXML
     void afficherAnchorComment(final MouseEvent event) {
         this.AnchorComments.setVisible(true);

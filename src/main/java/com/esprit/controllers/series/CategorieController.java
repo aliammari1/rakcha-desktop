@@ -45,12 +45,11 @@ public class CategorieController {
     private TableView<Category> tableView;
 
     /**
-     * Refreshes the category table and input fields, and repopulates the table with current categories.
+     * Refreshes the category table, clears input fields, and reloads the current categories.
      *
-     * Reinitializes the TableView by clearing its items and columns, clearing the name and description input
-     * fields, installing columns for name, description, and per-row Edit/Delete actions, and loading the
-     * first page of categories from the service. The Edit and Delete columns provide row buttons that
-     * trigger an edit flow or remove the row respectively; failures are logged and reported via alerts.
+     * Clears the TableView items and columns, resets the name and description input fields,
+     * installs columns for name, description and per-row Edit/Delete actions, and loads the
+     * first page of categories into the table.
      */
     private void ref() {
         this.tableView.getItems().clear();
@@ -89,10 +88,10 @@ public class CategorieController {
 
 
             /**
-             * Set the cell's graphic to the configured button when the cell is not empty; clear the graphic when it is empty.
+             * Sets the cell's graphic to the configured button when not empty and clears the graphic when empty.
              *
-             * @param item  unused placeholder (type Void) required by the cell API.
-             * @param empty true if the cell should be treated as empty and display no graphic, false to display the button.
+             * @param item  unused placeholder (type Void) required by the cell API
+             * @param empty true if the cell should be treated as empty and display no graphic, false to display the button
              */
             @Override
             protected void updateItem(final Void item, final boolean empty) {
@@ -128,10 +127,10 @@ public class CategorieController {
 
 
             /**
-             * Set the cell's graphic to the configured button when the cell is not empty; clear the graphic when it is empty.
+             * Sets the cell's graphic to the configured button when not empty and clears the graphic when empty.
              *
-             * @param item  unused placeholder (type Void) required by the cell API.
-             * @param empty true if the cell should be treated as empty and display no graphic, false to display the button.
+             * @param item  unused placeholder (type Void) required by the cell API
+             * @param empty true if the cell should be treated as empty and display no graphic, false to display the button
              */
             @Override
             protected void updateItem(final Void item, final boolean empty) {
@@ -176,9 +175,11 @@ public class CategorieController {
 
 
     /**
-     * Opens a dialog to edit the given category's name and description and persists the changes.
+     * Opens a modal dialog to edit the category's name and description and saves the updated category.
      *
-     * @param categorie the category to be edited; its name and description are updated with the user's input
+     * On successful update the method shows a success alert and refreshes the view.
+     *
+     * @param categorie the Category to edit; its name and description are replaced with the user's input
      * @throws RuntimeException if persisting the updated category fails
      */
     private void modifierCategorie(final Category categorie) {
@@ -227,9 +228,11 @@ public class CategorieController {
 
 
     /**
-     * Validate that the name input field contains at least one character.
+     * Checks that the name input field is not empty.
      *
-     * @return `true` if the name field contains at least one character, `false` otherwise.
+     * If the field is empty, sets the validation label to "Please enter a valid Name".
+     *
+     * @return true if the name field contains at least one character, false otherwise.
      */
     boolean checkname() {
         if ("" != nomF.getText()) {
@@ -244,11 +247,11 @@ public class CategorieController {
 
 
     /**
-     * Validate that the description input is not empty.
+     * Ensures the description input is not empty and updates the validation label when it is.
      *
-     * @return `true` if the description text is not empty, `false` otherwise; when the
-     *         description is empty the `checkdescreption` label is set to
-     *         "Please enter a valid Description".
+     * If the description is empty, sets the `checkdescreption` label to "Please enter a valid Description".
+     *
+     * @return true if the description text is not empty, false otherwise
      */
     boolean checkdescreption() {
         if ("" != descreptionF.getText()) {
@@ -263,11 +266,11 @@ public class CategorieController {
 
 
     /**
-     * Add a new category from the input fields after validating them and persist it via the category service.
+     * Create and save a new category from the UI inputs after validating name and description.
      *
-     * Validates the name and description fields; if both are valid, creates a Category, saves it through the service,
-     * shows a success alert, clears validation messages, and refreshes the view. If saving fails, shows an error alert
-     * with the failure message.
+     * If validation passes, constructs a Category from the text fields, persists it via the category service,
+     * displays a success alert, clears validation messages, and refreshes the view; on failure displays an error alert
+     * with the exception message.
      */
     @FXML
     void ajouteroeuvre(final ActionEvent event) {
@@ -348,14 +351,11 @@ public class CategorieController {
 
 
     /**
-     * Opens the statistics view in a new window by loading and displaying
-     * the "StatistiquesView.fxml" scene.
+     * Opens the statistics view in a new window.
      *
-     * If `actionEvent` is non-null, the method loads the FXML, obtains and
-     * initializes its controller, creates a new Stage, sets the scene and shows it.
-     * If `actionEvent` is null, the method logs the condition and performs no action.
+     * Loads "StatistiquesView.fxml", initializes its controller, creates a new Stage with the loaded scene, and shows it.
      *
-     * @param actionEvent the triggering ActionEvent; may be null to indicate no action
+     * @param actionEvent the triggering ActionEvent; if null the method performs no action
      */
     @FXML
     /**
@@ -395,9 +395,7 @@ public class CategorieController {
 
 
     /**
-     * Placeholder event handler for opening or displaying the movies view.
-     *
-     * Currently has no implementation.
+     * Open the movies view in response to a user action.
      *
      * @param actionEvent the event that triggered this handler
      */
@@ -406,10 +404,9 @@ public class CategorieController {
 
 
     /**
-     * Displays a list of products.
+     * Opens the products view.
      *
-     * @param actionEvent
-     *                    event that triggered the function call.
+     * @param actionEvent the ActionEvent that triggered this handler
      */
     public void showproducts(final ActionEvent actionEvent) {
     }

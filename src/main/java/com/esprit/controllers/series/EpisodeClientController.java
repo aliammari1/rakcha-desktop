@@ -81,14 +81,13 @@ public class EpisodeClientController implements Initializable {
     private List<Episode> episodes = new ArrayList<>();
 
     /**
-     * Initialize the controller UI to display the given series and its episodes, and configure media playback controls.
+     * Populate the controller UI with the provided series and configure episode listing and playback controls.
      *
-     * This sets the series image and metadata, loads episodes for the series into the list view with custom cells
-     * showing thumbnails and basic episode info, and attaches play/pause/stop handlers to the media controls
-     * when an episode is selected.
+     * Sets the series image and metadata, loads the series' episodes into the ListView using custom cells,
+     * and wires the media playback buttons to control the selected episode's media player.
      *
      * @param selectedSerie the series whose details and episodes should populate the UI
-     * @throws RuntimeException if loading episodes for the series fails
+     * @throws RuntimeException if retrieving episodes for the series fails
      */
     public void initialize(final Series selectedSerie) {
         this.selectedSerie = selectedSerie;
@@ -174,8 +173,8 @@ public class EpisodeClientController implements Initializable {
 
 
     /**
-     * Called by JavaFX after the FXML is loaded to perform controller initialization.
-     * Currently this implementation performs no initialization.
+     * Perform controller initialization after the FXML is loaded.
+     * This implementation performs no initialization.
      *
      * @param url            location used to resolve relative paths for the root object, may be null
      * @param resourceBundle resources for localized strings, may be null
@@ -190,11 +189,11 @@ public class EpisodeClientController implements Initializable {
 
 
     /**
-     * Create and persist a Feedback for the currently selected episode using the text entered in the feedback field.
+     * Create and persist a Feedback for the selected episode using the feedback text field.
      *
-     * The created Feedback uses the current user (taken from the window's user data) as the client, the current date as
-     * the feedback date, the text from `txtDescriptionFeedBack` as the description, and `idep` as the episode id.
-     * After persisting the feedback the feedback text field is cleared.
+     * The Feedback will use the current window user as the client, today's date as the feedback date,
+     * the text from {@code txtDescriptionFeedBack} as the description, and {@code idep} as the episode id.
+     * After persisting the feedback the feedback input field is cleared.
      *
      * @param event the ActionEvent triggered by the "Add Feedback" button
      */
@@ -219,13 +218,10 @@ public class EpisodeClientController implements Initializable {
 
 
     /**
-     * Display the SeriesClient view in the window that generated the mouse event.
-     *
-     * Loads the FXML resource at /ui/series/SeriesClient.fxml, creates a new Scene
-     * from it, and replaces the Scene of the Stage that contains the event's source.
+     * Open the SeriesClient view in the window that originated the mouse event.
      *
      * @param event the MouseEvent whose source Node is used to obtain the current Stage
-     * @throws IOException if the FXML resource cannot be loaded
+     * @throws IOException if the FXML resource for the SeriesClient view cannot be loaded
      */
     @FXML
     /**

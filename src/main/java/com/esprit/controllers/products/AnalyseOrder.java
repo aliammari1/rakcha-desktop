@@ -50,7 +50,7 @@ public class AnalyseOrder implements Initializable {
     private CategoryAxis xOrderAxis;
 
     /**
-     * Initialize the controller and load order statistics into the charts.
+     * Populate the controller's charts with current order and category statistics.
      *
      * @param location  the location used to resolve relative paths for the root object, or null if unknown
      * @param resources the resources used to localize the root object, or null if not localized

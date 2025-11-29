@@ -26,10 +26,10 @@ public class MainApp extends Application {
 
 
     /**
-     * Initializes the primary stage with the login UI and shows it.
+     * Initialize the primary stage with the login UI and display it.
      *
-     * @param primaryStage the primary JavaFX stage to set the login scene on and display
-     * @throws Exception if the login FXML resource cannot be loaded or the scene cannot be initialized
+     * @param primaryStage the primary JavaFX Stage to set the login scene on and display
+     * @throws Exception if the login FXML resource cannot be loaded or the scene cannot be created
      */
     @Override
     /**
