@@ -490,7 +490,7 @@
 }
 
 /* Scrollbar styling */
-.scroll-pane>.viewport {
+.scroll-pane > .viewport {
     -fx-background-color: transparent;
 }
 

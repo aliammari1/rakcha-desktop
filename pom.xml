@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://maven.apache.org/POM/4.0.0"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.example</groupId>
@@ -13,7 +13,6 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <file.encoding>UTF-8</file.encoding>
-    <jpro.version>2024.4.1</jpro.version>
 
     <!-- JPackage properties -->
     <main-class>com.esprit.MainApp</main-class>
@@ -26,7 +25,8 @@
 
     <!-- JVM modules for jlink -->
     <jvm.modules>
-      javafx.media,javafx.controls,javafx.fxml,javafx.swing,java.logging,java.base,java.desktop,java.sql,java.xml,java.net.http,java.naming,java.management</jvm.modules>
+      javafx.media,javafx.controls,javafx.fxml,javafx.swing,java.logging,java.base,java.desktop,java.sql,java.xml,java.net.http,java.naming,java.management
+    </jvm.modules>
   </properties>
 
   <repositories>
@@ -38,27 +38,9 @@
       <id>maven-central</id>
       <url>https://repo.maven.apache.org/maven2</url>
     </repository>
-    <repository>
-      <id>jpro - sandec repository</id>
-      <url>https://sandec.jfrog.io/artifactory/repo</url>
-    </repository>
   </repositories>
-  <pluginRepositories>
-    <pluginRepository>
-      <id>jpro - sandec repository</id>
-      <url>https://sandec.jfrog.io/artifactory/repo</url>
-    </pluginRepository>
-  </pluginRepositories>
 
   <dependencies>
-    <dependency>
-      <groupId>one.jpro</groupId>
-      <artifactId>jpro-webapi</artifactId>
-      <version>${jpro.version}</version>
-      <scope>compile</scope>
-    </dependency>
-
-
     <!-- SQLite JDBC Driver -->
     <dependency>
       <groupId>org.xerial</groupId>
@@ -66,6 +48,12 @@
       <version>3.50.2.0</version>
     </dependency>
 
+    <!-- Add this in the <dependencies> section -->
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>42.7.1</version>
+    </dependency>
     <!-- XML Processing Dependencies -->
     <!-- JAXB and Activation APIs - Jakarta version -->
     <dependency>
@@ -112,7 +100,43 @@
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>1.5.18-jpro</version>
+      <version>1.5.21</version>
+    </dependency>
+
+    <!-- Jsoup for web scraping -->
+    <dependency>
+      <groupId>org.jsoup</groupId>
+      <artifactId>jsoup</artifactId>
+      <version>1.18.1</version>
+    </dependency>
+
+    <!-- Apache Lucene for high-performance full-text search -->
+    <dependency>
+      <groupId>org.apache.lucene</groupId>
+      <artifactId>lucene-core</artifactId>
+      <version>9.12.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.lucene</groupId>
+      <artifactId>lucene-queryparser</artifactId>
+      <version>9.12.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.lucene</groupId>
+      <artifactId>lucene-analysis-common</artifactId>
+      <version>9.12.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.lucene</groupId>
+      <artifactId>lucene-suggest</artifactId>
+      <version>9.12.1</version>
+    </dependency>
+
+    <!-- Caffeine for high-performance caching -->
+    <dependency>
+      <groupId>com.github.ben-manes.caffeine</groupId>
+      <artifactId>caffeine</artifactId>
+      <version>3.1.8</version>
     </dependency>
 
     <!-- Testing Dependencies -->
@@ -122,7 +146,7 @@
       <version>6.0.0-M1</version>
       <scope>test</scope>
     </dependency>
-    
+
     <!-- TestFX for JavaFX UI Testing -->
     <dependency>
       <groupId>org.testfx</groupId>
@@ -136,7 +160,7 @@
       <version>4.0.18</version>
       <scope>test</scope>
     </dependency>
-    
+
     <!-- Monocle for headless JavaFX testing (PdfSam distribution compatible with JavaFX 21) -->
     <dependency>
       <groupId>org.pdfsam</groupId>
@@ -144,7 +168,7 @@
       <version>21</version>
       <scope>test</scope>
     </dependency>
-        
+
     <!-- AssertJ for fluent assertions -->
     <dependency>
       <groupId>org.assertj</groupId>
@@ -152,7 +176,7 @@
       <version>3.27.3</version>
       <scope>test</scope>
     </dependency>
-    
+
     <!-- Hamcrest matchers -->
     <dependency>
       <groupId>org.hamcrest</groupId>
@@ -162,33 +186,11 @@
     </dependency>
 
     <!-- Modern UI Packages -->
-    <!-- MaterialFX for modern UI components -->
-    <dependency>
-      <groupId>io.github.palexdev</groupId>
-      <artifactId>materialfx</artifactId>
-      <version>21.18.0-alpha</version>
-    </dependency>
-
     <!-- JFoenix for Material Design components -->
     <dependency>
       <groupId>com.jfoenix</groupId>
       <artifactId>jfoenix</artifactId>
       <version>9.0.10</version>
-    </dependency>
-
-
-    <!-- FontAwesome Icons -->
-    <dependency>
-      <groupId>de.jensd</groupId>
-      <artifactId>fontawesomefx-materialicons</artifactId>
-      <version>2.2.0-9.1.2</version>
-    </dependency>
-
-    <!-- Ikonli for additional icons -->
-    <dependency>
-      <groupId>org.kordamp.ikonli</groupId>
-      <artifactId>ikonli-material-pack</artifactId>
-      <version>12.4.0</version>
     </dependency>
 
     <!-- Existing Dependencies -->
@@ -226,11 +228,6 @@
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>
       <version>21.0.7</version>
-    </dependency>
-    <dependency>
-      <groupId>de.jensd</groupId>
-      <artifactId>fontawesomefx-fontawesome</artifactId>
-      <version>4.7.0-9.1.2</version>
     </dependency>
     <dependency>
       <groupId>org.controlsfx</groupId>
@@ -374,12 +371,7 @@
     </dependency>
     <dependency>
       <groupId>org.kordamp.ikonli</groupId>
-      <artifactId>ikonli-fontawesome5-pack</artifactId>
-      <version>12.4.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.kordamp.ikonli</groupId>
-      <artifactId>ikonli-fontawesome-pack</artifactId>
+      <artifactId>ikonli-materialdesign2-pack</artifactId>
       <version>12.4.0</version>
     </dependency>
     <dependency>
@@ -419,6 +411,13 @@
       <groupId>com.github.javafaker</groupId>
       <artifactId>javafaker</artifactId>
       <version>1.0.2</version>
+    </dependency>
+
+    <!-- HikariCP for Connection Pooling -->
+    <dependency>
+      <groupId>com.zaxxer</groupId>
+      <artifactId>HikariCP</artifactId>
+      <version>5.1.0</version>
     </dependency>
   </dependencies>
   <build>
@@ -491,28 +490,22 @@
           </annotationProcessorPaths>
         </configuration>
       </plugin>
-      
+
       <!-- Maven Surefire Plugin for running tests -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>3.5.2</version>
         <configuration>
-          <argLine>
-            -Dtestfx.robot=glass
-            -Dtestfx.headless=true
-            -Dglass.platform=Monocle
-            -Dmonocle.platform=Headless
-            -Dprism.order=sw
-            -Dprism.text=t2k
-            -Djava.awt.headless=true
+          <argLine>-Dtestfx.robot=glass -Dtestfx.headless=true -Dglass.platform=Monocle -Dmonocle.platform=Headless
+            -Dprism.order=sw -Dprism.text=t2k -Djava.awt.headless=true
           </argLine>
           <forkCount>1</forkCount>
           <reuseForks>true</reuseForks>
           <testFailureIgnore>false</testFailureIgnore>
         </configuration>
       </plugin>
-      
+
       <!-- Maven JAR Plugin - Create executable JAR -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -534,7 +527,7 @@
           </archive>
         </configuration>
       </plugin>
-      
+
       <!-- JavaFX Maven Plugin -->
       <plugin>
         <groupId>org.openjfx</groupId>
@@ -641,17 +634,6 @@
         </executions>
       </plugin>
 
-      <plugin>
-        <groupId>one.jpro</groupId>
-        <artifactId>jpro-maven-plugin</artifactId>
-        <version>${jpro.version}</version>
-        <configuration>
-          <mainClassName>${main-class}</mainClassName>
-          <visible>false</visible>
-          <openURLOnStartup>false</openURLOnStartup>
-        </configuration>
-      </plugin>
-
       <!-- JPackage Maven Plugin for Native Installers -->
       <plugin>
         <groupId>com.github.akman</groupId>
@@ -660,30 +642,30 @@
         <configuration>
           <!-- JDK Configuration -->
           <toolhome>${java.home}</toolhome>
-          
+
           <!-- Application Metadata -->
           <name>${app.name}</name>
           <appversion>${app.version}</appversion>
           <vendor>ESPRIT</vendor>
           <description>RAKCHA Desktop Application - Movie and Cinema Management System</description>
           <copyright>Copyright © 2025 ESPRIT</copyright>
-          
+
           <!-- Main Configuration -->
           <mainjar>${project.build.finalName}.jar</mainjar>
           <mainclass>${main-class}</mainclass>
           <dest>target/dist</dest>
           <temp>target/jpackage-temp</temp>
           <verbose>true</verbose>
-          
+
           <!-- Input Directory - contains all JARs (main + dependencies) -->
           <input>target/classpath-jars</input>
-          
+
           <!-- JVM Options -->
           <javaoptions>-Xms256m -Xmx1024m -Dfile.encoding=UTF-8 -Dlogback.configurationFile=logback.xml</javaoptions>
-          
+
           <!-- Resource Directory -->
           <resourcedir>src/packaging</resourcedir>
-          
+
           <!-- NOTE: Windows-specific configuration is handled in the workflow file for platform-specific builds -->
         </configuration>
         <executions>

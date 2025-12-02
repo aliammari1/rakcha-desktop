@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import org.kordamp.ikonli.javafx.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21"
+           fx:controller="com.esprit.controllers.users.ClientDashboardController"
+           styleClass="immersive-root"
+           stylesheets="@../styles/filmStyle.css, @../styles/dashboard.css">
+
+  <!-- Background -->
+  <AnchorPane styleClass="cinematic-bg">
+    <Circle radius="250" layoutX="100" layoutY="150" styleClass="ambient-orb orb-primary" opacity="0.15"/>
+    <Circle radius="300" layoutX="1150" layoutY="550" styleClass="ambient-orb orb-secondary" opacity="0.1"/>
+    <Circle radius="180" layoutX="600" layoutY="300" styleClass="ambient-orb orb-tertiary" opacity="0.08"/>
+  </AnchorPane>
+
+  <BorderPane styleClass="main-shell">
+    <left>
+      <fx:include source="../sidebar.fxml"/>
+    </left>
+
+    <center>
+      <ScrollPane styleClass="dashboard-scroll" fitToWidth="true" hbarPolicy="NEVER">
+        <VBox spacing="30">
+          <padding>
+            <Insets top="30" bottom="40" left="40" right="40"/>
+          </padding>
+
+          <!-- Header -->
+          <HBox alignment="CENTER_LEFT" spacing="20">
+            <VBox spacing="5">
+              <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Welcome back," styleClass="welcome-text"/>
+                <Label fx:id="userNameLabel" text="User" styleClass="user-name"/>
+              </HBox>
+              <Label text="Here's your personalized cinema experience overview" styleClass="header-subtitle"/>
+            </VBox>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <ComboBox fx:id="timeRangeCombo" styleClass="time-range-combo" prefWidth="150">
+              <items>
+                <fx:collection fx:id="timeRangeOptions">
+                  <String fx:value="This Week"/>
+                  <String fx:value="This Month"/>
+                  <String fx:value="Last 3 Months"/>
+                  <String fx:value="This Year"/>
+                  <String fx:value="All Time"/>
+                </fx:collection>
+              </items>
+            </ComboBox>
+          </HBox>
+
+          <!-- Quick Stats Row -->
+          <HBox spacing="20" styleClass="quick-stats">
+            <VBox styleClass="stat-card glass-card accent-1" HBox.hgrow="ALWAYS">
+              <padding>
+                <Insets topRightBottomLeft="20"/>
+              </padding>
+              <HBox alignment="CENTER_LEFT" spacing="15">
+                <StackPane styleClass="stat-icon-container">
+                  <FontIcon iconLiteral="mdi2t-ticket:28"/>
+                </StackPane>
+                <VBox spacing="5">
+                  <Label fx:id="totalTicketsLabel" text="0" styleClass="stat-value"/>
+                  <Label text="Movies Watched" styleClass="stat-label"/>
+                </VBox>
+              </HBox>
+            </VBox>
+
+            <VBox styleClass="stat-card glass-card accent-2" HBox.hgrow="ALWAYS">
+              <padding>
+                <Insets topRightBottomLeft="20"/>
+              </padding>
+              <HBox alignment="CENTER_LEFT" spacing="15">
+                <StackPane styleClass="stat-icon-container">
+                  <FontIcon iconLiteral="mdi2c-clock-outline:28"/>
+                </StackPane>
+                <VBox spacing="5">
+                  <Label fx:id="totalHoursLabel" text="0h" styleClass="stat-value"/>
+                  <Label text="Watch Time" styleClass="stat-label"/>
+                </VBox>
+              </HBox>
+            </VBox>
+
+            <VBox styleClass="stat-card glass-card accent-3" HBox.hgrow="ALWAYS">
+              <padding>
+                <Insets topRightBottomLeft="20"/>
+              </padding>
+              <HBox alignment="CENTER_LEFT" spacing="15">
+                <StackPane styleClass="stat-icon-container">
+                  <FontIcon iconLiteral="mdi2c-currency-usd:28"/>
+                </StackPane>
+                <VBox spacing="5">
+                  <Label fx:id="totalSpentLabel" text="$0" styleClass="stat-value"/>
+                  <Label text="Total Spent" styleClass="stat-label"/>
+                </VBox>
+              </HBox>
+            </VBox>
+
+            <VBox styleClass="stat-card glass-card accent-4" HBox.hgrow="ALWAYS">
+              <padding>
+                <Insets topRightBottomLeft="20"/>
+              </padding>
+              <HBox alignment="CENTER_LEFT" spacing="15">
+                <StackPane styleClass="stat-icon-container">
+                  <FontIcon iconLiteral="mdi2s-star:28"/>
+                </StackPane>
+                <VBox spacing="5">
+                  <Label fx:id="avgRatingLabel" text="0.0" styleClass="stat-value"/>
+                  <Label text="Avg Rating Given" styleClass="stat-label"/>
+                </VBox>
+              </HBox>
+            </VBox>
+          </HBox>
+
+          <!-- Main Dashboard Grid -->
+          <HBox spacing="25">
+
+            <!-- Left Column -->
+            <VBox spacing="25" HBox.hgrow="ALWAYS">
+
+              <!-- Watching Activity Chart -->
+              <VBox styleClass="dashboard-card glass-card" spacing="20">
+                <padding>
+                  <Insets topRightBottomLeft="25"/>
+                </padding>
+
+                <HBox alignment="CENTER_LEFT" spacing="15">
+                  <Label text="Watching Activity" styleClass="card-title"/>
+                  <Region HBox.hgrow="ALWAYS"/>
+                  <HBox styleClass="chart-toggle" spacing="0">
+                    <ToggleButton fx:id="moviesChartToggle" styleClass="chart-toggle-btn left active" text="Movies"/>
+                    <ToggleButton fx:id="seriesChartToggle" styleClass="chart-toggle-btn right" text="Series"/>
+                  </HBox>
+                </HBox>
+
+                <AreaChart fx:id="activityChart" styleClass="activity-chart" prefHeight="250" animated="true">
+                  <xAxis>
+                    <CategoryAxis fx:id="activityXAxis" label="Date"/>
+                  </xAxis>
+                  <yAxis>
+                    <NumberAxis fx:id="activityYAxis" label="Count" autoRanging="true"/>
+                  </yAxis>
+                </AreaChart>
+              </VBox>
+
+              <!-- Genre Distribution -->
+              <HBox spacing="25">
+                <VBox styleClass="dashboard-card glass-card" spacing="20" HBox.hgrow="ALWAYS">
+                  <padding>
+                    <Insets topRightBottomLeft="25"/>
+                  </padding>
+
+                  <Label text="Favorite Genres" styleClass="card-title"/>
+
+                  <PieChart fx:id="genreChart" styleClass="genre-chart" prefHeight="220" labelsVisible="false"
+                            legendVisible="true"/>
+                </VBox>
+
+                <!-- Time of Day Preference -->
+                <VBox styleClass="dashboard-card glass-card" spacing="20" HBox.hgrow="ALWAYS">
+                  <padding>
+                    <Insets topRightBottomLeft="25"/>
+                  </padding>
+
+                  <Label text="Preferred Showtimes" styleClass="card-title"/>
+
+                  <BarChart fx:id="showtimeChart" styleClass="showtime-chart" prefHeight="220" barGap="3"
+                            categoryGap="10">
+                    <xAxis>
+                      <CategoryAxis fx:id="showtimeXAxis"/>
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis fx:id="showtimeYAxis" autoRanging="true"/>
+                    </yAxis>
+                  </BarChart>
+                </VBox>
+              </HBox>
+
+              <!-- Spending Breakdown -->
+              <VBox styleClass="dashboard-card glass-card" spacing="20">
+                <padding>
+                  <Insets topRightBottomLeft="25"/>
+                </padding>
+
+                <HBox alignment="CENTER_LEFT" spacing="15">
+                  <Label text="Spending Breakdown" styleClass="card-title"/>
+                  <Region HBox.hgrow="ALWAYS"/>
+                  <Label fx:id="totalSpendingLabel" text="$0.00 total" styleClass="spending-total"/>
+                </HBox>
+
+                <HBox spacing="30" alignment="CENTER">
+                  <VBox spacing="15" HBox.hgrow="ALWAYS">
+                    <!-- Tickets -->
+                    <VBox spacing="8">
+                      <HBox alignment="CENTER_LEFT">
+                        <Label text="Movie Tickets" styleClass="spending-label"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="ticketSpendLabel" text="$0.00" styleClass="spending-value"/>
+                      </HBox>
+                      <ProgressBar fx:id="ticketSpendBar" progress="0.6" styleClass="spending-bar tickets"/>
+                    </VBox>
+
+                    <!-- Concessions -->
+                    <VBox spacing="8">
+                      <HBox alignment="CENTER_LEFT">
+                        <Label text="Concessions" styleClass="spending-label"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="concessionSpendLabel" text="$0.00" styleClass="spending-value"/>
+                      </HBox>
+                      <ProgressBar fx:id="concessionSpendBar" progress="0.25" styleClass="spending-bar concessions"/>
+                    </VBox>
+
+                    <!-- Merchandise -->
+                    <VBox spacing="8">
+                      <HBox alignment="CENTER_LEFT">
+                        <Label text="Merchandise" styleClass="spending-label"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="merchandiseSpendLabel" text="$0.00" styleClass="spending-value"/>
+                      </HBox>
+                      <ProgressBar fx:id="merchandiseSpendBar" progress="0.15" styleClass="spending-bar merchandise"/>
+                    </VBox>
+                  </VBox>
+                </HBox>
+              </VBox>
+            </VBox>
+
+            <!-- Right Column -->
+            <VBox spacing="25" prefWidth="380">
+
+              <!-- Upcoming Events -->
+              <VBox styleClass="dashboard-card glass-card" spacing="15">
+                <padding>
+                  <Insets topRightBottomLeft="20"/>
+                </padding>
+
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                  <Label text="Upcoming" styleClass="card-title"/>
+                  <Label fx:id="upcomingCountBadge" styleClass="count-badge" text="0"/>
+                  <Region HBox.hgrow="ALWAYS"/>
+                  <Button onAction="#viewAllUpcoming" styleClass="see-all-btn" text="See All"/>
+                </HBox>
+
+                <VBox fx:id="upcomingContainer" spacing="12"/>
+
+                <VBox fx:id="upcomingEmpty" alignment="CENTER" spacing="10" visible="false" managed="false">
+                  <FontIcon iconLiteral="mdi2c-calendar-blank:40" styleClass="empty-icon-small"/>
+                  <Label text="No upcoming events" styleClass="empty-text"/>
+                </VBox>
+              </VBox>
+
+              <!-- Recent Activity -->
+              <VBox styleClass="dashboard-card glass-card" spacing="15">
+                <padding>
+                  <Insets topRightBottomLeft="20"/>
+                </padding>
+
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                  <Label text="Recent Activity" styleClass="card-title"/>
+                  <Region HBox.hgrow="ALWAYS"/>
+                  <Button onAction="#viewAllActivity" styleClass="see-all-btn" text="See All"/>
+                </HBox>
+
+                <VBox fx:id="recentActivityContainer" spacing="10"/>
+              </VBox>
+
+              <!-- Top Cinemas Visited -->
+              <VBox styleClass="dashboard-card glass-card" spacing="15">
+                <padding>
+                  <Insets topRightBottomLeft="20"/>
+                </padding>
+
+                <Label text="Favorite Cinemas" styleClass="card-title"/>
+
+                <VBox fx:id="topCinemasContainer" spacing="12"/>
+              </VBox>
+
+              <!-- Achievements / Badges -->
+              <VBox styleClass="dashboard-card glass-card" spacing="15">
+                <padding>
+                  <Insets topRightBottomLeft="20"/>
+                </padding>
+
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                  <Label text="Achievements" styleClass="card-title"/>
+                  <Region HBox.hgrow="ALWAYS"/>
+                  <Button onAction="#viewAllBadges" styleClass="see-all-btn" text="See All"/>
+                </HBox>
+
+                <FlowPane fx:id="badgesContainer" hgap="15" vgap="15"/>
+              </VBox>
+
+              <!-- Recommendations -->
+              <VBox styleClass="dashboard-card glass-card" spacing="15">
+                <padding>
+                  <Insets topRightBottomLeft="20"/>
+                </padding>
+
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                  <FontIcon iconLiteral="mdi2l-lightbulb-on:20" styleClass="recommendation-icon"/>
+                  <Label text="Recommended for You" styleClass="card-title"/>
+                </HBox>
+
+                <VBox fx:id="recommendationsContainer" spacing="12"/>
+
+                <Button onAction="#viewMoreRecommendations" styleClass="view-more-btn" text="View More Recommendations"
+                        maxWidth="1.7976931348623157E308"/>
+              </VBox>
+            </VBox>
+          </HBox>
+
+          <!-- Loyalty Section -->
+          <VBox styleClass="loyalty-card glass-card" spacing="20">
+            <padding>
+              <Insets topRightBottomLeft="25"/>
+            </padding>
+
+            <HBox alignment="CENTER_LEFT" spacing="15">
+              <FontIcon iconLiteral="mdi2c-crown:24" styleClass="loyalty-icon"/>
+              <VBox spacing="3">
+                <Label text="Loyalty Program" styleClass="card-title"/>
+                <Label fx:id="loyaltyTierLabel" text="Silver Member" styleClass="loyalty-tier"/>
+              </VBox>
+
+              <Region HBox.hgrow="ALWAYS"/>
+
+              <VBox alignment="CENTER_RIGHT" spacing="3">
+                <Label fx:id="loyaltyPointsLabel" text="1,250 pts" styleClass="loyalty-points"/>
+                <Label text="Available Points" styleClass="points-label"/>
+              </VBox>
+            </HBox>
+
+            <VBox spacing="8">
+              <HBox alignment="CENTER_LEFT">
+                <Label text="Progress to Gold" styleClass="progress-label"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="pointsToNextLabel" text="750 pts to go" styleClass="points-to-next"/>
+              </HBox>
+              <ProgressBar fx:id="loyaltyProgressBar" progress="0.625" styleClass="loyalty-progress-bar"/>
+            </VBox>
+
+            <HBox spacing="15" alignment="CENTER">
+              <Button onAction="#viewRewards" styleClass="loyalty-btn" text="View Rewards">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2g-gift:16"/>
+                </graphic>
+              </Button>
+              <Button onAction="#viewBenefits" styleClass="loyalty-btn secondary" text="Tier Benefits">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2s-star:16"/>
+                </graphic>
+              </Button>
+              <Button onAction="#redeemPoints" styleClass="loyalty-btn primary" text="Redeem Points">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2w-wallet-giftcard:16"/>
+                </graphic>
+              </Button>
+            </HBox>
+          </VBox>
+        </VBox>
+      </ScrollPane>
+    </center>
+  </BorderPane>
+</StackPane>

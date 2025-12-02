@@ -1,25 +1,10 @@
 package com.esprit.controllers.users;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.Timeout;
-import java.util.concurrent.TimeUnit;
-import org.testfx.framework.junit5.Start;
-
 import com.esprit.models.cinemas.Cinema;
 import com.esprit.models.films.Film;
 import com.esprit.models.products.Product;
 import com.esprit.models.series.Series;
 import com.esprit.utils.TestFXBase;
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -29,6 +14,20 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.Timeout;
+import org.testfx.framework.junit5.Start;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Comprehensive test suite for HomeClientController.
@@ -45,14 +44,54 @@ class HomeClientControllerTest extends TestFXBase {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/users/HomeClient.fxml"));
         javafx.scene.Parent root = loader.load();
         controller = loader.getController();
-        
+
         stage.setScene(new Scene(root, 1280, 700));
         stage.show();
         stage.toFront();
     }
 
+    // Helper methods
+    private List<Film> createMockFilms() {
+        List<Film> films = new ArrayList<>();
+        Film film1 = new Film();
+        film1.setTitle("Action Movie");
+        Film film2 = new Film();
+        film2.setTitle("Comedy Movie");
+        films.add(film1);
+        films.add(film2);
+        return films;
+    }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    private List<Series> createMockSeries() {
+        List<Series> series = new ArrayList<>();
+        Series s1 = new Series();
+        s1.setName("Drama Series");
+        series.add(s1);
+        return series;
+    }
+
+    private List<Product> createMockProducts() {
+        List<Product> products = new ArrayList<>();
+        Product p1 = new Product();
+        p1.setName("Test Product");
+        products.add(p1);
+        return products;
+    }
+
+    private List<Cinema> createMockCinemas() {
+        List<Cinema> cinemas = new ArrayList<>();
+        Cinema c1 = new Cinema();
+        c1.setName("Test Cinema");
+        cinemas.add(c1);
+        return cinemas;
+    }
+
+    private <T> com.esprit.utils.Page<T> createPagedResult(List<T> content) {
+        return new com.esprit.utils.Page<>(content, 0, content.size(), content.size());
+    }
+
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Page Initialization Tests")
     class PageInitializationTests {
 
@@ -67,7 +106,6 @@ class HomeClientControllerTest extends TestFXBase {
             assertThat(welcomeLabel.getText()).isNotEmpty();
         }
 
-
         @Test
         @Order(2)
         @DisplayName("Should display search field")
@@ -78,7 +116,6 @@ class HomeClientControllerTest extends TestFXBase {
             assertThat(searchField).isNotNull();
             assertThat(searchField.isVisible()).isTrue();
         }
-
 
         @Test
         @Order(3)
@@ -91,7 +128,6 @@ class HomeClientControllerTest extends TestFXBase {
             assertThat(lookup("#productsContainer").tryQuery()).isPresent();
             assertThat(lookup("#cinemasContainer").tryQuery()).isPresent();
         }
-
 
         @Test
         @Order(4)
@@ -106,8 +142,8 @@ class HomeClientControllerTest extends TestFXBase {
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Featured Content Tests")
     class FeaturedContentTests {
 
@@ -122,7 +158,6 @@ class HomeClientControllerTest extends TestFXBase {
             assertThat(featuredImage.isVisible()).isTrue();
         }
 
-
         @Test
         @Order(6)
         @DisplayName("Should display featured title")
@@ -134,7 +169,6 @@ class HomeClientControllerTest extends TestFXBase {
             assertThat(featuredTitle.getText()).isNotEmpty();
         }
 
-
         @Test
         @Order(7)
         @DisplayName("Should display featured description")
@@ -145,7 +179,6 @@ class HomeClientControllerTest extends TestFXBase {
             assertThat(featuredDesc).isNotNull();
             assertThat(featuredDesc.isVisible()).isTrue();
         }
-
 
         @Test
         @Order(8)
@@ -164,8 +197,8 @@ class HomeClientControllerTest extends TestFXBase {
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Movies Display Tests")
     class MoviesDisplayTests {
 
@@ -180,7 +213,6 @@ class HomeClientControllerTest extends TestFXBase {
             assertThat(moviesContainer.isVisible()).isTrue();
         }
 
-
         @Test
         @Order(10)
         @DisplayName("Should load movies from service")
@@ -193,7 +225,6 @@ class HomeClientControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
-
         @Test
         @Order(11)
         @DisplayName("Should display movie cards")
@@ -204,7 +235,6 @@ class HomeClientControllerTest extends TestFXBase {
             assertThat(moviesContainer).isNotNull();
             assertThat(moviesContainer.getChildren()).isNotNull();
         }
-
 
         @Test
         @Order(12)
@@ -220,8 +250,8 @@ class HomeClientControllerTest extends TestFXBase {
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Series Display Tests")
     class SeriesDisplayTests {
 
@@ -236,7 +266,6 @@ class HomeClientControllerTest extends TestFXBase {
             assertThat(seriesContainer.isVisible()).isTrue();
         }
 
-
         @Test
         @Order(14)
         @DisplayName("Should load series from service")
@@ -248,7 +277,6 @@ class HomeClientControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
-
         @Test
         @Order(15)
         @DisplayName("Should display series cards")
@@ -259,7 +287,6 @@ class HomeClientControllerTest extends TestFXBase {
             assertThat(seriesContainer).isNotNull();
             assertThat(seriesContainer.getChildren()).isNotNull();
         }
-
 
         @Test
         @Order(16)
@@ -274,8 +301,8 @@ class HomeClientControllerTest extends TestFXBase {
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Products Display Tests")
     class ProductsDisplayTests {
 
@@ -290,7 +317,6 @@ class HomeClientControllerTest extends TestFXBase {
             assertThat(productsContainer.isVisible()).isTrue();
         }
 
-
         @Test
         @Order(18)
         @DisplayName("Should load products from service")
@@ -301,7 +327,6 @@ class HomeClientControllerTest extends TestFXBase {
             assertThat(productsContainer).isNotNull();
             waitForFxEvents();
         }
-
 
         @Test
         @Order(19)
@@ -316,8 +341,8 @@ class HomeClientControllerTest extends TestFXBase {
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Cinemas Display Tests")
     class CinemasDisplayTests {
 
@@ -332,7 +357,6 @@ class HomeClientControllerTest extends TestFXBase {
             assertThat(cinemasContainer.isVisible()).isTrue();
         }
 
-
         @Test
         @Order(21)
         @DisplayName("Should load cinemas from service")
@@ -346,8 +370,8 @@ class HomeClientControllerTest extends TestFXBase {
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Search Functionality Tests")
     class SearchFunctionalityTests {
 
@@ -364,7 +388,6 @@ class HomeClientControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
-
         @Test
         @Order(23)
         @DisplayName("Should search across all content types")
@@ -378,7 +401,6 @@ class HomeClientControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
-
         @Test
         @Order(24)
         @DisplayName("Should handle empty search")
@@ -391,7 +413,6 @@ class HomeClientControllerTest extends TestFXBase {
             assertThat(searchField.getText()).isEmpty();
             waitForFxEvents();
         }
-
 
         @Test
         @Order(25)
@@ -408,8 +429,8 @@ class HomeClientControllerTest extends TestFXBase {
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Animation Tests")
     class AnimationTests {
 
@@ -424,7 +445,6 @@ class HomeClientControllerTest extends TestFXBase {
             sleep(500);
         }
 
-
         @Test
         @Order(27)
         @DisplayName("Should display animated shapes")
@@ -435,7 +455,6 @@ class HomeClientControllerTest extends TestFXBase {
             assertThat(lookup("#shape2").tryQuery()).isPresent();
             sleep(500);
         }
-
 
         @Test
         @Order(28)
@@ -451,8 +470,8 @@ class HomeClientControllerTest extends TestFXBase {
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Scroll Functionality Tests")
     class ScrollFunctionalityTests {
 
@@ -467,7 +486,6 @@ class HomeClientControllerTest extends TestFXBase {
             assertThat(moviesScroll.getHbarPolicy()).isNotEqualTo(ScrollPane.ScrollBarPolicy.NEVER);
         }
 
-
         @Test
         @Order(30)
         @DisplayName("Should enable horizontal scrolling for series")
@@ -478,7 +496,6 @@ class HomeClientControllerTest extends TestFXBase {
             assertThat(seriesScroll).isNotNull();
             assertThat(seriesScroll.getHbarPolicy()).isNotEqualTo(ScrollPane.ScrollBarPolicy.NEVER);
         }
-
 
         @Test
         @Order(31)
@@ -493,8 +510,8 @@ class HomeClientControllerTest extends TestFXBase {
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Card Click Navigation Tests")
     class CardClickNavigationTests {
 
@@ -507,14 +524,13 @@ class HomeClientControllerTest extends TestFXBase {
             HBox moviesContainer = lookup("#moviesContainer").query();
             assertThat(moviesContainer).isNotNull();
             assertThat(moviesContainer.getChildren()).isNotNull();
-            
+
             if (!moviesContainer.getChildren().isEmpty()) {
                 // Verify cards are clickable
                 assertThat(moviesContainer.getChildren().size()).isGreaterThanOrEqualTo(0);
             }
 
         }
-
 
         @Test
         @Order(33)
@@ -525,14 +541,13 @@ class HomeClientControllerTest extends TestFXBase {
             HBox seriesContainer = lookup("#seriesContainer").query();
             assertThat(seriesContainer).isNotNull();
             assertThat(seriesContainer.getChildren()).isNotNull();
-            
+
             if (!seriesContainer.getChildren().isEmpty()) {
                 // Verify cards are clickable
                 assertThat(seriesContainer.getChildren().size()).isGreaterThanOrEqualTo(0);
             }
 
         }
-
 
         @Test
         @Order(34)
@@ -543,7 +558,7 @@ class HomeClientControllerTest extends TestFXBase {
             HBox productsContainer = lookup("#productsContainer").query();
             assertThat(productsContainer).isNotNull();
             assertThat(productsContainer.getChildren()).isNotNull();
-            
+
             if (!productsContainer.getChildren().isEmpty()) {
                 // Verify cards are clickable
                 assertThat(productsContainer.getChildren().size()).isGreaterThanOrEqualTo(0);
@@ -553,51 +568,4 @@ class HomeClientControllerTest extends TestFXBase {
 
     }
 
-
-
-    // Helper methods
-    private List<Film> createMockFilms() {
-        List<Film> films = new ArrayList<>();
-        Film film1 = new Film();
-        film1.setName("Action Movie");
-        Film film2 = new Film();
-        film2.setName("Comedy Movie");
-        films.add(film1);
-        films.add(film2);
-        return films;
-    }
-
-
-    private List<Series> createMockSeries() {
-        List<Series> series = new ArrayList<>();
-        Series s1 = new Series();
-        s1.setName("Drama Series");
-        series.add(s1);
-        return series;
-    }
-
-
-    private List<Product> createMockProducts() {
-        List<Product> products = new ArrayList<>();
-        Product p1 = new Product();
-        p1.setName("Test Product");
-        products.add(p1);
-        return products;
-    }
-
-
-    private List<Cinema> createMockCinemas() {
-        List<Cinema> cinemas = new ArrayList<>();
-        Cinema c1 = new Cinema();
-        c1.setName("Test Cinema");
-        cinemas.add(c1);
-        return cinemas;
-    }
-
-
-    private <T> com.esprit.utils.Page<T> createPagedResult(List<T> content) {
-        return new com.esprit.utils.Page<>(content, 0, content.size(), content.size());
-    }
-
 }
-

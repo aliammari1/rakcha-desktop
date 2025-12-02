@@ -1,0 +1,337 @@
+/*
+ * RAKCHA Cinematic Splash Screen Styles
+ * A premium movie-theater experience
+ */
+
+/* ===== Root Styling ===== */
+.root {
+    -fx-background-color: #000000;
+}
+
+/* ===== Cinematic Background ===== */
+.cinematic-background {
+    -fx-background-color: linear-gradient(
+        to bottom,
+        #0a0000 0%,
+        #1a0505 20%,
+        #0f0202 50%,
+        #1a0505 80%,
+        #0a0000 100%
+    );
+}
+
+.cinematic-canvas {
+    -fx-background-color: transparent;
+}
+
+/* ===== Letterbox Bars (Cinema Aspect Ratio Effect) ===== */
+.letterbox-bar {
+    -fx-background-color: #000000;
+    -fx-border-color: transparent;
+}
+
+/* ===== Media Container ===== */
+.media-container {
+    -fx-background-color: radial-gradient(
+        center 50% 50%,
+        radius 80%,
+        #1a0808 0%,
+        #0a0202 50%,
+        #050101 100%
+    );
+}
+
+.background-cinematic {
+    -fx-opacity: 0.8;
+}
+
+/* ===== Vignette Overlay Effect ===== */
+.vignette-overlay {
+    -fx-fill: transparent;
+    -fx-effect: null;
+}
+
+/* ===== Light Rays ===== */
+.light-rays-container {
+    -fx-background-color: transparent;
+}
+
+.light-ray {
+    -fx-fill: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(255, 68, 68, 0.15) 30%,
+        rgba(255, 100, 100, 0.2) 50%,
+        rgba(255, 68, 68, 0.15) 70%,
+        transparent 100%
+    );
+    -fx-opacity: 0;
+}
+
+/* ===== Film Grain Effect ===== */
+.film-grain {
+    -fx-fill: transparent;
+    -fx-background-color: transparent;
+    -fx-opacity: 0.03;
+    /* Film grain will be applied via animation */
+}
+
+/* ===== Logo Container ===== */
+.logo-container {
+    -fx-background-color: transparent;
+    -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.6), 50, 0, 0, 0);
+}
+
+.logo-glow {
+    -fx-fill: radial-gradient(
+        center 50% 50%,
+        radius 100%,
+        rgba(255, 0, 0, 0.4) 0%,
+        rgba(139, 0, 0, 0.2) 40%,
+        transparent 100%
+    );
+    -fx-opacity: 0.4;
+}
+
+.logo-ring {
+    -fx-fill: transparent;
+    -fx-stroke: linear-gradient(
+        to right,
+        #ff4444 0%,
+        #8b0000 25%,
+        #ff2222 50%,
+        #8b0000 75%,
+        #ff4444 100%
+    );
+    -fx-stroke-width: 2;
+    -fx-stroke-dash-array: 10 5;
+    -fx-opacity: 0.5;
+}
+
+.main-logo {
+    -fx-effect: dropshadow(gaussian, #ff0000, 30, 0.3, 0, 0);
+}
+
+/* ===== Title Styling ===== */
+.title-container {
+    -fx-background-color: transparent;
+}
+
+.cinematic-title {
+    -fx-font-family: 'Bebas Neue', 'Impact', 'Arial Black', sans-serif;
+    -fx-font-size: 72px;
+    -fx-font-weight: bold;
+    -fx-text-fill: linear-gradient(
+        to bottom,
+        #ffffff 0%,
+        #ffcccc 50%,
+        #ff9999 100%
+    );
+    -fx-effect: dropshadow(gaussian, #8b0000, 20, 0.5, 0, 5);
+    letter-spacing: 15px;
+}
+
+.subtitle-container {
+    -fx-background-color: transparent;
+}
+
+.cinematic-subtitle {
+    -fx-font-family: 'Montserrat', 'Segoe UI', 'Arial', sans-serif;
+    -fx-font-size: 16px;
+    -fx-font-weight: normal;
+    -fx-text-fill: #cc9999;
+    letter-spacing: 8px;
+}
+
+.subtitle-line {
+    -fx-fill: linear-gradient(
+        to right,
+        transparent 0%,
+        #8b0000 50%,
+        transparent 100%
+    );
+}
+
+/* ===== Loading Section ===== */
+.loading-section {
+    -fx-background-color: transparent;
+}
+
+.loading-bar-container {
+    -fx-background-color: transparent;
+}
+
+.loading-bar-bg {
+    -fx-fill: rgba(139, 0, 0, 0.3);
+    -fx-stroke: #8b0000;
+    -fx-stroke-width: 1;
+}
+
+.loading-bar {
+    -fx-fill: linear-gradient(
+        to right,
+        #ff4444 0%,
+        #ff0000 50%,
+        #ff4444 100%
+    );
+    -fx-effect: dropshadow(gaussian, #ff0000, 10, 0.5, 0, 0);
+}
+
+.loading-text {
+    -fx-font-family: 'Segoe UI', 'Arial', sans-serif;
+    -fx-font-size: 14px;
+    -fx-text-fill: #888888;
+    -fx-font-style: italic;
+}
+
+.loading-percentage {
+    -fx-font-family: 'Bebas Neue', 'Impact', 'Arial Black', sans-serif;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ff4444;
+    -fx-effect: dropshadow(gaussian, #ff0000, 5, 0.3, 0, 0);
+}
+
+/* ===== Floating Elements ===== */
+.floating-elements {
+    -fx-background-color: transparent;
+}
+
+.floating-icon {
+    -fx-fill: #ff4444;
+    -fx-opacity: 0.4;
+    -fx-effect: dropshadow(gaussian, #ff0000, 10, 0.3, 0, 0);
+}
+
+/* ===== Credits Section ===== */
+.credits-container {
+    -fx-background-color: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.9) 0%,
+        rgba(0, 0, 0, 0.5) 50%,
+        transparent 100%
+    );
+}
+
+.credits-row {
+    -fx-background-color: transparent;
+}
+
+.credit-item {
+    -fx-background-color: transparent;
+}
+
+.credit-icon {
+    -fx-fill: #ff4444;
+    -fx-effect: dropshadow(gaussian, #ff0000, 5, 0.3, 0, 0);
+}
+
+.credit-label {
+    -fx-font-family: 'Segoe UI', 'Arial', sans-serif;
+    -fx-font-size: 12px;
+    -fx-text-fill: #999999;
+    -fx-font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.credit-divider {
+    -fx-fill: linear-gradient(
+        to bottom,
+        transparent 0%,
+        #8b0000 50%,
+        transparent 100%
+    );
+}
+
+/* ===== Corner Decorations ===== */
+.corner-decorations {
+    -fx-background-color: transparent;
+}
+
+.corner-triangle {
+    -fx-fill: linear-gradient(
+        to bottom right,
+        rgba(139, 0, 0, 0.3) 0%,
+        transparent 100%
+    );
+    -fx-opacity: 0.5;
+}
+
+.corner-triangle.tr {
+    -fx-fill: linear-gradient(
+        to bottom left,
+        rgba(139, 0, 0, 0.3) 0%,
+        transparent 100%
+    );
+}
+
+.corner-triangle.bl {
+    -fx-fill: linear-gradient(
+        to top right,
+        rgba(139, 0, 0, 0.3) 0%,
+        transparent 100%
+    );
+}
+
+.corner-triangle.br {
+    -fx-fill: linear-gradient(
+        to top left,
+        rgba(139, 0, 0, 0.3) 0%,
+        transparent 100%
+    );
+}
+
+/* ===== Fade Overlay ===== */
+.fade-overlay {
+    -fx-fill: #000000;
+}
+
+/* ===== Center Content ===== */
+.center-content {
+    -fx-background-color: transparent;
+}
+
+/* ===== Animations (CSS Keyframes are not supported in JavaFX, using Timeline instead) ===== */
+
+/* ===== Responsive Adjustments ===== */
+@media screen and (max-width: 1200px) {
+    .cinematic-title {
+        -fx-font-size: 56px;
+    }
+
+    .cinematic-subtitle {
+        -fx-font-size: 14px;
+    }
+}
+
+/* ===== Special Effects ===== */
+.glow-pulse {
+    -fx-effect: dropshadow(gaussian, #ff0000, 30, 0.5, 0, 0);
+}
+
+.text-shimmer {
+    -fx-text-fill: linear-gradient(
+        to right,
+        #ffffff 0%,
+        #ff9999 25%,
+        #ffffff 50%,
+        #ff9999 75%,
+        #ffffff 100%
+    );
+}
+
+/* ===== Premium Badge ===== */
+.premium-badge {
+    -fx-background-color: linear-gradient(to right, #ffd700, #ffaa00);
+    -fx-background-radius: 15;
+    -fx-padding: 5 15;
+    -fx-effect: dropshadow(gaussian, rgba(255, 215, 0, 0.5), 10, 0, 0, 0);
+}
+
+.premium-badge-text {
+    -fx-font-family: 'Arial Black', sans-serif;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1a0a00;
+    letter-spacing: 2px;
+}

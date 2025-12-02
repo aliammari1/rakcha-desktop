@@ -1,87 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
-<?import org.kordamp.ikonli.javafx.FontIcon?>
+<?import javafx.scene.text.*?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" prefHeight="855.0"
+      prefWidth="1500.0"
+      xmlns="http://javafx.com/javafx/21"
+      fx:controller="com.esprit.controllers.products.ShoppingCartProductControllers">
 
-<VBox prefHeight="855.0" prefWidth="1500.0"
-    xmlns="http://javafx.com/javafx/21"
-    xmlns:fx="http://javafx.com/fxml/1" 
-    fx:controller="com.esprit.controllers.products.ShoppingCartProductControllers">
+  <HBox VBox.vgrow="ALWAYS">
+    <!-- SideBar -->
+    <fx:include source="/ui/sidebar.fxml"/>
 
-    <HBox VBox.vgrow="ALWAYS">
-        <!-- SideBar -->
-        <fx:include source="/ui/sidebar.fxml" />
+    <!-- Main Content -->
+    <VBox spacing="20" HBox.hgrow="ALWAYS">
+      <padding>
+        <Insets top="25" right="25" bottom="25" left="25"/>
+      </padding>
 
-        <!-- Main Content -->
-        <VBox spacing="20" HBox.hgrow="ALWAYS">
-            <padding>
-                <Insets top="25" right="25" bottom="25" left="25"/>
-            </padding>
+      <!-- Header -->
+      <Label text="Shopping Cart" styleClass="section-title">
+        <font>
+          <Font name="Arial Rounded MT Bold" size="32.0"/>
+        </font>
+      </Label>
 
-            <!-- Header -->
-            <Label text="Shopping Cart" styleClass="section-title">
-                <font>
-                    <Font name="Arial Rounded MT Bold" size="32.0"/>
-                </font>
-            </Label>
+      <!-- Content Area -->
+      <HBox spacing="20" VBox.vgrow="ALWAYS">
+        <!-- Cart Items -->
+        <VBox spacing="15" HBox.hgrow="ALWAYS">
+          <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="bg-white">
+            <FlowPane fx:id="PanierFlowPane" styleClass="flow-pane"/>
+          </ScrollPane>
 
-            <!-- Content Area -->
-            <HBox spacing="20" VBox.vgrow="ALWAYS">
-                <!-- Cart Items -->
-                <VBox spacing="15" HBox.hgrow="ALWAYS">
-                    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="bg-white">
-                        <FlowPane fx:id="PanierFlowPane" styleClass="flow-pane"/>
-                    </ScrollPane>
-
-                    <HBox spacing="10" alignment="CENTER_RIGHT">
-                        <Button onAction="#Paiment" styleClass="sale" text="Proceed to Checkout">
-                            <font>
-                                <Font name="Arial" size="14.0"/>
-                            </font>
-                        </Button>
-                        <Button  styleClass="delete-button" text="Clear Cart">
-                            <font>
-                                <Font name="Arial" size="14.0"/>
-                            </font>
-                        </Button>
-                    </HBox>
-                </VBox>
-
-                <!-- Order Summary -->
-                <VBox styleClass="bg-white" maxWidth="300.0" spacing="15">
-                    <padding>
-                        <Insets top="20" right="20" bottom="20" left="20"/>
-                    </padding>
-
-                    <Label text="Order Summary" styleClass="section-title">
-                        <font>
-                            <Font name="Arial Rounded MT Bold" size="24.0"/>
-                        </font>
-                    </Label>
-
-                    <GridPane vgap="10">
-                        <Label text="Subtotal:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                        <Label fx:id="subtotalLabel" text="\$0.00" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
-
-                        <Label text="Tax:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                        <Label fx:id="taxLabel" text="\$0.00" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
-
-                        <Label text="Total:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="total-label">
-                            <font>
-                                <Font name="Arial Bold" size="16.0"/>
-                            </font>
-                        </Label>
-                        <Label fx:id="totalLabel" text="\$0.00" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="total-label">
-                            <font>
-                                <Font name="Arial Bold" size="16.0"/>
-                            </font>
-                        </Label>
-                    </GridPane>
-                </VBox>
-            </HBox>
+          <HBox spacing="10" alignment="CENTER_RIGHT">
+            <Button onAction="#Paiment" styleClass="sale" text="Proceed to Checkout">
+              <font>
+                <Font name="Arial" size="14.0"/>
+              </font>
+            </Button>
+            <Button styleClass="delete-button" text="Clear Cart">
+              <font>
+                <Font name="Arial" size="14.0"/>
+              </font>
+            </Button>
+          </HBox>
         </VBox>
-    </HBox>
+
+        <!-- Order Summary -->
+        <VBox styleClass="bg-white" maxWidth="300.0" spacing="15">
+          <padding>
+            <Insets top="20" right="20" bottom="20" left="20"/>
+          </padding>
+
+          <Label text="Order Summary" styleClass="section-title">
+            <font>
+              <Font name="Arial Rounded MT Bold" size="24.0"/>
+            </font>
+          </Label>
+
+          <GridPane vgap="10">
+            <Label text="Subtotal:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <Label fx:id="subtotalLabel" text="\$0.00" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+            <Label text="Tax:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <Label fx:id="taxLabel" text="\$0.00" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+            <Label text="Total:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="total-label">
+              <font>
+                <Font name="Arial Bold" size="16.0"/>
+              </font>
+            </Label>
+            <Label fx:id="totalLabel" text="\$0.00" GridPane.rowIndex="2" GridPane.columnIndex="1"
+                   styleClass="total-label">
+              <font>
+                <Font name="Arial Bold" size="16.0"/>
+              </font>
+            </Label>
+          </GridPane>
+        </VBox>
+      </HBox>
+    </VBox>
+  </HBox>
 </VBox>

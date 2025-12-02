@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import org.kordamp.ikonli.javafx.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21"
+           fx:controller="com.esprit.controllers.products.ProductWishlistController"
+           styleClass="immersive-root"
+           stylesheets="@../styles/filmStyle.css, @../styles/shop.css">
+
+  <!-- Background -->
+  <AnchorPane styleClass="cinematic-bg">
+    <Circle radius="220" layoutX="100" layoutY="120" styleClass="ambient-orb orb-primary" opacity="0.12"/>
+    <Circle radius="260" layoutX="1100" layoutY="520" styleClass="ambient-orb orb-secondary" opacity="0.08"/>
+  </AnchorPane>
+
+  <BorderPane styleClass="main-shell">
+    <left>
+      <fx:include source="../sidebar.fxml"/>
+    </left>
+
+    <center>
+      <VBox spacing="0" HBox.hgrow="ALWAYS">
+
+        <!-- Header -->
+        <HBox styleClass="immersive-header" alignment="CENTER_LEFT" spacing="20">
+          <padding>
+            <Insets top="25" bottom="25" left="35" right="35"/>
+          </padding>
+
+          <VBox spacing="5">
+            <HBox spacing="15" alignment="CENTER_LEFT">
+              <Label text="My Wishlist" styleClass="header-title"/>
+              <Label fx:id="wishlistCountBadge" styleClass="count-badge" text="0 items"/>
+            </HBox>
+            <Label text="Products you've saved for later" styleClass="header-subtitle"/>
+          </VBox>
+
+          <Region HBox.hgrow="ALWAYS"/>
+
+          <Button fx:id="addAllToCartBtn" onAction="#addAllToCart" styleClass="primary-action-btn"
+                  text="Add All to Cart">
+            <graphic>
+              <FontIcon iconLiteral="mdi2c-cart-plus:18"/>
+            </graphic>
+          </Button>
+        </HBox>
+
+        <!-- Categories Filter -->
+        <HBox styleClass="category-filters" spacing="12" alignment="CENTER_LEFT">
+          <padding>
+            <Insets top="10" bottom="20" left="35" right="35"/>
+          </padding>
+
+          <ToggleButton fx:id="allCategoryBtn" styleClass="category-chip active" text="All" onAction="#filterAll"/>
+          <ToggleButton fx:id="snacksCategoryBtn" styleClass="category-chip" text="Snacks" onAction="#filterSnacks"/>
+          <ToggleButton fx:id="drinksCategoryBtn" styleClass="category-chip" text="Drinks" onAction="#filterDrinks"/>
+          <ToggleButton fx:id="combosCategoryBtn" styleClass="category-chip" text="Combos" onAction="#filterCombos"/>
+          <ToggleButton fx:id="merchandiseCategoryBtn" styleClass="category-chip" text="Merchandise"
+                        onAction="#filterMerchandise"/>
+
+          <Region HBox.hgrow="ALWAYS"/>
+
+          <ComboBox fx:id="sortCombo" styleClass="sort-combo" promptText="Sort by" prefWidth="180">
+            <items>
+              <FXCollections fx:factory="observableArrayList">
+                <String fx:value="Recently Added"/>
+                <String fx:value="Price: Low to High"/>
+                <String fx:value="Price: High to Low"/>
+                <String fx:value="Name A-Z"/>
+              </FXCollections>
+            </items>
+          </ComboBox>
+        </HBox>
+
+        <!-- Content Area -->
+        <StackPane VBox.vgrow="ALWAYS">
+          <padding>
+            <Insets left="35" right="35" bottom="25"/>
+          </padding>
+
+          <!-- Wishlist Grid -->
+          <ScrollPane fx:id="wishlistScrollPane" styleClass="wishlist-scroll" fitToWidth="true" hbarPolicy="NEVER">
+            <FlowPane fx:id="wishlistGrid" hgap="20" vgap="20" styleClass="wishlist-grid"/>
+          </ScrollPane>
+
+          <!-- Empty State -->
+          <VBox fx:id="emptyState" alignment="CENTER" spacing="20" visible="false" managed="false">
+            <StackPane styleClass="empty-icon-container">
+              <FontIcon iconLiteral="mdi2h-heart-outline:80" styleClass="empty-icon"/>
+            </StackPane>
+            <Label text="Your wishlist is empty" styleClass="empty-title"/>
+            <Label text="Save products you're interested in to purchase later" styleClass="empty-desc" wrapText="true"
+                   maxWidth="350" alignment="CENTER"/>
+            <Button onAction="#browseProducts" styleClass="browse-btn" text="Browse Products">
+              <graphic>
+                <FontIcon iconLiteral="mdi2s-store:18"/>
+              </graphic>
+            </Button>
+          </VBox>
+        </StackPane>
+
+        <!-- Bottom Summary Bar -->
+        <HBox fx:id="summaryBar" styleClass="summary-bar glass-card" spacing="30" alignment="CENTER_LEFT">
+          <padding>
+            <Insets top="15" bottom="15" left="35" right="35"/>
+          </padding>
+
+          <VBox spacing="3">
+            <Label text="Selected Items" styleClass="summary-label"/>
+            <Label fx:id="selectedCountLabel" text="0 items" styleClass="summary-value"/>
+          </VBox>
+
+          <Separator orientation="VERTICAL" styleClass="summary-separator"/>
+
+          <VBox spacing="3">
+            <Label text="Total Value" styleClass="summary-label"/>
+            <Label fx:id="totalValueLabel" text="\$0.00" styleClass="summary-value accent"/>
+          </VBox>
+
+          <Region HBox.hgrow="ALWAYS"/>
+
+          <Button onAction="#clearSelected" styleClass="clear-btn" text="Clear Selected">
+            <graphic>
+              <FontIcon iconLiteral="mdi2t-trash-can-outline:16"/>
+            </graphic>
+          </Button>
+          <Button onAction="#addSelectedToCart" styleClass="add-cart-btn" text="Add Selected to Cart">
+            <graphic>
+              <FontIcon iconLiteral="mdi2c-cart-plus:18"/>
+            </graphic>
+          </Button>
+        </HBox>
+      </VBox>
+    </center>
+  </BorderPane>
+
+  <!-- Product Quick View Dialog -->
+  <VBox fx:id="quickViewDialog" styleClass="dialog-overlay" visible="false" managed="false" alignment="CENTER">
+    <HBox styleClass="dialog-card wide" spacing="25" maxWidth="700" alignment="TOP_LEFT">
+      <padding>
+        <Insets top="30" right="30" bottom="30" left="30"/>
+      </padding>
+
+      <!-- Product Image -->
+      <VBox alignment="CENTER" spacing="15">
+        <ImageView fx:id="quickViewImage" fitWidth="250" fitHeight="250" styleClass="product-image"/>
+        <HBox fx:id="thumbnailsContainer" spacing="8" alignment="CENTER"/>
+      </VBox>
+
+      <!-- Product Details -->
+      <VBox spacing="15" HBox.hgrow="ALWAYS">
+        <HBox alignment="CENTER_LEFT">
+          <VBox spacing="5" HBox.hgrow="ALWAYS">
+            <Label fx:id="quickViewCategory" text="Snacks" styleClass="product-category"/>
+            <Label fx:id="quickViewName" text="Product Name" styleClass="product-name"/>
+          </VBox>
+          <Button onAction="#closeQuickView" styleClass="close-btn">
+            <graphic>
+              <FontIcon iconLiteral="mdi2c-close:20"/>
+            </graphic>
+          </Button>
+        </HBox>
+
+        <HBox spacing="15" alignment="CENTER_LEFT">
+          <Label fx:id="quickViewPrice" text="\$0.00" styleClass="product-price"/>
+          <Label fx:id="quickViewOriginalPrice" text="\$0.00" styleClass="product-original-price" visible="false"/>
+          <Label fx:id="discountBadge" text="-20%" styleClass="discount-badge" visible="false"/>
+        </HBox>
+
+        <Label fx:id="quickViewDescription" styleClass="product-description" wrapText="true"/>
+
+        <!-- Size Options -->
+        <VBox fx:id="sizeSection" spacing="8" visible="false" managed="false">
+          <Label text="Size" styleClass="option-label"/>
+          <HBox fx:id="sizeOptionsContainer" spacing="10"/>
+        </VBox>
+
+        <!-- Quantity Selector -->
+        <HBox spacing="15" alignment="CENTER_LEFT">
+          <Label text="Quantity" styleClass="option-label"/>
+          <HBox styleClass="quantity-selector" spacing="0" alignment="CENTER">
+            <Button onAction="#decreaseQuantity" styleClass="qty-btn">
+              <graphic>
+                <FontIcon iconLiteral="mdi2m-minus:16"/>
+              </graphic>
+            </Button>
+            <Label fx:id="quantityLabel" text="1" styleClass="qty-value"/>
+            <Button onAction="#increaseQuantity" styleClass="qty-btn">
+              <graphic>
+                <FontIcon iconLiteral="mdi2p-plus:16"/>
+              </graphic>
+            </Button>
+          </HBox>
+        </HBox>
+
+        <!-- Stock Status -->
+        <HBox fx:id="stockStatus" spacing="8" alignment="CENTER_LEFT">
+          <FontIcon iconLiteral="mdi2c-check-circle:16" styleClass="stock-icon in-stock"/>
+          <Label fx:id="stockLabel" text="In Stock" styleClass="stock-text in-stock"/>
+        </HBox>
+
+        <Region VBox.vgrow="ALWAYS"/>
+
+        <!-- Action Buttons -->
+        <HBox spacing="15">
+          <Button onAction="#removeFromWishlistQuickView" styleClass="secondary-btn" HBox.hgrow="ALWAYS"
+                  maxWidth="Infinity" text="Remove">
+            <graphic>
+              <FontIcon iconLiteral="mdi2h-heart-off:16"/>
+            </graphic>
+          </Button>
+          <Button onAction="#addToCartFromQuickView" styleClass="primary-btn" HBox.hgrow="ALWAYS"
+                  maxWidth="Infinity" text="Add to Cart">
+            <graphic>
+              <FontIcon iconLiteral="mdi2c-cart-plus:16"/>
+            </graphic>
+          </Button>
+        </HBox>
+      </VBox>
+    </HBox>
+  </VBox>
+
+  <!-- Remove Confirmation Dialog -->
+  <VBox fx:id="removeDialog" styleClass="dialog-overlay" visible="false" managed="false" alignment="CENTER">
+    <VBox styleClass="dialog-card" spacing="20" maxWidth="400">
+      <padding>
+        <Insets top="30" right="30" bottom="30" left="30"/>
+      </padding>
+
+      <VBox alignment="CENTER" spacing="15">
+        <StackPane styleClass="warning-icon-container">
+          <FontIcon iconLiteral="mdi2h-heart-off:48" styleClass="warning-icon"/>
+        </StackPane>
+        <Label text="Remove from Wishlist?" styleClass="dialog-title"/>
+        <Label fx:id="removeProductName" styleClass="remove-product-name"/>
+        <Label text="You can always add it back later" styleClass="dialog-desc"/>
+      </VBox>
+
+      <HBox spacing="15" alignment="CENTER">
+        <Button onAction="#cancelRemove" styleClass="secondary-btn" text="Cancel"/>
+        <Button onAction="#confirmRemove" styleClass="danger-btn" text="Remove"/>
+      </HBox>
+    </VBox>
+  </VBox>
+
+  <!-- Added to Cart Toast -->
+  <HBox fx:id="cartToast" styleClass="cart-toast" spacing="15" alignment="CENTER" visible="false" managed="false"
+        StackPane.alignment="BOTTOM_CENTER" translateY="-30">
+    <padding>
+      <Insets topRightBottomLeft="15"/>
+    </padding>
+    <FontIcon iconLiteral="mdi2c-check-circle:20" styleClass="toast-icon"/>
+    <Label fx:id="toastMessage" text="Added to cart" styleClass="toast-text"/>
+    <Button onAction="#viewCart" styleClass="toast-btn" text="View Cart"/>
+  </HBox>
+</StackPane>

@@ -1,144 +1,188 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.image.*?>
-<?import org.kordamp.ikonli.javafx.FontIcon?>
-<?import org.controlsfx.control.Rating?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.*?>
+<?import org.kordamp.ikonli.javafx.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21"
+           fx:controller="com.esprit.controllers.series.SerieController"
+           styleClass="immersive-root"
+           stylesheets="@../styles/filmStyle.css, @../styles/film-animations.css, @../styles/login-animations.css, @../styles/dashboard.css">
 
-<VBox prefHeight="855.0" prefWidth="1507.0"
-    xmlns="http://javafx.com/javafx/21"
-    xmlns:fx="http://javafx.com/fxml/1"
-    fx:controller="com.esprit.controllers.series.SerieController">
+  <!-- Cinematic Background with Gradient Mesh -->
+  <AnchorPane fx:id="cinematicBackground" styleClass="cinematic-bg">
 
-    <HBox VBox.vgrow="ALWAYS">
-        <!-- SideBar -->
-        <fx:include source="/ui/sidebar.fxml" />
+    <!-- Ambient Light Orbs -->
+    <Circle radius="200" layoutX="150" layoutY="150" styleClass="ambient-orb orb-primary" opacity="0.15"/>
+    <Circle radius="300" layoutX="1200" layoutY="600" styleClass="ambient-orb orb-secondary" opacity="0.1"/>
+    <Circle radius="150" layoutX="800" layoutY="100" styleClass="ambient-orb orb-accent" opacity="0.12"/>
 
-        <!-- Main Content -->
-        <VBox spacing="20" HBox.hgrow="ALWAYS">
+    <!-- Floating Cinema Elements -->
+    <FontIcon iconLiteral="mdi2t-television:40" layoutX="100" layoutY="500"
+              styleClass="floating-icon" opacity="0.08"/>
+    <FontIcon iconLiteral="mdi2m-movie-open:35" layoutX="1300" layoutY="300"
+              styleClass="floating-icon" opacity="0.06"/>
+    <FontIcon iconLiteral="mdi2s-star:25" layoutX="400" layoutY="700" styleClass="floating-star" opacity="0.1"/>
+    <FontIcon iconLiteral="mdi2s-star-outline:20" layoutX="950" layoutY="150"
+              styleClass="floating-star" opacity="0.08"/>
+  </AnchorPane>
+
+  <!-- Main Application Shell -->
+  <BorderPane styleClass="main-shell">
+    <left>
+      <fx:include source="/ui/sidebar.fxml"/>
+    </left>
+
+    <center>
+      <!-- Main Content -->
+      <VBox spacing="20" style="-fx-background-color: transparent;">
+        <padding>
+          <Insets top="25" right="25" bottom="25" left="25"/>
+        </padding>
+
+        <!-- Header -->
+        <HBox spacing="15" alignment="CENTER_LEFT" styleClass="immersive-header">
+          <Label text="Series Management" style="-fx-text-fill: white;" styleClass="brand-title">
+            <font>
+              <Font name="Arial Rounded MT Bold" size="32.0"/>
+            </font>
+          </Label>
+          <Region HBox.hgrow="ALWAYS"/>
+          <TextField fx:id="searchField" prefHeight="42.0" prefWidth="248.0"
+                     promptText="Search series..." styleClass="search-input"/>
+          <Button mnemonicParsing="false" styleClass="glass-btn">
+            <graphic>
+              <FontIcon iconLiteral="mdi2m-magnify:20"/>
+            </graphic>
+          </Button>
+        </HBox>
+
+        <!-- Content Area -->
+        <HBox spacing="20" VBox.vgrow="ALWAYS">
+          <!-- Left Side - Series Form -->
+          <VBox spacing="15" styleClass="glass-panel" maxWidth="450.0">
             <padding>
-                <Insets top="25" right="25" bottom="25" left="25" />
+              <Insets top="20" right="20" bottom="20" left="20"/>
             </padding>
 
-            <!-- Header -->
-            <HBox spacing="15" alignment="CENTER_LEFT">
-                <Label text="Series Management" styleClass="section-title">
-                    <font>
-                        <Font name="Arial Rounded MT Bold" size="32.0" />
-                    </font>
-                </Label>
-                <Region HBox.hgrow="ALWAYS" />
-                <TextField fx:id="searchField" prefHeight="42.0" prefWidth="248.0"
-                    promptText="Search series..." />
-                <Button mnemonicParsing="false" styleClass="search-button">
-                    <graphic>
-                        <FontIcon fill="#f5f5f5" iconLiteral="fa-search" />
-                    </graphic>
-                </Button>
+            <GridPane vgap="15" hgap="10">
+              <columnConstraints>
+                <ColumnConstraints minWidth="120" prefWidth="120"/>
+                <ColumnConstraints hgrow="ALWAYS"/>
+              </columnConstraints>
+
+              <!-- Title -->
+              <Label text="Title:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="label-light">
+                <font>
+                  <Font size="16.0"/>
+                </font>
+              </Label>
+              <TextField fx:id="nomF" styleClass="text-field-red"
+                         GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+              <Label fx:id="nomcheck" textFill="RED"
+                     GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+              <!-- Summary -->
+              <Label text="Summary:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="label-light">
+                <font>
+                  <Font size="16.0"/>
+                </font>
+              </Label>
+              <TextField fx:id="resumeF" styleClass="text-field-red"
+                         GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+              <Label fx:id="resumecheck" textFill="RED"
+                     GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+              <!-- Director -->
+              <Label text="Director:" GridPane.rowIndex="4" GridPane.columnIndex="0" styleClass="label-light">
+                <font>
+                  <Font size="16.0"/>
+                </font>
+              </Label>
+              <TextField fx:id="directeurF" styleClass="text-field-red"
+                         GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+              <Label fx:id="directeurcheck" textFill="RED"
+                     GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+              <!-- Country -->
+              <Label text="Country:" GridPane.rowIndex="6" GridPane.columnIndex="0" styleClass="label-light">
+                <font>
+                  <Font size="16.0"/>
+                </font>
+              </Label>
+              <TextField fx:id="paysF" styleClass="text-field-red"
+                         GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+              <Label fx:id="payscheck" textFill="RED"
+                     GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+
+              <!-- Category -->
+              <Label text="Category:" GridPane.rowIndex="8" GridPane.columnIndex="0" styleClass="label-light">
+                <font>
+                  <Font size="16.0"/>
+                </font>
+              </Label>
+              <ComboBox fx:id="categorieF" styleClass="glass-combo"
+                        GridPane.rowIndex="8" GridPane.columnIndex="1"/>
+              <Label fx:id="categoriecheck" textFill="RED"
+                     GridPane.rowIndex="9" GridPane.columnIndex="1"/>
+
+              <!-- Trailer -->
+              <Label text="Trailer URL:" GridPane.rowIndex="10" GridPane.columnIndex="0" styleClass="label-light">
+                <font>
+                  <Font size="16.0"/>
+                </font>
+              </Label>
+              <TextField fx:id="bandeaF" styleClass="text-field-red"
+                         GridPane.rowIndex="10" GridPane.columnIndex="1"/>
+
+              <!-- Poster -->
+              <Label text="Poster:" GridPane.rowIndex="11" GridPane.columnIndex="0" styleClass="label-light">
+                <font>
+                  <Font size="16.0"/>
+                </font>
+              </Label>
+              <VBox spacing="10" GridPane.rowIndex="11" GridPane.columnIndex="1">
+                <ImageView fx:id="serieImageView" fitHeight="150.0" fitWidth="200.0"
+                           pickOnBounds="true" preserveRatio="true"/>
+                <Button onAction="#importImage" styleClass="secondary-button"
+                        text="Upload Poster"/>
+                <Label fx:id="imagechek" textFill="RED"/>
+              </VBox>
+            </GridPane>
+
+            <!-- Action Buttons -->
+            <HBox spacing="10" alignment="CENTER">
+              <Button onAction="#ajouterSerie" styleClass="hero-btn primary" text="+ Create Series">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2p-plus-circle:20"/>
+                </graphic>
+              </Button>
+              <Button onAction="#Oepisodes" styleClass="hero-btn secondary" text="Manage Episodes">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2f-format-list-bulleted:18"/>
+                </graphic>
+              </Button>
             </HBox>
+          </VBox>
 
-            <!-- Content Area -->
-            <HBox spacing="20" VBox.vgrow="ALWAYS">
-                <!-- Left Side - Series Form -->
-                <VBox spacing="15" styleClass="bg-white" maxWidth="450.0">
-                    <padding>
-                        <Insets top="20" right="20" bottom="20" left="20" />
-                    </padding>
+          <!-- Right Side - Series List -->
+          <VBox HBox.hgrow="ALWAYS" spacing="15">
+            <TableView fx:id="tableView" VBox.vgrow="ALWAYS" styleClass="table-view-dark">
+              <!-- Columns will be added dynamically by the controller -->
+            </TableView>
 
-                    <GridPane vgap="15" hgap="10">
-                        <!-- Title -->
-                        <Label text="Title:" GridPane.rowIndex="0" GridPane.columnIndex="0">
-                            <font>
-                                <Font size="16.0" />
-                            </font>
-                        </Label>
-                        <TextField fx:id="nomF" styleClass="text-field-red"
-                            GridPane.rowIndex="0" GridPane.columnIndex="1" />
-                        <Label fx:id="checkname" textFill="RED"
-                            GridPane.rowIndex="1" GridPane.columnIndex="1" />
-
-                        <!-- Description -->
-                        <Label text="Description:" GridPane.rowIndex="2" GridPane.columnIndex="0">
-                            <font>
-                                <Font size="16.0" />
-                            </font>
-                        </Label>
-                        <TextArea fx:id="descreptionF" styleClass="text-area-red"
-                            GridPane.rowIndex="2" GridPane.columnIndex="1" />
-                        <Label fx:id="checkdescreption" textFill="RED"
-                            GridPane.rowIndex="3" GridPane.columnIndex="1" />
-
-                        <!-- Category -->
-                        <Label text="Category:" GridPane.rowIndex="4" GridPane.columnIndex="0">
-                            <font>
-                                <Font size="16.0" />
-                            </font>
-                        </Label>
-                        <ComboBox fx:id="categorieF" styleClass="combo-box-red"
-                            GridPane.rowIndex="4" GridPane.columnIndex="1" />
-
-                        <!-- Rating -->
-                        <Label text="Rating:" GridPane.rowIndex="5" GridPane.columnIndex="0">
-                            <font>
-                                <Font size="16.0" />
-                            </font>
-                        </Label>
-                        <Rating fx:id="ratingF" GridPane.rowIndex="5" GridPane.columnIndex="1" />
-
-                        <!-- Trailer -->
-                        <Label text="Trailer URL:" GridPane.rowIndex="6" GridPane.columnIndex="0">
-                            <font>
-                                <Font size="16.0" />
-                            </font>
-                        </Label>
-                        <TextField fx:id="bandeaF" styleClass="text-field-red"
-                            GridPane.rowIndex="6" GridPane.columnIndex="1" />
-
-                        <!-- Poster -->
-                        <Label text="Poster:" GridPane.rowIndex="7" GridPane.columnIndex="0">
-                            <font>
-                                <Font size="16.0" />
-                            </font>
-                        </Label>
-                        <VBox spacing="10" GridPane.rowIndex="7" GridPane.columnIndex="1">
-                            <ImageView fx:id="image" fitHeight="150.0" fitWidth="200.0"
-                                pickOnBounds="true" preserveRatio="true" />
-                            <Button onAction="#importImage" styleClass="secondary-button"
-                                text="Upload Poster" />
-                        </VBox>
-                    </GridPane>
-
-                    <!-- Action Buttons -->
-                    <HBox spacing="10" alignment="CENTER">
-                        <Button  styleClass="sale" text="Add Series" />
-                        <Button  styleClass="edit-button" text="Update" />
-                        <Button  styleClass="nav-button" text="Manage Episodes" />
-                        <Button  styleClass="nav-button"
-                            text="Manage Categories" />
-                    </HBox>
-                </VBox>
-
-                <!-- Right Side - Series List -->
-                <VBox HBox.hgrow="ALWAYS" spacing="15">
-                    <TableView fx:id="tableView" VBox.vgrow="ALWAYS" styleClass="table-view">
-                        <columns>
-                            <TableColumn fx:id="nomC" text="Title" />
-                            <TableColumn fx:id="descreptionC" text="Description" />
-                            <TableColumn fx:id="categorieC" text="Category" />
-                            <TableColumn fx:id="ratingC" text="Rating" />
-                            <TableColumn fx:id="bandeaC" text="Trailer" />
-                            <TableColumn fx:id="imageC" text="Poster" />
-                            <TableColumn fx:id="actionC" text="Action" />
-                        </columns>
-                    </TableView>
-
-                    <!-- Statistics -->
-                    <Button onAction="#stat" styleClass="nav-button" text="View Statistics" />
-                </VBox>
-            </HBox>
-        </VBox>
-    </HBox>
-</VBox>
+            <!-- Export Button -->
+            <Button onAction="#exportPdf" styleClass="glass-btn" text="Export to PDF">
+              <graphic>
+                <FontIcon iconLiteral="mdi2f-file-pdf-box:18"/>
+              </graphic>
+            </Button>
+          </VBox>
+        </HBox>
+      </VBox>
+    </center>
+  </BorderPane>
+</StackPane>

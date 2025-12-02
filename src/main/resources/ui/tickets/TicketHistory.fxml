@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import org.kordamp.ikonli.javafx.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21"
+           fx:controller="com.esprit.controllers.films.TicketHistoryController"
+           styleClass="immersive-root"
+           stylesheets="@../styles/filmStyle.css, @../styles/tickets.css">
+
+  <!-- Background -->
+  <AnchorPane styleClass="cinematic-bg">
+    <Circle radius="200" layoutX="150" layoutY="150" styleClass="ambient-orb orb-primary" opacity="0.15"/>
+    <Circle radius="250" layoutX="1100" layoutY="500" styleClass="ambient-orb orb-secondary" opacity="0.1"/>
+  </AnchorPane>
+
+  <BorderPane styleClass="main-shell">
+    <left>
+      <fx:include source="../sidebar.fxml"/>
+    </left>
+
+    <center>
+      <VBox spacing="0" styleClass="film-explorer">
+
+        <!-- Header -->
+        <HBox styleClass="immersive-header" alignment="CENTER_LEFT" spacing="20" prefHeight="80">
+          <padding>
+            <Insets top="15" bottom="15" left="25" right="25"/>
+          </padding>
+
+          <VBox spacing="2">
+            <Label text="MY TICKETS" styleClass="brand-title"/>
+            <Label text="Purchase History &amp; Upcoming Shows" styleClass="brand-subtitle"/>
+          </VBox>
+
+          <Region HBox.hgrow="ALWAYS"/>
+
+          <!-- Filters -->
+          <HBox styleClass="unified-search" alignment="CENTER" prefWidth="300">
+            <FontIcon iconLiteral="mdi2m-magnify:20" styleClass="search-icon"/>
+            <TextField fx:id="searchField" styleClass="search-input" promptText="Search tickets..."
+                       HBox.hgrow="ALWAYS"/>
+          </HBox>
+
+          <ComboBox fx:id="statusFilter" styleClass="glass-combo" promptText="All Status" prefWidth="140"/>
+          <ComboBox fx:id="dateRangeFilter" styleClass="glass-combo" promptText="All Time" prefWidth="140"/>
+
+          <Button onAction="#exportTickets" styleClass="glass-btn" text="Export">
+            <graphic>
+              <FontIcon iconLiteral="mdi2d-download:18"/>
+            </graphic>
+          </Button>
+        </HBox>
+
+        <!-- Stats Cards -->
+        <HBox spacing="20" styleClass="stats-bar">
+          <padding>
+            <Insets top="20" bottom="20" left="30" right="30"/>
+          </padding>
+
+          <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+            <FontIcon iconLiteral="mdi2t-ticket-confirmation:36" styleClass="stat-icon"/>
+            <Label fx:id="totalTicketsLabel" text="0" styleClass="stat-value"/>
+            <Label text="Total Tickets" styleClass="stat-label"/>
+          </VBox>
+
+          <VBox styleClass="stat-card upcoming" HBox.hgrow="ALWAYS">
+            <FontIcon iconLiteral="mdi2c-calendar-clock:36" styleClass="stat-icon"/>
+            <Label fx:id="upcomingTicketsLabel" text="0" styleClass="stat-value"/>
+            <Label text="Upcoming Shows" styleClass="stat-label"/>
+          </VBox>
+
+          <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+            <FontIcon iconLiteral="mdi2c-cash-multiple:36" styleClass="stat-icon"/>
+            <Label fx:id="totalSpentLabel" text="\$0" styleClass="stat-value"/>
+            <Label text="Total Spent" styleClass="stat-label"/>
+          </VBox>
+
+          <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+            <FontIcon iconLiteral="mdi2s-star:36" styleClass="stat-icon gold"/>
+            <Label fx:id="loyaltyPointsLabel" text="0" styleClass="stat-value"/>
+            <Label text="Loyalty Points" styleClass="stat-label"/>
+          </VBox>
+        </HBox>
+
+        <!-- Tabs -->
+        <HBox styleClass="tabs-bar" spacing="0">
+          <padding>
+            <Insets left="30" right="30"/>
+          </padding>
+
+          <ToggleButton fx:id="upcomingTab" styleClass="tab-btn active" text="Upcoming" onAction="#showUpcoming"/>
+          <ToggleButton fx:id="pastTab" styleClass="tab-btn" text="Past" onAction="#showPast"/>
+          <ToggleButton fx:id="cancelledTab" styleClass="tab-btn" text="Cancelled" onAction="#showCancelled"/>
+
+          <Region HBox.hgrow="ALWAYS"/>
+
+          <ComboBox fx:id="sortCombo" styleClass="glass-combo" promptText="Sort by Date" prefWidth="150"/>
+        </HBox>
+
+        <!-- Tickets List -->
+        <ScrollPane styleClass="main-scroll" fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+          <VBox fx:id="ticketsContainer" spacing="15" styleClass="tickets-list">
+            <padding>
+              <Insets top="20" bottom="40" left="30" right="30"/>
+            </padding>
+          </VBox>
+        </ScrollPane>
+      </VBox>
+    </center>
+  </BorderPane>
+
+  <!-- Ticket Detail Overlay -->
+  <VBox fx:id="ticketDetailOverlay" styleClass="detail-overlay" visible="false" managed="false" alignment="CENTER">
+    <StackPane styleClass="ticket-detail-card" maxWidth="600">
+      <VBox spacing="0">
+        <!-- Ticket Header -->
+        <HBox styleClass="ticket-header" alignment="CENTER_LEFT" spacing="15">
+          <padding>
+            <Insets topRightBottomLeft="20"/>
+          </padding>
+          <ImageView fx:id="detailPoster" fitWidth="80" fitHeight="120" preserveRatio="true"/>
+          <VBox spacing="5" HBox.hgrow="ALWAYS">
+            <Label fx:id="detailFilmTitle" styleClass="ticket-film-title"/>
+            <Label fx:id="detailCinema" styleClass="ticket-cinema"/>
+            <HBox spacing="10">
+              <Label fx:id="detailDate" styleClass="ticket-date"/>
+              <Label fx:id="detailTime" styleClass="ticket-time"/>
+            </HBox>
+          </VBox>
+          <Button onAction="#closeTicketDetail" styleClass="close-detail-btn">
+            <graphic>
+              <FontIcon iconLiteral="mdi2c-close:24"/>
+            </graphic>
+          </Button>
+        </HBox>
+
+        <!-- Divider with tear effect -->
+        <HBox styleClass="ticket-tear"/>
+
+        <!-- Ticket Body -->
+        <VBox spacing="15" styleClass="ticket-body">
+          <padding>
+            <Insets topRightBottomLeft="25"/>
+          </padding>
+
+          <HBox spacing="30">
+            <VBox spacing="5">
+              <Label text="HALL" styleClass="ticket-label"/>
+              <Label fx:id="detailHall" styleClass="ticket-value"/>
+            </VBox>
+            <VBox spacing="5">
+              <Label text="SEAT" styleClass="ticket-label"/>
+              <Label fx:id="detailSeat" styleClass="ticket-value"/>
+            </VBox>
+            <VBox spacing="5">
+              <Label text="TYPE" styleClass="ticket-label"/>
+              <Label fx:id="detailType" styleClass="ticket-value"/>
+            </VBox>
+            <VBox spacing="5">
+              <Label text="PRICE" styleClass="ticket-label"/>
+              <Label fx:id="detailPrice" styleClass="ticket-value price"/>
+            </VBox>
+          </HBox>
+
+          <HBox alignment="CENTER">
+            <VBox alignment="CENTER" spacing="10">
+              <ImageView fx:id="qrCodeImage" fitWidth="150" fitHeight="150"/>
+              <Label fx:id="ticketCodeLabel" styleClass="ticket-code"/>
+            </VBox>
+          </HBox>
+
+          <HBox spacing="15" alignment="CENTER" styleClass="ticket-actions">
+            <Button onAction="#downloadTicket" styleClass="action-btn secondary" text="Download PDF">
+              <graphic>
+                <FontIcon iconLiteral="mdi2d-download:18"/>
+              </graphic>
+            </Button>
+            <Button onAction="#shareTicket" styleClass="action-btn secondary" text="Share">
+              <graphic>
+                <FontIcon iconLiteral="mdi2s-share-variant:18"/>
+              </graphic>
+            </Button>
+            <Button fx:id="cancelTicketBtn" onAction="#cancelTicket" styleClass="action-btn danger" text="Cancel">
+              <graphic>
+                <FontIcon iconLiteral="mdi2c-close-circle:18"/>
+              </graphic>
+            </Button>
+          </HBox>
+        </VBox>
+      </VBox>
+    </StackPane>
+  </VBox>
+</StackPane>

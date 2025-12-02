@@ -1,12 +1,12 @@
 package com.esprit.utils;
 
+import io.github.cdimascio.dotenv.Dotenv;
+import lombok.extern.slf4j.Slf4j;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.logging.Logger;
-
-import io.github.cdimascio.dotenv.Dotenv;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Utility class providing helper methods for the RAKCHA application. Contains
@@ -20,10 +20,10 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class DataSource {
-    private static final Logger LOGGER = Logger.getLogger(DataSource.class.getName());
-    private static DataSource instance;
-    private static final Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
 
+    private static final Logger LOGGER = Logger.getLogger(DataSource.class.getName());
+    private static final Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+    private static DataSource instance;
     private final String url;
     private final String user;
     private final String password;
@@ -49,7 +49,7 @@ public class DataSource {
             log.info("Database connection established successfully");
         } catch (final SQLException e) {
             log.error(
-                    "Failed to establish database connection", e);
+                "Failed to establish database connection", e);
             throw new RuntimeException("Database connection failed", e);
         }
 

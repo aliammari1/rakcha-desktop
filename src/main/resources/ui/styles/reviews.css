@@ -1,0 +1,673 @@
+/* Reviews & Ratings CSS Styles */
+
+/* ===== REVIEWS AND RATINGS PAGE ===== */
+
+/* Reviews Header */
+.reviews-header {
+    -fx-background-color: rgba(30, 30, 35, 0.9);
+    -fx-background-radius: 16;
+    -fx-padding: 24;
+}
+
+.reviews-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.reviews-subtitle {
+    -fx-font-size: 14px;
+    -fx-text-fill: rgba(255, 255, 255, 0.6);
+}
+
+/* Rating Overview Card */
+.rating-overview {
+    -fx-background-color: rgba(35, 35, 40, 0.8);
+    -fx-background-radius: 16;
+    -fx-padding: 30;
+}
+
+.overall-rating {
+    -fx-alignment: center;
+}
+
+.rating-score {
+    -fx-font-size: 56px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.rating-max {
+    -fx-font-size: 20px;
+    -fx-text-fill: rgba(255, 255, 255, 0.4);
+}
+
+.rating-stars {
+    -fx-spacing: 4;
+}
+
+.rating-stars .ikonli-font-icon {
+    -fx-icon-color: #f59e0b;
+}
+
+.rating-stars .ikonli-font-icon.empty {
+    -fx-icon-color: rgba(255, 255, 255, 0.2);
+}
+
+.total-reviews {
+    -fx-font-size: 14px;
+    -fx-text-fill: rgba(255, 255, 255, 0.6);
+}
+
+/* Rating Distribution */
+.rating-distribution {
+    -fx-spacing: 12;
+}
+
+.distribution-row {
+    -fx-spacing: 12;
+}
+
+.star-label {
+    -fx-font-size: 13px;
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
+    -fx-min-width: 60;
+}
+
+.star-label .ikonli-font-icon {
+    -fx-icon-color: #f59e0b;
+}
+
+.distribution-bar {
+    -fx-pref-height: 8;
+    -fx-background-radius: 4;
+}
+
+.distribution-bar .track {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 4;
+}
+
+.distribution-bar .bar {
+    -fx-background-color: #f59e0b;
+    -fx-background-radius: 4;
+}
+
+.distribution-count {
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+    -fx-min-width: 40;
+    -fx-alignment: center-right;
+}
+
+/* Review Tags */
+.review-tags {
+    -fx-padding: 16 0 0 0;
+}
+
+.tag-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: rgba(255, 255, 255, 0.7);
+}
+
+.tags-container {
+    -fx-hgap: 8;
+    -fx-vgap: 8;
+}
+
+.review-tag {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 14;
+    -fx-padding: 6 12;
+    -fx-cursor: hand;
+}
+
+.review-tag:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+}
+
+.review-tag.selected {
+    -fx-background-color: rgba(220, 38, 38, 0.3);
+}
+
+.review-tag .label {
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
+}
+
+.review-tag .count {
+    -fx-font-size: 11px;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+}
+
+/* Write Review CTA */
+.write-review-cta {
+    -fx-background-color: rgba(220, 38, 38, 0.1);
+    -fx-background-radius: 12;
+    -fx-padding: 20;
+}
+
+.cta-text {
+    -fx-font-size: 14px;
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
+}
+
+.write-review-btn {
+    -fx-background-color: linear-gradient(135deg, #dc2626, #b91c1c);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 12 24;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+}
+
+.write-review-btn:hover {
+    -fx-background-color: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+/* Reviews List */
+.reviews-container {
+    -fx-background-color: rgba(25, 25, 30, 0.9);
+    -fx-background-radius: 16;
+}
+
+.reviews-list-header {
+    -fx-background-color: rgba(35, 35, 40, 0.8);
+    -fx-background-radius: 16 16 0 0;
+    -fx-padding: 16 24;
+}
+
+.reviews-count {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.sort-dropdown {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 8;
+    -fx-padding: 8 12;
+    -fx-font-size: 13px;
+}
+
+.filter-dropdown {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 8;
+    -fx-padding: 8 12;
+    -fx-font-size: 13px;
+}
+
+/* Review Card */
+.review-card {
+    -fx-background-color: transparent;
+    -fx-padding: 20 24;
+    -fx-border-color: rgba(255, 255, 255, 0.05);
+    -fx-border-width: 0 0 1 0;
+}
+
+.review-card:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.02);
+}
+
+.reviewer-avatar {
+    -fx-min-width: 48;
+    -fx-min-height: 48;
+    -fx-background-radius: 24;
+    -fx-background-color: linear-gradient(135deg, #dc2626, #b91c1c);
+    -fx-alignment: center;
+}
+
+.avatar-initial {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.reviewer-name {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.reviewer-badge {
+    -fx-background-color: rgba(147, 51, 234, 0.2);
+    -fx-background-radius: 8;
+    -fx-padding: 3 8;
+}
+
+.reviewer-badge .label {
+    -fx-font-size: 10px;
+    -fx-text-fill: #a78bfa;
+}
+
+.review-date {
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(255, 255, 255, 0.4);
+}
+
+.review-rating {
+    -fx-spacing: 3;
+}
+
+.review-rating .ikonli-font-icon {
+    -fx-icon-color: #f59e0b;
+    -fx-icon-size: 14;
+}
+
+.review-rating .ikonli-font-icon.empty {
+    -fx-icon-color: rgba(255, 255, 255, 0.2);
+}
+
+.review-title {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.review-text {
+    -fx-font-size: 14px;
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
+    -fx-line-spacing: 3;
+}
+
+.read-more {
+    -fx-font-size: 13px;
+    -fx-text-fill: #dc2626;
+    -fx-cursor: hand;
+}
+
+.read-more:hover {
+    -fx-underline: true;
+}
+
+/* Review Actions */
+.review-actions {
+    -fx-spacing: 16;
+}
+
+.helpful-btn {
+    -fx-background-color: transparent;
+    -fx-padding: 6 12;
+    -fx-cursor: hand;
+}
+
+.helpful-btn:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-background-radius: 8;
+}
+
+.helpful-btn .ikonli-font-icon {
+    -fx-icon-color: rgba(255, 255, 255, 0.5);
+}
+
+.helpful-btn .label {
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+}
+
+.helpful-btn.liked .ikonli-font-icon {
+    -fx-icon-color: #22c55e;
+}
+
+.helpful-btn.liked .label {
+    -fx-text-fill: #22c55e;
+}
+
+.report-btn {
+    -fx-background-color: transparent;
+    -fx-padding: 6 12;
+    -fx-cursor: hand;
+}
+
+.report-btn .ikonli-font-icon {
+    -fx-icon-color: rgba(255, 255, 255, 0.3);
+}
+
+.report-btn:hover .ikonli-font-icon {
+    -fx-icon-color: #ef4444;
+}
+
+/* Verified Purchase Badge */
+.verified-badge {
+    -fx-background-color: rgba(34, 197, 94, 0.15);
+    -fx-background-radius: 8;
+    -fx-padding: 4 10;
+}
+
+.verified-badge .ikonli-font-icon {
+    -fx-icon-color: #22c55e;
+}
+
+.verified-badge .label {
+    -fx-font-size: 11px;
+    -fx-text-fill: #22c55e;
+}
+
+/* ===== WRITE REVIEW MODAL ===== */
+
+.review-modal-backdrop {
+    -fx-background-color: rgba(0, 0, 0, 0.75);
+}
+
+.review-modal {
+    -fx-background-color: rgba(25, 25, 30, 0.98);
+    -fx-background-radius: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 40, 0, 0, 10);
+    -fx-max-width: 600;
+    -fx-min-width: 500;
+}
+
+.modal-header {
+    -fx-background-color: rgba(35, 35, 40, 0.8);
+    -fx-background-radius: 20 20 0 0;
+    -fx-padding: 24;
+}
+
+.modal-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.close-modal-btn {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 20;
+    -fx-padding: 8;
+    -fx-cursor: hand;
+}
+
+.close-modal-btn .ikonli-font-icon {
+    -fx-icon-color: rgba(255, 255, 255, 0.7);
+}
+
+/* Rating Input */
+.rating-input {
+    -fx-spacing: 16;
+}
+
+.rating-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
+}
+
+.star-input {
+    -fx-spacing: 8;
+}
+
+.star-btn {
+    -fx-background-color: transparent;
+    -fx-padding: 4;
+    -fx-cursor: hand;
+}
+
+.star-btn .ikonli-font-icon {
+    -fx-icon-color: rgba(255, 255, 255, 0.2);
+    -fx-icon-size: 32;
+}
+
+.star-btn:hover .ikonli-font-icon,
+.star-btn.selected .ikonli-font-icon {
+    -fx-icon-color: #f59e0b;
+}
+
+.rating-text {
+    -fx-font-size: 14px;
+    -fx-text-fill: rgba(255, 255, 255, 0.6);
+}
+
+/* Review Text Input */
+.review-textarea {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-background-radius: 12;
+    -fx-padding: 16;
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: rgba(255, 255, 255, 0.4);
+    -fx-pref-height: 150;
+}
+
+.review-textarea:focused {
+    -fx-background-color: rgba(255, 255, 255, 0.12);
+    -fx-border-color: rgba(220, 38, 38, 0.4);
+    -fx-border-width: 2;
+    -fx-border-radius: 12;
+}
+
+.character-count {
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(255, 255, 255, 0.4);
+}
+
+/* Review Title Input */
+.review-title-input {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-background-radius: 10;
+    -fx-padding: 12 16;
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: rgba(255, 255, 255, 0.4);
+}
+
+/* Guidelines */
+.guidelines {
+    -fx-background-color: rgba(59, 130, 246, 0.1);
+    -fx-background-radius: 10;
+    -fx-padding: 12;
+}
+
+.guidelines-title {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #93c5fd;
+}
+
+.guidelines-text {
+    -fx-font-size: 11px;
+    -fx-text-fill: rgba(255, 255, 255, 0.6);
+}
+
+/* Submit Button */
+.submit-review-btn {
+    -fx-background-color: linear-gradient(135deg, #dc2626, #b91c1c);
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-padding: 14 32;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+}
+
+.submit-review-btn:hover {
+    -fx-background-color: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.submit-review-btn:disabled {
+    -fx-opacity: 0.5;
+}
+
+/* ===== USER REVIEW HISTORY PAGE ===== */
+
+/* Stats Cards */
+.review-stats-grid {
+    -fx-hgap: 20;
+    -fx-vgap: 20;
+}
+
+.review-stat-card {
+    -fx-background-color: rgba(35, 35, 40, 0.8);
+    -fx-background-radius: 14;
+    -fx-padding: 20;
+}
+
+.stat-icon {
+    -fx-min-width: 44;
+    -fx-min-height: 44;
+    -fx-background-radius: 10;
+    -fx-alignment: center;
+}
+
+.stat-icon.reviews {
+    -fx-background-color: rgba(220, 38, 38, 0.15);
+}
+
+.stat-icon.reviews .ikonli-font-icon {
+    -fx-icon-color: #dc2626;
+}
+
+.stat-icon.helpful {
+    -fx-background-color: rgba(34, 197, 94, 0.15);
+}
+
+.stat-icon.helpful .ikonli-font-icon {
+    -fx-icon-color: #22c55e;
+}
+
+.stat-icon.avg-rating {
+    -fx-background-color: rgba(245, 158, 11, 0.15);
+}
+
+.stat-icon.avg-rating .ikonli-font-icon {
+    -fx-icon-color: #f59e0b;
+}
+
+.stat-value {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.stat-label {
+    -fx-font-size: 13px;
+    -fx-text-fill: rgba(255, 255, 255, 0.6);
+}
+
+/* User Review Card */
+.user-review-card {
+    -fx-background-color: rgba(30, 30, 35, 0.9);
+    -fx-background-radius: 14;
+    -fx-padding: 20;
+}
+
+.user-review-card:hover {
+    -fx-background-color: rgba(35, 35, 40, 0.95);
+}
+
+.review-film-poster {
+    -fx-min-width: 80;
+    -fx-min-height: 120;
+    -fx-background-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 8, 0, 0, 2);
+}
+
+.review-film-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.review-film-year {
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+}
+
+/* Edit/Delete Actions */
+.user-review-actions {
+    -fx-spacing: 8;
+}
+
+.edit-review-btn {
+    -fx-background-color: rgba(59, 130, 246, 0.15);
+    -fx-background-radius: 8;
+    -fx-padding: 8;
+    -fx-cursor: hand;
+}
+
+.edit-review-btn .ikonli-font-icon {
+    -fx-icon-color: #3b82f6;
+}
+
+.edit-review-btn:hover {
+    -fx-background-color: rgba(59, 130, 246, 0.25);
+}
+
+.delete-review-btn {
+    -fx-background-color: rgba(239, 68, 68, 0.15);
+    -fx-background-radius: 8;
+    -fx-padding: 8;
+    -fx-cursor: hand;
+}
+
+.delete-review-btn .ikonli-font-icon {
+    -fx-icon-color: #ef4444;
+}
+
+.delete-review-btn:hover {
+    -fx-background-color: rgba(239, 68, 68, 0.25);
+}
+
+/* Engagement Stats */
+.engagement-stats {
+    -fx-background-color: rgba(40, 40, 45, 0.6);
+    -fx-background-radius: 10;
+    -fx-padding: 12;
+}
+
+.engagement-item {
+    -fx-spacing: 6;
+}
+
+.engagement-item .ikonli-font-icon {
+    -fx-icon-color: rgba(255, 255, 255, 0.5);
+}
+
+.engagement-item .label {
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(255, 255, 255, 0.6);
+}
+
+/* Empty State */
+.empty-reviews {
+    -fx-spacing: 20;
+    -fx-alignment: center;
+    -fx-padding: 60;
+}
+
+.empty-icon {
+    -fx-min-width: 80;
+    -fx-min-height: 80;
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-background-radius: 40;
+    -fx-alignment: center;
+}
+
+.empty-icon .ikonli-font-icon {
+    -fx-icon-color: rgba(255, 255, 255, 0.3);
+}
+
+.empty-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.empty-subtitle {
+    -fx-font-size: 14px;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+}
+
+.start-reviewing-btn {
+    -fx-background-color: linear-gradient(135deg, #dc2626, #b91c1c);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 14 28;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+}
+
+.start-reviewing-btn:hover {
+    -fx-background-color: linear-gradient(135deg, #ef4444, #dc2626);
+}

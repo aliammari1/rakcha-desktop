@@ -1,6 +1,10 @@
 package com.esprit.controllers.cinemas;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import com.esprit.utils.TestFXBase;
+import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
@@ -8,15 +12,11 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.Timeout;
-import java.util.concurrent.TimeUnit;
 import org.testfx.framework.junit5.Start;
 
-import com.esprit.utils.TestFXBase;
+import java.util.concurrent.TimeUnit;
 
-import javafx.scene.control.Button;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Comprehensive test suite for CinemaStatisticsController.
@@ -33,7 +33,7 @@ class CinemaStatisticsControllerTest extends TestFXBase {
             getClass().getResource("/ui/cinemas/statistiques.fxml")
         );
         javafx.scene.Parent root = loader.load();
-        
+
         stage.setScene(new javafx.scene.Scene(root, 1280, 700));
         stage.show();
         stage.toFront();
@@ -237,7 +237,7 @@ class CinemaStatisticsControllerTest extends TestFXBase {
             Button showButton = lookup("Show Statistics").queryButton();
             clickOn(showButton);
             waitForFxEvents();
-            
+
             // Click again to regenerate
             clickOn(showButton);
             waitForFxEvents();
@@ -309,7 +309,7 @@ class CinemaStatisticsControllerTest extends TestFXBase {
             waitForFxEvents();
 
             Button showButton = lookup("Show Statistics").queryButton();
-            
+
             // Should not throw exception
             clickOn(showButton);
             waitForFxEvents();
@@ -345,10 +345,10 @@ class CinemaStatisticsControllerTest extends TestFXBase {
 
             Button showButton = lookup("Show Statistics").queryButton();
             assertThat(showButton).isNotNull();
-            
+
             clickOn(showButton);
             waitForFxEvents();
-            
+
             // Verify action was executed
             AnchorPane statsAnchor = lookup("#statisticsAnchor").query();
             assertThat(statsAnchor).isNotNull();
@@ -363,12 +363,12 @@ class CinemaStatisticsControllerTest extends TestFXBase {
 
             Button showButton = lookup("Show Statistics").queryButton();
             assertThat(showButton).isNotNull();
-            
+
             clickOn(showButton);
             waitForFxEvents();
             clickOn(showButton);
             waitForFxEvents();
-            
+
             assertThat(showButton).isNotNull();
         }
 
@@ -459,7 +459,7 @@ class CinemaStatisticsControllerTest extends TestFXBase {
             Button showButton = lookup("Show Statistics").queryButton();
             clickOn(showButton);
             waitForFxEvents();
-            
+
             // Click again to regenerate
             clickOn(showButton);
             waitForFxEvents();
@@ -478,10 +478,10 @@ class CinemaStatisticsControllerTest extends TestFXBase {
             Button showButton = lookup("Show Statistics").queryButton();
             clickOn(showButton);
             waitForFxEvents();
-            
+
             clickOn(showButton);
             waitForFxEvents();
-            
+
             // Verify anchor is cleared and repopulated
             AnchorPane statsAnchor = lookup("#statisticsAnchor").query();
             assertThat(statsAnchor).isNotNull();

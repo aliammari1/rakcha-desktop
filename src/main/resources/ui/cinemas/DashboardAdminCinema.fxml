@@ -1,97 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
+<?import org.kordamp.ikonli.javafx.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21"
+           fx:controller="com.esprit.controllers.cinemas.DashboardAdminController"
+           styleClass="immersive-root"
+           stylesheets="@../styles/filmStyle.css, @../styles/film-animations.css, @../styles/login-animations.css, @../styles/dashboard.css">
 
-<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-    fx:controller="com.esprit.controllers.cinemas.DashboardAdminController"
-    stylesheets="@../styles/dashboard.css">
-    <children>
-        <HBox AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"
-            AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-            <!-- Sidebar -->
-            <children>
-                <fx:include source="/ui/sidebar.fxml" />
-                <!-- Main Content -->
-                <AnchorPane fx:id="cinemasList" HBox.hgrow="ALWAYS">
-                    <children>
-                        <VBox spacing="20" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                            AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0"
-                            styleClass="bg-white">
-                            <padding>
-                                <Insets top="25" right="25" bottom="25" left="25" />
-                            </padding>
-                            <!-- Header Section using GridPane for responsiveness -->
-                            <GridPane hgap="10" vgap="10">
-                                <columnConstraints>
-                                    <ColumnConstraints hgrow="ALWAYS" />
-                                    <ColumnConstraints minWidth="100" />
-                                    <ColumnConstraints minWidth="200" />
-                                    <ColumnConstraints minWidth="50" />
-                                </columnConstraints>
-                                <children>
-                                    <Label text="Cinema List:" textFill="#030303"
-                                        GridPane.columnIndex="0">
-                                        <font>
-                                            <Font name="Arial Rounded MT Bold" size="48.0" />
-                                        </font>
-                                    </Label>
-                                    <Button mnemonicParsing="false" onAction="#filtrer"
-                                        styleClass="sale"
-                                        text="Filter" GridPane.columnIndex="1" />
-                                    <TextField fx:id="tfSearch" promptText="Search here ...."
-                                        prefHeight="42.0"
-                                        GridPane.columnIndex="2" />
-                                    <Button mnemonicParsing="false"
-                                        style="-fx-background-color: AE2D3C;"
-                                        GridPane.columnIndex="3">
-                                        <graphic>
-                                            <FontAwesomeIconView fill="#f5f5f5" glyphName="SEARCH"
-                                                size="19" />
-                                        </graphic>
-                                    </Button>
-                                </children>
-                            </GridPane>
-                            <!-- Content Area -->
-                            <TableView fx:id="listCinema" VBox.vgrow="ALWAYS">
-                                <columns>
-                                    <TableColumn fx:id="colCinema" text="Name" />
-                                    <TableColumn fx:id="colAdresse" text="Address" />
-                                    <TableColumn fx:id="colResponsable" text="Responsible" />
-                                    <TableColumn fx:id="colLogo" text="Logo" />
-                                    <TableColumn fx:id="colStatut" text="Status" />
-                                    <TableColumn fx:id="colAction" text="Actions" />
-                                </columns>
-                            </TableView>
-                        </VBox>
-                        <!-- Filter Dialog placed responsively -->
-                        <AnchorPane fx:id="filterAnchor" styleClass="bg-white" visible="false"
-                            AnchorPane.topAnchor="50.0" AnchorPane.leftAnchor="50.0">
-                            <children>
-                                <VBox spacing="15">
-                                    <padding>
-                                        <Insets top="20" right="20" bottom="20" left="20" />
-                                    </padding>
-                                    <Button mnemonicParsing="false" onAction="#filtrercinema"
-                                        styleClass="sale" text="Apply Filter" />
-                                </VBox>
-                            </children>
-                        </AnchorPane>
-                    </children>
-                </AnchorPane>
-            </children>
-        </HBox>
-    </children>
-</AnchorPane>
+  <!-- Cinematic Background with Gradient Mesh -->
+  <AnchorPane fx:id="cinematicBackground" styleClass="cinematic-bg">
+
+    <!-- Ambient Light Orbs -->
+    <Circle radius="200" layoutX="150" layoutY="150" styleClass="ambient-orb orb-primary" opacity="0.15"/>
+    <Circle radius="300" layoutX="1200" layoutY="600" styleClass="ambient-orb orb-secondary" opacity="0.1"/>
+    <Circle radius="150" layoutX="800" layoutY="100" styleClass="ambient-orb orb-accent" opacity="0.12"/>
+
+    <!-- Floating Cinema Elements -->
+    <FontIcon iconLiteral="mdi2m-movie-open:40" layoutX="100" layoutY="500"
+              styleClass="floating-icon" opacity="0.08"/>
+    <FontIcon iconLiteral="mdi2t-ticket:35" layoutX="1300" layoutY="300"
+              styleClass="floating-icon" opacity="0.06"/>
+    <FontIcon iconLiteral="mdi2s-star:25" layoutX="400" layoutY="700" styleClass="floating-star" opacity="0.1"/>
+    <FontIcon iconLiteral="mdi2s-star-outline:20" layoutX="950" layoutY="150"
+              styleClass="floating-star" opacity="0.08"/>
+  </AnchorPane>
+
+  <!-- Main Application Shell -->
+  <BorderPane styleClass="main-shell">
+    <left>
+      <fx:include source="/ui/sidebar.fxml"/>
+    </left>
+
+    <center>
+      <!-- Main Content with ScrollPane -->
+      <ScrollPane fitToWidth="true" fitToHeight="true"
+                  hbarPolicy="AS_NEEDED" vbarPolicy="AS_NEEDED"
+                  style="-fx-background-color: transparent; -fx-background: transparent;">
+        <VBox spacing="20" style="-fx-background-color: transparent;">
+          <padding>
+            <Insets top="25" right="25" bottom="25" left="25"/>
+          </padding>
+
+          <!-- Header -->
+          <HBox spacing="15" alignment="CENTER_LEFT" styleClass="immersive-header">
+            <Label text="Cinema Management" style="-fx-text-fill: white;" styleClass="brand-title">
+              <font>
+                <Font name="Arial Rounded MT Bold" size="32.0"/>
+              </font>
+            </Label>
+            <Region HBox.hgrow="ALWAYS"/>
+            <TextField fx:id="tfSearch" prefHeight="42.0" prefWidth="248.0"
+                       promptText="Search cinemas..." styleClass="search-input"/>
+            <Button mnemonicParsing="false" styleClass="glass-btn">
+              <graphic>
+                <FontIcon iconLiteral="mdi2m-magnify:20"/>
+              </graphic>
+            </Button>
+            <FontIcon iconLiteral="mdi2h-home:20" styleClass="icon-button"
+                      onMouseClicked="#filtrer" style="-fx-cursor: hand;"/>
+          </HBox>
+
+          <!-- Content Area -->
+          <VBox spacing="15" VBox.vgrow="ALWAYS">
+            <!-- Cinemas List Table -->
+            <TableView fx:id="listCinema" VBox.vgrow="ALWAYS" styleClass="table-view-dark">
+              <columns>
+                <TableColumn fx:id="colCinema" text="Name"/>
+                <TableColumn fx:id="colAdresse" text="Address"/>
+                <TableColumn fx:id="colResponsable" text="Responsible"/>
+                <TableColumn fx:id="colLogo" text="Logo"/>
+                <TableColumn fx:id="colStatut" text="Status"/>
+                <TableColumn fx:id="colAction" text="Actions"/>
+              </columns>
+            </TableView>
+          </VBox>
+        </VBox>
+      </ScrollPane>
+    </center>
+  </BorderPane>
+
+  <!-- Filter Dialog -->
+  <AnchorPane fx:id="filterAnchor" visible="false" styleClass="filter-dialog">
+    <VBox spacing="10">
+      <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+      </padding>
+      <Button onAction="#filtrercinema" styleClass="sale" text="Apply Filter"/>
+    </VBox>
+  </AnchorPane>
+</StackPane>

@@ -4,13 +4,14 @@ import java.util.List;
 
 /**
  * Utility class to represent paginated results.
- * 
+ *
  * @param <T> the type of entities in the page
  * @author RAKCHA Team
  * @version 1.0.0
  * @since 1.0.0
  */
 public class Page<T> {
+
     private final List<T> content;
     private final int page;
     private final int size;

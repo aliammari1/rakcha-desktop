@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import org.kordamp.ikonli.javafx.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21"
+           fx:controller="com.esprit.controllers.cinemas.MovieSessionBrowserController"
+           styleClass="immersive-root"
+           stylesheets="@../styles/filmStyle.css, @../styles/booking.css">
+
+  <!-- Cinematic Background -->
+  <AnchorPane fx:id="cinematicBackground" styleClass="cinematic-bg">
+    <Circle fx:id="ambientOrb1" radius="200" layoutX="150" layoutY="150" styleClass="ambient-orb orb-primary"
+            opacity="0.15"/>
+    <Circle fx:id="ambientOrb2" radius="300" layoutX="1200" layoutY="600" styleClass="ambient-orb orb-secondary"
+            opacity="0.1"/>
+  </AnchorPane>
+
+  <!-- Main Content -->
+  <BorderPane fx:id="mainShell" styleClass="main-shell">
+    <left>
+      <fx:include source="../sidebar.fxml"/>
+    </left>
+
+    <center>
+      <VBox fx:id="sessionBrowser" styleClass="film-explorer" spacing="0">
+
+        <!-- Header -->
+        <HBox fx:id="immersiveHeader" styleClass="immersive-header" alignment="CENTER_LEFT" spacing="20"
+              prefHeight="80">
+          <padding>
+            <Insets top="15" bottom="15" left="25" right="25"/>
+          </padding>
+
+          <VBox spacing="2" alignment="CENTER_LEFT">
+            <Label text="MOVIE SESSIONS" styleClass="brand-title"/>
+            <Label text="Browse &amp; Book Showtimes" styleClass="brand-subtitle"/>
+          </VBox>
+
+          <Region HBox.hgrow="ALWAYS"/>
+
+          <!-- Search & Filters -->
+          <HBox styleClass="unified-search" alignment="CENTER" spacing="0" prefWidth="350">
+            <FontIcon iconLiteral="mdi2m-magnify:20" styleClass="search-icon"/>
+            <TextField fx:id="searchField" styleClass="search-input" promptText="Search films, cinemas..."
+                       HBox.hgrow="ALWAYS"/>
+          </HBox>
+
+          <DatePicker fx:id="dateFilter" styleClass="glass-combo" promptText="Select Date"/>
+
+          <ComboBox fx:id="cinemaFilter" styleClass="glass-combo" promptText="All Cinemas" prefWidth="150"/>
+          <ComboBox fx:id="genreFilter" styleClass="glass-combo" promptText="All Genres" prefWidth="130"/>
+
+          <Button fx:id="refreshBtn" onAction="#refreshSessions" styleClass="glass-btn">
+            <graphic>
+              <FontIcon iconLiteral="mdi2r-refresh:20"/>
+            </graphic>
+          </Button>
+        </HBox>
+
+        <!-- View Toggle & Stats -->
+        <HBox styleClass="view-toggle-bar" alignment="CENTER_LEFT" spacing="15">
+          <padding>
+            <Insets top="15" bottom="15" left="30" right="30"/>
+          </padding>
+
+          <ToggleButton fx:id="calendarViewBtn" styleClass="view-toggle-btn" text="Calendar">
+            <graphic>
+              <FontIcon iconLiteral="mdi2c-calendar-month:18"/>
+            </graphic>
+          </ToggleButton>
+          <ToggleButton fx:id="listViewBtn" styleClass="view-toggle-btn" text="List">
+            <graphic>
+              <FontIcon iconLiteral="mdi2f-format-list-bulleted:18"/>
+            </graphic>
+          </ToggleButton>
+          <ToggleButton fx:id="gridViewBtn" styleClass="view-toggle-btn active" text="Grid">
+            <graphic>
+              <FontIcon iconLiteral="mdi2v-view-grid:18"/>
+            </graphic>
+          </ToggleButton>
+
+          <Region HBox.hgrow="ALWAYS"/>
+
+          <Label fx:id="sessionCountLabel" text="0 sessions available" styleClass="session-count"/>
+
+          <ComboBox fx:id="sortCombo" styleClass="glass-combo" promptText="Sort by" prefWidth="140"/>
+        </HBox>
+
+        <!-- Main Content Area -->
+        <ScrollPane fx:id="mainScrollPane" styleClass="main-scroll" fitToWidth="true" hbarPolicy="NEVER"
+                    VBox.vgrow="ALWAYS">
+          <VBox fx:id="contentContainer" styleClass="scroll-content" spacing="25">
+            <padding>
+              <Insets top="20" bottom="40" left="30" right="30"/>
+            </padding>
+
+            <!-- Today's Sessions -->
+            <VBox styleClass="session-section" spacing="15">
+              <HBox alignment="CENTER_LEFT" spacing="12">
+                <FontIcon iconLiteral="mdi2c-clock-outline:24" styleClass="section-icon"/>
+                <Label text="Today's Sessions" styleClass="section-title"/>
+                <Label fx:id="todayCountLabel" text="(0)" styleClass="section-count"/>
+              </HBox>
+              <FlowPane fx:id="todaySessionsPane" styleClass="sessions-grid" hgap="20" vgap="20"/>
+            </VBox>
+
+            <!-- Upcoming Sessions -->
+            <VBox styleClass="session-section" spacing="15">
+              <HBox alignment="CENTER_LEFT" spacing="12">
+                <FontIcon iconLiteral="mdi2c-calendar-clock:24" styleClass="section-icon"/>
+                <Label text="Upcoming Sessions" styleClass="section-title"/>
+              </HBox>
+              <FlowPane fx:id="upcomingSessionsPane" styleClass="sessions-grid" hgap="20" vgap="20"/>
+            </VBox>
+
+            <!-- Calendar View (Hidden by default) -->
+            <VBox fx:id="calendarViewContainer" styleClass="calendar-container" visible="false" managed="false">
+              <GridPane fx:id="calendarGrid" styleClass="calendar-grid"/>
+            </VBox>
+          </VBox>
+        </ScrollPane>
+      </VBox>
+    </center>
+  </BorderPane>
+
+  <!-- Session Details Overlay -->
+  <VBox fx:id="sessionDetailsOverlay" styleClass="detail-overlay" visible="false" managed="false" alignment="CENTER">
+    <StackPane styleClass="detail-card" maxWidth="800" maxHeight="600">
+      <VBox spacing="20">
+        <padding>
+          <Insets topRightBottomLeft="30"/>
+        </padding>
+
+        <HBox alignment="CENTER_LEFT" spacing="15">
+          <Label fx:id="detailFilmTitle" styleClass="detail-title" text="Film Title"/>
+          <Region HBox.hgrow="ALWAYS"/>
+          <Button fx:id="closeDetailBtn" onAction="#closeSessionDetails" styleClass="close-detail-btn">
+            <graphic>
+              <FontIcon iconLiteral="mdi2c-close:24"/>
+            </graphic>
+          </Button>
+        </HBox>
+
+        <HBox spacing="25">
+          <ImageView fx:id="detailPoster" fitWidth="200" fitHeight="300" preserveRatio="true"
+                     styleClass="detail-poster"/>
+
+          <VBox spacing="15" HBox.hgrow="ALWAYS">
+            <HBox spacing="15" styleClass="detail-meta">
+              <VBox spacing="5">
+                <Label text="Cinema" styleClass="meta-label"/>
+                <Label fx:id="detailCinema" styleClass="meta-value"/>
+              </VBox>
+              <VBox spacing="5">
+                <Label text="Hall" styleClass="meta-label"/>
+                <Label fx:id="detailHall" styleClass="meta-value"/>
+              </VBox>
+              <VBox spacing="5">
+                <Label text="Date" styleClass="meta-label"/>
+                <Label fx:id="detailDate" styleClass="meta-value"/>
+              </VBox>
+              <VBox spacing="5">
+                <Label text="Time" styleClass="meta-label"/>
+                <Label fx:id="detailTime" styleClass="meta-value"/>
+              </VBox>
+            </HBox>
+
+            <HBox spacing="15" alignment="CENTER_LEFT">
+              <VBox spacing="5">
+                <Label text="Price" styleClass="meta-label"/>
+                <Label fx:id="detailPrice" styleClass="price-large"/>
+              </VBox>
+              <VBox spacing="5">
+                <Label text="Available Seats" styleClass="meta-label"/>
+                <Label fx:id="detailSeats" styleClass="seats-available"/>
+              </VBox>
+            </HBox>
+
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <HBox spacing="15" styleClass="detail-actions">
+              <Button fx:id="bookNowBtn" onAction="#bookSession" styleClass="action-btn primary" text="Book Now">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2t-ticket:20"/>
+                </graphic>
+              </Button>
+              <Button fx:id="selectSeatsBtn" onAction="#selectSeats" styleClass="action-btn secondary"
+                      text="Select Seats">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2s-seat:20"/>
+                </graphic>
+              </Button>
+              <Button fx:id="addToWatchlistBtn" onAction="#addToWatchlist" styleClass="action-btn icon">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2b-bookmark-plus:20"/>
+                </graphic>
+              </Button>
+            </HBox>
+          </VBox>
+        </HBox>
+      </VBox>
+    </StackPane>
+  </VBox>
+</StackPane>

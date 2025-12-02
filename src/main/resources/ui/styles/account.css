@@ -1,0 +1,739 @@
+/* Account Screens CSS Styles */
+
+/* ===== ACCOUNT SETTINGS STYLES ===== */
+
+/* Settings Container */
+.settings-container {
+    -fx-max-width: 900;
+}
+
+/* Profile Header Card */
+.profile-header-card {
+    -fx-background-color: rgba(30, 30, 35, 0.9);
+    -fx-background-radius: 20;
+    -fx-padding: 30;
+}
+
+.profile-avatar {
+    -fx-min-width: 100;
+    -fx-min-height: 100;
+    -fx-background-radius: 50;
+    -fx-background-color: linear-gradient(135deg, #dc2626, #b91c1c);
+    -fx-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(220, 38, 38, 0.3), 15, 0, 0, 3);
+}
+
+.avatar-initial {
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.change-avatar-btn {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-background-radius: 20;
+    -fx-padding: 8 16;
+    -fx-font-size: 12px;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+}
+
+.change-avatar-btn:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+}
+
+.profile-name {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.profile-email {
+    -fx-font-size: 14px;
+    -fx-text-fill: rgba(255, 255, 255, 0.6);
+}
+
+.profile-badge {
+    -fx-background-color: rgba(147, 51, 234, 0.2);
+    -fx-background-radius: 12;
+    -fx-padding: 6 14;
+}
+
+.profile-badge .label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #a78bfa;
+}
+
+.member-since {
+    -fx-font-size: 13px;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+}
+
+/* Settings Navigation */
+.settings-nav {
+    -fx-background-color: rgba(30, 30, 35, 0.9);
+    -fx-background-radius: 16;
+    -fx-padding: 16;
+}
+
+.nav-item {
+    -fx-background-color: transparent;
+    -fx-background-radius: 10;
+    -fx-padding: 14 20;
+    -fx-cursor: hand;
+}
+
+.nav-item:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+}
+
+.nav-item.active {
+    -fx-background-color: rgba(220, 38, 38, 0.15);
+}
+
+.nav-item .ikonli-font-icon {
+    -fx-icon-color: rgba(255, 255, 255, 0.6);
+}
+
+.nav-item.active .ikonli-font-icon {
+    -fx-icon-color: #dc2626;
+}
+
+.nav-item .label {
+    -fx-font-size: 14px;
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
+}
+
+.nav-item.active .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+/* Settings Panel */
+.settings-panel {
+    -fx-background-color: rgba(30, 30, 35, 0.9);
+    -fx-background-radius: 16;
+    -fx-padding: 24;
+}
+
+.panel-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.panel-description {
+    -fx-font-size: 14px;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+}
+
+/* Form Sections */
+.form-section {
+    -fx-background-color: rgba(40, 40, 45, 0.6);
+    -fx-background-radius: 14;
+    -fx-padding: 20;
+}
+
+.section-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.form-row {
+    -fx-spacing: 16;
+}
+
+.form-field {
+    -fx-spacing: 8;
+}
+
+.field-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: rgba(255, 255, 255, 0.7);
+}
+
+.field-input {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-background-radius: 10;
+    -fx-padding: 12 16;
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: rgba(255, 255, 255, 0.4);
+}
+
+.field-input:focused {
+    -fx-background-color: rgba(255, 255, 255, 0.12);
+    -fx-border-color: rgba(220, 38, 38, 0.4);
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+}
+
+.field-input:disabled {
+    -fx-opacity: 0.6;
+}
+
+/* Toggle Settings */
+.toggle-setting {
+    -fx-background-color: rgba(40, 40, 45, 0.6);
+    -fx-background-radius: 12;
+    -fx-padding: 16;
+}
+
+.toggle-setting:hover {
+    -fx-background-color: rgba(50, 50, 55, 0.7);
+}
+
+.toggle-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.toggle-description {
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+}
+
+/* Custom Toggle Switch */
+.toggle-switch {
+    -fx-cursor: hand;
+}
+
+/* Connected Accounts */
+.connected-account {
+    -fx-background-color: rgba(40, 40, 45, 0.6);
+    -fx-background-radius: 12;
+    -fx-padding: 16;
+}
+
+.account-icon {
+    -fx-min-width: 40;
+    -fx-min-height: 40;
+    -fx-background-radius: 10;
+    -fx-alignment: center;
+}
+
+.account-icon.google {
+    -fx-background-color: rgba(234, 67, 53, 0.15);
+}
+
+.account-icon.google .ikonli-font-icon {
+    -fx-icon-color: #ea4335;
+}
+
+.account-icon.facebook {
+    -fx-background-color: rgba(24, 119, 242, 0.15);
+}
+
+.account-icon.facebook .ikonli-font-icon {
+    -fx-icon-color: #1877f2;
+}
+
+.account-icon.apple {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+}
+
+.account-icon.apple .ikonli-font-icon {
+    -fx-icon-color: white;
+}
+
+.account-name {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.account-status {
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+}
+
+.account-status.connected {
+    -fx-text-fill: #22c55e;
+}
+
+.connect-btn {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-padding: 8 16;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+.connect-btn:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+}
+
+.disconnect-btn {
+    -fx-background-color: rgba(239, 68, 68, 0.15);
+    -fx-text-fill: #ef4444;
+    -fx-font-size: 12px;
+    -fx-padding: 8 16;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+.disconnect-btn:hover {
+    -fx-background-color: rgba(239, 68, 68, 0.25);
+}
+
+/* Action Buttons */
+.save-btn {
+    -fx-background-color: linear-gradient(135deg, #dc2626, #b91c1c);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 12 32;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+}
+
+.save-btn:hover {
+    -fx-background-color: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.cancel-btn {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 12 32;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+}
+
+.cancel-btn:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Danger Zone */
+.danger-zone {
+    -fx-background-color: rgba(239, 68, 68, 0.1);
+    -fx-border-color: rgba(239, 68, 68, 0.3);
+    -fx-border-radius: 14;
+    -fx-border-width: 1;
+    -fx-background-radius: 14;
+    -fx-padding: 20;
+}
+
+.danger-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ef4444;
+}
+
+.danger-description {
+    -fx-font-size: 13px;
+    -fx-text-fill: rgba(255, 255, 255, 0.6);
+}
+
+.delete-account-btn {
+    -fx-background-color: rgba(239, 68, 68, 0.2);
+    -fx-text-fill: #ef4444;
+    -fx-font-size: 13px;
+    -fx-padding: 10 20;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+.delete-account-btn:hover {
+    -fx-background-color: #ef4444;
+    -fx-text-fill: white;
+}
+
+/* ===== WATCHLIST STYLES ===== */
+
+/* Watchlist Header */
+.watchlist-header {
+    -fx-background-color: rgba(30, 30, 35, 0.9);
+    -fx-background-radius: 16;
+    -fx-padding: 24;
+}
+
+.watchlist-title {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.watchlist-count {
+    -fx-font-size: 14px;
+    -fx-text-fill: rgba(255, 255, 255, 0.6);
+}
+
+/* Watchlist Grid */
+.watchlist-scroll {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+}
+
+.watchlist-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+.watchlist-grid {
+    -fx-hgap: 20;
+    -fx-vgap: 20;
+    -fx-padding: 20;
+}
+
+/* Watchlist Card */
+.watchlist-card {
+    -fx-background-color: rgba(30, 30, 35, 0.9);
+    -fx-background-radius: 14;
+    -fx-cursor: hand;
+    -fx-min-width: 180;
+    -fx-max-width: 200;
+}
+
+.watchlist-card:hover {
+    -fx-background-color: rgba(40, 40, 45, 0.95);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 15, 0, 0, 5);
+}
+
+.watchlist-poster {
+    -fx-min-height: 270;
+    -fx-background-radius: 14 14 0 0;
+}
+
+.watchlist-overlay {
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+    -fx-background-radius: 14 14 0 0;
+    opacity: 0;
+}
+
+.watchlist-card:hover .watchlist-overlay {
+    opacity: 1;
+}
+
+.play-btn {
+    -fx-background-color: rgba(220, 38, 38, 0.9);
+    -fx-background-radius: 30;
+    -fx-min-width: 60;
+    -fx-min-height: 60;
+    -fx-cursor: hand;
+}
+
+.play-btn .ikonli-font-icon {
+    -fx-icon-color: white;
+}
+
+.remove-btn {
+    -fx-background-color: rgba(0, 0, 0, 0.6);
+    -fx-background-radius: 16;
+    -fx-padding: 6;
+    -fx-cursor: hand;
+}
+
+.remove-btn .ikonli-font-icon {
+    -fx-icon-color: white;
+}
+
+.remove-btn:hover {
+    -fx-background-color: rgba(239, 68, 68, 0.8);
+}
+
+/* Watchlist Content */
+.watchlist-content {
+    -fx-padding: 14;
+}
+
+.watchlist-movie-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.watchlist-year {
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+}
+
+.watchlist-rating {
+    -fx-spacing: 4;
+}
+
+.watchlist-rating .ikonli-font-icon {
+    -fx-icon-color: #f59e0b;
+}
+
+.watchlist-rating .label {
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(255, 255, 255, 0.7);
+}
+
+.added-date {
+    -fx-font-size: 11px;
+    -fx-text-fill: rgba(255, 255, 255, 0.4);
+}
+
+/* ===== USER NOTIFICATIONS STYLES ===== */
+
+/* Notifications Header */
+.notifications-header {
+    -fx-background-color: rgba(30, 30, 35, 0.9);
+    -fx-background-radius: 16;
+    -fx-padding: 24;
+}
+
+.notifications-title {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.unread-count {
+    -fx-background-color: #dc2626;
+    -fx-background-radius: 12;
+    -fx-padding: 4 12;
+}
+
+.unread-count .label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.mark-all-read-btn {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-padding: 10 20;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+}
+
+.mark-all-read-btn:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Notification Filters */
+.notification-filters {
+    -fx-background-color: rgba(40, 40, 45, 0.6);
+    -fx-background-radius: 10;
+    -fx-padding: 6;
+}
+
+.notification-filter {
+    -fx-background-color: transparent;
+    -fx-text-fill: rgba(255, 255, 255, 0.6);
+    -fx-font-size: 13px;
+    -fx-padding: 10 20;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+.notification-filter:hover {
+    -fx-text-fill: white;
+}
+
+.notification-filter.active {
+    -fx-background-color: rgba(220, 38, 38, 0.3);
+    -fx-text-fill: white;
+}
+
+/* Notifications List */
+.notifications-scroll {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+}
+
+.notifications-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+.notifications-list {
+    -fx-spacing: 12;
+    -fx-padding: 20;
+}
+
+/* Notification Card */
+.notification-card {
+    -fx-background-color: rgba(30, 30, 35, 0.9);
+    -fx-background-radius: 14;
+    -fx-padding: 16;
+    -fx-cursor: hand;
+}
+
+.notification-card:hover {
+    -fx-background-color: rgba(40, 40, 45, 0.95);
+}
+
+.notification-card.unread {
+    -fx-border-color: rgba(220, 38, 38, 0.3);
+    -fx-border-radius: 14;
+    -fx-border-width: 0 0 0 4;
+}
+
+.notification-icon {
+    -fx-min-width: 48;
+    -fx-min-height: 48;
+    -fx-background-radius: 12;
+    -fx-alignment: center;
+}
+
+.notification-icon.booking {
+    -fx-background-color: rgba(59, 130, 246, 0.15);
+}
+
+.notification-icon.booking .ikonli-font-icon {
+    -fx-icon-color: #3b82f6;
+}
+
+.notification-icon.promo {
+    -fx-background-color: rgba(34, 197, 94, 0.15);
+}
+
+.notification-icon.promo .ikonli-font-icon {
+    -fx-icon-color: #22c55e;
+}
+
+.notification-icon.reminder {
+    -fx-background-color: rgba(245, 158, 11, 0.15);
+}
+
+.notification-icon.reminder .ikonli-font-icon {
+    -fx-icon-color: #f59e0b;
+}
+
+.notification-icon.social {
+    -fx-background-color: rgba(147, 51, 234, 0.15);
+}
+
+.notification-icon.social .ikonli-font-icon {
+    -fx-icon-color: #9333ea;
+}
+
+.notification-icon.system {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+}
+
+.notification-icon.system .ikonli-font-icon {
+    -fx-icon-color: rgba(255, 255, 255, 0.7);
+}
+
+.notification-title {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.notification-message {
+    -fx-font-size: 13px;
+    -fx-text-fill: rgba(255, 255, 255, 0.7);
+}
+
+.notification-time {
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(255, 255, 255, 0.4);
+}
+
+.unread-dot {
+    -fx-min-width: 10;
+    -fx-min-height: 10;
+    -fx-background-color: #dc2626;
+    -fx-background-radius: 5;
+}
+
+/* Notification Actions */
+.notification-actions {
+    -fx-spacing: 8;
+}
+
+.notification-action-btn {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-padding: 8 14;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+.notification-action-btn:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+}
+
+.notification-action-btn.primary {
+    -fx-background-color: rgba(220, 38, 38, 0.2);
+    -fx-text-fill: #dc2626;
+}
+
+.notification-action-btn.primary:hover {
+    -fx-background-color: rgba(220, 38, 38, 0.3);
+}
+
+.dismiss-btn {
+    -fx-background-color: transparent;
+    -fx-padding: 6;
+    -fx-cursor: hand;
+}
+
+.dismiss-btn .ikonli-font-icon {
+    -fx-icon-color: rgba(255, 255, 255, 0.4);
+}
+
+.dismiss-btn:hover .ikonli-font-icon {
+    -fx-icon-color: #ef4444;
+}
+
+/* Empty Notifications */
+.empty-notifications {
+    -fx-spacing: 20;
+    -fx-alignment: center;
+    -fx-padding: 80;
+}
+
+.empty-icon {
+    -fx-min-width: 80;
+    -fx-min-height: 80;
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-background-radius: 40;
+    -fx-alignment: center;
+}
+
+.empty-icon .ikonli-font-icon {
+    -fx-icon-color: rgba(255, 255, 255, 0.3);
+}
+
+.empty-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.empty-subtitle {
+    -fx-font-size: 14px;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+}
+
+/* Notification Preferences */
+.notification-prefs {
+    -fx-background-color: rgba(30, 30, 35, 0.8);
+    -fx-background-radius: 14;
+    -fx-padding: 20;
+}
+
+.prefs-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.pref-item {
+    -fx-padding: 12 0;
+    -fx-border-color: rgba(255, 255, 255, 0.05);
+    -fx-border-width: 0 0 1 0;
+}
+
+.pref-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
+}
+
+.pref-description {
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(255, 255, 255, 0.4);
+}

@@ -1,23 +1,8 @@
 package com.esprit.controllers.films;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.Timeout;
-import java.util.concurrent.TimeUnit;
-import org.testfx.framework.junit5.Start;
-
 import com.esprit.models.films.Category;
 import com.esprit.services.films.CategoryService;
 import com.esprit.utils.TestFXBase;
-
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
@@ -25,6 +10,20 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.Timeout;
+import org.testfx.framework.junit5.Start;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Comprehensive test suite for CategoryController.
@@ -44,14 +43,27 @@ class CategoryControllerTest extends TestFXBase {
         );
         javafx.scene.Parent root = loader.load();
         controller = loader.getController();
-        
+
         stage.setScene(new javafx.scene.Scene(root, 1280, 700));
         stage.show();
         stage.toFront();
     }
 
+    // Helper methods
+    private List<Category> createMockCategories() {
+        List<Category> categories = new ArrayList<>();
+        categories.add(new Category(1L, "Action", "Action movies"));
+        categories.add(new Category(2L, "Comedy", "Comedy movies"));
+        categories.add(new Category(3L, "Drama", "Drama movies"));
+        return categories;
+    }
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    private com.esprit.utils.Page<Category> createPagedResult(List<Category> categories) {
+        return new com.esprit.utils.Page<>(categories, 0, categories.size(), categories.size());
+    }
+
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Category Creation Tests")
     class CategoryCreationTests {
 
@@ -130,8 +142,8 @@ class CategoryControllerTest extends TestFXBase {
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Category Input Validation Tests")
     class CategoryInputValidationTests {
 
@@ -216,8 +228,8 @@ class CategoryControllerTest extends TestFXBase {
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Category Table Display Tests")
     class CategoryTableDisplayTests {
 
@@ -229,7 +241,7 @@ class CategoryControllerTest extends TestFXBase {
 
             // Load real categories from database
             TableView<Category> table = lookup("#filmCategory_tableView").query();
-            
+
             // Verify table is populated with real data
             assertThat(table).isNotNull();
             assertThat(table.getItems()).isNotNull();
@@ -244,8 +256,8 @@ class CategoryControllerTest extends TestFXBase {
 
             TableView<Category> table = lookup("#filmCategory_tableView").query();
             TableColumn<Category, Integer> idColumn = (TableColumn<Category, Integer>) table.getColumns().stream()
-                    .filter(col -> "idCategory_tableColumn".equals(col.getId()))
-                    .findFirst().orElse(null);
+                .filter(col -> "idCategory_tableColumn".equals(col.getId()))
+                .findFirst().orElse(null);
             assertThat(idColumn).isNotNull();
             assertThat(idColumn.isVisible()).isFalse();
         }
@@ -259,8 +271,8 @@ class CategoryControllerTest extends TestFXBase {
 
             TableView<Category> table = lookup("#filmCategory_tableView").query();
             TableColumn<Category, String> nameCol = (TableColumn<Category, String>) table.getColumns().stream()
-                    .filter(col -> "nomCategory_tableColumn".equals(col.getId()))
-                    .findFirst().orElse(null);
+                .filter(col -> "nomCategory_tableColumn".equals(col.getId()))
+                .findFirst().orElse(null);
             assertThat(nameCol).isNotNull();
             assertThat(nameCol.isVisible()).isTrue();
         }
@@ -274,8 +286,8 @@ class CategoryControllerTest extends TestFXBase {
 
             TableView<Category> table = lookup("#filmCategory_tableView").query();
             TableColumn<Category, String> descCol = (TableColumn<Category, String>) table.getColumns().stream()
-                    .filter(col -> "descriptionCategory_tableColumn".equals(col.getId()))
-                    .findFirst().orElse(null);
+                .filter(col -> "descriptionCategory_tableColumn".equals(col.getId()))
+                .findFirst().orElse(null);
             assertThat(descCol).isNotNull();
             assertThat(descCol.isVisible()).isTrue();
         }
@@ -289,15 +301,15 @@ class CategoryControllerTest extends TestFXBase {
 
             TableView<Category> table = lookup("#filmCategory_tableView").query();
             TableColumn<Category, Button> deleteCol = (TableColumn<Category, Button>) table.getColumns().stream()
-                    .filter(col -> "delete_tableColumn".equals(col.getId()))
-                    .findFirst().orElse(null);
+                .filter(col -> "delete_tableColumn".equals(col.getId()))
+                .findFirst().orElse(null);
             assertThat(deleteCol).isNotNull();
         }
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Category Update Tests")
     class CategoryUpdateTests {
 
@@ -306,12 +318,12 @@ class CategoryControllerTest extends TestFXBase {
         @DisplayName("Should update category name inline")
         void testUpdateCategoryName() {
             waitForFxEvents();
-            
+
             // Get table and verify name column is editable
             TableView<Category> table = lookup("#filmCategory_tableView").query();
             assertThat(table).isNotNull();
             assertThat(table.isEditable()).isTrue();
-            
+
             // Verify table supports editing
             if (!table.getItems().isEmpty()) {
                 Category category = table.getItems().get(0);
@@ -326,16 +338,16 @@ class CategoryControllerTest extends TestFXBase {
         @DisplayName("Should update category description inline")
         void testUpdateCategoryDescription() {
             waitForFxEvents();
-            
+
             // Get table and verify description column is editable
             TableView<Category> table = lookup("#filmCategory_tableView").query();
             assertThat(table).isNotNull();
             assertThat(table.isEditable()).isTrue();
-            
+
             // Verify description column exists
             TableColumn<Category, String> descCol = (TableColumn<Category, String>) table.getColumns().stream()
-                    .filter(col -> "descriptionCategory_tableColumn".equals(col.getId()))
-                    .findFirst().orElse(null);
+                .filter(col -> "descriptionCategory_tableColumn".equals(col.getId()))
+                .findFirst().orElse(null);
             assertThat(descCol).isNotNull();
         }
 
@@ -345,12 +357,12 @@ class CategoryControllerTest extends TestFXBase {
         @DisplayName("Should show confirmation after update")
         void testUpdateConfirmation() {
             waitForFxEvents();
-            
+
             // Get table for potential update
             TableView<Category> table = lookup("#filmCategory_tableView").query();
             assertThat(table).isNotNull();
             assertThat(table.isEditable()).isTrue();
-            
+
             // Verify table is ready for updates
             waitForFxEvents();
         }
@@ -361,23 +373,23 @@ class CategoryControllerTest extends TestFXBase {
         @DisplayName("Should refresh table after update")
         void testTableRefreshAfterUpdate() {
             waitForFxEvents();
-            
+
             // Get table and capture initial item count
             TableView<Category> table = lookup("#filmCategory_tableView").query();
             assertThat(table).isNotNull();
-            
+
             int initialSize = table.getItems().size();
-            
+
             // Verify table can be refreshed
             assertThat(table.getItems()).hasSize(initialSize);
-            
+
             waitForFxEvents();
         }
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Category Delete Tests")
     class CategoryDeleteTests {
 
@@ -386,17 +398,17 @@ class CategoryControllerTest extends TestFXBase {
         @DisplayName("Should delete category when delete button clicked")
         void testDeleteCategory() {
             waitForFxEvents();
-            
+
             // Get table and verify delete column exists
             TableView<Category> table = lookup("#filmCategory_tableView").query();
             assertThat(table).isNotNull();
-            
+
             // Verify delete button column exists
             TableColumn deleteCol = table.getColumns().stream()
-                    .filter(col -> "delete_tableColumn".equals(col.getId()))
-                    .findFirst().orElse(null);
+                .filter(col -> "delete_tableColumn".equals(col.getId()))
+                .findFirst().orElse(null);
             assertThat(deleteCol).isNotNull();
-            
+
             waitForFxEvents();
         }
 
@@ -406,17 +418,17 @@ class CategoryControllerTest extends TestFXBase {
         @DisplayName("Should show confirmation after deletion")
         void testDeleteConfirmation() {
             waitForFxEvents();
-            
+
             // Verify table is present for deletion operations
             TableView<Category> table = lookup("#filmCategory_tableView").query();
             assertThat(table).isNotNull();
-            
+
             // Verify delete column exists
             TableColumn deleteCol = table.getColumns().stream()
-                    .filter(col -> "delete_tableColumn".equals(col.getId()))
-                    .findFirst().orElse(null);
+                .filter(col -> "delete_tableColumn".equals(col.getId()))
+                .findFirst().orElse(null);
             assertThat(deleteCol).isNotNull();
-            
+
             waitForFxEvents();
         }
 
@@ -426,16 +438,16 @@ class CategoryControllerTest extends TestFXBase {
         @DisplayName("Should refresh table after deletion")
         void testTableRefreshAfterDeletion() {
             waitForFxEvents();
-            
+
             // Get table and capture initial item count
             TableView<Category> table = lookup("#filmCategory_tableView").query();
             assertThat(table).isNotNull();
-            
+
             int initialSize = table.getItems().size();
-            
+
             // Verify table can be refreshed
             assertThat(table.getItems()).hasSize(initialSize);
-            
+
             waitForFxEvents();
         }
 
@@ -445,21 +457,21 @@ class CategoryControllerTest extends TestFXBase {
         @DisplayName("Should handle deletion errors gracefully")
         void testDeleteError() {
             waitForFxEvents();
-            
+
             // Verify error handling capabilities
             TableView<Category> table = lookup("#filmCategory_tableView").query();
             assertThat(table).isNotNull();
-            
+
             // Verify table is functional
             assertThat(table.isEditable()).isTrue();
-            
+
             waitForFxEvents();
         }
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Category Search Tests")
     class CategorySearchTests {
 
@@ -515,14 +527,14 @@ class CategoryControllerTest extends TestFXBase {
         @DisplayName("Should show all categories when search is empty")
         void testEmptySearch() {
             waitForFxEvents();
-            
+
             // Clear search field to show all categories
             TextField searchField = lookup("#recherche_textField").query();
             clickOn(searchField).write("test");
             eraseText(4);
-            
+
             waitForFxEvents();
-            
+
             // Verify all categories are shown
             TableView<Category> table = lookup("#filmCategory_tableView").query();
             assertThat(table.getItems()).isNotEmpty();
@@ -546,8 +558,8 @@ class CategoryControllerTest extends TestFXBase {
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Filter Criteria Tests")
     class FilterCriteriaTests {
 
@@ -577,8 +589,8 @@ class CategoryControllerTest extends TestFXBase {
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Table Editing Tests")
     class TableEditingTests {
 
@@ -617,7 +629,7 @@ class CategoryControllerTest extends TestFXBase {
             TableView<Category> table = lookup("#filmCategory_tableView").query();
             assertThat(table).isNotNull();
             assertThat(table.isEditable()).isTrue();
-            
+
             // Verify table has items to edit
             if (!table.getItems().isEmpty()) {
                 Category category = table.getItems().get(0);
@@ -637,15 +649,15 @@ class CategoryControllerTest extends TestFXBase {
             TableView<Category> table = lookup("#filmCategory_tableView").query();
             assertThat(table).isNotNull();
             assertThat(table.isEditable()).isTrue();
-            
+
             // Table is ready for edits
             waitForFxEvents();
         }
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("UI Form Toggle Tests")
     class UIFormToggleTests {
 
@@ -675,8 +687,8 @@ class CategoryControllerTest extends TestFXBase {
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Error Handling Tests")
     class ErrorHandlingTests {
 
@@ -685,14 +697,14 @@ class CategoryControllerTest extends TestFXBase {
         @DisplayName("Should handle database errors gracefully")
         void testDatabaseError() {
             waitForFxEvents();
-            
+
             // Verify UI is present and functional
             TextArea nameArea = lookup("#nomCategory_textArea").query();
             TextArea descArea = lookup("#descriptionCategory_textArea").query();
-            
+
             assertThat(nameArea).isNotNull();
             assertThat(descArea).isNotNull();
-            
+
             waitForFxEvents();
         }
 
@@ -707,25 +719,10 @@ class CategoryControllerTest extends TestFXBase {
             TableView<Category> table = lookup("#filmCategory_tableView").query();
             assertThat(table).isNotNull();
             assertThat(table.getItems()).isNotNull();
-            
+
             waitForFxEvents();
         }
 
-    }
-
-
-    // Helper methods
-    private List<Category> createMockCategories() {
-        List<Category> categories = new ArrayList<>();
-        categories.add(new Category(1L, "Action", "Action movies"));
-        categories.add(new Category(2L, "Comedy", "Comedy movies"));
-        categories.add(new Category(3L, "Drama", "Drama movies"));
-        return categories;
-    }
-
-
-    private com.esprit.utils.Page<Category> createPagedResult(List<Category> categories) {
-        return new com.esprit.utils.Page<>(categories, 0, categories.size(), categories.size());
     }
 
 }

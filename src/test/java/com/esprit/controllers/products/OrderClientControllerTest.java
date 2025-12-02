@@ -1,24 +1,24 @@
 package com.esprit.controllers.products;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.Timeout;
-import java.util.concurrent.TimeUnit;
-import org.testfx.framework.junit5.Start;
-
 import com.esprit.models.products.SharedData;
 import com.esprit.utils.TestFXBase;
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.Timeout;
+import org.testfx.framework.junit5.Start;
+
+import java.util.concurrent.TimeUnit;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Comprehensive test suite for OrderClientController.
@@ -43,7 +43,8 @@ class OrderClientControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Phone Number Validation Tests")
     class PhoneNumberValidationTests {
 
@@ -77,11 +78,11 @@ class OrderClientControllerTest extends TestFXBase {
                 assertThat(errorLabel.get().isVisible()).isTrue();
             }
 
-            
+
             // Verify order button is disabled or error styling applied
             Button orderBtn = lookup("#idpaymentenligne").query();
             assertThat(orderBtn).isNotNull();
-            
+
             // Check if phone field has error styling
             if (phoneField.getStyleClass() != null) {
                 // If validation adds error class, it should be present
@@ -107,10 +108,10 @@ class OrderClientControllerTest extends TestFXBase {
                 assertThat(errorLabel.get().isVisible()).isTrue();
             }
 
-            
+
             Button orderBtn = lookup("#idpaymentenligne").query();
             assertThat(orderBtn).isNotNull();
-            
+
             // Verify special character was not accepted or error shown
             assertThat(phoneField.getText()).contains("-");
         }
@@ -132,7 +133,7 @@ class OrderClientControllerTest extends TestFXBase {
                 assertThat(errorLabel.get().isVisible()).isTrue();
             }
 
-            
+
             Button orderBtn = lookup("#idpaymentenligne").query();
             assertThat(orderBtn).isNotNull();
             assertThat(orderBtn.isDisabled()).isTrue();
@@ -155,7 +156,7 @@ class OrderClientControllerTest extends TestFXBase {
                 assertThat(errorLabel.get().isVisible()).isTrue();
             }
 
-            
+
             Button orderBtn = lookup("#idpaymentenligne").query();
             assertThat(orderBtn).isNotNull();
             assertThat(orderBtn.isDisabled()).isTrue();
@@ -193,11 +194,11 @@ class OrderClientControllerTest extends TestFXBase {
             TextField phoneField = lookup("#numTelephoneTextField").query();
             assertThat(phoneField).isNotNull();
             clickOn(phoneField).write("12345678");
-            
+
             // Leave address field empty (do not fill it)
             TextField addressField = lookup("#adresseTextField").query();
             assertThat(addressField).isNotNull();
-            
+
             // Attempt to create order without address
             Button orderBtn = lookup("#idpaymentenligne").query();
             assertThat(orderBtn).isNotNull();
@@ -211,13 +212,13 @@ class OrderClientControllerTest extends TestFXBase {
                 assertThat(addressErrorLabel.get().isVisible()).isTrue();
             }
 
-            
+
             // Verify address field has error state
             if (addressField.getStyleClass() != null) {
                 // Check if error styling is applied
             }
 
-            
+
             // Verify order button is still present (order wasn't created)
             assertThat(orderBtn).isNotNull();
         }
@@ -303,7 +304,8 @@ class OrderClientControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Product Stock Management Tests")
     class StockManagementTests {
 
@@ -347,7 +349,8 @@ class OrderClientControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Price Display Tests")
     class PriceDisplayTests {
 
@@ -388,7 +391,8 @@ class OrderClientControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("PayPal Integration Tests")
     class PayPalIntegrationTests {
 
@@ -443,7 +447,8 @@ class OrderClientControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Navigation Tests")
     class NavigationTests {
 
@@ -499,7 +504,8 @@ class OrderClientControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Error Handling Tests")
     class ErrorHandlingTests {
 

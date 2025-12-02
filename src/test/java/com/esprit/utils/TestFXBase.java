@@ -1,19 +1,5 @@
 package com.esprit.utils;
 
-import java.util.concurrent.TimeoutException;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import static org.testfx.api.FxAssert.verifyThat;
-import org.testfx.api.FxToolkit;
-import org.testfx.framework.junit5.ApplicationTest;
-import static org.testfx.matcher.base.NodeMatchers.isDisabled;
-import static org.testfx.matcher.base.NodeMatchers.isEnabled;
-import static org.testfx.matcher.base.NodeMatchers.isVisible;
-import static org.testfx.matcher.control.LabeledMatchers.hasText;
-import org.testfx.util.WaitForAsyncUtils;
-
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -21,18 +7,32 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.testfx.api.FxToolkit;
+import org.testfx.framework.junit5.ApplicationTest;
+import org.testfx.util.WaitForAsyncUtils;
+
+import java.util.concurrent.TimeoutException;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.testfx.api.FxAssert.verifyThat;
+import static org.testfx.matcher.base.NodeMatchers.isDisabled;
+import static org.testfx.matcher.base.NodeMatchers.isEnabled;
+import static org.testfx.matcher.base.NodeMatchers.isVisible;
+import static org.testfx.matcher.control.LabeledMatchers.hasText;
 
 /**
  * Base class for TestFX-based UI tests in the RAKCHA application.
  * Provides common utility methods and setup/teardown functionality.
- * 
+ * <p>
  * Best Practices Implemented:
  * - Proper JavaFX thread management
  * - Headless testing support
  * - Cleanup after each test
  * - Reusable utility methods
  * - Proper waiting for async operations
- * 
+ *
  * @author RAKCHA Team
  * @version 1.0.0
  * @since 1.0.0
@@ -58,10 +58,10 @@ public abstract class TestFXBase extends ApplicationTest {
     @AfterEach
     public void afterEachTest() throws TimeoutException {
         // Release all keys and mouse buttons
-        release(new KeyCode[] {}
-);
-        release(new MouseButton[] {}
-);
+        release(new KeyCode[]{}
+        );
+        release(new MouseButton[]{}
+        );
 
         // Close all windows except the primary stage
         FxToolkit.cleanupStages();
@@ -82,22 +82,22 @@ public abstract class TestFXBase extends ApplicationTest {
     /**
      * Wait for a node to be visible and ready
      * Useful for waiting for UI elements to load
-     * 
-     * @param query CSS query or node ID
+     *
+     * @param query          CSS query or node ID
      * @param timeoutSeconds Timeout in seconds (default: 5)
      */
     protected void waitForNode(String query, int timeoutSeconds) {
         try {
             org.testfx.util.WaitForAsyncUtils.waitFor(timeoutSeconds, java.util.concurrent.TimeUnit.SECONDS, () -> {
-                try {
-                    Node node = lookup(query).query();
-                    return node != null && node.isVisible();
-                } catch (Exception e) {
-                    return false;
-                }
+                    try {
+                        Node node = lookup(query).query();
+                        return node != null && node.isVisible();
+                    } catch (Exception e) {
+                        return false;
+                    }
 
-            }
-);
+                }
+            );
         } catch (Exception e) {
             // Node not found or timeout - continue anyway
         }
@@ -107,7 +107,7 @@ public abstract class TestFXBase extends ApplicationTest {
 
     /**
      * Click on a node and wait for events to complete
-     * 
+     *
      * @param query CSS query or node ID
      */
     protected void clickOnAndWait(String query) {
@@ -118,7 +118,7 @@ public abstract class TestFXBase extends ApplicationTest {
 
     /**
      * Type text in a field and wait for events to complete
-     * 
+     *
      * @param text Text to type
      */
     protected void writeAndWait(String text) {
@@ -130,7 +130,7 @@ public abstract class TestFXBase extends ApplicationTest {
     /**
      * Clear a text field by selecting all and deleting
      * Supports macOS by using META key instead of CONTROL
-     * 
+     *
      * @param query CSS query or node ID
      */
     protected void clearTextField(String query) {
@@ -138,11 +138,10 @@ public abstract class TestFXBase extends ApplicationTest {
         // Detect if running on macOS
         String osName = System.getProperty("os.name", "").toLowerCase();
         boolean isMac = osName.contains("mac");
-        
+
         if (isMac) {
             push(KeyCode.META, KeyCode.A);
-        }
- else {
+        } else {
             push(KeyCode.CONTROL, KeyCode.A);
         }
 
@@ -153,7 +152,7 @@ public abstract class TestFXBase extends ApplicationTest {
 
     /**
      * Fill a text field with new content
-     * 
+     *
      * @param query CSS query or node ID
      * @param text  Text to fill
      */
@@ -166,7 +165,7 @@ public abstract class TestFXBase extends ApplicationTest {
 
     /**
      * Verify that a node is visible
-     * 
+     *
      * @param query CSS query or node ID
      */
     protected void verifyVisible(String query) {
@@ -176,7 +175,7 @@ public abstract class TestFXBase extends ApplicationTest {
 
     /**
      * Verify that a node is not visible
-     * 
+     *
      * @param query CSS query or node ID
      */
     protected void verifyNotVisible(String query) {
@@ -188,7 +187,7 @@ public abstract class TestFXBase extends ApplicationTest {
 
     /**
      * Verify that a node is enabled
-     * 
+     *
      * @param query CSS query or node ID
      */
     protected void verifyEnabled(String query) {
@@ -198,7 +197,7 @@ public abstract class TestFXBase extends ApplicationTest {
 
     /**
      * Verify that a node is disabled
-     * 
+     *
      * @param query CSS query or node ID
      */
     protected void verifyDisabled(String query) {
@@ -208,7 +207,7 @@ public abstract class TestFXBase extends ApplicationTest {
 
     /**
      * Verify that a labeled node has specific text
-     * 
+     *
      * @param query        CSS query or node ID
      * @param expectedText Expected text content
      */
@@ -219,7 +218,7 @@ public abstract class TestFXBase extends ApplicationTest {
 
     /**
      * Get a node by its query
-     * 
+     *
      * @param query CSS query or node ID
      * @param <T>   Node type
      * @return The found node
@@ -231,7 +230,7 @@ public abstract class TestFXBase extends ApplicationTest {
 
     /**
      * Get the text from a TextField or TextInputControl
-     * 
+     *
      * @param query CSS query or node ID
      * @return Text content
      */
@@ -243,7 +242,7 @@ public abstract class TestFXBase extends ApplicationTest {
 
     /**
      * Get the text from a Label
-     * 
+     *
      * @param query CSS query or node ID
      * @return Label text
      */
@@ -255,7 +254,7 @@ public abstract class TestFXBase extends ApplicationTest {
 
     /**
      * Check if a checkbox is selected
-     * 
+     *
      * @param query CSS query or node ID
      * @return true if selected
      */
@@ -267,7 +266,7 @@ public abstract class TestFXBase extends ApplicationTest {
 
     /**
      * Select a checkbox
-     * 
+     *
      * @param query CSS query or node ID
      */
     protected void selectCheckBox(String query) {
@@ -281,7 +280,7 @@ public abstract class TestFXBase extends ApplicationTest {
 
     /**
      * Deselect a checkbox
-     * 
+     *
      * @param query CSS query or node ID
      */
     protected void deselectCheckBox(String query) {
@@ -295,7 +294,7 @@ public abstract class TestFXBase extends ApplicationTest {
 
     /**
      * Select an item from a ComboBox
-     * 
+     *
      * @param query CSS query or node ID
      * @param item  Item to select
      * @param <T>   Item type
@@ -338,7 +337,7 @@ public abstract class TestFXBase extends ApplicationTest {
 
     /**
      * Execute a task on the JavaFX Application Thread
-     * 
+     *
      * @param runnable Task to execute
      */
     protected void runOnFxThread(Runnable runnable) {
@@ -349,7 +348,7 @@ public abstract class TestFXBase extends ApplicationTest {
 
     /**
      * Get a test image file for testing image upload functionality
-     * 
+     *
      * @return A test image file
      */
     protected java.io.File getTestImageFile() {
@@ -357,11 +356,11 @@ public abstract class TestFXBase extends ApplicationTest {
             // Create a test image in the temp directory
             java.io.File tempDir = new java.io.File(System.getProperty("java.io.tmpdir"));
             java.io.File testImage = new java.io.File(tempDir, "test_actor_image.png");
-            
+
             // If test image doesn't exist, create a simple PNG file
             if (!testImage.exists()) {
                 // Create a minimal valid PNG file (1x1 pixel)
-                byte[] pngHeader = new byte[] {
+                byte[] pngHeader = new byte[]{
                     (byte) 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A,
                     0x00, 0x00, 0x00, 0x0D, 0x49, 0x48, 0x44, 0x52,
                     0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01,
@@ -372,9 +371,8 @@ public abstract class TestFXBase extends ApplicationTest {
                     0x18, (byte) 0xDD, (byte) 0x8D, (byte) 0xB4, 0x00, 0x00,
                     0x00, 0x00, 0x49, 0x45, 0x4E, 0x44, (byte) 0xAE,
                     0x42, 0x60, (byte) 0x82
-                }
-;
-                
+                };
+
                 try (java.io.FileOutputStream fos = new java.io.FileOutputStream(testImage)) {
                     fos.write(pngHeader);
                     fos.flush();
@@ -383,7 +381,7 @@ public abstract class TestFXBase extends ApplicationTest {
                 testImage.deleteOnExit();
             }
 
-            
+
             return testImage;
         } catch (Exception e) {
             throw new RuntimeException("Failed to create test image file", e);

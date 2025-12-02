@@ -1,5 +1,7 @@
 package com.esprit.utils;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,8 +13,6 @@ import java.sql.Connection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import io.github.cdimascio.dotenv.Dotenv;
-
 /**
  * Utility class providing helper methods for the RAKCHA application. Contains
  * reusable functionality and common operations.
@@ -22,6 +22,7 @@ import io.github.cdimascio.dotenv.Dotenv;
  * @since 1.0.0
  */
 public class Chat {
+
     private static final Logger LOGGER = Logger.getLogger(Chat.class.getName());
     private static final String API_URL = "https://api.openai.com/v1/chat/completions";
     private final Connection connection;
@@ -73,8 +74,8 @@ public class Chat {
             conn.setDoOutput(true);
 
             final String body = String.format(
-                    "{\"model\": \"%s\", \"messages\": [{\"role\": \"user\", \"content\": \"%s\"}]}", model,
-                    message.replace("\"", "\\\""));
+                "{\"model\": \"%s\", \"messages\": [{\"role\": \"user\", \"content\": \"%s\"}]}", model,
+                message.replace("\"", "\\\""));
 
             try (OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream(), StandardCharsets.UTF_8)) {
                 writer.write(body);
@@ -83,7 +84,7 @@ public class Chat {
 
             if (HttpURLConnection.HTTP_OK == conn.getResponseCode()) {
                 try (BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
+                    new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
                     StringBuilder response = new StringBuilder();
                     String line;
                     while ((line = reader.readLine()) != null) {
@@ -93,16 +94,14 @@ public class Chat {
                     return extractContentFromResponse(response.toString());
                 }
 
-            }
- else {
+            } else {
                 throw new RuntimeException(
-                        "Failed to get response from OpenAI API. HTTP error code: " + conn.getResponseCode());
+                    "Failed to get response from OpenAI API. HTTP error code: " + conn.getResponseCode());
             }
 
         } catch (IOException e) {
             throw new RuntimeException("Error communicating with OpenAI API: " + e.getMessage(), e);
-        }
- finally {
+        } finally {
             if (conn != null) {
                 conn.disconnect();
             }
@@ -117,11 +116,11 @@ public class Chat {
      *
      * @param message the message to check for inappropriate content
      * @return "1" if content is inappropriate, "0" if appropriate, "-1" if error
-     *         occurred
+     * occurred
      */
     public String badword(final String message) {
         final String question = "Is this content hateful or inappropriate? Reply with only '1' for yes or '0' for no: "
-                + message;
+            + message;
         try {
             return chatGPT(question).trim();
         } catch (RuntimeException e) {

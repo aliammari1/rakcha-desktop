@@ -1,24 +1,22 @@
 package com.esprit.controllers.users;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.sql.Date;
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import com.esprit.enums.UserRole;
 import com.esprit.models.users.CinemaManager;
 import com.esprit.models.users.Client;
 import com.esprit.models.users.User;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.CloudinaryStorage;
-
-import javafx.animation.*;
+import com.esprit.utils.validators.EmailValidator;
+import com.esprit.utils.validators.PasswordValidator;
+import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
+import javafx.animation.RotateTransition;
+import javafx.animation.ScaleTransition;
+import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -29,7 +27,14 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -45,6 +50,18 @@ import javafx.stage.Window;
 import javafx.util.Duration;
 import net.synedra.validatorfx.Validator;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * JavaFX controller class for the RAKCHA application. Handles UI interactions
  * and manages view logic using FXML.
@@ -54,6 +71,7 @@ import net.synedra.validatorfx.Validator;
  * @since 1.0.0
  */
 public class SignUpController implements Initializable {
+
     private static final Logger LOGGER = Logger.getLogger(SignUpController.class.getName());
     private static final Random RANDOM = new Random();
 
@@ -109,9 +127,8 @@ public class SignUpController implements Initializable {
     private String cloudinaryImageUrl;
 
     /**
-     * Switches the current window to the login scene and stops any running signup animations.
-     *
-     * @throws IOException if the Login.fxml resource cannot be loaded or initialized
+     * @param event
+     * @throws IOException
      */
     @FXML
     void switchToLogin(ActionEvent event) throws IOException {
@@ -125,17 +142,8 @@ public class SignUpController implements Initializable {
             LOGGER.log(Level.SEVERE, "Error switching to login view", e);
             throw e;
         }
-
     }
 
-
-    /**
-     * Initialize controller state, start UI animations, and configure validation and navigation handlers.
-     *
-     * Performs initial setup of dynamic element storage, schedules a short delayed initialization of
-     * particle/shape animations and their dynamic creations, configures form validation, and attaches
-     * the login button handler to transition back to the login view.
-     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // Initialize arrays for dynamic elements
@@ -150,8 +158,7 @@ public class SignUpController implements Initializable {
             initializeShapeAnimation();
             createDynamicAnimations();
             LOGGER.info("Animation initialization completed.");
-        }
-));
+        }));
         delayedInit.play();
 
         // Setup validation and data binding
@@ -164,18 +171,11 @@ public class SignUpController implements Initializable {
             } catch (IOException e) {
                 LOGGER.log(Level.SEVERE, "Error switching to login view", e);
             }
-
-        }
-);
+        });
     }
 
-
     /**
-     * Configure validation and UI feedback for the signup form fields and populate the role selector.
-     *
-     * <p>Attaches listeners that validate email (including existence via UserService), password length,
-     * name, given name, address, and phone number formats, and shows contextual error tooltips and
-     * prevents form submission via Enter when validation errors are present.</p>
+     * Set up form validation
      */
     private void setupValidation() {
         final Tooltip tooltip = new Tooltip();
@@ -187,83 +187,61 @@ public class SignUpController implements Initializable {
             if (!this.emailTextField.getText().matches(emailRegex)) {
                 this.emailTextField.getStyleClass().removeAll("checked");
                 this.emailTextField.getStyleClass().add("notChecked");
-            }
- else if (userService.checkEmailFound(newValue)) {
+            } else if (userService.checkEmailFound(newValue)) {
                 this.emailTextField.getStyleClass().removeAll("checked");
                 this.emailTextField.getStyleClass().add("notChecked");
-            }
- else {
+            } else {
                 this.emailTextField.getStyleClass().removeAll("notChecked");
                 this.emailTextField.getStyleClass().add("checked");
             }
-
-        }
-);
+        });
 
         // Password validation
         this.passwordTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (8 > passwordTextField.getLength()) {
                 this.passwordTextField.getStyleClass().removeAll("checked");
                 this.emailTextField.getStyleClass().add("notChecked");
-            }
- else {
+            } else {
                 this.passwordTextField.getStyleClass().removeAll("notChecked");
                 this.passwordTextField.getStyleClass().add("checked");
             }
-
-        }
-);
+        });
 
         // Nom validation
         this.nomTextField.textProperty().addListener(new ChangeListener<String>() {
-            /**
-             * Configures validation for the nomTextField: enforces lowercase-only and non-empty rules, displays a red tooltip with validation messages anchored near the field when validation fails, and installs an Enter-key filter that consumes Enter keystrokes while validation errors exist.
-             *
-             * @param observable the observed text property
-             * @param oldValue the previous text value
-             * @param newValue the new text value
-             */
             @Override
             public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                    final String newValue) {
+                                final String newValue) {
                 final Validator validator = new Validator();
                 validator.createCheck().dependsOn("firstName", nomTextField.textProperty())
-                        .withMethod(c -> {
-                            final String userName = c.get("firstName");
-                            if (null != userName && !userName.toLowerCase().equals(userName)) {
-                                c.error("Please use only lowercase letters.");
-                            }
- else if (userName.isEmpty()) {
-                                c.error("the string is empty");
-                            }
-
+                    .withMethod(c -> {
+                        final String userName = c.get("firstName");
+                        if (null != userName && !userName.toLowerCase().equals(userName)) {
+                            c.error("Please use only lowercase letters.");
+                        } else if (userName.isEmpty()) {
+                            c.error("the string is empty");
                         }
-).decorates(nomTextField).immediate();
+                    }).decorates(nomTextField).immediate();
                 final Window window = nomTextField.getScene().getWindow();
                 final Bounds bounds = nomTextField
-                        .localToScreen(nomTextField.getBoundsInLocal());
+                    .localToScreen(nomTextField.getBoundsInLocal());
                 nomTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
                     public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                            final String newValue) {
+                                        final String newValue) {
                         if (validator.containsErrors()) {
                             tooltip.setText(validator.createStringBinding().getValue());
                             tooltip.setStyle("-fx-background-color: #f00;");
                             nomTextField.setTooltip(tooltip);
                             nomTextField.getTooltip().show(window, bounds.getMinX() - 10,
-                                    bounds.getMinY() + 30);
-                        }
- else {
+                                bounds.getMinY() + 30);
+                        } else {
                             if (null != nomTextField.getTooltip()) {
                                 nomTextField.getTooltip().hide();
                             }
-
                         }
-
                     }
-
-                }
-);
+                });
                 nomTextField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
                     @Override
                     public void handle(final KeyEvent event) {
@@ -271,221 +249,148 @@ public class SignUpController implements Initializable {
                             if (validator.containsErrors()) {
                                 event.consume();
                             }
-
                         }
-
                     }
-
-                }
-);
+                });
             }
-
-        }
-);
+        });
 
         // Prenom validation
         this.prenomTextField.textProperty().addListener(new ChangeListener<String>() {
-            /**
-             * Validate the prenomTextField content and show or hide a contextual tooltip with validation messages.
-             *
-             * When the field contains errors (not all lowercase or empty), a red-styled tooltip with the validation
-             * message is displayed near the field and pressing Enter is prevented; when the field is valid the tooltip
-             * is hidden and Enter is allowed.
-             *
-             * @param observable the observable value that changed
-             * @param oldValue the previous text value
-             * @param newValue the new text value
-             */
             @Override
             public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                    final String newValue) {
+                                final String newValue) {
                 final Validator validator = new Validator();
-                validator.createCheck().dependsOn("firstName", prenomTextField.textProperty())
-                        .withMethod(c -> {
-                            final String userName = c.get("firstName");
-                            if (null != userName && !userName.toLowerCase().equals(userName)) {
-                                c.error("Please use only lowercase letters.");
-                            }
- else if (userName.isEmpty()) {
-                                c.error("the string is empty");
-                            }
-
+                validator.createCheck().dependsOn("lastName", prenomTextField.textProperty())
+                    .withMethod(c -> {
+                        final String userName = c.get("lastName");
+                        if (null != userName && !userName.toLowerCase().equals(userName)) {
+                            c.error("Please use only lowercase letters.");
+                        } else if (userName.isEmpty()) {
+                            c.error("the string is empty");
                         }
-).decorates(prenomTextField).immediate();
+                    }).decorates(prenomTextField).immediate();
                 final Window window = prenomTextField.getScene().getWindow();
                 final Bounds bounds = prenomTextField
-                        .localToScreen(prenomTextField.getBoundsInLocal());
+                    .localToScreen(prenomTextField.getBoundsInLocal());
                 prenomTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
                     public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                            final String newValue) {
+                                        final String newValue) {
                         if (validator.containsErrors()) {
                             tooltip.setText(validator.createStringBinding().getValue());
                             tooltip.setStyle("-fx-background-color: #f00;");
                             prenomTextField.setTooltip(tooltip);
                             prenomTextField.getTooltip().show(window, bounds.getMinX() - 10,
-                                    bounds.getMinY() + 30);
-                        }
- else {
+                                bounds.getMinY() + 30);
+                        } else {
                             if (null != prenomTextField.getTooltip()) {
                                 prenomTextField.getTooltip().hide();
                             }
-
                         }
-
                     }
-
-                }
-);
+                });
                 prenomTextField.addEventFilter(KeyEvent.KEY_PRESSED,
-                        new EventHandler<KeyEvent>() {
-                            @Override
-                            public void handle(final KeyEvent event) {
-                                if (KeyCode.ENTER == event.getCode()) {
-                                    if (validator.containsErrors()) {
-                                        event.consume();
-                                    }
-
+                    new EventHandler<KeyEvent>() {
+                        @Override
+                        public void handle(final KeyEvent event) {
+                            if (KeyCode.ENTER == event.getCode()) {
+                                if (validator.containsErrors()) {
+                                    event.consume();
                                 }
-
                             }
-
                         }
-);
+                    });
             }
-
-        }
-);
+        });
 
         // Adresse validation
         this.adresseTextField.textProperty().addListener(new ChangeListener<String>() {
-            /**
-             * Validate the adresseTextField value, display validation feedback, and block Enter when invalid.
-             *
-             * <p>Checks that the field is non-empty and contains only lowercase letters; when validation fails,
-             * a red tooltip with the error message is shown near the field and pressing Enter is consumed to
-             * prevent form submission. When the field is valid the tooltip is hidden.</p>
-             *
-             * @param observable the observed text property
-             * @param oldValue the previous text value
-             * @param newValue the current text value
-             */
             @Override
             public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                    final String newValue) {
+                                final String newValue) {
                 final Validator validator = new Validator();
-                validator.createCheck().dependsOn("firstName", adresseTextField.textProperty())
-                        .withMethod(c -> {
-                            final String userName = c.get("firstName");
-                            if (null != userName && !userName.toLowerCase().equals(userName)) {
-                                c.error("Please use only lowercase letters.");
-                            }
- else if (userName.isEmpty()) {
-                                c.error("the string is empty");
-                            }
-
+                validator.createCheck().dependsOn("address", adresseTextField.textProperty())
+                    .withMethod(c -> {
+                        final String userName = c.get("address");
+                        if (null != userName && !userName.toLowerCase().equals(userName)) {
+                            c.error("Please use only lowercase letters.");
+                        } else if (userName.isEmpty()) {
+                            c.error("the string is empty");
                         }
-).decorates(adresseTextField).immediate();
+                    }).decorates(adresseTextField).immediate();
                 final Window window = adresseTextField.getScene().getWindow();
                 final Bounds bounds = adresseTextField
-                        .localToScreen(adresseTextField.getBoundsInLocal());
+                    .localToScreen(adresseTextField.getBoundsInLocal());
                 adresseTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
                     public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                            final String newValue) {
+                                        final String newValue) {
                         if (validator.containsErrors()) {
                             tooltip.setText(validator.createStringBinding().getValue());
                             tooltip.setStyle("-fx-background-color: #f00;");
                             adresseTextField.setTooltip(tooltip);
                             adresseTextField.getTooltip().show(window, bounds.getMinX() - 10,
-                                    bounds.getMinY() + 30);
-                        }
- else {
+                                bounds.getMinY() + 30);
+                        } else {
                             if (null != adresseTextField.getTooltip()) {
                                 adresseTextField.getTooltip().hide();
                             }
-
                         }
-
                     }
-
-                }
-);
+                });
                 adresseTextField.addEventFilter(KeyEvent.KEY_PRESSED,
-                        new EventHandler<KeyEvent>() {
-                            @Override
-                            public void handle(final KeyEvent event) {
-                                if (KeyCode.ENTER == event.getCode()) {
-                                    if (validator.containsErrors()) {
-                                        event.consume();
-                                    }
-
+                    new EventHandler<KeyEvent>() {
+                        @Override
+                        public void handle(final KeyEvent event) {
+                            if (KeyCode.ENTER == event.getCode()) {
+                                if (validator.containsErrors()) {
+                                    event.consume();
                                 }
-
                             }
-
                         }
-);
+                    });
             }
-
-        }
-);
+        });
 
         // Email validation
         this.emailTextField.textProperty().addListener(new ChangeListener<String>() {
-            /**
-             * Validates the emailTextField value, displays a tooltip with validation messages when invalid,
-             * and prevents Enter key submission while validation errors exist.
-             *
-             * @param observable the observable value backing the text property
-             * @param oldValue   the previous text value
-             * @param newValue   the new text value
-             */
             @Override
             public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                    final String newValue) {
+                                final String newValue) {
                 final Validator validator = new Validator();
-                validator.createCheck().dependsOn("firstName", emailTextField.textProperty())
-                        .withMethod(c -> {
-                            final String userName = c.get("firstName");
-                            if (null != userName) {
-                                final String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-                                if (!userName.matches(emailRegex)) {
-                                    c.error("Invalid email format.");
-                                }
-
+                validator.createCheck().dependsOn("email", emailTextField.textProperty())
+                    .withMethod(c -> {
+                        final String userName = c.get("email");
+                        if (null != userName) {
+                            final String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+                            if (!userName.matches(emailRegex)) {
+                                c.error("Invalid email format.");
                             }
- else if (userName.isEmpty()) {
-                                c.error("the string is empty");
-                            }
-
+                        } else if (userName.isEmpty()) {
+                            c.error("the string is empty");
                         }
-).decorates(emailTextField).immediate();
+                    }).decorates(emailTextField).immediate();
                 final Window window = emailTextField.getScene().getWindow();
                 final Bounds bounds = emailTextField
-                        .localToScreen(emailTextField.getBoundsInLocal());
+                    .localToScreen(emailTextField.getBoundsInLocal());
                 emailTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
                     public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                            final String newValue) {
+                                        final String newValue) {
                         if (validator.containsErrors()) {
                             tooltip.setText(validator.createStringBinding().getValue());
                             tooltip.setStyle("-fx-background-color: #f00;");
                             emailTextField.setTooltip(tooltip);
                             emailTextField.getTooltip().show(window, bounds.getMinX() - 10,
-                                    bounds.getMinY() + 30);
-                        }
- else {
+                                bounds.getMinY() + 30);
+                        } else {
                             if (null != emailTextField.getTooltip()) {
                                 emailTextField.getTooltip().hide();
                             }
-
                         }
-
                     }
-
-                }
-);
+                });
                 emailTextField.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
                     @Override
                     public void handle(final KeyEvent event) {
@@ -493,190 +398,130 @@ public class SignUpController implements Initializable {
                             if (validator.containsErrors()) {
                                 event.consume();
                             }
-
                         }
-
                     }
-
-                }
-);
+                });
             }
-
-        }
-);
+        });
 
         // Password validation
         this.passwordTextField.textProperty().addListener(new ChangeListener<String>() {
-            /**
-             * Responds to changes on the observed text property by configuring validation for the password field and wiring UI feedback.
-             *
-             * Sets up a validator that requires the password field value to be non-empty and composed only of lowercase letters; shows a tooltip with validation messages positioned near the password field when validation fails; hides the tooltip when validation passes; and consumes Enter key events on the password field while validation errors remain.
-             *
-             * @param observable the observable value that changed
-             * @param oldValue the previous text value
-             * @param newValue the new text value
-             */
             @Override
             public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                    final String newValue) {
+                                final String newValue) {
                 final Validator validator = new Validator();
-                validator.createCheck().dependsOn("firstName", passwordTextField.textProperty())
-                        .withMethod(c -> {
-                            final String userName = c.get("firstName");
-                            if (null != userName && !userName.toLowerCase().equals(userName)) {
-                                c.error("Please use only lowercase letters.");
-                            }
- else if (userName.isEmpty()) {
-                                c.error("the string is empty");
-                            }
-
+                validator.createCheck().dependsOn("password", passwordTextField.textProperty())
+                    .withMethod(c -> {
+                        final String userName = c.get("password");
+                        if (null != userName && !userName.toLowerCase().equals(userName)) {
+                            c.error("Please use only lowercase letters.");
+                        } else if (userName.isEmpty()) {
+                            c.error("the string is empty");
                         }
-).decorates(passwordTextField).immediate();
+                    }).decorates(passwordTextField).immediate();
                 final Window window = passwordTextField.getScene().getWindow();
                 final Bounds bounds = passwordTextField
-                        .localToScreen(passwordTextField.getBoundsInLocal());
+                    .localToScreen(passwordTextField.getBoundsInLocal());
                 passwordTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
                     public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                            final String newValue) {
+                                        final String newValue) {
                         if (validator.containsErrors()) {
                             tooltip.setText(validator.createStringBinding().getValue());
                             tooltip.setStyle("-fx-background-color: #f00;");
                             passwordTextField.setTooltip(tooltip);
                             passwordTextField.getTooltip().show(window, bounds.getMinX() - 10,
-                                    bounds.getMinY() + 30);
-                        }
- else {
+                                bounds.getMinY() + 30);
+                        } else {
                             if (null != passwordTextField.getTooltip()) {
                                 passwordTextField.getTooltip().hide();
                             }
-
                         }
-
                     }
-
-                }
-);
+                });
                 passwordTextField.addEventFilter(KeyEvent.KEY_PRESSED,
-                        new EventHandler<KeyEvent>() {
-                            @Override
-                            public void handle(final KeyEvent event) {
-                                if (KeyCode.ENTER == event.getCode()) {
-                                    if (validator.containsErrors()) {
-                                        event.consume();
-                                    }
-
+                    new EventHandler<KeyEvent>() {
+                        @Override
+                        public void handle(final KeyEvent event) {
+                            if (KeyCode.ENTER == event.getCode()) {
+                                if (validator.containsErrors()) {
+                                    event.consume();
                                 }
-
                             }
-
                         }
-);
+                    });
             }
-
-        }
-);
+        });
 
         // Phone number validation
         this.num_telephoneTextField.textProperty().addListener(new ChangeListener<String>() {
-            /**
-             * Validates the phone number field input, shows/hides an inline error tooltip, and prevents submission via Enter when invalid.
-             *
-             * Performs two checks on the field's text: it must contain only digits and must not be empty. When validation fails,
-             * an error tooltip with a red background is shown near the text field containing the validation message; when validation
-             * passes the tooltip is hidden. If the Enter key is pressed while validation errors exist, the key event is consumed.
-             *
-             * @param observable the observable value that changed
-             * @param oldValue   the previous text value
-             * @param newValue   the new text value
-             */
             @Override
             public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                    final String newValue) {
+                                final String newValue) {
                 final Validator validator = new Validator();
                 validator.createCheck()
-                        .dependsOn("firstName", num_telephoneTextField.textProperty())
-                        .withMethod(c -> {
-                            final String userName = c.get("firstName");
-                            if (null != userName) {
-                                final String numberRegex = "\\d*";
-                                if (!userName.matches(numberRegex)) {
-                                    c.error("Please use only numbers.");
-                                }
-
+                    .dependsOn("phoneNumber", num_telephoneTextField.textProperty())
+                    .withMethod(c -> {
+                        final String userName = c.get("phoneNumber");
+                        if (null != userName) {
+                            final String numberRegex = "\\d*";
+                            if (!userName.matches(numberRegex)) {
+                                c.error("Please use only numbers.");
                             }
- else if (userName.isEmpty()) {
-                                c.error("the string is empty");
-                            }
-
+                        } else if (userName.isEmpty()) {
+                            c.error("the string is empty");
                         }
-).decorates(num_telephoneTextField).immediate();
+                    }).decorates(num_telephoneTextField).immediate();
                 final Window window = num_telephoneTextField.getScene().getWindow();
                 final Bounds bounds = num_telephoneTextField
-                        .localToScreen(num_telephoneTextField.getBoundsInLocal());
+                    .localToScreen(num_telephoneTextField.getBoundsInLocal());
                 num_telephoneTextField.textProperty().addListener(new ChangeListener<String>() {
                     @Override
                     public void changed(final ObservableValue<? extends String> observable, final String oldValue,
-                            final String newValue) {
+                                        final String newValue) {
                         if (validator.containsErrors()) {
                             tooltip.setText(validator.createStringBinding().getValue());
                             tooltip.setStyle("-fx-background-color: #f00;");
                             num_telephoneTextField.setTooltip(tooltip);
                             num_telephoneTextField.getTooltip().show(window,
-                                    bounds.getMinX() - 10, bounds.getMinY() + 30);
-                        }
- else {
+                                bounds.getMinX() - 10, bounds.getMinY() + 30);
+                        } else {
                             if (null != num_telephoneTextField.getTooltip()) {
                                 num_telephoneTextField.getTooltip().hide();
                             }
-
                         }
-
                     }
-
-                }
-);
+                });
                 num_telephoneTextField.addEventFilter(KeyEvent.KEY_PRESSED,
-                        new EventHandler<KeyEvent>() {
-                            @Override
-                            public void handle(final KeyEvent event) {
-                                if (KeyCode.ENTER == event.getCode()) {
-                                    if (validator.containsErrors()) {
-                                        event.consume();
-                                    }
-
+                    new EventHandler<KeyEvent>() {
+                        @Override
+                        public void handle(final KeyEvent event) {
+                            if (KeyCode.ENTER == event.getCode()) {
+                                if (validator.containsErrors()) {
+                                    event.consume();
                                 }
-
                             }
-
                         }
-);
+                    });
             }
-
-        }
-);
+        });
 
         // Initialize role selection combobox
-        final List<String> roleList = Arrays.asList("client", "responsable de cinema");
+        final List<String> roleList = Arrays.asList(UserRole.CLIENT.name(), UserRole.CINEMA_MANAGER.name());
         for (final String role : roleList) {
             this.roleComboBox.getItems().add(role);
         }
-
     }
 
-
     /**
-     * Opens a file chooser to select a PNG or JPG image, uploads the selected file to Cloudinary,
-     * stores the resulting URL in `cloudinaryImageUrl`, and sets the image into `photoDeProfilImageView`.
-     *
-     * @param event the UI action event that triggered the image import
+     * @param event
      */
     @FXML
     void importImage(final ActionEvent event) {
         final FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("PNG", "*.png"),
-                new FileChooser.ExtensionFilter("JPG", "*.jpg"));
+            new FileChooser.ExtensionFilter("PNG", "*.png"),
+            new FileChooser.ExtensionFilter("JPG", "*.jpg"));
         fileChooser.setTitle("Sélectionner une image");
         final File selectedFile = fileChooser.showOpenDialog(null);
         if (null != selectedFile) {
@@ -694,25 +539,16 @@ public class SignUpController implements Initializable {
             } catch (final IOException e) {
                 SignUpController.LOGGER.log(Level.SEVERE, "Error uploading image to Cloudinary", e);
             }
-
         }
-
     }
 
-
     /**
-     * Validate the signup form, create and persist a User (Client or CinemaManager), stop animations, and navigate to the profile view.
-     *
-     * Performs field validation (required fields, numeric phone, email format) and shows an error Alert for validation failures.
-     * On successful validation, constructs the appropriate User subclass based on the selected role, persists it via UserService,
-     * stops active UI animations, and replaces the current scene with the user's profile.
-     *
-     * @param event the ActionEvent triggered by the signup control
-     * @throws IOException if persisting the user or loading the profile view fails
+     * @param event
+     * @throws IOException
      */
     @FXML
     void signup(final ActionEvent event) throws IOException {
-        final String role = this.roleComboBox.getValue();
+        final UserRole role = UserRole.valueOf(this.roleComboBox.getValue());
         User user = null;
         final String nom = this.nomTextField.getText();
         final String prenom = this.prenomTextField.getText();
@@ -720,54 +556,74 @@ public class SignUpController implements Initializable {
         final String password = this.passwordTextField.getText();
         final String email = this.emailTextField.getText();
         final LocalDate dateDeNaissance = this.dateDeNaissanceDatePicker.getValue();
-        if (nom.isEmpty() || prenom.isEmpty() || num_telephone.isEmpty() || password.isEmpty() || role.isEmpty()
-                || email.isEmpty() || null == dateDeNaissance) {
+        if (nom.isEmpty() || prenom.isEmpty() || num_telephone.isEmpty() || password.isEmpty() || role.name().isEmpty()
+            || email.isEmpty() || null == dateDeNaissance) {
             final Alert alert = new Alert(Alert.AlertType.ERROR, "Please fill in all the required fields",
-                    ButtonType.CLOSE);
+                ButtonType.CLOSE);
             alert.show();
             return;
         }
-
         if (!num_telephone.matches("\\d+")) {
             final Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid phone number format", ButtonType.CLOSE);
             alert.show();
             return;
         }
 
-        if (!email.matches("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}")) {
-            final Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid email format", ButtonType.CLOSE);
+        // Enhanced email validation using EmailValidator
+        if (!EmailValidator.isValid(email)) {
+            String errorMessage = EmailValidator.getValidationMessage(email);
+            final Alert alert = new Alert(Alert.AlertType.ERROR,
+                errorMessage != null ? errorMessage : "Invalid email format", ButtonType.CLOSE);
+            alert.show();
+            return;
+        }
+
+        // Enhanced password validation using PasswordValidator
+        List<String> passwordErrors = PasswordValidator.getValidationErrors(password);
+        if (!passwordErrors.isEmpty()) {
+            final Alert alert = new Alert(Alert.AlertType.ERROR,
+                "Password validation failed:\n" + String.join("\n", passwordErrors),
+                ButtonType.CLOSE);
+            alert.show();
+            return;
+        }
+
+        // Check if email already exists
+        final UserService userService = new UserService();
+        if (userService.checkEmailFound(email)) {
+            final Alert alert = new Alert(Alert.AlertType.ERROR,
+                "This email is already registered. Please use a different email or login.",
+                ButtonType.CLOSE);
             alert.show();
             return;
         }
 
         switch (role) {
-            case "responsable de cinema":
+            case UserRole.CINEMA_MANAGER:
                 user = new CinemaManager(this.nomTextField.getText(), this.prenomTextField.getText(),
-                        this.num_telephoneTextField.getText(), this.passwordTextField.getText(),
-                        this.roleComboBox.getValue(), this.emailTextField.getText(),
-                        Date.valueOf(this.dateDeNaissanceDatePicker.getValue()), this.emailTextField.getText(),
-                        cloudinaryImageUrl != null ? cloudinaryImageUrl : "");
+                    this.num_telephoneTextField.getText(), this.passwordTextField.getText(),
+                    UserRole.valueOf(this.roleComboBox.getValue()), this.emailTextField.getText(),
+                    Date.valueOf(this.dateDeNaissanceDatePicker.getValue()), this.emailTextField.getText(),
+                    cloudinaryImageUrl != null ? cloudinaryImageUrl : "");
                 break;
-            case "client":
+            case UserRole.CLIENT:
                 user = new Client(this.nomTextField.getText(), this.prenomTextField.getText(),
-                        this.num_telephoneTextField.getText(), this.passwordTextField.getText(),
-                        this.roleComboBox.getValue(), this.emailTextField.getText(),
-                        Date.valueOf(this.dateDeNaissanceDatePicker.getValue()), this.emailTextField.getText(),
-                        cloudinaryImageUrl != null ? cloudinaryImageUrl : "");
+                    this.num_telephoneTextField.getText(), this.passwordTextField.getText(),
+                    UserRole.valueOf(this.roleComboBox.getValue()), this.emailTextField.getText(),
+                    Date.valueOf(this.dateDeNaissanceDatePicker.getValue()), this.emailTextField.getText(),
+                    cloudinaryImageUrl != null ? cloudinaryImageUrl : "");
                 break;
             default:
                 final Alert alert = new Alert(Alert.AlertType.ERROR, "the given role is not available",
-                        ButtonType.CLOSE);
+                    ButtonType.CLOSE);
                 alert.show();
                 return;
         }
-
 
         try {
             // Stop animations before navigating away
             stopAllAnimations();
 
-            final UserService userService = new UserService();
             userService.create(user);
             final Stage stage = (Stage) this.nomTextField.getScene().getWindow();
             final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/users/Profile.fxml"));
@@ -779,22 +635,15 @@ public class SignUpController implements Initializable {
             LOGGER.log(Level.SEVERE, "Error during signup process", e);
             throw new IOException("Failed to complete signup process", e);
         }
-
     }
 
-
     /**
-     * Stop all running animations and remove runtime-created dynamic UI elements from the signup scene.
-     *
-     * <p>Stops the particle creation timeline (if active) and removes any dynamically created particles,
-     * polygons, and rectangles from the foreground pane. The method tolerates missing elements and
-     * failures during removal and logs warnings for cleanup errors.</p>
+     * Stops all animations when leaving the signup screen
      */
     private void stopAllAnimations() {
         if (particleCreationTimeline != null) {
             particleCreationTimeline.stop();
         }
-
 
         // Clean up dynamic elements by removing them from the scene
         if (dynamicParticles != null) {
@@ -805,7 +654,6 @@ public class SignUpController implements Initializable {
                 LOGGER.warning("Could not access foreground pane for cleanup: " + e.getMessage());
             }
 
-
             if (foregroundPane != null) {
                 for (Circle particle : dynamicParticles) {
                     if (particle != null) {
@@ -814,15 +662,10 @@ public class SignUpController implements Initializable {
                         } catch (Exception e) {
                             LOGGER.warning("Could not remove particle: " + e.getMessage());
                         }
-
                     }
-
                 }
-
             }
-
         }
-
 
         // Clean up dynamic shapes
         if (dynamicShapes != null) {
@@ -833,7 +676,6 @@ public class SignUpController implements Initializable {
                 LOGGER.warning("Could not access foreground pane for cleanup: " + e.getMessage());
             }
 
-
             if (foregroundPane != null) {
                 for (Polygon shape : dynamicShapes) {
                     if (shape != null) {
@@ -842,15 +684,10 @@ public class SignUpController implements Initializable {
                         } catch (Exception e) {
                             LOGGER.warning("Could not remove shape: " + e.getMessage());
                         }
-
                     }
-
                 }
-
             }
-
         }
-
 
         // Clean up dynamic rectangles
         if (dynamicRectangles != null) {
@@ -861,7 +698,6 @@ public class SignUpController implements Initializable {
                 LOGGER.warning("Could not access foreground pane for cleanup: " + e.getMessage());
             }
 
-
             if (foregroundPane != null) {
                 for (Rectangle rect : dynamicRectangles) {
                     if (rect != null) {
@@ -870,37 +706,26 @@ public class SignUpController implements Initializable {
                         } catch (Exception e) {
                             LOGGER.warning("Could not remove rectangle: " + e.getMessage());
                         }
-
                     }
-
                 }
-
             }
-
         }
-
 
         LOGGER.info("All animations stopped and dynamic elements cleaned up");
     }
 
-
     /**
-     * Initialize and start animated floating effects for the controller's predefined particle nodes.
-     *
-     * For each non-null particle this method attaches and starts translate (X and Y), scale, and fade
-     * transitions to produce drifting, pulsing, and glow animations; logs a startup message for each
-     * animated particle and a warning if a particle reference is null.
+     * Initializes the particle animation for floating red particles
      */
     private void initializeParticleAnimation() {
-        Circle[] particles = { particle1, particle2, particle3, particle4, particle5, particle6,
-                particle7, particle8, particle9, particle10, particle11, particle12 }
-;
+        Circle[] particles = {particle1, particle2, particle3, particle4, particle5, particle6,
+            particle7, particle8, particle9, particle10, particle11, particle12};
 
         for (int i = 0; i < particles.length; i++) {
             if (particles[i] != null) {
                 // Floating X movement
                 TranslateTransition particleFloatX = new TranslateTransition(Duration.seconds(3 + i * 0.3),
-                        particles[i]);
+                    particles[i]);
                 particleFloatX.setFromX(0);
                 particleFloatX.setToX(30 - i * 5);
                 particleFloatX.setCycleCount(Animation.INDEFINITE);
@@ -909,7 +734,7 @@ public class SignUpController implements Initializable {
 
                 // Floating Y movement
                 TranslateTransition particleFloatY = new TranslateTransition(Duration.seconds(4 + i * 0.2),
-                        particles[i]);
+                    particles[i]);
                 particleFloatY.setFromY(0);
                 particleFloatY.setToY(25 - i * 3);
                 particleFloatY.setCycleCount(Animation.INDEFINITE);
@@ -941,52 +766,34 @@ public class SignUpController implements Initializable {
                 particleFade.play();
 
                 LOGGER.info("Started animations for particle" + (i + 1));
-            }
- else {
+            } else {
                 LOGGER.warning("particle" + (i + 1) + " is null");
             }
-
         }
-
     }
 
-
     /**
-         * Sets up animations for the controller's predefined geometric shape nodes.
-         *
-         * For each non-null shape field (shape1..shape6) this method invokes the
-         * appropriate animation helper: animatePolygon for Polygon, animateRectangleShape
-         * for Rectangle, and animateCircleShape for Circle.
-         */
+     * Initializes the geometric shape animations
+     */
     private void initializeShapeAnimation() {
         // Array of all existing shapes
-        Object[] shapes = { shape1, shape2, shape3, shape4, shape5, shape6 }
-;
+        Object[] shapes = {shape1, shape2, shape3, shape4, shape5, shape6};
 
         for (int i = 0; i < shapes.length; i++) {
             if (shapes[i] != null) {
                 if (shapes[i] instanceof Polygon) {
                     animatePolygon((Polygon) shapes[i], i);
-                }
- else if (shapes[i] instanceof Rectangle) {
+                } else if (shapes[i] instanceof Rectangle) {
                     animateRectangleShape((Rectangle) shapes[i], i);
-                }
- else if (shapes[i] instanceof Circle) {
+                } else if (shapes[i] instanceof Circle) {
                     animateCircleShape((Circle) shapes[i], i);
                 }
-
             }
-
         }
-
     }
 
-
     /**
-     * Starts continuous rotation, scale, and translate animations on the provided polygon.
-     *
-     * @param shape the Polygon node to animate
-     * @param index an index used to vary animation parameters (affects rotation direction and timing)
+     * Animates a polygon shape
      */
     private void animatePolygon(Polygon shape, int index) {
         // Rotation animation
@@ -1021,15 +828,8 @@ public class SignUpController implements Initializable {
         LOGGER.info("Started animations for polygon shape" + (index + 1));
     }
 
-
     /**
-     * Animate the given Rectangle with continuous rotation, opacity pulsing, and back-and-forth translation.
-     *
-     * The index parameter staggers and varies the animations: it adjusts durations for each transition and
-     * alternates rotation direction (even indices rotate clockwise, odd indices counter-clockwise).
-     *
-     * @param shape the Rectangle node to animate
-     * @param index zero-based index used to vary animation durations and rotation direction
+     * Animates a rectangle shape
      */
     private void animateRectangleShape(Rectangle shape, int index) {
         // Rotation animation
@@ -1062,14 +862,8 @@ public class SignUpController implements Initializable {
         LOGGER.info("Started animations for rectangle shape" + (index + 1));
     }
 
-
     /**
-     * Starts continuous scaling, fading, and translation animations on the given circle.
-     *
-     * The provided `index` influences animation durations and offsets so multiple shapes animate with staggered timings.
-     *
-     * @param shape the Circle node to animate
-     * @param index an integer used to vary animation timings and offsets for this shape
+     * Animates a circle shape
      */
     private void animateCircleShape(Circle shape, int index) {
         // Scale animation
@@ -1106,15 +900,8 @@ public class SignUpController implements Initializable {
         LOGGER.info("Started animations for circle shape" + (index + 1));
     }
 
-
     /**
-     * Creates and starts runtime-generated animated visual elements and adds them to the foreground pane.
-     *
-     * <p>This method generates three categories of dynamic nodes — small circular particles, polygonal shapes,
-     * and rectangles — with randomized sizes, positions, styles, and opacities; adds each node to the UI
-     * foreground AnchorPane; stores references in the controller's dynamicParticles, dynamicShapes, and
-     * dynamicRectangles arrays; and invokes the corresponding animation starter methods for each element
-     * (animateParticle, animateShape, animateRectangle).</p>
+     * Creates dynamic animated elements on the screen
      */
     private void createDynamicAnimations() {
         // Get a reference to the foreground AnchorPane (the last AnchorPane in the
@@ -1135,11 +922,11 @@ public class SignUpController implements Initializable {
             int red = 180 + RANDOM.nextInt(75);
             int darkRed = 80 + RANDOM.nextInt(100);
             particle.setStyle("-fx-fill: radial-gradient(center 50% 50%, radius 50%, #" +
-                    String.format("%02X", red) + "2222, #" + String.format("%02X", darkRed) + "0000); " +
-                    "-fx-effect: dropshadow(gaussian, #ff" + String.format("%02X", red) +
-                    String.format("%02X", red) + ", " + (10 + RANDOM.nextInt(15)) + ", 0, 0, 0); " +
-                    "-fx-opacity: " + (0.6 + RANDOM.nextDouble() * 0.4) + ";" +
-                    "-fx-z-index: " + (250 + i) + ";");
+                String.format("%02X", red) + "2222, #" + String.format("%02X", darkRed) + "0000); " +
+                "-fx-effect: dropshadow(gaussian, #ff" + String.format("%02X", red) +
+                String.format("%02X", red) + ", " + (10 + RANDOM.nextInt(15)) + ", 0, 0, 0); " +
+                "-fx-opacity: " + (0.6 + RANDOM.nextDouble() * 0.4) + ";" +
+                "-fx-z-index: " + (250 + i) + ";");
 
             // Add to parent and store reference
             foregroundPane.getChildren().add(particle);
@@ -1148,7 +935,6 @@ public class SignUpController implements Initializable {
             // Create animation
             animateParticle(particle, i);
         }
-
 
         // Create polygons
         for (int i = 0; i < dynamicShapes.length; i++) {
@@ -1167,7 +953,6 @@ public class SignUpController implements Initializable {
                 points[j * 2 + 1] = centerY + radius * Math.sin(angle);
             }
 
-
             shape.getPoints().addAll(points);
 
             // Apply styling
@@ -1175,12 +960,12 @@ public class SignUpController implements Initializable {
             int red = 100 + RANDOM.nextInt(100);
             int darkRed = 40 + RANDOM.nextInt(60);
             shape.setStyle("-fx-fill: linear-gradient(to bottom right, rgba(" + red + ", 0, 0, 0.5), rgba(" + darkRed
-                    + ", 0, 0, 0.3)); " +
-                    "-fx-stroke: #" + String.format("%02X", red) + "0000; " +
-                    "-fx-stroke-width: " + (1 + RANDOM.nextInt(2)) + "; " +
-                    "-fx-effect: dropshadow(gaussian, rgba(" + red + ", 0, 0, 0.7), " + (8 + RANDOM.nextInt(10))
-                    + ", 0, 0, 0); " +
-                    "-fx-z-index: " + (300 + i) + ";");
+                + ", 0, 0, 0.3)); " +
+                "-fx-stroke: #" + String.format("%02X", red) + "0000; " +
+                "-fx-stroke-width: " + (1 + RANDOM.nextInt(2)) + "; " +
+                "-fx-effect: dropshadow(gaussian, rgba(" + red + ", 0, 0, 0.7), " + (8 + RANDOM.nextInt(10))
+                + ", 0, 0, 0); " +
+                "-fx-z-index: " + (300 + i) + ";");
             shape.setOpacity(0.4 + RANDOM.nextDouble() * 0.4);
 
             // Add to parent and store reference
@@ -1190,7 +975,6 @@ public class SignUpController implements Initializable {
             // Create animation
             animateShape(shape, i);
         }
-
 
         // Create rectangles
         for (int i = 0; i < dynamicRectangles.length; i++) {
@@ -1206,12 +990,12 @@ public class SignUpController implements Initializable {
             int red = 150 + RANDOM.nextInt(100);
             int darkRed = 60 + RANDOM.nextInt(80);
             rect.setStyle("-fx-fill: linear-gradient(to bottom right, rgba(" + red + ", " + (red / 4) + ", " + (red / 4)
-                    + ", 0.6), rgba(" + darkRed + ", " + (darkRed / 6) + ", " + (darkRed / 6) + ", 0.4)); " +
-                    "-fx-stroke: #" + String.format("%02X", red) + "2222; " +
-                    "-fx-stroke-width: " + (RANDOM.nextDouble() * 2) + "; " +
-                    "-fx-effect: dropshadow(gaussian, rgba(" + red + ", " + (red / 4) + ", " + (red / 4) + ", 0.6), "
-                    + (8 + RANDOM.nextInt(8)) + ", 0, 0, 0); " +
-                    "-fx-z-index: " + (330 + i) + ";");
+                + ", 0.6), rgba(" + darkRed + ", " + (darkRed / 6) + ", " + (darkRed / 6) + ", 0.4)); " +
+                "-fx-stroke: #" + String.format("%02X", red) + "2222; " +
+                "-fx-stroke-width: " + (RANDOM.nextDouble() * 2) + "; " +
+                "-fx-effect: dropshadow(gaussian, rgba(" + red + ", " + (red / 4) + ", " + (red / 4) + ", 0.6), "
+                + (8 + RANDOM.nextInt(8)) + ", 0, 0, 0); " +
+                "-fx-z-index: " + (330 + i) + ";");
             rect.setOpacity(0.3 + RANDOM.nextDouble() * 0.5);
 
             // Add to parent and store reference
@@ -1222,16 +1006,11 @@ public class SignUpController implements Initializable {
             animateRectangle(rect, i);
         }
 
-
         LOGGER.info("Created " + maxDynamicElements + " dynamic particles and shapes");
     }
 
-
     /**
-     * Set up and start continuous translate, scale, and fade animations for a particle, staggering the start by index.
-     *
-     * @param particle the Circle node to animate
-     * @param index    staging index used to delay the animation start; the start delay is index * 50 milliseconds
+     * Creates animations for a particle
      */
     private void animateParticle(Circle particle, int index) {
         // Create X movement
@@ -1276,19 +1055,12 @@ public class SignUpController implements Initializable {
             moveY.play();
             scale.play();
             fade.play();
-        }
-);
+        });
         delay.play();
     }
 
-
     /**
-     * Animates a Polygon with continuous rotation, pulsing scale, and smooth translation.
-     *
-     * The provided `index` determines a short start delay (index * 200ms) to stagger multiple shapes.
-     *
-     * @param shape the Polygon to animate
-     * @param index zero-based position used to stagger the animation start time for this shape
+     * Creates animations for a shape
      */
     private void animateShape(Polygon shape, int index) {
         // Create rotation
@@ -1323,19 +1095,12 @@ public class SignUpController implements Initializable {
             rotate.play();
             scale.play();
             move.play();
-        }
-);
+        });
         delay.play();
     }
 
-
     /**
-     * Animate the given rectangle with continuous rotation, scale pulsing, opacity fading, and drifting translation.
-     *
-     * The animations start after a staggered delay determined by the index parameter (index * 150 ms).
-     *
-     * @param rect  the Rectangle node to animate
-     * @param index zero-based index used to stagger the animation start time for this rectangle
+     * Creates animations for a rectangle
      */
     private void animateRectangle(Rectangle rect, int index) {
         // Create rotation
@@ -1380,9 +1145,7 @@ public class SignUpController implements Initializable {
             scale.play();
             fade.play();
             move.play();
-        }
-);
+        });
         delay.play();
     }
-
 }

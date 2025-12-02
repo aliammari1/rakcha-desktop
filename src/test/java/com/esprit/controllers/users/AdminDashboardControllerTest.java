@@ -1,6 +1,13 @@
 package com.esprit.controllers.users;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import com.esprit.models.users.User;
+import com.esprit.services.users.UserService;
+import com.esprit.utils.TestFXBase;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
@@ -8,18 +15,11 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.Timeout;
-import java.util.concurrent.TimeUnit;
 import org.testfx.framework.junit5.Start;
 
-import com.esprit.models.users.User;
-import com.esprit.services.users.UserService;
-import com.esprit.utils.TestFXBase;
+import java.util.concurrent.TimeUnit;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.stage.Stage;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Comprehensive test suite for AdminDashboardController.
@@ -40,7 +40,8 @@ class AdminDashboardControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Dashboard Overview Tests")
     class DashboardOverviewTests {
 
@@ -86,7 +87,8 @@ class AdminDashboardControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("User Management Tests")
     class UserManagementTests {
 
@@ -129,7 +131,8 @@ class AdminDashboardControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("System Monitoring Tests")
     class SystemMonitoringTests {
 

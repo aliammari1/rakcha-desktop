@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import org.kordamp.ikonli.javafx.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21"
+           fx:controller="com.esprit.controllers.films.TicketDetailsController"
+           styleClass="immersive-root"
+           stylesheets="@../styles/filmStyle.css, @../styles/tickets.css">
+
+  <!-- Background -->
+  <AnchorPane styleClass="cinematic-bg">
+    <Circle radius="180" layoutX="100" layoutY="200" styleClass="ambient-orb orb-primary" opacity="0.12"/>
+  </AnchorPane>
+
+  <BorderPane styleClass="main-shell">
+    <left>
+      <fx:include source="../sidebar.fxml"/>
+    </left>
+
+    <center>
+      <ScrollPane styleClass="main-scroll" fitToWidth="true" hbarPolicy="NEVER">
+        <VBox alignment="CENTER" spacing="30">
+          <padding>
+            <Insets top="40" bottom="60" left="50" right="50"/>
+          </padding>
+
+          <!-- Back Button -->
+          <HBox alignment="CENTER_LEFT">
+            <Button onAction="#goBack" styleClass="back-btn" text="Back to Tickets">
+              <graphic>
+                <FontIcon iconLiteral="mdi2a-arrow-left:18"/>
+              </graphic>
+            </Button>
+          </HBox>
+
+          <!-- Main Ticket Card -->
+          <StackPane styleClass="premium-ticket-card" maxWidth="500">
+            <VBox spacing="0">
+
+              <!-- Film Banner -->
+              <StackPane styleClass="ticket-banner" prefHeight="200">
+                <ImageView fx:id="backdropImage" styleClass="ticket-backdrop" preserveRatio="false" fitHeight="200"/>
+                <Region styleClass="ticket-gradient"/>
+                <VBox alignment="BOTTOM_LEFT" spacing="5">
+                  <padding>
+                    <Insets topRightBottomLeft="20"/>
+                  </padding>
+                  <Label fx:id="filmTitle" styleClass="ticket-main-title"/>
+                  <HBox spacing="10">
+                    <Label fx:id="filmYear" styleClass="ticket-meta-pill"/>
+                    <Label fx:id="filmDuration" styleClass="ticket-meta-pill"/>
+                    <Label fx:id="filmRating" styleClass="ticket-meta-pill"/>
+                  </HBox>
+                </VBox>
+              </StackPane>
+
+              <!-- Ticket Info Section -->
+              <VBox spacing="20" styleClass="ticket-info-section">
+                <padding>
+                  <Insets top="25" bottom="25" left="30" right="30"/>
+                </padding>
+
+                <HBox spacing="25">
+                  <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="CINEMA" styleClass="ticket-field-label"/>
+                    <Label fx:id="cinemaName" styleClass="ticket-field-value"/>
+                  </VBox>
+                  <VBox spacing="5">
+                    <Label text="HALL" styleClass="ticket-field-label"/>
+                    <Label fx:id="hallName" styleClass="ticket-field-value"/>
+                  </VBox>
+                </HBox>
+
+                <HBox spacing="25">
+                  <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="DATE" styleClass="ticket-field-label"/>
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                      <FontIcon iconLiteral="mdi2c-calendar:18" styleClass="field-icon"/>
+                      <Label fx:id="sessionDate" styleClass="ticket-field-value"/>
+                    </HBox>
+                  </VBox>
+                  <VBox spacing="5">
+                    <Label text="TIME" styleClass="ticket-field-label"/>
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                      <FontIcon iconLiteral="mdi2c-clock:18" styleClass="field-icon"/>
+                      <Label fx:id="sessionTime" styleClass="ticket-field-value"/>
+                    </HBox>
+                  </VBox>
+                </HBox>
+
+                <HBox spacing="25">
+                  <VBox spacing="5">
+                    <Label text="SEAT" styleClass="ticket-field-label"/>
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                      <FontIcon iconLiteral="mdi2s-seat:18" styleClass="field-icon"/>
+                      <Label fx:id="seatInfo" styleClass="ticket-field-value highlight"/>
+                    </HBox>
+                  </VBox>
+                  <VBox spacing="5">
+                    <Label text="TYPE" styleClass="ticket-field-label"/>
+                    <Label fx:id="seatType" styleClass="ticket-type-badge"/>
+                  </VBox>
+                  <Region HBox.hgrow="ALWAYS"/>
+                  <VBox spacing="5" alignment="CENTER_RIGHT">
+                    <Label text="PRICE PAID" styleClass="ticket-field-label"/>
+                    <Label fx:id="pricePaid" styleClass="ticket-price"/>
+                  </VBox>
+                </HBox>
+              </VBox>
+
+              <!-- Dotted Divider -->
+              <HBox styleClass="ticket-divider" alignment="CENTER">
+                <Circle radius="15" styleClass="divider-circle left"/>
+                <Region styleClass="divider-line" HBox.hgrow="ALWAYS"/>
+                <Circle radius="15" styleClass="divider-circle right"/>
+              </HBox>
+
+              <!-- QR Code Section -->
+              <VBox alignment="CENTER" spacing="15" styleClass="qr-section">
+                <padding>
+                  <Insets top="25" bottom="30" left="30" right="30"/>
+                </padding>
+
+                <Label text="SCAN TO ENTER" styleClass="qr-title"/>
+                <StackPane styleClass="qr-frame">
+                  <ImageView fx:id="qrCodeImage" fitWidth="180" fitHeight="180"/>
+                </StackPane>
+                <Label fx:id="ticketCode" styleClass="ticket-code"/>
+
+                <HBox spacing="10" styleClass="status-container">
+                  <FontIcon fx:id="statusIcon" iconLiteral="mdi2c-check-circle:20"/>
+                  <Label fx:id="ticketStatus" styleClass="ticket-status"/>
+                </HBox>
+              </VBox>
+            </VBox>
+          </StackPane>
+
+          <!-- Action Buttons -->
+          <HBox spacing="15" alignment="CENTER" styleClass="ticket-actions">
+            <Button onAction="#downloadAsPDF" styleClass="action-btn primary" text="Download PDF">
+              <graphic>
+                <FontIcon iconLiteral="mdi2f-file-pdf-box:20"/>
+              </graphic>
+            </Button>
+            <Button onAction="#addToWallet" styleClass="action-btn secondary" text="Add to Wallet">
+              <graphic>
+                <FontIcon iconLiteral="mdi2w-wallet:20"/>
+              </graphic>
+            </Button>
+            <Button onAction="#shareTicket" styleClass="action-btn secondary" text="Share">
+              <graphic>
+                <FontIcon iconLiteral="mdi2s-share-variant:20"/>
+              </graphic>
+            </Button>
+          </HBox>
+
+          <!-- Additional Options -->
+          <VBox spacing="15" styleClass="additional-options" maxWidth="500">
+            <Button onAction="#transferTicket" styleClass="option-btn" text="Transfer Ticket to Friend"
+                    maxWidth="Infinity">
+              <graphic>
+                <FontIcon iconLiteral="mdi2a-account-arrow-right:20"/>
+              </graphic>
+            </Button>
+            <Button onAction="#requestRefund" styleClass="option-btn danger" text="Request Refund" maxWidth="Infinity">
+              <graphic>
+                <FontIcon iconLiteral="mdi2c-cash-refund:20"/>
+              </graphic>
+            </Button>
+          </VBox>
+
+          <!-- Purchase Info -->
+          <VBox spacing="10" styleClass="purchase-info" maxWidth="500">
+            <HBox spacing="10">
+              <Label text="Purchased on:" styleClass="info-label"/>
+              <Label fx:id="purchaseDate" styleClass="info-value"/>
+            </HBox>
+            <HBox spacing="10">
+              <Label text="Transaction ID:" styleClass="info-label"/>
+              <Label fx:id="transactionId" styleClass="info-value"/>
+            </HBox>
+            <HBox spacing="10">
+              <Label text="Payment Method:" styleClass="info-label"/>
+              <Label fx:id="paymentMethod" styleClass="info-value"/>
+            </HBox>
+          </VBox>
+        </VBox>
+      </ScrollPane>
+    </center>
+  </BorderPane>
+</StackPane>

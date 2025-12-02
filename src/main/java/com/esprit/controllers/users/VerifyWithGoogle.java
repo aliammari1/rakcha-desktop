@@ -1,23 +1,27 @@
 package com.esprit.controllers.users;
 
-import java.awt.*;
-import java.io.IOException;
-import java.net.URI;
-import java.util.concurrent.ExecutionException;
-import java.util.logging.Logger;
-
+import com.esprit.enums.UserRole;
+import com.esprit.models.users.Client;
+import com.esprit.models.users.User;
+import com.esprit.services.users.UserService;
 import com.esprit.utils.SignInGoogle;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+
+import java.awt.*;
+import java.io.IOException;
+import java.net.URI;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * JavaFX controller class for the RAKCHA application. Handles UI interactions
@@ -28,25 +32,20 @@ import javafx.stage.Stage;
  * @since 1.0.0
  */
 public class VerifyWithGoogle {
+
     private static final Logger LOGGER = Logger.getLogger(VerifyWithGoogle.class.getName());
 
     @FXML
-    private TextField authTextField;
+    private TextField verification_code_textField;
     @FXML
-    private Label emailErrorLabel;
+    private Label verification_error_label;
     @FXML
-    private Hyperlink hyperlink;
-    @FXML
-    private Label passwordErrorLabel;
-    @FXML
-    private Button sendButton;
+    private Button verifyButton;
 
     /**
-     * Initializes the controller by launching the Google sign-in page in the system default browser.
-     *
-     * @throws IOException if the system default browser cannot be launched or the URI cannot be accessed
-     * @throws ExecutionException if obtaining the sign-in URL fails
-     * @throws InterruptedException if the thread is interrupted while obtaining the sign-in URL
+     * @throws IOException
+     * @throws ExecutionException
+     * @throws InterruptedException
      */
     @FXML
     void initialize() throws IOException, ExecutionException, InterruptedException {
@@ -54,26 +53,132 @@ public class VerifyWithGoogle {
         Desktop.getDesktop().browse(URI.create(link));
     }
 
-
     /**
-     * Verifies the authorization code entered in the authTextField and, if valid, replaces the current window's scene with the Profile view.
-     *
-     * If verification fails, the scene is not changed.
-     *
-     * @param event the ActionEvent that triggered the verification
+     * @param event
      */
     @FXML
     void verifyAuthCode(final ActionEvent event) {
         try {
-            SignInGoogle.verifyAuthUrl(this.authTextField.getText());
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/users/Profile.fxml"));
-            final Parent root = loader.load();
-            final Stage stage = (Stage) this.sendButton.getScene().getWindow();
-            stage.setScene(new Scene(root));
-        } catch (final Exception e) {
-            VerifyWithGoogle.LOGGER.info("the auth is wrong");
-        }
+            String authCode = this.verification_code_textField.getText().trim();
 
+            if (authCode.isEmpty()) {
+                VerifyWithGoogle.LOGGER.warning("Authorization code is empty");
+                this.verification_error_label.setText("Please enter the authorization code");
+                return;
+            }
+
+            boolean verified = SignInGoogle.verifyAuthUrl(authCode);
+
+            if (verified) {
+                // Get the user information from Google
+                Map<String, Object> googleUserInfo = SignInGoogle.getLastUserInfo();
+
+                if (googleUserInfo != null) {
+                    // Create or get user from database
+                    User user = createOrGetUserFromGoogle(googleUserInfo);
+
+                    // Load the Profile FXML
+                    final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/users/Profile.fxml"));
+                    final Parent root = loader.load();
+
+                    // Get the controller and set the user data
+                    ProfileController controller = loader.getController();
+                    controller.setData(user);
+
+                    final Stage stage = (Stage) this.verifyButton.getScene().getWindow();
+                    stage.setScene(new Scene(root));
+
+                    // Clear the stored user info
+                    SignInGoogle.clearUserInfo();
+                } else {
+                    VerifyWithGoogle.LOGGER.warning("No user information retrieved from Google");
+                    this.verification_error_label.setText("Could not retrieve user information. Please try again.");
+                }
+            } else {
+                VerifyWithGoogle.LOGGER.warning("Authentication verification failed");
+                this.verification_error_label.setText("Invalid authorization code. Please try again.");
+            }
+        } catch (final Exception e) {
+            VerifyWithGoogle.LOGGER.log(Level.SEVERE, "Error during authentication", e);
+            this.verification_error_label.setText("An error occurred: " + e.getMessage());
+        }
     }
 
+    /**
+     * Creates a new user or retrieves an existing user from the database based on
+     * Google info
+     *
+     * @param googleUserInfo The user information from Google
+     * @return The User object
+     */
+    private User createOrGetUserFromGoogle(Map<String, Object> googleUserInfo) {
+        String email = (String) googleUserInfo.get("email");
+        String name = (String) googleUserInfo.get("name");
+        String picture = (String) googleUserInfo.get("picture");
+
+        UserService userService = new UserService();
+
+        // Try to find existing user by email
+        User user = userService.getUserByEmail(email);
+
+        if (user == null) {
+            // Create new client user
+            user = new Client();
+            user.setEmail(email);
+            user.setRole(UserRole.CLIENT); // Set default role for Google OAuth users
+
+            // Split name into first and last name
+            if (name != null && !name.isEmpty()) {
+                String[] nameParts = name.split(" ", 2);
+                user.setFirstName(nameParts[0]);
+                if (nameParts.length > 1) {
+                    user.setLastName(nameParts[1]);
+                } else {
+                    user.setLastName(""); // Set empty last name if not provided
+                }
+            } else {
+                user.setFirstName("");
+                user.setLastName("");
+            }
+
+            // Set profile picture from Google
+            if (picture != null) {
+                user.setProfilePictureUrl(picture);
+            }
+
+            // Generate a temporary password (user authenticated via Google, so they don't
+            // need this)
+            user.setPasswordHash("google-oauth-" + System.currentTimeMillis());
+
+            // Set default phone number (required by schema)
+            user.setPhoneNumber("12345678");
+
+            // Save the new user
+            try {
+                userService.create(user);
+                VerifyWithGoogle.LOGGER.info("New user created from Google login: " + email);
+
+                // Retrieve the newly created user to get the generated ID
+                user = userService.getUserByEmail(email);
+                if (user != null) {
+                    VerifyWithGoogle.LOGGER.info("Retrieved user ID: " + user.getId());
+                }
+            } catch (Exception e) {
+                VerifyWithGoogle.LOGGER.log(Level.WARNING, "Failed to save new user", e);
+            }
+        } else {
+            // Update existing user with latest Google profile picture if available
+            if (picture != null && (user.getProfilePictureUrl() == null || user.getProfilePictureUrl().isEmpty())) {
+                user.setProfilePictureUrl(picture);
+                try {
+                    userService.update(user);
+                } catch (Exception e) {
+                    VerifyWithGoogle.LOGGER.log(Level.WARNING, "Failed to update user profile picture", e);
+                }
+            }
+            VerifyWithGoogle.LOGGER.info("Existing user found: " + email);
+        }
+
+        return user;
+    }
 }

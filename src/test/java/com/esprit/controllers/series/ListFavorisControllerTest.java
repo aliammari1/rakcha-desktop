@@ -1,9 +1,16 @@
 package com.esprit.controllers.series;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import com.esprit.models.series.Favorite;
+import com.esprit.models.series.Series;
+import com.esprit.services.series.FavoriteService;
+import com.esprit.services.series.SeriesService;
+import com.esprit.utils.TestFXBase;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableView;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
@@ -11,21 +18,13 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.Timeout;
-import java.util.concurrent.TimeUnit;
 import org.testfx.framework.junit5.Start;
 
-import com.esprit.models.series.Favorite;
-import com.esprit.models.series.Series;
-import com.esprit.services.series.IServiceFavoriteImpl;
-import com.esprit.services.series.IServiceSeriesImpl;
-import com.esprit.utils.TestFXBase;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
-import javafx.stage.Stage;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Comprehensive test suite for ListFavorisController.
@@ -35,9 +34,9 @@ import javafx.stage.Stage;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ListFavorisControllerTest extends TestFXBase {
 
-    private IServiceFavoriteImpl favoriteService;
+    private FavoriteService favoriteService;
 
-    private IServiceSeriesImpl seriesService;
+    private SeriesService seriesService;
 
     @Start
     public void start(Stage stage) throws Exception {
@@ -47,8 +46,25 @@ class ListFavorisControllerTest extends TestFXBase {
         stage.show();
     }
 
+    // Helper methods
+    private List<Favorite> createMockFavorites() {
+        List<Favorite> favorites = new ArrayList<>();
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+        Favorite fav1 = new Favorite();
+        Series s1 = new Series();
+        s1.setName("Breaking Bad");
+        fav1.setSeries(s1);
+
+        favorites.add(fav1);
+        return favorites;
+    }
+
+    private <T> com.esprit.utils.Page<T> createPagedResult(List<T> content) {
+        return new com.esprit.utils.Page<>(content, 0, content.size(), content.size());
+    }
+
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Favorites Display Tests")
     class FavoritesDisplayTests {
 
@@ -86,8 +102,8 @@ class ListFavorisControllerTest extends TestFXBase {
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Remove Favorite Tests")
     class RemoveFavoriteTests {
 
@@ -114,8 +130,8 @@ class ListFavorisControllerTest extends TestFXBase {
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("View Series Tests")
     class ViewSeriesTests {
 
@@ -131,8 +147,8 @@ class ListFavorisControllerTest extends TestFXBase {
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Empty State Tests")
     class EmptyStateTests {
 
@@ -146,25 +162,6 @@ class ListFavorisControllerTest extends TestFXBase {
             assertThat(emptyLabel).isNotNull();
         }
 
-    }
-
-
-    // Helper methods
-    private List<Favorite> createMockFavorites() {
-        List<Favorite> favorites = new ArrayList<>();
-
-        Favorite fav1 = new Favorite();
-        Series s1 = new Series();
-        s1.setName("Breaking Bad");
-        fav1.setSeries(s1);
-
-        favorites.add(fav1);
-        return favorites;
-    }
-
-
-    private <T> com.esprit.utils.Page<T> createPagedResult(List<T> content) {
-        return new com.esprit.utils.Page<>(content, 0, content.size(), content.size());
     }
 
 }

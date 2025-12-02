@@ -1,6 +1,10 @@
 package com.esprit.controllers.users;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import com.esprit.utils.TestFXBase;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
@@ -8,15 +12,11 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.Timeout;
-import java.util.concurrent.TimeUnit;
 import org.testfx.framework.junit5.Start;
 
-import com.esprit.utils.TestFXBase;
+import java.util.concurrent.TimeUnit;
 
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.stage.Stage;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Comprehensive test suite for SMSAdminController.
@@ -32,7 +32,7 @@ class SMSAdminControllerTest extends TestFXBase {
             getClass().getResource("/ui/users/smsadmin.fxml")
         );
         javafx.scene.Parent root = loader.load();
-        
+
         stage.setScene(new javafx.scene.Scene(root, 1280, 700));
         stage.show();
         stage.toFront();
@@ -64,7 +64,7 @@ class SMSAdminControllerTest extends TestFXBase {
             TextField phoneField = lookup("#phoneNumberTextfield").query();
             clickOn(phoneField).write("12345678");
 
-            assertThat(phoneField.getText()).isEqualTo("12345678");
+            assertThat(phoneField.getText()).isEqualTo(12345678);
         }
 
 
@@ -158,7 +158,7 @@ class SMSAdminControllerTest extends TestFXBase {
 
             TextField phoneField = lookup("#phoneNumberTextfield").query();
             Button sendButton = lookup("#sendSMS").query();
-            
+
             assertThat(phoneField).isNotNull();
             assertThat(sendButton).isNotNull();
         }
@@ -212,7 +212,7 @@ class SMSAdminControllerTest extends TestFXBase {
 
             TextField phoneField = lookup("#phoneNumberTextfield").query();
             TextField codeField = lookup("#codeTextField").query();
-            
+
             assertThat(phoneField).isNotNull();
             assertThat(codeField).isNotNull();
         }
@@ -398,7 +398,7 @@ class SMSAdminControllerTest extends TestFXBase {
             TextField phoneField = lookup("#phoneNumberTextfield").query();
             TextField codeField = lookup("#codeTextField").query();
             Button sendButton = lookup("#sendSMS").query();
-            
+
             assertThat(phoneField).isNotNull();
             assertThat(codeField).isNotNull();
             assertThat(sendButton).isNotNull();

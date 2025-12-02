@@ -1,30 +1,29 @@
 package com.esprit.controllers.products;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import org.junit.jupiter.api.DisplayName;
+import com.esprit.models.products.Comment;
+import com.esprit.models.products.Product;
+import com.esprit.models.users.Client;
+import com.esprit.utils.TestFXBase;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.FlowPane;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.Timeout;
-import java.util.concurrent.TimeUnit;
 import org.testfx.framework.junit5.Start;
 
-import com.esprit.models.products.Comment;
-import com.esprit.models.products.Product;
-import com.esprit.models.users.Client;
-import com.esprit.utils.TestFXBase;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.TextArea;
-import javafx.scene.layout.FlowPane;
-import javafx.stage.Stage;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Comprehensive test suite for CommentProductController.
@@ -42,6 +41,26 @@ class CommentProductControllerTest extends TestFXBase {
         stage.show();
     }
 
+    // Helper methods
+    private List<Comment> createMockComments() {
+        List<Comment> comments = new ArrayList<>();
+        comments.add(createMockComment("John", "Doe", "Great product!"));
+        comments.add(createMockComment("Jane", "Smith", "Excellent quality!"));
+        comments.add(createMockComment("Bob", "Johnson", "Highly recommended!"));
+        return comments;
+    }
+
+    private Comment createMockComment(String firstName, String lastName, String text) {
+        Client client = new Client();
+        client.setFirstName(firstName);
+        client.setLastName(lastName);
+
+        Comment comment = new Comment();
+        comment.setClient(client);
+        comment.setCommentText(text);
+
+        return comment;
+    }
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -104,13 +123,12 @@ class CommentProductControllerTest extends TestFXBase {
 
             // Try to submit
             waitForFxEvents();
-            
+
             // Verify text area is empty
             assertThat(commentArea.getText()).isEmpty();
         }
 
     }
-
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -136,7 +154,7 @@ class CommentProductControllerTest extends TestFXBase {
                 assertThat(warningLabel.get().isVisible()).isTrue();
             }
 
-            
+
             // Verify submit was prevented or comment didn't get added
             assertThat(commentArea.getText()).isNotEmpty();
         }
@@ -159,7 +177,7 @@ class CommentProductControllerTest extends TestFXBase {
                 assertThat(warningLabel.get().isVisible()).isFalse();
             }
 
-            
+
             // Verify comment text is present
             assertThat(commentArea.getText()).contains(cleanText);
         }
@@ -195,7 +213,7 @@ class CommentProductControllerTest extends TestFXBase {
 
             TextArea commentArea = lookup("#monCommentaitreText").query();
             assertThat(commentArea).isNotNull();
-            
+
             // Verify submit button exists
             var submitButton = lookup("#submitButton").tryQuery();
             if (submitButton.isPresent()) {
@@ -203,7 +221,7 @@ class CommentProductControllerTest extends TestFXBase {
                 assertThat(submitButton.get().isDisabled()).isFalse();
             }
 
-            
+
             clickOn(commentArea).write("bad words here");
 
             // Submit comment
@@ -213,8 +231,7 @@ class CommentProductControllerTest extends TestFXBase {
             if (submitButton.isPresent()) {
                 // Button should be disabled after bad words
                 assertThat(submitButton.get().isDisabled()).isTrue();
-            }
- else {
+            } else {
                 // Or warning should be visible
                 var warningLabel = lookup("#warningLabel").tryQuery();
                 assertThat(warningLabel.isPresent()).isTrue();
@@ -223,7 +240,6 @@ class CommentProductControllerTest extends TestFXBase {
         }
 
     }
-
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -239,7 +255,7 @@ class CommentProductControllerTest extends TestFXBase {
             FlowPane commentPane = lookup("#CommentFlowPane").query();
             assertThat(commentPane).isNotNull();
             assertThat(commentPane.isVisible()).isTrue();
-            
+
             // Verify pane has children or is ready to display
             assertThat(commentPane.getChildren()).isNotNull();
         }
@@ -252,24 +268,23 @@ class CommentProductControllerTest extends TestFXBase {
             waitForFxEvents();
 
             Comment comment = createMockComment("John", "Doe", "Great product!");
-            
+
             FlowPane commentPane = lookup("#CommentFlowPane").query();
             assertThat(commentPane).isNotNull();
 
             // Wait for any async rendering
             waitForFxEvents();
-            
+
             // Query for author name label or text node with author name
             var authorLabel = lookup("John Doe").tryQuery();
             if (authorLabel.isPresent()) {
                 assertThat(authorLabel.get().isVisible()).isTrue();
-            }
- else {
+            } else {
                 // If not found by text, verify comment pane has children
                 assertThat(commentPane.getChildren()).isNotNull();
             }
 
-            
+
             // Verify mock object has correct author data
             assertThat(comment.getClient().getFirstName()).isEqualTo("John");
             assertThat(comment.getClient().getLastName()).isEqualTo("Doe");
@@ -283,24 +298,23 @@ class CommentProductControllerTest extends TestFXBase {
             waitForFxEvents();
 
             Comment comment = createMockComment("John", "Doe", "Great product!");
-            
+
             FlowPane commentPane = lookup("#CommentFlowPane").query();
             assertThat(commentPane).isNotNull();
 
             // Wait for rendering
             waitForFxEvents();
-            
+
             // Query for comment text node
             var textNode = lookup("Great product!").tryQuery();
             if (textNode.isPresent()) {
                 assertThat(textNode.get().isVisible()).isTrue();
-            }
- else {
+            } else {
                 // Verify comment pane is visible and ready
                 assertThat(commentPane.isVisible()).isTrue();
             }
 
-            
+
             // Verify mock comment has expected text
             assertThat(comment.getCommentText()).isEqualTo("Great product!");
         }
@@ -314,10 +328,10 @@ class CommentProductControllerTest extends TestFXBase {
 
             FlowPane commentPane = lookup("#CommentFlowPane").query();
             assertThat(commentPane).isNotNull();
-            
+
             // Comment pane should exist even if empty
             assertThat(commentPane.isVisible()).isTrue();
-            
+
             // Verify pane is ready (children list exists)
             assertThat(commentPane.getChildren()).isNotNull();
         }
@@ -331,11 +345,11 @@ class CommentProductControllerTest extends TestFXBase {
 
             List<Comment> comments = createMockComments();
             assertThat(comments).isNotEmpty().hasSize(3);
-            
+
             FlowPane commentPane = lookup("#CommentFlowPane").query();
             assertThat(commentPane).isNotNull();
             assertThat(commentPane.isVisible()).isTrue();
-            
+
             // Verify each comment has valid author and text
             for (Comment c : comments) {
                 assertThat(c.getClient()).isNotNull();
@@ -346,7 +360,6 @@ class CommentProductControllerTest extends TestFXBase {
         }
 
     }
-
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -362,7 +375,7 @@ class CommentProductControllerTest extends TestFXBase {
             Comment comment = createMockComment("Jane", "Smith", "Excellent!");
             assertThat(comment).isNotNull();
             assertThat(comment.getClient().getFirstName()).isEqualTo("Jane");
-            
+
             FlowPane commentPane = lookup("#CommentFlowPane").query();
             assertThat(commentPane).isNotNull();
         }
@@ -376,7 +389,7 @@ class CommentProductControllerTest extends TestFXBase {
 
             String longText = "a".repeat(200);
             Comment comment = createMockComment("John", "Doe", longText);
-            
+
             assertThat(comment.getCommentText()).hasSize(200);
             assertThat(comment.getCommentText()).isEqualTo(longText);
         }
@@ -389,7 +402,7 @@ class CommentProductControllerTest extends TestFXBase {
             waitForFxEvents();
 
             Comment comment = createMockComment("John", "Doe", "Test comment");
-            
+
             assertThat(comment.getClient()).isNotNull();
             assertThat(comment.getClient().getFirstName()).isEqualTo("John");
             assertThat(comment.getClient().getLastName()).isEqualTo("Doe");
@@ -403,16 +416,15 @@ class CommentProductControllerTest extends TestFXBase {
             waitForFxEvents();
 
             Comment comment = createMockComment("John", "Doe", "Test comment");
-            
+
             assertThat(comment.getCommentText()).isNotEmpty();
             assertThat(comment.getClient().getLastName()).isEqualTo("Doe");
-            
+
             // Verify comment structure
             assertThat(comment.getClient().getFirstName()).isNotEmpty();
         }
 
     }
-
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -435,7 +447,7 @@ class CommentProductControllerTest extends TestFXBase {
 
             // Submit comment
             waitForFxEvents();
-            
+
             // Verify UI is responsive
             assertThat(commentArea).isNotNull();
         }
@@ -456,7 +468,7 @@ class CommentProductControllerTest extends TestFXBase {
 
             // Submit comment
             waitForFxEvents();
-            
+
             // Verify comment area is responsive
             assertThat(commentArea).isNotNull();
         }
@@ -481,7 +493,6 @@ class CommentProductControllerTest extends TestFXBase {
 
     }
 
-
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
     @DisplayName("Navigation Tests")
@@ -492,7 +503,7 @@ class CommentProductControllerTest extends TestFXBase {
         @DisplayName("Should navigate to cinema client interface")
         void testNavigateToCinema() {
             waitForFxEvents();
-            
+
             // Verify page is loaded
             FlowPane commentPane = lookup("#CommentFlowPane").query();
             assertThat(commentPane).isNotNull();
@@ -504,7 +515,7 @@ class CommentProductControllerTest extends TestFXBase {
         @DisplayName("Should navigate to product client interface")
         void testNavigateToProducts() {
             waitForFxEvents();
-            
+
             // Verify page is loaded
             FlowPane commentPane = lookup("#CommentFlowPane").query();
             assertThat(commentPane).isNotNull();
@@ -516,7 +527,7 @@ class CommentProductControllerTest extends TestFXBase {
         @DisplayName("Should navigate to movie client interface")
         void testNavigateToMovies() {
             waitForFxEvents();
-            
+
             // Verify page is loaded
             FlowPane commentPane = lookup("#CommentFlowPane").query();
             assertThat(commentPane).isNotNull();
@@ -528,7 +539,7 @@ class CommentProductControllerTest extends TestFXBase {
         @DisplayName("Should navigate to series client interface")
         void testNavigateToSeries() {
             waitForFxEvents();
-            
+
             // Verify page is loaded
             FlowPane commentPane = lookup("#CommentFlowPane").query();
             assertThat(commentPane).isNotNull();
@@ -540,14 +551,13 @@ class CommentProductControllerTest extends TestFXBase {
         @DisplayName("Should navigate to event client interface")
         void testNavigateToEvents() {
             waitForFxEvents();
-            
+
             // Verify page is loaded
             FlowPane commentPane = lookup("#CommentFlowPane").query();
             assertThat(commentPane).isNotNull();
         }
 
     }
-
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -584,7 +594,7 @@ class CommentProductControllerTest extends TestFXBase {
 
             // Submit comment and verify handling
             waitForFxEvents();
-            
+
             // Verify UI is still responsive
             assertThat(commentArea).isNotNull();
         }
@@ -602,13 +612,12 @@ class CommentProductControllerTest extends TestFXBase {
 
             // Submit comment and verify error handling
             waitForFxEvents();
-            
+
             // Verify UI is still responsive
             assertThat(commentArea).isNotNull();
         }
 
     }
-
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -634,29 +643,6 @@ class CommentProductControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
-    }
-
-
-    // Helper methods
-    private List<Comment> createMockComments() {
-        List<Comment> comments = new ArrayList<>();
-        comments.add(createMockComment("John", "Doe", "Great product!"));
-        comments.add(createMockComment("Jane", "Smith", "Excellent quality!"));
-        comments.add(createMockComment("Bob", "Johnson", "Highly recommended!"));
-        return comments;
-    }
-
-
-    private Comment createMockComment(String firstName, String lastName, String text) {
-        Client client = new Client();
-        client.setFirstName(firstName);
-        client.setLastName(lastName);
-
-        Comment comment = new Comment();
-        comment.setClient(client);
-        comment.setCommentText(text);
-
-        return comment;
     }
 
 }

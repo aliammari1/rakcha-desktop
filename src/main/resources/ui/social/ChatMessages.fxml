@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import org.kordamp.ikonli.javafx.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21"
+           fx:controller="com.esprit.controllers.users.ChatMessagesController"
+           styleClass="immersive-root"
+           stylesheets="@../styles/filmStyle.css, @../styles/social.css">
+
+  <!-- Background -->
+  <AnchorPane styleClass="cinematic-bg">
+    <Circle radius="200" layoutX="100" layoutY="100" styleClass="ambient-orb orb-primary" opacity="0.12"/>
+    <Circle radius="300" layoutX="1200" layoutY="600" styleClass="ambient-orb orb-secondary" opacity="0.08"/>
+  </AnchorPane>
+
+  <BorderPane styleClass="main-shell">
+    <left>
+      <fx:include source="../sidebar.fxml"/>
+    </left>
+
+    <center>
+      <HBox spacing="0" HBox.hgrow="ALWAYS">
+
+        <!-- Conversations List Panel -->
+        <VBox spacing="0" styleClass="conversations-panel" prefWidth="340">
+
+          <!-- Header -->
+          <VBox styleClass="panel-header" spacing="15">
+            <padding>
+              <Insets top="20" bottom="20" left="20" right="20"/>
+            </padding>
+
+            <HBox alignment="CENTER_LEFT" spacing="10">
+              <Label text="Messages" styleClass="panel-title"/>
+              <Label fx:id="unreadBadge" styleClass="unread-badge" text="0" visible="false"/>
+              <Region HBox.hgrow="ALWAYS"/>
+              <Button onAction="#newConversation" styleClass="new-chat-btn">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2m-message-plus:20"/>
+                </graphic>
+              </Button>
+            </HBox>
+
+            <HBox styleClass="search-box" alignment="CENTER">
+              <FontIcon iconLiteral="mdi2m-magnify:18" styleClass="search-icon"/>
+              <TextField fx:id="searchField" styleClass="search-input" promptText="Search conversations..."
+                         HBox.hgrow="ALWAYS"/>
+            </HBox>
+          </VBox>
+
+          <!-- Conversations List -->
+          <ScrollPane styleClass="conversations-scroll" fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+            <VBox fx:id="conversationsContainer" spacing="0" styleClass="conversations-list"/>
+          </ScrollPane>
+        </VBox>
+
+        <!-- Chat Area -->
+        <VBox spacing="0" styleClass="chat-area" HBox.hgrow="ALWAYS">
+
+          <!-- Empty State -->
+          <StackPane fx:id="emptyState" VBox.vgrow="ALWAYS" visible="true">
+            <VBox alignment="CENTER" spacing="20">
+              <FontIcon iconLiteral="mdi2m-message-text:80" styleClass="empty-icon"/>
+              <Label text="Start a Conversation" styleClass="empty-title"/>
+              <Label text="Select a chat or start a new conversation to begin messaging" styleClass="empty-desc"
+                     wrapText="true" maxWidth="300" alignment="CENTER"/>
+              <Button onAction="#newConversation" styleClass="start-chat-btn" text="New Message">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2m-message-plus:18"/>
+                </graphic>
+              </Button>
+            </VBox>
+          </StackPane>
+
+          <!-- Active Chat View -->
+          <VBox fx:id="activeChatView" spacing="0" visible="false" managed="false" VBox.vgrow="ALWAYS">
+
+            <!-- Chat Header -->
+            <HBox styleClass="chat-header" alignment="CENTER_LEFT" spacing="15">
+              <padding>
+                <Insets top="15" bottom="15" left="20" right="20"/>
+              </padding>
+
+              <StackPane styleClass="avatar-container-small">
+                <ImageView fx:id="chatAvatar" fitWidth="45" fitHeight="45" styleClass="chat-avatar"/>
+                <Circle fx:id="onlineIndicator" radius="7" styleClass="online-indicator"/>
+              </StackPane>
+
+              <VBox spacing="2">
+                <Label fx:id="chatName" styleClass="chat-name"/>
+                <Label fx:id="chatStatus" styleClass="chat-status"/>
+              </VBox>
+
+              <Region HBox.hgrow="ALWAYS"/>
+
+              <HBox spacing="10">
+                <Button styleClass="header-action-btn" onAction="#voiceCall">
+                  <graphic>
+                    <FontIcon iconLiteral="mdi2p-phone:20"/>
+                  </graphic>
+                </Button>
+                <Button styleClass="header-action-btn" onAction="#videoCall">
+                  <graphic>
+                    <FontIcon iconLiteral="mdi2v-video:20"/>
+                  </graphic>
+                </Button>
+                <MenuButton styleClass="more-btn">
+                  <graphic>
+                    <FontIcon iconLiteral="mdi2d-dots-vertical:20"/>
+                  </graphic>
+                  <items>
+                    <MenuItem text="View Profile" onAction="#viewProfile"/>
+                    <MenuItem text="Media Gallery" onAction="#openMediaGallery"/>
+                    <MenuItem text="Search in Chat" onAction="#searchInChat"/>
+                    <SeparatorMenuItem/>
+                    <MenuItem text="Mute Notifications" onAction="#muteConversation"/>
+                    <MenuItem text="Block User" onAction="#blockUser"/>
+                    <MenuItem text="Delete Conversation" onAction="#deleteConversation" styleClass="danger"/>
+                  </items>
+                </MenuButton>
+              </HBox>
+            </HBox>
+
+            <!-- Messages Container -->
+            <ScrollPane fx:id="messagesScroll" styleClass="messages-scroll" fitToWidth="true" hbarPolicy="NEVER"
+                        VBox.vgrow="ALWAYS">
+              <VBox fx:id="messagesContainer" spacing="12" styleClass="messages-container">
+                <padding>
+                  <Insets top="20" bottom="20" left="25" right="25"/>
+                </padding>
+              </VBox>
+            </ScrollPane>
+
+            <!-- Typing Indicator -->
+            <HBox fx:id="typingIndicator" styleClass="typing-indicator" alignment="CENTER_LEFT" visible="false"
+                  managed="false">
+              <padding>
+                <Insets left="25"/>
+              </padding>
+              <Label fx:id="typingText" text="John is typing..." styleClass="typing-text"/>
+              <HBox styleClass="typing-dots" spacing="3">
+                <Circle radius="4" styleClass="dot dot-1"/>
+                <Circle radius="4" styleClass="dot dot-2"/>
+                <Circle radius="4" styleClass="dot dot-3"/>
+              </HBox>
+            </HBox>
+
+            <!-- Message Input -->
+            <HBox styleClass="message-input-area" alignment="CENTER" spacing="12">
+              <padding>
+                <Insets top="15" bottom="15" left="20" right="20"/>
+              </padding>
+
+              <Button styleClass="attachment-btn" onAction="#attachFile">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2p-plus:22"/>
+                </graphic>
+              </Button>
+
+              <Button styleClass="emoji-btn" onAction="#showEmojis">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2e-emoticon-outline:22"/>
+                </graphic>
+              </Button>
+
+              <HBox styleClass="input-container" HBox.hgrow="ALWAYS" alignment="CENTER">
+                <TextArea fx:id="messageInput" styleClass="message-input" promptText="Type a message..." wrapText="true"
+                          HBox.hgrow="ALWAYS" prefRowCount="1"/>
+              </HBox>
+
+              <Button fx:id="sendButton" styleClass="send-btn" onAction="#sendMessage">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2s-send:22"/>
+                </graphic>
+              </Button>
+            </HBox>
+          </VBox>
+        </VBox>
+
+        <!-- Info Panel (Collapsible) -->
+        <VBox fx:id="infoPanel" styleClass="info-panel" prefWidth="280" visible="false" managed="false">
+          <padding>
+            <Insets top="20" bottom="20" left="20" right="20"/>
+          </padding>
+
+          <!-- User Info -->
+          <VBox alignment="CENTER" spacing="15">
+            <ImageView fx:id="infoPanelAvatar" fitWidth="90" fitHeight="90" styleClass="info-avatar"/>
+            <Label fx:id="infoPanelName" styleClass="info-name"/>
+            <Label fx:id="infoPanelStatus" styleClass="info-status"/>
+          </VBox>
+
+          <!-- Actions -->
+          <HBox spacing="20" alignment="CENTER" styleClass="info-actions">
+            <VBox alignment="CENTER" spacing="5">
+              <Button styleClass="info-action-btn" onAction="#viewProfile">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2a-account:20"/>
+                </graphic>
+              </Button>
+              <Label text="Profile" styleClass="info-action-label"/>
+            </VBox>
+            <VBox alignment="CENTER" spacing="5">
+              <Button styleClass="info-action-btn" onAction="#muteConversation">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2b-bell-off:20"/>
+                </graphic>
+              </Button>
+              <Label text="Mute" styleClass="info-action-label"/>
+            </VBox>
+            <VBox alignment="CENTER" spacing="5">
+              <Button styleClass="info-action-btn" onAction="#searchInChat">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2m-magnify:20"/>
+                </graphic>
+              </Button>
+              <Label text="Search" styleClass="info-action-label"/>
+            </VBox>
+          </HBox>
+
+          <!-- Shared Media -->
+          <VBox spacing="12" styleClass="shared-media-section">
+            <HBox alignment="CENTER_LEFT" spacing="10">
+              <Label text="Shared Media" styleClass="section-label"/>
+              <Region HBox.hgrow="ALWAYS"/>
+              <Button styleClass="see-all-btn" text="See All" onAction="#openMediaGallery"/>
+            </HBox>
+            <TilePane fx:id="sharedMediaGrid" prefColumns="3" hgap="5" vgap="5"/>
+          </VBox>
+
+          <!-- Shared Files -->
+          <VBox spacing="12" styleClass="shared-files-section">
+            <Label text="Shared Files" styleClass="section-label"/>
+            <VBox fx:id="sharedFilesContainer" spacing="8"/>
+          </VBox>
+        </VBox>
+      </HBox>
+    </center>
+  </BorderPane>
+
+  <!-- New Conversation Dialog -->
+  <VBox fx:id="newConversationDialog" styleClass="dialog-overlay" visible="false" managed="false" alignment="CENTER">
+    <VBox styleClass="dialog-card" spacing="20" maxWidth="420">
+      <padding>
+        <Insets topRightBottomLeft="30"/>
+      </padding>
+
+      <HBox alignment="CENTER_LEFT" spacing="15">
+        <Label text="New Message" styleClass="dialog-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button onAction="#closeNewConversation" styleClass="close-btn">
+          <graphic>
+            <FontIcon iconLiteral="mdi2c-close:20"/>
+          </graphic>
+        </Button>
+      </HBox>
+
+      <VBox spacing="8">
+        <Label text="To:" styleClass="field-label"/>
+        <HBox styleClass="search-box" alignment="CENTER">
+          <FontIcon iconLiteral="mdi2m-magnify:18" styleClass="search-icon"/>
+          <TextField fx:id="newChatSearchField" styleClass="search-input" promptText="Search friends..."
+                     HBox.hgrow="ALWAYS"/>
+        </HBox>
+      </VBox>
+
+      <VBox fx:id="friendSearchResults" spacing="8" styleClass="friend-search-results" maxHeight="200">
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="200"/>
+      </VBox>
+    </VBox>
+  </VBox>
+
+  <!-- Emoji Picker -->
+  <VBox fx:id="emojiPicker" styleClass="emoji-picker" visible="false" managed="false" alignment="TOP_CENTER"
+        maxWidth="350" maxHeight="400">
+    <HBox styleClass="emoji-categories" spacing="0">
+      <Button styleClass="emoji-category active" text="😊"/>
+      <Button styleClass="emoji-category" text="🎬"/>
+      <Button styleClass="emoji-category" text="🍿"/>
+      <Button styleClass="emoji-category" text="❤️"/>
+      <Button styleClass="emoji-category" text="🎭"/>
+    </HBox>
+    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+      <FlowPane fx:id="emojiGrid" hgap="5" vgap="5" styleClass="emoji-grid"/>
+    </ScrollPane>
+  </VBox>
+</StackPane>

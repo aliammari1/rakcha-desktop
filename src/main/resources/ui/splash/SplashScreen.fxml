@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.ColorAdjust?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import org.kordamp.ikonli.javafx.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1"
+           fx:id="rootPane"
+           xmlns="http://javafx.com/javafx/21"
+           fx:controller="com.esprit.controllers.SplashScreenController"
+           prefWidth="1400" prefHeight="900"
+           style="-fx-background-color: #000000;"
+           stylesheets="@../styles/splash-cinematic.css"
+>
+
+  <!-- Background Layer - Animated Film Grain Effect -->
+  <Pane fx:id="backgroundPane" styleClass="cinematic-background">
+    <!-- Film grain overlay -->
+    <Rectangle fx:id="filmGrain"
+               width="1400" height="800"
+               styleClass="film-grain"/>
+  </Pane>
+
+  <!-- Main Content with Cinematic Aspect Ratio -->
+  <VBox alignment="CENTER" spacing="0">
+
+    <!-- Top Letterbox Bar -->
+    <HBox prefHeight="60" styleClass="letterbox-bar"/>
+
+    <!-- Main Cinematic Content -->
+    <StackPane fx:id="cinematicCanvas"
+               VBox.vgrow="ALWAYS"
+               styleClass="cinematic-canvas">
+
+      <!-- Background Image/Video Container -->
+      <StackPane fx:id="mediaContainer" styleClass="media-container">
+        <!-- Cinematic Background Image -->
+        <ImageView fx:id="backgroundImage"
+                   fitWidth="1400" fitHeight="680"
+                   preserveRatio="false"
+                   styleClass="background-cinematic">
+          <effect>
+            <ColorAdjust brightness="-0.3" contrast="0.1" saturation="-0.2"/>
+          </effect>
+        </ImageView>
+
+        <!-- Vignette Effect Overlay -->
+        <Rectangle fx:id="vignetteOverlay"
+                   width="1400" height="680"
+                   styleClass="vignette-overlay"/>
+
+        <!-- Dramatic Light Rays -->
+        <Pane fx:id="lightRaysPane" styleClass="light-rays-container" mouseTransparent="true">
+          <Rectangle fx:id="lightRay1"
+                     width="3" height="800"
+                     layoutX="300" layoutY="-100"
+                     rotate="25"
+                     styleClass="light-ray"/>
+          <Rectangle fx:id="lightRay2"
+                     width="2" height="900"
+                     layoutX="700" layoutY="-150"
+                     rotate="15"
+                     styleClass="light-ray"/>
+          <Rectangle fx:id="lightRay3"
+                     width="4" height="850"
+                     layoutX="1100" layoutY="-100"
+                     rotate="-20"
+                     styleClass="light-ray"/>
+        </Pane>
+      </StackPane>
+
+      <!-- Center Content - Logo and Title -->
+      <VBox alignment="CENTER" spacing="30" styleClass="center-content">
+
+        <!-- Cinematic Logo Container -->
+        <StackPane fx:id="logoContainer" styleClass="logo-container">
+          <!-- Logo Glow Effect -->
+          <Circle fx:id="logoGlow"
+                  radius="150"
+                  styleClass="logo-glow"/>
+
+          <!-- Animated Logo Ring -->
+          <Circle fx:id="logoRing"
+                  radius="120"
+                  strokeWidth="2"
+                  styleClass="logo-ring"/>
+
+          <!-- Main Logo -->
+          <ImageView fx:id="logoImage"
+                     fitWidth="200" fitHeight="200"
+                     preserveRatio="true"
+                     styleClass="main-logo">
+            <effect>
+              <DropShadow color="#ff0000" radius="30" spread="0.3"/>
+            </effect>
+          </ImageView>
+
+          <!-- Animated Particles around logo -->
+          <Pane fx:id="particlePane" mouseTransparent="true" maxWidth="400" maxHeight="400"/>
+        </StackPane>
+
+        <!-- Title with Cinematic Typography -->
+        <VBox alignment="CENTER" spacing="10" styleClass="title-container">
+          <!-- Main Title -->
+          <Label fx:id="titleLabel"
+                 text="RAKCHA"
+                 styleClass="cinematic-title">
+            <effect>
+              <Glow level="0.5"/>
+            </effect>
+          </Label>
+
+          <!-- Subtitle with typewriter effect -->
+          <HBox alignment="CENTER" spacing="20" styleClass="subtitle-container">
+            <Rectangle width="60" height="1" styleClass="subtitle-line"/>
+            <Label fx:id="subtitleLabel"
+                   text="CINEMA • EXPERIENCE • REIMAGINED"
+                   styleClass="cinematic-subtitle"/>
+            <Rectangle width="60" height="1" styleClass="subtitle-line"/>
+          </HBox>
+        </VBox>
+
+        <!-- Loading Section -->
+        <VBox alignment="CENTER" spacing="15" styleClass="loading-section">
+          <!-- Loading Text -->
+          <Label fx:id="loadingText"
+                 text="Loading exclusive content..."
+                 styleClass="loading-text"/>
+
+          <!-- Cinematic Loading Bar -->
+          <StackPane styleClass="loading-bar-container" prefWidth="500">
+            <Rectangle fx:id="loadingBarBackground"
+                       width="500" height="8"
+                       arcWidth="8" arcHeight="8"
+                       styleClass="loading-bar-bg"/>
+            <Rectangle fx:id="loadingBar"
+                       width="0" height="8"
+                       arcWidth="8" arcHeight="8"
+                       styleClass="loading-bar"
+                       StackPane.alignment="CENTER_LEFT"/>
+          </StackPane>
+
+          <!-- Loading Percentage -->
+          <Label fx:id="loadingPercentage"
+                 text="0%"
+                 styleClass="loading-percentage"/>
+        </VBox>
+      </VBox>
+
+      <!-- Floating Movie Elements -->
+      <Pane fx:id="floatingElementsPane" mouseTransparent="true" styleClass="floating-elements">
+        <!-- Film Reel Icon -->
+        <StackPane layoutX="80" layoutY="120">
+          <FontIcon iconLiteral="mdi2f-film:32" styleClass="floating-icon"/>
+        </StackPane>
+
+        <!-- Popcorn -->
+        <StackPane layoutX="1240" layoutY="180">
+          <FontIcon iconLiteral="mdi2p-popcorn:28" styleClass="floating-icon"/>
+        </StackPane>
+
+        <!-- Movie Camera -->
+        <StackPane layoutX="120" layoutY="480">
+          <FontIcon iconLiteral="mdi2v-video-vintage:30" styleClass="floating-icon"/>
+        </StackPane>
+
+        <!-- Star -->
+        <StackPane layoutX="1270" layoutY="460">
+          <FontIcon iconLiteral="mdi2s-star:28" styleClass="floating-icon"/>
+        </StackPane>
+
+        <!-- Ticket -->
+        <StackPane layoutX="60" layoutY="320">
+          <FontIcon iconLiteral="mdi2t-ticket:30" styleClass="floating-icon"/>
+        </StackPane>
+
+        <!-- Clapperboard -->
+        <StackPane layoutX="1290" layoutY="320">
+          <FontIcon iconLiteral="mdi2m-movie-open:32" styleClass="floating-icon"/>
+        </StackPane>
+      </Pane>
+
+      <!-- Bottom Credits Section -->
+      <VBox alignment="BOTTOM_CENTER"
+            StackPane.alignment="BOTTOM_CENTER"
+            styleClass="credits-container">
+        <padding>
+          <Insets bottom="80"/>
+        </padding>
+
+        <HBox alignment="CENTER" spacing="40" styleClass="credits-row">
+          <VBox alignment="CENTER" spacing="5" styleClass="credit-item">
+            <FontIcon iconLiteral="mdi2p-play-circle:28" styleClass="credit-icon"/>
+            <Label text="4K Streaming" styleClass="credit-label"/>
+          </VBox>
+          <Rectangle width="1" height="40" styleClass="credit-divider"/>
+          <VBox alignment="CENTER" spacing="5" styleClass="credit-item">
+            <FontIcon iconLiteral="mdi2t-ticket-confirmation:28" styleClass="credit-icon"/>
+            <Label text="Premium Seating" styleClass="credit-label"/>
+          </VBox>
+          <Rectangle width="1" height="40" styleClass="credit-divider"/>
+          <VBox alignment="CENTER" spacing="5" styleClass="credit-item">
+            <FontIcon iconLiteral="mdi2s-surround-sound:28" styleClass="credit-icon"/>
+            <Label text="Dolby Atmos" styleClass="credit-label"/>
+          </VBox>
+          <Rectangle width="1" height="40" styleClass="credit-divider"/>
+          <VBox alignment="CENTER" spacing="5" styleClass="credit-item">
+            <FontIcon iconLiteral="mdi2s-star:28" styleClass="credit-icon"/>
+            <Label text="VIP Access" styleClass="credit-label"/>
+          </VBox>
+        </HBox>
+      </VBox>
+
+      <!-- Corner Decorations -->
+      <Pane mouseTransparent="true" styleClass="corner-decorations">
+        <!-- Top Left Corner -->
+        <Polygon points="0,0,80,0,0,80"
+                 layoutX="0" layoutY="0"
+                 styleClass="corner-triangle tl"/>
+        <!-- Top Right Corner -->
+        <Polygon points="0,0,80,0,80,80"
+                 layoutX="1320" layoutY="0"
+                 styleClass="corner-triangle tr"/>
+        <!-- Bottom Left Corner -->
+        <Polygon points="0,0,0,80,80,80"
+                 layoutX="0" layoutY="600"
+                 styleClass="corner-triangle bl"/>
+        <!-- Bottom Right Corner -->
+        <Polygon points="0,80,80,0,80,80"
+                 layoutX="1320" layoutY="600"
+                 styleClass="corner-triangle br"/>
+      </Pane>
+    </StackPane>
+
+    <!-- Bottom Letterbox Bar -->
+    <HBox prefHeight="60" styleClass="letterbox-bar"/>
+  </VBox>
+
+  <!-- Fade Overlay for Transitions -->
+  <Rectangle fx:id="fadeOverlay"
+             width="1400" height="800"
+             styleClass="fade-overlay"
+             mouseTransparent="true"/>
+</StackPane>

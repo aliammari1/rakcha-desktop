@@ -1,13 +1,7 @@
 package com.esprit.controllers.cinemas;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-
 import com.esprit.models.cinemas.Cinema;
 import com.esprit.services.cinemas.CinemaService;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,30 +15,36 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+
 /**
  * Controller for modifying cinema details in a GUI application using JavaFX.
- * 
+ *
  * <p>
  * This controller provides functionality to modify cinema information such as
  * name,
  * address, and logo. It handles form validation, file selection for logos, and
  * database updates through the CinemaService.
  * </p>
- * 
+ *
  * <p>
  * The controller implements the Initializable interface to set up the UI
  * components
  * when the FXML is loaded.
  * </p>
- * 
+ *
  * @author Esprit Team
  * @version 1.0
- * @since 1.0
  * @see javafx.fxml.Initializable
  * @see com.esprit.models.cinemas.Cinema
  * @see com.esprit.services.cinemas.CinemaService
+ * @since 1.0
  */
 public class ModifierCinemaController implements Initializable {
+
     @FXML
     private TextField tfNom;
     @FXML
@@ -67,7 +67,7 @@ public class ModifierCinemaController implements Initializable {
 
     /**
      * Populate form fields with the given Cinema's data and update the logo preview.
-     *
+     * <p>
      * If the cinema has a non-null, non-empty logo path, loads that image and sets it into the logo ImageView.
      *
      * @param cinema the Cinema whose values populate the form
@@ -76,7 +76,7 @@ public class ModifierCinemaController implements Initializable {
         this.cinema = cinema;
         tfNom.setText(cinema.getName());
         tfAdresse.setText(cinema.getAddress());
-        String logo = cinema.getLogoPath();
+        String logo = cinema.getLogoUrl();
         if (logo != null && !logo.isEmpty()) {
             Image image = new Image(logo);
             tfLogo.setImage(image);
@@ -87,7 +87,7 @@ public class ModifierCinemaController implements Initializable {
 
     /**
      * Save edits to the currently selected cinema and open the cinema dashboard.
-     *
+     * <p>
      * Validates that a cinema is selected and that required fields (name and address)
      * are filled; updates the cinema's name, address, and logo path, persists the change
      * via the cinema service, and opens the DashboardResponsableCinema UI. Shows an
@@ -115,7 +115,7 @@ public class ModifierCinemaController implements Initializable {
         // Mettre à jour les informations du cinéma
         cinema.setName(nouveauNom);
         cinema.setAddress(nouvelleAdresse);
-        cinema.setLogoPath("");
+        cinema.setLogoUrl("");
         // Mettre à jour le cinéma dans la base de données
         CinemaService cinemaService = new CinemaService();
         cinemaService.update(cinema);
@@ -134,7 +134,7 @@ public class ModifierCinemaController implements Initializable {
 
     /**
      * Open a file chooser to select an image for the cinema logo and display it.
-     *
+     * <p>
      * Stores the chosen file in {@code selectedFile} and sets the {@code tfLogo}
      * ImageView to the selected image if a file was picked.
      *

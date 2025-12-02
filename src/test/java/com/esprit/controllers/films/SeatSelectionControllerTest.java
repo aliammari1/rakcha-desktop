@@ -1,5 +1,7 @@
 package com.esprit.controllers.films;
 
+import com.esprit.utils.TestFXBase;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -8,17 +10,14 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.Timeout;
-import java.util.concurrent.TimeUnit;
 import org.testfx.framework.junit5.Start;
 
-import com.esprit.utils.TestFXBase;
-
-import javafx.stage.Stage;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Comprehensive UI tests for SeatSelectionController.
  * Tests seat selection, booking flow, and payment processing.
- * 
+ *
  * @author RAKCHA Team
  * @version 1.0.0
  */
@@ -32,7 +31,7 @@ class SeatSelectionControllerTest extends TestFXBase {
             getClass().getResource("/ui/films/SeatSelection.fxml")
         );
         javafx.scene.Parent root = loader.load();
-        
+
         stage.setScene(new javafx.scene.Scene(root, 1280, 700));
         stage.show();
         stage.toFront();

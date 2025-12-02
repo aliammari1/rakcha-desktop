@@ -1,26 +1,25 @@
 package com.esprit.integration;
 
-import org.junit.jupiter.api.DisplayName;
+import com.esprit.MainApp;
+import com.esprit.utils.TestDataFactory;
+import com.esprit.utils.TestFXBase;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import static org.testfx.api.FxAssert.verifyThat;
 import org.testfx.framework.junit5.Start;
+
+import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.matcher.base.NodeMatchers.isVisible;
-
-import com.esprit.MainApp;
-import com.esprit.utils.TestDataFactory;
-import com.esprit.utils.TestFXBase;
-
-import javafx.stage.Stage;
 
 /**
  * End-to-end integration tests for complete user workflows.
  * Tests full user journeys through the application.
- * 
+ *
  * @author RAKCHA Team
  * @version 1.0.0
  */
@@ -82,7 +81,7 @@ class UserJourneyIntegrationTest extends TestFXBase {
                 waitForFxEvents();
             }
 
-            
+
             // Fill credentials
             fillTextField("#emailTextField", TestDataFactory.TestCredentials.VALID_EMAIL);
             fillTextField("#passwordTextField", TestDataFactory.TestCredentials.VALID_PASSWORD);
@@ -114,7 +113,7 @@ class UserJourneyIntegrationTest extends TestFXBase {
          * 8. Simulate/verify payment processing
          * 9. Verify booking confirmation message
          * 10. Assert booking appears in user profile
-         * 
+         * <p>
          * Needed test data/mocks:
          * - MovieSelectionView with fx:id for movie items
          * - CinemaSelectionView with theater/cinema options

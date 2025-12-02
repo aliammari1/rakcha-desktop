@@ -1,16 +1,16 @@
 package com.esprit.utils;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import io.github.cdimascio.dotenv.Dotenv;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import com.stripe.model.Customer;
 import com.stripe.model.Token;
+import io.github.cdimascio.dotenv.Dotenv;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public enum PaymentProcessor {
     ;
@@ -33,24 +33,17 @@ public enum PaymentProcessor {
     /**
      * Process a payment with Stripe
      *
-     * @param name
-     *                     Customer name
-     * @param email
-     *                     Customer email
-     * @param amount
-     *                     Amount to charge in the default currency
-     * @param cardNumber
-     *                     Credit card number
-     * @param cardExpMonth
-     *                     Card expiration month
-     * @param cardExpYear
-     *                     Card expiration year
-     * @param cardCvc
-     *                     Card CVC code
+     * @param name         Customer name
+     * @param email        Customer email
+     * @param amount       Amount to charge in the default currency
+     * @param cardNumber   Credit card number
+     * @param cardExpMonth Card expiration month
+     * @param cardExpYear  Card expiration year
+     * @param cardCvc      Card CVC code
      * @return boolean indicating if the payment was successful
      */
     public static boolean processPayment(final String name, final String email, final float amount,
-            final String cardNumber, final int cardExpMonth, final int cardExpYear, final String cardCvc) {
+                                         final String cardNumber, final int cardExpMonth, final int cardExpYear, final String cardCvc) {
         try {
             validateInputs(name, email, amount, cardNumber, cardExpMonth, cardExpYear, cardCvc);
 
@@ -76,7 +69,7 @@ public enum PaymentProcessor {
 
 
     private static void validateInputs(String name, String email, float amount, String cardNumber, int cardExpMonth,
-            int cardExpYear, String cardCvc) {
+                                       int cardExpYear, String cardCvc) {
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Name is required");
         }
@@ -117,7 +110,7 @@ public enum PaymentProcessor {
 
 
     private static Token createToken(final String cardNumber, final int expMonth, final int expYear, final String cvc)
-            throws StripeException {
+        throws StripeException {
         final Map<String, Object> cardParams = new HashMap<>();
         cardParams.put("number", cardNumber);
         cardParams.put("exp_month", expMonth);
@@ -131,7 +124,7 @@ public enum PaymentProcessor {
 
 
     private static Charge chargeCustomer(final String customerId, final String tokenId, final float amount)
-            throws StripeException {
+        throws StripeException {
         final Map<String, Object> chargeParams = new HashMap<>();
         chargeParams.put("amount", (int) (amount * CENTS_MULTIPLIER));
         chargeParams.put("currency", CURRENCY);

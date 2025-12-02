@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Rectangle?>
+<?import org.kordamp.ikonli.javafx.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21"
+           fx:controller="com.esprit.controllers.cinemas.SeatManagementController"
+           styleClass="immersive-root"
+           stylesheets="@../styles/filmStyle.css, @../styles/admin.css">
+
+  <!-- Background -->
+  <AnchorPane styleClass="cinematic-bg">
+    <Circle radius="200" layoutX="100" layoutY="100" styleClass="ambient-orb orb-primary" opacity="0.1"/>
+    <Circle radius="280" layoutX="1150" layoutY="550" styleClass="ambient-orb orb-secondary" opacity="0.08"/>
+  </AnchorPane>
+
+  <BorderPane styleClass="main-shell">
+    <left>
+      <fx:include source="../sidebar.fxml"/>
+    </left>
+
+    <center>
+      <VBox spacing="0" HBox.hgrow="ALWAYS">
+
+        <!-- Header -->
+        <HBox styleClass="immersive-header" alignment="CENTER_LEFT" spacing="20">
+          <padding>
+            <Insets top="25" bottom="25" left="35" right="35"/>
+          </padding>
+
+          <VBox spacing="5">
+            <Label text="Seat Management" styleClass="header-title"/>
+            <Label text="Configure seat layouts and manage seat availability" styleClass="header-subtitle"/>
+          </VBox>
+
+          <Region HBox.hgrow="ALWAYS"/>
+
+          <Button onAction="#saveLayout" styleClass="secondary-action-btn" text="Save Layout">
+            <graphic>
+              <FontIcon iconLiteral="mdi2c-content-save:18"/>
+            </graphic>
+          </Button>
+          <Button onAction="#applyTemplate" styleClass="primary-action-btn" text="Apply Template">
+            <graphic>
+              <FontIcon iconLiteral="mdi2f-file-document-outline:18"/>
+            </graphic>
+          </Button>
+        </HBox>
+
+        <!-- Selection Controls -->
+        <HBox styleClass="selection-controls" spacing="20" alignment="CENTER_LEFT">
+          <padding>
+            <Insets top="15" bottom="20" left="35" right="35"/>
+          </padding>
+
+          <VBox spacing="5">
+            <Label text="Cinema" styleClass="field-label-small"/>
+            <ComboBox fx:id="cinemaCombo" styleClass="control-combo" promptText="Select cinema" prefWidth="200"/>
+          </VBox>
+
+          <VBox spacing="5">
+            <Label text="Hall" styleClass="field-label-small"/>
+            <ComboBox fx:id="hallCombo" styleClass="control-combo" promptText="Select hall" prefWidth="180"/>
+          </VBox>
+
+          <Region HBox.hgrow="ALWAYS"/>
+
+          <!-- Seat Stats -->
+          <HBox spacing="25" styleClass="seat-stats">
+            <VBox alignment="CENTER" spacing="2">
+              <Label fx:id="totalSeatsLabel" text="0" styleClass="stat-number"/>
+              <Label text="Total" styleClass="stat-text"/>
+            </VBox>
+            <VBox alignment="CENTER" spacing="2">
+              <Label fx:id="regularSeatsLabel" text="0" styleClass="stat-number regular"/>
+              <Label text="Regular" styleClass="stat-text"/>
+            </VBox>
+            <VBox alignment="CENTER" spacing="2">
+              <Label fx:id="vipSeatsLabel" text="0" styleClass="stat-number vip"/>
+              <Label text="VIP" styleClass="stat-text"/>
+            </VBox>
+            <VBox alignment="CENTER" spacing="2">
+              <Label fx:id="accessibleSeatsLabel" text="0" styleClass="stat-number accessible"/>
+              <Label text="Accessible" styleClass="stat-text"/>
+            </VBox>
+            <VBox alignment="CENTER" spacing="2">
+              <Label fx:id="disabledSeatsLabel" text="0" styleClass="stat-number disabled"/>
+              <Label text="Disabled" styleClass="stat-text"/>
+            </VBox>
+          </HBox>
+        </HBox>
+
+        <!-- Main Content -->
+        <HBox spacing="25" VBox.vgrow="ALWAYS">
+          <padding>
+            <Insets left="35" right="35" bottom="25"/>
+          </padding>
+
+          <!-- Seat Map Area -->
+          <VBox styleClass="seat-map-container" HBox.hgrow="ALWAYS" spacing="20">
+
+            <!-- Screen Indicator -->
+            <VBox alignment="CENTER" spacing="8">
+              <Rectangle fx:id="screenIndicator" width="500" height="15" styleClass="screen-indicator"/>
+              <Label text="SCREEN" styleClass="screen-label"/>
+            </VBox>
+
+            <!-- Seat Grid -->
+            <ScrollPane styleClass="seat-map-scroll" fitToWidth="true" VBox.vgrow="ALWAYS">
+              <VBox alignment="CENTER" spacing="0">
+                <padding>
+                  <Insets topRightBottomLeft="30"/>
+                </padding>
+
+                <GridPane fx:id="seatGrid" styleClass="seat-grid" alignment="CENTER" hgap="5" vgap="5"/>
+              </VBox>
+            </ScrollPane>
+
+            <!-- Legend -->
+            <HBox styleClass="seat-legend" spacing="25" alignment="CENTER">
+              <HBox spacing="8" alignment="CENTER">
+                <StackPane styleClass="legend-seat regular"/>
+                <Label text="Regular" styleClass="legend-label"/>
+              </HBox>
+              <HBox spacing="8" alignment="CENTER">
+                <StackPane styleClass="legend-seat vip"/>
+                <Label text="VIP" styleClass="legend-label"/>
+              </HBox>
+              <HBox spacing="8" alignment="CENTER">
+                <StackPane styleClass="legend-seat accessible"/>
+                <Label text="Accessible" styleClass="legend-label"/>
+              </HBox>
+              <HBox spacing="8" alignment="CENTER">
+                <StackPane styleClass="legend-seat disabled"/>
+                <Label text="Disabled" styleClass="legend-label"/>
+              </HBox>
+              <HBox spacing="8" alignment="CENTER">
+                <StackPane styleClass="legend-seat selected"/>
+                <Label text="Selected" styleClass="legend-label"/>
+              </HBox>
+            </HBox>
+          </VBox>
+
+          <!-- Tools Panel -->
+          <VBox styleClass="tools-panel glass-card" spacing="20" prefWidth="280">
+            <padding>
+              <Insets topRightBottomLeft="20"/>
+            </padding>
+
+            <Label text="Editing Tools" styleClass="panel-title"/>
+
+            <!-- Selection Mode -->
+            <VBox spacing="10" styleClass="tool-section">
+              <Label text="Selection Mode" styleClass="tool-section-title"/>
+              <VBox spacing="8">
+                <RadioButton fx:id="singleSelectMode" styleClass="tool-radio" text="Single Select">
+                  <toggleGroup>
+                    <ToggleGroup fx:id="selectionModeGroup"/>
+                  </toggleGroup>
+                </RadioButton>
+                <RadioButton fx:id="rectangleSelectMode" styleClass="tool-radio" text="Rectangle Select">
+                  <toggleGroup>
+                    <fx:reference source="selectionModeGroup"/>
+                  </toggleGroup>
+                </RadioButton>
+                <RadioButton fx:id="rowSelectMode" styleClass="tool-radio" text="Select Row">
+                  <toggleGroup>
+                    <fx:reference source="selectionModeGroup"/>
+                  </toggleGroup>
+                </RadioButton>
+              </VBox>
+            </VBox>
+
+            <!-- Seat Type Assignment -->
+            <VBox spacing="10" styleClass="tool-section">
+              <Label text="Set Seat Type" styleClass="tool-section-title"/>
+              <VBox spacing="8">
+                <Button onAction="#setRegularType" styleClass="type-btn regular" text="Regular">
+                  <graphic>
+                    <FontIcon iconLiteral="mdi2s-seat:16"/>
+                  </graphic>
+                </Button>
+                <Button onAction="#setVIPType" styleClass="type-btn vip" text="VIP">
+                  <graphic>
+                    <FontIcon iconLiteral="mdi2s-star:16"/>
+                  </graphic>
+                </Button>
+                <Button onAction="#setAccessibleType" styleClass="type-btn accessible" text="Accessible">
+                  <graphic>
+                    <FontIcon iconLiteral="mdi2w-wheelchair-accessibility:16"/>
+                  </graphic>
+                </Button>
+                <Button onAction="#setDisabledType" styleClass="type-btn disabled" text="Disabled/Empty">
+                  <graphic>
+                    <FontIcon iconLiteral="mdi2c-close-circle:16"/>
+                  </graphic>
+                </Button>
+              </VBox>
+            </VBox>
+
+            <!-- Row Operations -->
+            <VBox spacing="10" styleClass="tool-section">
+              <Label text="Row Operations" styleClass="tool-section-title"/>
+              <HBox spacing="10">
+                <Button onAction="#addRow" styleClass="row-btn" HBox.hgrow="ALWAYS" text="Add Row">
+                  <graphic>
+                    <FontIcon iconLiteral="mdi2p-plus:16"/>
+                  </graphic>
+                </Button>
+                <Button onAction="#removeRow" styleClass="row-btn danger" HBox.hgrow="ALWAYS" text="Remove">
+                  <graphic>
+                    <FontIcon iconLiteral="mdi2m-minus:16"/>
+                  </graphic>
+                </Button>
+              </HBox>
+
+              <VBox spacing="5">
+                <Label text="Seats per row" styleClass="field-label-small"/>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                  <Spinner fx:id="seatsPerRowSpinner" styleClass="glass-spinner" min="1" max="50" initialValue="15"
+                           prefWidth="100"/>
+                  <Button onAction="#applySeatsPerRow" styleClass="apply-btn" text="Apply"/>
+                </HBox>
+              </VBox>
+            </VBox>
+
+            <!-- Aisle Management -->
+            <VBox spacing="10" styleClass="tool-section">
+              <Label text="Aisle Management" styleClass="tool-section-title"/>
+              <HBox spacing="10">
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                  <Label text="After seat #" styleClass="field-label-small"/>
+                  <Spinner fx:id="aisleAfterSpinner" styleClass="glass-spinner" min="1" max="50" initialValue="5"
+                           prefWidth="80"/>
+                </VBox>
+                <VBox spacing="5">
+                  <Label text=" " styleClass="field-label-small"/>
+                  <Button onAction="#addAisle" styleClass="aisle-btn" text="Add Aisle"/>
+                </VBox>
+              </HBox>
+            </VBox>
+
+            <!-- Quick Actions -->
+            <VBox spacing="10" styleClass="tool-section">
+              <Label text="Quick Actions" styleClass="tool-section-title"/>
+              <Button onAction="#selectAll" styleClass="quick-action-btn" text="Select All"
+                      maxWidth="1.7976931348623157E308">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2s-select-all:16"/>
+                </graphic>
+              </Button>
+              <Button onAction="#clearSelection" styleClass="quick-action-btn" text="Clear Selection"
+                      maxWidth="1.7976931348623157E308">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2s-selection-off:16"/>
+                </graphic>
+              </Button>
+              <Button onAction="#resetLayout" styleClass="quick-action-btn danger" text="Reset Layout"
+                      maxWidth="1.7976931348623157E308">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2r-refresh:16"/>
+                </graphic>
+              </Button>
+            </VBox>
+          </VBox>
+        </HBox>
+      </VBox>
+    </center>
+  </BorderPane>
+
+  <!-- Template Dialog -->
+  <VBox fx:id="templateDialog" styleClass="dialog-overlay" visible="false" managed="false" alignment="CENTER">
+    <VBox styleClass="dialog-card" spacing="20" maxWidth="500">
+      <padding>
+        <Insets topRightBottomLeft="30"/>
+      </padding>
+
+      <HBox alignment="CENTER_LEFT" spacing="15">
+        <Label text="Apply Layout Template" styleClass="dialog-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button onAction="#closeTemplateDialog" styleClass="close-btn">
+          <graphic>
+            <FontIcon iconLiteral="mdi2c-close:20"/>
+          </graphic>
+        </Button>
+      </HBox>
+
+      <Label text="Choose a predefined template or create your own layout" styleClass="dialog-desc"/>
+
+      <VBox spacing="12">
+        <!-- Template Options -->
+        <HBox styleClass="template-option" spacing="15" alignment="CENTER_LEFT"
+              onMouseClicked="#selectStandardTemplate">
+          <StackPane styleClass="template-icon">
+            <FontIcon iconLiteral="mdi2v-view-grid:24"/>
+          </StackPane>
+          <VBox spacing="3">
+            <Label text="Standard Layout" styleClass="template-name"/>
+            <Label text="10 rows × 15 seats with center aisle" styleClass="template-desc"/>
+          </VBox>
+        </HBox>
+
+        <HBox styleClass="template-option" spacing="15" alignment="CENTER_LEFT" onMouseClicked="#selectPremiumTemplate">
+          <StackPane styleClass="template-icon vip">
+            <FontIcon iconLiteral="mdi2s-star:24"/>
+          </StackPane>
+          <VBox spacing="3">
+            <Label text="Premium Layout" styleClass="template-name"/>
+            <Label text="8 rows with VIP back rows and wider aisles" styleClass="template-desc"/>
+          </VBox>
+        </HBox>
+
+        <HBox styleClass="template-option" spacing="15" alignment="CENTER_LEFT" onMouseClicked="#selectIMAXTemplate">
+          <StackPane styleClass="template-icon imax">
+            <FontIcon iconLiteral="mdi2t-theater:24"/>
+          </StackPane>
+          <VBox spacing="3">
+            <Label text="IMAX Layout" styleClass="template-name"/>
+            <Label text="Stadium seating with 15 rows × 20 seats" styleClass="template-desc"/>
+          </VBox>
+        </HBox>
+
+        <HBox styleClass="template-option" spacing="15" alignment="CENTER_LEFT"
+              onMouseClicked="#selectBoutiqueTemplate">
+          <StackPane styleClass="template-icon boutique">
+            <FontIcon iconLiteral="mdi2s-sofa:24"/>
+          </StackPane>
+          <VBox spacing="3">
+            <Label text="Boutique Layout" styleClass="template-name"/>
+            <Label text="Small intimate 5 rows × 10 recliner seats" styleClass="template-desc"/>
+          </VBox>
+        </HBox>
+      </VBox>
+
+      <HBox spacing="15" alignment="CENTER_RIGHT">
+        <Button onAction="#closeTemplateDialog" styleClass="secondary-btn" text="Cancel"/>
+      </HBox>
+    </VBox>
+  </VBox>
+
+  <!-- Confirmation Dialog -->
+  <VBox fx:id="confirmDialog" styleClass="dialog-overlay" visible="false" managed="false" alignment="CENTER">
+    <VBox styleClass="dialog-card" spacing="20" maxWidth="400">
+      <padding>
+        <Insets topRightBottomLeft="30"/>
+      </padding>
+
+      <VBox alignment="CENTER" spacing="15">
+        <StackPane styleClass="warning-icon-container">
+          <FontIcon iconLiteral="mdi2a-alert:48" styleClass="warning-icon"/>
+        </StackPane>
+        <Label text="Reset Layout?" styleClass="dialog-title"/>
+        <Label text="This will remove all current seats and reset the layout to default. This action cannot be undone."
+               styleClass="dialog-desc" wrapText="true" alignment="CENTER"/>
+      </VBox>
+
+      <HBox spacing="15" alignment="CENTER">
+        <Button onAction="#cancelReset" styleClass="secondary-btn" text="Cancel"/>
+        <Button onAction="#confirmReset" styleClass="danger-btn" text="Reset Layout"/>
+      </HBox>
+    </VBox>
+  </VBox>
+</StackPane>

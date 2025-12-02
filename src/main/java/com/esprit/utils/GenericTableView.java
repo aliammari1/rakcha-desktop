@@ -9,7 +9,11 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
-import javafx.scene.control.*;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Window;
 import javafx.util.Callback;
@@ -30,13 +34,14 @@ import java.util.logging.Logger;
  * @param <T> The type of objects displayed in the table
  */
 public class GenericTableView<T> {
+
     private static final Logger LOGGER = Logger.getLogger(GenericTableView.class.getName());
 
     private final TableView<T> tableView;
     private final ObservableList<T> items;
+    private final Map<TableColumn<T, ?>, ColumnConfig<T, ?>> columnConfigs = new HashMap<>();
     private FilteredList<T> filteredItems;
     private SortedList<T> sortedItems;
-    private final Map<TableColumn<T, ?>, ColumnConfig<T, ?>> columnConfigs = new HashMap<>();
 
     public GenericTableView(TableView<T> tableView) {
         this.tableView = tableView;
@@ -45,11 +50,200 @@ public class GenericTableView<T> {
         tableView.setEditable(true);
     }
 
+    /**
+     * Configure a text column with validation
+     */
+    public <S> void configureColumn(TableColumn<T, S> column, ColumnConfig<T, S> config) {
+        columnConfigs.put(column, config);
+
+        // Set cell value factory
+        column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<T, S>, ObservableValue<S>>() {
+                                       @Override
+                                       public ObservableValue<S> call(TableColumn.CellDataFeatures<T, S> param) {
+                                           return new SimpleObjectProperty<>(config.valueExtractor.apply(param.getValue()));
+                                       }
+
+                                   }
+        );
+
+        // Set cell factory with validation
+        if (config.editable && config.converter != null) {
+            column.setCellFactory(createValidatingCellFactory(config));
+        }
+
+
+        // Set on edit commit
+        if (config.valueSetter != null) {
+            column.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<T, S>>() {
+                                       @Override
+                                       public void handle(TableColumn.CellEditEvent<T, S> event) {
+                                           T item = event.getTableView().getItems().get(event.getTablePosition().getRow());
+                                           config.valueSetter.accept(item, event.getNewValue());
+                                           tableView.refresh();
+                                       }
+
+                                   }
+            );
+        }
+
+
+        column.setEditable(config.editable);
+    }
+
+    /**
+     * Create a cell factory with validation support
+     */
+    private <S> Callback<TableColumn<T, S>, TableCell<T, S>> createValidatingCellFactory(ColumnConfig<T, S> config) {
+        return column -> new TextFieldTableCell<T, S>(config.converter) {
+            private Validator validator;
+            private Tooltip errorTooltip;
+
+            @Override
+            public void startEdit() {
+                super.startEdit();
+                TextField textField = (TextField) this.getGraphic();
+
+                if (textField != null && config.validator != null) {
+                    if (validator == null) {
+                        validator = new Validator();
+                        errorTooltip = new Tooltip();
+                        errorTooltip.setStyle("-fx-background-color: #f00; -fx-text-fill: white;");
+                    }
+
+
+                    validator.createCheck()
+                        .dependsOn("value", textField.textProperty())
+                        .withMethod(c -> {
+                                String input = c.get("value");
+                                String error = config.validator.apply((S) input);
+                                if (error != null) {
+                                    c.error(error);
+                                }
+
+                            }
+                        )
+                        .decorates(textField)
+                        .immediate();
+
+                    textField.textProperty().addListener(new ChangeListener<String>() {
+                                                             @Override
+                                                             public void changed(ObservableValue<? extends String> observable,
+                                                                                 String oldValue, String newValue) {
+                                                                 updateValidationTooltip(textField);
+                                                             }
+
+                                                         }
+                    );
+                }
+
+            }
+
+
+            private void updateValidationTooltip(TextField textField) {
+                if (validator != null && validator.containsErrors()) {
+                    String errorMessage = validator.createStringBinding().getValue();
+                    errorTooltip.setText(errorMessage);
+                    textField.setTooltip(errorTooltip);
+
+                    Window window = getScene().getWindow();
+                    Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
+                    errorTooltip.show(window, bounds.getMinX(), bounds.getMinY() - 30);
+                } else {
+                    errorTooltip.hide();
+                    textField.setTooltip(null);
+                }
+
+            }
+
+        }
+            ;
+    }
+
+    /**
+     * Setup filtering and sorting
+     */
+    private void setupFilteringAndSorting() {
+        filteredItems = new FilteredList<>(items, p -> true);
+        sortedItems = new SortedList<>(filteredItems);
+        sortedItems.comparatorProperty().bind(tableView.comparatorProperty());
+        tableView.setItems(sortedItems);
+    }
+
+    /**
+     * Set filter predicate
+     */
+    public void setFilterPredicate(Predicate<T> predicate) {
+        filteredItems.setPredicate(predicate);
+    }
+
+    /**
+     * Add search functionality
+     */
+    public void setupSearchField(TextField searchField, Function<T, String> searchableFieldsExtractor) {
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+                filteredItems.setPredicate(item -> {
+                        if (newValue == null || newValue.isEmpty()) {
+                            return true;
+                        }
+
+
+                        String lowerCaseFilter = newValue.toLowerCase();
+                        String searchableText = searchableFieldsExtractor.apply(item).toLowerCase();
+                        return searchableText.contains(lowerCaseFilter);
+                    }
+                );
+            }
+        );
+    }
+
+    /**
+     * Add items to the table
+     */
+    public void addItem(T item) {
+        items.add(item);
+    }
+
+    /**
+     * Add multiple items
+     */
+    public void addItems(ObservableList<T> newItems) {
+        items.clear();
+        items.addAll(newItems);
+    }
+
+    /**
+     * Remove item
+     */
+    public void removeItem(T item) {
+        items.remove(item);
+    }
+
+    /**
+     * Clear all items
+     */
+    public void clearItems() {
+        items.clear();
+    }
+
+    /**
+     * Get filtered items
+     */
+    public ObservableList<T> getFilteredItems() {
+        return filteredItems;
+    }
+
+    /**
+     * Refresh the table
+     */
+    public void refresh() {
+        tableView.refresh();
+    }
 
     /**
      * Configuration class for table columns
      */
     public static class ColumnConfig<T, S> {
+
         private Function<T, S> valueExtractor;
         private BiConsumer<T, S> valueSetter;
         private Function<S, String> validator;
@@ -87,212 +281,11 @@ public class GenericTableView<T> {
 
     }
 
-
-    /**
-     * Configure a text column with validation
-     */
-    public <S> void configureColumn(TableColumn<T, S> column, ColumnConfig<T, S> config) {
-        columnConfigs.put(column, config);
-
-        // Set cell value factory
-        column.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<T, S>, ObservableValue<S>>() {
-            @Override
-            public ObservableValue<S> call(TableColumn.CellDataFeatures<T, S> param) {
-                return new SimpleObjectProperty<>(config.valueExtractor.apply(param.getValue()));
-            }
-
-        }
-);
-
-        // Set cell factory with validation
-        if (config.editable && config.converter != null) {
-            column.setCellFactory(createValidatingCellFactory(config));
-        }
-
-
-        // Set on edit commit
-        if (config.valueSetter != null) {
-            column.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<T, S>>() {
-                @Override
-                public void handle(TableColumn.CellEditEvent<T, S> event) {
-                    T item = event.getTableView().getItems().get(event.getTablePosition().getRow());
-                    config.valueSetter.accept(item, event.getNewValue());
-                    tableView.refresh();
-                }
-
-            }
-);
-        }
-
-
-        column.setEditable(config.editable);
-    }
-
-
-    /**
-     * Create a cell factory with validation support
-     */
-    private <S> Callback<TableColumn<T, S>, TableCell<T, S>> createValidatingCellFactory(ColumnConfig<T, S> config) {
-        return column -> new TextFieldTableCell<T, S>(config.converter) {
-            private Validator validator;
-            private Tooltip errorTooltip;
-
-            @Override
-            public void startEdit() {
-                super.startEdit();
-                TextField textField = (TextField) this.getGraphic();
-
-                if (textField != null && config.validator != null) {
-                    if (validator == null) {
-                        validator = new Validator();
-                        errorTooltip = new Tooltip();
-                        errorTooltip.setStyle("-fx-background-color: #f00; -fx-text-fill: white;");
-                    }
-
-
-                    validator.createCheck()
-                            .dependsOn("value", textField.textProperty())
-                            .withMethod(c -> {
-                                String input = c.get("value");
-                                String error = config.validator.apply((S) input);
-                                if (error != null) {
-                                    c.error(error);
-                                }
-
-                            }
-)
-                            .decorates(textField)
-                            .immediate();
-
-                    textField.textProperty().addListener(new ChangeListener<String>() {
-                        @Override
-                        public void changed(ObservableValue<? extends String> observable,
-                                String oldValue, String newValue) {
-                            updateValidationTooltip(textField);
-                        }
-
-                    }
-);
-                }
-
-            }
-
-
-            private void updateValidationTooltip(TextField textField) {
-                if (validator != null && validator.containsErrors()) {
-                    String errorMessage = validator.createStringBinding().getValue();
-                    errorTooltip.setText(errorMessage);
-                    textField.setTooltip(errorTooltip);
-
-                    Window window = getScene().getWindow();
-                    Bounds bounds = textField.localToScreen(textField.getBoundsInLocal());
-                    errorTooltip.show(window, bounds.getMinX(), bounds.getMinY() - 30);
-                }
- else {
-                    errorTooltip.hide();
-                    textField.setTooltip(null);
-                }
-
-            }
-
-        }
-;
-    }
-
-
-    /**
-     * Setup filtering and sorting
-     */
-    private void setupFilteringAndSorting() {
-        filteredItems = new FilteredList<>(items, p -> true);
-        sortedItems = new SortedList<>(filteredItems);
-        sortedItems.comparatorProperty().bind(tableView.comparatorProperty());
-        tableView.setItems(sortedItems);
-    }
-
-
-    /**
-     * Set filter predicate
-     */
-    public void setFilterPredicate(Predicate<T> predicate) {
-        filteredItems.setPredicate(predicate);
-    }
-
-
-    /**
-     * Add search functionality
-     */
-    public void setupSearchField(TextField searchField, Function<T, String> searchableFieldsExtractor) {
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredItems.setPredicate(item -> {
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
-
-
-                String lowerCaseFilter = newValue.toLowerCase();
-                String searchableText = searchableFieldsExtractor.apply(item).toLowerCase();
-                return searchableText.contains(lowerCaseFilter);
-            }
-);
-        }
-);
-    }
-
-
-    /**
-     * Add items to the table
-     */
-    public void addItem(T item) {
-        items.add(item);
-    }
-
-
-    /**
-     * Add multiple items
-     */
-    public void addItems(ObservableList<T> newItems) {
-        items.clear();
-        items.addAll(newItems);
-    }
-
-
-    /**
-     * Remove item
-     */
-    public void removeItem(T item) {
-        items.remove(item);
-    }
-
-
-    /**
-     * Clear all items
-     */
-    public void clearItems() {
-        items.clear();
-    }
-
-
-    /**
-     * Get filtered items
-     */
-    public ObservableList<T> getFilteredItems() {
-        return filteredItems;
-    }
-
-
-    /**
-     * Refresh the table
-     */
-    public void refresh() {
-        tableView.refresh();
-    }
-
-
     /**
      * Common validators
      */
     public static class Validators {
+
         public static Function<String, String> notEmpty() {
             return input -> {
                 if (input == null || input.trim().isEmpty()) {
@@ -301,7 +294,7 @@ public class GenericTableView<T> {
 
                 return null;
             }
-;
+                ;
         }
 
 
@@ -317,7 +310,7 @@ public class GenericTableView<T> {
 
                 return null;
             }
-;
+                ;
         }
 
 
@@ -339,7 +332,7 @@ public class GenericTableView<T> {
 
                 return null;
             }
-;
+                ;
         }
 
 
@@ -356,7 +349,7 @@ public class GenericTableView<T> {
 
                 return null;
             }
-;
+                ;
         }
 
     }

@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.media.MediaView?>
+<?import javafx.scene.shape.Circle?>
+<?import org.kordamp.ikonli.javafx.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21"
+           fx:controller="com.esprit.controllers.series.SeasonViewController"
+           styleClass="immersive-root"
+           stylesheets="@../styles/filmStyle.css, @../styles/series.css">
+
+  <!-- Background -->
+  <AnchorPane styleClass="cinematic-bg">
+    <Circle radius="250" layoutX="100" layoutY="150" styleClass="ambient-orb orb-primary" opacity="0.15"/>
+    <Circle radius="300" layoutX="1150" layoutY="550" styleClass="ambient-orb orb-secondary" opacity="0.1"/>
+  </AnchorPane>
+
+  <BorderPane styleClass="main-shell">
+    <left>
+      <fx:include source="../sidebar.fxml"/>
+    </left>
+
+    <center>
+      <VBox spacing="0" HBox.hgrow="ALWAYS">
+
+        <!-- Hero Section with Season Backdrop -->
+        <StackPane styleClass="season-hero" prefHeight="350">
+          <!-- Backdrop Image -->
+          <ImageView fx:id="backdropImage" styleClass="backdrop-image" fitWidth="1200" preserveRatio="true"/>
+          <VBox styleClass="backdrop-gradient"/>
+
+          <!-- Hero Content -->
+          <HBox styleClass="hero-content" spacing="30" alignment="BOTTOM_LEFT">
+            <padding>
+              <Insets top="40" bottom="35" left="40" right="40"/>
+            </padding>
+
+            <!-- Season Poster -->
+            <ImageView fx:id="seasonPoster" fitWidth="180" fitHeight="270" styleClass="season-poster"/>
+
+            <!-- Season Info -->
+            <VBox spacing="15" alignment="BOTTOM_LEFT">
+              <Button onAction="#goBack" styleClass="back-btn-light">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2a-arrow-left:18"/>
+                </graphic>
+              </Button>
+
+              <Label fx:id="seriesTitle" text="Series Title" styleClass="series-title"/>
+              <Label fx:id="seasonTitle" text="Season 1" styleClass="season-title"/>
+
+              <HBox spacing="20" alignment="CENTER_LEFT" styleClass="season-meta">
+                <Label fx:id="yearLabel" text="2024" styleClass="meta-item"/>
+                <Label text="•" styleClass="meta-separator"/>
+                <Label fx:id="episodeCountLabel" text="10 Episodes" styleClass="meta-item"/>
+                <Label text="•" styleClass="meta-separator"/>
+                <HBox spacing="5" alignment="CENTER">
+                  <FontIcon iconLiteral="mdi2s-star:16" styleClass="rating-star"/>
+                  <Label fx:id="ratingLabel" text="8.5" styleClass="meta-item"/>
+                </HBox>
+              </HBox>
+
+              <Label fx:id="seasonDescription" styleClass="season-description" wrapText="true" maxWidth="600"/>
+
+              <HBox spacing="15">
+                <Button onAction="#playFirstEpisode" styleClass="play-btn" text="Play">
+                  <graphic>
+                    <FontIcon iconLiteral="mdi2p-play:20"/>
+                  </graphic>
+                </Button>
+                <Button onAction="#continueWatching" fx:id="continueBtn" styleClass="continue-btn" text="Continue E3">
+                  <graphic>
+                    <FontIcon iconLiteral="mdi2p-play-circle:18"/>
+                  </graphic>
+                </Button>
+                <Button onAction="#toggleWatchlist" fx:id="watchlistBtn" styleClass="icon-btn">
+                  <graphic>
+                    <FontIcon fx:id="watchlistIcon" iconLiteral="mdi2p-plus:20"/>
+                  </graphic>
+                </Button>
+                <Button onAction="#shareseason" styleClass="icon-btn">
+                  <graphic>
+                    <FontIcon iconLiteral="mdi2s-share-variant:20"/>
+                  </graphic>
+                </Button>
+              </HBox>
+            </VBox>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <!-- Season Selector -->
+            <VBox alignment="TOP_RIGHT" spacing="10">
+              <Label text="Season" styleClass="season-select-label"/>
+              <ComboBox fx:id="seasonSelector" styleClass="season-selector" prefWidth="150"/>
+            </VBox>
+          </HBox>
+        </StackPane>
+
+        <!-- Episodes Section -->
+        <VBox spacing="20" VBox.vgrow="ALWAYS">
+          <padding>
+            <Insets top="25" bottom="30" left="40" right="40"/>
+          </padding>
+
+          <!-- Episodes Header -->
+          <HBox alignment="CENTER_LEFT" spacing="20">
+            <Label text="Episodes" styleClass="section-title"/>
+            <Label fx:id="episodeTotalLabel" text="(10 Episodes)" styleClass="episode-total"/>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <HBox styleClass="view-toggle" spacing="0">
+              <ToggleButton fx:id="listViewToggle" styleClass="view-toggle-btn left active" onAction="#showListView">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2v-view-list:16"/>
+                </graphic>
+              </ToggleButton>
+              <ToggleButton fx:id="gridViewToggle" styleClass="view-toggle-btn right" onAction="#showGridView">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2v-view-grid:16"/>
+                </graphic>
+              </ToggleButton>
+            </HBox>
+
+            <ComboBox fx:id="sortCombo" styleClass="sort-combo" prefWidth="150">
+              <items>
+                <fx:collection fx:id="sortOptions">
+                  <String fx:value="Newest First"/>
+                  <String fx:value="Oldest First"/>
+                </fx:collection>
+              </items>
+            </ComboBox>
+          </HBox>
+
+          <!-- Episodes Content -->
+          <StackPane VBox.vgrow="ALWAYS">
+
+            <!-- List View -->
+            <ScrollPane fx:id="listViewScrollPane" styleClass="episodes-scroll" fitToWidth="true" hbarPolicy="NEVER">
+              <VBox fx:id="episodesListContainer" spacing="15"/>
+            </ScrollPane>
+
+            <!-- Grid View (hidden by default) -->
+            <ScrollPane fx:id="gridViewScrollPane" styleClass="episodes-scroll" fitToWidth="true" hbarPolicy="NEVER"
+                        visible="false" managed="false">
+              <FlowPane fx:id="episodesGridContainer" hgap="20" vgap="20"/>
+            </ScrollPane>
+
+            <!-- Empty State -->
+            <VBox fx:id="emptyState" alignment="CENTER" spacing="15" visible="false" managed="false">
+              <FontIcon iconLiteral="mdi2v-video-off:60" styleClass="empty-icon"/>
+              <Label text="No episodes available" styleClass="empty-title"/>
+              <Label text="Episodes will appear here once they're released" styleClass="empty-desc"/>
+            </VBox>
+          </StackPane>
+        </VBox>
+      </VBox>
+    </center>
+  </BorderPane>
+
+  <!-- Episode Player Overlay -->
+  <VBox fx:id="playerOverlay" styleClass="player-overlay" visible="false" managed="false" alignment="CENTER">
+    <VBox styleClass="player-container" spacing="0" maxWidth="1000">
+      <!-- Player Header -->
+      <HBox styleClass="player-header" alignment="CENTER_LEFT" spacing="15">
+        <padding>
+          <Insets top="15" bottom="15" left="20" right="20"/>
+        </padding>
+        <Button onAction="#closePlayer" styleClass="close-player-btn">
+          <graphic>
+            <FontIcon iconLiteral="mdi2a-arrow-left:20"/>
+          </graphic>
+        </Button>
+        <VBox spacing="3">
+          <Label fx:id="playerSeriesTitle" text="Series Title" styleClass="player-series"/>
+          <Label fx:id="playerEpisodeTitle" text="S1 E1 - Episode Title" styleClass="player-episode"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <MenuButton styleClass="more-btn">
+          <graphic>
+            <FontIcon iconLiteral="mdi2d-dots-vertical:20"/>
+          </graphic>
+          <items>
+            <MenuItem text="Playback Speed"/>
+            <MenuItem text="Subtitles"/>
+            <MenuItem text="Quality"/>
+          </items>
+        </MenuButton>
+      </HBox>
+
+      <!-- Video Player Area -->
+      <StackPane fx:id="videoContainer" styleClass="video-container" VBox.vgrow="ALWAYS">
+        <MediaView fx:id="mediaView" fitWidth="1000"/>
+
+        <!-- Play/Pause Overlay -->
+        <VBox alignment="CENTER" styleClass="play-overlay">
+          <Button fx:id="bigPlayBtn" onAction="#togglePlayPause" styleClass="big-play-btn">
+            <graphic>
+              <FontIcon fx:id="bigPlayIcon" iconLiteral="mdi2p-play:60"/>
+            </graphic>
+          </Button>
+        </VBox>
+      </StackPane>
+
+      <!-- Player Controls -->
+      <VBox styleClass="player-controls" spacing="10">
+        <padding>
+          <Insets top="10" bottom="15" left="20" right="20"/>
+        </padding>
+
+        <!-- Progress Bar -->
+        <HBox spacing="10" alignment="CENTER">
+          <Label fx:id="currentTimeLabel" text="0:00" styleClass="time-label"/>
+          <Slider fx:id="progressSlider" styleClass="progress-slider" HBox.hgrow="ALWAYS"/>
+          <Label fx:id="totalTimeLabel" text="45:00" styleClass="time-label"/>
+        </HBox>
+
+        <!-- Control Buttons -->
+        <HBox alignment="CENTER" spacing="20">
+          <Button onAction="#previousEpisode" styleClass="control-btn">
+            <graphic>
+              <FontIcon iconLiteral="mdi2s-skip-previous:24"/>
+            </graphic>
+          </Button>
+          <Button onAction="#rewind10" styleClass="control-btn">
+            <graphic>
+              <FontIcon iconLiteral="mdi2r-rewind-10:24"/>
+            </graphic>
+          </Button>
+          <Button fx:id="playPauseBtn" onAction="#togglePlayPause" styleClass="play-pause-btn">
+            <graphic>
+              <FontIcon fx:id="playPauseIcon" iconLiteral="mdi2p-play:32"/>
+            </graphic>
+          </Button>
+          <Button onAction="#forward10" styleClass="control-btn">
+            <graphic>
+              <FontIcon iconLiteral="mdi2f-fast-forward-10:24"/>
+            </graphic>
+          </Button>
+          <Button onAction="#nextEpisode" styleClass="control-btn">
+            <graphic>
+              <FontIcon iconLiteral="mdi2s-skip-next:24"/>
+            </graphic>
+          </Button>
+
+          <Region HBox.hgrow="ALWAYS"/>
+
+          <HBox spacing="10" alignment="CENTER">
+            <FontIcon iconLiteral="mdi2v-volume-high:20" styleClass="volume-icon"/>
+            <Slider fx:id="volumeSlider" styleClass="volume-slider" prefWidth="100"/>
+          </HBox>
+
+          <Button onAction="#toggleFullscreen" styleClass="control-btn">
+            <graphic>
+              <FontIcon iconLiteral="mdi2f-fullscreen:24"/>
+            </graphic>
+          </Button>
+        </HBox>
+      </VBox>
+    </VBox>
+  </VBox>
+
+  <!-- Up Next Toast -->
+  <HBox fx:id="upNextToast" styleClass="up-next-toast glass-card" spacing="15" alignment="CENTER_LEFT"
+        visible="false" managed="false" StackPane.alignment="BOTTOM_RIGHT" translateX="-30" translateY="-30">
+    <padding>
+      <Insets topRightBottomLeft="15"/>
+    </padding>
+
+    <ImageView fx:id="upNextThumbnail" fitWidth="80" fitHeight="45" styleClass="up-next-thumb"/>
+    <VBox spacing="3">
+      <Label text="Up Next" styleClass="up-next-label"/>
+      <Label fx:id="upNextTitle" text="Episode Title" styleClass="up-next-title"/>
+    </VBox>
+    <VBox alignment="CENTER" spacing="2">
+      <Label fx:id="upNextCountdown" text="10" styleClass="countdown-number"/>
+      <Label text="seconds" styleClass="countdown-label"/>
+    </VBox>
+    <Button onAction="#playNextEpisode" styleClass="play-next-btn" text="Play">
+      <graphic>
+        <FontIcon iconLiteral="mdi2p-play:16"/>
+      </graphic>
+    </Button>
+    <Button onAction="#cancelAutoplay" styleClass="cancel-btn">
+      <graphic>
+        <FontIcon iconLiteral="mdi2c-close:16"/>
+      </graphic>
+    </Button>
+  </HBox>
+</StackPane>

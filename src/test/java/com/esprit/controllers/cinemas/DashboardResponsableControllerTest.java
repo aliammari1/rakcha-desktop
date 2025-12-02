@@ -1,6 +1,10 @@
 package com.esprit.controllers.cinemas;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import com.esprit.utils.TestFXBase;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableView;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
@@ -8,15 +12,11 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.Timeout;
-import java.util.concurrent.TimeUnit;
 import org.testfx.framework.junit5.Start;
 
-import com.esprit.utils.TestFXBase;
+import java.util.concurrent.TimeUnit;
 
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
-import javafx.stage.Stage;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Comprehensive test suite for DashboardResponsableController.
@@ -33,7 +33,7 @@ class DashboardResponsableControllerTest extends TestFXBase {
             getClass().getResource("/ui/cinemas/DashboardResponsableCinema.fxml")
         );
         javafx.scene.Parent root = loader.load();
-        
+
         stage.setScene(new javafx.scene.Scene(root, 1280, 700));
         stage.show();
         stage.toFront();
@@ -97,7 +97,7 @@ class DashboardResponsableControllerTest extends TestFXBase {
             Button addButton = lookup("#addSessionButton").query();
             assertThat(addButton).isNotNull();
             assertThat(addButton.isVisible()).isTrue();
-            
+
             clickOn(addButton);
             waitForFxEvents();
         }
@@ -111,33 +111,33 @@ class DashboardResponsableControllerTest extends TestFXBase {
 
             TableView<?> table = lookup("#sessionsTable").query();
             assertThat(table).isNotNull();
-            
+
             // Verify precondition: table must have items to delete
             assertThat(table.getItems())
-                    .as("Sessions table must contain at least one session for deletion test")
-                    .isNotEmpty();
-            
+                .as("Sessions table must contain at least one session for deletion test")
+                .isNotEmpty();
+
             // Select the first session
             table.getSelectionModel().selectFirst();
             waitForFxEvents();
-            
+
             // Verify precondition: selected item must exist
             Object selectedItem = table.getSelectionModel().getSelectedItem();
             assertThat(selectedItem)
-                    .as("A session must be selected before attempting deletion")
-                    .isNotNull();
-            
+                .as("A session must be selected before attempting deletion")
+                .isNotNull();
+
             // Verify precondition: delete button must exist
             Button deleteButton = lookup("#deleteSessionButton").query();
             assertThat(deleteButton)
-                    .as("Delete button must exist in the UI for session deletion")
-                    .isNotNull();
-            
+                .as("Delete button must exist in the UI for session deletion")
+                .isNotNull();
+
             // Verify precondition: delete button must be visible
             assertThat(deleteButton.isVisible())
-                    .as("Delete button must be visible to perform deletion")
-                    .isTrue();
-            
+                .as("Delete button must be visible to perform deletion")
+                .isTrue();
+
             // Execute the delete action
             clickOn(deleteButton);
             waitForFxEvents();

@@ -1,5 +1,7 @@
 package com.esprit.controllers.users;
 
+import com.esprit.utils.TestFXBase;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
@@ -7,17 +9,14 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.Timeout;
-import java.util.concurrent.TimeUnit;
 import org.testfx.framework.junit5.Start;
 
-import com.esprit.utils.TestFXBase;
-
-import javafx.stage.Stage;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Comprehensive UI tests for ResetPasswordController.
  * Tests password reset workflow, validation, and security.
- * 
+ *
  * @author RAKCHA Team
  * @version 1.0.0
  */
@@ -31,14 +30,15 @@ class ResetPasswordControllerTest extends TestFXBase {
             getClass().getResource("/ui/users/ResetPasswordlogin.fxml")
         );
         javafx.scene.Parent root = loader.load();
-        
+
         stage.setScene(new javafx.scene.Scene(root, 1280, 700));
         stage.show();
         stage.toFront();
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("UI Elements Tests")
     class UIElementsTests {
 
@@ -77,7 +77,8 @@ class ResetPasswordControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Password Validation Tests")
     class PasswordValidationTests {
 
@@ -155,7 +156,8 @@ class ResetPasswordControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Password Reset Flow Tests")
     class PasswordResetFlowTests {
 
@@ -215,7 +217,8 @@ class ResetPasswordControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Security Tests")
     class SecurityTests {
 
@@ -257,7 +260,8 @@ class ResetPasswordControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Error Handling Tests")
     class ErrorHandlingTests {
 

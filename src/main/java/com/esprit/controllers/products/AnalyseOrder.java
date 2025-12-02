@@ -1,16 +1,12 @@
 package com.esprit.controllers.products;
 
-import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
+import com.esprit.models.common.Category;
 import com.esprit.models.products.Order;
 import com.esprit.models.products.OrderItem;
-import com.esprit.models.products.ProductCategory;
-import com.esprit.services.products.CategoryService;
+import com.esprit.services.common.CategoryService;
 import com.esprit.services.products.OrderItemService;
 import com.esprit.services.products.OrderService;
-
+import com.esprit.utils.PageRequest;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -20,6 +16,12 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.XYChart;
 
+import java.net.URL;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.ResourceBundle;
+
 /**
  * Controller class for analyzing orders and visualizing order data in the
  * RAKCHA application.
@@ -27,7 +29,7 @@ import javafx.scene.chart.XYChart;
  * including:
  * - Number of orders by date (completed vs. in progress)
  * - Products purchased by category over time
- * 
+ *
  * <p>
  * The controller uses LineChart and StackedBarChart components to display the
  * data
@@ -40,6 +42,7 @@ import javafx.scene.chart.XYChart;
  * @since 1.0.0
  */
 public class AnalyseOrder implements Initializable {
+
     @FXML
     private LineChart<String, Number> TauxOrder;
     @FXML
@@ -81,40 +84,37 @@ public class AnalyseOrder implements Initializable {
         final OrderItemService orderItemService = new OrderItemService();
         final List<OrderItem> orderItems = orderItemService.read();
         final CategoryService categoryService = new CategoryService();
-        final List<ProductCategory> categories = categoryService.read();
+        final List<Category> categories = categoryService.read(new PageRequest(0, 10)).getContent();
         final Map<String, Integer> enCoursByDate = new HashMap<>();
         final Map<String, Integer> payeeByDate = new HashMap<>();
         final Map<String, Map<String, Integer>> categoriesAchatsByDate = new HashMap<>();
         final Map<String, XYChart.Series<String, Number>> seriesMap = new HashMap<>();
         // Remplir les maps avec toutes les dates possibles
         for (final Order order : orders) {
-            final Date dateOrder = order.getOrderDate();
-            final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            final String formattedDate = dateFormat.format(dateOrder);
+            final java.time.LocalDateTime dateOrder = order.getOrderDate();
+            final String formattedDate = dateOrder.toLocalDate().toString();
             enCoursByDate.put(formattedDate, 0);
             payeeByDate.put(formattedDate, 0);
             categoriesAchatsByDate.put(formattedDate, new HashMap<>());
-            for (final ProductCategory categorie : categories) {
-                categoriesAchatsByDate.get(formattedDate).put(categorie.getCategoryName(), 0);
+            for (final Category categorie : categories) {
+                categoriesAchatsByDate.get(formattedDate).put(categorie.getName(), 0);
             }
 
         }
 
         // Compter le nombre de orders par date et par statut
         for (final Order order : orders) {
-            final Date dateOrder = order.getOrderDate();
-            final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            final String formattedDate = dateFormat.format(dateOrder);
+            final java.time.LocalDateTime dateOrder = order.getOrderDate();
+            final String formattedDate = dateOrder.toLocalDate().toString();
             if ("en cours".equalsIgnoreCase(order.getStatus())) {
                 enCoursByDate.put(formattedDate, enCoursByDate.get(formattedDate) + 1);
-            }
- else if ("payee".equalsIgnoreCase(order.getStatus())) {
+            } else if ("payee".equalsIgnoreCase(order.getStatus())) {
                 payeeByDate.put(formattedDate, payeeByDate.get(formattedDate) + 1);
                 // Analyse des catégories achetées
                 final Map<String, Integer> categoriesAchats = categoriesAchatsByDate.get(formattedDate);
                 for (final OrderItem orderItem : orderItems) {
                     if (orderItem.getOrder().getId() == order.getId()) {
-                        final String categorie = orderItem.getProduct().getCategories().get(0).getCategoryName();
+                        final String categorie = orderItem.getProduct().getCategories().get(0).getName();
                         categoriesAchats.put(categorie, categoriesAchats.get(categorie) + 1);
                     }
 
@@ -140,11 +140,11 @@ public class AnalyseOrder implements Initializable {
         // Ajouter les séries au graphique
         this.TauxOrder.getData().addAll(enCoursSeries, payeeSeries);
         // Configurer la StackedBarChart pour les catégories
-        for (final ProductCategory categorie : categories) {
+        for (final Category categorie : categories) {
             // Créer la série avec le nom de la catégorie
             final XYChart.Series<String, Number> serie = new XYChart.Series<>();
-            serie.setName(categorie.getCategoryName());
-            seriesMap.put(categorie.getCategoryName(), serie);
+            serie.setName(categorie.getName());
+            seriesMap.put(categorie.getName(), serie);
         }
 
         // Parcourir les dates et ajouter les données aux séries
@@ -160,7 +160,7 @@ public class AnalyseOrder implements Initializable {
 
         // Afficher les séries sur le graphique
         final ObservableList<XYChart.Series<String, Number>> seriesList = FXCollections
-                .observableArrayList(seriesMap.values());
+            .observableArrayList(seriesMap.values());
         this.TauxCategorie.getData().addAll(seriesList);
         // Configuration des axes
         this.xAxis.setCategories(FXCollections.observableArrayList(categoriesAchatsByDate.keySet()));

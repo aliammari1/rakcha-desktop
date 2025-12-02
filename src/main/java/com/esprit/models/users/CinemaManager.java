@@ -1,9 +1,13 @@
 package com.esprit.models.users;
 
-import java.sql.Date;
-
-import lombok.*;
+import com.esprit.enums.UserRole;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+
+import java.sql.Date;
 
 /**
  * Cinema Manager entity extending User with Hibernate annotations
@@ -22,10 +26,12 @@ import lombok.experimental.SuperBuilder;
  * @version 1.0.0
  * @since 1.0.0
  */
+
 public class CinemaManager extends User {
 
     /**
-     * Create a CinemaManager initialized with the provided personal and contact details; the instance has no identifier assigned.
+     * Create a CinemaManager initialized with the provided personal and contact
+     * details; the instance has no identifier assigned.
      *
      * @param firstName     the cinema manager's first name
      * @param lastName      the cinema manager's last name
@@ -38,9 +44,11 @@ public class CinemaManager extends User {
      * @param photoDeProfil the path to the cinema manager's profile photo
      */
     public CinemaManager(final String firstName, final String lastName, final String phoneNumber, final String password,
-            final String role, final String address, final Date birthDate, final String email,
-            final String photoDeProfil) {
-        super(firstName, lastName, phoneNumber, password, role, address, birthDate, email, photoDeProfil);
+                         final UserRole role, final String address, final Date birthDate, final String email,
+                         final String profilePictureUrl) {
+        super(firstName, lastName, phoneNumber, password, role, address, birthDate, email, profilePictureUrl);
     }
 
 }
+
+

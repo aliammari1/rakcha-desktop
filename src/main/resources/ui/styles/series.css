@@ -1,0 +1,615 @@
+/* Series Screens CSS */
+
+/* Season View Hero */
+.season-hero {
+    -fx-min-height: 350;
+}
+
+.season-hero .backdrop-image {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0, 0, 0);
+}
+
+.season-hero .backdrop-gradient {
+    -fx-background-color: linear-gradient(to top, rgba(12, 12, 15, 1) 0%, rgba(12, 12, 15, 0.95) 20%, rgba(12, 12, 15, 0.6) 50%, transparent 100%);
+}
+
+.season-poster {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 15, 0, 0, 5);
+    -fx-background-radius: 8;
+}
+
+.series-title {
+    -fx-font-size: 16px;
+    -fx-text-fill: rgba(255, 255, 255, 0.7);
+}
+
+.season-title {
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.season-meta .meta-item {
+    -fx-font-size: 14px;
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
+}
+
+.season-meta .meta-separator {
+    -fx-text-fill: rgba(255, 255, 255, 0.4);
+}
+
+.season-meta .rating-star {
+    -fx-icon-color: #f59e0b;
+}
+
+.season-description {
+    -fx-font-size: 14px;
+    -fx-text-fill: rgba(255, 255, 255, 0.7);
+    -fx-line-spacing: 3;
+}
+
+/* Hero Buttons */
+.play-btn {
+    -fx-background-color: linear-gradient(135deg, #dc2626, #b91c1c);
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-padding: 12 30;
+    -fx-background-radius: 25;
+    -fx-cursor: hand;
+}
+
+.play-btn:hover {
+    -fx-background-color: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.continue-btn {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 12 25;
+    -fx-background-radius: 25;
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-radius: 25;
+    -fx-cursor: hand;
+}
+
+.continue-btn:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+}
+
+.icon-btn {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 22;
+    -fx-padding: 10;
+    -fx-cursor: hand;
+}
+
+.icon-btn:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+}
+
+.icon-btn .ikonli-font-icon {
+    -fx-icon-color: white;
+}
+
+/* Season Selector */
+.season-select-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+}
+
+.season-selector {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 8;
+    -fx-padding: 10 15;
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+}
+
+/* Episodes Section */
+.episode-total {
+    -fx-font-size: 14px;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+}
+
+.episodes-scroll {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+}
+
+.episodes-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Episode Card - List View */
+.episode-card {
+    -fx-background-color: rgba(35, 35, 40, 0.7);
+    -fx-background-radius: 12;
+    -fx-padding: 15;
+    -fx-cursor: hand;
+}
+
+.episode-card:hover {
+    -fx-background-color: rgba(50, 50, 55, 0.8);
+}
+
+.episode-thumbnail {
+    -fx-background-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 8, 0, 0, 2);
+}
+
+.episode-thumbnail-container {
+    -fx-min-width: 200;
+    -fx-max-width: 200;
+}
+
+.play-overlay {
+    -fx-background-color: rgba(0, 0, 0, 0.4);
+    -fx-background-radius: 8;
+    opacity: 0;
+}
+
+.episode-card:hover .play-overlay {
+    opacity: 1;
+}
+
+.play-icon-circle {
+    -fx-background-color: rgba(220, 38, 38, 0.9);
+    -fx-background-radius: 25;
+    -fx-min-width: 50;
+    -fx-min-height: 50;
+}
+
+.play-icon-circle .ikonli-font-icon {
+    -fx-icon-color: white;
+}
+
+.episode-number {
+    -fx-font-size: 13px;
+    -fx-text-fill: #dc2626;
+    -fx-font-weight: bold;
+}
+
+.episode-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.episode-duration {
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+}
+
+.episode-description {
+    -fx-font-size: 13px;
+    -fx-text-fill: rgba(255, 255, 255, 0.6);
+    -fx-line-spacing: 2;
+}
+
+/* Episode Progress Bar */
+.episode-progress-bar {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-pref-height: 4;
+    -fx-background-radius: 2;
+}
+
+.episode-progress-bar .bar {
+    -fx-background-color: #dc2626;
+    -fx-background-radius: 2;
+}
+
+.episode-progress-bar .track {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 2;
+}
+
+/* Watched Badge */
+.watched-badge {
+    -fx-background-color: rgba(34, 197, 94, 0.2);
+    -fx-background-radius: 12;
+    -fx-padding: 4 10;
+}
+
+.watched-badge .ikonli-font-icon {
+    -fx-icon-color: #22c55e;
+}
+
+.watched-badge .label {
+    -fx-text-fill: #22c55e;
+    -fx-font-size: 12px;
+}
+
+/* Player Overlay */
+.player-overlay {
+    -fx-background-color: rgba(0, 0, 0, 0.98);
+}
+
+.player-container {
+    -fx-background-color: #000;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 30, 0, 0, 10);
+}
+
+.player-header {
+    -fx-background-color: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+}
+
+.close-player-btn {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 20;
+    -fx-padding: 8;
+    -fx-cursor: hand;
+}
+
+.close-player-btn .ikonli-font-icon {
+    -fx-icon-color: white;
+}
+
+.player-series {
+    -fx-font-size: 13px;
+    -fx-text-fill: rgba(255, 255, 255, 0.6);
+}
+
+.player-episode {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+/* Video Container */
+.video-container {
+    -fx-background-color: #000;
+}
+
+.big-play-btn {
+    -fx-background-color: rgba(220, 38, 38, 0.9);
+    -fx-background-radius: 50;
+    -fx-padding: 20;
+    -fx-cursor: hand;
+}
+
+.big-play-btn .ikonli-font-icon {
+    -fx-icon-color: white;
+}
+
+/* Player Controls */
+.player-controls {
+    -fx-background-color: linear-gradient(0deg, rgba(0, 0, 0, 0.9) 0%, transparent 100%);
+}
+
+.time-label {
+    -fx-font-size: 13px;
+    -fx-text-fill: white;
+    -fx-font-family: "SF Mono", Consolas, monospace;
+}
+
+.progress-slider .track {
+    -fx-background-color: rgba(255, 255, 255, 0.3);
+    -fx-pref-height: 5;
+    -fx-background-radius: 2;
+}
+
+.progress-slider .bar {
+    -fx-background-color: #dc2626;
+    -fx-background-radius: 2;
+}
+
+.progress-slider .thumb {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-pref-width: 16;
+    -fx-pref-height: 16;
+}
+
+.control-btn {
+    -fx-background-color: transparent;
+    -fx-padding: 8;
+    -fx-cursor: hand;
+}
+
+.control-btn:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 20;
+}
+
+.control-btn .ikonli-font-icon {
+    -fx-icon-color: white;
+}
+
+.play-pause-btn {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-background-radius: 30;
+    -fx-padding: 12;
+    -fx-cursor: hand;
+}
+
+.play-pause-btn .ikonli-font-icon {
+    -fx-icon-color: white;
+}
+
+.volume-slider {
+    -fx-pref-width: 100;
+}
+
+.volume-slider .track {
+    -fx-background-color: rgba(255, 255, 255, 0.3);
+    -fx-pref-height: 4;
+}
+
+.volume-slider .bar {
+    -fx-background-color: white;
+}
+
+.volume-slider .thumb {
+    -fx-background-color: white;
+    -fx-pref-width: 12;
+    -fx-pref-height: 12;
+}
+
+/* Up Next Toast */
+.up-next-toast {
+    -fx-background-color: rgba(30, 30, 35, 0.95);
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 15, 0, 0, 5);
+}
+
+.up-next-thumb {
+    -fx-background-radius: 6;
+}
+
+.up-next-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+    -fx-text-transform: uppercase;
+}
+
+.up-next-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.countdown-number {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #dc2626;
+}
+
+.countdown-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+}
+
+.play-next-btn {
+    -fx-background-color: #dc2626;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-padding: 8 16;
+    -fx-background-radius: 20;
+    -fx-cursor: hand;
+}
+
+.cancel-btn {
+    -fx-background-color: transparent;
+    -fx-padding: 8;
+    -fx-cursor: hand;
+}
+
+.cancel-btn .ikonli-font-icon {
+    -fx-icon-color: rgba(255, 255, 255, 0.6);
+}
+
+/* ===== WATCH PROGRESS STYLES ===== */
+
+.progress-scroll {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+}
+
+.progress-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Content Tabs */
+.content-tabs {
+    -fx-background-color: rgba(30, 30, 35, 0.6);
+    -fx-padding: 5;
+    -fx-background-radius: 10;
+}
+
+.content-tab {
+    -fx-background-color: transparent;
+    -fx-text-fill: rgba(255, 255, 255, 0.6);
+    -fx-font-size: 13px;
+    -fx-padding: 10 20;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+.content-tab:hover {
+    -fx-text-fill: white;
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+}
+
+.content-tab.active, .content-tab:selected {
+    -fx-background-color: rgba(220, 38, 38, 0.3);
+    -fx-text-fill: white;
+}
+
+/* Horizontal Scroll */
+.horizontal-scroll {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+    -fx-padding: 5 0;
+}
+
+.horizontal-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+.horizontal-scroll .scroll-bar:horizontal {
+    -fx-pref-height: 6;
+}
+
+/* Continue Watching Card */
+.continue-card {
+    -fx-background-color: rgba(35, 35, 40, 0.8);
+    -fx-background-radius: 12;
+    -fx-min-width: 280;
+    -fx-max-width: 280;
+    -fx-cursor: hand;
+}
+
+.continue-card:hover {
+    -fx-background-color: rgba(50, 50, 55, 0.9);
+}
+
+.continue-thumbnail {
+    -fx-background-radius: 12 12 0 0;
+}
+
+.progress-overlay {
+    -fx-background-color: linear-gradient(0deg, rgba(0, 0, 0, 0.9) 0%, transparent 50%);
+    -fx-background-radius: 12 12 0 0;
+}
+
+/* Detail Panel */
+.detail-panel-overlay {
+    -fx-background-color: rgba(0, 0, 0, 0.6);
+}
+
+.overlay-backdrop {
+    -fx-background-color: transparent;
+}
+
+.detail-panel {
+    -fx-background-color: rgba(20, 20, 25, 0.98);
+    -fx-border-color: rgba(255, 255, 255, 0.08);
+    -fx-border-width: 0 0 0 1;
+}
+
+.detail-header {
+    -fx-min-height: 200;
+}
+
+.backdrop-gradient-panel {
+    -fx-background-color: linear-gradient(to top, rgba(20, 20, 25, 1) 0%, transparent 100%);
+}
+
+.detail-poster {
+    -fx-background-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 10, 0, 0, 3);
+}
+
+.detail-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.detail-rating {
+    -fx-font-size: 13px;
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
+}
+
+.close-panel-btn {
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+    -fx-background-radius: 20;
+    -fx-padding: 8;
+    -fx-cursor: hand;
+}
+
+.close-panel-btn .ikonli-font-icon {
+    -fx-icon-color: white;
+}
+
+/* Progress Section */
+.progress-section {
+    -fx-background-color: rgba(40, 40, 45, 0.6);
+    -fx-background-radius: 12;
+    -fx-padding: 20;
+}
+
+.progress-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.progress-percent {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #dc2626;
+}
+
+.overall-progress-bar {
+    -fx-pref-height: 8;
+    -fx-background-radius: 4;
+}
+
+.overall-progress-bar .track {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 4;
+}
+
+.overall-progress-bar .bar {
+    -fx-background-color: linear-gradient(90deg, #dc2626, #ef4444);
+    -fx-background-radius: 4;
+}
+
+.episode-progress-text {
+    -fx-font-size: 13px;
+    -fx-text-fill: rgba(255, 255, 255, 0.6);
+}
+
+/* Current Episode Section */
+.current-episode-card {
+    -fx-background-color: rgba(50, 50, 55, 0.8);
+    -fx-background-radius: 10;
+}
+
+.episode-thumb {
+    -fx-background-radius: 6;
+}
+
+.resume-btn {
+    -fx-background-color: #dc2626;
+    -fx-background-radius: 20;
+    -fx-padding: 10;
+    -fx-cursor: hand;
+}
+
+.resume-btn .ikonli-font-icon {
+    -fx-icon-color: white;
+}
+
+/* Season Progress */
+.season-progress-item {
+    -fx-padding: 10 0;
+}
+
+.season-name {
+    -fx-font-size: 13px;
+    -fx-text-fill: white;
+}
+
+.season-episodes-text {
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+}
+
+.season-progress-bar {
+    -fx-pref-height: 6;
+}
+
+.season-progress-bar .track {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 3;
+}
+
+.season-progress-bar .bar {
+    -fx-background-color: #22c55e;
+    -fx-background-radius: 3;
+}

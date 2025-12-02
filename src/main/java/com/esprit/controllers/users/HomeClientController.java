@@ -1,26 +1,24 @@
 package com.esprit.controllers.users;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import com.esprit.models.cinemas.Cinema;
 import com.esprit.models.films.Film;
 import com.esprit.models.products.Product;
 import com.esprit.models.series.Series;
-import com.esprit.models.cinemas.Cinema;
 import com.esprit.models.users.User;
+import com.esprit.services.cinemas.CinemaService;
 import com.esprit.services.films.FilmService;
 import com.esprit.services.products.ProductService;
-import com.esprit.services.series.IServiceSeriesImpl;
+import com.esprit.services.series.SeriesService;
 import com.esprit.utils.Page;
 import com.esprit.utils.PageRequest;
-import com.esprit.services.cinemas.CinemaService;
-
-import javafx.animation.*;
+import javafx.animation.FadeTransition;
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.RotateTransition;
+import javafx.animation.ScaleTransition;
+import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -29,29 +27,50 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * Controller for the HomeClient interface that displays movies, series, and
  * products
  * with animations and modern UI design similar to login/signup interfaces.
- * 
+ *
  * @author RAKCHA Team
  * @version 1.0.0
  * @since 1.0.0
  */
 public class HomeClientController implements Initializable {
-    private static final Logger LOGGER = Logger.getLogger(HomeClientController.class.getName());
 
+    private static final Logger LOGGER = Logger.getLogger(HomeClientController.class.getName());
+    // Featured movie data
+    private final String[] featuredMovies = {
+        "The Batman|https://image.tmdb.org/t/p/w500/vZloFAK7NmvMGKE7VkF5UHaz0I.jpg|When a sadistic serial killer begins murdering key political figures in Gotham, Batman is forced to investigate the city's hidden corruption and question his family's involvement.",
+        "Dune|https://image.tmdb.org/t/p/w500/jWZLvnBAjZvpbIJGV1GKK2JqfK3.jpg|Paul Atreides, a brilliant and gifted young man born into a great destiny beyond his understanding, must travel to the most dangerous planet in the universe to ensure the future of his family and his people.",
+        "Joker|https://image.tmdb.org/t/p/w500/kAVRgw7GgK1CfYEJq8ME6EvRIgU.jpg|During the 1980s, a failed stand-up comedian is driven insane and turns to a life of crime and chaos in Gotham City while becoming an infamous psychopathic crime figure.",
+        "Oppenheimer|https://image.tmdb.org/t/p/w500/6KErczPBROQty7QoIsaa6wJYXZi.jpg|The story of J. Robert Oppenheimer's role in the development of the atomic bomb during World War II.",
+        "Spider-Man: Across the Spider-Verse|https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg|After reuniting with Gwen Stacy, Brooklyn's full-time, friendly neighborhood Spider-Man is catapulted across the Multiverse."
+    };
     // FXML injected controls
     @FXML
     private StackPane rootContainer;
@@ -61,7 +80,6 @@ public class HomeClientController implements Initializable {
     private Label welcomeLabel;
     @FXML
     private ScrollPane mainScrollPane;
-
     // Featured section
     @FXML
     private StackPane featuredBanner;
@@ -71,7 +89,6 @@ public class HomeClientController implements Initializable {
     private Label featuredTitle;
     @FXML
     private Label featuredDescription;
-
     // Content containers
     @FXML
     private HBox moviesContainer;
@@ -89,7 +106,6 @@ public class HomeClientController implements Initializable {
     private ScrollPane productsScrollPane;
     @FXML
     private ScrollPane cinemasScrollPane;
-
     // Animation elements
     @FXML
     private Circle particle1, particle2, particle3, particle4, particle5, particle6;
@@ -101,34 +117,20 @@ public class HomeClientController implements Initializable {
     private Circle shape4;
     @FXML
     private AnchorPane particlesContainer;
-
     // Dynamic particles and shapes arrays
     private List<Circle> dynamicParticles;
     private List<javafx.scene.Node> dynamicShapes;
     private java.util.Random random;
-
     // Services
     private FilmService filmService;
     private ProductService productService;
-    private IServiceSeriesImpl seriesService;
+    private SeriesService seriesService;
     private CinemaService cinemaService;
-
     // Data lists
     private List<Film> recentFilms;
     private List<Series> recentSeries;
     private List<Product> recentProducts;
     private List<Cinema> recentCinemas;
-
-    // Featured movie data
-    private final String[] featuredMovies = {
-            "The Batman|https://image.tmdb.org/t/p/w500/vZloFAK7NmvMGKE7VkF5UHaz0I.jpg|When a sadistic serial killer begins murdering key political figures in Gotham, Batman is forced to investigate the city's hidden corruption and question his family's involvement.",
-            "Dune|https://image.tmdb.org/t/p/w500/jWZLvnBAjZvpbIJGV1GKK2JqfK3.jpg|Paul Atreides, a brilliant and gifted young man born into a great destiny beyond his understanding, must travel to the most dangerous planet in the universe to ensure the future of his family and his people.",
-            "Joker|https://image.tmdb.org/t/p/w500/kAVRgw7GgK1CfYEJq8ME6EvRIgU.jpg|During the 1980s, a failed stand-up comedian is driven insane and turns to a life of crime and chaos in Gotham City while becoming an infamous psychopathic crime figure.",
-            "Oppenheimer|https://image.tmdb.org/t/p/w500/6KErczPBROQty7QoIsaa6wJYXZi.jpg|The story of J. Robert Oppenheimer's role in the development of the atomic bomb during World War II.",
-            "Spider-Man: Across the Spider-Verse|https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg|After reuniting with Gwen Stacy, Brooklyn's full-time, friendly neighborhood Spider-Man is catapulted across the Multiverse."
-    }
-;
-
     private int currentFeaturedIndex = 0;
     private Timeline featuredRotationTimeline;
     private Timeline particleAnimationTimeline;
@@ -136,11 +138,16 @@ public class HomeClientController implements Initializable {
     /**
      * Initialize the controller and prepare the HomeClient user interface.
      *
-     * <p>Performs startup tasks required for the view: initializes backend services, configures the
-     * welcome message, loads featured content and the movies/series/products/cinemas sections,
-     * sets up animations and search behavior, and applies initial styling.</p>
+     * <p>
+     * Performs startup tasks required for the view: initializes backend services,
+     * configures the
+     * welcome message, loads featured content and the
+     * movies/series/products/cinemas sections,
+     * sets up animations and search behavior, and applies initial styling.
+     * </p>
      *
-     * @param location  the location used to resolve relative paths for the root object, may be null
+     * @param location  the location used to resolve relative paths for the root
+     *                  object, may be null
      * @param resources the resources used to localize the root object, may be null
      */
     @Override
@@ -172,20 +179,24 @@ public class HomeClientController implements Initializable {
         LOGGER.info("HomeClient interface initialized successfully");
     }
 
-
     /**
-         * Initialize backend services and the controller's in-memory collections used for content and animations.
-         *
-         * Instantiates service clients (filmService, productService, seriesService, cinemaService),
-         * creates lists for recent items (recentFilms, recentSeries, recentProducts, recentCinemas),
-         * initializes dynamic animation collections (dynamicParticles, dynamicShapes) and the Random instance.
-         * Logs successful initialization and records a warning if an initialization error occurs.
-         */
+     * Initialize backend services and the controller's in-memory collections used
+     * for content and animations.
+     * <p>
+     * Instantiates service clients (filmService, productService, seriesService,
+     * cinemaService),
+     * creates lists for recent items (recentFilms, recentSeries, recentProducts,
+     * recentCinemas),
+     * initializes dynamic animation collections (dynamicParticles, dynamicShapes)
+     * and the Random instance.
+     * Logs successful initialization and records a warning if an initialization
+     * error occurs.
+     */
     private void initializeServices() {
         try {
             filmService = new FilmService();
             productService = new ProductService();
-            seriesService = new IServiceSeriesImpl();
+            seriesService = new SeriesService();
             cinemaService = new CinemaService();
 
             recentFilms = new ArrayList<>();
@@ -205,11 +216,13 @@ public class HomeClientController implements Initializable {
 
     }
 
-
     /**
-     * Sets the welcome label text to the logged-in user's first and last name when available; otherwise sets a default welcome.
-     *
-     * Attempts to read a User object from the window's userData and updates the welcomeLabel. If no user is present or an error occurs, the label is set to "Welcome to RAKCHA!".
+     * Sets the welcome label text to the logged-in user's first and last name when
+     * available; otherwise sets a default welcome.
+     * <p>
+     * Attempts to read a User object from the window's userData and updates the
+     * welcomeLabel. If no user is present or an error occurs, the label is set to
+     * "Welcome to RAKCHA!".
      */
     private void setupWelcomeMessage() {
         try {
@@ -221,14 +234,12 @@ public class HomeClientController implements Initializable {
                         if (stage != null && stage.getUserData() instanceof User) {
                             User currentUser = (User) stage.getUserData();
                             welcomeLabel.setText("Welcome back, " + currentUser.getFirstName() + " "
-                                    + currentUser.getLastName() + "!");
-                        }
- else {
+                                + currentUser.getLastName() + "!");
+                        } else {
                             welcomeLabel.setText("Welcome to RAKCHA!");
                         }
 
-                    }
- else {
+                    } else {
                         welcomeLabel.setText("Welcome to RAKCHA!");
                     }
 
@@ -237,8 +248,7 @@ public class HomeClientController implements Initializable {
                     welcomeLabel.setText("Welcome to RAKCHA!");
                 }
 
-            }
-);
+            });
         } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error setting welcome message: " + e.getMessage(), e);
             welcomeLabel.setText("Welcome to RAKCHA!");
@@ -246,12 +256,13 @@ public class HomeClientController implements Initializable {
 
     }
 
-
     /**
      * Initialize the featured content display and start its automatic rotation.
-     *
-     * Calls updateFeaturedMovie to set the initial featured entry, then starts a Timeline
-     * that advances the featured item every 8 seconds and stores it in featuredRotationTimeline.
+     * <p>
+     * Calls updateFeaturedMovie to set the initial featured entry, then starts a
+     * Timeline
+     * that advances the featured item every 8 seconds and stores it in
+     * featuredRotationTimeline.
      */
     private void loadFeaturedContent() {
         // Start with first featured movie
@@ -259,18 +270,21 @@ public class HomeClientController implements Initializable {
 
         // Setup automatic rotation
         featuredRotationTimeline = new Timeline(
-                new KeyFrame(Duration.seconds(8), e -> rotateFeaturedMovie()));
+            new KeyFrame(Duration.seconds(8), e -> rotateFeaturedMovie()));
         featuredRotationTimeline.setCycleCount(Timeline.INDEFINITE);
         featuredRotationTimeline.play();
     }
 
-
     /**
-     * Update the featured banner to display the movie at the current featured index.
-     *
-     * Sets the featured title and description from the selected entry and, if the image control is available,
-     * replaces the banner image with a cross-fade transition. If there are no featured entries or the
-     * selected entry is malformed, the method returns without changing the UI. Image loading errors are
+     * Update the featured banner to display the movie at the current featured
+     * index.
+     * <p>
+     * Sets the featured title and description from the selected entry and, if the
+     * image control is available,
+     * replaces the banner image with a cross-fade transition. If there are no
+     * featured entries or the
+     * selected entry is malformed, the method returns without changing the UI.
+     * Image loading errors are
      * logged but do not throw.
      */
     private void updateFeaturedMovie() {
@@ -298,8 +312,7 @@ public class HomeClientController implements Initializable {
                         LOGGER.log(Level.WARNING, "Error loading featured image: " + ex.getMessage(), ex);
                     }
 
-                }
-);
+                });
                 fadeOut.play();
             }
 
@@ -307,20 +320,23 @@ public class HomeClientController implements Initializable {
 
     }
 
-
     /**
-     * Advance the featured index to the next entry and refresh the featured display.
+     * Advance the featured index to the next entry and refresh the featured
+     * display.
      */
     private void rotateFeaturedMovie() {
         currentFeaturedIndex = (currentFeaturedIndex + 1) % featuredMovies.length;
         updateFeaturedMovie();
     }
 
-
     /**
-     * Populates the movies horizontal container with movie cards and initializes its carousel animation.
-     *
-     * Attempts to load recent films from the film service and create a card for each; if no films are available or loading fails, populates the container with placeholder movie cards. Always sets up the carousel animation for the movies container and logs errors or a missing container.
+     * Populates the movies horizontal container with movie cards and initializes
+     * its carousel animation.
+     * <p>
+     * Attempts to load recent films from the film service and create a card for
+     * each; if no films are available or loading fails, populates the container
+     * with placeholder movie cards. Always sets up the carousel animation for the
+     * movies container and logs errors or a missing container.
      */
     private void loadMoviesContent() {
         try {
@@ -343,8 +359,7 @@ public class HomeClientController implements Initializable {
                             moviesContainer.getChildren().add(movieCard);
                         }
 
-                    }
- else {
+                    } else {
                         LOGGER.info("No films from service, creating placeholders");
                         createPlaceholderMovies();
                     }
@@ -354,11 +369,9 @@ public class HomeClientController implements Initializable {
                     createPlaceholderMovies();
                 }
 
-
                 // Setup carousel animation for movies
                 setupCarouselAnimation(moviesContainer, moviesScrollPane);
-            }
- else {
+            } else {
                 LOGGER.warning("Movies container is null!");
             }
 
@@ -373,21 +386,28 @@ public class HomeClientController implements Initializable {
 
     }
 
-
     /**
-     * Populate the series horizontal container with series cards and configure its carousel.
-     *
-     * Attempts to load up to 10 series from the configured series service and replaces the
-     * contents of {@code seriesContainer} with a card for each returned series. If the service
-     * returns no data or an error occurs, placeholder series cards are created instead. After
-     * populating the container the method initializes the carousel animation for the container
+     * Populate the series horizontal container with series cards and configure its
+     * carousel.
+     * <p>
+     * Attempts to load up to 10 series from the configured series service and
+     * replaces the
+     * contents of {@code seriesContainer} with a card for each returned series. If
+     * the service
+     * returns no data or an error occurs, placeholder series cards are created
+     * instead. After
+     * populating the container the method initializes the carousel animation for
+     * the container
      * and associated scroll pane.
-     *
+     * <p>
      * Side effects:
      * - Updates the controller field {@code recentSeries} when real data is loaded.
-     * - Calls {@code createPlaceholderSeries()} when no data is available or on service failure.
-     * - Calls {@code setupCarouselAnimation(Node, ScrollPane)} to start the horizontal carousel.
-     * - Logs progress, warnings, and errors; handles exceptions internally and does not propagate them.
+     * - Calls {@code createPlaceholderSeries()} when no data is available or on
+     * service failure.
+     * - Calls {@code setupCarouselAnimation(Node, ScrollPane)} to start the
+     * horizontal carousel.
+     * - Logs progress, warnings, and errors; handles exceptions internally and does
+     * not propagate them.
      */
     private void loadSeriesContent() {
         try {
@@ -408,8 +428,7 @@ public class HomeClientController implements Initializable {
                             seriesContainer.getChildren().add(seriesCard);
                         }
 
-                    }
- else {
+                    } else {
                         LOGGER.info("No series from service, creating placeholders");
                         createPlaceholderSeries();
                     }
@@ -419,11 +438,9 @@ public class HomeClientController implements Initializable {
                     createPlaceholderSeries();
                 }
 
-
                 // Setup carousel animation for series
                 setupCarouselAnimation(seriesContainer, seriesScrollPane);
-            }
- else {
+            } else {
                 LOGGER.warning("Series container is null!");
             }
 
@@ -438,16 +455,21 @@ public class HomeClientController implements Initializable {
 
     }
 
-
     /**
-     * Populate the products container with product cards and initialize its horizontal carousel.
-     *
-     * Attempts to load up to 10 products from the product service and, if products are available,
-     * creates and adds a card for each product to the products container. If the service returns no
-     * products or an error occurs, placeholder product cards are created instead. After populating
-     * the container, the method configures the carousel animation using the products scroll pane.
-     *
-     * If the products container is null, the method logs a warning and performs no UI updates.
+     * Populate the products container with product cards and initialize its
+     * horizontal carousel.
+     * <p>
+     * Attempts to load up to 10 products from the product service and, if products
+     * are available,
+     * creates and adds a card for each product to the products container. If the
+     * service returns no
+     * products or an error occurs, placeholder product cards are created instead.
+     * After populating
+     * the container, the method configures the carousel animation using the
+     * products scroll pane.
+     * <p>
+     * If the products container is null, the method logs a warning and performs no
+     * UI updates.
      */
     private void loadProductsContent() {
         try {
@@ -468,8 +490,7 @@ public class HomeClientController implements Initializable {
                             productsContainer.getChildren().add(productCard);
                         }
 
-                    }
- else {
+                    } else {
                         LOGGER.info("No products from service, creating placeholders");
                         createPlaceholderProducts();
                     }
@@ -479,11 +500,9 @@ public class HomeClientController implements Initializable {
                     createPlaceholderProducts();
                 }
 
-
                 // Setup carousel animation for products
                 setupCarouselAnimation(productsContainer, productsScrollPane);
-            }
- else {
+            } else {
                 LOGGER.warning("Products container is null!");
             }
 
@@ -498,13 +517,16 @@ public class HomeClientController implements Initializable {
 
     }
 
-
     /**
-     * Populates the horizontal cinemas container with cinema cards retrieved from the cinema service.
-     *
-     * Attempts to read a page of cinemas from the configured service and add a card for each result to the cinemas container.
-     * If the service call fails or returns no content, the method populates the container with placeholder cinema cards.
-     * After filling the container it initializes the container's carousel scrolling animation.
+     * Populates the horizontal cinemas container with cinema cards retrieved from
+     * the cinema service.
+     * <p>
+     * Attempts to read a page of cinemas from the configured service and add a card
+     * for each result to the cinemas container.
+     * If the service call fails or returns no content, the method populates the
+     * container with placeholder cinema cards.
+     * After filling the container it initializes the container's carousel scrolling
+     * animation.
      */
     private void loadCinemasContent() {
         try {
@@ -525,8 +547,7 @@ public class HomeClientController implements Initializable {
                             cinemasContainer.getChildren().add(cinemaCard);
                         }
 
-                    }
- else {
+                    } else {
                         LOGGER.info("No cinemas from service, creating placeholders");
                         createPlaceholderCinemas();
                     }
@@ -536,11 +557,9 @@ public class HomeClientController implements Initializable {
                     createPlaceholderCinemas();
                 }
 
-
                 // Setup carousel animation for cinemas
                 setupCarouselAnimation(cinemasContainer, cinemasScrollPane);
-            }
- else {
+            } else {
                 LOGGER.warning("Cinemas container is null!");
             }
 
@@ -555,12 +574,14 @@ public class HomeClientController implements Initializable {
 
     }
 
-
     /**
-     * Create a UI card representing a Film with its poster, title, release year, and a generated rating.
+     * Create a UI card representing a Film with its poster, title, release year,
+     * and a generated rating.
      *
-     * @param film the Film to represent in the card (used for image, title, year, and rating)
-     * @return a VBox containing the styled movie card node ready to be added to the scene graph
+     * @param film the Film to represent in the card (used for image, title, year,
+     *             and rating)
+     * @return a VBox containing the styled movie card node ready to be added to the
+     * scene graph
      */
     private VBox createMovieCard(Film film) {
         VBox card = new VBox(8);
@@ -569,14 +590,14 @@ public class HomeClientController implements Initializable {
         card.setPrefHeight(280);
         card.getStyleClass().add("content-card");
         card.setStyle(
-                "-fx-background-color: linear-gradient(to bottom, rgba(30, 30, 30, 0.9), rgba(20, 20, 20, 0.95));" +
-                        "-fx-background-radius: 15;" +
-                        "-fx-border-color: rgba(139, 0, 0, 0.3);" +
-                        "-fx-border-width: 1;" +
-                        "-fx-border-radius: 15;" +
-                        "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0, 0, 3);" +
-                        "-fx-padding: 10;" +
-                        "-fx-cursor: hand;");
+            "-fx-background-color: linear-gradient(to bottom, rgba(30, 30, 30, 0.9), rgba(20, 20, 20, 0.95));" +
+                "-fx-background-radius: 15;" +
+                "-fx-border-color: rgba(139, 0, 0, 0.3);" +
+                "-fx-border-width: 1;" +
+                "-fx-border-radius: 15;" +
+                "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0, 0, 3);" +
+                "-fx-padding: 10;" +
+                "-fx-cursor: hand;");
 
         // Movie poster
         ImageView poster = new ImageView();
@@ -587,92 +608,86 @@ public class HomeClientController implements Initializable {
 
         try {
             String imageUrl = null;
-            if (film.getImage() != null && !film.getImage().isEmpty()) {
-                imageUrl = film.getImage();
-            }
- else {
+            if (film.getImageUrl() != null && !film.getImageUrl().isEmpty()) {
+                imageUrl = film.getImageUrl();
+            } else {
                 // Use movie placeholder images from TMDB or other sources
                 String[] movieImages = {
-                        "https://image.tmdb.org/t/p/w500/vZloFAK7NmvMGKE7VkF5UHaz0I.jpg", // The Batman
-                        "https://image.tmdb.org/t/p/w500/pFlaoHTZeyNkG83vxsAJiGzfSsa.jpg", // Interstellar
-                        "https://image.tmdb.org/t/p/w500/rr7E0NoGKxvbkb89eR1GwfoYjpA.jpg", // Inception
-                        "https://image.tmdb.org/t/p/w500/aosm8NMQ3UyoBVpSxyimorCQykC.jpg", // The Dark Knight
-                        "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg", // The Matrix
-                        "https://image.tmdb.org/t/p/w500/cvsXj3I9Q2iyyIo95AecSd1tad7.jpg", // Avengers Endgame
-                        "https://image.tmdb.org/t/p/w500/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg", // Avengers
-                        "https://image.tmdb.org/t/p/w500/xLPffWMhMj1l50ND3KchMjYoKmE.jpg", // Iron Man
-                        "https://image.tmdb.org/t/p/w500/kqjL17yufvn9OVLyXYpvtyrFfak.jpg", // Thor
-                        "https://image.tmdb.org/t/p/w500/A6B6uONhxzYV52M8VaivRrxqBjl.jpg" // Captain America
-                }
-;
-                imageUrl = movieImages[Math.abs(film.getName().hashCode()) % movieImages.length];
+                    "https://image.tmdb.org/t/p/w500/vZloFAK7NmvMGKE7VkF5UHaz0I.jpg", // The Batman
+                    "https://image.tmdb.org/t/p/w500/pFlaoHTZeyNkG83vxsAJiGzfSsa.jpg", // Interstellar
+                    "https://image.tmdb.org/t/p/w500/rr7E0NoGKxvbkb89eR1GwfoYjpA.jpg", // Inception
+                    "https://image.tmdb.org/t/p/w500/aosm8NMQ3UyoBVpSxyimorCQykC.jpg", // The Dark Knight
+                    "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg", // The Matrix
+                    "https://image.tmdb.org/t/p/w500/cvsXj3I9Q2iyyIo95AecSd1tad7.jpg", // Avengers Endgame
+                    "https://image.tmdb.org/t/p/w500/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg", // Avengers
+                    "https://image.tmdb.org/t/p/w500/xLPffWMhMj1l50ND3KchMjYoKmE.jpg", // Iron Man
+                    "https://image.tmdb.org/t/p/w500/kqjL17yufvn9OVLyXYpvtyrFfak.jpg", // Thor
+                    "https://image.tmdb.org/t/p/w500/A6B6uONhxzYV52M8VaivRrxqBjl.jpg" // Captain America
+                };
+                imageUrl = movieImages[Math.abs(film.getTitle().hashCode()) % movieImages.length];
             }
 
             poster.setImage(new Image(imageUrl));
         } catch (Exception e) {
             try {
                 poster.setImage(new Image("https://via.placeholder.com/140x200/333333/ffffff?text=" +
-                        java.net.URLEncoder.encode(film.getName(), "UTF-8")));
+                    java.net.URLEncoder.encode(film.getTitle(), "UTF-8")));
             } catch (Exception ex) {
                 poster.setImage(new Image("https://via.placeholder.com/140x200/333333/ffffff?text=No+Image"));
             }
 
         }
 
-
         // Movie title
-        Label title = new Label(film.getName());
+        Label title = new Label(film.getTitle());
         title.setStyle(
-                "-fx-text-fill: white;" +
-                        "-fx-font-family: 'Arial';" +
-                        "-fx-font-size: 12px;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-wrap-text: true;");
+            "-fx-text-fill: white;" +
+                "-fx-font-family: 'Arial';" +
+                "-fx-font-size: 12px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-wrap-text: true;");
         title.setMaxWidth(140);
         title.setAlignment(Pos.CENTER);
 
         // Movie year
         Label year = new Label(String.valueOf(film.getReleaseYear()));
         year.setStyle(
-                "-fx-text-fill: #cccccc;" +
-                        "-fx-font-family: 'Arial';" +
-                        "-fx-font-size: 10px;");
+            "-fx-text-fill: #cccccc;" +
+                "-fx-font-family: 'Arial';" +
+                "-fx-font-size: 10px;");
         year.setAlignment(Pos.CENTER);
 
         // Rating stars (generate rating based on film name for consistency)
         HBox ratingBox = new HBox(2);
         ratingBox.setAlignment(Pos.CENTER);
-        int rating = 3 + (Math.abs(film.getName().hashCode()) % 3); // Generate 3-5 star rating
+        int rating = 3 + (Math.abs(film.getTitle().hashCode()) % 3); // Generate 3-5 star rating
         for (int i = 0; i < 5; i++) {
             Label star = new Label("★");
             star.setStyle("-fx-text-fill: " + (i < rating ? "#ffd700" : "#666666") + "; -fx-font-size: 10px;");
             ratingBox.getChildren().add(star);
         }
 
-
         card.getChildren().addAll(poster, title, year, ratingBox);
 
         // Add hover effect
         card.setOnMouseEntered(e -> {
             card.setStyle(
-                    card.getStyle() +
-                            "-fx-border-color: rgba(139, 0, 0, 0.6);" +
-                            "-fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.4), 15, 0, 0, 5);");
-        }
-);
+                card.getStyle() +
+                    "-fx-border-color: rgba(139, 0, 0, 0.6);" +
+                    "-fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.4), 15, 0, 0, 5);");
+        });
 
         card.setOnMouseExited(e -> {
             card.setStyle(
-                    "-fx-background-color: linear-gradient(to bottom, rgba(30, 30, 30, 0.9), rgba(20, 20, 20, 0.95));" +
-                            "-fx-background-radius: 15;" +
-                            "-fx-border-color: rgba(139, 0, 0, 0.3);" +
-                            "-fx-border-width: 1;" +
-                            "-fx-border-radius: 15;" +
-                            "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0, 0, 3);" +
-                            "-fx-padding: 10;" +
-                            "-fx-cursor: hand;");
-        }
-);
+                "-fx-background-color: linear-gradient(to bottom, rgba(30, 30, 30, 0.9), rgba(20, 20, 20, 0.95));" +
+                    "-fx-background-radius: 15;" +
+                    "-fx-border-color: rgba(139, 0, 0, 0.3);" +
+                    "-fx-border-width: 1;" +
+                    "-fx-border-radius: 15;" +
+                    "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0, 0, 3);" +
+                    "-fx-padding: 10;" +
+                    "-fx-cursor: hand;");
+        });
 
         // Add click handler
         card.setOnMouseClicked(e -> openMovieDetails(film));
@@ -680,12 +695,14 @@ public class HomeClientController implements Initializable {
         return card;
     }
 
-
     /**
-     * Builds a UI card for a TV series containing a poster image, title, and director label, and wires hover and click interactions.
+     * Builds a UI card for a TV series containing a poster image, title, and
+     * director label, and wires hover and click interactions.
      *
-     * @param series the Series whose data populates the card (name, director, image)
-     * @return a configured VBox containing the series poster, title, and director label
+     * @param series the Series whose data populates the card (name, director,
+     *               image)
+     * @return a configured VBox containing the series poster, title, and director
+     * label
      */
     private VBox createSeriesCard(Series series) {
         VBox card = new VBox(8);
@@ -694,14 +711,14 @@ public class HomeClientController implements Initializable {
         card.setPrefHeight(280);
         card.getStyleClass().add("content-card");
         card.setStyle(
-                "-fx-background-color: linear-gradient(to bottom, rgba(30, 30, 30, 0.9), rgba(20, 20, 20, 0.95));" +
-                        "-fx-background-radius: 15;" +
-                        "-fx-border-color: rgba(139, 0, 0, 0.3);" +
-                        "-fx-border-width: 1;" +
-                        "-fx-border-radius: 15;" +
-                        "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0, 0, 3);" +
-                        "-fx-padding: 10;" +
-                        "-fx-cursor: hand;");
+            "-fx-background-color: linear-gradient(to bottom, rgba(30, 30, 30, 0.9), rgba(20, 20, 20, 0.95));" +
+                "-fx-background-radius: 15;" +
+                "-fx-border-color: rgba(139, 0, 0, 0.3);" +
+                "-fx-border-width: 1;" +
+                "-fx-border-radius: 15;" +
+                "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0, 0, 3);" +
+                "-fx-padding: 10;" +
+                "-fx-cursor: hand;");
 
         // Series poster
         ImageView poster = new ImageView();
@@ -712,24 +729,22 @@ public class HomeClientController implements Initializable {
 
         try {
             String imageUrl = null;
-            if (series.getImage() != null && !series.getImage().isEmpty()) {
-                imageUrl = series.getImage();
-            }
- else {
+            if (series.getImageUrl() != null && !series.getImageUrl().isEmpty()) {
+                imageUrl = series.getImageUrl();
+            } else {
                 // Use TV series placeholder images
                 String[] seriesImages = {
-                        "https://image.tmdb.org/t/p/w500/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg", // Game of Thrones
-                        "https://image.tmdb.org/t/p/w500/4UjiPdFKJGJYdxwRs2Rzg7EmWqr.jpg", // Stranger Things
-                        "https://image.tmdb.org/t/p/w500/suopoADq0k8YZr4dQXcU6pToj6s.jpg", // Breaking Bad
-                        "https://image.tmdb.org/t/p/w500/9yBVqNruk6Ykrwc32qrK2TIE5xw.jpg", // The Mandalorian
-                        "https://image.tmdb.org/t/p/w500/7WUHnWGx5OO145IRxPDUkQSh4C7.jpg", // The Witcher
-                        "https://image.tmdb.org/t/p/w500/xUtOM1QO4r8w8yeE00QvBdq58N5.jpg", // House of the Dragon
-                        "https://image.tmdb.org/t/p/w500/mY7SeH4HFFxW1hiI6cWuwCRKptN.jpg", // Peaky Blinders
-                        "https://image.tmdb.org/t/p/w500/6LelQ6GzOoSKAj0AQPHRDdPB3Zg.jpg", // Sherlock
-                        "https://image.tmdb.org/t/p/w500/sWgBv7LV2PRoQgkxwlibdGXQ6he.jpg", // Squid Game
-                        "https://image.tmdb.org/t/p/w500/1BIoJGKbXvdLDVv01hJR4VQ6vTX.jpg" // Wednesday
-                }
-;
+                    "https://image.tmdb.org/t/p/w500/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg", // Game of Thrones
+                    "https://image.tmdb.org/t/p/w500/4UjiPdFKJGJYdxwRs2Rzg7EmWqr.jpg", // Stranger Things
+                    "https://image.tmdb.org/t/p/w500/suopoADq0k8YZr4dQXcU6pToj6s.jpg", // Breaking Bad
+                    "https://image.tmdb.org/t/p/w500/9yBVqNruk6Ykrwc32qrK2TIE5xw.jpg", // The Mandalorian
+                    "https://image.tmdb.org/t/p/w500/7WUHnWGx5OO145IRxPDUkQSh4C7.jpg", // The Witcher
+                    "https://image.tmdb.org/t/p/w500/xUtOM1QO4r8w8yeE00QvBdq58N5.jpg", // House of the Dragon
+                    "https://image.tmdb.org/t/p/w500/mY7SeH4HFFxW1hiI6cWuwCRKptN.jpg", // Peaky Blinders
+                    "https://image.tmdb.org/t/p/w500/6LelQ6GzOoSKAj0AQPHRDdPB3Zg.jpg", // Sherlock
+                    "https://image.tmdb.org/t/p/w500/sWgBv7LV2PRoQgkxwlibdGXQ6he.jpg", // Squid Game
+                    "https://image.tmdb.org/t/p/w500/1BIoJGKbXvdLDVv01hJR4VQ6vTX.jpg" // Wednesday
+                };
                 imageUrl = seriesImages[Math.abs(series.getName().hashCode()) % seriesImages.length];
             }
 
@@ -737,31 +752,30 @@ public class HomeClientController implements Initializable {
         } catch (Exception e) {
             try {
                 poster.setImage(new Image("https://via.placeholder.com/140x200/444444/ffffff?text=" +
-                        java.net.URLEncoder.encode(series.getName(), "UTF-8")));
+                    java.net.URLEncoder.encode(series.getName(), "UTF-8")));
             } catch (Exception ex) {
                 poster.setImage(new Image("https://via.placeholder.com/140x200/444444/ffffff?text=Series"));
             }
 
         }
 
-
         // Series title
         Label title = new Label(series.getName());
         title.setStyle(
-                "-fx-text-fill: white;" +
-                        "-fx-font-family: 'Arial';" +
-                        "-fx-font-size: 12px;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-wrap-text: true;");
+            "-fx-text-fill: white;" +
+                "-fx-font-family: 'Arial';" +
+                "-fx-font-size: 12px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-wrap-text: true;");
         title.setMaxWidth(140);
         title.setAlignment(Pos.CENTER);
 
         // Series director
         Label year = new Label(series.getDirector() != null ? series.getDirector() : "Unknown Director");
         year.setStyle(
-                "-fx-text-fill: #cccccc;" +
-                        "-fx-font-family: 'Arial';" +
-                        "-fx-font-size: 10px;");
+            "-fx-text-fill: #cccccc;" +
+                "-fx-font-family: 'Arial';" +
+                "-fx-font-size: 10px;");
 
         card.getChildren().addAll(poster, title, year);
 
@@ -771,15 +785,17 @@ public class HomeClientController implements Initializable {
         return card;
     }
 
-
     /**
      * Create a visual card representing a product for display in the UI.
-     *
-     * The card shows the product image (falls back to a selection of themed images or a text placeholder if missing),
-     * the product name, and the formatted price, and it attaches hover styling and a click handler that opens product details.
+     * <p>
+     * The card shows the product image (falls back to a selection of themed images
+     * or a text placeholder if missing),
+     * the product name, and the formatted price, and it attaches hover styling and
+     * a click handler that opens product details.
      *
      * @param product the product to render in the card
-     * @return a VBox node containing the product image, name, price, and interaction handlers
+     * @return a VBox node containing the product image, name, price, and
+     * interaction handlers
      */
     private VBox createProductCard(Product product) {
         VBox card = new VBox(8);
@@ -788,14 +804,14 @@ public class HomeClientController implements Initializable {
         card.setPrefHeight(280);
         card.getStyleClass().add("content-card");
         card.setStyle(
-                "-fx-background-color: linear-gradient(to bottom, rgba(30, 30, 30, 0.9), rgba(20, 20, 20, 0.95));" +
-                        "-fx-background-radius: 15;" +
-                        "-fx-border-color: rgba(139, 0, 0, 0.3);" +
-                        "-fx-border-width: 1;" +
-                        "-fx-border-radius: 15;" +
-                        "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0, 0, 3);" +
-                        "-fx-padding: 10;" +
-                        "-fx-cursor: hand;");
+            "-fx-background-color: linear-gradient(to bottom, rgba(30, 30, 30, 0.9), rgba(20, 20, 20, 0.95));" +
+                "-fx-background-radius: 15;" +
+                "-fx-border-color: rgba(139, 0, 0, 0.3);" +
+                "-fx-border-width: 1;" +
+                "-fx-border-radius: 15;" +
+                "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0, 0, 3);" +
+                "-fx-padding: 10;" +
+                "-fx-cursor: hand;");
 
         // Product image
         ImageView image = new ImageView();
@@ -806,33 +822,31 @@ public class HomeClientController implements Initializable {
 
         try {
             String imageUrl = null;
-            if (product.getImage() != null && !product.getImage().isEmpty()) {
-                imageUrl = product.getImage();
-            }
- else {
+            if (product.getImageUrl() != null && !product.getImageUrl().isEmpty()) {
+                imageUrl = product.getImageUrl();
+            } else {
                 // Use cinema-related product images
                 String[] productImages = {
-                        "https://images.unsplash.com/photo-1505686994434-e3cc5abf1330?w=300&h=400&fit=crop", // Popcorn
-                        "https://images.unsplash.com/photo-1627662235719-d9e9f31c4f73?w=300&h=400&fit=crop", // Cinema
-                                                                                                             // tickets
-                        "https://images.unsplash.com/photo-1489599446190-c9ad1d88c3dc?w=300&h=400&fit=crop", // Movie
-                                                                                                             // poster
-                        "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=300&h=400&fit=crop", // Cinema
-                                                                                                             // glasses
-                        "https://images.unsplash.com/photo-1509924603848-78edc5642dea?w=300&h=400&fit=crop", // Cinema
-                                                                                                             // drinks
-                        "https://images.unsplash.com/photo-1514306191717-452ec28c7814?w=300&h=400&fit=crop", // Movie
-                                                                                                             // reel
-                        "https://images.unsplash.com/photo-1528827871709-dbe8fe4e57f8?w=300&h=400&fit=crop", // Cinema
-                                                                                                             // candy
-                        "https://images.unsplash.com/photo-1616530940355-351fabd9524b?w=300&h=400&fit=crop", // Movie
-                                                                                                             // merchandise
-                        "https://images.unsplash.com/photo-1596473499708-4ff13b15f4cc?w=300&h=400&fit=crop", // Cinema
-                                                                                                             // snacks
-                        "https://images.unsplash.com/photo-1580745313093-4e79b5b3e6c0?w=300&h=400&fit=crop" // Movie
-                                                                                                            // memorabilia
-                }
-;
+                    "https://images.unsplash.com/photo-1505686994434-e3cc5abf1330?w=300&h=400&fit=crop", // Popcorn
+                    "https://images.unsplash.com/photo-1627662235719-d9e9f31c4f73?w=300&h=400&fit=crop", // Cinema
+                    // tickets
+                    "https://images.unsplash.com/photo-1489599446190-c9ad1d88c3dc?w=300&h=400&fit=crop", // Movie
+                    // poster
+                    "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=300&h=400&fit=crop", // Cinema
+                    // glasses
+                    "https://images.unsplash.com/photo-1509924603848-78edc5642dea?w=300&h=400&fit=crop", // Cinema
+                    // drinks
+                    "https://images.unsplash.com/photo-1514306191717-452ec28c7814?w=300&h=400&fit=crop", // Movie
+                    // reel
+                    "https://images.unsplash.com/photo-1528827871709-dbe8fe4e57f8?w=300&h=400&fit=crop", // Cinema
+                    // candy
+                    "https://images.unsplash.com/photo-1616530940355-351fabd9524b?w=300&h=400&fit=crop", // Movie
+                    // merchandise
+                    "https://images.unsplash.com/photo-1596473499708-4ff13b15f4cc?w=300&h=400&fit=crop", // Cinema
+                    // snacks
+                    "https://images.unsplash.com/photo-1580745313093-4e79b5b3e6c0?w=300&h=400&fit=crop" // Movie
+                    // memorabilia
+                };
                 imageUrl = productImages[Math.abs(product.getName().hashCode()) % productImages.length];
             }
 
@@ -840,32 +854,31 @@ public class HomeClientController implements Initializable {
         } catch (Exception e) {
             try {
                 image.setImage(new Image("https://via.placeholder.com/140x180/555555/ffffff?text=" +
-                        java.net.URLEncoder.encode(product.getName(), "UTF-8")));
+                    java.net.URLEncoder.encode(product.getName(), "UTF-8")));
             } catch (Exception ex) {
                 image.setImage(new Image("https://via.placeholder.com/140x180/555555/ffffff?text=Product"));
             }
 
         }
 
-
         // Product name
         Label name = new Label(product.getName());
         name.setStyle(
-                "-fx-text-fill: white;" +
-                        "-fx-font-family: 'Arial';" +
-                        "-fx-font-size: 12px;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-wrap-text: true;");
+            "-fx-text-fill: white;" +
+                "-fx-font-family: 'Arial';" +
+                "-fx-font-size: 12px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-wrap-text: true;");
         name.setMaxWidth(140);
         name.setAlignment(Pos.CENTER);
 
         // Product price
         Label price = new Label("$" + String.format("%.2f", product.getPrice()));
         price.setStyle(
-                "-fx-text-fill: #ff6666;" +
-                        "-fx-font-family: 'Arial';" +
-                        "-fx-font-size: 11px;" +
-                        "-fx-font-weight: bold;");
+            "-fx-text-fill: #ff6666;" +
+                "-fx-font-family: 'Arial';" +
+                "-fx-font-size: 11px;" +
+                "-fx-font-weight: bold;");
 
         card.getChildren().addAll(image, name, price);
 
@@ -875,47 +888,47 @@ public class HomeClientController implements Initializable {
         return card;
     }
 
-
     /**
      * Attach hover visual effects and a click handler to a card VBox.
-     *
-     * Applies styling changes for mouse enter/exit to indicate hover state and executes
+     * <p>
+     * Applies styling changes for mouse enter/exit to indicate hover state and
+     * executes
      * the provided action when the card is clicked.
      *
-     * @param card the VBox that represents the interactive card
+     * @param card          the VBox that represents the interactive card
      * @param onClickAction the runnable to execute when the card is clicked
      */
     private void setupCardInteractions(VBox card, Runnable onClickAction) {
         card.setOnMouseEntered(e -> {
             card.setStyle(
-                    card.getStyle() +
-                            "-fx-border-color: rgba(139, 0, 0, 0.6);" +
-                            "-fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.4), 15, 0, 0, 5);");
-        }
-);
+                card.getStyle() +
+                    "-fx-border-color: rgba(139, 0, 0, 0.6);" +
+                    "-fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.4), 15, 0, 0, 5);");
+        });
 
         card.setOnMouseExited(e -> {
             card.setStyle(
-                    "-fx-background-color: linear-gradient(to bottom, rgba(30, 30, 30, 0.9), rgba(20, 20, 20, 0.95));" +
-                            "-fx-background-radius: 15;" +
-                            "-fx-border-color: rgba(139, 0, 0, 0.3);" +
-                            "-fx-border-width: 1;" +
-                            "-fx-border-radius: 15;" +
-                            "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0, 0, 3);" +
-                            "-fx-padding: 10;" +
-                            "-fx-cursor: hand;");
-        }
-);
+                "-fx-background-color: linear-gradient(to bottom, rgba(30, 30, 30, 0.9), rgba(20, 20, 20, 0.95));" +
+                    "-fx-background-radius: 15;" +
+                    "-fx-border-color: rgba(139, 0, 0, 0.3);" +
+                    "-fx-border-width: 1;" +
+                    "-fx-border-radius: 15;" +
+                    "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0, 0, 3);" +
+                    "-fx-padding: 10;" +
+                    "-fx-cursor: hand;");
+        });
 
         card.setOnMouseClicked(e -> onClickAction.run());
     }
 
-
     /**
-     * Initialize and start all visual animations and dynamic decorative elements used by the home interface.
-     *
-     * Configures predefined particle and shape animations, applies content animations (such as fade-ins and rotations),
-     * and generates additional randomized dynamic particles and shapes added to the scene.
+     * Initialize and start all visual animations and dynamic decorative elements
+     * used by the home interface.
+     * <p>
+     * Configures predefined particle and shape animations, applies content
+     * animations (such as fade-ins and rotations),
+     * and generates additional randomized dynamic particles and shapes added to the
+     * scene.
      */
     private void setupAnimations() {
         setupParticleAnimations();
@@ -925,14 +938,18 @@ public class HomeClientController implements Initializable {
         createDynamicShapes();
     }
 
-
     /**
-     * Generates and adds a set of randomized decorative particle nodes to the particles container.
-     *
-     * Creates multiple Circle particles with varied radius, position, opacity, color/gradient fills,
-     * drop shadows, and style classes, adds each to the controller's dynamicParticles list and the
-     * particlesContainer node, and starts per-particle advanced animations. The method logs the
-     * number of particles created and will log a warning if particle creation fails or the container
+     * Generates and adds a set of randomized decorative particle nodes to the
+     * particles container.
+     * <p>
+     * Creates multiple Circle particles with varied radius, position, opacity,
+     * color/gradient fills,
+     * drop shadows, and style classes, adds each to the controller's
+     * dynamicParticles list and the
+     * particlesContainer node, and starts per-particle advanced animations. The
+     * method logs the
+     * number of particles created and will log a warning if particle creation fails
+     * or the container
      * is unavailable.
      */
     private void createDynamicParticles() {
@@ -940,7 +957,6 @@ public class HomeClientController implements Initializable {
             LOGGER.warning("Particles container is null, cannot create dynamic particles");
             return;
         }
-
 
         try {
             // Create 15 additional random particles with more variety
@@ -963,33 +979,30 @@ public class HomeClientController implements Initializable {
 
                 // More varied color palette with red theme
                 String[] colorPalette = {
-                        "#ff1111", "#ff2222", "#ff3333", "#ff4444", "#ff5555", "#ff6666", "#ff7777",
-                        "#ee1111", "#ee2222", "#ee3333", "#dd1111", "#dd2222", "#cc1111", "#cc2222",
-                        "#bb1111", "#aa1111", "#990000", "#880000", "#770000", "#660000"
-                }
-;
+                    "#ff1111", "#ff2222", "#ff3333", "#ff4444", "#ff5555", "#ff6666", "#ff7777",
+                    "#ee1111", "#ee2222", "#ee3333", "#dd1111", "#dd2222", "#cc1111", "#cc2222",
+                    "#bb1111", "#aa1111", "#990000", "#880000", "#770000", "#660000"
+                };
                 String color = colorPalette[random.nextInt(colorPalette.length)];
 
                 // Randomize gradient direction
                 String[] gradientTypes = {
-                        "radial-gradient(center 50% 50%, radius 50%, " + color + "aa, #660000aa)",
-                        "radial-gradient(center 30% 30%, radius 70%, " + color + "cc, #440000cc)",
-                        "radial-gradient(center 70% 70%, radius 60%, " + color + "88, #880000aa)",
-                        "linear-gradient(45deg, " + color + "aa, #660000aa)",
-                        "linear-gradient(135deg, " + color + "88, #440000cc)"
-                }
-;
+                    "radial-gradient(center 50% 50%, radius 50%, " + color + "aa, #660000aa)",
+                    "radial-gradient(center 30% 30%, radius 70%, " + color + "cc, #440000cc)",
+                    "radial-gradient(center 70% 70%, radius 60%, " + color + "88, #880000aa)",
+                    "linear-gradient(45deg, " + color + "aa, #660000aa)",
+                    "linear-gradient(135deg, " + color + "88, #440000cc)"
+                };
                 String gradient = gradientTypes[random.nextInt(gradientTypes.length)];
 
                 double shadowRadius = 6 + random.nextDouble() * 12; // 6-18px shadow
 
                 particle.setStyle(
-                        "-fx-fill: " + gradient + ";" +
-                                "-fx-effect: dropshadow(gaussian, " + color + "99, " + shadowRadius + ", 0, 0, 0);");
+                    "-fx-fill: " + gradient + ";" +
+                        "-fx-effect: dropshadow(gaussian, " + color + "99, " + shadowRadius + ", 0, 0, 0);");
 
                 // Assign random animation class combinations
-                String[] animationClasses = { "floating-particle", "glow-red", "pulsing-shape" }
-;
+                String[] animationClasses = {"floating-particle", "glow-red", "pulsing-shape"};
                 StringBuilder classBuilder = new StringBuilder();
                 for (String animClass : animationClasses) {
                     if (random.nextBoolean()) { // 50% chance for each class
@@ -1002,7 +1015,6 @@ public class HomeClientController implements Initializable {
                     particle.getStyleClass().addAll(classBuilder.toString().trim().split(" "));
                 }
 
-
                 // Add to containers
                 dynamicParticles.add(particle);
                 particlesContainer.getChildren().add(particle);
@@ -1011,7 +1023,6 @@ public class HomeClientController implements Initializable {
                 setupAdvancedParticleAnimation(particle, random.nextDouble() * 5);
             }
 
-
             LOGGER.info("Created " + dynamicParticles.size() + " dynamic particles with advanced randomness");
         } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error creating dynamic particles: " + e.getMessage(), e);
@@ -1019,13 +1030,16 @@ public class HomeClientController implements Initializable {
 
     }
 
-
     /**
-     * Generates and adds randomized decorative shapes to the particlesContainer and starts their animations.
-     *
-     * Creates rectangles, circles, triangles, and diamonds with randomized position, size, rotation,
-     * opacity, gradient fill, stroke, and drop shadow; assigns optional CSS animation classes,
-     * stores each shape in the dynamicShapes list, appends it to the particlesContainer, and
+     * Generates and adds randomized decorative shapes to the particlesContainer and
+     * starts their animations.
+     * <p>
+     * Creates rectangles, circles, triangles, and diamonds with randomized
+     * position, size, rotation,
+     * opacity, gradient fill, stroke, and drop shadow; assigns optional CSS
+     * animation classes,
+     * stores each shape in the dynamicShapes list, appends it to the
+     * particlesContainer, and
      * invokes the advanced shape animation setup for each created shape.
      */
     private void createDynamicShapes() {
@@ -1067,12 +1081,11 @@ public class HomeClientController implements Initializable {
                     case 2: // Triangle (Polygon)
                         Polygon triangle = new Polygon();
                         double size = 8 + random.nextDouble() * 20;
-                        triangle.getPoints().addAll(new Double[] {
-                                0.0, -size,
-                                -size * 0.866, size * 0.5,
-                                size * 0.866, size * 0.5
-                        }
-);
+                        triangle.getPoints().addAll(new Double[]{
+                            0.0, -size,
+                            -size * 0.866, size * 0.5,
+                            size * 0.866, size * 0.5
+                        });
                         triangle.setLayoutX(x);
                         triangle.setLayoutY(y);
                         triangle.setOpacity(opacity);
@@ -1083,13 +1096,12 @@ public class HomeClientController implements Initializable {
                     case 3: // Diamond (Polygon)
                         Polygon diamond = new Polygon();
                         double diamondSize = 6 + random.nextDouble() * 16;
-                        diamond.getPoints().addAll(new Double[] {
-                                0.0, -diamondSize,
-                                diamondSize, 0.0,
-                                0.0, diamondSize,
-                                -diamondSize, 0.0
-                        }
-);
+                        diamond.getPoints().addAll(new Double[]{
+                            0.0, -diamondSize,
+                            diamondSize, 0.0,
+                            0.0, diamondSize,
+                            -diamondSize, 0.0
+                        });
                         diamond.setLayoutX(x);
                         diamond.setLayoutY(y);
                         diamond.setOpacity(opacity);
@@ -1098,28 +1110,25 @@ public class HomeClientController implements Initializable {
                         break;
                 }
 
-
                 if (shape != null) {
                     // Enhanced color variety
                     String[] colorPalette = {
-                            "#c80000", "#b40000", "#dc3232", "#a00000", "#e04444", "#cc1111",
-                            "#d02020", "#b81818", "#f03030", "#c41515", "#e82828", "#bc0c0c"
-                    }
-;
+                        "#c80000", "#b40000", "#dc3232", "#a00000", "#e04444", "#cc1111",
+                        "#d02020", "#b81818", "#f03030", "#c41515", "#e82828", "#bc0c0c"
+                    };
                     String primaryColor = colorPalette[random.nextInt(colorPalette.length)];
                     String secondaryColor = colorPalette[random.nextInt(colorPalette.length)];
 
                     // Random gradient patterns
                     String[] gradientPatterns = {
-                            "linear-gradient(to bottom right, " + primaryColor + "66, " + secondaryColor + "aa)",
-                            "linear-gradient(45deg, " + primaryColor + "80, " + secondaryColor + "60)",
-                            "linear-gradient(135deg, " + primaryColor + "70, " + secondaryColor + "90)",
-                            "radial-gradient(center 50% 50%, radius 60%, " + primaryColor + "88, " + secondaryColor
-                                    + "66)",
-                            "radial-gradient(center 30% 70%, radius 80%, " + primaryColor + "aa, " + secondaryColor
-                                    + "44)"
-                    }
-;
+                        "linear-gradient(to bottom right, " + primaryColor + "66, " + secondaryColor + "aa)",
+                        "linear-gradient(45deg, " + primaryColor + "80, " + secondaryColor + "60)",
+                        "linear-gradient(135deg, " + primaryColor + "70, " + secondaryColor + "90)",
+                        "radial-gradient(center 50% 50%, radius 60%, " + primaryColor + "88, " + secondaryColor
+                            + "66)",
+                        "radial-gradient(center 30% 70%, radius 80%, " + primaryColor + "aa, " + secondaryColor
+                            + "44)"
+                    };
                     String gradient = gradientPatterns[random.nextInt(gradientPatterns.length)];
 
                     String strokeColor = colorPalette[random.nextInt(colorPalette.length)];
@@ -1127,17 +1136,16 @@ public class HomeClientController implements Initializable {
                     double shadowRadius = 5 + random.nextDouble() * 15; // 5-20px
 
                     shape.setStyle(
-                            "-fx-fill: " + gradient + ";" +
-                                    "-fx-stroke: " + strokeColor + ";" +
-                                    "-fx-stroke-width: " + strokeWidth + ";" +
-                                    "-fx-effect: dropshadow(gaussian, " + primaryColor + "80, " + shadowRadius
-                                    + ", 0, 0, 0);");
+                        "-fx-fill: " + gradient + ";" +
+                            "-fx-stroke: " + strokeColor + ";" +
+                            "-fx-stroke-width: " + strokeWidth + ";" +
+                            "-fx-effect: dropshadow(gaussian, " + primaryColor + "80, " + shadowRadius
+                            + ", 0, 0, 0);");
 
                     shape.setMouseTransparent(true);
 
                     // Random animation class assignments
-                    String[] animationClasses = { "rotating-shape", "pulsing-shape", "glow-red" }
-;
+                    String[] animationClasses = {"rotating-shape", "pulsing-shape", "glow-red"};
                     java.util.List<String> assignedClasses = new ArrayList<>();
                     for (String animClass : animationClasses) {
                         if (random.nextDouble() < 0.7) { // 70% chance for each class
@@ -1150,7 +1158,6 @@ public class HomeClientController implements Initializable {
                         shape.getStyleClass().addAll(assignedClasses);
                     }
 
-
                     dynamicShapes.add(shape);
                     particlesContainer.getChildren().add(shape);
 
@@ -1160,7 +1167,6 @@ public class HomeClientController implements Initializable {
 
             }
 
-
             LOGGER.info("Created " + dynamicShapes.size() + " dynamic shapes with enhanced randomness");
         } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error creating dynamic shapes: " + e.getMessage(), e);
@@ -1168,18 +1174,18 @@ public class HomeClientController implements Initializable {
 
     }
 
-
     /**
-     * Applies a composite floating animation to a particle, combining vertical and horizontal drift,
+     * Applies a composite floating animation to a particle, combining vertical and
+     * horizontal drift,
      * pulsing scale, and fading effects that run indefinitely.
      *
      * @param particle the Circle node to animate
-     * @param delay initial delay in seconds before the animations begin
+     * @param delay    initial delay in seconds before the animations begin
      */
     private void setupAdvancedParticleAnimation(Circle particle, double delay) {
         // Complex floating animation with multiple axes
         TranslateTransition moveY = new TranslateTransition(
-                Duration.seconds(2 + random.nextDouble() * 6), particle);
+            Duration.seconds(2 + random.nextDouble() * 6), particle);
         moveY.setFromY(0);
         moveY.setToY(-10 - random.nextDouble() * 25);
         moveY.setCycleCount(Timeline.INDEFINITE);
@@ -1187,7 +1193,7 @@ public class HomeClientController implements Initializable {
         moveY.setDelay(Duration.seconds(delay));
 
         TranslateTransition moveX = new TranslateTransition(
-                Duration.seconds(3 + random.nextDouble() * 8), particle);
+            Duration.seconds(3 + random.nextDouble() * 8), particle);
         moveX.setFromX(0);
         moveX.setToX(-5 + random.nextDouble() * 10); // Random horizontal drift
         moveX.setCycleCount(Timeline.INDEFINITE);
@@ -1196,7 +1202,7 @@ public class HomeClientController implements Initializable {
 
         // Advanced fade animation
         FadeTransition fade = new FadeTransition(
-                Duration.seconds(1.5 + random.nextDouble() * 3), particle);
+            Duration.seconds(1.5 + random.nextDouble() * 3), particle);
         fade.setFromValue(particle.getOpacity());
         fade.setToValue(Math.min(1.0, particle.getOpacity() + 0.2 + random.nextDouble() * 0.3));
         fade.setCycleCount(Timeline.INDEFINITE);
@@ -1205,7 +1211,7 @@ public class HomeClientController implements Initializable {
 
         // Scale pulsing
         ScaleTransition scale = new ScaleTransition(
-                Duration.seconds(2 + random.nextDouble() * 4), particle);
+            Duration.seconds(2 + random.nextDouble() * 4), particle);
         scale.setFromX(1.0);
         scale.setFromY(1.0);
         scale.setToX(0.8 + random.nextDouble() * 0.6); // 0.8-1.4 scale
@@ -1221,10 +1227,9 @@ public class HomeClientController implements Initializable {
         scale.play();
     }
 
-
     /**
      * Attach and start a set of continuous visual animations on the given node.
-     *
+     * <p>
      * Applies independent rotation, horizontal and vertical scaling, and opacity
      * oscillation to the provided node, and optionally a gentle translational
      * drift. Each animation uses randomized durations, targets, and direction and
@@ -1237,7 +1242,7 @@ public class HomeClientController implements Initializable {
     private void setupAdvancedShapeAnimation(javafx.scene.Node shape, double delay) {
         // Complex rotation animation
         RotateTransition rotation = new RotateTransition(
-                Duration.seconds(4 + random.nextDouble() * 16), shape);
+            Duration.seconds(4 + random.nextDouble() * 16), shape);
         rotation.setFromAngle(0);
         rotation.setToAngle(random.nextBoolean() ? 360 : -360); // Random direction
         rotation.setCycleCount(Timeline.INDEFINITE);
@@ -1245,7 +1250,7 @@ public class HomeClientController implements Initializable {
 
         // Multi-axis scale animation
         ScaleTransition scaleX = new ScaleTransition(
-                Duration.seconds(3 + random.nextDouble() * 6), shape);
+            Duration.seconds(3 + random.nextDouble() * 6), shape);
         scaleX.setFromX(1.0);
         scaleX.setToX(0.7 + random.nextDouble() * 0.8); // 0.7-1.5 scale
         scaleX.setCycleCount(Timeline.INDEFINITE);
@@ -1253,7 +1258,7 @@ public class HomeClientController implements Initializable {
         scaleX.setDelay(Duration.seconds(delay + random.nextDouble()));
 
         ScaleTransition scaleY = new ScaleTransition(
-                Duration.seconds(2.5 + random.nextDouble() * 5), shape);
+            Duration.seconds(2.5 + random.nextDouble() * 5), shape);
         scaleY.setFromY(1.0);
         scaleY.setToY(0.8 + random.nextDouble() * 0.6); // 0.8-1.4 scale
         scaleY.setCycleCount(Timeline.INDEFINITE);
@@ -1262,7 +1267,7 @@ public class HomeClientController implements Initializable {
 
         // Opacity oscillation
         FadeTransition fade = new FadeTransition(
-                Duration.seconds(2 + random.nextDouble() * 5), shape);
+            Duration.seconds(2 + random.nextDouble() * 5), shape);
         fade.setFromValue(shape.getOpacity());
         fade.setToValue(Math.min(0.9, shape.getOpacity() + 0.1 + random.nextDouble() * 0.4));
         fade.setCycleCount(Timeline.INDEFINITE);
@@ -1272,7 +1277,7 @@ public class HomeClientController implements Initializable {
         // Optional drift animation for extra movement
         if (random.nextBoolean()) {
             TranslateTransition drift = new TranslateTransition(
-                    Duration.seconds(8 + random.nextDouble() * 12), shape);
+                Duration.seconds(8 + random.nextDouble() * 12), shape);
             drift.setFromX(0);
             drift.setFromY(0);
             drift.setToX(-10 + random.nextDouble() * 20);
@@ -1283,7 +1288,6 @@ public class HomeClientController implements Initializable {
             drift.play();
         }
 
-
         // Start all animations
         rotation.play();
         scaleX.play();
@@ -1291,16 +1295,16 @@ public class HomeClientController implements Initializable {
         fade.play();
     }
 
-
     /**
      * Initializes and starts floating animations for the particle nodes.
-     *
-     * Attaches a looping floating animation to each of the six particle Circle fields (if present)
-     * and staggers their start times by 0.5 seconds per particle index to create a natural, offset motion.
+     * <p>
+     * Attaches a looping floating animation to each of the six particle Circle
+     * fields (if present)
+     * and staggers their start times by 0.5 seconds per particle index to create a
+     * natural, offset motion.
      */
     private void setupParticleAnimations() {
-        Circle[] particles = { particle1, particle2, particle3, particle4, particle5, particle6 }
-;
+        Circle[] particles = {particle1, particle2, particle3, particle4, particle5, particle6};
 
         for (int i = 0; i < particles.length; i++) {
             if (particles[i] != null) {
@@ -1311,9 +1315,9 @@ public class HomeClientController implements Initializable {
 
     }
 
-
     /**
-     * Applies a vertical floating translation and a pulsing fade animation to the given particle.
+     * Applies a vertical floating translation and a pulsing fade animation to the
+     * given particle.
      *
      * @param particle the Circle node to animate
      * @param delay    initial delay in seconds before the animation starts
@@ -1336,23 +1340,29 @@ public class HomeClientController implements Initializable {
         fadeTransition.play();
     }
 
-
     /**
-         * Apply animated effects to decorative shape nodes in the UI.
-         *
-         * <p>Starts continuous rotation on the available shape nodes used for background decoration and
-         * starts a pulsing scale/fade animation for the designated pulsing shape.</p>
-         *
-         * <p>Specifically:
-         * - shape1: continuous rotation with a 10-second cycle
-         * - shape2: continuous rotation with a 15-second cycle
-         * - shape3: continuous rotation with an 8-second cycle
-         * - shape5: continuous rotation with a 12-second cycle
-         * - shape6: continuous rotation with a 6-second cycle
-         * - shape4: pulsing (scale and fade) animation</p>
-         *
-         * <p>The method is null-safe and will skip any shape nodes that are not present.</p>
-         */
+     * Apply animated effects to decorative shape nodes in the UI.
+     *
+     * <p>
+     * Starts continuous rotation on the available shape nodes used for background
+     * decoration and
+     * starts a pulsing scale/fade animation for the designated pulsing shape.
+     * </p>
+     *
+     * <p>
+     * Specifically:
+     * - shape1: continuous rotation with a 10-second cycle
+     * - shape2: continuous rotation with a 15-second cycle
+     * - shape3: continuous rotation with an 8-second cycle
+     * - shape5: continuous rotation with a 12-second cycle
+     * - shape6: continuous rotation with a 6-second cycle
+     * - shape4: pulsing (scale and fade) animation
+     * </p>
+     *
+     * <p>
+     * The method is null-safe and will skip any shape nodes that are not present.
+     * </p>
+     */
     private void setupShapeAnimations() {
         // Rotation animations
         if (shape1 != null)
@@ -1371,7 +1381,6 @@ public class HomeClientController implements Initializable {
             setupPulsingAnimation(shape4);
     }
 
-
     /**
      * Applies a continuous 360-degree rotation to the specified node.
      *
@@ -1386,11 +1395,11 @@ public class HomeClientController implements Initializable {
         rotation.play();
     }
 
-
     /**
      * Applies a continuous pulsing scale and fade animation to the given node.
-     *
-     * The animation scales the node up and down and adjusts its opacity in a repeating cycle (~3 seconds per cycle).
+     * <p>
+     * The animation scales the node up and down and adjusts its opacity in a
+     * repeating cycle (~3 seconds per cycle).
      *
      * @param shape the JavaFX Node to animate with a pulsing effect
      */
@@ -1412,11 +1421,14 @@ public class HomeClientController implements Initializable {
         fade.play();
     }
 
-
     /**
-     * Applies a fade-in animation to the main scrollable content area when available.
+     * Applies a fade-in animation to the main scrollable content area when
+     * available.
      *
-     * <p>If {@code mainScrollPane} is non-null, its opacity is animated from 0.0 to 1.0 over 800 milliseconds.</p>
+     * <p>
+     * If {@code mainScrollPane} is non-null, its opacity is animated from 0.0 to
+     * 1.0 over 800 milliseconds.
+     * </p>
      */
     private void setupContentAnimations() {
         // Fade in the main content
@@ -1429,12 +1441,16 @@ public class HomeClientController implements Initializable {
 
     }
 
-
     /**
-     * Attach a listener to the search field that triggers searches for queries longer than two characters.
+     * Attach a listener to the search field that triggers searches for queries
+     * longer than two characters.
      *
-     * <p>If the injected `searchField` is non-null, a listener is added to its text property which calls
-     * {@code performSearch(String)} whenever the new text length exceeds 2 characters.</p>
+     * <p>
+     * If the injected `searchField` is non-null, a listener is added to its text
+     * property which calls
+     * {@code performSearch(String)} whenever the new text length exceeds 2
+     * characters.
+     * </p>
      */
     private void setupSearchFunctionality() {
         if (searchField != null) {
@@ -1443,17 +1459,16 @@ public class HomeClientController implements Initializable {
                     performSearch(newValue);
                 }
 
-            }
-);
+            });
         }
 
     }
 
-
     /**
      * Filter the currently displayed content using the provided search text.
      *
-     * @param query the text used to filter visible movies, series, products, and cinemas
+     * @param query the text used to filter visible movies, series, products, and
+     *              cinemas
      */
     private void performSearch(String query) {
         // This would filter the displayed content based on the search query
@@ -1461,11 +1476,12 @@ public class HomeClientController implements Initializable {
         LOGGER.info("Searching for: " + query);
     }
 
-
     /**
-     * Applies initial UI styling by adding the "fade-in" CSS class to the root container.
-     *
-     * This triggers the initial load animation when the root container is available.
+     * Applies initial UI styling by adding the "fade-in" CSS class to the root
+     * container.
+     * <p>
+     * This triggers the initial load animation when the root container is
+     * available.
      */
     private void applyInitialStyling() {
         // Add CSS classes for animations
@@ -1475,9 +1491,9 @@ public class HomeClientController implements Initializable {
 
     }
 
-
     /**
-     * Loads the movies view (filmuser.fxml) and replaces the current window's scene with it.
+     * Loads the movies view (filmuser.fxml) and replaces the current window's scene
+     * with it.
      *
      * @param event the ActionEvent that triggered this navigation
      */
@@ -1495,9 +1511,9 @@ public class HomeClientController implements Initializable {
 
     }
 
-
     /**
-     * Navigates the application to the Series client view by loading and setting "SeriesClient.fxml"
+     * Navigates the application to the Series client view by loading and setting
+     * "SeriesClient.fxml"
      * as the current scene on the existing stage.
      *
      * @param event the action event that triggered the navigation
@@ -1515,9 +1531,9 @@ public class HomeClientController implements Initializable {
 
     }
 
-
     /**
-     * Loads the product listing UI (AfficherProduitClient.fxml) into the current window.
+     * Loads the product listing UI (AfficherProduitClient.fxml) into the current
+     * window.
      *
      * @param event the ActionEvent that triggered the navigation
      */
@@ -1534,11 +1550,12 @@ public class HomeClientController implements Initializable {
 
     }
 
-
     /**
-     * Navigates the application to the cinemas dashboard view by loading and setting DashboardClientCinema.fxml as the current scene.
-     *
-     * If loading the FXML fails, the error is logged and the current scene is left unchanged.
+     * Navigates the application to the cinemas dashboard view by loading and
+     * setting DashboardClientCinema.fxml as the current scene.
+     * <p>
+     * If loading the FXML fails, the error is logged and the current scene is left
+     * unchanged.
      */
     @FXML
     void showCinemas(ActionEvent event) {
@@ -1553,9 +1570,9 @@ public class HomeClientController implements Initializable {
 
     }
 
-
     /**
-     * Navigates the application to the user's profile view by loading the Profile.fxml
+     * Navigates the application to the user's profile view by loading the
+     * Profile.fxml
      * and replacing the current scene with the loaded content.
      *
      * @param event the ActionEvent that triggered the navigation
@@ -1573,11 +1590,12 @@ public class HomeClientController implements Initializable {
 
     }
 
-
     /**
-     * Clears the current user's session data and navigates the application back to the login screen.
-     *
-     * Loads the login FXML, clears the stage's user data, and replaces the scene with the login scene.
+     * Clears the current user's session data and navigates the application back to
+     * the login screen.
+     * <p>
+     * Loads the login FXML, clears the stage's user data, and replaces the scene
+     * with the login scene.
      *
      * @param event the ActionEvent that triggered the logout
      */
@@ -1595,15 +1613,15 @@ public class HomeClientController implements Initializable {
 
     }
 
-
     /**
-     * Open the movie details view for the given film and navigate to the movies screen.
+     * Open the movie details view for the given film and navigate to the movies
+     * screen.
      *
      * @param film the Film whose details should be displayed
      */
 
     private void openMovieDetails(Film film) {
-        LOGGER.info("Opening movie details for: " + film.getName());
+        LOGGER.info("Opening movie details for: " + film.getTitle());
         // Navigate to movie details or show movie player
         try {
             showMovies(null);
@@ -1612,7 +1630,6 @@ public class HomeClientController implements Initializable {
         }
 
     }
-
 
     /**
      * Open the detail view for the given series and navigate to the series screen.
@@ -1630,9 +1647,9 @@ public class HomeClientController implements Initializable {
 
     }
 
-
     /**
-     * Initiates navigation to the products view for the given product (for viewing details or adding to cart).
+     * Initiates navigation to the products view for the given product (for viewing
+     * details or adding to cart).
      *
      * @param product the product to present in the products view
      */
@@ -1647,27 +1664,27 @@ public class HomeClientController implements Initializable {
 
     }
 
-
     /**
-     * Populate the movies container with a predefined set of placeholder movie cards.
-     *
-     * This method clears the current movies container and fills it with a fixed list
-     * of popular movie titles and short descriptors to display when the film service
+     * Populate the movies container with a predefined set of placeholder movie
+     * cards.
+     * <p>
+     * This method clears the current movies container and fills it with a fixed
+     * list
+     * of popular movie titles and short descriptors to display when the film
+     * service
      * fails or returns no data.
      */
 
     private void createPlaceholderMovies() {
         String[] placeholderMovies = {
-                "The Batman", "Dune", "Joker", "Oppenheimer", "Spider-Man: Across the Spider-Verse",
-                "Avengers: Endgame", "The Dark Knight", "Inception", "Interstellar", "The Matrix"
-        }
-;
+            "The Batman", "Dune", "Joker", "Oppenheimer", "Spider-Man: Across the Spider-Verse",
+            "Avengers: Endgame", "The Dark Knight", "Inception", "Interstellar", "The Matrix"
+        };
 
         String[] movieDescriptions = {
-                "2022 • Action", "2021 • Sci-Fi", "2019 • Drama", "2023 • Biography", "2023 • Animation",
-                "2019 • Action", "2008 • Action", "2010 • Sci-Fi", "2014 • Sci-Fi", "1999 • Sci-Fi"
-        }
-;
+            "2022 • Action", "2021 • Sci-Fi", "2019 • Drama", "2023 • Biography", "2023 • Animation",
+            "2019 • Action", "2008 • Action", "2010 • Sci-Fi", "2014 • Sci-Fi", "1999 • Sci-Fi"
+        };
 
         moviesContainer.getChildren().clear();
         for (int i = 0; i < placeholderMovies.length; i++) {
@@ -1677,27 +1694,27 @@ public class HomeClientController implements Initializable {
 
     }
 
-
     /**
-     * Populates the series container with a fixed set of rich placeholder series cards.
-     *
-     * Creates a predefined list of series titles and short descriptions, builds a rich placeholder
-     * card for each via createRichPlaceholderCard, and adds them to the seriesContainer.
+     * Populates the series container with a fixed set of rich placeholder series
+     * cards.
+     * <p>
+     * Creates a predefined list of series titles and short descriptions, builds a
+     * rich placeholder
+     * card for each via createRichPlaceholderCard, and adds them to the
+     * seriesContainer.
      */
     private void createPlaceholderSeries() {
         String[] placeholderSeries = {
-                "Breaking Bad", "Game of Thrones", "The Office", "Stranger Things", "The Crown",
-                "The Mandalorian", "House of the Dragon", "Wednesday", "The Witcher", "Peaky Blinders"
-        }
-;
+            "Breaking Bad", "Game of Thrones", "The Office", "Stranger Things", "The Crown",
+            "The Mandalorian", "House of the Dragon", "Wednesday", "The Witcher", "Peaky Blinders"
+        };
 
         String[] seriesDescriptions = {
-                "5 Seasons • Drama", "8 Seasons • Fantasy", "9 Seasons • Comedy", "4 Seasons • Sci-Fi",
-                "6 Seasons • Drama",
-                "3 Seasons • Sci-Fi", "1 Season • Fantasy", "1 Season • Comedy", "3 Seasons • Fantasy",
-                "6 Seasons • Crime"
-        }
-;
+            "5 Seasons • Drama", "8 Seasons • Fantasy", "9 Seasons • Comedy", "4 Seasons • Sci-Fi",
+            "6 Seasons • Drama",
+            "3 Seasons • Sci-Fi", "1 Season • Fantasy", "1 Season • Comedy", "3 Seasons • Fantasy",
+            "6 Seasons • Crime"
+        };
 
         seriesContainer.getChildren().clear();
         for (int i = 0; i < placeholderSeries.length; i++) {
@@ -1707,25 +1724,24 @@ public class HomeClientController implements Initializable {
 
     }
 
-
     /**
-     * Populate the products container with a predefined set of placeholder product cards.
-     *
-     * Clears the container and adds rich placeholder cards for a fixed list of product names
+     * Populate the products container with a predefined set of placeholder product
+     * cards.
+     * <p>
+     * Clears the container and adds rich placeholder cards for a fixed list of
+     * product names
      * paired with example prices to be shown when real product data is unavailable.
      */
     private void createPlaceholderProducts() {
         String[] placeholderProducts = {
-                "Premium Popcorn", "VIP Movie Tickets", "Gourmet Candy Mix", "Specialty Drinks", "Movie Merchandise",
-                "Collector's Edition", "Director's Cut", "Limited Edition", "Exclusive Bundle", "Gift Cards"
-        }
-;
+            "Premium Popcorn", "VIP Movie Tickets", "Gourmet Candy Mix", "Specialty Drinks", "Movie Merchandise",
+            "Collector's Edition", "Director's Cut", "Limited Edition", "Exclusive Bundle", "Gift Cards"
+        };
 
         String[] productPrices = {
-                "$8.99", "$15.99", "$6.49", "$4.99", "$12.99",
-                "$24.99", "$19.99", "$29.99", "$39.99", "$25.00"
-        }
-;
+            "$8.99", "$15.99", "$6.49", "$4.99", "$12.99",
+            "$24.99", "$19.99", "$29.99", "$39.99", "$25.00"
+        };
 
         productsContainer.getChildren().clear();
         for (int i = 0; i < placeholderProducts.length; i++) {
@@ -1735,17 +1751,20 @@ public class HomeClientController implements Initializable {
 
     }
 
-
     /**
-     * Builds a styled placeholder card to represent content when real data is unavailable.
-     *
-     * The card includes an image (selected by title and type with a network fallback), a title,
-     * a short description, a type label, and wired hover/click interactions for user feedback.
+     * Builds a styled placeholder card to represent content when real data is
+     * unavailable.
+     * <p>
+     * The card includes an image (selected by title and type with a network
+     * fallback), a title,
+     * a short description, a type label, and wired hover/click interactions for
+     * user feedback.
      *
      * @param title       the display title for the placeholder card
      * @param description a short descriptive text to show under the title
-     * @param type        the content category (for example "Movie", "Series", or "Product") used to choose an appropriate image and label
-     * @return            a configured VBox representing the rich placeholder card
+     * @param type        the content category (for example "Movie", "Series", or
+     *                    "Product") used to choose an appropriate image and label
+     * @return a configured VBox representing the rich placeholder card
      */
     private VBox createRichPlaceholderCard(String title, String description, String type) {
         VBox card = new VBox(8);
@@ -1754,14 +1773,14 @@ public class HomeClientController implements Initializable {
         card.setPrefHeight(280);
         card.getStyleClass().add("content-card");
         card.setStyle(
-                "-fx-background-color: linear-gradient(to bottom, rgba(35, 35, 35, 0.9), rgba(25, 25, 25, 0.95));" +
-                        "-fx-background-radius: 15;" +
-                        "-fx-border-color: rgba(139, 0, 0, 0.4);" +
-                        "-fx-border-width: 1;" +
-                        "-fx-border-radius: 15;" +
-                        "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0, 0, 3);" +
-                        "-fx-padding: 10;" +
-                        "-fx-cursor: hand;");
+            "-fx-background-color: linear-gradient(to bottom, rgba(35, 35, 35, 0.9), rgba(25, 25, 25, 0.95));" +
+                "-fx-background-radius: 15;" +
+                "-fx-border-color: rgba(139, 0, 0, 0.4);" +
+                "-fx-border-width: 1;" +
+                "-fx-border-radius: 15;" +
+                "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0, 0, 3);" +
+                "-fx-padding: 10;" +
+                "-fx-cursor: hand;");
 
         // Enhanced image with proper sources
         ImageView imageView = new ImageView();
@@ -1778,7 +1797,7 @@ public class HomeClientController implements Initializable {
             // Fallback to a more reliable placeholder
             try {
                 String fallbackUrl = "https://via.placeholder.com/140x200/666666/ffffff?text=" +
-                        java.net.URLEncoder.encode(type, "UTF-8");
+                    java.net.URLEncoder.encode(type, "UTF-8");
                 imageView.setImage(new Image(fallbackUrl));
             } catch (Exception ex) {
                 LOGGER.log(Level.WARNING, "Error loading placeholder image: " + ex.getMessage());
@@ -1786,36 +1805,35 @@ public class HomeClientController implements Initializable {
 
         }
 
-
         // Enhanced title
         Label titleLabel = new Label(title);
         titleLabel.setStyle(
-                "-fx-text-fill: #ffffff;" +
-                        "-fx-font-family: 'Arial';" +
-                        "-fx-font-size: 12px;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-wrap-text: true;" +
-                        "-fx-text-alignment: center;");
+            "-fx-text-fill: #ffffff;" +
+                "-fx-font-family: 'Arial';" +
+                "-fx-font-size: 12px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-wrap-text: true;" +
+                "-fx-text-alignment: center;");
         titleLabel.setMaxWidth(140);
         titleLabel.setAlignment(Pos.CENTER);
 
         // Enhanced description/info
         Label descLabel = new Label(description);
         descLabel.setStyle(
-                "-fx-text-fill: #cccccc;" +
-                        "-fx-font-family: 'Arial';" +
-                        "-fx-font-size: 10px;" +
-                        "-fx-text-alignment: center;");
+            "-fx-text-fill: #cccccc;" +
+                "-fx-font-family: 'Arial';" +
+                "-fx-font-size: 10px;" +
+                "-fx-text-alignment: center;");
         descLabel.setMaxWidth(140);
         descLabel.setAlignment(Pos.CENTER);
 
         // Type indicator
         Label typeLabel = new Label(type.toUpperCase());
         typeLabel.setStyle(
-                "-fx-text-fill: #ff6666;" +
-                        "-fx-font-family: 'Arial';" +
-                        "-fx-font-size: 9px;" +
-                        "-fx-font-weight: bold;");
+            "-fx-text-fill: #ff6666;" +
+                "-fx-font-family: 'Arial';" +
+                "-fx-font-size: 9px;" +
+                "-fx-font-weight: bold;");
         typeLabel.setAlignment(Pos.CENTER);
 
         card.getChildren().addAll(imageView, titleLabel, descLabel, typeLabel);
@@ -1826,97 +1844,94 @@ public class HomeClientController implements Initializable {
         return card;
     }
 
-
     /**
      * Selects a stable placeholder image URL for a given content item.
      *
      * @param title the content title used to deterministically choose an image
-     * @param type  the content category such as "Movie", "Series", "Product", or "Cinema"
-     * @return      a URL string pointing to an image appropriate for the given type (or a generic placeholder URL if the type is unrecognized)
+     * @param type  the content category such as "Movie", "Series", "Product", or
+     *              "Cinema"
+     * @return a URL string pointing to an image appropriate for the given type (or
+     * a generic placeholder URL if the type is unrecognized)
      */
     private String getImageUrlForType(String title, String type) {
         switch (type) {
             case "Movie":
                 String[] movieImages = {
-                        "https://image.tmdb.org/t/p/w500/vZloFAK7NmvMGKE7VkF5UHaz0I.jpg", // The Batman
-                        "https://image.tmdb.org/t/p/w500/d5NXSklXo0qyIYkgV94XAgMIckC.jpg", // Dune
-                        "https://image.tmdb.org/t/p/w500/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg", // Joker
-                        "https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg", // Oppenheimer
-                        "https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg", // Spider-Man
-                        "https://image.tmdb.org/t/p/w500/cvsXj3I9Q2iyyIo95AecSd1tad7.jpg", // Avengers Endgame
-                        "https://image.tmdb.org/t/p/w500/aosm8NMQ3UyoBVpSxyimorCQykC.jpg", // The Dark Knight
-                        "https://image.tmdb.org/t/p/w500/rr7E0NoGKxvbkb89eR1GwfoYjpA.jpg", // Inception
-                        "https://image.tmdb.org/t/p/w500/pFlaoHTZeyNkG83vxsAJiGzfSsa.jpg", // Interstellar
-                        "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg" // The Matrix
-                }
-;
+                    "https://image.tmdb.org/t/p/w500/vZloFAK7NmvMGKE7VkF5UHaz0I.jpg", // The Batman
+                    "https://image.tmdb.org/t/p/w500/d5NXSklXo0qyIYkgV94XAgMIckC.jpg", // Dune
+                    "https://image.tmdb.org/t/p/w500/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg", // Joker
+                    "https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg", // Oppenheimer
+                    "https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg", // Spider-Man
+                    "https://image.tmdb.org/t/p/w500/cvsXj3I9Q2iyyIo95AecSd1tad7.jpg", // Avengers Endgame
+                    "https://image.tmdb.org/t/p/w500/aosm8NMQ3UyoBVpSxyimorCQykC.jpg", // The Dark Knight
+                    "https://image.tmdb.org/t/p/w500/rr7E0NoGKxvbkb89eR1GwfoYjpA.jpg", // Inception
+                    "https://image.tmdb.org/t/p/w500/pFlaoHTZeyNkG83vxsAJiGzfSsa.jpg", // Interstellar
+                    "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg" // The Matrix
+                };
                 return movieImages[Math.abs(title.hashCode()) % movieImages.length];
 
             case "Series":
                 String[] seriesImages = {
-                        "https://image.tmdb.org/t/p/w500/suopoADq0k8YZr4dQXcU6pToj6s.jpg", // Breaking Bad
-                        "https://image.tmdb.org/t/p/w500/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg", // Game of Thrones
-                        "https://image.tmdb.org/t/p/w500/qWnJzyZhyy74gjpSjIXWmuk0ifX.jpg", // The Office
-                        "https://image.tmdb.org/t/p/w500/4UjiPdFKJGJYdxwRs2Rzg7EmWqr.jpg", // Stranger Things
-                        "https://image.tmdb.org/t/p/w500/1M876KPjulVwppEpldhdc8V4o68.jpg", // The Crown
-                        "https://image.tmdb.org/t/p/w500/9yBVqNruk6Ykrwc32qrK2TIE5xw.jpg", // The Mandalorian
-                        "https://image.tmdb.org/t/p/w500/xUtOM1QO4r8w8yeE00QvBdq58N5.jpg", // House of the Dragon
-                        "https://image.tmdb.org/t/p/w500/1BIoJGKbXvdLDVv01hJR4VQ6vTX.jpg", // Wednesday
-                        "https://image.tmdb.org/t/p/w500/7WUHnWGx5OO145IRxPDUkQSh4C7.jpg", // The Witcher
-                        "https://image.tmdb.org/t/p/w500/mY7SeH4HFFxW1hiI6cWuwCRKptN.jpg" // Peaky Blinders
-                }
-;
+                    "https://image.tmdb.org/t/p/w500/suopoADq0k8YZr4dQXcU6pToj6s.jpg", // Breaking Bad
+                    "https://image.tmdb.org/t/p/w500/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg", // Game of Thrones
+                    "https://image.tmdb.org/t/p/w500/qWnJzyZhyy74gjpSjIXWmuk0ifX.jpg", // The Office
+                    "https://image.tmdb.org/t/p/w500/4UjiPdFKJGJYdxwRs2Rzg7EmWqr.jpg", // Stranger Things
+                    "https://image.tmdb.org/t/p/w500/1M876KPjulVwppEpldhdc8V4o68.jpg", // The Crown
+                    "https://image.tmdb.org/t/p/w500/9yBVqNruk6Ykrwc32qrK2TIE5xw.jpg", // The Mandalorian
+                    "https://image.tmdb.org/t/p/w500/xUtOM1QO4r8w8yeE00QvBdq58N5.jpg", // House of the Dragon
+                    "https://image.tmdb.org/t/p/w500/1BIoJGKbXvdLDVv01hJR4VQ6vTX.jpg", // Wednesday
+                    "https://image.tmdb.org/t/p/w500/7WUHnWGx5OO145IRxPDUkQSh4C7.jpg", // The Witcher
+                    "https://image.tmdb.org/t/p/w500/mY7SeH4HFFxW1hiI6cWuwCRKptN.jpg" // Peaky Blinders
+                };
                 return seriesImages[Math.abs(title.hashCode()) % seriesImages.length];
 
             case "Product":
                 String[] productImages = {
-                        "https://images.unsplash.com/photo-1505686994434-e3cc5abf1330?w=300&h=400&fit=crop", // Popcorn
-                        "https://images.unsplash.com/photo-1627662235719-d9e9f31c4f73?w=300&h=400&fit=crop", // Movie
-                                                                                                             // tickets
-                        "https://images.unsplash.com/photo-1528827871709-dbe8fe4e57f8?w=300&h=400&fit=crop", // Cinema
-                                                                                                             // candy
-                        "https://images.unsplash.com/photo-1509924603848-78edc5642dea?w=300&h=400&fit=crop", // Cinema
-                                                                                                             // drinks
-                        "https://images.unsplash.com/photo-1616530940355-351fabd9524b?w=300&h=400&fit=crop", // Movie
-                                                                                                             // merchandise
-                        "https://images.unsplash.com/photo-1489599446190-c9ad1d88c3dc?w=300&h=400&fit=crop", // Cinema
-                                                                                                             // items
-                        "https://images.unsplash.com/photo-1514306191717-452ec28c7814?w=300&h=400&fit=crop", // Movie
-                                                                                                             // reel
-                        "https://images.unsplash.com/photo-1596473499708-4ff13b15f4cc?w=300&h=400&fit=crop", // Cinema
-                                                                                                             // memorabilia
-                        "https://images.unsplash.com/photo-1580745313093-4e79b5b3e6c0?w=300&h=400&fit=crop", // Movie
-                                                                                                             // collectibles
-                        "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=300&h=400&fit=crop" // Cinema
-                                                                                                            // accessories
-                }
-;
+                    "https://images.unsplash.com/photo-1505686994434-e3cc5abf1330?w=300&h=400&fit=crop", // Popcorn
+                    "https://images.unsplash.com/photo-1627662235719-d9e9f31c4f73?w=300&h=400&fit=crop", // Movie
+                    // tickets
+                    "https://images.unsplash.com/photo-1528827871709-dbe8fe4e57f8?w=300&h=400&fit=crop", // Cinema
+                    // candy
+                    "https://images.unsplash.com/photo-1509924603848-78edc5642dea?w=300&h=400&fit=crop", // Cinema
+                    // drinks
+                    "https://images.unsplash.com/photo-1616530940355-351fabd9524b?w=300&h=400&fit=crop", // Movie
+                    // merchandise
+                    "https://images.unsplash.com/photo-1489599446190-c9ad1d88c3dc?w=300&h=400&fit=crop", // Cinema
+                    // items
+                    "https://images.unsplash.com/photo-1514306191717-452ec28c7814?w=300&h=400&fit=crop", // Movie
+                    // reel
+                    "https://images.unsplash.com/photo-1596473499708-4ff13b15f4cc?w=300&h=400&fit=crop", // Cinema
+                    // memorabilia
+                    "https://images.unsplash.com/photo-1580745313093-4e79b5b3e6c0?w=300&h=400&fit=crop", // Movie
+                    // collectibles
+                    "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=300&h=400&fit=crop" // Cinema
+                    // accessories
+                };
                 return productImages[Math.abs(title.hashCode()) % productImages.length];
 
             case "Cinema":
                 String[] cinemaImages = {
-                        "https://images.unsplash.com/photo-1489599446190-c9ad1d88c3dc?w=300&h=400&fit=crop", // Cinema
-                                                                                                             // theater
-                        "https://images.unsplash.com/photo-1594909122845-11baa439b7bf?w=300&h=400&fit=crop", // Movie
-                                                                                                             // theater
-                        "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=400&fit=crop", // Cinema
-                                                                                                             // seats
-                        "https://images.unsplash.com/photo-1542204165-65bf26472b9b?w=300&h=400&fit=crop", // Cinema
-                                                                                                          // interior
-                        "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=300&h=400&fit=crop", // Movie
-                                                                                                             // screen
-                        "https://images.unsplash.com/photo-1556909459-f3a22c77cd8d?w=300&h=400&fit=crop", // Cinema
-                                                                                                          // lobby
-                        "https://images.unsplash.com/photo-1574267432553-4b4628081c31?w=300&h=400&fit=crop", // Cinema
-                                                                                                             // hall
-                        "https://images.unsplash.com/photo-1518676590629-3dcbd9c5a5c9?w=300&h=400&fit=crop", // Theater
-                                                                                                             // lights
-                        "https://images.unsplash.com/photo-1524712245354-2c4e5e7121c0?w=300&h=400&fit=crop", // Movie
-                                                                                                             // posters
-                        "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=300&h=400&fit=crop" // Cinema
-                                                                                                            // exterior
-                }
-;
+                    "https://images.unsplash.com/photo-1489599446190-c9ad1d88c3dc?w=300&h=400&fit=crop", // Cinema
+                    // theater
+                    "https://images.unsplash.com/photo-1594909122845-11baa439b7bf?w=300&h=400&fit=crop", // Movie
+                    // theater
+                    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=400&fit=crop", // Cinema
+                    // seats
+                    "https://images.unsplash.com/photo-1542204165-65bf26472b9b?w=300&h=400&fit=crop", // Cinema
+                    // interior
+                    "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=300&h=400&fit=crop", // Movie
+                    // screen
+                    "https://images.unsplash.com/photo-1556909459-f3a22c77cd8d?w=300&h=400&fit=crop", // Cinema
+                    // lobby
+                    "https://images.unsplash.com/photo-1574267432553-4b4628081c31?w=300&h=400&fit=crop", // Cinema
+                    // hall
+                    "https://images.unsplash.com/photo-1518676590629-3dcbd9c5a5c9?w=300&h=400&fit=crop", // Theater
+                    // lights
+                    "https://images.unsplash.com/photo-1524712245354-2c4e5e7121c0?w=300&h=400&fit=crop", // Movie
+                    // posters
+                    "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=300&h=400&fit=crop" // Cinema
+                    // exterior
+                };
                 return cinemaImages[Math.abs(title.hashCode()) % cinemaImages.length];
 
             default:
@@ -1925,13 +1940,15 @@ public class HomeClientController implements Initializable {
 
     }
 
-
     /**
-     * Builds a styled VBox representing a cinema card with image, name, and address,
+     * Builds a styled VBox representing a cinema card with image, name, and
+     * address,
      * and attaches hover and click interactions that open the cinema details view.
      *
-     * @param cinema the Cinema whose data (name, address, logo path) populates the card
-     * @return a configured VBox node that visually represents the cinema and handles user interaction
+     * @param cinema the Cinema whose data (name, address, logo path) populates the
+     *               card
+     * @return a configured VBox node that visually represents the cinema and
+     * handles user interaction
      */
     private VBox createCinemaCard(Cinema cinema) {
         VBox card = new VBox(8);
@@ -1940,14 +1957,14 @@ public class HomeClientController implements Initializable {
         card.setPrefHeight(280);
         card.getStyleClass().add("content-card");
         card.setStyle(
-                "-fx-background-color: linear-gradient(to bottom, rgba(30, 30, 30, 0.9), rgba(20, 20, 20, 0.95));" +
-                        "-fx-background-radius: 15;" +
-                        "-fx-border-color: rgba(139, 0, 0, 0.3);" +
-                        "-fx-border-width: 1;" +
-                        "-fx-border-radius: 15;" +
-                        "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0, 0, 3);" +
-                        "-fx-padding: 10;" +
-                        "-fx-cursor: hand;");
+            "-fx-background-color: linear-gradient(to bottom, rgba(30, 30, 30, 0.9), rgba(20, 20, 20, 0.95));" +
+                "-fx-background-radius: 15;" +
+                "-fx-border-color: rgba(139, 0, 0, 0.3);" +
+                "-fx-border-width: 1;" +
+                "-fx-border-radius: 15;" +
+                "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 10, 0, 0, 3);" +
+                "-fx-padding: 10;" +
+                "-fx-cursor: hand;");
 
         // Cinema image
         ImageView image = new ImageView();
@@ -1958,34 +1975,32 @@ public class HomeClientController implements Initializable {
 
         try {
             String imageUrl = null;
-            if (cinema.getLogoPath() != null && !cinema.getLogoPath().isEmpty()) {
-                imageUrl = cinema.getLogoPath();
-            }
- else {
+            if (cinema.getLogoUrl() != null && !cinema.getLogoUrl().isEmpty()) {
+                imageUrl = cinema.getLogoUrl();
+            } else {
                 // Use cinema-related images
                 String[] cinemaImages = {
-                        "https://images.unsplash.com/photo-1489599446190-c9ad1d88c3dc?w=300&h=400&fit=crop", // Cinema
-                                                                                                             // theater
-                        "https://images.unsplash.com/photo-1594909122845-11baa439b7bf?w=300&h=400&fit=crop", // Movie
-                                                                                                             // theater
-                        "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=400&fit=crop", // Cinema
-                                                                                                             // seats
-                        "https://images.unsplash.com/photo-1542204165-65bf26472b9b?w=300&h=400&fit=crop", // Cinema
-                                                                                                          // interior
-                        "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=300&h=400&fit=crop", // Movie
-                                                                                                             // screen
-                        "https://images.unsplash.com/photo-1556909459-f3a22c77cd8d?w=300&h=400&fit=crop", // Cinema
-                                                                                                          // lobby
-                        "https://images.unsplash.com/photo-1574267432553-4b4628081c31?w=300&h=400&fit=crop", // Cinema
-                                                                                                             // hall
-                        "https://images.unsplash.com/photo-1518676590629-3dcbd9c5a5c9?w=300&h=400&fit=crop", // Theater
-                                                                                                             // lights
-                        "https://images.unsplash.com/photo-1524712245354-2c4e5e7121c0?w=300&h=400&fit=crop", // Movie
-                                                                                                             // posters
-                        "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=300&h=400&fit=crop" // Cinema
-                                                                                                            // exterior
-                }
-;
+                    "https://images.unsplash.com/photo-1489599446190-c9ad1d88c3dc?w=300&h=400&fit=crop", // Cinema
+                    // theater
+                    "https://images.unsplash.com/photo-1594909122845-11baa439b7bf?w=300&h=400&fit=crop", // Movie
+                    // theater
+                    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=400&fit=crop", // Cinema
+                    // seats
+                    "https://images.unsplash.com/photo-1542204165-65bf26472b9b?w=300&h=400&fit=crop", // Cinema
+                    // interior
+                    "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=300&h=400&fit=crop", // Movie
+                    // screen
+                    "https://images.unsplash.com/photo-1556909459-f3a22c77cd8d?w=300&h=400&fit=crop", // Cinema
+                    // lobby
+                    "https://images.unsplash.com/photo-1574267432553-4b4628081c31?w=300&h=400&fit=crop", // Cinema
+                    // hall
+                    "https://images.unsplash.com/photo-1518676590629-3dcbd9c5a5c9?w=300&h=400&fit=crop", // Theater
+                    // lights
+                    "https://images.unsplash.com/photo-1524712245354-2c4e5e7121c0?w=300&h=400&fit=crop", // Movie
+                    // posters
+                    "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=300&h=400&fit=crop" // Cinema
+                    // exterior
+                };
                 imageUrl = cinemaImages[Math.abs(cinema.getName().hashCode()) % cinemaImages.length];
             }
 
@@ -1993,31 +2008,30 @@ public class HomeClientController implements Initializable {
         } catch (Exception e) {
             try {
                 image.setImage(new Image("https://via.placeholder.com/140x180/555555/ffffff?text=" +
-                        java.net.URLEncoder.encode(cinema.getName(), "UTF-8")));
+                    java.net.URLEncoder.encode(cinema.getName(), "UTF-8")));
             } catch (Exception ex) {
                 image.setImage(new Image("https://via.placeholder.com/140x180/555555/ffffff?text=Cinema"));
             }
 
         }
 
-
         // Cinema name
         Label name = new Label(cinema.getName());
         name.setStyle(
-                "-fx-text-fill: white;" +
-                        "-fx-font-family: 'Arial';" +
-                        "-fx-font-size: 12px;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-wrap-text: true;");
+            "-fx-text-fill: white;" +
+                "-fx-font-family: 'Arial';" +
+                "-fx-font-size: 12px;" +
+                "-fx-font-weight: bold;" +
+                "-fx-wrap-text: true;");
         name.setMaxWidth(140);
         name.setAlignment(Pos.CENTER);
 
         // Cinema address
         Label address = new Label(cinema.getAddress() != null ? cinema.getAddress() : "Location");
         address.setStyle(
-                "-fx-text-fill: #cccccc;" +
-                        "-fx-font-family: 'Arial';" +
-                        "-fx-font-size: 10px;");
+            "-fx-text-fill: #cccccc;" +
+                "-fx-font-family: 'Arial';" +
+                "-fx-font-size: 10px;");
         address.setMaxWidth(140);
         address.setAlignment(Pos.CENTER);
 
@@ -2029,18 +2043,25 @@ public class HomeClientController implements Initializable {
         return card;
     }
 
-
     /**
-     * Configures and starts an enhanced horizontal carousel auto-scroll for a content HBox and its ScrollPane.
+     * Configures and starts an enhanced horizontal carousel auto-scroll for a
+     * content HBox and its ScrollPane.
+     * <p>
+     * This method ensures the container has enough items (adds placeholders when
+     * needed), adjusts scroll pane
+     * policies for smooth auto-scrolling, creates a continuous Timeline to advance
+     * the horizontal scroll value
+     * with a graceful reset near the end, and installs hover interactions that
+     * pause the auto-scroll, enable
+     * manual panning, and provide brief scale-based visual feedback. It also adds a
+     * subtle scroll indicator
+     * animation and schedules the animation to start after layout completion.
+     * Errors are caught and logged.
      *
-     * This method ensures the container has enough items (adds placeholders when needed), adjusts scroll pane
-     * policies for smooth auto-scrolling, creates a continuous Timeline to advance the horizontal scroll value
-     * with a graceful reset near the end, and installs hover interactions that pause the auto-scroll, enable
-     * manual panning, and provide brief scale-based visual feedback. It also adds a subtle scroll indicator
-     * animation and schedules the animation to start after layout completion. Errors are caught and logged.
-     *
-     * @param container the HBox containing the horizontal content items to be scrolled
-     * @param scrollPane the ScrollPane that displays the container and will be driven by the carousel animation
+     * @param container  the HBox containing the horizontal content items to be
+     *                   scrolled
+     * @param scrollPane the ScrollPane that displays the container and will be
+     *                   driven by the carousel animation
      */
     private void setupCarouselAnimation(HBox container, ScrollPane scrollPane) {
         if (container == null || scrollPane == null)
@@ -2054,7 +2075,6 @@ public class HomeClientController implements Initializable {
                 LOGGER.info("Added additional content. Container now has " + container.getChildren().size() + " items");
             }
 
-
             // Set up the scroll pane properties for smooth scrolling
             scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
             scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -2063,30 +2083,28 @@ public class HomeClientController implements Initializable {
 
             // Create more visible auto-scroll animation
             Timeline autoScroll = new Timeline(
-                    new KeyFrame(Duration.millis(30), e -> { // Faster updates for smoother animation
-                        double currentHValue = scrollPane.getHvalue();
-                        double increment = 0.005; // Visible but smooth increment
+                new KeyFrame(Duration.millis(30), e -> { // Faster updates for smoother animation
+                    double currentHValue = scrollPane.getHvalue();
+                    double increment = 0.005; // Visible but smooth increment
 
-                        if (currentHValue >= 0.95) { // Reset before the end for smoother transition
-                            // Smooth reset to beginning with fade effect
-                            Timeline resetAnimation = new Timeline(
-                                    new KeyFrame(Duration.millis(800),
-                                            new KeyValue(scrollPane.hvalueProperty(), 0.0, Interpolator.EASE_BOTH)));
-                            resetAnimation.play();
-                            LOGGER.info("Carousel reset to beginning for container");
-                        }
- else {
-                            scrollPane.setHvalue(currentHValue + increment);
+                    if (currentHValue >= 0.95) { // Reset before the end for smoother transition
+                        // Smooth reset to beginning with fade effect
+                        Timeline resetAnimation = new Timeline(
+                            new KeyFrame(Duration.millis(800),
+                                new KeyValue(scrollPane.hvalueProperty(), 0.0, Interpolator.EASE_BOTH)));
+                        resetAnimation.play();
+                        LOGGER.info("Carousel reset to beginning for container");
+                    } else {
+                        scrollPane.setHvalue(currentHValue + increment);
 
-                            // Log progress every 20% for debugging
-                            if ((int) (currentHValue * 100) % 20 == 0) {
-                                LOGGER.info("Carousel progress: " + String.format("%.1f%%", currentHValue * 100));
-                            }
-
+                        // Log progress every 20% for debugging
+                        if ((int) (currentHValue * 100) % 20 == 0) {
+                            LOGGER.info("Carousel progress: " + String.format("%.1f%%", currentHValue * 100));
                         }
 
                     }
-));
+
+                }));
             autoScroll.setCycleCount(Timeline.INDEFINITE);
 
             // Enhanced hover interactions with visual feedback
@@ -2101,8 +2119,7 @@ public class HomeClientController implements Initializable {
                 pauseFeedback.play();
 
                 LOGGER.info("Carousel paused on hover");
-            }
-;
+            };
 
             EventHandler<MouseEvent> resumeHandler = e -> {
                 autoScroll.play();
@@ -2115,8 +2132,7 @@ public class HomeClientController implements Initializable {
                 resumeFeedback.play();
 
                 LOGGER.info("Carousel resumed");
-            }
-;
+            };
 
             container.setOnMouseEntered(pauseHandler);
             scrollPane.setOnMouseEntered(pauseHandler);
@@ -2136,30 +2152,36 @@ public class HomeClientController implements Initializable {
                     Thread.currentThread().interrupt();
                 }
 
-            }
-);
+            });
 
             LOGGER.info("Enhanced carousel animation setup for container with " + container.getChildren().size()
-                    + " items");
+                + " items");
         } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error setting up carousel animation: " + e.getMessage(), e);
         }
 
     }
 
-
     /**
-         * Populate the given horizontal container with rich placeholder cards until it contains at least twelve items.
-         *
-         * <p>The method inspects the provided container to infer a content type (Movie, Series, Product, or Cinema)
-         * and appends rich placeholder cards created via {@code createRichPlaceholderCard} until the container's
-         * child count reaches a minimum of 12. Placeholder titles and descriptions are chosen cyclically from
-         * predefined arrays and numbered to produce distinct entries.</p>
-         *
-         * @param container the HBox to populate (expected to be one of moviesContainer, seriesContainer,
-         *                  productsContainer, or cinemasContainer); additional children will be appended to
-         *                  enable visible horizontal scrolling
-         */
+     * Populate the given horizontal container with rich placeholder cards until it
+     * contains at least twelve items.
+     *
+     * <p>
+     * The method inspects the provided container to infer a content type (Movie,
+     * Series, Product, or Cinema)
+     * and appends rich placeholder cards created via
+     * {@code createRichPlaceholderCard} until the container's
+     * child count reaches a minimum of 12. Placeholder titles and descriptions are
+     * chosen cyclically from
+     * predefined arrays and numbered to produce distinct entries.
+     * </p>
+     *
+     * @param container the HBox to populate (expected to be one of moviesContainer,
+     *                  seriesContainer,
+     *                  productsContainer, or cinemasContainer); additional children
+     *                  will be appended to
+     *                  enable visible horizontal scrolling
+     */
     private void createAdditionalPlaceholderContent(HBox container) {
         int currentSize = container.getChildren().size();
         int targetSize = Math.max(12, currentSize); // Ensure at least 12 items for very visible scrolling
@@ -2168,31 +2190,25 @@ public class HomeClientController implements Initializable {
         String contentType = "Content";
         if (container == moviesContainer) {
             contentType = "Movie";
-        }
- else if (container == seriesContainer) {
+        } else if (container == seriesContainer) {
             contentType = "Series";
-        }
- else if (container == productsContainer) {
+        } else if (container == productsContainer) {
             contentType = "Product";
-        }
- else if (container == cinemasContainer) {
+        } else if (container == cinemasContainer) {
             contentType = "Cinema";
         }
 
-
         String[] contentTitles = {
-                "Featured " + contentType, "Popular " + contentType, "Trending " + contentType,
-                "New Release", "Top Rated", "Editor's Choice", "Premium Selection",
-                "Exclusive Content", "Staff Pick", "Must Watch", "Bestseller", "Award Winner"
-        }
-;
+            "Featured " + contentType, "Popular " + contentType, "Trending " + contentType,
+            "New Release", "Top Rated", "Editor's Choice", "Premium Selection",
+            "Exclusive Content", "Staff Pick", "Must Watch", "Bestseller", "Award Winner"
+        };
 
         String[] contentDescriptions = {
-                "Premium Content", "Highly Rated", "Most Watched", "Latest Addition",
-                "Five Stars", "Staff Pick", "VIP Selection", "Exclusive Access",
-                "Curated Choice", "Fan Favorite", "Top Seller", "Critics' Choice"
-        }
-;
+            "Premium Content", "Highly Rated", "Most Watched", "Latest Addition",
+            "Five Stars", "Staff Pick", "VIP Selection", "Exclusive Access",
+            "Curated Choice", "Fan Favorite", "Top Seller", "Critics' Choice"
+        };
 
         for (int i = currentSize; i < targetSize; i++) {
             String title = contentTitles[i % contentTitles.length] + " " + (i + 1);
@@ -2203,44 +2219,44 @@ public class HomeClientController implements Initializable {
 
     }
 
-
     /**
-         * Apply a subtle pulsing glow to indicate that the horizontal container is scrollable.
-         *
-         * Adds a repeating Timeline that animates the container's opacity to create a gentle visual hint
-         * that the HBox can be scrolled horizontally.
-         *
-         * @param container the HBox to receive the pulsing glow indicator
-         */
+     * Apply a subtle pulsing glow to indicate that the horizontal container is
+     * scrollable.
+     * <p>
+     * Adds a repeating Timeline that animates the container's opacity to create a
+     * gentle visual hint
+     * that the HBox can be scrolled horizontally.
+     *
+     * @param container the HBox to receive the pulsing glow indicator
+     */
     private void setupScrollIndicator(HBox container) {
         // Add subtle glow effect that pulses to indicate scrolling
         Timeline glowAnimation = new Timeline(
-                new KeyFrame(Duration.seconds(0), new KeyValue(container.opacityProperty(), 0.95)),
-                new KeyFrame(Duration.seconds(2), new KeyValue(container.opacityProperty(), 1.0)),
-                new KeyFrame(Duration.seconds(4), new KeyValue(container.opacityProperty(), 0.95)));
+            new KeyFrame(Duration.seconds(0), new KeyValue(container.opacityProperty(), 0.95)),
+            new KeyFrame(Duration.seconds(2), new KeyValue(container.opacityProperty(), 1.0)),
+            new KeyFrame(Duration.seconds(4), new KeyValue(container.opacityProperty(), 0.95)));
         glowAnimation.setCycleCount(Timeline.INDEFINITE);
         glowAnimation.play();
     }
 
-
     /**
      * Populates the cinemas container with a fixed set of placeholder cinema cards.
-     *
-     * Clears any existing children from the cinemas container and adds ten placeholder
-     * cinema cards using predefined names and locations for display when real data is unavailable.
+     * <p>
+     * Clears any existing children from the cinemas container and adds ten
+     * placeholder
+     * cinema cards using predefined names and locations for display when real data
+     * is unavailable.
      */
     private void createPlaceholderCinemas() {
         String[] placeholderCinemas = {
-                "CineMax Plaza", "MovieWorld IMAX", "Star Cinema Complex", "Grand Theater", "Royal Movies",
-                "Premiere Cinemas", "Silver Screen", "Diamond Theater", "Elite Cinemas", "Luxury Movies"
-        }
-;
+            "CineMax Plaza", "MovieWorld IMAX", "Star Cinema Complex", "Grand Theater", "Royal Movies",
+            "Premiere Cinemas", "Silver Screen", "Diamond Theater", "Elite Cinemas", "Luxury Movies"
+        };
 
         String[] cinemaLocations = {
-                "Downtown", "Mall District", "City Center", "Uptown", "Suburbs",
-                "Shopping Plaza", "Entertainment Zone", "Metro Center", "Business District", "West Side"
-        }
-;
+            "Downtown", "Mall District", "City Center", "Uptown", "Suburbs",
+            "Shopping Plaza", "Entertainment Zone", "Metro Center", "Business District", "West Side"
+        };
 
         cinemasContainer.getChildren().clear();
         for (int i = 0; i < placeholderCinemas.length; i++) {
@@ -2250,9 +2266,9 @@ public class HomeClientController implements Initializable {
 
     }
 
-
     /**
-     * Navigates to the cinemas view and attempts to display details for the specified cinema.
+     * Navigates to the cinemas view and attempts to display details for the
+     * specified cinema.
      *
      * @param cinema the cinema whose details should be presented
      */
@@ -2267,7 +2283,6 @@ public class HomeClientController implements Initializable {
 
     }
 
-
     /**
      * Navigate to the Movies view.
      *
@@ -2277,7 +2292,6 @@ public class HomeClientController implements Initializable {
     void browseMovies(ActionEvent event) {
         showMovies(event);
     }
-
 
     /**
      * Navigate to the cinemas view.
@@ -2289,7 +2303,6 @@ public class HomeClientController implements Initializable {
         showCinemas(event);
     }
 
-
     /**
      * Navigates the application to the series listing view.
      *
@@ -2299,7 +2312,6 @@ public class HomeClientController implements Initializable {
     void browseSeries(ActionEvent event) {
         showSeries(event);
     }
-
 
     /**
      * Navigate to the user's profile view.
@@ -2311,11 +2323,12 @@ public class HomeClientController implements Initializable {
         showProfile(event);
     }
 
-
     /**
-     * Stop animation timelines and clear dynamic particle and shape collections used by the controller.
-     *
-     * Performs a best-effort cleanup of resources created by this controller and logs outcome; exceptions are caught and logged.
+     * Stop animation timelines and clear dynamic particle and shape collections
+     * used by the controller.
+     * <p>
+     * Performs a best-effort cleanup of resources created by this controller and
+     * logs outcome; exceptions are caught and logged.
      */
     public void cleanup() {
         try {
@@ -2327,7 +2340,6 @@ public class HomeClientController implements Initializable {
                 particleAnimationTimeline.stop();
             }
 
-
             // Clear dynamic particles and shapes
             if (dynamicParticles != null) {
                 dynamicParticles.clear();
@@ -2336,7 +2348,6 @@ public class HomeClientController implements Initializable {
             if (dynamicShapes != null) {
                 dynamicShapes.clear();
             }
-
 
             LOGGER.info("HomeClient controller cleanup completed");
         } catch (Exception e) {

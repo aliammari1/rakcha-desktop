@@ -1,15 +1,14 @@
 package com.esprit.utils;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+import io.github.cdimascio.dotenv.Dotenv;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
-
-import io.github.cdimascio.dotenv.Dotenv;
 
 /**
  * A service class for handling image uploads to Cloudinary.
@@ -22,9 +21,10 @@ import io.github.cdimascio.dotenv.Dotenv;
  * @since 1.0.0
  */
 public class CloudinaryStorage {
+
     private static final Logger LOGGER = Logger.getLogger(CloudinaryStorage.class.getName());
-    private Cloudinary cloudinary;
     private static CloudinaryStorage instance;
+    private Cloudinary cloudinary;
 
     /**
      * Private constructor to enforce singleton pattern.
@@ -74,7 +74,7 @@ public class CloudinaryStorage {
             // Upload the file to Cloudinary
             @SuppressWarnings("unchecked")
             Map<String, Object> uploadResult = (Map<String, Object>) cloudinary.uploader().upload(imageFile,
-                    ObjectUtils.emptyMap());
+                ObjectUtils.emptyMap());
 
             // Get the secure URL of the uploaded image
             String imageUrl = (String) uploadResult.get("secure_url");
@@ -131,7 +131,7 @@ public class CloudinaryStorage {
         try {
             @SuppressWarnings("unchecked")
             Map<String, Object> result = (Map<String, Object>) cloudinary.uploader().destroy(publicId,
-                    ObjectUtils.emptyMap());
+                ObjectUtils.emptyMap());
             String status = (String) result.get("result");
             return "ok".equals(status);
         } catch (IOException e) {
@@ -144,7 +144,7 @@ public class CloudinaryStorage {
 
     /**
      * Extracts the public ID from a Cloudinary URL.
-     * 
+     *
      * @param cloudinaryUrl the full Cloudinary URL
      * @return the public ID of the image
      */

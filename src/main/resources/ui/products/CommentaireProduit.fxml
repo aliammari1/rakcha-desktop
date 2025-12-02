@@ -1,39 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.*?>
-
-<VBox prefHeight="855.0" prefWidth="1507.0"
+<VBox xmlns:fx="http://javafx.com/fxml/1" prefHeight="855.0"
+      prefWidth="1507.0"
       xmlns="http://javafx.com/javafx/21"
-      xmlns:fx="http://javafx.com/fxml/1" 
-      fx:controller="com.esprit.controllers.produits.CommentaireProduitController">
+      fx:controller="com.esprit.controllers.products.CommentProductController">
 
-    <HBox VBox.vgrow="ALWAYS">
-        <!-- SideBar -->
-        <fx:include source="/ui/sidebar.fxml" />
-        
-        <!-- Main Content -->
-        <HBox spacing="20" HBox.hgrow="ALWAYS">
-            <padding>
-                <Insets top="25" right="25" bottom="25" left="25"/>
-            </padding>
+  <HBox VBox.vgrow="ALWAYS">
+    <!-- SideBar -->
+    <fx:include source="/ui/sidebar.fxml"/>
 
-            <!-- Comment Form -->
-            <VBox styleClass="bg-white" maxWidth="368.0" spacing="20">
-                <padding>
-                    <Insets top="20" right="20" bottom="20" left="20"/>
-                </padding>
-                
-                <TextArea fx:id="monCommentaitreText" prefHeight="137.0" VBox.vgrow="ALWAYS"/>
-                
-                <Button onAction="#addchat" styleClass="button-client" text="ADD Chat"/>
-            </VBox>
+    <!-- Main Content -->
+    <HBox spacing="20" HBox.hgrow="ALWAYS">
+      <padding>
+        <Insets top="25" right="25" bottom="25" left="25"/>
+      </padding>
 
-            <!-- Comments List -->
-            <ScrollPane fx:id="produitscrollpane" fitToHeight="true" fitToWidth="true" HBox.hgrow="ALWAYS">
-                <FlowPane fx:id="CommentaireFlowPane" styleClass="bg-white"/>
-            </ScrollPane>
-        </HBox>
+      <!-- Comment Form -->
+      <VBox styleClass="bg-white" maxWidth="368.0" spacing="20">
+        <padding>
+          <Insets top="20" right="20" bottom="20" left="20"/>
+        </padding>
+
+        <TextArea fx:id="monCommentaitreText" prefHeight="137.0" VBox.vgrow="ALWAYS"/>
+
+        <Button onAction="#addchat" styleClass="button-client" text="ADD Chat"/>
+      </VBox>
+
+      <!-- Comments List -->
+      <ScrollPane fx:id="produitscrollpane" fitToHeight="true" fitToWidth="true" HBox.hgrow="ALWAYS">
+        <FlowPane fx:id="CommentaireFlowPane" styleClass="bg-white"/>
+      </ScrollPane>
     </HBox>
+  </HBox>
 </VBox>

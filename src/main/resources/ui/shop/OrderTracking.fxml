@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import org.kordamp.ikonli.javafx.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21"
+           fx:controller="com.esprit.controllers.products.OrderTrackingController"
+           styleClass="immersive-root"
+           stylesheets="@../styles/filmStyle.css, @../styles/shop.css">
+
+  <!-- Background -->
+  <AnchorPane styleClass="cinematic-bg">
+    <Circle radius="200" layoutX="150" layoutY="150" styleClass="ambient-orb orb-primary" opacity="0.12"/>
+    <Circle radius="260" layoutX="1100" layoutY="500" styleClass="ambient-orb orb-secondary" opacity="0.1"/>
+  </AnchorPane>
+
+  <BorderPane styleClass="main-shell">
+    <left>
+      <fx:include source="../sidebar.fxml"/>
+    </left>
+
+    <center>
+      <VBox spacing="0" HBox.hgrow="ALWAYS">
+
+        <!-- Header -->
+        <HBox styleClass="immersive-header" alignment="CENTER_LEFT" spacing="20">
+          <padding>
+            <Insets top="25" bottom="25" left="35" right="35"/>
+          </padding>
+
+          <VBox spacing="5">
+            <Label text="Order Tracking" styleClass="header-title"/>
+            <Label text="Track your orders and view delivery status" styleClass="header-subtitle"/>
+          </VBox>
+
+          <Region HBox.hgrow="ALWAYS"/>
+
+          <HBox styleClass="search-box" alignment="CENTER" prefWidth="300">
+            <FontIcon iconLiteral="mdi2m-magnify:18" styleClass="search-icon"/>
+            <TextField fx:id="orderSearchField" styleClass="search-input" promptText="Search by order ID..."
+                       HBox.hgrow="ALWAYS"/>
+          </HBox>
+        </HBox>
+
+        <!-- Order Tabs -->
+        <HBox styleClass="order-tabs" spacing="0">
+          <padding>
+            <Insets left="35" right="35"/>
+          </padding>
+          <ToggleButton fx:id="allOrdersTab" styleClass="order-tab active" text="All Orders" onAction="#showAllOrders"/>
+          <ToggleButton fx:id="activeTab" styleClass="order-tab" text="Active" onAction="#showActiveOrders"/>
+          <ToggleButton fx:id="completedTab" styleClass="order-tab" text="Completed" onAction="#showCompletedOrders"/>
+          <ToggleButton fx:id="cancelledTab" styleClass="order-tab" text="Cancelled" onAction="#showCancelledOrders"/>
+        </HBox>
+
+        <!-- Content -->
+        <HBox spacing="30" VBox.vgrow="ALWAYS">
+          <padding>
+            <Insets top="25" bottom="30" left="35" right="35"/>
+          </padding>
+
+          <!-- Orders List -->
+          <VBox spacing="15" prefWidth="450">
+            <Label text="Your Orders" styleClass="section-title"/>
+
+            <ScrollPane styleClass="orders-scroll" fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+              <VBox fx:id="ordersContainer" spacing="15"/>
+            </ScrollPane>
+
+            <!-- Empty State -->
+            <VBox fx:id="emptyOrdersState" alignment="CENTER" spacing="15" visible="false" managed="false">
+              <FontIcon iconLiteral="mdi2p-package-variant:60" styleClass="empty-icon"/>
+              <Label text="No orders found" styleClass="empty-title"/>
+              <Label text="Your orders will appear here" styleClass="empty-desc"/>
+            </VBox>
+          </VBox>
+
+          <!-- Order Details Panel -->
+          <VBox styleClass="order-details-panel glass-card" spacing="0" HBox.hgrow="ALWAYS">
+
+            <!-- Empty State -->
+            <VBox fx:id="emptyDetailsState" alignment="CENTER" spacing="15" VBox.vgrow="ALWAYS">
+              <FontIcon iconLiteral="mdi2p-package-variant-closed:60" styleClass="empty-icon"/>
+              <Label text="Select an order" styleClass="empty-title"/>
+              <Label text="Click on an order to view its details" styleClass="empty-desc"/>
+            </VBox>
+
+            <!-- Order Details View -->
+            <VBox fx:id="orderDetailsView" spacing="0" visible="false" managed="false" VBox.vgrow="ALWAYS">
+
+              <!-- Order Header -->
+              <HBox styleClass="order-header" alignment="CENTER_LEFT" spacing="15">
+                <padding>
+                  <Insets topRightBottomLeft="25"/>
+                </padding>
+
+                <VBox spacing="5">
+                  <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label fx:id="orderIdLabel" text="Order #12345" styleClass="order-id"/>
+                    <Label fx:id="orderStatusBadge" text="In Progress" styleClass="status-badge active"/>
+                  </HBox>
+                  <Label fx:id="orderDateLabel" text="Placed on Jan 15, 2024" styleClass="order-date"/>
+                </VBox>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <MenuButton styleClass="more-btn">
+                  <graphic>
+                    <FontIcon iconLiteral="mdi2d-dots-vertical:20"/>
+                  </graphic>
+                  <items>
+                    <MenuItem text="Download Receipt" onAction="#downloadReceipt"/>
+                    <MenuItem text="Contact Support" onAction="#contactSupport"/>
+                    <SeparatorMenuItem/>
+                    <MenuItem fx:id="cancelOrderItem" text="Cancel Order" onAction="#cancelOrder"/>
+                  </items>
+                </MenuButton>
+              </HBox>
+
+              <ScrollPane fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+                <VBox spacing="25">
+                  <padding>
+                    <Insets top="5" bottom="25" left="25" right="25"/>
+                  </padding>
+
+                  <!-- Tracking Timeline -->
+                  <VBox styleClass="tracking-section" spacing="20">
+                    <Label text="Tracking Status" styleClass="section-label"/>
+
+                    <VBox fx:id="trackingTimeline" spacing="0" styleClass="tracking-timeline">
+                      <!-- Timeline steps will be added dynamically -->
+                    </VBox>
+                  </VBox>
+
+                  <!-- Estimated Delivery -->
+                  <VBox fx:id="deliveryEstimate" styleClass="delivery-estimate glass-inner" spacing="10">
+                    <padding>
+                      <Insets topRightBottomLeft="20"/>
+                    </padding>
+                    <HBox alignment="CENTER_LEFT" spacing="15">
+                      <StackPane styleClass="delivery-icon-container">
+                        <FontIcon iconLiteral="mdi2t-truck-fast:28"/>
+                      </StackPane>
+                      <VBox spacing="3">
+                        <Label text="Estimated Delivery" styleClass="delivery-label"/>
+                        <Label fx:id="estimatedTimeLabel" text="Ready in 15 minutes" styleClass="delivery-time"/>
+                      </VBox>
+                    </HBox>
+                  </VBox>
+
+                  <!-- Order Items -->
+                  <VBox styleClass="items-section" spacing="15">
+                    <Label text="Order Items" styleClass="section-label"/>
+                    <VBox fx:id="orderItemsContainer" spacing="12"/>
+                  </VBox>
+
+                  <!-- Pickup/Delivery Info -->
+                  <VBox fx:id="pickupInfo" styleClass="pickup-section glass-inner" spacing="15">
+                    <padding>
+                      <Insets topRightBottomLeft="20"/>
+                    </padding>
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                      <FontIcon iconLiteral="mdi2m-map-marker:20" styleClass="location-icon"/>
+                      <Label text="Pickup Location" styleClass="section-label"/>
+                    </HBox>
+                    <VBox spacing="5">
+                      <Label fx:id="pickupCinemaLabel" text="Cineplex Downtown" styleClass="location-name"/>
+                      <Label fx:id="pickupAddressLabel" text="123 Main Street, City Center"
+                             styleClass="location-address"/>
+                    </VBox>
+                    <Button onAction="#openMap" styleClass="map-btn" text="View on Map">
+                      <graphic>
+                        <FontIcon iconLiteral="mdi2m-map:16"/>
+                      </graphic>
+                    </Button>
+                  </VBox>
+
+                  <!-- Order Summary -->
+                  <VBox styleClass="summary-section" spacing="12">
+                    <Label text="Order Summary" styleClass="section-label"/>
+
+                    <HBox alignment="CENTER_LEFT">
+                      <Label text="Subtotal" styleClass="summary-label"/>
+                      <Region HBox.hgrow="ALWAYS"/>
+                      <Label fx:id="subtotalLabel" text="$0.00" styleClass="summary-value"/>
+                    </HBox>
+                    <HBox alignment="CENTER_LEFT">
+                      <Label text="Delivery Fee" styleClass="summary-label"/>
+                      <Region HBox.hgrow="ALWAYS"/>
+                      <Label fx:id="deliveryFeeLabel" text="FREE" styleClass="summary-value"/>
+                    </HBox>
+                    <HBox alignment="CENTER_LEFT">
+                      <Label text="Tax" styleClass="summary-label"/>
+                      <Region HBox.hgrow="ALWAYS"/>
+                      <Label fx:id="taxLabel" text="$0.00" styleClass="summary-value"/>
+                    </HBox>
+
+                    <Separator styleClass="summary-separator"/>
+
+                    <HBox alignment="CENTER_LEFT" styleClass="total-row">
+                      <Label text="Total" styleClass="total-label"/>
+                      <Region HBox.hgrow="ALWAYS"/>
+                      <Label fx:id="totalLabel" text="$0.00" styleClass="total-value"/>
+                    </HBox>
+                  </VBox>
+
+                  <!-- Payment Info -->
+                  <HBox styleClass="payment-info" spacing="15" alignment="CENTER_LEFT">
+                    <FontIcon iconLiteral="mdi2c-credit-card:20" styleClass="payment-icon"/>
+                    <VBox spacing="3">
+                      <Label text="Payment Method" styleClass="payment-label"/>
+                      <Label fx:id="paymentMethodLabel" text="Visa •••• 4242" styleClass="payment-value"/>
+                    </VBox>
+                  </HBox>
+                </VBox>
+              </ScrollPane>
+
+              <!-- Action Buttons -->
+              <HBox fx:id="actionButtons" styleClass="action-bar" spacing="15" alignment="CENTER_RIGHT">
+                <padding>
+                  <Insets topRightBottomLeft="20"/>
+                </padding>
+                <Button onAction="#reorder" styleClass="secondary-btn" text="Reorder">
+                  <graphic>
+                    <FontIcon iconLiteral="mdi2r-refresh:16"/>
+                  </graphic>
+                </Button>
+                <Button fx:id="primaryActionBtn" onAction="#primaryAction" styleClass="primary-btn" text="Rate Order">
+                  <graphic>
+                    <FontIcon iconLiteral="mdi2s-star:16"/>
+                  </graphic>
+                </Button>
+              </HBox>
+            </VBox>
+          </VBox>
+        </HBox>
+      </VBox>
+    </center>
+  </BorderPane>
+
+  <!-- Cancel Order Dialog -->
+  <VBox fx:id="cancelDialog" styleClass="dialog-overlay" visible="false" managed="false" alignment="CENTER">
+    <VBox styleClass="dialog-card" spacing="20" maxWidth="400">
+      <padding>
+        <Insets topRightBottomLeft="30"/>
+      </padding>
+
+      <VBox alignment="CENTER" spacing="15">
+        <StackPane styleClass="warning-icon-container">
+          <FontIcon iconLiteral="mdi2a-alert-circle:48" styleClass="warning-icon"/>
+        </StackPane>
+        <Label text="Cancel Order?" styleClass="dialog-title"/>
+        <Label text="Are you sure you want to cancel this order? This action cannot be undone." styleClass="dialog-desc"
+               wrapText="true" alignment="CENTER"/>
+      </VBox>
+
+      <VBox spacing="8">
+        <Label text="Reason for cancellation (optional)" styleClass="field-label"/>
+        <TextArea fx:id="cancelReasonArea" styleClass="glass-textarea" promptText="Tell us why you're cancelling..."
+                  prefRowCount="3"/>
+      </VBox>
+
+      <HBox spacing="15" alignment="CENTER">
+        <Button onAction="#closeCancelDialog" styleClass="secondary-btn" text="Keep Order"/>
+        <Button onAction="#confirmCancel" styleClass="danger-btn" text="Cancel Order"/>
+      </HBox>
+    </VBox>
+  </VBox>
+
+  <!-- Rate Order Dialog -->
+  <VBox fx:id="rateDialog" styleClass="dialog-overlay" visible="false" managed="false" alignment="CENTER">
+    <VBox styleClass="dialog-card" spacing="20" maxWidth="450">
+      <padding>
+        <Insets topRightBottomLeft="30"/>
+      </padding>
+
+      <HBox alignment="CENTER_LEFT" spacing="15">
+        <Label text="Rate Your Order" styleClass="dialog-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button onAction="#closeRateDialog" styleClass="close-btn">
+          <graphic>
+            <FontIcon iconLiteral="mdi2c-close:20"/>
+          </graphic>
+        </Button>
+      </HBox>
+
+      <VBox alignment="CENTER" spacing="15">
+        <Label text="How was your experience?" styleClass="rate-question"/>
+        <HBox fx:id="ratingStars" spacing="10" alignment="CENTER" styleClass="rating-stars"/>
+        <Label fx:id="ratingLabel" text="Tap to rate" styleClass="rating-text"/>
+      </VBox>
+
+      <VBox spacing="8">
+        <Label text="Additional feedback (optional)" styleClass="field-label"/>
+        <TextArea fx:id="feedbackArea" styleClass="glass-textarea" promptText="Tell us about your experience..."
+                  prefRowCount="3"/>
+      </VBox>
+
+      <HBox spacing="15" alignment="CENTER_RIGHT">
+        <Button onAction="#closeRateDialog" styleClass="secondary-btn" text="Skip"/>
+        <Button onAction="#submitRating" styleClass="primary-btn" text="Submit Rating"/>
+      </HBox>
+    </VBox>
+  </VBox>
+</StackPane>

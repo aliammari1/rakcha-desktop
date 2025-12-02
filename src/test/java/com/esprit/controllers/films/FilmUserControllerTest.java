@@ -1,9 +1,14 @@
 package com.esprit.controllers.films;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import com.esprit.models.films.Film;
+import com.esprit.models.films.FilmComment;
+import com.esprit.utils.TestFXBase;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.FlowPane;
+import javafx.stage.Stage;
 import org.controlsfx.control.Rating;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -12,19 +17,13 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.Timeout;
-import java.util.concurrent.TimeUnit;
 import org.testfx.framework.junit5.Start;
 
-import com.esprit.models.films.Film;
-import com.esprit.models.films.FilmComment;
-import com.esprit.utils.TestFXBase;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.layout.FlowPane;
-import javafx.stage.Stage;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Comprehensive test suite for FilmUserController.
@@ -39,18 +38,52 @@ class FilmUserControllerTest extends TestFXBase {
     @Start
     public void start(Stage stage) throws Exception {
         javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
-            getClass().getResource("/ui/films/filmuser.fxml")
-        );
+            getClass().getResource("/ui/films/filmuser.fxml"));
         javafx.scene.Parent root = loader.load();
         controller = loader.getController();
-        
+
         stage.setScene(new javafx.scene.Scene(root, 1280, 700));
         stage.show();
         stage.toFront();
     }
 
+    // Helper methods
+    private List<Film> createMockFilms() {
+        List<Film> films = new ArrayList<>();
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+        Film film1 = new Film();
+        film1.setTitle("Action Movie");
+        film1.setDescription("Exciting action film");
+
+        Film film2 = new Film();
+        film2.setTitle("Comedy Movie");
+        film2.setDescription("Funny comedy");
+
+        films.add(film1);
+        films.add(film2);
+        return films;
+    }
+
+    private List<FilmComment> createMockComments() {
+        List<FilmComment> comments = new ArrayList<>();
+
+        FilmComment comment1 = new FilmComment();
+        comment1.setComment("Great film!");
+
+        FilmComment comment2 = new FilmComment();
+        comment2.setComment("Loved it!");
+
+        comments.add(comment1);
+        comments.add(comment2);
+        return comments;
+    }
+
+    private <T> com.esprit.utils.Page<T> createPagedResult(List<T> content) {
+        return new com.esprit.utils.Page<>(content, 0, content.size(), content.size());
+    }
+
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Film Display Tests")
     class FilmDisplayTests {
 
@@ -65,7 +98,6 @@ class FilmUserControllerTest extends TestFXBase {
             assertThat(filmPane.isVisible()).isTrue();
         }
 
-
         @Test
         @Order(2)
         @DisplayName("Should load films from service")
@@ -76,10 +108,9 @@ class FilmUserControllerTest extends TestFXBase {
             FlowPane filmPane = lookup("#flowpaneFilm").query();
             assertThat(filmPane).isNotNull();
             assertThat(filmPane.getChildren()).isNotNull();
-            
+
             waitForFxEvents();
         }
-
 
         @Test
         @Order(3)
@@ -97,8 +128,8 @@ class FilmUserControllerTest extends TestFXBase {
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Film Rating Tests")
     class FilmRatingTests {
 
@@ -113,7 +144,6 @@ class FilmUserControllerTest extends TestFXBase {
             assertThat(ratingControl.isVisible()).isTrue();
         }
 
-
         @Test
         @Order(5)
         @DisplayName("Should submit film rating")
@@ -125,11 +155,10 @@ class FilmUserControllerTest extends TestFXBase {
             ratingControl.setRating(4.5);
 
             waitForFxEvents();
-            
+
             // Verify rating was set
             assertThat(ratingControl.getRating()).isEqualTo(4.5);
         }
-
 
         @Test
         @Order(6)
@@ -142,7 +171,6 @@ class FilmUserControllerTest extends TestFXBase {
             assertThat(avgRatingLabel.isVisible()).isTrue();
         }
 
-
         @Test
         @Order(7)
         @DisplayName("Should update rating on change")
@@ -151,11 +179,11 @@ class FilmUserControllerTest extends TestFXBase {
 
             Rating ratingControl = lookup("#filmRate").query();
             assertThat(ratingControl).isNotNull();
-            
+
             ratingControl.setRating(3.0);
             waitForFxEvents();
             assertThat(ratingControl.getRating()).isEqualTo(3.0);
-            
+
             ratingControl.setRating(5.0);
             waitForFxEvents();
             assertThat(ratingControl.getRating()).isEqualTo(5.0);
@@ -163,8 +191,8 @@ class FilmUserControllerTest extends TestFXBase {
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Comments Display Tests")
     class CommentsDisplayTests {
 
@@ -179,7 +207,6 @@ class FilmUserControllerTest extends TestFXBase {
             assertThat(commentsPane.isVisible()).isTrue();
         }
 
-
         @Test
         @Order(9)
         @DisplayName("Should load film comments")
@@ -189,10 +216,9 @@ class FilmUserControllerTest extends TestFXBase {
             // Verify comments section is present
             ScrollPane commentsPane = lookup("#AnchorComments").query();
             assertThat(commentsPane).isNotNull();
-            
+
             waitForFxEvents();
         }
-
 
         @Test
         @Order(10)
@@ -208,7 +234,6 @@ class FilmUserControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
-
         @Test
         @Order(11)
         @DisplayName("Should display comment author")
@@ -218,14 +243,14 @@ class FilmUserControllerTest extends TestFXBase {
             // Verify comments section is present and ready
             ScrollPane commentsPane = lookup("#AnchorComments").query();
             assertThat(commentsPane).isNotNull();
-            
+
             waitForFxEvents();
         }
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Add Comment Tests")
     class AddCommentTests {
 
@@ -239,7 +264,6 @@ class FilmUserControllerTest extends TestFXBase {
             assertThat(commentInput).isNotNull();
             assertThat(commentInput.isVisible()).isTrue();
         }
-
 
         @Test
         @Order(13)
@@ -255,11 +279,10 @@ class FilmUserControllerTest extends TestFXBase {
             clickOn(submitButton);
 
             waitForFxEvents();
-            
+
             // Verify UI is responsive
             assertThat(submitButton).isNotNull();
         }
-
 
         @Test
         @Order(14)
@@ -270,14 +293,13 @@ class FilmUserControllerTest extends TestFXBase {
             // Verify comment input is present
             TextArea commentInput = lookup("#commentInput").query();
             assertThat(commentInput).isNotNull();
-            
+
             // Verify submit button is present
             Button submitButton = lookup("#submitCommentButton").query();
             assertThat(submitButton).isNotNull();
-            
+
             waitForFxEvents();
         }
-
 
         @Test
         @Order(15)
@@ -287,23 +309,23 @@ class FilmUserControllerTest extends TestFXBase {
 
             TextArea commentInput = lookup("#commentInput").query();
             assertThat(commentInput).isNotNull();
-            
+
             commentInput.setText("Test comment");
             assertThat(commentInput.getText()).isEqualTo("Test comment");
-            
+
             Button submitButton = lookup("#submitCommentButton").query();
             clickOn(submitButton);
-            
+
             waitForFxEvents();
-            
+
             // Comment field should be cleared after submit
             assertThat(commentInput.getText()).isEmpty();
         }
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Trailer Button Tests")
     class TrailerButtonTests {
 
@@ -318,7 +340,6 @@ class FilmUserControllerTest extends TestFXBase {
             assertThat(trailerButton.isVisible()).isTrue();
         }
 
-
         @Test
         @Order(17)
         @DisplayName("Should play trailer on click")
@@ -327,15 +348,14 @@ class FilmUserControllerTest extends TestFXBase {
 
             Button trailerButton = lookup("#trailer_Button").query();
             assertThat(trailerButton).isNotNull();
-            
+
             clickOn(trailerButton);
-            
+
             waitForFxEvents();
-            
+
             // Verify button is responsive
             assertThat(trailerButton).isNotNull();
         }
-
 
         @Test
         @Order(18)
@@ -345,19 +365,19 @@ class FilmUserControllerTest extends TestFXBase {
 
             Button trailerButton = lookup("#trailer_Button").query();
             assertThat(trailerButton).isNotNull();
-            
+
             clickOn(trailerButton);
 
             waitForFxEvents();
-            
+
             // Verify button interaction completed
             assertThat(trailerButton).isNotNull();
         }
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("QR Code Tests")
     class QRCodeTests {
 
@@ -369,7 +389,7 @@ class FilmUserControllerTest extends TestFXBase {
 
             Button qrButton = lookup("#generateQRButton").query();
             assertThat(qrButton).isNotNull();
-            
+
             clickOn(qrButton);
 
             waitForFxEvents();
@@ -377,7 +397,6 @@ class FilmUserControllerTest extends TestFXBase {
             // Verify button interaction completed
             assertThat(qrButton).isNotNull();
         }
-
 
         @Test
         @Order(20)
@@ -396,8 +415,8 @@ class FilmUserControllerTest extends TestFXBase {
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Navigation Tests")
     class NavigationTests {
 
@@ -409,15 +428,14 @@ class FilmUserControllerTest extends TestFXBase {
 
             Button cinemaButton = lookup("#Cinema_Button").query();
             assertThat(cinemaButton).isNotNull();
-            
+
             clickOn(cinemaButton);
 
             waitForFxEvents();
-            
+
             // Verify navigation completed
             assertThat(cinemaButton).isNotNull();
         }
-
 
         @Test
         @Order(22)
@@ -427,15 +445,14 @@ class FilmUserControllerTest extends TestFXBase {
 
             Button productButton = lookup("#product").query();
             assertThat(productButton).isNotNull();
-            
+
             clickOn(productButton);
 
             waitForFxEvents();
-            
+
             // Verify navigation completed
             assertThat(productButton).isNotNull();
         }
-
 
         @Test
         @Order(23)
@@ -445,19 +462,19 @@ class FilmUserControllerTest extends TestFXBase {
 
             Button eventButton = lookup("#event_button").query();
             assertThat(eventButton).isNotNull();
-            
+
             clickOn(eventButton);
 
             waitForFxEvents();
-            
+
             // Verify navigation completed
             assertThat(eventButton).isNotNull();
         }
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Film Filter Tests")
     class FilmFilterTests {
 
@@ -472,7 +489,6 @@ class FilmUserControllerTest extends TestFXBase {
             assertThat(filmFlowPane.getChildren()).isNotEmpty();
         }
 
-
         @Test
         @Order(25)
         @DisplayName("Should filter films by category")
@@ -486,8 +502,8 @@ class FilmUserControllerTest extends TestFXBase {
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Actors Display Tests")
     class ActorsDisplayTests {
 
@@ -502,7 +518,6 @@ class FilmUserControllerTest extends TestFXBase {
             assertThat(actorsPane.isVisible()).isTrue();
         }
 
-
         @Test
         @Order(27)
         @DisplayName("Should load film actors")
@@ -511,15 +526,15 @@ class FilmUserControllerTest extends TestFXBase {
 
             FlowPane actorsPane = lookup("#flowPaneactors").query();
             assertThat(actorsPane).isNotNull();
-            
+
             // Verify actors are loaded
             assertThat(actorsPane.getChildren()).isNotNull();
         }
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Film Details Tests")
     class FilmDetailsTests {
 
@@ -531,15 +546,14 @@ class FilmUserControllerTest extends TestFXBase {
 
             Button closeButton = lookup("#closeDetailFilm1").query();
             assertThat(closeButton).isNotNull();
-            
+
             clickOn(closeButton);
 
             waitForFxEvents();
-            
+
             // Verify close action completed
             assertThat(closeButton).isNotNull();
         }
-
 
         @Test
         @Order(29)
@@ -551,7 +565,6 @@ class FilmUserControllerTest extends TestFXBase {
             assertThat(titleLabel).isNotNull();
             assertThat(titleLabel.isVisible()).isTrue();
         }
-
 
         @Test
         @Order(30)
@@ -566,43 +579,4 @@ class FilmUserControllerTest extends TestFXBase {
 
     }
 
-
-    // Helper methods
-    private List<Film> createMockFilms() {
-        List<Film> films = new ArrayList<>();
-
-        Film film1 = new Film();
-        film1.setName("Action Movie");
-        film1.setDescription("Exciting action film");
-
-        Film film2 = new Film();
-        film2.setName("Comedy Movie");
-        film2.setDescription("Funny comedy");
-
-        films.add(film1);
-        films.add(film2);
-        return films;
-    }
-
-
-    private List<FilmComment> createMockComments() {
-        List<FilmComment> comments = new ArrayList<>();
-
-        FilmComment comment1 = new FilmComment();
-        comment1.setComment("Great film!");
-
-        FilmComment comment2 = new FilmComment();
-        comment2.setComment("Loved it!");
-
-        comments.add(comment1);
-        comments.add(comment2);
-        return comments;
-    }
-
-
-    private <T> com.esprit.utils.Page<T> createPagedResult(List<T> content) {
-        return new com.esprit.utils.Page<>(content, 0, content.size(), content.size());
-    }
-
 }
-

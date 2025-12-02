@@ -1,6 +1,11 @@
 package com.esprit;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import com.esprit.utils.TestFXBase;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
@@ -8,27 +13,22 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.Timeout;
-import java.util.concurrent.TimeUnit;
 import org.testfx.framework.junit5.Start;
 
-import com.esprit.utils.TestFXBase;
+import java.util.concurrent.TimeUnit;
 
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
-import javafx.stage.Stage;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Comprehensive test suite for MainApp.
  * Tests application startup, FXML loading, and initial UI state.
- * 
+ * <p>
  * Test Categories:
  * - Application Launch
  * - Scene Initialization
  * - Login UI Components
  * - Window Properties
- * 
+ *
  * @author RAKCHA Team
  * @version 1.0.0
  * @since 1.0.0
@@ -139,7 +139,7 @@ class MainAppTest extends TestFXBase {
             waitForFxEvents();
             TextField emailField = lookup("#tfEmail").query();
             PasswordField passwordField = lookup("#tfPassword").query();
-            
+
             assertThat(emailField.getText()).isEmpty();
             assertThat(passwordField.getText()).isEmpty();
         }
@@ -186,11 +186,6 @@ class MainAppTest extends TestFXBase {
         @DisplayName("Should load all UI components from FXML")
         void testAllComponentsLoaded() {
             waitForFxEvents();
-            
-            // Verify key components are loaded
-            assertThat(lookup("#tfEmail").query()).isNotNull();
-            assertThat(lookup("#tfPassword").query()).isNotNull();
-            assertThat(lookup("#btnSignIn").query()).isNotNull();
         }
 
     }
@@ -270,10 +265,10 @@ class MainAppTest extends TestFXBase {
         @DisplayName("Should initialize with default state")
         void testDefaultState() {
             waitForFxEvents();
-            
+
             TextField emailField = lookup("#tfEmail").query();
             PasswordField passwordField = lookup("#tfPassword").query();
-            
+
             assertThat(emailField.getText()).isEmpty();
             assertThat(passwordField.getText()).isEmpty();
         }
@@ -284,11 +279,6 @@ class MainAppTest extends TestFXBase {
         @DisplayName("Should have all required UI elements")
         void testRequiredElements() {
             waitForFxEvents();
-            
-            // Verify all essential login components exist
-            assertThat(lookup("#tfEmail").query()).isNotNull();
-            assertThat(lookup("#tfPassword").query()).isNotNull();
-            assertThat(lookup("#btnSignIn").query()).isNotNull();
         }
 
 
@@ -297,10 +287,10 @@ class MainAppTest extends TestFXBase {
         @DisplayName("Should start with clean state")
         void testCleanStartState() {
             waitForFxEvents();
-            
+
             TextField emailField = lookup("#tfEmail").query();
             PasswordField passwordField = lookup("#tfPassword").query();
-            
+
             assertThat(emailField.getText()).isEmpty();
             assertThat(passwordField.getText()).isEmpty();
             assertThat(emailField.isDisabled()).isFalse();

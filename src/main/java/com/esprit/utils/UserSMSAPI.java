@@ -1,12 +1,12 @@
 package com.esprit.utils;
 
-import java.util.logging.Logger;
-
-import io.github.cdimascio.dotenv.Dotenv;
 import com.vonage.client.VonageClient;
 import com.vonage.client.sms.MessageStatus;
 import com.vonage.client.sms.SmsSubmissionResponse;
 import com.vonage.client.sms.messages.TextMessage;
+import io.github.cdimascio.dotenv.Dotenv;
+
+import java.util.logging.Logger;
 
 public enum UserSMSAPI {
     ;
@@ -35,8 +35,7 @@ public enum UserSMSAPI {
         final SmsSubmissionResponse response = client.getSmsClient().submitMessage(message);
         if (MessageStatus.OK == response.getMessages().get(0).getStatus()) {
             LOGGER.info("Message sent successfully.");
-        }
- else {
+        } else {
             LOGGER.info("Message failed with error: " + response.getMessages().get(0).getErrorText());
         }
 

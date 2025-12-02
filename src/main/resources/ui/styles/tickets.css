@@ -1,0 +1,558 @@
+/* Tickets Screens CSS Styles */
+
+/* ===== TICKET HISTORY STYLES ===== */
+
+/* Header Section */
+.tickets-header {
+    -fx-background-color: rgba(30, 30, 35, 0.9);
+    -fx-background-radius: 16;
+    -fx-padding: 24;
+}
+
+.tickets-title {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.tickets-subtitle {
+    -fx-font-size: 14px;
+    -fx-text-fill: rgba(255, 255, 255, 0.6);
+}
+
+/* Filter Tabs */
+.filter-tabs {
+    -fx-background-color: rgba(40, 40, 45, 0.6);
+    -fx-background-radius: 12;
+    -fx-padding: 6;
+}
+
+.filter-tab {
+    -fx-background-color: transparent;
+    -fx-text-fill: rgba(255, 255, 255, 0.6);
+    -fx-font-size: 13px;
+    -fx-padding: 10 20;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+.filter-tab:hover {
+    -fx-text-fill: white;
+}
+
+.filter-tab.active {
+    -fx-background-color: rgba(220, 38, 38, 0.3);
+    -fx-text-fill: white;
+}
+
+/* Search & Sort */
+.search-sort-bar {
+    -fx-spacing: 16;
+}
+
+.tickets-search {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-background-radius: 10;
+    -fx-padding: 10 16;
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: rgba(255, 255, 255, 0.4);
+    -fx-pref-width: 300;
+}
+
+.sort-dropdown {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-background-radius: 10;
+    -fx-padding: 10 16;
+    -fx-font-size: 13px;
+}
+
+/* Tickets List */
+.tickets-scroll {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+}
+
+.tickets-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+.tickets-list {
+    -fx-spacing: 16;
+    -fx-padding: 20;
+}
+
+/* Ticket Card */
+.ticket-card {
+    -fx-background-color: rgba(30, 30, 35, 0.9);
+    -fx-background-radius: 16;
+    -fx-cursor: hand;
+}
+
+.ticket-card:hover {
+    -fx-background-color: rgba(40, 40, 45, 0.95);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 15, 0, 0, 5);
+}
+
+.ticket-poster {
+    -fx-min-width: 100;
+    -fx-min-height: 150;
+    -fx-background-radius: 16 0 0 16;
+}
+
+.ticket-content {
+    -fx-padding: 20;
+    -fx-spacing: 12;
+}
+
+.ticket-movie-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.ticket-info-row {
+    -fx-spacing: 6;
+}
+
+.ticket-info-row .ikonli-font-icon {
+    -fx-icon-color: #dc2626;
+}
+
+.ticket-info-row .label {
+    -fx-font-size: 13px;
+    -fx-text-fill: rgba(255, 255, 255, 0.7);
+}
+
+/* Ticket Status Badge */
+.ticket-status {
+    -fx-padding: 6 14;
+    -fx-background-radius: 12;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.ticket-status.upcoming {
+    -fx-background-color: rgba(59, 130, 246, 0.2);
+    -fx-text-fill: #3b82f6;
+}
+
+.ticket-status.completed {
+    -fx-background-color: rgba(34, 197, 94, 0.2);
+    -fx-text-fill: #22c55e;
+}
+
+.ticket-status.cancelled {
+    -fx-background-color: rgba(239, 68, 68, 0.2);
+    -fx-text-fill: #ef4444;
+}
+
+.ticket-status.expired {
+    -fx-background-color: rgba(156, 163, 175, 0.2);
+    -fx-text-fill: #9ca3af;
+}
+
+/* Ticket Details Section */
+.ticket-details-section {
+    -fx-background-color: rgba(40, 40, 45, 0.6);
+    -fx-background-radius: 10;
+    -fx-padding: 14;
+}
+
+.details-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: rgba(255, 255, 255, 0.4);
+    -fx-text-transform: uppercase;
+}
+
+.details-value {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+/* Seats Display */
+.seats-display {
+    -fx-spacing: 6;
+}
+
+.seat-chip {
+    -fx-background-color: rgba(220, 38, 38, 0.2);
+    -fx-background-radius: 6;
+    -fx-padding: 4 10;
+}
+
+.seat-chip .label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #dc2626;
+}
+
+/* Price Display */
+.ticket-price {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #22c55e;
+}
+
+/* Ticket Actions */
+.ticket-actions {
+    -fx-spacing: 10;
+    -fx-padding: 0 20 20 20;
+}
+
+.view-ticket-btn {
+    -fx-background-color: linear-gradient(135deg, #dc2626, #b91c1c);
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+}
+
+.view-ticket-btn:hover {
+    -fx-background-color: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.cancel-ticket-btn {
+    -fx-background-color: rgba(239, 68, 68, 0.15);
+    -fx-text-fill: #ef4444;
+    -fx-font-size: 13px;
+    -fx-padding: 10 20;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+}
+
+.cancel-ticket-btn:hover {
+    -fx-background-color: rgba(239, 68, 68, 0.25);
+}
+
+.rebook-btn {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-padding: 10 20;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+}
+
+.rebook-btn:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Empty State */
+.empty-tickets {
+    -fx-spacing: 20;
+    -fx-alignment: center;
+    -fx-padding: 80;
+}
+
+.empty-icon {
+    -fx-min-width: 100;
+    -fx-min-height: 100;
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-background-radius: 50;
+    -fx-alignment: center;
+}
+
+.empty-icon .ikonli-font-icon {
+    -fx-icon-color: rgba(255, 255, 255, 0.3);
+}
+
+.empty-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.empty-subtitle {
+    -fx-font-size: 14px;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+}
+
+.browse-movies-btn {
+    -fx-background-color: linear-gradient(135deg, #dc2626, #b91c1c);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 14 32;
+    -fx-background-radius: 12;
+    -fx-cursor: hand;
+}
+
+.browse-movies-btn:hover {
+    -fx-background-color: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+/* ===== TICKET DETAILS STYLES ===== */
+
+/* Ticket Container */
+.ticket-details-container {
+    -fx-max-width: 500;
+}
+
+/* Ticket Visual */
+.ticket-visual {
+    -fx-background-color: rgba(25, 25, 30, 0.98);
+    -fx-background-radius: 24;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 30, 0, 0, 10);
+}
+
+/* Ticket Header */
+.ticket-header {
+    -fx-min-height: 200;
+    -fx-background-radius: 24 24 0 0;
+}
+
+.header-backdrop {
+    -fx-background-radius: 24 24 0 0;
+}
+
+.header-gradient {
+    -fx-background-color: linear-gradient(to top, rgba(25, 25, 30, 1) 0%, rgba(25, 25, 30, 0.6) 50%, transparent 100%);
+    -fx-background-radius: 24 24 0 0;
+}
+
+.header-content {
+    -fx-padding: 20;
+}
+
+.logo-badge {
+    -fx-background-color: rgba(220, 38, 38, 0.9);
+    -fx-background-radius: 10;
+    -fx-padding: 8 14;
+}
+
+.logo-text {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.ticket-type-badge {
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+    -fx-background-radius: 8;
+    -fx-padding: 6 12;
+}
+
+.ticket-type-badge .label {
+    -fx-font-size: 11px;
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
+}
+
+/* Movie Info */
+.movie-info-section {
+    -fx-padding: 0 24 20 24;
+}
+
+.movie-title-large {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.movie-subtitle {
+    -fx-font-size: 14px;
+    -fx-text-fill: rgba(255, 255, 255, 0.6);
+}
+
+/* Ticket Divider */
+.ticket-divider {
+    -fx-padding: 0 24;
+}
+
+.divider-line {
+    -fx-stroke: rgba(255, 255, 255, 0.1);
+    -fx-stroke-dash-array: 8 6;
+    -fx-stroke-width: 2;
+}
+
+.divider-circle-left,
+.divider-circle-right {
+    -fx-min-width: 24;
+    -fx-min-height: 24;
+    -fx-background-color: #0c0c0f;
+    -fx-background-radius: 12;
+}
+
+/* Booking Details Grid */
+.booking-details-grid {
+    -fx-padding: 20 24;
+    -fx-hgap: 20;
+    -fx-vgap: 16;
+}
+
+.detail-item {
+    -fx-spacing: 4;
+}
+
+.detail-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: rgba(255, 255, 255, 0.4);
+    -fx-text-transform: uppercase;
+}
+
+.detail-value {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.detail-value.highlight {
+    -fx-text-fill: #dc2626;
+}
+
+/* QR Code Section */
+.qr-section {
+    -fx-padding: 0 24 24 24;
+}
+
+.qr-container {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-padding: 16;
+}
+
+.qr-code {
+    -fx-min-width: 150;
+    -fx-min-height: 150;
+}
+
+.booking-reference {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-font-family: "SF Mono", Consolas, monospace;
+}
+
+.scan-instructions {
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+}
+
+/* Ticket Footer */
+.ticket-footer {
+    -fx-background-color: rgba(35, 35, 40, 0.8);
+    -fx-background-radius: 0 0 24 24;
+    -fx-padding: 16 24;
+}
+
+.terms-text {
+    -fx-font-size: 11px;
+    -fx-text-fill: rgba(255, 255, 255, 0.4);
+}
+
+/* Action Buttons */
+.ticket-detail-actions {
+    -fx-spacing: 12;
+    -fx-padding: 20 0;
+}
+
+.download-btn {
+    -fx-background-color: linear-gradient(135deg, #dc2626, #b91c1c);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 14 28;
+    -fx-background-radius: 12;
+    -fx-cursor: hand;
+}
+
+.download-btn:hover {
+    -fx-background-color: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.share-btn {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 14 28;
+    -fx-background-radius: 12;
+    -fx-cursor: hand;
+}
+
+.share-btn:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+}
+
+.add-to-wallet-btn {
+    -fx-background-color: rgba(59, 130, 246, 0.2);
+    -fx-text-fill: #3b82f6;
+    -fx-font-size: 14px;
+    -fx-padding: 14 28;
+    -fx-background-radius: 12;
+    -fx-cursor: hand;
+}
+
+.add-to-wallet-btn:hover {
+    -fx-background-color: rgba(59, 130, 246, 0.3);
+}
+
+/* Reminder Section */
+.reminder-section {
+    -fx-background-color: rgba(245, 158, 11, 0.1);
+    -fx-background-radius: 12;
+    -fx-padding: 16;
+}
+
+.reminder-section .ikonli-font-icon {
+    -fx-icon-color: #f59e0b;
+}
+
+.reminder-title {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f59e0b;
+}
+
+.reminder-text {
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(255, 255, 255, 0.6);
+}
+
+.set-reminder-btn {
+    -fx-background-color: rgba(245, 158, 11, 0.2);
+    -fx-text-fill: #f59e0b;
+    -fx-font-size: 12px;
+    -fx-padding: 8 16;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+.set-reminder-btn:hover {
+    -fx-background-color: rgba(245, 158, 11, 0.3);
+}
+
+/* Related Actions */
+.related-actions {
+    -fx-background-color: rgba(30, 30, 35, 0.8);
+    -fx-background-radius: 14;
+    -fx-padding: 20;
+}
+
+.related-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.related-btn {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-background-radius: 10;
+    -fx-padding: 14;
+    -fx-cursor: hand;
+}
+
+.related-btn:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.12);
+}
+
+.related-btn .ikonli-font-icon {
+    -fx-icon-color: #dc2626;
+}
+
+.related-btn .label {
+    -fx-font-size: 13px;
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
+}

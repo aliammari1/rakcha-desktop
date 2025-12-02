@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 /**
  * Utility class for building paginated SQL queries.
- * 
+ *
  * @author RAKCHA Team
  * @version 1.0.0
  * @since 1.0.0
@@ -16,7 +16,7 @@ public class PaginationQueryBuilder {
 
     /**
      * Builds a paginated SELECT query from a base query.
-     * 
+     *
      * @param baseQuery   the base SELECT query (without ORDER BY, LIMIT, OFFSET)
      * @param pageRequest the pagination parameters
      * @return the paginated query
@@ -27,13 +27,13 @@ public class PaginationQueryBuilder {
         // Add ORDER BY clause if sorting is specified
         if (pageRequest.hasSorting()) {
             query.append(" ORDER BY ").append(pageRequest.getSortBy())
-                    .append(" ").append(pageRequest.getSortDirection());
+                .append(" ").append(pageRequest.getSortDirection());
         }
 
 
         // Add LIMIT and OFFSET
         query.append(" LIMIT ").append(pageRequest.getSize())
-                .append(" OFFSET ").append(pageRequest.getOffset());
+            .append(" OFFSET ").append(pageRequest.getOffset());
 
         return query.toString();
     }
@@ -41,7 +41,7 @@ public class PaginationQueryBuilder {
 
     /**
      * Builds a COUNT query from a base query to get total elements.
-     * 
+     *
      * @param baseQuery the base SELECT query
      * @return the count query
      */
@@ -70,7 +70,7 @@ public class PaginationQueryBuilder {
 
     /**
      * Executes a count query to get the total number of elements.
-     * 
+     *
      * @param connection the database connection
      * @param countQuery the count query
      * @return the total count
@@ -78,7 +78,7 @@ public class PaginationQueryBuilder {
      */
     public static long executeCountQuery(Connection connection, String countQuery) throws SQLException {
         try (PreparedStatement ps = connection.prepareStatement(countQuery);
-                ResultSet rs = ps.executeQuery()) {
+             ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
                 return rs.getLong(1);
             }
@@ -91,7 +91,7 @@ public class PaginationQueryBuilder {
 
     /**
      * Validates a column name for sorting to prevent SQL injection.
-     * 
+     *
      * @param columnName     the column name to validate
      * @param allowedColumns array of allowed column names
      * @return true if the column is allowed, false otherwise

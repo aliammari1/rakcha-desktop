@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import org.kordamp.ikonli.javafx.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21"
+           fx:controller="com.esprit.controllers.cinemas.CinemaHallManagementController"
+           styleClass="immersive-root"
+           stylesheets="@../styles/filmStyle.css, @../styles/admin.css">
+
+  <!-- Background -->
+  <AnchorPane styleClass="cinematic-bg">
+    <Circle radius="220" layoutX="100" layoutY="150" styleClass="ambient-orb orb-primary" opacity="0.12"/>
+    <Circle radius="280" layoutX="1150" layoutY="550" styleClass="ambient-orb orb-secondary" opacity="0.08"/>
+  </AnchorPane>
+
+  <BorderPane styleClass="main-shell">
+    <left>
+      <fx:include source="../sidebar.fxml"/>
+    </left>
+
+    <center>
+      <VBox spacing="0" HBox.hgrow="ALWAYS">
+
+        <!-- Header -->
+        <HBox styleClass="immersive-header" alignment="CENTER_LEFT" spacing="20">
+          <padding>
+            <Insets top="25" bottom="25" left="35" right="35"/>
+          </padding>
+
+          <VBox spacing="5">
+            <Label text="Cinema Hall Management" styleClass="header-title"/>
+            <Label text="Configure and manage all cinema halls across your venues" styleClass="header-subtitle"/>
+          </VBox>
+
+          <Region HBox.hgrow="ALWAYS"/>
+
+          <Button onAction="#createNewHall" styleClass="primary-action-btn" text="Add Hall">
+            <graphic>
+              <FontIcon iconLiteral="mdi2p-plus:20"/>
+            </graphic>
+          </Button>
+        </HBox>
+
+        <!-- Stats Cards -->
+        <HBox spacing="20" styleClass="stats-row">
+          <padding>
+            <Insets top="10" bottom="20" left="35" right="35"/>
+          </padding>
+
+          <VBox styleClass="stat-card glass-card" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" spacing="15">
+              <StackPane styleClass="stat-icon-container blue">
+                <FontIcon iconLiteral="mdi2t-theater:24"/>
+              </StackPane>
+              <VBox spacing="3">
+                <Label fx:id="totalHallsLabel" text="0" styleClass="stat-value"/>
+                <Label text="Total Halls" styleClass="stat-label"/>
+              </VBox>
+            </HBox>
+          </VBox>
+
+          <VBox styleClass="stat-card glass-card" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" spacing="15">
+              <StackPane styleClass="stat-icon-container green">
+                <FontIcon iconLiteral="mdi2c-check-circle:24"/>
+              </StackPane>
+              <VBox spacing="3">
+                <Label fx:id="activeHallsLabel" text="0" styleClass="stat-value"/>
+                <Label text="Active Halls" styleClass="stat-label"/>
+              </VBox>
+            </HBox>
+          </VBox>
+
+          <VBox styleClass="stat-card glass-card" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" spacing="15">
+              <StackPane styleClass="stat-icon-container purple">
+                <FontIcon iconLiteral="mdi2s-seat:24"/>
+              </StackPane>
+              <VBox spacing="3">
+                <Label fx:id="totalSeatsLabel" text="0" styleClass="stat-value"/>
+                <Label text="Total Seats" styleClass="stat-label"/>
+              </VBox>
+            </HBox>
+          </VBox>
+
+          <VBox styleClass="stat-card glass-card" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" spacing="15">
+              <StackPane styleClass="stat-icon-container orange">
+                <FontIcon iconLiteral="mdi2t-tools:24"/>
+              </StackPane>
+              <VBox spacing="3">
+                <Label fx:id="maintenanceHallsLabel" text="0" styleClass="stat-value"/>
+                <Label text="In Maintenance" styleClass="stat-label"/>
+              </VBox>
+            </HBox>
+          </VBox>
+        </HBox>
+
+        <!-- Filters and Search -->
+        <HBox styleClass="filters-bar" spacing="15" alignment="CENTER_LEFT">
+          <padding>
+            <Insets top="0" bottom="20" left="35" right="35"/>
+          </padding>
+
+          <HBox styleClass="search-box" alignment="CENTER" HBox.hgrow="ALWAYS" maxWidth="400">
+            <FontIcon iconLiteral="mdi2m-magnify:18" styleClass="search-icon"/>
+            <TextField fx:id="searchField" styleClass="search-input" promptText="Search halls by name..."
+                       HBox.hgrow="ALWAYS"/>
+          </HBox>
+
+          <ComboBox fx:id="cinemaFilter" styleClass="filter-combo" promptText="All Cinemas" prefWidth="180"/>
+          <ComboBox fx:id="statusFilter" styleClass="filter-combo" promptText="All Status" prefWidth="150"/>
+          <ComboBox fx:id="typeFilter" styleClass="filter-combo" promptText="All Types" prefWidth="150"/>
+
+          <Region HBox.hgrow="ALWAYS"/>
+
+          <ToggleButton fx:id="gridViewToggle" styleClass="view-toggle active" onAction="#showGridView">
+            <graphic>
+              <FontIcon iconLiteral="mdi2v-view-grid:18"/>
+            </graphic>
+          </ToggleButton>
+          <ToggleButton fx:id="tableViewToggle" styleClass="view-toggle" onAction="#showTableView">
+            <graphic>
+              <FontIcon iconLiteral="mdi2v-view-list:18"/>
+            </graphic>
+          </ToggleButton>
+        </HBox>
+
+        <!-- Content Area -->
+        <StackPane VBox.vgrow="ALWAYS">
+          <padding>
+            <Insets left="35" right="35" bottom="25"/>
+          </padding>
+
+          <!-- Grid View -->
+          <ScrollPane fx:id="gridScrollPane" styleClass="content-scroll" fitToWidth="true" hbarPolicy="NEVER">
+            <FlowPane fx:id="hallsGrid" hgap="20" vgap="20" styleClass="halls-grid"/>
+          </ScrollPane>
+
+          <!-- Table View -->
+          <VBox fx:id="tableViewContainer" visible="false" managed="false" spacing="0">
+            <TableView fx:id="hallsTable" styleClass="modern-table" VBox.vgrow="ALWAYS">
+              <columns>
+                <TableColumn fx:id="nameColumn" text="Hall Name" prefWidth="200">
+                  <cellValueFactory>
+                    <PropertyValueFactory property="name"/>
+                  </cellValueFactory>
+                </TableColumn>
+                <TableColumn fx:id="cinemaColumn" text="Cinema" prefWidth="180"/>
+                <TableColumn fx:id="seatsColumn" text="Seats" prefWidth="100"/>
+                <TableColumn fx:id="typeColumn" text="Type" prefWidth="120"/>
+                <TableColumn fx:id="statusColumn" text="Status" prefWidth="120"/>
+                <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="150"/>
+              </columns>
+            </TableView>
+          </VBox>
+
+          <!-- Empty State -->
+          <VBox fx:id="emptyState" alignment="CENTER" spacing="20" visible="false" managed="false">
+            <FontIcon iconLiteral="mdi2t-theater:80" styleClass="empty-icon"/>
+            <Label text="No Halls Found" styleClass="empty-title"/>
+            <Label text="Create your first cinema hall or adjust your filters" styleClass="empty-desc" wrapText="true"
+                   maxWidth="300" alignment="CENTER"/>
+            <Button onAction="#createNewHall" styleClass="primary-action-btn" text="Create Hall">
+              <graphic>
+                <FontIcon iconLiteral="mdi2p-plus:18"/>
+              </graphic>
+            </Button>
+          </VBox>
+        </StackPane>
+      </VBox>
+    </center>
+  </BorderPane>
+
+  <!-- Create/Edit Hall Dialog -->
+  <VBox fx:id="hallDialog" styleClass="dialog-overlay" visible="false" managed="false" alignment="CENTER">
+    <VBox styleClass="dialog-card large" spacing="20" maxWidth="600">
+      <padding>
+        <Insets topRightBottomLeft="30"/>
+      </padding>
+
+      <HBox alignment="CENTER_LEFT" spacing="15">
+        <Label fx:id="dialogTitle" text="Create New Hall" styleClass="dialog-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button onAction="#closeHallDialog" styleClass="close-btn">
+          <graphic>
+            <FontIcon iconLiteral="mdi2c-close:20"/>
+          </graphic>
+        </Button>
+      </HBox>
+
+      <ScrollPane fitToWidth="true" maxHeight="500" styleClass="dialog-scroll">
+        <VBox spacing="20">
+          <padding>
+            <Insets right="10"/>
+          </padding>
+
+          <!-- Basic Info -->
+          <VBox spacing="15" styleClass="form-section">
+            <Label text="Basic Information" styleClass="form-section-title"/>
+
+            <HBox spacing="20">
+              <VBox spacing="8" HBox.hgrow="ALWAYS">
+                <Label text="Hall Name" styleClass="field-label"/>
+                <TextField fx:id="hallNameField" styleClass="glass-input" promptText="Enter hall name"/>
+              </VBox>
+              <VBox spacing="8" HBox.hgrow="ALWAYS">
+                <Label text="Cinema" styleClass="field-label"/>
+                <ComboBox fx:id="hallCinemaCombo" styleClass="glass-combo" promptText="Select cinema"
+                          maxWidth="1.7976931348623157E308"/>
+              </VBox>
+            </HBox>
+
+            <HBox spacing="20">
+              <VBox spacing="8" HBox.hgrow="ALWAYS">
+                <Label text="Hall Type" styleClass="field-label"/>
+                <ComboBox fx:id="hallTypeCombo" styleClass="glass-combo" promptText="Select type"
+                          maxWidth="1.7976931348623157E308"/>
+              </VBox>
+              <VBox spacing="8" HBox.hgrow="ALWAYS">
+                <Label text="Status" styleClass="field-label"/>
+                <ComboBox fx:id="hallStatusCombo" styleClass="glass-combo" promptText="Select status"
+                          maxWidth="1.7976931348623157E308"/>
+              </VBox>
+            </HBox>
+          </VBox>
+
+          <!-- Seat Configuration -->
+          <VBox spacing="15" styleClass="form-section">
+            <Label text="Seat Configuration" styleClass="form-section-title"/>
+
+            <HBox spacing="20">
+              <VBox spacing="8" HBox.hgrow="ALWAYS">
+                <Label text="Number of Rows" styleClass="field-label"/>
+                <Spinner fx:id="rowsSpinner" styleClass="glass-spinner" min="1" max="30" initialValue="10"/>
+              </VBox>
+              <VBox spacing="8" HBox.hgrow="ALWAYS">
+                <Label text="Seats Per Row" styleClass="field-label"/>
+                <Spinner fx:id="seatsPerRowSpinner" styleClass="glass-spinner" min="1" max="50" initialValue="15"/>
+              </VBox>
+            </HBox>
+
+            <HBox spacing="15" alignment="CENTER_LEFT">
+              <CheckBox fx:id="vipSeatsCheck" styleClass="glass-checkbox" text="Include VIP Seats"/>
+              <CheckBox fx:id="accessibleSeatsCheck" styleClass="glass-checkbox" text="Include Accessible Seats"/>
+            </HBox>
+          </VBox>
+
+          <!-- Features -->
+          <VBox spacing="15" styleClass="form-section">
+            <Label text="Hall Features" styleClass="form-section-title"/>
+
+            <FlowPane hgap="10" vgap="10">
+              <CheckBox fx:id="imax3dCheck" styleClass="feature-checkbox" text="IMAX 3D"/>
+              <CheckBox fx:id="dolbyAtmosCheck" styleClass="feature-checkbox" text="Dolby Atmos"/>
+              <CheckBox fx:id="screenXCheck" styleClass="feature-checkbox" text="ScreenX"/>
+              <CheckBox fx:id="fourDXCheck" styleClass="feature-checkbox" text="4DX"/>
+              <CheckBox fx:id="reclinerSeatsCheck" styleClass="feature-checkbox" text="Recliner Seats"/>
+              <CheckBox fx:id="laserProjectionCheck" styleClass="feature-checkbox" text="Laser Projection"/>
+            </FlowPane>
+          </VBox>
+
+          <!-- Description -->
+          <VBox spacing="8">
+            <Label text="Description" styleClass="field-label"/>
+            <TextArea fx:id="hallDescriptionArea" styleClass="glass-textarea" promptText="Enter hall description..."
+                      prefRowCount="3"/>
+          </VBox>
+        </VBox>
+      </ScrollPane>
+
+      <HBox spacing="15" alignment="CENTER_RIGHT">
+        <Button onAction="#closeHallDialog" styleClass="secondary-btn" text="Cancel"/>
+        <Button fx:id="saveHallBtn" onAction="#saveHall" styleClass="primary-btn" text="Create Hall"/>
+      </HBox>
+    </VBox>
+  </VBox>
+
+  <!-- Delete Confirmation Dialog -->
+  <VBox fx:id="deleteDialog" styleClass="dialog-overlay" visible="false" managed="false" alignment="CENTER">
+    <VBox styleClass="dialog-card" spacing="20" maxWidth="400">
+      <padding>
+        <Insets topRightBottomLeft="30"/>
+      </padding>
+
+      <VBox alignment="CENTER" spacing="15">
+        <StackPane styleClass="warning-icon-container">
+          <FontIcon iconLiteral="mdi2a-alert-circle:48" styleClass="warning-icon"/>
+        </StackPane>
+        <Label text="Delete Hall?" styleClass="dialog-title"/>
+        <Label fx:id="deleteHallName" styleClass="delete-item-name"/>
+        <Label text="This action cannot be undone. All associated sessions will also be removed."
+               styleClass="dialog-desc" wrapText="true" alignment="CENTER"/>
+      </VBox>
+
+      <HBox spacing="15" alignment="CENTER">
+        <Button onAction="#cancelDelete" styleClass="secondary-btn" text="Cancel"/>
+        <Button onAction="#confirmDelete" styleClass="danger-btn" text="Delete Hall"/>
+      </HBox>
+    </VBox>
+  </VBox>
+</StackPane>

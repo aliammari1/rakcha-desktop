@@ -1,9 +1,12 @@
 package com.esprit.controllers.series;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import com.esprit.models.series.Category;
+import com.esprit.services.series.CategoryService;
+import com.esprit.utils.TestFXBase;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.FlowPane;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
@@ -11,17 +14,13 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.Timeout;
-import java.util.concurrent.TimeUnit;
 import org.testfx.framework.junit5.Start;
 
-import com.esprit.models.series.Category;
-import com.esprit.services.series.IServiceCategorieImpl;
-import com.esprit.utils.TestFXBase;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.layout.FlowPane;
-import javafx.stage.Stage;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Comprehensive test suite for CategoriesClientController.
@@ -31,7 +30,7 @@ import javafx.stage.Stage;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CategoriesClientControllerTest extends TestFXBase {
 
-    private IServiceCategorieImpl categoryService;
+    private CategoryService categoryService;
 
     @Override
     @Start
@@ -42,8 +41,27 @@ class CategoriesClientControllerTest extends TestFXBase {
         stage.show();
     }
 
+    // Helper methods
+    private List<Category> createMockCategories() {
+        List<Category> categories = new ArrayList<>();
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+        Category cat1 = new Category();
+        cat1.setName("Drama");
+
+        Category cat2 = new Category();
+        cat2.setName("Comedy");
+
+        categories.add(cat1);
+        categories.add(cat2);
+        return categories;
+    }
+
+    private <T> com.esprit.utils.Page<T> createPagedResult(List<T> content) {
+        return new com.esprit.utils.Page<>(content, 0, content.size(), content.size());
+    }
+
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Categories Display Tests")
     class CategoriesDisplayTests {
 
@@ -81,8 +99,8 @@ class CategoriesClientControllerTest extends TestFXBase {
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Category Selection Tests")
     class CategorySelectionTests {
 
@@ -109,8 +127,8 @@ class CategoriesClientControllerTest extends TestFXBase {
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Navigation Tests")
     class NavigationTests {
 
@@ -123,27 +141,6 @@ class CategoriesClientControllerTest extends TestFXBase {
             assertThat(lookup(".button").tryQuery()).isPresent();
         }
 
-    }
-
-
-    // Helper methods
-    private List<Category> createMockCategories() {
-        List<Category> categories = new ArrayList<>();
-
-        Category cat1 = new Category();
-        cat1.setName("Drama");
-
-        Category cat2 = new Category();
-        cat2.setName("Comedy");
-
-        categories.add(cat1);
-        categories.add(cat2);
-        return categories;
-    }
-
-
-    private <T> com.esprit.utils.Page<T> createPagedResult(List<T> content) {
-        return new com.esprit.utils.Page<>(content, 0, content.size(), content.size());
     }
 
 }

@@ -1,26 +1,11 @@
 package com.esprit.controllers.series;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.Timeout;
-import java.util.concurrent.TimeUnit;
-import org.testfx.framework.junit5.Start;
-
 import com.esprit.models.series.Category;
 import com.esprit.models.series.Series;
-import com.esprit.services.series.IServiceCategorieImpl;
-import com.esprit.services.series.IServiceFavoriteImpl;
-import com.esprit.services.series.IServiceSeriesImpl;
+import com.esprit.services.series.CategoryService;
+import com.esprit.services.series.FavoriteService;
+import com.esprit.services.series.SeriesService;
 import com.esprit.utils.TestFXBase;
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -30,6 +15,20 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.Timeout;
+import org.testfx.framework.junit5.Start;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Comprehensive test suite for SerieClientController.
@@ -39,11 +38,11 @@ import javafx.stage.Stage;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class SerieClientControllerTest extends TestFXBase {
 
-    private IServiceSeriesImpl seriesService;
+    private SeriesService seriesService;
 
-    private IServiceCategorieImpl categoryService;
+    private CategoryService categoryService;
 
-    private IServiceFavoriteImpl favoriteService;
+    private FavoriteService favoriteService;
 
     @Start
     public void start(Stage stage) throws Exception {
@@ -53,8 +52,55 @@ class SerieClientControllerTest extends TestFXBase {
         stage.show();
     }
 
+    // Helper methods
+    private List<Series> createMockSeries() {
+        List<Series> series = new ArrayList<>();
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+        Series s1 = new Series();
+        s1.setName("Breaking Bad");
+        s1.setSummary("Chemistry teacher turns to crime");
+        s1.setDirector("Vince Gilligan");
+        s1.setCountry("USA");
+
+        Series s2 = new Series();
+        s2.setName("Game of Thrones");
+        s2.setSummary("Epic fantasy series");
+        s2.setDirector("David Benioff");
+        s2.setCountry("USA");
+
+        series.add(s1);
+        series.add(s2);
+        return series;
+    }
+
+    private List<Series> createMockTopSeries() {
+        List<Series> top = new ArrayList<>();
+        for (int i = 1; i <= 3; i++) {
+            Series s = new Series();
+            s.setName("Top Series " + i);
+            top.add(s);
+        }
+
+        return top;
+    }
+
+    private List<Category> createMockCategories() {
+        List<Category> categories = new ArrayList<>();
+        Category c1 = new Category();
+        c1.setName("Action");
+        Category c2 = new Category();
+        c2.setName("Drama");
+        categories.add(c1);
+        categories.add(c2);
+        return categories;
+    }
+
+    private <T> com.esprit.utils.Page<T> createPagedResult(List<T> content) {
+        return new com.esprit.utils.Page<>(content, 0, content.size(), content.size());
+    }
+
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Series Display Tests")
     class SeriesDisplayTests {
 
@@ -103,8 +149,8 @@ class SerieClientControllerTest extends TestFXBase {
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Top 3 Series Tests")
     class Top3SeriesTests {
 
@@ -164,8 +210,8 @@ class SerieClientControllerTest extends TestFXBase {
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Category Filter Tests")
     class CategoryFilterTests {
 
@@ -237,8 +283,8 @@ class SerieClientControllerTest extends TestFXBase {
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Search Functionality Tests")
     class SearchFunctionalityTests {
 
@@ -338,8 +384,8 @@ class SerieClientControllerTest extends TestFXBase {
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Favorite Management Tests")
     class FavoriteManagementTests {
 
@@ -388,8 +434,8 @@ class SerieClientControllerTest extends TestFXBase {
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Watch Episode Tests")
     class WatchEpisodeTests {
 
@@ -436,8 +482,8 @@ class SerieClientControllerTest extends TestFXBase {
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Series Details Display Tests")
     class SeriesDetailsDisplayTests {
 
@@ -495,57 +541,6 @@ class SerieClientControllerTest extends TestFXBase {
             assertThat(listView).isNotNull();
         }
 
-    }
-
-
-    // Helper methods
-    private List<Series> createMockSeries() {
-        List<Series> series = new ArrayList<>();
-
-        Series s1 = new Series();
-        s1.setName("Breaking Bad");
-        s1.setSummary("Chemistry teacher turns to crime");
-        s1.setDirector("Vince Gilligan");
-        s1.setCountry("USA");
-
-        Series s2 = new Series();
-        s2.setName("Game of Thrones");
-        s2.setSummary("Epic fantasy series");
-        s2.setDirector("David Benioff");
-        s2.setCountry("USA");
-
-        series.add(s1);
-        series.add(s2);
-        return series;
-    }
-
-
-    private List<Series> createMockTopSeries() {
-        List<Series> top = new ArrayList<>();
-        for (int i = 1; i <= 3; i++) {
-            Series s = new Series();
-            s.setName("Top Series " + i);
-            top.add(s);
-        }
-
-        return top;
-    }
-
-
-    private List<Category> createMockCategories() {
-        List<Category> categories = new ArrayList<>();
-        Category c1 = new Category();
-        c1.setName("Action");
-        Category c2 = new Category();
-        c2.setName("Drama");
-        categories.add(c1);
-        categories.add(c2);
-        return categories;
-    }
-
-
-    private <T> com.esprit.utils.Page<T> createPagedResult(List<T> content) {
-        return new com.esprit.utils.Page<>(content, 0, content.size(), content.size());
     }
 
 }

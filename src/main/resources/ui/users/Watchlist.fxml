@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import org.kordamp.ikonli.javafx.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21"
+           fx:controller="com.esprit.controllers.users.WatchlistController"
+           styleClass="immersive-root"
+           stylesheets="@../styles/filmStyle.css, @../styles/watchlist.css">
+
+  <!-- Background -->
+  <AnchorPane styleClass="cinematic-bg">
+    <Circle radius="200" layoutX="150" layoutY="150" styleClass="ambient-orb orb-primary" opacity="0.15"/>
+    <Circle radius="280" layoutX="1150" layoutY="550" styleClass="ambient-orb orb-secondary" opacity="0.1"/>
+  </AnchorPane>
+
+  <BorderPane styleClass="main-shell">
+    <left>
+      <fx:include source="../sidebar.fxml"/>
+    </left>
+
+    <center>
+      <VBox spacing="0" styleClass="film-explorer">
+
+        <!-- Header -->
+        <HBox styleClass="immersive-header" alignment="CENTER_LEFT" spacing="20" prefHeight="80">
+          <padding>
+            <Insets top="15" bottom="15" left="25" right="25"/>
+          </padding>
+
+          <VBox spacing="2">
+            <Label text="MY WATCHLIST" styleClass="brand-title"/>
+            <Label text="Films &amp; Series saved for later" styleClass="brand-subtitle"/>
+          </VBox>
+
+          <Region HBox.hgrow="ALWAYS"/>
+
+          <HBox styleClass="unified-search" alignment="CENTER" prefWidth="300">
+            <FontIcon iconLiteral="mdi2m-magnify:20" styleClass="search-icon"/>
+            <TextField fx:id="searchField" styleClass="search-input" promptText="Search watchlist..."
+                       HBox.hgrow="ALWAYS"/>
+          </HBox>
+
+          <ComboBox fx:id="typeFilter" styleClass="glass-combo" promptText="All Types" prefWidth="130"/>
+          <ComboBox fx:id="sortCombo" styleClass="glass-combo" promptText="Date Added" prefWidth="140"/>
+        </HBox>
+
+        <!-- Stats Bar -->
+        <HBox spacing="30" styleClass="watchlist-stats" alignment="CENTER_LEFT">
+          <padding>
+            <Insets top="15" bottom="15" left="30" right="30"/>
+          </padding>
+
+          <HBox spacing="10" alignment="CENTER">
+            <FontIcon iconLiteral="mdi2m-movie:24" styleClass="stat-icon"/>
+            <Label fx:id="moviesCountLabel" text="0 Movies" styleClass="stat-text"/>
+          </HBox>
+
+          <HBox spacing="10" alignment="CENTER">
+            <FontIcon iconLiteral="mdi2t-television:24" styleClass="stat-icon"/>
+            <Label fx:id="seriesCountLabel" text="0 Series" styleClass="stat-text"/>
+          </HBox>
+
+          <Region HBox.hgrow="ALWAYS"/>
+
+          <Button onAction="#clearWatchlist" styleClass="glass-btn danger" text="Clear All">
+            <graphic>
+              <FontIcon iconLiteral="mdi2d-delete-sweep:18"/>
+            </graphic>
+          </Button>
+        </HBox>
+
+        <!-- Content -->
+        <ScrollPane styleClass="main-scroll" fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+          <VBox fx:id="contentContainer" spacing="30" styleClass="scroll-content">
+            <padding>
+              <Insets top="20" bottom="40" left="30" right="30"/>
+            </padding>
+
+            <!-- Continue Watching Section -->
+            <VBox fx:id="continueWatchingSection" spacing="15">
+              <HBox alignment="CENTER_LEFT" spacing="12">
+                <FontIcon iconLiteral="mdi2p-play-circle:24" styleClass="section-icon"/>
+                <Label text="Continue Watching" styleClass="section-title"/>
+              </HBox>
+              <ScrollPane styleClass="horizontal-scroll" hbarPolicy="NEVER" vbarPolicy="NEVER" fitToHeight="true">
+                <HBox fx:id="continueWatchingContainer" spacing="20"/>
+              </ScrollPane>
+            </VBox>
+
+            <!-- Movies Section -->
+            <VBox spacing="15">
+              <HBox alignment="CENTER_LEFT" spacing="12">
+                <FontIcon iconLiteral="mdi2f-filmstrip:24" styleClass="section-icon"/>
+                <Label text="Movies" styleClass="section-title"/>
+                <Label fx:id="moviesSectionCount" styleClass="section-count"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button styleClass="see-all-btn" text="See All">
+                  <graphic>
+                    <FontIcon iconLiteral="mdi2c-chevron-right:18"/>
+                  </graphic>
+                </Button>
+              </HBox>
+              <FlowPane fx:id="moviesGrid" styleClass="watchlist-grid" hgap="20" vgap="20"/>
+            </VBox>
+
+            <!-- Series Section -->
+            <VBox spacing="15">
+              <HBox alignment="CENTER_LEFT" spacing="12">
+                <FontIcon iconLiteral="mdi2t-television-classic:24" styleClass="section-icon"/>
+                <Label text="Series" styleClass="section-title"/>
+                <Label fx:id="seriesSectionCount" styleClass="section-count"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button styleClass="see-all-btn" text="See All">
+                  <graphic>
+                    <FontIcon iconLiteral="mdi2c-chevron-right:18"/>
+                  </graphic>
+                </Button>
+              </HBox>
+              <FlowPane fx:id="seriesGrid" styleClass="watchlist-grid" hgap="20" vgap="20"/>
+            </VBox>
+
+            <!-- Empty State -->
+            <VBox fx:id="emptyState" alignment="CENTER" spacing="20" visible="false" managed="false">
+              <FontIcon iconLiteral="mdi2b-bookmark-off:80" styleClass="empty-icon"/>
+              <Label text="Your watchlist is empty" styleClass="empty-title"/>
+              <Label text="Start adding movies and series you want to watch later" styleClass="empty-desc"/>
+              <Button onAction="#browseFilms" styleClass="action-btn primary" text="Browse Films">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2m-movie-search:20"/>
+                </graphic>
+              </Button>
+            </VBox>
+          </VBox>
+        </ScrollPane>
+      </VBox>
+    </center>
+  </BorderPane>
+
+  <!-- Item Options Menu Overlay -->
+  <VBox fx:id="itemOptionsOverlay" styleClass="options-overlay" visible="false" managed="false" alignment="CENTER">
+    <VBox styleClass="options-card" spacing="10" maxWidth="300">
+      <padding>
+        <Insets topRightBottomLeft="20"/>
+      </padding>
+
+      <Button onAction="#playItem" styleClass="option-btn" text="Play Now" maxWidth="Infinity">
+        <graphic>
+          <FontIcon iconLiteral="mdi2p-play:20"/>
+        </graphic>
+      </Button>
+      <Button onAction="#viewDetails" styleClass="option-btn" text="View Details" maxWidth="Infinity">
+        <graphic>
+          <FontIcon iconLiteral="mdi2i-information:20"/>
+        </graphic>
+      </Button>
+      <Button onAction="#findSessions" styleClass="option-btn" text="Find Sessions" maxWidth="Infinity">
+        <graphic>
+          <FontIcon iconLiteral="mdi2t-ticket:20"/>
+        </graphic>
+      </Button>
+      <Separator/>
+      <Button onAction="#removeFromWatchlist" styleClass="option-btn danger" text="Remove from Watchlist"
+              maxWidth="Infinity">
+        <graphic>
+          <FontIcon iconLiteral="mdi2b-bookmark-remove:20"/>
+        </graphic>
+      </Button>
+
+      <Button onAction="#closeOptions" styleClass="close-options-btn" text="Cancel" maxWidth="Infinity"/>
+    </VBox>
+  </VBox>
+</StackPane>

@@ -1,14 +1,8 @@
 package com.esprit.controllers.series;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
-import com.esprit.models.series.Category;
-import com.esprit.services.series.IServiceCategorieImpl;
+import com.esprit.models.common.Category;
+import com.esprit.services.common.CategoryService;
 import com.esprit.utils.PageRequest;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -24,6 +18,11 @@ import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 /**
  * Is responsible for handling user interactions related to categories, such as
  * displaying category information and handling menu events. The controller uses
@@ -33,6 +32,7 @@ import javafx.stage.Stage;
  * displays them in separate stages.
  */
 public class CategoriesClientController {
+
     @FXML
     ListView<Category> listeV2;
     @FXML
@@ -43,7 +43,7 @@ public class CategoriesClientController {
 
     /**
      * Populate the controller's TilePane with category entries retrieved from the service.
-     *
+     * <p>
      * Retrieves the first page of categories (page 0, size 10), clears the TilePane, and for each
      * category adds a VBox containing labels for its name and description.
      *
@@ -51,7 +51,7 @@ public class CategoriesClientController {
      */
     public void afficher() {
         this.tilepane.getChildren().clear();
-        final IServiceCategorieImpl iServiceCategorie = new IServiceCategorieImpl();
+        final CategoryService iServiceCategorie = new CategoryService();
         final double imageWidth = 200; // Largeur fixe souhaitée
         final double imageHeight = 200; // Hauteur fixe souhaitée
         // recupuration de liste de plat ajouter au shoppingcart
@@ -83,7 +83,7 @@ public class CategoriesClientController {
 
     /**
      * Initialize the controller and populate the category TilePane after FXML loading.
-     *
+     * <p>
      * Calls afficher() to load and render categories into the UI so the view is ready once initialization completes.
      */
     @FXML
@@ -106,7 +106,7 @@ public class CategoriesClientController {
     @FXML
     void Ocategories(final ActionEvent event) throws IOException {
         final Parent root = FXMLLoader
-                .load(Objects.requireNonNull(this.getClass().getResource("/ui//ui/CategorieClient.fxml")));
+            .load(Objects.requireNonNull(this.getClass().getResource("/ui/series/SeriesClient.fxml")));
         final Scene scene = new Scene(root);
         final Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
@@ -123,7 +123,7 @@ public class CategoriesClientController {
     @FXML
     void Oseries(final ActionEvent event) throws IOException {
         final Parent root = FXMLLoader
-                .load(Objects.requireNonNull(this.getClass().getResource("/ui/series/SeriesClient.fxml")));
+            .load(Objects.requireNonNull(this.getClass().getResource("/ui/series/SeriesClient.fxml")));
         final Scene scene = new Scene(root);
         final Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
@@ -140,7 +140,7 @@ public class CategoriesClientController {
     @FXML
     void Oepisode(final ActionEvent event) throws IOException {
         final Parent root = FXMLLoader
-                .load(Objects.requireNonNull(this.getClass().getResource("/ui/series/EpisodeClient.fxml")));
+            .load(Objects.requireNonNull(this.getClass().getResource("/ui/series/EpisodeClient.fxml")));
         final Scene scene = new Scene(root);
         final Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);

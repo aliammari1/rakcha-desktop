@@ -1,0 +1,824 @@
+/* Shop / E-commerce CSS Styles */
+
+/* ===== CHECKOUT PAGE STYLES ===== */
+
+/* Checkout Container */
+.checkout-container {
+    -fx-spacing: 30;
+}
+
+/* Order Summary Card */
+.order-summary-card {
+    -fx-background-color: rgba(30, 30, 35, 0.9);
+    -fx-background-radius: 16;
+    -fx-padding: 24;
+}
+
+.summary-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.cart-items-scroll {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+    -fx-max-height: 300;
+}
+
+.cart-items-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Cart Item */
+.cart-item {
+    -fx-background-color: rgba(40, 40, 45, 0.6);
+    -fx-background-radius: 10;
+    -fx-padding: 12;
+}
+
+.cart-item:hover {
+    -fx-background-color: rgba(50, 50, 55, 0.7);
+}
+
+.cart-item-image {
+    -fx-min-width: 60;
+    -fx-min-height: 60;
+    -fx-max-width: 60;
+    -fx-max-height: 60;
+    -fx-background-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0, 0, 2);
+}
+
+.cart-item-name {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.cart-item-variant {
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+}
+
+.cart-item-price {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #dc2626;
+}
+
+/* Quantity Controls */
+.quantity-control {
+    -fx-spacing: 8;
+}
+
+.quantity-btn {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 6;
+    -fx-min-width: 28;
+    -fx-min-height: 28;
+    -fx-cursor: hand;
+}
+
+.quantity-btn:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+}
+
+.quantity-btn .ikonli-font-icon {
+    -fx-icon-color: white;
+}
+
+.quantity-value {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-min-width: 30;
+    -fx-alignment: center;
+}
+
+.remove-item-btn {
+    -fx-background-color: transparent;
+    -fx-padding: 6;
+    -fx-cursor: hand;
+}
+
+.remove-item-btn:hover {
+    -fx-background-color: rgba(239, 68, 68, 0.2);
+    -fx-background-radius: 6;
+}
+
+.remove-item-btn .ikonli-font-icon {
+    -fx-icon-color: rgba(255, 255, 255, 0.5);
+}
+
+.remove-item-btn:hover .ikonli-font-icon {
+    -fx-icon-color: #ef4444;
+}
+
+/* Price Summary */
+.price-summary {
+    -fx-background-color: rgba(40, 40, 45, 0.6);
+    -fx-background-radius: 12;
+    -fx-padding: 16;
+}
+
+.summary-row {
+    -fx-spacing: 16;
+}
+
+.summary-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: rgba(255, 255, 255, 0.7);
+}
+
+.summary-value {
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+}
+
+.summary-divider {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-pref-height: 1;
+}
+
+.total-row .summary-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.total-row .summary-value {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #dc2626;
+}
+
+/* Promo Code */
+.promo-input-group {
+    -fx-spacing: 8;
+}
+
+.promo-input {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-background-radius: 8;
+    -fx-padding: 10 14;
+    -fx-font-size: 13px;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: rgba(255, 255, 255, 0.4);
+}
+
+.promo-input:focused {
+    -fx-background-color: rgba(255, 255, 255, 0.12);
+}
+
+.apply-promo-btn {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-padding: 10 16;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+.apply-promo-btn:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+}
+
+.promo-applied {
+    -fx-background-color: rgba(34, 197, 94, 0.15);
+    -fx-background-radius: 8;
+    -fx-padding: 10;
+}
+
+.promo-applied .label {
+    -fx-text-fill: #22c55e;
+    -fx-font-size: 12px;
+}
+
+/* Payment Section */
+.payment-section {
+    -fx-background-color: rgba(30, 30, 35, 0.9);
+    -fx-background-radius: 16;
+    -fx-padding: 24;
+}
+
+.section-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+/* Payment Method Cards */
+.payment-methods-grid {
+    -fx-hgap: 12;
+    -fx-vgap: 12;
+}
+
+.payment-method-card {
+    -fx-background-color: rgba(40, 40, 45, 0.7);
+    -fx-background-radius: 12;
+    -fx-padding: 16;
+    -fx-cursor: hand;
+    -fx-min-width: 140;
+}
+
+.payment-method-card:hover {
+    -fx-background-color: rgba(50, 50, 55, 0.8);
+}
+
+.payment-method-card.selected {
+    -fx-background-color: rgba(220, 38, 38, 0.15);
+    -fx-border-color: rgba(220, 38, 38, 0.5);
+    -fx-border-radius: 12;
+    -fx-border-width: 2;
+}
+
+.payment-icon {
+    -fx-min-width: 44;
+    -fx-min-height: 44;
+    -fx-background-radius: 10;
+    -fx-alignment: center;
+}
+
+.payment-icon.card {
+    -fx-background-color: rgba(59, 130, 246, 0.2);
+}
+
+.payment-icon.card .ikonli-font-icon {
+    -fx-icon-color: #3b82f6;
+}
+
+.payment-icon.paypal {
+    -fx-background-color: rgba(16, 146, 209, 0.2);
+}
+
+.payment-icon.paypal .ikonli-font-icon {
+    -fx-icon-color: #1092d1;
+}
+
+.payment-icon.apple {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+}
+
+.payment-icon.apple .ikonli-font-icon {
+    -fx-icon-color: white;
+}
+
+.payment-icon.wallet {
+    -fx-background-color: rgba(34, 197, 94, 0.2);
+}
+
+.payment-icon.wallet .ikonli-font-icon {
+    -fx-icon-color: #22c55e;
+}
+
+.payment-name {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.payment-info {
+    -fx-font-size: 11px;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+}
+
+.selected-indicator {
+    -fx-background-color: #dc2626;
+    -fx-background-radius: 10;
+    -fx-min-width: 20;
+    -fx-min-height: 20;
+}
+
+.selected-indicator .ikonli-font-icon {
+    -fx-icon-color: white;
+}
+
+/* Card Form */
+.card-form {
+    -fx-background-color: rgba(40, 40, 45, 0.6);
+    -fx-background-radius: 12;
+    -fx-padding: 20;
+}
+
+.card-input {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-background-radius: 8;
+    -fx-padding: 12 14;
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: rgba(255, 255, 255, 0.4);
+}
+
+.card-input:focused {
+    -fx-background-color: rgba(255, 255, 255, 0.12);
+    -fx-border-color: rgba(220, 38, 38, 0.4);
+    -fx-border-width: 2;
+    -fx-border-radius: 8;
+}
+
+.card-brands {
+    -fx-spacing: 8;
+}
+
+.card-brand {
+    -fx-opacity: 0.4;
+}
+
+.card-brand.active {
+    -fx-opacity: 1;
+}
+
+/* Checkout Button */
+.checkout-btn {
+    -fx-background-color: linear-gradient(135deg, #dc2626, #b91c1c);
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 16 40;
+    -fx-background-radius: 12;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(220, 38, 38, 0.4), 15, 0, 0, 4);
+}
+
+.checkout-btn:hover {
+    -fx-background-color: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.checkout-btn:disabled {
+    -fx-opacity: 0.5;
+}
+
+.secure-badge {
+    -fx-spacing: 6;
+}
+
+.secure-badge .ikonli-font-icon {
+    -fx-icon-color: #22c55e;
+}
+
+.secure-badge .label {
+    -fx-font-size: 11px;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+}
+
+/* ===== ORDER TRACKING STYLES ===== */
+
+/* Tracking Container */
+.tracking-container {
+    -fx-max-width: 800;
+}
+
+/* Order Header */
+.order-header {
+    -fx-background-color: rgba(30, 30, 35, 0.9);
+    -fx-background-radius: 16;
+    -fx-padding: 24;
+}
+
+.order-number {
+    -fx-font-size: 14px;
+    -fx-text-fill: rgba(255, 255, 255, 0.6);
+}
+
+.order-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.order-date {
+    -fx-font-size: 13px;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+}
+
+/* Order Status Badge */
+.order-status-badge {
+    -fx-padding: 8 16;
+    -fx-background-radius: 20;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.order-status-badge.processing {
+    -fx-background-color: rgba(59, 130, 246, 0.2);
+    -fx-text-fill: #3b82f6;
+}
+
+.order-status-badge.shipped {
+    -fx-background-color: rgba(245, 158, 11, 0.2);
+    -fx-text-fill: #f59e0b;
+}
+
+.order-status-badge.out-for-delivery {
+    -fx-background-color: rgba(147, 51, 234, 0.2);
+    -fx-text-fill: #9333ea;
+}
+
+.order-status-badge.delivered {
+    -fx-background-color: rgba(34, 197, 94, 0.2);
+    -fx-text-fill: #22c55e;
+}
+
+/* Timeline */
+.timeline-container {
+    -fx-background-color: rgba(30, 30, 35, 0.9);
+    -fx-background-radius: 16;
+    -fx-padding: 30;
+}
+
+.timeline-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.timeline {
+    -fx-spacing: 0;
+}
+
+.timeline-step {
+    -fx-spacing: 16;
+}
+
+.timeline-dot-container {
+    -fx-min-width: 40;
+    -fx-alignment: top-center;
+}
+
+.timeline-dot {
+    -fx-min-width: 20;
+    -fx-min-height: 20;
+    -fx-background-radius: 10;
+}
+
+.timeline-dot.completed {
+    -fx-background-color: #22c55e;
+}
+
+.timeline-dot.current {
+    -fx-background-color: #dc2626;
+    -fx-effect: dropshadow(gaussian, rgba(220, 38, 38, 0.5), 10, 0, 0, 0);
+}
+
+.timeline-dot.pending {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+}
+
+.timeline-dot .ikonli-font-icon {
+    -fx-icon-color: white;
+}
+
+.timeline-line {
+    -fx-min-width: 2;
+    -fx-min-height: 40;
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+}
+
+.timeline-line.completed {
+    -fx-background-color: #22c55e;
+}
+
+.step-content {
+    -fx-padding: 0 0 20 0;
+}
+
+.step-title {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.step-time {
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+}
+
+.step-description {
+    -fx-font-size: 13px;
+    -fx-text-fill: rgba(255, 255, 255, 0.6);
+}
+
+/* Delivery Info Card */
+.delivery-card {
+    -fx-background-color: rgba(35, 35, 40, 0.8);
+    -fx-background-radius: 12;
+    -fx-padding: 20;
+}
+
+.delivery-icon {
+    -fx-min-width: 48;
+    -fx-min-height: 48;
+    -fx-background-color: rgba(220, 38, 38, 0.15);
+    -fx-background-radius: 12;
+    -fx-alignment: center;
+}
+
+.delivery-icon .ikonli-font-icon {
+    -fx-icon-color: #dc2626;
+}
+
+.delivery-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+}
+
+.delivery-value {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+/* Map Preview */
+.map-preview {
+    -fx-background-color: rgba(40, 40, 45, 0.8);
+    -fx-background-radius: 12;
+    -fx-min-height: 200;
+}
+
+.map-placeholder {
+    -fx-font-size: 14px;
+    -fx-text-fill: rgba(255, 255, 255, 0.4);
+}
+
+/* Action Buttons */
+.tracking-actions {
+    -fx-spacing: 12;
+}
+
+.contact-support-btn {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 12 24;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+}
+
+.contact-support-btn:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+}
+
+.report-issue-btn {
+    -fx-background-color: rgba(239, 68, 68, 0.15);
+    -fx-text-fill: #ef4444;
+    -fx-font-size: 14px;
+    -fx-padding: 12 24;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+}
+
+.report-issue-btn:hover {
+    -fx-background-color: rgba(239, 68, 68, 0.25);
+}
+
+/* ===== WISHLIST STYLES ===== */
+
+/* Wishlist Grid */
+.wishlist-scroll {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+}
+
+.wishlist-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+.wishlist-grid {
+    -fx-hgap: 20;
+    -fx-vgap: 20;
+    -fx-padding: 20;
+}
+
+/* Wishlist Item Card */
+.wishlist-card {
+    -fx-background-color: rgba(30, 30, 35, 0.9);
+    -fx-background-radius: 16;
+    -fx-cursor: hand;
+    -fx-min-width: 240;
+    -fx-max-width: 280;
+}
+
+.wishlist-card:hover {
+    -fx-background-color: rgba(40, 40, 45, 0.95);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 15, 0, 0, 5);
+}
+
+.wishlist-image-container {
+    -fx-min-height: 180;
+}
+
+.wishlist-image {
+    -fx-background-radius: 16 16 0 0;
+}
+
+/* Quick Actions Overlay */
+.wishlist-overlay {
+    -fx-background-color: rgba(0, 0, 0, 0.4);
+    -fx-background-radius: 16 16 0 0;
+    opacity: 0;
+}
+
+.wishlist-card:hover .wishlist-overlay {
+    opacity: 1;
+}
+
+.quick-add-btn {
+    -fx-background-color: #dc2626;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20;
+    -fx-background-radius: 20;
+    -fx-cursor: hand;
+}
+
+.quick-add-btn:hover {
+    -fx-background-color: #ef4444;
+}
+
+.remove-wishlist-btn {
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+    -fx-background-radius: 20;
+    -fx-padding: 8;
+    -fx-cursor: hand;
+}
+
+.remove-wishlist-btn .ikonli-font-icon {
+    -fx-icon-color: white;
+}
+
+.remove-wishlist-btn:hover {
+    -fx-background-color: rgba(239, 68, 68, 0.8);
+}
+
+/* Wishlist Content */
+.wishlist-content {
+    -fx-padding: 16;
+}
+
+.wishlist-name {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.wishlist-category {
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+}
+
+/* Price Display */
+.price-container {
+    -fx-spacing: 8;
+}
+
+.current-price {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #dc2626;
+}
+
+.original-price {
+    -fx-font-size: 13px;
+    -fx-text-fill: rgba(255, 255, 255, 0.4);
+    -fx-strikethrough: true;
+}
+
+.discount-badge {
+    -fx-background-color: rgba(34, 197, 94, 0.2);
+    -fx-background-radius: 8;
+    -fx-padding: 4 8;
+}
+
+.discount-badge .label {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #22c55e;
+}
+
+/* Stock Status */
+.stock-status {
+    -fx-font-size: 11px;
+    -fx-padding: 4 10;
+    -fx-background-radius: 10;
+}
+
+.stock-status.in-stock {
+    -fx-background-color: rgba(34, 197, 94, 0.15);
+    -fx-text-fill: #22c55e;
+}
+
+.stock-status.low-stock {
+    -fx-background-color: rgba(245, 158, 11, 0.15);
+    -fx-text-fill: #f59e0b;
+}
+
+.stock-status.out-of-stock {
+    -fx-background-color: rgba(239, 68, 68, 0.15);
+    -fx-text-fill: #ef4444;
+}
+
+/* Price Alert Toggle */
+.price-alert-toggle {
+    -fx-spacing: 8;
+}
+
+.alert-toggle {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+}
+
+.alert-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: rgba(255, 255, 255, 0.6);
+}
+
+/* Empty Wishlist */
+.empty-wishlist {
+    -fx-spacing: 20;
+    -fx-alignment: center;
+    -fx-padding: 60;
+}
+
+.empty-wishlist-icon {
+    -fx-min-width: 80;
+    -fx-min-height: 80;
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-background-radius: 40;
+    -fx-alignment: center;
+}
+
+.empty-wishlist-icon .ikonli-font-icon {
+    -fx-icon-color: rgba(255, 255, 255, 0.3);
+}
+
+.empty-wishlist-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.empty-wishlist-subtitle {
+    -fx-font-size: 14px;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+}
+
+.browse-products-btn {
+    -fx-background-color: linear-gradient(135deg, #dc2626, #b91c1c);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 14 28;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+}
+
+.browse-products-btn:hover {
+    -fx-background-color: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+/* Filter Bar */
+.wishlist-filter-bar {
+    -fx-background-color: rgba(30, 30, 35, 0.8);
+    -fx-background-radius: 12;
+    -fx-padding: 16;
+}
+
+.filter-label {
+    -fx-font-size: 13px;
+    -fx-text-fill: rgba(255, 255, 255, 0.7);
+}
+
+.sort-dropdown {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 8;
+    -fx-padding: 8 14;
+    -fx-font-size: 13px;
+}
+
+.view-toggle {
+    -fx-spacing: 4;
+}
+
+.view-btn {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 6;
+    -fx-padding: 8;
+    -fx-cursor: hand;
+}
+
+.view-btn:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+}
+
+.view-btn.active {
+    -fx-background-color: rgba(220, 38, 38, 0.3);
+}
+
+.view-btn .ikonli-font-icon {
+    -fx-icon-color: rgba(255, 255, 255, 0.7);
+}
+
+.view-btn.active .ikonli-font-icon {
+    -fx-icon-color: #dc2626;
+}

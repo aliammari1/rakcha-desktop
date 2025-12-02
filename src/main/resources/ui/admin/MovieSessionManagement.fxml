@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import org.kordamp.ikonli.javafx.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21"
+           fx:controller="com.esprit.controllers.cinemas.MovieSessionManagementController"
+           styleClass="immersive-root"
+           stylesheets="@../styles/filmStyle.css, @../styles/admin.css">
+
+  <!-- Background -->
+  <AnchorPane styleClass="cinematic-bg">
+    <Circle radius="200" layoutX="150" layoutY="120" styleClass="ambient-orb orb-primary" opacity="0.12"/>
+    <Circle radius="260" layoutX="1100" layoutY="520" styleClass="ambient-orb orb-secondary" opacity="0.1"/>
+  </AnchorPane>
+
+  <BorderPane styleClass="main-shell">
+    <left>
+      <fx:include source="../sidebar.fxml"/>
+    </left>
+
+    <center>
+      <VBox spacing="0" HBox.hgrow="ALWAYS">
+
+        <!-- Header -->
+        <HBox styleClass="immersive-header" alignment="CENTER_LEFT" spacing="20">
+          <padding>
+            <Insets top="25" bottom="25" left="35" right="35"/>
+          </padding>
+
+          <VBox spacing="5">
+            <Label text="Movie Session Management" styleClass="header-title"/>
+            <Label text="Schedule and manage movie screenings across all cinema halls" styleClass="header-subtitle"/>
+          </VBox>
+
+          <Region HBox.hgrow="ALWAYS"/>
+
+          <Button onAction="#bulkSchedule" styleClass="secondary-action-btn" text="Bulk Schedule">
+            <graphic>
+              <FontIcon iconLiteral="mdi2c-calendar-multiple:18"/>
+            </graphic>
+          </Button>
+          <Button onAction="#createSession" styleClass="primary-action-btn" text="New Session">
+            <graphic>
+              <FontIcon iconLiteral="mdi2p-plus:20"/>
+            </graphic>
+          </Button>
+        </HBox>
+
+        <!-- Stats Overview -->
+        <HBox spacing="20" styleClass="stats-row">
+          <padding>
+            <Insets top="10" bottom="20" left="35" right="35"/>
+          </padding>
+
+          <VBox styleClass="stat-card glass-card" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" spacing="15">
+              <StackPane styleClass="stat-icon-container blue">
+                <FontIcon iconLiteral="mdi2c-calendar-today:24"/>
+              </StackPane>
+              <VBox spacing="3">
+                <Label fx:id="todaySessionsLabel" text="0" styleClass="stat-value"/>
+                <Label text="Today's Sessions" styleClass="stat-label"/>
+              </VBox>
+            </HBox>
+          </VBox>
+
+          <VBox styleClass="stat-card glass-card" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" spacing="15">
+              <StackPane styleClass="stat-icon-container green">
+                <FontIcon iconLiteral="mdi2t-ticket:24"/>
+              </StackPane>
+              <VBox spacing="3">
+                <Label fx:id="ticketsSoldLabel" text="0" styleClass="stat-value"/>
+                <Label text="Tickets Sold Today" styleClass="stat-label"/>
+              </VBox>
+            </HBox>
+          </VBox>
+
+          <VBox styleClass="stat-card glass-card" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" spacing="15">
+              <StackPane styleClass="stat-icon-container purple">
+                <FontIcon iconLiteral="mdi2p-percent:24"/>
+              </StackPane>
+              <VBox spacing="3">
+                <Label fx:id="occupancyRateLabel" text="0%" styleClass="stat-value"/>
+                <Label text="Avg Occupancy" styleClass="stat-label"/>
+              </VBox>
+            </HBox>
+          </VBox>
+
+          <VBox styleClass="stat-card glass-card" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" spacing="15">
+              <StackPane styleClass="stat-icon-container orange">
+                <FontIcon iconLiteral="mdi2c-currency-usd:24"/>
+              </StackPane>
+              <VBox spacing="3">
+                <Label fx:id="revenueLabel" text="$0" styleClass="stat-value"/>
+                <Label text="Today's Revenue" styleClass="stat-label"/>
+              </VBox>
+            </HBox>
+          </VBox>
+        </HBox>
+
+        <!-- View Controls -->
+        <HBox styleClass="view-controls" spacing="15" alignment="CENTER_LEFT">
+          <padding>
+            <Insets top="0" bottom="20" left="35" right="35"/>
+          </padding>
+
+          <!-- Date Navigation -->
+          <HBox styleClass="date-nav" spacing="10" alignment="CENTER">
+            <Button onAction="#previousDay" styleClass="nav-btn">
+              <graphic>
+                <FontIcon iconLiteral="mdi2c-chevron-left:20"/>
+              </graphic>
+            </Button>
+            <DatePicker fx:id="datePicker" styleClass="date-picker"/>
+            <Button onAction="#nextDay" styleClass="nav-btn">
+              <graphic>
+                <FontIcon iconLiteral="mdi2c-chevron-right:20"/>
+              </graphic>
+            </Button>
+            <Button onAction="#goToToday" styleClass="today-btn" text="Today"/>
+          </HBox>
+
+          <Region HBox.hgrow="ALWAYS"/>
+
+          <!-- Filters -->
+          <ComboBox fx:id="cinemaFilter" styleClass="filter-combo" promptText="All Cinemas" prefWidth="180"/>
+          <ComboBox fx:id="hallFilter" styleClass="filter-combo" promptText="All Halls" prefWidth="160"/>
+          <ComboBox fx:id="movieFilter" styleClass="filter-combo" promptText="All Movies" prefWidth="200"/>
+
+          <!-- View Toggle -->
+          <HBox spacing="0" styleClass="view-toggle-group">
+            <ToggleButton fx:id="timelineViewToggle" styleClass="view-toggle-btn left active" text="Timeline"/>
+            <ToggleButton fx:id="listViewToggle" styleClass="view-toggle-btn right" text="List"/>
+          </HBox>
+        </HBox>
+
+        <!-- Content Area -->
+        <StackPane VBox.vgrow="ALWAYS">
+          <padding>
+            <Insets left="35" right="35" bottom="25"/>
+          </padding>
+
+          <!-- Timeline View -->
+          <ScrollPane fx:id="timelineScrollPane" styleClass="timeline-scroll" fitToWidth="true" fitToHeight="true">
+            <VBox fx:id="timelineContainer" spacing="0" styleClass="timeline-container">
+              <!-- Timeline Header (Hours) -->
+              <HBox fx:id="timelineHeader" styleClass="timeline-header"/>
+
+              <!-- Hall Rows -->
+              <VBox fx:id="hallRowsContainer" spacing="10"/>
+            </VBox>
+          </ScrollPane>
+
+          <!-- List View -->
+          <VBox fx:id="listViewContainer" visible="false" managed="false" spacing="0">
+            <TableView fx:id="sessionsTable" styleClass="modern-table" VBox.vgrow="ALWAYS">
+              <columns>
+                <TableColumn fx:id="movieColumn" text="Movie" prefWidth="250"/>
+                <TableColumn fx:id="cinemaColumn" text="Cinema" prefWidth="180"/>
+                <TableColumn fx:id="hallColumn" text="Hall" prefWidth="120"/>
+                <TableColumn fx:id="timeColumn" text="Time" prefWidth="100"/>
+                <TableColumn fx:id="priceColumn" text="Price" prefWidth="100"/>
+                <TableColumn fx:id="seatsColumn" text="Seats" prefWidth="120"/>
+                <TableColumn fx:id="statusColumn" text="Status" prefWidth="100"/>
+                <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="130"/>
+              </columns>
+            </TableView>
+          </VBox>
+
+          <!-- Empty State -->
+          <VBox fx:id="emptyState" alignment="CENTER" spacing="20" visible="false" managed="false">
+            <FontIcon iconLiteral="mdi2c-calendar-blank:80" styleClass="empty-icon"/>
+            <Label text="No Sessions Scheduled" styleClass="empty-title"/>
+            <Label text="Create a new session or select a different date" styleClass="empty-desc" wrapText="true"
+                   maxWidth="300" alignment="CENTER"/>
+            <Button onAction="#createSession" styleClass="primary-action-btn" text="Schedule Session">
+              <graphic>
+                <FontIcon iconLiteral="mdi2p-plus:18"/>
+              </graphic>
+            </Button>
+          </VBox>
+        </StackPane>
+      </VBox>
+    </center>
+  </BorderPane>
+
+  <!-- Create/Edit Session Dialog -->
+  <VBox fx:id="sessionDialog" styleClass="dialog-overlay" visible="false" managed="false" alignment="CENTER">
+    <HBox styleClass="dialog-card wide" spacing="25" maxWidth="900" alignment="TOP_LEFT">
+      <padding>
+        <Insets topRightBottomLeft="30"/>
+      </padding>
+
+      <!-- Left Panel - Movie Selection -->
+      <VBox spacing="20" prefWidth="280">
+        <HBox alignment="CENTER_LEFT" spacing="15">
+          <Label text="Select Movie" styleClass="dialog-section-title"/>
+        </HBox>
+
+        <HBox styleClass="search-box" alignment="CENTER">
+          <FontIcon iconLiteral="mdi2m-magnify:18" styleClass="search-icon"/>
+          <TextField fx:id="movieSearchField" styleClass="search-input" promptText="Search movies..."
+                     HBox.hgrow="ALWAYS"/>
+        </HBox>
+
+        <ScrollPane styleClass="movie-list-scroll" fitToWidth="true" prefHeight="400">
+          <VBox fx:id="movieListContainer" spacing="10"/>
+        </ScrollPane>
+      </VBox>
+
+      <!-- Right Panel - Session Details -->
+      <VBox spacing="20" HBox.hgrow="ALWAYS">
+        <HBox alignment="CENTER_LEFT" spacing="15">
+          <Label fx:id="dialogTitle" text="New Session" styleClass="dialog-title"/>
+          <Region HBox.hgrow="ALWAYS"/>
+          <Button onAction="#closeSessionDialog" styleClass="close-btn">
+            <graphic>
+              <FontIcon iconLiteral="mdi2c-close:20"/>
+            </graphic>
+          </Button>
+        </HBox>
+
+        <!-- Selected Movie Preview -->
+        <HBox fx:id="selectedMoviePreview" styleClass="selected-movie-preview" spacing="15" visible="false"
+              managed="false">
+          <ImageView fx:id="selectedMoviePoster" fitWidth="80" fitHeight="120" styleClass="movie-poster"/>
+          <VBox spacing="5">
+            <Label fx:id="selectedMovieTitle" styleClass="movie-title"/>
+            <Label fx:id="selectedMovieDuration" styleClass="movie-duration"/>
+            <Label fx:id="selectedMovieRating" styleClass="movie-rating"/>
+          </VBox>
+        </HBox>
+
+        <ScrollPane fitToWidth="true" styleClass="dialog-scroll" VBox.vgrow="ALWAYS">
+          <VBox spacing="20">
+            <padding>
+              <Insets right="10"/>
+            </padding>
+
+            <!-- Location -->
+            <VBox spacing="15" styleClass="form-section">
+              <Label text="Location" styleClass="form-section-title"/>
+              <HBox spacing="20">
+                <VBox spacing="8" HBox.hgrow="ALWAYS">
+                  <Label text="Cinema" styleClass="field-label"/>
+                  <ComboBox fx:id="sessionCinemaCombo" styleClass="glass-combo" promptText="Select cinema"
+                            maxWidth="1.7976931348623157E308"/>
+                </VBox>
+                <VBox spacing="8" HBox.hgrow="ALWAYS">
+                  <Label text="Hall" styleClass="field-label"/>
+                  <ComboBox fx:id="sessionHallCombo" styleClass="glass-combo" promptText="Select hall"
+                            maxWidth="1.7976931348623157E308"/>
+                </VBox>
+              </HBox>
+            </VBox>
+
+            <!-- Date & Time -->
+            <VBox spacing="15" styleClass="form-section">
+              <Label text="Date &amp; Time" styleClass="form-section-title"/>
+              <HBox spacing="20">
+                <VBox spacing="8" HBox.hgrow="ALWAYS">
+                  <Label text="Date" styleClass="field-label"/>
+                  <DatePicker fx:id="sessionDatePicker" styleClass="glass-date-picker"
+                              maxWidth="1.7976931348623157E308"/>
+                </VBox>
+                <VBox spacing="8" HBox.hgrow="ALWAYS">
+                  <Label text="Start Time" styleClass="field-label"/>
+                  <ComboBox fx:id="sessionTimeCombo" styleClass="glass-combo" promptText="Select time"
+                            maxWidth="1.7976931348623157E308"/>
+                </VBox>
+              </HBox>
+            </VBox>
+
+            <!-- Pricing -->
+            <VBox spacing="15" styleClass="form-section">
+              <Label text="Pricing" styleClass="form-section-title"/>
+              <HBox spacing="20">
+                <VBox spacing="8" HBox.hgrow="ALWAYS">
+                  <Label text="Regular Price" styleClass="field-label"/>
+                  <TextField fx:id="regularPriceField" styleClass="glass-input" promptText="0.00"/>
+                </VBox>
+                <VBox spacing="8" HBox.hgrow="ALWAYS">
+                  <Label text="VIP Price" styleClass="field-label"/>
+                  <TextField fx:id="vipPriceField" styleClass="glass-input" promptText="0.00"/>
+                </VBox>
+              </HBox>
+            </VBox>
+
+            <!-- Options -->
+            <VBox spacing="15" styleClass="form-section">
+              <Label text="Options" styleClass="form-section-title"/>
+              <FlowPane hgap="15" vgap="10">
+                <CheckBox fx:id="is3DCheck" styleClass="glass-checkbox" text="3D"/>
+                <CheckBox fx:id="isIMAXCheck" styleClass="glass-checkbox" text="IMAX"/>
+                <CheckBox fx:id="isDolbyCheck" styleClass="glass-checkbox" text="Dolby Atmos"/>
+                <CheckBox fx:id="isSubtitledCheck" styleClass="glass-checkbox" text="Subtitled"/>
+              </FlowPane>
+            </VBox>
+          </VBox>
+        </ScrollPane>
+
+        <HBox spacing="15" alignment="CENTER_RIGHT">
+          <Button onAction="#closeSessionDialog" styleClass="secondary-btn" text="Cancel"/>
+          <Button fx:id="saveSessionBtn" onAction="#saveSession" styleClass="primary-btn" text="Create Session"/>
+        </HBox>
+      </VBox>
+    </HBox>
+  </VBox>
+
+  <!-- Bulk Schedule Dialog -->
+  <VBox fx:id="bulkScheduleDialog" styleClass="dialog-overlay" visible="false" managed="false" alignment="CENTER">
+    <VBox styleClass="dialog-card large" spacing="20" maxWidth="600">
+      <padding>
+        <Insets topRightBottomLeft="30"/>
+      </padding>
+
+      <HBox alignment="CENTER_LEFT" spacing="15">
+        <Label text="Bulk Schedule Sessions" styleClass="dialog-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button onAction="#closeBulkDialog" styleClass="close-btn">
+          <graphic>
+            <FontIcon iconLiteral="mdi2c-close:20"/>
+          </graphic>
+        </Button>
+      </HBox>
+
+      <Label text="Schedule multiple sessions for a movie across several days" styleClass="dialog-desc"/>
+
+      <VBox spacing="15">
+        <VBox spacing="8">
+          <Label text="Select Movie" styleClass="field-label"/>
+          <ComboBox fx:id="bulkMovieCombo" styleClass="glass-combo" promptText="Choose a movie"
+                    maxWidth="1.7976931348623157E308"/>
+        </VBox>
+
+        <HBox spacing="20">
+          <VBox spacing="8" HBox.hgrow="ALWAYS">
+            <Label text="Start Date" styleClass="field-label"/>
+            <DatePicker fx:id="bulkStartDate" styleClass="glass-date-picker" maxWidth="1.7976931348623157E308"/>
+          </VBox>
+          <VBox spacing="8" HBox.hgrow="ALWAYS">
+            <Label text="End Date" styleClass="field-label"/>
+            <DatePicker fx:id="bulkEndDate" styleClass="glass-date-picker" maxWidth="1.7976931348623157E308"/>
+          </VBox>
+        </HBox>
+
+        <VBox spacing="8">
+          <Label text="Select Halls" styleClass="field-label"/>
+          <FlowPane fx:id="bulkHallsContainer" hgap="10" vgap="10"/>
+        </VBox>
+
+        <VBox spacing="8">
+          <Label text="Showtimes" styleClass="field-label"/>
+          <FlowPane fx:id="bulkTimesContainer" hgap="10" vgap="10"/>
+          <Button onAction="#addShowtime" styleClass="add-time-btn" text="+ Add Time"/>
+        </VBox>
+      </VBox>
+
+      <Label fx:id="bulkPreviewLabel" styleClass="preview-label"/>
+
+      <HBox spacing="15" alignment="CENTER_RIGHT">
+        <Button onAction="#closeBulkDialog" styleClass="secondary-btn" text="Cancel"/>
+        <Button onAction="#createBulkSessions" styleClass="primary-btn" text="Schedule Sessions"/>
+      </HBox>
+    </VBox>
+  </VBox>
+</StackPane>

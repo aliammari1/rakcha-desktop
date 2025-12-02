@@ -1,5 +1,10 @@
 package com.esprit.services.films;
 
+import com.esprit.models.films.Actor;
+import com.esprit.models.films.Film;
+import com.esprit.utils.DataSource;
+import lombok.extern.slf4j.Slf4j;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,21 +14,13 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.esprit.models.films.Actor;
-import com.esprit.models.films.Film;
-import com.esprit.utils.DataSource;
-import com.esprit.utils.TableCreator;
-
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * Service class providing business logic for managing associations between
  * actors and films in the RAKCHA application.
  * This class handles the many-to-many relationship between actors and films,
  * allowing for creating, retrieving,
  * updating, and deleting these associations.
- *
- * 
+ * <p>
  * Key features include:
  * <ul>
  * <li>Creating actor-film associations</li>
@@ -40,6 +37,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class ActorFilmService {
+
     private static final Logger LOGGER = Logger.getLogger(ActorFilmService.class.getName());
     private final Connection connection;
 
@@ -49,56 +47,37 @@ public class ActorFilmService {
      */
     public ActorFilmService() {
         this.connection = DataSource.getInstance().getConnection();
-
-        // Create tables if they don't exist
-        try {
-            TableCreator tableCreator = new TableCreator(this.connection);
-
-            // Create actor_film junction table
-            String createActorFilmTable = """
-                    CREATE TABLE actor_film (
-                        id BIGINT PRIMARY KEY AUTO_INCREMENT,
-                        actor_id BIGINT NOT NULL,
-                        film_id BIGINT NOT NULL,
-                        role VARCHAR(255),
-                        UNIQUE(actor_id, film_id)
-                    )
-                    """;
-            tableCreator.createTableIfNotExists("actor_film", createActorFilmTable);
-
-        } catch (Exception e) {
-            log.error("Error creating tables for ActorFilmService", e);
-        }
-
     }
-
 
     /**
      * Creates associations between a film and multiple actors based on actor names.
-     * 
+     *
      * @param film       the film to associate actors with
      * @param actorNames list of actor names to be associated with the film
+     * @throws IllegalArgumentException if film ID is invalid or actor doesn't exist
      */
     public void createFilmActorAssociation(Film film, List<String> actorNames) {
-        final String req = "INSERT INTO actor_film (film_id, actor_id) VALUES (?,?)";
+        if (film.getId() == null || film.getId() <= 0) {
+            throw new IllegalArgumentException("Film must have a valid ID before creating associations");
+        }
+
+        ActorService actorService = new ActorService();
+        final String req = "INSERT INTO movie_actors (movie_id, actor_id) VALUES (?,?)";
         try (final PreparedStatement statement = this.connection.prepareStatement(req)) {
             for (final String actorName : actorNames) {
-                Actor actor = new ActorService().getActorByNom(actorName);
-                if (actor != null) {
-                    statement.setLong(1, film.getId());
-                    statement.setLong(2, actor.getId());
-                    statement.executeUpdate();
+                Actor actor = actorService.getActorByNom(actorName);
+                if (actor == null) {
+                    throw new IllegalArgumentException("Actor not found: " + actorName);
                 }
-
+                statement.setLong(1, film.getId());
+                statement.setLong(2, actor.getId());
+                statement.executeUpdate();
             }
-
         } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error creating film-actor associations", e);
             throw new RuntimeException(e);
         }
-
     }
-
 
     /**
      * Retrieves the list of actors associated with a specific film.
@@ -108,22 +87,19 @@ public class ActorFilmService {
      */
     public List<Actor> getActorsForFilm(int filmId) {
         final List<Actor> actors = new ArrayList<>();
-        final String req = "SELECT a.* FROM actors a JOIN actor_film af ON a.id = af.actor_id WHERE af.film_id = ?";
+        final String req = "SELECT a.* FROM actors a JOIN movie_actors af ON a.id = af.actor_id WHERE af.movie_id = ?";
         try (final PreparedStatement statement = this.connection.prepareStatement(req)) {
             statement.setInt(1, filmId);
             final ResultSet rs = statement.executeQuery();
             while (rs.next()) {
-                actors.add(Actor.builder().id(rs.getLong("id")).name(rs.getString("name")).image(rs.getString("image"))
-                        .biography(rs.getString("biography")).build());
+                actors.add(Actor.builder().id(rs.getLong("id")).name(rs.getString("name")).imageUrl(rs.getString("image_url"))
+                    .biography(rs.getString("biography")).build());
             }
-
         } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error getting actors for film: " + filmId, e);
         }
-
         return actors;
     }
-
 
     /**
      * Retrieves the list of films associated with a specific actor.
@@ -133,33 +109,33 @@ public class ActorFilmService {
      */
     public List<Film> getFilmsForActor(int actorId) {
         final List<Film> films = new ArrayList<>();
-        final String req = "SELECT f.* FROM films f JOIN actor_film af ON f.id = af.film_id WHERE af.actor_id = ?";
+        final String req = "SELECT f.* FROM movies f JOIN movie_actors af ON f.id = af.movie_id WHERE af.actor_id = ?";
         try (final PreparedStatement statement = this.connection.prepareStatement(req)) {
             statement.setInt(1, actorId);
             final ResultSet rs = statement.executeQuery();
             while (rs.next()) {
-                films.add(Film.builder().id(rs.getLong("id")).name(rs.getString("name")).image(rs.getString("image"))
-                        .duration(rs.getTime("duration")).description(rs.getString("description"))
-                        .releaseYear(rs.getInt("release_year")).build());
+                films.add(Film.builder().id(rs.getLong("id")).title(rs.getString("title"))
+                    .imageUrl(rs.getString("image_url"))
+                    .durationMin(rs.getInt("duration_min")).description(rs.getString("description"))
+                    .releaseYear(rs.getInt("release_year")).build());
             }
-
         } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error getting films for actor: " + actorId, e);
         }
-
         return films;
     }
 
-
     /**
-     * Replace all actor associations for the given film with associations for the provided actor names.
+     * Updates the actors associated with a film by first removing all existing
+     * associations
+     * and then creating new ones based on the provided actor names.
      *
-     * @param film the film whose actor associations will be replaced
-     * @param actorNames list of actor names to associate with the film; names that do not match an existing actor are ignored
+     * @param film       the film to update actor associations for
+     * @param actorNames list of actor names to be associated with the film
      */
     public void updateActors(final Film film, final List<String> actorNames) {
         // Delete existing associations
-        final String reqDelete = "DELETE FROM actor_film WHERE film_id = ?";
+        final String reqDelete = "DELETE FROM movie_actors WHERE movie_id = ?";
         try (final PreparedStatement statement = this.connection.prepareStatement(reqDelete)) {
             statement.setLong(1, film.getId());
             statement.executeUpdate();
@@ -168,34 +144,33 @@ public class ActorFilmService {
             throw new RuntimeException(e);
         }
 
-
         // Create new associations
         createFilmActorAssociation(film, actorNames);
     }
 
-
     /**
-     * Retrieve a comma-separated string of actor names for the specified film.
+     * Gets a comma-separated string of actor names for a specific film.
      *
-     * @param filmId the film's ID
-     * @return a comma-separated string of actor names, or an empty string if no actors are associated or an error occurs
+     * @param filmId the ID of the film to get actor names for
+     * @return a comma-separated string of actor names
      */
     public String getActorsNames(final Long filmId) {
-        final String req = "SELECT GROUP_CONCAT(a.name SEPARATOR ', ') AS actorNames FROM actors a JOIN actor_film af ON a.id = af.actor_id WHERE af.film_id = ?";
+        final String req = "SELECT name FROM actors a JOIN movie_actors af ON a.id = af.actor_id WHERE af.movie_id = ?";
         try (final PreparedStatement statement = this.connection.prepareStatement(req)) {
             statement.setLong(1, filmId);
             final ResultSet rs = statement.executeQuery();
-            if (rs.next()) {
-                return rs.getString("actorNames");
+            if (!rs.next())
+                return "";
+            StringBuilder actorNames = new StringBuilder(rs.getString("name"));
+            while (rs.next()) {
+                actorNames.append(",").append(rs.getString("name"));
             }
-
+            return actorNames.toString();
         } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error getting actor names for film: " + filmId, e);
         }
-
         return "";
     }
-
 
     /**
      * Deletes the association between a specific film and actor.
@@ -204,7 +179,7 @@ public class ActorFilmService {
      * @param actorId the ID of the actor to remove from the association
      */
     public void deleteFilmActorAssociation(int filmId, int actorId) {
-        final String req = "DELETE FROM actor_film WHERE film_id = ? AND actor_id = ?";
+        final String req = "DELETE FROM movie_actors WHERE movie_id = ? AND actor_id = ?";
         try (final PreparedStatement statement = this.connection.prepareStatement(req)) {
             statement.setInt(1, filmId);
             statement.setInt(2, actorId);
@@ -213,7 +188,5 @@ public class ActorFilmService {
             LOGGER.log(Level.SEVERE, "Error deleting film-actor association", e);
             throw new RuntimeException(e);
         }
-
     }
-
 }

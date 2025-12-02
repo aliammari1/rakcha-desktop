@@ -1,7 +1,5 @@
 package com.esprit.utils;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
@@ -12,16 +10,18 @@ import org.junit.jupiter.api.TestMethodOrder;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * Comprehensive test suite for DataSource utility class.
  * Tests singleton pattern, database connection, and error handling.
- * 
+ * <p>
  * Test Categories:
  * - Singleton Pattern
  * - Database Connection
  * - Connection Management
  * - Error Handling
- * 
+ *
  * @author RAKCHA Team
  * @version 1.0.0
  * @since 1.0.0
@@ -40,7 +40,7 @@ class DataSourceTest {
         void testSingletonInstance() {
             DataSource instance1 = DataSource.getInstance();
             DataSource instance2 = DataSource.getInstance();
-            
+
             assertThat(instance1).isNotNull();
             assertThat(instance2).isNotNull();
             assertThat(instance1).isSameAs(instance2);
@@ -52,20 +52,20 @@ class DataSourceTest {
         @DisplayName("Should maintain singleton across threads")
         void testSingletonThreadSafety() throws InterruptedException {
             DataSource[] instances = new DataSource[2];
-            
+
             Thread thread1 = new Thread(() -> {
                 instances[0] = DataSource.getInstance();
             });
-            
+
             Thread thread2 = new Thread(() -> {
                 instances[1] = DataSource.getInstance();
             });
-            
+
             thread1.start();
             thread2.start();
             thread1.join();
             thread2.join();
-            
+
             assertThat(instances[0]).isSameAs(instances[1]);
         }
 
@@ -77,7 +77,7 @@ class DataSourceTest {
             DataSource first = DataSource.getInstance();
             DataSource second = DataSource.getInstance();
             DataSource third = DataSource.getInstance();
-            
+
             assertThat(first).isSameAs(second);
             assertThat(second).isSameAs(third);
         }
@@ -96,7 +96,7 @@ class DataSourceTest {
         void testValidConnection() {
             DataSource dataSource = DataSource.getInstance();
             Connection connection = dataSource.getConnection();
-            
+
             assertThat(connection).isNotNull();
         }
 
@@ -108,7 +108,7 @@ class DataSourceTest {
             DataSource dataSource = DataSource.getInstance();
             Connection conn1 = dataSource.getConnection();
             Connection conn2 = dataSource.getConnection();
-            
+
             assertThat(conn1).isNotNull();
             assertThat(conn2).isNotNull();
             assertThat(conn1).isSameAs(conn2);
@@ -121,9 +121,9 @@ class DataSourceTest {
         void testConnectionPersistence() {
             DataSource dataSource = DataSource.getInstance();
             Connection connection = dataSource.getConnection();
-            
+
             assertThat(connection).isNotNull();
-            
+
             // Get connection again
             Connection sameConnection = dataSource.getConnection();
             assertThat(sameConnection).isSameAs(connection);
@@ -136,7 +136,7 @@ class DataSourceTest {
         void testConnectionValid() throws SQLException {
             DataSource dataSource = DataSource.getInstance();
             Connection connection = dataSource.getConnection();
-            
+
             assertThat(connection).isNotNull();
             assertThat(connection.isClosed()).isFalse();
         }
@@ -155,7 +155,7 @@ class DataSourceTest {
         void testConnectionMetadata() throws SQLException {
             DataSource dataSource = DataSource.getInstance();
             Connection connection = dataSource.getConnection();
-            
+
             assertThat(connection.getMetaData()).isNotNull();
         }
 
@@ -166,7 +166,7 @@ class DataSourceTest {
         void testTransactionSupport() throws SQLException {
             DataSource dataSource = DataSource.getInstance();
             Connection connection = dataSource.getConnection();
-            
+
             assertThat(connection.getMetaData().supportsTransactions()).isTrue();
         }
 
@@ -177,7 +177,7 @@ class DataSourceTest {
         void testStatementCreation() throws SQLException {
             DataSource dataSource = DataSource.getInstance();
             Connection connection = dataSource.getConnection();
-            
+
             assertThat(connection.createStatement()).isNotNull();
         }
 
@@ -188,7 +188,7 @@ class DataSourceTest {
         void testPreparedStatementCreation() throws SQLException {
             DataSource dataSource = DataSource.getInstance();
             Connection connection = dataSource.getConnection();
-            
+
             assertThat(connection.prepareStatement("SELECT 1")).isNotNull();
         }
 
@@ -206,11 +206,11 @@ class DataSourceTest {
         void testMultipleOperations() throws SQLException {
             DataSource dataSource = DataSource.getInstance();
             Connection connection = dataSource.getConnection();
-            
+
             // Perform multiple operations
             connection.createStatement();
             connection.prepareStatement("SELECT 1");
-            
+
             assertThat(connection.isClosed()).isFalse();
         }
 
@@ -220,11 +220,11 @@ class DataSourceTest {
         @DisplayName("Should reuse same connection")
         void testConnectionReuse() {
             DataSource dataSource = DataSource.getInstance();
-            
+
             Connection conn1 = dataSource.getConnection();
             Connection conn2 = dataSource.getConnection();
             Connection conn3 = dataSource.getConnection();
-            
+
             assertThat(conn1).isSameAs(conn2);
             assertThat(conn2).isSameAs(conn3);
         }
@@ -243,7 +243,7 @@ class DataSourceTest {
         void testConcurrentAccess() throws InterruptedException {
             DataSource dataSource = DataSource.getInstance();
             Connection[] connections = new Connection[5];
-            
+
             Thread[] threads = new Thread[5];
             for (int i = 0; i < 5; i++) {
                 final int index = i;
@@ -252,11 +252,11 @@ class DataSourceTest {
                 });
                 threads[i].start();
             }
-            
+
             for (Thread thread : threads) {
                 thread.join();
             }
-            
+
             // All connections should be the same instance
             for (int i = 1; i < 5; i++) {
                 assertThat(connections[i]).isSameAs(connections[0]);
@@ -271,7 +271,7 @@ class DataSourceTest {
             final int threadCount = 10;
             DataSource[] instances = new DataSource[threadCount];
             Thread[] threads = new Thread[threadCount];
-            
+
             for (int i = 0; i < threadCount; i++) {
                 final int index = i;
                 threads[i] = new Thread(() -> {
@@ -279,11 +279,11 @@ class DataSourceTest {
                 });
                 threads[i].start();
             }
-            
+
             for (Thread thread : threads) {
                 thread.join();
             }
-            
+
             // All instances should be the same
             for (int i = 1; i < threadCount; i++) {
                 assertThat(instances[i]).isSameAs(instances[0]);
@@ -304,7 +304,7 @@ class DataSourceTest {
         void testMySQLConnection() throws SQLException {
             DataSource dataSource = DataSource.getInstance();
             Connection connection = dataSource.getConnection();
-            
+
             String dbProduct = connection.getMetaData().getDatabaseProductName();
             assertThat(dbProduct).containsIgnoringCase("mysql");
         }
@@ -316,7 +316,7 @@ class DataSourceTest {
         void testDatabaseName() throws SQLException {
             DataSource dataSource = DataSource.getInstance();
             Connection connection = dataSource.getConnection();
-            
+
             String catalog = connection.getCatalog();
             assertThat(catalog).isNotEmpty();
         }
@@ -328,7 +328,7 @@ class DataSourceTest {
         void testConnectionURL() throws SQLException {
             DataSource dataSource = DataSource.getInstance();
             Connection connection = dataSource.getConnection();
-            
+
             String url = connection.getMetaData().getURL();
             assertThat(url).isNotEmpty();
             assertThat(url).startsWith("jdbc:mysql://");
@@ -358,7 +358,7 @@ class DataSourceTest {
         @DisplayName("Should handle rapid connection requests")
         void testRapidConnectionRequests() {
             DataSource dataSource = DataSource.getInstance();
-            
+
             for (int i = 0; i < 50; i++) {
                 Connection connection = dataSource.getConnection();
                 assertThat(connection).isNotNull();

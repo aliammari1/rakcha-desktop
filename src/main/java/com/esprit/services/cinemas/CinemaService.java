@@ -1,9 +1,5 @@
 package com.esprit.services.cinemas;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.esprit.models.cinemas.Cinema;
 import com.esprit.models.users.CinemaManager;
 import com.esprit.services.IService;
@@ -12,9 +8,14 @@ import com.esprit.utils.DataSource;
 import com.esprit.utils.Page;
 import com.esprit.utils.PageRequest;
 import com.esprit.utils.PaginationQueryBuilder;
-import com.esprit.utils.TableCreator;
-
 import lombok.extern.slf4j.Slf4j;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 /**
@@ -26,14 +27,13 @@ import lombok.extern.slf4j.Slf4j;
  * @since 1.0.0
  */
 public class CinemaService implements IService<Cinema> {
-    private final Connection connection;
-    private final UserService userService;
 
     // Allowed columns for sorting to prevent SQL injection
     private static final String[] ALLOWED_SORT_COLUMNS = {
-            "id", "name", "location", "phone", "email", "description"
-    }
-;
+        "id", "name", "address", "manager_id", "logo_url", "status"
+    };
+    private final Connection connection;
+    private final UserService userService;
 
     /**
      * Initialize the service by obtaining a database connection, creating a UserService, and ensuring the cinema table exists.
@@ -44,25 +44,12 @@ public class CinemaService implements IService<Cinema> {
     public CinemaService() {
         this.connection = DataSource.getInstance().getConnection();
         this.userService = new UserService();
-
-        // Create tables if they don't exist
-        TableCreator tableCreator = new TableCreator(connection);
-        tableCreator.createTableIfNotExists("cinema", """
-                    CREATE TABLE cinema (
-                        id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                        name VARCHAR(50) NOT NULL,
-                        address VARCHAR(100) NOT NULL,
-                        manager_id BIGINT NOT NULL,
-                        logo_path VARCHAR(1000) NOT NULL,
-                        status VARCHAR(50) NOT NULL
-                    )
-                """);
     }
 
 
     /**
      * Insert a new Cinema record into the database.
-     *
+     * <p>
      * If the cinema's status is null, the status is set to "Pending" before insertion.
      *
      * @param cinema the Cinema to persist; must have a non-null manager with a non-null id
@@ -77,7 +64,7 @@ public class CinemaService implements IService<Cinema> {
      *               the entity to create
      */
     public void create(Cinema cinema) {
-        String query = "INSERT INTO cinema (name, address, manager_id, logo_path, status) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO cinemas (name, address, manager_id, logo_url, status) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, cinema.getName());
             stmt.setString(2, cinema.getAddress());
@@ -85,14 +72,13 @@ public class CinemaService implements IService<Cinema> {
             // Handle null manager case
             if (cinema.getManager() != null && cinema.getManager().getId() != null) {
                 stmt.setLong(3, cinema.getManager().getId());
-            }
- else {
+            } else {
                 log.warn("Cinema manager is null for cinema: " + cinema.getName());
                 throw new IllegalArgumentException("Cinema must have a valid manager with an ID");
             }
 
 
-            stmt.setString(4, cinema.getLogoPath());
+            stmt.setString(4, cinema.getLogoUrl());
             stmt.setString(5, cinema.getStatus() != null ? cinema.getStatus() : "Pending");
             stmt.executeUpdate();
             log.info("Cinema created successfully");
@@ -106,7 +92,7 @@ public class CinemaService implements IService<Cinema> {
 
     /**
      * Update the database record identified by the given cinema's id.
-     *
+     * <p>
      * Updates the record's name, address, logoPath, and status to match the provided Cinema object.
      *
      * @param cinema the Cinema whose id identifies the record to update; its name, address, logoPath, and status will be saved
@@ -119,11 +105,11 @@ public class CinemaService implements IService<Cinema> {
      *               the entity to update
      */
     public void update(Cinema cinema) {
-        String query = "UPDATE cinema SET name = ?, address = ?, logo_path = ?, status = ? WHERE id = ?";
+        String query = "UPDATE cinemas SET name = ?, address = ?, logo_url = ?, status = ? WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, cinema.getName());
             stmt.setString(2, cinema.getAddress());
-            stmt.setString(3, cinema.getLogoPath());
+            stmt.setString(3, cinema.getLogoUrl());
             stmt.setString(4, cinema.getStatus());
             stmt.setLong(5, cinema.getId());
             stmt.executeUpdate();
@@ -148,7 +134,7 @@ public class CinemaService implements IService<Cinema> {
      *           the ID of the entity to delete
      */
     public void delete(Cinema cinema) {
-        String query = "DELETE FROM cinema WHERE id = ?";
+        String query = "DELETE FROM cinemas WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setLong(1, cinema.getId());
             stmt.executeUpdate();
@@ -169,11 +155,11 @@ public class CinemaService implements IService<Cinema> {
      */
     public Page<Cinema> read(PageRequest pageRequest) {
         final List<Cinema> content = new ArrayList<>();
-        final String baseQuery = "SELECT * FROM cinema";
+        final String baseQuery = "SELECT * FROM cinemas";
 
         // Validate sort column to prevent SQL injection
         if (pageRequest.hasSorting() &&
-                !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
+            !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
             log.warn("Invalid sort column: {}. Using default sorting.", pageRequest.getSortBy());
             pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
@@ -188,7 +174,7 @@ public class CinemaService implements IService<Cinema> {
             final String paginatedQuery = PaginationQueryBuilder.buildPaginatedQuery(baseQuery, pageRequest);
 
             try (PreparedStatement stmt = connection.prepareStatement(paginatedQuery);
-                    ResultSet rs = stmt.executeQuery()) {
+                 ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Cinema cinema = buildCinema(rs);
                     if (cinema != null) {
@@ -212,17 +198,17 @@ public class CinemaService implements IService<Cinema> {
 
     /**
      * Retrieve a page of cinemas sorted by the specified column.
-     *
+     * <p>
      * Validates the requested sort column against the allowed set; if invalid, the result
      * uses the service's default sorting. The returned Page contains the cinemas for the
      * requested page and page size.
      *
      * @param pageRequest pagination information (page index and page size)
-     * @param orderBy      column name to sort by (must be one of the allowed sort columns)
-     * @return             a Page of cinemas sorted by the requested column for the given page; if the
-     *                     sort column is invalid, the page is returned using the default sort. In case
-     *                     of a query error the page contains whatever rows were retrieved (may be empty)
-     *                     and its total count equals the number of returned items.
+     * @param orderBy     column name to sort by (must be one of the allowed sort columns)
+     * @return a Page of cinemas sorted by the requested column for the given page; if the
+     * sort column is invalid, the page is returned using the default sort. In case
+     * of a query error the page contains whatever rows were retrieved (may be empty)
+     * and its total count equals the number of returned items.
      */
     public Page<Cinema> sort(PageRequest pageRequest, String orderBy) {
         List<Cinema> cinemas = new ArrayList<>();
@@ -233,21 +219,18 @@ public class CinemaService implements IService<Cinema> {
             return read(pageRequest); // Return default sorted results
         }
 
-
-        String query = "SELECT * FROM cinema ORDER BY " + orderBy + " LIMIT ? OFFSET ?";
+        String query = "SELECT * FROM cinemas ORDER BY " + orderBy + " LIMIT ? OFFSET ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, pageRequest.getSize());
             stmt.setInt(2, pageRequest.getPage() * pageRequest.getSize());
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                Cinema cinema = buildCinema(rs);
-                if (cinema != null) {
-                    cinemas.add(cinema);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Cinema cinema = buildCinema(rs);
+                    if (cinema != null) {
+                        cinemas.add(cinema);
+                    }
                 }
-
             }
-
         } catch (SQLException e) {
             log.error("Error sorting cinemas", e);
         }
@@ -263,7 +246,7 @@ public class CinemaService implements IService<Cinema> {
      * @return the cinema with the specified ID, or null if not found
      */
     public Cinema getCinemaById(Long cinemaId) {
-        String query = "SELECT * FROM cinema WHERE id = ?";
+        String query = "SELECT * FROM cinemas WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setLong(1, cinemaId);
             ResultSet rs = stmt.executeQuery();
@@ -286,7 +269,7 @@ public class CinemaService implements IService<Cinema> {
      * @return the cinema with the specified name, or null if not found
      */
     public Cinema getCinemaByName(String name) {
-        String query = "SELECT * FROM cinema WHERE name = ?";
+        String query = "SELECT * FROM cinemas WHERE name = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, name);
             ResultSet rs = stmt.executeQuery();
@@ -318,12 +301,121 @@ public class CinemaService implements IService<Cinema> {
 
 
             return Cinema.builder().id(rs.getLong("id")).name(rs.getString("name")).address(rs.getString("address"))
-                    .manager(manager).logoPath(rs.getString("logo_path")).status(rs.getString("status")).build();
+                .manager(manager).logoUrl(rs.getString("logo_url")).status(rs.getString("status")).build();
         } catch (SQLException e) {
             log.error("Error building cinema from ResultSet", e);
             return null;
         }
 
+    }
+
+    /**
+     * Checks if a cinema with the specified ID exists in the database.
+     *
+     * @param id the ID of the cinema to check
+     * @return true if the cinema exists, false otherwise
+     */
+    @Override
+    public boolean exists(Long id) {
+        String query = "SELECT COUNT(*) FROM cinemas WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setLong(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            log.error("Error checking if cinema exists with id: " + id, e);
+        }
+        return false;
+    }
+
+    /**
+     * Retrieves a cinema by its ID.
+     *
+     * @param id the ID of the cinema to retrieve
+     * @return the cinema with the specified ID, or null if not found
+     */
+    @Override
+    public Cinema getById(Long id) {
+        return getCinemaById(id);
+    }
+
+    /**
+     * Retrieves all cinemas from the database.
+     *
+     * @return a list of all cinemas
+     */
+    @Override
+    public List<Cinema> getAll() {
+        List<Cinema> cinemas = new ArrayList<>();
+        String query = "SELECT * FROM cinemas";
+        try (PreparedStatement stmt = connection.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                Cinema cinema = buildCinema(rs);
+                if (cinema != null) {
+                    cinemas.add(cinema);
+                }
+            }
+        } catch (SQLException e) {
+            log.error("Error retrieving all cinemas", e);
+        }
+        return cinemas;
+    }
+
+    /**
+     * Get all cinemas (alias for compatibility).
+     * @return list of all cinemas
+     */
+    public List<Cinema> getAllCinemas() {
+        return getAll();
+    }
+
+    /**
+     * Returns the total number of cinemas in the database.
+     *
+     * @return the count of cinemas
+     */
+    @Override
+    public int count() {
+        String query = "SELECT COUNT(*) FROM cinemas";
+        try (PreparedStatement stmt = connection.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            log.error("Error counting cinemas", e);
+        }
+        return 0;
+    }
+
+    /**
+     * Searches for cinemas by name.
+     *
+     * @param keyword the search keyword to match against cinema names
+     * @return a list of cinemas matching the search keyword
+     */
+    @Override
+    public List<Cinema> search(String keyword) {
+        List<Cinema> cinemas = new ArrayList<>();
+        String query = "SELECT * FROM cinemas WHERE name LIKE ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, "%" + keyword + "%");
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Cinema cinema = buildCinema(rs);
+                    if (cinema != null) {
+                        cinemas.add(cinema);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            log.error("Error searching cinemas with keyword: " + keyword, e);
+        }
+        return cinemas;
     }
 
 }

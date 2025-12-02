@@ -1,32 +1,36 @@
 package com.esprit.controllers.films;
 
+import com.esprit.models.cinemas.MovieSession;
+import com.esprit.services.cinemas.MovieSessionService;
+import com.esprit.utils.PaymentProcessor;
+import com.stripe.exception.StripeException;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
+import org.controlsfx.control.CheckComboBox;
+
 import java.time.LocalDate;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.controlsfx.control.CheckComboBox;
-
-import com.esprit.models.cinemas.MovieSession;
-import com.esprit.services.cinemas.MovieSessionService;
-import com.esprit.utils.PaymentProcessor;
-import com.stripe.exception.StripeException;
-
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.layout.Pane;
-
 /**
  * Controller class for handling payment processing in the RAKCHA application.
- * 
+ *
  * <p>
  * This controller is responsible for validating and processing payments for
  * movie tickets.
  * It handles credit card information validation, payment processing, and user
  * feedback.
  * </p>
- * 
+ *
  * <p>
  * Key features include:
  * </p>
@@ -37,12 +41,13 @@ import javafx.scene.layout.Pane;
  * <li>Email format validation</li>
  * <li>Integration with Stripe payment processing</li>
  * </ul>
- * 
+ *
  * @author RAKCHA Team
  * @version 1.0.0
  * @since 1.0.0
  */
 public class PaymentController {
+
     private static final Logger LOGGER = Logger.getLogger(PaymentController.class.getName());
 
     @FXML
@@ -80,17 +85,17 @@ public class PaymentController {
 
     /**
      * Initializes the payment form's month, year, and CVC spinners.
-     *
+     * <p>
      * Month spinner accepts values 1–12, year spinner accepts a large positive range, and CVC spinner accepts values 1–999.
      */
     @FXML
     void initialize() {
         final SpinnerValueFactory<Integer> valueFactory_month = new SpinnerValueFactory.IntegerSpinnerValueFactory(1,
-                12, 1, 1);// (min,max,startvalue,incrementValue)
+            12, 1, 1);// (min,max,startvalue,incrementValue)
         final SpinnerValueFactory<Integer> valueFactory_year = new SpinnerValueFactory.IntegerSpinnerValueFactory(1,
-                9999999, 1, 1);// (min,max,startvalue,incrementValue)
+            9999999, 1, 1);// (min,max,startvalue,incrementValue)
         final SpinnerValueFactory<Integer> valueFactory_cvc = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 999,
-                1, 1);// (min,max,startvalue,incrementValue)
+            1, 1);// (min,max,startvalue,incrementValue)
         this.MM.setValueFactory(valueFactory_month);
         this.YY.setValueFactory(valueFactory_year);
         this.cvc.setValueFactory(valueFactory_cvc);
@@ -112,11 +117,11 @@ public class PaymentController {
         final int mm = LocalDate.now().getMonthValue();
         final int yy = LocalDate.now().getYear();
         final SpinnerValueFactory<Integer> valueFactory_month = new SpinnerValueFactory.IntegerSpinnerValueFactory(1,
-                12, mm, 1);// (min,max,startvalue,incrementValue)
+            12, mm, 1);// (min,max,startvalue,incrementValue)
         final SpinnerValueFactory<Integer> valueFactory_year = new SpinnerValueFactory.IntegerSpinnerValueFactory(1,
-                9999999, yy, 1);// (min,max,startvalue,incrementValue)
+            9999999, yy, 1);// (min,max,startvalue,incrementValue)
         final SpinnerValueFactory<Integer> valueFactory_cvc = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 999,
-                1, 1);// (min,max,startvalue,incrementValue)
+            1, 1);// (min,max,startvalue,incrementValue)
         this.MM.setValueFactory(valueFactory_month);
         this.YY.setValueFactory(valueFactory_year);
         this.cvc.setValueFactory(valueFactory_cvc);
@@ -124,29 +129,29 @@ public class PaymentController {
         // total.setText(total_txt);
         this.spinnerTextField = this.cvc.getEditor();
         this.spinnerTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            try {
-                this.cvc.getValueFactory().setValue(Integer.parseInt(newValue));
-            } catch (final NumberFormatException e) {
-                // Handle invalid input
-            }
+                try {
+                    this.cvc.getValueFactory().setValue(Integer.parseInt(newValue));
+                } catch (final NumberFormatException e) {
+                    // Handle invalid input
+                }
 
-        }
-);
+            }
+        );
     }
 
 
     /**
-         * Validate payment inputs and attempt to process the payment.
-         *
-         * <p>
-         * Validates client name, email, card number, CVC, and expiration date; if validation succeeds,
-         * submits the payment via PaymentProcessor. The method presents error alerts and highlights
-         * invalid fields when validation fails, and presents a success or failure alert after attempting payment.
-         * </p>
-         *
-         * @param event the action event that triggered this handler
-         * @throws StripeException if an error occurs during Stripe payment processing
-         */
+     * Validate payment inputs and attempt to process the payment.
+     *
+     * <p>
+     * Validates client name, email, card number, CVC, and expiration date; if validation succeeds,
+     * submits the payment via PaymentProcessor. The method presents error alerts and highlights
+     * invalid fields when validation fails, and presents a success or failure alert after attempting payment.
+     * </p>
+     *
+     * @param event the action event that triggered this handler
+     * @throws StripeException if an error occurs during Stripe payment processing
+     */
     @FXML
     private void payment(final ActionEvent event) throws StripeException {
         PaymentController.LOGGER.info(String.valueOf(this.cvc.getValue()));
@@ -158,8 +163,7 @@ public class PaymentController {
             alert.showAndWait();
             this.client_name.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             // new animatefx.animation.Shake(client_name).play();
-        }
- else if (this.email.getText().isEmpty()) {
+        } else if (this.email.getText().isEmpty()) {
             final Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("You need to input your Email");
             alert.setTitle("Problem");
@@ -167,8 +171,7 @@ public class PaymentController {
             alert.showAndWait();
             this.email.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             // new animatefx.animation.Shake(email).play();
-        }
- else if (!this.isValidEmail(this.email.getText())) {
+        } else if (!this.isValidEmail(this.email.getText())) {
             final Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Please enter a valid Email address.");
             alert.setTitle("Problem");
@@ -176,8 +179,7 @@ public class PaymentController {
             alert.showAndWait();
             this.email.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             // new animatefx.animation.Shake(email).play();
-        }
- else if (this.num_card.getText().isEmpty()) {
+        } else if (this.num_card.getText().isEmpty()) {
             final Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("You need to input your Card Number");
             alert.setTitle("Problem");
@@ -185,8 +187,7 @@ public class PaymentController {
             alert.showAndWait();
             this.num_card.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             // new animatefx.animation.Shake(num_card).play();
-        }
- else if (!this.check_cvc(this.cvc.getValue())) {
+        } else if (!this.check_cvc(this.cvc.getValue())) {
             final Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("The CVC number should contain three digits");
             alert.setTitle("Problem");
@@ -194,8 +195,7 @@ public class PaymentController {
             alert.showAndWait();
             this.cvc.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             // new animatefx.animation.Shake(cvc).play();
-        }
- else if (!this.check_expDate(this.YY.getValue(), this.MM.getValue())) {
+        } else if (!this.check_expDate(this.YY.getValue(), this.MM.getValue())) {
             final Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Please enter a valid expiration date");
             alert.setTitle("Problem");
@@ -205,8 +205,7 @@ public class PaymentController {
             this.YY.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
             // new animatefx.animation.Shake(MM).play();
             // new animatefx.animation.Shake(YY).play();
-        }
- else {
+        } else {
             this.client_name.setStyle(null);
             this.email.setStyle(null);
             this.num_card.setStyle(null);
@@ -222,8 +221,7 @@ public class PaymentController {
                 alert.showAndWait();
                 this.num_card.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
                 // new animatefx.animation.Shake(num_card).play();
-            }
- else {
+            } else {
                 this.num_card.setStyle(null);
                 final String name = this.client_name.getText();
                 final String email_txt = this.email.getText();
@@ -232,7 +230,7 @@ public class PaymentController {
                 final int mm = this.MM.getValue();
                 final String cvc_num = String.valueOf(this.cvc.getValue());
                 final boolean payment_result = PaymentProcessor.processPayment(name, email_txt,
-                        Integer.parseInt(this.total.getText().replaceAll("\\D+", "")), num, mm, yy, cvc_num);
+                    Integer.parseInt(this.total.getText().replaceAll("\\D+", "")), num, mm, yy, cvc_num);
                 PaymentController.LOGGER.info("the payment is done: " + payment_result);
                 if (payment_result) {
                     final Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -244,8 +242,7 @@ public class PaymentController {
                     // ReservationService rs = new ReservationService();
                     // rs.updateEntity(this.reservation);
                     // redirect_to_successPage();
-                }
- else {
+                } else {
                     final Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setContentText("Payment Failed.");
                     alert.setTitle("Problem");
@@ -341,12 +338,12 @@ public class PaymentController {
 
 
     /**
- * Navigate to the payment success view and display it on the current stage.
- */ 
+     * Navigate to the payment success view and display it on the current stage.
+     */
 /**
  * Navigate to the payment failure view and display it on the current stage.
- */ 
-/**
+ */
+    /**
      * Placeholder for navigating to the payment success page.
      *
      * <p>Currently a no-op; navigation implementation is commented out and this method does not change application state or UI.</p>
@@ -399,7 +396,7 @@ public class PaymentController {
 
     /**
      * Navigate to the client reservation list view for the current reservation's client.
-     *
+     * <p>
      * Loads the reservation list FXML, initializes its controller with the current
      * reservation's client ID, and replaces the current scene to display that view.
      *

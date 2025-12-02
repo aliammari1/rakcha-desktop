@@ -1,5 +1,7 @@
 package com.esprit.controllers.films;
 
+import com.esprit.utils.TestFXBase;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
@@ -7,17 +9,14 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.Timeout;
-import java.util.concurrent.TimeUnit;
 import org.testfx.framework.junit5.Start;
 
-import com.esprit.utils.TestFXBase;
-
-import javafx.stage.Stage;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Comprehensive UI tests for PaymentController.
  * Tests payment form, validation, processing, and security.
- * 
+ *
  * @author RAKCHA Team
  * @version 1.0.0
  */
@@ -31,14 +30,15 @@ class PaymentControllerTest extends TestFXBase {
             getClass().getResource("/ui/films/Paymentuser.fxml")
         );
         javafx.scene.Parent root = loader.load();
-        
+
         stage.setScene(new javafx.scene.Scene(root, 1280, 700));
         stage.show();
         stage.toFront();
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Payment Form Display Tests")
     class PaymentFormDisplayTests {
 
@@ -80,7 +80,8 @@ class PaymentControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Card Number Validation Tests")
     class CardNumberValidationTests {
 
@@ -140,7 +141,8 @@ class PaymentControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Expiry Date Validation Tests")
     class ExpiryDateValidationTests {
 
@@ -182,7 +184,8 @@ class PaymentControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("CVV Validation Tests")
     class CVVValidationTests {
 
@@ -224,7 +227,8 @@ class PaymentControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Cardholder Name Validation Tests")
     class CardholderNameTests {
 
@@ -256,7 +260,8 @@ class PaymentControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Payment Method Selection Tests")
     class PaymentMethodSelectionTests {
 
@@ -303,7 +308,8 @@ class PaymentControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Payment Processing Tests")
     class PaymentProcessingTests {
 
@@ -370,7 +376,8 @@ class PaymentControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Error Handling Tests")
     class ErrorHandlingTests {
 
@@ -425,7 +432,8 @@ class PaymentControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Security Tests")
     class SecurityTests {
 
@@ -467,7 +475,8 @@ class PaymentControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Cancel and Back Tests")
     class CancelBackTests {
 
@@ -505,7 +514,8 @@ class PaymentControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Receipt and Confirmation Tests")
     class ReceiptConfirmationTests {
 

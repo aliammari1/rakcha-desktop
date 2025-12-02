@@ -1,6 +1,10 @@
 package com.esprit.controllers.users;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import com.esprit.utils.TestFXBase;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
@@ -8,15 +12,11 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.Timeout;
-import java.util.concurrent.TimeUnit;
 import org.testfx.framework.junit5.Start;
 
-import com.esprit.utils.TestFXBase;
+import java.util.concurrent.TimeUnit;
 
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.stage.Stage;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Comprehensive test suite for MailAdminController.
@@ -32,14 +32,15 @@ class MailAdminControllerTest extends TestFXBase {
             getClass().getResource("/ui/users/maillogin.fxml")
         );
         javafx.scene.Parent root = loader.load();
-        
+
         stage.setScene(new javafx.scene.Scene(root, 1280, 700));
         stage.show();
         stage.toFront();
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Email Input Tests")
     class EmailInputTests {
 
@@ -83,7 +84,8 @@ class MailAdminControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Send Email Tests")
     class SendEmailTests {
 
@@ -106,7 +108,7 @@ class MailAdminControllerTest extends TestFXBase {
 
             TextField emailField = lookup("#mailTextField").query();
             Button sendButton = lookup("#sendButton").query();
-            
+
             assertThat(emailField).isNotNull();
             assertThat(sendButton).isNotNull();
         }
@@ -131,7 +133,7 @@ class MailAdminControllerTest extends TestFXBase {
 
             TextField emailField = lookup("#mailTextField").query();
             Button sendButton = lookup("#sendButton").query();
-            
+
             assertThat(emailField).isNotNull();
             assertThat(sendButton).isNotNull();
         }
@@ -161,7 +163,8 @@ class MailAdminControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Error Label Tests")
     class ErrorLabelTests {
 
@@ -220,7 +223,8 @@ class MailAdminControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Email Validation Tests")
     class EmailValidationTests {
 
@@ -231,11 +235,10 @@ class MailAdminControllerTest extends TestFXBase {
             waitForFxEvents();
 
             String[] validEmails = {
-                    "test@example.com",
-                    "user.name@domain.co.uk",
-                    "name123@test-domain.org"
-            }
-;
+                "test@example.com",
+                "user.name@domain.co.uk",
+                "name123@test-domain.org"
+            };
 
             TextField emailField = lookup("#mailTextField").query();
             for (String email : validEmails) {
@@ -262,7 +265,8 @@ class MailAdminControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Button State Tests")
     class ButtonStateTests {
 
@@ -285,7 +289,7 @@ class MailAdminControllerTest extends TestFXBase {
 
             TextField emailField = lookup("#mailTextField").query();
             Button sendButton = lookup("#sendButton").query();
-            
+
             assertThat(emailField).isNotNull();
             assertThat(sendButton).isNotNull();
         }
@@ -293,7 +297,8 @@ class MailAdminControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Error Handling Tests")
     class ErrorHandlingTests {
 
@@ -305,7 +310,7 @@ class MailAdminControllerTest extends TestFXBase {
 
             TextField emailField = lookup("#mailTextField").query();
             Button sendButton = lookup("#sendButton").query();
-            
+
             assertThat(emailField).isNotNull();
             assertThat(sendButton).isNotNull();
         }
@@ -324,7 +329,8 @@ class MailAdminControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Security Tests")
     class SecurityTests {
 

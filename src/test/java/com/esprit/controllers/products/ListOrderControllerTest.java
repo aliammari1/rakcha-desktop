@@ -1,24 +1,24 @@
 package com.esprit.controllers.products;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.Timeout;
-import java.util.concurrent.TimeUnit;
-import org.testfx.framework.junit5.Start;
-
 import com.esprit.models.products.Order;
 import com.esprit.utils.TestFXBase;
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.Timeout;
+import org.testfx.framework.junit5.Start;
+
+import java.util.concurrent.TimeUnit;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Comprehensive test suite for ListOrderController.
@@ -177,12 +177,12 @@ class ListOrderControllerTest extends TestFXBase {
 
             // Verify search text is entered
             assertThat(searchBar.getText()).contains("John");
-            
+
             // Verify table is filtered or has appropriate items
             int filteredCount = table.getItems().size();
             // Filtered count should be <= initial count
             assertThat(filteredCount).isLessThanOrEqualTo(initialCount);
-            
+
             // Verify visible items contain the search term
             for (Order order : table.getItems()) {
                 String clientName = order.getClient().getFirstName() + " " + order.getClient().getLastName();
@@ -209,11 +209,11 @@ class ListOrderControllerTest extends TestFXBase {
             waitForFxEvents();
 
             assertThat(searchBar.getText()).contains("Main");
-            
+
             // Verify filtering applied
             int filteredCount = table.getItems().size();
             assertThat(filteredCount).isLessThanOrEqualTo(initialCount);
-            
+
             // Verify visible items match search criteria
             for (Order order : table.getItems()) {
                 assertThat(order.getAddress().toLowerCase()).contains("main");
@@ -238,7 +238,7 @@ class ListOrderControllerTest extends TestFXBase {
             waitForFxEvents();
 
             assertThat(searchBar.getText()).contains("12345");
-            
+
             // Verify visible items contain the phone search term
             for (Order order : table.getItems()) {
                 String phone = String.valueOf(order.getPhoneNumber());
@@ -264,7 +264,7 @@ class ListOrderControllerTest extends TestFXBase {
             waitForFxEvents();
 
             assertThat(searchBar.getText()).contains("JOHN");
-            
+
             // Verify results match despite case difference
             for (Order order : table.getItems()) {
                 String clientName = (order.getClient().getFirstName() + " " + order.getClient().getLastName()).toLowerCase();
@@ -290,7 +290,7 @@ class ListOrderControllerTest extends TestFXBase {
             waitForFxEvents();
 
             assertThat(searchBar.getText()).isEmpty();
-            
+
             // When search is empty, all items should be shown
             assertThat(table.getItems().size()).isGreaterThanOrEqualTo(0);
         }
@@ -307,21 +307,21 @@ class ListOrderControllerTest extends TestFXBase {
 
             TextField searchBar = lookup("#SearchBar").query();
             assertThat(searchBar).isNotNull();
-            
+
             // Clear any existing text
             clickOn(searchBar).eraseText(searchBar.getLength());
-            
+
             // Type first character
             clickOn(searchBar).write("J");
             waitForFxEvents();
-            
+
             assertThat(searchBar.getText()).contains("J");
             int firstCharCount = table.getItems().size();
 
             // Type second character
             clickOn(searchBar).write("o");
             waitForFxEvents();
-            
+
             // Table should update with more specific results
             int secondCharCount = table.getItems().size();
             assertThat(secondCharCount).isLessThanOrEqualTo(firstCharCount);
@@ -353,7 +353,7 @@ class ListOrderControllerTest extends TestFXBase {
 
             TableView<Order> table = lookup("#orderTableView").query();
             assertThat(table).isNotNull();
-            
+
             if (table.getItems().isEmpty()) {
                 return; // Skip if no items
             }
@@ -368,7 +368,7 @@ class ListOrderControllerTest extends TestFXBase {
             if (deleteButton.isPresent()) {
                 clickOn(deleteButton.get());
                 waitForFxEvents();
-                
+
                 // Verify a confirmation dialog appears or warning label is visible
                 var confirmDialog = lookup(".dialog-pane").tryQuery();
                 if (confirmDialog.isPresent()) {
@@ -388,14 +388,14 @@ class ListOrderControllerTest extends TestFXBase {
 
             TableView<Order> table = lookup("#orderTableView").query();
             assertThat(table).isNotNull();
-            
+
             if (table.getItems().isEmpty()) {
                 return; // Skip if no items to delete
             }
 
 
             int initialCount = table.getItems().size();
-            
+
             // Select and delete first order
             table.getSelectionModel().selectFirst();
             waitForFxEvents();
@@ -405,13 +405,13 @@ class ListOrderControllerTest extends TestFXBase {
             if (deleteButton.isPresent()) {
                 clickOn(deleteButton.get());
                 waitForFxEvents();
-                
+
                 // Click OK/Confirm on dialog
                 var confirmButton = lookup(".confirm-button, #okButton, .ok-button").tryQuery();
                 if (confirmButton.isPresent()) {
                     clickOn(confirmButton.get());
                     waitForFxEvents();
-                    
+
                     // Verify item was deleted
                     assertThat(table.getItems().size()).isLessThan(initialCount);
                 }
@@ -429,7 +429,7 @@ class ListOrderControllerTest extends TestFXBase {
 
             TableView<Order> table = lookup("#orderTableView").query();
             assertThat(table).isNotNull();
-            
+
             // Capture initial state
             int initialCount = table.getItems().size();
 
@@ -442,7 +442,7 @@ class ListOrderControllerTest extends TestFXBase {
                 if (deleteButton.isPresent()) {
                     clickOn(deleteButton.get());
                     waitForFxEvents();
-                    
+
                     var confirmButton = lookup(".confirm-button, #okButton").tryQuery();
                     if (confirmButton.isPresent()) {
                         clickOn(confirmButton.get());
@@ -453,7 +453,7 @@ class ListOrderControllerTest extends TestFXBase {
 
             }
 
-            
+
             // Verify table is still functional
             assertThat(table.getItems()).isNotNull();
         }
@@ -467,14 +467,14 @@ class ListOrderControllerTest extends TestFXBase {
 
             TableView<Order> table = lookup("#orderTableView").query();
             assertThat(table).isNotNull();
-            
+
             if (table.getItems().isEmpty()) {
                 return; // Skip if no items
             }
 
 
             int initialCount = table.getItems().size();
-            
+
             // Select first order
             table.getSelectionModel().selectFirst();
             Order selectedOrder = table.getSelectionModel().getSelectedItem();
@@ -485,16 +485,16 @@ class ListOrderControllerTest extends TestFXBase {
             if (deleteButton.isPresent()) {
                 clickOn(deleteButton.get());
                 waitForFxEvents();
-                
+
                 // Click Cancel/No on confirmation dialog
                 var cancelButton = lookup(".cancel-button, #cancelButton, .no-button").tryQuery();
                 if (cancelButton.isPresent()) {
                     clickOn(cancelButton.get());
                     waitForFxEvents();
-                    
+
                     // Verify nothing was deleted
                     assertThat(table.getItems().size()).isEqualTo(initialCount);
-                    
+
                     // Verify selected item still exists
                     if (selectedOrder != null) {
                         assertThat(table.getItems()).contains(selectedOrder);

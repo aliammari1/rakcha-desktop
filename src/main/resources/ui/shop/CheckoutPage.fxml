@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import org.kordamp.ikonli.javafx.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21"
+           fx:controller="com.esprit.controllers.products.CheckoutPageController"
+           styleClass="immersive-root"
+           stylesheets="@../styles/filmStyle.css, @../styles/shop.css">
+
+  <!-- Background -->
+  <AnchorPane styleClass="cinematic-bg">
+    <Circle radius="220" layoutX="100" layoutY="120" styleClass="ambient-orb orb-primary" opacity="0.12"/>
+    <Circle radius="280" layoutX="1150" layoutY="520" styleClass="ambient-orb orb-secondary" opacity="0.08"/>
+  </AnchorPane>
+
+  <BorderPane styleClass="main-shell">
+    <left>
+      <fx:include source="../sidebar.fxml"/>
+    </left>
+
+    <center>
+      <HBox spacing="30" HBox.hgrow="ALWAYS">
+        <padding>
+          <Insets top="30" bottom="30" left="40" right="40"/>
+        </padding>
+
+        <!-- Main Checkout Form -->
+        <VBox spacing="25" HBox.hgrow="ALWAYS">
+
+          <!-- Header -->
+          <HBox alignment="CENTER_LEFT" spacing="15">
+            <Button onAction="#goBack" styleClass="back-btn">
+              <graphic>
+                <FontIcon iconLiteral="mdi2a-arrow-left:20"/>
+              </graphic>
+            </Button>
+            <VBox spacing="3">
+              <Label text="Checkout" styleClass="page-title"/>
+              <Label fx:id="checkoutSubtitle" text="Complete your order" styleClass="page-subtitle"/>
+            </VBox>
+          </HBox>
+
+          <!-- Progress Steps -->
+          <HBox styleClass="checkout-steps" spacing="0" alignment="CENTER">
+            <VBox alignment="CENTER" spacing="5" styleClass="step active">
+              <StackPane styleClass="step-circle">
+                <Label text="1"/>
+              </StackPane>
+              <Label text="Cart" styleClass="step-label"/>
+            </VBox>
+            <Region styleClass="step-line active" HBox.hgrow="ALWAYS"/>
+            <VBox alignment="CENTER" spacing="5" styleClass="step active">
+              <StackPane styleClass="step-circle">
+                <Label text="2"/>
+              </StackPane>
+              <Label text="Details" styleClass="step-label"/>
+            </VBox>
+            <Region styleClass="step-line" HBox.hgrow="ALWAYS"/>
+            <VBox alignment="CENTER" spacing="5" styleClass="step">
+              <StackPane styleClass="step-circle">
+                <Label text="3"/>
+              </StackPane>
+              <Label text="Payment" styleClass="step-label"/>
+            </VBox>
+            <Region styleClass="step-line" HBox.hgrow="ALWAYS"/>
+            <VBox alignment="CENTER" spacing="5" styleClass="step">
+              <StackPane styleClass="step-circle">
+                <FontIcon iconLiteral="mdi2c-check:16"/>
+              </StackPane>
+              <Label text="Confirm" styleClass="step-label"/>
+            </VBox>
+          </HBox>
+
+          <ScrollPane styleClass="checkout-scroll" fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+            <VBox spacing="25">
+
+              <!-- Delivery Options (for products) -->
+              <VBox fx:id="deliverySection" styleClass="checkout-section glass-card" spacing="20">
+                <padding>
+                  <Insets topRightBottomLeft="25"/>
+                </padding>
+
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                  <FontIcon iconLiteral="mdi2t-truck-delivery:22" styleClass="section-icon"/>
+                  <Label text="Delivery Options" styleClass="section-title"/>
+                </HBox>
+
+                <VBox spacing="12">
+                  <HBox styleClass="delivery-option selected" spacing="15" alignment="CENTER_LEFT"
+                        onMouseClicked="#selectPickup">
+                    <RadioButton fx:id="pickupOption" styleClass="option-radio" selected="true">
+                      <toggleGroup>
+                        <ToggleGroup fx:id="deliveryGroup"/>
+                      </toggleGroup>
+                    </RadioButton>
+                    <VBox spacing="3" HBox.hgrow="ALWAYS">
+                      <Label text="Pick up at cinema" styleClass="option-title"/>
+                      <Label text="Ready before your movie starts" styleClass="option-desc"/>
+                    </VBox>
+                    <Label text="FREE" styleClass="option-price free"/>
+                  </HBox>
+
+                  <HBox styleClass="delivery-option" spacing="15" alignment="CENTER_LEFT"
+                        onMouseClicked="#selectDelivery">
+                    <RadioButton fx:id="deliveryOption" styleClass="option-radio">
+                      <toggleGroup>
+                        <fx:reference source="deliveryGroup"/>
+                      </toggleGroup>
+                    </RadioButton>
+                    <VBox spacing="3" HBox.hgrow="ALWAYS">
+                      <Label text="Deliver to seat" styleClass="option-title"/>
+                      <Label text="We'll bring it to you during the movie" styleClass="option-desc"/>
+                    </VBox>
+                    <Label text="+$2.99" styleClass="option-price"/>
+                  </HBox>
+                </VBox>
+              </VBox>
+
+              <!-- Contact Information -->
+              <VBox styleClass="checkout-section glass-card" spacing="20">
+                <padding>
+                  <Insets topRightBottomLeft="25"/>
+                </padding>
+
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                  <FontIcon iconLiteral="mdi2a-account:22" styleClass="section-icon"/>
+                  <Label text="Contact Information" styleClass="section-title"/>
+                </HBox>
+
+                <HBox spacing="20">
+                  <VBox spacing="8" HBox.hgrow="ALWAYS">
+                    <Label text="Full Name" styleClass="field-label"/>
+                    <TextField fx:id="nameField" styleClass="glass-input" promptText="Enter your name"/>
+                  </VBox>
+                  <VBox spacing="8" HBox.hgrow="ALWAYS">
+                    <Label text="Email" styleClass="field-label"/>
+                    <TextField fx:id="emailField" styleClass="glass-input" promptText="your@email.com"/>
+                  </VBox>
+                </HBox>
+
+                <VBox spacing="8">
+                  <Label text="Phone Number" styleClass="field-label"/>
+                  <TextField fx:id="phoneField" styleClass="glass-input" promptText="+1 (555) 000-0000"/>
+                </VBox>
+              </VBox>
+
+              <!-- Payment Method -->
+              <VBox styleClass="checkout-section glass-card" spacing="20">
+                <padding>
+                  <Insets topRightBottomLeft="25"/>
+                </padding>
+
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                  <FontIcon iconLiteral="mdi2c-credit-card:22" styleClass="section-icon"/>
+                  <Label text="Payment Method" styleClass="section-title"/>
+                </HBox>
+
+                <!-- Payment Method Tabs -->
+                <HBox styleClass="payment-tabs" spacing="0">
+                  <ToggleButton fx:id="cardTab" styleClass="payment-tab active" text="Card" onAction="#showCardPayment">
+                    <graphic>
+                      <FontIcon iconLiteral="mdi2c-credit-card:16"/>
+                    </graphic>
+                  </ToggleButton>
+                  <ToggleButton fx:id="paypalTab" styleClass="payment-tab" text="PayPal" onAction="#showPaypalPayment">
+                    <graphic>
+                      <FontIcon iconLiteral="mdi2p-paypal:16"/>
+                    </graphic>
+                  </ToggleButton>
+                  <ToggleButton fx:id="applePayTab" styleClass="payment-tab" text="Apple Pay"
+                                onAction="#showApplePayPayment">
+                    <graphic>
+                      <FontIcon iconLiteral="mdi2a-apple:16"/>
+                    </graphic>
+                  </ToggleButton>
+                </HBox>
+
+                <!-- Card Payment Form -->
+                <VBox fx:id="cardPaymentForm" spacing="15">
+                  <VBox spacing="8">
+                    <Label text="Card Number" styleClass="field-label"/>
+                    <HBox styleClass="card-input-container" alignment="CENTER_LEFT">
+                      <TextField fx:id="cardNumberField" styleClass="card-input" promptText="1234 5678 9012 3456"
+                                 HBox.hgrow="ALWAYS"/>
+                      <HBox spacing="8" styleClass="card-icons">
+                        <FontIcon iconLiteral="mdi2c-credit-card:20"/>
+                      </HBox>
+                    </HBox>
+                  </VBox>
+
+                  <HBox spacing="20">
+                    <VBox spacing="8" HBox.hgrow="ALWAYS">
+                      <Label text="Expiry Date" styleClass="field-label"/>
+                      <TextField fx:id="expiryField" styleClass="glass-input" promptText="MM/YY"/>
+                    </VBox>
+                    <VBox spacing="8" HBox.hgrow="ALWAYS">
+                      <Label text="CVV" styleClass="field-label"/>
+                      <TextField fx:id="cvvField" styleClass="glass-input" promptText="123"/>
+                    </VBox>
+                  </HBox>
+
+                  <VBox spacing="8">
+                    <Label text="Cardholder Name" styleClass="field-label"/>
+                    <TextField fx:id="cardholderField" styleClass="glass-input" promptText="Name on card"/>
+                  </VBox>
+
+                  <CheckBox fx:id="saveCardCheck" styleClass="glass-checkbox" text="Save card for future purchases"/>
+                </VBox>
+
+                <!-- PayPal Form (hidden by default) -->
+                <VBox fx:id="paypalPaymentForm" spacing="15" visible="false" managed="false">
+                  <Label text="You will be redirected to PayPal to complete your payment" styleClass="payment-note"/>
+                  <Button styleClass="paypal-btn" text="Continue with PayPal" maxWidth="1.7976931348623157E308">
+                    <graphic>
+                      <FontIcon iconLiteral="mdi2p-paypal:20"/>
+                    </graphic>
+                  </Button>
+                </VBox>
+
+                <!-- Apple Pay Form (hidden by default) -->
+                <VBox fx:id="applePayPaymentForm" spacing="15" visible="false" managed="false">
+                  <Label text="Complete payment with Apple Pay" styleClass="payment-note"/>
+                  <Button styleClass="apple-pay-btn" text="Pay with Apple Pay" maxWidth="1.7976931348623157E308">
+                    <graphic>
+                      <FontIcon iconLiteral="mdi2a-apple:20"/>
+                    </graphic>
+                  </Button>
+                </VBox>
+              </VBox>
+
+              <!-- Promo Code -->
+              <VBox styleClass="checkout-section glass-card" spacing="15">
+                <padding>
+                  <Insets topRightBottomLeft="25"/>
+                </padding>
+
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                  <FontIcon iconLiteral="mdi2t-tag:22" styleClass="section-icon"/>
+                  <Label text="Promo Code" styleClass="section-title"/>
+                </HBox>
+
+                <HBox spacing="10">
+                  <TextField fx:id="promoCodeField" styleClass="glass-input" promptText="Enter promo code"
+                             HBox.hgrow="ALWAYS"/>
+                  <Button onAction="#applyPromoCode" styleClass="apply-promo-btn" text="Apply"/>
+                </HBox>
+                <Label fx:id="promoMessage" styleClass="promo-message" visible="false"/>
+              </VBox>
+            </VBox>
+          </ScrollPane>
+        </VBox>
+
+        <!-- Order Summary Sidebar -->
+        <VBox styleClass="order-summary glass-card" spacing="20" prefWidth="380">
+          <padding>
+            <Insets topRightBottomLeft="25"/>
+          </padding>
+
+          <Label text="Order Summary" styleClass="summary-title"/>
+
+          <!-- Cart Items -->
+          <ScrollPane styleClass="cart-items-scroll" fitToWidth="true" maxHeight="300">
+            <VBox fx:id="cartItemsContainer" spacing="15"/>
+          </ScrollPane>
+
+          <Separator styleClass="summary-separator"/>
+
+          <!-- Price Breakdown -->
+          <VBox spacing="12" styleClass="price-breakdown">
+            <HBox alignment="CENTER_LEFT">
+              <Label text="Subtotal" styleClass="price-label"/>
+              <Region HBox.hgrow="ALWAYS"/>
+              <Label fx:id="subtotalLabel" text="$0.00" styleClass="price-value"/>
+            </HBox>
+            <HBox alignment="CENTER_LEFT">
+              <Label text="Delivery" styleClass="price-label"/>
+              <Region HBox.hgrow="ALWAYS"/>
+              <Label fx:id="deliveryLabel" text="FREE" styleClass="price-value"/>
+            </HBox>
+            <HBox fx:id="discountRow" alignment="CENTER_LEFT" visible="false" managed="false">
+              <Label text="Discount" styleClass="price-label discount"/>
+              <Region HBox.hgrow="ALWAYS"/>
+              <Label fx:id="discountLabel" text="-$0.00" styleClass="price-value discount"/>
+            </HBox>
+            <HBox alignment="CENTER_LEFT">
+              <Label text="Tax" styleClass="price-label"/>
+              <Region HBox.hgrow="ALWAYS"/>
+              <Label fx:id="taxLabel" text="$0.00" styleClass="price-value"/>
+            </HBox>
+          </VBox>
+
+          <Separator styleClass="summary-separator"/>
+
+          <HBox alignment="CENTER_LEFT" styleClass="total-row">
+            <Label text="Total" styleClass="total-label"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="totalLabel" text="$0.00" styleClass="total-value"/>
+          </HBox>
+
+          <!-- Security Note -->
+          <HBox styleClass="security-note" spacing="10" alignment="CENTER_LEFT">
+            <FontIcon iconLiteral="mdi2l-lock:18"/>
+            <Label text="Secure SSL encrypted payment" styleClass="security-text"/>
+          </HBox>
+
+          <!-- Place Order Button -->
+          <Button fx:id="placeOrderBtn" onAction="#placeOrder" styleClass="place-order-btn" text="Place Order"
+                  maxWidth="1.7976931348623157E308">
+            <graphic>
+              <FontIcon iconLiteral="mdi2c-check:20"/>
+            </graphic>
+          </Button>
+
+          <!-- Terms -->
+          <Label text="By placing this order, you agree to our Terms of Service and Privacy Policy"
+                 styleClass="terms-text" wrapText="true"/>
+        </VBox>
+      </HBox>
+    </center>
+  </BorderPane>
+
+  <!-- Processing Overlay -->
+  <VBox fx:id="processingOverlay" styleClass="processing-overlay" visible="false" managed="false" alignment="CENTER">
+    <VBox styleClass="processing-card" alignment="CENTER" spacing="20">
+      <ProgressIndicator styleClass="processing-spinner"/>
+      <Label text="Processing your order..." styleClass="processing-text"/>
+      <Label text="Please don't close this window" styleClass="processing-subtext"/>
+    </VBox>
+  </VBox>
+</StackPane>

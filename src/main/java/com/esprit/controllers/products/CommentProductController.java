@@ -1,23 +1,13 @@
 package com.esprit.controllers.products;
 
-import java.io.IOException;
-import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import com.esprit.models.products.Comment;
+import com.esprit.models.common.Review;
 import com.esprit.models.products.Product;
 import com.esprit.models.users.Client;
-import com.esprit.services.products.CommentService;
+import com.esprit.services.common.ReviewService;
 import com.esprit.services.products.ProductService;
 import com.esprit.services.users.UserService;
 import com.esprit.utils.Chat;
-
+import com.esprit.utils.PageRequest;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -35,12 +25,22 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * Controller class for managing product comments in the RAKCHA application.
  * This controller handles the display of existing comments and provides
  * functionality
  * for users to add new comments.
- * 
+ *
  * <p>
  * The controller provides validation for comments, checking for inappropriate
  * content
@@ -54,6 +54,7 @@ import javafx.stage.Stage;
  * @since 1.0.0
  */
 public class CommentProductController implements Initializable {
+
     private static final Logger LOGGER = Logger.getLogger(CommentProductController.class.getName());
     private final Chat chat = new Chat();
     @FXML
@@ -78,7 +79,7 @@ public class CommentProductController implements Initializable {
             // Convertir la chaîne de texte en objet Date
             final String dateString = this.monCommentaitreText.getText();
             final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // ajustez le format selon vos
-                                                                                    // besoins
+            // besoins
             final Date datecommantaire = dateFormat.parse(dateString);
             // Affichez la date pour vérification
             CommentProductController.LOGGER.info("datecommantaire: " + datecommantaire);
@@ -91,12 +92,11 @@ public class CommentProductController implements Initializable {
                 alert.setTitle("Comment non valide");
                 alert.setContentText("Votre comment contient des gros mots et ne peut pas être publié.");
                 alert.showAndWait();
-            }
- else {
+            } else {
                 // Créez un objet Comment
-                final Comment comment = new Comment((Client) new UserService().getUserById(4L), userMessage,
-                        produitService.getProductById(produit.getId()));
-                final CommentService commentService = new CommentService();
+                final Review comment = new Review((Client) new UserService().getUserById(4L), userMessage,
+                    produitService.getProductById(produit.getId()));
+                final ReviewService commentService = new ReviewService();
                 // Ajoutez le comment à la base de données
                 commentService.create(comment);
                 // Mettez à jour l'interface utilisateur
@@ -129,16 +129,16 @@ public class CommentProductController implements Initializable {
 
     /**
      * Load and display accepted comments in the CommentFlowPane.
-     *
+     * <p>
      * Retrieves comments from CommentService, creates a UI card for each comment via
      * createcommentcard(Comment), and adds those cards to the CommentFlowPane.
      */
     private void loadAcceptedComment() {
         // Récupérer toutes les produits depuis le service
-        final CommentService commentservices = new CommentService();
-        final List<Comment> comments = commentservices.read();
+        final ReviewService commentservices = new ReviewService();
+        final List<Review> comments = commentservices.read(new PageRequest(0, 10)).getContent();
         // Créer une carte pour chaque produit et l'ajouter à la FlowPane
-        for (final Comment comm : comments) {
+        for (final Review comm : comments) {
             final HBox cardContainer = this.createcommentcard(comm);
             this.CommentFlowPane.getChildren().add(cardContainer);
         }
@@ -152,14 +152,14 @@ public class CommentProductController implements Initializable {
      * @param comm the Comment to render; the client's first and last name and the comment text are used
      * @return an HBox whose children form a styled card showing the comment author's name and the comment text
      */
-    public HBox createcommentcard(final Comment comm) {
+    public HBox createcommentcard(final Review comm) {
         // Créer une VBox pour chaque comment
         final HBox commentVBox = new HBox();
         commentVBox.setStyle("-fx-padding: 5px 0 0 10px");
         final AnchorPane card = new AnchorPane();
         card.setPrefWidth(200);
         // Nom de l'auteur
-        final Label nomLabel = new Label(comm.getClient().getFirstName() + " " + comm.getClient().getLastName() + ":");
+        final Label nomLabel = new Label(comm.getUser().getFirstName() + " " + comm.getUser().getLastName() + ":");
         nomLabel.setStyle("-fx-font-weight: bold");
         nomLabel.setFont(Font.font("Verdana", 15));
         nomLabel.setStyle("-fx-text-fill: black;");
@@ -169,7 +169,7 @@ public class CommentProductController implements Initializable {
         nomLabel.setMaxWidth(300);
         nomLabel.setWrapText(true);
         // Contenu du comment
-        final Label commentLabel = new Label(comm.getCommentText());
+        final Label commentLabel = new Label(comm.getComment());
         commentLabel.setFont(Font.font("Arial", 12));
         commentLabel.setTextFill(Color.web("black"));
         commentLabel.setPrefWidth(230);
@@ -210,7 +210,7 @@ public class CommentProductController implements Initializable {
             currentStage.close();
         } catch (final IOException e) {
             CommentProductController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
-                                                                                  // d'entrée/sortie
+            // d'entrée/sortie
         }
 
     }
@@ -226,7 +226,7 @@ public class CommentProductController implements Initializable {
         try {
             // Charger la nouvelle interface ShoppingCartProduct.fxml
             final FXMLLoader loader = new FXMLLoader(
-                    this.getClass().getResource("/ui//ui/AffichageEvenementClient.fxml"));
+                this.getClass().getResource("/ui//ui/AffichageEvenementClient.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -241,7 +241,7 @@ public class CommentProductController implements Initializable {
             currentStage.close();
         } catch (final IOException e) {
             CommentProductController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
-                                                                                  // d'entrée/sortie
+            // d'entrée/sortie
         }
 
     }
@@ -257,7 +257,7 @@ public class CommentProductController implements Initializable {
         try {
             // Charger la nouvelle interface ShoppingCartProduct.fxml
             final FXMLLoader loader = new FXMLLoader(
-                    this.getClass().getResource("/ui/produits/AfficherProductClient.fxml"));
+                this.getClass().getResource("/ui/produits/AfficherProductClient.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -272,7 +272,7 @@ public class CommentProductController implements Initializable {
             currentStage.close();
         } catch (final IOException e) {
             CommentProductController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
-                                                                                  // d'entrée/sortie
+            // d'entrée/sortie
         }
 
     }
@@ -280,7 +280,7 @@ public class CommentProductController implements Initializable {
 
     /**
      * No-op handler for client profile action.
-     *
+     * <p>
      * Currently a placeholder and performs no action.
      */
     @FXML
@@ -312,7 +312,7 @@ public class CommentProductController implements Initializable {
             currentStage.close();
         } catch (final IOException e) {
             CommentProductController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
-                                                                                  // d'entrée/sortie
+            // d'entrée/sortie
         }
 
     }
@@ -342,7 +342,7 @@ public class CommentProductController implements Initializable {
             currentStage.close();
         } catch (final IOException e) {
             CommentProductController.LOGGER.log(Level.SEVERE, e.getMessage(), e); // Gérer l'exception
-                                                                                  // d'entrée/sortie
+            // d'entrée/sortie
         }
 
     }

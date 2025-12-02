@@ -1,0 +1,553 @@
+/* Booking Screens CSS Styles */
+
+/* ===== MOVIE SESSION BROWSER STYLES ===== */
+
+/* Hero Filter Section */
+.filter-hero {
+    -fx-background-color: rgba(30, 30, 35, 0.9);
+    -fx-background-radius: 20;
+    -fx-padding: 30;
+}
+
+.hero-title {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.hero-subtitle {
+    -fx-font-size: 16px;
+    -fx-text-fill: rgba(255, 255, 255, 0.6);
+}
+
+/* Filter Bar */
+.filter-bar {
+    -fx-spacing: 16;
+}
+
+.filter-group {
+    -fx-spacing: 8;
+}
+
+.filter-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: rgba(255, 255, 255, 0.6);
+    -fx-text-transform: uppercase;
+}
+
+.filter-dropdown {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 10;
+    -fx-padding: 12 16;
+    -fx-font-size: 14px;
+    -fx-pref-width: 180;
+}
+
+.date-picker-custom {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 10;
+    -fx-padding: 12 16;
+    -fx-font-size: 14px;
+}
+
+.search-field {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 10;
+    -fx-padding: 12 16;
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: rgba(255, 255, 255, 0.4);
+    -fx-pref-width: 280;
+}
+
+.search-field:focused {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-border-color: rgba(220, 38, 38, 0.4);
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+}
+
+/* Quick Filter Chips */
+.quick-filters {
+    -fx-spacing: 10;
+}
+
+.filter-chip {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-background-radius: 20;
+    -fx-padding: 8 16;
+    -fx-font-size: 13px;
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
+    -fx-cursor: hand;
+}
+
+.filter-chip:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.12);
+}
+
+.filter-chip.active {
+    -fx-background-color: rgba(220, 38, 38, 0.3);
+    -fx-text-fill: white;
+}
+
+/* Sessions Grid */
+.sessions-scroll {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+}
+
+.sessions-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+.sessions-grid {
+    -fx-hgap: 24;
+    -fx-vgap: 24;
+    -fx-padding: 20;
+}
+
+/* Session Card */
+.session-card {
+    -fx-background-color: rgba(30, 30, 35, 0.9);
+    -fx-background-radius: 16;
+    -fx-cursor: hand;
+    -fx-min-width: 320;
+    -fx-max-width: 360;
+}
+
+.session-card:hover {
+    -fx-background-color: rgba(40, 40, 45, 0.95);
+    -fx-effect: dropshadow(gaussian, rgba(220, 38, 38, 0.2), 20, 0, 0, 5);
+}
+
+.session-poster {
+    -fx-min-height: 180;
+    -fx-background-radius: 16 16 0 0;
+}
+
+.session-gradient {
+    -fx-background-color: linear-gradient(to top, rgba(20, 20, 25, 1) 0%, rgba(20, 20, 25, 0.7) 40%, transparent 100%);
+    -fx-background-radius: 16 16 0 0;
+}
+
+.format-badges {
+    -fx-spacing: 6;
+}
+
+.format-badge {
+    -fx-background-color: rgba(0, 0, 0, 0.7);
+    -fx-background-radius: 6;
+    -fx-padding: 4 8;
+}
+
+.format-badge.imax {
+    -fx-background-color: rgba(16, 146, 209, 0.9);
+}
+
+.format-badge.dolby {
+    -fx-background-color: rgba(255, 0, 64, 0.9);
+}
+
+.format-badge.threeD {
+    -fx-background-color: rgba(245, 158, 11, 0.9);
+}
+
+.format-badge .label {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.session-content {
+    -fx-padding: 20;
+}
+
+.movie-title-card {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.movie-genre {
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+}
+
+.movie-duration {
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+}
+
+/* Session Times */
+.session-times {
+    -fx-spacing: 12;
+}
+
+.session-info {
+    -fx-spacing: 8;
+}
+
+.cinema-name {
+    -fx-font-size: 13px;
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
+}
+
+.cinema-name .ikonli-font-icon {
+    -fx-icon-color: #dc2626;
+}
+
+.time-slots {
+    -fx-hgap: 8;
+    -fx-vgap: 8;
+}
+
+.time-slot {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 8;
+    -fx-padding: 8 14;
+    -fx-cursor: hand;
+}
+
+.time-slot:hover {
+    -fx-background-color: rgba(220, 38, 38, 0.3);
+}
+
+.time-slot.selected {
+    -fx-background-color: #dc2626;
+}
+
+.time-slot .time {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.time-slot .seats {
+    -fx-font-size: 10px;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+}
+
+.time-slot.low-availability .seats {
+    -fx-text-fill: #f59e0b;
+}
+
+.time-slot.sold-out {
+    -fx-background-color: rgba(75, 85, 99, 0.4);
+    -fx-cursor: not-allowed;
+}
+
+.time-slot.sold-out .time {
+    -fx-text-fill: rgba(255, 255, 255, 0.3);
+}
+
+.time-slot.sold-out .seats {
+    -fx-text-fill: #ef4444;
+}
+
+/* View Details Button */
+.view-details-btn {
+    -fx-background-color: transparent;
+    -fx-border-color: rgba(220, 38, 38, 0.5);
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+    -fx-text-fill: #dc2626;
+    -fx-font-size: 13px;
+    -fx-padding: 10 20;
+    -fx-cursor: hand;
+}
+
+.view-details-btn:hover {
+    -fx-background-color: rgba(220, 38, 38, 0.1);
+}
+
+/* ===== MOVIE SESSION DETAILS STYLES ===== */
+
+/* Details Hero */
+.details-hero {
+    -fx-min-height: 400;
+}
+
+.details-backdrop {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 20, 0, 0, 0);
+}
+
+.details-gradient {
+    -fx-background-color: linear-gradient(to top, rgba(12, 12, 15, 1) 0%, rgba(12, 12, 15, 0.95) 30%, rgba(12, 12, 15, 0.6) 60%, transparent 100%);
+}
+
+.details-poster {
+    -fx-min-width: 250;
+    -fx-min-height: 375;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 20, 0, 0, 8);
+}
+
+.details-info {
+    -fx-spacing: 16;
+}
+
+.details-title {
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.details-meta {
+    -fx-spacing: 12;
+}
+
+.meta-item {
+    -fx-font-size: 14px;
+    -fx-text-fill: rgba(255, 255, 255, 0.7);
+}
+
+.meta-separator {
+    -fx-text-fill: rgba(255, 255, 255, 0.3);
+}
+
+.details-rating {
+    -fx-spacing: 4;
+}
+
+.details-rating .ikonli-font-icon {
+    -fx-icon-color: #f59e0b;
+}
+
+.rating-value {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.details-description {
+    -fx-font-size: 15px;
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
+    -fx-line-spacing: 4;
+}
+
+/* Booking Section */
+.booking-section {
+    -fx-background-color: rgba(30, 30, 35, 0.95);
+    -fx-background-radius: 20;
+    -fx-padding: 30;
+}
+
+.section-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+/* Date Selector */
+.date-selector {
+    -fx-spacing: 10;
+}
+
+.date-card {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-background-radius: 14;
+    -fx-padding: 16 20;
+    -fx-cursor: hand;
+    -fx-min-width: 80;
+}
+
+.date-card:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.12);
+}
+
+.date-card.selected {
+    -fx-background-color: rgba(220, 38, 38, 0.3);
+    -fx-border-color: #dc2626;
+    -fx-border-radius: 14;
+    -fx-border-width: 2;
+}
+
+.date-day {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+    -fx-text-transform: uppercase;
+}
+
+.date-number {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.date-month {
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(255, 255, 255, 0.6);
+}
+
+.date-card.selected .date-day,
+.date-card.selected .date-month {
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
+}
+
+/* Cinema & Hall Selector */
+.cinema-selector {
+    -fx-background-color: rgba(35, 35, 40, 0.8);
+    -fx-background-radius: 14;
+    -fx-padding: 20;
+}
+
+.cinema-header {
+    -fx-spacing: 12;
+}
+
+.cinema-name-large {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.cinema-address {
+    -fx-font-size: 13px;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+}
+
+.hall-tabs {
+    -fx-spacing: 8;
+}
+
+.hall-tab {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-background-radius: 10;
+    -fx-padding: 10 18;
+    -fx-cursor: hand;
+}
+
+.hall-tab:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.12);
+}
+
+.hall-tab.selected {
+    -fx-background-color: rgba(220, 38, 38, 0.3);
+}
+
+.hall-name {
+    -fx-font-size: 13px;
+    -fx-text-fill: white;
+}
+
+.hall-features {
+    -fx-spacing: 4;
+}
+
+.feature-badge {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 6;
+    -fx-padding: 2 6;
+}
+
+.feature-badge .label {
+    -fx-font-size: 9px;
+    -fx-text-fill: rgba(255, 255, 255, 0.6);
+}
+
+/* Showtime Grid */
+.showtime-grid {
+    -fx-hgap: 12;
+    -fx-vgap: 12;
+}
+
+.showtime-btn {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 12;
+    -fx-padding: 14 20;
+    -fx-cursor: hand;
+    -fx-min-width: 100;
+}
+
+.showtime-btn:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+}
+
+.showtime-btn.selected {
+    -fx-background-color: linear-gradient(135deg, #dc2626, #b91c1c);
+    -fx-effect: dropshadow(gaussian, rgba(220, 38, 38, 0.4), 10, 0, 0, 2);
+}
+
+.showtime-time {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.showtime-format {
+    -fx-font-size: 11px;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+}
+
+.showtime-price {
+    -fx-font-size: 13px;
+    -fx-text-fill: #22c55e;
+}
+
+.availability-indicator {
+    -fx-min-width: 8;
+    -fx-min-height: 8;
+    -fx-background-radius: 4;
+}
+
+.availability-indicator.high {
+    -fx-background-color: #22c55e;
+}
+
+.availability-indicator.medium {
+    -fx-background-color: #f59e0b;
+}
+
+.availability-indicator.low {
+    -fx-background-color: #ef4444;
+}
+
+/* Book Button */
+.book-btn {
+    -fx-background-color: linear-gradient(135deg, #dc2626, #b91c1c);
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 16 48;
+    -fx-background-radius: 12;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(220, 38, 38, 0.4), 15, 0, 0, 4);
+}
+
+.book-btn:hover {
+    -fx-background-color: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.book-btn:disabled {
+    -fx-opacity: 0.5;
+}
+
+/* Summary Card */
+.booking-summary {
+    -fx-background-color: rgba(40, 40, 45, 0.8);
+    -fx-background-radius: 14;
+    -fx-padding: 20;
+}
+
+.summary-row {
+    -fx-spacing: 16;
+}
+
+.summary-label {
+    -fx-font-size: 13px;
+    -fx-text-fill: rgba(255, 255, 255, 0.6);
+}
+
+.summary-value {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.total-price {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #dc2626;
+}

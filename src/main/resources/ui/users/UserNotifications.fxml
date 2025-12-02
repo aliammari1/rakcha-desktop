@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import org.kordamp.ikonli.javafx.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21"
+           fx:controller="com.esprit.controllers.users.UserNotificationsController"
+           styleClass="immersive-root"
+           stylesheets="@../styles/filmStyle.css, @../styles/notifications.css">
+
+  <!-- Background -->
+  <AnchorPane styleClass="cinematic-bg">
+    <Circle radius="180" layoutX="120" layoutY="180" styleClass="ambient-orb orb-primary" opacity="0.12"/>
+    <Circle radius="220" layoutX="1050" layoutY="450" styleClass="ambient-orb orb-secondary" opacity="0.08"/>
+  </AnchorPane>
+
+  <BorderPane styleClass="main-shell">
+    <left>
+      <fx:include source="../sidebar.fxml"/>
+    </left>
+
+    <center>
+      <VBox spacing="0" styleClass="film-explorer">
+
+        <!-- Header -->
+        <HBox styleClass="immersive-header" alignment="CENTER_LEFT" spacing="20" prefHeight="80">
+          <padding>
+            <Insets top="15" bottom="15" left="25" right="25"/>
+          </padding>
+
+          <VBox spacing="2">
+            <HBox spacing="10" alignment="CENTER_LEFT">
+              <Label text="NOTIFICATIONS" styleClass="brand-title"/>
+              <Label fx:id="unreadBadge" styleClass="unread-badge" text="3"/>
+            </HBox>
+            <Label text="Stay updated with your activity" styleClass="brand-subtitle"/>
+          </VBox>
+
+          <Region HBox.hgrow="ALWAYS"/>
+
+          <Button onAction="#markAllRead" styleClass="glass-btn" text="Mark All Read">
+            <graphic>
+              <FontIcon iconLiteral="mdi2c-check-all:18"/>
+            </graphic>
+          </Button>
+          <Button onAction="#openSettings" styleClass="glass-btn">
+            <graphic>
+              <FontIcon iconLiteral="mdi2c-cog:20"/>
+            </graphic>
+          </Button>
+        </HBox>
+
+        <!-- Filter Tabs -->
+        <HBox styleClass="filter-tabs" spacing="0">
+          <padding>
+            <Insets left="25" right="25"/>
+          </padding>
+
+          <ToggleButton fx:id="allToggle" styleClass="filter-tab active" text="All" onAction="#filterAll"/>
+          <ToggleButton fx:id="bookingsToggle" styleClass="filter-tab" text="Bookings" onAction="#filterBookings"/>
+          <ToggleButton fx:id="socialToggle" styleClass="filter-tab" text="Social" onAction="#filterSocial"/>
+          <ToggleButton fx:id="promotionsToggle" styleClass="filter-tab" text="Promotions" onAction="#filterPromotions"/>
+          <ToggleButton fx:id="systemToggle" styleClass="filter-tab" text="System" onAction="#filterSystem"/>
+
+          <Region HBox.hgrow="ALWAYS"/>
+
+          <Button onAction="#clearAll" styleClass="clear-btn" text="Clear All">
+            <graphic>
+              <FontIcon iconLiteral="mdi2d-delete-sweep:16"/>
+            </graphic>
+          </Button>
+          
+          <ProgressIndicator fx:id="loadingIndicator" prefWidth="30" prefHeight="30" visible="false"/>
+        </HBox>
+
+        <!-- Combo box for filtering -->
+        <HBox alignment="CENTER_LEFT" spacing="15">
+          <padding>
+            <Insets left="25" right="25" top="10" bottom="10"/>
+          </padding>
+          <ComboBox fx:id="filterCombo" styleClass="filter-combo" prefWidth="200"/>
+        </HBox>
+
+        <!-- Notifications List -->
+        <ScrollPane styleClass="main-scroll" fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+          <VBox fx:id="notificationsList" spacing="0" styleClass="notifications-list">
+            <padding>
+              <Insets top="10" bottom="40" left="25" right="25"/>
+            </padding>
+          </VBox>
+        </ScrollPane>
+
+        <!-- Empty State -->
+        <VBox fx:id="emptyStateBox" alignment="CENTER" spacing="20" visible="false" managed="false">
+          <padding>
+            <Insets top="80"/>
+          </padding>
+          <FontIcon iconLiteral="mdi2b-bell-off:80" styleClass="empty-icon"/>
+          <Label text="No notifications" styleClass="empty-title"/>
+          <Label text="You're all caught up!" styleClass="empty-desc"/>
+        </VBox>
+      </VBox>
+    </center>
+  </BorderPane>
+
+  <!-- Notification Detail Panel -->
+  <HBox fx:id="detailPanel" styleClass="detail-panel" visible="false" managed="false" alignment="CENTER_RIGHT">
+    <VBox styleClass="detail-content" prefWidth="400" spacing="20">
+      <padding>
+        <Insets top="25" right="25" bottom="25" left="25"/>
+      </padding>
+
+      <HBox alignment="CENTER_LEFT" spacing="15">
+        <Label fx:id="detailTitle" styleClass="detail-title" HBox.hgrow="ALWAYS"/>
+        <Button onAction="#closeDetail" styleClass="close-btn">
+          <graphic>
+            <FontIcon iconLiteral="mdi2c-close:20"/>
+          </graphic>
+        </Button>
+      </HBox>
+
+      <Label fx:id="detailTime" styleClass="detail-time"/>
+      <Label fx:id="detailMessage" styleClass="detail-message" wrapText="true"/>
+
+      <ImageView fx:id="detailImage" fitWidth="350" preserveRatio="true" styleClass="detail-image"/>
+
+      <HBox fx:id="detailActions" spacing="15" styleClass="detail-actions"/>
+    </VBox>
+  </HBox>
+</StackPane>

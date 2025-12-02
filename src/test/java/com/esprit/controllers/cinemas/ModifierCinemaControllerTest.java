@@ -1,6 +1,10 @@
 package com.esprit.controllers.cinemas;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import com.esprit.utils.TestFXBase;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
@@ -8,15 +12,11 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.Timeout;
-import java.util.concurrent.TimeUnit;
 import org.testfx.framework.junit5.Start;
 
-import com.esprit.utils.TestFXBase;
+import java.util.concurrent.TimeUnit;
 
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.stage.Stage;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Comprehensive test suite for ModifierCinemaController.
@@ -33,14 +33,15 @@ class ModifierCinemaControllerTest extends TestFXBase {
             getClass().getResource("/ui/cinemas/DashboardResponsableCinema.fxml")
         );
         javafx.scene.Parent root = loader.load();
-        
+
         stage.setScene(new javafx.scene.Scene(root, 1280, 700));
         stage.show();
         stage.toFront();
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Cinema Update Tests")
     class CinemaUpdateTests {
 
@@ -64,16 +65,16 @@ class ModifierCinemaControllerTest extends TestFXBase {
 
             TextField nameField = lookup("#cinemaNameField").query();
             assertThat(nameField).isNotNull();
-            
+
             clickOn(nameField).eraseText(20).write("Updated Cinema");
             waitForFxEvents();
-            
+
             assertThat(nameField.getText()).isEqualTo("Updated Cinema");
 
             Button saveButton = lookup("#saveButton").query();
             assertThat(saveButton).isNotNull();
             assertThat(saveButton.isVisible()).isTrue();
-            
+
             clickOn(saveButton);
             waitForFxEvents();
         }
@@ -87,13 +88,13 @@ class ModifierCinemaControllerTest extends TestFXBase {
 
             TextField nameField = lookup("#cinemaNameField").query();
             assertThat(nameField).isNotNull();
-            
+
             clickOn(nameField).eraseText(20);
             waitForFxEvents();
 
             Button saveButton = lookup("#saveButton").query();
             assertThat(saveButton).isNotNull();
-            
+
             clickOn(saveButton);
             waitForFxEvents();
 
@@ -105,7 +106,8 @@ class ModifierCinemaControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Form Validation Tests")
     class FormValidationTests {
 
@@ -117,7 +119,7 @@ class ModifierCinemaControllerTest extends TestFXBase {
 
             TextField addressField = lookup("#addressField").query();
             assertThat(addressField).isNotNull();
-            
+
             clickOn(addressField).write("123 Main St");
             waitForFxEvents();
 
@@ -134,18 +136,19 @@ class ModifierCinemaControllerTest extends TestFXBase {
 
             TextField phoneField = lookup("#phoneField").query();
             assertThat(phoneField).isNotNull();
-            
+
             clickOn(phoneField).write("12345678");
             waitForFxEvents();
 
             assertThat(phoneField.getText()).hasSize(8);
-            assertThat(phoneField.getText()).isEqualTo("12345678");
+            assertThat(phoneField.getText()).isEqualTo(12345678);
         }
 
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Cancel Operation Tests")
     class CancelOperationTests {
 
@@ -158,10 +161,10 @@ class ModifierCinemaControllerTest extends TestFXBase {
             Button cancelButton = lookup("#cancelButton").query();
             assertThat(cancelButton).isNotNull();
             assertThat(cancelButton.isVisible()).isTrue();
-            
+
             clickOn(cancelButton);
             waitForFxEvents();
-            
+
             // Verify button was clicked and no update occurred
             assertThat(cancelButton.isVisible()).isTrue();
         }

@@ -1,11 +1,12 @@
 package com.esprit.controllers.cinemas;
 
 import com.vader.sentiment.analyzer.SentimentAnalyzer;
+
 import java.util.HashMap;
 
 /**
  * Lightweight controller for analyzing text sentiment using VADER algorithm.
- * 
+ *
  * <p>
  * This class uses VADER (Valence Aware Dictionary and sEntiment Reasoner) which
  * is
@@ -13,13 +14,13 @@ import java.util.HashMap;
  * to
  * sentiments expressed in social media, but works well on other domains too.
  * </p>
- * 
+ *
  * <p>
  * VADER uses a combination of qualitative and quantitative measures and doesn't
  * require
  * manual word list definitions. It's much lighter than Stanford CoreNLP.
  * </p>
- * 
+ *
  * @author Esprit Team
  * @version 2.0
  * @since 2.0
@@ -30,7 +31,7 @@ public class SentimentAnalysisController {
 
     /**
      * Construct a SentimentAnalysisController and initialize its internal VADER SentimentAnalyzer.
-     *
+     * <p>
      * The controller is created with a ready-to-use SentimentAnalyzer instance for subsequent sentiment operations.
      */
     public SentimentAnalysisController() {
@@ -64,11 +65,9 @@ public class SentimentAnalysisController {
 
             if (compound >= 0.05) {
                 return "Positive";
-            }
- else if (compound <= -0.05) {
+            } else if (compound <= -0.05) {
                 return "Negative";
-            }
- else {
+            } else {
                 return "Neutral";
             }
 
@@ -85,7 +84,7 @@ public class SentimentAnalysisController {
      * @param text the text to analyze; must not be null
      * @return a string formatted as "<Sentiment> (Compound: <compound>, Pos: <positive>, Neg: <negative>, Neu: <neutral>)" with numeric scores rounded to three decimals
      * @throws IllegalArgumentException if {@code text} is null
-     * @throws RuntimeException if an error occurs during analysis
+     * @throws RuntimeException         if an error occurs during analysis
      */
     public String analyzeSentimentDetailed(final String text) {
         if (text == null) {
@@ -109,17 +108,15 @@ public class SentimentAnalysisController {
             String sentiment;
             if (compound >= 0.05) {
                 sentiment = "Positive";
-            }
- else if (compound <= -0.05) {
+            } else if (compound <= -0.05) {
                 sentiment = "Negative";
-            }
- else {
+            } else {
                 sentiment = "Neutral";
             }
 
 
             return String.format("%s (Compound: %.3f, Pos: %.3f, Neg: %.3f, Neu: %.3f)",
-                    sentiment, compound, positive, negative, neutral);
+                sentiment, compound, positive, negative, neutral);
         } catch (Exception e) {
             throw new RuntimeException("Error analyzing detailed sentiment", e);
         }
@@ -133,7 +130,7 @@ public class SentimentAnalysisController {
      * @param text the input text to analyze; must not be null
      * @return the compound score between -1.0 (negative) and 1.0 (positive)
      * @throws IllegalArgumentException if {@code text} is null
-     * @throws RuntimeException if an error occurs during analysis
+     * @throws RuntimeException         if an error occurs during analysis
      */
     public double getSentimentScore(final String text) {
         if (text == null) {
@@ -163,7 +160,7 @@ public class SentimentAnalysisController {
      * @param text the input text to analyze; must not be null
      * @return a map with keys "compound", "positive", "negative", and "neutral" mapped to their respective float scores
      * @throws IllegalArgumentException if text is null
-     * @throws RuntimeException if an error occurs while performing sentiment analysis
+     * @throws RuntimeException         if an error occurs while performing sentiment analysis
      */
     public HashMap<String, Float> getAllSentimentScores(final String text) {
         if (text == null) {

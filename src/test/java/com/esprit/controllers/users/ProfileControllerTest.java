@@ -1,5 +1,7 @@
 package com.esprit.controllers.users;
 
+import com.esprit.utils.TestFXBase;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
@@ -7,17 +9,14 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.Timeout;
-import java.util.concurrent.TimeUnit;
 import org.testfx.framework.junit5.Start;
 
-import com.esprit.utils.TestFXBase;
-
-import javafx.stage.Stage;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Comprehensive UI tests for ProfileController.
  * Tests profile viewing, editing, and settings management.
- * 
+ *
  * @author RAKCHA Team
  * @version 1.0.0
  */
@@ -31,14 +30,15 @@ class ProfileControllerTest extends TestFXBase {
             getClass().getResource("/ui/users/Profile.fxml")
         );
         javafx.scene.Parent root = loader.load();
-        
+
         stage.setScene(new javafx.scene.Scene(root, 1280, 700));
         stage.show();
         stage.toFront();
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Profile Display Tests")
     class ProfileDisplayTests {
 
@@ -77,7 +77,8 @@ class ProfileControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Profile Edit Tests")
     class ProfileEditTests {
 
@@ -140,7 +141,8 @@ class ProfileControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Photo Upload Tests")
     class PhotoUploadTests {
 
@@ -186,7 +188,8 @@ class ProfileControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Password Change Tests")
     class PasswordChangeTests {
 
@@ -224,7 +227,8 @@ class ProfileControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Account Settings Tests")
     class AccountSettingsTests {
 

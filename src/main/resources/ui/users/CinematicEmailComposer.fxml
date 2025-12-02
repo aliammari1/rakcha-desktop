@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" prefHeight="855.0"
+      prefWidth="1507.0"
+      xmlns="http://javafx.com/javafx/21"
+      fx:controller="com.esprit.controllers.users.MailAdminController">
+
+  <HBox VBox.vgrow="ALWAYS">
+    <!-- SideBar -->
+    <fx:include source="/ui/sidebar.fxml"/>
+
+    <!-- Main Content -->
+    <VBox spacing="20" HBox.hgrow="ALWAYS">
+      <padding>
+        <Insets top="25" right="25" bottom="25" left="25"/>
+      </padding>
+
+      <!-- Header -->
+      <Label text="Email Notifications" styleClass="section-title">
+        <font>
+          <Font name="Arial Rounded MT Bold" size="32.0"/>
+        </font>
+      </Label>
+
+      <!-- Email Form -->
+      <VBox spacing="15" styleClass="bg-white" maxWidth="600.0">
+        <padding>
+          <Insets top="20" right="20" bottom="20" left="20"/>
+        </padding>
+
+        <GridPane vgap="15" hgap="10">
+          <!-- Email Address -->
+          <Label text="Email Address:" GridPane.rowIndex="0" GridPane.columnIndex="0">
+            <font>
+              <Font size="16.0"/>
+            </font>
+          </Label>
+          <TextField fx:id="mailTextField" promptText="Enter recipient email"
+                     GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+          <!-- Subject -->
+          <Label text="Subject:" GridPane.rowIndex="1" GridPane.columnIndex="0">
+            <font>
+              <Font size="16.0"/>
+            </font>
+          </Label>
+          <TextField fx:id="subjectTextField" promptText="Enter email subject"
+                     GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+          <!-- Message -->
+          <Label text="Message:" GridPane.rowIndex="2" GridPane.columnIndex="0">
+            <font>
+              <Font size="16.0"/>
+            </font>
+          </Label>
+          <TextArea fx:id="messageField" promptText="Type your message here..."
+                    prefRowCount="5" wrapText="true"
+                    GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+        </GridPane>
+
+        <!-- Error Label -->
+        <Label fx:id="emailErrorLabel" styleClass="error-label">
+          <font>
+            <Font size="12.0"/>
+          </font>
+        </Label>
+
+        <!-- Action Buttons -->
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+          <Button fx:id="sendButton" onAction="#sendMail" styleClass="primary-button">
+            <graphic>
+              <FontIcon iconLiteral="mdi2s-send"/>
+            </graphic>
+            <text>Send Email</text>
+          </Button>
+          <Button styleClass="secondary-button">
+            <graphic>
+              <FontIcon iconLiteral="mdi2r-refresh"/>
+            </graphic>
+            <text>Clear</text>
+          </Button>
+        </HBox>
+      </VBox>
+
+      <!-- Email History -->
+      <VBox VBox.vgrow="ALWAYS" styleClass="bg-white">
+        <padding>
+          <Insets top="20" right="20" bottom="20" left="20"/>
+        </padding>
+
+        <Label text="Email History" styleClass="subsection-title">
+          <font>
+            <Font name="Arial Bold" size="24.0"/>
+          </font>
+        </Label>
+
+        <TableView fx:id="messageHistory" VBox.vgrow="ALWAYS">
+          <columns>
+            <TableColumn text="Date/Time"/>
+            <TableColumn text="Recipient"/>
+            <TableColumn text="Subject"/>
+            <TableColumn text="Status"/>
+          </columns>
+        </TableView>
+      </VBox>
+    </VBox>
+  </HBox>
+</VBox>

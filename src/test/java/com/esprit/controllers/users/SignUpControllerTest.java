@@ -1,10 +1,12 @@
 package com.esprit.controllers.users;
 
-import java.time.LocalDate;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import com.esprit.utils.TestAssertions;
+import com.esprit.utils.TestDataFactory;
+import com.esprit.utils.TestFXBase;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.input.KeyCode;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
@@ -12,24 +14,21 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.Timeout;
-import java.util.concurrent.TimeUnit;
-import static org.testfx.api.FxAssert.verifyThat;
 import org.testfx.framework.junit5.Start;
+
+import java.time.LocalDate;
+import java.util.concurrent.TimeUnit;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.matcher.base.NodeMatchers.isVisible;
-
-import com.esprit.utils.TestAssertions;
-import com.esprit.utils.TestDataFactory;
-import com.esprit.utils.TestFXBase;
-
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.input.KeyCode;
-import javafx.stage.Stage;
 
 /**
  * Comprehensive UI tests for SignUpController.
  * Tests user registration flow, validation, and form interactions.
- * 
+ * <p>
  * Test Categories:
  * - UI Elements Visibility
  * - Form Validation
@@ -38,7 +37,7 @@ import javafx.stage.Stage;
  * - Date Picker Interaction
  * - Photo Upload
  * - Form Submission
- * 
+ *
  * @author RAKCHA Team
  * @version 1.0.0
  * @since 1.0.0
@@ -53,7 +52,7 @@ class SignUpControllerTest extends TestFXBase {
             getClass().getResource("/ui/users/SignUp.fxml")
         );
         javafx.scene.Parent root = loader.load();
-        
+
         stage.setScene(new javafx.scene.Scene(root, 1280, 700));
         stage.show();
         stage.toFront();
@@ -70,16 +69,16 @@ class SignUpControllerTest extends TestFXBase {
         @DisplayName("Should display all registration form fields")
         void testRegistrationFormElementsVisible() {
             TestAssertions.verifyAllVisible(
-                    "#nomTextField",
-                    "#prenomTextField",
-                    "#emailTextField",
-                    "#passwordTextField",
-                    "#num_telephoneTextField",
-                    "#adresseTextField",
-                    "#dateDeNaissanceDatePicker",
-                    "#roleComboBox",
-                    "#signUpButton",
-                    "#loginButton");
+                "#nomTextField",
+                "#prenomTextField",
+                "#emailTextField",
+                "#passwordTextField",
+                "#num_telephoneTextField",
+                "#adresseTextField",
+                "#dateDeNaissanceDatePicker",
+                "#roleComboBox",
+                "#signUpButton",
+                "#loginButton");
         }
 
 

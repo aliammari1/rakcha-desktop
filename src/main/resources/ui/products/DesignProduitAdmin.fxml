@@ -1,139 +1,200 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.image.*?>
-<?import org.kordamp.ikonli.javafx.FontIcon?>
-<?import java.lang.String?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.*?>
+<?import org.kordamp.ikonli.javafx.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21"
+           fx:controller="com.esprit.controllers.products.DesignProductAdminContoller"
+           styleClass="immersive-root"
+           stylesheets="@../styles/filmStyle.css, @../styles/film-animations.css, @../styles/login-animations.css, @../styles/dashboard.css">
 
-<VBox prefHeight="855.0" prefWidth="1507.0"
-    stylesheets="@../styles/filmStyle.css"
-    xmlns="http://javafx.com/javafx/21"
-    xmlns:fx="http://javafx.com/fxml/1"
-    fx:controller="com.esprit.controllers.produits.DesignProduitAdminContoller">
+  <!-- Cinematic Background with Gradient Mesh -->
+  <AnchorPane fx:id="cinematicBackground" styleClass="cin ematic-bg">
 
-    <HBox VBox.vgrow="ALWAYS">
-        <!-- SideBar -->
-        <fx:include source="/ui/sidebar.fxml" />
+    <!-- Ambient Light Orbs -->
+    <Circle radius="200" layoutX="150" layoutY="150" styleClass="ambient-orb orb-primary" opacity="0.15"/>
+    <Circle radius="300" layoutX="1200" layoutY="600" styleClass="ambient-orb orb-secondary" opacity="0.1"/>
+    <Circle radius="150" layoutX="800" layoutY="100" styleClass="ambient-orb orb-accent" opacity="0.12"/>
 
-        <!-- Main Content -->
-        <VBox spacing="20" HBox.hgrow="ALWAYS">
-            <padding>
-                <Insets top="25" right="25" bottom="25" left="25" />
-            </padding>
+    <!-- Floating Cinema Elements -->
+    <FontIcon iconLiteral="mdi2s-shopping:40" layoutX="100" layoutY="500"
+              styleClass="floating-icon" opacity="0.08"/>
+    <FontIcon iconLiteral="mdi2p-package:35" layoutX="1300" layoutY="300"
+              styleClass="floating-icon" opacity="0.06"/>
+    <FontIcon iconLiteral="mdi2s-star:25" layoutX="400" layoutY="700" styleClass="floating-star" opacity="0.1"/>
+    <FontIcon iconLiteral="mdi2s-star-outline:20" layoutX="950" layoutY="150"
+              styleClass="floating-star" opacity="0.08"/>
+  </AnchorPane>
 
-            <!-- Header Section -->
-            <HBox spacing="15" alignment="CENTER_LEFT">
-                <Label text="Product Management" styleClass="section-title">
-                    <font>
-                        <Font name="Arial Rounded MT Bold" size="32.0" />
-                    </font>
+  <!-- Main Application Shell -->
+  <BorderPane styleClass="main-shell">
+    <left>
+      <fx:include source="/ui/sidebar.fxml"/>
+    </left>
+
+    <center>
+      <!-- Main Content with ScrollPane -->
+      <ScrollPane fitToWidth="true" fitToHeight="true"
+                  hbarPolicy="AS_NEEDED" vbarPolicy="AS_NEEDED"
+                  style="-fx-background-color: transparent; -fx-background: transparent;">
+        <VBox spacing="20" style="-fx-background-color: transparent;">
+          <padding>
+            <Insets top="25" right="25" bottom="25" left="25"/>
+          </padding>
+
+          <!-- Header -->
+          <HBox spacing="15" alignment="CENTER_LEFT" styleClass="immersive-header">
+            <Label text="Product Management" style="-fx-text-fill: white;" styleClass="brand-title">
+              <font>
+                <Font name="Arial Rounded MT Bold" size="32.0"/>
+              </font>
+            </Label>
+            <Region HBox.hgrow="ALWAYS"/>
+            <TextField fx:id="SearchBar" prefHeight="42.0" prefWidth="248.0"
+                       promptText="Search products..." styleClass="search-input"/>
+            <Button mnemonicParsing="false" styleClass="glass-btn">
+              <graphic>
+                <FontIcon iconLiteral="mdi2m-magnify:20"/>
+              </graphic>
+            </Button>
+          </HBox>
+
+          <!-- Content Area -->
+          <HBox spacing="20" VBox.vgrow="ALWAYS">
+            <!-- Left Side - Product Form -->
+            <VBox spacing="15" styleClass="glass-panel" maxWidth="450.0">
+              <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+              </padding>
+
+              <GridPane vgap="15" hgap="10">
+                <columnConstraints>
+                  <ColumnConstraints minWidth="120" prefWidth="120"/>
+                  <ColumnConstraints hgrow="ALWAYS"/>
+                </columnConstraints>
+
+                <!-- Name -->
+                <Label text="Name:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="label-light">
+                  <font>
+                    <Font size="16.0"/>
+                  </font>
                 </Label>
-                <Region HBox.hgrow="ALWAYS" />
-                <TextField fx:id="searchBar" prefHeight="42.0" prefWidth="248.0"
-                    promptText="Search here ......................." />
-                <Button mnemonicParsing="false" styleClass="search-button">
-                    <graphic>
-                        <FontIcon fill="#f5f5f5" iconLiteral="fa-search" />
-                    </graphic>
+                <TextField fx:id="nomP_textFiled" styleClass="text-field-red"
+                           GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                <!-- Description -->
+                <Label text="Description:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="label-light">
+                  <font>
+                    <Font size="16.0"/>
+                  </font>
+                </Label>
+                <TextArea fx:id="descriptionP_textArea" styleClass="text-area-red"
+                          GridPane.rowIndex="1" GridPane.columnIndex="1" prefRowCount="3"/>
+
+                <!-- Category -->
+                <Label text="Category:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="label-light">
+                  <font>
+                    <Font size="16.0"/>
+                  </font>
+                </Label>
+                <ComboBox fx:id="nomC_comboBox" styleClass="combo-box-red"
+                          GridPane.rowIndex="2" GridPane.columnIndex="1" maxWidth="Infinity"/>
+
+                <!-- Price -->
+                <Label text="Price:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="label-light">
+                  <font>
+                    <Font size="16.0"/>
+                  </font>
+                </Label>
+                <TextField fx:id="prix_textFiled" styleClass="text-field-red"
+                           GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                <!-- Stock -->
+                <Label text="Stock:" GridPane.rowIndex="4" GridPane.columnIndex="0" styleClass="label-light">
+                  <font>
+                    <Font size="16.0"/>
+                  </font>
+                </Label>
+                <TextField fx:id="quantiteP_textFiled" styleClass="text-field-red"
+                           GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+                <!-- Image -->
+                <Label text="Image:" GridPane.rowIndex="5" GridPane.columnIndex="0" styleClass="label-light">
+                  <font>
+                    <Font size="16.0"/>
+                  </font>
+                </Label>
+                <VBox spacing="10" GridPane.rowIndex="5" GridPane.columnIndex="1">
+                  <ImageView fx:id="image" fitHeight="150.0" fitWidth="200.0"
+                             pickOnBounds="true" preserveRatio="true"/>
+                  <Button onAction="#importImage" styleClass="secondary-button"
+                          text="Upload Image"/>
+                </VBox>
+              </GridPane>
+
+              <!-- Action Buttons -->
+              <HBox spacing="10" alignment="CENTER">
+                <Button onAction="#ajouter_produit" styleClass="hero-btn primary" text="+ Add Product">
+                  <graphic>
+                    <FontIcon iconLiteral="mdi2p-plus-circle:20"/>
+                  </graphic>
                 </Button>
-                <FontIcon fx:id="idfilter" fill="#9a4141" iconLiteral="fa-filter"
-                    onMouseClicked="#filtrer" />
-            </HBox>
+              </HBox>
 
-            <!-- Content Area -->
-            <HBox spacing="20" VBox.vgrow="ALWAYS">
-                <!-- Left Side - Add Product Form -->
-                <VBox spacing="15" styleClass="bg-white" maxWidth="400.0">
-                    <padding>
-                        <Insets top="20" right="20" bottom="20" left="20" />
-                    </padding>
+              <Separator/>
 
-                    <Label text="Add Product" styleClass="form-title">
-                        <font>
-                            <Font name="Arial Narrow Bold Italic" size="24.0" />
-                        </font>
-                    </Label>
+              <HBox spacing="10" alignment="CENTER">
+                <Button onAction="#modifier" styleClass="secondary-button" text="Edit Selected">
+                  <graphic>
+                    <FontIcon iconLiteral="mdi2p-pencil:16"/>
+                  </graphic>
+                </Button>
+                <Button onAction="#GestionCategorie" styleClass="secondary-button" text="Manage Categories">
+                  <graphic>
+                    <FontIcon iconLiteral="mdi2t-tag-multiple:16"/>
+                  </graphic>
+                </Button>
+              </HBox>
+            </VBox>
 
-                    <GridPane vgap="15" hgap="10">
-                        <!-- Name -->
-                        <Label text="Name:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
-                        <TextField fx:id="nomP_textField" styleClass="text-field-red"
-                            GridPane.rowIndex="0" GridPane.columnIndex="1" />
+            <!-- Right Side - Products List -->
+            <VBox HBox.hgrow="ALWAYS" spacing="15">
+              <TableView fx:id="Product_tableview" VBox.vgrow="ALWAYS" styleClass="table-view-dark">
+                <columns>
+                  <TableColumn fx:id="nomP_tableC" text="Name"/>
+                  <TableColumn fx:id="descriptionP_tableC" text="Description"/>
+                  <TableColumn fx:id="nomCP_tableC" text="Category"/>
+                  <TableColumn fx:id="PrixP_tableC" text="Price"/>
+                  <TableColumn fx:id="quantiteP_tableC" text="Stock"/>
+                  <TableColumn fx:id="image_tableC" text="Image"/>
+                  <TableColumn fx:id="deleteColumn" text="Action"/>
+                </columns>
+              </TableView>
 
-                        <!-- Description -->
-                        <Label text="Description:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
-                        <TextArea fx:id="descriptionP_textArea" styleClass="text-area-red"
-                            GridPane.rowIndex="1" GridPane.columnIndex="1" />
-
-                        <!-- Category -->
-                        <Label text="Category:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
-                        <ComboBox fx:id="categorieP_ComboBox" styleClass="combo-box-red"
-                            GridPane.rowIndex="2" GridPane.columnIndex="1" />
-
-                        <!-- Price -->
-                        <Label text="Price:" GridPane.rowIndex="3" GridPane.columnIndex="0" />
-                        <TextField fx:id="prixP_textField" styleClass="text-field-red"
-                            GridPane.rowIndex="3" GridPane.columnIndex="1" />
-
-                        <!-- Stock -->
-                        <Label text="Stock:" GridPane.rowIndex="4" GridPane.columnIndex="0" />
-                        <TextField fx:id="stockP_textField" styleClass="text-field-red"
-                            GridPane.rowIndex="4" GridPane.columnIndex="1" />
-
-                        <!-- Image -->
-                        <Label text="Image:" GridPane.rowIndex="5" GridPane.columnIndex="0" />
-                        <VBox spacing="10" GridPane.rowIndex="5" GridPane.columnIndex="1">
-                            <ImageView fx:id="imageP_imageView" fitHeight="150.0" fitWidth="200.0"
-                                pickOnBounds="true" preserveRatio="true" />
-                            <Button onAction="#importImage" styleClass="secondary-button"
-                                text="Upload Image" />
-                        </VBox>
-                    </GridPane>
-
-                    <HBox spacing="10" alignment="CENTER">
-                        <Button onAction="#ajouter_produit" styleClass="sale" text="Add" />
-                        <Button onAction="#modifier" styleClass="edit-button" text="Edit" />
-                        <Button onAction="#GestionCategorie" styleClass="nav-button"
-                            text="Categories" />
-                    </HBox>
-                </VBox>
-
-                <!-- Right Side - Products Table -->
-                <VBox HBox.hgrow="ALWAYS">
-                    <TableView fx:id="produit_tableview" VBox.vgrow="ALWAYS" styleClass="table-view">
-                        <columns>
-                            <TableColumn fx:id="nomP_tableC" text="Name" />
-                            <TableColumn fx:id="description_tableC" text="Description" />
-                            <TableColumn fx:id="categorie_tableC" text="Category" />
-                            <TableColumn fx:id="prix_tableC" text="Price" />
-                            <TableColumn fx:id="stock_tableC" text="Stock" />
-                            <TableColumn fx:id="image_tableC" text="Image" />
-                            <TableColumn fx:id="deleteColumn" text="Action" />
-                        </columns>
-                    </TableView>
-
-                    <!-- Statistics Button -->
-                    <Button onAction="#analyser" styleClass="nav-button" text="Show Statistics"
-                        alignment="CENTER">
-                        <VBox.margin>
-                            <Insets top="10" />
-                        </VBox.margin>
-                    </Button>
-                </VBox>
-            </HBox>
+              <!-- Statistics Button -->
+              <Button onAction="#analyser" styleClass="hero-btn primary" text="📊 Show Statistics" alignment="CENTER">
+                <VBox.margin>
+                  <Insets top="10"/>
+                </VBox.margin>
+              </Button>
+            </VBox>
+          </HBox>
         </VBox>
-    </HBox>
+      </ScrollPane>
+    </center>
+  </BorderPane>
 
-    <!-- Filter Dialog -->
-    <AnchorPane fx:id="filterAnchor" visible="false" styleClass="filter-dialog">
-        <VBox spacing="10">
-            <padding>
-                <Insets top="20" right="20" bottom="20" left="20" />
-            </padding>
-            <Button onAction="#filtercinema" styleClass="sale" text="Filter" />
-        </VBox>
-    </AnchorPane>
-</VBox>
+  <!-- Filter Dialog -->
+  <AnchorPane fx:id="filterAnchor" visible="false" styleClass="filter-dialog">
+    <VBox spacing="10">
+      <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+      </padding>
+      <Button onAction="#filtercinema" styleClass="sale" text="Filter"/>
+    </VBox>
+  </AnchorPane>
+</StackPane>

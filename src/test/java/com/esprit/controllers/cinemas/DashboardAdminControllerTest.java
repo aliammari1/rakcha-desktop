@@ -1,10 +1,10 @@
 package com.esprit.controllers.cinemas;
 
-import java.util.concurrent.TimeUnit;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import com.esprit.models.cinemas.Cinema;
+import com.esprit.utils.TestAssertions;
+import com.esprit.utils.TestFXBase;
+import javafx.scene.control.TableView;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -13,23 +13,22 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.Timeout;
-import static org.testfx.api.FxAssert.verifyThat;
 import org.testfx.framework.junit5.Start;
+
+import java.util.concurrent.TimeUnit;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.matcher.base.NodeMatchers.isEnabled;
 import static org.testfx.matcher.base.NodeMatchers.isNotNull;
 import static org.testfx.matcher.base.NodeMatchers.isVisible;
 
-import com.esprit.models.cinemas.Cinema;
-import com.esprit.utils.TestAssertions;
-import com.esprit.utils.TestFXBase;
-
-import javafx.scene.control.TableView;
-import javafx.stage.Stage;
-
 /**
  * Comprehensive UI tests for DashboardAdminController.
  * Tests cinema management, filtering, approval/rejection workflows.
- * 
+ *
  * @author RAKCHA Team
  * @version 1.0.0
  */
@@ -44,11 +43,11 @@ class DashboardAdminControllerTest extends TestFXBase {
             getClass().getResource("/ui/cinemas/DashboardAdminCinema.fxml")
         );
         javafx.scene.Parent root = loader.load();
-        
+
         stage.setScene(new javafx.scene.Scene(root, 1280, 700));
         stage.show();
         stage.toFront();
-        
+
         // Wait for UI to be fully loaded and initialized
         waitForFxEvents();
     }
@@ -64,13 +63,13 @@ class DashboardAdminControllerTest extends TestFXBase {
         @DisplayName("Should display cinema table with all columns")
         void testCinemaTableDisplay() {
             TestAssertions.verifyAllVisible(
-                    "#listCinema",
-                    "#colCinema",
-                    "#colAdresse",
-                    "#colResponsable",
-                    "#colStatut",
-                    "#colLogo",
-                    "#colAction");
+                "#listCinema",
+                "#colCinema",
+                "#colAdresse",
+                "#colResponsable",
+                "#colStatut",
+                "#colLogo",
+                "#colAction");
         }
 
 
@@ -94,9 +93,9 @@ class DashboardAdminControllerTest extends TestFXBase {
             TableView<Cinema> table = lookup("#listCinema").query();
 
             assertTrue(table.getColumns().stream()
-                    .anyMatch(col -> col.getId().contains("Cinema")));
+                .anyMatch(col -> col.getId().contains("Cinema")));
             assertTrue(table.getColumns().stream()
-                    .anyMatch(col -> col.getId().contains("Adresse")));
+                .anyMatch(col -> col.getId().contains("Adresse")));
         }
 
 

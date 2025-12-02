@@ -1,6 +1,15 @@
 package com.esprit.controllers.series;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import com.esprit.utils.TestFXBase;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.PieChart;
+import javafx.scene.chart.XYChart;
+import javafx.scene.control.ComboBox;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
@@ -8,20 +17,11 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.Timeout;
-import java.util.concurrent.TimeUnit;
 import org.testfx.framework.junit5.Start;
 
-import com.esprit.utils.TestFXBase;
+import java.util.concurrent.TimeUnit;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.PieChart;
-import javafx.scene.chart.XYChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.control.ComboBox;
-import javafx.scene.layout.BorderPane;
-import javafx.stage.Stage;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Comprehensive test suite for StatistiqueController.
@@ -40,7 +40,8 @@ class StatistiqueControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Statistics View Tests")
     class StatisticsViewTests {
 
@@ -90,7 +91,8 @@ class StatistiqueControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Bar Chart Tests")
     class BarChartTests {
 
@@ -123,13 +125,13 @@ class StatistiqueControllerTest extends TestFXBase {
 
             BorderPane borderPane = lookup("#borderPane").query();
             assertThat(borderPane.getCenter()).isInstanceOf(BarChart.class);
-            
+
             @SuppressWarnings("unchecked")
             BarChart<String, Number> barChart = (BarChart<String, Number>) borderPane.getCenter();
-            
+
             // Verify bar chart has data
             assertThat(barChart.getData()).isNotEmpty();
-            
+
             // Verify at least one series with data items
             for (XYChart.Series<String, Number> series : barChart.getData()) {
                 assertThat(series.getData()).isNotEmpty();
@@ -151,17 +153,17 @@ class StatistiqueControllerTest extends TestFXBase {
 
             BorderPane borderPane = lookup("#borderPane").query();
             assertThat(borderPane.getCenter()).isInstanceOf(BarChart.class);
-            
+
             @SuppressWarnings("unchecked")
             BarChart<String, Number> barChart = (BarChart<String, Number>) borderPane.getCenter();
-            
+
             // Verify X-axis exists and is a category axis
             assertThat(barChart.getXAxis()).isNotNull();
-            
+
             // Verify X-axis label (if set)
             String xAxisLabel = barChart.getXAxis().getLabel();
             assertThat(xAxisLabel).isNotNull();
-            
+
             // Verify categories have been populated
             assertThat(barChart.getData()).isNotEmpty();
         }
@@ -180,18 +182,18 @@ class StatistiqueControllerTest extends TestFXBase {
 
             BorderPane borderPane = lookup("#borderPane").query();
             assertThat(borderPane.getCenter()).isInstanceOf(BarChart.class);
-            
+
             @SuppressWarnings("unchecked")
             BarChart<String, Number> barChart = (BarChart<String, Number>) borderPane.getCenter();
-            
+
             // Verify Y-axis exists and is numeric
             assertThat(barChart.getYAxis()).isNotNull();
             assertThat(barChart.getYAxis()).isInstanceOf(NumberAxis.class);
-            
+
             // Verify Y-axis label
             String yAxisLabel = barChart.getYAxis().getLabel();
             assertThat(yAxisLabel).isNotNull();
-            
+
             // Verify Y-axis has proper bounds or auto-ranging
             NumberAxis yAxis = (NumberAxis) barChart.getYAxis();
             assertThat(yAxis.getUpperBound()).isGreaterThanOrEqualTo(0);
@@ -211,10 +213,10 @@ class StatistiqueControllerTest extends TestFXBase {
 
             BorderPane borderPane = lookup("#borderPane").query();
             assertThat(borderPane.getCenter()).isInstanceOf(BarChart.class);
-            
+
             @SuppressWarnings("unchecked")
             BarChart<String, Number> barChart = (BarChart<String, Number>) borderPane.getCenter();
-            
+
             // Verify series data contains items with non-null values
             assertThat(barChart.getData()).isNotEmpty();
             for (XYChart.Series<String, Number> series : barChart.getData()) {
@@ -244,10 +246,10 @@ class StatistiqueControllerTest extends TestFXBase {
 
             BorderPane borderPane = lookup("#borderPane").query();
             assertThat(borderPane.getCenter()).isInstanceOf(BarChart.class);
-            
+
             @SuppressWarnings("unchecked")
             BarChart<String, Number> barChart = (BarChart<String, Number>) borderPane.getCenter();
-            
+
             // Verify category count doesn't exceed limit (default: 10)
             int displayLimit = 10;
             assertThat(barChart.getData()).isNotEmpty();
@@ -261,7 +263,8 @@ class StatistiqueControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Pie Chart Tests")
     class PieChartTests {
 
@@ -339,7 +342,8 @@ class StatistiqueControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Chart Switching Tests")
     class ChartSwitchingTests {
 
@@ -392,7 +396,8 @@ class StatistiqueControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Context Menu Tests")
     class ContextMenuTests {
 
@@ -424,7 +429,8 @@ class StatistiqueControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Empty Data Tests")
     class EmptyDataTests {
 
@@ -452,7 +458,8 @@ class StatistiqueControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Data Update Tests")
     class DataUpdateTests {
 

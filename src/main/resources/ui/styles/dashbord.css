@@ -208,9 +208,9 @@
     -fx-background-insets: 0, 0 0 5 0, 0 0 6 0, 0 0 7 0;
     -fx-background-radius: 8;
     -fx-background-color: linear-gradient(from 0% 93% to 0% 100%, #b71111 0%, #911010 100%),
-        #962222,
-        #d73535,
-        radial-gradient(center 50% 50%, radius 100%, #e03f3f, #b42828);
+    #962222,
+    #d73535,
+    radial-gradient(center 50% 50%, radius 100%, #e03f3f, #b42828);
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.75), 4, 0, 0, 1);
     -fx-font-weight: bold;
     -fx-font-size: 1.1em;
@@ -220,9 +220,9 @@
 .sale:hover {
 
     -fx-background-color: linear-gradient(from 0% 93% to 0% 100%, #a11212 0%, #851111 100),
-        #962121,
-        #de3838,
-        radial-gradient(center 50% 50%, radius 100%, #e54444, #c52828);
+    #962121,
+    #de3838,
+    radial-gradient(center 50% 50%, radius 100%, #e54444, #c52828);
 }
 
 .sale:pressed {
@@ -351,11 +351,11 @@
     -fx-background-radius: 50%;
     -fx-min-width: 30px;
     -fx-min-height: 30px;
-    -fx-background-color: rgba(255,255,255,0.1);
+    -fx-background-color: rgba(255, 255, 255, 0.1);
 }
 
 .window-button:hover {
-    -fx-background-color: rgba(255,255,255,0.2);
+    -fx-background-color: rgba(255, 255, 255, 0.2);
 }
 
 .window-button.close:hover {

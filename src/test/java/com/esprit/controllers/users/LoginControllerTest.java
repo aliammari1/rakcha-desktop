@@ -1,5 +1,20 @@
 package com.esprit.controllers.users;
 
+import com.esprit.MainApp;
+import com.esprit.utils.TestAssertions;
+import com.esprit.utils.TestDataFactory;
+import com.esprit.utils.TestFXBase;
+import javafx.scene.input.KeyCode;
+import javafx.stage.Stage;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.Timeout;
+import org.testfx.framework.junit5.Start;
+
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -8,31 +23,15 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.Timeout;
 import static org.testfx.api.FxAssert.verifyThat;
-import org.testfx.framework.junit5.Start;
 import static org.testfx.matcher.base.NodeMatchers.isNotNull;
 import static org.testfx.matcher.base.NodeMatchers.isVisible;
 import static org.testfx.matcher.control.LabeledMatchers.hasText;
 
-import com.esprit.MainApp;
-import com.esprit.utils.TestAssertions;
-import com.esprit.utils.TestDataFactory;
-import com.esprit.utils.TestFXBase;
-
-import javafx.scene.input.KeyCode;
-import javafx.stage.Stage;
-
 /**
  * Comprehensive UI tests for LoginController.
  * Tests all user interactions, validations, and navigation flows.
- * 
+ * <p>
  * Test Categories:
  * - UI Elements Visibility
  * - Input Validation
@@ -40,7 +39,7 @@ import javafx.stage.Stage;
  * - Navigation
  * - Error Handling
  * - Authentication Flows
- * 
+ *
  * @author RAKCHA Team
  * @version 1.0.0
  * @since 1.0.0
@@ -56,7 +55,8 @@ class LoginControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("UI Elements Tests")
     class UIElementsTests {
 
@@ -66,10 +66,10 @@ class LoginControllerTest extends TestFXBase {
         void testLoginFormElementsVisible() {
             // Verify all essential UI elements are present and visible
             TestAssertions.verifyAllVisible(
-                    "#emailTextField",
-                    "#passwordTextField",
-                    "#signInButton",
-                    "#signUpButton");
+                "#emailTextField",
+                "#passwordTextField",
+                "#signInButton",
+                "#signUpButton");
 
             // Verify buttons have correct text
             verifyThat("#signInButton", hasText("Sign In"));
@@ -116,7 +116,8 @@ class LoginControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Input Validation Tests")
     class InputValidationTests {
 
@@ -197,7 +198,8 @@ class LoginControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Form Interaction Tests")
     class FormInteractionTests {
 
@@ -258,7 +260,8 @@ class LoginControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Button Interaction Tests")
     class ButtonInteractionTests {
 
@@ -321,7 +324,8 @@ class LoginControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Authentication Flow Tests")
     class AuthenticationFlowTests {
 
@@ -398,7 +402,7 @@ class LoginControllerTest extends TestFXBase {
             // Check that we are still on login page (no navigation)
             verifyThat("#emailTextField", isVisible());
             verifyThat("#signInButton", isVisible());
-            
+
             // Verify input was sanitized - the malicious input should not execute
             assertThat(lookup("#emailTextField").queryTextInputControl().getText())
                 .as("Email field should contain the input (sanitized)")
@@ -422,7 +426,7 @@ class LoginControllerTest extends TestFXBase {
             // Check that we are still on login page (no script execution/navigation)
             verifyThat("#emailTextField", isVisible());
             verifyThat("#signInButton", isVisible());
-            
+
             // Verify the script tag was not executed (we're still on login page)
             // The app should sanitize the input and reject authentication
             assertThat(lookup("#emailTextField").queryTextInputControl().getText())
@@ -433,7 +437,8 @@ class LoginControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Accessibility Tests")
     class AccessibilityTests {
 
@@ -466,7 +471,8 @@ class LoginControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Error Recovery Tests")
     class ErrorRecoveryTests {
 
@@ -508,7 +514,8 @@ class LoginControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Visual and Animation Tests")
     class VisualTests {
 

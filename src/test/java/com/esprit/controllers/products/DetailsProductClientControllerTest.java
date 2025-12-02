@@ -1,23 +1,8 @@
 package com.esprit.controllers.products;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.Timeout;
-import java.util.concurrent.TimeUnit;
-import org.testfx.framework.junit5.Start;
-
 import com.esprit.models.products.Product;
 import com.esprit.models.products.Review;
 import com.esprit.utils.TestFXBase;
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -26,6 +11,20 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.Timeout;
+import org.testfx.framework.junit5.Start;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Comprehensive test suite for DetailsProductClientController.
@@ -43,6 +42,31 @@ class DetailsProductClientControllerTest extends TestFXBase {
         stage.show();
     }
 
+    // Helper methods
+    private Product createMockProduct() {
+        Product product = new Product();
+        product.setId(1L);
+        product.setName("Test Product");
+        product.setDescription("Test Description");
+        product.setPrice(100);
+        product.setQuantity(10);
+        product.setImage("product-image.jpg");
+        return product;
+    }
+
+    private List<Review> createMockReviews() {
+        List<Review> reviews = new ArrayList<>();
+
+        Review review1 = new Review();
+        review1.setRating(5);
+
+        Review review2 = new Review();
+        review2.setRating(4);
+
+        reviews.add(review1);
+        reviews.add(review2);
+        return reviews;
+    }
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -70,7 +94,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
             Product product = createMockProduct();
             assertThat(product).isNotNull();
             assertThat(product.getName()).isEqualTo("Test Product");
-            
+
             FlowPane detailPane = lookup("#detailFlowPane").query();
             assertThat(detailPane).isNotNull();
 
@@ -88,7 +112,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
             Product product = createMockProduct();
             assertThat(product).isNotNull();
             assertThat(product.getPrice()).isEqualTo(100);
-            
+
             FlowPane detailPane = lookup("#detailFlowPane").query();
             assertThat(detailPane).isNotNull();
 
@@ -118,7 +142,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
             Product product = createMockProduct();
             assertThat(product).isNotNull();
             assertThat(product.getDescription()).isEqualTo("Test Description");
-            
+
             FlowPane detailPane = lookup("#detailFlowPane").query();
             assertThat(detailPane).isNotNull();
 
@@ -127,7 +151,6 @@ class DetailsProductClientControllerTest extends TestFXBase {
         }
 
     }
-
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -182,7 +205,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
 
             Control quantitySelector = lookup("#quantitySelector").query();
             assertThat(quantitySelector).isNotNull();
-            
+
             // Verify quantity selector is accessible
             waitForFxEvents();
         }
@@ -244,7 +267,6 @@ class DetailsProductClientControllerTest extends TestFXBase {
 
     }
 
-
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
     @DisplayName("Product Review Tests")
@@ -258,7 +280,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
 
             List<Review> reviews = createMockReviews();
             assertThat(reviews).isNotEmpty().hasSize(2);
-            
+
             FlowPane detailPane = lookup("#detailFlowPane").query();
             assertThat(detailPane).isNotNull();
 
@@ -266,7 +288,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
             // 1. Call controller.setReviews(reviews) or similar
             // 2. Platform.runLater(() -> updateReviewUI())
             // 3. Verify detailPane children count matches reviews.size()
-            
+
             waitForFxEvents();
         }
 
@@ -280,12 +302,12 @@ class DetailsProductClientControllerTest extends TestFXBase {
             List<Review> reviews = createMockReviews();
             assertThat(reviews.get(0).getRating()).isEqualTo(5);
             assertThat(reviews.get(1).getRating()).isEqualTo(4);
-            
+
             FlowPane detailPane = lookup("#detailFlowPane").query();
             assertThat(detailPane).isNotNull();
 
             // In a real test: inject reviews, assert star ratings visible in UI
-            
+
             waitForFxEvents();
         }
 
@@ -298,12 +320,12 @@ class DetailsProductClientControllerTest extends TestFXBase {
 
             List<Review> reviews = createMockReviews();
             assertThat(reviews).isNotEmpty();
-            
+
             FlowPane detailPane = lookup("#detailFlowPane").query();
             assertThat(detailPane).isNotNull();
 
             // In a real test: inject reviews, lookup review text labels, assert text content
-            
+
             waitForFxEvents();
         }
 
@@ -316,12 +338,12 @@ class DetailsProductClientControllerTest extends TestFXBase {
 
             List<Review> reviews = createMockReviews();
             assertThat(reviews).isNotEmpty();
-            
+
             FlowPane detailPane = lookup("#detailFlowPane").query();
             assertThat(detailPane).isNotNull();
 
             // In a real test: inject reviews with names, assert reviewer names visible in UI
-            
+
             waitForFxEvents();
         }
 
@@ -334,21 +356,20 @@ class DetailsProductClientControllerTest extends TestFXBase {
 
             List<Review> reviews = createMockReviews();
             double averageRating = reviews.stream()
-                    .mapToInt(Review::getRating)
-                    .average()
-                    .orElse(0);
+                .mapToInt(Review::getRating)
+                .average()
+                .orElse(0);
             assertThat(averageRating).isEqualTo(4.5);
-            
+
             FlowPane detailPane = lookup("#detailFlowPane").query();
             assertThat(detailPane).isNotNull();
 
             // In a real test: inject reviews, assert calculated average displayed in UI
-            
+
             waitForFxEvents();
         }
 
     }
-
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -402,7 +423,6 @@ class DetailsProductClientControllerTest extends TestFXBase {
 
     }
 
-
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
     @DisplayName("Product Image Tests")
@@ -455,7 +475,6 @@ class DetailsProductClientControllerTest extends TestFXBase {
 
     }
 
-
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
     @DisplayName("Price Display Tests")
@@ -469,7 +488,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
 
             Product product = createMockProduct();
             product.setPrice(100);
-            
+
             FlowPane detailPane = lookup("#detailFlowPane").query();
             assertThat(detailPane).isNotNull();
 
@@ -486,10 +505,10 @@ class DetailsProductClientControllerTest extends TestFXBase {
 
             Button incrementButton = lookup("#incrementButton").query();
             assertThat(incrementButton).isNotNull();
-            
+
             // Select quantity 2
             clickOn(incrementButton);
-            
+
             // Verify total calculation
             waitForFxEvents();
         }
@@ -503,7 +522,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
 
             Product product = createMockProduct();
             product.setPrice(100);
-            
+
             FlowPane detailPane = lookup("#detailFlowPane").query();
             assertThat(detailPane).isNotNull();
 
@@ -512,7 +531,6 @@ class DetailsProductClientControllerTest extends TestFXBase {
         }
 
     }
-
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -527,7 +545,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
 
             Product product = createMockProduct();
             product.setQuantity(10);
-            
+
             FlowPane detailPane = lookup("#detailFlowPane").query();
             assertThat(detailPane).isNotNull();
 
@@ -544,7 +562,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
 
             Product product = createMockProduct();
             product.setQuantity(0);
-            
+
             Button addButton = lookup("#addToCartButton").query();
             assertThat(addButton).isNotNull();
 
@@ -561,7 +579,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
 
             Product product = createMockProduct();
             product.setQuantity(5);
-            
+
             Button incrementButton = lookup("#incrementButton").query();
             assertThat(incrementButton).isNotNull();
 
@@ -570,7 +588,6 @@ class DetailsProductClientControllerTest extends TestFXBase {
         }
 
     }
-
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -610,34 +627,6 @@ class DetailsProductClientControllerTest extends TestFXBase {
             assertThat(cartButton).isNotNull();
         }
 
-    }
-
-
-    // Helper methods
-    private Product createMockProduct() {
-        Product product = new Product();
-        product.setId(1L);
-        product.setName("Test Product");
-        product.setDescription("Test Description");
-        product.setPrice(100);
-        product.setQuantity(10);
-        product.setImage("product-image.jpg");
-        return product;
-    }
-
-
-    private List<Review> createMockReviews() {
-        List<Review> reviews = new ArrayList<>();
-
-        Review review1 = new Review();
-        review1.setRating(5);
-
-        Review review2 = new Review();
-        review2.setRating(4);
-
-        reviews.add(review1);
-        reviews.add(review2);
-        return reviews;
     }
 
 }

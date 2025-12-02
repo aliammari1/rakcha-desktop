@@ -1,9 +1,13 @@
 package com.esprit.controllers.products;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import com.esprit.models.products.ProductCategory;
+import com.esprit.utils.TestFXBase;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
@@ -11,18 +15,13 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.Timeout;
-import java.util.concurrent.TimeUnit;
 import org.testfx.framework.junit5.Start;
 
-import com.esprit.models.products.ProductCategory;
-import com.esprit.utils.TestFXBase;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.stage.Stage;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Comprehensive test suite for DesignCategorieAdminController.
@@ -40,6 +39,14 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
         stage.show();
     }
 
+    // Helper methods
+    private List<ProductCategory> createMockCategories() {
+        List<ProductCategory> categories = new ArrayList<>();
+        ProductCategory c = new ProductCategory();
+        c.setCategoryName("Electronics");
+        categories.add(c);
+        return categories;
+    }
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -67,25 +74,24 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
             // Get mock categories that would be returned by service
             List<ProductCategory> mockCategories = createMockCategories();
             assertThat(mockCategories).isNotEmpty();
-            
+
             TableView<ProductCategory> table = lookup("#categoriesTable").query();
             assertThat(table).isNotNull();
-            
+
             // Verify table items is present
             assertThat(table.getItems()).isNotNull();
-            
+
             // For this test, we verify the table structure exists
             // In a real scenario with mocked service, we would:
             // 1. Mock CategoryService.getAll() to return mockCategories
             // 2. Inject mock into controller
             // 3. Assert table.getItems().size() equals mockCategories.size()
             // 4. Assert specific cell values match mock data
-            
+
             waitForFxEvents();
         }
 
     }
-
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -122,14 +128,14 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
             // Capture initial table row count
             TableView<ProductCategory> table = lookup("#categoriesTable").query();
             int initialRowCount = table.getItems().size();
-            
+
             // Clear name field or set to invalid value
             TextField nameField = lookup("#categoryNameField").query();
             assertThat(nameField).isNotNull();
-            
+
             // Try to create with empty name
             clearTextField("#categoryNameField");
-            
+
             Button createButton = lookup("#createButton").query();
             assertThat(createButton).isNotNull();
             clickOn(createButton);
@@ -138,15 +144,14 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
 
             // Verify table row count unchanged (creation prevented)
             assertThat(table.getItems().size()).as("Table row count should not change on invalid creation")
-                    .isEqualTo(initialRowCount);
-            
+                .isEqualTo(initialRowCount);
+
             // Verify name field is still visible and responsive
             assertThat(nameField.isVisible()).isTrue();
             assertThat(createButton.isDisabled() || nameField.getText().isEmpty()).isTrue();
         }
 
     }
-
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -174,7 +179,7 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
             // Locate and populate edit field with new name
             TextField editField = lookup("#categoryNameField").query();
             assertThat(editField).isNotNull();
-            
+
             String newCategoryName = "UpdatedCategory_" + System.currentTimeMillis();
             clearTextField("#categoryNameField");
             clickOn(editField).write(newCategoryName);
@@ -185,8 +190,7 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
             if (updateButton.isPresent()) {
                 clickOn(updateButton.get());
                 waitForFxEvents();
-            }
- else {
+            } else {
                 // If no separate update button, creator button might handle it
                 Button createButton = lookup("#createButton").query();
                 clickOn(createButton);
@@ -200,7 +204,6 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
         }
 
     }
-
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -219,7 +222,7 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
 
             // Capture initial row count
             int initialRowCount = table.getItems().size();
-            
+
             // Select first row
             table.getSelectionModel().select(0);
             waitForFxEvents();
@@ -233,7 +236,7 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
             if (deleteButton.isPresent()) {
                 clickOn(deleteButton.get());
                 waitForFxEvents();
-                
+
                 // Handle confirmation dialog if present
                 var confirmButton = lookup("#confirmButton").tryQuery();
                 if (confirmButton.isPresent()) {
@@ -246,24 +249,14 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
 
             // Verify row count decreased
             assertThat(table.getItems().size()).as("Table should have fewer items after deletion")
-                    .isLessThanOrEqualTo(initialRowCount);
-            
+                .isLessThanOrEqualTo(initialRowCount);
+
             // Verify the specific deleted item is no longer in the table
             boolean deletedItemStillExists = table.getItems().stream()
-                    .anyMatch(cat -> cat.getCategoryName().equals(selectedCategory.getCategoryName()));
+                .anyMatch(cat -> cat.getCategoryName().equals(selectedCategory.getCategoryName()));
             assertThat(deletedItemStillExists).as("Deleted category should not be in table").isFalse();
         }
 
-    }
-
-
-    // Helper methods
-    private List<ProductCategory> createMockCategories() {
-        List<ProductCategory> categories = new ArrayList<>();
-        ProductCategory c = new ProductCategory();
-        c.setCategoryName("Electronics");
-        categories.add(c);
-        return categories;
     }
 
 }

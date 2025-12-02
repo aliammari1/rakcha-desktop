@@ -1,5 +1,7 @@
 package com.esprit.controllers.series;
 
+import com.esprit.utils.TestFXBase;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
@@ -7,17 +9,14 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.Timeout;
-import java.util.concurrent.TimeUnit;
 import org.testfx.framework.junit5.Start;
 
-import com.esprit.utils.TestFXBase;
-
-import javafx.stage.Stage;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Comprehensive UI tests for SerieController.
  * Tests series CRUD operations, episode management, and categorization.
- * 
+ *
  * @author RAKCHA Team
  * @version 1.0.0
  */
@@ -31,7 +30,7 @@ class SerieControllerTest extends TestFXBase {
             getClass().getResource("/ui/series/Serie-view.fxml")
         );
         javafx.scene.Parent root = loader.load();
-        
+
         stage.setScene(new javafx.scene.Scene(root, 1280, 700));
         stage.show();
         stage.toFront();

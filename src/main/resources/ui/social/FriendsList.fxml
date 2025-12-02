@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import org.kordamp.ikonli.javafx.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21"
+           fx:controller="com.esprit.controllers.users.FriendsListController"
+           styleClass="immersive-root"
+           stylesheets="@../styles/filmStyle.css, @../styles/social.css">
+
+  <!-- Background -->
+  <AnchorPane styleClass="cinematic-bg">
+    <Circle radius="200" layoutX="150" layoutY="150" styleClass="ambient-orb orb-primary" opacity="0.15"/>
+    <Circle radius="250" layoutX="1100" layoutY="500" styleClass="ambient-orb orb-secondary" opacity="0.1"/>
+  </AnchorPane>
+
+  <BorderPane styleClass="main-shell">
+    <left>
+      <fx:include source="../sidebar.fxml"/>
+    </left>
+
+    <center>
+      <HBox spacing="0" HBox.hgrow="ALWAYS">
+        <!-- Friends List Panel -->
+        <VBox spacing="0" styleClass="friends-panel" prefWidth="350">
+
+          <!-- Header -->
+          <VBox styleClass="panel-header" spacing="15">
+            <padding>
+              <Insets top="20" bottom="20" left="20" right="20"/>
+            </padding>
+
+            <HBox alignment="CENTER_LEFT" spacing="10">
+              <Label text="Friends" styleClass="panel-title"/>
+              <Label fx:id="friendsCountBadge" styleClass="count-badge" text="0"/>
+              <Region HBox.hgrow="ALWAYS"/>
+              <Button onAction="#addFriend" styleClass="add-friend-btn">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2a-account-plus:20"/>
+                </graphic>
+              </Button>
+            </HBox>
+
+            <HBox styleClass="search-box" alignment="CENTER">
+              <FontIcon iconLiteral="mdi2m-magnify:18" styleClass="search-icon"/>
+              <TextField fx:id="searchField" styleClass="search-input" promptText="Search friends..."
+                         HBox.hgrow="ALWAYS"/>
+            </HBox>
+          </VBox>
+
+          <!-- Filter Tabs -->
+          <HBox styleClass="filter-tabs" spacing="0">
+            <ToggleButton fx:id="allTab" styleClass="filter-tab active" text="All" onAction="#showAll"/>
+            <ToggleButton fx:id="onlineTab" styleClass="filter-tab" text="Online" onAction="#showOnline"/>
+            <ToggleButton fx:id="pendingTab" styleClass="filter-tab" text="Pending" onAction="#showPending"/>
+          </HBox>
+
+          <!-- Friends List -->
+          <ScrollPane styleClass="friends-scroll" fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+            <VBox fx:id="friendsListContainer" spacing="5" styleClass="friends-list">
+              <padding>
+                <Insets top="10" bottom="10" left="10" right="10"/>
+              </padding>
+            </VBox>
+          </ScrollPane>
+
+          <!-- Friend Requests Section -->
+          <VBox fx:id="requestsSection" styleClass="requests-section" spacing="10">
+            <padding>
+              <Insets topRightBottomLeft="15"/>
+            </padding>
+
+            <HBox alignment="CENTER_LEFT" spacing="10">
+              <Label text="Friend Requests" styleClass="section-label"/>
+              <Label fx:id="requestsCountBadge" styleClass="count-badge red" text="0"/>
+            </HBox>
+            <VBox fx:id="requestsContainer" spacing="8"/>
+          </VBox>
+        </VBox>
+
+        <!-- Main Content Area -->
+        <VBox spacing="0" styleClass="main-content-area" HBox.hgrow="ALWAYS">
+
+          <!-- Selected Friend Profile / Activity -->
+          <StackPane VBox.vgrow="ALWAYS">
+
+            <!-- Empty State -->
+            <VBox fx:id="emptyState" alignment="CENTER" spacing="20">
+              <FontIcon iconLiteral="mdi2a-account-group:100" styleClass="empty-icon"/>
+              <Label text="Select a friend" styleClass="empty-title"/>
+              <Label text="Choose a friend from the list to view their profile and activity" styleClass="empty-desc"
+                     wrapText="true" maxWidth="300" alignment="CENTER"/>
+            </VBox>
+
+            <!-- Friend Profile View -->
+            <VBox fx:id="friendProfileView" spacing="0" visible="false" managed="false">
+
+              <!-- Profile Header -->
+              <VBox styleClass="profile-header" alignment="CENTER" spacing="15">
+                <padding>
+                  <Insets top="40" bottom="30" left="40" right="40"/>
+                </padding>
+
+                <StackPane styleClass="avatar-container">
+                  <ImageView fx:id="friendAvatar" fitWidth="120" fitHeight="120" styleClass="friend-avatar"/>
+                  <Circle fx:id="onlineIndicator" radius="12" styleClass="online-indicator"/>
+                </StackPane>
+
+                <Label fx:id="friendName" styleClass="friend-name"/>
+                <Label fx:id="friendStatus" styleClass="friend-status"/>
+
+                <HBox spacing="15" alignment="CENTER">
+                  <Button onAction="#sendMessage" styleClass="action-btn primary" text="Message">
+                    <graphic>
+                      <FontIcon iconLiteral="mdi2m-message:18"/>
+                    </graphic>
+                  </Button>
+                  <Button onAction="#inviteToMovie" styleClass="action-btn secondary" text="Invite to Movie">
+                    <graphic>
+                      <FontIcon iconLiteral="mdi2m-movie:18"/>
+                    </graphic>
+                  </Button>
+                  <MenuButton styleClass="more-btn">
+                    <graphic>
+                      <FontIcon iconLiteral="mdi2d-dots-vertical:20"/>
+                    </graphic>
+                    <items>
+                      <MenuItem text="View Profile" onAction="#viewFullProfile"/>
+                      <MenuItem text="Block" onAction="#blockFriend"/>
+                      <MenuItem text="Remove Friend" onAction="#removeFriend" styleClass="danger"/>
+                    </items>
+                  </MenuButton>
+                </HBox>
+              </VBox>
+
+              <!-- Activity Feed -->
+              <VBox spacing="15" styleClass="activity-section" VBox.vgrow="ALWAYS">
+                <padding>
+                  <Insets top="20" bottom="20" left="30" right="30"/>
+                </padding>
+
+                <Label text="Recent Activity" styleClass="section-title"/>
+
+                <ScrollPane styleClass="activity-scroll" fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+                  <VBox fx:id="activityContainer" spacing="15"/>
+                </ScrollPane>
+              </VBox>
+
+              <!-- Shared Interests -->
+              <VBox styleClass="shared-section" spacing="15">
+                <padding>
+                  <Insets topRightBottomLeft="20"/>
+                </padding>
+
+                <Label text="Shared Interests" styleClass="section-title"/>
+                <FlowPane fx:id="sharedInterestsContainer" hgap="10" vgap="10"/>
+              </VBox>
+            </VBox>
+          </StackPane>
+        </VBox>
+      </HBox>
+    </center>
+  </BorderPane>
+
+  <!-- Add Friend Dialog -->
+  <VBox fx:id="addFriendDialog" styleClass="dialog-overlay" visible="false" managed="false" alignment="CENTER">
+    <VBox styleClass="dialog-card" spacing="20" maxWidth="400">
+      <padding>
+        <Insets topRightBottomLeft="30"/>
+      </padding>
+
+      <HBox alignment="CENTER_LEFT" spacing="15">
+        <Label text="Add Friend" styleClass="dialog-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button onAction="#closeAddDialog" styleClass="close-btn">
+          <graphic>
+            <FontIcon iconLiteral="mdi2c-close:20"/>
+          </graphic>
+        </Button>
+      </HBox>
+
+      <VBox spacing="8">
+        <Label text="Search by username or email" styleClass="field-label"/>
+        <HBox styleClass="search-box" alignment="CENTER">
+          <FontIcon iconLiteral="mdi2m-magnify:18" styleClass="search-icon"/>
+          <TextField fx:id="addFriendSearchField" styleClass="search-input" promptText="Enter username or email..."
+                     HBox.hgrow="ALWAYS"/>
+        </HBox>
+      </VBox>
+
+      <VBox fx:id="searchResultsContainer" spacing="10" styleClass="search-results"/>
+
+      <Label fx:id="addFriendMessage" styleClass="message-label"/>
+    </VBox>
+  </VBox>
+</StackPane>

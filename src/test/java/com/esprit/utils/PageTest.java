@@ -1,6 +1,5 @@
 package com.esprit.utils;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
@@ -13,16 +12,18 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * Comprehensive test suite for Page utility class.
  * Tests pagination data structure, metadata, and edge cases.
- * 
+ * <p>
  * Test Categories:
  * - Page Creation
  * - Page Metadata
  * - Content Management
  * - Edge Cases
- * 
+ *
  * @author RAKCHA Team
  * @version 1.0.0
  * @since 1.0.0
@@ -41,7 +42,7 @@ class PageTest {
         void testCreatePageWithContent() {
             List<String> content = Arrays.asList("item1", "item2", "item3");
             Page<String> page = new Page<>(content, 0, 10, 3);
-            
+
             assertThat(page).isNotNull();
             assertThat(page.getContent()).isEqualTo(content);
         }
@@ -52,7 +53,7 @@ class PageTest {
         @DisplayName("Should create empty page")
         void testCreateEmptyPage() {
             Page<String> page = new Page<>(Collections.emptyList(), 0, 10, 0);
-            
+
             assertThat(page).isNotNull();
             assertThat(page.getContent()).isEmpty();
             assertThat(page.getTotalElements()).isZero();
@@ -65,7 +66,7 @@ class PageTest {
         void testPageNumber() {
             List<String> content = Arrays.asList("item1", "item2");
             Page<String> page = new Page<>(content, 2, 10, 50);
-            
+
             assertThat(page.getPage()).isEqualTo(2);
         }
 
@@ -76,7 +77,7 @@ class PageTest {
         void testPageSize() {
             List<String> content = Arrays.asList("item1", "item2");
             Page<String> page = new Page<>(content, 0, 20, 50);
-            
+
             assertThat(page.getSize()).isEqualTo(20);
         }
 
@@ -87,7 +88,7 @@ class PageTest {
         void testTotalElements() {
             List<String> content = Arrays.asList("item1", "item2");
             Page<String> page = new Page<>(content, 0, 10, 100);
-            
+
             assertThat(page.getTotalElements()).isEqualTo(100);
         }
 
@@ -105,7 +106,7 @@ class PageTest {
         void testTotalPages() {
             List<String> content = Arrays.asList("item1", "item2");
             Page<String> page = new Page<>(content, 0, 10, 25);
-            
+
             assertThat(page.getTotalPages()).isEqualTo(3);
         }
 
@@ -116,7 +117,7 @@ class PageTest {
         void testExactPageDivision() {
             List<String> content = Arrays.asList("item1", "item2");
             Page<String> page = new Page<>(content, 0, 10, 30);
-            
+
             assertThat(page.getTotalPages()).isEqualTo(3);
         }
 
@@ -127,7 +128,7 @@ class PageTest {
         void testIsFirst() {
             List<String> content = Arrays.asList("item1", "item2");
             Page<String> page = new Page<>(content, 0, 10, 50);
-            
+
             assertThat(page.isFirst()).isTrue();
         }
 
@@ -138,7 +139,7 @@ class PageTest {
         void testIsNotFirst() {
             List<String> content = Arrays.asList("item1", "item2");
             Page<String> page = new Page<>(content, 1, 10, 50);
-            
+
             assertThat(page.isFirst()).isFalse();
         }
 
@@ -149,7 +150,7 @@ class PageTest {
         void testIsLast() {
             List<String> content = Arrays.asList("item1", "item2");
             Page<String> page = new Page<>(content, 2, 10, 25);
-            
+
             assertThat(page.isLast()).isTrue();
         }
 
@@ -160,7 +161,7 @@ class PageTest {
         void testIsNotLast() {
             List<String> content = Arrays.asList("item1", "item2");
             Page<String> page = new Page<>(content, 0, 10, 50);
-            
+
             assertThat(page.isLast()).isFalse();
         }
 
@@ -171,7 +172,7 @@ class PageTest {
         void testHasNext() {
             List<String> content = Arrays.asList("item1", "item2");
             Page<String> page = new Page<>(content, 0, 10, 50);
-            
+
             assertThat(page.hasNext()).isTrue();
         }
 
@@ -182,7 +183,7 @@ class PageTest {
         void testHasNoNext() {
             List<String> content = Arrays.asList("item1", "item2");
             Page<String> page = new Page<>(content, 2, 10, 25);
-            
+
             assertThat(page.hasNext()).isFalse();
         }
 
@@ -193,7 +194,7 @@ class PageTest {
         void testHasPrevious() {
             List<String> content = Arrays.asList("item1", "item2");
             Page<String> page = new Page<>(content, 1, 10, 50);
-            
+
             assertThat(page.hasPrevious()).isTrue();
         }
 
@@ -204,7 +205,7 @@ class PageTest {
         void testHasNoPrevious() {
             List<String> content = Arrays.asList("item1", "item2");
             Page<String> page = new Page<>(content, 0, 10, 50);
-            
+
             assertThat(page.hasPrevious()).isFalse();
         }
 
@@ -222,7 +223,7 @@ class PageTest {
         void testNumberOfElements() {
             List<String> content = Arrays.asList("item1", "item2", "item3");
             Page<String> page = new Page<>(content, 0, 10, 50);
-            
+
             assertThat(page.getNumberOfElements()).isEqualTo(3);
         }
 
@@ -232,7 +233,7 @@ class PageTest {
         @DisplayName("Should detect empty page")
         void testIsEmpty() {
             Page<String> page = new Page<>(Collections.emptyList(), 0, 10, 0);
-            
+
             assertThat(page.isEmpty()).isTrue();
         }
 
@@ -243,7 +244,7 @@ class PageTest {
         void testIsNotEmpty() {
             List<String> content = Arrays.asList("item1");
             Page<String> page = new Page<>(content, 0, 10, 50);
-            
+
             assertThat(page.isEmpty()).isFalse();
         }
 
@@ -254,7 +255,7 @@ class PageTest {
         void testContentOrder() {
             List<String> content = Arrays.asList("first", "second", "third");
             Page<String> page = new Page<>(content, 0, 10, 50);
-            
+
             assertThat(page.getContent()).containsExactly("first", "second", "third");
         }
 
@@ -265,7 +266,7 @@ class PageTest {
         void testDifferentContentTypes() {
             List<Integer> content = Arrays.asList(1, 2, 3);
             Page<Integer> page = new Page<>(content, 0, 10, 50);
-            
+
             assertThat(page.getContent()).containsExactly(1, 2, 3);
         }
 
@@ -283,7 +284,7 @@ class PageTest {
         void testSingleElement() {
             List<String> content = Arrays.asList("only");
             Page<String> page = new Page<>(content, 0, 1, 1);
-            
+
             assertThat(page.getContent()).hasSize(1);
             assertThat(page.isFirst()).isTrue();
             assertThat(page.isLast()).isTrue();
@@ -300,7 +301,7 @@ class PageTest {
                 content.add("item" + i);
             }
             Page<String> page = new Page<>(content, 0, 1000, 1000);
-            
+
             assertThat(page.getContent()).hasSize(1000);
             assertThat(page.getTotalPages()).isEqualTo(1);
         }
@@ -312,7 +313,7 @@ class PageTest {
         void testZeroPageSize() {
             List<String> content = Collections.emptyList();
             Page<String> page = new Page<>(content, 0, 0, 0);
-            
+
             assertThat(page.getContent()).isEmpty();
         }
 
@@ -323,7 +324,7 @@ class PageTest {
         void testLastPagePartial() {
             List<String> content = Arrays.asList("item1", "item2");
             Page<String> page = new Page<>(content, 2, 10, 22);
-            
+
             assertThat(page.getContent()).hasSize(2);
             assertThat(page.isLast()).isTrue();
             assertThat(page.getTotalPages()).isEqualTo(3);
@@ -336,7 +337,7 @@ class PageTest {
         void testNegativePageNumber() {
             List<String> content = Arrays.asList("item1");
             Page<String> page = new Page<>(content, -1, 10, 50);
-            
+
             assertThat(page.getPage()).isEqualTo(-1);
         }
 
@@ -347,7 +348,7 @@ class PageTest {
         void testContentExceedingPageSize() {
             List<String> content = Arrays.asList("item1", "item2", "item3");
             Page<String> page = new Page<>(content, 0, 2, 10);
-            
+
             // Even if content is larger, it should be stored as-is
             assertThat(page.getContent()).hasSize(3);
         }
@@ -359,7 +360,7 @@ class PageTest {
         void testPagesWithRemainder() {
             List<String> content = Arrays.asList("item1");
             Page<String> page = new Page<>(content, 0, 3, 10);
-            
+
             // 10 elements / 3 per page = 4 pages (3 full + 1 partial)
             assertThat(page.getTotalPages()).isEqualTo(4);
         }
@@ -371,7 +372,7 @@ class PageTest {
         void testLargeTotalElements() {
             List<String> content = Arrays.asList("item1");
             Page<String> page = new Page<>(content, 0, 10, 1_000_000);
-            
+
             assertThat(page.getTotalPages()).isEqualTo(100_000);
             assertThat(page.hasNext()).isTrue();
         }
@@ -387,10 +388,10 @@ class PageTest {
         @Test
         @Order(29)
         @DisplayName("Should handle page 0")
-        void testPage Zero() {
+        void testPageZero() {
             List<String> content = Arrays.asList("item1");
             Page<String> page = new Page<>(content, 0, 10, 50);
-            
+
             assertThat(page.getPage()).isZero();
             assertThat(page.isFirst()).isTrue();
             assertThat(page.hasPrevious()).isFalse();
@@ -403,7 +404,7 @@ class PageTest {
         void testMaximumPage() {
             List<String> content = Arrays.asList("item1");
             Page<String> page = new Page<>(content, 9, 10, 100);
-            
+
             assertThat(page.isLast()).isTrue();
             assertThat(page.hasNext()).isFalse();
         }
@@ -415,7 +416,7 @@ class PageTest {
         void testSinglePageScenario() {
             List<String> content = Arrays.asList("item1", "item2", "item3");
             Page<String> page = new Page<>(content, 0, 10, 3);
-            
+
             assertThat(page.isFirst()).isTrue();
             assertThat(page.isLast()).isTrue();
             assertThat(page.hasPrevious()).isFalse();

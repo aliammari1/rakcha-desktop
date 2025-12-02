@@ -1,71 +1,200 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.*?>
+<?import org.kordamp.ikonli.javafx.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21"
+           fx:controller="com.esprit.controllers.users.AdminDashboardController"
+           styleClass="immersive-root"
+           stylesheets="@../styles/filmStyle.css, @../styles/film-animations.css, @../styles/login-animations.css, @../styles/dashboard.css">
 
-<AnchorPane prefHeight="474.0" prefWidth="864.0" xmlns="http://javafx.com/javafx/21"
-    xmlns:fx="http://javafx.com/fxml/1"
-    fx:controller="com.esprit.controllers.users.AdminDashboardController">
-    <BorderPane prefHeight="474.0" prefWidth="864.0" styleClass="top-form"
-        stylesheets="@../styles/dashbord.css">
-        <top>
-            <AnchorPane prefHeight="40.0" prefWidth="1291.0" BorderPane.alignment="CENTER" />
-        </top>
-        <left>
-            <fx:include source="/ui/sidebar.fxml" />
-        </left>
-        <center>
-            <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                <AnchorPane layoutX="265.0" layoutY="83.0" prefHeight="686.0" prefWidth="1050.0"
-                    AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                    AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+  <!-- Cinematic Background with Gradient Mesh -->
+  <AnchorPane fx:id="cinematicBackground" styleClass="cinematic-bg">
 
-                    <TableView fx:id="userTableView" layoutX="26.0" layoutY="37.0"
-                        prefHeight="200.0" prefWidth="775.0" />
-                    <Label layoutX="233.0" layoutY="392.0" text="nom" />
-                    <TextField fx:id="firstNameTextField" layoutX="233.0" layoutY="419.0"
-                        prefHeight="26.0" prefWidth="94.0" />
-                    <TextField fx:id="lastNameTextField" layoutX="233.0" layoutY="354.0"
-                        prefHeight="26.0" prefWidth="94.0" />
-                    <Label layoutX="236.0" layoutY="326.0" text="prenom" />
-                    <Label layoutX="222.0" layoutY="269.0" text="numero de telephone" />
-                    <TextField fx:id="phoneNumberTextField" layoutX="233.0" layoutY="287.0"
-                        prefHeight="26.0" prefWidth="94.0" />
-                    <TextField fx:id="passwordTextField" layoutX="361.0" layoutY="419.0"
-                        prefHeight="26.0" prefWidth="109.0" />
-                    <Label layoutX="364.0" layoutY="401.0" text="password" />
-                    <Label layoutX="501.0" layoutY="401.0" text="role" />
-                    <TextField fx:id="adresseTextField" layoutX="497.0" layoutY="354.0"
-                        prefHeight="26.0" prefWidth="94.0" />
-                    <Label layoutX="491.0" layoutY="335.0" text="adresse" />
-                    <Label layoutX="494.0" layoutY="269.0" text="date de naissance" />
-                    <DatePicker fx:id="dateDeNaissanceDatePicker" layoutX="494.0" layoutY="287.0"
-                        prefHeight="26.0" prefWidth="94.0" />
-                    <TextField fx:id="emailTextField" layoutX="360.0" layoutY="285.0"
-                        prefHeight="26.0" prefWidth="110.0" />
-                    <Label layoutX="361.0" layoutY="269.0" text="email" />
-                    <Label layoutX="652.0" layoutY="241.0" text="image" />
-                    <ImageView fx:id="photoDeProfilImageView" fitHeight="150.0" fitWidth="200.0"
-                        layoutX="636.0" layoutY="260.0" pickOnBounds="true" preserveRatio="true" />
-                    <Button layoutX="710.0" layoutY="419.0" mnemonicParsing="false"
-                        onAction="#importImage" styleClass="sale" text="import" />
-                    <ComboBox fx:id="roleComboBox" layoutX="501.0" layoutY="419.0" prefHeight="26.0"
-                        prefWidth="94.0" />
-                    <Button layoutX="55.0" layoutY="274.0" mnemonicParsing="false"
-                        onAction="#addAdmin" styleClass="sale" text="add" />
-                    <Button layoutX="53.0" layoutY="322.0" mnemonicParsing="false"
-                        onAction="#clearTextFields" styleClass="sale" text="clear" />
-                    <Button layoutX="33.0" layoutY="14.0" mnemonicParsing="false"
-                        onAction="#generatePDF" styleClass="sale" text="generate PDF" />
-                </AnchorPane>
-            </AnchorPane>
-        </center>
-    </BorderPane>
-</AnchorPane>
+    <!-- Ambient Light Orbs -->
+    <Circle radius="200" layoutX="150" layoutY="150" styleClass="ambient-orb orb-primary" opacity="0.15"/>
+    <Circle radius="300" layoutX="1200" layoutY="600" styleClass="ambient-orb orb-secondary" opacity="0.1"/>
+    <Circle radius="150" layoutX="800" layoutY="100" styleClass="ambient-orb orb-accent" opacity="0.12"/>
+
+    <!-- Floating User Management Icons -->
+    <FontIcon iconLiteral="mdi2a-account-multiple:40" layoutX="100" layoutY="500"
+              styleClass="floating-icon" opacity="0.08"/>
+    <FontIcon iconLiteral="mdi2s-security:35" layoutX="1300" layoutY="300"
+              styleClass="floating-icon" opacity="0.06"/>
+    <FontIcon iconLiteral="mdi2s-star:25" layoutX="400" layoutY="700" styleClass="floating-star" opacity="0.1"/>
+    <FontIcon iconLiteral="mdi2s-star-outline:20" layoutX="950" layoutY="150"
+              styleClass="floating-star" opacity="0.08"/>
+  </AnchorPane>
+
+  <!-- Main Application Shell -->
+  <BorderPane styleClass="main-shell">
+    <left>
+      <fx:include source="/ui/sidebar.fxml"/>
+    </left>
+
+    <center>
+      <!-- Main Content with ScrollPane -->
+      <ScrollPane fitToWidth="true" fitToHeight="true"
+                  hbarPolicy="AS_NEEDED" vbarPolicy="AS_NEEDED"
+                  style="-fx-background-color: transparent; -fx-background: transparent;">
+        <VBox spacing="20" style="-fx-background-color: transparent;">
+          <padding>
+            <Insets top="25" right="25" bottom="25" left="25"/>
+          </padding>
+
+          <!-- Header -->
+          <HBox spacing="15" alignment="CENTER_LEFT" styleClass="immersive-header">
+            <Label text="User Management" style="-fx-text-fill: white;" styleClass="brand-title">
+              <font>
+                <Font name="Arial Rounded MT Bold" size="32.0"/>
+              </font>
+            </Label>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button mnemonicParsing="false" styleClass="glass-btn" onAction="#generatePDF">
+              <graphic>
+                <FontIcon iconLiteral="mdi2f-file-download:20"/>
+              </graphic>
+            </Button>
+          </HBox>
+
+          <!-- Users Table Section -->
+          <VBox spacing="15" VBox.vgrow="ALWAYS">
+            <TableView fx:id="userTableView" VBox.vgrow="ALWAYS" styleClass="table-view-dark"/>
+          </VBox>
+
+          <!-- User Form Section -->
+          <VBox spacing="15" styleClass="glass-panel">
+            <padding>
+              <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <Label text="User Details" style="-fx-text-fill: white;" styleClass="section-title">
+              <font>
+                <Font name="Arial" size="16.0"/>
+              </font>
+            </Label>
+
+            <!-- Form Grid -->
+            <GridPane hgap="20" vgap="15">
+              <columnConstraints>
+                <ColumnConstraints percentWidth="25"/>
+                <ColumnConstraints percentWidth="25"/>
+                <ColumnConstraints percentWidth="25"/>
+                <ColumnConstraints percentWidth="25"/>
+              </columnConstraints>
+
+              <!-- First Name -->
+              <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                <Label text="First Name" styleClass="label-light">
+                  <font>
+                    <Font size="16.0"/>
+                  </font>
+                </Label>
+                <TextField fx:id="firstNameTextField" styleClass="text-field-red" promptText="Enter first name"/>
+              </VBox>
+
+              <!-- Last Name -->
+              <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                <Label text="Last Name" styleClass="label-light">
+                  <font>
+                    <Font size="16.0"/>
+                  </font>
+                </Label>
+                <TextField fx:id="lastNameTextField" styleClass="text-field-red" promptText="Enter last name"/>
+              </VBox>
+
+              <!-- Email -->
+              <VBox spacing="5" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                <Label text="Email" styleClass="label-light">
+                  <font>
+                    <Font size="16.0"/>
+                  </font>
+                </Label>
+                <TextField fx:id="emailTextField" styleClass="text-field-red" promptText="Enter email"/>
+              </VBox>
+
+              <!-- Phone Number -->
+              <VBox spacing="5" GridPane.columnIndex="3" GridPane.rowIndex="0">
+                <Label text="Phone" styleClass="label-light">
+                  <font>
+                    <Font size="16.0"/>
+                  </font>
+                </Label>
+                <TextField fx:id="phoneNumberTextField" styleClass="text-field-red" promptText="Enter phone"/>
+              </VBox>
+
+              <!-- Password -->
+              <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                <Label text="Password" styleClass="label-light">
+                  <font>
+                    <Font size="16.0"/>
+                  </font>
+                </Label>
+                <TextField fx:id="passwordTextField" styleClass="text-field-red" promptText="Enter password"/>
+              </VBox>
+
+              <!-- Address -->
+              <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <Label text="Address" styleClass="label-light">
+                  <font>
+                    <Font size="16.0"/>
+                  </font>
+                </Label>
+                <TextField fx:id="adresseTextField" styleClass="text-field-red" promptText="Enter address"/>
+              </VBox>
+
+              <!-- Birth Date -->
+              <VBox spacing="5" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                <Label text="Birth Date" styleClass="label-light">
+                  <font>
+                    <Font size="16.0"/>
+                  </font>
+                </Label>
+                <DatePicker fx:id="dateDeNaissanceDatePicker" styleClass="text-field-red"/>
+              </VBox>
+
+              <!-- Role -->
+              <VBox spacing="5" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                <Label text="Role" styleClass="label-light">
+                  <font>
+                    <Font size="16.0"/>
+                  </font>
+                </Label>
+                <ComboBox fx:id="roleComboBox" styleClass="combo-box-red" prefHeight="35" maxWidth="Infinity"/>
+              </VBox>
+
+              <!-- Profile Picture -->
+              <VBox spacing="5" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="2">
+                <Label text="Profile Picture" styleClass="label-light">
+                  <font>
+                    <Font size="16.0"/>
+                  </font>
+                </Label>
+                <HBox spacing="10">
+                  <ImageView fx:id="photoDeProfilImageView" fitHeight="80" fitWidth="80"
+                             preserveRatio="true" styleClass="profile-image"/>
+                  <Button mnemonicParsing="false" onAction="#importImage" styleClass="glass-btn">
+                    <graphic>
+                      <FontIcon iconLiteral="mdi2u-upload:20"/>
+                    </graphic>
+                  </Button>
+                </HBox>
+              </VBox>
+
+              <!-- Action Buttons -->
+              <HBox spacing="10" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="2"
+                    alignment="CENTER_RIGHT">
+                <Button mnemonicParsing="false" onAction="#addAdmin" styleClass="primary-btn" text="Add User"/>
+                <Button mnemonicParsing="false" onAction="#clearTextFields" styleClass="secondary-btn" text="Clear"/>
+              </HBox>
+            </GridPane>
+          </VBox>
+        </VBox>
+      </ScrollPane>
+    </center>
+  </BorderPane>
+</StackPane>

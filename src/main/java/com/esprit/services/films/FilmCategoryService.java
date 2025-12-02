@@ -1,5 +1,12 @@
 package com.esprit.services.films;
 
+import com.esprit.enums.CategoryType;
+import com.esprit.models.common.Category;
+import com.esprit.models.films.Film;
+import com.esprit.services.common.CategoryService;
+import com.esprit.utils.DataSource;
+import lombok.extern.slf4j.Slf4j;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,13 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.esprit.models.films.Category;
-import com.esprit.models.films.Film;
-import com.esprit.utils.DataSource;
-import com.esprit.utils.TableCreator;
-
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 /**
@@ -26,134 +26,105 @@ import lombok.extern.slf4j.Slf4j;
  * @since 1.0.0
  */
 public class FilmCategoryService {
+
     private static final Logger LOGGER = Logger.getLogger(FilmCategoryService.class.getName());
     private final Connection connection;
 
     /**
-     * Initializes the FilmCategoryService and ensures the film_category junction table exists.
-     *
-     * The constructor obtains a database connection from the application's DataSource and
-     * creates the film_category table with a unique constraint on (film_id, category_id)
-     * if it does not already exist.
+     * Constructs a new FilmCategoryService instance.
+     * Initializes database connection and creates tables if they don't exist.
      */
     public FilmCategoryService() {
         this.connection = DataSource.getInstance().getConnection();
-
-        // Create tables if they don't exist
-        try {
-            TableCreator tableCreator = new TableCreator(this.connection);
-
-            // Create film_category junction table
-            String createFilmCategoryTable = """
-                    CREATE TABLE film_category (
-                        id BIGINT PRIMARY KEY AUTO_INCREMENT,
-                        film_id BIGINT NOT NULL,
-                        category_id BIGINT NOT NULL,
-                        UNIQUE(film_id, category_id)
-                    )
-                    """;
-            tableCreator.createTableIfNotExists("film_category", createFilmCategoryTable);
-
-        } catch (Exception e) {
-            log.error("Error creating tables for FilmCategoryService", e);
-        }
-
     }
 
-
     /**
-     * Create associations between a film and multiple categories.
-     *
-     * Only categories that exist (matching names) are associated; names with no matching category are ignored.
+     * Creates associations between a film and multiple categories.
      *
      * @param film          the film to associate with categories
      * @param categoryNames the list of category names to associate with the film
-     * @throws RuntimeException if a database error prevents creating the associations
+     * @throws IllegalArgumentException if film ID is invalid or category doesn't
+     *                                  exist
      */
     public void createFilmCategoryAssociation(Film film, List<String> categoryNames) {
-        final String req = "INSERT INTO film_category (film_id, category_id) VALUES (?,?)";
+        if (film.getId() == null || film.getId() <= 0) {
+            throw new IllegalArgumentException("Film must have a valid ID before creating associations");
+        }
+
+        CategoryService categoryService = new CategoryService();
+        final String req = "INSERT INTO movie_categories (movie_id, category_id) VALUES (?,?)";
         try (final PreparedStatement statement = this.connection.prepareStatement(req)) {
             for (final String categoryName : categoryNames) {
-                Category category = new CategoryService().getCategoryByNom(categoryName);
-                if (category != null) {
-                    statement.setLong(1, film.getId());
-                    statement.setLong(2, category.getId());
-                    statement.executeUpdate();
+                Category category = categoryService.getCategoryByNameAndType(categoryName, CategoryType.MOVIE);
+                if (category == null) {
+                    throw new IllegalArgumentException("Category not found: " + categoryName);
                 }
-
+                statement.setLong(1, film.getId());
+                statement.setLong(2, category.getId());
+                statement.executeUpdate();
             }
-
         } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error creating film-category associations", e);
             throw new RuntimeException(e);
         }
-
     }
 
-
     /**
-     * Fetches all categories associated with the specified film.
+     * Retrieves the CategoriesForFilm value.
      *
-     * @param filmId the ID of the film whose categories to retrieve
-     * @return a list of Category objects associated with the film; an empty list if none are found or an error occurs
+     * @return the CategoriesForFilm value
      */
     public List<Category> getCategoriesForFilm(int filmId) {
         final List<Category> categories = new ArrayList<>();
-        final String req = "SELECT c.* FROM categories c JOIN film_category fc ON c.id = fc.category_id WHERE fc.film_id = ?";
+        // Table is film_categories, not categories
+        final String req = "SELECT c.* FROM categories c JOIN movie_categories fc ON c.id = fc.category_id WHERE fc.movie_id = ?";
         try (final PreparedStatement statement = this.connection.prepareStatement(req)) {
             statement.setInt(1, filmId);
             final ResultSet rs = statement.executeQuery();
             while (rs.next()) {
                 categories.add(Category.builder().id(rs.getLong("id")).name(rs.getString("name"))
-                        .description(rs.getString("description")).build());
+                    .description(rs.getString("description")).build());
             }
-
         } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error getting categories for film: " + filmId, e);
         }
-
         return categories;
     }
 
-
     /**
-     * Retrieve all films associated with the given category.
+     * Retrieves the FilmsForCategory value.
      *
-     * @param categoryId the category database id to fetch films for
-     * @return a list of Film objects linked to the specified category; an empty list if none are found or on error
+     * @return the FilmsForCategory value
      */
     public List<Film> getFilmsForCategory(int categoryId) {
         final List<Film> films = new ArrayList<>();
-        final String req = "SELECT f.* FROM films f JOIN film_category fc ON f.id = fc.film_id WHERE fc.category_id = ?";
+        final String req = "SELECT f.* FROM movies f JOIN movie_categories fc ON f.id = fc.movie_id WHERE fc.category_id = ?";
         try (final PreparedStatement statement = this.connection.prepareStatement(req)) {
             statement.setInt(1, categoryId);
             final ResultSet rs = statement.executeQuery();
             while (rs.next()) {
-                films.add(Film.builder().id(rs.getLong("id")).name(rs.getString("name")).image(rs.getString("image"))
-                        .duration(rs.getTime("duration")).description(rs.getString("description"))
-                        .releaseYear(rs.getInt("release_year")).build());
+                films.add(Film.builder().id(rs.getLong("id")).title(rs.getString("title"))
+                    .imageUrl(rs.getString("image_url"))
+                    .durationMin(rs.getInt("duration_min")).description(rs.getString("description"))
+                    .releaseYear(rs.getInt("release_year")).build());
             }
-
         } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error getting films for category: " + categoryId, e);
         }
-
         return films;
     }
 
-
     /**
-     * Replace a film's category associations with the provided list of category names.
+     * Updates the categories associated with a film.
+     * Removes existing associations and creates new ones.
      *
-     * Deletes all existing associations for the film and creates new associations for each name in {@code categoryNames}.
-     *
-     * @param film          the film whose category associations will be replaced
-     * @param categoryNames the new category names to associate with the film
-     * @throws RuntimeException if a database error occurs while removing or creating associations
+     * @param film          the film whose categories to update
+     * @param categoryNames the new list of category names to associate with the
+     *                      film
      */
     public void updateCategories(final Film film, final List<String> categoryNames) {
         // Delete existing associations
-        final String reqDelete = "DELETE FROM film_category WHERE film_id = ?";
+        final String reqDelete = "DELETE FROM movie_categories WHERE movie_id = ?";
         try (final PreparedStatement statement = this.connection.prepareStatement(reqDelete)) {
             statement.setLong(1, film.getId());
             statement.executeUpdate();
@@ -162,34 +133,32 @@ public class FilmCategoryService {
             throw new RuntimeException(e);
         }
 
-
         // Create new associations
         createFilmCategoryAssociation(film, categoryNames);
     }
 
-
     /**
-     * Fetches comma-separated category names associated with a film.
+     * Retrieves the CategoryNames value.
      *
-     * @param filmId the ID of the film to retrieve categories for
-     * @return the category names joined by ", " for the given film, or an empty string if none are found or on error
+     * @return the CategoryNames value
      */
     public String getCategoryNames(final Long filmId) {
-        final String req = "SELECT GROUP_CONCAT(c.name SEPARATOR ', ') AS categoryNames FROM categories c JOIN film_category fc ON c.id = fc.category_id WHERE fc.film_id = ?";
+        final String req = "SELECT c.name FROM categories c JOIN movie_categories mc ON c.id = mc.category_id WHERE mc.movie_id = ?";
         try (final PreparedStatement statement = this.connection.prepareStatement(req)) {
             statement.setLong(1, filmId);
             final ResultSet rs = statement.executeQuery();
-            if (rs.next()) {
-                return rs.getString("categoryNames");
+            if (!rs.next())
+                return "";
+            final StringBuilder categoryNames = new StringBuilder(rs.getString("name"));
+            while (rs.next()) {
+                categoryNames.append(", ").append(rs.getString("name"));
             }
-
+            return categoryNames.toString();
         } catch (final SQLException e) {
             LOGGER.log(Level.SEVERE, "Error getting category names for film: " + filmId, e);
         }
-
         return "";
     }
-
 
     /**
      * Deletes the association between a specific film and category.
@@ -198,7 +167,7 @@ public class FilmCategoryService {
      * @param categoryId the ID of the category
      */
     public void deleteFilmCategoryAssociation(int filmId, int categoryId) {
-        final String req = "DELETE FROM film_category WHERE film_id = ? AND category_id = ?";
+        final String req = "DELETE FROM movie_categories WHERE movie_id = ? AND category_id = ?";
         try (final PreparedStatement statement = this.connection.prepareStatement(req)) {
             statement.setInt(1, filmId);
             statement.setInt(2, categoryId);
@@ -207,7 +176,5 @@ public class FilmCategoryService {
             LOGGER.log(Level.SEVERE, "Error deleting film-category association", e);
             throw new RuntimeException(e);
         }
-
     }
-
 }

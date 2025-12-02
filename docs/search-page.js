@@ -24,11 +24,12 @@
  */
 
 "use strict";
-$(function() {
+$(function () {
     var copy = $("#page-search-copy");
     var expand = $("#page-search-expand");
     var searchLink = $("span#page-search-link");
     var redirect = $("input#search-redirect");
+
     function setSearchUrlTemplate() {
         var href = document.location.href.split(/[#?]/)[0];
         href += "?q=" + "%s";
@@ -38,26 +39,29 @@ $(function() {
         searchLink.html(href);
         copy[0].onmouseenter();
     }
+
     function copyLink(e) {
         copyToClipboard(this.previousSibling.innerText);
         switchCopyLabel(this, this.lastElementChild);
     }
+
     copy.click(copyLink);
-    copy[0].onmouseenter = function() {};
+    copy[0].onmouseenter = function () {
+    };
     redirect.click(setSearchUrlTemplate);
     setSearchUrlTemplate();
     copy.prop("disabled", false);
     redirect.prop("disabled", false);
     expand.click(function (e) {
         var searchInfo = $("div.page-search-info");
-        if(this.parentElement.hasAttribute("open")) {
+        if (this.parentElement.hasAttribute("open")) {
             searchInfo.attr("style", "border-width: 0;");
         } else {
             searchInfo.attr("style", "border-width: 1px;").height(searchInfo.prop("scrollHeight"));
         }
     });
 });
-$(window).on("load", function() {
+$(window).on("load", function () {
     var input = $("#page-search-input");
     var reset = $("#page-search-reset");
     var notify = $("#page-search-notify");
@@ -68,6 +72,7 @@ $(window).on("load", function() {
     var fixedTab = false;
     var visibleTabs = [];
     var feelingLucky = false;
+
     function renderResults(result) {
         if (!result.length) {
             notify.html(messages.noResult);
@@ -90,7 +95,7 @@ $(window).on("load", function() {
             arr.push(item);
         }
         if (!activeTab || r[activeTab].length === 0 || !fixedTab) {
-            Object.keys(r).reduce(function(prev, curr) {
+            Object.keys(r).reduce(function (prev, curr) {
                 if (r[curr].length > 0 && r[curr][0].score > prev) {
                     activeTab = curr;
                     return r[curr][0].score;
@@ -113,7 +118,7 @@ $(window).on("load", function() {
                 }
             }
         }
-        var categoryCount = Object.keys(r).reduce(function(prev, curr) {
+        var categoryCount = Object.keys(r).reduce(function (prev, curr) {
             return prev + (r[curr].length > 0 ? 1 : 0);
         }, 0);
         visibleTabs = [];
@@ -126,7 +131,7 @@ $(window).on("load", function() {
                     var button = $("<button id='result-tab-" + key
                         + "' class='page-search-header'><span>" + categories[key] + "</span>"
                         + "<span style='font-weight: normal'> (" + count + ")</span></button>").appendTo(tabContainer);
-                    button.click(key, function(e) {
+                    button.click(key, function (e) {
                         fixedTab = true;
                         renderResult(e.data, $(this));
                     });
@@ -145,6 +150,7 @@ $(window).on("load", function() {
             renderTable(activeTab, r[activeTab]).appendTo(resultContainer);
         }
         resultSection.show();
+
         function renderResult(category, button) {
             activeTab = category;
             setSearchUrl();
@@ -154,9 +160,11 @@ $(window).on("load", function() {
             button.addClass("active-table-tab");
         }
     }
+
     function selectTab(category) {
         $("button#result-tab-" + category).click();
     }
+
     function renderTable(category, items) {
         var table = $("<div class='summary-table'>")
             .addClass(category === "modules"
@@ -182,16 +190,17 @@ $(window).on("load", function() {
         if (category !== "modules") {
             $("<div class='table-header col-plain'>" + col2 + "</div>").appendTo(table);
         }
-        $.each(items, function(index, item) {
+        $.each(items, function (index, item) {
             var rowColor = index % 2 ? "odd-row-color" : "even-row-color";
             renderItem(item, table, rowColor);
         });
         return table;
     }
+
     function renderItem(item, table, rowColor) {
         var label = getHighlightedText(item.input, item.boundaries, item.prefix.length, item.input.length);
         var link = $("<a/>")
-            .attr("href",  getURL(item.indexItem, item.category))
+            .attr("href", getURL(item.indexItem, item.category))
             .attr("tabindex", "0")
             .addClass("search-result-link")
             .html(label);
@@ -204,7 +213,9 @@ $(window).on("load", function() {
         }
         $("<div/>").html(link).addClass("col-last").addClass(rowColor).appendTo(table);
     }
+
     var timeout;
+
     function schedulePageSearch() {
         if (timeout) {
             clearTimeout(timeout);
@@ -213,6 +224,7 @@ $(window).on("load", function() {
             doPageSearch()
         }, 100);
     }
+
     function doPageSearch() {
         setSearchUrl();
         var term = searchTerm = input.val().trim();
@@ -224,9 +236,10 @@ $(window).on("load", function() {
             resultSection.hide();
         } else {
             notify.html(messages.searching);
-            doSearch({ term: term, maxResults: 1200 }, renderResults);
+            doSearch({term: term, maxResults: 1200}, renderResults);
         }
     }
+
     function setSearchUrl() {
         var query = input.val().trim();
         var url = document.location.pathname;
@@ -238,11 +251,12 @@ $(window).on("load", function() {
         }
         history.replaceState({query: query}, "", url);
     }
-    input.on("input", function(e) {
+
+    input.on("input", function (e) {
         feelingLucky = false;
         schedulePageSearch();
     });
-    $(document).keydown(function(e) {
+    $(document).keydown(function (e) {
         if ((e.ctrlKey || e.metaKey) && (e.key === "ArrowLeft" || e.key === "ArrowRight")) {
             if (activeTab && visibleTabs.length > 1) {
                 var idx = visibleTabs.indexOf(activeTab);
@@ -252,7 +266,7 @@ $(window).on("load", function() {
             }
         }
     });
-    reset.click(function() {
+    reset.click(function () {
         notify.html(messages.enterTerm);
         resultSection.hide();
         activeTab = "";

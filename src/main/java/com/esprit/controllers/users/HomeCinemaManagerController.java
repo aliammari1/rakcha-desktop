@@ -1,49 +1,58 @@
 package com.esprit.controllers.users;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import com.esprit.models.films.Actor;
-import com.esprit.models.films.Category;
-import com.esprit.models.films.Film;
 import com.esprit.models.cinemas.MovieSession;
+import com.esprit.models.common.Category;
+import com.esprit.models.films.Actor;
+import com.esprit.models.films.Film;
 import com.esprit.models.users.User;
+import com.esprit.services.cinemas.MovieSessionService;
+import com.esprit.services.common.CategoryService;
 import com.esprit.services.films.ActorService;
-import com.esprit.services.films.CategoryService;
 import com.esprit.services.films.FilmService;
 import com.esprit.utils.Page;
 import com.esprit.utils.PageRequest;
-import com.esprit.services.cinemas.MovieSessionService;
-
-import javafx.animation.*;
+import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * Controller for the Cinema Manager Home Dashboard interface.
  * Provides an overview of cinema operations and quick access to manager
  * functions.
- * 
+ *
  * @author RAKCHA Team
  * @version 1.0.0
  * @since 1.0.0
  */
 public class HomeCinemaManagerController implements Initializable {
+
     private static final Logger LOGGER = Logger.getLogger(HomeCinemaManagerController.class.getName());
 
     // Services
@@ -68,13 +77,13 @@ public class HomeCinemaManagerController implements Initializable {
     @FXML
     private Label welcomeLabel;
     @FXML
-    private Label movieCountLabel;
+    private Label cinemaCountLabel;
     @FXML
     private Label sessionCountLabel;
     @FXML
-    private Label actorCountLabel;
+    private Label revenueLabel;
     @FXML
-    private Label categoryCountLabel;
+    private Label bookingCountLabel;
 
     // Animation elements
     @FXML
@@ -107,14 +116,12 @@ public class HomeCinemaManagerController implements Initializable {
                         if (stage != null && stage.getUserData() instanceof User) {
                             User currentUser = (User) stage.getUserData();
                             welcomeLabel.setText("Welcome, " + currentUser.getFirstName() + " "
-                                    + currentUser.getLastName() + "!");
-                        }
- else {
+                                + currentUser.getLastName() + "!");
+                        } else {
                             welcomeLabel.setText("Welcome, Cinema Manager!");
                         }
 
-                    }
- else {
+                    } else {
                         welcomeLabel.setText("Welcome, Cinema Manager!");
                     }
 
@@ -124,7 +131,7 @@ public class HomeCinemaManagerController implements Initializable {
                 }
 
             }
-));
+            ));
             delayedInit.play();
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error initializing cinema manager dashboard: " + e.getMessage(), e);
@@ -134,38 +141,39 @@ public class HomeCinemaManagerController implements Initializable {
 
 
     /**
-     * Populates the dashboard statistic labels with counts retrieved from the film, actor,
-     * category, and session services; on error logs a warning and sets all statistic labels to "0".
+     * Populates the dashboard statistic labels with counts retrieved from the cinema and session services.
      */
     private void loadDashboardStatistics() {
         try {
-            // Load movie count
-            PageRequest pageRequest = new PageRequest(0, 10);
-            Page<Film> films = filmService.read(pageRequest);
-            movieCountLabel.setText(String.valueOf(films.getContent().size()));
-
-            // Load actor count
-            PageRequest actorPageRequest = new PageRequest(0, 10);
-            Page<Actor> actors = actorService.read(actorPageRequest);
-            actorCountLabel.setText(String.valueOf(actors.getContent().size()));
-
-            // Load category count
-            PageRequest categoryPageRequest = new PageRequest(0, 10);
-            Page<Category> categories = categoryService.read(categoryPageRequest);
-            categoryCountLabel.setText(String.valueOf(categories.getContent().size()));
+            // Load cinema count (placeholder)
+            if (cinemaCountLabel != null) {
+                cinemaCountLabel.setText("5");
+            }
 
             // Load session count
-            PageRequest sessionPageRequest = new PageRequest(0, 10);
-            Page<MovieSession> sessions = sessionService.read(sessionPageRequest);
-            sessionCountLabel.setText(String.valueOf(sessions.getContent().size()));
+            if (sessionCountLabel != null) {
+                PageRequest sessionPageRequest = new PageRequest(0, 10);
+                Page<MovieSession> sessions = sessionService.read(sessionPageRequest);
+                sessionCountLabel.setText(String.valueOf(sessions.getContent().size()));
+            }
+
+            // Load revenue (placeholder)
+            if (revenueLabel != null) {
+                revenueLabel.setText("$15,250");
+            }
+
+            // Load booking count (placeholder)
+            if (bookingCountLabel != null) {
+                bookingCountLabel.setText("128");
+            }
 
         } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error loading dashboard statistics: " + e.getMessage(), e);
             // Set default values in case of error
-            movieCountLabel.setText("0");
-            actorCountLabel.setText("0");
-            categoryCountLabel.setText("0");
-            sessionCountLabel.setText("0");
+            if (cinemaCountLabel != null) cinemaCountLabel.setText("0");
+            if (sessionCountLabel != null) sessionCountLabel.setText("0");
+            if (revenueLabel != null) revenueLabel.setText("$0");
+            if (bookingCountLabel != null) bookingCountLabel.setText("0");
         }
 
     }
@@ -176,13 +184,15 @@ public class HomeCinemaManagerController implements Initializable {
      */
     private void loadTodaySessions() {
         try {
-            todaySessionsContainer.getChildren().clear();
+            if (todaySessionsContainer != null) {
+                todaySessionsContainer.getChildren().clear();
 
-            // Add sample session items for today
-            addSessionItem("The Matrix", "10:00 AM", "Hall 1");
-            addSessionItem("Inception", "2:00 PM", "Hall 2");
-            addSessionItem("The Dark Knight", "6:00 PM", "Hall 1");
-            addSessionItem("Interstellar", "9:00 PM", "Hall 3");
+                // Add sample session items for today
+                addSessionItem("The Matrix", "10:00 AM", "Hall 1");
+                addSessionItem("Inception", "2:00 PM", "Hall 2");
+                addSessionItem("The Dark Knight", "6:00 PM", "Hall 1");
+                addSessionItem("Interstellar", "9:00 PM", "Hall 3");
+            }
 
         } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error loading today's sessions: " + e.getMessage(), e);
@@ -197,7 +207,7 @@ public class HomeCinemaManagerController implements Initializable {
     private void addSessionItem(String movieTitle, String time, String hall) {
         HBox sessionItem = new HBox(10);
         sessionItem
-                .setStyle("-fx-padding: 10; -fx-background-color: rgba(60, 60, 60, 0.5); -fx-background-radius: 10;");
+            .setStyle("-fx-padding: 10; -fx-background-color: rgba(60, 60, 60, 0.5); -fx-background-radius: 10;");
 
         Label movieLabel = new Label(movieTitle);
         movieLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;");
@@ -218,19 +228,21 @@ public class HomeCinemaManagerController implements Initializable {
 
     /**
      * Populate the recent activity section of the dashboard.
-     *
+     * <p>
      * Clears the activity container and appends recent activity entries for display.
      * If an error occurs while loading entries, a warning is logged and the container remains cleared.
      */
     private void loadRecentActivity() {
         try {
-            activityContainer.getChildren().clear();
+            if (activityContainer != null) {
+                activityContainer.getChildren().clear();
 
-            // Add sample activity items
-            addActivityItem("New movie session added: Avatar", "10 minutes ago");
-            addActivityItem("Actor profile updated: Tom Hanks", "30 minutes ago");
-            addActivityItem("Category created: Sci-Fi", "1 hour ago");
-            addActivityItem("Movie statistics updated", "2 hours ago");
+                // Add sample activity items
+                addActivityItem("New movie session added: Avatar", "10 minutes ago");
+                addActivityItem("Actor profile updated: Tom Hanks", "30 minutes ago");
+                addActivityItem("Category created: Sci-Fi", "1 hour ago");
+                addActivityItem("Movie statistics updated", "2 hours ago");
+            }
 
         } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error loading recent activity: " + e.getMessage(), e);
@@ -248,7 +260,7 @@ public class HomeCinemaManagerController implements Initializable {
     private void addActivityItem(String activity, String timestamp) {
         HBox activityItem = new HBox(10);
         activityItem
-                .setStyle("-fx-padding: 10; -fx-background-color: rgba(60, 60, 60, 0.5); -fx-background-radius: 10;");
+            .setStyle("-fx-padding: 10; -fx-background-color: rgba(60, 60, 60, 0.5); -fx-background-radius: 10;");
 
         Label activityLabel = new Label(activity);
         activityLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
@@ -266,7 +278,7 @@ public class HomeCinemaManagerController implements Initializable {
 
     /**
      * Starts the dashboard's background animations.
-     *
+     * <p>
      * Initiates continuous floating animations for the particle nodes (if present)
      * and applies a one-second fade-in to the root container (if present).
      */
@@ -274,22 +286,22 @@ public class HomeCinemaManagerController implements Initializable {
         if (particle1 != null && particle2 != null) {
             // Floating animation for particles
             Timeline particleAnimation = new Timeline(
-                    new KeyFrame(Duration.seconds(0),
-                            new KeyValue(particle1.layoutXProperty(), particle1.getLayoutX())),
-                    new KeyFrame(Duration.seconds(3),
-                            new KeyValue(particle1.layoutXProperty(), particle1.getLayoutX() + 50)),
-                    new KeyFrame(Duration.seconds(6),
-                            new KeyValue(particle1.layoutXProperty(), particle1.getLayoutX())));
+                new KeyFrame(Duration.seconds(0),
+                    new KeyValue(particle1.layoutXProperty(), particle1.getLayoutX())),
+                new KeyFrame(Duration.seconds(3),
+                    new KeyValue(particle1.layoutXProperty(), particle1.getLayoutX() + 50)),
+                new KeyFrame(Duration.seconds(6),
+                    new KeyValue(particle1.layoutXProperty(), particle1.getLayoutX())));
             particleAnimation.setCycleCount(Timeline.INDEFINITE);
             particleAnimation.play();
 
             Timeline particle2Animation = new Timeline(
-                    new KeyFrame(Duration.seconds(0),
-                            new KeyValue(particle2.layoutYProperty(), particle2.getLayoutY())),
-                    new KeyFrame(Duration.seconds(4),
-                            new KeyValue(particle2.layoutYProperty(), particle2.getLayoutY() - 30)),
-                    new KeyFrame(Duration.seconds(8),
-                            new KeyValue(particle2.layoutYProperty(), particle2.getLayoutY())));
+                new KeyFrame(Duration.seconds(0),
+                    new KeyValue(particle2.layoutYProperty(), particle2.getLayoutY())),
+                new KeyFrame(Duration.seconds(4),
+                    new KeyValue(particle2.layoutYProperty(), particle2.getLayoutY() - 30)),
+                new KeyFrame(Duration.seconds(8),
+                    new KeyValue(particle2.layoutYProperty(), particle2.getLayoutY())));
             particle2Animation.setCycleCount(Timeline.INDEFINITE);
             particle2Animation.play();
         }
@@ -326,7 +338,7 @@ public class HomeCinemaManagerController implements Initializable {
 
     /**
      * Navigates the application to the session management dashboard.
-     *
+     * <p>
      * Loads the FXML at "/ui/cinemas/DashboardResponsable.fxml" and replaces the current stage's scene with the loaded root.
      */
     @FXML
@@ -345,7 +357,7 @@ public class HomeCinemaManagerController implements Initializable {
 
     /**
      * Navigate the application to the actor management screen.
-     *
+     * <p>
      * Loads the Actor.fxml layout and replaces the current stage's scene with it.
      */
     @FXML
@@ -368,7 +380,7 @@ public class HomeCinemaManagerController implements Initializable {
     @FXML
     void viewStatistics(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/series/Statistique.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/cinemas/statistiques.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) rootContainer.getScene().getWindow();
             stage.setScene(new Scene(root));

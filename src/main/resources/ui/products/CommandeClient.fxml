@@ -1,110 +1,109 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import org.kordamp.ikonli.javafx.FontIcon?>
-<?import java.net.URL?>
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<?import java.net.URL?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" prefHeight="855.0"
+      prefWidth="1507.0"
+      xmlns="http://javafx.com/javafx/21"
+      fx:controller="com.esprit.controllers.products.OrderClientController">
 
-<VBox prefHeight="855.0" prefWidth="1507.0"
-    xmlns="http://javafx.com/javafx/21"
-    xmlns:fx="http://javafx.com/fxml/1"
-    fx:controller="com.esprit.controllers.produits.CommandeClientController">
+  <HBox VBox.vgrow="ALWAYS">
+    <!-- SideBar -->
+    <fx:include source="/ui/sidebar.fxml"/>
 
-    <HBox VBox.vgrow="ALWAYS">
-        <!-- SideBar -->
-        <fx:include source="/ui/sidebar.fxml" />
+    <!-- Main Content -->
+    <VBox spacing="20" HBox.hgrow="ALWAYS">
+      <padding>
+        <Insets top="25" right="25" bottom="25" left="25"/>
+      </padding>
 
-        <!-- Main Content -->
-        <VBox spacing="20" HBox.hgrow="ALWAYS">
-            <padding>
-                <Insets top="25" right="25" bottom="25" left="25" />
-            </padding>
-
-            <!-- Header -->
-            <HBox spacing="15" alignment="CENTER_LEFT">
-                <ImageView fitHeight="69.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
-                    <Image url="@Logo.png" />
-                </ImageView>
-                <VBox>
-                    <Label text="Loujain Hajlaoui" />
-                    <Label text="User" />
-                </VBox>
-                <Region HBox.hgrow="ALWAYS" />
-                <FontIcon fill="#ab4040" iconLiteral="fa-shopping-cart" onMouseClicked="#panier" />
-            </HBox>
-
-            <!-- Content Area -->
-            <HBox spacing="20" VBox.vgrow="ALWAYS">
-                <!-- Payment Form -->
-                <VBox fx:id="paimenet" styleClass="bg-white" maxWidth="645.0" spacing="20">
-                    <padding>
-                        <Insets top="25" right="25" bottom="25" left="25" />
-                    </padding>
-
-                    <HBox spacing="15" alignment="CENTER">
-                        <Label text="Payment Paypal:" styleClass="section-title">
-                            <font>
-                                <Font name="Arial Rounded MT Bold" size="24.0" />
-                            </font>
-                        </Label>
-                        <Button styleClass="sale" prefHeight="86.0" prefWidth="101.0">
-                            <graphic>
-                                <FontIcon fill="WHITE" iconLiteral="fa-paypal" />
-                            </graphic>
-                        </Button>
-                    </HBox>
-
-                    <GridPane vgap="20" hgap="10">
-                        <Label text="Phone Number :" GridPane.rowIndex="0" GridPane.columnIndex="0">
-                            <font>
-                                <Font name="Arial Rounded MT Bold" size="24.0" />
-                            </font>
-                        </Label>
-                        <TextField fx:id="numTelephoneTextField" GridPane.rowIndex="0"
-                            GridPane.columnIndex="1" />
-
-                        <Label text="Address :" GridPane.rowIndex="1" GridPane.columnIndex="0">
-                            <font>
-                                <Font name="Arial Rounded MT Bold" size="24.0" />
-                            </font>
-                        </Label>
-                        <TextField fx:id="adresseTextField" GridPane.rowIndex="1"
-                            GridPane.columnIndex="1" />
-                    </GridPane>
-
-                    <Button onAction="#order" styleClass="sale" text="order">
-                        <font>
-                            <Font name="Arial" size="18.0" />
-                        </font>
-                    </Button>
-                </VBox>
-
-                <!-- Total Price Section -->
-                <VBox alignment="TOP_CENTER" spacing="20">
-                    <Label text="Total Price :" textAlignment="CENTER">
-                        <font>
-                            <Font name="Tw Cen MT Condensed" size="36.0" />
-                        </font>
-                    </Label>
-                    <FlowPane fx:id="prixtotaleFlowPane" styleClass="bg-white" prefHeight="65.0"
-                        prefWidth="188.0" />
-                    <Button fx:id="idpaymentenligne" onAction="#payment" styleClass="sale"
-                        text="Online Payment" visible="false">
-                        <font>
-                            <Font size="14.0" />
-                        </font>
-                    </Button>
-                </VBox>
-            </HBox>
+      <!-- Header -->
+      <HBox spacing="15" alignment="CENTER_LEFT">
+        <ImageView fitHeight="69.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
+          <Image url="@Logo.png"/>
+        </ImageView>
+        <VBox>
+          <Label text="Loujain Hajlaoui"/>
+          <Label text="User"/>
         </VBox>
-    </HBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <FontIcon iconLiteral="mdi2s-shopping:20:#ab4040" onMouseClicked="#shoppingcart" style="-fx-cursor: hand;"/>
+      </HBox>
 
-    <stylesheets>
-        <URL value="@../styles/produitStyle.css" />
-        <URL value="@../styles/filmStyle.css" />
-    </stylesheets>
+      <!-- Content Area -->
+      <HBox spacing="20" VBox.vgrow="ALWAYS">
+        <!-- Payment Form -->
+        <VBox fx:id="paimenet" styleClass="bg-white" maxWidth="645.0" spacing="20">
+          <padding>
+            <Insets top="25" right="25" bottom="25" left="25"/>
+          </padding>
+
+          <HBox spacing="15" alignment="CENTER">
+            <Label text="Payment Paypal:" styleClass="section-title">
+              <font>
+                <Font name="Arial Rounded MT Bold" size="24.0"/>
+              </font>
+            </Label>
+            <Button styleClass="sale" prefHeight="86.0" prefWidth="101.0">
+              <graphic>
+                <FontIcon iconLiteral="mdi2p-paypal:24:white"/>
+              </graphic>
+            </Button>
+          </HBox>
+
+          <GridPane vgap="20" hgap="10">
+            <Label text="Phone Number :" GridPane.rowIndex="0" GridPane.columnIndex="0">
+              <font>
+                <Font name="Arial Rounded MT Bold" size="24.0"/>
+              </font>
+            </Label>
+            <TextField fx:id="numTelephoneTextField" GridPane.rowIndex="0"
+                       GridPane.columnIndex="1"/>
+
+            <Label text="Address :" GridPane.rowIndex="1" GridPane.columnIndex="0">
+              <font>
+                <Font name="Arial Rounded MT Bold" size="24.0"/>
+              </font>
+            </Label>
+            <TextField fx:id="adresseTextField" GridPane.rowIndex="1"
+                       GridPane.columnIndex="1"/>
+          </GridPane>
+
+          <Button onAction="#order" styleClass="sale" text="order">
+            <font>
+              <Font name="Arial" size="18.0"/>
+            </font>
+          </Button>
+        </VBox>
+
+        <!-- Total Price Section -->
+        <VBox alignment="TOP_CENTER" spacing="20">
+          <Label text="Total Price :" textAlignment="CENTER">
+            <font>
+              <Font name="Tw Cen MT Condensed" size="36.0"/>
+            </font>
+          </Label>
+          <FlowPane fx:id="prixtotaleFlowPane" styleClass="bg-white" prefHeight="65.0"
+                    prefWidth="188.0"/>
+          <Button fx:id="idpaymentenligne" onAction="#payment" styleClass="sale"
+                  text="Online Payment" visible="false">
+            <font>
+              <Font size="14.0"/>
+            </font>
+          </Button>
+        </VBox>
+      </HBox>
+    </VBox>
+  </HBox>
+
+  <stylesheets>
+    <URL value="@../styles/produitStyle.css"/>
+    <URL value="@../styles/filmStyle.css"/>
+  </stylesheets>
 </VBox>

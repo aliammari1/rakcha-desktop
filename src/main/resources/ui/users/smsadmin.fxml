@@ -1,98 +1,106 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.*?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" prefHeight="855.0"
+      prefWidth="1507.0"
+      xmlns="http://javafx.com/javafx/21"
+      fx:controller="com.esprit.controllers.users.SMSAdminController">
 
-<VBox prefHeight="855.0" prefWidth="1507.0"
-    xmlns="http://javafx.com/javafx/21"
-    xmlns:fx="http://javafx.com/fxml/1" 
-    fx:controller="com.esprit.controllers.users.SMSAdminController">
+  <HBox VBox.vgrow="ALWAYS">
+    <!-- SideBar -->
+    <fx:include source="/ui/sidebar.fxml"/>
 
-    <HBox VBox.vgrow="ALWAYS">
-        <!-- SideBar -->
-        <fx:include source="/ui/sidebar.fxml" />
-        
-        <!-- Main Content -->
-        <VBox spacing="20" HBox.hgrow="ALWAYS">
-            <padding>
-                <Insets top="25" right="25" bottom="25" left="25"/>
-            </padding>
+    <!-- Main Content -->
+    <VBox spacing="20" HBox.hgrow="ALWAYS">
+      <padding>
+        <Insets top="25" right="25" bottom="25" left="25"/>
+      </padding>
 
-            <!-- Header -->
-            <Label text="SMS Notifications" styleClass="section-title">
-                <font>
-                    <Font name="Arial Rounded MT Bold" size="32.0"/>
-                </font>
-            </Label>
+      <!-- Header -->
+      <Label text="SMS Notifications" styleClass="section-title">
+        <font>
+          <Font name="Arial Rounded MT Bold" size="32.0"/>
+        </font>
+      </Label>
 
-            <!-- SMS Form -->
-            <VBox spacing="15" styleClass="bg-white" maxWidth="600.0">
-                <padding>
-                    <Insets top="20" right="20" bottom="20" left="20"/>
-                </padding>
+      <!-- SMS Form -->
+      <VBox spacing="15" styleClass="bg-white" maxWidth="600.0">
+        <padding>
+          <Insets top="20" right="20" bottom="20" left="20"/>
+        </padding>
 
-                <GridPane vgap="15" hgap="10">
-                    <!-- Recipient -->
-                    <Label text="Recipient:" GridPane.rowIndex="0" GridPane.columnIndex="0">
-                        <font>
-                            <Font size="16.0"/>
-                        </font>
-                    </Label>
-                    <TextField fx:id="receiverField" promptText="Enter phone number"
-                             GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+        <GridPane vgap="15" hgap="10">
+          <!-- Phone Number -->
+          <Label text="Phone Number:" GridPane.rowIndex="0" GridPane.columnIndex="0">
+            <font>
+              <Font size="16.0"/>
+            </font>
+          </Label>
+          <TextField fx:id="phoneNumberTextfield" promptText="Enter phone number (8 digits)"
+                     GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
-                    <!-- Message -->
-                    <Label text="Message:" GridPane.rowIndex="1" GridPane.columnIndex="0">
-                        <font>
-                            <Font size="16.0"/>
-                        </font>
-                    </Label>
-                    <TextArea fx:id="messageField" promptText="Type your message here..."
-                             prefRowCount="5" wrapText="true"
-                             GridPane.rowIndex="1" GridPane.columnIndex="1"/>
-                </GridPane>
+          <!-- Verification Code -->
+          <Label text="Verification Code:" GridPane.rowIndex="1" GridPane.columnIndex="0">
+            <font>
+              <Font size="16.0"/>
+            </font>
+          </Label>
+          <TextField fx:id="codeTextField" promptText="Enter verification code"
+                     GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
-                <!-- Action Buttons -->
-                <HBox spacing="10" alignment="CENTER_RIGHT">
-                    <Button onAction="#sendSMS" styleClass="primary-button">
-                        <graphic>
-                            <FontIcon iconLiteral="fa-paper-plane"/>
-                        </graphic>
-                        <text>Send SMS</text>
-                    </Button>
-                    <Button  styleClass="secondary-button">
-                        <graphic>
-                            <FontIcon iconLiteral="fa-refresh"/>
-                        </graphic>
-                        <text>Clear</text>
-                    </Button>
-                </HBox>
-            </VBox>
+          <!-- Message -->
+          <Label text="Message:" GridPane.rowIndex="2" GridPane.columnIndex="0">
+            <font>
+              <Font size="16.0"/>
+            </font>
+          </Label>
+          <TextArea fx:id="messageField" promptText="Type your message here..."
+                    prefRowCount="5" wrapText="true"
+                    GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+        </GridPane>
 
-            <!-- Message History -->
-            <VBox VBox.vgrow="ALWAYS" styleClass="bg-white">
-                <padding>
-                    <Insets top="20" right="20" bottom="20" left="20"/>
-                </padding>
+        <!-- Action Buttons -->
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+          <Button onAction="#sendSMS" styleClass="primary-button">
+            <graphic>
+              <FontIcon iconLiteral="mdi2s-send"/>
+            </graphic>
+            <text>Send SMS</text>
+          </Button>
+          <Button styleClass="secondary-button">
+            <graphic>
+              <FontIcon iconLiteral="mdi2r-refresh"/>
+            </graphic>
+            <text>Clear</text>
+          </Button>
+        </HBox>
+      </VBox>
 
-                <Label text="Message History" styleClass="subsection-title">
-                    <font>
-                        <Font name="Arial Bold" size="24.0"/>
-                    </font>
-                </Label>
+      <!-- Message History -->
+      <VBox VBox.vgrow="ALWAYS" styleClass="bg-white">
+        <padding>
+          <Insets top="20" right="20" bottom="20" left="20"/>
+        </padding>
 
-                <TableView fx:id="messageHistory" VBox.vgrow="ALWAYS">
-                    <columns>
-                        <TableColumn text="Date/Time"/>
-                        <TableColumn text="Recipient"/>
-                        <TableColumn text="Message"/>
-                        <TableColumn text="Status"/>
-                    </columns>
-                </TableView>
-            </VBox>
-        </VBox>
-    </HBox>
+        <Label text="Message History" styleClass="subsection-title">
+          <font>
+            <Font name="Arial Bold" size="24.0"/>
+          </font>
+        </Label>
+
+        <TableView fx:id="messageHistory" VBox.vgrow="ALWAYS">
+          <columns>
+            <TableColumn text="Date/Time"/>
+            <TableColumn text="Recipient"/>
+            <TableColumn text="Message"/>
+            <TableColumn text="Status"/>
+          </columns>
+        </TableView>
+      </VBox>
+    </VBox>
+  </HBox>
 </VBox>

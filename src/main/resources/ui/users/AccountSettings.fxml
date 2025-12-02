@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import org.kordamp.ikonli.javafx.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21"
+           fx:controller="com.esprit.controllers.users.AccountSettingsController"
+           styleClass="immersive-root"
+           stylesheets="@../styles/filmStyle.css, @../styles/account.css">
+
+  <!-- Background -->
+  <AnchorPane styleClass="cinematic-bg">
+    <Circle radius="200" layoutX="150" layoutY="150" styleClass="ambient-orb orb-primary" opacity="0.15"/>
+    <Circle radius="250" layoutX="1100" layoutY="500" styleClass="ambient-orb orb-secondary" opacity="0.1"/>
+  </AnchorPane>
+
+  <BorderPane styleClass="main-shell">
+    <left>
+      <fx:include source="../sidebar.fxml"/>
+    </left>
+
+    <center>
+      <ScrollPane styleClass="main-scroll" fitToWidth="true" hbarPolicy="NEVER">
+        <VBox spacing="30" styleClass="settings-container">
+          <padding>
+            <Insets top="30" bottom="50" left="40" right="40"/>
+          </padding>
+
+          <!-- Header -->
+          <HBox alignment="CENTER_LEFT" spacing="20">
+            <VBox spacing="2">
+              <Label text="ACCOUNT SETTINGS" styleClass="brand-title"/>
+              <Label text="Manage your preferences and security" styleClass="brand-subtitle"/>
+            </VBox>
+          </HBox>
+
+          <!-- Settings Sections -->
+          <HBox spacing="30">
+            <!-- Left Column - Navigation -->
+            <VBox spacing="10" styleClass="settings-nav" prefWidth="250">
+              <Button fx:id="profileNavBtn" styleClass="nav-item active" text="Profile" onAction="#showProfile"
+                      maxWidth="Infinity">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2a-account:20"/>
+                </graphic>
+              </Button>
+              <Button fx:id="securityNavBtn" styleClass="nav-item" text="Security" onAction="#showSecurity"
+                      maxWidth="Infinity">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2s-shield-lock:20"/>
+                </graphic>
+              </Button>
+              <Button fx:id="notificationsNavBtn" styleClass="nav-item" text="Notifications"
+                      onAction="#showNotifications" maxWidth="Infinity">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2b-bell:20"/>
+                </graphic>
+              </Button>
+              <Button fx:id="privacyNavBtn" styleClass="nav-item" text="Privacy" onAction="#showPrivacy"
+                      maxWidth="Infinity">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2e-eye-off:20"/>
+                </graphic>
+              </Button>
+              <Button fx:id="connectedNavBtn" styleClass="nav-item" text="Connected Accounts" onAction="#showConnected"
+                      maxWidth="Infinity">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2l-link:20"/>
+                </graphic>
+              </Button>
+              <Button fx:id="preferencesNavBtn" styleClass="nav-item" text="Preferences" onAction="#showPreferences"
+                      maxWidth="Infinity">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2t-tune:20"/>
+                </graphic>
+              </Button>
+              <Button fx:id="dataNavBtn" styleClass="nav-item" text="Data &amp; Storage" onAction="#showData"
+                      maxWidth="Infinity">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2d-database:20"/>
+                </graphic>
+              </Button>
+
+              <Region VBox.vgrow="ALWAYS"/>
+
+              <Button styleClass="nav-item danger" text="Delete Account" onAction="#deleteAccount" maxWidth="Infinity">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2d-delete:20"/>
+                </graphic>
+              </Button>
+            </VBox>
+
+            <!-- Right Column - Content -->
+            <StackPane HBox.hgrow="ALWAYS" styleClass="settings-content">
+
+              <!-- Profile Section -->
+              <VBox fx:id="profileSection" spacing="25">
+                <Label text="Profile Information" styleClass="section-title"/>
+
+                <HBox spacing="30" alignment="TOP_LEFT">
+                  <VBox spacing="15" alignment="CENTER">
+                    <StackPane styleClass="avatar-container">
+                      <ImageView fx:id="avatarImage" fitWidth="120" fitHeight="120" styleClass="avatar"/>
+                      <Circle radius="60" styleClass="avatar-border"/>
+                    </StackPane>
+                    <Button onAction="#changeAvatar" styleClass="change-avatar-btn" text="Change Photo">
+                      <graphic>
+                        <FontIcon iconLiteral="mdi2c-camera:16"/>
+                      </graphic>
+                    </Button>
+                  </VBox>
+
+                  <VBox spacing="20" HBox.hgrow="ALWAYS">
+                    <HBox spacing="20">
+                      <VBox spacing="8" HBox.hgrow="ALWAYS">
+                        <Label text="First Name" styleClass="field-label"/>
+                        <TextField fx:id="firstNameField" styleClass="settings-input" promptText="Enter first name"/>
+                      </VBox>
+                      <VBox spacing="8" HBox.hgrow="ALWAYS">
+                        <Label text="Last Name" styleClass="field-label"/>
+                        <TextField fx:id="lastNameField" styleClass="settings-input" promptText="Enter last name"/>
+                      </VBox>
+                    </HBox>
+
+                    <VBox spacing="8">
+                      <Label text="Email" styleClass="field-label"/>
+                      <HBox spacing="10">
+                        <TextField fx:id="emailField" styleClass="settings-input" promptText="Enter email"
+                                   HBox.hgrow="ALWAYS"/>
+                        <Button fx:id="verifyEmailBtn" styleClass="verify-btn" text="Verify"/>
+                      </HBox>
+                    </VBox>
+
+                    <VBox spacing="8">
+                      <Label text="Phone Number" styleClass="field-label"/>
+                      <TextField fx:id="phoneField" styleClass="settings-input" promptText="+1 (555) 000-0000"/>
+                    </VBox>
+
+                    <VBox spacing="8">
+                      <Label text="Bio" styleClass="field-label"/>
+                      <TextArea fx:id="bioField" styleClass="settings-textarea" promptText="Tell us about yourself..."
+                                prefRowCount="3"/>
+                    </VBox>
+                  </VBox>
+                </HBox>
+
+                <HBox spacing="15" alignment="CENTER_RIGHT">
+                  <Button onAction="#cancelChanges" styleClass="action-btn secondary" text="Cancel"/>
+                  <Button onAction="#saveProfile" styleClass="action-btn primary" text="Save Changes"/>
+                </HBox>
+              </VBox>
+
+              <!-- Security Section (Hidden by default) -->
+              <VBox fx:id="securitySection" spacing="25" visible="false" managed="false">
+                <Label text="Security Settings" styleClass="section-title"/>
+
+                <VBox spacing="20" styleClass="security-section">
+                  <Label text="Change Password" styleClass="subsection-title"/>
+
+                  <VBox spacing="8">
+                    <Label text="Current Password" styleClass="field-label"/>
+                    <PasswordField fx:id="currentPasswordField" styleClass="settings-input"/>
+                  </VBox>
+
+                  <VBox spacing="8">
+                    <Label text="New Password" styleClass="field-label"/>
+                    <PasswordField fx:id="newPasswordField" styleClass="settings-input"/>
+                    <ProgressBar fx:id="passwordStrength" styleClass="password-strength" prefWidth="200"/>
+                    <Label fx:id="passwordHint" styleClass="password-hint"/>
+                  </VBox>
+
+                  <VBox spacing="8">
+                    <Label text="Confirm New Password" styleClass="field-label"/>
+                    <PasswordField fx:id="confirmPasswordField" styleClass="settings-input"/>
+                  </VBox>
+
+                  <Button onAction="#updatePassword" styleClass="action-btn primary" text="Update Password"/>
+                </VBox>
+
+                <Separator styleClass="section-separator"/>
+
+                <VBox spacing="15">
+                  <Label text="Two-Factor Authentication" styleClass="subsection-title"/>
+                  <HBox spacing="15" alignment="CENTER_LEFT">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                      <Label text="Authenticator App" styleClass="option-title"/>
+                      <Label text="Use an authenticator app for 2FA" styleClass="option-desc"/>
+                    </VBox>
+                    <ToggleButton fx:id="twoFactorToggle" styleClass="toggle-switch"/>
+                  </HBox>
+                </VBox>
+
+                <VBox spacing="15">
+                  <Label text="Login Sessions" styleClass="subsection-title"/>
+                  <VBox fx:id="sessionsContainer" spacing="10"/>
+                  <Button onAction="#logoutAllSessions" styleClass="action-btn danger"
+                          text="Logout All Other Sessions"/>
+                </VBox>
+              </VBox>
+
+              <!-- Notifications Section -->
+              <VBox fx:id="notificationsSection" spacing="25" visible="false" managed="false">
+                <Label text="Notification Preferences" styleClass="section-title"/>
+
+                <VBox spacing="15">
+                  <HBox spacing="15" alignment="CENTER_LEFT" styleClass="notification-option">
+                    <VBox spacing="3" HBox.hgrow="ALWAYS">
+                      <Label text="Email Notifications" styleClass="option-title"/>
+                      <Label text="Receive updates about bookings and promotions" styleClass="option-desc"/>
+                    </VBox>
+                    <ToggleButton fx:id="emailNotifToggle" styleClass="toggle-switch"/>
+                  </HBox>
+
+                  <HBox spacing="15" alignment="CENTER_LEFT" styleClass="notification-option">
+                    <VBox spacing="3" HBox.hgrow="ALWAYS">
+                      <Label text="Push Notifications" styleClass="option-title"/>
+                      <Label text="Get instant alerts on your device" styleClass="option-desc"/>
+                    </VBox>
+                    <ToggleButton fx:id="pushNotifToggle" styleClass="toggle-switch"/>
+                  </HBox>
+
+                  <HBox spacing="15" alignment="CENTER_LEFT" styleClass="notification-option">
+                    <VBox spacing="3" HBox.hgrow="ALWAYS">
+                      <Label text="Booking Reminders" styleClass="option-title"/>
+                      <Label text="Remind me before my scheduled shows" styleClass="option-desc"/>
+                    </VBox>
+                    <ToggleButton fx:id="reminderToggle" styleClass="toggle-switch"/>
+                  </HBox>
+
+                  <HBox spacing="15" alignment="CENTER_LEFT" styleClass="notification-option">
+                    <VBox spacing="3" HBox.hgrow="ALWAYS">
+                      <Label text="New Releases" styleClass="option-title"/>
+                      <Label text="Notify when new movies are available" styleClass="option-desc"/>
+                    </VBox>
+                    <ToggleButton fx:id="newReleaseToggle" styleClass="toggle-switch"/>
+                  </HBox>
+
+                  <HBox spacing="15" alignment="CENTER_LEFT" styleClass="notification-option">
+                    <VBox spacing="3" HBox.hgrow="ALWAYS">
+                      <Label text="Friend Activity" styleClass="option-title"/>
+                      <Label text="Updates about friends' reviews and bookings" styleClass="option-desc"/>
+                    </VBox>
+                    <ToggleButton fx:id="friendActivityToggle" styleClass="toggle-switch"/>
+                  </HBox>
+                </VBox>
+              </VBox>
+
+              <!-- Preferences Section -->
+              <VBox fx:id="preferencesSection" spacing="25" visible="false" managed="false">
+                <Label text="App Preferences" styleClass="section-title"/>
+
+                <VBox spacing="20">
+                  <VBox spacing="8">
+                    <Label text="Language" styleClass="field-label"/>
+                    <ComboBox fx:id="languageCombo" styleClass="settings-combo" prefWidth="250"/>
+                  </VBox>
+
+                  <VBox spacing="8">
+                    <Label text="Theme" styleClass="field-label"/>
+                    <HBox spacing="15">
+                      <ToggleButton fx:id="darkThemeBtn" styleClass="theme-btn" text="Dark"/>
+                      <ToggleButton fx:id="lightThemeBtn" styleClass="theme-btn" text="Light"/>
+                      <ToggleButton fx:id="autoThemeBtn" styleClass="theme-btn" text="Auto"/>
+                    </HBox>
+                  </VBox>
+
+                  <VBox spacing="8">
+                    <Label text="Default Cinema" styleClass="field-label"/>
+                    <ComboBox fx:id="defaultCinemaCombo" styleClass="settings-combo" prefWidth="300"/>
+                  </VBox>
+
+                  <VBox spacing="8">
+                    <Label text="Preferred Seat Location" styleClass="field-label"/>
+                    <ComboBox fx:id="seatPreferenceCombo" styleClass="settings-combo" prefWidth="250"/>
+                  </VBox>
+                </VBox>
+              </VBox>
+            </StackPane>
+          </HBox>
+        </VBox>
+      </ScrollPane>
+    </center>
+  </BorderPane>
+</StackPane>

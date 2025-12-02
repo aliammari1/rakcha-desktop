@@ -1,14 +1,5 @@
 package com.esprit.utils;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.imageio.ImageIO;
-
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.MultiFormatReader;
@@ -20,6 +11,14 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * Utility class providing helper methods for the RAKCHA application. Contains
  * reusable functionality and common operations.
@@ -29,6 +28,7 @@ import com.google.zxing.common.HybridBinarizer;
  * @since 1.0.0
  */
 public class CodeBareProduct {
+
     private static final Logger LOGGER = Logger.getLogger(CodeBareProduct.class.getName());
     private static final int DEFAULT_WIDTH = 300;
     private static final int DEFAULT_HEIGHT = 100;
@@ -37,10 +37,8 @@ public class CodeBareProduct {
     /**
      * Generate a barcode image for a product
      *
-     * @param productCode
-     *                    The product code to encode
-     * @param filePath
-     *                    The path where the barcode image should be saved
+     * @param productCode The product code to encode
+     * @param filePath    The path where the barcode image should be saved
      * @return boolean indicating if generation was successful
      */
     public static boolean generateBarcode(String productCode, Path filePath) {
@@ -51,7 +49,7 @@ public class CodeBareProduct {
 
 
             BitMatrix matrix = new MultiFormatWriter().encode(productCode, BarcodeFormat.CODE_128, DEFAULT_WIDTH,
-                    DEFAULT_HEIGHT);
+                DEFAULT_HEIGHT);
 
             MatrixToImageWriter.writeToPath(matrix, DEFAULT_FORMAT, filePath);
             LOGGER.info("Barcode generated successfully: " + filePath);
@@ -68,8 +66,7 @@ public class CodeBareProduct {
     /**
      * Read a barcode from an image file
      *
-     * @param barcodeImage
-     *                     The image file containing the barcode
+     * @param barcodeImage The image file containing the barcode
      * @return The decoded barcode text, or null if reading failed
      */
     public static String readBarcode(File barcodeImage) {

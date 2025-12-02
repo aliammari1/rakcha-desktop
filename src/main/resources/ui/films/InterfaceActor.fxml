@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.image.*?>
-<?import org.kordamp.ikonli.javafx.FontIcon?>
-
-<VBox prefHeight="855.0" prefWidth="1507.0"
-    xmlns="http://javafx.com/javafx/21"
-    xmlns:fx="http://javafx.com/fxml/1"
-    fx:controller="com.esprit.controllers.films.ActorController">
+<VBox xmlns:fx="http://javafx.com/fxml/1" prefHeight="855.0"
+      prefWidth="1507.0"
+      xmlns="http://javafx.com/javafx/21"
+      fx:controller="com.esprit.controllers.films.ActorController">
   <HBox VBox.vgrow="ALWAYS">
     <!-- SideBar -->
     <fx:include source="/ui/sidebar.fxml"/>
@@ -27,8 +25,8 @@
           </font>
         </Label>
         <Region HBox.hgrow="ALWAYS"/>
-        <TextField fx:id="recherche_textField" promptText="Search actors..." 
-                                    prefWidth="300.0" styleClass="text-field-red" />
+        <TextField fx:id="recherche_textField" promptText="Search actors..."
+                   prefWidth="300.0" styleClass="text-field-red"/>
       </HBox>
       <!-- Content Area -->
       <HBox spacing="20" VBox.vgrow="ALWAYS">
@@ -45,9 +43,9 @@
               </font>
             </Label>
             <TextField fx:id="nomActor_textField" styleClass="text-field-red"
-                                                    GridPane.rowIndex="0" GridPane.columnIndex="1" />
-            <Label fx:id="errorNameActor" styleClass="error-label" 
-                                                    GridPane.rowIndex="1" GridPane.columnIndex="1" />
+                       GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+            <Label fx:id="errorNameActor" styleClass="error-label"
+                   GridPane.rowIndex="1" GridPane.columnIndex="1"/>
             <!-- Biography -->
             <Label text="Biography:" GridPane.rowIndex="2" GridPane.columnIndex="0">
               <font>
@@ -55,10 +53,10 @@
               </font>
             </Label>
             <TextArea fx:id="bioActor_textArea" styleClass="text-field-red"
-                                                    prefRowCount="5" wrapText="true"
-                                                    GridPane.rowIndex="2" GridPane.columnIndex="1" />
-            <Label fx:id="errorBio" styleClass="error-label" 
-                                                    GridPane.rowIndex="3" GridPane.columnIndex="1" />
+                      prefRowCount="5" wrapText="true"
+                      GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+            <Label fx:id="errorBio" styleClass="error-label"
+                   GridPane.rowIndex="3" GridPane.columnIndex="1"/>
             <!-- Image -->
             <Label text="Image:" GridPane.rowIndex="4" GridPane.columnIndex="0">
               <font>
@@ -67,16 +65,16 @@
             </Label>
             <VBox spacing="10" GridPane.rowIndex="4" GridPane.columnIndex="1">
               <ImageView fx:id="imageActor_ImageView1" fitHeight="150.0" fitWidth="200.0"
-                                                            pickOnBounds="true" preserveRatio="true" />
+                         pickOnBounds="true" preserveRatio="true"/>
               <Button onAction="#importImage" styleClass="secondary-button"
-                                                            text="Upload Image" />
+                      text="Upload Image"/>
             </VBox>
           </GridPane>
           <!-- Action Buttons -->
           <HBox spacing="10" alignment="CENTER">
             <Button onAction="#insertActor" styleClass="sale" text="Add Actor"/>
-            <Button fx:id="GoToFilms_Button" onAction="#switchToFilms" 
-                                                    styleClass="edit-button" text="Go to Films" />
+            <Button fx:id="GoToFilms_Button" onAction="#switchToFilms"
+                    styleClass="edit-button" text="Go to Films"/>
           </HBox>
         </VBox>
         <!-- Right Side - Actors Table -->

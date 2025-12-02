@@ -2,10 +2,10 @@ name: Build and Deploy RAKCHA Desktop
 
 on:
   push:
-    branches: [main, master]
-    tags: ["v*"]
+    branches: [ main, master ]
+    tags: [ "v*" ]
   pull_request:
-    branches: [main, master]
+    branches: [ main, master ]
   workflow_dispatch:
 
 env:
@@ -82,9 +82,9 @@ jobs:
 
       - name: Verify Linux artifacts
         run: |
-          echo "=== Debian Package ===" 
+          echo "=== Debian Package ==="
           ls -lh target/dist/*.deb || echo "No .deb package found"
-          echo "=== Portable Archive ===" 
+          echo "=== Portable Archive ==="
           ls -lh ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-linux-portable.tar.gz
 
       - name: Upload Linux artifacts
@@ -171,9 +171,9 @@ jobs:
 
       - name: Verify Windows artifacts
         run: |
-          Write-Host "=== MSI Installer ===" 
+          Write-Host "=== MSI Installer ==="
           Get-ChildItem target\dist\*.msi -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "$($_.Name) - $([math]::Round($_.Length/1MB, 2)) MB" }
-          Write-Host "=== Portable Archive ===" 
+          Write-Host "=== Portable Archive ==="
           Get-ChildItem ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-windows-portable.zip -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "$($_.Name) - $([math]::Round($_.Length/1MB, 2)) MB" }
         shell: powershell
 
@@ -250,9 +250,9 @@ jobs:
 
       - name: Verify macOS artifacts
         run: |
-          echo "=== DMG Installer ===" 
+          echo "=== DMG Installer ==="
           ls -lh target/dist/*.dmg 2>/dev/null || echo "No .dmg installer found"
-          echo "=== Portable Archive ===" 
+          echo "=== Portable Archive ==="
           ls -lh ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-macos-portable.tar.gz
 
       - name: Upload macOS artifacts
@@ -266,7 +266,7 @@ jobs:
           if-no-files-found: warn
 
   deploy-website:
-    needs: [build-linux, build-windows, build-macos]
+    needs: [ build-linux, build-windows, build-macos ]
     runs-on: ubuntu-latest
     name: Deploy to GitHub Pages
     if: always() && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/'))
@@ -309,26 +309,26 @@ jobs:
         run: |
           cp -r website/* ./
           mkdir -p releases/linux releases/windows releases/macos
-          
+
           # Copy platform-specific files with version naming
           if [ -d "artifacts/linux" ]; then
             find artifacts/linux -type f \( -name "*.deb" -o -name "*.tar.gz" \) -exec cp {} releases/linux/ \;
           fi
-          
+
           if [ -d "artifacts/windows" ]; then
             find artifacts/windows -type f \( -name "*.msi" -o -name "*.zip" \) -exec cp {} releases/windows/ \;
           fi
-          
+
           if [ -d "artifacts/macos" ]; then
             find artifacts/macos -type f \( -name "*.dmg" -o -name "*.tar.gz" \) -exec cp {} releases/macos/ \;
           fi
-          
+
           # Generate release information
           echo "# RAKCHA Desktop Installers" > releases/README.md
           echo "" >> releases/README.md
           echo "Built with jpackage for native platform integration." >> releases/README.md
           echo "" >> releases/README.md
-          
+
           for platform in linux windows macos; do
             echo "## ${platform^} Installers" >> releases/README.md
             for file in releases/$platform/*; do
@@ -354,7 +354,7 @@ jobs:
         uses: actions/deploy-pages@v4
 
   create-release:
-    needs: [build-linux, build-windows, build-macos]
+    needs: [ build-linux, build-windows, build-macos ]
     runs-on: ubuntu-latest
     name: Create GitHub Release
     if: always() && startsWith(github.ref, 'refs/tags/')
@@ -400,14 +400,14 @@ jobs:
           echo "" >> release-notes.md
           echo "## 📦 Downloads" >> release-notes.md
           echo "" >> release-notes.md
-          
+
           # Linux section
           echo "### 🐧 Linux" >> release-notes.md
           for file in artifacts/linux/*; do
             if [[ -f "$file" ]]; then
               filename=$(basename "$file")
               size=$(du -h "$file" | cut -f1)
-              
+
               if [[ $filename == *.deb ]]; then
                 echo "- **$filename** (${size}) - Debian/Ubuntu installer package (recommended)" >> release-notes.md
               elif [[ $filename == *portable* ]]; then
@@ -415,15 +415,15 @@ jobs:
               fi
             fi
           done
-          
-          # Windows section  
+
+          # Windows section
           echo "" >> release-notes.md
           echo "### 🪟 Windows" >> release-notes.md
           for file in artifacts/windows/*; do
             if [[ -f "$file" ]]; then
               filename=$(basename "$file")
               size=$(du -h "$file" | cut -f1)
-              
+
               if [[ $filename == *.msi ]]; then
                 echo "- **$filename** (${size}) - Windows MSI installer (recommended)" >> release-notes.md
               elif [[ $filename == *portable* ]]; then
@@ -431,7 +431,7 @@ jobs:
               fi
             fi
           done
-          
+
           # macOS section
           echo "" >> release-notes.md
           echo "### 🍎 macOS" >> release-notes.md
@@ -439,7 +439,7 @@ jobs:
             if [[ -f "$file" ]]; then
               filename=$(basename "$file")
               size=$(du -h "$file" | cut -f1)
-              
+
               if [[ $filename == *.dmg ]]; then
                 echo "- **$filename** (${size}) - macOS DMG disk image installer (recommended)" >> release-notes.md
               elif [[ $filename == *portable* ]]; then
@@ -447,7 +447,7 @@ jobs:
               fi
             fi
           done
-          
+
           echo "" >> release-notes.md
           echo "## 📋 Installation Instructions" >> release-notes.md
           echo "" >> release-notes.md

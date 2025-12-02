@@ -1,6 +1,11 @@
 package com.esprit.controllers.users;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import com.esprit.utils.TestFXBase;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
@@ -8,21 +13,16 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.Timeout;
-import java.util.concurrent.TimeUnit;
 import org.testfx.framework.junit5.Start;
 
-import com.esprit.utils.TestFXBase;
+import java.util.concurrent.TimeUnit;
 
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Comprehensive test suite for FaceRecognitionController.
  * Tests camera initialization, face detection, and recognition functionality.
- * 
+ * <p>
  * Note: This controller uses OpenCV which requires native libraries.
  * Tests focus on UI interaction and state management.
  */
@@ -251,7 +251,7 @@ class FaceRecognitionControllerTest extends TestFXBase {
 
             // Assert camera remains in stopped state (button text returns to initial)
             assertThat(cameraButton.getText()).isEqualTo(initialText);
-            
+
             // Verify frame view is not streaming
             ImageView frameView = lookup("#originalFrame").query();
             assertThat(frameView).isNotNull();
@@ -287,7 +287,7 @@ class FaceRecognitionControllerTest extends TestFXBase {
             // Verify camera button and frame display are ready
             Button cameraButton = lookup("#cameraButton").query();
             ImageView frameView = lookup("#originalFrame").query();
-            
+
             assertThat(cameraButton).isNotNull();
             assertThat(frameView).isNotNull();
         }
@@ -329,7 +329,7 @@ class FaceRecognitionControllerTest extends TestFXBase {
 
             Button cameraButton = lookup("#cameraButton").query();
             assertThat(cameraButton).isNotNull();
-            
+
             // Verify frame view is ready for real-time updates
             ImageView frameView = lookup("#originalFrame").query();
             assertThat(frameView).isNotNull();
@@ -362,7 +362,7 @@ class FaceRecognitionControllerTest extends TestFXBase {
 
             Button cameraButton = lookup("#cameraButton").query();
             ImageView frameView = lookup("#originalFrame").query();
-            
+
             assertThat(cameraButton).isNotNull();
             assertThat(frameView).isNotNull();
         }

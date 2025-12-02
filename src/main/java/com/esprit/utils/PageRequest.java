@@ -2,21 +2,21 @@ package com.esprit.utils;
 
 /**
  * Utility class for pagination parameters.
- * 
+ *
  * @author RAKCHA Team
  * @version 1.0.0
  * @since 1.0.0
  */
 public class PageRequest {
-    private final int page;
-    private final int size;
-    private final String sortBy;
-    private final String sortDirection;
 
     public static final int DEFAULT_PAGE = 0;
     public static final int DEFAULT_SIZE = 20;
     public static final int MAX_SIZE = 100;
     public static final String DEFAULT_SORT_DIRECTION = "ASC";
+    private final int page;
+    private final int size;
+    private final String sortBy;
+    private final String sortDirection;
 
     public PageRequest(int page, int size) {
         this(page, size, null, DEFAULT_SORT_DIRECTION);
@@ -28,9 +28,9 @@ public class PageRequest {
         this.size = Math.min(Math.max(1, size), MAX_SIZE);
         this.sortBy = sortBy;
         this.sortDirection = sortDirection != null &&
-                ("DESC".equalsIgnoreCase(sortDirection) || "ASC".equalsIgnoreCase(sortDirection))
-                        ? sortDirection.toUpperCase()
-                        : DEFAULT_SORT_DIRECTION;
+            ("DESC".equalsIgnoreCase(sortDirection) || "ASC".equalsIgnoreCase(sortDirection))
+            ? sortDirection.toUpperCase()
+            : DEFAULT_SORT_DIRECTION;
     }
 
 

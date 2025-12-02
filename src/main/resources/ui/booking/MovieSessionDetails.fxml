@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import org.kordamp.ikonli.javafx.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21"
+           fx:controller="com.esprit.controllers.cinemas.MovieSessionDetailsController"
+           styleClass="immersive-root"
+           stylesheets="@../styles/filmStyle.css, @../styles/booking.css">
+
+  <!-- Background -->
+  <AnchorPane styleClass="cinematic-bg">
+    <Circle radius="250" layoutX="100" layoutY="100" styleClass="ambient-orb orb-primary" opacity="0.12"/>
+    <Circle radius="200" layoutX="1100" layoutY="500" styleClass="ambient-orb orb-secondary" opacity="0.08"/>
+  </AnchorPane>
+
+  <BorderPane styleClass="main-shell">
+    <left>
+      <fx:include source="../sidebar.fxml"/>
+    </left>
+
+    <center>
+      <ScrollPane styleClass="main-scroll" fitToWidth="true" hbarPolicy="NEVER">
+        <VBox spacing="0" styleClass="session-details-container">
+
+          <!-- Hero Section with Backdrop -->
+          <StackPane fx:id="heroSection" styleClass="hero-section" prefHeight="400">
+            <ImageView fx:id="backdropImage" styleClass="hero-backdrop" preserveRatio="false" fitHeight="400"/>
+            <Region styleClass="hero-gradient"/>
+
+            <HBox alignment="BOTTOM_LEFT" spacing="30">
+              <padding>
+                <Insets top="40" bottom="40" left="50" right="50"/>
+              </padding>
+
+              <ImageView fx:id="posterImage" styleClass="hero-poster" fitHeight="320" fitWidth="220"
+                         preserveRatio="true"/>
+
+              <VBox spacing="15" alignment="BOTTOM_LEFT" HBox.hgrow="ALWAYS">
+                <Button onAction="#goBack" styleClass="back-btn" text="Back to Sessions">
+                  <graphic>
+                    <FontIcon iconLiteral="mdi2a-arrow-left:18"/>
+                  </graphic>
+                </Button>
+
+                <Label fx:id="filmTitle" styleClass="hero-title" text="Film Title"/>
+
+                <HBox spacing="15" styleClass="hero-meta">
+                  <Label fx:id="yearLabel" styleClass="meta-pill"/>
+                  <Label fx:id="durationLabel" styleClass="meta-pill"/>
+                  <Label fx:id="ratingLabel" styleClass="meta-pill"/>
+                  <HBox spacing="5" alignment="CENTER">
+                    <FontIcon iconLiteral="mdi2s-star:16" styleClass="star-gold"/>
+                    <Label fx:id="scoreLabel" styleClass="rating-text"/>
+                  </HBox>
+                </HBox>
+
+                <HBox fx:id="genreContainer" spacing="10" styleClass="genre-tags"/>
+              </VBox>
+            </HBox>
+          </StackPane>
+
+          <!-- Session Info Section -->
+          <VBox spacing="30" styleClass="session-info-section">
+            <padding>
+              <Insets top="30" bottom="40" left="50" right="50"/>
+            </padding>
+
+            <!-- Cinema & Session Details -->
+            <HBox spacing="40">
+              <!-- Left: Session Details -->
+              <VBox spacing="20" HBox.hgrow="ALWAYS">
+                <Label text="Session Details" styleClass="section-title"/>
+
+                <HBox spacing="30" styleClass="info-cards">
+                  <VBox styleClass="info-card" spacing="8">
+                    <FontIcon iconLiteral="mdi2m-movie-open:32" styleClass="info-icon"/>
+                    <Label text="Cinema" styleClass="info-label"/>
+                    <Label fx:id="cinemaName" styleClass="info-value"/>
+                    <Label fx:id="cinemaAddress" styleClass="info-sub"/>
+                  </VBox>
+
+                  <VBox styleClass="info-card" spacing="8">
+                    <FontIcon iconLiteral="mdi2d-door:32" styleClass="info-icon"/>
+                    <Label text="Hall" styleClass="info-label"/>
+                    <Label fx:id="hallName" styleClass="info-value"/>
+                    <Label fx:id="hallCapacity" styleClass="info-sub"/>
+                  </VBox>
+
+                  <VBox styleClass="info-card" spacing="8">
+                    <FontIcon iconLiteral="mdi2c-calendar:32" styleClass="info-icon"/>
+                    <Label text="Date &amp; Time" styleClass="info-label"/>
+                    <Label fx:id="sessionDate" styleClass="info-value"/>
+                    <Label fx:id="sessionTime" styleClass="info-sub"/>
+                  </VBox>
+
+                  <VBox styleClass="info-card" spacing="8">
+                    <FontIcon iconLiteral="mdi2c-cash:32" styleClass="info-icon"/>
+                    <Label text="Price" styleClass="info-label"/>
+                    <Label fx:id="ticketPrice" styleClass="info-value price"/>
+                    <Label text="per seat" styleClass="info-sub"/>
+                  </VBox>
+                </HBox>
+              </VBox>
+            </HBox>
+
+            <!-- Seat Selection Preview -->
+            <VBox spacing="15" styleClass="seat-preview-section">
+              <HBox alignment="CENTER_LEFT" spacing="15">
+                <Label text="Seat Availability" styleClass="section-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <HBox spacing="20" styleClass="seat-legend">
+                  <HBox spacing="5" alignment="CENTER">
+                    <Region styleClass="seat-indicator available"/>
+                    <Label text="Available" styleClass="legend-text"/>
+                  </HBox>
+                  <HBox spacing="5" alignment="CENTER">
+                    <Region styleClass="seat-indicator occupied"/>
+                    <Label text="Occupied" styleClass="legend-text"/>
+                  </HBox>
+                  <HBox spacing="5" alignment="CENTER">
+                    <Region styleClass="seat-indicator vip"/>
+                    <Label text="VIP" styleClass="legend-text"/>
+                  </HBox>
+                </HBox>
+              </HBox>
+
+              <StackPane styleClass="seat-map-container">
+                <VBox alignment="CENTER" spacing="10">
+                  <Label text="SCREEN" styleClass="screen-label"/>
+                  <Region styleClass="screen-indicator"/>
+                  <GridPane fx:id="seatMapGrid" styleClass="seat-map" alignment="CENTER"/>
+                </VBox>
+              </StackPane>
+
+              <HBox alignment="CENTER" spacing="15">
+                <Label fx:id="availableSeatsLabel" styleClass="available-seats-text"/>
+              </HBox>
+            </VBox>
+
+            <!-- Booking Section -->
+            <VBox spacing="20" styleClass="booking-section">
+              <Label text="Quick Book" styleClass="section-title"/>
+
+              <HBox spacing="30" alignment="CENTER_LEFT">
+                <VBox spacing="10">
+                  <Label text="Number of Tickets" styleClass="field-label"/>
+                  <HBox spacing="10" alignment="CENTER_LEFT" styleClass="quantity-selector">
+                    <Button fx:id="decreaseBtn" onAction="#decreaseQuantity" styleClass="qty-btn">
+                      <graphic>
+                        <FontIcon iconLiteral="mdi2m-minus:18"/>
+                      </graphic>
+                    </Button>
+                    <Label fx:id="quantityLabel" text="1" styleClass="qty-value"/>
+                    <Button fx:id="increaseBtn" onAction="#increaseQuantity" styleClass="qty-btn">
+                      <graphic>
+                        <FontIcon iconLiteral="mdi2p-plus:18"/>
+                      </graphic>
+                    </Button>
+                  </HBox>
+                </VBox>
+
+                <VBox spacing="10">
+                  <Label text="Seat Type" styleClass="field-label"/>
+                  <ComboBox fx:id="seatTypeCombo" styleClass="glass-combo" prefWidth="150"/>
+                </VBox>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <VBox spacing="5" alignment="CENTER_RIGHT">
+                  <Label text="Total" styleClass="field-label"/>
+                  <Label fx:id="totalPriceLabel" styleClass="total-price"/>
+                </VBox>
+              </HBox>
+
+              <HBox spacing="15" styleClass="booking-actions">
+                <Button fx:id="selectSeatsBtn" onAction="#openSeatSelection" styleClass="action-btn secondary"
+                        text="Choose Specific Seats">
+                  <graphic>
+                    <FontIcon iconLiteral="mdi2s-seat:20"/>
+                  </graphic>
+                </Button>
+                <Button fx:id="bookNowBtn" onAction="#proceedToPayment" styleClass="action-btn primary"
+                        text="Proceed to Payment">
+                  <graphic>
+                    <FontIcon iconLiteral="mdi2c-credit-card:20"/>
+                  </graphic>
+                </Button>
+              </HBox>
+            </VBox>
+
+            <!-- Film Synopsis -->
+            <VBox spacing="15">
+              <Label text="Synopsis" styleClass="section-title"/>
+              <Label fx:id="synopsisLabel" styleClass="synopsis-text" wrapText="true"/>
+            </VBox>
+
+            <!-- Other Sessions for this Film -->
+            <VBox spacing="15">
+              <HBox alignment="CENTER_LEFT" spacing="15">
+                <Label text="Other Showtimes" styleClass="section-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button styleClass="see-all-btn" text="View All">
+                  <graphic>
+                    <FontIcon iconLiteral="mdi2c-chevron-right:18"/>
+                  </graphic>
+                </Button>
+              </HBox>
+              <ScrollPane styleClass="horizontal-scroll" hbarPolicy="NEVER" vbarPolicy="NEVER" fitToHeight="true">
+                <HBox fx:id="otherSessionsContainer" spacing="15"/>
+              </ScrollPane>
+            </VBox>
+          </VBox>
+        </VBox>
+      </ScrollPane>
+    </center>
+  </BorderPane>
+</StackPane>

@@ -1,1 +1,2962 @@
-memberSearchIndex = [{"p":"com.esprit.utils.ui","c":"UIUtils","l":"ACCENT_COLOR"},{"p":"com.esprit.controllers.series","c":"EpisodeController","l":"ACCOUNT_SID"},{"p":"com.esprit.models.films","c":"Actor","l":"Actor(Long)","u":"%3Cinit%3E(java.lang.Long)"},{"p":"com.esprit.models.films","c":"Actor","l":"Actor(Long, String, String, String)","u":"%3Cinit%3E(java.lang.Long,java.lang.String,java.lang.String,java.lang.String)"},{"p":"com.esprit.models.films","c":"Actor","l":"Actor(String, String, String)","u":"%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String)"},{"p":"com.esprit.controllers.films","c":"ActorController","l":"ActorController()","u":"%3Cinit%3E()"},{"p":"com.esprit.services.films","c":"ActorFilmService","l":"ActorFilmService()","u":"%3Cinit%3E()"},{"p":"com.esprit.services.films","c":"ActorService","l":"ActorService()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.products","c":"DesignProductAdminContoller","l":"add_produit(ActionEvent)","u":"add_produit(javafx.event.ActionEvent)"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"addClickAnimation(Node)","u":"addClickAnimation(javafx.scene.Node)"},{"p":"com.esprit.services.series","c":"IServiceSeriesImpl","l":"addDislike(Series)","u":"addDislike(com.esprit.models.series.Series)"},{"p":"com.esprit.utils.validation","c":"ValidationUtils","l":"addEmailValidation(TextField)","u":"addEmailValidation(javafx.scene.control.TextField)"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"addHoverEffect(Node)","u":"addHoverEffect(javafx.scene.Node)"},{"p":"com.esprit.services.series","c":"IServiceSeriesImpl","l":"addLike(Series)","u":"addLike(com.esprit.models.series.Series)"},{"p":"com.esprit.utils.validation","c":"ValidationUtils","l":"addNameValidation(TextField)","u":"addNameValidation(javafx.scene.control.TextField)"},{"p":"com.esprit.utils.validation","c":"ValidationUtils","l":"addPasswordValidation(TextField)","u":"addPasswordValidation(javafx.scene.control.TextField)"},{"p":"com.esprit.utils.validation","c":"ValidationUtils","l":"addPhoneValidation(TextField)","u":"addPhoneValidation(javafx.scene.control.TextField)"},{"p":"com.esprit.services.products","c":"CategoryService","l":"addProductToCategory(int, int)","u":"addProductToCategory(int,int)"},{"p":"com.esprit.utils.validation","c":"ValidationUtils","l":"addRequiredValidation(TextField, String)","u":"addRequiredValidation(javafx.scene.control.TextField,java.lang.String)"},{"p":"com.esprit.utils.validation","c":"ValidationUtils","l":"addValidation(TextField, Predicate<String>, String)","u":"addValidation(javafx.scene.control.TextField,java.util.function.Predicate,java.lang.String)"},{"p":"com.esprit.controllers.base","c":"BaseController","l":"addValidationListener(TextField, Predicate<String>, String)","u":"addValidationListener(javafx.scene.control.TextField,java.util.function.Predicate,java.lang.String)"},{"p":"com.esprit.models.users","c":"Admin","l":"Admin(String, String, String, String, String, String, Date, String, String)","u":"%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.sql.Date,java.lang.String,java.lang.String)"},{"p":"com.esprit.controllers.users","c":"AdminDashboardController","l":"AdminDashboardController()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers","c":"AdminSideBarController","l":"AdminSideBarController()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.series","c":"CategoriesClientController","l":"afficher()"},{"p":"com.esprit.controllers.series","c":"SerieClientController","l":"afficher()"},{"p":"com.esprit.controllers.series","c":"ListFavorisController","l":"afficherliste(List<Series>)","u":"afficherliste(java.util.List)"},{"p":"com.esprit.controllers.series","c":"SerieClientController","l":"afficherliste(List<Series>)","u":"afficherliste(java.util.List)"},{"p":"com.esprit.controllers.products","c":"DetailsProductClientController","l":"afficherProduct()"},{"p":"com.esprit.controllers.products","c":"ShoppingCartProductControllers","l":"afficherProduct(MouseEvent)","u":"afficherProduct(javafx.scene.input.MouseEvent)"},{"p":"com.esprit.controllers.products","c":"AfficherProductClientControllers","l":"AfficherProductClientControllers()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.series","c":"EpisodeClientController","l":"afficherserie(MouseEvent)","u":"afficherserie(javafx.scene.input.MouseEvent)"},{"p":"com.esprit.controllers.products","c":"AnalyseOrder","l":"AnalyseOrder()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.cinemas","c":"SentimentAnalysisController","l":"analyzeSentiment(String)","u":"analyzeSentiment(java.lang.String)"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"animateIn(Node, UIUtils.AnimationType)","u":"animateIn(javafx.scene.Node,com.esprit.utils.ui.UIUtils.AnimationType)"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"animateOut(Node, UIUtils.AnimationType, Runnable)","u":"animateOut(javafx.scene.Node,com.esprit.utils.ui.UIUtils.AnimationType,java.lang.Runnable)"},{"p":"com.esprit.utils.validation","c":"ValidationUtils.ValidationBuilder","l":"apply()"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"applyDarkTheme(Scene)","u":"applyDarkTheme(javafx.scene.Scene)"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"applyLightTheme(Scene)","u":"applyLightTheme(javafx.scene.Scene)"},{"p":"com.esprit.controllers.series","c":"EpisodeController","l":"AUTH_TOKEN"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"BACKGROUND_COLOR"},{"p":"com.esprit.utils","c":"Chat","l":"badword(String)","u":"badword(java.lang.String)"},{"p":"com.esprit.controllers.base","c":"BaseController","l":"BaseController()","u":"%3Cinit%3E()"},{"p":"com.esprit.services.base","c":"BaseService","l":"BaseService(Class<T>)","u":"%3Cinit%3E(java.lang.Class)"},{"p":"com.esprit.services.base","c":"BaseService","l":"batchInsert(List<T>, int)","u":"batchInsert(java.util.List,int)"},{"p":"com.esprit.utils.ui","c":"UIUtils.AnimationType","l":"BOUNCE_IN"},{"p":"com.esprit.utils.ui","c":"UIUtils.AnimationType","l":"BOUNCE_OUT"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"BUTTON_DANGER"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"BUTTON_INFO"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"BUTTON_PRIMARY"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"BUTTON_SECONDARY"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"BUTTON_SUCCESS"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"BUTTON_WARNING"},{"p":"com.esprit.utils","c":"DemoScreenshotGenerator","l":"captureMultipleStages(Stage[], String)","u":"captureMultipleStages(javafx.stage.Stage[],java.lang.String)"},{"p":"com.esprit.utils","c":"DemoScreenshotGenerator","l":"captureNode(Node, String)","u":"captureNode(javafx.scene.Node,java.lang.String)"},{"p":"com.esprit.utils","c":"DemoScreenshotGenerator","l":"captureStage(Stage, String)","u":"captureStage(javafx.stage.Stage,java.lang.String)"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"CARD"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"CARD_COLOR"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"CARD_ELEVATED"},{"p":"com.esprit.controllers.series","c":"CategorieController","l":"CategorieController()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.series","c":"CategoriesClientController","l":"CategoriesClientController()","u":"%3Cinit%3E()"},{"p":"com.esprit.models.films","c":"Category","l":"Category(Long, String, String)","u":"%3Cinit%3E(java.lang.Long,java.lang.String,java.lang.String)"},{"p":"com.esprit.models.films","c":"Category","l":"Category(String, String)","u":"%3Cinit%3E(java.lang.String,java.lang.String)"},{"p":"com.esprit.models.series","c":"Category","l":"Category(String, String)","u":"%3Cinit%3E(java.lang.String,java.lang.String)"},{"p":"com.esprit.controllers.films","c":"CategoryController","l":"CategoryController()","u":"%3Cinit%3E()"},{"p":"com.esprit.services.films","c":"CategoryService","l":"CategoryService()","u":"%3Cinit%3E()"},{"p":"com.esprit.services.products","c":"CategoryService","l":"CategoryService()","u":"%3Cinit%3E()"},{"p":"com.esprit.utils","c":"Chat","l":"Chat()","u":"%3Cinit%3E()"},{"p":"com.esprit.utils","c":"Chat","l":"chatGPT(String)","u":"chatGPT(java.lang.String)"},{"p":"com.esprit.services.products","c":"ProductService","l":"checkAvailableStock(Long, int)","u":"checkAvailableStock(java.lang.Long,int)"},{"p":"com.esprit.services.users","c":"UserService","l":"checkEmailFound(String)","u":"checkEmailFound(java.lang.String)"},{"p":"com.esprit.models.cinemas","c":"Cinema","l":"Cinema(String, String, CinemaManager, String, String)","u":"%3Cinit%3E(java.lang.String,java.lang.String,com.esprit.models.users.CinemaManager,java.lang.String,java.lang.String)"},{"p":"com.esprit.models.cinemas","c":"CinemaComment","l":"CinemaComment(Cinema, Client, String, String)","u":"%3Cinit%3E(com.esprit.models.cinemas.Cinema,com.esprit.models.users.Client,java.lang.String,java.lang.String)"},{"p":"com.esprit.services.cinemas","c":"CinemaCommentService","l":"CinemaCommentService()","u":"%3Cinit%3E()"},{"p":"com.esprit.models.cinemas","c":"CinemaHall","l":"CinemaHall(Cinema, Integer, String)","u":"%3Cinit%3E(com.esprit.models.cinemas.Cinema,java.lang.Integer,java.lang.String)"},{"p":"com.esprit.services.cinemas","c":"CinemaHallService","l":"CinemaHallService()","u":"%3Cinit%3E()"},{"p":"com.esprit.models.users","c":"CinemaManager","l":"CinemaManager(String, String, String, String, String, String, Date, String, String)","u":"%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.sql.Date,java.lang.String,java.lang.String)"},{"p":"com.esprit.controllers","c":"CinemaManagerSideBarController","l":"CinemaManagerSideBarController()","u":"%3Cinit%3E()"},{"p":"com.esprit.models.cinemas","c":"CinemaRating","l":"CinemaRating(Cinema, Client, Integer)","u":"%3Cinit%3E(com.esprit.models.cinemas.Cinema,com.esprit.models.users.Client,java.lang.Integer)"},{"p":"com.esprit.services.cinemas","c":"CinemaRatingService","l":"CinemaRatingService()","u":"%3Cinit%3E()"},{"p":"com.esprit.services.cinemas","c":"CinemaService","l":"CinemaService()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.cinemas","c":"CinemaStatisticsController","l":"CinemaStatisticsController()","u":"%3Cinit%3E()"},{"p":"com.esprit.utils","c":"DemoScreenshotGenerator","l":"cleanupOldScreenshots(int)"},{"p":"com.esprit.controllers.base","c":"BaseController","l":"clearFields()"},{"p":"com.esprit.controllers.users","c":"ModernAdminDashboardController","l":"clearFields()"},{"p":"com.esprit.models.users","c":"Client","l":"Client(String, String, String, String, String, String, Date, String, String)","u":"%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.sql.Date,java.lang.String,java.lang.String)"},{"p":"com.esprit.controllers","c":"ClientSideBarController","l":"ClientSideBarController()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.films","c":"ActorController","l":"close()"},{"p":"com.esprit.controllers.products","c":"AfficherProductClientControllers","l":"Close(MouseEvent)","u":"Close(javafx.scene.input.MouseEvent)"},{"p":"com.esprit.utils","c":"DataSource","l":"closeConnection()"},{"p":"com.esprit.controllers.films","c":"FilmUserController","l":"closeDetailFilm2"},{"p":"com.esprit.services.base","c":"BaseService","l":"closeEntityManagerFactory()"},{"p":"com.esprit.controllers.products","c":"AfficherProductClientControllers","l":"CloseFilter(MouseEvent)","u":"CloseFilter(javafx.scene.input.MouseEvent)"},{"p":"com.esprit.utils","c":"CodeBareProduct","l":"CodeBareProduct()","u":"%3Cinit%3E()"},{"p":"com.esprit.models.products","c":"Comment","l":"Comment(Client, String, Product)","u":"%3Cinit%3E(com.esprit.models.users.Client,java.lang.String,com.esprit.models.products.Product)"},{"p":"com.esprit.controllers.products","c":"CommentProductController","l":"CommentProductController()","u":"%3Cinit%3E()"},{"p":"com.esprit.services.products","c":"CommentService","l":"CommentService()","u":"%3Cinit%3E()"},{"p":"com.esprit.services.series","c":"IServiceFavoriteImpl","l":"connection"},{"p":"com.esprit.services.series","c":"IServiceFeedbackImpl","l":"connection"},{"p":"com.esprit.services.base","c":"BaseService","l":"count()"},{"p":"com.esprit.services.films","c":"ActorService","l":"create(Actor)","u":"create(com.esprit.models.films.Actor)"},{"p":"com.esprit.services.films","c":"CategoryService","l":"create(Category)","u":"create(com.esprit.models.films.Category)"},{"p":"com.esprit.services.series","c":"IServiceCategorieImpl","l":"create(Category)","u":"create(com.esprit.models.series.Category)"},{"p":"com.esprit.services.cinemas","c":"CinemaService","l":"create(Cinema)","u":"create(com.esprit.models.cinemas.Cinema)"},{"p":"com.esprit.services.cinemas","c":"CinemaCommentService","l":"create(CinemaComment)","u":"create(com.esprit.models.cinemas.CinemaComment)"},{"p":"com.esprit.services.cinemas","c":"CinemaHallService","l":"create(CinemaHall)","u":"create(com.esprit.models.cinemas.CinemaHall)"},{"p":"com.esprit.services.cinemas","c":"CinemaRatingService","l":"create(CinemaRating)","u":"create(com.esprit.models.cinemas.CinemaRating)"},{"p":"com.esprit.services.products","c":"CommentService","l":"create(Comment)","u":"create(com.esprit.models.products.Comment)"},{"p":"com.esprit.services.series","c":"IServiceEpisodeImpl","l":"create(Episode)","u":"create(com.esprit.models.series.Episode)"},{"p":"com.esprit.services.series","c":"IServiceFavoriteImpl","l":"create(Favorite)","u":"create(com.esprit.models.series.Favorite)"},{"p":"com.esprit.services.series","c":"IServiceFeedbackImpl","l":"create(Feedback)","u":"create(com.esprit.models.series.Feedback)"},{"p":"com.esprit.services.films","c":"FilmService","l":"create(Film)","u":"create(com.esprit.models.films.Film)"},{"p":"com.esprit.services.films","c":"FilmCommentService","l":"create(FilmComment)","u":"create(com.esprit.models.films.FilmComment)"},{"p":"com.esprit.services.films","c":"FilmRatingService","l":"create(FilmRating)","u":"create(com.esprit.models.films.FilmRating)"},{"p":"com.esprit.services.cinemas","c":"MovieSessionService","l":"create(MovieSession)","u":"create(com.esprit.models.cinemas.MovieSession)"},{"p":"com.esprit.services.products","c":"OrderService","l":"create(Order)","u":"create(com.esprit.models.products.Order)"},{"p":"com.esprit.services.products","c":"OrderItemService","l":"create(OrderItem)","u":"create(com.esprit.models.products.OrderItem)"},{"p":"com.esprit.services.products","c":"ProductService","l":"create(Product)","u":"create(com.esprit.models.products.Product)"},{"p":"com.esprit.services.products","c":"CategoryService","l":"create(ProductCategory)","u":"create(com.esprit.models.products.ProductCategory)"},{"p":"com.esprit.services.products","c":"ReviewService","l":"create(Review)","u":"create(com.esprit.models.products.Review)"},{"p":"com.esprit.services.cinemas","c":"SeatService","l":"create(Seat)","u":"create(com.esprit.models.cinemas.Seat)"},{"p":"com.esprit.services.series","c":"IServiceSeriesImpl","l":"create(Series)","u":"create(com.esprit.models.series.Series)"},{"p":"com.esprit.services.products","c":"ShoppingCartService","l":"create(ShoppingCart)","u":"create(com.esprit.models.products.ShoppingCart)"},{"p":"com.esprit.services.base","c":"BaseService","l":"create(T)"},{"p":"com.esprit.services","c":"IService","l":"create(T)"},{"p":"com.esprit.services.films","c":"TicketService","l":"create(Ticket)","u":"create(com.esprit.models.films.Ticket)"},{"p":"com.esprit.services.users","c":"UserService","l":"create(User)","u":"create(com.esprit.models.users.User)"},{"p":"com.esprit.controllers.films","c":"FilmUserController","l":"createActorDetails(int)"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"createButton(String, FontAwesomeSolid, String)","u":"createButton(java.lang.String,org.kordamp.ikonli.fontawesome5.FontAwesomeSolid,java.lang.String)"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"createCard()"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"createCircularImageView(String, double)","u":"createCircularImageView(java.lang.String,double)"},{"p":"com.esprit.controllers.products","c":"CommentProductController","l":"createcommentcard(Comment)","u":"createcommentcard(com.esprit.models.products.Comment)"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"createDangerButton(String, FontAwesomeSolid)","u":"createDangerButton(java.lang.String,org.kordamp.ikonli.fontawesome5.FontAwesomeSolid)"},{"p":"com.esprit.controllers.base","c":"BaseController","l":"createDeleteColumn()"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"createElevatedCard()"},{"p":"com.esprit.services.films","c":"ActorFilmService","l":"createFilmActorAssociation(Film, List<String>)","u":"createFilmActorAssociation(com.esprit.models.films.Film,java.util.List)"},{"p":"com.esprit.services.films","c":"FilmCategoryService","l":"createFilmCategoryAssociation(Film, List<String>)","u":"createFilmCategoryAssociation(com.esprit.models.films.Film,java.util.List)"},{"p":"com.esprit.services.films","c":"FilmCinemaService","l":"createFilmCinemaAssociation(Film, List<String>)","u":"createFilmCinemaAssociation(com.esprit.models.films.Film,java.util.List)"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"createFloatingTextField(String)","u":"createFloatingTextField(java.lang.String)"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"createLoadingIndicator()"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"createModernAlert(Alert.AlertType, String, String)","u":"createModernAlert(javafx.scene.control.Alert.AlertType,java.lang.String,java.lang.String)"},{"p":"com.esprit.services.products","c":"OrderService","l":"createOrder(Order)","u":"createOrder(com.esprit.models.products.Order)"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"createPlaceholderImage(double)"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"createPrimaryButton(String, FontAwesomeSolid)","u":"createPrimaryButton(java.lang.String,org.kordamp.ikonli.fontawesome5.FontAwesomeSolid)"},{"p":"com.esprit.controllers.films","c":"PaymentUserController","l":"createReceiptPDF(String, Ticket)","u":"createReceiptPDF(java.lang.String,com.esprit.models.films.Ticket)"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"createResponsiveGrid(int)"},{"p":"com.esprit.controllers.base","c":"BaseController","l":"createSearchPredicate(String)","u":"createSearchPredicate(java.lang.String)"},{"p":"com.esprit.controllers.users","c":"ModernAdminDashboardController","l":"createSearchPredicate(String)","u":"createSearchPredicate(java.lang.String)"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"createSecondaryButton(String, FontAwesomeSolid)","u":"createSecondaryButton(java.lang.String,org.kordamp.ikonli.fontawesome5.FontAwesomeSolid)"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"createSuccessButton(String, FontAwesomeSolid)","u":"createSuccessButton(java.lang.String,org.kordamp.ikonli.fontawesome5.FontAwesomeSolid)"},{"p":"com.esprit.controllers.base","c":"BaseController","l":"createTextFieldCellFactory(StringConverter<S>, Predicate<S>, String)","u":"createTextFieldCellFactory(javafx.util.StringConverter,java.util.function.Predicate,java.lang.String)"},{"p":"com.esprit.controllers.cinemas","c":"DashboardClientController","l":"createTopRatedCinemaCards(AnchorPane)","u":"createTopRatedCinemaCards(javafx.scene.layout.AnchorPane)"},{"p":"com.esprit.controllers.films","c":"FilmUserController","l":"createtopthree(int)"},{"p":"com.esprit.controllers.products","c":"AfficherProductClientControllers","l":"createtopthree(Product)","u":"createtopthree(com.esprit.models.products.Product)"},{"p":"com.esprit.controllers.products","c":"DetailsProductClientController","l":"createtopthree(Product)","u":"createtopthree(com.esprit.models.products.Product)"},{"p":"com.esprit.utils.validation","c":"ValidationUtils","l":"createValidator()"},{"p":"com.esprit.utils.validation","c":"ValidationUtils.ValidationBuilder","l":"custom(Predicate<String>, String)","u":"custom(java.util.function.Predicate,java.lang.String)"},{"p":"com.esprit.controllers.cinemas","c":"DashboardAdminController","l":"DashboardAdminController()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.cinemas","c":"DashboardClientController","l":"DashboardClientController()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.cinemas","c":"DashboardResponsableController","l":"DashboardResponsableController()","u":"%3Cinit%3E()"},{"p":"com.esprit.utils","c":"DatabaseManager","l":"DatabaseManager()","u":"%3Cinit%3E()"},{"p":"com.esprit.utils.validation","c":"ValidationUtils","l":"DECIMAL_REGEX"},{"p":"com.esprit.services.films","c":"ActorService","l":"delete(Actor)","u":"delete(com.esprit.models.films.Actor)"},{"p":"com.esprit.services.films","c":"CategoryService","l":"delete(Category)","u":"delete(com.esprit.models.films.Category)"},{"p":"com.esprit.services.series","c":"IServiceCategorieImpl","l":"delete(Category)","u":"delete(com.esprit.models.series.Category)"},{"p":"com.esprit.services.cinemas","c":"CinemaService","l":"delete(Cinema)","u":"delete(com.esprit.models.cinemas.Cinema)"},{"p":"com.esprit.services.cinemas","c":"CinemaCommentService","l":"delete(CinemaComment)","u":"delete(com.esprit.models.cinemas.CinemaComment)"},{"p":"com.esprit.services.cinemas","c":"CinemaHallService","l":"delete(CinemaHall)","u":"delete(com.esprit.models.cinemas.CinemaHall)"},{"p":"com.esprit.services.cinemas","c":"CinemaRatingService","l":"delete(CinemaRating)","u":"delete(com.esprit.models.cinemas.CinemaRating)"},{"p":"com.esprit.services.products","c":"CommentService","l":"delete(Comment)","u":"delete(com.esprit.models.products.Comment)"},{"p":"com.esprit.services.series","c":"IServiceEpisodeImpl","l":"delete(Episode)","u":"delete(com.esprit.models.series.Episode)"},{"p":"com.esprit.services.series","c":"IServiceFavoriteImpl","l":"delete(Favorite)","u":"delete(com.esprit.models.series.Favorite)"},{"p":"com.esprit.services.series","c":"IServiceFeedbackImpl","l":"delete(Feedback)","u":"delete(com.esprit.models.series.Feedback)"},{"p":"com.esprit.services.films","c":"FilmService","l":"delete(Film)","u":"delete(com.esprit.models.films.Film)"},{"p":"com.esprit.services.films","c":"FilmCommentService","l":"delete(FilmComment)","u":"delete(com.esprit.models.films.FilmComment)"},{"p":"com.esprit.services.films","c":"FilmRatingService","l":"delete(FilmRating)","u":"delete(com.esprit.models.films.FilmRating)"},{"p":"com.esprit.services.cinemas","c":"MovieSessionService","l":"delete(MovieSession)","u":"delete(com.esprit.models.cinemas.MovieSession)"},{"p":"com.esprit.services.products","c":"OrderService","l":"delete(Order)","u":"delete(com.esprit.models.products.Order)"},{"p":"com.esprit.services.products","c":"OrderItemService","l":"delete(OrderItem)","u":"delete(com.esprit.models.products.OrderItem)"},{"p":"com.esprit.services.products","c":"ProductService","l":"delete(Product)","u":"delete(com.esprit.models.products.Product)"},{"p":"com.esprit.services.products","c":"CategoryService","l":"delete(ProductCategory)","u":"delete(com.esprit.models.products.ProductCategory)"},{"p":"com.esprit.services.products","c":"ReviewService","l":"delete(Review)","u":"delete(com.esprit.models.products.Review)"},{"p":"com.esprit.services.series","c":"IServiceSeriesImpl","l":"delete(Series)","u":"delete(com.esprit.models.series.Series)"},{"p":"com.esprit.services.products","c":"ShoppingCartService","l":"delete(ShoppingCart)","u":"delete(com.esprit.models.products.ShoppingCart)"},{"p":"com.esprit.services.base","c":"BaseService","l":"delete(T)"},{"p":"com.esprit.services","c":"IService","l":"delete(T)"},{"p":"com.esprit.services.films","c":"TicketService","l":"delete(Ticket)","u":"delete(com.esprit.models.films.Ticket)"},{"p":"com.esprit.services.users","c":"UserService","l":"delete(User)","u":"delete(com.esprit.models.users.User)"},{"p":"com.esprit.controllers.users","c":"ProfileController","l":"deleteAccount(ActionEvent)","u":"deleteAccount(javafx.event.ActionEvent)"},{"p":"com.esprit.services.base","c":"BaseService","l":"deleteById(ID)"},{"p":"com.esprit.services.series","c":"IServiceEpisodeImpl","l":"deleteById(Long)","u":"deleteById(java.lang.Long)"},{"p":"com.esprit.services.films","c":"ActorFilmService","l":"deleteFilmActorAssociation(int, int)","u":"deleteFilmActorAssociation(int,int)"},{"p":"com.esprit.services.films","c":"FilmCategoryService","l":"deleteFilmCategoryAssociation(int, int)","u":"deleteFilmCategoryAssociation(int,int)"},{"p":"com.esprit.services.films","c":"FilmCinemaService","l":"deleteFilmCinemaAssociation(int, int)","u":"deleteFilmCinemaAssociation(int,int)"},{"p":"com.esprit.utils","c":"CloudinaryStorage","l":"deleteImage(String)","u":"deleteImage(java.lang.String)"},{"p":"com.esprit.controllers.base","c":"BaseController","l":"deleteItem(T)"},{"p":"com.esprit.controllers.users","c":"ModernAdminDashboardController","l":"deleteItem(User)","u":"deleteItem(com.esprit.models.users.User)"},{"p":"com.esprit.utils","c":"DemoScreenshotGenerator","l":"DemoScreenshotGenerator()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.products","c":"DesignCategorieAdminController","l":"DesignCategorieAdminController()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.products","c":"DesignProductAdminContoller","l":"DesignProductAdminContoller()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.products","c":"DetailsProductClientController","l":"detailFlowPane"},{"p":"com.esprit.controllers.products","c":"DetailsProductClientController","l":"DetailsProductClientController()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.films","c":"FilmUserController","l":"displayAllComments(Long)","u":"displayAllComments(java.lang.Long)"},{"p":"com.esprit.controllers.films","c":"PaymentUserController","l":"doubleToInt(double)"},{"p":"com.esprit.utils.validation","c":"ValidationUtils","l":"EMAIL_REGEX"},{"p":"com.esprit.utils.validation","c":"ValidationUtils.ValidationBuilder","l":"email()"},{"p":"com.esprit.utils.validation","c":"ValidationUtils","l":"emailValidator()"},{"p":"com.esprit.services.base","c":"BaseService","l":"entityClass"},{"p":"com.esprit.models.series","c":"Episode","l":"Episode(String, int, int, String, String, int)","u":"%3Cinit%3E(java.lang.String,int,int,java.lang.String,java.lang.String,int)"},{"p":"com.esprit.controllers.series","c":"EpisodeClientController","l":"EpisodeClientController()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.series","c":"EpisodeController","l":"EpisodeController()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.series","c":"EpisodeController","l":"episodeImageView"},{"p":"com.esprit.utils.ui","c":"UIUtils.NotificationType","l":"ERROR"},{"p":"com.esprit.services.base","c":"BaseService","l":"executeQuery(String, Object...)","u":"executeQuery(java.lang.String,java.lang.Object...)"},{"p":"com.esprit.services.base","c":"BaseService","l":"executeUpdate(String, Object...)","u":"executeUpdate(java.lang.String,java.lang.Object...)"},{"p":"com.esprit.services.base","c":"BaseService","l":"existsById(ID)"},{"p":"com.esprit.controllers.films","c":"ActorController","l":"exportActors(String)","u":"exportActors(java.lang.String)"},{"p":"com.esprit.utils","c":"FaceDetector","l":"FaceDetector(FaceDetector.FaceDetectionCallback)","u":"%3Cinit%3E(com.esprit.utils.FaceDetector.FaceDetectionCallback)"},{"p":"com.esprit.utils","c":"FaceRecognition","l":"FaceRecognition()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.users","c":"FaceRecognitionController","l":"FaceRecognitionController()","u":"%3Cinit%3E()"},{"p":"com.esprit.utils.ui","c":"UIUtils.AnimationType","l":"FADE_IN"},{"p":"com.esprit.utils.ui","c":"UIUtils.AnimationType","l":"FADE_OUT"},{"p":"com.esprit.models.series","c":"Favorite","l":"Favorite(Long, Long)","u":"%3Cinit%3E(java.lang.Long,java.lang.Long)"},{"p":"com.esprit.models.series","c":"Feedback","l":"Feedback(Long, String, Date, Long)","u":"%3Cinit%3E(java.lang.Long,java.lang.String,java.util.Date,java.lang.Long)"},{"p":"com.esprit.models.films","c":"Film","l":"Film(Film)","u":"%3Cinit%3E(com.esprit.models.films.Film)"},{"p":"com.esprit.models.films","c":"Film","l":"Film(Long)","u":"%3Cinit%3E(java.lang.Long)"},{"p":"com.esprit.models.films","c":"Film","l":"Film(Long, String, String, Time, String, int)","u":"%3Cinit%3E(java.lang.Long,java.lang.String,java.lang.String,java.sql.Time,java.lang.String,int)"},{"p":"com.esprit.models.films","c":"Film","l":"Film(String, String, Time, String, int)","u":"%3Cinit%3E(java.lang.String,java.lang.String,java.sql.Time,java.lang.String,int)"},{"p":"com.esprit.services.films","c":"FilmCategoryService","l":"FilmCategoryService()","u":"%3Cinit%3E()"},{"p":"com.esprit.services.films","c":"FilmCinemaService","l":"FilmCinemaService()","u":"%3Cinit%3E()"},{"p":"com.esprit.models.films","c":"FilmComment","l":"FilmComment(String, Client, Film)","u":"%3Cinit%3E(java.lang.String,com.esprit.models.users.Client,com.esprit.models.films.Film)"},{"p":"com.esprit.services.films","c":"FilmCommentService","l":"FilmCommentService()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.films","c":"FilmController","l":"FilmController()","u":"%3Cinit%3E()"},{"p":"com.esprit.models.films","c":"FilmRating","l":"FilmRating(Film, Client, int)","u":"%3Cinit%3E(com.esprit.models.films.Film,com.esprit.models.users.Client,int)"},{"p":"com.esprit.services.films","c":"FilmRatingService","l":"FilmRatingService()","u":"%3Cinit%3E()"},{"p":"com.esprit.services.films","c":"FilmService","l":"FilmService()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.films","c":"FilmUserController","l":"FilmUserController()","u":"%3Cinit%3E()"},{"p":"com.esprit.utils","c":"FilmYoutubeTrailer","l":"FilmYoutubeTrailer()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.films","c":"FilmUserController","l":"filterByKeyword(String)","u":"filterByKeyword(java.lang.String)"},{"p":"com.esprit.controllers.products","c":"AfficherProductClientControllers","l":"filtercinema(ActionEvent)","u":"filtercinema(javafx.event.ActionEvent)"},{"p":"com.esprit.controllers.products","c":"DesignCategorieAdminController","l":"filtercinema(ActionEvent)","u":"filtercinema(javafx.event.ActionEvent)"},{"p":"com.esprit.controllers.products","c":"DesignProductAdminContoller","l":"filtercinema(ActionEvent)","u":"filtercinema(javafx.event.ActionEvent)"},{"p":"com.esprit.controllers.base","c":"BaseController","l":"filteredItems"},{"p":"com.esprit.utils","c":"FaceDetector","l":"finalize()"},{"p":"com.esprit.services.base","c":"BaseService","l":"findAll()"},{"p":"com.esprit.services.base","c":"BaseService","l":"findById(ID)"},{"p":"com.esprit.services.series","c":"IServiceSeriesImpl","l":"findMostLiked()"},{"p":"com.esprit.services.base","c":"BaseService","l":"findWithPagination(int, int)","u":"findWithPagination(int,int)"},{"p":"com.esprit.utils.validation","c":"ValidationUtils","l":"forField(TextField)","u":"forField(javafx.scene.control.TextField)"},{"p":"com.esprit.services.users","c":"UserService","l":"forgetPassword(String, String)","u":"forgetPassword(java.lang.String,java.lang.String)"},{"p":"com.esprit.controllers.products","c":"AfficherProductClientControllers","l":"forward_message"},{"p":"com.esprit.config","c":"HibernateConfig.DatabaseType","l":"fromString(String)","u":"fromString(java.lang.String)"},{"p":"com.esprit.utils","c":"UserPDF","l":"generate(List<User>)","u":"generate(java.util.List)"},{"p":"com.esprit.utils","c":"CodeBareProduct","l":"generateBarcode(String, Path)","u":"generateBarcode(java.lang.String,java.nio.file.Path)"},{"p":"com.esprit.utils","c":"DemoScreenshotGenerator","l":"generateDemoWorkflow()"},{"p":"com.esprit.controllers.users","c":"ModernAdminDashboardController","l":"generatePDF()"},{"p":"com.esprit.services.users","c":"UserService","l":"generateUserPDF()"},{"p":"com.esprit.services.films","c":"ActorService","l":"getActorByNom(String)","u":"getActorByNom(java.lang.String)"},{"p":"com.esprit.services.films","c":"ActorService","l":"getActorByPlacement(int)"},{"p":"com.esprit.services.films","c":"ActorFilmService","l":"getActorsForFilm(int)"},{"p":"com.esprit.services.films","c":"ActorFilmService","l":"getActorsNames(Long)","u":"getActorsNames(java.lang.Long)"},{"p":"com.esprit.services.products","c":"CategoryService","l":"getAllCategories()"},{"p":"com.esprit.services.products","c":"CategoryService","l":"getAllCategoriesNames()"},{"p":"com.esprit.services.cinemas","c":"CinemaRatingService","l":"getAverageRating(Long)","u":"getAverageRating(java.lang.Long)"},{"p":"com.esprit.services.products","c":"ReviewService","l":"getAverageRating(Long)","u":"getAverageRating(java.lang.Long)"},{"p":"com.esprit.services.films","c":"FilmRatingService","l":"getAverageRatingSorted()"},{"p":"com.esprit.services.products","c":"OrderItemService","l":"getAverageRatingSorted()"},{"p":"com.esprit.services.products","c":"ReviewService","l":"getAverageRatingSorted()"},{"p":"com.esprit.services.films","c":"FilmRatingService","l":"getAvergeRating(Long)","u":"getAvergeRating(java.lang.Long)"},{"p":"com.esprit.services.series","c":"IServiceSeriesImpl","l":"getByIdSeries(Long)","u":"getByIdSeries(java.lang.Long)"},{"p":"com.esprit.services.series","c":"IServiceFavoriteImpl","l":"getByIdUserAndIdSerie(long, Long)","u":"getByIdUserAndIdSerie(long,java.lang.Long)"},{"p":"com.esprit.models.products","c":"Product","l":"getCategories()"},{"p":"com.esprit.services.films","c":"FilmCategoryService","l":"getCategoriesForFilm(int)"},{"p":"com.esprit.services.products","c":"CategoryService","l":"getCategoriesForProduct(int)"},{"p":"com.esprit.services.series","c":"IServiceCategorieImpl","l":"getCategoriesStatistics()"},{"p":"com.esprit.services.products","c":"CategoryService","l":"getCategory(long)"},{"p":"com.esprit.services.films","c":"CategoryService","l":"getCategory(Long)","u":"getCategory(java.lang.Long)"},{"p":"com.esprit.services.products","c":"CategoryService","l":"getCategoryByName(String)","u":"getCategoryByName(java.lang.String)"},{"p":"com.esprit.services.films","c":"CategoryService","l":"getCategoryByNom(String)","u":"getCategoryByNom(java.lang.String)"},{"p":"com.esprit.models.products","c":"Product","l":"getCategoryNames()"},{"p":"com.esprit.services.films","c":"FilmCategoryService","l":"getCategoryNames(Long)","u":"getCategoryNames(java.lang.Long)"},{"p":"com.esprit.controllers.cinemas","c":"DashboardAdminController","l":"getCinemaAddresses()"},{"p":"com.esprit.controllers.cinemas","c":"DashboardClientController","l":"getCinemaAddresses()"},{"p":"com.esprit.services.cinemas","c":"CinemaService","l":"getCinemaById(Long)","u":"getCinemaById(java.lang.Long)"},{"p":"com.esprit.services.cinemas","c":"CinemaService","l":"getCinemaByName(String)","u":"getCinemaByName(java.lang.String)"},{"p":"com.esprit.services.cinemas","c":"CinemaHallService","l":"getCinemaHallById(Long)","u":"getCinemaHallById(java.lang.Long)"},{"p":"com.esprit.services.cinemas","c":"CinemaHallService","l":"getCinemaHallByName(String)","u":"getCinemaHallByName(java.lang.String)"},{"p":"com.esprit.services.cinemas","c":"CinemaHallService","l":"getCinemaHallsByCinemaId(Long)","u":"getCinemaHallsByCinemaId(java.lang.Long)"},{"p":"com.esprit.controllers.cinemas","c":"DashboardClientController","l":"getCinemaNames()"},{"p":"com.esprit.services.films","c":"FilmCinemaService","l":"getCinemaNames(Long)","u":"getCinemaNames(java.lang.Long)"},{"p":"com.esprit.services.films","c":"FilmCinemaService","l":"getCinemasForFilm(int)"},{"p":"com.esprit.controllers.cinemas","c":"DashboardAdminController","l":"getCinemaStatuses()"},{"p":"com.esprit.services.cinemas","c":"CinemaCommentService","l":"getCommentsByCinemaId(Long)","u":"getCommentsByCinemaId(java.lang.Long)"},{"p":"com.esprit.services.cinemas","c":"CinemaRatingService","l":"getCommentsByCinemaId(Long)","u":"getCommentsByCinemaId(java.lang.Long)"},{"p":"com.esprit.services.products","c":"CommentService","l":"getCommentsByProductId(int)"},{"p":"com.esprit.config","c":"HibernateConfig.DatabaseType","l":"getConfigFile()"},{"p":"com.esprit.utils","c":"DataSource","l":"getConnection()"},{"p":"com.esprit.config","c":"HibernateConfig","l":"getCurrentDatabaseType()"},{"p":"com.esprit.utils","c":"DatabaseManager","l":"getCurrentDatabaseType()"},{"p":"com.esprit.utils","c":"DatabaseManager","l":"getCurrentDatabaseUrl()"},{"p":"com.esprit.utils","c":"DataSource","l":"getDatabaseType()"},{"p":"com.esprit.utils","c":"DataSource","l":"getDatabaseUrl()"},{"p":"com.esprit.services.base","c":"BaseService","l":"getEntityManager()"},{"p":"com.esprit.controllers.series","c":"EpisodeController","l":"getFilePath()"},{"p":"com.esprit.controllers.series","c":"SerieController","l":"getFilePath()"},{"p":"com.esprit.services.films","c":"FilmService","l":"getFilm(int)"},{"p":"com.esprit.services.films","c":"FilmService","l":"getFilm(Long)","u":"getFilm(java.lang.Long)"},{"p":"com.esprit.services.films","c":"FilmService","l":"getFilmByName(String)","u":"getFilmByName(java.lang.String)"},{"p":"com.esprit.services.films","c":"FilmService","l":"getFilmLastInsertID()"},{"p":"com.esprit.services.films","c":"ActorFilmService","l":"getFilmsForActor(int)"},{"p":"com.esprit.services.films","c":"FilmCategoryService","l":"getFilmsForCategory(int)"},{"p":"com.esprit.services.films","c":"FilmCinemaService","l":"getFilmsForCinema(Long)","u":"getFilmsForCinema(java.lang.Long)"},{"p":"com.esprit.services.cinemas","c":"MovieSessionService","l":"getFirstSessionForFilm(Long)","u":"getFirstSessionForFilm(java.lang.Long)"},{"p":"com.esprit.services.films","c":"FilmService","l":"getIMDBUrlbyNom(String)","u":"getIMDBUrlbyNom(java.lang.String)"},{"p":"com.esprit.models.products","c":"SharedData","l":"getInstance()"},{"p":"com.esprit.utils","c":"CloudinaryStorage","l":"getInstance()"},{"p":"com.esprit.utils","c":"DataSource","l":"getInstance()"},{"p":"com.esprit.services.products","c":"OrderItemService","l":"getItemsByOrder(int)"},{"p":"com.esprit.services.series","c":"IServiceSeriesImpl","l":"getLikesStatistics()"},{"p":"com.esprit.services.cinemas","c":"MovieSessionService","l":"getMovieSessionById(int)"},{"p":"com.esprit.models.cinemas","c":"Cinema","l":"getMovieSessions()"},{"p":"com.esprit.config","c":"HibernateConfig.DatabaseType","l":"getName()"},{"p":"com.esprit.services.products","c":"OrderService","l":"getOrderById(int)"},{"p":"com.esprit.services.products","c":"OrderItemService","l":"getOrderItemsByOrder(int)"},{"p":"com.esprit.services.products","c":"OrderService","l":"getPaidOrders()"},{"p":"com.esprit.services.products","c":"ProductService","l":"getProductById(Long)","u":"getProductById(java.lang.Long)"},{"p":"com.esprit.controllers.products","c":"AfficherProductClientControllers","l":"getProductCategory()"},{"p":"com.esprit.controllers.products","c":"DesignCategorieAdminController","l":"getProductCategory()"},{"p":"com.esprit.controllers.products","c":"DesignProductAdminContoller","l":"getProductCategory()"},{"p":"com.esprit.services.products","c":"CategoryService","l":"getProductCountForCategory(int)"},{"p":"com.esprit.services.products","c":"ProductService","l":"getProductPrice(Long)","u":"getProductPrice(java.lang.Long)"},{"p":"com.esprit.services.products","c":"ProductService","l":"getProductsByCategory(Long)","u":"getProductsByCategory(java.lang.Long)"},{"p":"com.esprit.services.products","c":"ProductService","l":"getProductsOrderByQuantityAndStatus()"},{"p":"com.esprit.utils","c":"CloudinaryStorage","l":"getPublicIdFromUrl(String)","u":"getPublicIdFromUrl(java.lang.String)"},{"p":"com.esprit.controllers.products","c":"DetailsProductClientController","l":"getQuantiteSelectionnee()"},{"p":"com.esprit.services.cinemas","c":"CinemaRatingService","l":"getRatingForClientAndCinema(Long, Long)","u":"getRatingForClientAndCinema(java.lang.Long,java.lang.Long)"},{"p":"com.esprit.utils","c":"DemoScreenshotGenerator","l":"getScreenshotsDirectory()"},{"p":"com.esprit.services.cinemas","c":"SeatService","l":"getSeatsByCinemaHallId(Long)","u":"getSeatsByCinemaHallId(java.lang.Long)"},{"p":"com.esprit.controllers.base","c":"BaseController","l":"getSelectedItem()"},{"p":"com.esprit.config","c":"HibernateConfig","l":"getSessionFactory()"},{"p":"com.esprit.services.cinemas","c":"MovieSessionService","l":"getSessionsByDateRangeAndCinema(LocalDate, LocalDate, Cinema)","u":"getSessionsByDateRangeAndCinema(java.time.LocalDate,java.time.LocalDate,com.esprit.models.cinemas.Cinema)"},{"p":"com.esprit.services.cinemas","c":"MovieSessionService","l":"getSessionsByFilmAndCinema(Long, Long)","u":"getSessionsByFilmAndCinema(java.lang.Long,java.lang.Long)"},{"p":"com.esprit.services.products","c":"OrderService","l":"getTop3PurchasedProducts()"},{"p":"com.esprit.services.cinemas","c":"CinemaRatingService","l":"getTopRatedCinemas()"},{"p":"com.esprit.services.films","c":"FilmRatingService","l":"getTopRatedFilms()"},{"p":"com.esprit.services.products","c":"OrderItemService","l":"getTotalQuantityByCategoryAndDate(String, String)","u":"getTotalQuantityByCategoryAndDate(java.lang.String,java.lang.String)"},{"p":"com.esprit.services.films","c":"FilmService","l":"getTrailerFilm(String)","u":"getTrailerFilm(java.lang.String)"},{"p":"com.esprit.services.users","c":"UserService","l":"getUserById(Long)","u":"getUserById(java.lang.Long)"},{"p":"com.esprit.services.films","c":"FilmRatingService","l":"getUserRatings(Long)","u":"getUserRatings(java.lang.Long)"},{"p":"com.esprit.config","c":"HibernateConfig.DatabaseType","l":"H2"},{"p":"com.esprit.controllers.series","c":"StatistiqueController","l":"handleClose(ActionEvent)","u":"handleClose(javafx.event.ActionEvent)"},{"p":"com.esprit.controllers.series","c":"StatistiqueController","l":"handleUpdatePieData(ActionEvent)","u":"handleUpdatePieData(javafx.event.ActionEvent)"},{"p":"com.esprit.config","c":"HibernateConfig","l":"HibernateConfig()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.base","c":"BaseController","l":"imageView"},{"p":"com.esprit.utils","c":"ImdbAPI","l":"ImdbAPI()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.films","c":"ActorController","l":"importActors(String)","u":"importActors(java.lang.String)"},{"p":"com.esprit.controllers.base","c":"BaseController","l":"importImage()"},{"p":"com.esprit.controllers.users","c":"ProfileController","l":"importPhoto()"},{"p":"com.esprit.utils.ui","c":"UIUtils.NotificationType","l":"INFO"},{"p":"com.esprit.utils","c":"FaceRecognition","l":"init()"},{"p":"com.esprit.controllers.films","c":"PaymentUserController","l":"init(MovieSession, Client)","u":"init(com.esprit.models.cinemas.MovieSession,com.esprit.models.users.Client)"},{"p":"com.esprit.controllers.cinemas","c":"ModifierCinemaController","l":"initData(Cinema)","u":"initData(com.esprit.models.cinemas.Cinema)"},{"p":"com.esprit.controllers.base","c":"BaseController","l":"initialize()"},{"p":"com.esprit.controllers.cinemas","c":"DashboardAdminController","l":"initialize()"},{"p":"com.esprit.controllers.cinemas","c":"DashboardClientController","l":"initialize()"},{"p":"com.esprit.controllers.films","c":"FilmUserController","l":"initialize()"},{"p":"com.esprit.controllers.series","c":"SerieClientController","l":"initialize()"},{"p":"com.esprit.controllers.series","c":"StatistiqueController","l":"initialize()"},{"p":"com.esprit.controllers.users","c":"ModernAdminDashboardController","l":"initialize()"},{"p":"com.esprit.controllers.users","c":"ProfileController","l":"initialize()"},{"p":"com.esprit.controllers.films","c":"SeatSelectionController","l":"initialize(MovieSession, Client)","u":"initialize(com.esprit.models.cinemas.MovieSession,com.esprit.models.users.Client)"},{"p":"com.esprit.controllers.series","c":"EpisodeClientController","l":"initialize(Series)","u":"initialize(com.esprit.models.series.Series)"},{"p":"com.esprit.controllers","c":"AdminSideBarController","l":"initialize(URL, ResourceBundle)","u":"initialize(java.net.URL,java.util.ResourceBundle)"},{"p":"com.esprit.controllers","c":"CinemaManagerSideBarController","l":"initialize(URL, ResourceBundle)","u":"initialize(java.net.URL,java.util.ResourceBundle)"},{"p":"com.esprit.controllers.cinemas","c":"DashboardResponsableController","l":"initialize(URL, ResourceBundle)","u":"initialize(java.net.URL,java.util.ResourceBundle)"},{"p":"com.esprit.controllers.cinemas","c":"ModifierCinemaController","l":"initialize(URL, ResourceBundle)","u":"initialize(java.net.URL,java.util.ResourceBundle)"},{"p":"com.esprit.controllers","c":"ClientSideBarController","l":"initialize(URL, ResourceBundle)","u":"initialize(java.net.URL,java.util.ResourceBundle)"},{"p":"com.esprit.controllers.films","c":"PaymentUserController","l":"initialize(URL, ResourceBundle)","u":"initialize(java.net.URL,java.util.ResourceBundle)"},{"p":"com.esprit.controllers.products","c":"AfficherProductClientControllers","l":"initialize(URL, ResourceBundle)","u":"initialize(java.net.URL,java.util.ResourceBundle)"},{"p":"com.esprit.controllers.products","c":"AnalyseOrder","l":"initialize(URL, ResourceBundle)","u":"initialize(java.net.URL,java.util.ResourceBundle)"},{"p":"com.esprit.controllers.products","c":"CommentProductController","l":"initialize(URL, ResourceBundle)","u":"initialize(java.net.URL,java.util.ResourceBundle)"},{"p":"com.esprit.controllers.products","c":"DetailsProductClientController","l":"initialize(URL, ResourceBundle)","u":"initialize(java.net.URL,java.util.ResourceBundle)"},{"p":"com.esprit.controllers.products","c":"OrderClientController","l":"initialize(URL, ResourceBundle)","u":"initialize(java.net.URL,java.util.ResourceBundle)"},{"p":"com.esprit.controllers.products","c":"ShoppingCartProductControllers","l":"initialize(URL, ResourceBundle)","u":"initialize(java.net.URL,java.util.ResourceBundle)"},{"p":"com.esprit.controllers.series","c":"EpisodeClientController","l":"initialize(URL, ResourceBundle)","u":"initialize(java.net.URL,java.util.ResourceBundle)"},{"p":"com.esprit.controllers.series","c":"ListFavorisController","l":"initialize(URL, ResourceBundle)","u":"initialize(java.net.URL,java.util.ResourceBundle)"},{"p":"com.esprit.controllers.series","c":"StatistiqueController","l":"initialize(URL, ResourceBundle)","u":"initialize(java.net.URL,java.util.ResourceBundle)"},{"p":"com.esprit.controllers.users","c":"LoginController","l":"initialize(URL, ResourceBundle)","u":"initialize(java.net.URL,java.util.ResourceBundle)"},{"p":"com.esprit.controllers.users","c":"SMSAdminController","l":"initialize(URL, ResourceBundle)","u":"initialize(java.net.URL,java.util.ResourceBundle)"},{"p":"com.esprit.config","c":"HibernateConfig","l":"initializeDatabase()"},{"p":"com.esprit.utils","c":"DatabaseManager","l":"initializeSchema()"},{"p":"com.esprit.controllers.films","c":"PaymentUserController","l":"initWithSeats(MovieSession, Client, List<Seat>)","u":"initWithSeats(com.esprit.models.cinemas.MovieSession,com.esprit.models.users.Client,java.util.List)"},{"p":"com.esprit.utils","c":"DatabaseManager","l":"isCurrentlyH2()"},{"p":"com.esprit.utils","c":"DatabaseManager","l":"isCurrentlyMySQL()"},{"p":"com.esprit.utils","c":"DatabaseManager","l":"isCurrentlyPostgreSQL()"},{"p":"com.esprit.utils","c":"DatabaseManager","l":"isCurrentlySQLite()"},{"p":"com.esprit.services.series","c":"IServiceCategorieImpl","l":"IServiceCategorieImpl()","u":"%3Cinit%3E()"},{"p":"com.esprit.services.series","c":"IServiceEpisodeImpl","l":"IServiceEpisodeImpl()","u":"%3Cinit%3E()"},{"p":"com.esprit.services.series","c":"IServiceFavoriteImpl","l":"IServiceFavoriteImpl()","u":"%3Cinit%3E()"},{"p":"com.esprit.services.series","c":"IServiceFeedbackImpl","l":"IServiceFeedbackImpl()","u":"%3Cinit%3E()"},{"p":"com.esprit.services.series","c":"IServiceSeriesImpl","l":"IServiceSeriesImpl()","u":"%3Cinit%3E()"},{"p":"com.esprit.utils.validation","c":"ValidationUtils","l":"isLengthValid(String, int, int)","u":"isLengthValid(java.lang.String,int,int)"},{"p":"com.esprit.utils","c":"DataSource","l":"isMySQL()"},{"p":"com.esprit.utils.validation","c":"ValidationUtils","l":"isNotEmpty(String)","u":"isNotEmpty(java.lang.String)"},{"p":"com.esprit.controllers.films","c":"PaymentUserController","l":"isNum(String)","u":"isNum(java.lang.String)"},{"p":"com.esprit.utils","c":"DataSource","l":"isSQLite()"},{"p":"com.esprit.utils.validation","c":"ValidationUtils","l":"isValidDecimal(String)","u":"isValidDecimal(java.lang.String)"},{"p":"com.esprit.controllers.films","c":"PaymentController","l":"isValidEmail(String)","u":"isValidEmail(java.lang.String)"},{"p":"com.esprit.utils.validation","c":"ValidationUtils","l":"isValidEmail(String)","u":"isValidEmail(java.lang.String)"},{"p":"com.esprit.utils.validation","c":"ValidationUtils","l":"isValidName(String)","u":"isValidName(java.lang.String)"},{"p":"com.esprit.utils.validation","c":"ValidationUtils","l":"isValidNumber(String)","u":"isValidNumber(java.lang.String)"},{"p":"com.esprit.utils.validation","c":"ValidationUtils","l":"isValidPassword(String)","u":"isValidPassword(java.lang.String)"},{"p":"com.esprit.utils.validation","c":"ValidationUtils","l":"isValidPhone(String)","u":"isValidPhone(java.lang.String)"},{"p":"com.esprit.controllers.base","c":"BaseController","l":"items"},{"p":"com.esprit.controllers.users","c":"ProfileController","l":"leftPane"},{"p":"com.esprit.utils.validation","c":"ValidationUtils.ValidationBuilder","l":"length(int, int)","u":"length(int,int)"},{"p":"com.esprit.utils.validation","c":"ValidationUtils","l":"lengthValidator(int, int)","u":"lengthValidator(int,int)"},{"p":"com.esprit.controllers.series","c":"ListFavorisController","l":"ListFavorisController()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.products","c":"ListOrderController","l":"ListOrderController()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.products","c":"AfficherProductClientControllers","l":"loadAcceptedTop3()"},{"p":"com.esprit.controllers.products","c":"DetailsProductClientController","l":"loadAcceptedTop3()"},{"p":"com.esprit.controllers.base","c":"BaseController","l":"loadData()"},{"p":"com.esprit.controllers.users","c":"ModernAdminDashboardController","l":"loadData()"},{"p":"com.esprit.controllers.base","c":"BaseController","l":"logger"},{"p":"com.esprit.services.base","c":"BaseService","l":"logger"},{"p":"com.esprit.services.users","c":"UserService","l":"login(String, String)","u":"login(java.lang.String,java.lang.String)"},{"p":"com.esprit.controllers.users","c":"LoginController","l":"LoginController()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.users","c":"MailAdminController","l":"MailAdminController()","u":"%3Cinit%3E()"},{"p":"com.esprit","c":"MainApp","l":"main(String[])","u":"main(java.lang.String[])"},{"p":"com.esprit","c":"MainApp","l":"MainApp()","u":"%3Cinit%3E()"},{"p":"com.esprit.utils.validation","c":"ValidationUtils.ValidationBuilder","l":"message(String)","u":"message(java.lang.String)"},{"p":"com.esprit.controllers.users","c":"ModernAdminDashboardController","l":"ModernAdminDashboardController()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.cinemas","c":"ModifierCinemaController","l":"ModifierCinemaController()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.users","c":"ProfileController","l":"modifyAccount(ActionEvent)","u":"modifyAccount(javafx.event.ActionEvent)"},{"p":"com.esprit.models.cinemas","c":"MovieSession","l":"MovieSession(CinemaHall, Film, Time, Time, Date, Double)","u":"%3Cinit%3E(com.esprit.models.cinemas.CinemaHall,com.esprit.models.films.Film,java.sql.Time,java.sql.Time,java.sql.Date,java.lang.Double)"},{"p":"com.esprit.models.cinemas","c":"MovieSession","l":"MovieSession(CinemaHall, Film, Time, Time, LocalDate, Double)","u":"%3Cinit%3E(com.esprit.models.cinemas.CinemaHall,com.esprit.models.films.Film,java.sql.Time,java.sql.Time,java.time.LocalDate,java.lang.Double)"},{"p":"com.esprit.services.cinemas","c":"MovieSessionService","l":"MovieSessionService()","u":"%3Cinit%3E()"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"MUTED_COLOR"},{"p":"com.esprit.config","c":"HibernateConfig.DatabaseType","l":"MYSQL"},{"p":"com.esprit.utils.validation","c":"ValidationUtils","l":"NAME_REGEX"},{"p":"com.esprit.utils.validation","c":"ValidationUtils.ValidationBuilder","l":"name()"},{"p":"com.esprit.utils.validation","c":"ValidationUtils","l":"nameValidator()"},{"p":"com.esprit.utils.validation","c":"ValidationUtils","l":"NUMBER_REGEX"},{"p":"com.esprit.utils","c":"FaceDetector.FaceDetectionCallback","l":"onFaceDetected(Mat)","u":"onFaceDetected(org.opencv.core.Mat)"},{"p":"com.esprit.utils","c":"FaceDetector.FaceDetectionCallback","l":"onFrameProcessed(Mat)","u":"onFrameProcessed(org.opencv.core.Mat)"},{"p":"com.esprit.controllers.films","c":"PaymentUserController","l":"openPDF(String)","u":"openPDF(java.lang.String)"},{"p":"com.esprit.models.products","c":"Order","l":"Order(Date, String, Client, int, String)","u":"%3Cinit%3E(java.util.Date,java.lang.String,com.esprit.models.users.Client,int,java.lang.String)"},{"p":"com.esprit.controllers.products","c":"OrderClientController","l":"OrderClientController()","u":"%3Cinit%3E()"},{"p":"com.esprit.models.products","c":"OrderItem","l":"OrderItem(int, Product, Order)","u":"%3Cinit%3E(int,com.esprit.models.products.Product,com.esprit.models.products.Order)"},{"p":"com.esprit.services.products","c":"OrderItemService","l":"OrderItemService()","u":"%3Cinit%3E()"},{"p":"com.esprit.services.products","c":"OrderService","l":"OrderService()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.products","c":"ShoppingCartProductControllers","l":"Paiment(MouseEvent)","u":"Paiment(javafx.scene.input.MouseEvent)"},{"p":"com.esprit.utils.validation","c":"ValidationUtils","l":"PASSWORD_REGEX"},{"p":"com.esprit.utils.validation","c":"ValidationUtils.ValidationBuilder","l":"password()"},{"p":"com.esprit.utils.validation","c":"ValidationUtils","l":"passwordValidator()"},{"p":"com.esprit.utils","c":"Paymentuser","l":"pay(int)"},{"p":"com.esprit.controllers.films","c":"PaymentController","l":"PaymentController()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.films","c":"PaymentUserController","l":"PaymentUserController()","u":"%3Cinit%3E()"},{"p":"com.esprit.utils.validation","c":"ValidationUtils","l":"PHONE_REGEX"},{"p":"com.esprit.utils.validation","c":"ValidationUtils.ValidationBuilder","l":"phone()"},{"p":"com.esprit.utils.validation","c":"ValidationUtils","l":"phoneValidator()"},{"p":"com.esprit.config","c":"HibernateConfig.DatabaseType","l":"POSTGRESQL"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"PRIMARY_COLOR"},{"p":"com.esprit.utils","c":"PaymentProcessor","l":"processPayment(String, String, float, String, int, int, String)","u":"processPayment(java.lang.String,java.lang.String,float,java.lang.String,int,int,java.lang.String)"},{"p":"com.esprit.models.products","c":"Product","l":"Product(Long)","u":"%3Cinit%3E(java.lang.Long)"},{"p":"com.esprit.models.products","c":"Product","l":"Product(String, int, String, String, List<ProductCategory>, int)","u":"%3Cinit%3E(java.lang.String,int,java.lang.String,java.lang.String,java.util.List,int)"},{"p":"com.esprit.models.products","c":"ProductCategory","l":"ProductCategory(String, String)","u":"%3Cinit%3E(java.lang.String,java.lang.String)"},{"p":"com.esprit.services.products","c":"ProductService","l":"ProductService()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.users","c":"ProfileController","l":"ProfileController()","u":"%3Cinit%3E()"},{"p":"com.esprit.services.films","c":"FilmRatingService","l":"ratingExists(Long, Long)","u":"ratingExists(java.lang.Long,java.lang.Long)"},{"p":"com.esprit.services.products","c":"ReviewService","l":"ratingExists(Long, Long)","u":"ratingExists(java.lang.Long,java.lang.Long)"},{"p":"com.esprit.services.cinemas","c":"CinemaCommentService","l":"read()"},{"p":"com.esprit.services.cinemas","c":"CinemaHallService","l":"read()"},{"p":"com.esprit.services.cinemas","c":"CinemaRatingService","l":"read()"},{"p":"com.esprit.services.cinemas","c":"CinemaService","l":"read()"},{"p":"com.esprit.services.cinemas","c":"MovieSessionService","l":"read()"},{"p":"com.esprit.services.films","c":"ActorService","l":"read()"},{"p":"com.esprit.services.films","c":"CategoryService","l":"read()"},{"p":"com.esprit.services.films","c":"FilmCommentService","l":"read()"},{"p":"com.esprit.services.films","c":"FilmRatingService","l":"read()"},{"p":"com.esprit.services.films","c":"FilmService","l":"read()"},{"p":"com.esprit.services.films","c":"TicketService","l":"read()"},{"p":"com.esprit.services","c":"IService","l":"read()"},{"p":"com.esprit.services.products","c":"CategoryService","l":"read()"},{"p":"com.esprit.services.products","c":"CommentService","l":"read()"},{"p":"com.esprit.services.products","c":"OrderItemService","l":"read()"},{"p":"com.esprit.services.products","c":"OrderService","l":"read()"},{"p":"com.esprit.services.products","c":"ProductService","l":"read()"},{"p":"com.esprit.services.products","c":"ReviewService","l":"read()"},{"p":"com.esprit.services.products","c":"ShoppingCartService","l":"read()"},{"p":"com.esprit.services.series","c":"IServiceCategorieImpl","l":"read()"},{"p":"com.esprit.services.series","c":"IServiceEpisodeImpl","l":"read()"},{"p":"com.esprit.services.series","c":"IServiceFavoriteImpl","l":"read()"},{"p":"com.esprit.services.series","c":"IServiceFeedbackImpl","l":"read()"},{"p":"com.esprit.services.series","c":"IServiceSeriesImpl","l":"read()"},{"p":"com.esprit.services.users","c":"UserService","l":"read()"},{"p":"com.esprit.utils","c":"CodeBareProduct","l":"readBarcode(File)","u":"readBarcode(java.io.File)"},{"p":"com.esprit.services.products","c":"CommentService","l":"readByClientId(int)"},{"p":"com.esprit.services.products","c":"OrderService","l":"readClientOrders()"},{"p":"com.esprit.services.films","c":"FilmCinemaService","l":"readMoviesForCinema(Long)","u":"readMoviesForCinema(java.lang.Long)"},{"p":"com.esprit.services.products","c":"OrderItemService","l":"readOrderItem(Long)","u":"readOrderItem(java.lang.Long)"},{"p":"com.esprit.services.products","c":"ShoppingCartService","l":"readUserShoppingCart(Long)","u":"readUserShoppingCart(java.lang.Long)"},{"p":"com.esprit.controllers.cinemas","c":"DashboardClientController","l":"rechercher(List<Cinema>, String)","u":"rechercher(java.util.List,java.lang.String)"},{"p":"com.esprit.controllers.films","c":"FilmUserController","l":"rechercher(List<Film>, String)","u":"rechercher(java.util.List,java.lang.String)"},{"p":"com.esprit.controllers.products","c":"AfficherProductClientControllers","l":"rechercher(List<Product>, String)","u":"rechercher(java.util.List,java.lang.String)"},{"p":"com.esprit.controllers.series","c":"SerieClientController","l":"rechercher(List<Series>, String)","u":"rechercher(java.util.List,java.lang.String)"},{"p":"com.esprit.utils","c":"FaceRecognition","l":"recognize(Mat)","u":"recognize(org.opencv.core.Mat)"},{"p":"com.esprit.controllers.films","c":"ActorController","l":"redo()"},{"p":"com.esprit.controllers.base","c":"BaseController","l":"refreshTable()"},{"p":"com.esprit.services.series","c":"IServiceSeriesImpl","l":"removeDislike(Series)","u":"removeDislike(com.esprit.models.series.Series)"},{"p":"com.esprit.services.series","c":"IServiceSeriesImpl","l":"removeLike(Series)","u":"removeLike(com.esprit.models.series.Series)"},{"p":"com.esprit.services.products","c":"CategoryService","l":"removeProductFromCategory(int, int)","u":"removeProductFromCategory(int,int)"},{"p":"com.esprit.utils.validation","c":"ValidationUtils.ValidationBuilder","l":"required()"},{"p":"com.esprit.utils.validation","c":"ValidationUtils","l":"requiredValidator()"},{"p":"com.esprit.controllers.users","c":"ResetPasswordController","l":"ResetPasswordController()","u":"%3Cinit%3E()"},{"p":"com.esprit.services.series","c":"IServiceSeriesImpl","l":"retrieveByCategory(Long)","u":"retrieveByCategory(java.lang.Long)"},{"p":"com.esprit.services.series","c":"IServiceEpisodeImpl","l":"retrieveBySeries(Long)","u":"retrieveBySeries(java.lang.Long)"},{"p":"com.esprit.models.products","c":"Review","l":"Review(Client, int, Product)","u":"%3Cinit%3E(com.esprit.models.users.Client,int,com.esprit.models.products.Product)"},{"p":"com.esprit.services.products","c":"ReviewService","l":"ReviewService()","u":"%3Cinit%3E()"},{"p":"com.esprit.utils","c":"FaceDetector","l":"run()"},{"p":"com.esprit.controllers.base","c":"BaseController","l":"saveItem()"},{"p":"com.esprit.controllers.users","c":"ModernAdminDashboardController","l":"saveItem()"},{"p":"com.esprit.controllers.products","c":"AfficherProductClientControllers","l":"SearchBar"},{"p":"com.esprit.controllers.products","c":"DetailsProductClientController","l":"SearchBar"},{"p":"com.esprit.services.products","c":"CategoryService","l":"searchCategoriesByName(String)","u":"searchCategoriesByName(java.lang.String)"},{"p":"com.esprit.utils","c":"ImdbAPI","l":"searchMovie(String)","u":"searchMovie(java.lang.String)"},{"p":"com.esprit.controllers.base","c":"BaseController","l":"searchTextField"},{"p":"com.esprit.models.cinemas","c":"Seat","l":"Seat(Integer, Integer, Boolean, CinemaHall)","u":"%3Cinit%3E(java.lang.Integer,java.lang.Integer,java.lang.Boolean,com.esprit.models.cinemas.CinemaHall)"},{"p":"com.esprit.controllers.films","c":"SeatSelectionController","l":"SeatSelectionController()","u":"%3Cinit%3E()"},{"p":"com.esprit.services.cinemas","c":"SeatService","l":"SeatService()","u":"%3Cinit%3E()"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"SECONDARY_COLOR"},{"p":"com.esprit.controllers.base","c":"BaseController","l":"selectItem(T)"},{"p":"com.esprit.utils","c":"UserMail","l":"send(String, String)","u":"send(java.lang.String,java.lang.String)"},{"p":"com.esprit.controllers.series","c":"SerieController","l":"sendEmail(String, String, String)","u":"sendEmail(java.lang.String,java.lang.String,java.lang.String)"},{"p":"com.esprit.services.users","c":"UserService","l":"sendMail(String, String)","u":"sendMail(java.lang.String,java.lang.String)"},{"p":"com.esprit.controllers.users","c":"SMSAdminController","l":"sendSMS(ActionEvent)","u":"sendSMS(javafx.event.ActionEvent)"},{"p":"com.esprit.utils","c":"UserSMSAPI","l":"sendSMS(int, String, String)","u":"sendSMS(int,java.lang.String,java.lang.String)"},{"p":"com.esprit.controllers.cinemas","c":"SentimentAnalysisController","l":"SentimentAnalysisController()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.series","c":"SerieClientController","l":"SerieClientController()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.series","c":"SerieController","l":"SerieController()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.series","c":"SerieController","l":"serieImageView"},{"p":"com.esprit.models.series","c":"Series","l":"Series(String, String, String, String, String, int, int, int, int)","u":"%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,int,int,int,int)"},{"p":"com.esprit.models.products","c":"Product","l":"setCategories(List<ProductCategory>)","u":"setCategories(java.util.List)"},{"p":"com.esprit.controllers","c":"CinemaManagerSideBarController","l":"setData(CinemaManager)","u":"setData(com.esprit.models.users.CinemaManager)"},{"p":"com.esprit.controllers.cinemas","c":"DashboardResponsableController","l":"setData(CinemaManager)","u":"setData(com.esprit.models.users.CinemaManager)"},{"p":"com.esprit.controllers.films","c":"PaymentUserController","l":"setData(Client, String)","u":"setData(com.esprit.models.users.Client,java.lang.String)"},{"p":"com.esprit.controllers.films","c":"PaymentController","l":"setData(MovieSession)","u":"setData(com.esprit.models.cinemas.MovieSession)"},{"p":"com.esprit.controllers.users","c":"ProfileController","l":"setData(User)","u":"setData(com.esprit.models.users.User)"},{"p":"com.esprit.config","c":"HibernateConfig","l":"setDatabaseType(HibernateConfig.DatabaseType)","u":"setDatabaseType(com.esprit.config.HibernateConfig.DatabaseType)"},{"p":"com.esprit.controllers.users","c":"ProfileController","l":"setLeftPane(AnchorPane)","u":"setLeftPane(javafx.scene.layout.AnchorPane)"},{"p":"com.esprit.controllers.products","c":"DetailsProductClientController","l":"setProductId(Long)","u":"setProductId(java.lang.Long)"},{"p":"com.esprit.controllers.base","c":"BaseController","l":"setupCellEditCommit()"},{"p":"com.esprit.controllers.users","c":"ModernAdminDashboardController","l":"setupCellEditCommit()"},{"p":"com.esprit.controllers.base","c":"BaseController","l":"setupCellFactories()"},{"p":"com.esprit.controllers.users","c":"ModernAdminDashboardController","l":"setupCellFactories()"},{"p":"com.esprit.controllers.base","c":"BaseController","l":"setupCellValueFactories()"},{"p":"com.esprit.controllers.users","c":"ModernAdminDashboardController","l":"setupCellValueFactories()"},{"p":"com.esprit.controllers.base","c":"BaseController","l":"setupSearch()"},{"p":"com.esprit.controllers.base","c":"BaseController","l":"setupTableColumns()"},{"p":"com.esprit.controllers.users","c":"ModernAdminDashboardController","l":"setupTableColumns()"},{"p":"com.esprit.controllers.base","c":"BaseController","l":"setupTableView()"},{"p":"com.esprit.controllers.base","c":"BaseController","l":"setupValidation()"},{"p":"com.esprit.controllers.users","c":"ModernAdminDashboardController","l":"setupValidation()"},{"p":"com.esprit.models.products","c":"ShoppingCart","l":"ShoppingCart(int, Product, User)","u":"%3Cinit%3E(int,com.esprit.models.products.Product,com.esprit.models.users.User)"},{"p":"com.esprit.controllers.products","c":"AfficherProductClientControllers","l":"shoppingcartFlowPane"},{"p":"com.esprit.controllers.products","c":"DetailsProductClientController","l":"shoppingcartFlowPane"},{"p":"com.esprit.controllers.products","c":"ShoppingCartProductControllers","l":"ShoppingCartProductControllers()","u":"%3Cinit%3E()"},{"p":"com.esprit.services.products","c":"ShoppingCartService","l":"ShoppingCartService()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.series","c":"CategorieController","l":"showcinema(ActionEvent)","u":"showcinema(javafx.event.ActionEvent)"},{"p":"com.esprit.controllers.series","c":"EpisodeController","l":"showcinema(ActionEvent)","u":"showcinema(javafx.event.ActionEvent)"},{"p":"com.esprit.controllers.series","c":"SerieController","l":"showcinema(ActionEvent)","u":"showcinema(javafx.event.ActionEvent)"},{"p":"com.esprit.controllers.base","c":"BaseController","l":"showConfirmationDialog(String, String)","u":"showConfirmationDialog(java.lang.String,java.lang.String)"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"showConfirmationDialog(String, String)","u":"showConfirmationDialog(java.lang.String,java.lang.String)"},{"p":"com.esprit.controllers.base","c":"BaseController","l":"showErrorAlert(String, String)","u":"showErrorAlert(java.lang.String,java.lang.String)"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"showErrorNotification(String)","u":"showErrorNotification(java.lang.String)"},{"p":"com.esprit.controllers.series","c":"CategorieController","l":"showevent(ActionEvent)","u":"showevent(javafx.event.ActionEvent)"},{"p":"com.esprit.controllers.series","c":"EpisodeController","l":"showevent(ActionEvent)","u":"showevent(javafx.event.ActionEvent)"},{"p":"com.esprit.controllers.series","c":"SerieController","l":"showevent(ActionEvent)","u":"showevent(javafx.event.ActionEvent)"},{"p":"com.esprit.services.series","c":"IServiceFavoriteImpl","l":"showFavoritesList(int)"},{"p":"com.esprit.controllers.base","c":"BaseController","l":"showInfoAlert(String, String)","u":"showInfoAlert(java.lang.String,java.lang.String)"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"showInfoNotification(String)","u":"showInfoNotification(java.lang.String)"},{"p":"com.esprit.controllers.series","c":"CategorieController","l":"showmovies(ActionEvent)","u":"showmovies(javafx.event.ActionEvent)"},{"p":"com.esprit.controllers.series","c":"EpisodeController","l":"showmovies(ActionEvent)","u":"showmovies(javafx.event.ActionEvent)"},{"p":"com.esprit.controllers.series","c":"SerieController","l":"showmovies(ActionEvent)","u":"showmovies(javafx.event.ActionEvent)"},{"p":"com.esprit.controllers.cinemas","c":"DashboardClientController","l":"showPlanning(Cinema)","u":"showPlanning(com.esprit.models.cinemas.Cinema)"},{"p":"com.esprit.controllers.series","c":"CategorieController","l":"showproducts(ActionEvent)","u":"showproducts(javafx.event.ActionEvent)"},{"p":"com.esprit.controllers.series","c":"EpisodeController","l":"showproducts(ActionEvent)","u":"showproducts(javafx.event.ActionEvent)"},{"p":"com.esprit.controllers.series","c":"SerieController","l":"showproducts(ActionEvent)","u":"showproducts(javafx.event.ActionEvent)"},{"p":"com.esprit.controllers.series","c":"CategorieController","l":"showseries(ActionEvent)","u":"showseries(javafx.event.ActionEvent)"},{"p":"com.esprit.controllers.series","c":"EpisodeController","l":"showseries(ActionEvent)","u":"showseries(javafx.event.ActionEvent)"},{"p":"com.esprit.controllers.series","c":"SerieController","l":"showseries(ActionEvent)","u":"showseries(javafx.event.ActionEvent)"},{"p":"com.esprit.controllers.series","c":"CategorieController","l":"showStatistics(ActionEvent)","u":"showStatistics(javafx.event.ActionEvent)"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"showSuccessNotification(String)","u":"showSuccessNotification(java.lang.String)"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"showWarningNotification(String)","u":"showWarningNotification(java.lang.String)"},{"p":"com.esprit.config","c":"HibernateConfig","l":"shutdown()"},{"p":"com.esprit.utils","c":"SignInGoogle","l":"signInWithGoogle()"},{"p":"com.esprit.utils","c":"SignInMicrosoft","l":"SignInWithMicrosoft(String...)","u":"SignInWithMicrosoft(java.lang.String...)"},{"p":"com.esprit.controllers.users","c":"AdminDashboardController","l":"signOut(ActionEvent)","u":"signOut(javafx.event.ActionEvent)"},{"p":"com.esprit.controllers.users","c":"ModernAdminDashboardController","l":"signOut(ActionEvent)","u":"signOut(javafx.event.ActionEvent)"},{"p":"com.esprit.controllers.users","c":"ProfileController","l":"signOut(ActionEvent)","u":"signOut(javafx.event.ActionEvent)"},{"p":"com.esprit.controllers.users","c":"SignUpController","l":"SignUpController()","u":"%3Cinit%3E()"},{"p":"com.esprit.utils.ui","c":"UIUtils.AnimationType","l":"SLIDE_IN_DOWN"},{"p":"com.esprit.utils.ui","c":"UIUtils.AnimationType","l":"SLIDE_IN_LEFT"},{"p":"com.esprit.utils.ui","c":"UIUtils.AnimationType","l":"SLIDE_IN_RIGHT"},{"p":"com.esprit.utils.ui","c":"UIUtils.AnimationType","l":"SLIDE_IN_UP"},{"p":"com.esprit.utils.ui","c":"UIUtils.AnimationType","l":"SLIDE_OUT_DOWN"},{"p":"com.esprit.utils.ui","c":"UIUtils.AnimationType","l":"SLIDE_OUT_LEFT"},{"p":"com.esprit.utils.ui","c":"UIUtils.AnimationType","l":"SLIDE_OUT_RIGHT"},{"p":"com.esprit.utils.ui","c":"UIUtils.AnimationType","l":"SLIDE_OUT_UP"},{"p":"com.esprit.controllers.users","c":"SMSAdminController","l":"SMSAdminController()","u":"%3Cinit%3E()"},{"p":"com.esprit.services.cinemas","c":"CinemaService","l":"sort(String)","u":"sort(java.lang.String)"},{"p":"com.esprit.services.films","c":"FilmService","l":"sort(String)","u":"sort(java.lang.String)"},{"p":"com.esprit.services.products","c":"ProductService","l":"sort(String)","u":"sort(java.lang.String)"},{"p":"com.esprit.services.users","c":"UserService","l":"sort(String)","u":"sort(java.lang.String)"},{"p":"com.esprit.controllers.base","c":"BaseController","l":"sortedItems"},{"p":"com.esprit.config","c":"HibernateConfig.DatabaseType","l":"SQLITE"},{"p":"com.esprit","c":"MainApp","l":"start(Stage)","u":"start(javafx.stage.Stage)"},{"p":"com.esprit.services.series","c":"IServiceFavoriteImpl","l":"statement"},{"p":"com.esprit.services.series","c":"IServiceFeedbackImpl","l":"statement"},{"p":"com.esprit.controllers.series","c":"StatistiqueController","l":"StatistiqueController()","u":"%3Cinit%3E()"},{"p":"com.esprit.utils","c":"FaceDetector","l":"stop()"},{"p":"com.esprit.utils.ui","c":"UIUtils.NotificationType","l":"SUCCESS"},{"p":"com.esprit.controllers.films","c":"CategoryController","l":"switchForm(ActionEvent)","u":"switchForm(javafx.event.ActionEvent)"},{"p":"com.esprit.controllers.films","c":"FilmController","l":"switchForm(ActionEvent)","u":"switchForm(javafx.event.ActionEvent)"},{"p":"com.esprit.controllers.films","c":"FilmUserController","l":"switchtcinemaaa(ActionEvent)","u":"switchtcinemaaa(javafx.event.ActionEvent)"},{"p":"com.esprit.controllers.films","c":"FilmUserController","l":"switchtevent(ActionEvent)","u":"switchtevent(javafx.event.ActionEvent)"},{"p":"com.esprit.controllers.films","c":"PaymentUserController","l":"switchtfillmmaa(ActionEvent)","u":"switchtfillmmaa(javafx.event.ActionEvent)"},{"p":"com.esprit.controllers.films","c":"ActorController","l":"switchtoajouterCinema(ActionEvent)","u":"switchtoajouterCinema(javafx.event.ActionEvent)"},{"p":"com.esprit.controllers.films","c":"FilmController","l":"switchtoajouterCinema(ActionEvent)","u":"switchtoajouterCinema(javafx.event.ActionEvent)"},{"p":"com.esprit.controllers.films","c":"FilmUserController","l":"switchtoajouterCinema(ActionEvent)","u":"switchtoajouterCinema(javafx.event.ActionEvent)"},{"p":"com.esprit.controllers.films","c":"FilmUserController","l":"switchtoajouterproduct(ActionEvent)","u":"switchtoajouterproduct(javafx.event.ActionEvent)"},{"p":"com.esprit.utils","c":"DatabaseManager","l":"switchToH2()"},{"p":"com.esprit.utils","c":"DatabaseManager","l":"switchToMySQL()"},{"p":"com.esprit.utils","c":"DatabaseManager","l":"switchToMySQL(String, String, String, String, String)","u":"switchToMySQL(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)"},{"p":"com.esprit.controllers.films","c":"FilmUserController","l":"switchtopayment(String)","u":"switchtopayment(java.lang.String)"},{"p":"com.esprit.utils","c":"DatabaseManager","l":"switchToPostgreSQL()"},{"p":"com.esprit.utils","c":"DatabaseManager","l":"switchToPostgreSQL(String, String, String, String, String)","u":"switchToPostgreSQL(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)"},{"p":"com.esprit.controllers.films","c":"FilmUserController","l":"switchtoSerie(ActionEvent)","u":"switchtoSerie(javafx.event.ActionEvent)"},{"p":"com.esprit.utils","c":"DatabaseManager","l":"switchToSQLite()"},{"p":"com.esprit.utils","c":"DatabaseManager","l":"switchToSQLite(String)","u":"switchToSQLite(java.lang.String)"},{"p":"com.esprit.controllers","c":"AdminSideBarController","l":"switchToUsers(ActionEvent)","u":"switchToUsers(javafx.event.ActionEvent)"},{"p":"com.esprit.controllers.base","c":"BaseController","l":"tableView"},{"p":"com.esprit.utils","c":"DatabaseManager","l":"testConnection()"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"TEXT_COLOR"},{"p":"com.esprit.models.films","c":"Ticket","l":"Ticket(int, Client, MovieSession, float)","u":"%3Cinit%3E(int,com.esprit.models.users.Client,com.esprit.models.cinemas.MovieSession,float)"},{"p":"com.esprit.services.films","c":"TicketService","l":"TicketService()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.users","c":"ModernAdminDashboardController","l":"toggleTheme()"},{"p":"com.esprit.utils.ui","c":"UIUtils","l":"UIUtils()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.films","c":"ActorController","l":"undo()"},{"p":"com.esprit.services.films","c":"ActorService","l":"update(Actor)","u":"update(com.esprit.models.films.Actor)"},{"p":"com.esprit.services.films","c":"CategoryService","l":"update(Category)","u":"update(com.esprit.models.films.Category)"},{"p":"com.esprit.services.series","c":"IServiceCategorieImpl","l":"update(Category)","u":"update(com.esprit.models.series.Category)"},{"p":"com.esprit.services.cinemas","c":"CinemaService","l":"update(Cinema)","u":"update(com.esprit.models.cinemas.Cinema)"},{"p":"com.esprit.services.cinemas","c":"CinemaCommentService","l":"update(CinemaComment)","u":"update(com.esprit.models.cinemas.CinemaComment)"},{"p":"com.esprit.services.cinemas","c":"CinemaHallService","l":"update(CinemaHall)","u":"update(com.esprit.models.cinemas.CinemaHall)"},{"p":"com.esprit.services.cinemas","c":"CinemaRatingService","l":"update(CinemaRating)","u":"update(com.esprit.models.cinemas.CinemaRating)"},{"p":"com.esprit.services.products","c":"CommentService","l":"update(Comment)","u":"update(com.esprit.models.products.Comment)"},{"p":"com.esprit.services.series","c":"IServiceEpisodeImpl","l":"update(Episode)","u":"update(com.esprit.models.series.Episode)"},{"p":"com.esprit.services.series","c":"IServiceFavoriteImpl","l":"update(Favorite)","u":"update(com.esprit.models.series.Favorite)"},{"p":"com.esprit.services.series","c":"IServiceFeedbackImpl","l":"update(Feedback)","u":"update(com.esprit.models.series.Feedback)"},{"p":"com.esprit.services.films","c":"FilmService","l":"update(Film)","u":"update(com.esprit.models.films.Film)"},{"p":"com.esprit.services.films","c":"FilmCommentService","l":"update(FilmComment)","u":"update(com.esprit.models.films.FilmComment)"},{"p":"com.esprit.services.films","c":"FilmRatingService","l":"update(FilmRating)","u":"update(com.esprit.models.films.FilmRating)"},{"p":"com.esprit.services.cinemas","c":"MovieSessionService","l":"update(MovieSession)","u":"update(com.esprit.models.cinemas.MovieSession)"},{"p":"com.esprit.services.products","c":"OrderService","l":"update(Order)","u":"update(com.esprit.models.products.Order)"},{"p":"com.esprit.services.products","c":"OrderItemService","l":"update(OrderItem)","u":"update(com.esprit.models.products.OrderItem)"},{"p":"com.esprit.services.products","c":"ProductService","l":"update(Product)","u":"update(com.esprit.models.products.Product)"},{"p":"com.esprit.services.products","c":"CategoryService","l":"update(ProductCategory)","u":"update(com.esprit.models.products.ProductCategory)"},{"p":"com.esprit.services.products","c":"ReviewService","l":"update(Review)","u":"update(com.esprit.models.products.Review)"},{"p":"com.esprit.services.series","c":"IServiceSeriesImpl","l":"update(Series)","u":"update(com.esprit.models.series.Series)"},{"p":"com.esprit.services.products","c":"ShoppingCartService","l":"update(ShoppingCart)","u":"update(com.esprit.models.products.ShoppingCart)"},{"p":"com.esprit.services.base","c":"BaseService","l":"update(T)"},{"p":"com.esprit.services","c":"IService","l":"update(T)"},{"p":"com.esprit.services.films","c":"TicketService","l":"update(Ticket)","u":"update(com.esprit.models.films.Ticket)"},{"p":"com.esprit.services.users","c":"UserService","l":"update(User)","u":"update(com.esprit.models.users.User)"},{"p":"com.esprit.services.films","c":"ActorFilmService","l":"updateActors(Film, List<String>)","u":"updateActors(com.esprit.models.films.Film,java.util.List)"},{"p":"com.esprit.services.films","c":"FilmCategoryService","l":"updateCategories(Film, List<String>)","u":"updateCategories(com.esprit.models.films.Film,java.util.List)"},{"p":"com.esprit.services.films","c":"FilmCinemaService","l":"updateCinemas(Film, List<String>)","u":"updateCinemas(com.esprit.models.films.Film,java.util.List)"},{"p":"com.esprit.controllers.base","c":"BaseController","l":"updateItem(T)"},{"p":"com.esprit.controllers.users","c":"ModernAdminDashboardController","l":"updateItem(User)","u":"updateItem(com.esprit.models.users.User)"},{"p":"com.esprit.services.users","c":"UserService","l":"updatePassword(String, String)","u":"updatePassword(java.lang.String,java.lang.String)"},{"p":"com.esprit.services.cinemas","c":"SeatService","l":"updateSeatStatus(Long, Boolean)","u":"updateSeatStatus(java.lang.Long,java.lang.Boolean)"},{"p":"com.esprit.utils","c":"CloudinaryStorage","l":"uploadImage(File)","u":"uploadImage(java.io.File)"},{"p":"com.esprit.utils","c":"CloudinaryStorage","l":"uploadImage(File, Map<String, Object>)","u":"uploadImage(java.io.File,java.util.Map)"},{"p":"com.esprit.models.users","c":"User","l":"User(String, String, String, String, String, String, Date, String, String)","u":"%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.sql.Date,java.lang.String,java.lang.String)"},{"p":"com.esprit.utils","c":"UserPDF","l":"UserPDF()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers","c":"AdminSideBarController","l":"usersButton"},{"p":"com.esprit.services.users","c":"UserService","l":"UserService()","u":"%3Cinit%3E()"},{"p":"com.esprit.utils.validation","c":"ValidationUtils","l":"validateFields(TextField...)","u":"validateFields(javafx.scene.control.TextField...)"},{"p":"com.esprit.controllers.base","c":"BaseController","l":"validateForm()"},{"p":"com.esprit.controllers.users","c":"ModernAdminDashboardController","l":"validateForm()"},{"p":"com.esprit.utils.validation","c":"ValidationUtils.ValidationBuilder","l":"ValidationBuilder(TextField)","u":"%3Cinit%3E(javafx.scene.control.TextField)"},{"p":"com.esprit.utils.validation","c":"ValidationUtils","l":"ValidationUtils()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.base","c":"BaseController","l":"validator"},{"p":"com.esprit.config","c":"HibernateConfig.DatabaseType","l":"valueOf(String)","u":"valueOf(java.lang.String)"},{"p":"com.esprit.utils","c":"PaymentProcessor","l":"valueOf(String)","u":"valueOf(java.lang.String)"},{"p":"com.esprit.utils","c":"Paymentuser","l":"valueOf(String)","u":"valueOf(java.lang.String)"},{"p":"com.esprit.utils","c":"SignInGoogle","l":"valueOf(String)","u":"valueOf(java.lang.String)"},{"p":"com.esprit.utils","c":"SignInMicrosoft","l":"valueOf(String)","u":"valueOf(java.lang.String)"},{"p":"com.esprit.utils.ui","c":"UIUtils.AnimationType","l":"valueOf(String)","u":"valueOf(java.lang.String)"},{"p":"com.esprit.utils.ui","c":"UIUtils.NotificationType","l":"valueOf(String)","u":"valueOf(java.lang.String)"},{"p":"com.esprit.utils","c":"UserMail","l":"valueOf(String)","u":"valueOf(java.lang.String)"},{"p":"com.esprit.utils","c":"UserSMSAPI","l":"valueOf(String)","u":"valueOf(java.lang.String)"},{"p":"com.esprit.config","c":"HibernateConfig.DatabaseType","l":"values()"},{"p":"com.esprit.utils","c":"PaymentProcessor","l":"values()"},{"p":"com.esprit.utils","c":"Paymentuser","l":"values()"},{"p":"com.esprit.utils","c":"SignInGoogle","l":"values()"},{"p":"com.esprit.utils","c":"SignInMicrosoft","l":"values()"},{"p":"com.esprit.utils.ui","c":"UIUtils.AnimationType","l":"values()"},{"p":"com.esprit.utils.ui","c":"UIUtils.NotificationType","l":"values()"},{"p":"com.esprit.utils","c":"UserMail","l":"values()"},{"p":"com.esprit.utils","c":"UserSMSAPI","l":"values()"},{"p":"com.esprit.utils","c":"SignInGoogle","l":"verifyAuthUrl(String)","u":"verifyAuthUrl(java.lang.String)"},{"p":"com.esprit.utils","c":"SignInMicrosoft","l":"verifyAuthUrl(String)","u":"verifyAuthUrl(java.lang.String)"},{"p":"com.esprit.controllers.users","c":"VerifyWithGoogle","l":"VerifyWithGoogle()","u":"%3Cinit%3E()"},{"p":"com.esprit.controllers.users","c":"VerifyWithMicrosoft","l":"VerifyWithMicrosoft()","u":"%3Cinit%3E()"},{"p":"com.esprit.utils.ui","c":"UIUtils.NotificationType","l":"WARNING"},{"p":"com.esprit.utils","c":"FilmYoutubeTrailer","l":"watchTrailer(String)","u":"watchTrailer(java.lang.String)"},{"p":"com.esprit.utils.ui","c":"UIUtils.AnimationType","l":"ZOOM_IN"},{"p":"com.esprit.utils.ui","c":"UIUtils.AnimationType","l":"ZOOM_OUT"}];updateSearchResults();
+memberSearchIndex = [{
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils",
+    "l": "ACCENT_COLOR"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "EpisodeController",
+    "l": "ACCOUNT_SID"
+}, {
+    "p": "com.esprit.models.films",
+    "c": "Actor",
+    "l": "Actor(Long)",
+    "u": "%3Cinit%3E(java.lang.Long)"
+}, {
+    "p": "com.esprit.models.films",
+    "c": "Actor",
+    "l": "Actor(Long, String, String, String)",
+    "u": "%3Cinit%3E(java.lang.Long,java.lang.String,java.lang.String,java.lang.String)"
+}, {
+    "p": "com.esprit.models.films",
+    "c": "Actor",
+    "l": "Actor(String, String, String)",
+    "u": "%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String)"
+}, {
+    "p": "com.esprit.controllers.films",
+    "c": "ActorController",
+    "l": "ActorController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "ActorFilmService",
+    "l": "ActorFilmService()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "ActorService",
+    "l": "ActorService()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "DesignProductAdminContoller",
+    "l": "add_produit(ActionEvent)",
+    "u": "add_produit(javafx.event.ActionEvent)"
+}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils",
+    "l": "addClickAnimation(Node)",
+    "u": "addClickAnimation(javafx.scene.Node)"
+}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceSeriesImpl",
+    "l": "addDislike(Series)",
+    "u": "addDislike(com.esprit.models.series.Series)"
+}, {
+    "p": "com.esprit.utils.validation",
+    "c": "ValidationUtils",
+    "l": "addEmailValidation(TextField)",
+    "u": "addEmailValidation(javafx.scene.control.TextField)"
+}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils",
+    "l": "addHoverEffect(Node)",
+    "u": "addHoverEffect(javafx.scene.Node)"
+}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceSeriesImpl",
+    "l": "addLike(Series)",
+    "u": "addLike(com.esprit.models.series.Series)"
+}, {
+    "p": "com.esprit.utils.validation",
+    "c": "ValidationUtils",
+    "l": "addNameValidation(TextField)",
+    "u": "addNameValidation(javafx.scene.control.TextField)"
+}, {
+    "p": "com.esprit.utils.validation",
+    "c": "ValidationUtils",
+    "l": "addPasswordValidation(TextField)",
+    "u": "addPasswordValidation(javafx.scene.control.TextField)"
+}, {
+    "p": "com.esprit.utils.validation",
+    "c": "ValidationUtils",
+    "l": "addPhoneValidation(TextField)",
+    "u": "addPhoneValidation(javafx.scene.control.TextField)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "CategoryService",
+    "l": "addProductToCategory(int, int)",
+    "u": "addProductToCategory(int,int)"
+}, {
+    "p": "com.esprit.utils.validation",
+    "c": "ValidationUtils",
+    "l": "addRequiredValidation(TextField, String)",
+    "u": "addRequiredValidation(javafx.scene.control.TextField,java.lang.String)"
+}, {
+    "p": "com.esprit.utils.validation",
+    "c": "ValidationUtils",
+    "l": "addValidation(TextField, Predicate<String>, String)",
+    "u": "addValidation(javafx.scene.control.TextField,java.util.function.Predicate,java.lang.String)"
+}, {
+    "p": "com.esprit.controllers.base",
+    "c": "BaseController",
+    "l": "addValidationListener(TextField, Predicate<String>, String)",
+    "u": "addValidationListener(javafx.scene.control.TextField,java.util.function.Predicate,java.lang.String)"
+}, {
+    "p": "com.esprit.models.users",
+    "c": "Admin",
+    "l": "Admin(String, String, String, String, String, String, Date, String, String)",
+    "u": "%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.sql.Date,java.lang.String,java.lang.String)"
+}, {
+    "p": "com.esprit.controllers.users",
+    "c": "AdminDashboardController",
+    "l": "AdminDashboardController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.controllers",
+    "c": "AdminSideBarController",
+    "l": "AdminSideBarController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "CategoriesClientController",
+    "l": "afficher()"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "SerieClientController",
+    "l": "afficher()"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "ListFavorisController",
+    "l": "afficherliste(List<Series>)",
+    "u": "afficherliste(java.util.List)"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "SerieClientController",
+    "l": "afficherliste(List<Series>)",
+    "u": "afficherliste(java.util.List)"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "DetailsProductClientController",
+    "l": "afficherProduct()"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "ShoppingCartProductControllers",
+    "l": "afficherProduct(MouseEvent)",
+    "u": "afficherProduct(javafx.scene.input.MouseEvent)"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "AfficherProductClientControllers",
+    "l": "AfficherProductClientControllers()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "EpisodeClientController",
+    "l": "afficherserie(MouseEvent)",
+    "u": "afficherserie(javafx.scene.input.MouseEvent)"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "AnalyseOrder",
+    "l": "AnalyseOrder()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.controllers.cinemas",
+    "c": "SentimentAnalysisController",
+    "l": "analyzeSentiment(String)",
+    "u": "analyzeSentiment(java.lang.String)"
+}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils",
+    "l": "animateIn(Node, UIUtils.AnimationType)",
+    "u": "animateIn(javafx.scene.Node,com.esprit.utils.ui.UIUtils.AnimationType)"
+}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils",
+    "l": "animateOut(Node, UIUtils.AnimationType, Runnable)",
+    "u": "animateOut(javafx.scene.Node,com.esprit.utils.ui.UIUtils.AnimationType,java.lang.Runnable)"
+}, {
+    "p": "com.esprit.utils.validation",
+    "c": "ValidationUtils.ValidationBuilder",
+    "l": "apply()"
+}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils",
+    "l": "applyDarkTheme(Scene)",
+    "u": "applyDarkTheme(javafx.scene.Scene)"
+}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils",
+    "l": "applyLightTheme(Scene)",
+    "u": "applyLightTheme(javafx.scene.Scene)"
+}, {"p": "com.esprit.controllers.series", "c": "EpisodeController", "l": "AUTH_TOKEN"}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils",
+    "l": "BACKGROUND_COLOR"
+}, {
+    "p": "com.esprit.utils",
+    "c": "Chat",
+    "l": "badword(String)",
+    "u": "badword(java.lang.String)"
+}, {
+    "p": "com.esprit.controllers.base",
+    "c": "BaseController",
+    "l": "BaseController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.services.base",
+    "c": "BaseService",
+    "l": "BaseService(Class<T>)",
+    "u": "%3Cinit%3E(java.lang.Class)"
+}, {
+    "p": "com.esprit.services.base",
+    "c": "BaseService",
+    "l": "batchInsert(List<T>, int)",
+    "u": "batchInsert(java.util.List,int)"
+}, {"p": "com.esprit.utils.ui", "c": "UIUtils.AnimationType", "l": "BOUNCE_IN"}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils.AnimationType",
+    "l": "BOUNCE_OUT"
+}, {"p": "com.esprit.utils.ui", "c": "UIUtils", "l": "BUTTON_DANGER"}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils",
+    "l": "BUTTON_INFO"
+}, {"p": "com.esprit.utils.ui", "c": "UIUtils", "l": "BUTTON_PRIMARY"}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils",
+    "l": "BUTTON_SECONDARY"
+}, {"p": "com.esprit.utils.ui", "c": "UIUtils", "l": "BUTTON_SUCCESS"}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils",
+    "l": "BUTTON_WARNING"
+}, {
+    "p": "com.esprit.utils",
+    "c": "DemoScreenshotGenerator",
+    "l": "captureMultipleStages(Stage[], String)",
+    "u": "captureMultipleStages(javafx.stage.Stage[],java.lang.String)"
+}, {
+    "p": "com.esprit.utils",
+    "c": "DemoScreenshotGenerator",
+    "l": "captureNode(Node, String)",
+    "u": "captureNode(javafx.scene.Node,java.lang.String)"
+}, {
+    "p": "com.esprit.utils",
+    "c": "DemoScreenshotGenerator",
+    "l": "captureStage(Stage, String)",
+    "u": "captureStage(javafx.stage.Stage,java.lang.String)"
+}, {"p": "com.esprit.utils.ui", "c": "UIUtils", "l": "CARD"}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils",
+    "l": "CARD_COLOR"
+}, {"p": "com.esprit.utils.ui", "c": "UIUtils", "l": "CARD_ELEVATED"}, {
+    "p": "com.esprit.controllers.series",
+    "c": "CategorieController",
+    "l": "CategorieController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "CategoriesClientController",
+    "l": "CategoriesClientController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.models.films",
+    "c": "Category",
+    "l": "Category(Long, String, String)",
+    "u": "%3Cinit%3E(java.lang.Long,java.lang.String,java.lang.String)"
+}, {
+    "p": "com.esprit.models.films",
+    "c": "Category",
+    "l": "Category(String, String)",
+    "u": "%3Cinit%3E(java.lang.String,java.lang.String)"
+}, {
+    "p": "com.esprit.models.series",
+    "c": "Category",
+    "l": "Category(String, String)",
+    "u": "%3Cinit%3E(java.lang.String,java.lang.String)"
+}, {
+    "p": "com.esprit.controllers.films",
+    "c": "CategoryController",
+    "l": "CategoryController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "CategoryService",
+    "l": "CategoryService()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "CategoryService",
+    "l": "CategoryService()",
+    "u": "%3Cinit%3E()"
+}, {"p": "com.esprit.utils", "c": "Chat", "l": "Chat()", "u": "%3Cinit%3E()"}, {
+    "p": "com.esprit.utils",
+    "c": "Chat",
+    "l": "chatGPT(String)",
+    "u": "chatGPT(java.lang.String)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "ProductService",
+    "l": "checkAvailableStock(Long, int)",
+    "u": "checkAvailableStock(java.lang.Long,int)"
+}, {
+    "p": "com.esprit.services.users",
+    "c": "UserService",
+    "l": "checkEmailFound(String)",
+    "u": "checkEmailFound(java.lang.String)"
+}, {
+    "p": "com.esprit.models.cinemas",
+    "c": "Cinema",
+    "l": "Cinema(String, String, CinemaManager, String, String)",
+    "u": "%3Cinit%3E(java.lang.String,java.lang.String,com.esprit.models.users.CinemaManager,java.lang.String,java.lang.String)"
+}, {
+    "p": "com.esprit.models.cinemas",
+    "c": "CinemaComment",
+    "l": "CinemaComment(Cinema, Client, String, String)",
+    "u": "%3Cinit%3E(com.esprit.models.cinemas.Cinema,com.esprit.models.users.Client,java.lang.String,java.lang.String)"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "CinemaCommentService",
+    "l": "CinemaCommentService()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.models.cinemas",
+    "c": "CinemaHall",
+    "l": "CinemaHall(Cinema, Integer, String)",
+    "u": "%3Cinit%3E(com.esprit.models.cinemas.Cinema,java.lang.Integer,java.lang.String)"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "CinemaHallService",
+    "l": "CinemaHallService()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.models.users",
+    "c": "CinemaManager",
+    "l": "CinemaManager(String, String, String, String, String, String, Date, String, String)",
+    "u": "%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.sql.Date,java.lang.String,java.lang.String)"
+}, {
+    "p": "com.esprit.controllers",
+    "c": "CinemaManagerSideBarController",
+    "l": "CinemaManagerSideBarController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.models.cinemas",
+    "c": "CinemaRating",
+    "l": "CinemaRating(Cinema, Client, Integer)",
+    "u": "%3Cinit%3E(com.esprit.models.cinemas.Cinema,com.esprit.models.users.Client,java.lang.Integer)"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "CinemaRatingService",
+    "l": "CinemaRatingService()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "CinemaService",
+    "l": "CinemaService()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.controllers.cinemas",
+    "c": "CinemaStatisticsController",
+    "l": "CinemaStatisticsController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.utils",
+    "c": "DemoScreenshotGenerator",
+    "l": "cleanupOldScreenshots(int)"
+}, {
+    "p": "com.esprit.controllers.base",
+    "c": "BaseController",
+    "l": "clearFields()"
+}, {
+    "p": "com.esprit.controllers.users",
+    "c": "ModernAdminDashboardController",
+    "l": "clearFields()"
+}, {
+    "p": "com.esprit.models.users",
+    "c": "Client",
+    "l": "Client(String, String, String, String, String, String, Date, String, String)",
+    "u": "%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.sql.Date,java.lang.String,java.lang.String)"
+}, {
+    "p": "com.esprit.controllers",
+    "c": "ClientSideBarController",
+    "l": "ClientSideBarController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.controllers.films",
+    "c": "ActorController",
+    "l": "close()"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "AfficherProductClientControllers",
+    "l": "Close(MouseEvent)",
+    "u": "Close(javafx.scene.input.MouseEvent)"
+}, {"p": "com.esprit.utils", "c": "DataSource", "l": "closeConnection()"}, {
+    "p": "com.esprit.controllers.films",
+    "c": "FilmUserController",
+    "l": "closeDetailFilm2"
+}, {
+    "p": "com.esprit.services.base",
+    "c": "BaseService",
+    "l": "closeEntityManagerFactory()"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "AfficherProductClientControllers",
+    "l": "CloseFilter(MouseEvent)",
+    "u": "CloseFilter(javafx.scene.input.MouseEvent)"
+}, {
+    "p": "com.esprit.utils",
+    "c": "CodeBareProduct",
+    "l": "CodeBareProduct()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.models.products",
+    "c": "Comment",
+    "l": "Comment(Client, String, Product)",
+    "u": "%3Cinit%3E(com.esprit.models.users.Client,java.lang.String,com.esprit.models.products.Product)"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "CommentProductController",
+    "l": "CommentProductController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "CommentService",
+    "l": "CommentService()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceFavoriteImpl",
+    "l": "connection"
+}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceFeedbackImpl",
+    "l": "connection"
+}, {"p": "com.esprit.services.base", "c": "BaseService", "l": "count()"}, {
+    "p": "com.esprit.services.films",
+    "c": "ActorService",
+    "l": "create(Actor)",
+    "u": "create(com.esprit.models.films.Actor)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "CategoryService",
+    "l": "create(Category)",
+    "u": "create(com.esprit.models.films.Category)"
+}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceCategorieImpl",
+    "l": "create(Category)",
+    "u": "create(com.esprit.models.series.Category)"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "CinemaService",
+    "l": "create(Cinema)",
+    "u": "create(com.esprit.models.cinemas.Cinema)"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "CinemaCommentService",
+    "l": "create(CinemaComment)",
+    "u": "create(com.esprit.models.cinemas.CinemaComment)"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "CinemaHallService",
+    "l": "create(CinemaHall)",
+    "u": "create(com.esprit.models.cinemas.CinemaHall)"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "CinemaRatingService",
+    "l": "create(CinemaRating)",
+    "u": "create(com.esprit.models.cinemas.CinemaRating)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "CommentService",
+    "l": "create(Comment)",
+    "u": "create(com.esprit.models.products.Comment)"
+}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceEpisodeImpl",
+    "l": "create(Episode)",
+    "u": "create(com.esprit.models.series.Episode)"
+}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceFavoriteImpl",
+    "l": "create(Favorite)",
+    "u": "create(com.esprit.models.series.Favorite)"
+}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceFeedbackImpl",
+    "l": "create(Feedback)",
+    "u": "create(com.esprit.models.series.Feedback)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmService",
+    "l": "create(Film)",
+    "u": "create(com.esprit.models.films.Film)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmCommentService",
+    "l": "create(FilmComment)",
+    "u": "create(com.esprit.models.films.FilmComment)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmRatingService",
+    "l": "create(FilmRating)",
+    "u": "create(com.esprit.models.films.FilmRating)"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "MovieSessionService",
+    "l": "create(MovieSession)",
+    "u": "create(com.esprit.models.cinemas.MovieSession)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "OrderService",
+    "l": "create(Order)",
+    "u": "create(com.esprit.models.products.Order)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "OrderItemService",
+    "l": "create(OrderItem)",
+    "u": "create(com.esprit.models.products.OrderItem)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "ProductService",
+    "l": "create(Product)",
+    "u": "create(com.esprit.models.products.Product)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "CategoryService",
+    "l": "create(ProductCategory)",
+    "u": "create(com.esprit.models.products.ProductCategory)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "ReviewService",
+    "l": "create(Review)",
+    "u": "create(com.esprit.models.products.Review)"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "SeatService",
+    "l": "create(Seat)",
+    "u": "create(com.esprit.models.cinemas.Seat)"
+}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceSeriesImpl",
+    "l": "create(Series)",
+    "u": "create(com.esprit.models.series.Series)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "ShoppingCartService",
+    "l": "create(ShoppingCart)",
+    "u": "create(com.esprit.models.products.ShoppingCart)"
+}, {"p": "com.esprit.services.base", "c": "BaseService", "l": "create(T)"}, {
+    "p": "com.esprit.services",
+    "c": "IService",
+    "l": "create(T)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "TicketService",
+    "l": "create(Ticket)",
+    "u": "create(com.esprit.models.films.Ticket)"
+}, {
+    "p": "com.esprit.services.users",
+    "c": "UserService",
+    "l": "create(User)",
+    "u": "create(com.esprit.models.users.User)"
+}, {
+    "p": "com.esprit.controllers.films",
+    "c": "FilmUserController",
+    "l": "createActorDetails(int)"
+}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils",
+    "l": "createButton(String, FontAwesomeSolid, String)",
+    "u": "createButton(java.lang.String,org.kordamp.ikonli.fontawesome5.FontAwesomeSolid,java.lang.String)"
+}, {"p": "com.esprit.utils.ui", "c": "UIUtils", "l": "createCard()"}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils",
+    "l": "createCircularImageView(String, double)",
+    "u": "createCircularImageView(java.lang.String,double)"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "CommentProductController",
+    "l": "createcommentcard(Comment)",
+    "u": "createcommentcard(com.esprit.models.products.Comment)"
+}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils",
+    "l": "createDangerButton(String, FontAwesomeSolid)",
+    "u": "createDangerButton(java.lang.String,org.kordamp.ikonli.fontawesome5.FontAwesomeSolid)"
+}, {
+    "p": "com.esprit.controllers.base",
+    "c": "BaseController",
+    "l": "createDeleteColumn()"
+}, {"p": "com.esprit.utils.ui", "c": "UIUtils", "l": "createElevatedCard()"}, {
+    "p": "com.esprit.services.films",
+    "c": "ActorFilmService",
+    "l": "createFilmActorAssociation(Film, List<String>)",
+    "u": "createFilmActorAssociation(com.esprit.models.films.Film,java.util.List)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmCategoryService",
+    "l": "createFilmCategoryAssociation(Film, List<String>)",
+    "u": "createFilmCategoryAssociation(com.esprit.models.films.Film,java.util.List)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmCinemaService",
+    "l": "createFilmCinemaAssociation(Film, List<String>)",
+    "u": "createFilmCinemaAssociation(com.esprit.models.films.Film,java.util.List)"
+}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils",
+    "l": "createFloatingTextField(String)",
+    "u": "createFloatingTextField(java.lang.String)"
+}, {"p": "com.esprit.utils.ui", "c": "UIUtils", "l": "createLoadingIndicator()"}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils",
+    "l": "createModernAlert(Alert.AlertType, String, String)",
+    "u": "createModernAlert(javafx.scene.control.Alert.AlertType,java.lang.String,java.lang.String)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "OrderService",
+    "l": "createOrder(Order)",
+    "u": "createOrder(com.esprit.models.products.Order)"
+}, {"p": "com.esprit.utils.ui", "c": "UIUtils", "l": "createPlaceholderImage(double)"}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils",
+    "l": "createPrimaryButton(String, FontAwesomeSolid)",
+    "u": "createPrimaryButton(java.lang.String,org.kordamp.ikonli.fontawesome5.FontAwesomeSolid)"
+}, {
+    "p": "com.esprit.controllers.films",
+    "c": "PaymentUserController",
+    "l": "createReceiptPDF(String, Ticket)",
+    "u": "createReceiptPDF(java.lang.String,com.esprit.models.films.Ticket)"
+}, {"p": "com.esprit.utils.ui", "c": "UIUtils", "l": "createResponsiveGrid(int)"}, {
+    "p": "com.esprit.controllers.base",
+    "c": "BaseController",
+    "l": "createSearchPredicate(String)",
+    "u": "createSearchPredicate(java.lang.String)"
+}, {
+    "p": "com.esprit.controllers.users",
+    "c": "ModernAdminDashboardController",
+    "l": "createSearchPredicate(String)",
+    "u": "createSearchPredicate(java.lang.String)"
+}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils",
+    "l": "createSecondaryButton(String, FontAwesomeSolid)",
+    "u": "createSecondaryButton(java.lang.String,org.kordamp.ikonli.fontawesome5.FontAwesomeSolid)"
+}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils",
+    "l": "createSuccessButton(String, FontAwesomeSolid)",
+    "u": "createSuccessButton(java.lang.String,org.kordamp.ikonli.fontawesome5.FontAwesomeSolid)"
+}, {
+    "p": "com.esprit.controllers.base",
+    "c": "BaseController",
+    "l": "createTextFieldCellFactory(StringConverter<S>, Predicate<S>, String)",
+    "u": "createTextFieldCellFactory(javafx.util.StringConverter,java.util.function.Predicate,java.lang.String)"
+}, {
+    "p": "com.esprit.controllers.cinemas",
+    "c": "DashboardClientController",
+    "l": "createTopRatedCinemaCards(AnchorPane)",
+    "u": "createTopRatedCinemaCards(javafx.scene.layout.AnchorPane)"
+}, {
+    "p": "com.esprit.controllers.films",
+    "c": "FilmUserController",
+    "l": "createtopthree(int)"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "AfficherProductClientControllers",
+    "l": "createtopthree(Product)",
+    "u": "createtopthree(com.esprit.models.products.Product)"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "DetailsProductClientController",
+    "l": "createtopthree(Product)",
+    "u": "createtopthree(com.esprit.models.products.Product)"
+}, {
+    "p": "com.esprit.utils.validation",
+    "c": "ValidationUtils",
+    "l": "createValidator()"
+}, {
+    "p": "com.esprit.utils.validation",
+    "c": "ValidationUtils.ValidationBuilder",
+    "l": "custom(Predicate<String>, String)",
+    "u": "custom(java.util.function.Predicate,java.lang.String)"
+}, {
+    "p": "com.esprit.controllers.cinemas",
+    "c": "DashboardAdminController",
+    "l": "DashboardAdminController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.controllers.cinemas",
+    "c": "DashboardClientController",
+    "l": "DashboardClientController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.controllers.cinemas",
+    "c": "DashboardResponsableController",
+    "l": "DashboardResponsableController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.utils",
+    "c": "DatabaseManager",
+    "l": "DatabaseManager()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.utils.validation",
+    "c": "ValidationUtils",
+    "l": "DECIMAL_REGEX"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "ActorService",
+    "l": "delete(Actor)",
+    "u": "delete(com.esprit.models.films.Actor)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "CategoryService",
+    "l": "delete(Category)",
+    "u": "delete(com.esprit.models.films.Category)"
+}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceCategorieImpl",
+    "l": "delete(Category)",
+    "u": "delete(com.esprit.models.series.Category)"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "CinemaService",
+    "l": "delete(Cinema)",
+    "u": "delete(com.esprit.models.cinemas.Cinema)"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "CinemaCommentService",
+    "l": "delete(CinemaComment)",
+    "u": "delete(com.esprit.models.cinemas.CinemaComment)"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "CinemaHallService",
+    "l": "delete(CinemaHall)",
+    "u": "delete(com.esprit.models.cinemas.CinemaHall)"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "CinemaRatingService",
+    "l": "delete(CinemaRating)",
+    "u": "delete(com.esprit.models.cinemas.CinemaRating)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "CommentService",
+    "l": "delete(Comment)",
+    "u": "delete(com.esprit.models.products.Comment)"
+}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceEpisodeImpl",
+    "l": "delete(Episode)",
+    "u": "delete(com.esprit.models.series.Episode)"
+}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceFavoriteImpl",
+    "l": "delete(Favorite)",
+    "u": "delete(com.esprit.models.series.Favorite)"
+}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceFeedbackImpl",
+    "l": "delete(Feedback)",
+    "u": "delete(com.esprit.models.series.Feedback)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmService",
+    "l": "delete(Film)",
+    "u": "delete(com.esprit.models.films.Film)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmCommentService",
+    "l": "delete(FilmComment)",
+    "u": "delete(com.esprit.models.films.FilmComment)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmRatingService",
+    "l": "delete(FilmRating)",
+    "u": "delete(com.esprit.models.films.FilmRating)"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "MovieSessionService",
+    "l": "delete(MovieSession)",
+    "u": "delete(com.esprit.models.cinemas.MovieSession)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "OrderService",
+    "l": "delete(Order)",
+    "u": "delete(com.esprit.models.products.Order)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "OrderItemService",
+    "l": "delete(OrderItem)",
+    "u": "delete(com.esprit.models.products.OrderItem)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "ProductService",
+    "l": "delete(Product)",
+    "u": "delete(com.esprit.models.products.Product)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "CategoryService",
+    "l": "delete(ProductCategory)",
+    "u": "delete(com.esprit.models.products.ProductCategory)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "ReviewService",
+    "l": "delete(Review)",
+    "u": "delete(com.esprit.models.products.Review)"
+}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceSeriesImpl",
+    "l": "delete(Series)",
+    "u": "delete(com.esprit.models.series.Series)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "ShoppingCartService",
+    "l": "delete(ShoppingCart)",
+    "u": "delete(com.esprit.models.products.ShoppingCart)"
+}, {"p": "com.esprit.services.base", "c": "BaseService", "l": "delete(T)"}, {
+    "p": "com.esprit.services",
+    "c": "IService",
+    "l": "delete(T)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "TicketService",
+    "l": "delete(Ticket)",
+    "u": "delete(com.esprit.models.films.Ticket)"
+}, {
+    "p": "com.esprit.services.users",
+    "c": "UserService",
+    "l": "delete(User)",
+    "u": "delete(com.esprit.models.users.User)"
+}, {
+    "p": "com.esprit.controllers.users",
+    "c": "ProfileController",
+    "l": "deleteAccount(ActionEvent)",
+    "u": "deleteAccount(javafx.event.ActionEvent)"
+}, {"p": "com.esprit.services.base", "c": "BaseService", "l": "deleteById(ID)"}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceEpisodeImpl",
+    "l": "deleteById(Long)",
+    "u": "deleteById(java.lang.Long)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "ActorFilmService",
+    "l": "deleteFilmActorAssociation(int, int)",
+    "u": "deleteFilmActorAssociation(int,int)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmCategoryService",
+    "l": "deleteFilmCategoryAssociation(int, int)",
+    "u": "deleteFilmCategoryAssociation(int,int)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmCinemaService",
+    "l": "deleteFilmCinemaAssociation(int, int)",
+    "u": "deleteFilmCinemaAssociation(int,int)"
+}, {
+    "p": "com.esprit.utils",
+    "c": "CloudinaryStorage",
+    "l": "deleteImage(String)",
+    "u": "deleteImage(java.lang.String)"
+}, {
+    "p": "com.esprit.controllers.base",
+    "c": "BaseController",
+    "l": "deleteItem(T)"
+}, {
+    "p": "com.esprit.controllers.users",
+    "c": "ModernAdminDashboardController",
+    "l": "deleteItem(User)",
+    "u": "deleteItem(com.esprit.models.users.User)"
+}, {
+    "p": "com.esprit.utils",
+    "c": "DemoScreenshotGenerator",
+    "l": "DemoScreenshotGenerator()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "DesignCategorieAdminController",
+    "l": "DesignCategorieAdminController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "DesignProductAdminContoller",
+    "l": "DesignProductAdminContoller()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "DetailsProductClientController",
+    "l": "detailFlowPane"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "DetailsProductClientController",
+    "l": "DetailsProductClientController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.controllers.films",
+    "c": "FilmUserController",
+    "l": "displayAllComments(Long)",
+    "u": "displayAllComments(java.lang.Long)"
+}, {
+    "p": "com.esprit.controllers.films",
+    "c": "PaymentUserController",
+    "l": "doubleToInt(double)"
+}, {
+    "p": "com.esprit.utils.validation",
+    "c": "ValidationUtils",
+    "l": "EMAIL_REGEX"
+}, {
+    "p": "com.esprit.utils.validation",
+    "c": "ValidationUtils.ValidationBuilder",
+    "l": "email()"
+}, {
+    "p": "com.esprit.utils.validation",
+    "c": "ValidationUtils",
+    "l": "emailValidator()"
+}, {"p": "com.esprit.services.base", "c": "BaseService", "l": "entityClass"}, {
+    "p": "com.esprit.models.series",
+    "c": "Episode",
+    "l": "Episode(String, int, int, String, String, int)",
+    "u": "%3Cinit%3E(java.lang.String,int,int,java.lang.String,java.lang.String,int)"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "EpisodeClientController",
+    "l": "EpisodeClientController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "EpisodeController",
+    "l": "EpisodeController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "EpisodeController",
+    "l": "episodeImageView"
+}, {"p": "com.esprit.utils.ui", "c": "UIUtils.NotificationType", "l": "ERROR"}, {
+    "p": "com.esprit.services.base",
+    "c": "BaseService",
+    "l": "executeQuery(String, Object...)",
+    "u": "executeQuery(java.lang.String,java.lang.Object...)"
+}, {
+    "p": "com.esprit.services.base",
+    "c": "BaseService",
+    "l": "executeUpdate(String, Object...)",
+    "u": "executeUpdate(java.lang.String,java.lang.Object...)"
+}, {"p": "com.esprit.services.base", "c": "BaseService", "l": "existsById(ID)"}, {
+    "p": "com.esprit.controllers.films",
+    "c": "ActorController",
+    "l": "exportActors(String)",
+    "u": "exportActors(java.lang.String)"
+}, {
+    "p": "com.esprit.utils",
+    "c": "FaceDetector",
+    "l": "FaceDetector(FaceDetector.FaceDetectionCallback)",
+    "u": "%3Cinit%3E(com.esprit.utils.FaceDetector.FaceDetectionCallback)"
+}, {
+    "p": "com.esprit.utils",
+    "c": "FaceRecognition",
+    "l": "FaceRecognition()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.controllers.users",
+    "c": "FaceRecognitionController",
+    "l": "FaceRecognitionController()",
+    "u": "%3Cinit%3E()"
+}, {"p": "com.esprit.utils.ui", "c": "UIUtils.AnimationType", "l": "FADE_IN"}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils.AnimationType",
+    "l": "FADE_OUT"
+}, {
+    "p": "com.esprit.models.series",
+    "c": "Favorite",
+    "l": "Favorite(Long, Long)",
+    "u": "%3Cinit%3E(java.lang.Long,java.lang.Long)"
+}, {
+    "p": "com.esprit.models.series",
+    "c": "Feedback",
+    "l": "Feedback(Long, String, Date, Long)",
+    "u": "%3Cinit%3E(java.lang.Long,java.lang.String,java.util.Date,java.lang.Long)"
+}, {
+    "p": "com.esprit.models.films",
+    "c": "Film",
+    "l": "Film(Film)",
+    "u": "%3Cinit%3E(com.esprit.models.films.Film)"
+}, {
+    "p": "com.esprit.models.films",
+    "c": "Film",
+    "l": "Film(Long)",
+    "u": "%3Cinit%3E(java.lang.Long)"
+}, {
+    "p": "com.esprit.models.films",
+    "c": "Film",
+    "l": "Film(Long, String, String, Time, String, int)",
+    "u": "%3Cinit%3E(java.lang.Long,java.lang.String,java.lang.String,java.sql.Time,java.lang.String,int)"
+}, {
+    "p": "com.esprit.models.films",
+    "c": "Film",
+    "l": "Film(String, String, Time, String, int)",
+    "u": "%3Cinit%3E(java.lang.String,java.lang.String,java.sql.Time,java.lang.String,int)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmCategoryService",
+    "l": "FilmCategoryService()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmCinemaService",
+    "l": "FilmCinemaService()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.models.films",
+    "c": "FilmComment",
+    "l": "FilmComment(String, Client, Film)",
+    "u": "%3Cinit%3E(java.lang.String,com.esprit.models.users.Client,com.esprit.models.films.Film)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmCommentService",
+    "l": "FilmCommentService()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.controllers.films",
+    "c": "FilmController",
+    "l": "FilmController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.models.films",
+    "c": "FilmRating",
+    "l": "FilmRating(Film, Client, int)",
+    "u": "%3Cinit%3E(com.esprit.models.films.Film,com.esprit.models.users.Client,int)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmRatingService",
+    "l": "FilmRatingService()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmService",
+    "l": "FilmService()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.controllers.films",
+    "c": "FilmUserController",
+    "l": "FilmUserController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.utils",
+    "c": "FilmYoutubeTrailer",
+    "l": "FilmYoutubeTrailer()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.controllers.films",
+    "c": "FilmUserController",
+    "l": "filterByKeyword(String)",
+    "u": "filterByKeyword(java.lang.String)"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "AfficherProductClientControllers",
+    "l": "filtercinema(ActionEvent)",
+    "u": "filtercinema(javafx.event.ActionEvent)"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "DesignCategorieAdminController",
+    "l": "filtercinema(ActionEvent)",
+    "u": "filtercinema(javafx.event.ActionEvent)"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "DesignProductAdminContoller",
+    "l": "filtercinema(ActionEvent)",
+    "u": "filtercinema(javafx.event.ActionEvent)"
+}, {"p": "com.esprit.controllers.base", "c": "BaseController", "l": "filteredItems"}, {
+    "p": "com.esprit.utils",
+    "c": "FaceDetector",
+    "l": "finalize()"
+}, {"p": "com.esprit.services.base", "c": "BaseService", "l": "findAll()"}, {
+    "p": "com.esprit.services.base",
+    "c": "BaseService",
+    "l": "findById(ID)"
+}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceSeriesImpl",
+    "l": "findMostLiked()"
+}, {
+    "p": "com.esprit.services.base",
+    "c": "BaseService",
+    "l": "findWithPagination(int, int)",
+    "u": "findWithPagination(int,int)"
+}, {
+    "p": "com.esprit.utils.validation",
+    "c": "ValidationUtils",
+    "l": "forField(TextField)",
+    "u": "forField(javafx.scene.control.TextField)"
+}, {
+    "p": "com.esprit.services.users",
+    "c": "UserService",
+    "l": "forgetPassword(String, String)",
+    "u": "forgetPassword(java.lang.String,java.lang.String)"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "AfficherProductClientControllers",
+    "l": "forward_message"
+}, {
+    "p": "com.esprit.config",
+    "c": "HibernateConfig.DatabaseType",
+    "l": "fromString(String)",
+    "u": "fromString(java.lang.String)"
+}, {
+    "p": "com.esprit.utils",
+    "c": "UserPDF",
+    "l": "generate(List<User>)",
+    "u": "generate(java.util.List)"
+}, {
+    "p": "com.esprit.utils",
+    "c": "CodeBareProduct",
+    "l": "generateBarcode(String, Path)",
+    "u": "generateBarcode(java.lang.String,java.nio.file.Path)"
+}, {
+    "p": "com.esprit.utils",
+    "c": "DemoScreenshotGenerator",
+    "l": "generateDemoWorkflow()"
+}, {
+    "p": "com.esprit.controllers.users",
+    "c": "ModernAdminDashboardController",
+    "l": "generatePDF()"
+}, {"p": "com.esprit.services.users", "c": "UserService", "l": "generateUserPDF()"}, {
+    "p": "com.esprit.services.films",
+    "c": "ActorService",
+    "l": "getActorByNom(String)",
+    "u": "getActorByNom(java.lang.String)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "ActorService",
+    "l": "getActorByPlacement(int)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "ActorFilmService",
+    "l": "getActorsForFilm(int)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "ActorFilmService",
+    "l": "getActorsNames(Long)",
+    "u": "getActorsNames(java.lang.Long)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "CategoryService",
+    "l": "getAllCategories()"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "CategoryService",
+    "l": "getAllCategoriesNames()"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "CinemaRatingService",
+    "l": "getAverageRating(Long)",
+    "u": "getAverageRating(java.lang.Long)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "ReviewService",
+    "l": "getAverageRating(Long)",
+    "u": "getAverageRating(java.lang.Long)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmRatingService",
+    "l": "getAverageRatingSorted()"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "OrderItemService",
+    "l": "getAverageRatingSorted()"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "ReviewService",
+    "l": "getAverageRatingSorted()"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmRatingService",
+    "l": "getAvergeRating(Long)",
+    "u": "getAvergeRating(java.lang.Long)"
+}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceSeriesImpl",
+    "l": "getByIdSeries(Long)",
+    "u": "getByIdSeries(java.lang.Long)"
+}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceFavoriteImpl",
+    "l": "getByIdUserAndIdSerie(long, Long)",
+    "u": "getByIdUserAndIdSerie(long,java.lang.Long)"
+}, {"p": "com.esprit.models.products", "c": "Product", "l": "getCategories()"}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmCategoryService",
+    "l": "getCategoriesForFilm(int)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "CategoryService",
+    "l": "getCategoriesForProduct(int)"
+}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceCategorieImpl",
+    "l": "getCategoriesStatistics()"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "CategoryService",
+    "l": "getCategory(long)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "CategoryService",
+    "l": "getCategory(Long)",
+    "u": "getCategory(java.lang.Long)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "CategoryService",
+    "l": "getCategoryByName(String)",
+    "u": "getCategoryByName(java.lang.String)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "CategoryService",
+    "l": "getCategoryByNom(String)",
+    "u": "getCategoryByNom(java.lang.String)"
+}, {"p": "com.esprit.models.products", "c": "Product", "l": "getCategoryNames()"}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmCategoryService",
+    "l": "getCategoryNames(Long)",
+    "u": "getCategoryNames(java.lang.Long)"
+}, {
+    "p": "com.esprit.controllers.cinemas",
+    "c": "DashboardAdminController",
+    "l": "getCinemaAddresses()"
+}, {
+    "p": "com.esprit.controllers.cinemas",
+    "c": "DashboardClientController",
+    "l": "getCinemaAddresses()"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "CinemaService",
+    "l": "getCinemaById(Long)",
+    "u": "getCinemaById(java.lang.Long)"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "CinemaService",
+    "l": "getCinemaByName(String)",
+    "u": "getCinemaByName(java.lang.String)"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "CinemaHallService",
+    "l": "getCinemaHallById(Long)",
+    "u": "getCinemaHallById(java.lang.Long)"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "CinemaHallService",
+    "l": "getCinemaHallByName(String)",
+    "u": "getCinemaHallByName(java.lang.String)"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "CinemaHallService",
+    "l": "getCinemaHallsByCinemaId(Long)",
+    "u": "getCinemaHallsByCinemaId(java.lang.Long)"
+}, {
+    "p": "com.esprit.controllers.cinemas",
+    "c": "DashboardClientController",
+    "l": "getCinemaNames()"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmCinemaService",
+    "l": "getCinemaNames(Long)",
+    "u": "getCinemaNames(java.lang.Long)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmCinemaService",
+    "l": "getCinemasForFilm(int)"
+}, {
+    "p": "com.esprit.controllers.cinemas",
+    "c": "DashboardAdminController",
+    "l": "getCinemaStatuses()"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "CinemaCommentService",
+    "l": "getCommentsByCinemaId(Long)",
+    "u": "getCommentsByCinemaId(java.lang.Long)"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "CinemaRatingService",
+    "l": "getCommentsByCinemaId(Long)",
+    "u": "getCommentsByCinemaId(java.lang.Long)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "CommentService",
+    "l": "getCommentsByProductId(int)"
+}, {"p": "com.esprit.config", "c": "HibernateConfig.DatabaseType", "l": "getConfigFile()"}, {
+    "p": "com.esprit.utils",
+    "c": "DataSource",
+    "l": "getConnection()"
+}, {"p": "com.esprit.config", "c": "HibernateConfig", "l": "getCurrentDatabaseType()"}, {
+    "p": "com.esprit.utils",
+    "c": "DatabaseManager",
+    "l": "getCurrentDatabaseType()"
+}, {"p": "com.esprit.utils", "c": "DatabaseManager", "l": "getCurrentDatabaseUrl()"}, {
+    "p": "com.esprit.utils",
+    "c": "DataSource",
+    "l": "getDatabaseType()"
+}, {"p": "com.esprit.utils", "c": "DataSource", "l": "getDatabaseUrl()"}, {
+    "p": "com.esprit.services.base",
+    "c": "BaseService",
+    "l": "getEntityManager()"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "EpisodeController",
+    "l": "getFilePath()"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "SerieController",
+    "l": "getFilePath()"
+}, {"p": "com.esprit.services.films", "c": "FilmService", "l": "getFilm(int)"}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmService",
+    "l": "getFilm(Long)",
+    "u": "getFilm(java.lang.Long)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmService",
+    "l": "getFilmByName(String)",
+    "u": "getFilmByName(java.lang.String)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmService",
+    "l": "getFilmLastInsertID()"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "ActorFilmService",
+    "l": "getFilmsForActor(int)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmCategoryService",
+    "l": "getFilmsForCategory(int)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmCinemaService",
+    "l": "getFilmsForCinema(Long)",
+    "u": "getFilmsForCinema(java.lang.Long)"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "MovieSessionService",
+    "l": "getFirstSessionForFilm(Long)",
+    "u": "getFirstSessionForFilm(java.lang.Long)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmService",
+    "l": "getIMDBUrlbyNom(String)",
+    "u": "getIMDBUrlbyNom(java.lang.String)"
+}, {"p": "com.esprit.models.products", "c": "SharedData", "l": "getInstance()"}, {
+    "p": "com.esprit.utils",
+    "c": "CloudinaryStorage",
+    "l": "getInstance()"
+}, {"p": "com.esprit.utils", "c": "DataSource", "l": "getInstance()"}, {
+    "p": "com.esprit.services.products",
+    "c": "OrderItemService",
+    "l": "getItemsByOrder(int)"
+}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceSeriesImpl",
+    "l": "getLikesStatistics()"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "MovieSessionService",
+    "l": "getMovieSessionById(int)"
+}, {"p": "com.esprit.models.cinemas", "c": "Cinema", "l": "getMovieSessions()"}, {
+    "p": "com.esprit.config",
+    "c": "HibernateConfig.DatabaseType",
+    "l": "getName()"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "OrderService",
+    "l": "getOrderById(int)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "OrderItemService",
+    "l": "getOrderItemsByOrder(int)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "OrderService",
+    "l": "getPaidOrders()"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "ProductService",
+    "l": "getProductById(Long)",
+    "u": "getProductById(java.lang.Long)"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "AfficherProductClientControllers",
+    "l": "getProductCategory()"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "DesignCategorieAdminController",
+    "l": "getProductCategory()"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "DesignProductAdminContoller",
+    "l": "getProductCategory()"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "CategoryService",
+    "l": "getProductCountForCategory(int)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "ProductService",
+    "l": "getProductPrice(Long)",
+    "u": "getProductPrice(java.lang.Long)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "ProductService",
+    "l": "getProductsByCategory(Long)",
+    "u": "getProductsByCategory(java.lang.Long)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "ProductService",
+    "l": "getProductsOrderByQuantityAndStatus()"
+}, {
+    "p": "com.esprit.utils",
+    "c": "CloudinaryStorage",
+    "l": "getPublicIdFromUrl(String)",
+    "u": "getPublicIdFromUrl(java.lang.String)"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "DetailsProductClientController",
+    "l": "getQuantiteSelectionnee()"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "CinemaRatingService",
+    "l": "getRatingForClientAndCinema(Long, Long)",
+    "u": "getRatingForClientAndCinema(java.lang.Long,java.lang.Long)"
+}, {
+    "p": "com.esprit.utils",
+    "c": "DemoScreenshotGenerator",
+    "l": "getScreenshotsDirectory()"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "SeatService",
+    "l": "getSeatsByCinemaHallId(Long)",
+    "u": "getSeatsByCinemaHallId(java.lang.Long)"
+}, {"p": "com.esprit.controllers.base", "c": "BaseController", "l": "getSelectedItem()"}, {
+    "p": "com.esprit.config",
+    "c": "HibernateConfig",
+    "l": "getSessionFactory()"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "MovieSessionService",
+    "l": "getSessionsByDateRangeAndCinema(LocalDate, LocalDate, Cinema)",
+    "u": "getSessionsByDateRangeAndCinema(java.time.LocalDate,java.time.LocalDate,com.esprit.models.cinemas.Cinema)"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "MovieSessionService",
+    "l": "getSessionsByFilmAndCinema(Long, Long)",
+    "u": "getSessionsByFilmAndCinema(java.lang.Long,java.lang.Long)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "OrderService",
+    "l": "getTop3PurchasedProducts()"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "CinemaRatingService",
+    "l": "getTopRatedCinemas()"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmRatingService",
+    "l": "getTopRatedFilms()"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "OrderItemService",
+    "l": "getTotalQuantityByCategoryAndDate(String, String)",
+    "u": "getTotalQuantityByCategoryAndDate(java.lang.String,java.lang.String)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmService",
+    "l": "getTrailerFilm(String)",
+    "u": "getTrailerFilm(java.lang.String)"
+}, {
+    "p": "com.esprit.services.users",
+    "c": "UserService",
+    "l": "getUserById(Long)",
+    "u": "getUserById(java.lang.Long)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmRatingService",
+    "l": "getUserRatings(Long)",
+    "u": "getUserRatings(java.lang.Long)"
+}, {"p": "com.esprit.config", "c": "HibernateConfig.DatabaseType", "l": "H2"}, {
+    "p": "com.esprit.controllers.series",
+    "c": "StatistiqueController",
+    "l": "handleClose(ActionEvent)",
+    "u": "handleClose(javafx.event.ActionEvent)"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "StatistiqueController",
+    "l": "handleUpdatePieData(ActionEvent)",
+    "u": "handleUpdatePieData(javafx.event.ActionEvent)"
+}, {
+    "p": "com.esprit.config",
+    "c": "HibernateConfig",
+    "l": "HibernateConfig()",
+    "u": "%3Cinit%3E()"
+}, {"p": "com.esprit.controllers.base", "c": "BaseController", "l": "imageView"}, {
+    "p": "com.esprit.utils",
+    "c": "ImdbAPI",
+    "l": "ImdbAPI()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.controllers.films",
+    "c": "ActorController",
+    "l": "importActors(String)",
+    "u": "importActors(java.lang.String)"
+}, {
+    "p": "com.esprit.controllers.base",
+    "c": "BaseController",
+    "l": "importImage()"
+}, {"p": "com.esprit.controllers.users", "c": "ProfileController", "l": "importPhoto()"}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils.NotificationType",
+    "l": "INFO"
+}, {"p": "com.esprit.utils", "c": "FaceRecognition", "l": "init()"}, {
+    "p": "com.esprit.controllers.films",
+    "c": "PaymentUserController",
+    "l": "init(MovieSession, Client)",
+    "u": "init(com.esprit.models.cinemas.MovieSession,com.esprit.models.users.Client)"
+}, {
+    "p": "com.esprit.controllers.cinemas",
+    "c": "ModifierCinemaController",
+    "l": "initData(Cinema)",
+    "u": "initData(com.esprit.models.cinemas.Cinema)"
+}, {
+    "p": "com.esprit.controllers.base",
+    "c": "BaseController",
+    "l": "initialize()"
+}, {
+    "p": "com.esprit.controllers.cinemas",
+    "c": "DashboardAdminController",
+    "l": "initialize()"
+}, {
+    "p": "com.esprit.controllers.cinemas",
+    "c": "DashboardClientController",
+    "l": "initialize()"
+}, {
+    "p": "com.esprit.controllers.films",
+    "c": "FilmUserController",
+    "l": "initialize()"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "SerieClientController",
+    "l": "initialize()"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "StatistiqueController",
+    "l": "initialize()"
+}, {
+    "p": "com.esprit.controllers.users",
+    "c": "ModernAdminDashboardController",
+    "l": "initialize()"
+}, {
+    "p": "com.esprit.controllers.users",
+    "c": "ProfileController",
+    "l": "initialize()"
+}, {
+    "p": "com.esprit.controllers.films",
+    "c": "SeatSelectionController",
+    "l": "initialize(MovieSession, Client)",
+    "u": "initialize(com.esprit.models.cinemas.MovieSession,com.esprit.models.users.Client)"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "EpisodeClientController",
+    "l": "initialize(Series)",
+    "u": "initialize(com.esprit.models.series.Series)"
+}, {
+    "p": "com.esprit.controllers",
+    "c": "AdminSideBarController",
+    "l": "initialize(URL, ResourceBundle)",
+    "u": "initialize(java.net.URL,java.util.ResourceBundle)"
+}, {
+    "p": "com.esprit.controllers",
+    "c": "CinemaManagerSideBarController",
+    "l": "initialize(URL, ResourceBundle)",
+    "u": "initialize(java.net.URL,java.util.ResourceBundle)"
+}, {
+    "p": "com.esprit.controllers.cinemas",
+    "c": "DashboardResponsableController",
+    "l": "initialize(URL, ResourceBundle)",
+    "u": "initialize(java.net.URL,java.util.ResourceBundle)"
+}, {
+    "p": "com.esprit.controllers.cinemas",
+    "c": "ModifierCinemaController",
+    "l": "initialize(URL, ResourceBundle)",
+    "u": "initialize(java.net.URL,java.util.ResourceBundle)"
+}, {
+    "p": "com.esprit.controllers",
+    "c": "ClientSideBarController",
+    "l": "initialize(URL, ResourceBundle)",
+    "u": "initialize(java.net.URL,java.util.ResourceBundle)"
+}, {
+    "p": "com.esprit.controllers.films",
+    "c": "PaymentUserController",
+    "l": "initialize(URL, ResourceBundle)",
+    "u": "initialize(java.net.URL,java.util.ResourceBundle)"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "AfficherProductClientControllers",
+    "l": "initialize(URL, ResourceBundle)",
+    "u": "initialize(java.net.URL,java.util.ResourceBundle)"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "AnalyseOrder",
+    "l": "initialize(URL, ResourceBundle)",
+    "u": "initialize(java.net.URL,java.util.ResourceBundle)"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "CommentProductController",
+    "l": "initialize(URL, ResourceBundle)",
+    "u": "initialize(java.net.URL,java.util.ResourceBundle)"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "DetailsProductClientController",
+    "l": "initialize(URL, ResourceBundle)",
+    "u": "initialize(java.net.URL,java.util.ResourceBundle)"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "OrderClientController",
+    "l": "initialize(URL, ResourceBundle)",
+    "u": "initialize(java.net.URL,java.util.ResourceBundle)"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "ShoppingCartProductControllers",
+    "l": "initialize(URL, ResourceBundle)",
+    "u": "initialize(java.net.URL,java.util.ResourceBundle)"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "EpisodeClientController",
+    "l": "initialize(URL, ResourceBundle)",
+    "u": "initialize(java.net.URL,java.util.ResourceBundle)"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "ListFavorisController",
+    "l": "initialize(URL, ResourceBundle)",
+    "u": "initialize(java.net.URL,java.util.ResourceBundle)"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "StatistiqueController",
+    "l": "initialize(URL, ResourceBundle)",
+    "u": "initialize(java.net.URL,java.util.ResourceBundle)"
+}, {
+    "p": "com.esprit.controllers.users",
+    "c": "LoginController",
+    "l": "initialize(URL, ResourceBundle)",
+    "u": "initialize(java.net.URL,java.util.ResourceBundle)"
+}, {
+    "p": "com.esprit.controllers.users",
+    "c": "SMSAdminController",
+    "l": "initialize(URL, ResourceBundle)",
+    "u": "initialize(java.net.URL,java.util.ResourceBundle)"
+}, {"p": "com.esprit.config", "c": "HibernateConfig", "l": "initializeDatabase()"}, {
+    "p": "com.esprit.utils",
+    "c": "DatabaseManager",
+    "l": "initializeSchema()"
+}, {
+    "p": "com.esprit.controllers.films",
+    "c": "PaymentUserController",
+    "l": "initWithSeats(MovieSession, Client, List<Seat>)",
+    "u": "initWithSeats(com.esprit.models.cinemas.MovieSession,com.esprit.models.users.Client,java.util.List)"
+}, {"p": "com.esprit.utils", "c": "DatabaseManager", "l": "isCurrentlyH2()"}, {
+    "p": "com.esprit.utils",
+    "c": "DatabaseManager",
+    "l": "isCurrentlyMySQL()"
+}, {"p": "com.esprit.utils", "c": "DatabaseManager", "l": "isCurrentlyPostgreSQL()"}, {
+    "p": "com.esprit.utils",
+    "c": "DatabaseManager",
+    "l": "isCurrentlySQLite()"
+}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceCategorieImpl",
+    "l": "IServiceCategorieImpl()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceEpisodeImpl",
+    "l": "IServiceEpisodeImpl()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceFavoriteImpl",
+    "l": "IServiceFavoriteImpl()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceFeedbackImpl",
+    "l": "IServiceFeedbackImpl()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceSeriesImpl",
+    "l": "IServiceSeriesImpl()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.utils.validation",
+    "c": "ValidationUtils",
+    "l": "isLengthValid(String, int, int)",
+    "u": "isLengthValid(java.lang.String,int,int)"
+}, {"p": "com.esprit.utils", "c": "DataSource", "l": "isMySQL()"}, {
+    "p": "com.esprit.utils.validation",
+    "c": "ValidationUtils",
+    "l": "isNotEmpty(String)",
+    "u": "isNotEmpty(java.lang.String)"
+}, {
+    "p": "com.esprit.controllers.films",
+    "c": "PaymentUserController",
+    "l": "isNum(String)",
+    "u": "isNum(java.lang.String)"
+}, {"p": "com.esprit.utils", "c": "DataSource", "l": "isSQLite()"}, {
+    "p": "com.esprit.utils.validation",
+    "c": "ValidationUtils",
+    "l": "isValidDecimal(String)",
+    "u": "isValidDecimal(java.lang.String)"
+}, {
+    "p": "com.esprit.controllers.films",
+    "c": "PaymentController",
+    "l": "isValidEmail(String)",
+    "u": "isValidEmail(java.lang.String)"
+}, {
+    "p": "com.esprit.utils.validation",
+    "c": "ValidationUtils",
+    "l": "isValidEmail(String)",
+    "u": "isValidEmail(java.lang.String)"
+}, {
+    "p": "com.esprit.utils.validation",
+    "c": "ValidationUtils",
+    "l": "isValidName(String)",
+    "u": "isValidName(java.lang.String)"
+}, {
+    "p": "com.esprit.utils.validation",
+    "c": "ValidationUtils",
+    "l": "isValidNumber(String)",
+    "u": "isValidNumber(java.lang.String)"
+}, {
+    "p": "com.esprit.utils.validation",
+    "c": "ValidationUtils",
+    "l": "isValidPassword(String)",
+    "u": "isValidPassword(java.lang.String)"
+}, {
+    "p": "com.esprit.utils.validation",
+    "c": "ValidationUtils",
+    "l": "isValidPhone(String)",
+    "u": "isValidPhone(java.lang.String)"
+}, {"p": "com.esprit.controllers.base", "c": "BaseController", "l": "items"}, {
+    "p": "com.esprit.controllers.users",
+    "c": "ProfileController",
+    "l": "leftPane"
+}, {
+    "p": "com.esprit.utils.validation",
+    "c": "ValidationUtils.ValidationBuilder",
+    "l": "length(int, int)",
+    "u": "length(int,int)"
+}, {
+    "p": "com.esprit.utils.validation",
+    "c": "ValidationUtils",
+    "l": "lengthValidator(int, int)",
+    "u": "lengthValidator(int,int)"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "ListFavorisController",
+    "l": "ListFavorisController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "ListOrderController",
+    "l": "ListOrderController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "AfficherProductClientControllers",
+    "l": "loadAcceptedTop3()"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "DetailsProductClientController",
+    "l": "loadAcceptedTop3()"
+}, {"p": "com.esprit.controllers.base", "c": "BaseController", "l": "loadData()"}, {
+    "p": "com.esprit.controllers.users",
+    "c": "ModernAdminDashboardController",
+    "l": "loadData()"
+}, {"p": "com.esprit.controllers.base", "c": "BaseController", "l": "logger"}, {
+    "p": "com.esprit.services.base",
+    "c": "BaseService",
+    "l": "logger"
+}, {
+    "p": "com.esprit.services.users",
+    "c": "UserService",
+    "l": "login(String, String)",
+    "u": "login(java.lang.String,java.lang.String)"
+}, {
+    "p": "com.esprit.controllers.users",
+    "c": "LoginController",
+    "l": "LoginController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.controllers.users",
+    "c": "MailAdminController",
+    "l": "MailAdminController()",
+    "u": "%3Cinit%3E()"
+}, {"p": "com.esprit", "c": "MainApp", "l": "main(String[])", "u": "main(java.lang.String[])"}, {
+    "p": "com.esprit",
+    "c": "MainApp",
+    "l": "MainApp()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.utils.validation",
+    "c": "ValidationUtils.ValidationBuilder",
+    "l": "message(String)",
+    "u": "message(java.lang.String)"
+}, {
+    "p": "com.esprit.controllers.users",
+    "c": "ModernAdminDashboardController",
+    "l": "ModernAdminDashboardController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.controllers.cinemas",
+    "c": "ModifierCinemaController",
+    "l": "ModifierCinemaController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.controllers.users",
+    "c": "ProfileController",
+    "l": "modifyAccount(ActionEvent)",
+    "u": "modifyAccount(javafx.event.ActionEvent)"
+}, {
+    "p": "com.esprit.models.cinemas",
+    "c": "MovieSession",
+    "l": "MovieSession(CinemaHall, Film, Time, Time, Date, Double)",
+    "u": "%3Cinit%3E(com.esprit.models.cinemas.CinemaHall,com.esprit.models.films.Film,java.sql.Time,java.sql.Time,java.sql.Date,java.lang.Double)"
+}, {
+    "p": "com.esprit.models.cinemas",
+    "c": "MovieSession",
+    "l": "MovieSession(CinemaHall, Film, Time, Time, LocalDate, Double)",
+    "u": "%3Cinit%3E(com.esprit.models.cinemas.CinemaHall,com.esprit.models.films.Film,java.sql.Time,java.sql.Time,java.time.LocalDate,java.lang.Double)"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "MovieSessionService",
+    "l": "MovieSessionService()",
+    "u": "%3Cinit%3E()"
+}, {"p": "com.esprit.utils.ui", "c": "UIUtils", "l": "MUTED_COLOR"}, {
+    "p": "com.esprit.config",
+    "c": "HibernateConfig.DatabaseType",
+    "l": "MYSQL"
+}, {"p": "com.esprit.utils.validation", "c": "ValidationUtils", "l": "NAME_REGEX"}, {
+    "p": "com.esprit.utils.validation",
+    "c": "ValidationUtils.ValidationBuilder",
+    "l": "name()"
+}, {
+    "p": "com.esprit.utils.validation",
+    "c": "ValidationUtils",
+    "l": "nameValidator()"
+}, {"p": "com.esprit.utils.validation", "c": "ValidationUtils", "l": "NUMBER_REGEX"}, {
+    "p": "com.esprit.utils",
+    "c": "FaceDetector.FaceDetectionCallback",
+    "l": "onFaceDetected(Mat)",
+    "u": "onFaceDetected(org.opencv.core.Mat)"
+}, {
+    "p": "com.esprit.utils",
+    "c": "FaceDetector.FaceDetectionCallback",
+    "l": "onFrameProcessed(Mat)",
+    "u": "onFrameProcessed(org.opencv.core.Mat)"
+}, {
+    "p": "com.esprit.controllers.films",
+    "c": "PaymentUserController",
+    "l": "openPDF(String)",
+    "u": "openPDF(java.lang.String)"
+}, {
+    "p": "com.esprit.models.products",
+    "c": "Order",
+    "l": "Order(Date, String, Client, int, String)",
+    "u": "%3Cinit%3E(java.util.Date,java.lang.String,com.esprit.models.users.Client,int,java.lang.String)"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "OrderClientController",
+    "l": "OrderClientController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.models.products",
+    "c": "OrderItem",
+    "l": "OrderItem(int, Product, Order)",
+    "u": "%3Cinit%3E(int,com.esprit.models.products.Product,com.esprit.models.products.Order)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "OrderItemService",
+    "l": "OrderItemService()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "OrderService",
+    "l": "OrderService()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "ShoppingCartProductControllers",
+    "l": "Paiment(MouseEvent)",
+    "u": "Paiment(javafx.scene.input.MouseEvent)"
+}, {
+    "p": "com.esprit.utils.validation",
+    "c": "ValidationUtils",
+    "l": "PASSWORD_REGEX"
+}, {
+    "p": "com.esprit.utils.validation",
+    "c": "ValidationUtils.ValidationBuilder",
+    "l": "password()"
+}, {"p": "com.esprit.utils.validation", "c": "ValidationUtils", "l": "passwordValidator()"}, {
+    "p": "com.esprit.utils",
+    "c": "Paymentuser",
+    "l": "pay(int)"
+}, {
+    "p": "com.esprit.controllers.films",
+    "c": "PaymentController",
+    "l": "PaymentController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.controllers.films",
+    "c": "PaymentUserController",
+    "l": "PaymentUserController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.utils.validation",
+    "c": "ValidationUtils",
+    "l": "PHONE_REGEX"
+}, {
+    "p": "com.esprit.utils.validation",
+    "c": "ValidationUtils.ValidationBuilder",
+    "l": "phone()"
+}, {"p": "com.esprit.utils.validation", "c": "ValidationUtils", "l": "phoneValidator()"}, {
+    "p": "com.esprit.config",
+    "c": "HibernateConfig.DatabaseType",
+    "l": "POSTGRESQL"
+}, {"p": "com.esprit.utils.ui", "c": "UIUtils", "l": "PRIMARY_COLOR"}, {
+    "p": "com.esprit.utils",
+    "c": "PaymentProcessor",
+    "l": "processPayment(String, String, float, String, int, int, String)",
+    "u": "processPayment(java.lang.String,java.lang.String,float,java.lang.String,int,int,java.lang.String)"
+}, {
+    "p": "com.esprit.models.products",
+    "c": "Product",
+    "l": "Product(Long)",
+    "u": "%3Cinit%3E(java.lang.Long)"
+}, {
+    "p": "com.esprit.models.products",
+    "c": "Product",
+    "l": "Product(String, int, String, String, List<ProductCategory>, int)",
+    "u": "%3Cinit%3E(java.lang.String,int,java.lang.String,java.lang.String,java.util.List,int)"
+}, {
+    "p": "com.esprit.models.products",
+    "c": "ProductCategory",
+    "l": "ProductCategory(String, String)",
+    "u": "%3Cinit%3E(java.lang.String,java.lang.String)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "ProductService",
+    "l": "ProductService()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.controllers.users",
+    "c": "ProfileController",
+    "l": "ProfileController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmRatingService",
+    "l": "ratingExists(Long, Long)",
+    "u": "ratingExists(java.lang.Long,java.lang.Long)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "ReviewService",
+    "l": "ratingExists(Long, Long)",
+    "u": "ratingExists(java.lang.Long,java.lang.Long)"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "CinemaCommentService",
+    "l": "read()"
+}, {"p": "com.esprit.services.cinemas", "c": "CinemaHallService", "l": "read()"}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "CinemaRatingService",
+    "l": "read()"
+}, {"p": "com.esprit.services.cinemas", "c": "CinemaService", "l": "read()"}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "MovieSessionService",
+    "l": "read()"
+}, {"p": "com.esprit.services.films", "c": "ActorService", "l": "read()"}, {
+    "p": "com.esprit.services.films",
+    "c": "CategoryService",
+    "l": "read()"
+}, {"p": "com.esprit.services.films", "c": "FilmCommentService", "l": "read()"}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmRatingService",
+    "l": "read()"
+}, {"p": "com.esprit.services.films", "c": "FilmService", "l": "read()"}, {
+    "p": "com.esprit.services.films",
+    "c": "TicketService",
+    "l": "read()"
+}, {"p": "com.esprit.services", "c": "IService", "l": "read()"}, {
+    "p": "com.esprit.services.products",
+    "c": "CategoryService",
+    "l": "read()"
+}, {"p": "com.esprit.services.products", "c": "CommentService", "l": "read()"}, {
+    "p": "com.esprit.services.products",
+    "c": "OrderItemService",
+    "l": "read()"
+}, {"p": "com.esprit.services.products", "c": "OrderService", "l": "read()"}, {
+    "p": "com.esprit.services.products",
+    "c": "ProductService",
+    "l": "read()"
+}, {"p": "com.esprit.services.products", "c": "ReviewService", "l": "read()"}, {
+    "p": "com.esprit.services.products",
+    "c": "ShoppingCartService",
+    "l": "read()"
+}, {"p": "com.esprit.services.series", "c": "IServiceCategorieImpl", "l": "read()"}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceEpisodeImpl",
+    "l": "read()"
+}, {"p": "com.esprit.services.series", "c": "IServiceFavoriteImpl", "l": "read()"}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceFeedbackImpl",
+    "l": "read()"
+}, {"p": "com.esprit.services.series", "c": "IServiceSeriesImpl", "l": "read()"}, {
+    "p": "com.esprit.services.users",
+    "c": "UserService",
+    "l": "read()"
+}, {
+    "p": "com.esprit.utils",
+    "c": "CodeBareProduct",
+    "l": "readBarcode(File)",
+    "u": "readBarcode(java.io.File)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "CommentService",
+    "l": "readByClientId(int)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "OrderService",
+    "l": "readClientOrders()"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmCinemaService",
+    "l": "readMoviesForCinema(Long)",
+    "u": "readMoviesForCinema(java.lang.Long)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "OrderItemService",
+    "l": "readOrderItem(Long)",
+    "u": "readOrderItem(java.lang.Long)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "ShoppingCartService",
+    "l": "readUserShoppingCart(Long)",
+    "u": "readUserShoppingCart(java.lang.Long)"
+}, {
+    "p": "com.esprit.controllers.cinemas",
+    "c": "DashboardClientController",
+    "l": "rechercher(List<Cinema>, String)",
+    "u": "rechercher(java.util.List,java.lang.String)"
+}, {
+    "p": "com.esprit.controllers.films",
+    "c": "FilmUserController",
+    "l": "rechercher(List<Film>, String)",
+    "u": "rechercher(java.util.List,java.lang.String)"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "AfficherProductClientControllers",
+    "l": "rechercher(List<Product>, String)",
+    "u": "rechercher(java.util.List,java.lang.String)"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "SerieClientController",
+    "l": "rechercher(List<Series>, String)",
+    "u": "rechercher(java.util.List,java.lang.String)"
+}, {
+    "p": "com.esprit.utils",
+    "c": "FaceRecognition",
+    "l": "recognize(Mat)",
+    "u": "recognize(org.opencv.core.Mat)"
+}, {"p": "com.esprit.controllers.films", "c": "ActorController", "l": "redo()"}, {
+    "p": "com.esprit.controllers.base",
+    "c": "BaseController",
+    "l": "refreshTable()"
+}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceSeriesImpl",
+    "l": "removeDislike(Series)",
+    "u": "removeDislike(com.esprit.models.series.Series)"
+}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceSeriesImpl",
+    "l": "removeLike(Series)",
+    "u": "removeLike(com.esprit.models.series.Series)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "CategoryService",
+    "l": "removeProductFromCategory(int, int)",
+    "u": "removeProductFromCategory(int,int)"
+}, {
+    "p": "com.esprit.utils.validation",
+    "c": "ValidationUtils.ValidationBuilder",
+    "l": "required()"
+}, {
+    "p": "com.esprit.utils.validation",
+    "c": "ValidationUtils",
+    "l": "requiredValidator()"
+}, {
+    "p": "com.esprit.controllers.users",
+    "c": "ResetPasswordController",
+    "l": "ResetPasswordController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceSeriesImpl",
+    "l": "retrieveByCategory(Long)",
+    "u": "retrieveByCategory(java.lang.Long)"
+}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceEpisodeImpl",
+    "l": "retrieveBySeries(Long)",
+    "u": "retrieveBySeries(java.lang.Long)"
+}, {
+    "p": "com.esprit.models.products",
+    "c": "Review",
+    "l": "Review(Client, int, Product)",
+    "u": "%3Cinit%3E(com.esprit.models.users.Client,int,com.esprit.models.products.Product)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "ReviewService",
+    "l": "ReviewService()",
+    "u": "%3Cinit%3E()"
+}, {"p": "com.esprit.utils", "c": "FaceDetector", "l": "run()"}, {
+    "p": "com.esprit.controllers.base",
+    "c": "BaseController",
+    "l": "saveItem()"
+}, {
+    "p": "com.esprit.controllers.users",
+    "c": "ModernAdminDashboardController",
+    "l": "saveItem()"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "AfficherProductClientControllers",
+    "l": "SearchBar"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "DetailsProductClientController",
+    "l": "SearchBar"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "CategoryService",
+    "l": "searchCategoriesByName(String)",
+    "u": "searchCategoriesByName(java.lang.String)"
+}, {
+    "p": "com.esprit.utils",
+    "c": "ImdbAPI",
+    "l": "searchMovie(String)",
+    "u": "searchMovie(java.lang.String)"
+}, {
+    "p": "com.esprit.controllers.base",
+    "c": "BaseController",
+    "l": "searchTextField"
+}, {
+    "p": "com.esprit.models.cinemas",
+    "c": "Seat",
+    "l": "Seat(Integer, Integer, Boolean, CinemaHall)",
+    "u": "%3Cinit%3E(java.lang.Integer,java.lang.Integer,java.lang.Boolean,com.esprit.models.cinemas.CinemaHall)"
+}, {
+    "p": "com.esprit.controllers.films",
+    "c": "SeatSelectionController",
+    "l": "SeatSelectionController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "SeatService",
+    "l": "SeatService()",
+    "u": "%3Cinit%3E()"
+}, {"p": "com.esprit.utils.ui", "c": "UIUtils", "l": "SECONDARY_COLOR"}, {
+    "p": "com.esprit.controllers.base",
+    "c": "BaseController",
+    "l": "selectItem(T)"
+}, {
+    "p": "com.esprit.utils",
+    "c": "UserMail",
+    "l": "send(String, String)",
+    "u": "send(java.lang.String,java.lang.String)"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "SerieController",
+    "l": "sendEmail(String, String, String)",
+    "u": "sendEmail(java.lang.String,java.lang.String,java.lang.String)"
+}, {
+    "p": "com.esprit.services.users",
+    "c": "UserService",
+    "l": "sendMail(String, String)",
+    "u": "sendMail(java.lang.String,java.lang.String)"
+}, {
+    "p": "com.esprit.controllers.users",
+    "c": "SMSAdminController",
+    "l": "sendSMS(ActionEvent)",
+    "u": "sendSMS(javafx.event.ActionEvent)"
+}, {
+    "p": "com.esprit.utils",
+    "c": "UserSMSAPI",
+    "l": "sendSMS(int, String, String)",
+    "u": "sendSMS(int,java.lang.String,java.lang.String)"
+}, {
+    "p": "com.esprit.controllers.cinemas",
+    "c": "SentimentAnalysisController",
+    "l": "SentimentAnalysisController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "SerieClientController",
+    "l": "SerieClientController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "SerieController",
+    "l": "SerieController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "SerieController",
+    "l": "serieImageView"
+}, {
+    "p": "com.esprit.models.series",
+    "c": "Series",
+    "l": "Series(String, String, String, String, String, int, int, int, int)",
+    "u": "%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,int,int,int,int)"
+}, {
+    "p": "com.esprit.models.products",
+    "c": "Product",
+    "l": "setCategories(List<ProductCategory>)",
+    "u": "setCategories(java.util.List)"
+}, {
+    "p": "com.esprit.controllers",
+    "c": "CinemaManagerSideBarController",
+    "l": "setData(CinemaManager)",
+    "u": "setData(com.esprit.models.users.CinemaManager)"
+}, {
+    "p": "com.esprit.controllers.cinemas",
+    "c": "DashboardResponsableController",
+    "l": "setData(CinemaManager)",
+    "u": "setData(com.esprit.models.users.CinemaManager)"
+}, {
+    "p": "com.esprit.controllers.films",
+    "c": "PaymentUserController",
+    "l": "setData(Client, String)",
+    "u": "setData(com.esprit.models.users.Client,java.lang.String)"
+}, {
+    "p": "com.esprit.controllers.films",
+    "c": "PaymentController",
+    "l": "setData(MovieSession)",
+    "u": "setData(com.esprit.models.cinemas.MovieSession)"
+}, {
+    "p": "com.esprit.controllers.users",
+    "c": "ProfileController",
+    "l": "setData(User)",
+    "u": "setData(com.esprit.models.users.User)"
+}, {
+    "p": "com.esprit.config",
+    "c": "HibernateConfig",
+    "l": "setDatabaseType(HibernateConfig.DatabaseType)",
+    "u": "setDatabaseType(com.esprit.config.HibernateConfig.DatabaseType)"
+}, {
+    "p": "com.esprit.controllers.users",
+    "c": "ProfileController",
+    "l": "setLeftPane(AnchorPane)",
+    "u": "setLeftPane(javafx.scene.layout.AnchorPane)"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "DetailsProductClientController",
+    "l": "setProductId(Long)",
+    "u": "setProductId(java.lang.Long)"
+}, {
+    "p": "com.esprit.controllers.base",
+    "c": "BaseController",
+    "l": "setupCellEditCommit()"
+}, {
+    "p": "com.esprit.controllers.users",
+    "c": "ModernAdminDashboardController",
+    "l": "setupCellEditCommit()"
+}, {
+    "p": "com.esprit.controllers.base",
+    "c": "BaseController",
+    "l": "setupCellFactories()"
+}, {
+    "p": "com.esprit.controllers.users",
+    "c": "ModernAdminDashboardController",
+    "l": "setupCellFactories()"
+}, {
+    "p": "com.esprit.controllers.base",
+    "c": "BaseController",
+    "l": "setupCellValueFactories()"
+}, {
+    "p": "com.esprit.controllers.users",
+    "c": "ModernAdminDashboardController",
+    "l": "setupCellValueFactories()"
+}, {
+    "p": "com.esprit.controllers.base",
+    "c": "BaseController",
+    "l": "setupSearch()"
+}, {
+    "p": "com.esprit.controllers.base",
+    "c": "BaseController",
+    "l": "setupTableColumns()"
+}, {
+    "p": "com.esprit.controllers.users",
+    "c": "ModernAdminDashboardController",
+    "l": "setupTableColumns()"
+}, {
+    "p": "com.esprit.controllers.base",
+    "c": "BaseController",
+    "l": "setupTableView()"
+}, {
+    "p": "com.esprit.controllers.base",
+    "c": "BaseController",
+    "l": "setupValidation()"
+}, {
+    "p": "com.esprit.controllers.users",
+    "c": "ModernAdminDashboardController",
+    "l": "setupValidation()"
+}, {
+    "p": "com.esprit.models.products",
+    "c": "ShoppingCart",
+    "l": "ShoppingCart(int, Product, User)",
+    "u": "%3Cinit%3E(int,com.esprit.models.products.Product,com.esprit.models.users.User)"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "AfficherProductClientControllers",
+    "l": "shoppingcartFlowPane"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "DetailsProductClientController",
+    "l": "shoppingcartFlowPane"
+}, {
+    "p": "com.esprit.controllers.products",
+    "c": "ShoppingCartProductControllers",
+    "l": "ShoppingCartProductControllers()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "ShoppingCartService",
+    "l": "ShoppingCartService()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "CategorieController",
+    "l": "showcinema(ActionEvent)",
+    "u": "showcinema(javafx.event.ActionEvent)"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "EpisodeController",
+    "l": "showcinema(ActionEvent)",
+    "u": "showcinema(javafx.event.ActionEvent)"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "SerieController",
+    "l": "showcinema(ActionEvent)",
+    "u": "showcinema(javafx.event.ActionEvent)"
+}, {
+    "p": "com.esprit.controllers.base",
+    "c": "BaseController",
+    "l": "showConfirmationDialog(String, String)",
+    "u": "showConfirmationDialog(java.lang.String,java.lang.String)"
+}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils",
+    "l": "showConfirmationDialog(String, String)",
+    "u": "showConfirmationDialog(java.lang.String,java.lang.String)"
+}, {
+    "p": "com.esprit.controllers.base",
+    "c": "BaseController",
+    "l": "showErrorAlert(String, String)",
+    "u": "showErrorAlert(java.lang.String,java.lang.String)"
+}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils",
+    "l": "showErrorNotification(String)",
+    "u": "showErrorNotification(java.lang.String)"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "CategorieController",
+    "l": "showevent(ActionEvent)",
+    "u": "showevent(javafx.event.ActionEvent)"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "EpisodeController",
+    "l": "showevent(ActionEvent)",
+    "u": "showevent(javafx.event.ActionEvent)"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "SerieController",
+    "l": "showevent(ActionEvent)",
+    "u": "showevent(javafx.event.ActionEvent)"
+}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceFavoriteImpl",
+    "l": "showFavoritesList(int)"
+}, {
+    "p": "com.esprit.controllers.base",
+    "c": "BaseController",
+    "l": "showInfoAlert(String, String)",
+    "u": "showInfoAlert(java.lang.String,java.lang.String)"
+}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils",
+    "l": "showInfoNotification(String)",
+    "u": "showInfoNotification(java.lang.String)"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "CategorieController",
+    "l": "showmovies(ActionEvent)",
+    "u": "showmovies(javafx.event.ActionEvent)"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "EpisodeController",
+    "l": "showmovies(ActionEvent)",
+    "u": "showmovies(javafx.event.ActionEvent)"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "SerieController",
+    "l": "showmovies(ActionEvent)",
+    "u": "showmovies(javafx.event.ActionEvent)"
+}, {
+    "p": "com.esprit.controllers.cinemas",
+    "c": "DashboardClientController",
+    "l": "showPlanning(Cinema)",
+    "u": "showPlanning(com.esprit.models.cinemas.Cinema)"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "CategorieController",
+    "l": "showproducts(ActionEvent)",
+    "u": "showproducts(javafx.event.ActionEvent)"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "EpisodeController",
+    "l": "showproducts(ActionEvent)",
+    "u": "showproducts(javafx.event.ActionEvent)"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "SerieController",
+    "l": "showproducts(ActionEvent)",
+    "u": "showproducts(javafx.event.ActionEvent)"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "CategorieController",
+    "l": "showseries(ActionEvent)",
+    "u": "showseries(javafx.event.ActionEvent)"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "EpisodeController",
+    "l": "showseries(ActionEvent)",
+    "u": "showseries(javafx.event.ActionEvent)"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "SerieController",
+    "l": "showseries(ActionEvent)",
+    "u": "showseries(javafx.event.ActionEvent)"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "CategorieController",
+    "l": "showStatistics(ActionEvent)",
+    "u": "showStatistics(javafx.event.ActionEvent)"
+}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils",
+    "l": "showSuccessNotification(String)",
+    "u": "showSuccessNotification(java.lang.String)"
+}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils",
+    "l": "showWarningNotification(String)",
+    "u": "showWarningNotification(java.lang.String)"
+}, {"p": "com.esprit.config", "c": "HibernateConfig", "l": "shutdown()"}, {
+    "p": "com.esprit.utils",
+    "c": "SignInGoogle",
+    "l": "signInWithGoogle()"
+}, {
+    "p": "com.esprit.utils",
+    "c": "SignInMicrosoft",
+    "l": "SignInWithMicrosoft(String...)",
+    "u": "SignInWithMicrosoft(java.lang.String...)"
+}, {
+    "p": "com.esprit.controllers.users",
+    "c": "AdminDashboardController",
+    "l": "signOut(ActionEvent)",
+    "u": "signOut(javafx.event.ActionEvent)"
+}, {
+    "p": "com.esprit.controllers.users",
+    "c": "ModernAdminDashboardController",
+    "l": "signOut(ActionEvent)",
+    "u": "signOut(javafx.event.ActionEvent)"
+}, {
+    "p": "com.esprit.controllers.users",
+    "c": "ProfileController",
+    "l": "signOut(ActionEvent)",
+    "u": "signOut(javafx.event.ActionEvent)"
+}, {
+    "p": "com.esprit.controllers.users",
+    "c": "SignUpController",
+    "l": "SignUpController()",
+    "u": "%3Cinit%3E()"
+}, {"p": "com.esprit.utils.ui", "c": "UIUtils.AnimationType", "l": "SLIDE_IN_DOWN"}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils.AnimationType",
+    "l": "SLIDE_IN_LEFT"
+}, {"p": "com.esprit.utils.ui", "c": "UIUtils.AnimationType", "l": "SLIDE_IN_RIGHT"}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils.AnimationType",
+    "l": "SLIDE_IN_UP"
+}, {"p": "com.esprit.utils.ui", "c": "UIUtils.AnimationType", "l": "SLIDE_OUT_DOWN"}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils.AnimationType",
+    "l": "SLIDE_OUT_LEFT"
+}, {"p": "com.esprit.utils.ui", "c": "UIUtils.AnimationType", "l": "SLIDE_OUT_RIGHT"}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils.AnimationType",
+    "l": "SLIDE_OUT_UP"
+}, {
+    "p": "com.esprit.controllers.users",
+    "c": "SMSAdminController",
+    "l": "SMSAdminController()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "CinemaService",
+    "l": "sort(String)",
+    "u": "sort(java.lang.String)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmService",
+    "l": "sort(String)",
+    "u": "sort(java.lang.String)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "ProductService",
+    "l": "sort(String)",
+    "u": "sort(java.lang.String)"
+}, {
+    "p": "com.esprit.services.users",
+    "c": "UserService",
+    "l": "sort(String)",
+    "u": "sort(java.lang.String)"
+}, {"p": "com.esprit.controllers.base", "c": "BaseController", "l": "sortedItems"}, {
+    "p": "com.esprit.config",
+    "c": "HibernateConfig.DatabaseType",
+    "l": "SQLITE"
+}, {
+    "p": "com.esprit",
+    "c": "MainApp",
+    "l": "start(Stage)",
+    "u": "start(javafx.stage.Stage)"
+}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceFavoriteImpl",
+    "l": "statement"
+}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceFeedbackImpl",
+    "l": "statement"
+}, {
+    "p": "com.esprit.controllers.series",
+    "c": "StatistiqueController",
+    "l": "StatistiqueController()",
+    "u": "%3Cinit%3E()"
+}, {"p": "com.esprit.utils", "c": "FaceDetector", "l": "stop()"}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils.NotificationType",
+    "l": "SUCCESS"
+}, {
+    "p": "com.esprit.controllers.films",
+    "c": "CategoryController",
+    "l": "switchForm(ActionEvent)",
+    "u": "switchForm(javafx.event.ActionEvent)"
+}, {
+    "p": "com.esprit.controllers.films",
+    "c": "FilmController",
+    "l": "switchForm(ActionEvent)",
+    "u": "switchForm(javafx.event.ActionEvent)"
+}, {
+    "p": "com.esprit.controllers.films",
+    "c": "FilmUserController",
+    "l": "switchtcinemaaa(ActionEvent)",
+    "u": "switchtcinemaaa(javafx.event.ActionEvent)"
+}, {
+    "p": "com.esprit.controllers.films",
+    "c": "FilmUserController",
+    "l": "switchtevent(ActionEvent)",
+    "u": "switchtevent(javafx.event.ActionEvent)"
+}, {
+    "p": "com.esprit.controllers.films",
+    "c": "PaymentUserController",
+    "l": "switchtfillmmaa(ActionEvent)",
+    "u": "switchtfillmmaa(javafx.event.ActionEvent)"
+}, {
+    "p": "com.esprit.controllers.films",
+    "c": "ActorController",
+    "l": "switchtoajouterCinema(ActionEvent)",
+    "u": "switchtoajouterCinema(javafx.event.ActionEvent)"
+}, {
+    "p": "com.esprit.controllers.films",
+    "c": "FilmController",
+    "l": "switchtoajouterCinema(ActionEvent)",
+    "u": "switchtoajouterCinema(javafx.event.ActionEvent)"
+}, {
+    "p": "com.esprit.controllers.films",
+    "c": "FilmUserController",
+    "l": "switchtoajouterCinema(ActionEvent)",
+    "u": "switchtoajouterCinema(javafx.event.ActionEvent)"
+}, {
+    "p": "com.esprit.controllers.films",
+    "c": "FilmUserController",
+    "l": "switchtoajouterproduct(ActionEvent)",
+    "u": "switchtoajouterproduct(javafx.event.ActionEvent)"
+}, {"p": "com.esprit.utils", "c": "DatabaseManager", "l": "switchToH2()"}, {
+    "p": "com.esprit.utils",
+    "c": "DatabaseManager",
+    "l": "switchToMySQL()"
+}, {
+    "p": "com.esprit.utils",
+    "c": "DatabaseManager",
+    "l": "switchToMySQL(String, String, String, String, String)",
+    "u": "switchToMySQL(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)"
+}, {
+    "p": "com.esprit.controllers.films",
+    "c": "FilmUserController",
+    "l": "switchtopayment(String)",
+    "u": "switchtopayment(java.lang.String)"
+}, {"p": "com.esprit.utils", "c": "DatabaseManager", "l": "switchToPostgreSQL()"}, {
+    "p": "com.esprit.utils",
+    "c": "DatabaseManager",
+    "l": "switchToPostgreSQL(String, String, String, String, String)",
+    "u": "switchToPostgreSQL(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)"
+}, {
+    "p": "com.esprit.controllers.films",
+    "c": "FilmUserController",
+    "l": "switchtoSerie(ActionEvent)",
+    "u": "switchtoSerie(javafx.event.ActionEvent)"
+}, {"p": "com.esprit.utils", "c": "DatabaseManager", "l": "switchToSQLite()"}, {
+    "p": "com.esprit.utils",
+    "c": "DatabaseManager",
+    "l": "switchToSQLite(String)",
+    "u": "switchToSQLite(java.lang.String)"
+}, {
+    "p": "com.esprit.controllers",
+    "c": "AdminSideBarController",
+    "l": "switchToUsers(ActionEvent)",
+    "u": "switchToUsers(javafx.event.ActionEvent)"
+}, {"p": "com.esprit.controllers.base", "c": "BaseController", "l": "tableView"}, {
+    "p": "com.esprit.utils",
+    "c": "DatabaseManager",
+    "l": "testConnection()"
+}, {"p": "com.esprit.utils.ui", "c": "UIUtils", "l": "TEXT_COLOR"}, {
+    "p": "com.esprit.models.films",
+    "c": "Ticket",
+    "l": "Ticket(int, Client, MovieSession, float)",
+    "u": "%3Cinit%3E(int,com.esprit.models.users.Client,com.esprit.models.cinemas.MovieSession,float)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "TicketService",
+    "l": "TicketService()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.controllers.users",
+    "c": "ModernAdminDashboardController",
+    "l": "toggleTheme()"
+}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils",
+    "l": "UIUtils()",
+    "u": "%3Cinit%3E()"
+}, {"p": "com.esprit.controllers.films", "c": "ActorController", "l": "undo()"}, {
+    "p": "com.esprit.services.films",
+    "c": "ActorService",
+    "l": "update(Actor)",
+    "u": "update(com.esprit.models.films.Actor)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "CategoryService",
+    "l": "update(Category)",
+    "u": "update(com.esprit.models.films.Category)"
+}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceCategorieImpl",
+    "l": "update(Category)",
+    "u": "update(com.esprit.models.series.Category)"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "CinemaService",
+    "l": "update(Cinema)",
+    "u": "update(com.esprit.models.cinemas.Cinema)"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "CinemaCommentService",
+    "l": "update(CinemaComment)",
+    "u": "update(com.esprit.models.cinemas.CinemaComment)"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "CinemaHallService",
+    "l": "update(CinemaHall)",
+    "u": "update(com.esprit.models.cinemas.CinemaHall)"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "CinemaRatingService",
+    "l": "update(CinemaRating)",
+    "u": "update(com.esprit.models.cinemas.CinemaRating)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "CommentService",
+    "l": "update(Comment)",
+    "u": "update(com.esprit.models.products.Comment)"
+}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceEpisodeImpl",
+    "l": "update(Episode)",
+    "u": "update(com.esprit.models.series.Episode)"
+}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceFavoriteImpl",
+    "l": "update(Favorite)",
+    "u": "update(com.esprit.models.series.Favorite)"
+}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceFeedbackImpl",
+    "l": "update(Feedback)",
+    "u": "update(com.esprit.models.series.Feedback)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmService",
+    "l": "update(Film)",
+    "u": "update(com.esprit.models.films.Film)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmCommentService",
+    "l": "update(FilmComment)",
+    "u": "update(com.esprit.models.films.FilmComment)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmRatingService",
+    "l": "update(FilmRating)",
+    "u": "update(com.esprit.models.films.FilmRating)"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "MovieSessionService",
+    "l": "update(MovieSession)",
+    "u": "update(com.esprit.models.cinemas.MovieSession)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "OrderService",
+    "l": "update(Order)",
+    "u": "update(com.esprit.models.products.Order)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "OrderItemService",
+    "l": "update(OrderItem)",
+    "u": "update(com.esprit.models.products.OrderItem)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "ProductService",
+    "l": "update(Product)",
+    "u": "update(com.esprit.models.products.Product)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "CategoryService",
+    "l": "update(ProductCategory)",
+    "u": "update(com.esprit.models.products.ProductCategory)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "ReviewService",
+    "l": "update(Review)",
+    "u": "update(com.esprit.models.products.Review)"
+}, {
+    "p": "com.esprit.services.series",
+    "c": "IServiceSeriesImpl",
+    "l": "update(Series)",
+    "u": "update(com.esprit.models.series.Series)"
+}, {
+    "p": "com.esprit.services.products",
+    "c": "ShoppingCartService",
+    "l": "update(ShoppingCart)",
+    "u": "update(com.esprit.models.products.ShoppingCart)"
+}, {"p": "com.esprit.services.base", "c": "BaseService", "l": "update(T)"}, {
+    "p": "com.esprit.services",
+    "c": "IService",
+    "l": "update(T)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "TicketService",
+    "l": "update(Ticket)",
+    "u": "update(com.esprit.models.films.Ticket)"
+}, {
+    "p": "com.esprit.services.users",
+    "c": "UserService",
+    "l": "update(User)",
+    "u": "update(com.esprit.models.users.User)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "ActorFilmService",
+    "l": "updateActors(Film, List<String>)",
+    "u": "updateActors(com.esprit.models.films.Film,java.util.List)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmCategoryService",
+    "l": "updateCategories(Film, List<String>)",
+    "u": "updateCategories(com.esprit.models.films.Film,java.util.List)"
+}, {
+    "p": "com.esprit.services.films",
+    "c": "FilmCinemaService",
+    "l": "updateCinemas(Film, List<String>)",
+    "u": "updateCinemas(com.esprit.models.films.Film,java.util.List)"
+}, {
+    "p": "com.esprit.controllers.base",
+    "c": "BaseController",
+    "l": "updateItem(T)"
+}, {
+    "p": "com.esprit.controllers.users",
+    "c": "ModernAdminDashboardController",
+    "l": "updateItem(User)",
+    "u": "updateItem(com.esprit.models.users.User)"
+}, {
+    "p": "com.esprit.services.users",
+    "c": "UserService",
+    "l": "updatePassword(String, String)",
+    "u": "updatePassword(java.lang.String,java.lang.String)"
+}, {
+    "p": "com.esprit.services.cinemas",
+    "c": "SeatService",
+    "l": "updateSeatStatus(Long, Boolean)",
+    "u": "updateSeatStatus(java.lang.Long,java.lang.Boolean)"
+}, {
+    "p": "com.esprit.utils",
+    "c": "CloudinaryStorage",
+    "l": "uploadImage(File)",
+    "u": "uploadImage(java.io.File)"
+}, {
+    "p": "com.esprit.utils",
+    "c": "CloudinaryStorage",
+    "l": "uploadImage(File, Map<String, Object>)",
+    "u": "uploadImage(java.io.File,java.util.Map)"
+}, {
+    "p": "com.esprit.models.users",
+    "c": "User",
+    "l": "User(String, String, String, String, String, String, Date, String, String)",
+    "u": "%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.sql.Date,java.lang.String,java.lang.String)"
+}, {"p": "com.esprit.utils", "c": "UserPDF", "l": "UserPDF()", "u": "%3Cinit%3E()"}, {
+    "p": "com.esprit.controllers",
+    "c": "AdminSideBarController",
+    "l": "usersButton"
+}, {
+    "p": "com.esprit.services.users",
+    "c": "UserService",
+    "l": "UserService()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.utils.validation",
+    "c": "ValidationUtils",
+    "l": "validateFields(TextField...)",
+    "u": "validateFields(javafx.scene.control.TextField...)"
+}, {
+    "p": "com.esprit.controllers.base",
+    "c": "BaseController",
+    "l": "validateForm()"
+}, {
+    "p": "com.esprit.controllers.users",
+    "c": "ModernAdminDashboardController",
+    "l": "validateForm()"
+}, {
+    "p": "com.esprit.utils.validation",
+    "c": "ValidationUtils.ValidationBuilder",
+    "l": "ValidationBuilder(TextField)",
+    "u": "%3Cinit%3E(javafx.scene.control.TextField)"
+}, {
+    "p": "com.esprit.utils.validation",
+    "c": "ValidationUtils",
+    "l": "ValidationUtils()",
+    "u": "%3Cinit%3E()"
+}, {"p": "com.esprit.controllers.base", "c": "BaseController", "l": "validator"}, {
+    "p": "com.esprit.config",
+    "c": "HibernateConfig.DatabaseType",
+    "l": "valueOf(String)",
+    "u": "valueOf(java.lang.String)"
+}, {
+    "p": "com.esprit.utils",
+    "c": "PaymentProcessor",
+    "l": "valueOf(String)",
+    "u": "valueOf(java.lang.String)"
+}, {
+    "p": "com.esprit.utils",
+    "c": "Paymentuser",
+    "l": "valueOf(String)",
+    "u": "valueOf(java.lang.String)"
+}, {
+    "p": "com.esprit.utils",
+    "c": "SignInGoogle",
+    "l": "valueOf(String)",
+    "u": "valueOf(java.lang.String)"
+}, {
+    "p": "com.esprit.utils",
+    "c": "SignInMicrosoft",
+    "l": "valueOf(String)",
+    "u": "valueOf(java.lang.String)"
+}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils.AnimationType",
+    "l": "valueOf(String)",
+    "u": "valueOf(java.lang.String)"
+}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils.NotificationType",
+    "l": "valueOf(String)",
+    "u": "valueOf(java.lang.String)"
+}, {
+    "p": "com.esprit.utils",
+    "c": "UserMail",
+    "l": "valueOf(String)",
+    "u": "valueOf(java.lang.String)"
+}, {
+    "p": "com.esprit.utils",
+    "c": "UserSMSAPI",
+    "l": "valueOf(String)",
+    "u": "valueOf(java.lang.String)"
+}, {"p": "com.esprit.config", "c": "HibernateConfig.DatabaseType", "l": "values()"}, {
+    "p": "com.esprit.utils",
+    "c": "PaymentProcessor",
+    "l": "values()"
+}, {"p": "com.esprit.utils", "c": "Paymentuser", "l": "values()"}, {
+    "p": "com.esprit.utils",
+    "c": "SignInGoogle",
+    "l": "values()"
+}, {"p": "com.esprit.utils", "c": "SignInMicrosoft", "l": "values()"}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils.AnimationType",
+    "l": "values()"
+}, {"p": "com.esprit.utils.ui", "c": "UIUtils.NotificationType", "l": "values()"}, {
+    "p": "com.esprit.utils",
+    "c": "UserMail",
+    "l": "values()"
+}, {"p": "com.esprit.utils", "c": "UserSMSAPI", "l": "values()"}, {
+    "p": "com.esprit.utils",
+    "c": "SignInGoogle",
+    "l": "verifyAuthUrl(String)",
+    "u": "verifyAuthUrl(java.lang.String)"
+}, {
+    "p": "com.esprit.utils",
+    "c": "SignInMicrosoft",
+    "l": "verifyAuthUrl(String)",
+    "u": "verifyAuthUrl(java.lang.String)"
+}, {
+    "p": "com.esprit.controllers.users",
+    "c": "VerifyWithGoogle",
+    "l": "VerifyWithGoogle()",
+    "u": "%3Cinit%3E()"
+}, {
+    "p": "com.esprit.controllers.users",
+    "c": "VerifyWithMicrosoft",
+    "l": "VerifyWithMicrosoft()",
+    "u": "%3Cinit%3E()"
+}, {"p": "com.esprit.utils.ui", "c": "UIUtils.NotificationType", "l": "WARNING"}, {
+    "p": "com.esprit.utils",
+    "c": "FilmYoutubeTrailer",
+    "l": "watchTrailer(String)",
+    "u": "watchTrailer(java.lang.String)"
+}, {"p": "com.esprit.utils.ui", "c": "UIUtils.AnimationType", "l": "ZOOM_IN"}, {
+    "p": "com.esprit.utils.ui",
+    "c": "UIUtils.AnimationType",
+    "l": "ZOOM_OUT"
+}];
+updateSearchResults();

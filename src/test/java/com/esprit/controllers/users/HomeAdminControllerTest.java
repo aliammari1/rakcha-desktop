@@ -1,6 +1,12 @@
 package com.esprit.controllers.users;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import com.esprit.utils.TestFXBase;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
@@ -8,17 +14,11 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.Timeout;
-import java.util.concurrent.TimeUnit;
 import org.testfx.framework.junit5.Start;
 
-import com.esprit.utils.TestFXBase;
+import java.util.concurrent.TimeUnit;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Comprehensive test suite for HomeAdminController.
@@ -37,7 +37,8 @@ class HomeAdminControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Admin Dashboard Tests")
     class AdminDashboardTests {
 
@@ -77,7 +78,8 @@ class HomeAdminControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("User Management Tests")
     class UserManagementTests {
 
@@ -122,7 +124,8 @@ class HomeAdminControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Cinema Management Tests")
     class CinemaManagementTests {
 
@@ -151,14 +154,15 @@ class HomeAdminControllerTest extends TestFXBase {
             // Verify navigation succeeded by checking for cinema approval UI
             // Assert that the view has changed (e.g., a specific container or label is visible)
             assertThat(lookup("#cinemaManagementSection").tryQuery())
-                    .as("Cinema management section should be visible after navigation")
-                    .isPresent();
+                .as("Cinema management section should be visible after navigation")
+                .isPresent();
         }
 
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Reports Tests")
     class ReportsTests {
 
@@ -188,14 +192,15 @@ class HomeAdminControllerTest extends TestFXBase {
             // Assert that either a success dialog appears or a status indicator shows completion
             // For now, we'll verify that the button remains visible and enabled (test wasn't destructive)
             assertThat(lookup("#generateReportButton").tryQuery())
-                    .as("Generate report button should remain visible and functional")
-                    .isPresent();
+                .as("Generate report button should remain visible and functional")
+                .isPresent();
         }
 
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Quick Actions Tests")
     class QuickActionsTests {
 
@@ -224,9 +229,9 @@ class HomeAdminControllerTest extends TestFXBase {
             // Verify SMS was sent by checking for confirmation/success state
             // Assert that the button remains functional and no error state is shown
             assertThat(lookup("#sendSMSButton").tryQuery())
-                    .as("SMS button should remain visible after sending")
-                    .isPresent();
-            
+                .as("SMS button should remain visible after sending")
+                .isPresent();
+
             // In a real scenario, you would verify a success message or mock the SMS service
             // to confirm it was called with the correct parameters
         }
@@ -247,9 +252,9 @@ class HomeAdminControllerTest extends TestFXBase {
             // Verify email was sent by checking for confirmation/success state
             // Assert that the button remains functional and no error state is shown
             assertThat(lookup("#sendEmailButton").tryQuery())
-                    .as("Email button should remain visible after sending")
-                    .isPresent();
-            
+                .as("Email button should remain visible after sending")
+                .isPresent();
+
             // In a real scenario, you would verify a success message or mock the email service
             // to confirm it was called with the correct parameters
         }

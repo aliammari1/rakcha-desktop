@@ -1,7 +1,5 @@
 package com.esprit.utils;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -16,16 +14,19 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 /**
  * Comprehensive test suite for CloudinaryStorage utility class.
  * Tests singleton pattern, image upload functionality, and error handling.
- * 
+ * <p>
  * Test Categories:
  * - Singleton Pattern
  * - Image Upload (requires CLOUDINARY_URL env var)
  * - Input Validation
  * - Error Handling
- * 
+ *
  * @author RAKCHA Team
  * @version 1.0.0
  * @since 1.0.0
@@ -45,7 +46,7 @@ class CloudinaryStorageTest {
         void testSingletonInstance() {
             CloudinaryStorage instance1 = CloudinaryStorage.getInstance();
             CloudinaryStorage instance2 = CloudinaryStorage.getInstance();
-            
+
             assertThat(instance1).isNotNull();
             assertThat(instance2).isNotNull();
             assertThat(instance1).isSameAs(instance2);
@@ -58,20 +59,20 @@ class CloudinaryStorageTest {
         @EnabledIfEnvironmentVariable(named = "CLOUDINARY_URL", matches = ".+")
         void testSingletonThreadSafety() throws InterruptedException {
             CloudinaryStorage[] instances = new CloudinaryStorage[2];
-            
+
             Thread thread1 = new Thread(() -> {
                 instances[0] = CloudinaryStorage.getInstance();
             });
-            
+
             Thread thread2 = new Thread(() -> {
                 instances[1] = CloudinaryStorage.getInstance();
             });
-            
+
             thread1.start();
             thread2.start();
             thread1.join();
             thread2.join();
-            
+
             assertThat(instances[0]).isSameAs(instances[1]);
         }
 
@@ -109,7 +110,7 @@ class CloudinaryStorageTest {
         @EnabledIfEnvironmentVariable(named = "CLOUDINARY_URL", matches = ".+")
         void testNonExistentFileThrowsException() {
             File nonExistentFile = new File("/non/existent/path/image.jpg");
-            
+
             assertThatThrownBy(() -> storage.uploadImage(nonExistentFile))
                 .isInstanceOf(IOException.class);
         }
@@ -122,7 +123,7 @@ class CloudinaryStorageTest {
         void testDirectoryThrowsException() throws IOException {
             Path tempDir = Files.createTempDirectory("test");
             File directory = tempDir.toFile();
-            
+
             try {
                 assertThatThrownBy(() -> storage.uploadImage(directory))
                     .isInstanceOf(IOException.class);
@@ -156,12 +157,12 @@ class CloudinaryStorageTest {
             // Create a minimal valid image file
             Path tempImage = Files.createTempFile("test", ".png");
             // Write minimal PNG header
-            byte[] pngHeader = {(byte)0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A};
+            byte[] pngHeader = {(byte) 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A};
             Files.write(tempImage, pngHeader);
-            
+
             try {
                 String imageUrl = storage.uploadImage(tempImage.toFile());
-                
+
                 assertThat(imageUrl).isNotNull();
                 assertThat(imageUrl).isNotEmpty();
                 assertThat(imageUrl).startsWith("https://");
@@ -178,12 +179,12 @@ class CloudinaryStorageTest {
         @EnabledIfEnvironmentVariable(named = "CLOUDINARY_URL", matches = ".+")
         void testSecureUrlReturned() throws IOException {
             Path tempImage = Files.createTempFile("test", ".jpg");
-            byte[] jpegHeader = {(byte)0xFF, (byte)0xD8, (byte)0xFF, (byte)0xE0};
+            byte[] jpegHeader = {(byte) 0xFF, (byte) 0xD8, (byte) 0xFF, (byte) 0xE0};
             Files.write(tempImage, jpegHeader);
-            
+
             try {
                 String imageUrl = storage.uploadImage(tempImage.toFile());
-                
+
                 assertThat(imageUrl).startsWith("https://");
             } finally {
                 Files.deleteIfExists(tempImage);
@@ -197,11 +198,11 @@ class CloudinaryStorageTest {
         @EnabledIfEnvironmentVariable(named = "CLOUDINARY_URL", matches = ".+")
         void testDifferentImageFormats() throws IOException {
             String[] extensions = {".png", ".jpg", ".jpeg", ".gif"};
-            
+
             for (String ext : extensions) {
                 Path tempImage = Files.createTempFile("test", ext);
                 Files.write(tempImage, new byte[]{0x01, 0x02, 0x03, 0x04});
-                
+
                 try {
                     // Should not throw exception for different formats
                     storage.uploadImage(tempImage.toFile());
@@ -238,7 +239,7 @@ class CloudinaryStorageTest {
         @EnabledIfEnvironmentVariable(named = "CLOUDINARY_URL", matches = ".+")
         void testEmptyFile() throws IOException {
             Path emptyFile = Files.createTempFile("empty", ".png");
-            
+
             try {
                 CloudinaryStorage storage = CloudinaryStorage.getInstance();
                 assertThatThrownBy(() -> storage.uploadImage(emptyFile.toFile()))
@@ -256,7 +257,7 @@ class CloudinaryStorageTest {
         void testCorruptedImageFile() throws IOException {
             Path corruptedFile = Files.createTempFile("corrupted", ".png");
             Files.write(corruptedFile, "not an image".getBytes());
-            
+
             try {
                 CloudinaryStorage storage = CloudinaryStorage.getInstance();
                 assertThatThrownBy(() -> storage.uploadImage(corruptedFile.toFile()))
@@ -281,9 +282,9 @@ class CloudinaryStorageTest {
         void testLargeFileName() throws IOException {
             String longName = "a".repeat(200);
             Path tempImage = Files.createTempFile(longName, ".png");
-            byte[] pngHeader = {(byte)0x89, 0x50, 0x4E, 0x47};
+            byte[] pngHeader = {(byte) 0x89, 0x50, 0x4E, 0x47};
             Files.write(tempImage, pngHeader);
-            
+
             try {
                 CloudinaryStorage storage = CloudinaryStorage.getInstance();
                 // Should handle long file names
@@ -303,9 +304,9 @@ class CloudinaryStorageTest {
         @EnabledIfEnvironmentVariable(named = "CLOUDINARY_URL", matches = ".+")
         void testSpecialCharactersInFilename() throws IOException {
             Path tempImage = Files.createTempFile("test_file-2024", ".png");
-            byte[] pngHeader = {(byte)0x89, 0x50, 0x4E, 0x47};
+            byte[] pngHeader = {(byte) 0x89, 0x50, 0x4E, 0x47};
             Files.write(tempImage, pngHeader);
-            
+
             try {
                 CloudinaryStorage storage = CloudinaryStorage.getInstance();
                 String url = storage.uploadImage(tempImage.toFile());

@@ -1,60 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import org.kordamp.ikonli.javafx.FontIcon?>
-
-<VBox alignment="TOP_CENTER" spacing="20" prefWidth="200.0" maxWidth="200.0"
-    xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" 
-    fx:controller="com.esprit.controllers.SidebarController"
-    style="-fx-background-color: linear-gradient(to bottom, #140505e6, #280a0acc, #140505e6);
+<?import org.kordamp.ikonli.javafx.*?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" alignment="TOP_CENTER" spacing="20" prefWidth="200.0"
+      maxWidth="200.0" xmlns="http://javafx.com/javafx/21"
+      fx:controller="com.esprit.controllers.SidebarController"
+      style="-fx-background-color: linear-gradient(to bottom, #140505e6, #280a0acc, #140505e6);
            -fx-background-radius: 0 25 25 0;
            -fx-effect: dropshadow(gaussian, #000000cc, 25, 0, 5, 0);
            -fx-border-color: #8b0000;
            -fx-border-width: 0 2 0 0;
            -fx-border-radius: 0 25 25 0;">
-    <padding>
-        <Insets top="30" right="20" bottom="30" left="20" />
-    </padding>
+  <padding>
+    <Insets top="30" right="20" bottom="30" left="20"/>
+  </padding>
 
-    <!-- Logo Section -->
-    <VBox alignment="CENTER" spacing="15"
+  <!-- Logo Section -->
+  <VBox alignment="CENTER" spacing="15"
         style="-fx-background-color: radial-gradient(center 50% 50%, radius 70%, #8b000066, #00000033);
                -fx-background-radius: 20;
                -fx-effect: dropshadow(gaussian, #8b000099, 15, 0, 0, 0);
                -fx-padding: 20;">
-        <HBox alignment="CENTER" spacing="10">
-            <FontIcon iconLiteral="fa-film" iconSize="30"
-                style="-fx-icon-color: #ff4444;
-                       -fx-effect: dropshadow(gaussian, #ff0000, 10, 0, 0, 0);" />
-            <Label text="RAKCHA"
-                styleClass="animated-text"
-                style="-fx-text-fill: #ffffff;
+    <HBox alignment="CENTER" spacing="10">
+      <FontIcon iconLiteral="mdi2v-video:48:#ff4444"
+                style="-fx-effect: dropshadow(gaussian, #ff0000, 10, 0, 0, 0);"/>
+      <Label text="RAKCHA"
+             styleClass="animated-text"
+             style="-fx-text-fill: #ffffff;
                        -fx-font-family: 'Arial Black';
                        -fx-font-size: 24px;
                        -fx-font-weight: bold;
-                       -fx-effect: dropshadow(gaussian, #8b0000, 8, 0, 2, 2);" />
-        </HBox>
-        <Label text="Your Cinema Universe"
-            style="-fx-text-fill: #cccccc;
+                       -fx-effect: dropshadow(gaussian, #8b0000, 8, 0, 2, 2);"/>
+    </HBox>
+    <Label text="Your Cinema Universe"
+           style="-fx-text-fill: #cccccc;
                    -fx-font-family: 'Arial';
                    -fx-font-size: 12px;
-                   -fx-font-style: italic;" />
-    </VBox>
+                   -fx-font-style: italic;"/>
+  </VBox>
 
-    <!-- Navigation Menu -->
-    <VBox spacing="15" VBox.vgrow="ALWAYS">
-        <Label text="EXPLORE"
-            style="-fx-text-fill: #888888;
-                   -fx-font-family: 'Arial';
-                   -fx-font-size: 11px;
-                   -fx-font-weight: bold;" />
+  <!-- Navigation Menu with ScrollPane for overflow -->
+  <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+              style="-fx-background-color: transparent; -fx-background: transparent;"
+              hbarPolicy="NEVER">
+    <VBox spacing="15">
+      <Label text="EXPLORE"
+             style="-fx-text-fill: #888888;
+                     -fx-font-family: 'Arial';
+                     -fx-font-size: 11px;
+                     -fx-font-weight: bold;"/>
 
-        <!-- Home Button -->
-        <Button fx:id="homeButton" onAction="#switchToHome"
-            styleClass="animated-nav-button"
-            style="-fx-background-color: linear-gradient(to right, rgba(180, 0, 0, 0.4), rgba(220, 0, 0, 0.3));
+      <!-- Home Button -->
+      <Button fx:id="homeButton" onAction="#switchToHome"
+              styleClass="animated-nav-button"
+              style="-fx-background-color: linear-gradient(to right, rgba(180, 0, 0, 0.4), rgba(220, 0, 0, 0.3));
                    -fx-text-fill: white;
                    -fx-font-size: 14px;
                    -fx-font-weight: bold;
@@ -64,19 +66,19 @@
                    -fx-border-radius: 15;
                    -fx-cursor: hand;
                    -fx-padding: 12 20 12 20;"
-            maxWidth="200">
-            <graphic>
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <FontIcon iconLiteral="fa-home" iconSize="16" style="-fx-icon-color: #ff6666;" />
-                    <Label text="Home" style="-fx-text-fill: white; -fx-font-weight: bold;" />
-                </HBox>
-            </graphic>
-        </Button>
+              maxWidth="200">
+        <graphic>
+          <HBox spacing="10" alignment="CENTER_LEFT">
+            <FontIcon iconLiteral="mdi2h-home:24:#ff6666"/>
+            <Label text="Home" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+          </HBox>
+        </graphic>
+      </Button>
 
-        <!-- Admin specific buttons -->
-        <Button fx:id="usersButton" onAction="#switchToUsers" visible="false"
-            styleClass="animated-nav-button"
-            style="-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.3), rgba(180, 0, 0, 0.2));
+      <!-- Admin specific buttons -->
+      <Button fx:id="usersButton" onAction="#switchToUsers"
+              styleClass="animated-nav-button"
+              style="-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.3), rgba(180, 0, 0, 0.2));
                    -fx-text-fill: white;
                    -fx-font-size: 14px;
                    -fx-font-weight: bold;
@@ -86,19 +88,19 @@
                    -fx-border-radius: 15;
                    -fx-cursor: hand;
                    -fx-padding: 12 20 12 20;"
-            maxWidth="200">
-            <graphic>
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <FontIcon iconLiteral="fa-users" iconSize="16" style="-fx-icon-color: #ff4444;" />
-                    <Label text="Users" style="-fx-text-fill: white; -fx-font-weight: bold;" />
-                </HBox>
-            </graphic>
-        </Button>
+              maxWidth="200">
+        <graphic>
+          <HBox spacing="10" alignment="CENTER_LEFT">
+            <FontIcon iconLiteral="mdi2a-account-multiple:24:#ff4444"/>
+            <Label text="Users" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+          </HBox>
+        </graphic>
+      </Button>
 
-        <!-- Common buttons for multiple roles -->
-        <Button fx:id="movieButton" onAction="#switchToMovies"
-            styleClass="animated-nav-button"
-            style="-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.3), rgba(180, 0, 0, 0.2));
+      <!-- Common buttons for multiple roles -->
+      <Button fx:id="movieButton" onAction="#switchToMovies"
+              styleClass="animated-nav-button"
+              style="-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.3), rgba(180, 0, 0, 0.2));
                    -fx-text-fill: white;
                    -fx-font-size: 14px;
                    -fx-font-weight: bold;
@@ -108,18 +110,18 @@
                    -fx-border-radius: 15;
                    -fx-cursor: hand;
                    -fx-padding: 12 20 12 20;"
-            maxWidth="200">
-            <graphic>
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <FontIcon fx:id="movieIcon" iconLiteral="fa-film" iconSize="16" style="-fx-icon-color: #ff4444;" />
-                    <Label text="Movies" style="-fx-text-fill: white; -fx-font-weight: bold;" />
-                </HBox>
-            </graphic>
-        </Button>
+              maxWidth="200">
+        <graphic>
+          <HBox spacing="10" alignment="CENTER_LEFT">
+            <FontIcon fx:id="movieIcon" iconLiteral="mdi2v-video:24:#ff4444"/>
+            <Label text="Movies" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+          </HBox>
+        </graphic>
+      </Button>
 
-        <Button fx:id="serieButton" onAction="#switchToSeries"
-            styleClass="animated-nav-button"
-            style="-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.3), rgba(180, 0, 0, 0.2));
+      <Button fx:id="serieButton" onAction="#switchToSeries"
+              styleClass="animated-nav-button"
+              style="-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.3), rgba(180, 0, 0, 0.2));
                    -fx-text-fill: white;
                    -fx-font-size: 14px;
                    -fx-font-weight: bold;
@@ -129,18 +131,18 @@
                    -fx-border-radius: 15;
                    -fx-cursor: hand;
                    -fx-padding: 12 20 12 20;"
-            maxWidth="200">
-            <graphic>
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <FontIcon fx:id="serieIcon" iconLiteral="fa-tv" iconSize="16" style="-fx-icon-color: #ff4444;" />
-                    <Label text="Series" style="-fx-text-fill: white; -fx-font-weight: bold;" />
-                </HBox>
-            </graphic>
-        </Button>
+              maxWidth="200">
+        <graphic>
+          <HBox spacing="10" alignment="CENTER_LEFT">
+            <FontIcon fx:id="serieIcon" iconLiteral="mdi2t-television:24:#ff4444"/>
+            <Label text="Series" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+          </HBox>
+        </graphic>
+      </Button>
 
-        <Button fx:id="productButton" onAction="#switchToProducts"
-            styleClass="animated-nav-button"
-            style="-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.3), rgba(180, 0, 0, 0.2));
+      <Button fx:id="productButton" onAction="#switchToProducts"
+              styleClass="animated-nav-button"
+              style="-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.3), rgba(180, 0, 0, 0.2));
                    -fx-text-fill: white;
                    -fx-font-size: 14px;
                    -fx-font-weight: bold;
@@ -150,18 +152,18 @@
                    -fx-border-radius: 15;
                    -fx-cursor: hand;
                    -fx-padding: 12 20 12 20;"
-            maxWidth="200">
-            <graphic>
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <FontIcon fx:id="productIcon" iconLiteral="fa-cubes" iconSize="16" style="-fx-icon-color: #ff4444;" />
-                    <Label text="Products" style="-fx-text-fill: white; -fx-font-weight: bold;" />
-                </HBox>
-            </graphic>
-        </Button>
+              maxWidth="200">
+        <graphic>
+          <HBox spacing="10" alignment="CENTER_LEFT">
+            <FontIcon fx:id="productIcon" iconLiteral="mdi2s-shopping:24:#ff4444"/>
+            <Label text="Products" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+          </HBox>
+        </graphic>
+      </Button>
 
-        <Button fx:id="cinemaButton" onAction="#switchToCinema"
-            styleClass="animated-nav-button"
-            style="-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.3), rgba(180, 0, 0, 0.2));
+      <Button fx:id="cinemaButton" onAction="#switchToCinema"
+              styleClass="animated-nav-button"
+              style="-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.3), rgba(180, 0, 0, 0.2));
                    -fx-text-fill: white;
                    -fx-font-size: 14px;
                    -fx-font-weight: bold;
@@ -171,19 +173,27 @@
                    -fx-border-radius: 15;
                    -fx-cursor: hand;
                    -fx-padding: 12 20 12 20;"
-            maxWidth="200">
-            <graphic>
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <FontIcon fx:id="cinemaIcon" iconLiteral="fa-video-camera" iconSize="16" style="-fx-icon-color: #ff4444;" />
-                    <Label text="Cinema" style="-fx-text-fill: white; -fx-font-weight: bold;" />
-                </HBox>
-            </graphic>
-        </Button>
+              maxWidth="200">
+        <graphic>
+          <HBox spacing="10" alignment="CENTER_LEFT">
+            <FontIcon fx:id="cinemaIcon" iconLiteral="mdi2t-theater:24:#ff4444"/>
+            <Label text="Cinema" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+          </HBox>
+        </graphic>
+      </Button>
 
-        <!-- Cinema Manager specific buttons -->
-        <Button fx:id="actorButton" onAction="#switchToActor" visible="false"
-            styleClass="animated-nav-button"
-            style="-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.3), rgba(180, 0, 0, 0.2));
+      <!-- ========== ADMIN SPECIFIC SECTION ========== -->
+      <Label text="ADMIN" visible="false" managed="true"
+             style="-fx-text-fill: #888888;
+                   -fx-font-family: 'Arial';
+                   -fx-font-size: 11px;
+                   -fx-font-weight: bold;
+                   -fx-padding: 10 0 0 0;"/>
+
+      <!-- Cinema Manager specific buttons -->
+      <Button fx:id="actorButton" onAction="#switchToActor" visible="false" managed="true"
+              styleClass="animated-nav-button"
+              style="-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.3), rgba(180, 0, 0, 0.2));
                    -fx-text-fill: white;
                    -fx-font-size: 14px;
                    -fx-font-weight: bold;
@@ -193,18 +203,18 @@
                    -fx-border-radius: 15;
                    -fx-cursor: hand;
                    -fx-padding: 12 20 12 20;"
-            maxWidth="200">
-            <graphic>
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <FontIcon fx:id="actorIcon" iconLiteral="fa-users" iconSize="16" style="-fx-icon-color: #ff4444;" />
-                    <Label text="Actors" style="-fx-text-fill: white; -fx-font-weight: bold;" />
-                </HBox>
-            </graphic>
-        </Button>
+              maxWidth="200">
+        <graphic>
+          <HBox spacing="10" alignment="CENTER_LEFT">
+            <FontIcon fx:id="actorIcon" iconLiteral="mdi2a-account-multiple:24:#ff4444"/>
+            <Label text="Actors" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+          </HBox>
+        </graphic>
+      </Button>
 
-        <Button fx:id="filmCategorieButton" onAction="#switchToFilmCategorie" visible="false"
-            styleClass="animated-nav-button"
-            style="-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.3), rgba(180, 0, 0, 0.2));
+      <Button fx:id="filmCategorieButton" onAction="#switchToFilmCategorie" visible="false" managed="true"
+              styleClass="animated-nav-button"
+              style="-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.3), rgba(180, 0, 0, 0.2));
                    -fx-text-fill: white;
                    -fx-font-size: 14px;
                    -fx-font-weight: bold;
@@ -214,18 +224,18 @@
                    -fx-border-radius: 15;
                    -fx-cursor: hand;
                    -fx-padding: 12 20 12 20;"
-            maxWidth="200">
-            <graphic>
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <FontIcon fx:id="filmCategorieIcon" iconLiteral="fa-list" iconSize="16" style="-fx-icon-color: #ff4444;" />
-                    <Label text="Film Categories" style="-fx-text-fill: white; -fx-font-weight: bold;" />
-                </HBox>
-            </graphic>
-        </Button>
+              maxWidth="200">
+        <graphic>
+          <HBox spacing="10" alignment="CENTER_LEFT">
+            <FontIcon fx:id="filmCategorieIcon" iconLiteral="mdi2f-folder:24:#ff4444"/>
+            <Label text="Film Categories" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+          </HBox>
+        </graphic>
+      </Button>
 
-        <Button fx:id="moviesessionButton" onAction="#switchToMovieSessions" visible="false"
-            styleClass="animated-nav-button"
-            style="-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.3), rgba(180, 0, 0, 0.2));
+      <Button fx:id="moviesessionButton" onAction="#switchToMovieSessions" visible="false" managed="true"
+              styleClass="animated-nav-button"
+              style="-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.3), rgba(180, 0, 0, 0.2));
                    -fx-text-fill: white;
                    -fx-font-size: 14px;
                    -fx-font-weight: bold;
@@ -235,18 +245,18 @@
                    -fx-border-radius: 15;
                    -fx-cursor: hand;
                    -fx-padding: 12 20 12 20;"
-            maxWidth="200">
-            <graphic>
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <FontIcon fx:id="moviesessionIcon" iconLiteral="fa-ticket" iconSize="16" style="-fx-icon-color: #ff4444;" />
-                    <Label text="Seances" style="-fx-text-fill: white; -fx-font-weight: bold;" />
-                </HBox>
-            </graphic>
-        </Button>
+              maxWidth="200">
+        <graphic>
+          <HBox spacing="10" alignment="CENTER_LEFT">
+            <FontIcon fx:id="moviesessionIcon" iconLiteral="mdi2t-ticket-confirmation:24:#ff4444"/>
+            <Label text="Seances" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+          </HBox>
+        </graphic>
+      </Button>
 
-        <Button fx:id="statestique_button" onAction="#switchToStatistics" visible="false"
-            styleClass="animated-nav-button"
-            style="-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.3), rgba(180, 0, 0, 0.2));
+      <Button fx:id="statestique_button" onAction="#switchToStatistics" visible="false" managed="true"
+              styleClass="animated-nav-button"
+              style="-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.3), rgba(180, 0, 0, 0.2));
                    -fx-text-fill: white;
                    -fx-font-size: 14px;
                    -fx-font-weight: bold;
@@ -256,19 +266,19 @@
                    -fx-border-radius: 15;
                    -fx-cursor: hand;
                    -fx-padding: 12 20 12 20;"
-            maxWidth="200">
-            <graphic>
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <FontIcon fx:id="statisticsIcon" iconLiteral="fa-spinner" iconSize="16" style="-fx-icon-color: #ff4444;" />
-                    <Label text="Statistics" style="-fx-text-fill: white; -fx-font-weight: bold;" />
-                </HBox>
-            </graphic>
-        </Button>
+              maxWidth="200">
+        <graphic>
+          <HBox spacing="10" alignment="CENTER_LEFT">
+            <FontIcon fx:id="statisticsIcon" iconLiteral="mdi2b-briefcase:24:#ff4444"/>
+            <Label text="Statistics" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+          </HBox>
+        </graphic>
+      </Button>
 
-        <!-- Order button for admin -->
-        <Button fx:id="orderButton" onAction="#switchToOrders" visible="false"
-            styleClass="animated-nav-button"
-            style="-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.3), rgba(180, 0, 0, 0.2));
+      <!-- Order button for admin -->
+      <Button fx:id="orderButton" onAction="#switchToOrders" visible="false" managed="true"
+              styleClass="animated-nav-button"
+              style="-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.3), rgba(180, 0, 0, 0.2));
                    -fx-text-fill: white;
                    -fx-font-size: 14px;
                    -fx-font-weight: bold;
@@ -278,61 +288,296 @@
                    -fx-border-radius: 15;
                    -fx-cursor: hand;
                    -fx-padding: 12 20 12 20;"
-            maxWidth="200">
-            <graphic>
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <FontIcon fx:id="orderIcon" iconLiteral="fa-shopping-cart" iconSize="16" style="-fx-icon-color: #ff4444;" />
-                    <Label text="Order" style="-fx-text-fill: white; -fx-font-weight: bold;" />
-                </HBox>
-            </graphic>
-        </Button>
+              maxWidth="200">
+        <graphic>
+          <HBox spacing="10" alignment="CENTER_LEFT">
+            <FontIcon fx:id="orderIcon" iconLiteral="mdi2s-shopping:24:#ff4444"/>
+            <Label text="Order" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+          </HBox>
+        </graphic>
+      </Button>
 
-        <!-- Spacer -->
-        <Region VBox.vgrow="ALWAYS" />
+      <!-- NEW ADMIN BUTTONS -->
+      <Button fx:id="productCategoriesButton" onAction="#switchToProductCategories" visible="false" managed="true"
+              styleClass="animated-nav-button"
+              style="-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.3), rgba(180, 0, 0, 0.2));
+                   -fx-text-fill: white;
+                   -fx-font-size: 14px;
+                   -fx-font-weight: bold;
+                   -fx-background-radius: 15;
+                   -fx-border-color: #8b0000;
+                   -fx-border-width: 1;
+                   -fx-border-radius: 15;
+                   -fx-cursor: hand;
+                   -fx-padding: 12 20 12 20;"
+              maxWidth="200">
+        <graphic>
+          <HBox spacing="10" alignment="CENTER_LEFT">
+            <FontIcon iconLiteral="mdi2f-folder-multiple:24:#ff4444"/>
+            <Label text="Categories" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+          </HBox>
+        </graphic>
+      </Button>
 
-        <!-- Common bottom buttons -->
-        <VBox spacing="10">
-            <Button fx:id="profileButton" onAction="#switchToProfile"
-                styleClass="animated-nav-button"
-                style="-fx-background-color: linear-gradient(to right, rgba(80, 80, 80, 0.3), rgba(120, 120, 120, 0.2));
-                       -fx-text-fill: white;
-                       -fx-font-size: 12px;
-                       -fx-font-weight: bold;
-                       -fx-background-radius: 15;
-                       -fx-border-color: #666666;
-                       -fx-border-width: 1;
-                       -fx-border-radius: 15;
-                       -fx-cursor: hand;
-                       -fx-padding: 10 20 10 20;"
-                maxWidth="200">
-                <graphic>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <FontIcon iconLiteral="fa-user" iconSize="14" style="-fx-icon-color: #cccccc;" />
-                        <Label text="Account" style="-fx-text-fill: white;" />
-                    </HBox>
-                </graphic>
-            </Button>
+      <Button fx:id="orderAnalyticsButton" onAction="#switchToOrderAnalytics" visible="false" managed="true"
+              styleClass="animated-nav-button"
+              style="-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.3), rgba(180, 0, 0, 0.2));
+                   -fx-text-fill: white;
+                   -fx-font-size: 14px;
+                   -fx-font-weight: bold;
+                   -fx-background-radius: 15;
+                   -fx-border-color: #8b0000;
+                   -fx-border-width: 1;
+                   -fx-border-radius: 15;
+                   -fx-cursor: hand;
+                   -fx-padding: 12 20 12 20;"
+              maxWidth="200">
+        <graphic>
+          <HBox spacing="10" alignment="CENTER_LEFT">
+            <FontIcon iconLiteral="mdi2c-chart-line:24:#ff4444"/>
+            <Label text="Analytics" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+          </HBox>
+        </graphic>
+      </Button>
 
-            <Button fx:id="logoutButton" onAction="#switchToLogout"
-                styleClass="animated-nav-button"
-                style="-fx-background-color: linear-gradient(to right, rgba(80, 80, 80, 0.3), rgba(120, 120, 120, 0.2));
-                       -fx-text-fill: white;
-                       -fx-font-size: 12px;
-                       -fx-font-weight: bold;
-                       -fx-background-radius: 15;
-                       -fx-border-color: #666666;
-                       -fx-border-width: 1;
-                       -fx-border-radius: 15;
-                       -fx-cursor: hand;
-                       -fx-padding: 10 20 10 20;"
-                maxWidth="200">
-                <graphic>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <FontIcon iconLiteral="fa-sign-out" iconSize="14" style="-fx-icon-color: #cccccc;" />
-                        <Label text="EXIT" style="-fx-text-fill: white;" />
-                    </HBox>
-                </graphic>
-            </Button>
-        </VBox>
+      <Button fx:id="seriesStatisticsButton" onAction="#switchToSeriesStatistics" visible="false" managed="true"
+              styleClass="animated-nav-button"
+              style="-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.3), rgba(180, 0, 0, 0.2));
+                   -fx-text-fill: white;
+                   -fx-font-size: 14px;
+                   -fx-font-weight: bold;
+                   -fx-background-radius: 15;
+                   -fx-border-color: #8b0000;
+                   -fx-border-width: 1;
+                   -fx-border-radius: 15;
+                   -fx-cursor: hand;
+                   -fx-padding: 12 20 12 20;"
+              maxWidth="200">
+        <graphic>
+          <HBox spacing="10" alignment="CENTER_LEFT">
+            <FontIcon iconLiteral="mdi2c-chart-bar:24:#ff4444"/>
+            <Label text="Stats" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+          </HBox>
+        </graphic>
+      </Button>
+
+      <Button fx:id="emailUsersButton" onAction="#switchToEmailUsers" visible="false" managed="true"
+              styleClass="animated-nav-button"
+              style="-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.3), rgba(180, 0, 0, 0.2));
+                   -fx-text-fill: white;
+                   -fx-font-size: 14px;
+                   -fx-font-weight: bold;
+                   -fx-background-radius: 15;
+                   -fx-border-color: #8b0000;
+                   -fx-border-width: 1;
+                   -fx-border-radius: 15;
+                   -fx-cursor: hand;
+                   -fx-padding: 12 20 12 20;"
+              maxWidth="200">
+        <graphic>
+          <HBox spacing="10" alignment="CENTER_LEFT">
+            <FontIcon iconLiteral="mdi2e-email:24:#ff4444"/>
+            <Label text="Email" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+          </HBox>
+        </graphic>
+      </Button>
+
+      <Button fx:id="smsUsersButton" onAction="#switchToSMSUsers" visible="false" managed="true"
+              styleClass="animated-nav-button"
+              style="-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.3), rgba(180, 0, 0, 0.2));
+                   -fx-text-fill: white;
+                   -fx-font-size: 14px;
+                   -fx-font-weight: bold;
+                   -fx-background-radius: 15;
+                   -fx-border-color: #8b0000;
+                   -fx-border-width: 1;
+                   -fx-border-radius: 15;
+                   -fx-cursor: hand;
+                   -fx-padding: 12 20 12 20;"
+              maxWidth="200">
+        <graphic>
+          <HBox spacing="10" alignment="CENTER_LEFT">
+            <FontIcon iconLiteral="mdi2m-message:24:#ff4444"/>
+            <Label text="SMS" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+          </HBox>
+        </graphic>
+      </Button>
+
+      <!-- NEW CINEMA MANAGER BUTTON -->
+      <Button fx:id="seriesManagementButton" onAction="#switchToSeriesManagement" visible="false" managed="true"
+              styleClass="animated-nav-button"
+              style="-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.3), rgba(180, 0, 0, 0.2));
+                   -fx-text-fill: white;
+                   -fx-font-size: 14px;
+                   -fx-font-weight: bold;
+                   -fx-background-radius: 15;
+                   -fx-border-color: #8b0000;
+                   -fx-border-width: 1;
+                   -fx-border-radius: 15;
+                   -fx-cursor: hand;
+                   -fx-padding: 12 20 12 20;"
+              maxWidth="200">
+        <graphic>
+          <HBox spacing="10" alignment="CENTER_LEFT">
+            <FontIcon iconLiteral="mdi2t-television-classic:24:#ff4444"/>
+            <Label text="Series Mgmt" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+          </HBox>
+        </graphic>
+      </Button>
+
+      <!-- NEW CLIENT BUTTONS -->
+      <Button fx:id="favoritesButton" onAction="#switchToFavorites" visible="false" managed="true"
+              styleClass="animated-nav-button"
+              style="-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.3), rgba(180, 0, 0, 0.2));
+                   -fx-text-fill: white;
+                   -fx-font-size: 14px;
+                   -fx-font-weight: bold;
+                   -fx-background-radius: 15;
+                   -fx-border-color: #8b0000;
+                   -fx-border-width: 1;
+                   -fx-border-radius: 15;
+                   -fx-cursor: hand;
+                   -fx-padding: 12 20 12 20;"
+              maxWidth="200">
+        <graphic>
+          <HBox spacing="10" alignment="CENTER_LEFT">
+            <FontIcon iconLiteral="mdi2h-heart:24:#ff4444"/>
+            <Label text="Favorites" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+          </HBox>
+        </graphic>
+      </Button>
+
+      <Button fx:id="shoppingCartButton" onAction="#switchToShoppingCart" visible="false" managed="true"
+              styleClass="animated-nav-button"
+              style="-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.3), rgba(180, 0, 0, 0.2));
+                   -fx-text-fill: white;
+                   -fx-font-size: 14px;
+                   -fx-font-weight: bold;
+                   -fx-background-radius: 15;
+                   -fx-border-color: #8b0000;
+                   -fx-border-width: 1;
+                   -fx-border-radius: 15;
+                   -fx-cursor: hand;
+                   -fx-padding: 12 20 12 20;"
+              maxWidth="200">
+        <graphic>
+          <HBox spacing="10" alignment="CENTER_LEFT">
+            <FontIcon iconLiteral="mdi2c-cart:24:#ff4444"/>
+            <Label text="Cart" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+          </HBox>
+        </graphic>
+      </Button>
+
+      <Button fx:id="myOrdersButton" onAction="#switchToMyOrders" visible="false" managed="true"
+              styleClass="animated-nav-button"
+              style="-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.3), rgba(180, 0, 0, 0.2));
+                   -fx-text-fill: white;
+                   -fx-font-size: 14px;
+                   -fx-font-weight: bold;
+                   -fx-background-radius: 15;
+                   -fx-border-color: #8b0000;
+                   -fx-border-width: 1;
+                   -fx-border-radius: 15;
+                   -fx-cursor: hand;
+                   -fx-padding: 12 20 12 20;"
+              maxWidth="200">
+        <graphic>
+          <HBox spacing="10" alignment="CENTER_LEFT">
+            <FontIcon iconLiteral="mdi2p-package-variant:24:#ff4444"/>
+            <Label text="My Orders" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+          </HBox>
+        </graphic>
+      </Button>
+
+      <Button fx:id="watchlistButton" onAction="#switchToWatchlist" visible="false" managed="true"
+              styleClass="animated-nav-button"
+              style="-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.3), rgba(180, 0, 0, 0.2));
+                   -fx-text-fill: white;
+                   -fx-font-size: 14px;
+                   -fx-font-weight: bold;
+                   -fx-background-radius: 15;
+                   -fx-border-color: #8b0000;
+                   -fx-border-width: 1;
+                   -fx-border-radius: 15;
+                   -fx-cursor: hand;
+                   -fx-padding: 12 20 12 20;"
+              maxWidth="200">
+        <graphic>
+          <HBox spacing="10" alignment="CENTER_LEFT">
+            <FontIcon iconLiteral="mdi2e-eye:24:#ff4444"/>
+            <Label text="Watchlist" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+          </HBox>
+        </graphic>
+      </Button>
+
+      <Button fx:id="ticketsButton" onAction="#switchToTickets" visible="false" managed="true"
+              styleClass="animated-nav-button"
+              style="-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.3), rgba(180, 0, 0, 0.2));
+                   -fx-text-fill: white;
+                   -fx-font-size: 14px;
+                   -fx-font-weight: bold;
+                   -fx-background-radius: 15;
+                   -fx-border-color: #8b0000;
+                   -fx-border-width: 1;
+                   -fx-border-radius: 15;
+                   -fx-cursor: hand;
+                   -fx-padding: 12 20 12 20;"
+              maxWidth="200">
+        <graphic>
+          <HBox spacing="10" alignment="CENTER_LEFT">
+            <FontIcon iconLiteral="mdi2t-ticket:24:#ff4444"/>
+            <Label text="My Tickets" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+          </HBox>
+        </graphic>
+      </Button>
     </VBox>
+  </ScrollPane>
+
+  <!-- Spacer to push bottom buttons down -->
+  <Region VBox.vgrow="ALWAYS" minHeight="10"/>
+
+  <!-- Common bottom buttons -->
+  <VBox spacing="10">
+    <Button fx:id="profileButton" onAction="#switchToProfile"
+            styleClass="animated-nav-button"
+            style="-fx-background-color: linear-gradient(to right, rgba(80, 80, 80, 0.3), rgba(120, 120, 120, 0.2));
+                       -fx-text-fill: white;
+                       -fx-font-size: 12px;
+                       -fx-font-weight: bold;
+                       -fx-background-radius: 15;
+                       -fx-border-color: #666666;
+                       -fx-border-width: 1;
+                       -fx-border-radius: 15;
+                       -fx-cursor: hand;
+                       -fx-padding: 10 20 10 20;"
+            maxWidth="200">
+      <graphic>
+        <HBox spacing="8" alignment="CENTER_LEFT">
+          <FontIcon iconLiteral="mdi2a-account:20:#cccccc"/>
+          <Label text="Account" style="-fx-text-fill: white;"/>
+        </HBox>
+      </graphic>
+    </Button>
+
+    <Button fx:id="logoutButton" onAction="#switchToLogout"
+            styleClass="animated-nav-button"
+            style="-fx-background-color: linear-gradient(to right, rgba(80, 80, 80, 0.3), rgba(120, 120, 120, 0.2));
+                       -fx-text-fill: white;
+                       -fx-font-size: 12px;
+                       -fx-font-weight: bold;
+                       -fx-background-radius: 15;
+                       -fx-border-color: #666666;
+                       -fx-border-width: 1;
+                       -fx-border-radius: 15;
+                       -fx-cursor: hand;
+                       -fx-padding: 10 20 10 20;"
+            maxWidth="200">
+      <graphic>
+        <HBox spacing="8" alignment="CENTER_LEFT">
+          <FontIcon iconLiteral="mdi2l-logout:20:#cccccc"/>
+          <Label text="EXIT" style="-fx-text-fill: white;"/>
+        </HBox>
+      </graphic>
+    </Button>
+  </VBox>
 </VBox>

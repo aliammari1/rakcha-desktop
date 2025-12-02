@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            xmlns="http://javafx.com/javafx/21"
+            fx:controller="com.esprit.controllers.common.CategoryManagementController"
+            style="-fx-background-color: linear-gradient(to bottom right, #1a0a0a, #2d1515, #1a0a0a);">
+
+  <!-- Top Header -->
+  <top>
+    <VBox spacing="10" style="-fx-background-color: linear-gradient(to right, #2d0a0a, #4a1515, #2d0a0a);
+                                   -fx-padding: 20;">
+      <HBox alignment="CENTER_LEFT" spacing="15">
+        <Button onAction="#goBack" styleClass="back-btn"
+                style="-fx-background-color: transparent; -fx-cursor: hand;">
+          <graphic>
+            <FontIcon iconLiteral="mdi2a-arrow-left:24:#ff6666"/>
+          </graphic>
+        </Button>
+        <Label fx:id="titleLabel" text="Category Management"
+               style="-fx-text-fill: #ffffff;
+                              -fx-font-size: 28px;
+                              -fx-font-weight: bold;
+                              -fx-font-family: 'Arial Black';
+                              -fx-effect: dropshadow(gaussian, #8b0000, 10, 0, 2, 2);"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label fx:id="statusLabel" text="Ready"
+               style="-fx-text-fill: #aaaaaa; -fx-font-size: 12px;"/>
+      </HBox>
+
+      <!-- Search and Filter Bar -->
+      <HBox spacing="15" alignment="CENTER_LEFT">
+        <HBox spacing="10" alignment="CENTER_LEFT"
+              style="-fx-background-color: rgba(255,255,255,0.1);
+                             -fx-background-radius: 20;
+                             -fx-padding: 8 15;">
+          <FontIcon iconLiteral="mdi2m-magnify:20:#999999"/>
+          <TextField fx:id="searchField" promptText="Search categories..."
+                     prefWidth="250"
+                     style="-fx-background-color: transparent;
+                                      -fx-text-fill: white;
+                                      -fx-prompt-text-fill: #888888;
+                                      -fx-font-size: 14px;"/>
+        </HBox>
+
+        <Label text="Filter by Type:" style="-fx-text-fill: #cccccc;"/>
+        <ComboBox fx:id="filterTypeComboBox" prefWidth="180"
+                  style="-fx-background-color: rgba(139, 0, 0, 0.3);
+                                 -fx-background-radius: 10;
+                                 -fx-border-color: #8b0000;
+                                 -fx-border-radius: 10;"/>
+      </HBox>
+    </VBox>
+  </top>
+
+  <!-- Main Content -->
+  <center>
+    <HBox spacing="20" style="-fx-padding: 20;">
+      <!-- Category Table -->
+      <VBox spacing="10" HBox.hgrow="ALWAYS">
+        <Label text="Categories" style="-fx-text-fill: #ff6666; -fx-font-size: 16px; -fx-font-weight: bold;"/>
+        <TableView fx:id="categoryTable" VBox.vgrow="ALWAYS"
+                   style="-fx-background-color: rgba(0,0,0,0.3);
+                                  -fx-background-radius: 15;
+                                  -fx-border-color: #8b0000;
+                                  -fx-border-radius: 15;
+                                  -fx-border-width: 1;">
+          <columns>
+            <TableColumn fx:id="idColumn" text="ID" prefWidth="60" sortable="true"/>
+            <TableColumn fx:id="nameColumn" text="Name" prefWidth="150" sortable="true"/>
+            <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="250" sortable="true"/>
+            <TableColumn fx:id="typeColumn" text="Type" prefWidth="100" sortable="true"/>
+            <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="150" sortable="false"/>
+          </columns>
+          <placeholder>
+            <Label text="No categories found" style="-fx-text-fill: #888888;"/>
+          </placeholder>
+        </TableView>
+      </VBox>
+
+      <!-- Form Panel -->
+      <VBox spacing="15" prefWidth="320"
+            style="-fx-background-color: rgba(139, 0, 0, 0.15);
+                         -fx-background-radius: 20;
+                         -fx-border-color: #8b0000;
+                         -fx-border-radius: 20;
+                         -fx-border-width: 1;
+                         -fx-padding: 20;">
+        <Label text="Category Details"
+               style="-fx-text-fill: #ff6666;
+                              -fx-font-size: 18px;
+                              -fx-font-weight: bold;"/>
+
+        <Separator style="-fx-background-color: #8b0000;"/>
+
+        <!-- Name Field -->
+        <VBox spacing="5">
+          <Label text="Name *" style="-fx-text-fill: #cccccc; -fx-font-size: 12px;"/>
+          <TextField fx:id="nameField" promptText="Enter category name"
+                     style="-fx-background-color: rgba(255,255,255,0.1);
+                                      -fx-text-fill: white;
+                                      -fx-prompt-text-fill: #888888;
+                                      -fx-background-radius: 10;
+                                      -fx-border-color: #666666;
+                                      -fx-border-radius: 10;
+                                      -fx-padding: 10;"/>
+        </VBox>
+
+        <!-- Type ComboBox -->
+        <VBox spacing="5">
+          <Label text="Type *" style="-fx-text-fill: #cccccc; -fx-font-size: 12px;"/>
+          <ComboBox fx:id="typeComboBox" maxWidth="Infinity"
+                    style="-fx-background-color: rgba(255,255,255,0.1);
+                                     -fx-background-radius: 10;
+                                     -fx-border-color: #666666;
+                                     -fx-border-radius: 10;"/>
+        </VBox>
+
+        <!-- Description Field -->
+        <VBox spacing="5" VBox.vgrow="ALWAYS">
+          <Label text="Description *" style="-fx-text-fill: #cccccc; -fx-font-size: 12px;"/>
+          <TextArea fx:id="descriptionField" promptText="Enter category description"
+                    wrapText="true" prefRowCount="4"
+                    VBox.vgrow="ALWAYS"
+                    style="-fx-background-color: rgba(255,255,255,0.1);
+                                     -fx-text-fill: white;
+                                     -fx-prompt-text-fill: #888888;
+                                     -fx-background-radius: 10;
+                                     -fx-border-color: #666666;
+                                     -fx-border-radius: 10;
+                                     -fx-padding: 10;"/>
+        </VBox>
+
+        <Separator style="-fx-background-color: #8b0000;"/>
+
+        <!-- Action Buttons -->
+        <HBox spacing="10" alignment="CENTER">
+          <Button fx:id="addButton" text="Add" onAction="#saveCategory"
+                  prefWidth="120"
+                  style="-fx-background-color: linear-gradient(to bottom, #8b0000, #5a0000);
+                                   -fx-text-fill: white;
+                                   -fx-font-weight: bold;
+                                   -fx-background-radius: 15;
+                                   -fx-cursor: hand;
+                                   -fx-padding: 10 20;"/>
+          <Button fx:id="clearButton" text="Clear" onAction="#clearForm"
+                  prefWidth="120"
+                  style="-fx-background-color: rgba(100,100,100,0.5);
+                                   -fx-text-fill: white;
+                                   -fx-font-weight: bold;
+                                   -fx-background-radius: 15;
+                                   -fx-cursor: hand;
+                                   -fx-padding: 10 20;"/>
+        </HBox>
+      </VBox>
+    </HBox>
+  </center>
+
+  <!-- Bottom Status Bar -->
+  <bottom>
+    <HBox alignment="CENTER" spacing="20"
+          style="-fx-background-color: rgba(0,0,0,0.3); -fx-padding: 10;">
+      <Label text="💡 Tip: Select a row to edit, or fill the form to add a new category"
+             style="-fx-text-fill: #888888; -fx-font-size: 11px;"/>
+    </HBox>
+  </bottom>
+</BorderPane>

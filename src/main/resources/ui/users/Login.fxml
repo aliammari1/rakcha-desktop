@@ -1,250 +1,249 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.image.*?>
 <?import javafx.scene.shape.*?>
-<?import javafx.scene.effect.*?>
-<?import org.kordamp.ikonli.javafx.FontIcon?>
-<?import java.net.URL?>
-<StackPane fx:id="rootContainer" maxWidth="1200.0" maxHeight="680.0" minWidth="1200.0" minHeight="680.0"
-           xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+<?import org.kordamp.ikonli.javafx.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" fx:id="rootContainer" maxWidth="1200.0" maxHeight="680.0"
+           minWidth="1200.0"
+           minHeight="680.0" xmlns="http://javafx.com/javafx/21"
            fx:controller="com.esprit.controllers.users.LoginController"
            style="-fx-background-color: linear-gradient(to bottom right, #0a0a0a, #1a0a0a, #2a0f0f, #1a0606, #0a0a0a);
            -fx-effect: dropshadow(gaussian, #8b0000, 50, 0, 0, 0);
            -fx-background-animation: true;"
            stylesheets="@../styles/login-animations.css">
 
-    <!-- Background Animations Container - Now comes FIRST in the StackPane for proper layering -->
-    <AnchorPane style="-fx-background-color: transparent;" maxWidth="1200.0" maxHeight="630.0" styleClass="animated-background">
-        
-        <!-- Removed carousel container with movie posters as requested -->
-        
-        <!-- Geometric Shapes - Enhanced with better visibility and positioning -->
-        <Polygon fx:id="shape1" points="150.0,300.0,170.0,280.0,190.0,300.0,170.0,320.0" 
-            styleClass="rotating-shape, pulsing-shape"
-            style="-fx-fill: linear-gradient(to bottom right, rgba(200, 0, 0, 0.6), rgba(100, 0, 0, 0.4)); 
-                   -fx-stroke: #8b0000; 
+  <!-- Background Animations Container - Now comes FIRST in the StackPane for proper layering -->
+  <AnchorPane style="-fx-background-color: transparent;" maxWidth="1200.0" maxHeight="630.0"
+              styleClass="animated-background">
+
+    <!-- Removed carousel container with movie posters as requested -->
+
+    <!-- Geometric Shapes - Enhanced with better visibility and positioning -->
+    <Polygon fx:id="shape1" points="150.0,300.0,170.0,280.0,190.0,300.0,170.0,320.0"
+             styleClass="rotating-shape, pulsing-shape"
+             style="-fx-fill: linear-gradient(to bottom right, rgba(200, 0, 0, 0.6), rgba(100, 0, 0, 0.4));
+                   -fx-stroke: #8b0000;
                    -fx-stroke-width: 2;
                    -fx-effect: dropshadow(gaussian, rgba(200, 0, 0, 0.8), 15, 0, 0, 0);
-                   -fx-z-index: 100;" 
-            opacity="0.8" />
-            
-        <Polygon fx:id="shape2" points="950.0,200.0,980.0,180.0,1010.0,200.0,995.0,230.0,965.0,230.0" 
-            styleClass="rotating-shape"
-            style="-fx-fill: linear-gradient(to bottom right, rgba(200, 0, 0, 0.7), rgba(100, 0, 0, 0.4)); 
-                   -fx-stroke: #660000; 
+                   -fx-z-index: 100;"
+             opacity="0.8"/>
+
+    <Polygon fx:id="shape2" points="950.0,200.0,980.0,180.0,1010.0,200.0,995.0,230.0,965.0,230.0"
+             styleClass="rotating-shape"
+             style="-fx-fill: linear-gradient(to bottom right, rgba(200, 0, 0, 0.7), rgba(100, 0, 0, 0.4));
+                   -fx-stroke: #660000;
                    -fx-stroke-width: 2;
                    -fx-effect: dropshadow(gaussian, rgba(200, 0, 0, 0.7), 12, 0, 0, 0);
-                   -fx-z-index: 101;" 
-            opacity="0.8" />
-            
-        <Rectangle fx:id="shape3" width="35" height="35" layoutX="600" layoutY="100"
-            styleClass="rotating-shape, pulsing-shape"
-            style="-fx-fill: linear-gradient(to bottom right, rgba(255, 68, 68, 0.7), rgba(139, 0, 0, 0.5));
+                   -fx-z-index: 101;"
+             opacity="0.8"/>
+
+    <Rectangle fx:id="shape3" width="35" height="35" layoutX="600" layoutY="100"
+               styleClass="rotating-shape, pulsing-shape"
+               style="-fx-fill: linear-gradient(to bottom right, rgba(255, 68, 68, 0.7), rgba(139, 0, 0, 0.5));
                    -fx-stroke: #ff4444;
                    -fx-stroke-width: 2;
                    -fx-rotate: 45;
                    -fx-effect: dropshadow(gaussian, rgba(255, 68, 68, 0.8), 12, 0, 0, 0);
                    -fx-z-index: 102;"
-            opacity="0.8" />
-            
-        <Circle fx:id="shape4" radius="25" layoutX="1050" layoutY="500"
+               opacity="0.8"/>
+
+    <Circle fx:id="shape4" radius="25" layoutX="1050" layoutY="500"
             styleClass="pulsing-shape, glow-red"
             style="-fx-fill: linear-gradient(center 50%, radius 50%, rgba(255, 102, 102, 0.7), rgba(139, 0, 0, 0.3));
                    -fx-stroke: #ff6666;
                    -fx-stroke-width: 2;
                    -fx-effect: dropshadow(gaussian, rgba(255, 102, 102, 0.8), 18, 0, 0, 0);
                    -fx-z-index: 103;"
-            opacity="0.7" />
-            
-        <!-- Added more geometric shapes -->
-        <Polygon fx:id="shape5" points="350.0,150.0,370.0,120.0,400.0,135.0,385.0,170.0" 
-            styleClass="rotating-shape, pulsing-shape"
-            style="-fx-fill: linear-gradient(to bottom right, rgba(180, 0, 0, 0.5), rgba(90, 0, 0, 0.3)); 
-                   -fx-stroke: #aa0000; 
+            opacity="0.7"/>
+
+    <!-- Added more geometric shapes -->
+    <Polygon fx:id="shape5" points="350.0,150.0,370.0,120.0,400.0,135.0,385.0,170.0"
+             styleClass="rotating-shape, pulsing-shape"
+             style="-fx-fill: linear-gradient(to bottom right, rgba(180, 0, 0, 0.5), rgba(90, 0, 0, 0.3));
+                   -fx-stroke: #aa0000;
                    -fx-stroke-width: 2;
                    -fx-effect: dropshadow(gaussian, rgba(180, 0, 0, 0.7), 12, 0, 0, 0);
-                   -fx-z-index: 104;" 
-            opacity="0.7" />
-            
-        <Rectangle fx:id="shape6" width="40" height="15" layoutX="800" layoutY="250"
-            styleClass="rotating-shape"
-            style="-fx-fill: linear-gradient(to bottom right, rgba(220, 50, 50, 0.6), rgba(120, 0, 0, 0.4));
+                   -fx-z-index: 104;"
+             opacity="0.7"/>
+
+    <Rectangle fx:id="shape6" width="40" height="15" layoutX="800" layoutY="250"
+               styleClass="rotating-shape"
+               style="-fx-fill: linear-gradient(to bottom right, rgba(220, 50, 50, 0.6), rgba(120, 0, 0, 0.4));
                    -fx-stroke: #cc2222;
                    -fx-stroke-width: 1;
                    -fx-rotate: 30;
                    -fx-effect: dropshadow(gaussian, rgba(220, 50, 50, 0.6), 10, 0, 0, 0);
                    -fx-z-index: 105;"
-            opacity="0.7" />
-    </AnchorPane>
-
-   
-    <HBox spacing="0" maxWidth="1200.0" maxHeight="630.0" style="-fx-background-color: transparent;">
+               opacity="0.7"/>
+  </AnchorPane>
 
 
-        <VBox alignment="CENTER" spacing="25" prefWidth="400.0" maxWidth="400.0"
-            style="-fx-background-color: linear-gradient(to bottom, rgba(20, 5, 5, 0.9), rgba(40, 10, 10, 0.8), rgba(20, 5, 5, 0.9));
+  <HBox spacing="0" maxWidth="1200.0" maxHeight="630.0" style="-fx-background-color: transparent;">
+
+
+    <VBox alignment="CENTER" spacing="25" prefWidth="400.0" maxWidth="400.0"
+          style="-fx-background-color: linear-gradient(to bottom, rgba(20, 5, 5, 0.9), rgba(40, 10, 10, 0.8), rgba(20, 5, 5, 0.9));
                    -fx-background-radius: 0 25 25 0;
                    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.8), 25, 0, 5, 0);
                    -fx-border-color: #8b0000;
                    -fx-border-width: 0 2 0 0;
                    -fx-border-radius: 0 25 25 0;">
-            <padding>
-                <Insets top="40" right="30" bottom="40" left="30" />
-            </padding>
+      <padding>
+        <Insets top="40" right="30" bottom="40" left="30"/>
+      </padding>
 
 
-            <VBox alignment="CENTER" spacing="20"
-                style="-fx-background-color: radial-gradient(center 50% 50%, radius 70%, rgba(139, 0, 0, 0.3), rgba(0, 0, 0, 0.1));
+      <VBox alignment="CENTER" spacing="20"
+            style="-fx-background-color: radial-gradient(center 50% 50%, radius 70%, rgba(139, 0, 0, 0.3), rgba(0, 0, 0, 0.1));
                        -fx-background-radius: 20;
                        -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.6), 15, 0, 0, 0);
                        -fx-padding: 20;">
-                <HBox alignment="CENTER" spacing="15">
-                    <FontIcon iconLiteral="fa-film" iconSize="40"
-                        style="-fx-icon-color: #ff4444;
-                               -fx-effect: dropshadow(gaussian, #ff0000, 10, 0, 0, 0);" />
-                    <Label text="RAKCHA"
-                        styleClass="animated-text"
-                        style="-fx-text-fill: #ffffff;
+        <HBox alignment="CENTER" spacing="15">
+          <FontIcon iconLiteral="mdi2p-play:40:#ff4444"
+                    style="-fx-effect: dropshadow(gaussian, #ff0000, 10, 0, 0, 0);"/>
+          <Label text="RAKCHA"
+                 styleClass="animated-text"
+                 style="-fx-text-fill: #ffffff;
                                -fx-font-family: 'Arial Black';
                                -fx-font-size: 32px;
                                -fx-font-weight: bold;
-                               -fx-effect: dropshadow(gaussian, #8b0000, 8, 0, 2, 2);" />
-                </HBox>
-                <Label text="Cinema • Series • Excellence"
-                    style="-fx-text-fill: #cccccc;
+                               -fx-effect: dropshadow(gaussian, #8b0000, 8, 0, 2, 2);"/>
+        </HBox>
+        <Label text="Cinema • Series • Excellence"
+               style="-fx-text-fill: #cccccc;
                            -fx-font-family: 'Arial';
                            -fx-font-size: 14px;
-                           -fx-font-style: italic;" />
-            </VBox>
+                           -fx-font-style: italic;"/>
+      </VBox>
 
 
-            <VBox spacing="15" alignment="CENTER" maxWidth="340">
+      <VBox spacing="15" alignment="CENTER" maxWidth="340">
 
-                <StackPane style="-fx-background-color: transparent;">
-                    <ImageView fx:id="featuredMovieImage" fitWidth="200" fitHeight="300" preserveRatio="true"
-                        style="-fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.8), 20, 0, 0, 5);">
-                        <image>
-                            <Image url="https://image.tmdb.org/t/p/w500/vZloFAK7NmvMGKE7VkF5UHaz0I.jpg" />
-                        </image>
-                    </ImageView>
+        <StackPane style="-fx-background-color: transparent;">
+          <ImageView fx:id="featuredMovieImage" fitWidth="200" fitHeight="300" preserveRatio="true"
+                     style="-fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.8), 20, 0, 0, 5);">
+            <image>
+              <Image url="https://image.tmdb.org/t/p/w500/vZloFAK7NmvMGKE7VkF5UHaz0I.jpg"/>
+            </image>
+          </ImageView>
 
-                    <VBox alignment="BOTTOM_CENTER" spacing="8" StackPane.alignment="BOTTOM_CENTER"
-                        style="-fx-background-color: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.9));
+          <VBox alignment="BOTTOM_CENTER" spacing="8" StackPane.alignment="BOTTOM_CENTER"
+                style="-fx-background-color: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.9));
                                -fx-padding: 20 15 15 15;
                                -fx-background-radius: 0 0 10 10;">
-                        <Label text="Featured This Week"
-                            style="-fx-text-fill: #ff6666;
+            <Label text="Featured This Week"
+                   style="-fx-text-fill: #ff6666;
                                    -fx-font-family: 'Arial';
                                    -fx-font-size: 12px;
-                                   -fx-font-weight: bold;" />
-                        <Label fx:id="featuredMovieTitle" text="The Batman"
-                            style="-fx-text-fill: white;
+                                   -fx-font-weight: bold;"/>
+            <Label fx:id="featuredMovieTitle" text="The Batman"
+                   style="-fx-text-fill: white;
                                    -fx-font-family: 'Arial';
                                    -fx-font-size: 16px;
-                                   -fx-font-weight: bold;" />
-                    </VBox>
-                </StackPane>
+                                   -fx-font-weight: bold;"/>
+          </VBox>
+        </StackPane>
 
 
-                <HBox spacing="10" alignment="CENTER">
-                    <VBox alignment="CENTER" spacing="5"
-                        style="-fx-background-color: rgba(139, 0, 0, 0.2);
+        <HBox spacing="10" alignment="CENTER">
+          <VBox alignment="CENTER" spacing="5"
+                style="-fx-background-color: rgba(139, 0, 0, 0.2);
                                -fx-background-radius: 10;
                                -fx-padding: 10;
                                -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 5, 0, 0, 2);">
-                        <FontIcon iconLiteral="fa-ticket" iconSize="20" style="-fx-icon-color: #ff4444;" />
-                        <Label text="Premium\nSeats" textAlignment="CENTER"
-                            style="-fx-text-fill: white; -fx-font-size: 10px;" />
-                    </VBox>
-                    <VBox alignment="CENTER" spacing="5"
-                        style="-fx-background-color: rgba(139, 0, 0, 0.2);
+            <FontIcon iconLiteral="mdi2t-ticket-confirmation:20:#ff4444"/>
+            <Label text="Premium\nSeats" textAlignment="CENTER"
+                   style="-fx-text-fill: white; -fx-font-size: 10px;"/>
+          </VBox>
+          <VBox alignment="CENTER" spacing="5"
+                style="-fx-background-color: rgba(139, 0, 0, 0.2);
                                -fx-background-radius: 10;
                                -fx-padding: 10;
                                -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 5, 0, 0, 2);">
-                        <FontIcon iconLiteral="fa-play-circle" iconSize="20" style="-fx-icon-color: #ff4444;" />
-                        <Label text="4K\nStreaming" textAlignment="CENTER"
-                            style="-fx-text-fill: white; -fx-font-size: 10px;" />
-                    </VBox>
-                    <VBox alignment="CENTER" spacing="5"
-                        style="-fx-background-color: rgba(139, 0, 0, 0.2);
+            <FontIcon iconLiteral="mdi2p-play:20:#ff4444"/>
+            <Label text="4K\nStreaming" textAlignment="CENTER"
+                   style="-fx-text-fill: white; -fx-font-size: 10px;"/>
+          </VBox>
+          <VBox alignment="CENTER" spacing="5"
+                style="-fx-background-color: rgba(139, 0, 0, 0.2);
                                -fx-background-radius: 10;
                                -fx-padding: 10;
                                -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 5, 0, 0, 2);">
-                        <FontIcon iconLiteral="fa-star" iconSize="20" style="-fx-icon-color: #ff4444;" />
-                        <Label text="VIP\nAccess" textAlignment="CENTER"
-                            style="-fx-text-fill: white; -fx-font-size: 10px;" />
-                    </VBox>
-                </HBox>
-            </VBox>
+            <FontIcon iconLiteral="mdi2s-star:20:#ff4444"/>
+            <Label text="VIP\nAccess" textAlignment="CENTER"
+                   style="-fx-text-fill: white; -fx-font-size: 10px;"/>
+          </VBox>
+        </HBox>
+      </VBox>
 
 
-            <HBox alignment="CENTER" spacing="5"
-                style="-fx-background-color: linear-gradient(to right, transparent, rgba(139, 0, 0, 0.3), transparent);
+      <HBox alignment="CENTER" spacing="5"
+            style="-fx-background-color: linear-gradient(to right, transparent, rgba(139, 0, 0, 0.3), transparent);
                        -fx-background-radius: 5;
                        -fx-padding: 8;">
-                <Circle radius="2" style="-fx-fill: #8b0000;" />
-                <Rectangle width="20" height="2" style="-fx-fill: #8b0000;" />
-                <Circle radius="2" style="-fx-fill: #8b0000;" />
-                <Label text="🎬" style="-fx-text-fill: #ff4444; -fx-font-size: 16px;" />
-                <Circle radius="2" style="-fx-fill: #8b0000;" />
-                <Rectangle width="20" height="2" style="-fx-fill: #8b0000;" />
-                <Circle radius="2" style="-fx-fill: #8b0000;" />
-                <Label text="🍿" style="-fx-text-fill: #ff4444; -fx-font-size: 16px;" />
-                <Circle radius="2" style="-fx-fill: #8b0000;" />
-                <Rectangle width="20" height="2" style="-fx-fill: #8b0000;" />
-                <Circle radius="2" style="-fx-fill: #8b0000;" />
-            </HBox>
-        </VBox>
+        <Circle radius="2" style="-fx-fill: #8b0000;"/>
+        <Rectangle width="20" height="2" style="-fx-fill: #8b0000;"/>
+        <Circle radius="2" style="-fx-fill: #8b0000;"/>
+        <Label text="🎬" style="-fx-text-fill: #ff4444; -fx-font-size: 16px;"/>
+        <Circle radius="2" style="-fx-fill: #8b0000;"/>
+        <Rectangle width="20" height="2" style="-fx-fill: #8b0000;"/>
+        <Circle radius="2" style="-fx-fill: #8b0000;"/>
+        <Label text="🍿" style="-fx-text-fill: #ff4444; -fx-font-size: 16px;"/>
+        <Circle radius="2" style="-fx-fill: #8b0000;"/>
+        <Rectangle width="20" height="2" style="-fx-fill: #8b0000;"/>
+        <Circle radius="2" style="-fx-fill: #8b0000;"/>
+      </HBox>
+    </VBox>
 
 
-        <VBox alignment="CENTER" spacing="20" prefWidth="800.0" maxWidth="800.0"
-            style="-fx-background-color: radial-gradient(center 50% 50%, radius 80%, rgba(15, 15, 15, 0.95), rgba(5, 5, 5, 0.98));
+    <VBox alignment="CENTER" spacing="20" prefWidth="800.0" maxWidth="800.0"
+          style="-fx-background-color: radial-gradient(center 50% 50%, radius 80%, rgba(15, 15, 15, 0.95), rgba(5, 5, 5, 0.98));
                    -fx-background-radius: 25 0 0 25;
                    -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.3), 30, 0, 0, 0);">
-            <padding>
-                <Insets top="50" right="60" bottom="50" left="60" />
-            </padding>
+      <padding>
+        <Insets top="50" right="60" bottom="50" left="60"/>
+      </padding>
 
 
-            <VBox spacing="15" alignment="CENTER">
-                <StackPane>
+      <VBox spacing="15" alignment="CENTER">
+        <StackPane>
 
-                    <Rectangle width="300" height="80"
-                        style="-fx-fill: radial-gradient(center 50% 50%, radius 70%, rgba(139, 0, 0, 0.2), transparent);
+          <Rectangle width="300" height="80"
+                     style="-fx-fill: radial-gradient(center 50% 50%, radius 70%, rgba(139, 0, 0, 0.2), transparent);
                                -fx-background-radius: 20;"
-                        opacity="0.8" />
-                    <VBox alignment="CENTER" spacing="5">
-                        <Label text="WELCOME BACK"
-                            styleClass="animated-text"
-                            style="-fx-text-fill: #ffffff;
+                     opacity="0.8"/>
+          <VBox alignment="CENTER" spacing="5">
+            <Label text="WELCOME BACK"
+                   styleClass="animated-text"
+                   style="-fx-text-fill: #ffffff;
                                    -fx-font-family: 'Arial Black';
                                    -fx-font-size: 28px;
                                    -fx-font-weight: bold;
-                                   -fx-effect: dropshadow(gaussian, #8b0000, 6, 0, 1, 1);" />
-                        <Label text="Enter the World of Cinema"
-                            style="-fx-text-fill: #cccccc;
+                                   -fx-effect: dropshadow(gaussian, #8b0000, 6, 0, 1, 1);"/>
+            <Label text="Enter the World of Cinema"
+                   style="-fx-text-fill: #cccccc;
                                    -fx-font-family: 'Arial';
                                    -fx-font-size: 14px;
-                                   -fx-font-style: italic;" />
-                    </VBox>
-                </StackPane>
-            </VBox>
+                                   -fx-font-style: italic;"/>
+          </VBox>
+        </StackPane>
+      </VBox>
 
 
-            <VBox spacing="15" alignment="CENTER">
-                <Label text="Quick Access"
-                    style="-fx-text-fill: #888888;
+      <VBox spacing="15" alignment="CENTER">
+        <Label text="Quick Access"
+               style="-fx-text-fill: #888888;
                            -fx-font-family: 'Arial';
                            -fx-font-size: 12px;
-                           -fx-font-weight: bold;" />
-                <HBox spacing="20" alignment="CENTER">
-                    <Button fx:id="googleSIgnInButton" onAction="#signInWithGoogle"
-                        styleClass="animated-button"
-                        style="-fx-background-color: linear-gradient(to bottom right, #2a2a2a, #1a1a1a);
+                           -fx-font-weight: bold;"/>
+        <HBox spacing="20" alignment="CENTER">
+          <Button fx:id="googleSIgnInButton" onAction="#signInWithGoogle"
+                  styleClass="animated-button"
+                  style="-fx-background-color: linear-gradient(to bottom right, #2a2a2a, #1a1a1a);
                                -fx-text-fill: white;
                                -fx-font-size: 12px;
                                -fx-font-weight: bold;
@@ -255,16 +254,16 @@
                                -fx-effect: dropshadow(gaussian, rgba(66, 133, 244, 0.5), 10, 0, 0, 0);
                                -fx-cursor: hand;
                                -fx-padding: 12 20 12 20;">
-                        <graphic>
-                            <HBox spacing="8" alignment="CENTER">
-                                <FontIcon iconLiteral="fa-google" iconSize="16" style="-fx-icon-color: #4285f4;" />
-                                <Label text="Google" style="-fx-text-fill: white; -fx-font-weight: bold;" />
-                            </HBox>
-                        </graphic>
-                    </Button>
-                    <Button fx:id="microsoftSignInButton" onAction="#signInWithMicrosoft"
-                        styleClass="animated-button"
-                        style="-fx-background-color: linear-gradient(to bottom right, #2a2a2a, #1a1a1a);
+            <graphic>
+              <HBox spacing="8" alignment="CENTER">
+                <FontIcon iconLiteral="mdi2g-google:16:#4285f4"/>
+                <Label text="Google" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+              </HBox>
+            </graphic>
+          </Button>
+          <Button fx:id="microsoftSignInButton" onAction="#signInWithMicrosoft"
+                  styleClass="animated-button"
+                  style="-fx-background-color: linear-gradient(to bottom right, #2a2a2a, #1a1a1a);
                                -fx-text-fill: white;
                                -fx-font-size: 12px;
                                -fx-font-weight: bold;
@@ -275,58 +274,95 @@
                                -fx-effect: dropshadow(gaussian, rgba(0, 161, 241, 0.5), 10, 0, 0, 0);
                                -fx-cursor: hand;
                                -fx-padding: 12 20 12 20;">
-                        <graphic>
-                            <HBox spacing="8" alignment="CENTER">
-                                <FontIcon iconLiteral="fa-windows" iconSize="16" style="-fx-icon-color: #00a1f1;" />
-                                <Label text="Microsoft" style="-fx-text-fill: white; -fx-font-weight: bold;" />
-                            </HBox>
-                        </graphic>
-                    </Button>
-                </HBox>
-            </VBox>
+            <graphic>
+              <HBox spacing="8" alignment="CENTER">
+                <FontIcon iconLiteral="mdi2m-microsoft:16:#34a853"/>
+                <Label text="Microsoft" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+              </HBox>
+            </graphic>
+          </Button>
+        </HBox>
+      </VBox>
 
 
-            <HBox alignment="CENTER" spacing="20" maxWidth="400">
-                <Line endX="120"
-                    style="-fx-stroke: #8b0000;
-                           -fx-stroke-width: 1;" />
-                <Label text="OR"
-                    style="-fx-text-fill: #8b0000;
+      <HBox alignment="CENTER" spacing="20" maxWidth="400">
+        <Line endX="120"
+              style="-fx-stroke: #8b0000;
+                           -fx-stroke-width: 1;"/>
+        <Label text="OR"
+               style="-fx-text-fill: #8b0000;
                            -fx-font-family: 'Arial';
                            -fx-font-size: 12px;
                            -fx-font-weight: bold;
                            -fx-background-color: #0f0f0f;
-                           -fx-padding: 0 10 0 10;" />
-                <Line endX="120"
-                    style="-fx-stroke: #8b0000;
-                           -fx-stroke-width: 1;" />
+                           -fx-padding: 0 10 0 10;"/>
+        <Line endX="120"
+              style="-fx-stroke: #8b0000;
+                           -fx-stroke-width: 1;"/>
+      </HBox>
+
+
+      <VBox spacing="20" maxWidth="400" alignment="CENTER">
+
+        <VBox spacing="8">
+          <Label text="Email or Username"
+                 style="-fx-text-fill: #cccccc;
+                               -fx-font-family: 'Arial';
+                               -fx-font-size: 13px;
+                               -fx-font-weight: bold;"/>
+          <StackPane>
+
+            <Rectangle width="400" height="50"
+                       style="-fx-fill: linear-gradient(to bottom, rgba(40, 40, 40, 0.8), rgba(20, 20, 20, 0.9));
+                                   -fx-stroke: #8b0000;
+                                   -fx-stroke-width: 1;
+                                   -fx-background-radius: 12;
+                                   -fx-stroke-radius: 12;
+                                   -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.3), 8, 0, 0, 0);"/>
+            <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-padding: 0 20 0 20;">
+              <FontIcon iconLiteral="mdi2a-account:16:ffffff"/>
+              <TextField fx:id="emailTextField" text="ammari.ali.0001@gmail.com"
+                         styleClass="animated-input"
+                         promptText="Enter your email or username"
+                         style="-fx-background-color: transparent;
+                                       -fx-text-fill: white;
+                                       -fx-font-family: 'Arial';
+                                       -fx-font-size: 14px;
+                                       -fx-border-color: transparent;
+                                       -fx-focus-color: transparent;
+                                       -fx-faint-focus-color: transparent;
+                                       -fx-prompt-text-fill: #666666;"
+                         HBox.hgrow="ALWAYS"/>
             </HBox>
+          </StackPane>
+          <Label fx:id="emailErrorLabel"
+                 style="-fx-text-fill: #ff4444;
+                               -fx-font-family: 'Arial';
+                               -fx-font-size: 11px;"/>
+        </VBox>
 
 
-            <VBox spacing="20" maxWidth="400" alignment="CENTER">
-
-                <VBox spacing="8">
-                    <Label text="Email or Username"
-                        style="-fx-text-fill: #cccccc;
+        <VBox spacing="8">
+          <Label text="Password"
+                 style="-fx-text-fill: #cccccc;
                                -fx-font-family: 'Arial';
                                -fx-font-size: 13px;
-                               -fx-font-weight: bold;" />
-                    <StackPane>
+                               -fx-font-weight: bold;"/>
+          <StackPane>
 
-                        <Rectangle width="400" height="50"
-                            style="-fx-fill: linear-gradient(to bottom, rgba(40, 40, 40, 0.8), rgba(20, 20, 20, 0.9));
+            <Rectangle width="400" height="50"
+                       style="-fx-fill: linear-gradient(to bottom, rgba(40, 40, 40, 0.8), rgba(20, 20, 20, 0.9));
                                    -fx-stroke: #8b0000;
                                    -fx-stroke-width: 1;
                                    -fx-background-radius: 12;
                                    -fx-stroke-radius: 12;
-                                   -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.3), 8, 0, 0, 0);" />
-                        <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-padding: 0 20 0 20;">
-                            <FontIcon iconLiteral="fa-user" iconSize="16"
-                                style="-fx-icon-color: #8b0000;" />
-                            <TextField fx:id="emailTextField" text="lulu.schoen@yahoo.com"
-                                styleClass="animated-input"
-                                promptText="Enter your email or username"
-                                style="-fx-background-color: transparent;
+                                   -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.3), 8, 0, 0, 0);"/>
+            <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-padding: 0 20 0 20;">
+              <FontIcon iconLiteral="mdi2l-lock:16:ffffff"/>
+              <PasswordField fx:id="passwordTextField" text="\$Password123"
+                             styleClass="animated-input"
+                             promptText="Enter your password"
+                             style="-fx-background-color: transparent;
                                        -fx-text-fill: white;
                                        -fx-font-family: 'Arial';
                                        -fx-font-size: 14px;
@@ -334,78 +370,39 @@
                                        -fx-focus-color: transparent;
                                        -fx-faint-focus-color: transparent;
                                        -fx-prompt-text-fill: #666666;"
-                                HBox.hgrow="ALWAYS" />
-                        </HBox>
-                    </StackPane>
-                    <Label fx:id="emailErrorLabel"
-                        style="-fx-text-fill: #ff4444;
+                             HBox.hgrow="ALWAYS"/>
+            </HBox>
+          </StackPane>
+          <Label fx:id="passwordErrorLabel"
+                 style="-fx-text-fill: #ff4444;
                                -fx-font-family: 'Arial';
-                               -fx-font-size: 11px;" />
-                </VBox>
+                               -fx-font-size: 11px;"/>
+        </VBox>
 
 
-                <VBox spacing="8">
-                    <Label text="Password"
-                        style="-fx-text-fill: #cccccc;
+        <HBox alignment="CENTER" spacing="50">
+          <CheckBox id="rememberMe" text="Remember me"
+                    style="-fx-text-fill: #cccccc;
                                -fx-font-family: 'Arial';
-                               -fx-font-size: 13px;
-                               -fx-font-weight: bold;" />
-                    <StackPane>
-
-                        <Rectangle width="400" height="50"
-                            style="-fx-fill: linear-gradient(to bottom, rgba(40, 40, 40, 0.8), rgba(20, 20, 20, 0.9));
-                                   -fx-stroke: #8b0000;
-                                   -fx-stroke-width: 1;
-                                   -fx-background-radius: 12;
-                                   -fx-stroke-radius: 12;
-                                   -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.3), 8, 0, 0, 0);" />
-                        <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-padding: 0 20 0 20;">
-                            <FontIcon iconLiteral="fa-lock" iconSize="16"
-                                style="-fx-icon-color: #8b0000;" />
-                            <PasswordField fx:id="passwordTextField" text="password123"
-                                styleClass="animated-input"
-                                promptText="Enter your password"
-                                style="-fx-background-color: transparent;
-                                       -fx-text-fill: white;
-                                       -fx-font-family: 'Arial';
-                                       -fx-font-size: 14px;
-                                       -fx-border-color: transparent;
-                                       -fx-focus-color: transparent;
-                                       -fx-faint-focus-color: transparent;
-                                       -fx-prompt-text-fill: #666666;"
-                                HBox.hgrow="ALWAYS" />
-                        </HBox>
-                    </StackPane>
-                    <Label fx:id="passwordErrorLabel"
-                        style="-fx-text-fill: #ff4444;
-                               -fx-font-family: 'Arial';
-                               -fx-font-size: 11px;" />
-                </VBox>
-
-
-                <HBox alignment="CENTER" spacing="50">
-                    <CheckBox id="rememberMe" text="Remember me"
-                        style="-fx-text-fill: #cccccc;
-                               -fx-font-family: 'Arial';
-                               -fx-font-size: 12px;" />
-                    <Hyperlink fx:id="forgetPasswordHyperlink" text="Forgot Password?"
-                        style="-fx-text-fill: #ff6666;
+                               -fx-font-size: 12px;"/>
+          <Hyperlink fx:id="forgetPasswordHyperlink" text="Forgot Password?"
+                     style="-fx-text-fill: #ff6666;
                                -fx-font-family: 'Arial';
                                -fx-font-size: 12px;
                                -fx-border-color: transparent;
-                               -fx-underline: false;" />
-                </HBox>
+                               -fx-underline: false;"/>
+        </HBox>
 
 
-                <StackPane>
+        <StackPane>
 
-                    <Rectangle width="400" height="55"
-                        style="-fx-fill: radial-gradient(center 50% 50%, radius 60%, rgba(139, 0, 0, 0.4), transparent);
+          <Rectangle width="400" height="55"
+                     style="-fx-fill: radial-gradient(center 50% 50%, radius 60%, rgba(139, 0, 0, 0.4), transparent);
                                -fx-background-radius: 15;"
-                        opacity="0.8" />
-                    <Button fx:id="signInButton" text="SIGN IN" onAction="#login"
-                        styleClass="animated-button"
-                        style="-fx-background-color: linear-gradient(to bottom right, #8b0000, #440000, #8b0000);
+                     opacity="0.8"/>
+          <Button fx:id="signInButton" text="SIGN IN" onAction="#login"
+                  styleClass="animated-button"
+                  style="-fx-background-color: linear-gradient(to bottom right, #8b0000, #440000, #8b0000);
                                -fx-text-fill: white;
                                -fx-font-family: 'Arial Black';
                                -fx-font-size: 16px;
@@ -417,18 +414,18 @@
                                -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.8), 15, 0, 0, 3);
                                -fx-cursor: hand;
                                -fx-padding: 18 50 18 50;"
-                        maxWidth="400" />
-                </StackPane>
+                  maxWidth="400"/>
+        </StackPane>
 
 
-                <HBox alignment="CENTER" spacing="10">
-                    <Label text="Don't have an account?"
-                        style="-fx-text-fill: #888888;
+        <HBox alignment="CENTER" spacing="10">
+          <Label text="Don't have an account?"
+                 style="-fx-text-fill: #888888;
                                -fx-font-family: 'Arial';
-                               -fx-font-size: 13px;" />
-                    <Button fx:id="signUpButton" onAction="#switchToSignUp" text="Create Account"
-                        styleClass="animated-button"
-                        style="-fx-background-color: transparent;
+                               -fx-font-size: 13px;"/>
+          <Button fx:id="signUpButton" onAction="#switchToSignUp" text="Create Account"
+                  styleClass="animated-button"
+                  style="-fx-background-color: transparent;
                                -fx-text-fill: #ff6666;
                                -fx-font-family: 'Arial';
                                -fx-font-size: 13px;
@@ -438,107 +435,107 @@
                                -fx-border-radius: 20;
                                -fx-background-radius: 20;
                                -fx-cursor: hand;
-                               -fx-padding: 8 20 8 20;" />
-                </HBox>
+                               -fx-padding: 8 20 8 20;"/>
+        </HBox>
 
 
-                <Hyperlink fx:id="forgetPasswordEmailHyperlink" text="Email Password Reset"
-                    style="-fx-text-fill: #666666;
+        <Hyperlink fx:id="forgetPasswordEmailHyperlink" text="Email Password Reset"
+                   style="-fx-text-fill: #666666;
                            -fx-font-family: 'Arial';
                            -fx-font-size: 11px;
                            -fx-border-color: transparent;
-                           -fx-underline: false;" />
-            </VBox>
-        </VBox>
-    </HBox>
+                           -fx-underline: false;"/>
+      </VBox>
+    </VBox>
+  </HBox>
 
-    <!-- Foreground particles layer - Added at the end to ensure they're on top -->
-    <AnchorPane style="-fx-background-color: transparent;" mouseTransparent="true">
-        <!-- Enhanced particles with better visibility and positioning -->
-        <Circle fx:id="particle1" radius="4" layoutX="200" layoutY="150" 
+  <!-- Foreground particles layer - Added at the end to ensure they're on top -->
+  <AnchorPane style="-fx-background-color: transparent;" mouseTransparent="true">
+    <!-- Enhanced particles with better visibility and positioning -->
+    <Circle fx:id="particle1" radius="4" layoutX="200" layoutY="150"
             styleClass="floating-particle, glow-red"
-            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff4444, #aa0000); 
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff4444, #aa0000);
                    -fx-effect: dropshadow(gaussian, #ff0000, 15, 0, 0, 0);
                    -fx-opacity: 0.8;
-                   -fx-z-index: 200;" />
-                   
-        <Circle fx:id="particle2" radius="5" layoutX="800" layoutY="250" 
+                   -fx-z-index: 200;"/>
+
+    <Circle fx:id="particle2" radius="5" layoutX="800" layoutY="250"
             styleClass="floating-particle, glow-red"
-            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff3333, #880000); 
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff3333, #880000);
                    -fx-effect: dropshadow(gaussian, #ff0000, 18, 0, 0, 0);
                    -fx-opacity: 0.85;
-                   -fx-z-index: 201;" />
-                   
-        <Circle fx:id="particle3" radius="6" layoutX="300" layoutY="500" 
+                   -fx-z-index: 201;"/>
+
+    <Circle fx:id="particle3" radius="6" layoutX="300" layoutY="500"
             styleClass="floating-particle, glow-red"
-            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff6666, #bb0000); 
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff6666, #bb0000);
                    -fx-effect: dropshadow(gaussian, #ff3333, 20, 0, 0, 0);
                    -fx-opacity: 0.9;
-                   -fx-z-index: 202;" />
-                   
-        <Circle fx:id="particle4" radius="3.5" layoutX="900" layoutY="400" 
+                   -fx-z-index: 202;"/>
+
+    <Circle fx:id="particle4" radius="3.5" layoutX="900" layoutY="400"
             styleClass="floating-particle, glow-red"
-            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff5555, #990000); 
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff5555, #990000);
                    -fx-effect: dropshadow(gaussian, #ff1111, 15, 0, 0, 0);
                    -fx-opacity: 0.8;
-                   -fx-z-index: 203;" />
-                   
-        <Circle fx:id="particle5" radius="4.5" layoutX="150" layoutY="350" 
+                   -fx-z-index: 203;"/>
+
+    <Circle fx:id="particle5" radius="4.5" layoutX="150" layoutY="350"
             styleClass="floating-particle, glow-red"
-            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff2222, #770000); 
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff2222, #770000);
                    -fx-effect: dropshadow(gaussian, #ff0000, 16, 0, 0, 0);
                    -fx-opacity: 0.95;
-                   -fx-z-index: 204;" />
-                   
-        <Circle fx:id="particle6" radius="3" layoutX="750" layoutY="450" 
+                   -fx-z-index: 204;"/>
+
+    <Circle fx:id="particle6" radius="3" layoutX="750" layoutY="450"
             styleClass="floating-particle, glow-red"
-            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff7777, #aa2222); 
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff7777, #aa2222);
                    -fx-effect: dropshadow(gaussian, #ff4444, 12, 0, 0, 0);
                    -fx-opacity: 0.8;
-                   -fx-z-index: 205;" />
-                   
-        <!-- Added more particles -->
-        <Circle fx:id="particle7" radius="4.5" layoutX="500" layoutY="200" 
+                   -fx-z-index: 205;"/>
+
+    <!-- Added more particles -->
+    <Circle fx:id="particle7" radius="4.5" layoutX="500" layoutY="200"
             styleClass="floating-particle, glow-red"
-            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff5555, #aa2222); 
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff5555, #aa2222);
                    -fx-effect: dropshadow(gaussian, #ff2222, 17, 0, 0, 0);
                    -fx-opacity: 0.85;
-                   -fx-z-index: 206;" />
-                   
-        <Circle fx:id="particle8" radius="3" layoutX="650" layoutY="350" 
+                   -fx-z-index: 206;"/>
+
+    <Circle fx:id="particle8" radius="3" layoutX="650" layoutY="350"
             styleClass="floating-particle, glow-red"
-            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff3333, #990000); 
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff3333, #990000);
                    -fx-effect: dropshadow(gaussian, #ff0000, 14, 0, 0, 0);
                    -fx-opacity: 0.8;
-                   -fx-z-index: 207;" />
-                   
-        <Circle fx:id="particle9" radius="5" layoutX="450" layoutY="450" 
+                   -fx-z-index: 207;"/>
+
+    <Circle fx:id="particle9" radius="5" layoutX="450" layoutY="450"
             styleClass="floating-particle, glow-red"
-            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff6666, #cc2222); 
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff6666, #cc2222);
                    -fx-effect: dropshadow(gaussian, #ff3333, 18, 0, 0, 0);
                    -fx-opacity: 0.9;
-                   -fx-z-index: 208;" />
-                   
-        <Circle fx:id="particle10" radius="2.5" layoutX="1050" layoutY="250" 
+                   -fx-z-index: 208;"/>
+
+    <Circle fx:id="particle10" radius="2.5" layoutX="1050" layoutY="250"
             styleClass="floating-particle, glow-red"
-            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff4444, #880000); 
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff4444, #880000);
                    -fx-effect: dropshadow(gaussian, #ff1111, 12, 0, 0, 0);
                    -fx-opacity: 0.75;
-                   -fx-z-index: 209;" />
-                   
-        <Circle fx:id="particle11" radius="4" layoutX="350" layoutY="100" 
+                   -fx-z-index: 209;"/>
+
+    <Circle fx:id="particle11" radius="4" layoutX="350" layoutY="100"
             styleClass="floating-particle, glow-red"
-            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff7777, #bb2222); 
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff7777, #bb2222);
                    -fx-effect: dropshadow(gaussian, #ff4444, 16, 0, 0, 0);
                    -fx-opacity: 0.85;
-                   -fx-z-index: 210;" />
-                   
-        <Circle fx:id="particle12" radius="3.5" layoutX="950" layoutY="530" 
+                   -fx-z-index: 210;"/>
+
+    <Circle fx:id="particle12" radius="3.5" layoutX="950" layoutY="530"
             styleClass="floating-particle, glow-red"
-            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff5555, #aa0000); 
+            style="-fx-fill: radial-gradient(center 50% 50%, radius 50%, #ff5555, #aa0000);
                    -fx-effect: dropshadow(gaussian, #ff2222, 15, 0, 0, 0);
                    -fx-opacity: 0.8;
-                   -fx-z-index: 211;" />
-    </AnchorPane>
+                   -fx-z-index: 211;"/>
+  </AnchorPane>
 
 </StackPane>

@@ -1,15 +1,16 @@
 package com.esprit.controllers.cinemas;
 
-import java.util.HashMap;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+
+import java.util.HashMap;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * Comprehensive test suite for SentimentAnalysisController.
@@ -20,7 +21,8 @@ class SentimentAnalysisControllerTest {
 
     private final SentimentAnalysisController controller = new SentimentAnalysisController();
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Sentiment Analysis Tests")
     class SentimentAnalysisTests {
 
@@ -79,7 +81,7 @@ class SentimentAnalysisControllerTest {
         @DisplayName("Should get all sentiment scores as map")
         void testGetAllSentimentScores() {
             HashMap<String, Float> scores = controller.getAllSentimentScores("Great film!");
-            
+
             assertThat(scores).isNotNull();
             assertThat(scores).containsKeys("compound", "positive", "negative", "neutral");
             assertThat(scores.get("compound")).isBetween(-1f, 1f);
@@ -105,7 +107,7 @@ class SentimentAnalysisControllerTest {
         void testVeryStrongPositive() {
             String result = controller.analyzeSentiment("This is the best movie ever made! Absolutely amazing! Fantastic!");
             assertThat(result).isEqualTo("Positive");
-            
+
             double score = controller.getSentimentScore("This is the best movie ever made! Absolutely amazing! Fantastic!");
             assertThat(score).isGreaterThan(0.5);
         }
@@ -117,7 +119,7 @@ class SentimentAnalysisControllerTest {
         void testVeryStrongNegative() {
             String result = controller.analyzeSentiment("Terrible! Horrible! Worst! Awful! Disgusting!");
             assertThat(result).isEqualTo("Negative");
-            
+
             double score = controller.getSentimentScore("Terrible! Horrible! Worst! Awful! Disgusting!");
             assertThat(score).isLessThan(-0.5);
         }
@@ -135,7 +137,8 @@ class SentimentAnalysisControllerTest {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Error Handling Tests")
     class ErrorHandlingTests {
 
@@ -197,7 +200,7 @@ class SentimentAnalysisControllerTest {
                 longText.append("This is a great movie! ");
             }
 
-            
+
             String result = controller.analyzeSentiment(longText.toString());
             assertThat(result).isIn("Positive", "Neutral", "Negative");
         }
@@ -214,7 +217,8 @@ class SentimentAnalysisControllerTest {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Sentiment Score Range Tests")
     class SentimentScoreRangeTests {
 

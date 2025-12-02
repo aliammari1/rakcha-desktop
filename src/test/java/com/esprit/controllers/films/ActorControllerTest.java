@@ -1,28 +1,10 @@
 package com.esprit.controllers.films;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.Timeout;
-import java.util.concurrent.TimeUnit;
-import org.testfx.framework.junit5.Start;
-
 import com.esprit.models.films.Actor;
 import com.esprit.services.films.ActorService;
 import com.esprit.utils.CloudinaryStorage;
 import com.esprit.utils.TestFXBase;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -31,6 +13,23 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.Timeout;
+import org.testfx.framework.junit5.Start;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Comprehensive test suite for ActorController.
@@ -56,7 +55,7 @@ class ActorControllerTest extends TestFXBase {
         );
         javafx.scene.Parent root = loader.load();
         controller = loader.getController();
-        
+
         stage.setScene(new javafx.scene.Scene(root, 1280, 700));
         stage.show();
         stage.toFront();
@@ -67,11 +66,11 @@ class ActorControllerTest extends TestFXBase {
     public void setUp() {
         // Initialize ObjectMapper
         objectMapper = new ObjectMapper();
-        
+
         // Initialize cloudinaryStorage as null (tests should not depend on it)
         // or use the real implementation if available
         cloudinaryStorage = null;
-        
+
         // Initialize actorService as a simple test instance
         // For now, we create a test service that provides canned responses
         // In production, this would be injected from the controller
@@ -84,6 +83,18 @@ class ActorControllerTest extends TestFXBase {
 
     }
 
+    // Helper methods
+    private List<Actor> createMockActors() {
+        List<Actor> actors = new ArrayList<>();
+        actors.add(new Actor(1L, "Tom Hanks", "/img/actors/tom.jpg", "American actor"));
+        actors.add(new Actor(2L, "Meryl Streep", "/img/actors/meryl.jpg", "American actress"));
+        actors.add(new Actor(3L, "Leonardo DiCaprio", "/img/actors/leo.jpg", "American actor"));
+        return actors;
+    }
+
+    private com.esprit.utils.Page<Actor> createPagedResult(List<Actor> actors) {
+        return new com.esprit.utils.Page<>(actors, 0, actors.size(), actors.size());
+    }
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -95,33 +106,32 @@ class ActorControllerTest extends TestFXBase {
         @DisplayName("Should create actor with valid input")
         void testCreateActor() {
             waitForFxEvents();
-            
+
             // Interact with real UI components
             TextArea nameArea = lookup("#nomActor_textArea1").query();
             TextArea bioArea = lookup("#bioActor_textArea").query();
             Button insertBtn = lookup("#insertButton").query();
-            
+
             // Type real data
             clickOn(nameArea).write("Tom Hanks");
             clickOn(bioArea).write("Award-winning American actor");
-            
+
             // Upload real test image
             File testImage = getTestImageFile();
             controller.imageActor_ImageView1.setImage(
                 new Image(testImage.toURI().toString())
             );
-            
+
             // Click insert button
             clickOn(insertBtn);
             waitForFxEvents();
-            
+
             // Verify in real database (skip if actorService not initialized)
             if (actorService != null) {
                 Actor created = actorService.getActorByNom("Tom Hanks");
                 assertThat(created).isNotNull();
                 assertThat(created.getBiography()).isEqualTo("Award-winning American actor");
-            }
- else {
+            } else {
                 // Verify UI feedback instead
                 assertThat(nameArea.getText()).isNotEmpty();
             }
@@ -134,20 +144,20 @@ class ActorControllerTest extends TestFXBase {
         @DisplayName("Should require image before creation")
         void testImageRequired() {
             waitForFxEvents();
-            
+
             // Interact with real UI components
             TextArea nameArea = lookup("#nomActor_textArea1").query();
             TextArea bioArea = lookup("#bioActor_textArea").query();
             Button insertBtn = lookup("#insertButton").query();
-            
+
             // Type real data without image
             clickOn(nameArea).write("John Doe");
             clickOn(bioArea).write("Biography without image");
-            
+
             // Try to submit without image
             clickOn(insertBtn);
             waitForFxEvents();
-            
+
             // Verify error alert is displayed
             assertThat(lookup(".alert").tryQuery()).isPresent();
         }
@@ -158,29 +168,29 @@ class ActorControllerTest extends TestFXBase {
         @DisplayName("Should show confirmation after actor creation")
         void testCreationConfirmation() {
             waitForFxEvents();
-            
+
             // Interact with real UI components
             TextArea nameArea = lookup("#nomActor_textArea1").query();
             TextArea bioArea = lookup("#bioActor_textArea").query();
             Button insertBtn = lookup("#insertButton").query();
-            
+
             // Type real data
             clickOn(nameArea).write("Test Actor");
             clickOn(bioArea).write("Test Biography");
-            
+
             // Upload real test image
             File testImage = getTestImageFile();
             controller.imageActor_ImageView1.setImage(
                 new Image(testImage.toURI().toString())
             );
-            
+
             // Click insert button
             clickOn(insertBtn);
             waitForFxEvents();
-            
+
             // Verify confirmation alert is displayed
             assertThat(lookup(".alert").tryQuery()).isPresent();
-            
+
             // Verify in real database (skip if actorService not initialized)
             if (actorService != null) {
                 Actor created = actorService.getActorByNom("Test Actor");
@@ -196,30 +206,30 @@ class ActorControllerTest extends TestFXBase {
         @DisplayName("Should refresh table after creation")
         void testTableRefreshAfterCreation() {
             waitForFxEvents();
-            
+
             // Interact with real UI components
             TextArea nameArea = lookup("#nomActor_textArea1").query();
             TextArea bioArea = lookup("#bioActor_textArea").query();
             Button insertBtn = lookup("#insertButton").query();
-            
+
             // Type real data
             clickOn(nameArea).write("Test Actor");
             clickOn(bioArea).write("Test Biography");
-            
+
             // Upload real test image
             File testImage = getTestImageFile();
             controller.imageActor_ImageView1.setImage(
                 new Image(testImage.toURI().toString())
             );
-            
+
             // Click insert button
             clickOn(insertBtn);
             waitForFxEvents();
-            
+
             // Verify table was refreshed
             TableView<Actor> table = lookup("#filmActor_tableView11").query();
             assertThat(table.getItems()).isNotEmpty();
-            
+
             // Verify actor was created in database (skip if actorService not initialized)
             if (actorService != null) {
                 Actor created = actorService.getActorByNom("Test Actor");
@@ -229,7 +239,6 @@ class ActorControllerTest extends TestFXBase {
 
         }
     }
-
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -241,13 +250,13 @@ class ActorControllerTest extends TestFXBase {
         @DisplayName("Should upload image to Cloudinary")
         void testCloudinaryUpload() throws Exception {
             waitForFxEvents();
-            
+
             // Upload real test image
             File testImage = getTestImageFile();
             controller.imageActor_ImageView1.setImage(
                 new Image(testImage.toURI().toString())
             );
-            
+
             // Verify image was set
             ImageView imageView = lookup("#imageActor_ImageView1").query();
             assertThat(imageView.getImage()).isNotNull();
@@ -260,14 +269,14 @@ class ActorControllerTest extends TestFXBase {
         @DisplayName("Should validate image file size")
         void testImageSizeValidation() {
             waitForFxEvents();
-            
+
             // Try to upload file larger than 5MB
             File largeFile = new File("test_large_file.bin");
             largeFile.deleteOnExit();
-            
+
             // This would trigger size validation in real scenario
             waitForFxEvents();
-            
+
             // Verify validation error if exceeded
             assertThat(lookup(".alert").tryQuery()).isEmpty();
         }
@@ -278,10 +287,10 @@ class ActorControllerTest extends TestFXBase {
         @DisplayName("Should validate image format")
         void testImageFormatValidation() {
             waitForFxEvents();
-            
+
             // Try to upload non-image file (simulated)
             File nonImageFile = new File("test.txt");
-            
+
             // Attempt to load as image would fail
             try {
                 Image image = new Image(nonImageFile.toURI().toString());
@@ -289,7 +298,7 @@ class ActorControllerTest extends TestFXBase {
                 // Format validation error expected
             }
 
-            
+
             waitForFxEvents();
         }
 
@@ -299,15 +308,15 @@ class ActorControllerTest extends TestFXBase {
         @DisplayName("Should accept PNG images")
         void testPngImageAccepted() {
             waitForFxEvents();
-            
+
             // Upload valid PNG file
             File testPngImage = getTestImageFile();
             controller.imageActor_ImageView1.setImage(
                 new Image(testPngImage.toURI().toString())
             );
-            
+
             waitForFxEvents();
-            
+
             ImageView imageView = lookup("#imageActor_ImageView1").query();
             assertThat(imageView.getImage()).isNotNull();
         }
@@ -318,15 +327,15 @@ class ActorControllerTest extends TestFXBase {
         @DisplayName("Should accept JPG images")
         void testJpgImageAccepted() {
             waitForFxEvents();
-            
+
             // Upload valid JPG file
             File testJpgImage = getTestImageFile();
             controller.imageActor_ImageView1.setImage(
                 new Image(testJpgImage.toURI().toString())
             );
-            
+
             waitForFxEvents();
-            
+
             ImageView imageView = lookup("#imageActor_ImageView1").query();
             assertThat(imageView.getImage()).isNotNull();
         }
@@ -337,14 +346,14 @@ class ActorControllerTest extends TestFXBase {
         @DisplayName("Should display uploaded image in ImageView")
         void testImageDisplay() throws IOException {
             waitForFxEvents();
-            
+
             // Upload real image
             File testImage = getTestImageFile();
             Image image = new Image(testImage.toURI().toString());
             controller.imageActor_ImageView1.setImage(image);
-            
+
             waitForFxEvents();
-            
+
             // Verify image is displayed
             ImageView imageView = lookup("#imageActor_ImageView1").query();
             assertThat(imageView.getImage()).isNotNull();
@@ -353,8 +362,8 @@ class ActorControllerTest extends TestFXBase {
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Actor Table Display Tests")
     class ActorTableDisplayTests {
 
@@ -363,10 +372,10 @@ class ActorControllerTest extends TestFXBase {
         @DisplayName("Should display actors in table")
         void testDisplayActors() {
             waitForFxEvents();
-            
+
             // Load real actors from database
             TableView<Actor> table = lookup("#filmActor_tableView11").query();
-            
+
             // Verify table is populated with real data
             assertThat(table).isNotNull();
             assertThat(table.getItems()).isNotNull();
@@ -381,8 +390,8 @@ class ActorControllerTest extends TestFXBase {
 
             TableView<Actor> table = lookup("#filmActor_tableView11").query();
             TableColumn idCol = table.getColumns().stream()
-                    .filter(col -> "idActor_tableColumn1".equals(col.getId()))
-                    .findFirst().orElse(null);
+                .filter(col -> "idActor_tableColumn1".equals(col.getId()))
+                .findFirst().orElse(null);
             assertThat(idCol).isNotNull();
             assertThat(idCol.isVisible()).isFalse();
         }
@@ -396,8 +405,8 @@ class ActorControllerTest extends TestFXBase {
 
             TableView<Actor> table = lookup("#filmActor_tableView11").query();
             TableColumn<Actor, String> nameCol = (TableColumn<Actor, String>) table.getColumns().stream()
-                    .filter(col -> "nomActor_tableColumn1".equals(col.getId()))
-                    .findFirst().orElse(null);
+                .filter(col -> "nomActor_tableColumn1".equals(col.getId()))
+                .findFirst().orElse(null);
             assertThat(nameCol).isNotNull();
         }
 
@@ -410,8 +419,8 @@ class ActorControllerTest extends TestFXBase {
 
             TableView<Actor> table = lookup("#filmActor_tableView11").query();
             TableColumn<Actor, String> bioCol = (TableColumn<Actor, String>) table.getColumns().stream()
-                    .filter(col -> "bioActor_tableColumn1".equals(col.getId()))
-                    .findFirst().orElse(null);
+                .filter(col -> "bioActor_tableColumn1".equals(col.getId()))
+                .findFirst().orElse(null);
             assertThat(bioCol).isNotNull();
         }
 
@@ -424,8 +433,8 @@ class ActorControllerTest extends TestFXBase {
 
             TableView<Actor> table = lookup("#filmActor_tableView11").query();
             TableColumn imageCol = table.getColumns().stream()
-                    .filter(col -> "imageActor_tableColumn1".equals(col.getId()))
-                    .findFirst().orElse(null);
+                .filter(col -> "imageActor_tableColumn1".equals(col.getId()))
+                .findFirst().orElse(null);
             assertThat(imageCol).isNotNull();
         }
 
@@ -438,15 +447,15 @@ class ActorControllerTest extends TestFXBase {
 
             TableView<Actor> table = lookup("#filmActor_tableView11").query();
             TableColumn deleteCol = table.getColumns().stream()
-                    .filter(col -> "DeleteActor_Column1".equals(col.getId()))
-                    .findFirst().orElse(null);
+                .filter(col -> "DeleteActor_Column1".equals(col.getId()))
+                .findFirst().orElse(null);
             assertThat(deleteCol).isNotNull();
         }
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Actor Search Tests")
     class ActorSearchTests {
 
@@ -486,28 +495,28 @@ class ActorControllerTest extends TestFXBase {
         @DisplayName("Should show all actors when search is empty")
         void testEmptySearch() {
             waitForFxEvents();
-            
+
             // Get the table first to verify it's present
             TableView<Actor> table = lookup("#filmActor_tableView11").query();
             assertThat(table).isNotNull();
-            
+
             int initialCount = table.getItems().size();
-            
+
             // Clear search field to show all actors
             TextField searchField = lookup("#recherche_textField").query();
             assertThat(searchField).isNotNull();
-            
+
             clickOn(searchField).write("test");
             waitForFxEvents();
-            
+
             int searchCount = table.getItems().size();
-            
+
             // Clear the text
             eraseText(4);
             waitForFxEvents();
-            
+
             int finalCount = table.getItems().size();
-            
+
             // Verify that clearing the search returns to original state
             // Either both are 0 (no test data loaded) or both are equal (search was cleared)
             assertThat(finalCount).isEqualTo(initialCount);
@@ -549,8 +558,8 @@ class ActorControllerTest extends TestFXBase {
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Actor Update Tests")
     class ActorUpdateTests {
 
@@ -559,12 +568,12 @@ class ActorControllerTest extends TestFXBase {
         @DisplayName("Should update actor name inline")
         void testUpdateActorName() {
             waitForFxEvents();
-            
+
             // Get table and simulate inline editing
             TableView<Actor> table = lookup("#filmActor_tableView11").query();
             assertThat(table).isNotNull();
             assertThat(table.isEditable()).isTrue();
-            
+
             // Verify table supports editing
             if (!table.getItems().isEmpty()) {
                 Actor actor = table.getItems().get(0);
@@ -579,16 +588,16 @@ class ActorControllerTest extends TestFXBase {
         @DisplayName("Should update actor biography inline")
         void testUpdateActorBiography() {
             waitForFxEvents();
-            
+
             // Get table and verify biography column is editable
             TableView<Actor> table = lookup("#filmActor_tableView11").query();
             assertThat(table).isNotNull();
             assertThat(table.isEditable()).isTrue();
-            
+
             // Verify biography column exists and is editable
             TableColumn<Actor, String> bioCol = (TableColumn<Actor, String>) table.getColumns().stream()
-                    .filter(col -> "bioActor_tableColumn1".equals(col.getId()))
-                    .findFirst().orElse(null);
+                .filter(col -> "bioActor_tableColumn1".equals(col.getId()))
+                .findFirst().orElse(null);
             assertThat(bioCol).isNotNull();
         }
 
@@ -598,17 +607,17 @@ class ActorControllerTest extends TestFXBase {
         @DisplayName("Should update actor image via cell click")
         void testUpdateActorImage() {
             waitForFxEvents();
-            
+
             // Get table and verify image column exists
             TableView<Actor> table = lookup("#filmActor_tableView11").query();
             assertThat(table).isNotNull();
-            
+
             // Verify image column is present
             TableColumn imageCol = table.getColumns().stream()
-                    .filter(col -> "imageActor_tableColumn1".equals(col.getId()))
-                    .findFirst().orElse(null);
+                .filter(col -> "imageActor_tableColumn1".equals(col.getId()))
+                .findFirst().orElse(null);
             assertThat(imageCol).isNotNull();
-            
+
             waitForFxEvents();
         }
 
@@ -618,20 +627,20 @@ class ActorControllerTest extends TestFXBase {
         @DisplayName("Should show confirmation after update")
         void testUpdateConfirmation() {
             waitForFxEvents();
-            
+
             // Get table for potential update
             TableView<Actor> table = lookup("#filmActor_tableView11").query();
             assertThat(table).isNotNull();
             assertThat(table.isEditable()).isTrue();
-            
+
             // Verify table is ready for updates
             waitForFxEvents();
         }
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Actor Delete Tests")
     class ActorDeleteTests {
 
@@ -640,17 +649,17 @@ class ActorControllerTest extends TestFXBase {
         @DisplayName("Should delete actor when delete button clicked")
         void testDeleteActor() {
             waitForFxEvents();
-            
+
             // Get table and verify delete column exists
             TableView<Actor> table = lookup("#filmActor_tableView11").query();
             assertThat(table).isNotNull();
-            
+
             // Verify delete button column exists
             TableColumn deleteCol = table.getColumns().stream()
-                    .filter(col -> "DeleteActor_Column1".equals(col.getId()))
-                    .findFirst().orElse(null);
+                .filter(col -> "DeleteActor_Column1".equals(col.getId()))
+                .findFirst().orElse(null);
             assertThat(deleteCol).isNotNull();
-            
+
             waitForFxEvents();
         }
 
@@ -660,17 +669,17 @@ class ActorControllerTest extends TestFXBase {
         @DisplayName("Should show confirmation after deletion")
         void testDeleteConfirmation() {
             waitForFxEvents();
-            
+
             // Verify table is present for deletion operations
             TableView<Actor> table = lookup("#filmActor_tableView11").query();
             assertThat(table).isNotNull();
-            
+
             // Verify delete column exists
             TableColumn deleteCol = table.getColumns().stream()
-                    .filter(col -> "DeleteActor_Column1".equals(col.getId()))
-                    .findFirst().orElse(null);
+                .filter(col -> "DeleteActor_Column1".equals(col.getId()))
+                .findFirst().orElse(null);
             assertThat(deleteCol).isNotNull();
-            
+
             waitForFxEvents();
         }
 
@@ -680,21 +689,20 @@ class ActorControllerTest extends TestFXBase {
         @DisplayName("Should refresh table after deletion")
         void testTableRefreshAfterDeletion() {
             waitForFxEvents();
-            
+
             // Get table and capture initial item count
             TableView<Actor> table = lookup("#filmActor_tableView11").query();
             assertThat(table).isNotNull();
-            
+
             int initialSize = table.getItems().size();
-            
+
             // Verify table can be refreshed
             assertThat(table.getItems()).hasSize(initialSize);
-            
+
             waitForFxEvents();
         }
 
     }
-
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -709,22 +717,22 @@ class ActorControllerTest extends TestFXBase {
 
             TableView<Actor> table = lookup("#filmActor_tableView11").query();
             assertThat(table).isNotNull();
-            
+
             // Capture the initial state
             int initialRowCount = table.getItems().size();
-            
+
             // Perform an action (e.g., select and delete if items exist)
             if (!table.getItems().isEmpty()) {
                 table.getSelectionModel().selectFirst();
                 waitForFxEvents();
-                
+
                 // Capture state after action
                 int rowCountAfterAction = table.getItems().size();
-                
+
                 // Perform undo
                 press(javafx.scene.input.KeyCode.CONTROL, javafx.scene.input.KeyCode.Z);
                 waitForFxEvents();
-                
+
                 // Verify undo restored previous state (row count should match initial or previous state)
                 int rowCountAfterUndo = table.getItems().size();
                 // The undo action should have changed the state if there was an action to undo
@@ -742,24 +750,24 @@ class ActorControllerTest extends TestFXBase {
 
             TableView<Actor> table = lookup("#filmActor_tableView11").query();
             assertThat(table).isNotNull();
-            
+
             // Capture initial state
             int initialRowCount = table.getItems().size();
-            
+
             if (!table.getItems().isEmpty()) {
                 table.getSelectionModel().selectFirst();
                 waitForFxEvents();
-                
+
                 // Perform undo
                 press(javafx.scene.input.KeyCode.CONTROL, javafx.scene.input.KeyCode.Z);
                 waitForFxEvents();
                 int rowCountAfterUndo = table.getItems().size();
-                
+
                 // Then redo
                 press(javafx.scene.input.KeyCode.CONTROL, javafx.scene.input.KeyCode.Y);
                 waitForFxEvents();
                 int rowCountAfterRedo = table.getItems().size();
-                
+
                 // Verify action was redone (row count should return to post-action state if applicable)
                 assertThat(table.getItems()).isNotNull();
                 assertThat(table.getItems().size()).isGreaterThanOrEqualTo(0);
@@ -776,23 +784,23 @@ class ActorControllerTest extends TestFXBase {
 
             TableView<Actor> table = lookup("#filmActor_tableView11").query();
             assertThat(table).isNotNull();
-            
+
             // Perform multiple actions and capture states
             int stateCount = 0;
             List<Integer> stateHistory = new ArrayList<>();
             stateHistory.add(table.getItems().size()); // Initial state
-            
+
             // Perform first action if possible
             if (!table.getItems().isEmpty()) {
                 table.getSelectionModel().selectFirst();
                 waitForFxEvents();
                 stateHistory.add(table.getItems().size());
-                
+
                 // Verify multiple undos traverse history
                 press(javafx.scene.input.KeyCode.CONTROL, javafx.scene.input.KeyCode.Z);
                 waitForFxEvents();
                 assertThat(table.getItems()).isNotNull();
-                
+
                 // Verify redo restores to previous state
                 press(javafx.scene.input.KeyCode.CONTROL, javafx.scene.input.KeyCode.Y);
                 waitForFxEvents();
@@ -810,27 +818,27 @@ class ActorControllerTest extends TestFXBase {
 
             TableView<Actor> table = lookup("#filmActor_tableView11").query();
             assertThat(table).isNotNull();
-            
+
             // Perform action, undo, then perform new action
             if (!table.getItems().isEmpty()) {
                 table.getSelectionModel().selectFirst();
                 waitForFxEvents();
                 int stateAfterAction = table.getItems().size();
-                
+
                 // Perform undo
                 press(javafx.scene.input.KeyCode.CONTROL, javafx.scene.input.KeyCode.Z);
                 waitForFxEvents();
                 int stateAfterUndo = table.getItems().size();
-                
+
                 // Perform a new action
                 if (!table.getItems().isEmpty()) {
                     table.getSelectionModel().selectLast();
                     waitForFxEvents();
-                    
+
                     // Try to redo - the redo stack should be cleared after new action
                     press(javafx.scene.input.KeyCode.CONTROL, javafx.scene.input.KeyCode.Y);
                     waitForFxEvents();
-                    
+
                     // Verify table state remains consistent
                     assertThat(table.getItems()).isNotNull();
                 }
@@ -840,7 +848,6 @@ class ActorControllerTest extends TestFXBase {
         }
 
     }
-
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -855,7 +862,7 @@ class ActorControllerTest extends TestFXBase {
 
             TableView<Actor> table = lookup("#filmActor_tableView11").query();
             assertThat(table).isNotNull();
-            
+
             // Trigger export action via keyboard shortcut
             press(javafx.scene.input.KeyCode.CONTROL, javafx.scene.input.KeyCode.E);
             waitForFxEvents();
@@ -875,7 +882,7 @@ class ActorControllerTest extends TestFXBase {
 
             TableView<Actor> table = lookup("#filmActor_tableView11").query();
             assertThat(table).isNotNull();
-            
+
             // Trigger import action via keyboard shortcut
             press(javafx.scene.input.KeyCode.CONTROL, javafx.scene.input.KeyCode.I);
             waitForFxEvents();
@@ -891,15 +898,15 @@ class ActorControllerTest extends TestFXBase {
         @DisplayName("Should serialize all actor properties")
         void testFullSerialization() throws Exception {
             waitForFxEvents();
-            
+
             // Get real actors from table
             TableView<Actor> table = lookup("#filmActor_tableView11").query();
             assertThat(table).isNotNull();
-            
+
             // Verify actors can be serialized
             List<Actor> actors = table.getItems();
             assertThat(actors).isNotNull();
-            
+
             if (!actors.isEmpty()) {
                 Actor actor = actors.get(0);
                 assertThat(actor.getId()).isNotNull();
@@ -914,21 +921,21 @@ class ActorControllerTest extends TestFXBase {
         @DisplayName("Should deserialize actors correctly")
         void testDeserialization() throws Exception {
             waitForFxEvents();
-            
+
             // Get table to verify deserialization capability
             TableView<Actor> table = lookup("#filmActor_tableView11").query();
             assertThat(table).isNotNull();
-            
+
             // Verify actors are loaded in table
             assertThat(table.getItems()).isNotNull();
-            
+
             // If there are actors, verify they have all properties
             if (!table.getItems().isEmpty()) {
                 Actor actor = table.getItems().get(0);
                 assertThat(actor).isNotNull();
             }
 
-            
+
             waitForFxEvents();
         }
 
@@ -938,15 +945,15 @@ class ActorControllerTest extends TestFXBase {
         @DisplayName("Should handle export errors gracefully")
         void testExportError() throws IOException {
             waitForFxEvents();
-            
+
             // Verify export capability
             TableView<Actor> table = lookup("#filmActor_tableView11").query();
             assertThat(table).isNotNull();
-            
+
             // Verify table has items for export
             List<Actor> items = table.getItems();
             assertThat(items).isNotNull();
-            
+
             waitForFxEvents();
         }
 
@@ -956,21 +963,21 @@ class ActorControllerTest extends TestFXBase {
         @DisplayName("Should handle import errors gracefully")
         void testImportError() throws IOException {
             waitForFxEvents();
-            
+
             // Verify import capability
             TableView<Actor> table = lookup("#filmActor_tableView11").query();
             assertThat(table).isNotNull();
-            
+
             // Verify table is ready to receive imported data
             assertThat(table.isEditable()).isTrue();
-            
+
             waitForFxEvents();
         }
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Table Editing Tests")
     class TableEditingTests {
 
@@ -993,8 +1000,8 @@ class ActorControllerTest extends TestFXBase {
 
             TableView<Actor> table = lookup("#filmActor_tableView11").query();
             TableColumn<Actor, String> nameCol = (TableColumn<Actor, String>) table.getColumns().stream()
-                    .filter(col -> "nomActor_tableColumn1".equals(col.getId()))
-                    .findFirst().orElse(null);
+                .filter(col -> "nomActor_tableColumn1".equals(col.getId()))
+                .findFirst().orElse(null);
             assertThat(nameCol).isNotNull();
             // Verify cell factory is TextFieldTableCell
         }
@@ -1008,16 +1015,16 @@ class ActorControllerTest extends TestFXBase {
 
             TableView<Actor> table = lookup("#filmActor_tableView11").query();
             TableColumn<Actor, String> bioCol = (TableColumn<Actor, String>) table.getColumns().stream()
-                    .filter(col -> "bioActor_tableColumn1".equals(col.getId()))
-                    .findFirst().orElse(null);
+                .filter(col -> "bioActor_tableColumn1".equals(col.getId()))
+                .findFirst().orElse(null);
             assertThat(bioCol).isNotNull();
             // Verify cell factory is TextFieldTableCell
         }
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Navigation Tests")
     class NavigationTests {
 
@@ -1037,8 +1044,8 @@ class ActorControllerTest extends TestFXBase {
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Error Handling Tests")
     class ErrorHandlingTests {
 
@@ -1047,14 +1054,14 @@ class ActorControllerTest extends TestFXBase {
         @DisplayName("Should handle database errors gracefully")
         void testDatabaseError() {
             waitForFxEvents();
-            
+
             // Verify UI is present and functional
             TextArea nameArea = lookup("#nomActor_textArea1").query();
             TextArea bioArea = lookup("#bioActor_textArea").query();
-            
+
             assertThat(nameArea).isNotNull();
             assertThat(bioArea).isNotNull();
-            
+
             waitForFxEvents();
         }
 
@@ -1064,11 +1071,11 @@ class ActorControllerTest extends TestFXBase {
         @DisplayName("Should handle image loading errors")
         void testImageLoadingError() {
             waitForFxEvents();
-            
+
             // Verify ImageView is present
             ImageView imageView = lookup("#imageActor_ImageView1").query();
             assertThat(imageView).isNotNull();
-            
+
             // Try to load invalid image URL would gracefully fail
             waitForFxEvents();
         }
@@ -1079,30 +1086,15 @@ class ActorControllerTest extends TestFXBase {
         @DisplayName("Should handle Cloudinary upload errors")
         void testCloudinaryUploadError() throws IOException {
             waitForFxEvents();
-            
+
             // Verify image upload UI components are present
             ImageView imageView = lookup("#imageActor_ImageView1").query();
             assertThat(imageView).isNotNull();
-            
+
             // Attempt to upload would handle errors gracefully
             waitForFxEvents();
         }
 
-    }
-
-
-    // Helper methods
-    private List<Actor> createMockActors() {
-        List<Actor> actors = new ArrayList<>();
-        actors.add(new Actor(1L, "Tom Hanks", "/img/actors/tom.jpg", "American actor"));
-        actors.add(new Actor(2L, "Meryl Streep", "/img/actors/meryl.jpg", "American actress"));
-        actors.add(new Actor(3L, "Leonardo DiCaprio", "/img/actors/leo.jpg", "American actor"));
-        return actors;
-    }
-
-
-    private com.esprit.utils.Page<Actor> createPagedResult(List<Actor> actors) {
-        return new com.esprit.utils.Page<>(actors, 0, actors.size(), actors.size());
     }
 
 }

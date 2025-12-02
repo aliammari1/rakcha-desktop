@@ -1,78 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.chart.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" prefHeight="855.0"
+      prefWidth="1507.0"
+      xmlns="http://javafx.com/javafx/21"
+      fx:controller="com.esprit.controllers.series.SeriesStatisticsController"
+      spacing="20" style="-fx-background-color: #1a1a1a;">
 
-<VBox prefHeight="855.0" prefWidth="1507.0"
-    xmlns="http://javafx.com/javafx/21"
-    xmlns:fx="http://javafx.com/fxml/1" 
-    fx:controller="com.esprit.controllers.series.StatistiqueController">
+  <padding>
+    <Insets top="25" right="25" bottom="25" left="25"/>
+  </padding>
 
-    <HBox VBox.vgrow="ALWAYS">
-        <!-- SideBar -->
-        <fx:include source="/ui/sidebar.fxml" />
-        
-        <!-- Main Content -->
-        <VBox spacing="20" HBox.hgrow="ALWAYS">
-            <padding>
-                <Insets top="25" right="25" bottom="25" left="25"/>
-            </padding>
+  <!-- Title -->
+  <Label text="Series Statistics" style="-fx-text-fill: white;">
+    <font>
+      <Font name="Arial Rounded MT Bold" size="32.0"/>
+    </font>
+  </Label>
 
-            <!-- Header -->
-            <Label text="Series Analytics" styleClass="section-title">
-                <font>
-                    <Font name="Arial Rounded MT Bold" size="32.0"/>
-                </font>
-            </Label>
-
-            <!-- Charts Grid -->
-            <GridPane hgap="20" vgap="20" VBox.vgrow="ALWAYS">
-                <!-- Rating Distribution -->
-                <PieChart fx:id="ratingDistributionChart" title="Rating Distribution"
-                         GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-
-                <!-- Category Distribution -->
-                <BarChart fx:id="categoryDistributionChart" title="Categories Distribution"
-                         GridPane.columnIndex="1" GridPane.rowIndex="0">
-                    <xAxis>
-                        <CategoryAxis label="Categories"/>
-                    </xAxis>
-                    <yAxis>
-                        <NumberAxis label="Number of Series"/>
-                    </yAxis>
-                </BarChart>
-
-                <!-- Ratings Over Time -->
-                <LineChart fx:id="ratingsOverTimeChart" title="Ratings Trend"
-                          GridPane.columnIndex="0" GridPane.rowIndex="1">
-                    <xAxis>
-                        <CategoryAxis label="Time Period"/>
-                    </xAxis>
-                    <yAxis>
-                        <NumberAxis label="Average Rating"/>
-                    </yAxis>
-                </LineChart>
-
-                <!-- Popular Series -->
-                <StackedBarChart fx:id="popularSeriesChart" title="Most Popular Series"
-                                GridPane.columnIndex="1" GridPane.rowIndex="1">
-                    <xAxis>
-                        <CategoryAxis label="Series"/>
-                    </xAxis>
-                    <yAxis>
-                        <NumberAxis label="Views/Ratings"/>
-                    </yAxis>
-                </StackedBarChart>
-            </GridPane>
-
-            <!-- Export Options -->
-            <HBox spacing="10" alignment="CENTER_RIGHT">
-                <Button styleClass="primary-button" text="Export to PDF"/>
-                <Button styleClass="secondary-button" text="Back to Series"/>
-            </HBox>
-        </VBox>
-    </HBox>
+  <!-- Content Placeholder -->
+  <VBox VBox.vgrow="ALWAYS" alignment="CENTER" spacing="20">
+    <Label text="Series Statistics Dashboard"
+           style="-fx-text-fill: #cccccc; -fx-font-size: 18px;"/>
+    <Label text="Content coming soon..."
+           style="-fx-text-fill: #888888; -fx-font-size: 14px;"/>
+  </VBox>
 </VBox>

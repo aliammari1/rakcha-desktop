@@ -1,18 +1,15 @@
 package com.esprit.models.cinemas;
 
-import java.sql.Date;
-import java.sql.Time;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.esprit.models.films.Film;
 import com.esprit.models.films.Ticket;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents a movie session in a cinema.
@@ -38,11 +35,9 @@ public class MovieSession {
 
     private Film film;
 
-    private Time startTime;
+    private java.time.LocalDateTime startTime;
 
-    private Time endTime;
-
-    private Date sessionDate;
+    private java.time.LocalDateTime endTime;
 
     private Double price;
 
@@ -52,37 +47,63 @@ public class MovieSession {
     /**
      * Constructor without id for creating new movie session instances.
      */
-    public MovieSession(final CinemaHall cinemaHall, final Film film, final Time startTime, final Time endTime,
-            final Date sessionDate, final Double price) {
+    public MovieSession(final CinemaHall cinemaHall, final Film film, final java.time.LocalDateTime startTime, final java.time.LocalDateTime endTime,
+                        final Double price) {
         this.cinemaHall = cinemaHall;
         this.film = film;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.sessionDate = sessionDate;
         this.price = price;
         this.tickets = new ArrayList<>();
     }
 
-
     /**
-     * Create a MovieSession for the given hall, film, time range, date, and price.
+     * Legacy constructor using Date and Time objects.
      *
-     * @param cinemaHall the hall where the session will take place
-     * @param film the film to be shown
-     * @param startTime the session start time
-     * @param endTime the session end time
-     * @param sessionDate the date of the session
-     * @param price the ticket price for the session
+     * @deprecated Use LocalDateTime constructor instead
      */
-    public MovieSession(final CinemaHall cinemaHall, final Film film, final Time startTime, final Time endTime,
-            final LocalDate sessionDate, final Double price) {
+    @Deprecated(forRemoval = true)
+    public MovieSession(final CinemaHall cinemaHall, final Film film, final java.sql.Time startTime, final java.sql.Time endTime,
+                        final java.sql.Date sessionDate, final Double price) {
         this.cinemaHall = cinemaHall;
         this.film = film;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.sessionDate = Date.valueOf(sessionDate);
+        this.startTime = startTime != null ? startTime.toLocalTime().atDate(sessionDate.toLocalDate()) : null;
+        this.endTime = endTime != null ? endTime.toLocalTime().atDate(sessionDate.toLocalDate()) : null;
         this.price = price;
         this.tickets = new ArrayList<>();
+    }
+
+    /**
+     * Legacy constructor using Time objects and LocalDate.
+     *
+     * @deprecated Use LocalDateTime constructor instead
+     */
+    @Deprecated(forRemoval = true)
+    public MovieSession(final CinemaHall cinemaHall, final Film film, final java.sql.Time startTime, final java.sql.Time endTime,
+                        final LocalDate sessionDate, final Double price) {
+        this.cinemaHall = cinemaHall;
+        this.film = film;
+        this.startTime = startTime != null ? startTime.toLocalTime().atDate(sessionDate) : null;
+        this.endTime = endTime != null ? endTime.toLocalTime().atDate(sessionDate) : null;
+        this.price = price;
+        this.tickets = new ArrayList<>();
+    }
+
+    /**
+     * Get the base price of the movie session.
+     * @return the price
+     */
+    public Double getBasePrice() {
+        return this.price;
+    }
+
+    /**
+     * Set the base price of the movie session.
+     * @param basePrice the price to set
+     */
+    public void setBasePrice(Double basePrice) {
+        this.price = basePrice;
     }
 
 }
+

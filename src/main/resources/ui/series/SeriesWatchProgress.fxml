@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import org.kordamp.ikonli.javafx.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21"
+           fx:controller="com.esprit.controllers.series.SeriesWatchProgressController"
+           styleClass="immersive-root"
+           stylesheets="@../styles/filmStyle.css, @../styles/series.css">
+
+  <!-- Background -->
+  <AnchorPane styleClass="cinematic-bg">
+    <Circle radius="220" layoutX="100" layoutY="120" styleClass="ambient-orb orb-primary" opacity="0.12"/>
+    <Circle radius="280" layoutX="1150" layoutY="520" styleClass="ambient-orb orb-secondary" opacity="0.08"/>
+  </AnchorPane>
+
+  <BorderPane styleClass="main-shell">
+    <left>
+      <fx:include source="../sidebar.fxml"/>
+    </left>
+
+    <center>
+      <VBox spacing="0" HBox.hgrow="ALWAYS">
+
+        <!-- Header -->
+        <HBox styleClass="immersive-header" alignment="CENTER_LEFT" spacing="20">
+          <padding>
+            <Insets top="25" bottom="25" left="35" right="35"/>
+          </padding>
+
+          <VBox spacing="5">
+            <Label text="Watch Progress" styleClass="header-title"/>
+            <Label text="Track your series watching journey" styleClass="header-subtitle"/>
+          </VBox>
+
+          <Region HBox.hgrow="ALWAYS"/>
+
+          <HBox styleClass="search-box" alignment="CENTER" prefWidth="280">
+            <FontIcon iconLiteral="mdi2m-magnify:18" styleClass="search-icon"/>
+            <TextField fx:id="searchField" styleClass="search-input" promptText="Search series..." HBox.hgrow="ALWAYS"/>
+          </HBox>
+        </HBox>
+
+        <!-- Stats Overview -->
+        <HBox spacing="20" styleClass="stats-row">
+          <padding>
+            <Insets top="10" bottom="25" left="35" right="35"/>
+          </padding>
+
+          <VBox styleClass="stat-card glass-card" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" spacing="15">
+              <StackPane styleClass="stat-icon-container blue">
+                <FontIcon iconLiteral="mdi2t-television-play:24"/>
+              </StackPane>
+              <VBox spacing="3">
+                <Label fx:id="watchingCountLabel" text="0" styleClass="stat-value"/>
+                <Label text="Currently Watching" styleClass="stat-label"/>
+              </VBox>
+            </HBox>
+          </VBox>
+
+          <VBox styleClass="stat-card glass-card" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" spacing="15">
+              <StackPane styleClass="stat-icon-container green">
+                <FontIcon iconLiteral="mdi2c-check-circle:24"/>
+              </StackPane>
+              <VBox spacing="3">
+                <Label fx:id="completedCountLabel" text="0" styleClass="stat-value"/>
+                <Label text="Completed" styleClass="stat-label"/>
+              </VBox>
+            </HBox>
+          </VBox>
+
+          <VBox styleClass="stat-card glass-card" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" spacing="15">
+              <StackPane styleClass="stat-icon-container purple">
+                <FontIcon iconLiteral="mdi2p-play-circle:24"/>
+              </StackPane>
+              <VBox spacing="3">
+                <Label fx:id="episodesWatchedLabel" text="0" styleClass="stat-value"/>
+                <Label text="Episodes Watched" styleClass="stat-label"/>
+              </VBox>
+            </HBox>
+          </VBox>
+
+          <VBox styleClass="stat-card glass-card" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" spacing="15">
+              <StackPane styleClass="stat-icon-container orange">
+                <FontIcon iconLiteral="mdi2c-clock-outline:24"/>
+              </StackPane>
+              <VBox spacing="3">
+                <Label fx:id="totalTimeLabel" text="0h" styleClass="stat-value"/>
+                <Label text="Time Watched" styleClass="stat-label"/>
+              </VBox>
+            </HBox>
+          </VBox>
+        </HBox>
+
+        <!-- Content Tabs -->
+        <HBox styleClass="content-tabs" spacing="0">
+          <padding>
+            <Insets left="35" right="35"/>
+          </padding>
+          <ToggleButton fx:id="continueWatchingTab" styleClass="content-tab active" text="Continue Watching"
+                        onAction="#showContinueWatching"/>
+          <ToggleButton fx:id="allSeriesTab" styleClass="content-tab" text="All Series" onAction="#showAllSeries"/>
+          <ToggleButton fx:id="completedTab" styleClass="content-tab" text="Completed" onAction="#showCompleted"/>
+          <ToggleButton fx:id="onHoldTab" styleClass="content-tab" text="On Hold" onAction="#showOnHold"/>
+        </HBox>
+
+        <!-- Main Content Area -->
+        <ScrollPane styleClass="progress-scroll" fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+          <VBox spacing="35">
+            <padding>
+              <Insets top="25" bottom="30" left="35" right="35"/>
+            </padding>
+
+            <!-- Continue Watching Section -->
+            <VBox fx:id="continueWatchingSection" spacing="20">
+              <HBox alignment="CENTER_LEFT" spacing="15">
+                <Label text="Continue Watching" styleClass="section-title"/>
+                <Label fx:id="continueCountBadge" styleClass="count-badge" text="0"/>
+              </HBox>
+
+              <ScrollPane styleClass="horizontal-scroll" fitToHeight="true" vbarPolicy="NEVER">
+                <HBox fx:id="continueWatchingContainer" spacing="20"/>
+              </ScrollPane>
+
+              <!-- Empty State -->
+              <VBox fx:id="continueWatchingEmpty" alignment="CENTER" spacing="15" visible="false" managed="false"
+                    minHeight="150">
+                <FontIcon iconLiteral="mdi2p-play-pause:40" styleClass="empty-icon"/>
+                <Label text="Nothing to continue" styleClass="empty-title"/>
+                <Label text="Start watching a series and it will appear here" styleClass="empty-desc"/>
+              </VBox>
+            </VBox>
+
+            <!-- Recently Watched Section -->
+            <VBox fx:id="recentlyWatchedSection" spacing="20">
+              <HBox alignment="CENTER_LEFT" spacing="15">
+                <Label text="Recently Watched" styleClass="section-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button onAction="#viewHistory" styleClass="see-all-btn" text="View History"/>
+              </HBox>
+
+              <VBox fx:id="recentlyWatchedContainer" spacing="15"/>
+            </VBox>
+
+            <!-- All Series Progress -->
+            <VBox fx:id="allSeriesSection" spacing="20" visible="false" managed="false">
+              <HBox alignment="CENTER_LEFT" spacing="15">
+                <Label text="All Series" styleClass="section-title"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <ComboBox fx:id="statusFilter" styleClass="filter-combo" promptText="All Status" prefWidth="150"/>
+                <ComboBox fx:id="sortByCombo" styleClass="filter-combo" promptText="Sort By" prefWidth="150"/>
+              </HBox>
+
+              <FlowPane fx:id="allSeriesGrid" hgap="20" vgap="20"/>
+
+              <!-- Empty State -->
+              <VBox fx:id="allSeriesEmpty" alignment="CENTER" spacing="15" visible="false" managed="false"
+                    minHeight="200">
+                <FontIcon iconLiteral="mdi2t-television:60" styleClass="empty-icon"/>
+                <Label text="No series yet" styleClass="empty-title"/>
+                <Label text="Start watching series and track your progress" styleClass="empty-desc"/>
+                <Button onAction="#browseSeries" styleClass="browse-btn" text="Browse Series">
+                  <graphic>
+                    <FontIcon iconLiteral="mdi2m-magnify:18"/>
+                  </graphic>
+                </Button>
+              </VBox>
+            </VBox>
+          </VBox>
+        </ScrollPane>
+      </VBox>
+    </center>
+  </BorderPane>
+
+  <!-- Series Detail Panel (Slide-in) -->
+  <HBox fx:id="detailPanelOverlay" styleClass="detail-panel-overlay" visible="false" managed="false">
+    <Region styleClass="overlay-backdrop" HBox.hgrow="ALWAYS" onMouseClicked="#closeDetailPanel"/>
+
+    <VBox fx:id="detailPanel" styleClass="detail-panel glass-card" spacing="0" prefWidth="420">
+
+      <!-- Panel Header -->
+      <StackPane styleClass="detail-header">
+        <ImageView fx:id="detailBackdrop" fitWidth="420" fitHeight="200" styleClass="detail-backdrop"/>
+        <VBox styleClass="backdrop-gradient-panel"/>
+
+        <HBox alignment="TOP_RIGHT" StackPane.alignment="TOP_RIGHT">
+          <padding>
+            <Insets topRightBottomLeft="15"/>
+          </padding>
+          <Button onAction="#closeDetailPanel" styleClass="close-panel-btn">
+            <graphic>
+              <FontIcon iconLiteral="mdi2c-close:20"/>
+            </graphic>
+          </Button>
+        </HBox>
+
+        <HBox alignment="BOTTOM_LEFT" spacing="15" StackPane.alignment="BOTTOM_LEFT">
+          <padding>
+            <Insets left="20" bottom="15"/>
+          </padding>
+          <ImageView fx:id="detailPoster" fitWidth="80" fitHeight="120" styleClass="detail-poster"/>
+          <VBox spacing="5">
+            <Label fx:id="detailTitle" text="Series Title" styleClass="detail-title"/>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+              <FontIcon iconLiteral="mdi2s-star:14" styleClass="rating-star"/>
+              <Label fx:id="detailRating" text="8.5" styleClass="detail-rating"/>
+              <Label text="•" styleClass="meta-separator"/>
+              <Label fx:id="detailYear" text="2024" styleClass="detail-year"/>
+            </HBox>
+          </VBox>
+        </HBox>
+      </StackPane>
+
+      <!-- Progress Info -->
+      <VBox spacing="20" VBox.vgrow="ALWAYS">
+        <padding>
+          <Insets topRightBottomLeft="25"/>
+        </padding>
+
+        <!-- Overall Progress -->
+        <VBox spacing="12" styleClass="progress-section">
+          <HBox alignment="CENTER_LEFT" spacing="10">
+            <Label text="Overall Progress" styleClass="progress-label"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="progressPercentLabel" text="65%" styleClass="progress-percent"/>
+          </HBox>
+          <ProgressBar fx:id="overallProgressBar" progress="0.65" styleClass="overall-progress-bar"
+                       maxWidth="1.7976931348623157E308"/>
+          <Label fx:id="episodeProgressLabel" text="13 of 20 episodes watched" styleClass="episode-progress-text"/>
+        </VBox>
+
+        <!-- Current Episode -->
+        <VBox spacing="12" styleClass="current-episode-section">
+          <Label text="Continue From" styleClass="section-label"/>
+          <HBox styleClass="current-episode-card glass-inner" spacing="12" alignment="CENTER_LEFT">
+            <padding>
+              <Insets topRightBottomLeft="12"/>
+            </padding>
+            <ImageView fx:id="currentEpisodeThumbnail" fitWidth="100" fitHeight="56" styleClass="episode-thumb"/>
+            <VBox spacing="5" HBox.hgrow="ALWAYS">
+              <Label fx:id="currentEpisodeNumber" text="S2 E4" styleClass="episode-number"/>
+              <Label fx:id="currentEpisodeTitle" text="Episode Title" styleClass="episode-title"/>
+              <ProgressBar fx:id="episodeProgressBar" progress="0.45" styleClass="episode-progress-bar"
+                           maxWidth="1.7976931348623157E308"/>
+            </VBox>
+            <Button onAction="#resumeEpisode" styleClass="resume-btn">
+              <graphic>
+                <FontIcon iconLiteral="mdi2p-play:20"/>
+              </graphic>
+            </Button>
+          </HBox>
+        </VBox>
+
+        <!-- Seasons Progress -->
+        <VBox spacing="12" styleClass="seasons-progress-section">
+          <Label text="Seasons" styleClass="section-label"/>
+          <VBox fx:id="seasonsProgressContainer" spacing="10"/>
+        </VBox>
+
+        <Region VBox.vgrow="ALWAYS"/>
+
+        <!-- Action Buttons -->
+        <VBox spacing="12">
+          <Button onAction="#continueWatching" styleClass="primary-btn" text="Continue Watching"
+                  maxWidth="1.7976931348623157E308">
+            <graphic>
+              <FontIcon iconLiteral="mdi2p-play:18"/>
+            </graphic>
+          </Button>
+          <HBox spacing="12">
+            <Button onAction="#viewSeriesDetails" styleClass="secondary-btn" HBox.hgrow="ALWAYS"
+                    maxWidth="1.7976931348623157E308" text="View Details">
+              <graphic>
+                <FontIcon iconLiteral="mdi2i-information:16"/>
+              </graphic>
+            </Button>
+            <MenuButton styleClass="more-btn" text="More">
+              <graphic>
+                <FontIcon iconLiteral="mdi2d-dots-horizontal:16"/>
+              </graphic>
+              <items>
+                <MenuItem text="Mark Season as Watched" onAction="#markSeasonWatched"/>
+                <MenuItem text="Mark All as Watched" onAction="#markAllWatched"/>
+                <MenuItem text="Reset Progress" onAction="#resetProgress"/>
+                <SeparatorMenuItem/>
+                <MenuItem text="Remove from List" onAction="#removeFromList"/>
+              </items>
+            </MenuButton>
+          </HBox>
+        </VBox>
+      </VBox>
+    </VBox>
+  </HBox>
+
+  <!-- Mark Complete Dialog -->
+  <VBox fx:id="markCompleteDialog" styleClass="dialog-overlay" visible="false" managed="false" alignment="CENTER">
+    <VBox styleClass="dialog-card" spacing="20" maxWidth="400">
+      <padding>
+        <Insets topRightBottomLeft="30"/>
+      </padding>
+
+      <VBox alignment="CENTER" spacing="15">
+        <StackPane styleClass="success-icon-container">
+          <FontIcon iconLiteral="mdi2c-check-circle:48" styleClass="success-icon"/>
+        </StackPane>
+        <Label text="Mark as Completed?" styleClass="dialog-title"/>
+        <Label fx:id="markCompleteSeriesName" styleClass="dialog-series-name"/>
+        <Label text="This will mark all episodes as watched" styleClass="dialog-desc"/>
+      </VBox>
+
+      <HBox spacing="15" alignment="CENTER">
+        <Button onAction="#cancelMarkComplete" styleClass="secondary-btn" text="Cancel"/>
+        <Button onAction="#confirmMarkComplete" styleClass="primary-btn" text="Mark Complete"/>
+      </HBox>
+    </VBox>
+  </VBox>
+</StackPane>

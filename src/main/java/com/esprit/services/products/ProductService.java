@@ -1,5 +1,15 @@
 package com.esprit.services.products;
 
+import com.esprit.exceptions.InsufficientStockException;
+import com.esprit.models.common.Category;
+import com.esprit.models.products.Product;
+import com.esprit.services.IService;
+import com.esprit.utils.DataSource;
+import com.esprit.utils.Page;
+import com.esprit.utils.PageRequest;
+import com.esprit.utils.PaginationQueryBuilder;
+import lombok.extern.slf4j.Slf4j;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,17 +19,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.esprit.models.products.Product;
-import com.esprit.models.products.ProductCategory;
-import com.esprit.services.IService;
-import com.esprit.utils.DataSource;
-import com.esprit.utils.Page;
-import com.esprit.utils.PageRequest;
-import com.esprit.utils.PaginationQueryBuilder;
-import com.esprit.utils.TableCreator;
-
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 /**
@@ -31,67 +30,22 @@ import lombok.extern.slf4j.Slf4j;
  * @since 1.0.0
  */
 public class ProductService implements IService<Product> {
-    private static final Logger LOGGER = Logger.getLogger(ProductService.class.getName());
-    private final Connection connection;
 
+    private static final Logger LOGGER = Logger.getLogger(ProductService.class.getName());
     // Allowed columns for sorting to prevent SQL injection
     private static final String[] ALLOWED_SORT_COLUMNS = {
-            "id", "name", "price", "image", "description", "quantity"
-    }
-;
+        "id", "name", "price", "image_url", "description", "stock_quantity"
+    };
+    private final Connection connection;
 
     /**
-     * Initialize the ProductService by opening a database connection and ensuring required product-related tables exist.
-     *
-     * Ensures the presence of the "product_categories", "products", and "product_category" tables, creating them if they are missing.
+     * Constructs a new ProductService instance.
+     * Initializes database connection and creates tables if they don't exist.
      */
     public ProductService() {
         this.connection = DataSource.getInstance().getConnection();
-
-        // Create tables if they don't exist
-        TableCreator tableCreator = new TableCreator(connection);
-
-        // Create product categories table
-        tableCreator.createTableIfNotExists("product_categories", """
-                    CREATE TABLE product_categories (
-                        id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                        category_name VARCHAR(50) NOT NULL,
-                        description VARCHAR(255) NOT NULL
-                    )
-                """);
-
-        // Create products table
-        tableCreator.createTableIfNotExists("products", """
-                    CREATE TABLE products (
-                        id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                        name VARCHAR(50) NOT NULL,
-                        price INT NOT NULL,
-                        image VARCHAR(255) NOT NULL,
-                        description VARCHAR(100) NOT NULL,
-                        quantity INT NOT NULL
-                    )
-                """);
-
-        // Create product-category junction table
-        tableCreator.createTableIfNotExists("product_category", """
-                    CREATE TABLE product_category (
-                        product_id BIGINT NOT NULL,
-                        category_id BIGINT NOT NULL,
-                        PRIMARY KEY (product_id, category_id)
-                    )
-                """);
     }
 
-
-    /**
-     * Inserts the given Product into the database and establishes its category relations.
-     *
-     * This saves the product fields (name, price, image, description, quantity), retrieves
-     * the generated product ID, and creates entries in the product_category join table when
-     * the product has associated categories.
-     *
-     * @param product the product to persist; its assigned database ID is used to create category relations when categories are present
-     */
     @Override
     /**
      * Creates a new entity in the database.
@@ -100,66 +54,49 @@ public class ProductService implements IService<Product> {
      *               the entity to create
      */
     public void create(final Product product) {
-        final String req = "INSERT into products(name, price, image, description, quantity) values (?, ?, ?, ?, ?)";
+        final String req = "INSERT into products(name, price, image_url, description, stock_quantity, category_id) values (?, ?, ?, ?, ?, ?)";
         try {
             ProductService.LOGGER.info("product: " + product);
             final PreparedStatement pst = this.connection.prepareStatement(req,
-                    PreparedStatement.RETURN_GENERATED_KEYS);
+                PreparedStatement.RETURN_GENERATED_KEYS);
             pst.setString(1, product.getName());
-            pst.setInt(2, product.getPrice());
-            pst.setString(3, product.getImage());
+            pst.setDouble(2, product.getPrice());
+            pst.setString(3, product.getImageUrl());
             pst.setString(4, product.getDescription());
-            pst.setInt(5, product.getQuantity());
-            pst.executeUpdate();
+            pst.setInt(5, product.getStockQuantity());
 
-            // Get the generated product ID
-            final ResultSet generatedKeys = pst.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                final long productId = generatedKeys.getLong(1);
-                // Create product-category relationships
-                if (product.getCategories() != null && !product.getCategories().isEmpty()) {
-                    createProductCategoryRelations(productId, product.getCategories());
-                }
-
+            // Set category_id if available
+            if (product.getCategories() != null && !product.getCategories().isEmpty()) {
+                pst.setLong(6, product.getCategories().get(0).getId());
+            } else {
+                pst.setNull(6, java.sql.Types.INTEGER);
             }
-
+            pst.executeUpdate();
             ProductService.LOGGER.info("Product added!");
         } catch (final SQLException e) {
             ProductService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
-
     }
 
-
     /**
-     * Create associations between a product and the provided categories by inserting rows into the product_category table.
-     *
-     * @param productId the ID of the product to associate with categories
-     * @param categories the list of categories to link to the product; each category's ID will be used
-     * @throws SQLException if a database access error occurs while persisting the relations
+     * @param productId
+     * @param categories
+     * @throws SQLException
      */
-    private void createProductCategoryRelations(final long productId, final List<ProductCategory> categories)
-            throws SQLException {
-        final String req = "INSERT INTO product_category(product_id, category_id) VALUES (?, ?)";
-        try (final PreparedStatement pst = this.connection.prepareStatement(req)) {
-            for (final ProductCategory category : categories) {
-                pst.setLong(1, productId);
-                pst.setLong(2, category.getId());
-                pst.addBatch();
+    private void createProductCategoryRelations(final long productId, final List<Category> categories)
+        throws SQLException {
+        // Products now have a direct category_id column, so this method is simplified
+        // If you need to keep many-to-many relationships, you'd use a junction table
+        if (categories != null && !categories.isEmpty()) {
+            final String req = "UPDATE products SET category_id = ? WHERE id = ?";
+            try (final PreparedStatement pst = this.connection.prepareStatement(req)) {
+                pst.setLong(1, categories.get(0).getId());
+                pst.setLong(2, productId);
+                pst.executeUpdate();
             }
-
-            pst.executeBatch();
         }
-
     }
 
-
-    /**
-     * Retrieve a paginated Page of products for the requested page index, size, and optional sort.
-     *
-     * @param pageRequest pagination parameters (page index, page size, and optional sort column/direction)
-     * @return a Page<Product> containing the page content, the requested page index and size, and the total number of matching elements
-     */
     @Override
     /**
      * Retrieves products with pagination support.
@@ -173,11 +110,10 @@ public class ProductService implements IService<Product> {
 
         // Validate sort column to prevent SQL injection
         if (pageRequest.hasSorting() &&
-                !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
+            !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
             log.warn("Invalid sort column: {}. Using default sorting.", pageRequest.getSortBy());
             pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
-
 
         try {
             // Get total count
@@ -188,18 +124,17 @@ public class ProductService implements IService<Product> {
             final String paginatedQuery = PaginationQueryBuilder.buildPaginatedQuery(baseQuery, pageRequest);
 
             try (PreparedStatement stmt = connection.prepareStatement(paginatedQuery);
-                    ResultSet rs = stmt.executeQuery()) {
+                 ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     final Product product = Product.builder().id(rs.getLong("id")).name(rs.getString("name"))
-                            .price(rs.getInt("price")).image(rs.getString("image"))
-                            .description(rs.getString("description"))
-                            .quantity(rs.getInt("quantity")).categories(getCategoriesForProduct(rs.getLong("id")))
-                            .build();
+                        .price(rs.getDouble("price")).imageUrl(rs.getString("image_url"))
+                        .description(rs.getString("description"))
+                        .stockQuantity(rs.getInt("stock_quantity"))
+                        .categories(getCategoriesForProduct(rs.getLong("id")))
+                        .build();
                     content.add(product);
                 }
-
             }
-
 
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
 
@@ -207,43 +142,34 @@ public class ProductService implements IService<Product> {
             log.error("Error retrieving paginated products: {}", e.getMessage(), e);
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), 0);
         }
-
     }
 
-
     /**
-         * Retrieves the categories associated with a given product.
-         *
-         * @param productId the product's ID whose categories should be retrieved
-         * @return a list of ProductCategory objects linked to the product; an empty list if no categories are found or if a SQL error occurs
-         */
-    private List<ProductCategory> getCategoriesForProduct(final Long productId) {
-        final List<ProductCategory> categories = new ArrayList<>();
-        final String req = "SELECT c.* FROM product_categories c "
-                + "JOIN product_category pc ON c.id = pc.category_id " + "WHERE pc.product_id = ?";
+     * @param productId
+     * @return List<ProductCategory>
+     */
+    private List<Category> getCategoriesForProduct(final Long productId) {
+        final List<Category> categories = new ArrayList<>();
+        // Query the category directly from products table
+        final String req = "SELECT c.* FROM categories c WHERE c.id = (SELECT category_id FROM products WHERE id = ?)";
         try (final PreparedStatement pst = this.connection.prepareStatement(req)) {
             pst.setLong(1, productId);
             final ResultSet rs = pst.executeQuery();
             while (rs.next()) {
-                final ProductCategory category = ProductCategory.builder().id(rs.getLong("id"))
-                        .categoryName(rs.getString("category_name")).description(rs.getString("description")).build();
+                final Category category = Category.builder().id(rs.getLong("id"))
+                    .name(rs.getString("name")).description(rs.getString("description")).build();
                 categories.add(category);
             }
-
         } catch (final SQLException e) {
             ProductService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
-
         return categories;
     }
 
-
     /**
-     * Retrieve all products ordered by the specified column.
+     * Performs sort operation.
      *
-     * @param sortBy the column name to sort by; allowed values: "id", "name", "price", "description", "quantity"
-     * @return a list of products ordered by the specified column; empty if no products are found or a database error occurs
-     * @throws IllegalArgumentException if `sortBy` is not one of the allowed column names
+     * @return the result of the operation
      */
     public List<Product> sort(final String sortBy) {
         final List<String> validColumns = Arrays.asList("id", "name", "price", "description", "quantity");
@@ -251,30 +177,23 @@ public class ProductService implements IService<Product> {
         if (!validColumns.contains(sortBy)) {
             throw new IllegalArgumentException("Invalid sort parameter");
         }
-
         final String req = "SELECT * FROM products ORDER BY %s".formatted(sortBy);
         try (final PreparedStatement pst = this.connection.prepareStatement(req)) {
             final ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 final Product product = Product.builder().id(rs.getLong("id")).name(rs.getString("name"))
-                        .price(rs.getInt("price")).image(rs.getString("image")).description(rs.getString("description"))
-                        .quantity(rs.getInt("quantity")).categories(getCategoriesForProduct(rs.getLong("id"))).build();
+                    .price(rs.getDouble("price")).imageUrl(rs.getString("image_url"))
+                    .description(rs.getString("description"))
+                    .stockQuantity(rs.getInt("stock_quantity"))
+                    .categories(getCategoriesForProduct(rs.getLong("id"))).build();
                 products.add(product);
             }
-
         } catch (final SQLException e) {
             ProductService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
-
         return products;
     }
 
-
-    /**
-     * Updates the specified product's fields and refreshes its category associations in the database.
-     *
-     * @param product the Product with a non-null id whose name, price, description, image, quantity, and categories will replace the stored values
-     */
     @Override
     /**
      * Updates an existing entity in the database.
@@ -283,14 +202,14 @@ public class ProductService implements IService<Product> {
      *               the entity to update
      */
     public void update(final Product product) {
-        final String req = "UPDATE products SET name = ?, price = ?, description = ?, image = ?, quantity = ? WHERE id = ?";
+        final String req = "UPDATE products SET name = ?, price = ?, description = ?, image_url = ?, stock_quantity = ? WHERE id = ?";
         try {
             final PreparedStatement pst = this.connection.prepareStatement(req);
             pst.setString(1, product.getName());
-            pst.setInt(2, product.getPrice());
+            pst.setDouble(2, product.getPrice());
             pst.setString(3, product.getDescription());
-            pst.setString(4, product.getImage());
-            pst.setInt(5, product.getQuantity());
+            pst.setString(4, product.getImageUrl());
+            pst.setInt(5, product.getStockQuantity());
             pst.setLong(6, product.getId());
             pst.executeUpdate();
 
@@ -301,42 +220,32 @@ public class ProductService implements IService<Product> {
         } catch (final SQLException e) {
             ProductService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
-
     }
 
-
     /**
-     * Replaces all category associations for the given product with the supplied categories.
-     *
-     * Deletes existing product–category links for the product and, if the list is non-empty, inserts relations for each category in the provided list.
-     *
-     * @param productId the product id whose category relations will be replaced
-     * @param categories list of categories to associate with the product; if null or empty no new relations are created
-     * @throws SQLException if a database error occurs while deleting or creating relations
+     * @param productId
+     * @param categories
+     * @throws SQLException
      */
-    private void updateProductCategoryRelations(final Long productId, final List<ProductCategory> categories)
-            throws SQLException {
+    private void updateProductCategoryRelations(final Long productId, final List<Category> categories)
+        throws SQLException {
         // First, delete existing relationships
-        final String deleteReq = "DELETE FROM produit_categorie WHERE id_produit = ?";
-        try (final PreparedStatement deletePst = this.connection.prepareStatement(deleteReq)) {
-            deletePst.setLong(1, productId);
-            deletePst.executeUpdate();
-        }
-
+        /*
+         * final String deleteReq =
+         * "DELETE FROM produit_categorie WHERE id_produit = ?";
+         * try (final PreparedStatement deletePst =
+         * this.connection.prepareStatement(deleteReq)) {
+         * deletePst.setLong(1, productId);
+         * deletePst.executeUpdate();
+         * }
+         */
 
         // Then, create new relationships
         if (categories != null && !categories.isEmpty()) {
             createProductCategoryRelations(productId, categories);
         }
-
     }
 
-
-    /**
-     * Removes the given product and its product–category associations from the database.
-     *
-     * @param product the product to delete; its `id` identifies the database record to remove
-     */
     @Override
     /**
      * Deletes an entity from the database.
@@ -346,12 +255,15 @@ public class ProductService implements IService<Product> {
      */
     public void delete(final Product product) {
         try {
-            final String deleteCategoriesReq = "DELETE FROM product_category WHERE product_id = ?";
-            try (final PreparedStatement deleteCatPst = this.connection.prepareStatement(deleteCategoriesReq)) {
-                deleteCatPst.setLong(1, product.getId());
-                deleteCatPst.executeUpdate();
-            }
-
+            /*
+             * final String deleteCategoriesReq =
+             * "DELETE FROM product_category WHERE product_id = ?";
+             * try (final PreparedStatement deleteCatPst =
+             * this.connection.prepareStatement(deleteCategoriesReq)) {
+             * deleteCatPst.setLong(1, product.getId());
+             * deleteCatPst.executeUpdate();
+             * }
+             */
 
             final String req = "DELETE FROM products WHERE id = ?";
             try (final PreparedStatement pst = this.connection.prepareStatement(req)) {
@@ -359,20 +271,16 @@ public class ProductService implements IService<Product> {
                 pst.executeUpdate();
             }
 
-
             ProductService.LOGGER.info("product deleted!");
         } catch (final SQLException e) {
             ProductService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
-
     }
 
-
     /**
-     * Retrieves the product with the specified id.
+     * Retrieves the ProductById value.
      *
-     * @param productId the id of the product to retrieve
-     * @return the Product with the given id, or null if no matching product exists or a database error occurs
+     * @return the ProductById value
      */
     public Product getProductById(final Long productId) {
         Product product = null;
@@ -382,43 +290,35 @@ public class ProductService implements IService<Product> {
             pst.setLong(1, productId);
             final ResultSet rs = pst.executeQuery();
             if (rs.next()) {
-                product = Product.builder().id(rs.getLong("id")).name(rs.getString("name")).price(rs.getInt("price"))
-                        .image(rs.getString("image")).description(rs.getString("description"))
-                        .quantity(rs.getInt("quantity")).categories(getCategoriesForProduct(productId)).build();
+                product = Product.builder().id(rs.getLong("id")).name(rs.getString("name")).price(rs.getDouble("price"))
+                    .imageUrl(rs.getString("image_url")).description(rs.getString("description"))
+                    .stockQuantity(rs.getInt("stock_quantity")).categories(getCategoriesForProduct(productId))
+                    .build();
             }
-
         } catch (final SQLException e) {
             ProductService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
-
         return product;
     }
 
-
     /**
-     * Determine whether a product has at least the requested quantity in stock.
+     * Performs checkAvailableStock operation.
      *
-     * @param productId the ID of the product to check
-     * @param requestedQuantity the quantity to verify is available
-     * @return `true` if the product exists and its quantity is greater than or equal to the requested quantity, `false` otherwise
+     * @return the result of the operation
      */
     public boolean checkAvailableStock(final Long productId, final int requestedQuantity) {
         final Product product = this.getProductById(productId);
         if (null != product) {
-            return product.getQuantity() >= requestedQuantity;
-        }
- else {
+            return product.getStockQuantity() >= requestedQuantity;
+        } else {
             return false; // The product doesn't exist
         }
-
     }
 
-
     /**
-     * Retrieve the price of the product identified by the given ID.
+     * Retrieves the ProductPrice value.
      *
-     * @param productId the product's database identifier
-     * @return the product's price, or 0 if the product is not found or an error occurs
+     * @return the ProductPrice value
      */
     public double getProductPrice(final Long productId) {
         final String req = "SELECT price FROM products WHERE id = ?";
@@ -428,80 +328,303 @@ public class ProductService implements IService<Product> {
             pst.setLong(1, productId);
             final ResultSet rs = pst.executeQuery();
             if (rs.next()) {
-                productPrice = rs.getDouble("prix");
+                productPrice = rs.getDouble("price");
             }
-
         } catch (final SQLException e) {
             ProductService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
-
         return productPrice;
     }
 
-
     /**
-     * Retrieve all products associated with the specified category ID.
+     * Retrieves the ProductsByCategory value.
      *
-     * @param categoryId the ID of the category to fetch products for
-     * @return a list of products that belong to the category; empty if none are found or an error occurs
+     * @return the ProductsByCategory value
      */
     public List<Product> getProductsByCategory(final Long categoryId) {
         final List<Product> products = new ArrayList<>();
-        final String req = "SELECT p.* FROM products p " + "JOIN product_category pc ON p.id = pc.product_id "
-                + "WHERE pc.category_id = ?";
+        // Updated query to match the actual database schema
+        final String req = "SELECT DISTINCT p.* FROM products p WHERE p.category_id = ?";
         try (final PreparedStatement pst = this.connection.prepareStatement(req)) {
             pst.setLong(1, categoryId);
             final ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 final Product product = Product.builder().id(rs.getLong("id")).name(rs.getString("name"))
-                        .price(rs.getInt("price")).image(rs.getString("image")).description(rs.getString("description"))
-                        .quantity(rs.getInt("quantity")).categories(getCategoriesForProduct(rs.getLong("id"))).build();
+                    .price(rs.getDouble("price")).imageUrl(rs.getString("image_url"))
+                    .description(rs.getString("description"))
+                    .stockQuantity(rs.getInt("stock_quantity"))
+                    .categories(getCategoriesForProduct(rs.getLong("id"))).build();
                 products.add(product);
             }
-
         } catch (final SQLException e) {
             ProductService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
-
         return products;
     }
 
-
     /**
-     * Returns products sorted by total quantity sold in paid orders, highest first.
+     * Retrieves the ProductsOrderByQuantityAndStatus value.
      *
-     * Each returned Product has its id, name, price, image, description, associated categories,
-     * and its quantity field set to the aggregated total quantity sold.
-     *
-     * @return a list of products ordered by total quantity sold (descending)
+     * @return the ProductsOrderByQuantityAndStatus value
      */
     public List<Product> getProductsOrderByQuantityAndStatus() {
         final List<Product> products = new ArrayList<>();
         final String req = """
-                SELECT p.id_produit, p.nom, p.prix, p.image, p.description, SUM(ci.quantity) AS total_quantity \
-                FROM produit p \
-                JOIN orderitem ci ON p.id_produit = ci.id_produit \
-                JOIN order c ON ci.idOrder = c.idOrder \
-                WHERE c.statu = 'payee' \
-                GROUP BY p.id_produit, p.nom, p.prix, p.image, p.description \
-                ORDER BY total_quantity DESC\
-                """;
+            SELECT p.id, p.name, p.price, p.image_url, p.description, SUM(oi.quantity) AS total_quantity \
+            FROM products p \
+            JOIN order_items oi ON p.id = oi.product_id \
+            JOIN orders o ON oi.order_id = o.id \
+            WHERE o.status = 'completed' \
+            GROUP BY p.id, p.name, p.price, p.image_url, p.description \
+            ORDER BY total_quantity DESC\
+            """;
         try (final PreparedStatement preparedStatement = this.connection.prepareStatement(req);
-                final ResultSet resultSet = preparedStatement.executeQuery()) {
+             final ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
-                final Product product = new Product(resultSet.getString("nom"), resultSet.getInt("prix"),
-                        resultSet.getString("image"), resultSet.getString("description"), null,
-                        resultSet.getInt("total_quantity"));
-                product.setId(resultSet.getLong("id_produit"));
+                final Product product = new Product(null, resultSet.getString("name"), resultSet.getString("description"),
+                    resultSet.getString("image_url"), resultSet.getDouble("price"),
+                    resultSet.getInt("total_quantity"), new ArrayList<>(), new ArrayList<>());
+                product.setId(resultSet.getLong("id"));
                 product.setCategories(getCategoriesForProduct(product.getId()));
                 products.add(product);
             }
-
         } catch (final SQLException e) {
             ProductService.LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        }
+        return products;
+    }
+
+    /**
+     * Checks if sufficient stock is available for the requested quantity.
+     *
+     * @param productId         the product ID
+     * @param requestedQuantity the quantity needed
+     * @return true if stock is available, false otherwise
+     */
+    public boolean hasStock(Long productId, int requestedQuantity) {
+        return checkAvailableStock(productId, requestedQuantity);
+    }
+
+    /**
+     * Reduces stock for a product by the specified quantity.
+     * This is typically called when an order is paid.
+     *
+     * @param productId the product ID
+     * @param quantity  the quantity to deduct
+     * @throws InsufficientStockException if stock is insufficient
+     */
+    public void reduceStock(Long productId, int quantity) throws InsufficientStockException {
+        Product product = getProductById(productId);
+
+        if (product == null) {
+            throw new InsufficientStockException("Product not found with ID: " + productId);
+        }
+
+        if (product.getStockQuantity() < quantity) {
+            throw new InsufficientStockException(
+                productId,
+                product.getName(),
+                quantity,
+                product.getStockQuantity());
+        }
+
+        String req = "UPDATE products SET  stock_quantity = stock_quantity - ? WHERE id = ?";
+        try (PreparedStatement pst = connection.prepareStatement(req)) {
+            pst.setInt(1, quantity);
+            pst.setLong(2, productId);
+            int rowsAffected = pst.executeUpdate();
+
+            if (rowsAffected > 0) {
+                LOGGER.info(
+                    String.format("Stock reduced for product %s (ID: %d). Quantity deducted: %d, New quantity: %d",
+                        product.getName(), productId, quantity, product.getStockQuantity() - quantity));
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error reducing stock for product ID: " + productId, e);
+            throw new InsufficientStockException("Database error while reducing stock");
+        }
+    }
+
+    /**
+     * Restores stock for a product by the specified quantity.
+     * This is typically called when an order is cancelled.
+     *
+     * @param productId the product ID
+     * @param quantity  the quantity to restore
+     */
+    public void restoreStock(Long productId, int quantity) {
+        Product product = getProductById(productId);
+
+        if (product == null) {
+            LOGGER.warning("Cannot restore stock: Product not found with ID: " + productId);
+            return;
+        }
+
+        String req = "UPDATE products SET stock_quantity = stock_quantity + ? WHERE id = ?";
+        try (PreparedStatement pst = connection.prepareStatement(req)) {
+            pst.setInt(1, quantity);
+            pst.setLong(2, productId);
+            int rowsAffected = pst.executeUpdate();
+
+            if (rowsAffected > 0) {
+                LOGGER.info(
+                    String.format("Stock restored for product %s (ID: %d). Quantity restored: %d, New quantity: %d",
+                        product.getName(), productId, quantity, product.getStockQuantity() + quantity));
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error restoring stock for product ID: " + productId, e);
+        }
+    }
+
+    /**
+     * Gets the current available stock for a product.
+     *
+     * @param productId the product ID
+     * @return the available quantity, or 0 if product not found
+     */
+    public int getAvailableStock(Long productId) {
+        Product product = getProductById(productId);
+        return product != null ? product.getStockQuantity() : 0;
+    }
+
+    /**
+     * Searches for products within a specific price range.
+     *
+     * @param minPrice the minimum price (inclusive)
+     * @param maxPrice the maximum price (inclusive)
+     * @return list of products within the price range
+     */
+    public List<Product> searchByPriceRange(int minPrice, int maxPrice) {
+        List<Product> products = new ArrayList<>();
+        String req = "SELECT * FROM products WHERE price >= ? AND price <= ? ORDER BY price ASC";
+
+        try (PreparedStatement pst = connection.prepareStatement(req)) {
+            pst.setInt(1, minPrice);
+            pst.setInt(2, maxPrice);
+            ResultSet rs = pst.executeQuery();
+
+            while (rs.next()) {
+                Product product = Product.builder()
+                    .id(rs.getLong("id"))
+                    .name(rs.getString("name"))
+                    .price(rs.getDouble("price"))
+                    .imageUrl(rs.getString("image_url"))
+                    .description(rs.getString("description"))
+                    .stockQuantity(rs.getInt("stock_quantity"))
+                    .categories(getCategoriesForProduct(rs.getLong("id")))
+                    .build();
+                products.add(product);
+            }
+
+            LOGGER.info(String.format("Found %d products in price range %d-%d",
+                products.size(), minPrice, maxPrice));
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error searching products by price range", e);
         }
 
         return products;
     }
 
+    /**
+     * Counts the total number of products in the database.
+     *
+     * @return the total count of products
+     */
+    @Override
+    public int count() {
+        String query = "SELECT COUNT(*) FROM products";
+        try (PreparedStatement stmt = connection.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error counting products", e);
+        }
+        return 0;
+    }
+
+    /**
+     * Retrieves a product by its ID.
+     *
+     * @param id the ID of the product to retrieve
+     * @return the product with the specified ID, or null if not found
+     */
+    @Override
+    public Product getById(final Long id) {
+        return getProductById(id);
+    }
+
+    /**
+     * Retrieves all products from the database.
+     *
+     * @return a list of all products
+     */
+    @Override
+    public List<Product> getAll() {
+        List<Product> products = new ArrayList<>();
+        String query = "SELECT * FROM products";
+        try (PreparedStatement stmt = connection.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                Product product = Product.builder()
+                    .id(rs.getLong("id"))
+                    .name(rs.getString("name"))
+                    .price(rs.getDouble("price"))
+                    .imageUrl(rs.getString("image_url"))
+                    .description(rs.getString("description"))
+                    .stockQuantity(rs.getInt("stock_quantity"))
+                    .categories(getCategoriesForProduct(rs.getLong("id")))
+                    .build();
+                products.add(product);
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error retrieving all products", e);
+        }
+        return products;
+    }
+
+    /**
+     * Searches for products by name or description.
+     *
+     * @param query the search query
+     * @return a list of products matching the search query
+     */
+    @Override
+    public List<Product> search(final String query) {
+        List<Product> products = new ArrayList<>();
+        final String req = "SELECT * FROM products WHERE name LIKE ? OR description LIKE ? ORDER BY name";
+        try (final PreparedStatement pst = this.connection.prepareStatement(req)) {
+            final String searchPattern = "%" + query + "%";
+            pst.setString(1, searchPattern);
+            pst.setString(2, searchPattern);
+            final ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                Product product = Product.builder()
+                    .id(rs.getLong("id"))
+                    .name(rs.getString("name"))
+                    .price(rs.getDouble("price"))
+                    .imageUrl(rs.getString("image_url"))
+                    .description(rs.getString("description"))
+                    .stockQuantity(rs.getInt("stock_quantity"))
+                    .categories(getCategoriesForProduct(rs.getLong("id")))
+                    .build();
+                products.add(product);
+            }
+        } catch (final SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error searching products", e);
+        }
+        return products;
+    }
+
+    /**
+     * Checks if a product exists by its ID.
+     *
+     * @param id the ID of the product to check
+     * @return true if the product exists, false otherwise
+     */
+    @Override
+    public boolean exists(final Long id) {
+        return getProductById(id) != null;
+    }
 }

@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import org.controlsfx.control.Rating?>
+<?import org.kordamp.ikonli.javafx.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21"
+           fx:controller="com.esprit.controllers.common.ReviewsAndRatingsController"
+           styleClass="immersive-root"
+           stylesheets="@../styles/filmStyle.css, @../styles/reviews.css">
+
+  <!-- Background -->
+  <AnchorPane styleClass="cinematic-bg">
+    <Circle radius="220" layoutX="100" layoutY="120" styleClass="ambient-orb orb-primary" opacity="0.12"/>
+    <Circle radius="280" layoutX="1150" layoutY="520" styleClass="ambient-orb orb-secondary" opacity="0.08"/>
+  </AnchorPane>
+
+  <BorderPane styleClass="main-shell">
+    <left>
+      <fx:include source="../sidebar.fxml"/>
+    </left>
+
+    <center>
+      <VBox spacing="0" HBox.hgrow="ALWAYS">
+
+        <!-- Hero Section with Film Info -->
+        <StackPane styleClass="reviews-hero" prefHeight="280">
+          <!-- Backdrop -->
+          <ImageView fx:id="backdropImage" styleClass="backdrop-image" fitWidth="1200" preserveRatio="true"/>
+          <VBox styleClass="backdrop-gradient"/>
+
+          <!-- Content -->
+          <HBox styleClass="hero-content" spacing="25" alignment="CENTER_LEFT">
+            <padding>
+              <Insets top="30" bottom="30" left="40" right="40"/>
+            </padding>
+
+            <ImageView fx:id="filmPoster" fitWidth="140" fitHeight="210" styleClass="film-poster"/>
+
+            <VBox spacing="12" HBox.hgrow="ALWAYS">
+              <Button onAction="#goBack" styleClass="back-btn-light">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2a-arrow-left:18"/>
+                </graphic>
+              </Button>
+
+              <Label fx:id="filmTitle" text="Film Title" styleClass="film-title"/>
+
+              <HBox spacing="20" alignment="CENTER_LEFT" styleClass="film-meta">
+                <Label fx:id="yearLabel" text="2024" styleClass="meta-item"/>
+                <Label text="•" styleClass="meta-separator"/>
+                <Label fx:id="genreLabel" text="Action, Drama" styleClass="meta-item"/>
+                <Label text="•" styleClass="meta-separator"/>
+                <Label fx:id="durationLabel" text="2h 15m" styleClass="meta-item"/>
+              </HBox>
+
+              <!-- Rating Summary -->
+              <HBox spacing="30" alignment="CENTER_LEFT" styleClass="rating-summary">
+                <VBox alignment="CENTER" spacing="5">
+                  <Label fx:id="averageRatingLabel" text="8.5" styleClass="average-rating"/>
+                  <Rating fx:id="averageStars" rating="4.25" max="5" updateOnHover="false" partialRating="true"/>
+                  <Label fx:id="totalReviewsLabel" text="1,234 reviews" styleClass="total-reviews"/>
+                </VBox>
+
+                <!-- Rating Distribution -->
+                <VBox spacing="6" styleClass="rating-distribution">
+                  <HBox spacing="8" alignment="CENTER_LEFT">
+                    <Label text="5" styleClass="dist-label"/>
+                    <FontIcon iconLiteral="mdi2s-star:12" styleClass="dist-star"/>
+                    <ProgressBar fx:id="star5Bar" progress="0.6" styleClass="dist-bar"/>
+                    <Label fx:id="star5Label" text="60%" styleClass="dist-percent"/>
+                  </HBox>
+                  <HBox spacing="8" alignment="CENTER_LEFT">
+                    <Label text="4" styleClass="dist-label"/>
+                    <FontIcon iconLiteral="mdi2s-star:12" styleClass="dist-star"/>
+                    <ProgressBar fx:id="star4Bar" progress="0.25" styleClass="dist-bar"/>
+                    <Label fx:id="star4Label" text="25%" styleClass="dist-percent"/>
+                  </HBox>
+                  <HBox spacing="8" alignment="CENTER_LEFT">
+                    <Label text="3" styleClass="dist-label"/>
+                    <FontIcon iconLiteral="mdi2s-star:12" styleClass="dist-star"/>
+                    <ProgressBar fx:id="star3Bar" progress="0.1" styleClass="dist-bar"/>
+                    <Label fx:id="star3Label" text="10%" styleClass="dist-percent"/>
+                  </HBox>
+                  <HBox spacing="8" alignment="CENTER_LEFT">
+                    <Label text="2" styleClass="dist-label"/>
+                    <FontIcon iconLiteral="mdi2s-star:12" styleClass="dist-star"/>
+                    <ProgressBar fx:id="star2Bar" progress="0.03" styleClass="dist-bar"/>
+                    <Label fx:id="star2Label" text="3%" styleClass="dist-percent"/>
+                  </HBox>
+                  <HBox spacing="8" alignment="CENTER_LEFT">
+                    <Label text="1" styleClass="dist-label"/>
+                    <FontIcon iconLiteral="mdi2s-star:12" styleClass="dist-star"/>
+                    <ProgressBar fx:id="star1Bar" progress="0.02" styleClass="dist-bar"/>
+                    <Label fx:id="star1Label" text="2%" styleClass="dist-percent"/>
+                  </HBox>
+                </VBox>
+              </HBox>
+            </VBox>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <!-- Write Review Button -->
+            <Button onAction="#writeReview" styleClass="write-review-btn" text="Write a Review">
+              <graphic>
+                <FontIcon iconLiteral="mdi2p-pencil:18"/>
+              </graphic>
+            </Button>
+          </HBox>
+        </StackPane>
+
+        <!-- Reviews Content -->
+        <VBox spacing="0" VBox.vgrow="ALWAYS">
+
+          <!-- Filters Bar -->
+          <HBox styleClass="filters-bar" spacing="20" alignment="CENTER_LEFT">
+            <padding>
+              <Insets top="20" bottom="20" left="40" right="40"/>
+            </padding>
+
+            <Label text="Reviews" styleClass="section-title"/>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <HBox styleClass="filter-group" spacing="10">
+              <ToggleButton fx:id="allReviewsFilter" styleClass="filter-chip active" text="All"/>
+              <ToggleButton fx:id="fiveStarFilter" styleClass="filter-chip" text="5★"/>
+              <ToggleButton fx:id="fourStarFilter" styleClass="filter-chip" text="4★"/>
+              <ToggleButton fx:id="threeStarFilter" styleClass="filter-chip" text="3★"/>
+              <ToggleButton fx:id="lowStarFilter" styleClass="filter-chip" text="1-2★"/>
+            </HBox>
+
+            <ComboBox fx:id="sortCombo" styleClass="sort-combo" prefWidth="180">
+              <items>
+                <fx:collection fx:id="sortOptions">
+                  <String fx:value="Most Recent"/>
+                  <String fx:value="Highest Rated"/>
+                  <String fx:value="Lowest Rated"/>
+                  <String fx:value="Most Helpful"/>
+                </fx:collection>
+              </items>
+            </ComboBox>
+          </HBox>
+
+          <!-- Reviews List -->
+          <ScrollPane styleClass="reviews-scroll" fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+            <VBox spacing="20">
+              <padding>
+                <Insets top="10" bottom="30" left="40" right="40"/>
+              </padding>
+
+              <!-- User's Own Review (if exists) -->
+              <VBox fx:id="userReviewSection" styleClass="user-review-section" spacing="15" visible="false"
+                    managed="false">
+                <Label text="Your Review" styleClass="subsection-title"/>
+                <VBox fx:id="userReviewContainer"/>
+                <Separator styleClass="section-separator"/>
+              </VBox>
+
+              <!-- All Reviews -->
+              <VBox fx:id="reviewsContainer" spacing="20"/>
+
+              <!-- Load More -->
+              <HBox fx:id="loadMoreContainer" alignment="CENTER" visible="false" managed="false">
+                <Button onAction="#loadMoreReviews" styleClass="load-more-btn" text="Load More Reviews"/>
+              </HBox>
+
+              <!-- Empty State -->
+              <VBox fx:id="emptyState" alignment="CENTER" spacing="15" visible="false" managed="false" minHeight="300">
+                <FontIcon iconLiteral="mdi2c-comment-outline:60" styleClass="empty-icon"/>
+                <Label text="No reviews yet" styleClass="empty-title"/>
+                <Label text="Be the first to share your thoughts about this film" styleClass="empty-desc"/>
+                <Button onAction="#writeReview" styleClass="write-review-btn" text="Write First Review">
+                  <graphic>
+                    <FontIcon iconLiteral="mdi2p-pencil:16"/>
+                  </graphic>
+                </Button>
+              </VBox>
+            </VBox>
+          </ScrollPane>
+        </VBox>
+      </VBox>
+    </center>
+  </BorderPane>
+
+  <!-- Write/Edit Review Dialog -->
+  <VBox fx:id="reviewDialog" styleClass="dialog-overlay" visible="false" managed="false" alignment="CENTER">
+    <VBox styleClass="dialog-card large" spacing="20" maxWidth="600">
+      <padding>
+        <Insets topRightBottomLeft="30"/>
+      </padding>
+
+      <HBox alignment="CENTER_LEFT" spacing="15">
+        <Label fx:id="dialogTitle" text="Write a Review" styleClass="dialog-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button onAction="#closeReviewDialog" styleClass="close-btn">
+          <graphic>
+            <FontIcon iconLiteral="mdi2c-close:20"/>
+          </graphic>
+        </Button>
+      </HBox>
+
+      <!-- Film Preview -->
+      <HBox styleClass="review-film-preview" spacing="15" alignment="CENTER_LEFT">
+        <ImageView fx:id="dialogPoster" fitWidth="60" fitHeight="90" styleClass="dialog-poster"/>
+        <VBox spacing="5">
+          <Label fx:id="dialogFilmTitle" text="Film Title" styleClass="dialog-film-title"/>
+          <Label fx:id="dialogFilmYear" text="2024" styleClass="dialog-film-year"/>
+        </VBox>
+      </HBox>
+
+      <!-- Rating Selection -->
+      <VBox spacing="12" alignment="CENTER" styleClass="rating-section">
+        <Label text="Tap to rate" styleClass="rate-prompt"/>
+        <Rating fx:id="userRating" rating="0" max="5" styleClass="user-rating-stars"/>
+        <Label fx:id="ratingDescription" text="" styleClass="rating-description"/>
+      </VBox>
+
+      <!-- Review Title -->
+      <VBox spacing="8">
+        <Label text="Review Title" styleClass="field-label"/>
+        <TextField fx:id="reviewTitleField" styleClass="glass-input" promptText="Sum up your thoughts"/>
+      </VBox>
+
+      <!-- Review Content -->
+      <VBox spacing="8">
+        <HBox alignment="CENTER_LEFT">
+          <Label text="Your Review" styleClass="field-label"/>
+          <Region HBox.hgrow="ALWAYS"/>
+          <Label fx:id="charCountLabel" text="0/2000" styleClass="char-count"/>
+        </HBox>
+        <TextArea fx:id="reviewContentArea" styleClass="glass-textarea"
+                  promptText="What did you think about this film? Share your detailed thoughts..." prefRowCount="6"
+                  wrapText="true"/>
+      </VBox>
+
+      <!-- Spoiler Toggle -->
+      <HBox spacing="10" alignment="CENTER_LEFT">
+        <CheckBox fx:id="containsSpoilersCheck" styleClass="glass-checkbox" text="This review contains spoilers"/>
+        <FontIcon iconLiteral="mdi2a-alert:16" styleClass="spoiler-icon"/>
+      </HBox>
+
+      <!-- Tags -->
+      <VBox spacing="8">
+        <Label text="Quick Tags (optional)" styleClass="field-label"/>
+        <FlowPane fx:id="tagsContainer" hgap="10" vgap="10">
+          <ToggleButton styleClass="tag-chip" text="Great Acting"/>
+          <ToggleButton styleClass="tag-chip" text="Amazing Visuals"/>
+          <ToggleButton styleClass="tag-chip" text="Great Story"/>
+          <ToggleButton styleClass="tag-chip" text="Good Soundtrack"/>
+          <ToggleButton styleClass="tag-chip" text="Emotional"/>
+          <ToggleButton styleClass="tag-chip" text="Funny"/>
+          <ToggleButton styleClass="tag-chip" text="Thought-provoking"/>
+          <ToggleButton styleClass="tag-chip" text="Must Watch"/>
+        </FlowPane>
+      </VBox>
+
+      <HBox spacing="15" alignment="CENTER_RIGHT">
+        <Button onAction="#closeReviewDialog" styleClass="secondary-btn" text="Cancel"/>
+        <Button fx:id="submitReviewBtn" onAction="#submitReview" styleClass="primary-btn" text="Post Review"/>
+      </HBox>
+    </VBox>
+  </VBox>
+
+  <!-- Delete Review Confirmation -->
+  <VBox fx:id="deleteDialog" styleClass="dialog-overlay" visible="false" managed="false" alignment="CENTER">
+    <VBox styleClass="dialog-card" spacing="20" maxWidth="400">
+      <padding>
+        <Insets topRightBottomLeft="30"/>
+      </padding>
+
+      <VBox alignment="CENTER" spacing="15">
+        <StackPane styleClass="warning-icon-container">
+          <FontIcon iconLiteral="mdi2d-delete:48" styleClass="warning-icon"/>
+        </StackPane>
+        <Label text="Delete Review?" styleClass="dialog-title"/>
+        <Label text="This action cannot be undone. Your review will be permanently removed." styleClass="dialog-desc"
+               wrapText="true" alignment="CENTER"/>
+      </VBox>
+
+      <HBox spacing="15" alignment="CENTER">
+        <Button onAction="#cancelDelete" styleClass="secondary-btn" text="Cancel"/>
+        <Button onAction="#confirmDelete" styleClass="danger-btn" text="Delete Review"/>
+      </HBox>
+    </VBox>
+  </VBox>
+
+  <!-- Report Review Dialog -->
+  <VBox fx:id="reportDialog" styleClass="dialog-overlay" visible="false" managed="false" alignment="CENTER">
+    <VBox styleClass="dialog-card" spacing="20" maxWidth="450">
+      <padding>
+        <Insets topRightBottomLeft="30"/>
+      </padding>
+
+      <HBox alignment="CENTER_LEFT" spacing="15">
+        <Label text="Report Review" styleClass="dialog-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button onAction="#closeReportDialog" styleClass="close-btn">
+          <graphic>
+            <FontIcon iconLiteral="mdi2c-close:20"/>
+          </graphic>
+        </Button>
+      </HBox>
+
+      <Label text="Why are you reporting this review?" styleClass="dialog-subtitle"/>
+
+      <VBox spacing="10">
+        <RadioButton fx:id="reportSpam" styleClass="report-option" text="Spam or fake review">
+          <toggleGroup>
+            <ToggleGroup fx:id="reportReasonGroup"/>
+          </toggleGroup>
+        </RadioButton>
+        <RadioButton fx:id="reportOffensive" styleClass="report-option" text="Offensive or inappropriate content">
+          <toggleGroup>
+            <fx:reference source="reportReasonGroup"/>
+          </toggleGroup>
+        </RadioButton>
+        <RadioButton fx:id="reportSpoilers" styleClass="report-option" text="Unmarked spoilers">
+          <toggleGroup>
+            <fx:reference source="reportReasonGroup"/>
+          </toggleGroup>
+        </RadioButton>
+        <RadioButton fx:id="reportOther" styleClass="report-option" text="Other">
+          <toggleGroup>
+            <fx:reference source="reportReasonGroup"/>
+          </toggleGroup>
+        </RadioButton>
+      </VBox>
+
+      <VBox fx:id="otherReasonSection" spacing="8" visible="false" managed="false">
+        <Label text="Please specify" styleClass="field-label"/>
+        <TextArea fx:id="otherReasonArea" styleClass="glass-textarea" promptText="Describe the issue..."
+                  prefRowCount="3"/>
+      </VBox>
+
+      <HBox spacing="15" alignment="CENTER_RIGHT">
+        <Button onAction="#closeReportDialog" styleClass="secondary-btn" text="Cancel"/>
+        <Button onAction="#submitReport" styleClass="danger-btn" text="Submit Report"/>
+      </HBox>
+    </VBox>
+  </VBox>
+</StackPane>

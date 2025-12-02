@@ -1,9 +1,14 @@
 package com.esprit.controllers.series;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import com.esprit.models.series.Episode;
+import com.esprit.services.series.EpisodeService;
+import com.esprit.services.series.SeriesService;
+import com.esprit.utils.TestFXBase;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.layout.FlowPane;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
@@ -11,19 +16,13 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.Timeout;
-import java.util.concurrent.TimeUnit;
 import org.testfx.framework.junit5.Start;
 
-import com.esprit.models.series.Episode;
-import com.esprit.services.series.IServiceEpisodeImpl;
-import com.esprit.services.series.IServiceSeriesImpl;
-import com.esprit.utils.TestFXBase;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.FlowPane;
-import javafx.stage.Stage;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Comprehensive test suite for EpisodeClientController.
@@ -33,9 +32,9 @@ import javafx.stage.Stage;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class EpisodeClientControllerTest extends TestFXBase {
 
-    private IServiceEpisodeImpl episodeService;
+    private EpisodeService episodeService;
 
-    private IServiceSeriesImpl seriesService;
+    private SeriesService seriesService;
 
     @Override
     @Start
@@ -46,8 +45,31 @@ class EpisodeClientControllerTest extends TestFXBase {
         stage.show();
     }
 
+    // Helper methods
+    private List<Episode> createMockEpisodes() {
+        List<Episode> episodes = new ArrayList<>();
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+        Episode ep1 = new Episode();
+        ep1.setTitle("Episode 1");
+        ep1.setEpisodeNumber(1);
+        ep1.setSeason(1);
+
+        Episode ep2 = new Episode();
+        ep2.setTitle("Episode 2");
+        ep2.setEpisodeNumber(2);
+        ep2.setSeason(1);
+
+        episodes.add(ep1);
+        episodes.add(ep2);
+        return episodes;
+    }
+
+    private <T> com.esprit.utils.Page<T> createPagedResult(List<T> content) {
+        return new com.esprit.utils.Page<>(content, 0, content.size(), content.size());
+    }
+
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Episode Display Tests")
     class EpisodeDisplayTests {
 
@@ -96,8 +118,8 @@ class EpisodeClientControllerTest extends TestFXBase {
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Video Player Tests")
     class VideoPlayerTests {
 
@@ -142,8 +164,8 @@ class EpisodeClientControllerTest extends TestFXBase {
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Episode Selection Tests")
     class EpisodeSelectionTests {
 
@@ -170,8 +192,8 @@ class EpisodeClientControllerTest extends TestFXBase {
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Season Filter Tests")
     class SeasonFilterTests {
 
@@ -186,8 +208,8 @@ class EpisodeClientControllerTest extends TestFXBase {
 
     }
 
-
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Navigation Tests")
     class NavigationTests {
 
@@ -200,31 +222,6 @@ class EpisodeClientControllerTest extends TestFXBase {
             assertThat(lookup("#backButton").tryQuery()).isPresent();
         }
 
-    }
-
-
-    // Helper methods
-    private List<Episode> createMockEpisodes() {
-        List<Episode> episodes = new ArrayList<>();
-
-        Episode ep1 = new Episode();
-        ep1.setTitle("Episode 1");
-        ep1.setEpisodeNumber(1);
-        ep1.setSeason(1);
-
-        Episode ep2 = new Episode();
-        ep2.setTitle("Episode 2");
-        ep2.setEpisodeNumber(2);
-        ep2.setSeason(1);
-
-        episodes.add(ep1);
-        episodes.add(ep2);
-        return episodes;
-    }
-
-
-    private <T> com.esprit.utils.Page<T> createPagedResult(List<T> content) {
-        return new com.esprit.utils.Page<>(content, 0, content.size(), content.size());
     }
 
 }

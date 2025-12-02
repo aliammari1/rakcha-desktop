@@ -1,0 +1,273 @@
+/* RAKCHA Cinematic Email Composer - Professional Film-Like UI */
+
+/* Root styling */
+.email-composer-root {
+    -fx-padding: 0;
+    -fx-background-color: #0a0e27;
+}
+
+/* Main email container */
+.email-container {
+    -fx-padding: 30px;
+    -fx-background-color: rgba(15, 18, 45, 0.9);
+    -fx-border-color: #ff6b35;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(255, 107, 53, 0.3), 15, 0.5, 0, 0);
+}
+
+/* Header styling */
+.email-header {
+    -fx-padding: 10px 0px 20px 0px;
+    -fx-border-color: #ff6b35;
+    -fx-border-width: 0 0 2 0;
+}
+
+/* Input groups */
+.input-group {
+    -fx-padding: 15px;
+    -fx-background-color: rgba(20, 25, 55, 0.8);
+    -fx-border-color: #444444;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-spacing: 8;
+}
+
+.input-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ff6b35;
+    -fx-padding: 0 0 5 0;
+}
+
+/* Text input fields */
+.cinema-input {
+    -fx-font-family: "Outfit";
+    -fx-font-size: 13px;
+    -fx-padding: 10px 15px;
+    -fx-border-color: #555555;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+    -fx-background-color: rgba(30, 40, 70, 0.9);
+    -fx-text-fill: #e0e0e0;
+    -fx-prompt-text-fill: #888888;
+    -fx-focus-color: #ff6b35;
+    -fx-faint-focus-color: rgba(255, 107, 53, 0.1);
+}
+
+.cinema-input:focused {
+    -fx-border-color: #ff6b35;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(255, 107, 53, 0.5), 8, 0.5, 0, 0);
+}
+
+/* Text area styling */
+.cinema-textarea {
+    -fx-font-family: "Outfit";
+    -fx-font-size: 12px;
+    -fx-padding: 12px 15px;
+    -fx-border-color: #555555;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+    -fx-background-color: rgba(20, 30, 60, 0.95);
+    -fx-text-fill: #e0e0e0;
+    -fx-prompt-text-fill: #888888;
+    -fx-focus-color: #ff6b35;
+    -fx-faint-focus-color: rgba(255, 107, 53, 0.1);
+    -fx-control-inner-background: rgba(20, 30, 60, 0.95);
+    -fx-control-inner-background-alt: rgba(20, 30, 60, 0.95);
+    -fx-text-wrap: true;
+}
+
+.cinema-textarea:focused {
+    -fx-border-color: #ff6b35;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(255, 107, 53, 0.5), 8, 0.5, 0, 0);
+}
+
+/* ScrollBar styling for text areas */
+.cinema-textarea .scroll-bar {
+    -fx-padding: 0;
+}
+
+.cinema-textarea .scroll-bar .thumb {
+    -fx-background-color: rgba(255, 107, 53, 0.6);
+    -fx-background-radius: 5;
+}
+
+.cinema-textarea .scroll-bar .thumb:hover {
+    -fx-background-color: rgba(255, 107, 53, 0.8);
+}
+
+.cinema-textarea .scroll-bar .increment-button,
+.cinema-textarea .scroll-bar .decrement-button {
+    -fx-padding: 0;
+}
+
+/* ComboBox styling */
+.cinema-combo {
+    -fx-font-family: "Outfit";
+    -fx-font-size: 13px;
+    -fx-padding: 10px 15px;
+    -fx-border-color: #555555;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+    -fx-background-color: rgba(30, 40, 70, 0.9);
+    -fx-text-fill: #e0e0e0;
+    -fx-focus-color: #ff6b35;
+    -fx-faint-focus-color: rgba(255, 107, 53, 0.1);
+}
+
+.cinema-combo:focused {
+    -fx-border-color: #ff6b35;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(255, 107, 53, 0.5), 8, 0.5, 0, 0);
+}
+
+.cinema-combo-popup {
+    -fx-border-color: #ff6b35;
+    -fx-border-width: 1;
+}
+
+.cinema-combo .list-cell {
+    -fx-background-color: rgba(30, 40, 70, 0.95);
+    -fx-text-fill: #e0e0e0;
+    -fx-padding: 8px 15px;
+}
+
+.cinema-combo .list-cell:hover {
+    -fx-background-color: rgba(255, 107, 53, 0.2);
+}
+
+.cinema-combo .list-cell:selected {
+    -fx-background-color: #ff6b35;
+    -fx-text-fill: white;
+}
+
+/* Preview box styling */
+.preview-box {
+    -fx-padding: 0;
+    -fx-background-color: rgba(10, 14, 39, 0.8);
+    -fx-border-color: #ff6b35;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+}
+
+.preview-text {
+    -fx-font-family: "Courier New";
+    -fx-font-size: 11px;
+    -fx-padding: 10px;
+    -fx-control-inner-background: rgba(10, 14, 39, 0.8);
+    -fx-text-fill: #00aa00;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-border-width: 0;
+}
+
+/* Button styling */
+.send-button {
+    -fx-font-family: "Outfit";
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 12px 30px;
+    -fx-background: linear-gradient(to bottom, #ff6b35, #e85a2a);
+    -fx-text-fill: white;
+    -fx-border-width: 0;
+    -fx-border-radius: 5;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(255, 107, 53, 0.4), 8, 0.5, 0, 2);
+}
+
+.send-button:hover {
+    -fx-background: linear-gradient(to bottom, #ff7d4d, #f06d3a);
+    -fx-effect: dropshadow(gaussian, rgba(255, 107, 53, 0.6), 12, 0.5, 0, 3);
+}
+
+.send-button:pressed {
+    -fx-background: linear-gradient(to bottom, #e85a2a, #d94a1f);
+    -fx-effect: dropshadow(gaussian, rgba(255, 107, 53, 0.3), 5, 0.5, 0, 1);
+}
+
+.send-button:disabled {
+    -fx-background: #555555;
+    -fx-text-fill: #999999;
+    -fx-cursor: not-allowed;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 5, 0.5, 0, 1);
+}
+
+/* Clear button styling */
+.clear-button {
+    -fx-font-family: "Outfit";
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 30px;
+    -fx-background: linear-gradient(to bottom, rgba(100, 100, 100, 0.8), rgba(80, 80, 80, 0.8));
+    -fx-text-fill: white;
+    -fx-border-color: #666666;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+    -fx-cursor: hand;
+}
+
+.clear-button:hover {
+    -fx-background: linear-gradient(to bottom, rgba(120, 120, 120, 0.9), rgba(100, 100, 100, 0.9));
+    -fx-border-color: #888888;
+}
+
+.clear-button:pressed {
+    -fx-background: rgba(60, 60, 60, 0.9);
+}
+
+/* Button group spacing */
+.button-group {
+    -fx-padding: 20px 0 0 0;
+    -fx-spacing: 15px;
+}
+
+/* Status label styling */
+.status-label {
+    -fx-font-size: 12px;
+    -fx-padding: 10px;
+    -fx-text-alignment: center;
+}
+
+/* Scrollbar styling for general use */
+.scroll-bar {
+    -fx-block-increment: 20;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: rgba(255, 107, 53, 0.5);
+    -fx-background-radius: 5;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: rgba(255, 107, 53, 0.7);
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+}
+
+/* VBox spacing */
+.vbox {
+    -fx-spacing: 10px;
+}
+
+/* Error label styling */
+.error-label {
+    -fx-text-fill: #ff4444;
+    -fx-font-size: 11px;
+}
+
+/* Focus styling for accessibility */
+*:focused {
+    -fx-focus-color: rgba(255, 107, 53, 0.5);
+}
+
+/* Transition effects */
+* {
+    -fx-font-family: "Outfit", sans-serif;
+}

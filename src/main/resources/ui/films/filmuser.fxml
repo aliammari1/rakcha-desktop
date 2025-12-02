@@ -1,368 +1,543 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import org.kordamp.ikonli.javafx.FontIcon?>
 <?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
 <?import org.controlsfx.control.Rating?>
+<?import org.kordamp.ikonli.javafx.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21"
+           fx:controller="com.esprit.controllers.films.FilmUserController"
+           styleClass="immersive-root"
+           stylesheets="@../styles/filmStyle.css, @../styles/film-animations.css, @../styles/login-animations.css">
 
-<StackPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-    fx:controller="com.esprit.controllers.films.FilmUserController"
-    styleClass="film-root-pane"
-    stylesheets="@../styles/filmStyle.css, @../styles/film-animations.css, @../styles/login-animations.css">
+  <!-- Cinematic Background with Gradient Mesh -->
+  <AnchorPane fx:id="cinematicBackground" styleClass="cinematic-bg"
+              AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
 
-    <!-- Animated Background Layer -->
-    <AnchorPane styleClass="animated-shape" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
-        
-        <!-- Geometric Shapes - Login Theme Style -->
-        <Polygon fx:id="filmShape1" points="150.0,300.0,170.0,280.0,190.0,300.0,170.0,320.0" 
-            styleClass="rotating-shape, pulsing-shape, rotating-shape-polygon"
-            opacity="0.8" />
-            
-        <Rectangle fx:id="filmShape2" width="35" height="35" layoutX="1350" layoutY="200"
-            styleClass="rotating-shape, pulsing-shape, rotating-shape-rectangle"
-            opacity="0.8" />
-            
-        <Circle fx:id="filmShape3" radius="25" layoutX="300" layoutY="700"
-            styleClass="pulsing-shape, glow-red, pulsing-circle"
-            opacity="0.7" />
-            
-        <Polygon fx:id="filmShape4" points="1200.0,500.0,1230.0,480.0,1260.0,500.0,1245.0,530.0,1215.0,530.0" 
-            styleClass="rotating-shape, rotating-shape-pentagon"
-            opacity="0.8" />
+    <!-- Ambient Light Orbs -->
+    <Circle fx:id="ambientOrb1" radius="200" layoutX="150" layoutY="150" styleClass="ambient-orb orb-primary"
+            opacity="0.15"/>
+    <Circle fx:id="ambientOrb2" radius="300" layoutX="1200" layoutY="600" styleClass="ambient-orb orb-secondary"
+            opacity="0.1"/>
+    <Circle fx:id="ambientOrb3" radius="150" layoutX="800" layoutY="100" styleClass="ambient-orb orb-accent"
+            opacity="0.12"/>
 
-        <!-- Floating Particles -->
-        <Circle fx:id="filmParticle1" radius="4" layoutX="400" layoutY="300" styleClass="film-particle, film-particle-style" />
-        <Circle fx:id="filmParticle2" radius="5" layoutX="900" layoutY="500" styleClass="film-particle, film-particle-style" />
-        <Circle fx:id="filmParticle3" radius="3" layoutX="1200" layoutY="400" styleClass="film-particle, film-particle-style" />
-        <Circle fx:id="filmParticle4" radius="6" layoutX="600" layoutY="600" styleClass="film-particle, film-particle-style" />
-    </AnchorPane>
+    <!-- Floating Cinema Elements -->
+    <FontIcon fx:id="floatingReel1" iconLiteral="mdi2f-filmstrip:40" layoutX="100" layoutY="500"
+              styleClass="floating-icon" opacity="0.08"/>
+    <FontIcon fx:id="floatingReel2" iconLiteral="mdi2m-movie-open:35" layoutX="1300" layoutY="300"
+              styleClass="floating-icon" opacity="0.06"/>
+    <FontIcon fx:id="floatingStar1" iconLiteral="mdi2s-star:25" layoutX="400" layoutY="700" styleClass="floating-star"
+              opacity="0.1"/>
+    <FontIcon fx:id="floatingStar2" iconLiteral="mdi2s-star-outline:20" layoutX="950" layoutY="150"
+              styleClass="floating-star" opacity="0.08"/>
+  </AnchorPane>
 
-    <!-- Main Content -->
-    <AnchorPane fx:id="anchorPaneFilm" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
-        stylesheets="@../styles/filmStyle.css">
-        
-        <!-- Sidebar -->
-        <fx:include source="/ui/sidebar.fxml" />
-        
-        <!-- Series Navigation Button -->
-        <Button fx:id="SerieButton" layoutY="271.0" mnemonicParsing="false"
-            onAction="#switchtoSerie" prefHeight="63.0" prefWidth="248.0" styleClass="nav-btn"
-            stylesheets="@../styles/filmStyle.css" text="Series              "
-            textAlignment="CENTER" />
-        <FontIcon fill="#ebe5e5" iconLiteral="fa-tv" layoutX="14.0" layoutY="313.0" />
-        
-        <!-- Main Content Area -->
-        <AnchorPane layoutX="248.0" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="248" AnchorPane.rightAnchor="0" styleClass="tab-pane"
-            stylesheets="@../styles/filmStyle.css">
-            <children>
-                <!-- Modern Header with Dark Theme -->
-                <HBox alignment="CENTER_LEFT" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" prefHeight="100.0"
-                    spacing="20.0" styleClass="dark-gradient-header"
-                    style="-fx-background-color: linear-gradient(to bottom, rgba(20, 5, 5, 0.95), rgba(40, 10, 10, 0.9), rgba(20, 5, 5, 0.95)); 
-                           -fx-background-radius: 0 0 15 15; 
-                           -fx-effect: dropshadow(gaussian, rgba(139, 0, 0, 0.8), 25, 0, 0, 5);
-                           -fx-border-color: #8b0000;
-                           -fx-border-width: 0 0 2 0;">
+  <!-- Main Application Shell -->
+  <BorderPane fx:id="mainShell" styleClass="main-shell">
+
+    <!-- Left: Minimal Sidebar -->
+    <left>
+      <VBox fx:id="miniSidebar" styleClass="mini-sidebar" spacing="0" prefWidth="70">
+        <padding>
+          <Insets top="20" bottom="20" left="10" right="10"/>
+        </padding>
+
+        <!-- Logo Icon -->
+        <VBox alignment="CENTER" spacing="8">
+          <ImageView fitHeight="45" fitWidth="45" preserveRatio="true" styleClass="sidebar-logo">
+            <image>
+              <Image url="@Logo.png"/>
+            </image>
+          </ImageView>
+        </VBox>
+
+        <Region VBox.vgrow="ALWAYS" prefHeight="30"/>
+
+        <!-- Navigation Icons -->
+        <VBox alignment="CENTER" spacing="15" styleClass="nav-icons">
+          <Button fx:id="navFilms" styleClass="nav-icon-btn active" mnemonicParsing="false">
+            <graphic>
+              <FontIcon iconLiteral="mdi2m-movie:24" styleClass="nav-icon"/>
+            </graphic>
+          </Button>
+          <Button fx:id="SerieButton" onAction="#switchtoSerie" styleClass="nav-icon-btn" mnemonicParsing="false">
+            <graphic>
+              <FontIcon iconLiteral="mdi2t-television:24" styleClass="nav-icon"/>
+            </graphic>
+          </Button>
+          <Button styleClass="nav-icon-btn" mnemonicParsing="false">
+            <graphic>
+              <FontIcon iconLiteral="mdi2h-heart:24" styleClass="nav-icon"/>
+            </graphic>
+          </Button>
+          <Button styleClass="nav-icon-btn" mnemonicParsing="false">
+            <graphic>
+              <FontIcon iconLiteral="mdi2t-ticket:24" styleClass="nav-icon"/>
+            </graphic>
+          </Button>
+        </VBox>
+
+        <Region VBox.vgrow="ALWAYS"/>
+
+        <!-- Bottom Icons -->
+        <VBox alignment="CENTER" spacing="15">
+          <Button fx:id="settingsBtn" onAction="#openSettings" styleClass="nav-icon-btn" mnemonicParsing="false">
+            <graphic>
+              <FontIcon iconLiteral="mdi2c-cog:22" styleClass="nav-icon"/>
+            </graphic>
+            <tooltip>
+              <Tooltip text="Settings"/>
+            </tooltip>
+          </Button>
+        </VBox>
+      </VBox>
+    </left>
+
+    <!-- Center: Main Content Area -->
+    <center>
+      <StackPane fx:id="contentStack" styleClass="content-stack">
+
+        <!-- Primary View: Film Explorer -->
+        <VBox fx:id="filmExplorer" styleClass="film-explorer" spacing="0">
+
+          <!-- Immersive Header with Glassmorphism -->
+          <HBox fx:id="immersiveHeader" styleClass="immersive-header" alignment="CENTER_LEFT" spacing="20"
+                prefHeight="80">
+            <padding>
+              <Insets top="15" bottom="15" left="25" right="25"/>
+            </padding>
+
+            <!-- Brand Section -->
+            <VBox spacing="2" alignment="CENTER_LEFT">
+              <Label text="RAKCHA" styleClass="brand-title"/>
+              <Label text="Cinema Experience" styleClass="brand-subtitle"/>
+            </VBox>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <!-- Unified Search Bar -->
+            <HBox styleClass="unified-search" alignment="CENTER" spacing="0" prefWidth="400">
+              <FontIcon iconLiteral="mdi2m-magnify:20" styleClass="search-icon"/>
+              <TextField fx:id="serach_film_user" styleClass="search-input"
+                         promptText="Search films, actors, genres..." HBox.hgrow="ALWAYS">
+                <cursor>
+                  <Cursor fx:constant="TEXT"/>
+                </cursor>
+              </TextField>
+              <Button styleClass="search-voice-btn" mnemonicParsing="false">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2m-microphone:18" styleClass="voice-icon"/>
+                </graphic>
+              </Button>
+            </HBox>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <!-- Quick Actions -->
+            <HBox spacing="12" alignment="CENTER_RIGHT">
+              <ComboBox fx:id="tricomboBox" styleClass="glass-combo" promptText="Sort" prefWidth="120"
+                        onAction="#sortFilms"/>
+              <Button onAction="#filtrer" styleClass="glass-btn" mnemonicParsing="false">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2t-tune-vertical:20"/>
+                </graphic>
+              </Button>
+              <Separator orientation="VERTICAL" styleClass="header-separator"/>
+              <Button fx:id="notificationBtn" onAction="#showNotifications" styleClass="notification-btn"
+                      mnemonicParsing="false">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2b-bell-outline:22"/>
+                </graphic>
+              </Button>
+            </HBox>
+          </HBox>
+
+          <!-- Content Scroll Area -->
+          <ScrollPane fx:id="mainScrollPane" styleClass="main-scroll" fitToWidth="true"
+                      hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" VBox.vgrow="ALWAYS">
+
+            <VBox fx:id="scrollContent" styleClass="scroll-content" spacing="35">
+              <padding>
+                <Insets top="25" bottom="40" left="30" right="30"/>
+              </padding>
+
+              <!-- Featured Hero Section -->
+              <VBox fx:id="heroSection" styleClass="hero-section" spacing="0">
+                <StackPane fx:id="heroStack" styleClass="hero-stack" prefHeight="380">
+                  <!-- Hero Background Image (set dynamically) -->
+                  <ImageView fx:id="heroBackdrop" styleClass="hero-backdrop" preserveRatio="false" fitHeight="380"/>
+
+                  <!-- Gradient Overlay -->
+                  <Region styleClass="hero-gradient"/>
+
+                  <!-- Hero Content -->
+                  <HBox alignment="BOTTOM_LEFT" spacing="30">
                     <padding>
-                        <Insets left="20.0" right="20.0" top="10.0" bottom="10.0" />
+                      <Insets top="40" bottom="40" left="50" right="50"/>
                     </padding>
-                    
-                    <!-- Logo and User Info -->
-                    <HBox alignment="CENTER_LEFT" spacing="15.0">
-                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@Logo.png" />
-                            </image>
-                        </ImageView>
-                        <VBox spacing="2.0">
-                            <Label text="Loujain Hajlaoui" styleClass="animated-text" 
-                                style="-fx-text-fill: #ffffff; -fx-font-size: 16px; -fx-font-weight: bold;
-                                       -fx-effect: dropshadow(gaussian, #8b0000, 6, 0, 1, 1);" />
-                            <Label text="User" style="-fx-text-fill: rgba(255,255,255,0.7); -fx-font-size: 12px;" />
-                        </VBox>
-                    </HBox>
-                    
-                    <!-- Spacer -->
-                    <HBox HBox.hgrow="ALWAYS" />
-                    
-                    <!-- Filter Controls -->
-                    <HBox alignment="CENTER" spacing="10.0">
-                        <ComboBox fx:id="tricomboBox" prefHeight="40.0" prefWidth="150.0" 
-                            styleClass="filter-button" promptText="Sort by..." />
-                        <Button onAction="#filtrer" prefHeight="40.0" prefWidth="100.0" 
-                            styleClass="action-button" text="Filter">
-                            <graphic>
-                                <FontIcon iconLiteral="fa-filter" fill="white" />
-                            </graphic>
-                        </Button>
-                    </HBox>
-                    
-                    <!-- Search Bar -->
-                    <HBox alignment="CENTER" spacing="5.0" styleClass="search-container">
-                        <TextField fx:id="serach_film_user" prefHeight="40.0" prefWidth="250.0" 
-                            styleClass="search-bar" promptText="Search movies...">
-                            <cursor>
-                                <Cursor fx:constant="TEXT" />
-                            </cursor>
-                        </TextField>
-                        <Button mnemonicParsing="false" styleClass="action-button" 
-                            prefHeight="40.0" prefWidth="40.0">
-                            <graphic>
-                                <FontIcon fill="white" iconLiteral="fa-search" />
-                            </graphic>
-                        </Button>
-                    </HBox>
-                </HBox>
-                
-                <!-- Content Area with Cards -->
-                <HBox AnchorPane.topAnchor="120.0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0" spacing="15.0">
-                    <padding>
-                        <Insets left="15.0" right="15.0" top="15.0" bottom="15.0" />
-                    </padding>
-                    
-                    <!-- Left Column - All Movies -->
-                    <VBox spacing="15.0" HBox.hgrow="ALWAYS" prefWidth="750.0">
-                        <Label text="All Movies" styleClass="section-title, animated-text"
-                            style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #ffffff;
-                                   -fx-effect: dropshadow(gaussian, #ff4444, 12, 0, 2, 2);" />
-                        <ScrollPane fx:id="filmScrollPane" fitToHeight="true" fitToWidth="true"
-                            hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" styleClass="film-scroll"
-                            style="-fx-background-color: transparent; -fx-background: transparent;"
-                            VBox.vgrow="ALWAYS">
-                            <VBox spacing="0.0" style="-fx-background-color: transparent;" />
-                        </ScrollPane>
-                    </VBox>
-                    
-                    <!-- Right Column - Top 3 Movies -->
-                    <VBox spacing="15.0" prefWidth="420.0">
-                        <HBox alignment="CENTER_LEFT" spacing="15.0">
-                            <Label text="Top Movies" styleClass="section-title, animated-text"
-                                style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #ffffff;
-                                       -fx-effect: dropshadow(gaussian, #ff4444, 12, 0, 2, 2);" />
-                            <ComboBox fx:id="top3combobox" prefHeight="45.0" prefWidth="150.0" 
-                                styleClass="filter-button" promptText="Category" />
+
+                    <!-- Featured Poster -->
+                    <ImageView fx:id="heroPoster" styleClass="hero-poster" fitHeight="280" fitWidth="190"
+                               preserveRatio="true"/>
+
+                    <!-- Featured Info -->
+                    <VBox spacing="12" alignment="BOTTOM_LEFT" HBox.hgrow="ALWAYS">
+                      <Label styleClass="hero-badge" text="⭐ FEATURED TODAY"/>
+                      <Label fx:id="heroTitle" styleClass="hero-title" text="Featured Film" wrapText="true"/>
+                      <HBox spacing="15" styleClass="hero-meta">
+                        <Label fx:id="heroYear" text="2024" styleClass="meta-pill"/>
+                        <Label fx:id="heroDuration" text="2h 15m" styleClass="meta-pill"/>
+                        <Label fx:id="heroGenre" text="Action" styleClass="meta-pill genre"/>
+                        <HBox spacing="5" alignment="CENTER">
+                          <FontIcon iconLiteral="mdi2s-star:16" styleClass="star-gold"/>
+                          <Label fx:id="heroRating" text="4.8" styleClass="rating-text"/>
                         </HBox>
-                        
-                        <!-- Top 3 Container -->
-                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" 
-                            styleClass="film-scroll" style="-fx-background-color: transparent; -fx-background: transparent;"
-                            VBox.vgrow="ALWAYS">
-                            <VBox fx:id="topthreeVbox" spacing="20.0" styleClass="top-films-container"
-                                style="-fx-background-color: transparent;">
-                                <padding>
-                                    <Insets top="10.0" />
-                                </padding>
-                            </VBox>
-                        </ScrollPane>
-                        
-                        <!-- Alternative Top 3 (hidden by default) -->
-                        <VBox fx:id="topthreeVbox1" spacing="20.0" visible="false"
-                            style="-fx-background-color: transparent;" />
+                      </HBox>
+                      <Label fx:id="heroDescription" styleClass="hero-description" wrapText="true" maxWidth="500"/>
+                      <HBox spacing="15" styleClass="hero-actions">
+                        <Button fx:id="heroPlayBtn" styleClass="hero-btn primary" text="Book Tickets"
+                                mnemonicParsing="false">
+                          <graphic>
+                            <FontIcon iconLiteral="mdi2t-ticket:20"/>
+                          </graphic>
+                        </Button>
+                        <Button fx:id="heroTrailerBtn" styleClass="hero-btn secondary" text="Watch Trailer"
+                                mnemonicParsing="false">
+                          <graphic>
+                            <FontIcon iconLiteral="mdi2p-play-circle-outline:20"/>
+                          </graphic>
+                        </Button>
+                        <Button fx:id="heroAddListBtn" onAction="#addToWatchlist" styleClass="hero-btn icon-only"
+                                mnemonicParsing="false">
+                          <graphic>
+                            <FontIcon iconLiteral="mdi2p-plus:22"/>
+                          </graphic>
+                          <tooltip>
+                            <Tooltip text="Add to watchlist"/>
+                          </tooltip>
+                        </Button>
+                        <Button fx:id="heroShareBtn" onAction="#shareHeroFilm" styleClass="hero-btn icon-only"
+                                mnemonicParsing="false">
+                          <graphic>
+                            <FontIcon iconLiteral="mdi2s-share-variant:20"/>
+                          </graphic>
+                          <tooltip>
+                            <Tooltip text="Share this film"/>
+                          </tooltip>
+                        </Button>
+                      </HBox>
                     </VBox>
+                  </HBox>
+                </StackPane>
+              </VBox>
+
+              <!-- Quick Categories Pills -->
+              <HBox fx:id="categoryPills" styleClass="category-pills" spacing="12" alignment="CENTER_LEFT">
+                <Button styleClass="pill-btn active" text="All" onAction="#filterByCategory" mnemonicParsing="false"/>
+                <Button styleClass="pill-btn" text="Now Showing" onAction="#filterByCategory" mnemonicParsing="false"/>
+                <Button styleClass="pill-btn" text="Coming Soon" onAction="#filterByCategory" mnemonicParsing="false"/>
+                <Button styleClass="pill-btn" text="Top Rated" onAction="#filterByCategory" mnemonicParsing="false"/>
+                <Button styleClass="pill-btn" text="Action" onAction="#filterByCategory" mnemonicParsing="false"/>
+                <Button styleClass="pill-btn" text="Drama" onAction="#filterByCategory" mnemonicParsing="false"/>
+                <Button styleClass="pill-btn" text="Comedy" onAction="#filterByCategory" mnemonicParsing="false"/>
+                <Button styleClass="pill-btn" text="Sci-Fi" onAction="#filterByCategory" mnemonicParsing="false"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <ComboBox fx:id="top3combobox" styleClass="view-combo" promptText="View" prefWidth="100"
+                          onAction="#sortBySelection"/>
+              </HBox>
+
+              <!-- Inline Expanded Film Detail (Hidden by default) -->
+              <VBox fx:id="inlineDetailPanel" styleClass="inline-detail-panel" visible="false" managed="false"
+                    spacing="0">
+                <HBox styleClass="detail-container" spacing="0">
+                  <!-- Left: Large Poster with Parallax Effect -->
+                  <StackPane styleClass="detail-poster-stack" prefWidth="350">
+                    <ImageView fx:id="imagefilmDetail" styleClass="detail-poster" fitWidth="320" fitHeight="450"
+                               preserveRatio="true"/>
+                    <VBox alignment="BOTTOM_CENTER" styleClass="poster-actions">
+                      <padding>
+                        <Insets bottom="20"/>
+                      </padding>
+                      <Button fx:id="trailer_Button" styleClass="poster-play-btn" mnemonicParsing="false">
+                        <graphic>
+                          <FontIcon iconLiteral="mdi2p-play:40"/>
+                        </graphic>
+                      </Button>
+                    </VBox>
+                  </StackPane>
+
+                  <!-- Center: Film Details -->
+                  <VBox styleClass="detail-info" spacing="20" HBox.hgrow="ALWAYS">
+                    <padding>
+                      <Insets top="30" bottom="30" left="35" right="35"/>
+                    </padding>
+
+                    <!-- Close Button -->
+                    <HBox alignment="TOP_RIGHT">
+                      <Button fx:id="closeDetailFilm" styleClass="close-detail-btn" mnemonicParsing="false">
+                        <graphic>
+                          <FontIcon iconLiteral="mdi2c-close:24"/>
+                        </graphic>
+                      </Button>
+                    </HBox>
+
+                    <!-- Title and Rating -->
+                    <VBox spacing="8">
+                      <Label fx:id="filmNomDetail" styleClass="detail-title" text="Film Title" wrapText="true"/>
+                      <HBox spacing="20" alignment="CENTER_LEFT" styleClass="detail-meta-row">
+                        <HBox spacing="6" alignment="CENTER" styleClass="rating-display">
+                          <FontIcon iconLiteral="mdi2s-star:28" styleClass="star-gold"/>
+                          <Label fx:id="labelavregeRate" text="4.5" styleClass="rating-large"/>
+                          <Label text="/5" styleClass="rating-suffix"/>
+                        </HBox>
+                        <Separator orientation="VERTICAL"/>
+                        <Label fx:id="yearLabel" text="2024" styleClass="detail-meta"/>
+                        <Label fx:id="durationLabel" text="2h 30m" styleClass="detail-meta"/>
+                        <Label fx:id="directorLabel" text="Director" styleClass="detail-meta"/>
+                      </HBox>
+                    </VBox>
+
+                    <!-- Genre Tags -->
+                    <HBox fx:id="genreTags" spacing="10" styleClass="genre-tags">
+                      <Label text="Action" styleClass="genre-tag"/>
+                      <Label text="Adventure" styleClass="genre-tag"/>
+                      <Label text="Sci-Fi" styleClass="genre-tag"/>
+                    </HBox>
+
+                    <!-- Description -->
+                    <VBox spacing="10">
+                      <Label text="Synopsis" styleClass="section-label"/>
+                      <TextArea fx:id="descriptionDETAILfilm" styleClass="detail-description"
+                                editable="false" wrapText="true" prefRowCount="4"/>
+                    </VBox>
+
+                    <!-- Your Rating -->
+                    <VBox spacing="10" styleClass="user-rating-section">
+                      <Label text="Your Rating" styleClass="section-label"/>
+                      <HBox spacing="15" alignment="CENTER_LEFT">
+                        <Rating fx:id="filmRate" max="5" rating="0"/>
+                        <Label fx:id="userRatingLabel" text="Rate this film" styleClass="rating-hint"/>
+                      </HBox>
+                    </VBox>
+
+                    <!-- Action Buttons -->
+                    <HBox spacing="15" styleClass="detail-actions">
+                      <Button fx:id="reserver_Film" styleClass="action-btn primary" text="Book Tickets"
+                              mnemonicParsing="false">
+                        <graphic>
+                          <FontIcon iconLiteral="mdi2t-ticket:20"/>
+                        </graphic>
+                      </Button>
+                      <Button onMouseClicked="#afficherAnchorComment" styleClass="action-btn secondary" text="Reviews"
+                              mnemonicParsing="false">
+                        <graphic>
+                          <FontIcon iconLiteral="mdi2c-comment-text-multiple:20"/>
+                        </graphic>
+                      </Button>
+                      <Button fx:id="shareDetailBtn" onAction="#shareDetailFilm" styleClass="action-btn icon"
+                              mnemonicParsing="false">
+                        <graphic>
+                          <FontIcon iconLiteral="mdi2s-share-variant:20"/>
+                        </graphic>
+                        <tooltip>
+                          <Tooltip text="Share this film"/>
+                        </tooltip>
+                      </Button>
+                      <Button fx:id="favoriteDetailBtn" onAction="#toggleFavorite" styleClass="action-btn icon"
+                              mnemonicParsing="false">
+                        <graphic>
+                          <FontIcon iconLiteral="mdi2h-heart-outline:20"/>
+                        </graphic>
+                        <tooltip>
+                          <Tooltip text="Add to favorites"/>
+                        </tooltip>
+                      </Button>
+                    </HBox>
+                  </VBox>
+
+                  <!-- Right: QR Code and Additional Info -->
+                  <VBox styleClass="detail-sidebar" spacing="25" prefWidth="200">
+                    <padding>
+                      <Insets top="40" bottom="40" left="25" right="25"/>
+                    </padding>
+
+                    <!-- Quick Book QR -->
+                    <VBox spacing="10" alignment="CENTER" styleClass="qr-section">
+                      <Label text="Quick Book" styleClass="qr-label"/>
+                      <StackPane styleClass="qr-frame">
+                        <ImageView fx:id="qrcode" fitHeight="130" fitWidth="130" preserveRatio="true"/>
+                      </StackPane>
+                      <Label text="Scan to book on mobile" styleClass="qr-hint"/>
+                    </VBox>
+
+                    <!-- Showtime Preview -->
+                    <VBox spacing="10" styleClass="showtime-preview">
+                      <Label text="Next Showtime" styleClass="section-label-small"/>
+                      <HBox spacing="8" alignment="CENTER" styleClass="showtime-badge">
+                        <FontIcon iconLiteral="mdi2c-clock-outline:16"/>
+                        <Label text="Today 7:30 PM" styleClass="showtime-text"/>
+                      </HBox>
+                    </VBox>
+                  </VBox>
                 </HBox>
-            </children>
-        </AnchorPane>
-    </AnchorPane>
-    
-    <!-- Film Detail Modal -->
-    <AnchorPane fx:id="detalAnchorPane" layoutX="280.0" layoutY="68.0" prefHeight="719.0"
-        prefWidth="942.0" styleClass="detail-modal" stylesheets="@../styles/filmStyle.css"
-        visible="false"
-        style="-fx-background-color: white; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 20, 0, 0, 5);">
-        <children>
-            <!-- Close Button -->
-            <Button fx:id="closeDetailFilm" layoutX="880.0" layoutY="14.0" mnemonicParsing="false"
-                prefHeight="35.0" prefWidth="48.0" styleClass="close"
-                stylesheets="@../styles/filmStyle.css">
-                <graphic>
-                    <FontIcon iconLiteral="fa-close" styleClass="close" />
-                </graphic>
-            </Button>
-            
-            <!-- Film Image -->
-            <ImageView fx:id="imagefilmDetail" fitHeight="421.0" fitWidth="348.0" layoutX="57.0"
-                layoutY="57.0" pickOnBounds="true" preserveRatio="true" 
-                style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 15, 0, 0, 5);" />
-            
-            <!-- Film Title -->
-            <Label fx:id="filmNomDetail" layoutX="422.0" layoutY="56.0" prefHeight="62.0"
-                prefWidth="400.0" text="Film Name" wrapText="true"
-                style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;">
-                <font>
-                    <Font size="26.0" />
-                </font>
-            </Label>
-            
-            <!-- Average Rating -->
-            <HBox alignment="CENTER_LEFT" layoutX="735.0" layoutY="70.0" spacing="8.0">
-                <FontIcon fill="#f2b604" iconLiteral="fa-star" iconSize="24" />
-                <Label fx:id="labelavregeRate" text="4.5/5" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;">
-                    <font>
-                        <Font size="20.0" />
-                    </font>
-                </Label>
-            </HBox>
-            
-            <!-- Description -->
-            <TextArea fx:id="descriptionDETAILfilm" editable="false" layoutX="422.0" layoutY="110.0"
-                prefHeight="384.0" prefWidth="402.0" wrapText="true" 
-                styleClass="description-area"
-                style="-fx-background-color: #f8f9fa; -fx-background-radius: 10; -fx-padding: 15;" />
-            
-            <!-- User Rating -->
-            <VBox alignment="CENTER" layoutX="57.0" layoutY="494.0" spacing="10.0">
-                <Label text="Rate this film:" style="-fx-font-size: 14px; -fx-text-fill: #7f8c8d;" />
-                <Rating fx:id="filmRate" prefHeight="35.0" prefWidth="240.0" rating="0.0" />
-            </VBox>
-            
-            <!-- Comment Icon -->
-            <Button layoutX="275.0" layoutY="500.0" mnemonicParsing="false" 
-                onMouseClicked="#afficherAnchorComment" styleClass="action-button"
-                prefHeight="40.0" prefWidth="110.0" text="Comments">
-                <graphic>
-                    <FontIcon fill="white" iconLiteral="fa-commenting" />
-                </graphic>
-            </Button>
-            
-            <!-- Action Buttons -->
-            <HBox alignment="CENTER" layoutX="422.0" layoutY="505.0" spacing="15.0">
-                <Button fx:id="trailer_Button" mnemonicParsing="false"
-                    prefHeight="42.0" prefWidth="172.0" styleClass="action-button"
-                    stylesheets="@../styles/filmStyle.css" text="Watch Trailer">
-                    <graphic>
-                        <FontIcon iconLiteral="fa-play" fill="white" />
-                    </graphic>
-                    <cursor>
-                        <Cursor fx:constant="HAND" />
-                    </cursor>
-                </Button>
-                <Button fx:id="reserver_Film" mnemonicParsing="false"
-                    prefHeight="42.0" prefWidth="172.0" styleClass="action-button"
-                    stylesheets="@../styles/filmStyle.css" text="RESERVE">
-                    <graphic>
-                        <FontIcon iconLiteral="fa-ticket" fill="white" />
-                    </graphic>
-                    <cursor>
-                        <Cursor fx:constant="HAND" />
-                    </cursor>
-                </Button>
-            </HBox>
-            
-            <!-- QR Code -->
-            <VBox alignment="CENTER" layoutX="680.0" layoutY="556.0" spacing="8.0">
-                <Label text="Scan to Reserve" style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;" />
-                <ImageView fx:id="qrcode" fitHeight="140.0" fitWidth="140.0" pickOnBounds="true" preserveRatio="true" 
-                    style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 3);" />
-            </VBox>
-            
-            <!-- Comments Panel (nested) -->
-            <AnchorPane fx:id="commentAnchorPane" layoutX="170.0" layoutY="48.0" prefHeight="638.0"
-                prefWidth="499.0" styleClass="bg-white" stylesheets="@../styles/filmStyle.css"
-                visible="false"
-                style="-fx-background-color: white; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 15, 0, 0, 5);">
-                <children>
-                    <Button fx:id="closeDetailFilm1" layoutX="443.0" layoutY="6.0"
-                        mnemonicParsing="false" prefHeight="35.0" prefWidth="48.0"
-                        styleClass="close" stylesheets="@../styles/filmStyle.css">
-                        <graphic>
-                            <FontIcon iconLiteral="fa-close" styleClass="close" />
-                        </graphic>
+
+                <!-- Comments Section (Expandable) -->
+                <VBox fx:id="AnchorComments" styleClass="comments-section" visible="false" managed="false" spacing="15">
+                  <padding>
+                    <Insets top="25" bottom="25" left="40" right="40"/>
+                  </padding>
+
+                  <HBox alignment="CENTER_LEFT" spacing="15">
+                    <Label text="Reviews &amp; Comments" styleClass="comments-title"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="closeDetailFilm2" onAction="#closercommets" styleClass="close-comments-btn"
+                            mnemonicParsing="false">
+                      <graphic>
+                        <FontIcon iconLiteral="mdi2c-chevron-up:24"/>
+                      </graphic>
                     </Button>
-                    <Label text="Comments" layoutX="20.0" layoutY="10.0" 
-                        style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
-                    <ScrollPane fitToHeight="true" fitToWidth="true" layoutX="13.0" layoutY="41.0"
-                        prefHeight="519.0" prefWidth="465.0" styleClass="film-scroll"
-                        style="-fx-background-color: transparent;">
-                        <content>
-                            <VBox fx:id="commentVBox" prefWidth="450.0" spacing="10.0" 
-                                style="-fx-background-color: transparent; -fx-padding: 10;" />
-                        </content>
-                    </ScrollPane>
-                    <HBox alignment="CENTER_LEFT" layoutX="20.0" layoutY="575.0" spacing="10.0">
-                        <TextField fx:id="commentTextField" prefHeight="40.0" HBox.hgrow="ALWAYS"
-                            styleClass="search-bar" promptText="Write a comment..." />
-                        <Button mnemonicParsing="false" styleClass="action-button" prefHeight="40.0" prefWidth="40.0">
-                            <graphic>
-                                <FontIcon fx:id="sendIcon" fill="white" iconLiteral="fa-send" />
-                            </graphic>
-                        </Button>
-                    </HBox>
-                </children>
-            </AnchorPane>
-            
-            <!-- Alternative Comments Panel -->
-            <AnchorPane fx:id="AnchorComments" layoutX="423.0" layoutY="120.0" prefHeight="535.0"
-                prefWidth="426.0" styleClass="bg-white" visible="false"
-                style="-fx-background-color: white; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 15, 0, 0, 5);">
-                <children>
-                    <Button fx:id="closeDetailFilm2" layoutX="374.0" layoutY="2.0"
-                        mnemonicParsing="false" onAction="#closercommets" prefHeight="35.0"
-                        prefWidth="48.0" styleClass="close" stylesheets="@../styles/filmStyle.css">
-                        <graphic>
-                            <FontIcon iconLiteral="fa-close" styleClass="close" />
-                        </graphic>
+                  </HBox>
+
+                  <!-- Comment Input -->
+                  <HBox styleClass="comment-input-row" spacing="12" alignment="CENTER">
+                    <TextField fx:id="txtAreaComments" styleClass="comment-input"
+                               promptText="Share your thoughts about this film..." HBox.hgrow="ALWAYS">
+                      <cursor>
+                        <Cursor fx:constant="TEXT"/>
+                      </cursor>
+                    </TextField>
+                    <Button onMouseClicked="#AddComment" styleClass="send-comment-btn" mnemonicParsing="false">
+                      <graphic>
+                        <FontIcon iconLiteral="mdi2s-send:20"/>
+                      </graphic>
                     </Button>
-                    <Label text="Comments" layoutX="20.0" layoutY="10.0" 
-                        style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
-                    <ScrollPane fx:id="ScrollPaneComments" layoutY="37.0" prefHeight="442.0"
-                        prefWidth="426.0" styleClass="film-scroll"
-                        style="-fx-background-color: transparent;">
-                        <content>
-                            <VBox spacing="10.0" style="-fx-background-color: transparent; -fx-padding: 15;" />
-                        </content>
-                    </ScrollPane>
-                    <HBox alignment="CENTER_LEFT" layoutX="15.0" layoutY="486.0" spacing="10.0" prefWidth="396.0">
-                        <TextField fx:id="txtAreaComments" prefHeight="42.0" HBox.hgrow="ALWAYS"
-                            styleClass="search-bar" promptText="Write a comment...">
-                            <cursor>
-                                <Cursor fx:constant="TEXT" />
-                            </cursor>
-                        </TextField>
-                        <Button mnemonicParsing="false" onMouseClicked="#AddComment" 
-                            styleClass="action-button" prefHeight="42.0" prefWidth="42.0">
-                            <graphic>
-                                <FontIcon fill="white" iconLiteral="fa-send" />
-                            </graphic>
-                        </Button>
-                    </HBox>
-                </children>
-            </AnchorPane>
-        </children>
-    </AnchorPane>
-    
-    <!-- Trailer Overlay -->
-    <AnchorPane fx:id="anchorPane_Trailer" layoutX="400.0" layoutY="200.0" prefHeight="453.0"
-        prefWidth="702.0" visible="false" 
-        style="-fx-background-color: black; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 25, 0, 0, 5);" />
-    
-    <!-- Filter Panel -->
-    <AnchorPane fx:id="Anchore_Pane_filtrage" layoutX="630.0" layoutY="200.0" prefHeight="442.0"
-        prefWidth="250.0" styleClass="bg-white" visible="false"
-        style="-fx-background-color: white; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 20, 0, 0, 5);">
-        <children>
-            <Label text="Filter Options" layoutX="20.0" layoutY="20.0" 
-                style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
-            <Button fx:id="bouttonAnchor_outfilltrer" layoutX="75.0" layoutY="380.0"
-                mnemonicParsing="false" onAction="#filtrercinema" prefHeight="42.0" prefWidth="100.0"
-                styleClass="action-button" text="Apply">
+                  </HBox>
+
+                  <!-- Comments List -->
+                  <ScrollPane fx:id="ScrollPaneComments" styleClass="comments-scroll"
+                              fitToWidth="true" prefHeight="250" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
+                    <VBox fx:id="commentsListVBox" spacing="12" styleClass="comments-list"/>
+                  </ScrollPane>
+                </VBox>
+              </VBox>
+
+              <!-- Film Grid Section -->
+              <VBox styleClass="films-section" spacing="20">
+                <HBox alignment="CENTER_LEFT" spacing="15">
+                  <Label text="Browse Films" styleClass="section-title"/>
+                  <Label fx:id="movieCountLabel" text="0 films" styleClass="film-count"/>
+                  <Region HBox.hgrow="ALWAYS"/>
+                  <Button onAction="#refreshMovies" styleClass="refresh-btn" mnemonicParsing="false">
+                    <graphic>
+                      <FontIcon iconLiteral="mdi2r-refresh:18"/>
+                    </graphic>
+                  </Button>
+                </HBox>
+
+                <!-- Films Grid (FlowPane injected here programmatically) -->
+                <ScrollPane fx:id="filmScrollPane" styleClass="films-grid-scroll"
+                            fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="NEVER" prefHeight="600">
+                  <VBox fx:id="filmGridContainer" spacing="20" styleClass="film-grid-container"/>
+                </ScrollPane>
+              </VBox>
+
+              <!-- Top Picks Horizontal Section -->
+              <VBox styleClass="top-picks-section" spacing="18">
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                  <FontIcon iconLiteral="mdi2c-crown:26" styleClass="crown-icon"/>
+                  <Label text="Top Picks For You" styleClass="section-title gold"/>
+                  <Region HBox.hgrow="ALWAYS"/>
+                  <Button styleClass="see-all-btn" text="See All" mnemonicParsing="false">
+                    <graphic>
+                      <FontIcon iconLiteral="mdi2c-chevron-right:18"/>
+                    </graphic>
+                  </Button>
+                </HBox>
+
+                <ScrollPane styleClass="horizontal-scroll" hbarPolicy="NEVER" vbarPolicy="NEVER" fitToHeight="true">
+                  <HBox fx:id="topthreeVbox" spacing="20" styleClass="top-picks-row">
+                    <padding>
+                      <Insets top="10" bottom="10" left="5" right="5"/>
+                    </padding>
+                  </HBox>
+                </ScrollPane>
+
+                <!-- Hidden alternate container -->
+                <VBox fx:id="topthreeVbox1" visible="false" managed="false"/>
+              </VBox>
+            </VBox>
+          </ScrollPane>
+        </VBox>
+
+        <!-- Trailer Overlay -->
+        <StackPane fx:id="trailerOverlay" styleClass="trailer-overlay" visible="false" managed="false">
+          <VBox alignment="CENTER" styleClass="trailer-container">
+            <HBox alignment="TOP_RIGHT" styleClass="trailer-header">
+              <padding>
+                <Insets top="20" right="20"/>
+              </padding>
+              <Button fx:id="closeTrailerBtn" onAction="#closeTrailer" styleClass="close-trailer-btn"
+                      mnemonicParsing="false">
                 <graphic>
-                    <FontIcon iconLiteral="fa-check" fill="white" />
+                  <FontIcon iconLiteral="mdi2c-close:28"/>
                 </graphic>
-            </Button>
-        </children>
-    </AnchorPane>
+              </Button>
+            </HBox>
+            <AnchorPane fx:id="anchorPane_Trailer" styleClass="trailer-player" prefWidth="900" prefHeight="506"/>
+          </VBox>
+        </StackPane>
+
+        <!-- Filter Slide Panel -->
+        <HBox fx:id="filterPanelWrapper" styleClass="filter-panel-wrapper" visible="false" managed="false"
+              alignment="CENTER_RIGHT">
+          <VBox fx:id="Anchore_Pane_filtrage" styleClass="filter-panel" spacing="20" prefWidth="320">
+            <padding>
+              <Insets top="30" bottom="30" left="25" right="25"/>
+            </padding>
+
+            <HBox alignment="CENTER_LEFT" spacing="10">
+              <FontIcon iconLiteral="mdi2t-tune-vertical:24"/>
+              <Label text="Filters" styleClass="filter-title"/>
+              <Region HBox.hgrow="ALWAYS"/>
+              <Button onAction="#filtrercinema" styleClass="close-filter-btn" mnemonicParsing="false">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2c-close:20"/>
+                </graphic>
+              </Button>
+            </HBox>
+
+            <Separator styleClass="filter-separator"/>
+
+            <!-- Filter options will be added programmatically -->
+            <VBox fx:id="filterOptionsContainer" spacing="15" VBox.vgrow="ALWAYS"/>
+
+            <HBox spacing="12" alignment="CENTER">
+              <Button fx:id="filterResetBtn" onAction="#resetFilters" styleClass="filter-reset-btn" text="Reset"
+                      mnemonicParsing="false" HBox.hgrow="ALWAYS"/>
+              <Button fx:id="bouttonAnchor_outfilltrer" onAction="#filtrercinema"
+                      styleClass="filter-apply-btn" text="Apply Filters" mnemonicParsing="false" HBox.hgrow="ALWAYS">
+                <graphic>
+                  <FontIcon iconLiteral="mdi2c-check:18"/>
+                </graphic>
+              </Button>
+            </HBox>
+          </VBox>
+        </HBox>
+      </StackPane>
+    </center>
+  </BorderPane>
+
+  <!-- Hidden legacy elements for controller compatibility -->
+  <AnchorPane fx:id="anchorPaneFilm" visible="false" managed="false"/>
+  <AnchorPane fx:id="detalAnchorPane" visible="false" managed="false"/>
+  <AnchorPane fx:id="commentAnchorPane" visible="false" managed="false">
+    <VBox fx:id="commentVBox"/>
+    <TextField fx:id="commentTextField"/>
+    <Button fx:id="closeDetailFilm1"/>
+    <FontIcon fx:id="sendIcon" iconLiteral="mdi2s-send:20"/>
+  </AnchorPane>
 </StackPane>

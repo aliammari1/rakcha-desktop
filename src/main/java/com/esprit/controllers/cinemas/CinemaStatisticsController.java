@@ -1,25 +1,24 @@
 package com.esprit.controllers.cinemas;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.esprit.models.cinemas.CinemaComment;
-import com.esprit.services.cinemas.CinemaCommentService;
+import com.esprit.models.common.Review;
 import com.esprit.services.cinemas.CinemaService;
+import com.esprit.services.common.ReviewService;
 import com.esprit.utils.PageRequest;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Controller responsible for generating and displaying sentiment statistics for
  * various
  * cinemas based on user comments.
- * 
+ *
  * <p>
  * This controller retrieves movie commentary data from a service, generates
  * sentiment
@@ -28,20 +27,21 @@ import javafx.scene.layout.VBox;
  * statistics. The controller also displays the generated PieCharts in an
  * AnchorPane.
  * </p>
- * 
+ *
  * @author Esprit Team
  * @version 1.0
  * @since 1.0
  */
 public class CinemaStatisticsController {
-    private final CinemaCommentService cinemaCommentService = new CinemaCommentService();
+
+    private final ReviewService cinemaCommentService = new ReviewService();
     private final CinemaService cinemaService = new CinemaService();
     @FXML
     private AnchorPane statisticsAnchor;
 
     /**
      * Generate and display per-cinema sentiment pie charts in the statistics anchor pane.
-     *
+     * <p>
      * Clears existing content in the statistics anchor, aggregates sentiment counts from
      * stored cinema comments, creates a PieChart for each cinema showing its sentiment
      * distribution, and adds the charts in a vertical layout to the anchor pane.
@@ -52,7 +52,7 @@ public class CinemaStatisticsController {
     void showStatistics(final ActionEvent event) {
         this.statisticsAnchor.getChildren().clear();
         // Récupérer les commentaires de la base de données
-        final List<CinemaComment> comments = this.cinemaCommentService.read(PageRequest.defaultPage()).getContent();
+        final List<Review> comments = this.cinemaCommentService.read(PageRequest.defaultPage()).getContent();
         // Générer les statistiques sur l'analyse de sentiment
         final Map<String, Map<String, Integer>> cinemaSentimentStatistics = this.generateSentimentStatistics(comments);
         // Créer un VBox pour contenir les PieCharts
@@ -75,19 +75,18 @@ public class CinemaStatisticsController {
      * @param comments list of CinemaComment; each comment increments the count for its cinema's sentiment
      * @return a map that maps each cinema name to a map from sentiment label to the number of comments with that sentiment
      */
-    private Map<String, Map<String, Integer>> generateSentimentStatistics(final List<CinemaComment> comments) {
+    private Map<String, Map<String, Integer>> generateSentimentStatistics(final List<Review> comments) {
         final Map<String, Map<String, Integer>> cinemaSentimentStatistics = new HashMap<>();
         // Parcourir les commentaires et compter le nombre de sentiments pour chaque
         // cinéma
-        for (final CinemaComment comment : comments) {
+        for (final Review comment : comments) {
             final String cinemaName = this.cinemaService.getCinemaById(comment.getCinema().getId()).getName();
             final String sentiment = comment.getSentiment();
             // Vérifier si le cinéma est déjà dans la map
             if (cinemaSentimentStatistics.containsKey(cinemaName)) {
                 final Map<String, Integer> sentimentStatistics = cinemaSentimentStatistics.get(cinemaName);
                 sentimentStatistics.put(sentiment, sentimentStatistics.getOrDefault(sentiment, 0) + 1);
-            }
- else {
+            } else {
                 final Map<String, Integer> sentimentStatistics = new HashMap<>();
                 sentimentStatistics.put(sentiment, 1);
                 cinemaSentimentStatistics.put(cinemaName, sentimentStatistics);

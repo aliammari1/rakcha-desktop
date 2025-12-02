@@ -1,12 +1,5 @@
 package com.esprit.utils;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.util.Arrays;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.esprit.models.users.User;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
@@ -15,6 +8,13 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Utility class providing helper methods for the RAKCHA application. Contains
@@ -25,6 +25,7 @@ import com.itextpdf.text.pdf.PdfWriter;
  * @since 1.0.0
  */
 public class UserPDF {
+
     private static final Logger LOGGER = Logger.getLogger(UserPDF.class.getName());
 
     /**
@@ -41,8 +42,7 @@ public class UserPDF {
 
         document.open();
         final List<String> attributes = Arrays.asList("id", "nom", "prenom", "num_telephone", "email", "role");
-        float[] widths = { 50, 50, 50, 80, 50, 50 }
-;
+        float[] widths = {50, 50, 50, 80, 50, 50};
         PdfPTable table = new PdfPTable(widths);
         addTableHeader(table, attributes);
         addRows(table, userData);
@@ -64,18 +64,18 @@ public class UserPDF {
      */
     private void addTableHeader(PdfPTable table, List<String> attributes) {
         attributes.forEach(columnTitle -> {
-            PdfPCell header = new PdfPCell();
-            header.setBackgroundColor(BaseColor.LIGHT_GRAY);
-            header.setBorderWidth(2);
-            header.setIndent(10);
-            header.setPhrase(new Phrase(columnTitle));
-            table.addCell(header);
-        }
-);
+                PdfPCell header = new PdfPCell();
+                header.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                header.setBorderWidth(2);
+                header.setIndent(10);
+                header.setPhrase(new Phrase(columnTitle));
+                table.addCell(header);
+            }
+        );
     }
 
 
-    /** 
+    /**
      * @param table
      * @param userData
      */
@@ -86,7 +86,7 @@ public class UserPDF {
             table.addCell(user.getLastName());
             table.addCell(String.valueOf(user.getPhoneNumber()));
             table.addCell(user.getEmail());
-            table.addCell(user.getRole());
+            table.addCell(user.getRole().name());
         }
 
     }

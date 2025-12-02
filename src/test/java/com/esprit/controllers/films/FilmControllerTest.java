@@ -1,7 +1,9 @@
 package com.esprit.controllers.films;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import com.esprit.utils.TestDataFactory;
+import com.esprit.utils.TestFXBase;
+import javafx.scene.control.TableView;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -10,24 +12,22 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.Timeout;
-import java.util.concurrent.TimeUnit;
-import static org.testfx.api.FxAssert.verifyThat;
 import org.testfx.framework.junit5.Start;
+
+import java.util.concurrent.TimeUnit;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.matcher.base.NodeMatchers.isEnabled;
 import static org.testfx.matcher.base.NodeMatchers.isNotNull;
 import static org.testfx.matcher.base.NodeMatchers.isVisible;
-
-import com.esprit.utils.TestDataFactory;
-import com.esprit.utils.TestFXBase;
-
-import javafx.scene.control.TableView;
-import javafx.stage.Stage;
 
 /**
  * Comprehensive UI tests for FilmController.
  * Tests film CRUD operations, category/actor management, image uploads,
  * search/filtering.
- * 
+ *
  * @author RAKCHA Team
  * @version 1.0.0
  */
@@ -41,14 +41,15 @@ class FilmControllerTest extends TestFXBase {
             getClass().getResource("/ui/films/InterfaceFilm.fxml")
         );
         javafx.scene.Parent root = loader.load();
-        
+
         stage.setScene(new javafx.scene.Scene(root, 1280, 700));
         stage.show();
         stage.toFront();
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Film Table Display Tests")
     class FilmTableDisplayTests {
 
@@ -117,7 +118,8 @@ class FilmControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Film Creation Tests")
     class FilmCreationTests {
 
@@ -222,7 +224,8 @@ class FilmControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Film Validation Tests")
     class FilmValidationTests {
 
@@ -231,18 +234,18 @@ class FilmControllerTest extends TestFXBase {
         @DisplayName("Should validate required film title")
         void testTitleRequired() {
             waitForFxEvents();
-            
+
             // Capture initial table size
             int initialSize = ((TableView<?>) lookup("#film_tableView").query()).getItems().size();
-            
+
             // Clear and submit with empty title
             clearTextField("#titre_textField");
             clickOnAndWait("#ajouter_Button");
             waitForFxEvents();
-            
+
             // Verify table size unchanged (no film added)
-            assertEquals(initialSize, ((TableView<?>) lookup("#film_tableView").query()).getItems().size(), 
-                    "Table size should not change after failed validation");
+            assertEquals(initialSize, ((TableView<?>) lookup("#film_tableView").query()).getItems().size(),
+                "Table size should not change after failed validation");
         }
 
 
@@ -251,17 +254,17 @@ class FilmControllerTest extends TestFXBase {
         @DisplayName("Should validate required film year")
         void testYearRequired() {
             waitForFxEvents();
-            
+
             int initialSize = ((TableView<?>) lookup("#film_tableView").query()).getItems().size();
-            
+
             fillTextField("#titre_textField", TestDataFactory.generateMovieTitle());
             clearTextField("#annederalisation_textField");
             clickOnAndWait("#ajouter_Button");
             waitForFxEvents();
-            
+
             // Verify no film was added
             assertEquals(initialSize, ((TableView<?>) lookup("#film_tableView").query()).getItems().size(),
-                    "Table size should not change when year is missing");
+                "Table size should not change when year is missing");
         }
 
 
@@ -270,17 +273,17 @@ class FilmControllerTest extends TestFXBase {
         @DisplayName("Should validate year format")
         void testYearFormatValidation() {
             waitForFxEvents();
-            
+
             int initialSize = ((TableView<?>) lookup("#film_tableView").query()).getItems().size();
-            
+
             fillTextField("#titre_textField", TestDataFactory.generateMovieTitle());
             fillTextField("#annederalisation_textField", "invalid");
             clickOnAndWait("#ajouter_Button");
             waitForFxEvents();
-            
+
             // Verify invalid year format prevented film creation
             assertEquals(initialSize, ((TableView<?>) lookup("#film_tableView").query()).getItems().size(),
-                    "Non-numeric year should prevent film creation");
+                "Non-numeric year should prevent film creation");
         }
 
 
@@ -289,17 +292,17 @@ class FilmControllerTest extends TestFXBase {
         @DisplayName("Should validate year range")
         void testYearRangeValidation() {
             waitForFxEvents();
-            
+
             int initialSize = ((TableView<?>) lookup("#film_tableView").query()).getItems().size();
-            
+
             fillTextField("#titre_textField", TestDataFactory.generateMovieTitle());
             fillTextField("#annederalisation_textField", "1800");
             clickOnAndWait("#ajouter_Button");
             waitForFxEvents();
-            
+
             // Verify year out of valid range prevented creation
             assertEquals(initialSize, ((TableView<?>) lookup("#film_tableView").query()).getItems().size(),
-                    "Year 1800 should be outside valid range and prevent creation");
+                "Year 1800 should be outside valid range and prevent creation");
         }
 
 
@@ -308,18 +311,18 @@ class FilmControllerTest extends TestFXBase {
         @DisplayName("Should validate duration is numeric")
         void testDurationNumericValidation() {
             waitForFxEvents();
-            
+
             int initialSize = ((TableView<?>) lookup("#film_tableView").query()).getItems().size();
-            
+
             fillTextField("#titre_textField", TestDataFactory.generateMovieTitle());
             fillTextField("#annederalisation_textField", "2023");
             fillTextField("#duree_textField", "invalid");
             clickOnAndWait("#ajouter_Button");
             waitForFxEvents();
-            
+
             // Verify non-numeric duration prevented creation
             assertEquals(initialSize, ((TableView<?>) lookup("#film_tableView").query()).getItems().size(),
-                    "Non-numeric duration should prevent film creation");
+                "Non-numeric duration should prevent film creation");
         }
 
 
@@ -328,18 +331,18 @@ class FilmControllerTest extends TestFXBase {
         @DisplayName("Should validate duration positive value")
         void testDurationPositiveValidation() {
             waitForFxEvents();
-            
+
             int initialSize = ((TableView<?>) lookup("#film_tableView").query()).getItems().size();
-            
+
             fillTextField("#titre_textField", TestDataFactory.generateMovieTitle());
             fillTextField("#annederalisation_textField", "2023");
             fillTextField("#duree_textField", "-10");
             clickOnAndWait("#ajouter_Button");
             waitForFxEvents();
-            
+
             // Verify negative duration prevented creation
             assertEquals(initialSize, ((TableView<?>) lookup("#film_tableView").query()).getItems().size(),
-                    "Negative duration should prevent film creation");
+                "Negative duration should prevent film creation");
         }
 
 
@@ -348,19 +351,19 @@ class FilmControllerTest extends TestFXBase {
         @DisplayName("Should validate description length")
         void testDescriptionLengthValidation() {
             waitForFxEvents();
-            
+
             int initialSize = ((TableView<?>) lookup("#film_tableView").query()).getItems().size();
-            
+
             fillTextField("#titre_textField", TestDataFactory.generateMovieTitle());
             fillTextField("#annederalisation_textField", "2023");
             fillTextField("#duree_textField", "120");
             fillTextField("#description_textField", "Too short");
             clickOnAndWait("#ajouter_Button");
             waitForFxEvents();
-            
+
             // Verify insufficient description prevented creation
             assertEquals(initialSize, ((TableView<?>) lookup("#film_tableView").query()).getItems().size(),
-                    "Description too short should prevent film creation");
+                "Description too short should prevent film creation");
         }
 
     }
@@ -577,7 +580,8 @@ class FilmControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Film Update Tests")
     class FilmUpdateTests {
 
@@ -641,7 +645,8 @@ class FilmControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Film Deletion Tests")
     class FilmDeletionTests {
 
@@ -708,7 +713,8 @@ class FilmControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Search and Filter Tests")
     class SearchFilterTests {
 
@@ -822,7 +828,8 @@ class FilmControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Table Operations Tests")
     class TableOperationsTests {
 

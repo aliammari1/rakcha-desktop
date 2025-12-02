@@ -1,10 +1,17 @@
 package com.esprit.controllers;
 
-import java.util.concurrent.TimeUnit;
-
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import com.esprit.models.users.Admin;
+import com.esprit.models.users.CinemaManager;
+import com.esprit.models.users.Client;
+import com.esprit.utils.TestAssertions;
+import com.esprit.utils.TestDataFactory;
+import com.esprit.utils.TestFXBase;
+import javafx.css.PseudoClass;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -13,43 +20,35 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.Timeout;
-import static org.testfx.api.FxAssert.verifyThat;
 import org.testfx.framework.junit5.Start;
+
+import java.util.concurrent.TimeUnit;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.matcher.base.NodeMatchers.isEnabled;
 import static org.testfx.matcher.base.NodeMatchers.isNotNull;
 import static org.testfx.matcher.base.NodeMatchers.isVisible;
 
-import com.esprit.models.users.Admin;
-import com.esprit.models.users.CinemaManager;
-import com.esprit.models.users.Client;
-import com.esprit.utils.TestAssertions;
-import com.esprit.utils.TestDataFactory;
-import com.esprit.utils.TestFXBase;
-
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.stage.Stage;
-import javafx.css.PseudoClass;
-
 /**
  * Comprehensive UI tests for SidebarController.
  * Tests role-based navigation, button visibility, and user interactions.
- * 
+ * <p>
  * Test Categories:
  * - Role-Based Visibility
  * - Navigation Functionality
  * - Button Interactions
  * - User Context Management
- * 
+ *
  * @author RAKCHA Team
  * @version 1.0.0
  * @since 1.0.0
  */
 @Timeout(value = 10, unit = TimeUnit.SECONDS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class SidebarControllerTest extends TestFXBase {
+public class SidebarControllerTest extends TestFXBase {
 
     private SidebarController controller;
 
@@ -64,7 +63,6 @@ class SidebarControllerTest extends TestFXBase {
         stage.show();
     }
 
-
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
     @DisplayName("Common UI Elements Tests")
@@ -75,15 +73,14 @@ class SidebarControllerTest extends TestFXBase {
         @DisplayName("Should display common navigation buttons")
         void testCommonButtonsVisible() {
             TestAssertions.verifyAllVisible(
-                    "#homeButton",
-                    "#movieButton",
-                    "#serieButton",
-                    "#productButton",
-                    "#cinemaButton",
-                    "#profileButton",
-                    "#logoutButton");
+                "#homeButton",
+                "#movieButton",
+                "#serieButton",
+                "#productButton",
+                "#cinemaButton",
+                "#profileButton",
+                "#logoutButton");
         }
-
 
         @Test
         @Order(2)
@@ -98,7 +95,6 @@ class SidebarControllerTest extends TestFXBase {
             verifyThat("#logoutButton", isEnabled());
         }
 
-
         @Test
         @Order(3)
         @DisplayName("Should display icons for navigation buttons")
@@ -108,9 +104,7 @@ class SidebarControllerTest extends TestFXBase {
             verifyThat("#productIcon", isNotNull());
             verifyThat("#cinemaIcon", isNotNull());
         }
-
     }
-
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -121,19 +115,18 @@ class SidebarControllerTest extends TestFXBase {
         void setupAdminUser() {
             // Create and set admin user
             Admin admin = Admin.builder()
-                    .lastName(TestDataFactory.generateLastName())
-                    .firstName(TestDataFactory.generateFirstName())
-                    .phoneNumber("12345678")
-                    .password(TestDataFactory.TestCredentials.ADMIN_PASSWORD)
-                    .role("ADMIN")
-                    .address("123 Admin St")
-                    .birthDate(new java.sql.Date(System.currentTimeMillis()))
-                    .email(TestDataFactory.TestCredentials.ADMIN_EMAIL)
-                    .photoDeProfil("default.png")
-                    .build();
+                .lastName(TestDataFactory.generateLastName())
+                .firstName(TestDataFactory.generateFirstName())
+                .phoneNumber("12345678")
+                .password(TestDataFactory.TestCredentials.ADMIN_PASSWORD)
+                .role("ADMIN")
+                .address("123 Admin St")
+                .birthDate(new java.sql.Date(System.currentTimeMillis()))
+                .email(TestDataFactory.TestCredentials.ADMIN_EMAIL)
+                .photoDeProfil("default.png")
+                .build();
             runOnFxThread(() -> controller.setCurrentUser(admin));
         }
-
 
         @Test
         @Order(10)
@@ -142,14 +135,12 @@ class SidebarControllerTest extends TestFXBase {
             verifyThat("#usersButton", isVisible());
         }
 
-
         @Test
         @Order(11)
         @DisplayName("Admin should see order button")
         void testAdminOrderButtonVisible() {
             verifyThat("#orderButton", isVisible());
         }
-
 
         @Test
         @Order(12)
@@ -158,7 +149,6 @@ class SidebarControllerTest extends TestFXBase {
             verifyThat("#usersButton", isEnabled());
             verifyThat("#orderButton", isEnabled());
         }
-
 
         @Test
         @Order(13)
@@ -171,13 +161,10 @@ class SidebarControllerTest extends TestFXBase {
             if (actorButton != null) {
                 assertFalse(actorButton.isVisible() || actorButton.isManaged());
             }
-
             if (filmCategorieButton != null) {
                 assertFalse(filmCategorieButton.isVisible() || filmCategorieButton.isManaged());
             }
-
         }
-
 
         @Test
         @Order(14)
@@ -189,7 +176,6 @@ class SidebarControllerTest extends TestFXBase {
             // Should navigate to users management view
         }
 
-
         @Test
         @Order(15)
         @DisplayName("Admin should be able to navigate to orders")
@@ -199,9 +185,7 @@ class SidebarControllerTest extends TestFXBase {
 
             // Should navigate to orders view
         }
-
     }
-
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -211,19 +195,18 @@ class SidebarControllerTest extends TestFXBase {
         @BeforeEach
         void setupCinemaManagerUser() {
             CinemaManager manager = CinemaManager.builder()
-                    .lastName(TestDataFactory.generateLastName())
-                    .firstName(TestDataFactory.generateFirstName())
-                    .phoneNumber("12345678")
-                    .password(TestDataFactory.TestCredentials.CINEMA_MANAGER_PASSWORD)
-                    .role("MANAGER")
-                    .address("456 Manager St")
-                    .birthDate(new java.sql.Date(System.currentTimeMillis()))
-                    .email(TestDataFactory.TestCredentials.CINEMA_MANAGER_EMAIL)
-                    .photoDeProfil("default.png")
-                    .build();
+                .lastName(TestDataFactory.generateLastName())
+                .firstName(TestDataFactory.generateFirstName())
+                .phoneNumber("12345678")
+                .password(TestDataFactory.TestCredentials.CINEMA_MANAGER_PASSWORD)
+                .role("MANAGER")
+                .address("456 Manager St")
+                .birthDate(new java.sql.Date(System.currentTimeMillis()))
+                .email(TestDataFactory.TestCredentials.CINEMA_MANAGER_EMAIL)
+                .photoDeProfil("default.png")
+                .build();
             runOnFxThread(() -> controller.setCurrentUser(manager));
         }
-
 
         @Test
         @Order(20)
@@ -232,14 +215,12 @@ class SidebarControllerTest extends TestFXBase {
             verifyThat("#actorButton", isVisible());
         }
 
-
         @Test
         @Order(21)
         @DisplayName("Cinema manager should see film categories button")
         void testCinemaManagerFilmCategorieButtonVisible() {
             verifyThat("#filmCategorieButton", isVisible());
         }
-
 
         @Test
         @Order(22)
@@ -248,14 +229,12 @@ class SidebarControllerTest extends TestFXBase {
             verifyThat("#moviesessionButton", isVisible());
         }
 
-
         @Test
         @Order(23)
         @DisplayName("Cinema manager should see statistics button")
         void testCinemaManagerStatisticsButtonVisible() {
             verifyThat("#statestique_button", isVisible());
         }
-
 
         @Test
         @Order(24)
@@ -267,7 +246,6 @@ class SidebarControllerTest extends TestFXBase {
             verifyThat("#statestique_button", isEnabled());
         }
 
-
         @Test
         @Order(25)
         @DisplayName("Cinema manager should NOT see admin specific buttons")
@@ -278,13 +256,10 @@ class SidebarControllerTest extends TestFXBase {
             if (usersButton != null) {
                 assertFalse(usersButton.isVisible() || usersButton.isManaged());
             }
-
             if (orderButton != null) {
                 assertFalse(orderButton.isVisible() || orderButton.isManaged());
             }
-
         }
-
 
         @Test
         @Order(26)
@@ -294,7 +269,6 @@ class SidebarControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
-
         @Test
         @Order(27)
         @DisplayName("Cinema manager should navigate to film categories")
@@ -303,7 +277,6 @@ class SidebarControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
-
         @Test
         @Order(28)
         @DisplayName("Cinema manager should navigate to statistics")
@@ -311,9 +284,7 @@ class SidebarControllerTest extends TestFXBase {
             clickOnAndWait("#statestique_button");
             waitForFxEvents();
         }
-
     }
-
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -323,33 +294,31 @@ class SidebarControllerTest extends TestFXBase {
         @BeforeEach
         void setupClientUser() {
             Client client = Client.builder()
-                    .lastName(TestDataFactory.generateLastName())
-                    .firstName(TestDataFactory.generateFirstName())
-                    .phoneNumber("12345678")
-                    .password(TestDataFactory.TestCredentials.VALID_PASSWORD)
-                    .role("CLIENT")
-                    .address("789 Client St")
-                    .birthDate(new java.sql.Date(System.currentTimeMillis()))
-                    .email(TestDataFactory.TestCredentials.VALID_EMAIL)
-                    .photoDeProfil("default.png")
-                    .build();
+                .lastName(TestDataFactory.generateLastName())
+                .firstName(TestDataFactory.generateFirstName())
+                .phoneNumber("12345678")
+                .password(TestDataFactory.TestCredentials.VALID_PASSWORD)
+                .role("CLIENT")
+                .address("789 Client St")
+                .birthDate(new java.sql.Date(System.currentTimeMillis()))
+                .email(TestDataFactory.TestCredentials.VALID_EMAIL)
+                .photoDeProfil("default.png")
+                .build();
             runOnFxThread(() -> controller.setCurrentUser(client));
         }
-
 
         @Test
         @Order(30)
         @DisplayName("Client should see common navigation buttons")
         void testClientCommonButtonsVisible() {
             TestAssertions.verifyAllVisible(
-                    "#homeButton",
-                    "#movieButton",
-                    "#serieButton",
-                    "#productButton",
-                    "#cinemaButton",
-                    "#profileButton");
+                "#homeButton",
+                "#movieButton",
+                "#serieButton",
+                "#productButton",
+                "#cinemaButton",
+                "#profileButton");
         }
-
 
         @Test
         @Order(31)
@@ -361,13 +330,10 @@ class SidebarControllerTest extends TestFXBase {
             if (usersButton != null) {
                 assertFalse(usersButton.isVisible() || usersButton.isManaged());
             }
-
             if (orderButton != null) {
                 assertFalse(orderButton.isVisible() || orderButton.isManaged());
             }
-
         }
-
 
         @Test
         @Order(32)
@@ -379,15 +345,11 @@ class SidebarControllerTest extends TestFXBase {
             if (actorButton != null) {
                 assertFalse(actorButton.isVisible() || actorButton.isManaged());
             }
-
             if (filmCategorieButton != null) {
                 assertFalse(filmCategorieButton.isVisible() || filmCategorieButton.isManaged());
             }
-
         }
-
     }
-
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -402,7 +364,6 @@ class SidebarControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
-
         @Test
         @Order(41)
         @DisplayName("Should navigate to movies page")
@@ -410,7 +371,6 @@ class SidebarControllerTest extends TestFXBase {
             clickOnAndWait("#movieButton");
             waitForFxEvents();
         }
-
 
         @Test
         @Order(42)
@@ -420,7 +380,6 @@ class SidebarControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
-
         @Test
         @Order(43)
         @DisplayName("Should navigate to products page")
@@ -428,7 +387,6 @@ class SidebarControllerTest extends TestFXBase {
             clickOnAndWait("#productButton");
             waitForFxEvents();
         }
-
 
         @Test
         @Order(44)
@@ -438,7 +396,6 @@ class SidebarControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
-
         @Test
         @Order(45)
         @DisplayName("Should navigate to profile page")
@@ -446,7 +403,6 @@ class SidebarControllerTest extends TestFXBase {
             clickOnAndWait("#profileButton");
             waitForFxEvents();
         }
-
 
         @Test
         @Order(46)
@@ -457,9 +413,7 @@ class SidebarControllerTest extends TestFXBase {
 
             // Should navigate to login page or show logout confirmation
         }
-
     }
-
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -476,13 +430,14 @@ class SidebarControllerTest extends TestFXBase {
             // Hover effect should be applied
             Button homeButton = lookup("#homeButton").queryButton();
             assertNotNull(homeButton);
-            
-            // Verify hover pseudo-class is applied with polling/retry to handle timing-dependent state
+
+            // Verify hover pseudo-class is applied with polling/retry to handle
+            // timing-dependent state
             final int MAX_RETRIES = 10; // ~500ms with 50ms sleeps
             final int SLEEP_MS = 50;
             boolean hoverApplied = false;
             PseudoClass hoverPseudoClass = PseudoClass.getPseudoClass("hover");
-            
+
             for (int i = 0; i < MAX_RETRIES; i++) {
                 try {
                     Thread.sleep(SLEEP_MS);
@@ -490,27 +445,21 @@ class SidebarControllerTest extends TestFXBase {
                     Thread.currentThread().interrupt();
                     break;
                 }
-
                 waitForFxEvents();
-                
-                final boolean[] stateCheck = { false }
-;
+
+                final boolean[] stateCheck = {false};
                 runOnFxThread(() -> {
                     stateCheck[0] = homeButton.getPseudoClassStates().contains(hoverPseudoClass);
-                }
-);
-                
+                });
+
                 if (stateCheck[0]) {
                     hoverApplied = true;
                     break;
                 }
-
             }
 
-            
             assertTrue(hoverApplied, "Hover pseudo-class should be applied to homeButton within timeout");
         }
-
 
         @Test
         @Order(51)
@@ -524,7 +473,6 @@ class SidebarControllerTest extends TestFXBase {
             assertNotNull(movieButton);
         }
 
-
         @Test
         @Order(52)
         @DisplayName("Multiple clicks should not break navigation")
@@ -537,9 +485,7 @@ class SidebarControllerTest extends TestFXBase {
             waitForFxEvents();
             // Should handle multiple rapid clicks gracefully
         }
-
     }
-
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -552,49 +498,47 @@ class SidebarControllerTest extends TestFXBase {
         void testUserChange() {
             // Start with admin
             Admin admin = Admin.builder()
-                    .lastName("User")
-                    .firstName("Admin")
-                    .phoneNumber("12345678")
-                    .password("password")
-                    .role("ADMIN")
-                    .address("Admin St")
-                    .birthDate(new java.sql.Date(System.currentTimeMillis()))
-                    .email("admin@test.com")
-                    .photoDeProfil("default.png")
-                    .build();
+                .lastName("User")
+                .firstName("Admin")
+                .phoneNumber("12345678")
+                .password("password")
+                .role("ADMIN")
+                .address("Admin St")
+                .birthDate(new java.sql.Date(System.currentTimeMillis()))
+                .email("admin@test.com")
+                .photoDeProfil("default.png")
+                .build();
             runOnFxThread(() -> controller.setCurrentUser(admin));
             waitForFxEvents();
 
             // Verify admin buttons are visible
             verifyThat("#usersButton", isVisible());
             verifyThat("#orderButton", isVisible());
-            
+
             // Verify cinema manager buttons are hidden
             Button actorButton = lookup("#actorButton").queryButton();
             Button filmCategorieButton = lookup("#filmCategorieButton").queryButton();
             if (actorButton != null) {
                 assertFalse(actorButton.isVisible() || actorButton.isManaged(),
-                        "Actor button should be hidden for admin user");
+                    "Actor button should be hidden for admin user");
             }
-
             if (filmCategorieButton != null) {
                 assertFalse(filmCategorieButton.isVisible() || filmCategorieButton.isManaged(),
-                        "Film categories button should be hidden for admin user");
+                    "Film categories button should be hidden for admin user");
             }
-
 
             // Change to client
             Client client = Client.builder()
-                    .lastName("User")
-                    .firstName("Client")
-                    .phoneNumber("12345678")
-                    .password("password")
-                    .role("CLIENT")
-                    .address("Client St")
-                    .birthDate(new java.sql.Date(System.currentTimeMillis()))
-                    .email("client@test.com")
-                    .photoDeProfil("default.png")
-                    .build();
+                .lastName("User")
+                .firstName("Client")
+                .phoneNumber("12345678")
+                .password("password")
+                .role("CLIENT")
+                .address("Client St")
+                .birthDate(new java.sql.Date(System.currentTimeMillis()))
+                .email("client@test.com")
+                .photoDeProfil("default.png")
+                .build();
             runOnFxThread(() -> controller.setCurrentUser(client));
             waitForFxEvents();
 
@@ -603,37 +547,34 @@ class SidebarControllerTest extends TestFXBase {
             Button orderButton = lookup("#orderButton").queryButton();
             if (usersButton != null) {
                 assertFalse(usersButton.isVisible() || usersButton.isManaged(),
-                        "Users button should be hidden for client user");
+                    "Users button should be hidden for client user");
             }
-
             if (orderButton != null) {
                 assertFalse(orderButton.isVisible() || orderButton.isManaged(),
-                        "Order button should be hidden for client user");
+                    "Order button should be hidden for client user");
             }
 
-            
             // Verify common client buttons are still visible
             verifyThat("#homeButton", isVisible());
             verifyThat("#movieButton", isVisible());
             verifyThat("#profileButton", isVisible());
         }
 
-
         @Test
         @Order(61)
         @DisplayName("Should maintain user context during navigation")
         void testMaintainUserContext() {
             Client client = Client.builder()
-                    .lastName("Client")
-                    .firstName("Test")
-                    .phoneNumber("12345678")
-                    .password("password")
-                    .role("CLIENT")
-                    .address("Test St")
-                    .birthDate(new java.sql.Date(System.currentTimeMillis()))
-                    .email("test@test.com")
-                    .photoDeProfil("default.png")
-                    .build();
+                .lastName("Client")
+                .firstName("Test")
+                .phoneNumber("12345678")
+                .password("password")
+                .role("CLIENT")
+                .address("Test St")
+                .birthDate(new java.sql.Date(System.currentTimeMillis()))
+                .email("test@test.com")
+                .photoDeProfil("default.png")
+                .build();
             runOnFxThread(() -> controller.setCurrentUser(client));
 
             clickOnAndWait("#movieButton");
@@ -645,9 +586,7 @@ class SidebarControllerTest extends TestFXBase {
             // User context should be maintained
             assertNotNull(controller);
         }
-
     }
-
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -663,12 +602,11 @@ class SidebarControllerTest extends TestFXBase {
 
             pressTab();
             waitForFxEvents();
-            
+
             // Next button should be focused - verify that movieButton is now focused
             assertTrue(lookup("#movieButton").query().isFocused(),
-                    "Focus should move to movieButton after pressing Tab from homeButton");
+                "Focus should move to movieButton after pressing Tab from homeButton");
         }
-
 
         @Test
         @Order(71)
@@ -679,8 +617,5 @@ class SidebarControllerTest extends TestFXBase {
             verifyThat("#productIcon", isNotNull());
             verifyThat("#cinemaIcon", isNotNull());
         }
-
     }
-
 }
-

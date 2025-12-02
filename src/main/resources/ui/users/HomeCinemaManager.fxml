@@ -1,133 +1,131 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.*?>
+
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import org.kordamp.ikonli.javafx.*?>
-<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1"
+            fx:controller="com.esprit.controllers.users.HomeCinemaManagerController"
+            style="-fx-background-color: linear-gradient(to bottom, #1a1a1f, #0f0f14);">
 
-<BorderPane fx:id="rootContainer" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
-    fx:controller="com.esprit.controllers.users.HomeCinemaManagerController"
-    style="-fx-background-color: linear-gradient(to bottom, #1a1a1f, #0f0f14);">
+  <!-- Sidebar -->
+  <left>
+    <fx:include source="../sidebar.fxml"/>
+  </left>
 
-    <!-- Sidebar -->
-    <left>
-        <fx:include source="../sidebar.fxml" />
-    </left>
+  <!-- Top Header -->
+  <top>
+    <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-padding: 20; -fx-background-color: rgba(20, 20, 25, 0.9);">
+      <Label fx:id="welcomeLabel" text="Welcome, Cinema Manager!"
+             style="-fx-text-fill: #ff6666; -fx-font-family: 'Arial Black'; -fx-font-size: 24px; -fx-font-weight: bold;"/>
+      <Region HBox.hgrow="ALWAYS"/>
+      <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label text="CINEMA SYSTEM ACTIVE" style="-fx-text-fill: #00ff00; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+      </HBox>
+    </HBox>
+  </top>
 
-    <!-- Top Header -->
-    <top>
-        <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-padding: 20; -fx-background-color: rgba(20, 20, 25, 0.9);">
-            <Label fx:id="welcomeLabel" text="Welcome, Cinema Manager!"
-                style="-fx-text-fill: #ff6666; -fx-font-family: 'Arial Black'; -fx-font-size: 24px; -fx-font-weight: bold;" />
-            <Region HBox.hgrow="ALWAYS" />
-            <HBox alignment="CENTER_LEFT" spacing="10">
-                <Label text="CINEMA SYSTEM ACTIVE" style="-fx-text-fill: #00ff00; -fx-font-size: 12px; -fx-font-weight: bold;" />
-            </HBox>
-        </HBox>
-    </top>
+  <!-- Main Content -->
+  <center>
+    <ScrollPane fitToWidth="true" fitToHeight="true"
+                style="-fx-background: transparent; -fx-background-color: transparent;">
+      <VBox spacing="30" style="-fx-padding: 30;">
 
-    <!-- Main Content -->
-    <center>
-        <ScrollPane fitToWidth="true" fitToHeight="true" 
-            style="-fx-background: transparent; -fx-background-color: transparent;">
-            <VBox spacing="30" style="-fx-padding: 30;">
-                
-                <!-- Cinema Overview -->
-                <VBox spacing="15">
-                    <Label text="CINEMA OVERVIEW"
-                        style="-fx-text-fill: #ffffff; -fx-font-family: 'Arial Black'; -fx-font-size: 18px;" />
-                    
-                    <GridPane hgap="20" vgap="20" alignment="CENTER">
-                        <!-- My Cinemas Card -->
-                        <VBox spacing="10" alignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="0"
-                            style="-fx-background-color: linear-gradient(to bottom right, rgba(102, 204, 255, 0.2), rgba(74, 144, 226, 0.1)); 
+        <!-- Cinema Overview -->
+        <VBox spacing="15">
+          <Label text="CINEMA OVERVIEW"
+                 style="-fx-text-fill: #ffffff; -fx-font-family: 'Arial Black'; -fx-font-size: 18px;"/>
+
+          <GridPane hgap="20" vgap="20" alignment="CENTER">
+            <!-- My Cinemas Card -->
+            <VBox spacing="10" alignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="0"
+                  style="-fx-background-color: linear-gradient(to bottom right, rgba(102, 204, 255, 0.2), rgba(74, 144, 226, 0.1));
                                    -fx-background-radius: 15; -fx-padding: 20; -fx-min-width: 180; -fx-min-height: 120;">
-                            <FontIcon iconLiteral="fa-building" iconSize="30" style="-fx-icon-color: #66ccff;" />
-                            <Label fx:id="cinemaCountLabel" text="0"
-                                style="-fx-text-fill: white; -fx-font-family: 'Arial Black'; -fx-font-size: 24px;" />
-                            <Label text="My Cinemas" style="-fx-text-fill: #cccccc; -fx-font-size: 12px;" />
-                        </VBox>
-
-                        <!-- Movie Sessions Card -->
-                        <VBox spacing="10" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="0"
-                            style="-fx-background-color: linear-gradient(to bottom right, rgba(255, 102, 102, 0.2), rgba(139, 0, 0, 0.1)); 
-                                   -fx-background-radius: 15; -fx-padding: 20; -fx-min-width: 180; -fx-min-height: 120;">
-                            <FontIcon iconLiteral="fa-calendar" iconSize="30" style="-fx-icon-color: #ff6666;" />
-                            <Label fx:id="sessionCountLabel" text="0"
-                                style="-fx-text-fill: white; -fx-font-family: 'Arial Black'; -fx-font-size: 24px;" />
-                            <Label text="Active Sessions" style="-fx-text-fill: #cccccc; -fx-font-size: 12px;" />
-                        </VBox>
-
-                        <!-- Revenue Card -->
-                        <VBox spacing="10" alignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="0"
-                            style="-fx-background-color: linear-gradient(to bottom right, rgba(0, 255, 127, 0.2), rgba(34, 139, 34, 0.1)); 
-                                   -fx-background-radius: 15; -fx-padding: 20; -fx-min-width: 180; -fx-min-height: 120;">
-                            <FontIcon iconLiteral="fa-dollar" iconSize="30" style="-fx-icon-color: #00ff7f;" />
-                            <Label fx:id="revenueLabel" text="$0"
-                                style="-fx-text-fill: white; -fx-font-family: 'Arial Black'; -fx-font-size: 24px;" />
-                            <Label text="Monthly Revenue" style="-fx-text-fill: #cccccc; -fx-font-size: 12px;" />
-                        </VBox>
-
-                        <!-- Bookings Card -->
-                        <VBox spacing="10" alignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="0"
-                            style="-fx-background-color: linear-gradient(to bottom right, rgba(255, 170, 0, 0.2), rgba(255, 140, 0, 0.1)); 
-                                   -fx-background-radius: 15; -fx-padding: 20; -fx-min-width: 180; -fx-min-height: 120;">
-                            <FontIcon iconLiteral="fa-ticket" iconSize="30" style="-fx-icon-color: #ffaa00;" />
-                            <Label fx:id="bookingCountLabel" text="0"
-                                style="-fx-text-fill: white; -fx-font-family: 'Arial Black'; -fx-font-size: 24px;" />
-                            <Label text="Total Bookings" style="-fx-text-fill: #cccccc; -fx-font-size: 12px;" />
-                        </VBox>
-                    </GridPane>
-                </VBox>
-
-                <!-- Management Tools -->
-                <VBox spacing="20">
-                    <Label text="MANAGEMENT TOOLS"
-                        style="-fx-text-fill: #ffffff; -fx-font-family: 'Arial Black'; -fx-font-size: 18px;" />
-                    
-                    <GridPane hgap="15" vgap="15" alignment="CENTER">
-                        <Button text="MANAGE CINEMAS" onAction="#manageCinemas" 
-                            GridPane.columnIndex="0" GridPane.rowIndex="0"
-                            style="-fx-background-color: linear-gradient(to right, #4a90e2, #66ccff); -fx-text-fill: white; 
-                                   -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand; 
-                                   -fx-padding: 15 30 15 30;" />
-                        
-                        <Button text="SCHEDULE SESSIONS" onAction="#manageSessions" 
-                            GridPane.columnIndex="1" GridPane.rowIndex="0"
-                            style="-fx-background-color: linear-gradient(to right, #8b0000, #ff4444); -fx-text-fill: white; 
-                                   -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand; 
-                                   -fx-padding: 15 30 15 30;" />
-                        
-                        <Button text="VIEW ANALYTICS" onAction="#viewAnalytics" 
-                            GridPane.columnIndex="2" GridPane.rowIndex="0"
-                            style="-fx-background-color: linear-gradient(to right, #ff8c00, #ffaa00); -fx-text-fill: white; 
-                                   -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand; 
-                                   -fx-padding: 15 30 15 30;" />
-                        
-                        <Button text="REPORTS" onAction="#generateReports" 
-                            GridPane.columnIndex="3" GridPane.rowIndex="0"
-                            style="-fx-background-color: linear-gradient(to right, #6a0dad, #9932cc); -fx-text-fill: white; 
-                                   -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand; 
-                                   -fx-padding: 15 30 15 30;" />
-                    </GridPane>
-                </VBox>
-
-                <!-- Recent Activity -->
-                <VBox spacing="15">
-                    <HBox alignment="CENTER_LEFT" spacing="10">
-                        <Label text="RECENT ACTIVITY"
-                            style="-fx-text-fill: #ffffff; -fx-font-family: 'Arial Black'; -fx-font-size: 18px;" />
-                    </HBox>
-                    
-                    <VBox fx:id="activityContainer" spacing="10"
-                        style="-fx-background-color: rgba(40, 40, 40, 0.7); -fx-background-radius: 15; -fx-padding: 20;">
-                        <!-- Activity items will be added dynamically -->
-                    </VBox>
-                </VBox>
-
+              <FontIcon iconLiteral="mdi2h-home:30:#66ccff"/>
+              <Label fx:id="cinemaCountLabel" text="0"
+                     style="-fx-text-fill: white; -fx-font-family: 'Arial Black'; -fx-font-size: 24px;"/>
+              <Label text="My Cinemas" style="-fx-text-fill: #cccccc; -fx-font-size: 12px;"/>
             </VBox>
-        </ScrollPane>
-    </center>
+
+            <!-- Movie Sessions Card -->
+            <VBox spacing="10" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                  style="-fx-background-color: linear-gradient(to bottom right, rgba(255, 102, 102, 0.2), rgba(139, 0, 0, 0.1));
+                                   -fx-background-radius: 15; -fx-padding: 20; -fx-min-width: 180; -fx-min-height: 120;">
+              <FontIcon iconLiteral="mdi2c-calendar:30:#ff6666"/>
+              <Label fx:id="sessionCountLabel" text="0"
+                     style="-fx-text-fill: white; -fx-font-family: 'Arial Black'; -fx-font-size: 24px;"/>
+              <Label text="Active Sessions" style="-fx-text-fill: #cccccc; -fx-font-size: 12px;"/>
+            </VBox>
+
+            <!-- Revenue Card -->
+            <VBox spacing="10" alignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="0"
+                  style="-fx-background-color: linear-gradient(to bottom right, rgba(0, 255, 127, 0.2), rgba(34, 139, 34, 0.1));
+                                   -fx-background-radius: 15; -fx-padding: 20; -fx-min-width: 180; -fx-min-height: 120;">
+              <FontIcon iconLiteral="mdi2c-currency-usd:30:#00ff7f"/>
+              <Label fx:id="revenueLabel"
+                     style="-fx-text-fill: white; -fx-font-family: 'Arial Black'; -fx-font-size: 24px;"/>
+              <Label text="Monthly Revenue" style="-fx-text-fill: #cccccc; -fx-font-size: 12px;"/>
+            </VBox>
+
+            <!-- Bookings Card -->
+            <VBox spacing="10" alignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="0"
+                  style="-fx-background-color: linear-gradient(to bottom right, rgba(255, 170, 0, 0.2), rgba(255, 140, 0, 0.1));
+                                   -fx-background-radius: 15; -fx-padding: 20; -fx-min-width: 180; -fx-min-height: 120;">
+              <FontIcon iconLiteral="mdi2t-ticket-confirmation:30:#ffaa00"/>
+              <Label fx:id="bookingCountLabel" text="0"
+                     style="-fx-text-fill: white; -fx-font-family: 'Arial Black'; -fx-font-size: 24px;"/>
+              <Label text="Total Bookings" style="-fx-text-fill: #cccccc; -fx-font-size: 12px;"/>
+            </VBox>
+          </GridPane>
+        </VBox>
+
+        <!-- Management Tools -->
+        <VBox spacing="20">
+          <Label text="MANAGEMENT TOOLS"
+                 style="-fx-text-fill: #ffffff; -fx-font-family: 'Arial Black'; -fx-font-size: 18px;"/>
+
+          <GridPane hgap="15" vgap="15" alignment="CENTER">
+            <Button text="MANAGE CINEMAS" onAction="#manageCinemas"
+                    GridPane.columnIndex="0" GridPane.rowIndex="0"
+                    style="-fx-background-color: linear-gradient(to right, #4a90e2, #66ccff); -fx-text-fill: white;
+                                   -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand;
+                                   -fx-padding: 15 30 15 30;"/>
+
+            <Button text="SCHEDULE SESSIONS" onAction="#manageSessions"
+                    GridPane.columnIndex="1" GridPane.rowIndex="0"
+                    style="-fx-background-color: linear-gradient(to right, #8b0000, #ff4444); -fx-text-fill: white;
+                                   -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand;
+                                   -fx-padding: 15 30 15 30;"/>
+
+            <Button text="VIEW ANALYTICS" onAction="#viewAnalytics"
+                    GridPane.columnIndex="2" GridPane.rowIndex="0"
+                    style="-fx-background-color: linear-gradient(to right, #ff8c00, #ffaa00); -fx-text-fill: white;
+                                   -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand;
+                                   -fx-padding: 15 30 15 30;"/>
+
+            <Button text="REPORTS" onAction="#generateReports"
+                    GridPane.columnIndex="3" GridPane.rowIndex="0"
+                    style="-fx-background-color: linear-gradient(to right, #6a0dad, #9932cc); -fx-text-fill: white;
+                                   -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 20; -fx-cursor: hand;
+                                   -fx-padding: 15 30 15 30;"/>
+          </GridPane>
+        </VBox>
+
+        <!-- Recent Activity -->
+        <VBox spacing="15">
+          <HBox alignment="CENTER_LEFT" spacing="10">
+            <Label text="RECENT ACTIVITY"
+                   style="-fx-text-fill: #ffffff; -fx-font-family: 'Arial Black'; -fx-font-size: 18px;"/>
+          </HBox>
+
+          <VBox fx:id="activityContainer" spacing="10"
+                style="-fx-background-color: rgba(40, 40, 40, 0.7); -fx-background-radius: 15; -fx-padding: 20;">
+            <!-- Activity items will be added dynamically -->
+          </VBox>
+        </VBox>
+
+      </VBox>
+    </ScrollPane>
+  </center>
 
 </BorderPane>
 

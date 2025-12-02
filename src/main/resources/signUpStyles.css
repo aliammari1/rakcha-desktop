@@ -1,50 +1,50 @@
 .root {
-  -fx-font-family: "Arial";
-  -fx-background-color: #f0f0f0;
+    -fx-font-family: "Arial";
+    -fx-background-color: #f0f0f0;
 }
 
 .label {
-  -fx-font-size: 14px;
-  -fx-font-weight: bold;
-  -fx-text-fill: #333333;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
 }
 
 .text-field,
 .combo-box-base {
-  -fx-background-color: #ffffff;
-  -fx-padding: 5px;
-  -fx-border-color: #cccccc;
-  -fx-border-radius: 5px;
+    -fx-background-color: #ffffff;
+    -fx-padding: 5px;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 5px;
 }
 
 .image-view {
-  -fx-border-color: #cccccc;
-  -fx-border-width: 1px;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 1px;
 }
 
 .transparent-scroll-pane {
-  -fx-background-color: transparent;
+    -fx-background-color: transparent;
 }
 
 .transparent-scroll-pane > .viewport {
-  -fx-background-color: transparent;
+    -fx-background-color: transparent;
 }
 
 .form-label {
-  -fx-font-family: "Outfit Medium";
-  -fx-font-size: 14px;
+    -fx-font-family: "Outfit Medium";
+    -fx-font-size: 14px;
 }
 
 .form-field {
-  -fx-pref-height: 35px;
-  -fx-max-width: Infinity;
+    -fx-pref-height: 35px;
+    -fx-max-width: Infinity;
 }
 
 .profile-image {
-  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0, 0, 0);
-  -fx-background-radius: 50%;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0, 0, 0);
+    -fx-background-radius: 50%;
 }
 
 .import-button {
-  -fx-background-radius: 20;
+    -fx-background-radius: 20;
 }

@@ -18,7 +18,9 @@ import lombok.Setter;
  * @version 1.0.0
  * @since 1.0.0
  */
+
 public class SharedData {
+
     private static SharedData instance;
     private double totalPrice;
 
@@ -43,3 +45,5 @@ public class SharedData {
     }
 
 }
+
+

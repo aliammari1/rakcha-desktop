@@ -1,15 +1,9 @@
 package com.esprit.controllers.products;
 
-import java.io.IOException;
-import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.esprit.models.products.Order;
 import com.esprit.models.users.Client;
 import com.esprit.services.products.OrderService;
 import com.esprit.services.users.UserService;
-
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,17 +13,26 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+
+import java.io.IOException;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Controller class for managing and displaying orders in the RAKCHA
  * application.
  * This controller handles the display of orders in a TableView, provides search
  * functionality, and allows for order deletion and statistical analysis.
- * 
+ *
  * <p>
  * The controller initializes the table view with order data from the database,
  * configures cell factories for displaying client information, and sets up
@@ -42,6 +45,7 @@ import javafx.util.Callback;
  * @since 1.0.0
  */
 public class ListOrderController {
+
     private static final Logger LOGGER = Logger.getLogger(ListOrderController.class.getName());
 
     @FXML
@@ -66,7 +70,7 @@ public class ListOrderController {
     /**
      * Initializes the controller by setting up event listeners and populating the
      * table view.
-     * 
+     *
      * <p>
      * This method configures the search bar to trigger filtering when text changes,
      * initializes the order display, and sets up the delete column functionality.
@@ -75,9 +79,9 @@ public class ListOrderController {
     @FXML
     void initialize() {
         this.SearchBar.textProperty().addListener((observable, oldValue, newValue) -> {
-            this.search(newValue);
-        }
-);
+                this.search(newValue);
+            }
+        );
         this.afficheOrder();
         this.initDeleteColumn();
     }
@@ -85,25 +89,25 @@ public class ListOrderController {
 
     /**
      * Populates the TableView with orders and configures columns to show client and order fields.
-     *
+     * <p>
      * Configures columns for client first name, client last name, address, phone number, date, and status;
      * loads orders from OrderService into the table and enables cell selection.
      */
     void afficheOrder() {
         this.idnom.setCellValueFactory(cellData -> {
-            final Order order = cellData.getValue();
-            final UserService userService = new UserService();
-            final Client client = (Client) userService.getUserById(order.getClient().getId());
-            return new SimpleStringProperty(client.getFirstName());
-        }
-);
+                final Order order = cellData.getValue();
+                final UserService userService = new UserService();
+                final Client client = (Client) userService.getUserById(order.getClient().getId());
+                return new SimpleStringProperty(client.getFirstName());
+            }
+        );
         this.idprenom.setCellValueFactory(cellData -> {
-            final Order order = cellData.getValue();
-            final UserService userService = new UserService();
-            final Client client = (Client) userService.getUserById(order.getClient().getId());
-            return new SimpleStringProperty(client.getLastName());
-        }
-);
+                final Order order = cellData.getValue();
+                final UserService userService = new UserService();
+                final Client client = (Client) userService.getUserById(order.getClient().getId());
+                return new SimpleStringProperty(client.getLastName());
+            }
+        );
         this.idadresse.setCellValueFactory(new PropertyValueFactory<Order, String>("adresse"));
         this.idnumero.setCellValueFactory(new PropertyValueFactory<Order, Integer>("num_telephone"));
         this.iddate.setCellValueFactory(new PropertyValueFactory<Order, Date>("dateOrder"));
@@ -120,7 +124,7 @@ public class ListOrderController {
 
     /**
      * Filter orders shown in the table by a search keyword.
-     *
+     * <p>
      * If `keyword` is null or empty, all orders are displayed. Otherwise the table
      * is updated to show orders whose address, client's first name, client's
      * last name, or status contain the keyword (case-insensitive).
@@ -133,13 +137,12 @@ public class ListOrderController {
         final ObservableList<Order> filteredList = FXCollections.observableArrayList();
         if (null == keyword || keyword.trim().isEmpty()) {
             filteredList.addAll(orderservice.read());
-        }
- else {
+        } else {
             for (final Order order : orderservice.read()) {
-                if (order.getAddress().toLowerCase().contains(keyword.toLowerCase())
-                        || order.getClient().getLastName().toLowerCase().contains(keyword.toLowerCase())
-                        || order.getClient().getFirstName().toLowerCase().contains(keyword.toLowerCase())
-                        || order.getStatus().toLowerCase().contains(keyword.toLowerCase())) {
+                if (order.getShippingAddress().toLowerCase().contains(keyword.toLowerCase())
+                    || order.getClient().getLastName().toLowerCase().contains(keyword.toLowerCase())
+                    || order.getClient().getFirstName().toLowerCase().contains(keyword.toLowerCase())
+                    || order.getStatus().toLowerCase().contains(keyword.toLowerCase())) {
                     filteredList.add(order);
                 }
 
@@ -176,14 +179,14 @@ public class ListOrderController {
                     {
                         this.btnDelete.getStyleClass().add("delete-button");
                         this.btnDelete.setOnAction((final ActionEvent event) -> {
-                            final Order order = this.getTableView().getItems().get(this.getIndex());
-                            final OrderService ps = new OrderService();
-                            ps.delete(order);
-                            // Mise à jour de la TableView après la suppression de la base de données
-                            orderTableView.getItems().remove(order);
-                            orderTableView.refresh();
-                        }
-);
+                                final Order order = this.getTableView().getItems().get(this.getIndex());
+                                final OrderService ps = new OrderService();
+                                ps.delete(order);
+                                // Mise à jour de la TableView après la suppression de la base de données
+                                orderTableView.getItems().remove(order);
+                                orderTableView.refresh();
+                            }
+                        );
                     }
 
 
@@ -198,26 +201,24 @@ public class ListOrderController {
                         super.updateItem(item, empty);
                         if (empty) {
                             this.setGraphic(null);
-                        }
- else {
+                        } else {
                             this.setGraphic(this.btnDelete);
                         }
 
                     }
 
                 }
-;
+                    ;
             }
 
-        }
-;
+        };
         this.deleteColumn.setCellFactory(cellFactory);
     }
 
 
     /**
      * Opens the order statistics view in a new window.
-     * 
+     *
      * <p>
      * This method loads the AnalyseOrder.fxml file, creates a new scene and stage,
      * and displays it. The original stage is shown again when the statistics window
@@ -229,8 +230,8 @@ public class ListOrderController {
     @FXML
     void statOrder(final ActionEvent event) {
         try {
-            // Charger la nouvelle interface ShoppingCartProduct.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/produits/AnalyseOrder.fxml"));
+            // Charger la nouvelle interface AnalyseCommande.fxml
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/products/AnalyseCommande.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);

@@ -1,6 +1,9 @@
 package com.esprit.controllers.cinemas;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import com.esprit.utils.TestFXBase;
+import javafx.scene.control.Button;
+import javafx.scene.layout.FlowPane;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
@@ -8,14 +11,11 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.Timeout;
-import java.util.concurrent.TimeUnit;
 import org.testfx.framework.junit5.Start;
 
-import com.esprit.utils.TestFXBase;
+import java.util.concurrent.TimeUnit;
 
-import javafx.scene.control.Button;
-import javafx.scene.layout.FlowPane;
-import javafx.stage.Stage;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Comprehensive test suite for DashboardClientController.
@@ -32,14 +32,15 @@ class DashboardClientControllerTest extends TestFXBase {
             getClass().getResource("/ui/cinemas/DashboardClientCinema.fxml")
         );
         javafx.scene.Parent root = loader.load();
-        
+
         stage.setScene(new javafx.scene.Scene(root, 1280, 700));
         stage.show();
         stage.toFront();
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Cinema Display Tests")
     class CinemaDisplayTests {
 
@@ -63,7 +64,7 @@ class DashboardClientControllerTest extends TestFXBase {
 
             FlowPane cinemasPane = lookup("#cinemasFlowPane").query();
             assertThat(cinemasPane).isNotNull();
-            
+
             // Verify cinemas are loaded in the pane
             assertThat(cinemasPane.getChildren()).isNotEmpty();
         }
@@ -71,7 +72,8 @@ class DashboardClientControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Film Display Tests")
     class FilmDisplayTests {
 
@@ -95,10 +97,10 @@ class DashboardClientControllerTest extends TestFXBase {
 
             FlowPane filmsPane = lookup("#filmsFlowPane").query();
             assertThat(filmsPane).isNotNull();
-            
+
             // Verify films are loaded in the pane
             assertThat(filmsPane.getChildren()).isNotEmpty();
-            
+
             Button filmButton = (Button) lookup("#filmButton").tryQuery().orElse(null);
             if (filmButton != null) {
                 clickOn(filmButton);
@@ -110,7 +112,8 @@ class DashboardClientControllerTest extends TestFXBase {
     }
 
 
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)@Nested
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    @Nested
     @DisplayName("Booking Tests")
     class BookingTests {
 
@@ -123,7 +126,7 @@ class DashboardClientControllerTest extends TestFXBase {
             Button bookButton = (Button) lookup("#bookButton").tryQuery().orElse(null);
             assertThat(bookButton).isNotNull();
             assertThat(bookButton.isVisible()).isTrue();
-            
+
             clickOn(bookButton);
             waitForFxEvents();
         }

@@ -1,14 +1,9 @@
 package com.esprit.controllers.films;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.esprit.models.cinemas.MovieSession;
 import com.esprit.models.cinemas.Seat;
 import com.esprit.models.users.Client;
 import com.esprit.services.cinemas.SeatService;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,16 +13,20 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Controller class responsible for seat selection in the cinema booking
  * process.
- * 
+ *
  * <p>
  * This controller manages the seat grid interface where users can select their
  * preferred seats for a movie session. It visualizes the seat layout with color
  * coding to indicate available, occupied, and selected seats.
  * </p>
- * 
+ *
  * <p>
  * Key features:
  * </p>
@@ -42,6 +41,7 @@ import javafx.stage.Stage;
  * @since 1.0.0
  */
 public class SeatSelectionController {
+
     @FXML
     private GridPane seatGrid;
     @FXML
@@ -71,7 +71,7 @@ public class SeatSelectionController {
 
     /**
      * Populate the seatGrid with buttons representing seats for the current movie session's cinema hall.
-     *
+     * <p>
      * Occupied seats are disabled and styled red; available seats are styled green. Clicking a seat
      * toggles its selection state and updates the controller's selectedSeats list.
      */
@@ -82,8 +82,8 @@ public class SeatSelectionController {
         int maxRow = 0;
         int maxCol = 0;
         for (Seat seat : seats) {
-            maxRow = Math.max(maxRow, seat.getRowNumber());
-            maxCol = Math.max(maxCol, seat.getSeatNumber());
+            maxRow = Math.max(maxRow, Integer.parseInt(seat.getRowLabel() != null ? seat.getRowLabel() : "0"));
+            maxCol = Math.max(maxCol, Integer.parseInt(seat.getSeatNumber() != null ? seat.getSeatNumber() : "0"));
         }
 
 
@@ -96,8 +96,8 @@ public class SeatSelectionController {
                 if (currentSeat != null) {
                     seatButton.setDisable(currentSeat.getIsOccupied());
                     seatButton.setStyle(currentSeat.getIsOccupied()
-                            ? "-fx-background-color: red;"
-                            : "-fx-background-color: green;");
+                        ? "-fx-background-color: red;"
+                        : "-fx-background-color: green;");
 
                     seatButton.setOnAction(e -> handleSeatSelection(seatButton, currentSeat));
                 }
@@ -120,13 +120,21 @@ public class SeatSelectionController {
      * @return the matching Seat object, or null if no match is found
      */
     private Seat findSeat(List<Seat> seats, int row, int col) {
-        return seats.stream().filter(s -> s.getRowNumber() == row && s.getSeatNumber() == col).findFirst().orElse(null);
+        return seats.stream().filter(s -> {
+            try {
+                int seatRow = Integer.parseInt(s.getRowLabel() != null ? s.getRowLabel() : "0");
+                int seatCol = Integer.parseInt(s.getSeatNumber() != null ? s.getSeatNumber() : "0");
+                return seatRow == row && seatCol == col;
+            } catch (NumberFormatException e) {
+                return false;
+            }
+        }).findFirst().orElse(null);
     }
 
 
     /**
      * Handles the selection and deselection of seats.
-     * 
+     *
      * <p>
      * Toggles the selection state of a seat when clicked and updates the visual
      * appearance accordingly. Selected seats are highlighted in yellow, while
@@ -141,8 +149,7 @@ public class SeatSelectionController {
         if (selectedSeats.contains(seat)) {
             selectedSeats.remove(seat);
             seatButton.setStyle("-fx-background-color: green;");
-        }
- else {
+        } else {
             selectedSeats.add(seat);
             seatButton.setStyle("-fx-background-color: yellow;");
         }

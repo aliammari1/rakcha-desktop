@@ -1,12 +1,6 @@
 package com.esprit.controllers.users;
 
-import java.io.IOException;
-import java.net.URL;
-import java.security.SecureRandom;
-import java.util.ResourceBundle;
-
 import com.esprit.utils.UserSMSAPI;
-
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,6 +13,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.net.URL;
+import java.security.SecureRandom;
+import java.util.ResourceBundle;
+
 /**
  * JavaFX controller class for the RAKCHA application. Handles UI interactions
  * and manages view logic using FXML.
@@ -28,6 +27,7 @@ import javafx.stage.Stage;
  * @since 1.0.0
  */
 public class SMSAdminController implements Initializable {
+
     int verificationCode;
     @FXML
     private TextField codeTextField;
@@ -51,7 +51,7 @@ public class SMSAdminController implements Initializable {
         if (this.verificationCode == Integer.parseInt(this.codeTextField.getText())) {
             try {
                 final FXMLLoader loader = new FXMLLoader(
-                        this.getClass().getResource("/ui/users/ResetPasswordlogin.fxml"));
+                    this.getClass().getResource("/ui/users/ResetPasswordlogin.fxml"));
                 final Parent root = loader.load();
                 final Stage stage = (Stage) this.codeTextField.getScene().getWindow();
                 stage.setScene(new Scene(root));
@@ -81,16 +81,16 @@ public class SMSAdminController implements Initializable {
      */
     public void initialize(final URL location, final ResourceBundle resources) {
         this.phoneNumberTextfield.textProperty().addListener(
-                (final ObservableValue<? extends String> observable, final String oldValue, final String newValue) -> {
-                    if (8 == newValue.trim().length()) {
-                        final SecureRandom random = new SecureRandom();
-                        this.verificationCode = random.nextInt(999999 - 100000) + 100000;
-                        UserSMSAPI.sendSMS(Integer.parseInt(this.phoneNumberTextfield.getText()), "Rakcha Admin",
-                                "your code is " + this.verificationCode);
-                    }
-
+            (final ObservableValue<? extends String> observable, final String oldValue, final String newValue) -> {
+                if (8 == newValue.trim().length()) {
+                    final SecureRandom random = new SecureRandom();
+                    this.verificationCode = random.nextInt(999999 - 100000) + 100000;
+                    UserSMSAPI.sendSMS(Integer.parseInt(this.phoneNumberTextfield.getText()), "Rakcha Admin",
+                        "your code is " + this.verificationCode);
                 }
-);
+
+            }
+        );
     }
 
 }

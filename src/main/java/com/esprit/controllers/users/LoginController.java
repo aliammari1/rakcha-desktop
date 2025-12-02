@@ -1,19 +1,22 @@
 package com.esprit.controllers.users;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-import java.util.Random;
-import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import com.esprit.enums.UserRole;
 import com.esprit.models.users.User;
+import com.esprit.services.users.UserSecurityService;
 import com.esprit.services.users.UserService;
+import com.esprit.utils.SessionManager;
 import com.github.plushaze.traynotification.notification.Notifications;
 import com.github.plushaze.traynotification.notification.TrayNotification;
-
-import javafx.animation.*;
+import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.ParallelTransition;
+import javafx.animation.PauseTransition;
+import javafx.animation.RotateTransition;
+import javafx.animation.ScaleTransition;
+import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -21,7 +24,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -32,6 +41,14 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.Random;
+import java.util.ResourceBundle;
+import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * JavaFX controller class for the RAKCHA application. Handles UI interactions
  * and manages view logic using FXML.
@@ -41,9 +58,40 @@ import javafx.util.Duration;
  * @since 1.0.0
  */
 public class LoginController implements Initializable {
+
     private static final Logger LOGGER = Logger.getLogger(LoginController.class.getName());
     private static final Random RANDOM = new Random();
-
+    // Verified movie poster URLs with correct TMDB images
+    private final String[] moviePosters = {
+        "https://image.tmdb.org/t/p/w500/d5NXSklXo0qyIYkgV94XAgMIckC.jpg", // Dune (2021)
+        "https://image.tmdb.org/t/p/w500/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg", // Joker (2019)
+        "https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg", // Oppenheimer (2023)
+        "https://image.tmdb.org/t/p/w500/gajva2L0rPYkEWjzgFlBXCAVBE5.jpg", // Blade Runner 2049
+        "https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg", // Inception
+        "https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg", // Spider-Man: Across the Spider-Verse
+        "https://image.tmdb.org/t/p/w500/74xTEgt7R36Fpooo50r9T25onhq.jpg", // The Batman (2022)
+        "https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg", // Interstellar
+        "https://image.tmdb.org/t/p/w500/or06FN3Dka5tukK1e9sl16pB3iy.jpg", // Avengers: Endgame
+        "https://image.tmdb.org/t/p/w500/vZloFAK7NmvMGKE7VkF5UHaz0I.jpg", // John Wick: Chapter 4
+        "https://image.tmdb.org/t/p/w500/62HCnUTziyWcpDaBO2i1DX17ljH.jpg", // Top Gun: Maverick
+        "https://image.tmdb.org/t/p/w500/w3LxiVYdWWRvEVdn5RYq6jIqkb1.jpg" // Everything Everywhere All at Once
+    };
+    // Movie titles corresponding to the posters
+    private final String[] movieTitles = {
+        "Dune",
+        "Joker",
+        "Oppenheimer",
+        "Blade Runner 2049",
+        "Inception",
+        "Spider-Man: Across the Spider-Verse",
+        "The Batman",
+        "Interstellar",
+        "Avengers: Endgame",
+        "John Wick: Chapter 4",
+        "Top Gun: Maverick",
+        "Everything Everywhere All at Once"
+    };
+    private final UserSecurityService securityService = new UserSecurityService();
     @FXML
     private StackPane rootContainer;
     @FXML
@@ -70,7 +118,8 @@ public class LoginController implements Initializable {
     private Button microsoftSignInButton;
     @FXML
     private AnchorPane loginAnchorPane;
-
+    @FXML
+    private Label errorLabel;
     // Animation elements
     @FXML
     private Circle particle1, particle2, particle3, particle4, particle5, particle6;
@@ -82,51 +131,14 @@ public class LoginController implements Initializable {
     private Rectangle shape3, shape6;
     @FXML
     private Circle shape4;
-
     // Featured movie elements
     @FXML
     private ImageView featuredMovieImage;
     @FXML
     private Label featuredMovieTitle;
-
-    // Verified movie poster URLs with correct TMDB images
-    private final String[] moviePosters = {
-            "https://image.tmdb.org/t/p/w500/d5NXSklXo0qyIYkgV94XAgMIckC.jpg", // Dune (2021)
-            "https://image.tmdb.org/t/p/w500/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg", // Joker (2019)
-            "https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg", // Oppenheimer (2023)
-            "https://image.tmdb.org/t/p/w500/gajva2L0rPYkEWjzgFlBXCAVBE5.jpg", // Blade Runner 2049
-            "https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg", // Inception
-            "https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg", // Spider-Man: Across the Spider-Verse
-            "https://image.tmdb.org/t/p/w500/74xTEgt7R36Fpooo50r9T25onhq.jpg", // The Batman (2022)
-            "https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg", // Interstellar
-            "https://image.tmdb.org/t/p/w500/or06FN3Dka5tukK1e9sl16pB3iy.jpg", // Avengers: Endgame
-            "https://image.tmdb.org/t/p/w500/vZloFAK7NmvMGKE7VkF5UHaz0I.jpg", // John Wick: Chapter 4
-            "https://image.tmdb.org/t/p/w500/62HCnUTziyWcpDaBO2i1DX17ljH.jpg", // Top Gun: Maverick
-            "https://image.tmdb.org/t/p/w500/w3LxiVYdWWRvEVdn5RYq6jIqkb1.jpg" // Everything Everywhere All at Once
-    }
-;
-
-    // Movie titles corresponding to the posters
-    private final String[] movieTitles = {
-            "Dune",
-            "Joker",
-            "Oppenheimer",
-            "Blade Runner 2049",
-            "Inception",
-            "Spider-Man: Across the Spider-Verse",
-            "The Batman",
-            "Interstellar",
-            "Avengers: Endgame",
-            "John Wick: Chapter 4",
-            "Top Gun: Maverick",
-            "Everything Everywhere All at Once"
-    }
-;
-
     private int currentImageIndex = 0;
     private Timeline featuredMovieSwitchTimeline;
     private Timeline particleCreationTimeline;
-
     // Arrays to store dynamic particles and shapes
     private Circle[] dynamicParticles;
     private Polygon[] dynamicShapes;
@@ -134,13 +146,11 @@ public class LoginController implements Initializable {
     private int maxDynamicElements = 15; // Number of dynamic elements to create
 
     /**
-         * Stops active UI animations and switches the current stage's scene to the Google verification view.
-         *
-         * @param event the action event that triggered the Google sign-in
-         * @throws IOException if the Google verification FXML resource cannot be loaded
-         * @throws ExecutionException if an asynchronous verification task fails
-         * @throws InterruptedException if the thread is interrupted while waiting for an asynchronous task
-         */
+     * @param event
+     * @throws IOException
+     * @throws ExecutionException
+     * @throws InterruptedException
+     */
     @FXML
     void signInWithGoogle(final ActionEvent event) throws IOException, ExecutionException, InterruptedException {
         try {
@@ -152,15 +162,13 @@ public class LoginController implements Initializable {
         } catch (final Exception e) {
             LoginController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
-
     }
 
-
     /**
-     * Handle the Microsoft sign-in action by stopping animations and switching the current stage's scene
-     * to the VerifyWithMicrosoft view.
-     *
-     * @param event the ActionEvent that triggered this handler
+     * @param event
+     * @throws IOException
+     * @throws ExecutionException
+     * @throws InterruptedException
      */
     @FXML
     void signInWithMicrosoft(final ActionEvent event) throws IOException, ExecutionException, InterruptedException {
@@ -173,28 +181,62 @@ public class LoginController implements Initializable {
         } catch (final Exception e) {
             LoginController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
-
     }
 
-
     /**
-         * Authenticate the user with the provided email and password and navigate to the appropriate role-specific home view.
-         *
-         * On successful authentication this method displays a brief success notification, loads and shows the FXML corresponding
-         * to the user's role, stores the authenticated User object in the stage's userData for downstream controllers, and
-         * stops any ongoing login-view animations. If authentication fails it shows an error alert indicating invalid credentials.
-         *
-         * @param event the action event that triggered the login (typically the sign-in button press)
-         * @throws IOException if an error occurs while loading or switching to the target FXML view
-         */
+     * @param event
+     * @throws IOException
+     */
     @FXML
     void login(final ActionEvent event) throws IOException {
         final UserService userService = new UserService();
-        final User user = userService.login(this.emailTextField.getText(), this.passwordTextField.getText());
+
+        String email = this.emailTextField.getText();
+        String password = this.passwordTextField.getText();
+
+        // Reset error styling
+        if (errorLabel != null) {
+            errorLabel.setVisible(false);
+        }
+        this.emailTextField.setStyle("-fx-border-color: #ccc;");
+        this.passwordTextField.setStyle("-fx-border-color: #ccc;");
+
+        // Security Check 1: Account Lockout
+        if (securityService.isAccountLocked(email)) {
+            if (errorLabel != null) {
+                errorLabel.setText(
+                    "Account locked due to too many failed login attempts. Please try again later or contact support.");
+                errorLabel.setVisible(true);
+            } else {
+                final Alert alert = new Alert(Alert.AlertType.ERROR,
+                    "Account locked due to too many failed login attempts. Please try again later or contact support.",
+                    ButtonType.CLOSE);
+                alert.show();
+            }
+            LOGGER.warning("Login attempt on locked account: " + email);
+            return;
+        }
+
+        // Security Check 2: Account Deactivation
+        if (!securityService.isAccountActive(email)) {
+            if (errorLabel != null) {
+                errorLabel.setText("Account has been deactivated. Please contact support for assistance.");
+                errorLabel.setVisible(true);
+            } else {
+                final Alert alert = new Alert(Alert.AlertType.ERROR,
+                    "Account has been deactivated. Please contact support for assistance.",
+                    ButtonType.CLOSE);
+                alert.show();
+            }
+            LOGGER.warning("Login attempt on deactivated account: " + email);
+            return;
+        }
+
+        final User user = userService.login(email, password);
         if (null != user) {
             try {
                 final TrayNotification trayNotification = new TrayNotification("users", "login successful",
-                        Notifications.SUCCESS);
+                    Notifications.SUCCESS);
                 trayNotification.showAndDismiss(new Duration(3000));
 
                 final Stage stage = (Stage) this.signInButton.getScene().getWindow();
@@ -202,30 +244,29 @@ public class LoginController implements Initializable {
                 // Redirect to role-specific home screen
                 String fxmlPath = "";
                 String windowTitle = "RAKCHA";
-
-                switch (user.getRole().toLowerCase()) {
-                    case "admin":
-                        fxmlPath = "/ui/users/HomeAdmin.fxml";
+                UserRole role = user.getRole();
+                switch (role) {
+                    case UserRole.ADMIN:
+                        fxmlPath = "/ui/users/Profile.fxml";
                         windowTitle = "RAKCHA - Admin Dashboard";
                         break;
-                    case "client":
-                        fxmlPath = "/ui/users/HomeClient.fxml";
+                    case UserRole.CLIENT:
+                        fxmlPath = "/ui/users/Profile.fxml";
                         windowTitle = "RAKCHA - Client Home";
                         break;
-                    case "responsable de cinema":
-                        fxmlPath = "/ui/users/HomeCinemaManager.fxml";
+                    case UserRole.CINEMA_MANAGER:
+                        fxmlPath = "/ui/users/Profile.fxml";
                         windowTitle = "RAKCHA - Cinema Manager";
                         break;
                     default:
-                        // Fallback to profile page for unknown roles
+                        // Fallback to the profile page for unknown roles
                         fxmlPath = "/ui/users/Profile.fxml";
                         windowTitle = "RAKCHA - Profile";
                         LOGGER.log(Level.WARNING,
-                                "Unknown user role: " + user.getRole() + ". Redirecting to profile page.");
+                            "Unknown user role: " + user.getRole() + ". Redirecting to profile page.");
                         break;
                 }
-
-
+                SessionManager.setCurrentUser(user);
                 final FXMLLoader loader = new FXMLLoader(this.getClass().getResource(fxmlPath));
                 final Parent root = loader.load();
 
@@ -234,34 +275,37 @@ public class LoginController implements Initializable {
                 stage.setScene(scene);
                 stage.setTitle(windowTitle);
 
-                // Set user data on the stage so controllers can access it via getUserData()
-                stage.setUserData(user);
-
                 // Stop animations when navigating away
                 stopAllAnimations();
 
+                // Record successful login (resets failed attempts)
+                securityService.recordSuccessfulLogin(email);
+
                 LOGGER.log(Level.INFO,
-                        "User " + user.getEmail() + " with role " + user.getRole() + " logged in successfully");
+                    "User " + user.getEmail() + " with role " + user.getRole() + " logged in successfully");
 
             } catch (Exception e) {
                 LOGGER.log(Level.SEVERE, "Error during login process", e);
                 throw new IOException("Failed to complete login process", e);
             }
+        } else {
+            // Record failed login attempt
+            securityService.recordFailedLogin(email);
 
+            if (errorLabel != null) {
+                errorLabel.setText("Invalid email or password. Account will be locked after 5 failed attempts.");
+                errorLabel.setVisible(true);
+            } else {
+                final Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid email or password", ButtonType.CLOSE);
+                alert.show();
+            }
+            LOGGER.warning("Failed login attempt for: " + email);
         }
- else {
-            final Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid email or password", ButtonType.CLOSE);
-            alert.show();
-        }
-
     }
 
-
     /**
-     * Navigate to the Sign Up view and stop ongoing animations.
-     *
-     * @param event the action event that triggered the navigation
-     * @throws IOException if loading the SignUp FXML or setting the new scene fails
+     * @param event
+     * @throws IOException
      */
     @FXML
     void switchToSignUp(ActionEvent event) throws IOException {
@@ -277,20 +321,8 @@ public class LoginController implements Initializable {
             LOGGER.log(Level.SEVERE, "Error switching to signup view", e);
             throw e;
         }
-
     }
 
-
-    /**
-     * Configure UI event handlers, initialize dynamic element arrays, and schedule startup of visual animations.
-     *
-     * Sets action handlers for the forget-password links and the sign-up button, allocates arrays for dynamic
-     * particles, shapes, and rectangles, and starts a short delayed Timeline that initializes the featured
-     * movie display and various particle/shape animations.
-     *
-     * @param location  the location used to resolve relative paths for the root object, or null if unknown
-     * @param resources the ResourceBundle for localization, or null if none provided
-     */
     @Override
     /**
      * Initializes the JavaFX controller and sets up UI components. This method is
@@ -308,11 +340,8 @@ public class LoginController implements Initializable {
                 } catch (final IOException e) {
                     throw new RuntimeException(e);
                 }
-
             }
-
-        }
-);
+        });
 
         this.forgetPasswordEmailHyperlink.setOnAction(new EventHandler<>() {
             @Override
@@ -321,16 +350,13 @@ public class LoginController implements Initializable {
                     final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/users/maillogin.fxml"));
                     final Parent root = loader.load();
                     final Stage stage = (Stage) forgetPasswordEmailHyperlink.getScene()
-                            .getWindow();
+                        .getWindow();
                     stage.setScene(new Scene(root));
                 } catch (final IOException e) {
                     throw new RuntimeException(e);
                 }
-
             }
-
-        }
-);
+        });
 
         // Ensure signUpButton has its event handler
         signUpButton.setOnAction(event -> {
@@ -339,9 +365,7 @@ public class LoginController implements Initializable {
             } catch (IOException e) {
                 LOGGER.log(Level.SEVERE, "Error switching to signup view", e);
             }
-
-        }
-);
+        });
 
         // Initialize arrays for dynamic elements
         dynamicParticles = new Circle[maxDynamicElements];
@@ -356,21 +380,12 @@ public class LoginController implements Initializable {
             initializeShapeAnimation();
             createDynamicAnimations();
             LOGGER.info("Animation initialization completed.");
-        }
-));
+        }));
         delayedInit.play();
     }
 
-
     /**
-     * Adds and animates a set of dynamic decorative elements (particles, polygons, rectangles)
-     * onto the current foreground pane of the login view.
-     *
-     * <p>The method locates the topmost AnchorPane in the scene root, creates a configurable
-     * number of particle circles, polygon shapes, and rectangles, adds them to that pane,
-     * and starts their corresponding animations. If the UI root or foreground pane cannot
-     * be found the method returns without modifying the scene. Any runtime errors during
-     * creation are logged and suppressed.
+     * Creates dynamic animated elements on the screen
      */
     private void createDynamicAnimations() {
         // Check if rootContainer or anchorPane is null
@@ -379,20 +394,18 @@ public class LoginController implements Initializable {
             return;
         }
 
-
         try {
             // Get a reference to the foreground AnchorPane (the last AnchorPane in the
             // StackPane)
             StackPane root = (rootContainer != null) ? rootContainer
-                    : (anchorPane != null && anchorPane.getScene() != null)
-                            ? (StackPane) anchorPane.getScene().getRoot()
-                            : null;
+                : (anchorPane != null && anchorPane.getScene() != null)
+                ? (StackPane) anchorPane.getScene().getRoot()
+                : null;
 
             if (root == null || root.getChildren().isEmpty()) {
                 LOGGER.warning("Cannot create dynamic animations: root container not properly initialized");
                 return;
             }
-
 
             // Robustly find the foreground AnchorPane - look for the last AnchorPane child
             AnchorPane foregroundPane = null;
@@ -401,15 +414,12 @@ public class LoginController implements Initializable {
                     foregroundPane = (AnchorPane) root.getChildren().get(i);
                     break;
                 }
-
             }
-
 
             if (foregroundPane == null) {
                 LOGGER.warning("Cannot create dynamic animations: foreground AnchorPane not found in root container");
                 return;
             }
-
 
             // Create dynamic particles
             for (int i = 0; i < maxDynamicElements; i++) {
@@ -425,11 +435,11 @@ public class LoginController implements Initializable {
                 int red = 180 + RANDOM.nextInt(75);
                 int darkRed = 80 + RANDOM.nextInt(100);
                 particle.setStyle("-fx-fill: radial-gradient(center 50% 50%, radius 50%, #" +
-                        String.format("%02X", red) + "2222, #" + String.format("%02X", darkRed) + "0000); " +
-                        "-fx-effect: dropshadow(gaussian, #ff" + String.format("%02X", red) +
-                        String.format("%02X", red) + ", " + (10 + RANDOM.nextInt(15)) + ", 0, 0, 0); " +
-                        "-fx-opacity: " + (0.6 + RANDOM.nextDouble() * 0.4) + ";" +
-                        "-fx-z-index: " + (250 + i) + ";");
+                    String.format("%02X", red) + "2222, #" + String.format("%02X", darkRed) + "0000); " +
+                    "-fx-effect: dropshadow(gaussian, #ff" + String.format("%02X", red) +
+                    String.format("%02X", red) + ", " + (10 + RANDOM.nextInt(15)) + ", 0, 0, 0); " +
+                    "-fx-opacity: " + (0.6 + RANDOM.nextDouble() * 0.4) + ";" +
+                    "-fx-z-index: " + (250 + i) + ";");
 
                 // Add to parent and store reference
                 foregroundPane.getChildren().add(particle);
@@ -438,7 +448,6 @@ public class LoginController implements Initializable {
                 // Create animation
                 animateParticle(particle, i);
             }
-
 
             // Create polygons
             for (int i = 0; i < dynamicShapes.length; i++) {
@@ -457,7 +466,6 @@ public class LoginController implements Initializable {
                     points[j * 2 + 1] = centerY + radius * Math.sin(angle);
                 }
 
-
                 shape.getPoints().addAll(points);
 
                 // Apply styling
@@ -465,13 +473,13 @@ public class LoginController implements Initializable {
                 int red = 100 + RANDOM.nextInt(100);
                 int darkRed = 40 + RANDOM.nextInt(60);
                 shape.setStyle("-fx-fill: linear-gradient(to bottom right, rgba(" + red + ", 0, 0, 0.5), rgba("
-                        + darkRed
-                        + ", 0, 0, 0.3)); " +
-                        "-fx-stroke: #" + String.format("%02X", red) + "0000; " +
-                        "-fx-stroke-width: " + (1 + RANDOM.nextInt(2)) + "; " +
-                        "-fx-effect: dropshadow(gaussian, rgba(" + red + ", 0, 0, 0.7), " + (8 + RANDOM.nextInt(10))
-                        + ", 0, 0, 0); " +
-                        "-fx-z-index: " + (300 + i) + ";");
+                    + darkRed
+                    + ", 0, 0, 0.3)); " +
+                    "-fx-stroke: #" + String.format("%02X", red) + "0000; " +
+                    "-fx-stroke-width: " + (1 + RANDOM.nextInt(2)) + "; " +
+                    "-fx-effect: dropshadow(gaussian, rgba(" + red + ", 0, 0, 0.7), " + (8 + RANDOM.nextInt(10))
+                    + ", 0, 0, 0); " +
+                    "-fx-z-index: " + (300 + i) + ";");
                 shape.setOpacity(0.4 + RANDOM.nextDouble() * 0.4);
 
                 // Add to parent and store reference
@@ -481,7 +489,6 @@ public class LoginController implements Initializable {
                 // Create animation
                 animateShape(shape, i);
             }
-
 
             // Create rectangles
             for (int i = 0; i < dynamicRectangles.length; i++) {
@@ -497,14 +504,14 @@ public class LoginController implements Initializable {
                 int red = 150 + RANDOM.nextInt(100);
                 int darkRed = 60 + RANDOM.nextInt(80);
                 rect.setStyle("-fx-fill: linear-gradient(to bottom right, rgba(" + red + ", " + (red / 4) + ", "
-                        + (red / 4)
-                        + ", 0.6), rgba(" + darkRed + ", " + (darkRed / 6) + ", " + (darkRed / 6) + ", 0.4)); " +
-                        "-fx-stroke: #" + String.format("%02X", red) + "2222; " +
-                        "-fx-stroke-width: " + (RANDOM.nextDouble() * 2) + "; " +
-                        "-fx-effect: dropshadow(gaussian, rgba(" + red + ", " + (red / 4) + ", " + (red / 4)
-                        + ", 0.6), "
-                        + (8 + RANDOM.nextInt(8)) + ", 0, 0, 0); " +
-                        "-fx-z-index: " + (330 + i) + ";");
+                    + (red / 4)
+                    + ", 0.6), rgba(" + darkRed + ", " + (darkRed / 6) + ", " + (darkRed / 6) + ", 0.4)); " +
+                    "-fx-stroke: #" + String.format("%02X", red) + "2222; " +
+                    "-fx-stroke-width: " + (RANDOM.nextDouble() * 2) + "; " +
+                    "-fx-effect: dropshadow(gaussian, rgba(" + red + ", " + (red / 4) + ", " + (red / 4)
+                    + ", 0.6), "
+                    + (8 + RANDOM.nextInt(8)) + ", 0, 0, 0); " +
+                    "-fx-z-index: " + (330 + i) + ";");
                 rect.setOpacity(0.3 + RANDOM.nextDouble() * 0.5);
 
                 // Add to parent and store reference
@@ -515,20 +522,14 @@ public class LoginController implements Initializable {
                 animateRectangle(rect, i);
             }
 
-
             LOGGER.info("Created " + maxDynamicElements + " dynamic particles and shapes");
         } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error creating dynamic animations: " + e.getMessage(), e);
         }
-
     }
 
-
     /**
-     * Configure and start continuous movement, scale, and fade animations for a particle circle.
-     *
-     * @param particle the Circle node to animate
-     * @param index    zero-based index used to stagger the animation start (delay = index * 50 ms)
+     * Creates animations for a particle
      */
     private void animateParticle(Circle particle, int index) {
         // Create X movement
@@ -573,20 +574,12 @@ public class LoginController implements Initializable {
             moveY.play();
             scale.play();
             fade.play();
-        }
-);
+        });
         delay.play();
     }
 
-
     /**
-     * Attach rotation, scale (pulsing), and translate (drift) animations to a Polygon and start them with a staggered delay.
-     *
-     * The animations run indefinitely; the scale and translate animations auto-reverse. The initial delay before starting
-     * is computed from the provided index (index * 200 milliseconds).
-     *
-     * @param shape the Polygon to animate
-     * @param index the zero-based index used to compute a staggered start delay (index * 200 ms)
+     * Creates animations for a shape
      */
     private void animateShape(Polygon shape, int index) {
         // Create rotation
@@ -621,18 +614,12 @@ public class LoginController implements Initializable {
             rotate.play();
             scale.play();
             move.play();
-        }
-);
+        });
         delay.play();
     }
 
-
     /**
-     * Starts continuous visual animations on the given rectangle: continuous rotation, pulsing scale,
-     * pulsing opacity, and drifting translation, with a staggered start delay.
-     *
-     * @param rect  the Rectangle to animate
-     * @param index zero-based index used to stagger the start; the animation start is delayed by index * 150 ms
+     * Creates animations for a rectangle
      */
     private void animateRectangle(Rectangle rect, int index) {
         // Create rotation
@@ -677,18 +664,12 @@ public class LoginController implements Initializable {
             scale.play();
             fade.play();
             move.play();
-        }
-);
+        });
         delay.play();
     }
 
-
     /**
-     * Sets the initial featured movie image and title, starts a subtle poster scale animation,
-     * and begins an automatic 8-second cycle to switch featured movies.
-     *
-     * <p>If the featured image or title UI nodes are null this method logs a warning and does nothing.
-     * Any exceptions encountered while loading the initial image are logged and do not propagate.</p>
+     * Initializes the featured movie display with image switching
      */
     private void initializeFeaturedMovie() {
         if (featuredMovieImage != null && featuredMovieTitle != null) {
@@ -713,7 +694,7 @@ public class LoginController implements Initializable {
                 // Create image switching timeline - switches featured movie every 8 seconds
                 featuredMovieSwitchTimeline = new Timeline();
                 featuredMovieSwitchTimeline.getKeyFrames()
-                        .add(new KeyFrame(Duration.seconds(8), e -> switchFeaturedMovie()));
+                    .add(new KeyFrame(Duration.seconds(8), e -> switchFeaturedMovie()));
                 featuredMovieSwitchTimeline.setCycleCount(Animation.INDEFINITE);
                 featuredMovieSwitchTimeline.play();
 
@@ -721,21 +702,13 @@ public class LoginController implements Initializable {
             } catch (Exception e) {
                 LOGGER.warning("Failed to load initial featured movie: " + e.getMessage());
             }
-
-        }
- else {
+        } else {
             LOGGER.warning("Featured movie elements are null");
         }
-
     }
 
-
     /**
-     * Advances the featured movie carousel and updates the on-screen poster and title with fade transitions.
-     *
-     * <p>If both featuredMovieImage and featuredMovieTitle are present, increments the internal image index,
-     * selects the next poster and title, fades the current content out, replaces the image and text, then fades them back in.
-     * The method logs the new featured title and handles internal exceptions by logging a warning.</p>
+     * Switches the featured movie display with fade transitions
      */
     private void switchFeaturedMovie() {
         // Increment the current image index
@@ -779,35 +752,26 @@ public class LoginController implements Initializable {
                 } catch (Exception ex) {
                     LOGGER.warning("Error updating featured movie: " + ex.getMessage());
                 }
-
-            }
-);
+            });
 
             fadeOut.play();
 
             LOGGER.info("Updated featured movie to: " + featuredTitle);
         }
-
     }
 
-
     /**
-     * Initialize and start motion, scale, and fade animations for the predefined particle circles.
-     *
-     * For each non-null particle circle this creates and plays X/Y translate transitions, a scale
-     * transition and a fade transition to produce floating and pulsing effects; logs a warning for
-     * any particle that is null.
+     * Initializes the particle animation for floating red particles
      */
     private void initializeParticleAnimation() {
-        Circle[] particles = { particle1, particle2, particle3, particle4, particle5, particle6,
-                particle7, particle8, particle9, particle10, particle11, particle12 }
-;
+        Circle[] particles = {particle1, particle2, particle3, particle4, particle5, particle6,
+            particle7, particle8, particle9, particle10, particle11, particle12};
 
         for (int i = 0; i < particles.length; i++) {
             if (particles[i] != null) {
                 // Floating X movement
                 TranslateTransition particleFloatX = new TranslateTransition(Duration.seconds(3 + i * 0.3),
-                        particles[i]);
+                    particles[i]);
                 particleFloatX.setFromX(0);
                 particleFloatX.setToX(30 - i * 5);
                 particleFloatX.setCycleCount(Animation.INDEFINITE);
@@ -816,7 +780,7 @@ public class LoginController implements Initializable {
 
                 // Floating Y movement
                 TranslateTransition particleFloatY = new TranslateTransition(Duration.seconds(4 + i * 0.2),
-                        particles[i]);
+                    particles[i]);
                 particleFloatY.setFromY(0);
                 particleFloatY.setToY(25 - i * 3);
                 particleFloatY.setCycleCount(Animation.INDEFINITE);
@@ -848,51 +812,34 @@ public class LoginController implements Initializable {
                 particleFade.play();
 
                 LOGGER.info("Started animations for particle" + (i + 1));
-            }
- else {
+            } else {
                 LOGGER.warning("particle" + (i + 1) + " is null");
             }
-
         }
-
     }
-
 
     /**
      * Initializes the geometric shape animations
      */
     private void initializeShapeAnimation() {
         // Array of all existing shapes
-        Object[] shapes = { shape1, shape2, shape3, shape4, shape5, shape6 }
-;
+        Object[] shapes = {shape1, shape2, shape3, shape4, shape5, shape6};
 
         for (int i = 0; i < shapes.length; i++) {
             if (shapes[i] != null) {
                 if (shapes[i] instanceof Polygon) {
                     animatePolygon((Polygon) shapes[i], i);
-                }
- else if (shapes[i] instanceof Rectangle) {
+                } else if (shapes[i] instanceof Rectangle) {
                     animateRectangleShape((Rectangle) shapes[i], i);
-                }
- else if (shapes[i] instanceof Circle) {
+                } else if (shapes[i] instanceof Circle) {
                     animateCircleShape((Circle) shapes[i], i);
                 }
-
             }
-
         }
-
     }
 
-
     /**
-     * Starts continuous visual animations for the given polygon.
-     *
-     * Applies an indefinite rotation, pulsing scale, and oscillating translation to the shape.
-     * The `index` alters animation timing and alternates rotation direction to produce variation.
-     *
-     * @param shape the Polygon to animate
-     * @param index an integer used to stagger durations and to determine rotation direction
+     * Animates a polygon shape
      */
     private void animatePolygon(Polygon shape, int index) {
         // Rotation animation
@@ -927,12 +874,8 @@ public class LoginController implements Initializable {
         LOGGER.info("Started animations for polygon shape" + (index + 1));
     }
 
-
     /**
-     * Applies continuous rotation, fade (opacity pulse), and drifting movement animations to the given rectangle.
-     *
-     * @param shape the Rectangle to animate
-     * @param index zero-based index used to vary animation timing, direction, and staggering for this rectangle
+     * Animates a rectangle shape
      */
     private void animateRectangleShape(Rectangle shape, int index) {
         // Rotation animation
@@ -965,15 +908,8 @@ public class LoginController implements Initializable {
         LOGGER.info("Started animations for rectangle shape" + (index + 1));
     }
 
-
     /**
-     * Start continuous scale, glow (fade) and translation animations on the given circle.
-     *
-     * <p>The animations run indefinitely and use the provided index to vary durations and timing,
-     * creating a staggered visual effect between multiple shapes.</p>
-     *
-     * @param shape the Circle to animate
-     * @param index zero-based index used to vary animation durations and staggering for this shape
+     * Animates a circle shape
      */
     private void animateCircleShape(Circle shape, int index) {
         // Scale animation
@@ -1010,41 +946,32 @@ public class LoginController implements Initializable {
         LOGGER.info("Started animations for circle shape" + (index + 1));
     }
 
-
     /**
-     * Stop and clean up all visual animations and dynamic elements used by the login view.
-     *
-     * Stops any active timelines controlling the featured movie and particle creation, and
-     * removes dynamically created particles, shapes, and rectangles from the scene graph.
-     * Logs completion and any non-fatal issues encountered during cleanup.
+     * Stops all animations when leaving the login screen
      */
     private void stopAllAnimations() {
         if (featuredMovieSwitchTimeline != null) {
             featuredMovieSwitchTimeline.stop();
         }
 
-
         if (particleCreationTimeline != null) {
             particleCreationTimeline.stop();
         }
-
 
         // Clean up dynamic elements by removing them from the scene
         if (dynamicParticles != null) {
             AnchorPane foregroundPane = null;
             try {
                 StackPane root = rootContainer != null ? rootContainer
-                        : (anchorPane != null && anchorPane.getScene() != null)
-                                ? (StackPane) anchorPane.getScene().getRoot()
-                                : null;
+                    : (anchorPane != null && anchorPane.getScene() != null)
+                    ? (StackPane) anchorPane.getScene().getRoot()
+                    : null;
                 if (root != null && root.getChildren().size() > 2) {
                     foregroundPane = (AnchorPane) root.getChildren().get(2);
                 }
-
             } catch (Exception e) {
                 LOGGER.fine("Could not access foreground pane for cleanup: " + e.getMessage());
             }
-
 
             if (foregroundPane != null) {
                 for (Circle particle : dynamicParticles) {
@@ -1054,32 +981,25 @@ public class LoginController implements Initializable {
                         } catch (Exception e) {
                             LOGGER.warning("Could not remove particle: " + e.getMessage());
                         }
-
                     }
-
                 }
-
             }
-
         }
-
 
         // Clean up dynamic shapes
         if (dynamicShapes != null) {
             AnchorPane foregroundPane = null;
             try {
                 StackPane root = rootContainer != null ? rootContainer
-                        : (anchorPane != null && anchorPane.getScene() != null)
-                                ? (StackPane) anchorPane.getScene().getRoot()
-                                : null;
+                    : (anchorPane != null && anchorPane.getScene() != null)
+                    ? (StackPane) anchorPane.getScene().getRoot()
+                    : null;
                 if (root != null && root.getChildren().size() > 2) {
                     foregroundPane = (AnchorPane) root.getChildren().get(2);
                 }
-
             } catch (Exception e) {
                 LOGGER.fine("Could not access foreground pane for cleanup: " + e.getMessage());
             }
-
 
             if (foregroundPane != null) {
                 for (Polygon shape : dynamicShapes) {
@@ -1089,32 +1009,25 @@ public class LoginController implements Initializable {
                         } catch (Exception e) {
                             LOGGER.warning("Could not remove shape: " + e.getMessage());
                         }
-
                     }
-
                 }
-
             }
-
         }
-
 
         // Clean up dynamic rectangles
         if (dynamicRectangles != null) {
             AnchorPane foregroundPane = null;
             try {
                 StackPane root = rootContainer != null ? rootContainer
-                        : (anchorPane != null && anchorPane.getScene() != null)
-                                ? (StackPane) anchorPane.getScene().getRoot()
-                                : null;
+                    : (anchorPane != null && anchorPane.getScene() != null)
+                    ? (StackPane) anchorPane.getScene().getRoot()
+                    : null;
                 if (root != null && root.getChildren().size() > 2) {
                     foregroundPane = (AnchorPane) root.getChildren().get(2);
                 }
-
             } catch (Exception e) {
                 LOGGER.fine("Could not access foreground pane for cleanup: " + e.getMessage());
             }
-
 
             if (foregroundPane != null) {
                 for (Rectangle rect : dynamicRectangles) {
@@ -1124,17 +1037,11 @@ public class LoginController implements Initializable {
                         } catch (Exception e) {
                             LOGGER.warning("Could not remove rectangle: " + e.getMessage());
                         }
-
                     }
-
                 }
-
             }
-
         }
-
 
         LOGGER.info("All animations stopped and dynamic elements cleaned up");
     }
-
 }
