@@ -1,6 +1,7 @@
 package com.esprit.controllers.cinemas;
 
 import com.vader.sentiment.analyzer.SentimentAnalyzer;
+import com.vader.sentiment.analyzer.SentimentPolarities;
 
 import java.util.HashMap;
 
@@ -9,16 +10,13 @@ import java.util.HashMap;
  *
  * <p>
  * This class uses VADER (Valence Aware Dictionary and sEntiment Reasoner) which
- * is
- * a lexicon and rule-based sentiment analysis tool that is specifically attuned
- * to
- * sentiments expressed in social media, but works well on other domains too.
+ * is a lexicon and rule-based sentiment analysis tool that is specifically attuned
+ * to sentiments expressed in social media, but works well on other domains too.
  * </p>
  *
  * <p>
  * VADER uses a combination of qualitative and quantitative measures and doesn't
- * require
- * manual word list definitions. It's much lighter than Stanford CoreNLP.
+ * require manual word list definitions. It's much lighter than Stanford CoreNLP.
  * </p>
  *
  * @author Esprit Team
@@ -27,17 +25,12 @@ import java.util.HashMap;
  */
 public class SentimentAnalysisController {
 
-    private final SentimentAnalyzer sentimentAnalyzer;
-
     /**
-     * Construct a SentimentAnalysisController and initialize its internal VADER SentimentAnalyzer.
-     * <p>
-     * The controller is created with a ready-to-use SentimentAnalyzer instance for subsequent sentiment operations.
+     * Construct a SentimentAnalysisController.
      */
     public SentimentAnalysisController() {
-        this.sentimentAnalyzer = new SentimentAnalyzer();
+        // No initialization needed - using static methods
     }
-
 
     /**
      * Classifies the sentiment of the given text as Positive, Negative, or Neutral.
@@ -52,16 +45,10 @@ public class SentimentAnalysisController {
             throw new IllegalArgumentException("Text cannot be null");
         }
 
-
         try {
-            // Set the input string and analyze
-            sentimentAnalyzer.setInputString(text);
-            sentimentAnalyzer.setInputStringProperties();
-            sentimentAnalyzer.analyze();
-
-            // Get the polarity scores
-            final HashMap<String, Float> sentimentScores = sentimentAnalyzer.getPolarity();
-            final double compound = sentimentScores.get("compound");
+            // Analyze using static method
+            SentimentPolarities polarities = SentimentAnalyzer.getScoresFor(text);
+            final double compound = polarities.getCompoundPolarity();
 
             if (compound >= 0.05) {
                 return "Positive";
@@ -74,9 +61,7 @@ public class SentimentAnalysisController {
         } catch (Exception e) {
             throw new RuntimeException("Error analyzing sentiment", e);
         }
-
     }
-
 
     /**
      * Return a formatted sentiment label and polarity scores for the given text.
@@ -91,19 +76,13 @@ public class SentimentAnalysisController {
             throw new IllegalArgumentException("Text cannot be null");
         }
 
-
         try {
-            // Set the input string and analyze
-            sentimentAnalyzer.setInputString(text);
-            sentimentAnalyzer.setInputStringProperties();
-            sentimentAnalyzer.analyze();
-
-            // Get the polarity scores
-            final HashMap<String, Float> sentimentScores = sentimentAnalyzer.getPolarity();
-            final double compound = sentimentScores.get("compound");
-            final double positive = sentimentScores.get("positive");
-            final double negative = sentimentScores.get("negative");
-            final double neutral = sentimentScores.get("neutral");
+            // Analyze using static method
+            SentimentPolarities polarities = SentimentAnalyzer.getScoresFor(text);
+            final double compound = polarities.getCompoundPolarity();
+            final double positive = polarities.getPositivePolarity();
+            final double negative = polarities.getNegativePolarity();
+            final double neutral = polarities.getNeutralPolarity();
 
             String sentiment;
             if (compound >= 0.05) {
@@ -114,15 +93,12 @@ public class SentimentAnalysisController {
                 sentiment = "Neutral";
             }
 
-
             return String.format("%s (Compound: %.3f, Pos: %.3f, Neg: %.3f, Neu: %.3f)",
                 sentiment, compound, positive, negative, neutral);
         } catch (Exception e) {
             throw new RuntimeException("Error analyzing detailed sentiment", e);
         }
-
     }
-
 
     /**
      * Retrieve the compound sentiment score for the input text.
@@ -137,22 +113,14 @@ public class SentimentAnalysisController {
             throw new IllegalArgumentException("Text cannot be null");
         }
 
-
         try {
-            // Set the input string and analyze
-            sentimentAnalyzer.setInputString(text);
-            sentimentAnalyzer.setInputStringProperties();
-            sentimentAnalyzer.analyze();
-
-            // Get the polarity scores and return compound score
-            final HashMap<String, Float> sentimentScores = sentimentAnalyzer.getPolarity();
-            return sentimentScores.get("compound");
+            // Analyze using static method
+            SentimentPolarities polarities = SentimentAnalyzer.getScoresFor(text);
+            return polarities.getCompoundPolarity();
         } catch (Exception e) {
             throw new RuntimeException("Error getting sentiment score", e);
         }
-
     }
-
 
     /**
      * Obtain sentiment polarity scores for the provided text.
@@ -167,18 +135,19 @@ public class SentimentAnalysisController {
             throw new IllegalArgumentException("Text cannot be null");
         }
 
-
         try {
-            // Set the input string and analyze
-            sentimentAnalyzer.setInputString(text);
-            sentimentAnalyzer.setInputStringProperties();
-            sentimentAnalyzer.analyze();
-
-            return sentimentAnalyzer.getPolarity();
+            // Analyze using static method
+            SentimentPolarities polarities = SentimentAnalyzer.getScoresFor(text);
+            
+            HashMap<String, Float> scores = new HashMap<>();
+            scores.put("compound", (float) polarities.getCompoundPolarity());
+            scores.put("positive", (float) polarities.getPositivePolarity());
+            scores.put("negative", (float) polarities.getNegativePolarity());
+            scores.put("neutral", (float) polarities.getNeutralPolarity());
+            
+            return scores;
         } catch (Exception e) {
             throw new RuntimeException("Error getting all sentiment scores", e);
         }
-
     }
-
 }
