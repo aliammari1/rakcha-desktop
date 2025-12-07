@@ -145,7 +145,7 @@ public class TicketService implements IService<Ticket> {
     public List<Ticket> getAll() {
         final List<Ticket> tickets = new ArrayList<>();
         final String query = "SELECT * FROM tickets";
-        
+
         try (PreparedStatement stmt = connection.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
@@ -171,7 +171,7 @@ public class TicketService implements IService<Ticket> {
         } catch (SQLException e) {
             log.severe("Error retrieving all tickets: " + e.getMessage());
         }
-        
+
         return tickets;
     }
 
@@ -610,13 +610,14 @@ public class TicketService implements IService<Ticket> {
 
     /**
      * Get all tickets purchased by a specific user.
+     *
      * @param userId the ID of the user
      * @return list of tickets purchased by the user
      */
     public List<Ticket> getTicketsByUser(Long userId) {
         List<Ticket> tickets = new ArrayList<>();
         String query = "SELECT * FROM tickets WHERE user_id = ? ORDER BY purchase_time DESC";
-        
+
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setLong(1, userId);
             try (ResultSet rs = stmt.executeQuery()) {
@@ -630,7 +631,7 @@ public class TicketService implements IService<Ticket> {
         } catch (SQLException e) {
             log.severe("Error retrieving tickets for user: " + userId + " - " + e.getMessage());
         }
-        
+
         return tickets;
     }
 }

@@ -367,6 +367,7 @@ public class CinemaService implements IService<Cinema> {
 
     /**
      * Get all cinemas (alias for compatibility).
+     *
      * @return list of all cinemas
      */
     public List<Cinema> getAllCinemas() {

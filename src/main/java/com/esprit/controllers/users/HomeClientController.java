@@ -348,7 +348,7 @@ public class HomeClientController implements Initializable {
 
                 // Try to get from service first
                 try {
-                    PageRequest pageRequest = new PageRequest(0, 10);
+                    PageRequest pageRequest = PageRequest.defaultPage();
                     Page<Film> films = filmService.read(pageRequest);
                     if (films != null && !films.getContent().isEmpty()) {
                         recentFilms = films.getContent();
@@ -417,7 +417,7 @@ public class HomeClientController implements Initializable {
                 seriesContainer.getChildren().clear();
 
                 try {
-                    PageRequest pageRequest = new PageRequest(0, 10);
+                    PageRequest pageRequest = PageRequest.defaultPage();
                     Page<Series> series = seriesService.read(pageRequest);
                     if (series != null && !series.getContent().isEmpty()) {
                         recentSeries = series.getContent();
@@ -479,7 +479,7 @@ public class HomeClientController implements Initializable {
                 productsContainer.getChildren().clear();
 
                 try {
-                    PageRequest pageRequest = new PageRequest(0, 10);
+                    PageRequest pageRequest = PageRequest.defaultPage();
                     Page<Product> products = productService.read(pageRequest);
                     if (products != null && !products.getContent().isEmpty()) {
                         recentProducts = products.getContent();
@@ -536,7 +536,7 @@ public class HomeClientController implements Initializable {
                 cinemasContainer.getChildren().clear();
 
                 try {
-                    PageRequest pageRequest = new PageRequest(0, 10);
+                    PageRequest pageRequest = PageRequest.defaultPage();
                     Page<Cinema> cinemas = cinemaService.read(pageRequest);
                     if (cinemas != null && !cinemas.getContent().isEmpty()) {
                         recentCinemas = cinemas.getContent();

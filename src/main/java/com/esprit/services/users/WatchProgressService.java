@@ -610,19 +610,20 @@ public class WatchProgressService {
 
     /**
      * Get the watch progress for a specific user and content.
-     * @param userId the user ID
+     *
+     * @param userId      the user ID
      * @param contentType the content type (e.g., "film", "series")
-     * @param contentId the content ID
+     * @param contentId   the content ID
      * @return the progress percentage (0-100)
      */
     public int getProgress(Long userId, String contentType, Long contentId) {
         String query = "SELECT progress FROM watch_progress WHERE user_id = ? AND content_type = ? AND content_id = ? LIMIT 1";
-        
+
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setLong(1, userId);
             pst.setString(2, contentType);
             pst.setLong(3, contentId);
-            
+
             ResultSet rs = pst.executeQuery();
             if (rs.next()) {
                 return rs.getInt("progress");
@@ -630,12 +631,13 @@ public class WatchProgressService {
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error getting progress for content", e);
         }
-        
+
         return 0;
     }
 
     /**
      * Get watch progress for a user (returns all their progress).
+     *
      * @param userId the user ID
      * @return list of watch progress
      */
@@ -657,13 +659,14 @@ public class WatchProgressService {
 
     /**
      * Add a series/film to user's watchlist.
-     * @param userId the user ID
+     *
+     * @param userId      the user ID
      * @param contentType the type of content (film/series)
-     * @param contentId the ID of the content
+     * @param contentId   the ID of the content
      */
     public void addToWatchlist(Long userId, String contentType, Long contentId) {
         String query = "INSERT INTO watch_progress (user_id, film_id, series_id, content_type, progress, last_watched) " +
-                      "VALUES (?, ?, ?, ?, 0, NOW()) ON DUPLICATE KEY UPDATE last_watched = NOW()";
+            "VALUES (?, ?, ?, ?, 0, NOW()) ON DUPLICATE KEY UPDATE last_watched = NOW()";
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setLong(1, userId);
             if ("film".equals(contentType)) {

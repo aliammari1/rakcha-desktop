@@ -146,6 +146,7 @@ public class SeasonService {
 
     /**
      * Alias for getSeasonsBySeriesId.
+     *
      * @param seriesId the ID of the series
      * @return list of seasons
      */

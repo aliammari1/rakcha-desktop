@@ -136,7 +136,7 @@ public class CommentProductController implements Initializable {
     private void loadAcceptedComment() {
         // Récupérer toutes les produits depuis le service
         final ReviewService commentservices = new ReviewService();
-        final List<Review> comments = commentservices.read(new PageRequest(0, 10)).getContent();
+        final List<Review> comments = commentservices.read(PageRequest.defaultPage()).getContent();
         // Créer une carte pour chaque produit et l'ajouter à la FlowPane
         for (final Review comm : comments) {
             final HBox cardContainer = this.createcommentcard(comm);
@@ -226,7 +226,7 @@ public class CommentProductController implements Initializable {
         try {
             // Charger la nouvelle interface ShoppingCartProduct.fxml
             final FXMLLoader loader = new FXMLLoader(
-                this.getClass().getResource("/ui//ui/AffichageEvenementClient.fxml"));
+                this.getClass().getResource("/ui/AffichageEvenementClient.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -327,7 +327,7 @@ public class CommentProductController implements Initializable {
     void SerieClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface ShoppingCartProduct.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui//ui/Series-view.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/Series-view.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);

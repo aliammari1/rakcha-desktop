@@ -551,7 +551,7 @@ public class ShoppingCartProductControllers implements Initializable {
         try {
             // Charger la nouvelle interface ShoppingCartProduct.fxml
             final FXMLLoader loader = new FXMLLoader(
-                this.getClass().getResource("/ui//ui/AffichageEvenementClient.fxml"));
+                this.getClass().getResource("/ui/AffichageEvenementClient.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -657,7 +657,7 @@ public class ShoppingCartProductControllers implements Initializable {
     void SerieClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface ShoppingCartProduct.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui//ui/Series-view.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/Series-view.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -695,7 +695,7 @@ public class ShoppingCartProductControllers implements Initializable {
         try {
             final Parent rootNode = fxmlLoader.load();
             final Scene scene = new Scene(rootNode);
-            // Créer une nouvelle fenêtre pour la page "/ui//ui/AfficherProduct.fxml"
+            // Créer une nouvelle fenêtre pour la page "/ui/AfficherProduct.fxml"
             final Stage previousStage = new Stage();
             // Configurer la fenêtre précédente avec les propriétés nécessaires
             previousStage.setScene(scene);

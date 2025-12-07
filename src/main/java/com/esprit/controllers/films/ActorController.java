@@ -631,7 +631,7 @@ public class ActorController {
                      */
                 );
             final ActorService categoryService = new ActorService();
-            PageRequest pageRequest = new PageRequest(0, 10);
+            PageRequest pageRequest = PageRequest.defaultPage();
             final ObservableList<Actor> obC = FXCollections.observableArrayList(categoryService.read(pageRequest).getContent());
             this.filmActor_tableView11.setItems(obC);
         } catch (final Exception e) {

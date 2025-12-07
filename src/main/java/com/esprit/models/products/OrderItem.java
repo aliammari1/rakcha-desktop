@@ -65,6 +65,7 @@ public class OrderItem {
 
     /**
      * Convenience method to get product name.
+     *
      * @return the product name
      */
     public String getProductName() {
@@ -73,6 +74,7 @@ public class OrderItem {
 
     /**
      * Convenience method to get product ID.
+     *
      * @return the product ID
      */
     public Long getProductId() {
@@ -81,6 +83,7 @@ public class OrderItem {
 
     /**
      * Convenience method to calculate subtotal (quantity * unit price).
+     *
      * @return the subtotal for this item
      */
     public Double getSubtotal() {

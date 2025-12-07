@@ -101,7 +101,7 @@ public class EpisodeController {
         final EpisodeService iServiceEpisode = new EpisodeService();
         final SeriesService iServiceSerie = new SeriesService();
         try {
-            PageRequest pageRequest = new PageRequest(0, 10);
+            PageRequest pageRequest = PageRequest.defaultPage();
             this.serieList = iServiceSerie.read(pageRequest).getContent();
             for (final Series s : this.serieList) {
                 this.serieF.getItems().add(s.getName());
@@ -209,7 +209,7 @@ public class EpisodeController {
         this.tableView.getColumns().addAll(titreCol, numeroepisodeCol, saisonCol, serieCol, supprimerCol, modifierCol);
         // Récupérer les catégories et les ajouter à la TableView
         try {
-            PageRequest pageRequest = new PageRequest(0, 10);
+            PageRequest pageRequest = PageRequest.defaultPage();
             this.tableView.getItems().addAll(iServiceEpisode.read(pageRequest).getContent());
         } catch (final Exception e) {
             EpisodeController.LOGGER.log(Level.SEVERE, e.getMessage(), e);

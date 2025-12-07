@@ -244,7 +244,7 @@ public class AdminDashboardController {
     void readUserTable() {
         try {
             final UserService userService = new UserService();
-            PageRequest pageRequest = new PageRequest(0, 10);
+            PageRequest pageRequest = PageRequest.defaultPage();
             final Page<User> userList = userService.read(pageRequest);
             this.userTableView.setItems(FXCollections.observableArrayList(userList.getContent()));
         } catch (final Exception e) {

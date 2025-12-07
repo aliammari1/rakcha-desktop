@@ -659,17 +659,17 @@ public class ReviewService implements IService<Review> {
      * Get reviews for a specific content (film, series, product, cinema).
      *
      * @param contentType the type of content (e.g., "film", "series", "product", "cinema")
-     * @param contentId the ID of the content
+     * @param contentId   the ID of the content
      * @return list of reviews for the content
      */
     public List<Review> getReviewsByContent(String contentType, Long contentId) {
         List<Review> reviews = new ArrayList<>();
         String query = "SELECT * FROM reviews WHERE content_type = ? AND content_id = ? ORDER BY created_at DESC";
-        
+
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, contentType);
             stmt.setLong(2, contentId);
-            
+
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Review review = buildReviewFromResultSet(rs);
@@ -681,26 +681,26 @@ public class ReviewService implements IService<Review> {
         } catch (SQLException e) {
             log.error("Error retrieving reviews by content", e);
         }
-        
+
         return reviews;
     }
 
     /**
      * Get a specific review for a user and content.
      *
-     * @param userId the user ID
+     * @param userId      the user ID
      * @param contentType the type of content
-     * @param contentId the ID of the content
+     * @param contentId   the ID of the content
      * @return the review if found, null otherwise
      */
     public Review getUserReview(Long userId, String contentType, Long contentId) {
         String query = "SELECT * FROM reviews WHERE user_id = ? AND content_type = ? AND content_id = ? LIMIT 1";
-        
+
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setLong(1, userId);
             stmt.setString(2, contentType);
             stmt.setLong(3, contentId);
-            
+
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return buildReviewFromResultSet(rs);
@@ -709,7 +709,7 @@ public class ReviewService implements IService<Review> {
         } catch (SQLException e) {
             log.error("Error retrieving user review", e);
         }
-        
+
         return null;
     }
 
@@ -732,13 +732,13 @@ public class ReviewService implements IService<Review> {
             reviewBuilder.contentImage(rs.getString("content_image"));
             reviewBuilder.helpfulCount(rs.getInt("helpful_count"));
             reviewBuilder.text(rs.getString("text"));
-            
+
             // Handle timestamp conversion
             java.sql.Timestamp timestamp = rs.getTimestamp("created_at");
             if (timestamp != null) {
                 reviewBuilder.createdAt(timestamp.toLocalDateTime());
             }
-            
+
             // Load user if available
             Long userId = rs.getLong("user_id");
             if (userId != null && userId > 0) {
@@ -748,7 +748,7 @@ public class ReviewService implements IService<Review> {
                     reviewBuilder.user((Client) user);
                 }
             }
-            
+
             return reviewBuilder.build();
         } catch (SQLException e) {
             log.error("Error building review from result set", e);
@@ -758,6 +758,7 @@ public class ReviewService implements IService<Review> {
 
     /**
      * Create a new review.
+     *
      * @param review the review to create
      */
     public void createReview(Review review) {
@@ -766,8 +767,9 @@ public class ReviewService implements IService<Review> {
 
     /**
      * Mark a review as helpful.
+     *
      * @param reviewId the review ID
-     * @param userId the user ID marking it helpful
+     * @param userId   the user ID marking it helpful
      */
     public void markHelpful(Long reviewId, Long userId) {
         String query = "UPDATE reviews SET helpful_count = helpful_count + 1 WHERE id = ?";
@@ -781,9 +783,10 @@ public class ReviewService implements IService<Review> {
 
     /**
      * Report a review.
+     *
      * @param reviewId the review ID
-     * @param userId the user ID reporting
-     * @param reason the reason for reporting
+     * @param userId   the user ID reporting
+     * @param reason   the reason for reporting
      */
     public void reportReview(Long reviewId, Long userId, String reason) {
         // This could be stored in a separate reviews_reports table

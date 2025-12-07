@@ -84,7 +84,7 @@ public class AnalyseOrder implements Initializable {
         final OrderItemService orderItemService = new OrderItemService();
         final List<OrderItem> orderItems = orderItemService.read();
         final CategoryService categoryService = new CategoryService();
-        final List<Category> categories = categoryService.read(new PageRequest(0, 10)).getContent();
+        final List<Category> categories = categoryService.read(PageRequest.defaultPage()).getContent();
         final Map<String, Integer> enCoursByDate = new HashMap<>();
         final Map<String, Integer> payeeByDate = new HashMap<>();
         final Map<String, Map<String, Integer>> categoriesAchatsByDate = new HashMap<>();

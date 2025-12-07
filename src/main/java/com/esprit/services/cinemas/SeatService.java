@@ -121,7 +121,7 @@ public class SeatService {
             log.warn("Invalid seat ID for deletion");
             return;
         }
-        
+
         String query = "DELETE FROM seats WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setLong(1, seatId);
@@ -174,6 +174,7 @@ public class SeatService {
 
     /**
      * Create a new seat (convenience alias for create method).
+     *
      * @param seat the seat to create
      */
     public void createSeat(Seat seat) {
@@ -182,6 +183,7 @@ public class SeatService {
 
     /**
      * Update an existing seat (convenience alias for update method).
+     *
      * @param seat the seat to update
      */
     public void updateSeat(Seat seat) {

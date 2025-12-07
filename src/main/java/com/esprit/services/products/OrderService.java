@@ -629,20 +629,21 @@ public class OrderService implements IService<Order> {
 
     /**
      * Get the total spending for a user in a specific date range.
-     * @param userId the user ID
+     *
+     * @param userId    the user ID
      * @param startDate the start date
-     * @param endDate the end date
+     * @param endDate   the end date
      * @return the total spending amount
      */
     public double getMonthlySpending(Long userId, java.time.LocalDate startDate, java.time.LocalDate endDate) {
         double totalSpending = 0.0;
         String query = "SELECT COALESCE(SUM(total_amount), 0) as total FROM orders WHERE user_id = ? AND order_date BETWEEN ? AND ?";
-        
+
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setLong(1, userId);
             stmt.setObject(2, startDate);
             stmt.setObject(3, endDate);
-            
+
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 totalSpending = rs.getDouble("total");
@@ -650,7 +651,7 @@ public class OrderService implements IService<Order> {
         } catch (SQLException e) {
             log.error("Error calculating monthly spending for user: " + userId, e);
         }
-        
+
         return totalSpending;
     }
 }

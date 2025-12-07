@@ -95,7 +95,8 @@ public class FriendService {
 
     /**
      * Accept a friend request (overloaded version with userId and friendId).
-     * @param userId the user ID (receiver of the request)
+     *
+     * @param userId   the user ID (receiver of the request)
      * @param friendId the friend ID (sender of the request)
      * @throws SQLException if a database error occurs
      */
@@ -108,7 +109,8 @@ public class FriendService {
 
     /**
      * Decline a friend request (overloaded version with userId and friendId).
-     * @param userId the user ID (receiver of the request)
+     *
+     * @param userId   the user ID (receiver of the request)
      * @param friendId the friend ID (sender of the request)
      * @throws SQLException if a database error occurs
      */

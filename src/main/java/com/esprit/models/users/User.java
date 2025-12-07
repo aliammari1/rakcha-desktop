@@ -84,14 +84,14 @@ public abstract class User {
     /**
      * Create a new User instance without an id.
      *
-     * @param firstName        the user's first name
-     * @param lastName         the user's last name
-     * @param phoneNumber      the user's phone number
-     * @param passwordHash     the user's password hash
-     * @param role             the user's role in the system
-     * @param address          the user's address
-     * @param birthDate        the user's birth date
-     * @param email            the user's email address
+     * @param firstName         the user's first name
+     * @param lastName          the user's last name
+     * @param phoneNumber       the user's phone number
+     * @param passwordHash      the user's password hash
+     * @param role              the user's role in the system
+     * @param address           the user's address
+     * @param birthDate         the user's birth date
+     * @param email             the user's email address
      * @param profilePictureUrl the path to the user's profile photo
      */
     protected User(final String firstName, final String lastName, final String phoneNumber, final String passwordHash,
@@ -129,6 +129,7 @@ public abstract class User {
 
     /**
      * Get the username of the user.
+     *
      * @return the username
      */
     public String getUsername() {
@@ -137,6 +138,7 @@ public abstract class User {
 
     /**
      * Get the profile picture URL of the user.
+     *
      * @return the profile picture URL
      */
     public String getProfilePicture() {
@@ -145,6 +147,7 @@ public abstract class User {
 
     /**
      * Set the profile picture URL of the user.
+     *
      * @param profilePictureUrl the URL to set
      */
     public void setProfilePicture(String profilePictureUrl) {
@@ -154,6 +157,7 @@ public abstract class User {
     /**
      * Get the loyalty points for this user (convenience method).
      * Calculated based on total spent, tickets purchased, or other metrics.
+     *
      * @return the loyalty points count
      */
     public int getLoyaltyPoints() {

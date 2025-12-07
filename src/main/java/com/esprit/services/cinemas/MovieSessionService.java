@@ -459,6 +459,7 @@ public class MovieSessionService implements IService<MovieSession> {
 
     /**
      * Get all movie sessions from the database.
+     *
      * @return list of all movie sessions
      */
     public List<MovieSession> getAllSessions() {
@@ -480,6 +481,7 @@ public class MovieSessionService implements IService<MovieSession> {
 
     /**
      * Create a new movie session (convenience alias).
+     *
      * @param session the movie session to create
      */
     public void createSession(MovieSession session) {
@@ -488,6 +490,7 @@ public class MovieSessionService implements IService<MovieSession> {
 
     /**
      * Update an existing movie session (convenience alias).
+     *
      * @param session the movie session to update
      */
     public void updateSession(MovieSession session) {
@@ -496,6 +499,7 @@ public class MovieSessionService implements IService<MovieSession> {
 
     /**
      * Delete a movie session by ID (convenience method).
+     *
      * @param id the ID of the movie session to delete
      */
     public void deleteSession(Long id) {

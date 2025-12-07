@@ -272,7 +272,7 @@ public class ProductWishlistController implements Initializable {
             toastMessage.setText(message);
             cartToast.setVisible(true);
             cartToast.setManaged(true);
-            
+
             // Auto-hide after 3 seconds
             new java.util.Timer().schedule(
                 new java.util.TimerTask() {

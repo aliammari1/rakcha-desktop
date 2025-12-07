@@ -115,7 +115,7 @@ public class DesignProductAdminContoller {
             this.filterCategorieProducts(newValue.trim());
         });
         final CategoryService cs = new CategoryService();
-        for (final Category c : cs.read(new PageRequest(0, 10)).getContent()) {
+        for (final Category c : cs.read(PageRequest.defaultPage()).getContent()) {
             this.nomC_comboBox.getItems().add(c.getName());
         }
         this.afficher_produit();
@@ -394,7 +394,7 @@ public class DesignProductAdminContoller {
                         // Créer un ComboBox contenant les noms des catégories
                         final ComboBox<String> produitComboBox = new ComboBox<>();
                         // Obtenez la liste des noms de catégories
-                        final List<String> categorieNames = cs.read(new PageRequest(0, 10)).getContent().stream()
+                        final List<String> categorieNames = cs.read(PageRequest.defaultPage()).getContent().stream()
                             .map(Category::getName).toList();
                         // Ajoutez les noms de catégories au ComboBox
                         produitComboBox.getItems().addAll(categorieNames);
@@ -538,7 +538,7 @@ public class DesignProductAdminContoller {
         // Utiliser une ObservableList pour stocker les éléments
         final ObservableList<Product> list = FXCollections.observableArrayList();
         final ProductService ps = new ProductService();
-        PageRequest pageRequest = new PageRequest(0, 10);
+        PageRequest pageRequest = PageRequest.defaultPage();
         list.addAll(ps.read(pageRequest).getContent());
         this.Product_tableview.setItems(list);
         // Activer la sélection de cellules
@@ -718,7 +718,7 @@ public class DesignProductAdminContoller {
     private void search(final String keyword) {
         final ProductService produitservice = new ProductService();
         final ObservableList<Product> filteredList = FXCollections.observableArrayList();
-        PageRequest pageRequest = new PageRequest(0, 10);
+        PageRequest pageRequest = PageRequest.defaultPage();
         if (null == keyword || keyword.trim().isEmpty()) {
             filteredList.addAll(produitservice.read(pageRequest).getContent());
         } else {
@@ -770,7 +770,7 @@ public class DesignProductAdminContoller {
      */
     private List<Product> getAllCategories() {
         final ProductService categoryservice = new ProductService();
-        PageRequest pageRequest = new PageRequest(0, 10);
+        PageRequest pageRequest = PageRequest.defaultPage();
         return categoryservice.read(pageRequest).getContent();
     }
 
@@ -930,7 +930,7 @@ public class DesignProductAdminContoller {
     }
 
     /**
-     * Loads a new FXML file "/ui//ui/DesignEvenementAdmin.fxml" and creates a new
+     * Loads a new FXML file "/ui/DesignEvenementAdmin.fxml" and creates a new
      * scene with it, replacing the current stage with the new scene.
      *
      * @param event ActionEvent object that triggered the event handling, providing
@@ -947,7 +947,7 @@ public class DesignProductAdminContoller {
     void eventClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface ShoppingCartProduct.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui//ui/DesignEvenementAdmin.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/DesignEvenementAdmin.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);

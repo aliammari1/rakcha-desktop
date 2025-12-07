@@ -212,7 +212,7 @@ public class ActorService implements IService<Actor> {
     public List<Actor> getAll() {
         final List<Actor> actors = new ArrayList<>();
         final String query = "SELECT * FROM actors";
-        
+
         try (PreparedStatement stmt = connection.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
@@ -226,7 +226,7 @@ public class ActorService implements IService<Actor> {
         } catch (SQLException e) {
             log.error("Error retrieving all actors", e);
         }
-        
+
         return actors;
     }
 

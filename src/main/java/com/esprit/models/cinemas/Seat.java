@@ -47,70 +47,6 @@ public class Seat {
     private Boolean isAccessible = false;
 
     /**
-     * Get the seat type for display and styling.
-     * @return the seat type
-     */
-    public String getSeatType() {
-        return this.type;
-    }
-
-    /**
-     * Set the seat type.
-     * @param seatType the seat type to set
-     */
-    public void setSeatType(String seatType) {
-        this.type = seatType;
-    }
-
-    /**
-     * Check if the seat is active (available for booking).
-     * @return true if seat is active, false otherwise
-     */
-    public Boolean isActive() {
-        return !isOccupied;
-    }
-
-    /**
-     * Set the active status of the seat.
-     * @param active true to activate, false to deactivate
-     */
-    public void setActive(Boolean active) {
-        this.isOccupied = !active;
-    }
-
-    /**
-     * Get the price multiplier for this seat.
-     * @return the price multiplier
-     */
-    public Double getPriceMultiplier() {
-        return this.priceMultiplier != null ? this.priceMultiplier : 1.0;
-    }
-
-    /**
-     * Set the price multiplier for this seat.
-     * @param priceMultiplier the multiplier to set
-     */
-    public void setPriceMultiplier(Double priceMultiplier) {
-        this.priceMultiplier = priceMultiplier != null ? priceMultiplier : 1.0;
-    }
-
-    /**
-     * Check if the seat is accessible (wheelchair accessible).
-     * @return true if accessible, false otherwise
-     */
-    public Boolean isAccessible() {
-        return this.isAccessible != null && this.isAccessible;
-    }
-
-    /**
-     * Set the accessibility of the seat.
-     * @param accessible true if accessible, false otherwise
-     */
-    public void setAccessible(Boolean accessible) {
-        this.isAccessible = accessible != null ? accessible : false;
-    }
-
-    /**
      * Create a Seat instance without an id for use when creating new seats.
      *
      * @param rowLabel   the row label for the seat (e.g., "A", "B")
@@ -147,6 +83,78 @@ public class Seat {
         this.isOccupied = isOccupied != null ? isOccupied : false;
         this.priceMultiplier = 1.0;
         this.isAccessible = false;
+    }
+
+    /**
+     * Get the seat type for display and styling.
+     *
+     * @return the seat type
+     */
+    public String getSeatType() {
+        return this.type;
+    }
+
+    /**
+     * Set the seat type.
+     *
+     * @param seatType the seat type to set
+     */
+    public void setSeatType(String seatType) {
+        this.type = seatType;
+    }
+
+    /**
+     * Check if the seat is active (available for booking).
+     *
+     * @return true if seat is active, false otherwise
+     */
+    public Boolean isActive() {
+        return !isOccupied;
+    }
+
+    /**
+     * Set the active status of the seat.
+     *
+     * @param active true to activate, false to deactivate
+     */
+    public void setActive(Boolean active) {
+        this.isOccupied = !active;
+    }
+
+    /**
+     * Get the price multiplier for this seat.
+     *
+     * @return the price multiplier
+     */
+    public Double getPriceMultiplier() {
+        return this.priceMultiplier != null ? this.priceMultiplier : 1.0;
+    }
+
+    /**
+     * Set the price multiplier for this seat.
+     *
+     * @param priceMultiplier the multiplier to set
+     */
+    public void setPriceMultiplier(Double priceMultiplier) {
+        this.priceMultiplier = priceMultiplier != null ? priceMultiplier : 1.0;
+    }
+
+    /**
+     * Check if the seat is accessible (wheelchair accessible).
+     *
+     * @return true if accessible, false otherwise
+     */
+    public Boolean isAccessible() {
+        return this.isAccessible != null && this.isAccessible;
+    }
+
+    /**
+     * Set the accessibility of the seat.
+     *
+     * @param accessible true if accessible, false otherwise
+     */
+    public void setAccessible(Boolean accessible) {
+        this.isAccessible = accessible != null ? accessible : false;
     }
 
 }

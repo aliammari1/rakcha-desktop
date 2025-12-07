@@ -346,7 +346,7 @@ public class FilmUserController {
      * displays from services.
      */
     private void setupBasicUI() {
-        PageRequest pageRequest = new PageRequest(0, 3);
+        PageRequest pageRequest = PageRequest.defaultPage();
         this.top3combobox.getItems().addAll("Top 3 Films", "Top 3 Actors");
         this.top3combobox.setValue("Top 3 Films");
         this.top3combobox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -381,7 +381,7 @@ public class FilmUserController {
             updateMovieCount();
         });
         final FilmService filmService1 = new FilmService();
-        PageRequest filmPageRequest = new PageRequest(0, 10);
+        PageRequest filmPageRequest = PageRequest.defaultPage();
         this.l1 = filmService1.read(filmPageRequest).getContent();
 
         // Initialize universal search engine
@@ -474,7 +474,7 @@ public class FilmUserController {
      */
     private List<Integer> getCinemaYears() {
         final FilmService cinemaService = new FilmService();
-        PageRequest pageRequest = new PageRequest(0, 10);
+        PageRequest pageRequest = PageRequest.defaultPage();
         final List<Film> cinemas = cinemaService.read(pageRequest).getContent();
         // Extraire les années de réalisation uniques des films
         return cinemas.stream().map(Film::getReleaseYear).distinct().collect(Collectors.toList());
@@ -620,7 +620,7 @@ public class FilmUserController {
     public void switchtevent(final ActionEvent event) {
         try {
             final FXMLLoader fxmlLoader = new FXMLLoader(
-                this.getClass().getResource("/ui//ui/AffichageEvenementClient.fxml"));
+                this.getClass().getResource("/ui/AffichageEvenementClient.fxml"));
             final AnchorPane root = fxmlLoader.load();
             final Stage stage = (Stage) this.event_button.getScene().getWindow();
             final Scene scene = new Scene(root, 1280, 700);
@@ -838,7 +838,7 @@ public class FilmUserController {
     public void displayAllComments(final Long filmId) {
         // Get comments from database
         final ReviewService cinemaCommentService = new ReviewService();
-        PageRequest pageRequest = new PageRequest(0, 10);
+        PageRequest pageRequest = PageRequest.defaultPage();
         final List<Review> allComments = cinemaCommentService.read(pageRequest).getContent();
         final List<Review> filmComments = new ArrayList<>();
 
@@ -991,7 +991,7 @@ public class FilmUserController {
             return;
 
         this.flowpaneFilm.getChildren().clear();
-        PageRequest pageRequest = new PageRequest(0, 10);
+        PageRequest pageRequest = PageRequest.defaultPage();
         final List<Film> filmList = new FilmService().sort(pageRequest, sortOption).getContent();
         for (final Film film : filmList) {
             this.flowpaneFilm.getChildren().add(this.createFilmCard(film));
@@ -1796,7 +1796,7 @@ public class FilmUserController {
 
     @FXML
     void refreshMovies(ActionEvent event) {
-        PageRequest filmPageRequest = new PageRequest(0, 10);
+        PageRequest filmPageRequest = PageRequest.defaultPage();
         this.l1 = new FilmService().read(filmPageRequest).getContent();
         this.flowpaneFilm.getChildren().clear();
         for (final Film film : l1) {

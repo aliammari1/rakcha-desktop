@@ -462,6 +462,7 @@ public class SeriesService implements IService<Series> {
 
     /**
      * Get a series by its ID (convenience alias for getById).
+     *
      * @param id the series ID
      * @return the series or null if not found
      */

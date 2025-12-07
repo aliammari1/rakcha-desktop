@@ -57,7 +57,7 @@ public class CategoriesClientController {
         // recupuration de liste de plat ajouter au shoppingcart
         List<Category> categories = new ArrayList<>();
         try {
-            PageRequest pageRequest = new PageRequest(0, 10);
+            PageRequest pageRequest = PageRequest.defaultPage();
             categories = iServiceCategorie.read(pageRequest).getContent();
         } catch (final Exception e) {
             throw new RuntimeException(e);

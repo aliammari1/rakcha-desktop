@@ -109,7 +109,7 @@ public class AccountSettingsController {
     public void initialize() {
         LOGGER.info("Initializing AccountSettingsController");
 
-        currentUser = SessionManager.getInstance().getCurrentUser();
+        currentUser = SessionManager.getCurrentUser();
         if (currentUser == null) {
             LOGGER.warning("No user logged in");
             return;

@@ -20,6 +20,7 @@ public class Season {
     /**
      * Get the season description (alias for compatibility).
      * For seasons, the title serves as description.
+     *
      * @return the season title/description
      */
     public String getDescription() {
@@ -28,6 +29,7 @@ public class Season {
 
     /**
      * Set the season description (alias for compatibility).
+     *
      * @param description the description to set
      */
     public void setDescription(String description) {

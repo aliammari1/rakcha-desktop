@@ -214,7 +214,7 @@ public class DashboardClientController {
      */
     private HashSet<Cinema> loadAcceptedCinemas() {
         final CinemaService cinemaService = new CinemaService();
-        PageRequest pageRequest = new PageRequest(0, 10);
+        PageRequest pageRequest = PageRequest.defaultPage();
         final List<Cinema> cinemas = cinemaService.read(pageRequest).getContent();
         final List<Cinema> acceptedCinemasList = cinemas.stream()
             .filter(cinema -> CinemaStatus.ACCEPTED.getStatus().equals(cinema.getStatus()))
@@ -774,7 +774,7 @@ public class DashboardClientController {
      */
     private List<Cinema> getAllCinemas() {
         final CinemaService cinemaService = new CinemaService();
-        PageRequest pageRequest = new PageRequest(0, 10);
+        PageRequest pageRequest = PageRequest.defaultPage();
         return cinemaService.read(pageRequest).getContent();
     }
 
@@ -1051,7 +1051,7 @@ public class DashboardClientController {
      */
     private List<Review> getAllComment(final Long cinemaId) {
         final ReviewService cinemaCommentService = new ReviewService();
-        PageRequest pageRequest = new PageRequest(0, 10);
+        PageRequest pageRequest = PageRequest.defaultPage();
         final List<Review> allComments = cinemaCommentService.read(pageRequest).getContent();
         final List<Review> cinemaComments = new ArrayList<>();
         for (final Review comment : allComments) {

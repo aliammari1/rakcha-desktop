@@ -237,7 +237,7 @@ public class DashboardAdminController {
         scrollPane.setPrefViewportHeight(500);
         // TODO: This logic is wrong
         FilmService filmCinemaService = new FilmService();
-        List<Film> films = filmCinemaService.read(new PageRequest(0, 10)).getContent();
+        List<Film> films = filmCinemaService.read(PageRequest.defaultPage()).getContent();
 
         for (Film film : films) {
             AnchorPane card = createFilmCard(film);
@@ -510,25 +510,6 @@ public class DashboardAdminController {
     }
 
     /**
-     * Opens the Event administration window and closes the current window.
-     *
-     * @param event the ActionEvent that triggered the navigation
-     * @throws IOException if the FXML resource cannot be loaded
-     */
-    @FXML
-    void afficherEventsAdmin(final ActionEvent event) throws IOException {
-        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui//ui/DesignEvenementAdmin.fxml"));
-        final Parent root = loader.load();
-        final Scene scene = new Scene(root);
-        final Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        final Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.setTitle("Event Manegement");
-        stage.show();
-        currentStage.close();
-    }
-
-    /**
      * Open the film administration window and close the current window.
      * <p>
      * Loads the film administration UI, shows it in a new stage titled "Film
@@ -581,7 +562,7 @@ public class DashboardAdminController {
      */
     @FXML
     void AfficherProductAdmin(final ActionEvent event) throws IOException {
-        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui//ui/DesignProductAdmin.fxml.fxml"));
+        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/DesignProductAdmin.fxml.fxml"));
         final Parent root = loader.load();
         final Scene scene = new Scene(root);
         final Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();

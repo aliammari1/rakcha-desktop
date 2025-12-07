@@ -33,7 +33,7 @@ public class CinemaVerification {
             // --- 1. Verify Session Conflict ---
             System.out.println("\n--- 1. Verifying Session Conflict ---");
             // Get first available hall and film
-            List<CinemaHall> halls = hallService.read(new PageRequest(0, 10)).getContent();
+            List<CinemaHall> halls = hallService.read(PageRequest.defaultPage()).getContent();
             if (halls.isEmpty()) {
                 System.out.println("No cinema halls found. Skipping session test.");
                 return;

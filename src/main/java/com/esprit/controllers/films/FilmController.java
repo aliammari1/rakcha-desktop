@@ -136,7 +136,7 @@ public class FilmController {
         final FilmService fs = new FilmService();
         final CinemaService cinemaService = new CinemaService();
         final ActorService actorService = new ActorService();
-        PageRequest actorPageRequest = new PageRequest(0, 10);
+        PageRequest actorPageRequest = PageRequest.defaultPage();
         final List<Actor> actors = actorService.read(actorPageRequest).getContent();
         final List<String> actorNames = actors.stream().map(Actor::getName).collect(Collectors.toList());
         this.checkComboBoxActor.getItems().addAll(actorNames);
@@ -144,7 +144,7 @@ public class FilmController {
             final Tooltip tooltip2 = new Tooltip("Tooltip text for " + item);
             Tooltip.install(this.checkComboBoxActor, tooltip2);
         });
-        PageRequest cinemaPageRequest = new PageRequest(0, 10);
+        PageRequest cinemaPageRequest = PageRequest.defaultPage();
         final List<Cinema> cinemaList = cinemaService.read(cinemaPageRequest).getContent();
         final List<String> cinemaNames = cinemaList.stream().map(Cinema::getName).collect(Collectors.toList());
         this.checkComboBoxCinema.getItems().addAll(cinemaNames);
@@ -153,7 +153,7 @@ public class FilmController {
             Tooltip.install(this.checkComboBoxCinema, tooltip2);
         });
         final CategoryService categoryService = new CategoryService();
-        PageRequest categoryPageRequest = new PageRequest(0, 10);
+        PageRequest categoryPageRequest = PageRequest.defaultPage();
         final List<Category> categories = categoryService.read(categoryPageRequest).getContent();
         final List<String> categoryNames = categories.stream().map(Category::getName).collect(Collectors.toList());
         this.checkComboBoxCategory.getItems().addAll(categoryNames);
@@ -433,7 +433,7 @@ public class FilmController {
             this.setupCellFactory();
             this.setupCellOnEditCommit();
             final FilmService filmService = new FilmService();
-            PageRequest filmPageRequest = new PageRequest(0, 10);
+            PageRequest filmPageRequest = PageRequest.defaultPage();
             final ObservableList<Film> obF = FXCollections
                 .observableArrayList(filmService.read(filmPageRequest).getContent());
             this.tvFilms.setItems(obF);

@@ -321,6 +321,7 @@ public class FilmService implements IService<Film> {
 
     /**
      * Get all films from the database.
+     *
      * @return list of all films
      */
     public List<Film> getAllFilms() {
@@ -430,8 +431,9 @@ public class FilmService implements IService<Film> {
 
     /**
      * Get recommended films for a user based on watch history.
+     *
      * @param userId the ID of the user
-     * @param limit the maximum number of recommendations
+     * @param limit  the maximum number of recommendations
      * @return list of recommended films
      */
     public List<Film> getRecommendationsForUser(Long userId, int limit) {
@@ -440,7 +442,7 @@ public class FilmService implements IService<Film> {
         if (films == null) {
             return new ArrayList<>();
         }
-        
+
         return films.stream()
             .limit(Math.max(limit, 0))
             .collect(Collectors.toList());

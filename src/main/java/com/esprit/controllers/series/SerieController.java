@@ -118,7 +118,7 @@ public class SerieController {
         final CategoryService categorieserv = new CategoryService();
         final SeriesService iServiceSerie = new SeriesService();
         try {
-            PageRequest pageRequest = new PageRequest(0, 10);
+            PageRequest pageRequest = PageRequest.defaultPage();
             this.categorieList = categorieserv.read(pageRequest).getContent();
             for (final Category c : this.categorieList) {
                 this.categorieF.getItems().add(c.getName());
@@ -232,7 +232,7 @@ public class SerieController {
             modifierCol);
         // Récupérer les catégories et les ajouter à la TableView
         try {
-            PageRequest pageRequest = new PageRequest(0, 10);
+            PageRequest pageRequest = PageRequest.defaultPage();
             this.tableView.getItems().addAll(serviceSerie.read(pageRequest).getContent());
         } catch (final Exception e) {
             SerieController.LOGGER.log(Level.SEVERE, e.getMessage(), e);
@@ -255,7 +255,7 @@ public class SerieController {
         final File selectedFile = fileChooser.showSaveDialog(((Node) event.getSource()).getScene().getWindow());
         if (null != selectedFile) {
             final ReviewService sf = new ReviewService();
-            PageRequest pageRequest = new PageRequest(0, 10);
+            PageRequest pageRequest = PageRequest.defaultPage();
             final List<Review> feedbackList = sf.read(pageRequest).getContent();
             try {
                 // Créer le document PDF

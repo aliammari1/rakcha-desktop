@@ -89,6 +89,7 @@ public class Cinema {
 
     /**
      * Get the cinema name (alias for compatibility).
+     *
      * @return the cinema name
      */
     public String getNom() {
@@ -97,6 +98,7 @@ public class Cinema {
 
     /**
      * Set the cinema name (alias for compatibility).
+     *
      * @param nom the name to set
      */
     public void setNom(String nom) {
@@ -105,6 +107,7 @@ public class Cinema {
 
     /**
      * Get the cinema address (convenience alias for French naming convention).
+     *
      * @return the address
      */
     public String getAdresse() {
@@ -113,6 +116,7 @@ public class Cinema {
 
     /**
      * Set the cinema address (convenience alias for French naming convention).
+     *
      * @param adresse the address to set
      */
     public void setAdresse(String adresse) {

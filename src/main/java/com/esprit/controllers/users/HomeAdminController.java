@@ -424,7 +424,7 @@ public class HomeAdminController implements Initializable {
      */
     private void loadComprehensiveStatistics() {
         try {
-            PageRequest pageRequest = new PageRequest(0, 100);
+            PageRequest pageRequest = PageRequest.defaultPage();
             // Load user statistics
             Page<User> users = userService.read(pageRequest);
             totalUsers = users.getTotalElements();
@@ -645,7 +645,7 @@ public class HomeAdminController implements Initializable {
 
                 // Load and store recent users
                 recentUsers.clear();
-                PageRequest pageRequest = new PageRequest(0, 10);
+                PageRequest pageRequest = PageRequest.defaultPage();
                 Page<User> users = userService.read(pageRequest);
                 int count = Math.min(5, users.getContent().size());
 
@@ -700,7 +700,7 @@ public class HomeAdminController implements Initializable {
 
                 // Load recent movies
                 try {
-                    PageRequest pageRequest = new PageRequest(0, 10);
+                    PageRequest pageRequest = PageRequest.defaultPage();
                     Page<Film> films = filmService.read(pageRequest);
                     for (int i = 0; i < Math.min(3, films.getTotalElements()); i++) {
                         Film film = films.getContent().get(i);
@@ -723,7 +723,7 @@ public class HomeAdminController implements Initializable {
 
                 // Load recent series
                 try {
-                    PageRequest pageRequest = new PageRequest(0, 10);
+                    PageRequest pageRequest = PageRequest.defaultPage();
                     Page<Series> series = seriesService.read(pageRequest);
                     for (int i = 0; i < Math.min(2, series.getTotalElements()); i++) {
                         Series seriesItem = series.getContent().get(i);
@@ -746,7 +746,7 @@ public class HomeAdminController implements Initializable {
 
                 // Load recent products
                 try {
-                    PageRequest pageRequest = new PageRequest(0, 10);
+                    PageRequest pageRequest = PageRequest.defaultPage();
                     Page<Product> products = productService.read(pageRequest);
                     for (int i = 0; i < Math.min(2, products.getTotalElements()); i++) {
                         Product product = products.getContent().get(i);
@@ -769,7 +769,7 @@ public class HomeAdminController implements Initializable {
 
                 // Load recent cinemas
                 try {
-                    PageRequest pageRequest = new PageRequest(0, 10);
+                    PageRequest pageRequest = PageRequest.defaultPage();
                     Page<Cinema> cinemas = cinemaService.read(pageRequest);
                     for (int i = 0; i < Math.min(2, cinemas.getTotalElements()); i++) {
                         Cinema cinema = cinemas.getContent().get(i);

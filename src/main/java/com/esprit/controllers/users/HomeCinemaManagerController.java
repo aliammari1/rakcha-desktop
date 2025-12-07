@@ -152,7 +152,7 @@ public class HomeCinemaManagerController implements Initializable {
 
             // Load session count
             if (sessionCountLabel != null) {
-                PageRequest sessionPageRequest = new PageRequest(0, 10);
+                PageRequest sessionPageRequest = PageRequest.defaultPage();
                 Page<MovieSession> sessions = sessionService.read(sessionPageRequest);
                 sessionCountLabel.setText(String.valueOf(sessions.getContent().size()));
             }

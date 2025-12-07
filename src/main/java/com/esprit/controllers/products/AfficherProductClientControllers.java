@@ -169,7 +169,7 @@ public class AfficherProductClientControllers implements Initializable {
             AfficherProductClientControllers.LOGGER.log(Level.WARNING, "Error loading top 3 products: " + e.getMessage());
         }
         final ProductService produitService = new ProductService();
-        PageRequest pageRequest = new PageRequest(0, 10);
+        PageRequest pageRequest = PageRequest.defaultPage();
         this.l1 = produitService.read(pageRequest).getContent();
         this.SearchBar.textProperty().addListener((observable, oldValue, newValue) -> {
                 final List<Product> produitsRecherches = AfficherProductClientControllers.rechercher(this.l1, newValue);
@@ -200,7 +200,7 @@ public class AfficherProductClientControllers implements Initializable {
      */
     private void loadAcceptedProducts() {
         final ProductService produitService = new ProductService();
-        PageRequest pageRequest = new PageRequest(0, 10);
+        PageRequest pageRequest = PageRequest.defaultPage();
         final List<Product> produits = produitService.read(pageRequest).getContent();
         // Charger tous les produits dans produitFlowPane
         for (final Product produit : produits) {
@@ -689,7 +689,7 @@ public class AfficherProductClientControllers implements Initializable {
      */
     private List<Product> getAllCategories() {
         final ProductService categoryservice = new ProductService();
-        PageRequest pageRequest = new PageRequest(0, 10);
+        PageRequest pageRequest = PageRequest.defaultPage();
         return categoryservice.read(pageRequest).getContent();
     }
 
@@ -841,7 +841,7 @@ public class AfficherProductClientControllers implements Initializable {
         try {
             // Charger la nouvelle interface ShoppingCartProduct.fxml
             final FXMLLoader loader = new FXMLLoader(
-                this.getClass().getResource("/ui//ui/AffichageEvenementClient.fxml"));
+                this.getClass().getResource("/ui/AffichageEvenementClient.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -944,7 +944,7 @@ public class AfficherProductClientControllers implements Initializable {
     void SerieClient(final ActionEvent event) {
         try {
             // Charger la nouvelle interface ShoppingCartProduct.fxml
-            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui//ui/Series-view.fxml"));
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/ui/Series-view.fxml"));
             final Parent root = loader.load();
             // Créer une nouvelle scène avec la nouvelle interface
             final Scene scene = new Scene(root);
@@ -1004,7 +1004,7 @@ public class AfficherProductClientControllers implements Initializable {
      */
     private List<Review> getAllComment(final Long idproduit) {
         final ReviewService commentService = new ReviewService();
-        final List<Review> allComments = commentService.read(new PageRequest(0, 10)).getContent(); // Récupérer tous les comments
+        final List<Review> allComments = commentService.read(PageRequest.defaultPage()).getContent(); // Récupérer tous les comments
         final List<Review> comments = new ArrayList<>();
         // Filtrer les comments pour ne conserver que ceux du cinéma correspondant
         for (final Review comment : allComments) {

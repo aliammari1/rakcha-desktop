@@ -299,6 +299,7 @@ public class CartService {
 
     /**
      * Update an order item in the cart.
+     *
      * @param orderItem the order item to update
      */
     public void updateOrderItem(OrderItem orderItem) {
@@ -309,11 +310,12 @@ public class CartService {
 
     /**
      * Remove an item from the cart by ID.
+     *
      * @param cartItemId the ID of the cart item to remove
      */
     public void removeFromCart(Long cartItemId) {
         String query = "DELETE FROM shopping_cart WHERE id = ?";
-        
+
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setLong(1, cartItemId);
             stmt.executeUpdate();
@@ -324,6 +326,7 @@ public class CartService {
 
     /**
      * Clear the entire cart for a user (alias).
+     *
      * @param userId the user ID
      */
     public void clearCart(Long userId) {

@@ -75,6 +75,7 @@ public class Ticket {
 
     /**
      * Get the ticket purchase date (convenience method).
+     *
      * @return the purchase date/time
      */
     public java.time.LocalDateTime getPurchaseDate() {
@@ -83,6 +84,7 @@ public class Ticket {
 
     /**
      * Set the ticket purchase date (convenience method).
+     *
      * @param purchaseDate the purchase date/time to set
      */
     public void setPurchaseDate(java.time.LocalDateTime purchaseDate) {
@@ -91,6 +93,7 @@ public class Ticket {
 
     /**
      * Get the ticket creation time (alias for purchaseTime).
+     *
      * @return the creation date/time
      */
     public java.time.LocalDateTime getCreatedAt() {
@@ -99,6 +102,7 @@ public class Ticket {
 
     /**
      * Set the ticket creation time (alias for purchaseTime).
+     *
      * @param createdAt the creation date/time to set
      */
     public void setCreatedAt(java.time.LocalDateTime createdAt) {
@@ -107,6 +111,7 @@ public class Ticket {
 
     /**
      * Get the ticket price (alias for pricePaid).
+     *
      * @return the price paid
      */
     public double getPrice() {
@@ -115,6 +120,7 @@ public class Ticket {
 
     /**
      * Set the ticket price (alias for pricePaid).
+     *
      * @param price the price to set
      */
     public void setPrice(double price) {
@@ -123,6 +129,7 @@ public class Ticket {
 
     /**
      * Get the ticket user (alias for client).
+     *
      * @return the client associated with the ticket
      */
     public Client getUser() {
@@ -131,6 +138,7 @@ public class Ticket {
 
     /**
      * Set the ticket user (alias for client).
+     *
      * @param user the client to set
      */
     public void setUser(Client user) {

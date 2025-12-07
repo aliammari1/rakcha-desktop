@@ -91,6 +91,7 @@ public class MovieSession {
 
     /**
      * Get the base price of the movie session.
+     *
      * @return the price
      */
     public Double getBasePrice() {
@@ -99,6 +100,7 @@ public class MovieSession {
 
     /**
      * Set the base price of the movie session.
+     *
      * @param basePrice the price to set
      */
     public void setBasePrice(Double basePrice) {

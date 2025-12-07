@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class Payment {
+
     private int paymentId;
     private int orderId;
     private double amount;
@@ -24,19 +25,19 @@ public class Payment {
     private LocalDateTime createdAt;
     private LocalDateTime processedAt;
     private String refundReason;
-    
+
     @Override
     public String toString() {
         return "Payment{" +
-                "paymentId=" + paymentId +
-                ", orderId=" + orderId +
-                ", amount=" + amount +
-                ", paymentMethod='" + paymentMethod + '\'' +
-                ", status='" + status + '\'' +
-                ", transactionId='" + transactionId + '\'' +
-                ", createdAt=" + createdAt +
-                ", processedAt=" + processedAt +
-                ", refundReason='" + refundReason + '\'' +
-                '}';
+            "paymentId=" + paymentId +
+            ", orderId=" + orderId +
+            ", amount=" + amount +
+            ", paymentMethod='" + paymentMethod + '\'' +
+            ", status='" + status + '\'' +
+            ", transactionId='" + transactionId + '\'' +
+            ", createdAt=" + createdAt +
+            ", processedAt=" + processedAt +
+            ", refundReason='" + refundReason + '\'' +
+            '}';
     }
 }

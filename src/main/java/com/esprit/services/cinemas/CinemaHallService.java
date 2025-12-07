@@ -421,6 +421,7 @@ public class CinemaHallService implements IService<CinemaHall> {
 
     /**
      * Get all cinema halls.
+     *
      * @return list of all cinema halls
      */
     public List<CinemaHall> getAllHalls() {

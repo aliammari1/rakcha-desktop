@@ -57,6 +57,7 @@ public class CinemaHall {
 
     /**
      * Get the hall name (alias for compatibility).
+     *
      * @return the hall name
      */
     public String getHallName() {
@@ -65,6 +66,7 @@ public class CinemaHall {
 
     /**
      * Set the hall name (alias for compatibility).
+     *
      * @param hallName the name to set
      */
     public void setHallName(String hallName) {
@@ -73,6 +75,7 @@ public class CinemaHall {
 
     /**
      * Get the seat capacity.
+     *
      * @return the capacity
      */
     public Integer getCapacity() {
@@ -81,6 +84,7 @@ public class CinemaHall {
 
     /**
      * Set the seat capacity.
+     *
      * @param capacity the capacity to set
      */
     public void setCapacity(Integer capacity) {
@@ -89,6 +93,7 @@ public class CinemaHall {
 
     /**
      * Get the screen type (legacy field, returns fixed string for compatibility).
+     *
      * @return the screen type
      */
     public String getScreenType() {
@@ -97,6 +102,7 @@ public class CinemaHall {
 
     /**
      * Set the screen type (convenience method for compatibility).
+     *
      * @param screenType the screen type to set
      */
     public void setScreenType(String screenType) {
@@ -105,6 +111,7 @@ public class CinemaHall {
 
     /**
      * Check if the hall is active.
+     *
      * @return true if active, false otherwise
      */
     public Boolean isActive() {
@@ -113,6 +120,7 @@ public class CinemaHall {
 
     /**
      * Set whether the hall is active (convenience method for compatibility).
+     *
      * @param active whether the hall is active
      */
     public void setActive(boolean active) {
@@ -121,6 +129,7 @@ public class CinemaHall {
 
     /**
      * Get the description of the cinema hall.
+     *
      * @return the description
      */
     public String getDescription() {
@@ -129,6 +138,7 @@ public class CinemaHall {
 
     /**
      * Set the description of the cinema hall (convenience method for compatibility).
+     *
      * @param description the description to set
      */
     public void setDescription(String description) {

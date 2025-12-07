@@ -40,45 +40,76 @@ public class SeriesWatchProgressController {
 
     private static final Logger LOGGER = Logger.getLogger(SeriesWatchProgressController.class.getName());
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd MMM yyyy");
-
-    @FXML private VBox progressContainer;
-    @FXML private Label totalSeriesLabel;
-    @FXML private Label totalWatchTimeLabel;
-    @FXML private Label currentlyWatchingLabel;
-    @FXML private Label completedCountLabel;
-    @FXML private ComboBox<String> statusFilter;
-    @FXML private TextField searchField;
-    @FXML private ProgressIndicator loadingIndicator;
-    @FXML private VBox statsBox;
-    @FXML private TabPane progressTabs;
-    @FXML private Label watchingCountLabel;
-    @FXML private Label episodesWatchedLabel;
-    @FXML private Label totalTimeLabel;
-    @FXML private ToggleButton continueWatchingTab;
-    @FXML private ToggleButton allSeriesTab;
-    @FXML private ToggleButton completedTab;
-    @FXML private ToggleButton onHoldTab;
-    @FXML private VBox continueWatchingSection;
-    @FXML private Label continueCountBadge;
-    @FXML private HBox continueWatchingContainer;
-    @FXML private VBox continueWatchingEmpty;
-    @FXML private VBox recentlyWatchedSection;
-    @FXML private VBox recentlyWatchedContainer;
-    @FXML private VBox allSeriesSection;
-    @FXML private ComboBox<String> sortByCombo;
-    @FXML private FlowPane allSeriesGrid;
-    @FXML private VBox allSeriesEmpty;
-    @FXML private HBox detailPanelOverlay;
-    @FXML private VBox detailPanel;
-    @FXML private ImageView detailBackdrop;
-    @FXML private ImageView detailPoster;
-    @FXML private Label detailTitle;
-    @FXML private Label detailRating;
-
     private final SeriesService seriesService;
     private final WatchProgressService watchProgressService;
     private final SeasonService seasonService;
     private final EpisodeService episodeService;
+    @FXML
+    private VBox progressContainer;
+    @FXML
+    private Label totalSeriesLabel;
+    @FXML
+    private Label totalWatchTimeLabel;
+    @FXML
+    private Label currentlyWatchingLabel;
+    @FXML
+    private Label completedCountLabel;
+    @FXML
+    private ComboBox<String> statusFilter;
+    @FXML
+    private TextField searchField;
+    @FXML
+    private ProgressIndicator loadingIndicator;
+    @FXML
+    private VBox statsBox;
+    @FXML
+    private TabPane progressTabs;
+    @FXML
+    private Label watchingCountLabel;
+    @FXML
+    private Label episodesWatchedLabel;
+    @FXML
+    private Label totalTimeLabel;
+    @FXML
+    private ToggleButton continueWatchingTab;
+    @FXML
+    private ToggleButton allSeriesTab;
+    @FXML
+    private ToggleButton completedTab;
+    @FXML
+    private ToggleButton onHoldTab;
+    @FXML
+    private VBox continueWatchingSection;
+    @FXML
+    private Label continueCountBadge;
+    @FXML
+    private HBox continueWatchingContainer;
+    @FXML
+    private VBox continueWatchingEmpty;
+    @FXML
+    private VBox recentlyWatchedSection;
+    @FXML
+    private VBox recentlyWatchedContainer;
+    @FXML
+    private VBox allSeriesSection;
+    @FXML
+    private ComboBox<String> sortByCombo;
+    @FXML
+    private FlowPane allSeriesGrid;
+    @FXML
+    private VBox allSeriesEmpty;
+    @FXML
+    private HBox detailPanelOverlay;
+    @FXML
+    private VBox detailPanel;
+    @FXML
+    private ImageView detailBackdrop;
+    @FXML
+    private ImageView detailPoster;
+    @FXML
+    private Label detailTitle;
+    @FXML
+    private Label detailRating;
     private ObservableList<WatchProgress> allProgress;
     private User currentUser;
 
@@ -94,7 +125,7 @@ public class SeriesWatchProgressController {
     public void initialize() {
         LOGGER.info("Initializing SeriesWatchProgressController");
 
-        currentUser = SessionManager.getInstance().getCurrentUser();
+        currentUser = SessionManager.getCurrentUser();
         if (currentUser == null) {
             LOGGER.warning("No user logged in");
             return;

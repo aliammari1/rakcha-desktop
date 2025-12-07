@@ -470,8 +470,8 @@ public class UserService implements IService<User> {
     /**
      * Changes the password for a user.
      *
-     * @param userId the ID of the user
-     * @param newPassword the new password
+     * @param userId          the ID of the user
+     * @param newPassword     the new password
      * @param confirmPassword the confirmation password
      * @return true if password was changed successfully, false otherwise
      */
@@ -507,7 +507,7 @@ public class UserService implements IService<User> {
     /**
      * Deletes a user account after password verification.
      *
-     * @param userId the ID of the user
+     * @param userId   the ID of the user
      * @param password the user's password for verification
      * @return true if account was deleted successfully, false otherwise
      */

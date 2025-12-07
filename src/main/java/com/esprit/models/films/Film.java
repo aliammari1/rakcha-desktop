@@ -181,6 +181,7 @@ public class Film {
 
     /**
      * Get the film name/title (alias for compatibility).
+     *
      * @return the film title
      */
     public String getNom() {
@@ -189,6 +190,7 @@ public class Film {
 
     /**
      * Set the film name/title (alias for compatibility).
+     *
      * @param nom the title to set
      */
     public void setNom(String nom) {
@@ -197,6 +199,7 @@ public class Film {
 
     /**
      * Get the film duration in minutes (alias for compatibility).
+     *
      * @return the duration in minutes
      */
     public int getDuree() {
@@ -205,6 +208,7 @@ public class Film {
 
     /**
      * Set the film duration in minutes (alias for compatibility).
+     *
      * @param duree the duration in minutes
      */
     public void setDuree(int duree) {
@@ -213,6 +217,7 @@ public class Film {
 
     /**
      * Get the film image URL (convenience method).
+     *
      * @return the image URL
      */
     public String getImage() {
@@ -221,6 +226,7 @@ public class Film {
 
     /**
      * Set the film image URL (convenience method).
+     *
      * @param imageUrl the image URL to set
      */
     public void setImage(String imageUrl) {
@@ -229,21 +235,23 @@ public class Film {
 
     /**
      * Get the film rating/note (calculated from reviews or stored rating).
+     *
      * @return the rating as a double
      */
     public double getNote() {
         // If we have reviews, calculate average rating
         if (this.reviews != null && !this.reviews.isEmpty()) {
             return this.reviews.stream()
-                    .mapToInt(Review::getRating)
-                    .average()
-                    .orElse(0.0);
+                .mapToInt(Review::getRating)
+                .average()
+                .orElse(0.0);
         }
         return 0.0;
     }
 
     /**
      * Get the release year (alias for compatibility).
+     *
      * @return the release year
      */
     public int getAnnee() {
@@ -252,6 +260,7 @@ public class Film {
 
     /**
      * Set the release year (alias for compatibility).
+     *
      * @param annee the year to set
      */
     public void setAnnee(int annee) {
@@ -260,6 +269,7 @@ public class Film {
 
     /**
      * Get the film name/title (convenience alias).
+     *
      * @return the film title
      */
     public String getName() {
@@ -268,6 +278,7 @@ public class Film {
 
     /**
      * Set the film name/title (convenience alias).
+     *
      * @param name the title to set
      */
     public void setName(String name) {
@@ -276,6 +287,7 @@ public class Film {
 
     /**
      * Get the film duration (alias for durationMin).
+     *
      * @return the duration in minutes
      */
     public int getDuration() {
@@ -284,6 +296,7 @@ public class Film {
 
     /**
      * Set the film duration (alias for durationMin).
+     *
      * @param duration the duration in minutes
      */
     public void setDuration(int duration) {
@@ -292,6 +305,7 @@ public class Film {
 
     /**
      * Get the film genre (from categories or first category).
+     *
      * @return the genre as a string
      */
     public String getGenre() {
@@ -303,6 +317,7 @@ public class Film {
 
     /**
      * Get the film country (alias - may come from metadata or be extracted).
+     *
      * @return the country
      */
     public String getCountry() {
@@ -312,6 +327,7 @@ public class Film {
 
     /**
      * Get the average rating from reviews.
+     *
      * @return the average rating
      */
     public double getAverageRating() {
@@ -321,6 +337,7 @@ public class Film {
 
     /**
      * Get the rating (alias for getAverageRating).
+     *
      * @return the rating as a double
      */
     public double getRating() {

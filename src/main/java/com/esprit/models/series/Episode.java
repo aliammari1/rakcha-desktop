@@ -79,6 +79,7 @@ public class Episode {
 
     /**
      * Get the episode thumbnail URL (alias for compatibility).
+     *
      * @return the image/thumbnail URL
      */
     public String getThumbnail() {
@@ -87,6 +88,7 @@ public class Episode {
 
     /**
      * Set the episode thumbnail URL (alias for compatibility).
+     *
      * @param thumbnail the thumbnail URL to set
      */
     public void setThumbnail(String thumbnail) {
@@ -95,6 +97,7 @@ public class Episode {
 
     /**
      * Get the episode duration in minutes (alias for compatibility).
+     *
      * @return the duration in minutes
      */
     public Integer getDuration() {
@@ -103,6 +106,7 @@ public class Episode {
 
     /**
      * Set the episode duration in minutes (alias for compatibility).
+     *
      * @param duration the duration in minutes
      */
     public void setDuration(Integer duration) {
@@ -112,6 +116,7 @@ public class Episode {
     /**
      * Get the episode description (alias for compatibility).
      * For episodes, the title serves as description.
+     *
      * @return the episode title/description
      */
     public String getDescription() {
@@ -120,6 +125,7 @@ public class Episode {
 
     /**
      * Set the episode description (alias for compatibility).
+     *
      * @param description the description to set
      */
     public void setDescription(String description) {

@@ -146,6 +146,7 @@ public class Review {
 
     /**
      * Get the user ID (convenience method).
+     *
      * @return the user ID
      */
     public Long getUserId() {
@@ -153,7 +154,21 @@ public class Review {
     }
 
     /**
+     * Set the user ID (convenience method for client assignment).
+     *
+     * @param userId the user ID
+     */
+    public void setUserId(Long userId) {
+        // This is a convenience method - would need actual Client object
+        // For now, it's a placeholder
+        if (this.user != null) {
+            this.user.setId(userId);
+        }
+    }
+
+    /**
      * Get the user's avatar/profile picture URL (convenience method).
+     *
      * @return the user's profile picture URL
      */
     public String getUserAvatar() {
@@ -162,6 +177,7 @@ public class Review {
 
     /**
      * Get the username (convenience method).
+     *
      * @return the username or email
      */
     public String getUsername() {
@@ -171,6 +187,7 @@ public class Review {
     /**
      * Get the review title (convenience method).
      * Returns content title or comment preview.
+     *
      * @return the title
      */
     public String getTitle() {
@@ -185,6 +202,7 @@ public class Review {
 
     /**
      * Check if the review contains spoilers (convenience method).
+     *
      * @return true if review may contain spoilers
      */
     public boolean hasSpoilers() {
@@ -194,18 +212,6 @@ public class Review {
             return lower.contains("spoiler") || lower.contains("dies") || lower.contains("twist");
         }
         return false;
-    }
-
-    /**
-     * Set the user ID (convenience method for client assignment).
-     * @param userId the user ID
-     */
-    public void setUserId(Long userId) {
-        // This is a convenience method - would need actual Client object
-        // For now, it's a placeholder
-        if (this.user != null) {
-            this.user.setId(userId);
-        }
     }
 }
 

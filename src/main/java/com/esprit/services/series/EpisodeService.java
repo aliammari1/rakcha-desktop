@@ -261,13 +261,14 @@ public class EpisodeService implements IService<Episode> {
 
     /**
      * Get episodes for a specific season.
+     *
      * @param seasonId the season ID
      * @return list of episodes for the season
      */
     public List<Episode> getEpisodesBySeason(Long seasonId) {
         final List<Episode> episodes = new ArrayList<>();
         final String query = "SELECT * FROM episodes WHERE season_id = ? ORDER BY episode_number";
-        
+
         try (final PreparedStatement ps = this.connection.prepareStatement(query)) {
             ps.setLong(1, seasonId);
             try (final ResultSet rs = ps.executeQuery()) {
@@ -281,7 +282,7 @@ public class EpisodeService implements IService<Episode> {
         } catch (SQLException e) {
             log.error("Error retrieving episodes for season {}: {}", seasonId, e.getMessage(), e);
         }
-        
+
         return episodes;
     }
 

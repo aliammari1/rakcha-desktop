@@ -82,6 +82,7 @@ public class Product {
 
     /**
      * Get the product stock quantity (convenience method).
+     *
      * @return the current stock quantity
      */
     public int getStock() {
@@ -90,6 +91,7 @@ public class Product {
 
     /**
      * Set the product stock quantity (convenience method).
+     *
      * @param stock the stock quantity to set
      */
     public void setStock(int stock) {
@@ -98,6 +100,7 @@ public class Product {
 
     /**
      * Get the product category as a string (convenience method).
+     *
      * @return the category names joined by ", " or null
      */
     public String getCategory() {
@@ -107,6 +110,7 @@ public class Product {
     /**
      * Get the product original price (convenience method for discount calculation).
      * For now, returns the current price. In a full system, would be a separate field.
+     *
      * @return the original price
      */
     public double getOriginalPrice() {
@@ -117,6 +121,7 @@ public class Product {
 
     /**
      * Get the product image URL (convenience method).
+     *
      * @return the image URL
      */
     public String getImage() {
@@ -125,6 +130,7 @@ public class Product {
 
     /**
      * Set the product image URL (convenience method).
+     *
      * @param imageUrl the image URL to set
      */
     public void setImage(String imageUrl) {
@@ -133,6 +139,7 @@ public class Product {
 
     /**
      * Get the product name/title (alias for compatibility).
+     *
      * @return the product name
      */
     public String getNom() {
@@ -141,6 +148,7 @@ public class Product {
 
     /**
      * Set the product name/title (alias for compatibility).
+     *
      * @param nom the name to set
      */
     public void setNom(String nom) {
@@ -149,6 +157,7 @@ public class Product {
 
     /**
      * Get the product price (alias for compatibility).
+     *
      * @return the price
      */
     public Double getPrix() {
@@ -157,6 +166,7 @@ public class Product {
 
     /**
      * Set the product price (alias for compatibility).
+     *
      * @param prix the price to set
      */
     public void setPrix(Double prix) {

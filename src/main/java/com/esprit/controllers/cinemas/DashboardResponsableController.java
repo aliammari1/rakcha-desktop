@@ -321,7 +321,7 @@ public class DashboardResponsableController implements Initializable {
         this.comboMovie.getItems().clear();
         // TODO: this logic is wrong
         FilmService filmCinemaService = new FilmService();
-        List<Film> moviesForCinema = filmCinemaService.read(new PageRequest(0, 1000)).getContent();
+        List<Film> moviesForCinema = filmCinemaService.read(PageRequest.defaultPage()).getContent();
 
         for (final Film f : moviesForCinema) {
             this.comboMovie.getItems().add(f.getTitle());
@@ -1539,7 +1539,7 @@ public class DashboardResponsableController implements Initializable {
              */
             private List<Film> loadAssociatedFilms(final Long idCinema) {
                 FilmService filmCinemaService = new FilmService();
-                return filmCinemaService.read(new PageRequest(0, 10)).getContent();
+                return filmCinemaService.read(PageRequest.defaultPage()).getContent();
             }
 
         });
@@ -1619,7 +1619,7 @@ public class DashboardResponsableController implements Initializable {
      */
     private List<MovieSession> loadMovieSessions() {
         final MovieSessionService moviesessionService = new MovieSessionService();
-        PageRequest pageRequest = new PageRequest(0, 10);
+        PageRequest pageRequest = PageRequest.defaultPage();
         final List<MovieSession> moviesessions = moviesessionService.read(pageRequest).getContent();
         final ObservableList<MovieSession> moviesessionObservableList = FXCollections
             .observableArrayList(moviesessions);
@@ -1679,7 +1679,7 @@ public class DashboardResponsableController implements Initializable {
      */
     private void loadcinemahalls() {
         final CinemaHallService cinemahallService = new CinemaHallService();
-        PageRequest pageRequest = new PageRequest(0, 10);
+        PageRequest pageRequest = PageRequest.defaultPage();
         final List<CinemaHall> cinemahalls = cinemahallService.read(pageRequest).getContent();
         final List<CinemaHall> cinemahalls_cinema = cinemahalls.stream()
             .filter(cinemahall -> cinemahall.getCinema().getId().equals(this.cinemaId))

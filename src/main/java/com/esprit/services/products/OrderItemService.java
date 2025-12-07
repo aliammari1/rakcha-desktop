@@ -158,7 +158,7 @@ public class OrderItemService implements IService<OrderItem> {
 
     /**
      * Retrieves the OrderItemsByOrder value.
-
+     *
      * @return the OrderItemsByOrder value
      */
     public List<OrderItem> getOrderItemsByOrder(final int orderId) {

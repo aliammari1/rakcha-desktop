@@ -220,7 +220,7 @@ public class SerieClientController {
      */
     public void afficher() throws SQLException {
         final CategoryService iServiceCategorie = new CategoryService();
-        PageRequest pageRequest = new PageRequest(0, 10);
+        PageRequest pageRequest = PageRequest.defaultPage();
         this.categorieList = iServiceCategorie.read(pageRequest).getContent();
     }
 
@@ -578,7 +578,7 @@ public class SerieClientController {
         this.loadSeriesList();
         final SeriesService iServiceSerie = new SeriesService();
         final CategoryService iServiceCategorie = new CategoryService();
-        PageRequest pageRequest = new PageRequest(0, 10);
+        PageRequest pageRequest = PageRequest.defaultPage();
         final List<Category> categorieList = iServiceCategorie.read(pageRequest).getContent();
         final ObservableList<Category> categorieObservableList = FXCollections.observableArrayList();
         if (CamboxCategorie != null) {
@@ -713,7 +713,7 @@ public class SerieClientController {
     @FXML
     private void loadSeriesList() throws SQLException {
         final SeriesService seriesService = new SeriesService();
-        PageRequest pageRequest = new PageRequest(0, 10);
+        PageRequest pageRequest = PageRequest.defaultPage();
         final List<Series> series = seriesService.read(pageRequest).getContent();
         this.afficherliste(series); // Utilisez votre méthode d'affichage pour la ListView
         final SeriesService ss = new SeriesService();

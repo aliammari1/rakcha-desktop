@@ -208,7 +208,7 @@ public class CategoryManagementController implements Initializable {
      */
     private void loadCategories() {
         ObservableList<Category> categories = FXCollections.observableArrayList();
-        PageRequest pageRequest = new PageRequest(0, 100); // Load up to 100 categories
+        PageRequest pageRequest = PageRequest.defaultPage(); // Load up to 100 categories
 
         if (selectedType != null) {
             categories.addAll(categoryService.readByType(selectedType, pageRequest).getContent());

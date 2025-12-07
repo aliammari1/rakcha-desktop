@@ -99,6 +99,7 @@ public class Order {
 
     /**
      * Convenience method to get created date (alias for orderDate).
+     *
      * @return the order date
      */
     public java.time.LocalDateTime getCreatedAt() {
@@ -107,6 +108,7 @@ public class Order {
 
     /**
      * Convenience method to set created date (alias for orderDate).
+     *
      * @param createdAt the order date
      */
     public void setCreatedAt(java.time.LocalDateTime createdAt) {
@@ -115,6 +117,7 @@ public class Order {
 
     /**
      * Convenience method to get items (alias for orderItems).
+     *
      * @return the order items
      */
     public List<OrderItem> getItems() {
@@ -123,6 +126,7 @@ public class Order {
 
     /**
      * Convenience method to set items (alias for orderItems).
+     *
      * @param items the order items
      */
     public void setItems(List<OrderItem> items) {
@@ -130,15 +134,8 @@ public class Order {
     }
 
     /**
-     * Convenience method to set total amount (alias for totalAmount).
-     * @param total the total amount
-     */
-    public void setTotal(Double total) {
-        this.totalAmount = total;
-    }
-
-    /**
      * Convenience method to set total amount.
+     *
      * @param totalAmount the total amount
      */
     public void setTotalAmount(Double totalAmount) {
@@ -147,6 +144,7 @@ public class Order {
 
     /**
      * Convenience method to get total amount.
+     *
      * @return the total amount
      */
     public Double getTotal() {
@@ -154,9 +152,19 @@ public class Order {
     }
 
     /**
+     * Convenience method to set total amount (alias for totalAmount).
+     *
+     * @param total the total amount
+     */
+    public void setTotal(Double total) {
+        this.totalAmount = total;
+    }
+
+    /**
      * Convenience method to get payment method.
      * Currently returns a default value based on order status.
      * Can be extended to include actual payment method field if needed.
+     *
      * @return the payment method
      */
     public String getPaymentMethod() {
@@ -164,15 +172,17 @@ public class Order {
     }
 
     /**
-     * Convenience method to set user (alias for client).
-     * @param user the user who placed the order
+     * Convenience method to set payment method.
+     *
+     * @param paymentMethod the payment method
      */
-    public void setUser(User user) {
-        this.user = user;
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 
     /**
      * Convenience method to get user (alias for client).
+     *
      * @return the user who placed the order
      */
     public User getUser() {
@@ -180,15 +190,17 @@ public class Order {
     }
 
     /**
-     * Convenience method to set delivery address.
-     * @param deliveryAddress the delivery address
+     * Convenience method to set user (alias for client).
+     *
+     * @param user the user who placed the order
      */
-    public void setDeliveryAddress(String deliveryAddress) {
-        this.deliveryAddress = deliveryAddress;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     /**
      * Convenience method to get delivery address.
+     *
      * @return the delivery address
      */
     public String getDeliveryAddress() {
@@ -196,15 +208,17 @@ public class Order {
     }
 
     /**
-     * Convenience method to set city.
-     * @param city the city
+     * Convenience method to set delivery address.
+     *
+     * @param deliveryAddress the delivery address
      */
-    public void setCity(String city) {
-        this.city = city;
+    public void setDeliveryAddress(String deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
     }
 
     /**
      * Convenience method to get city.
+     *
      * @return the city
      */
     public String getCity() {
@@ -212,15 +226,17 @@ public class Order {
     }
 
     /**
-     * Convenience method to set postal code.
-     * @param postalCode the postal code
+     * Convenience method to set city.
+     *
+     * @param city the city
      */
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
+    public void setCity(String city) {
+        this.city = city;
     }
 
     /**
      * Convenience method to get postal code.
+     *
      * @return the postal code
      */
     public String getPostalCode() {
@@ -228,15 +244,17 @@ public class Order {
     }
 
     /**
-     * Convenience method to set country.
-     * @param country the country
+     * Convenience method to set postal code.
+     *
+     * @param postalCode the postal code
      */
-    public void setCountry(String country) {
-        this.country = country;
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
     }
 
     /**
      * Convenience method to get country.
+     *
      * @return the country
      */
     public String getCountry() {
@@ -244,11 +262,12 @@ public class Order {
     }
 
     /**
-     * Convenience method to set payment method.
-     * @param paymentMethod the payment method
+     * Convenience method to set country.
+     *
+     * @param country the country
      */
-    public void setPaymentMethod(String paymentMethod) {
-        this.paymentMethod = paymentMethod;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
 }

@@ -77,7 +77,7 @@ public class WatchlistController {
     public void initialize() {
         LOGGER.info("Initializing WatchlistController");
 
-        currentUser = SessionManager.getInstance().getCurrentUser();
+        currentUser = SessionManager.getCurrentUser();
         if (currentUser == null) {
             LOGGER.warning("No user logged in");
             return;
@@ -414,7 +414,7 @@ public class WatchlistController {
     }
 
     public void playItem(ActionEvent actionEvent) {
-        
+
     }
 
     public void viewDetails(ActionEvent actionEvent) {

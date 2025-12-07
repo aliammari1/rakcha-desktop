@@ -138,13 +138,13 @@ public class SentimentAnalysisController {
         try {
             // Analyze using static method
             SentimentPolarities polarities = SentimentAnalyzer.getScoresFor(text);
-            
+
             HashMap<String, Float> scores = new HashMap<>();
             scores.put("compound", (float) polarities.getCompoundPolarity());
             scores.put("positive", (float) polarities.getPositivePolarity());
             scores.put("negative", (float) polarities.getNegativePolarity());
             scores.put("neutral", (float) polarities.getNeutralPolarity());
-            
+
             return scores;
         } catch (Exception e) {
             throw new RuntimeException("Error getting all sentiment scores", e);

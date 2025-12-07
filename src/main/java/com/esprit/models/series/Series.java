@@ -94,6 +94,7 @@ public class Series {
 
     /**
      * Get the series image URL (convenience method).
+     *
      * @return the image URL
      */
     public String getImage() {
@@ -102,6 +103,7 @@ public class Series {
 
     /**
      * Set the series image URL (convenience method).
+     *
      * @param imageUrl the image URL to set
      */
     public void setImage(String imageUrl) {
@@ -110,6 +112,7 @@ public class Series {
 
     /**
      * Get the series name/title (alias for compatibility).
+     *
      * @return the series name
      */
     public String getNom() {
@@ -118,6 +121,7 @@ public class Series {
 
     /**
      * Set the series name/title (alias for compatibility).
+     *
      * @param nom the name to set
      */
     public void setNom(String nom) {
@@ -126,6 +130,7 @@ public class Series {
 
     /**
      * Get the release year (alias for compatibility).
+     *
      * @return the release year
      */
     public int getAnnee() {
@@ -134,6 +139,7 @@ public class Series {
 
     /**
      * Set the release year (alias for compatibility).
+     *
      * @param annee the year to set
      */
     public void setAnnee(int annee) {
@@ -142,6 +148,7 @@ public class Series {
 
     /**
      * Get the series rating/note (calculated from episodes or reviews).
+     *
      * @return the rating as a double
      */
     public double getNote() {
@@ -151,6 +158,7 @@ public class Series {
 
     /**
      * Get the series description (alias for compatibility).
+     *
      * @return the series description
      */
     public String getDescription() {
@@ -159,6 +167,7 @@ public class Series {
 
     /**
      * Set the series description (alias for compatibility).
+     *
      * @param description the description to set
      */
     public void setDescription(String description) {
@@ -167,6 +176,7 @@ public class Series {
 
     /**
      * Get the series genres/categories (alias for compatibility).
+     *
      * @return list of categories/genres
      */
     public List<Category> getGenres() {
@@ -175,6 +185,7 @@ public class Series {
 
     /**
      * Get the series ID (alias for compatibility).
+     *
      * @return the series ID
      */
     public Long getIdserie() {
