@@ -1,6 +1,6 @@
 package com.esprit.controllers.series;
 
-import com.esprit.models.series.Category;
+import com.esprit.models.common.Category;
 import com.esprit.utils.TestFXBase;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -38,7 +38,6 @@ class CategorieControllerTest extends TestFXBase {
         stage.show();
     }
 
-
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
     @DisplayName("Category Table Tests")
@@ -54,7 +53,6 @@ class CategorieControllerTest extends TestFXBase {
             assertThat(table).isNotNull();
         }
 
-
         @Test
         @Order(2)
         @DisplayName("Should load categories from service")
@@ -64,7 +62,6 @@ class CategorieControllerTest extends TestFXBase {
             TableView<Category> table = lookup("#categoriesTable").query();
             assertThat(table).isNotNull();
         }
-
 
         @Test
         @Order(3)
@@ -78,7 +75,6 @@ class CategorieControllerTest extends TestFXBase {
         }
 
     }
-
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -99,7 +95,6 @@ class CategorieControllerTest extends TestFXBase {
             assertThat(createButton).isNotNull();
         }
 
-
         @Test
         @Order(5)
         @DisplayName("Should validate category name not empty")
@@ -109,7 +104,6 @@ class CategorieControllerTest extends TestFXBase {
             Button createButton = lookup("#createButton").query();
             assertThat(createButton).isNotNull();
         }
-
 
         @Test
         @Order(6)
@@ -129,7 +123,6 @@ class CategorieControllerTest extends TestFXBase {
 
     }
 
-
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
     @DisplayName("Update Category Tests")
@@ -144,7 +137,6 @@ class CategorieControllerTest extends TestFXBase {
             assertThat(lookup("#updateButton").tryQuery()).isPresent();
         }
 
-
         @Test
         @Order(8)
         @DisplayName("Should populate form on selection")
@@ -156,7 +148,6 @@ class CategorieControllerTest extends TestFXBase {
         }
 
     }
-
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -172,7 +163,6 @@ class CategorieControllerTest extends TestFXBase {
             assertThat(lookup("#deleteButton").tryQuery()).isPresent();
         }
 
-
         @Test
         @Order(10)
         @DisplayName("Should confirm before deletion")
@@ -183,7 +173,6 @@ class CategorieControllerTest extends TestFXBase {
         }
 
     }
-
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -205,7 +194,5 @@ class CategorieControllerTest extends TestFXBase {
 
     }
 
-
     // Helper methods would be implemented when tests are fully developed
 }
-

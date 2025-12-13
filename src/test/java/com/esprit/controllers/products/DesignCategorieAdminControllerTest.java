@@ -1,6 +1,6 @@
 package com.esprit.controllers.products;
 
-import com.esprit.models.products.ProductCategory;
+import com.esprit.models.common.Category;
 import com.esprit.utils.TestFXBase;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -40,10 +40,10 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
     }
 
     // Helper methods
-    private List<ProductCategory> createMockCategories() {
-        List<ProductCategory> categories = new ArrayList<>();
-        ProductCategory c = new ProductCategory();
-        c.setCategoryName("Electronics");
+    private List<Category> createMockCategories() {
+        List<Category> categories = new ArrayList<>();
+        Category c = new Category();
+        c.setName("Electronics");
         categories.add(c);
         return categories;
     }
@@ -59,11 +59,10 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
         void testCategoriesTableDisplay() {
             waitForFxEvents();
 
-            TableView<ProductCategory> table = lookup("#categoriesTable").query();
+            TableView<Category> table = lookup("#categoriesTable").query();
             assertThat(table).isNotNull();
             assertThat(table.isVisible()).isTrue();
         }
-
 
         @Test
         @Order(2)
@@ -72,10 +71,10 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
             waitForFxEvents();
 
             // Get mock categories that would be returned by service
-            List<ProductCategory> mockCategories = createMockCategories();
+            List<Category> mockCategories = createMockCategories();
             assertThat(mockCategories).isNotEmpty();
 
-            TableView<ProductCategory> table = lookup("#categoriesTable").query();
+            TableView<Category> table = lookup("#categoriesTable").query();
             assertThat(table).isNotNull();
 
             // Verify table items is present
@@ -118,7 +117,6 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
             assertThat(createButton).isNotNull();
         }
 
-
         @Test
         @Order(4)
         @DisplayName("Should validate ProductCategory name")
@@ -126,7 +124,7 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
             waitForFxEvents();
 
             // Capture initial table row count
-            TableView<ProductCategory> table = lookup("#categoriesTable").query();
+            TableView<Category> table = lookup("#categoriesTable").query();
             int initialRowCount = table.getItems().size();
 
             // Clear name field or set to invalid value
@@ -144,7 +142,7 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
 
             // Verify table row count unchanged (creation prevented)
             assertThat(table.getItems().size()).as("Table row count should not change on invalid creation")
-                .isEqualTo(initialRowCount);
+                    .isEqualTo(initialRowCount);
 
             // Verify name field is still visible and responsive
             assertThat(nameField.isVisible()).isTrue();
@@ -164,7 +162,7 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
         void testUpdateCategory() {
             waitForFxEvents();
 
-            TableView<ProductCategory> table = lookup("#categoriesTable").query();
+            TableView<Category> table = lookup("#categoriesTable").query();
             assertThat(table).isNotNull();
             assertThat(table.getItems().size()).as("Table should have items to update").isGreaterThan(0);
 
@@ -173,7 +171,7 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
             waitForFxEvents();
 
             // Get selected category before update
-            ProductCategory selectedCategory = table.getSelectionModel().getSelectedItem();
+            Category selectedCategory = table.getSelectionModel().getSelectedItem();
             assertThat(selectedCategory).isNotNull();
 
             // Locate and populate edit field with new name
@@ -197,7 +195,6 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
                 waitForFxEvents();
             }
 
-
             // Verify the table shows the updated name
             waitForFxEvents();
             assertThat(table.getItems()).isNotEmpty().as("Table should still have items after update");
@@ -216,7 +213,7 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
         void testDeleteCategory() {
             waitForFxEvents();
 
-            TableView<ProductCategory> table = lookup("#categoriesTable").query();
+            TableView<Category> table = lookup("#categoriesTable").query();
             assertThat(table).isNotNull();
             assertThat(table.getItems().size()).as("Table should have items to delete").isGreaterThan(0);
 
@@ -228,7 +225,7 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
             waitForFxEvents();
 
             // Get selected category before deletion
-            ProductCategory selectedCategory = table.getSelectionModel().getSelectedItem();
+            Category selectedCategory = table.getSelectionModel().getSelectedItem();
             assertThat(selectedCategory).isNotNull();
 
             // Locate and click delete button
@@ -246,18 +243,16 @@ class DesignCategorieAdminControllerTest extends TestFXBase {
 
             }
 
-
             // Verify row count decreased
             assertThat(table.getItems().size()).as("Table should have fewer items after deletion")
-                .isLessThanOrEqualTo(initialRowCount);
+                    .isLessThanOrEqualTo(initialRowCount);
 
             // Verify the specific deleted item is no longer in the table
             boolean deletedItemStillExists = table.getItems().stream()
-                .anyMatch(cat -> cat.getCategoryName().equals(selectedCategory.getCategoryName()));
+                    .anyMatch(cat -> cat.getName().equals(selectedCategory.getName()));
             assertThat(deletedItemStillExists).as("Deleted category should not be in table").isFalse();
         }
 
     }
 
 }
-

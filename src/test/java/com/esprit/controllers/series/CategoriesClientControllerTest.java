@@ -1,7 +1,7 @@
 package com.esprit.controllers.series;
 
-import com.esprit.models.series.Category;
-import com.esprit.services.series.CategoryService;
+import com.esprit.models.common.Category;
+import com.esprit.services.common.CategoryService;
 import com.esprit.utils.TestFXBase;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -75,7 +75,6 @@ class CategoriesClientControllerTest extends TestFXBase {
             assertThat(flowPane).isNotNull();
         }
 
-
         @Test
         @Order(2)
         @DisplayName("Should load categories from service")
@@ -85,7 +84,6 @@ class CategoriesClientControllerTest extends TestFXBase {
             FlowPane flowPane = lookup("#categoriesFlowPane").query();
             assertThat(flowPane).isNotNull();
         }
-
 
         @Test
         @Order(3)
@@ -113,7 +111,6 @@ class CategoriesClientControllerTest extends TestFXBase {
             FlowPane flowPane = lookup("#categoriesFlowPane").query();
             assertThat(flowPane).isNotNull();
         }
-
 
         @Test
         @Order(5)
@@ -144,4 +141,3 @@ class CategoriesClientControllerTest extends TestFXBase {
     }
 
 }
-

@@ -1,7 +1,7 @@
 package com.esprit.controllers.films;
 
-import com.esprit.models.films.Category;
-import com.esprit.services.films.CategoryService;
+import com.esprit.models.common.Category;
+import com.esprit.services.common.CategoryService;
 import com.esprit.utils.TestFXBase;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -34,13 +34,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CategoryControllerTest extends TestFXBase {
 
     private CategoryService categoryService;
-    private CategoryController controller;
+    private Object controller; // Controller type obtained dynamically from FXML
 
     @Start
     public void start(Stage stage) throws Exception {
         javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
-            getClass().getResource("/ui/films/InterfaceCategory.fxml")
-        );
+                getClass().getResource("/ui/films/InterfaceCategory.fxml"));
         javafx.scene.Parent root = loader.load();
         controller = loader.getController();
 
@@ -52,9 +51,9 @@ class CategoryControllerTest extends TestFXBase {
     // Helper methods
     private List<Category> createMockCategories() {
         List<Category> categories = new ArrayList<>();
-        categories.add(new Category(1L, "Action", "Action movies"));
-        categories.add(new Category(2L, "Comedy", "Comedy movies"));
-        categories.add(new Category(3L, "Drama", "Drama movies"));
+        categories.add(Category.builder().id(1L).name("Action").description("Action movies").build());
+        categories.add(Category.builder().id(2L).name("Comedy").description("Comedy movies").build());
+        categories.add(Category.builder().id(3L).name("Drama").description("Drama movies").build());
         return categories;
     }
 
@@ -91,7 +90,6 @@ class CategoryControllerTest extends TestFXBase {
             assertThat(table.getItems()).isNotEmpty();
         }
 
-
         @Test
         @Order(2)
         @DisplayName("Should show confirmation after category creation")
@@ -114,7 +112,6 @@ class CategoryControllerTest extends TestFXBase {
             // Verify confirmation alert is displayed
             assertThat(lookup(".alert").tryQuery()).isPresent();
         }
-
 
         @Test
         @Order(3)
@@ -163,7 +160,6 @@ class CategoryControllerTest extends TestFXBase {
             assertThat(nameArea.getTooltip()).isNotNull();
         }
 
-
         @Test
         @Order(5)
         @DisplayName("Should accept name starting with uppercase")
@@ -176,7 +172,6 @@ class CategoryControllerTest extends TestFXBase {
             // Verify no validation error
             waitForFxEvents();
         }
-
 
         @Test
         @Order(6)
@@ -193,7 +188,6 @@ class CategoryControllerTest extends TestFXBase {
             // Verify validation error
         }
 
-
         @Test
         @Order(7)
         @DisplayName("Should reject whitespace-only name")
@@ -208,7 +202,6 @@ class CategoryControllerTest extends TestFXBase {
 
             // Verify validation error is shown
         }
-
 
         @Test
         @Order(8)
@@ -247,7 +240,6 @@ class CategoryControllerTest extends TestFXBase {
             assertThat(table.getItems()).isNotNull();
         }
 
-
         @Test
         @Order(10)
         @DisplayName("Should hide ID column")
@@ -256,12 +248,11 @@ class CategoryControllerTest extends TestFXBase {
 
             TableView<Category> table = lookup("#filmCategory_tableView").query();
             TableColumn<Category, Integer> idColumn = (TableColumn<Category, Integer>) table.getColumns().stream()
-                .filter(col -> "idCategory_tableColumn".equals(col.getId()))
-                .findFirst().orElse(null);
+                    .filter(col -> "idCategory_tableColumn".equals(col.getId()))
+                    .findFirst().orElse(null);
             assertThat(idColumn).isNotNull();
             assertThat(idColumn.isVisible()).isFalse();
         }
-
 
         @Test
         @Order(11)
@@ -271,12 +262,11 @@ class CategoryControllerTest extends TestFXBase {
 
             TableView<Category> table = lookup("#filmCategory_tableView").query();
             TableColumn<Category, String> nameCol = (TableColumn<Category, String>) table.getColumns().stream()
-                .filter(col -> "nomCategory_tableColumn".equals(col.getId()))
-                .findFirst().orElse(null);
+                    .filter(col -> "nomCategory_tableColumn".equals(col.getId()))
+                    .findFirst().orElse(null);
             assertThat(nameCol).isNotNull();
             assertThat(nameCol.isVisible()).isTrue();
         }
-
 
         @Test
         @Order(12)
@@ -286,12 +276,11 @@ class CategoryControllerTest extends TestFXBase {
 
             TableView<Category> table = lookup("#filmCategory_tableView").query();
             TableColumn<Category, String> descCol = (TableColumn<Category, String>) table.getColumns().stream()
-                .filter(col -> "descriptionCategory_tableColumn".equals(col.getId()))
-                .findFirst().orElse(null);
+                    .filter(col -> "descriptionCategory_tableColumn".equals(col.getId()))
+                    .findFirst().orElse(null);
             assertThat(descCol).isNotNull();
             assertThat(descCol.isVisible()).isTrue();
         }
-
 
         @Test
         @Order(13)
@@ -301,8 +290,8 @@ class CategoryControllerTest extends TestFXBase {
 
             TableView<Category> table = lookup("#filmCategory_tableView").query();
             TableColumn<Category, Button> deleteCol = (TableColumn<Category, Button>) table.getColumns().stream()
-                .filter(col -> "delete_tableColumn".equals(col.getId()))
-                .findFirst().orElse(null);
+                    .filter(col -> "delete_tableColumn".equals(col.getId()))
+                    .findFirst().orElse(null);
             assertThat(deleteCol).isNotNull();
         }
 
@@ -332,7 +321,6 @@ class CategoryControllerTest extends TestFXBase {
 
         }
 
-
         @Test
         @Order(15)
         @DisplayName("Should update category description inline")
@@ -346,11 +334,10 @@ class CategoryControllerTest extends TestFXBase {
 
             // Verify description column exists
             TableColumn<Category, String> descCol = (TableColumn<Category, String>) table.getColumns().stream()
-                .filter(col -> "descriptionCategory_tableColumn".equals(col.getId()))
-                .findFirst().orElse(null);
+                    .filter(col -> "descriptionCategory_tableColumn".equals(col.getId()))
+                    .findFirst().orElse(null);
             assertThat(descCol).isNotNull();
         }
-
 
         @Test
         @Order(16)
@@ -366,7 +353,6 @@ class CategoryControllerTest extends TestFXBase {
             // Verify table is ready for updates
             waitForFxEvents();
         }
-
 
         @Test
         @Order(17)
@@ -405,13 +391,12 @@ class CategoryControllerTest extends TestFXBase {
 
             // Verify delete button column exists
             TableColumn deleteCol = table.getColumns().stream()
-                .filter(col -> "delete_tableColumn".equals(col.getId()))
-                .findFirst().orElse(null);
+                    .filter(col -> "delete_tableColumn".equals(col.getId()))
+                    .findFirst().orElse(null);
             assertThat(deleteCol).isNotNull();
 
             waitForFxEvents();
         }
-
 
         @Test
         @Order(19)
@@ -425,13 +410,12 @@ class CategoryControllerTest extends TestFXBase {
 
             // Verify delete column exists
             TableColumn deleteCol = table.getColumns().stream()
-                .filter(col -> "delete_tableColumn".equals(col.getId()))
-                .findFirst().orElse(null);
+                    .filter(col -> "delete_tableColumn".equals(col.getId()))
+                    .findFirst().orElse(null);
             assertThat(deleteCol).isNotNull();
 
             waitForFxEvents();
         }
-
 
         @Test
         @Order(20)
@@ -450,7 +434,6 @@ class CategoryControllerTest extends TestFXBase {
 
             waitForFxEvents();
         }
-
 
         @Test
         @Order(21)
@@ -490,7 +473,6 @@ class CategoryControllerTest extends TestFXBase {
             // Verify filtered results
         }
 
-
         @Test
         @Order(23)
         @DisplayName("Should filter by description")
@@ -506,7 +488,6 @@ class CategoryControllerTest extends TestFXBase {
             // Verify filtered results
         }
 
-
         @Test
         @Order(24)
         @DisplayName("Should perform case-insensitive search")
@@ -520,7 +501,6 @@ class CategoryControllerTest extends TestFXBase {
 
             // Verify results include "Action" category
         }
-
 
         @Test
         @Order(25)
@@ -539,7 +519,6 @@ class CategoryControllerTest extends TestFXBase {
             TableView<Category> table = lookup("#filmCategory_tableView").query();
             assertThat(table.getItems()).isNotEmpty();
         }
-
 
         @Test
         @Order(26)
@@ -573,7 +552,6 @@ class CategoryControllerTest extends TestFXBase {
             assertThat(filterCombo.getItems()).contains("Name", "Description");
         }
 
-
         @Test
         @Order(28)
         @DisplayName("Should filter by selected criteria")
@@ -604,7 +582,6 @@ class CategoryControllerTest extends TestFXBase {
             assertThat(table.isEditable()).isTrue();
         }
 
-
         @Test
         @Order(30)
         @DisplayName("Should validate input during inline editing")
@@ -617,7 +594,6 @@ class CategoryControllerTest extends TestFXBase {
             // Verify validation error is shown
             waitForFxEvents();
         }
-
 
         @Test
         @Order(31)
@@ -637,7 +613,6 @@ class CategoryControllerTest extends TestFXBase {
             }
 
         }
-
 
         @Test
         @Order(32)
@@ -675,7 +650,6 @@ class CategoryControllerTest extends TestFXBase {
             // Verify CRUD interface is visible
         }
 
-
         @Test
         @Order(34)
         @DisplayName("Should hide CRUD interface initially")
@@ -708,7 +682,6 @@ class CategoryControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
-
         @Test
         @Order(36)
         @DisplayName("Should handle null values safely")
@@ -726,4 +699,3 @@ class CategoryControllerTest extends TestFXBase {
     }
 
 }
-

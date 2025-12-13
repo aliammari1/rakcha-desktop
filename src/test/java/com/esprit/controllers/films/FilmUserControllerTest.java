@@ -1,7 +1,7 @@
 package com.esprit.controllers.films;
 
 import com.esprit.models.films.Film;
-import com.esprit.models.films.FilmComment;
+import com.esprit.models.common.Review;
 import com.esprit.utils.TestFXBase;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -38,7 +38,7 @@ class FilmUserControllerTest extends TestFXBase {
     @Start
     public void start(Stage stage) throws Exception {
         javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
-            getClass().getResource("/ui/films/filmuser.fxml"));
+                getClass().getResource("/ui/films/filmuser.fxml"));
         javafx.scene.Parent root = loader.load();
         controller = loader.getController();
 
@@ -64,13 +64,13 @@ class FilmUserControllerTest extends TestFXBase {
         return films;
     }
 
-    private List<FilmComment> createMockComments() {
-        List<FilmComment> comments = new ArrayList<>();
+    private List<Review> createMockComments() {
+        List<Review> comments = new ArrayList<>();
 
-        FilmComment comment1 = new FilmComment();
+        Review comment1 = new Review();
         comment1.setComment("Great film!");
 
-        FilmComment comment2 = new FilmComment();
+        Review comment2 = new Review();
         comment2.setComment("Loved it!");
 
         comments.add(comment1);

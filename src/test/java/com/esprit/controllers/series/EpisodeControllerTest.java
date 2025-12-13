@@ -66,7 +66,7 @@ class EpisodeControllerTest extends TestFXBase {
         Episode e1 = new Episode();
         e1.setTitle("Episode 1");
         e1.setEpisodeNumber(1);
-        e1.setSeason(1);
+        e1.setSeasonId(1L);
         episodes.add(e1);
         return episodes;
     }
@@ -100,7 +100,6 @@ class EpisodeControllerTest extends TestFXBase {
             clickOn(seasonField).write("1");
         }
 
-
         @Test
         @Order(2)
         @DisplayName("Should validate episode title not empty")
@@ -111,7 +110,6 @@ class EpisodeControllerTest extends TestFXBase {
             assertThat(titleField).isNotNull();
             assertThat(lookup("#titrecheck").tryQuery()).isPresent();
         }
-
 
         @Test
         @Order(3)
@@ -124,7 +122,6 @@ class EpisodeControllerTest extends TestFXBase {
             assertThat(lookup("#numbercheck").tryQuery()).isPresent();
         }
 
-
         @Test
         @Order(4)
         @DisplayName("Should validate season number is numeric")
@@ -135,7 +132,6 @@ class EpisodeControllerTest extends TestFXBase {
             assertThat(seasonField).isNotNull();
             assertThat(lookup("#seasoncheck").tryQuery()).isPresent();
         }
-
 
         @Test
         @Order(5)
@@ -167,7 +163,6 @@ class EpisodeControllerTest extends TestFXBase {
             assertThat(seriesCombo).isNotNull();
         }
 
-
         @Test
         @Order(7)
         @DisplayName("Should select series from combo box")
@@ -177,7 +172,6 @@ class EpisodeControllerTest extends TestFXBase {
             ComboBox<String> seriesCombo = lookup("#serieF").query();
             assertThat(seriesCombo).isNotNull();
         }
-
 
         @Test
         @Order(8)
@@ -205,7 +199,6 @@ class EpisodeControllerTest extends TestFXBase {
             assertThat(lookup("#episodeImageView").tryQuery()).isPresent();
         }
 
-
         @Test
         @Order(10)
         @DisplayName("Should validate image format")
@@ -214,7 +207,6 @@ class EpisodeControllerTest extends TestFXBase {
 
             assertThat(lookup("#picturechek").tryQuery()).isPresent();
         }
-
 
         @Test
         @Order(11)
@@ -242,7 +234,6 @@ class EpisodeControllerTest extends TestFXBase {
             assertThat(lookup("#videoPathField").tryQuery()).isPresent();
         }
 
-
         @Test
         @Order(13)
         @DisplayName("Should validate video format")
@@ -252,7 +243,6 @@ class EpisodeControllerTest extends TestFXBase {
             Label videoCheck = lookup("#videocheck").query();
             assertThat(videoCheck).isNotNull();
         }
-
 
         @Test
         @Order(14)
@@ -279,7 +269,6 @@ class EpisodeControllerTest extends TestFXBase {
             assertThat(lookup("#EpisodeTable").tryQuery()).isPresent();
         }
 
-
         @Test
         @Order(16)
         @DisplayName("Should display episode title column")
@@ -289,7 +278,6 @@ class EpisodeControllerTest extends TestFXBase {
             TableView<Episode> table = lookup("#tableView").query();
             assertThat(table.getColumns()).isNotEmpty();
         }
-
 
         @Test
         @Order(17)
@@ -301,7 +289,6 @@ class EpisodeControllerTest extends TestFXBase {
             assertThat(table).isNotNull();
         }
 
-
         @Test
         @Order(18)
         @DisplayName("Should display season column")
@@ -312,7 +299,6 @@ class EpisodeControllerTest extends TestFXBase {
             assertThat(table).isNotNull();
         }
 
-
         @Test
         @Order(19)
         @DisplayName("Should display delete button column")
@@ -322,7 +308,6 @@ class EpisodeControllerTest extends TestFXBase {
             TableView<Episode> table = lookup("#tableView").query();
             assertThat(table).isNotNull();
         }
-
 
         @Test
         @Order(20)
@@ -354,7 +339,6 @@ class EpisodeControllerTest extends TestFXBase {
             assertThat(titleField.getText()).isNotEmpty();
         }
 
-
         @Test
         @Order(22)
         @DisplayName("Should update episode")
@@ -364,7 +348,6 @@ class EpisodeControllerTest extends TestFXBase {
             TextField titleField = lookup("#titreF").query();
             assertThat(titleField).isNotNull();
         }
-
 
         @Test
         @Order(23)
@@ -392,7 +375,6 @@ class EpisodeControllerTest extends TestFXBase {
             assertThat(lookup("#tableView").tryQuery()).isPresent();
         }
 
-
         @Test
         @Order(25)
         @DisplayName("Should refresh table after deletion")
@@ -402,7 +384,6 @@ class EpisodeControllerTest extends TestFXBase {
             TableView<Episode> table = lookup("#tableView").query();
             assertThat(table).isNotNull();
         }
-
 
         @Test
         @Order(26)
@@ -433,7 +414,6 @@ class EpisodeControllerTest extends TestFXBase {
             assertThat(lookup("#titreF").tryQuery()).isPresent();
         }
 
-
         @Test
         @Order(28)
         @DisplayName("Should handle SMS sending errors")
@@ -442,7 +422,6 @@ class EpisodeControllerTest extends TestFXBase {
 
             assertThat(lookup("#titreF").tryQuery()).isPresent();
         }
-
 
         @Test
         @Order(29)
@@ -470,7 +449,6 @@ class EpisodeControllerTest extends TestFXBase {
             assertThat(titleField).isNotNull();
             assertThat(titleField.getText()).isEmpty();
         }
-
 
         @Test
         @Order(31)
@@ -506,7 +484,6 @@ class EpisodeControllerTest extends TestFXBase {
             assertThat(lookup("#seriecheck").tryQuery()).isPresent();
         }
 
-
         @Test
         @Order(33)
         @DisplayName("Should show error messages on invalid input")
@@ -517,7 +494,6 @@ class EpisodeControllerTest extends TestFXBase {
             assertThat(titleCheck).isNotNull();
             assertThat(titleCheck.getText()).isNotEmpty();
         }
-
 
         @Test
         @Order(34)
@@ -533,4 +509,3 @@ class EpisodeControllerTest extends TestFXBase {
     }
 
 }
-

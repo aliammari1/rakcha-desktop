@@ -1,8 +1,8 @@
 package com.esprit.controllers.series;
 
-import com.esprit.models.series.Category;
+import com.esprit.models.common.Category;
 import com.esprit.models.series.Series;
-import com.esprit.services.series.CategoryService;
+import com.esprit.services.common.CategoryService;
 import com.esprit.services.series.FavoriteService;
 import com.esprit.services.series.SeriesService;
 import com.esprit.utils.TestFXBase;
@@ -114,7 +114,6 @@ class SerieClientControllerTest extends TestFXBase {
             assertThat(listView).isNotNull();
         }
 
-
         @Test
         @Order(2)
         @DisplayName("Should load series from service")
@@ -125,7 +124,6 @@ class SerieClientControllerTest extends TestFXBase {
             assertThat(listView).isNotNull();
         }
 
-
         @Test
         @Order(3)
         @DisplayName("Should display series with custom cell factory")
@@ -135,7 +133,6 @@ class SerieClientControllerTest extends TestFXBase {
             ListView<Series> listView = lookup("#listeSerie").query();
             assertThat(listView).isNotNull();
         }
-
 
         @Test
         @Order(4)
@@ -164,7 +161,6 @@ class SerieClientControllerTest extends TestFXBase {
             assertThat(top3Box).isNotNull();
         }
 
-
         @Test
         @Order(6)
         @DisplayName("Should load most liked series")
@@ -174,7 +170,6 @@ class SerieClientControllerTest extends TestFXBase {
             HBox top3Box = lookup("#hboxTop3").query();
             assertThat(top3Box).isNotNull();
         }
-
 
         @Test
         @Order(7)
@@ -186,7 +181,6 @@ class SerieClientControllerTest extends TestFXBase {
             assertThat(top3Box).isNotNull();
         }
 
-
         @Test
         @Order(8)
         @DisplayName("Should set spacing for top 3 series")
@@ -196,7 +190,6 @@ class SerieClientControllerTest extends TestFXBase {
             HBox top3Box = lookup("#hboxTop3").query();
             assertThat(top3Box.getSpacing()).isGreaterThan(0);
         }
-
 
         @Test
         @Order(9)
@@ -225,7 +218,6 @@ class SerieClientControllerTest extends TestFXBase {
             assertThat(categoryCombo).isNotNull();
         }
 
-
         @Test
         @Order(11)
         @DisplayName("Should populate category combo box")
@@ -235,7 +227,6 @@ class SerieClientControllerTest extends TestFXBase {
             ComboBox<Category> categoryCombo = lookup("#CamboxCategorie").query();
             assertThat(categoryCombo).isNotNull();
         }
-
 
         @Test
         @Order(12)
@@ -254,7 +245,6 @@ class SerieClientControllerTest extends TestFXBase {
             // Verify filtered results
         }
 
-
         @Test
         @Order(13)
         @DisplayName("Should show all series when no category selected")
@@ -264,7 +254,6 @@ class SerieClientControllerTest extends TestFXBase {
             ListView<Series> listView = lookup("#listeSerie").query();
             assertThat(listView).isNotNull();
         }
-
 
         @Test
         @Order(14)
@@ -298,7 +287,6 @@ class SerieClientControllerTest extends TestFXBase {
             assertThat(searchField).isNotNull();
         }
 
-
         @Test
         @Order(16)
         @DisplayName("Should filter series by search term")
@@ -314,7 +302,6 @@ class SerieClientControllerTest extends TestFXBase {
             // Verify filtered results
         }
 
-
         @Test
         @Order(17)
         @DisplayName("Should perform case-insensitive search")
@@ -329,7 +316,6 @@ class SerieClientControllerTest extends TestFXBase {
             // Should match "Breaking", "breaking", "BREAKING"
         }
 
-
         @Test
         @Order(18)
         @DisplayName("Should search by series name")
@@ -341,7 +327,6 @@ class SerieClientControllerTest extends TestFXBase {
 
             waitForFxEvents();
         }
-
 
         @Test
         @Order(19)
@@ -355,7 +340,6 @@ class SerieClientControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
-
         @Test
         @Order(20)
         @DisplayName("Should display search results label")
@@ -365,7 +349,6 @@ class SerieClientControllerTest extends TestFXBase {
             Label resultsLabel = lookup("#resultatLabel").query();
             assertThat(resultsLabel).isNotNull();
         }
-
 
         @Test
         @Order(21)
@@ -399,7 +382,6 @@ class SerieClientControllerTest extends TestFXBase {
             assertThat(watchButton).isNotNull();
         }
 
-
         @Test
         @Order(23)
         @DisplayName("Should remove series from favorites")
@@ -409,7 +391,6 @@ class SerieClientControllerTest extends TestFXBase {
             Button watchButton = lookup("#watchEpisode").query();
             assertThat(watchButton).isNotNull();
         }
-
 
         @Test
         @Order(24)
@@ -421,7 +402,6 @@ class SerieClientControllerTest extends TestFXBase {
             // Click again to unfavorite
             waitForFxEvents();
         }
-
 
         @Test
         @Order(25)
@@ -449,7 +429,6 @@ class SerieClientControllerTest extends TestFXBase {
             assertThat(watchButton).isNotNull();
         }
 
-
         @Test
         @Order(27)
         @DisplayName("Should navigate to episode viewer")
@@ -463,7 +442,6 @@ class SerieClientControllerTest extends TestFXBase {
 
             // Verify navigation
         }
-
 
         @Test
         @Order(28)
@@ -497,7 +475,6 @@ class SerieClientControllerTest extends TestFXBase {
             assertThat(listView).isNotNull();
         }
 
-
         @Test
         @Order(30)
         @DisplayName("Should display series summary")
@@ -507,7 +484,6 @@ class SerieClientControllerTest extends TestFXBase {
             ListView<Series> listView = lookup("#listeSerie").query();
             assertThat(listView).isNotNull();
         }
-
 
         @Test
         @Order(31)
@@ -519,7 +495,6 @@ class SerieClientControllerTest extends TestFXBase {
             assertThat(listView).isNotNull();
         }
 
-
         @Test
         @Order(32)
         @DisplayName("Should display series country")
@@ -529,7 +504,6 @@ class SerieClientControllerTest extends TestFXBase {
             ListView<Series> listView = lookup("#listeSerie").query();
             assertThat(listView).isNotNull();
         }
-
 
         @Test
         @Order(33)
@@ -544,4 +518,3 @@ class SerieClientControllerTest extends TestFXBase {
     }
 
 }
-

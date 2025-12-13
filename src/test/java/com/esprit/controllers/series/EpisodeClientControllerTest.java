@@ -52,12 +52,12 @@ class EpisodeClientControllerTest extends TestFXBase {
         Episode ep1 = new Episode();
         ep1.setTitle("Episode 1");
         ep1.setEpisodeNumber(1);
-        ep1.setSeason(1);
+        ep1.setSeasonId(1L);
 
         Episode ep2 = new Episode();
         ep2.setTitle("Episode 2");
         ep2.setEpisodeNumber(2);
-        ep2.setSeason(1);
+        ep2.setSeasonId(1L);
 
         episodes.add(ep1);
         episodes.add(ep2);
@@ -83,7 +83,6 @@ class EpisodeClientControllerTest extends TestFXBase {
             assertThat(flowPane).isNotNull();
         }
 
-
         @Test
         @Order(2)
         @DisplayName("Should load episodes for series")
@@ -94,7 +93,6 @@ class EpisodeClientControllerTest extends TestFXBase {
             assertThat(flowPane).isNotNull();
         }
 
-
         @Test
         @Order(3)
         @DisplayName("Should display episode cards")
@@ -104,7 +102,6 @@ class EpisodeClientControllerTest extends TestFXBase {
             FlowPane flowPane = lookup("#episodesFlowPane").query();
             assertThat(flowPane).isNotNull();
         }
-
 
         @Test
         @Order(4)
@@ -132,7 +129,6 @@ class EpisodeClientControllerTest extends TestFXBase {
             assertThat(lookup("#mediaView").tryQuery()).isPresent();
         }
 
-
         @Test
         @Order(6)
         @DisplayName("Should play episode video")
@@ -142,7 +138,6 @@ class EpisodeClientControllerTest extends TestFXBase {
             assertThat(lookup("#playButton").tryQuery()).isPresent();
         }
 
-
         @Test
         @Order(7)
         @DisplayName("Should pause video playback")
@@ -151,7 +146,6 @@ class EpisodeClientControllerTest extends TestFXBase {
 
             assertThat(lookup("#pauseButton").tryQuery()).isPresent();
         }
-
 
         @Test
         @Order(8)
@@ -178,7 +172,6 @@ class EpisodeClientControllerTest extends TestFXBase {
             FlowPane flowPane = lookup("#episodesFlowPane").query();
             assertThat(flowPane).isNotNull();
         }
-
 
         @Test
         @Order(10)
@@ -225,4 +218,3 @@ class EpisodeClientControllerTest extends TestFXBase {
     }
 
 }
-

@@ -7,14 +7,16 @@ import com.esprit.models.users.CinemaManager;
 import com.esprit.models.users.User;
 import com.esprit.utils.NavigationManager;
 import com.esprit.utils.SessionManager;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.web.WebView;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -22,90 +24,97 @@ import org.kordamp.ikonli.javafx.FontIcon;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Controller for the application sidebar navigation.
+ * Dynamically creates and manages navigation buttons based on user role.
+ */
 @Slf4j
 public class SidebarController implements Initializable {
 
     // User data
     private User currentUser;
 
-    // Common buttons
+    // Container references from FXML
     @FXML
+    private VBox navigationContainer;
+    @FXML
+    private VBox bottomButtonsContainer;
+    @FXML
+    private ScrollPane navigationScrollPane;
+
+    // Button references for navigation actions
     private Button homeButton;
-    @FXML
     private Button movieButton;
-    @FXML
     private Button serieButton;
-    @FXML
     private Button productButton;
-    @FXML
     private Button cinemaButton;
-    @FXML
     private Button profileButton;
-    @FXML
     private Button logoutButton;
 
     // Admin specific buttons
-    @FXML
     private Button usersButton;
-    @FXML
     private Button orderButton;
-    @FXML
     private Button productCategoriesButton;
-    @FXML
     private Button orderAnalyticsButton;
-    @FXML
     private Button seriesStatisticsButton;
-    @FXML
     private Button emailUsersButton;
-    @FXML
     private Button smsUsersButton;
 
     // Cinema Manager specific buttons
-    @FXML
     private Button actorButton;
-    @FXML
     private Button filmCategorieButton;
-    @FXML
     private Button moviesessionButton;
-    @FXML
     private Button statestique_button;
-    @FXML
     private Button seriesManagementButton;
 
-    // Icons
-    @FXML
-    private FontIcon movieIcon;
-    @FXML
-    private FontIcon serieIcon;
-    @FXML
-    private FontIcon productIcon;
-    @FXML
-    private FontIcon cinemaIcon;
-    @FXML
-    private FontIcon actorIcon;
-    @FXML
-    private FontIcon filmCategorieIcon;
-    @FXML
-    private FontIcon moviesessionIcon;
-    @FXML
-    private FontIcon statisticsIcon;
-    @FXML
-    private FontIcon orderIcon;
-
     // Client specific buttons
-    @FXML
     private Button favoritesButton;
-    @FXML
     private Button shoppingCartButton;
-    @FXML
     private Button myOrdersButton;
-    @FXML
     private Button watchlistButton;
-    @FXML
     private Button ticketsButton;
 
-    @FXML
-    private WebView webView;
+    // Styles
+    private static final String NAV_BUTTON_STYLE = "-fx-background-color: linear-gradient(to right, rgba(139, 0, 0, 0.3), rgba(180, 0, 0, 0.2));"
+            +
+            "-fx-text-fill: white;" +
+            "-fx-font-size: 14px;" +
+            "-fx-font-weight: bold;" +
+            "-fx-background-radius: 15;" +
+            "-fx-border-color: #8b0000;" +
+            "-fx-border-width: 1;" +
+            "-fx-border-radius: 15;" +
+            "-fx-cursor: hand;" +
+            "-fx-padding: 12 20 12 20;";
+
+    private static final String NAV_BUTTON_ACTIVE_STYLE = "-fx-background-color: linear-gradient(to right, rgba(180, 0, 0, 0.4), rgba(220, 0, 0, 0.3));"
+            +
+            "-fx-text-fill: white;" +
+            "-fx-font-size: 14px;" +
+            "-fx-font-weight: bold;" +
+            "-fx-background-radius: 15;" +
+            "-fx-border-color: #bb0000;" +
+            "-fx-border-width: 2;" +
+            "-fx-border-radius: 15;" +
+            "-fx-cursor: hand;" +
+            "-fx-padding: 12 20 12 20;";
+
+    private static final String BOTTOM_BUTTON_STYLE = "-fx-background-color: linear-gradient(to right, rgba(80, 80, 80, 0.3), rgba(120, 120, 120, 0.2));"
+            +
+            "-fx-text-fill: white;" +
+            "-fx-font-size: 12px;" +
+            "-fx-font-weight: bold;" +
+            "-fx-background-radius: 15;" +
+            "-fx-border-color: #666666;" +
+            "-fx-border-width: 1;" +
+            "-fx-border-radius: 15;" +
+            "-fx-cursor: hand;" +
+            "-fx-padding: 10 20 10 20;";
+
+    private static final String SECTION_LABEL_STYLE = "-fx-text-fill: #888888;" +
+            "-fx-font-family: 'Arial';" +
+            "-fx-font-size: 11px;" +
+            "-fx-font-weight: bold;";
 
     /**
      * Sets the current user and configures the sidebar based on user role.
@@ -118,13 +127,7 @@ public class SidebarController implements Initializable {
             return;
         }
         this.currentUser = user;
-        if (user instanceof Admin) {
-            configureForAdmin();
-        } else if (user instanceof CinemaManager) {
-            configureForCinemaManager();
-        } else {
-            configureForClient();
-        }
+        buildNavigationMenu();
     }
 
     /**
@@ -136,7 +139,7 @@ public class SidebarController implements Initializable {
      */
     public void setData(Admin admin) {
         this.currentUser = admin;
-        configureForAdmin();
+        buildNavigationMenu();
     }
 
     /**
@@ -147,320 +150,345 @@ public class SidebarController implements Initializable {
      */
     public void setData(CinemaManager cinemaManager) {
         this.currentUser = cinemaManager;
-        configureForCinemaManager();
+        buildNavigationMenu();
     }
 
     /**
-     * Adjusts sidebar control visibility for an Admin user.
-     * <p>
-     * Shows admin-specific navigation controls, hides cinema-manager specific
-     * controls, and ensures common navigation buttons are visible.
+     * Clears and rebuilds the navigation menu based on the current user's role.
      */
-    private void configureForAdmin() {
-        // Show admin-specific buttons
-        if (usersButton != null)
-            usersButton.setVisible(true);
-        if (orderButton != null)
-            orderButton.setVisible(true);
-        if (orderIcon != null)
-            orderIcon.setVisible(true);
-        if (productCategoriesButton != null)
-            productCategoriesButton.setVisible(true);
-        if (orderAnalyticsButton != null)
-            orderAnalyticsButton.setVisible(true);
-        if (seriesStatisticsButton != null)
-            seriesStatisticsButton.setVisible(true);
-        if (emailUsersButton != null)
-            emailUsersButton.setVisible(true);
-        if (smsUsersButton != null)
-            smsUsersButton.setVisible(true);
+    private void buildNavigationMenu() {
+        // Clear existing buttons
+        navigationContainer.getChildren().clear();
+        bottomButtonsContainer.getChildren().clear();
 
-        // Hide cinema manager specific buttons
-        if (actorButton != null)
-            actorButton.setVisible(false);
-        if (filmCategorieButton != null)
-            filmCategorieButton.setVisible(false);
-        if (moviesessionButton != null)
-            moviesessionButton.setVisible(false);
-        if (statestique_button != null)
-            statestique_button.setVisible(false);
-        if (actorIcon != null)
-            actorIcon.setVisible(false);
-        if (filmCategorieIcon != null)
-            filmCategorieIcon.setVisible(false);
-        if (moviesessionIcon != null)
-            moviesessionIcon.setVisible(false);
-        if (statisticsIcon != null)
-            statisticsIcon.setVisible(false);
-        if (seriesManagementButton != null)
-            seriesManagementButton.setVisible(false);
+        // Add explore section label
+        Label exploreLabel = new Label("EXPLORE");
+        exploreLabel.setStyle(SECTION_LABEL_STYLE);
+        navigationContainer.getChildren().add(exploreLabel);
 
-        // Hide client specific buttons
-        if (favoritesButton != null)
-            favoritesButton.setVisible(false);
-        if (shoppingCartButton != null)
-            shoppingCartButton.setVisible(false);
-        if (myOrdersButton != null)
-            myOrdersButton.setVisible(false);
-        if (watchlistButton != null)
-            watchlistButton.setVisible(false);
-        if (ticketsButton != null)
-            ticketsButton.setVisible(false);
+        // Add common navigation buttons
+        addCommonButtons();
 
-        // Show common buttons
-        if (movieButton != null)
-            movieButton.setVisible(true);
-        if (serieButton != null)
-            serieButton.setVisible(true);
-        if (productButton != null)
-            productButton.setVisible(true);
-        if (cinemaButton != null)
-            cinemaButton.setVisible(true);
+        // Add role-specific buttons
+        if (currentUser instanceof Admin) {
+            addAdminButtons();
+        } else if (currentUser instanceof CinemaManager) {
+            addCinemaManagerButtons();
+        } else {
+            addClientButtons();
+        }
+
+        // Add bottom buttons (Profile and Logout)
+        addBottomButtons();
     }
 
     /**
-     * Configure sidebar visibility for a user with the Cinema Manager role.
-     * <p>
-     * Shows cinema-manager-specific and common controls while hiding admin-only
-     * controls.
+     * Adds navigation buttons common to all user roles.
      */
-    private void configureForCinemaManager() {
-        // Hide admin-specific buttons
-        if (usersButton != null)
-            usersButton.setVisible(false);
-        if (orderButton != null)
-            orderButton.setVisible(false);
-        if (orderIcon != null)
-            orderIcon.setVisible(false);
-        if (productCategoriesButton != null)
-            productCategoriesButton.setVisible(false);
-        if (orderAnalyticsButton != null)
-            orderAnalyticsButton.setVisible(false);
-        if (seriesStatisticsButton != null)
-            seriesStatisticsButton.setVisible(false);
-        if (emailUsersButton != null)
-            emailUsersButton.setVisible(false);
-        if (smsUsersButton != null)
-            smsUsersButton.setVisible(false);
+    private void addCommonButtons() {
+        // Home button with active style
+        homeButton = createNavButton("Home", "mdi2h-home:24:#ff6666", NAV_BUTTON_ACTIVE_STYLE);
+        homeButton.setOnAction(e -> switchToHome());
+        navigationContainer.getChildren().add(homeButton);
 
-        // Show cinema manager specific buttons
-        if (actorButton != null)
-            actorButton.setVisible(true);
-        if (filmCategorieButton != null)
-            filmCategorieButton.setVisible(true);
-        if (moviesessionButton != null)
-            moviesessionButton.setVisible(true);
-        if (statestique_button != null)
-            statestique_button.setVisible(true);
-        if (actorIcon != null)
-            actorIcon.setVisible(true);
-        if (filmCategorieIcon != null)
-            filmCategorieIcon.setVisible(true);
-        if (moviesessionIcon != null)
-            moviesessionIcon.setVisible(true);
-        if (statisticsIcon != null)
-            statisticsIcon.setVisible(true);
-        if (seriesManagementButton != null)
-            seriesManagementButton.setVisible(true);
+        // Movies button
+        movieButton = createNavButton("Movies", "mdi2v-video:24:#ff4444", NAV_BUTTON_STYLE);
+        movieButton.setOnAction(e -> switchToMovies());
+        navigationContainer.getChildren().add(movieButton);
 
-        // Hide client specific buttons
-        if (favoritesButton != null)
-            favoritesButton.setVisible(false);
-        if (shoppingCartButton != null)
-            shoppingCartButton.setVisible(false);
-        if (myOrdersButton != null)
-            myOrdersButton.setVisible(false);
-        if (watchlistButton != null)
-            watchlistButton.setVisible(false);
-        if (ticketsButton != null)
-            ticketsButton.setVisible(false);
+        // Series button
+        serieButton = createNavButton("Series", "mdi2t-television:24:#ff4444", NAV_BUTTON_STYLE);
+        serieButton.setOnAction(e -> switchToSeries());
+        navigationContainer.getChildren().add(serieButton);
 
-        // Show common buttons
-        if (movieButton != null)
-            movieButton.setVisible(true);
-        if (serieButton != null)
-            serieButton.setVisible(true);
-        if (productButton != null)
-            productButton.setVisible(false); // Cinema managers don't see products
-        if (cinemaButton != null)
-            cinemaButton.setVisible(true);
+        // Products button (visible for Admin and Client, not Cinema Manager)
+        if (!(currentUser instanceof CinemaManager)) {
+            productButton = createNavButton("Products", "mdi2s-shopping:24:#ff4444", NAV_BUTTON_STYLE);
+            productButton.setOnAction(e -> switchToProducts());
+            navigationContainer.getChildren().add(productButton);
+        }
+
+        // Cinema button
+        cinemaButton = createNavButton("Cinema", "mdi2t-theater:24:#ff4444", NAV_BUTTON_STYLE);
+        cinemaButton.setOnAction(e -> switchToCinema());
+        navigationContainer.getChildren().add(cinemaButton);
     }
 
     /**
-     * Configure the sidebar for a client user.
-     * <p>
-     * Hides admin-only and cinema-manager-only controls (users, orders, actor, film
-     * category,
-     * movie sessions, statistics, and their icons) and shows common navigation
-     * buttons
-     * (movies, series, products, cinemas).
+     * Adds navigation buttons specific to Admin users.
      */
-    private void configureForClient() {
-        // Hide admin-specific buttons
-        if (usersButton != null)
-            usersButton.setVisible(false);
-        if (orderButton != null)
-            orderButton.setVisible(false);
-        if (orderIcon != null)
-            orderIcon.setVisible(false);
-        if (productCategoriesButton != null)
-            productCategoriesButton.setVisible(false);
-        if (orderAnalyticsButton != null)
-            orderAnalyticsButton.setVisible(false);
-        if (seriesStatisticsButton != null)
-            seriesStatisticsButton.setVisible(false);
-        if (emailUsersButton != null)
-            emailUsersButton.setVisible(false);
-        if (smsUsersButton != null)
-            smsUsersButton.setVisible(false);
+    private void addAdminButtons() {
+        // Admin section label
+        Label adminLabel = new Label("ADMIN");
+        adminLabel.setStyle(SECTION_LABEL_STYLE + "-fx-padding: 10 0 0 0;");
+        navigationContainer.getChildren().add(adminLabel);
 
-        // Hide cinema manager specific buttons
-        if (actorButton != null)
-            actorButton.setVisible(false);
-        if (filmCategorieButton != null)
-            filmCategorieButton.setVisible(false);
-        if (moviesessionButton != null)
-            moviesessionButton.setVisible(false);
-        if (statestique_button != null)
-            statestique_button.setVisible(false);
-        if (actorIcon != null)
-            actorIcon.setVisible(false);
-        if (filmCategorieIcon != null)
-            filmCategorieIcon.setVisible(false);
-        if (moviesessionIcon != null)
-            moviesessionIcon.setVisible(false);
-        if (statisticsIcon != null)
-            statisticsIcon.setVisible(false);
-        if (seriesManagementButton != null)
-            seriesManagementButton.setVisible(false);
+        // Users button
+        usersButton = createNavButton("Users", "mdi2a-account-multiple:24:#ff4444", NAV_BUTTON_STYLE);
+        usersButton.setOnAction(e -> switchToUsers());
+        navigationContainer.getChildren().add(usersButton);
 
-        // Show client specific buttons
-        if (favoritesButton != null)
-            favoritesButton.setVisible(true);
-        if (shoppingCartButton != null)
-            shoppingCartButton.setVisible(true);
-        if (myOrdersButton != null)
-            myOrdersButton.setVisible(true);
-        if (watchlistButton != null)
-            watchlistButton.setVisible(true);
-        if (ticketsButton != null)
-            ticketsButton.setVisible(true);
+        // Orders button
+        orderButton = createNavButton("Order", "mdi2s-shopping:24:#ff4444", NAV_BUTTON_STYLE);
+        orderButton.setOnAction(e -> switchToOrders());
+        navigationContainer.getChildren().add(orderButton);
 
-        // Show common buttons
-        if (movieButton != null)
-            movieButton.setVisible(true);
-        if (serieButton != null)
-            serieButton.setVisible(true);
-        if (productButton != null)
-            productButton.setVisible(true);
-        if (cinemaButton != null)
-            cinemaButton.setVisible(true);
-    }
+        // Product Categories button
+        productCategoriesButton = createNavButton("Categories", "mdi2f-folder-multiple:24:#ff4444", NAV_BUTTON_STYLE);
+        productCategoriesButton.setOnAction(e -> switchToProductCategories());
+        navigationContainer.getChildren().add(productCategoriesButton);
 
-    // Navigation methods
+        // Order Analytics button
+        orderAnalyticsButton = createNavButton("Analytics", "mdi2c-chart-line:24:#ff4444", NAV_BUTTON_STYLE);
+        orderAnalyticsButton.setOnAction(e -> switchToOrderAnalytics());
+        navigationContainer.getChildren().add(orderAnalyticsButton);
 
-    /**
-     * Switches to the users management view (Admin only).
-     */
-    @FXML
-    public void switchToUsers(final ActionEvent event) {
-        Stage stage = (Stage) this.usersButton.getScene().getWindow();
-        NavigationManager.navigateToUsers(stage);
+        // Series Statistics button
+        seriesStatisticsButton = createNavButton("Stats", "mdi2c-chart-bar:24:#ff4444", NAV_BUTTON_STYLE);
+        seriesStatisticsButton.setOnAction(e -> switchToSeriesStatistics());
+        navigationContainer.getChildren().add(seriesStatisticsButton);
+
+        // Email Users button
+        emailUsersButton = createNavButton("Email", "mdi2e-email:24:#ff4444", NAV_BUTTON_STYLE);
+        emailUsersButton.setOnAction(e -> switchToEmailUsers());
+        navigationContainer.getChildren().add(emailUsersButton);
+
+        // SMS Users button
+        smsUsersButton = createNavButton("SMS", "mdi2m-message:24:#ff4444", NAV_BUTTON_STYLE);
+        smsUsersButton.setOnAction(e -> switchToSMSUsers());
+        navigationContainer.getChildren().add(smsUsersButton);
     }
 
     /**
-     * Switches to the events view.
+     * Adds navigation buttons specific to Cinema Manager users.
      */
-    @FXML
-    void switchToEvent(final ActionEvent event) {
-        // Implementation depends on role
+    private void addCinemaManagerButtons() {
+        // Manager section label
+        Label managerLabel = new Label("MANAGEMENT");
+        managerLabel.setStyle(SECTION_LABEL_STYLE + "-fx-padding: 10 0 0 0;");
+        navigationContainer.getChildren().add(managerLabel);
+
+        // Actors button
+        actorButton = createNavButton("Actors", "mdi2a-account-multiple:24:#ff4444", NAV_BUTTON_STYLE);
+        actorButton.setOnAction(e -> switchToActor());
+        navigationContainer.getChildren().add(actorButton);
+
+        // Film Categories button
+        filmCategorieButton = createNavButton("Film Categories", "mdi2f-folder:24:#ff4444", NAV_BUTTON_STYLE);
+        filmCategorieButton.setOnAction(e -> switchToFilmCategorie());
+        navigationContainer.getChildren().add(filmCategorieButton);
+
+        // Movie Sessions button
+        moviesessionButton = createNavButton("Seances", "mdi2t-ticket-confirmation:24:#ff4444", NAV_BUTTON_STYLE);
+        moviesessionButton.setOnAction(e -> switchToMovieSessions());
+        navigationContainer.getChildren().add(moviesessionButton);
+
+        // Statistics button
+        statestique_button = createNavButton("Statistics", "mdi2b-briefcase:24:#ff4444", NAV_BUTTON_STYLE);
+        statestique_button.setOnAction(e -> switchToStatistics());
+        navigationContainer.getChildren().add(statestique_button);
+
+        // Series Management button
+        seriesManagementButton = createNavButton("Series Mgmt", "mdi2t-television-classic:24:#ff4444",
+                NAV_BUTTON_STYLE);
+        seriesManagementButton.setOnAction(e -> switchToSeriesManagement());
+        navigationContainer.getChildren().add(seriesManagementButton);
     }
 
     /**
-     * Navigate to the movies view appropriate for the current user's role.
+     * Adds navigation buttons specific to Client users.
      */
-    @FXML
-    void switchToMovies(final ActionEvent event) {
+    private void addClientButtons() {
+        // Personal section label
+        Label personalLabel = new Label("PERSONAL");
+        personalLabel.setStyle(SECTION_LABEL_STYLE + "-fx-padding: 10 0 0 0;");
+        navigationContainer.getChildren().add(personalLabel);
+
+        // Favorites button
+        favoritesButton = createNavButton("Favorites", "mdi2h-heart:24:#ff4444", NAV_BUTTON_STYLE);
+        favoritesButton.setOnAction(e -> switchToFavorites());
+        navigationContainer.getChildren().add(favoritesButton);
+
+        // Shopping Cart button
+        shoppingCartButton = createNavButton("Cart", "mdi2c-cart:24:#ff4444", NAV_BUTTON_STYLE);
+        shoppingCartButton.setOnAction(e -> switchToShoppingCart());
+        navigationContainer.getChildren().add(shoppingCartButton);
+
+        // My Orders button
+        myOrdersButton = createNavButton("My Orders", "mdi2p-package-variant:24:#ff4444", NAV_BUTTON_STYLE);
+        myOrdersButton.setOnAction(e -> switchToMyOrders());
+        navigationContainer.getChildren().add(myOrdersButton);
+
+        // Watchlist button
+        watchlistButton = createNavButton("Watchlist", "mdi2e-eye:24:#ff4444", NAV_BUTTON_STYLE);
+        watchlistButton.setOnAction(e -> switchToWatchlist());
+        navigationContainer.getChildren().add(watchlistButton);
+
+        // Tickets button
+        ticketsButton = createNavButton("My Tickets", "mdi2t-ticket:24:#ff4444", NAV_BUTTON_STYLE);
+        ticketsButton.setOnAction(e -> switchToTickets());
+        navigationContainer.getChildren().add(ticketsButton);
+    }
+
+    /**
+     * Adds the bottom section buttons (Profile and Logout).
+     */
+    private void addBottomButtons() {
+        // Profile button
+        profileButton = createNavButton("Account", "mdi2a-account:20:#cccccc", BOTTOM_BUTTON_STYLE);
+        profileButton.setOnAction(e -> switchToProfile());
+        bottomButtonsContainer.getChildren().add(profileButton);
+
+        // Logout button
+        logoutButton = createNavButton("EXIT", "mdi2l-logout:20:#cccccc", BOTTOM_BUTTON_STYLE);
+        logoutButton.setOnAction(e -> switchToLogout());
+        bottomButtonsContainer.getChildren().add(logoutButton);
+    }
+
+    /**
+     * Creates a styled navigation button with an icon and label.
+     *
+     * @param text        the button label text
+     * @param iconLiteral the Ikonli icon literal (e.g., "mdi2h-home:24:#ff6666")
+     * @param style       the CSS style string for the button
+     * @return the configured Button
+     */
+    private Button createNavButton(String text, String iconLiteral, String style) {
+        Button button = new Button();
+        button.setStyle(style);
+        button.setMaxWidth(200);
+        button.getStyleClass().add("animated-nav-button");
+
+        // Create icon
+        FontIcon icon = new FontIcon();
+        icon.setIconLiteral(iconLiteral);
+
+        // Create label
+        Label label = new Label(text);
+        label.setStyle("-fx-text-fill: white; -fx-font-weight: bold;");
+
+        // Create HBox for icon and label
+        HBox graphic = new HBox(10);
+        graphic.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+        graphic.getChildren().addAll(icon, label);
+
+        button.setGraphic(graphic);
+        return button;
+    }
+
+    // Navigation methods (without ActionEvent parameter for lambda compatibility)
+
+    private void switchToHome() {
+        if (currentUser == null) {
+            log.warn("Cannot navigate to home: current user is null");
+            return;
+        }
+        Stage stage = (Stage) homeButton.getScene().getWindow();
+        NavigationManager.navigateToHome(stage, currentUser);
+    }
+
+    private void switchToMovies() {
         if (currentUser == null) {
             log.warn("Cannot navigate to movies: current user is null");
             return;
         }
-        Stage stage = (Stage) this.movieButton.getScene().getWindow();
+        Stage stage = (Stage) movieButton.getScene().getWindow();
         NavigationManager.navigateToMovies(stage, currentUser);
     }
 
-    /**
-     * Switches the current scene to the orders view for administrators.
-     */
-    @FXML
-    void switchToOrders(final ActionEvent event) {
-        Stage stage = (Stage) this.orderButton.getScene().getWindow();
-        NavigationManager.navigateToOrders(stage);
-    }
-
-    /**
-     * Open the products view appropriate for the current user's role.
-     */
-    @FXML
-    void switchToProducts(final ActionEvent event) {
-        if (currentUser == null) {
-            log.warn("Cannot navigate to products: current user is null");
-            return;
-        }
-        Stage stage = (Stage) this.productButton.getScene().getWindow();
-        NavigationManager.navigateToProducts(stage, currentUser);
-    }
-
-    /**
-     * Switches the application's scene to the role-appropriate series view.
-     */
-    @FXML
-    void switchToSeries(final ActionEvent event) {
+    private void switchToSeries() {
         if (currentUser == null) {
             log.warn("Cannot navigate to series: current user is null");
             return;
         }
-        Stage stage = (Stage) this.serieButton.getScene().getWindow();
+        Stage stage = (Stage) serieButton.getScene().getWindow();
         NavigationManager.navigateToSeries(stage, currentUser);
     }
 
-    /**
-     * Navigate to the cinema dashboard appropriate for the current user's role.
-     */
-    @FXML
-    void switchToCinema(final ActionEvent event) {
+    private void switchToProducts() {
+        if (currentUser == null) {
+            log.warn("Cannot navigate to products: current user is null");
+            return;
+        }
+        Stage stage = (Stage) productButton.getScene().getWindow();
+        NavigationManager.navigateToProducts(stage, currentUser);
+    }
+
+    private void switchToCinema() {
         if (currentUser == null) {
             log.warn("Cannot navigate to cinema: current user is null");
             return;
         }
-        Stage stage = (Stage) this.cinemaButton.getScene().getWindow();
+        Stage stage = (Stage) cinemaButton.getScene().getWindow();
         NavigationManager.navigateToCinema(stage, currentUser);
     }
 
-    /**
-     * Switches the UI to the actors view intended for cinema managers.
-     */
-    @FXML
-    void switchToActor(final ActionEvent event) {
-        Stage stage = (Stage) this.actorButton.getScene().getWindow();
+    private void switchToProfile() {
+        if (currentUser == null) {
+            log.warn("Cannot navigate to profile: current user is null");
+            return;
+        }
+        Stage stage = (Stage) profileButton.getScene().getWindow();
+        NavigationManager.navigateToProfile(stage, currentUser);
+    }
+
+    private void switchToLogout() {
+        Stage stage = (Stage) logoutButton.getScene().getWindow();
+        NavigationManager.navigateToLogin(stage);
+    }
+
+    // Admin navigation methods
+
+    private void switchToUsers() {
+        Stage stage = (Stage) usersButton.getScene().getWindow();
+        NavigationManager.navigateToUsers(stage);
+    }
+
+    private void switchToOrders() {
+        Stage stage = (Stage) orderButton.getScene().getWindow();
+        NavigationManager.navigateToOrders(stage);
+    }
+
+    private void switchToProductCategories() {
+        Stage stage = (Stage) productCategoriesButton.getScene().getWindow();
+        NavigationManager.navigateToCategories(stage);
+    }
+
+    private void switchToOrderAnalytics() {
+        Stage stage = (Stage) orderAnalyticsButton.getScene().getWindow();
+        NavigationManager.navigateToOrderAnalytics(stage);
+    }
+
+    private void switchToSeriesStatistics() {
+        Stage stage = (Stage) seriesStatisticsButton.getScene().getWindow();
+        NavigationManager.navigateToSeriesStatistics(stage);
+    }
+
+    private void switchToEmailUsers() {
+        Stage stage = (Stage) emailUsersButton.getScene().getWindow();
+        NavigationManager.navigateToEmailComposer(stage);
+    }
+
+    private void switchToSMSUsers() {
+        Stage stage = (Stage) smsUsersButton.getScene().getWindow();
+        NavigationManager.navigateToSMSComposer(stage);
+    }
+
+    // Cinema Manager navigation methods
+
+    private void switchToActor() {
+        Stage stage = (Stage) actorButton.getScene().getWindow();
         NavigationManager.navigate(stage, "/ui/films/InterfaceActor.fxml");
     }
 
-    /**
-     * Navigate the application to the unified category management view.
-     */
-    @FXML
-    void switchToFilmCategorie(final ActionEvent event) {
+    private void switchToFilmCategorie() {
         navigateToCategoryManagement(CategoryType.MOVIE);
     }
 
-    /**
-     * Navigate to the unified category management screen with optional type filter.
-     */
     private void navigateToCategoryManagement(CategoryType initialType) {
         try {
             final FXMLLoader loader = new FXMLLoader(
-                this.getClass().getResource("/ui/common/CategoryManagement.fxml"));
+                    this.getClass().getResource("/ui/common/CategoryManagement.fxml"));
             final Parent root = loader.load();
 
             // Set initial type filter if specified
@@ -469,176 +497,58 @@ public class SidebarController implements Initializable {
                 controller.setInitialType(initialType);
             }
 
-            final Stage stage = (Stage) (filmCategorieButton != null ?
-                filmCategorieButton.getScene().getWindow() :
-                productCategoriesButton.getScene().getWindow());
+            final Stage stage = (Stage) filmCategorieButton.getScene().getWindow();
             stage.setScene(new Scene(root));
         } catch (final Exception e) {
             log.error("Error navigating to category management: {}", e.getMessage(), e);
         }
     }
 
-    /**
-     * Navigate to the movie sessions dashboard for cinema managers.
-     */
-    @FXML
-    void switchToMovieSessions(final ActionEvent event) {
-        Stage stage = (Stage) this.moviesessionButton.getScene().getWindow();
+    private void switchToMovieSessions() {
+        Stage stage = (Stage) moviesessionButton.getScene().getWindow();
         NavigationManager.navigate(stage, "/ui/cinemas/DashboardResponsableCinema.fxml");
     }
 
-    /**
-     * Navigate to the cinema statistics view.
-     */
-    @FXML
-    void switchToStatistics(final ActionEvent event) {
-        Stage stage = (Stage) this.statestique_button.getScene().getWindow();
+    private void switchToStatistics() {
+        Stage stage = (Stage) statestique_button.getScene().getWindow();
         NavigationManager.navigate(stage, "/ui/cinemas/statistiques.fxml");
     }
 
-    /**
-     * Handles navigation to home page based on user role.
-     */
-    @FXML
-    void switchToHome(final ActionEvent event) {
-        if (currentUser == null) {
-            log.warn("Cannot navigate to home: current user is null");
-            return;
-        }
-        Stage stage = (Stage) this.homeButton.getScene().getWindow();
-        NavigationManager.navigateToHome(stage, currentUser);
-    }
-
-    /**
-     * Navigate the application window to the user's profile view.
-     */
-    @FXML
-    void switchToProfile(final ActionEvent event) {
-        if (currentUser == null) {
-            log.warn("Cannot navigate to profile: current user is null");
-            return;
-        }
-        Stage stage = (Stage) this.profileButton.getScene().getWindow();
-        NavigationManager.navigateToProfile(stage, currentUser);
-    }
-
-    /**
-     * Clears the current stage's user data and replaces the window scene with the
-     * login screen.
-     */
-    @FXML
-    void switchToLogout(final ActionEvent event) {
-        Stage stage = (Stage) this.logoutButton.getScene().getWindow();
-        NavigationManager.navigateToLogin(stage);
-    }
-
-    // ============= ADMIN SPECIFIC NAVIGATION METHODS =============
-
-    /**
-     * Switches to unified category management (Admin only - shows all types including PRODUCT).
-     */
-    @FXML
-    void switchToProductCategories(final ActionEvent event) {
-        Stage stage = (Stage) this.productCategoriesButton.getScene().getWindow();
-        NavigationManager.navigateToCategories(stage);
-    }
-
-    /**
-     * Switches to order analytics view (Admin only).
-     */
-    @FXML
-    void switchToOrderAnalytics(final ActionEvent event) {
-        Stage stage = (Stage) this.orderAnalyticsButton.getScene().getWindow();
-        NavigationManager.navigateToOrderAnalytics(stage);
-    }
-
-    /**
-     * Switches to series statistics view (Admin only).
-     */
-    @FXML
-    void switchToSeriesStatistics(final ActionEvent event) {
-        Stage stage = (Stage) this.seriesStatisticsButton.getScene().getWindow();
-        NavigationManager.navigateToSeriesStatistics(stage);
-    }
-
-    /**
-     * Switches to email composer (Admin only).
-     */
-    @FXML
-    void switchToEmailUsers(final ActionEvent event) {
-        Stage stage = (Stage) this.emailUsersButton.getScene().getWindow();
-        NavigationManager.navigateToEmailComposer(stage);
-    }
-
-    /**
-     * Switches to SMS sender (Admin only).
-     */
-    @FXML
-    void switchToSMSUsers(final ActionEvent event) {
-        Stage stage = (Stage) this.smsUsersButton.getScene().getWindow();
-        NavigationManager.navigateToSMSComposer(stage);
-    }
-
-    // ============= CINEMA MANAGER SPECIFIC NAVIGATION METHODS =============
-
-    /**
-     * Switches to series management (Cinema Manager only).
-     */
-    @FXML
-    void switchToSeriesManagement(final ActionEvent event) {
-        Stage stage = (Stage) this.seriesManagementButton.getScene().getWindow();
+    private void switchToSeriesManagement() {
+        Stage stage = (Stage) seriesManagementButton.getScene().getWindow();
         NavigationManager.navigateToSeries(stage, currentUser);
     }
 
-    // ============= CLIENT SPECIFIC NAVIGATION METHODS =============
+    // Client navigation methods
 
-    /**
-     * Switches to favorites list (Client only).
-     */
-    @FXML
-    void switchToFavorites(final ActionEvent event) {
-        Stage stage = (Stage) this.favoritesButton.getScene().getWindow();
+    private void switchToFavorites() {
+        Stage stage = (Stage) favoritesButton.getScene().getWindow();
         NavigationManager.navigateToFavorites(stage);
     }
 
-    /**
-     * Switches to shopping cart (Client only).
-     */
-    @FXML
-    void switchToShoppingCart(final ActionEvent event) {
-        Stage stage = (Stage) this.shoppingCartButton.getScene().getWindow();
+    private void switchToShoppingCart() {
+        Stage stage = (Stage) shoppingCartButton.getScene().getWindow();
         NavigationManager.navigateToShoppingCart(stage);
     }
 
-    /**
-     * Switches to client's order history (Client only).
-     */
-    @FXML
-    void switchToMyOrders(final ActionEvent event) {
-        Stage stage = (Stage) this.myOrdersButton.getScene().getWindow();
+    private void switchToMyOrders() {
+        Stage stage = (Stage) myOrdersButton.getScene().getWindow();
         NavigationManager.navigateToMyOrders(stage);
     }
 
-    /**
-     * Switches to Watchlist (Client only).
-     */
-    @FXML
-    void switchToWatchlist(final ActionEvent event) {
-        Stage stage = (Stage) this.watchlistButton.getScene().getWindow();
+    private void switchToWatchlist() {
+        Stage stage = (Stage) watchlistButton.getScene().getWindow();
         NavigationManager.navigateToWatchlist(stage);
     }
 
-    /**
-     * Switches to Ticket History (Client only).
-     */
-    @FXML
-    void switchToTickets(final ActionEvent event) {
-        Stage stage = (Stage) this.ticketsButton.getScene().getWindow();
+    private void switchToTickets() {
+        Stage stage = (Stage) ticketsButton.getScene().getWindow();
         NavigationManager.navigateToTicketHistory(stage);
     }
 
     /**
-     * Invoked after FXML loading; applies the default client sidebar configuration.
+     * Invoked after FXML loading; initializes the sidebar with current user from
+     * session.
      *
      * @param location  the location used to resolve relative paths for the root
      *                  object, or null
@@ -646,10 +556,8 @@ public class SidebarController implements Initializable {
      */
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
-        // Don't configure until user is set to avoid NullPointerException
-        // Configuration will happen when setCurrentUser() is called
         setCurrentUser(SessionManager.getCurrentUser());
-        log.debug("SidebarController initialized, awaiting user configuration");
+        log.debug("SidebarController initialized with dynamically created navigation buttons");
     }
 
 }

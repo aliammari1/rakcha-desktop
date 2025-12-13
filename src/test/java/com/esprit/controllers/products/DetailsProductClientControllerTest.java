@@ -1,7 +1,7 @@
 package com.esprit.controllers.products;
 
 import com.esprit.models.products.Product;
-import com.esprit.models.products.Review;
+import com.esprit.models.common.Review;
 import com.esprit.utils.TestFXBase;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -48,8 +48,8 @@ class DetailsProductClientControllerTest extends TestFXBase {
         product.setId(1L);
         product.setName("Test Product");
         product.setDescription("Test Description");
-        product.setPrice(100);
-        product.setQuantity(10);
+        product.setPrice(100.0);
+        product.setStockQuantity(10);
         product.setImage("product-image.jpg");
         return product;
     }
@@ -84,7 +84,6 @@ class DetailsProductClientControllerTest extends TestFXBase {
             assertThat(detailPane.isVisible()).isTrue();
         }
 
-
         @Test
         @Order(2)
         @DisplayName("Should display product name")
@@ -101,7 +100,6 @@ class DetailsProductClientControllerTest extends TestFXBase {
             // In a real test: inject product, verify name displayed in UI
             waitForFxEvents();
         }
-
 
         @Test
         @Order(3)
@@ -120,7 +118,6 @@ class DetailsProductClientControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
-
         @Test
         @Order(4)
         @DisplayName("Should display product image")
@@ -131,7 +128,6 @@ class DetailsProductClientControllerTest extends TestFXBase {
             assertThat(productImage).isNotNull();
             assertThat(productImage.isVisible()).isTrue();
         }
-
 
         @Test
         @Order(5)
@@ -168,7 +164,6 @@ class DetailsProductClientControllerTest extends TestFXBase {
             assertThat(cartPane.isVisible()).isTrue();
         }
 
-
         @Test
         @Order(7)
         @DisplayName("Should add product to cart")
@@ -185,7 +180,6 @@ class DetailsProductClientControllerTest extends TestFXBase {
             assertThat(addButton).isNotNull();
         }
 
-
         @Test
         @Order(8)
         @DisplayName("Should display quantity selector")
@@ -195,7 +189,6 @@ class DetailsProductClientControllerTest extends TestFXBase {
             assertThat(lookup("#quantitySelector").tryQuery()).isPresent();
             assertThat(lookup("#quantitySelector").query().isVisible()).isTrue();
         }
-
 
         @Test
         @Order(9)
@@ -209,7 +202,6 @@ class DetailsProductClientControllerTest extends TestFXBase {
             // Verify quantity selector is accessible
             waitForFxEvents();
         }
-
 
         @Test
         @Order(10)
@@ -226,7 +218,6 @@ class DetailsProductClientControllerTest extends TestFXBase {
             // Verify button is still responsive
             assertThat(incrementButton).isNotNull();
         }
-
 
         @Test
         @Order(11)
@@ -247,7 +238,6 @@ class DetailsProductClientControllerTest extends TestFXBase {
             // Verify buttons are still responsive
             assertThat(decrementButton).isNotNull();
         }
-
 
         @Test
         @Order(12)
@@ -292,7 +282,6 @@ class DetailsProductClientControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
-
         @Test
         @Order(14)
         @DisplayName("Should display review rating")
@@ -311,7 +300,6 @@ class DetailsProductClientControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
-
         @Test
         @Order(15)
         @DisplayName("Should display review text")
@@ -324,11 +312,11 @@ class DetailsProductClientControllerTest extends TestFXBase {
             FlowPane detailPane = lookup("#detailFlowPane").query();
             assertThat(detailPane).isNotNull();
 
-            // In a real test: inject reviews, lookup review text labels, assert text content
+            // In a real test: inject reviews, lookup review text labels, assert text
+            // content
 
             waitForFxEvents();
         }
-
 
         @Test
         @Order(16)
@@ -342,11 +330,11 @@ class DetailsProductClientControllerTest extends TestFXBase {
             FlowPane detailPane = lookup("#detailFlowPane").query();
             assertThat(detailPane).isNotNull();
 
-            // In a real test: inject reviews with names, assert reviewer names visible in UI
+            // In a real test: inject reviews with names, assert reviewer names visible in
+            // UI
 
             waitForFxEvents();
         }
-
 
         @Test
         @Order(17)
@@ -356,9 +344,9 @@ class DetailsProductClientControllerTest extends TestFXBase {
 
             List<Review> reviews = createMockReviews();
             double averageRating = reviews.stream()
-                .mapToInt(Review::getRating)
-                .average()
-                .orElse(0);
+                    .mapToInt(Review::getRating)
+                    .average()
+                    .orElse(0);
             assertThat(averageRating).isEqualTo(4.5);
 
             FlowPane detailPane = lookup("#detailFlowPane").query();
@@ -387,7 +375,6 @@ class DetailsProductClientControllerTest extends TestFXBase {
             assertThat(searchBar.isVisible()).isTrue();
         }
 
-
         @Test
         @Order(19)
         @DisplayName("Should filter products by search term")
@@ -403,7 +390,6 @@ class DetailsProductClientControllerTest extends TestFXBase {
             // Verify search bar is responsive
             assertThat(searchBar).isNotNull();
         }
-
 
         @Test
         @Order(20)
@@ -439,7 +425,6 @@ class DetailsProductClientControllerTest extends TestFXBase {
             assertThat(imageView.isVisible()).isTrue();
         }
 
-
         @Test
         @Order(22)
         @DisplayName("Should handle missing product image")
@@ -455,7 +440,6 @@ class DetailsProductClientControllerTest extends TestFXBase {
             // Verify image view is accessible
             waitForFxEvents();
         }
-
 
         @Test
         @Order(23)
@@ -487,7 +471,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
             waitForFxEvents();
 
             Product product = createMockProduct();
-            product.setPrice(100);
+            product.setPrice(100.0);
 
             FlowPane detailPane = lookup("#detailFlowPane").query();
             assertThat(detailPane).isNotNull();
@@ -495,7 +479,6 @@ class DetailsProductClientControllerTest extends TestFXBase {
             // Verify price is accessible
             waitForFxEvents();
         }
-
 
         @Test
         @Order(25)
@@ -513,7 +496,6 @@ class DetailsProductClientControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
-
         @Test
         @Order(26)
         @DisplayName("Should format price with currency")
@@ -521,7 +503,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
             waitForFxEvents();
 
             Product product = createMockProduct();
-            product.setPrice(100);
+            product.setPrice(100.0);
 
             FlowPane detailPane = lookup("#detailFlowPane").query();
             assertThat(detailPane).isNotNull();
@@ -544,7 +526,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
             waitForFxEvents();
 
             Product product = createMockProduct();
-            product.setQuantity(10);
+            product.setStockQuantity(10);
 
             FlowPane detailPane = lookup("#detailFlowPane").query();
             assertThat(detailPane).isNotNull();
@@ -553,7 +535,6 @@ class DetailsProductClientControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
-
         @Test
         @Order(28)
         @DisplayName("Should disable add to cart when out of stock")
@@ -561,7 +542,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
             waitForFxEvents();
 
             Product product = createMockProduct();
-            product.setQuantity(0);
+            product.setStockQuantity(0);
 
             Button addButton = lookup("#addToCartButton").query();
             assertThat(addButton).isNotNull();
@@ -570,7 +551,6 @@ class DetailsProductClientControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
-
         @Test
         @Order(29)
         @DisplayName("Should limit quantity to available stock")
@@ -578,7 +558,7 @@ class DetailsProductClientControllerTest extends TestFXBase {
             waitForFxEvents();
 
             Product product = createMockProduct();
-            product.setQuantity(5);
+            product.setStockQuantity(5);
 
             Button incrementButton = lookup("#incrementButton").query();
             assertThat(incrementButton).isNotNull();
@@ -610,7 +590,6 @@ class DetailsProductClientControllerTest extends TestFXBase {
             assertThat(backButton).isNotNull();
         }
 
-
         @Test
         @Order(31)
         @DisplayName("Should navigate to shopping cart")
@@ -630,4 +609,3 @@ class DetailsProductClientControllerTest extends TestFXBase {
     }
 
 }
-

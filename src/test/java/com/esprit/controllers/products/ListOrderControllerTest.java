@@ -36,7 +36,6 @@ class ListOrderControllerTest extends TestFXBase {
         stage.show();
     }
 
-
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
     @DisplayName("Order Display Tests")
@@ -53,7 +52,6 @@ class ListOrderControllerTest extends TestFXBase {
             assertThat(table.isVisible()).isTrue();
         }
 
-
         @Test
         @org.junit.jupiter.api.Order(2)
         @DisplayName("Should load orders from service")
@@ -68,7 +66,6 @@ class ListOrderControllerTest extends TestFXBase {
             waitForFxEvents();
         }
 
-
         @Test
         @org.junit.jupiter.api.Order(3)
         @DisplayName("Should display client name column")
@@ -80,7 +77,6 @@ class ListOrderControllerTest extends TestFXBase {
             assertThat(lookup("#idnom").tryQuery()).isPresent();
         }
 
-
         @Test
         @org.junit.jupiter.api.Order(4)
         @DisplayName("Should display client first name column")
@@ -89,7 +85,6 @@ class ListOrderControllerTest extends TestFXBase {
 
             assertThat(lookup("#idprenom").tryQuery()).isPresent();
         }
-
 
         @Test
         @org.junit.jupiter.api.Order(5)
@@ -100,7 +95,6 @@ class ListOrderControllerTest extends TestFXBase {
             assertThat(lookup("#idadresse").tryQuery()).isPresent();
         }
 
-
         @Test
         @org.junit.jupiter.api.Order(6)
         @DisplayName("Should display phone number column")
@@ -109,7 +103,6 @@ class ListOrderControllerTest extends TestFXBase {
 
             assertThat(lookup("#idnumero").tryQuery()).isPresent();
         }
-
 
         @Test
         @org.junit.jupiter.api.Order(7)
@@ -120,7 +113,6 @@ class ListOrderControllerTest extends TestFXBase {
             assertThat(lookup("#iddate").tryQuery()).isPresent();
         }
 
-
         @Test
         @org.junit.jupiter.api.Order(8)
         @DisplayName("Should display status column")
@@ -129,7 +121,6 @@ class ListOrderControllerTest extends TestFXBase {
 
             assertThat(lookup("#idStatu").tryQuery()).isPresent();
         }
-
 
         @Test
         @org.junit.jupiter.api.Order(9)
@@ -141,7 +132,6 @@ class ListOrderControllerTest extends TestFXBase {
         }
 
     }
-
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -157,7 +147,6 @@ class ListOrderControllerTest extends TestFXBase {
             TextField searchBar = lookup("#SearchBar").query();
             assertThat(searchBar).isNotNull();
         }
-
 
         @Test
         @org.junit.jupiter.api.Order(11)
@@ -191,7 +180,6 @@ class ListOrderControllerTest extends TestFXBase {
 
         }
 
-
         @Test
         @org.junit.jupiter.api.Order(12)
         @DisplayName("Should filter orders by address")
@@ -216,11 +204,10 @@ class ListOrderControllerTest extends TestFXBase {
 
             // Verify visible items match search criteria
             for (Order order : table.getItems()) {
-                assertThat(order.getAddress().toLowerCase()).contains("main");
+                assertThat(order.getShippingAddress().toLowerCase()).contains("main");
             }
 
         }
-
 
         @Test
         @org.junit.jupiter.api.Order(13)
@@ -247,7 +234,6 @@ class ListOrderControllerTest extends TestFXBase {
 
         }
 
-
         @Test
         @org.junit.jupiter.api.Order(14)
         @DisplayName("Should perform case-insensitive search")
@@ -267,12 +253,12 @@ class ListOrderControllerTest extends TestFXBase {
 
             // Verify results match despite case difference
             for (Order order : table.getItems()) {
-                String clientName = (order.getClient().getFirstName() + " " + order.getClient().getLastName()).toLowerCase();
+                String clientName = (order.getClient().getFirstName() + " " + order.getClient().getLastName())
+                        .toLowerCase();
                 assertThat(clientName).contains("john");
             }
 
         }
-
 
         @Test
         @org.junit.jupiter.api.Order(15)
@@ -294,7 +280,6 @@ class ListOrderControllerTest extends TestFXBase {
             // When search is empty, all items should be shown
             assertThat(table.getItems().size()).isGreaterThanOrEqualTo(0);
         }
-
 
         @Test
         @org.junit.jupiter.api.Order(16)
@@ -329,7 +314,6 @@ class ListOrderControllerTest extends TestFXBase {
 
     }
 
-
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
     @DisplayName("Order Deletion Tests")
@@ -344,7 +328,6 @@ class ListOrderControllerTest extends TestFXBase {
             assertThat(lookup("#deleteColumn").tryQuery()).isPresent();
         }
 
-
         @Test
         @org.junit.jupiter.api.Order(18)
         @DisplayName("Should confirm before deleting order")
@@ -357,7 +340,6 @@ class ListOrderControllerTest extends TestFXBase {
             if (table.getItems().isEmpty()) {
                 return; // Skip if no items
             }
-
 
             // Select first row
             table.getSelectionModel().selectFirst();
@@ -379,7 +361,6 @@ class ListOrderControllerTest extends TestFXBase {
 
         }
 
-
         @Test
         @org.junit.jupiter.api.Order(19)
         @DisplayName("Should delete order on confirmation")
@@ -392,7 +373,6 @@ class ListOrderControllerTest extends TestFXBase {
             if (table.getItems().isEmpty()) {
                 return; // Skip if no items to delete
             }
-
 
             int initialCount = table.getItems().size();
 
@@ -419,7 +399,6 @@ class ListOrderControllerTest extends TestFXBase {
             }
 
         }
-
 
         @Test
         @org.junit.jupiter.api.Order(20)
@@ -453,11 +432,9 @@ class ListOrderControllerTest extends TestFXBase {
 
             }
 
-
             // Verify table is still functional
             assertThat(table.getItems()).isNotNull();
         }
-
 
         @Test
         @org.junit.jupiter.api.Order(21)
@@ -471,7 +448,6 @@ class ListOrderControllerTest extends TestFXBase {
             if (table.getItems().isEmpty()) {
                 return; // Skip if no items
             }
-
 
             int initialCount = table.getItems().size();
 
@@ -508,7 +484,6 @@ class ListOrderControllerTest extends TestFXBase {
 
     }
 
-
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
     @DisplayName("Order Status Display Tests")
@@ -525,7 +500,6 @@ class ListOrderControllerTest extends TestFXBase {
             assertThat(lookup("#idStatu").tryQuery()).isPresent();
         }
 
-
         @Test
         @org.junit.jupiter.api.Order(23)
         @DisplayName("Should display confirmed status")
@@ -536,7 +510,6 @@ class ListOrderControllerTest extends TestFXBase {
             assertThat(table).isNotNull();
         }
 
-
         @Test
         @org.junit.jupiter.api.Order(24)
         @DisplayName("Should display delivered status")
@@ -546,7 +519,6 @@ class ListOrderControllerTest extends TestFXBase {
             TableView<Order> table = lookup("#orderTableView").query();
             assertThat(table).isNotNull();
         }
-
 
         @Test
         @org.junit.jupiter.api.Order(25)
@@ -559,7 +531,6 @@ class ListOrderControllerTest extends TestFXBase {
         }
 
     }
-
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -576,7 +547,6 @@ class ListOrderControllerTest extends TestFXBase {
             assertThat(table).isNotNull();
         }
 
-
         @Test
         @org.junit.jupiter.api.Order(27)
         @DisplayName("Should display client first name")
@@ -585,7 +555,6 @@ class ListOrderControllerTest extends TestFXBase {
 
             assertThat(lookup("#idprenom").tryQuery()).isPresent();
         }
-
 
         @Test
         @org.junit.jupiter.api.Order(28)
@@ -597,7 +566,6 @@ class ListOrderControllerTest extends TestFXBase {
         }
 
     }
-
 
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
@@ -612,7 +580,6 @@ class ListOrderControllerTest extends TestFXBase {
 
             assertThat(lookup("#statisticsButton").tryQuery()).isPresent();
         }
-
 
         @Test
         @org.junit.jupiter.api.Order(30)
@@ -629,7 +596,6 @@ class ListOrderControllerTest extends TestFXBase {
 
     }
 
-
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     @Nested
     @DisplayName("Empty State Tests")
@@ -645,7 +611,6 @@ class ListOrderControllerTest extends TestFXBase {
             assertThat(table).isNotNull();
         }
 
-
         @Test
         @org.junit.jupiter.api.Order(32)
         @DisplayName("Should display message when no orders")
@@ -658,7 +623,5 @@ class ListOrderControllerTest extends TestFXBase {
 
     }
 
-
     // Helper methods are handled by test fixtures or mocked data
 }
-
