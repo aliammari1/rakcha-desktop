@@ -1,106 +1,187 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
-<?import org.controlsfx.control.CheckComboBox?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" id="AnchorPane" fx:id="bord" prefHeight="784.0"
-            prefWidth="1430.0" style="-fx-background-image: red; -fx-background-color: #AE2D3C;"
-            styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/21"
-            fx:controller="com.esprit.controllers.films.PaymentUserController">
-  <children>
-    <Label fx:id="filmLabel_Payment" alignment="CENTER" layoutX="222.0" layoutY="34.0"
-           prefHeight="33.0" prefWidth="168.0" style="-fx-font-size: 30;" text="gnfyh"
-           AnchorPane.leftAnchor="222.0" AnchorPane.rightAnchor="410.0"/>
-    <Pane layoutX="1063.0" prefHeight="101.0" prefWidth="345.0"
-          style="-fx-background-radius: 20 20 0 0;" styleClass="linear-grad">
-      <children>
-        <Label fx:id="nomPrenom" layoutX="265.0" layoutY="28.0" text="Client"
-               textFill="#fffefe">
-          <font>
-            <Font name="System Bold" size="18.0"/>
-          </font>
-        </Label>
-      </children>
-    </Pane>
-    <AnchorPane fx:id="anchorpane_payment" layoutX="67.0" layoutY="92.0" prefHeight="585.0"
-                prefWidth="985.0" style="-fx-background-color: #ffffff; -fx-background-radius: 10;">
-      <children>
-        <Line endX="100.0" endY="-36.600006103515625" layoutX="462.0" layoutY="70.0"
-              startX="100.0" startY="424.20001220703125" stroke="#b9b1b1"
-              strokeDashOffset="2.0"/>
-        <Label layoutX="56.0" layoutY="239.0" style="-fx-text-fill: white;"
-               text="Card information :"/>
-        <ComboBox fx:id="cinemacombox_res" layoutX="137.0" layoutY="67.0" prefHeight="37.0"
-                  prefWidth="244.0"/>
-        <CheckComboBox fx:id="checkcomboboxseance_res" layoutX="136.0" layoutY="121.0"
-                       prefHeight="37.0" prefWidth="244.0"/>
-        <Spinner fx:id="nbrplacepPayment_Spinner" layoutX="445.0" layoutY="121.0"
-                 prefHeight="38.0" prefWidth="96.0"/>
+<?import org.kordamp.ikonli.javafx.*?>
+<?import org.controlsfx.control.*?>
 
-        <Label layoutX="190.0" layoutY="14.0" prefHeight="38.0" prefWidth="345.0"
-               text="Paiement en ligne via Stripe" textAlignment="CENTER">
-          <font>
-            <Font name="System Bold" size="26.0"/>
-          </font>
-        </Label>
-        <Label layoutX="584.0" layoutY="175.0" text="Notre paiement !"
-               textAlignment="CENTER" textFill="#eab95f">
-          <font>
-            <Font name="System Bold Italic" size="32.0"/>
-          </font>
-        </Label>
-        <Label alignment="CENTER" layoutX="594.0" layoutY="224.0" prefHeight="150.0"
-               prefWidth="267.0"
-               text="Votre sécurité est notre priorité et nous travaillons dur pour protéger vos informations de paiement"
-               textFill="#9a9292" wrapText="true">
-          <font>
-            <Font size="26.0"/>
-          </font>
-        </Label>
-        <TextField fx:id="carte" layoutX="128.0" layoutY="188.0" prefHeight="34.0"
-                   prefWidth="275.0" promptText="Numero de la carte"/>
-        <Button fx:id="Pay" layoutX="134.0" layoutY="470.0" mnemonicParsing="false"
-                onAction="#Pay" prefHeight="34.0" prefWidth="275.0"
-                style="-fx-background-color: #a48041;" text="Payer" textFill="WHITE">
-          <font>
-            <Font name="System Bold" size="16.0"/>
-          </font>
-        </Button>
-        <TextField fx:id="moisExp" layoutX="129.0" layoutY="246.0" prefHeight="34.0"
-                   prefWidth="275.0" promptText="Mois d'expiration"/>
-        <TextField fx:id="anneeExp" layoutX="132.0" layoutY="299.0" prefHeight="34.0"
-                   prefWidth="275.0" promptText="Année d'expiration"/>
-        <TextField fx:id="cvc" layoutX="134.0" layoutY="348.0" prefHeight="34.0"
-                   prefWidth="275.0" promptText="CVC"/>
-        <Button fx:id="filmm" layoutX="19.0" layoutY="20.0" mnemonicParsing="false"
-                onAction="#switchtfillmmaa" prefHeight="47.0" prefWidth="88.0" styleClass="sale"
-                stylesheets="@../styles/filmStyle.css" text="BACK"/>
-        <Label fx:id="total" layoutX="139.0" layoutY="410.0" prefHeight="38.0"
-               prefWidth="150.0"
-               style="-fx-background-color: #eab95f; -fx-background-radius: 10;" text="TOTAL: "/>
-      </children>
-    </AnchorPane>
-    <Button fx:id="viewPDF" text="View PDF"/>
-    <ImageView fitHeight="78.0" fitWidth="67.0" pickOnBounds="true" preserveRatio="true">
-      <image>
-        <Image url="@Logo.png"/>
-      </image>
-    </ImageView>
-    <ImageView fitHeight="462.0" fitWidth="388.0" layoutX="1058.0" layoutY="197.0"
-               pickOnBounds="true" preserveRatio="true">
-      <image>
-        <Image
-          url="@Logo.png"/>
-      </image>
-    </ImageView>
-    <ImageView fitHeight="76.0" fitWidth="58.0" layoutX="1392.0" layoutY="11.0"
-               pickOnBounds="true" preserveRatio="true">
-      <image>
-        <Image url="@Logo.png"/>
-      </image>
-    </ImageView>
-  </children>
-</AnchorPane>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" fx:id="rootContainer" maxWidth="1400.0" maxHeight="800.0"
+           minWidth="1200.0" minHeight="700.0" xmlns="http://javafx.com/javafx/21"
+           fx:controller="com.esprit.controllers.films.PaymentUserController"
+           styleClass="immersive-root"
+           stylesheets="@../styles/filmStyle.css, @../styles/login-animations.css">
+
+  <!-- Cinematic Background Effects -->
+  <AnchorPane styleClass="cinematic-bg" mouseTransparent="true">
+    <!-- Ambient orbs with cinema theme -->
+    <Circle fx:id="orb1" radius="100" layoutX="200" layoutY="150" styleClass="ambient-orb, orb-primary"/>
+    <Circle fx:id="orb2" radius="70" layoutX="1100" layoutY="200" styleClass="ambient-orb, orb-secondary"/>
+    <Circle fx:id="orb3" radius="90" layoutX="1000" layoutY="550" styleClass="ambient-orb, orb-accent"/>
+    
+    <!-- Floating cinema icons -->
+    <FontIcon fx:id="floatingIcon1" iconLiteral="mdi2c-credit-card:22" layoutX="120" layoutY="300" 
+              styleClass="floating-icon" opacity="0.3"/>
+    <FontIcon fx:id="floatingIcon2" iconLiteral="mdi2s-star:18" layoutX="1200" layoutY="400" 
+              styleClass="floating-star" opacity="0.4"/>
+    <FontIcon fx:id="floatingIcon3" iconLiteral="mdi2s-shield-check:20" layoutX="100" layoutY="500" 
+              styleClass="floating-icon" opacity="0.25"/>
+  </AnchorPane>
+
+  <!-- Main Content -->
+  <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="main-scroll">
+    <VBox alignment="TOP_CENTER" spacing="30" styleClass="scroll-content" style="-fx-padding: 40;">
+
+    <!-- Payment Header -->
+    <VBox alignment="CENTER" spacing="20" styleClass="hero-stack" style="-fx-padding: 35;">
+
+      <HBox alignment="CENTER" spacing="20">
+        <FontIcon iconLiteral="mdi2c-credit-card:40" styleClass="star-gold"/>
+        <VBox alignment="CENTER" spacing="5">
+          <Label text="SECURE PAYMENT" styleClass="hero-title" style="-fx-font-size: 28px;"/>
+          <Label fx:id="filmLabel_Payment" text="Movie Title" styleClass="detail-title" style="-fx-font-size: 18px;"/>
+        </VBox>
+        <FontIcon iconLiteral="mdi2s-shield-check:40" styleClass="star-gold"/>
+      </HBox>
+
+      <!-- Order Summary -->
+      <VBox fx:id="orderSummary" alignment="CENTER" spacing="15" styleClass="showtime-preview">
+        <Label text="ORDER SUMMARY" styleClass="section-title" style="-fx-font-size: 16px;"/>
+        
+        <HBox alignment="CENTER" spacing="35" styleClass="hero-meta">
+          <VBox alignment="CENTER" spacing="5">
+            <Label text="Selected Seats" styleClass="section-label-small"/>
+            <Label fx:id="selectedSeatsDisplay" text="A1, A2" styleClass="rating-text"/>
+          </VBox>
+          
+          <Separator orientation="VERTICAL" styleClass="filter-separator"/>
+          
+          <VBox alignment="CENTER" spacing="5">
+            <Label text="Session Time" styleClass="section-label-small"/>
+            <Label fx:id="sessionTimeDisplay" text="19:30 - 21:45" styleClass="detail-meta"/>
+          </VBox>
+          
+          <Separator orientation="VERTICAL" styleClass="filter-separator"/>
+          
+          <VBox alignment="CENTER" spacing="5">
+            <Label text="Total Amount" styleClass="section-label-small"/>
+            <Label fx:id="total" text="30.00 TND" styleClass="rating-large"/>
+          </VBox>
+        </HBox>
+      </VBox>
+    </VBox>
+
+    <!-- Payment Form -->
+    <HBox alignment="CENTER" spacing="40" VBox.vgrow="ALWAYS">
+      
+      <!-- Payment Details -->
+      <VBox spacing="25" prefWidth="450" styleClass="inline-detail-panel" style="-fx-padding: 40;">
+
+        <VBox alignment="CENTER" spacing="10">
+          <FontIcon iconLiteral="mdi2c-credit-card-outline:30" styleClass="star-gold"/>
+          <Label text="PAYMENT DETAILS" styleClass="section-title"/>
+        </VBox>
+
+        <VBox spacing="20">
+          <!-- Card Number -->
+          <VBox spacing="8">
+            <Label text="Card Number" styleClass="section-label-small"/>
+            <TextField fx:id="carte" promptText="4242 4242 4242 4242 (Test Card)" styleClass="comment-input"/>
+          </VBox>
+
+          <!-- Expiry and CVC -->
+          <HBox spacing="15">
+            <VBox spacing="8" HBox.hgrow="ALWAYS">
+              <Label text="Expiry Month" styleClass="section-label-small"/>
+              <TextField fx:id="moisExp" promptText="MM" styleClass="comment-input"/>
+            </VBox>
+            
+            <VBox spacing="8" HBox.hgrow="ALWAYS">
+              <Label text="Expiry Year" styleClass="section-label-small"/>
+              <TextField fx:id="anneeExp" promptText="YYYY" styleClass="comment-input"/>
+            </VBox>
+            
+            <VBox spacing="8" HBox.hgrow="ALWAYS">
+              <Label text="CVC" styleClass="section-label-small"/>
+              <TextField fx:id="cvc" promptText="123" styleClass="comment-input"/>
+            </VBox>
+          </HBox>
+        </VBox>
+      </VBox>
+
+      <!-- Security Info -->
+      <VBox spacing="20" prefWidth="350" styleClass="detail-sidebar">
+
+        <VBox alignment="CENTER" spacing="10">
+          <FontIcon iconLiteral="mdi2s-shield-check:40" styleClass="star-gold"/>
+          <Label text="SECURE PAYMENT" styleClass="section-title" style="-fx-font-size: 16px;"/>
+        </VBox>
+
+        <VBox spacing="15" styleClass="qr-section">
+          <HBox alignment="CENTER_LEFT" spacing="12">
+            <FontIcon iconLiteral="mdi2l-lock:16" styleClass="star-gold"/>
+            <Label text="256-bit SSL encryption" styleClass="detail-meta" maxWidth="250" wrapText="true"/>
+          </HBox>
+          
+          <HBox alignment="CENTER_LEFT" spacing="12">
+            <FontIcon iconLiteral="mdi2c-credit-card-check:16" styleClass="star-gold"/>
+            <Label text="PCI DSS compliant" styleClass="detail-meta" maxWidth="250" wrapText="true"/>
+          </HBox>
+          
+          <HBox alignment="CENTER_LEFT" spacing="12">
+            <FontIcon iconLiteral="mdi2s-shield-account:16" styleClass="star-gold"/>
+            <Label text="Your data is protected" styleClass="detail-meta" maxWidth="250" wrapText="true"/>
+          </HBox>
+          
+          <HBox alignment="CENTER_LEFT" spacing="12">
+            <FontIcon iconLiteral="mdi2c-clock-fast:16" styleClass="star-gold"/>
+            <Label text="Instant confirmation" styleClass="detail-meta" maxWidth="250" wrapText="true"/>
+          </HBox>
+        </VBox>
+
+        <!-- Accepted Cards -->
+        <VBox spacing="12" styleClass="qr-section">
+          <Label text="ACCEPTED CARDS" styleClass="qr-label"/>
+          <HBox spacing="12" alignment="CENTER_LEFT">
+            <FontIcon iconLiteral="mdi2c-credit-card:24" style="-fx-fill: #8b0023; -fx-icon-color: #8b0023;"/>
+            <FontIcon iconLiteral="mdi2c-credit-card:24" style="-fx-fill: #d42558; -fx-icon-color: #d42558;"/>
+            <FontIcon iconLiteral="mdi2c-credit-card:24" style="-fx-fill: #b91c45; -fx-icon-color: #b91c45;"/>
+            <FontIcon iconLiteral="mdi2c-credit-card:24" style="-fx-fill: #ffc800; -fx-icon-color: #ffc800;"/>
+          </HBox>
+        </VBox>
+      </VBox>
+    </HBox>
+
+    <!-- Action Buttons -->
+    <HBox alignment="CENTER" spacing="25" styleClass="hero-actions" style="-fx-padding: 25 0 0 0;">
+      <Button fx:id="filmm" text="← BACK TO SEATS" onAction="#switchtfillmmaa" styleClass="hero-btn, secondary">
+        <graphic>
+          <FontIcon iconLiteral="mdi2a-arrow-left:16"/>
+        </graphic>
+      </Button>
+
+      <Button fx:id="Pay" text="COMPLETE PAYMENT" onAction="#Pay" styleClass="hero-btn, primary">
+        <graphic>
+          <FontIcon iconLiteral="mdi2c-credit-card:16"/>
+        </graphic>
+      </Button>
+    </HBox>
+
+    </VBox>
+  </ScrollPane>
+
+  <!-- Hidden fields for compatibility -->
+  <VBox visible="false">
+    <ComboBox fx:id="cinemacombox_res"/>
+    <CheckComboBox fx:id="checkcomboboxmoviesession_res"/>
+    <Spinner fx:id="nbrplacepPayment_Spinner"/>
+    <Label fx:id="nomPrenom"/>
+    <Button fx:id="viewPDF"/>
+    <AnchorPane fx:id="anchorpane_payment"/>
+    <AnchorPane fx:id="bord"/>
+  </VBox>
+
+</StackPane>

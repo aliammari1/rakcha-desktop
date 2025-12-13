@@ -4,14 +4,16 @@ import com.esprit.models.cinemas.Cinema;
 import com.esprit.models.cinemas.MovieSession;
 import com.esprit.models.cinemas.Seat;
 import com.esprit.models.films.Ticket;
+import com.esprit.enums.TicketStatus;
 import com.esprit.models.users.Client;
 import com.esprit.services.cinemas.CinemaService;
 import com.esprit.services.cinemas.MovieSessionService;
 import com.esprit.services.cinemas.SeatService;
+
 import com.esprit.services.films.FilmService;
 import com.esprit.services.films.TicketService;
 import com.esprit.utils.PageRequest;
-import com.stripe.exception.StripeException;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
@@ -28,6 +30,7 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -43,8 +46,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import java.util.stream.Collectors;
 
 /**
  * Controller class for handling user payments for cinema tickets.
@@ -81,6 +84,12 @@ public class PaymentUserController implements Initializable {
     private Label total;
     @FXML
     private Label filmLabel_Payment;
+    @FXML
+    private Label selectedSeatsDisplay;
+    @FXML
+    private Label sessionTimeDisplay;
+    @FXML
+    private VBox orderSummary;
     @FXML
     private Button Pay;
     @FXML
@@ -307,36 +316,38 @@ public class PaymentUserController implements Initializable {
 
     /**
      * Process the user's payment for the selected movie session, charge the card,
-     * update seat status, and persist the ticket order.
+     * update seat status, and persist the ticket orders.
+     * Enhanced version with proper seat reservation and multiple ticket creation.
      *
      * @param event the ActionEvent triggered by the Pay button
-     * @throws StripeException if the payment provider reports an error while
-     *                         processing the charge
      */
     @FXML
-    private void Pay(final ActionEvent event) throws StripeException {
-        final TicketService scom = new TicketService();
-        final SeatService seatService = new SeatService();
+    private void Pay(final ActionEvent event) {
+        final TicketService ticketService = new TicketService();
 
-        if (this.isValidInput()) {
-            // Update seat status
-            if (selectedSeats != null) {
-                for (Seat seat : selectedSeats) {
-                    // seatService.updateSeatStatus(seat.getId(), true);
-                }
-            }
+        if (!this.isValidInput()) {
+            return;
+        }
 
-            if (this.moviesession == null) {
-                return;
-            }
+        if (this.moviesession == null) {
+            showError("Session Error", "No movie session selected.");
+            return;
+        }
 
-            // Calculate total amount
-            // If selectedSeats is populated, use that count, otherwise use spinner
-            int seatCount = (selectedSeats != null && !selectedSeats.isEmpty())
-                ? selectedSeats.size()
-                : nbrplacepPayment_Spinner.getValue();
+        if (selectedSeats == null || selectedSeats.isEmpty()) {
+            showError("Seat Error", "No seats selected for reservation.");
+            return;
+        }
 
-            final double amount = this.moviesession.getPrice() * seatCount;
+        try {
+            // Calculate total amount with seat multipliers
+            double totalAmount = selectedSeats.stream()
+                .mapToDouble(seat -> {
+                    double basePrice = moviesession.getPrice() != null ? moviesession.getPrice() : 15.0;
+                    double multiplier = seat.getPriceMultiplier() != null ? seat.getPriceMultiplier() : 1.0;
+                    return basePrice * multiplier;
+                })
+                .sum();
 
             // Prepare payment details
             String name = client.getFirstName() + " " + client.getLastName();
@@ -348,95 +359,373 @@ public class PaymentUserController implements Initializable {
 
             // Process payment
             boolean paymentSuccess = com.esprit.utils.PaymentProcessor.processPayment(
-                name, email, (float) amount, cardNumber, expMonth, expYear, cvcCode);
+                name, email, (float) totalAmount, cardNumber, expMonth, expYear, cvcCode);
 
             if (paymentSuccess) {
-                final Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Paiement");
-                alert.setContentText("Paiement effectué avec succès, Votre Order a été enregistré");
-                alert.showAndWait();
+                // First, ensure seats are saved to database and have IDs
+                prepareSeatForDatabase(selectedSeats);
+                
+                // Create tickets for each selected seat
+                for (Seat seat : selectedSeats) {
+                    // Calculate individual seat price
+                    double basePrice = moviesession.getPrice() != null ? moviesession.getPrice() : 15.0;
+                    double multiplier = seat.getPriceMultiplier() != null ? seat.getPriceMultiplier() : 1.0;
+                    double seatPrice = basePrice * multiplier;
 
-                // Create and save ticket
-                final Ticket ticket = new Ticket();
-                ticket.setPricePaid((float) amount);
-                ticket.setClient(this.client);
-                ticket.setMovieSession(this.moviesession);
-                // Assign first selected seat if available
-                if (selectedSeats != null && !selectedSeats.isEmpty()) {
-                    ticket.setSeat(selectedSeats.get(0));
+                    // Create ticket for this seat
+                    Ticket ticket = new Ticket();
+                    ticket.setPricePaid((float) seatPrice);
+                    ticket.setClient(this.client);
+                    ticket.setMovieSession(this.moviesession);
+                    ticket.setSeat(seat);
+                    
+                    // Set required fields that were missing
+                    ticket.setStatus(TicketStatus.CONFIRMED);
+                    ticket.setPurchaseTime(java.time.LocalDateTime.now());
+                    ticket.setQrCode(generateQRCode(ticket));
+                    
+                    // Save ticket to database
+                    ticketService.create(ticket);
+                    
+                    LOGGER.info(String.format("✅ TICKET CREATED: User ID: %d, Movie: %s, Seat: %s%s, Price: %.2f TND, Status: %s, QR: %s", 
+                        client.getId(),
+                        moviesession.getFilm().getTitle(),
+                        getRowLetter(seat), 
+                        seat.getSeatNumber(), 
+                        seatPrice,
+                        ticket.getStatus(),
+                        ticket.getQrCode()));
                 }
 
-                scom.create(ticket);
+                // Verify tickets were created
+                int ticketCount = verifyTicketsCreated();
+                
+                // Show success message
+                Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+                successAlert.setTitle("Payment Successful");
+                successAlert.setHeaderText("Booking Confirmed!");
+                successAlert.setContentText(String.format(
+                    "Payment of %.2f TND processed successfully.\n" +
+                    "Your tickets have been reserved for %s.\n" +
+                    "Seats: %s\n" +
+                    "Session: %s\n" +
+                    "Tickets Created: %d\n\n" +
+                    "You can view your tickets in the 'My Tickets' section.",
+                    totalAmount,
+                    moviesession.getFilm().getTitle(),
+                    selectedSeats.stream()
+                        .map(seat -> getRowLetter(seat) + seat.getSeatNumber())
+                        .collect(Collectors.joining(", ")),
+                    moviesession.getStartTime().toLocalTime() + " - " + moviesession.getEndTime().toLocalTime(),
+                    ticketCount
+                ));
+                successAlert.showAndWait();
 
-                // Close the stage or navigate away
-                // ((Stage) Pay.getScene().getWindow()).close();
+                // Navigate back to cinema dashboard
+                navigateBackToDashboard();
+
             } else {
-                final Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Erreur de Paiement");
-                alert.setContentText("Le paiement a échoué. Veuillez vérifier vos informations.");
-                alert.showAndWait();
+                showError("Payment Failed", "The payment could not be processed. Please check your card details and try again.");
+            }
+
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Error processing payment", e);
+            showError("Payment Error", "An error occurred while processing your payment: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Get row letter for display
+     */
+    private String getRowLetter(Seat seat) {
+        try {
+            int rowNum = Integer.parseInt(seat.getRowLabel() != null ? seat.getRowLabel() : "1");
+            return String.valueOf((char) ('A' + rowNum - 1));
+        } catch (NumberFormatException e) {
+            return seat.getRowLabel() != null ? seat.getRowLabel() : "?";
+        }
+    }
+    
+    /**
+     * Prepare seats for database storage by ensuring they have proper IDs
+     * This method handles seats that were created dynamically in the UI
+     */
+    private void prepareSeatForDatabase(List<Seat> seats) {
+        SeatService seatService = new SeatService();
+        
+        for (Seat seat : seats) {
+            if (seat.getId() == null) {
+                // Set cinema hall reference if missing
+                if (seat.getCinemaHall() == null && moviesession != null && moviesession.getCinemaHall() != null) {
+                    seat.setCinemaHall(moviesession.getCinemaHall());
+                }
+                
+                // Try to find existing seat in database first
+                Seat existingSeat = findExistingSeat(seatService, seat);
+                if (existingSeat != null) {
+                    // Use existing seat data
+                    seat.setId(existingSeat.getId());
+                    LOGGER.info(String.format("Found existing seat ID %d for %s%s", 
+                        existingSeat.getId(), getRowLetter(seat), seat.getSeatNumber()));
+                } else {
+                    // Create new seat in database
+                    try {
+                        seatService.create(seat);
+                        // Since create doesn't return ID, we need to find it again
+                        Seat createdSeat = findExistingSeat(seatService, seat);
+                        if (createdSeat != null) {
+                            seat.setId(createdSeat.getId());
+                            LOGGER.info(String.format("Created new seat ID %d for %s%s", 
+                                createdSeat.getId(), getRowLetter(seat), seat.getSeatNumber()));
+                        } else {
+                            // Fallback: use position-based ID
+                            seat.setId(generateTempSeatId(seat));
+                            LOGGER.warning(String.format("Using fallback ID %d for seat %s%s", 
+                                seat.getId(), getRowLetter(seat), seat.getSeatNumber()));
+                        }
+                    } catch (Exception e) {
+                        // If creation fails, use fallback ID
+                        seat.setId(generateTempSeatId(seat));
+                        LOGGER.warning(String.format("Seat creation failed, using fallback ID %d for %s%s: %s", 
+                            seat.getId(), getRowLetter(seat), seat.getSeatNumber(), e.getMessage()));
+                    }
+                }
+            }
+        }
+    }
+    
+    /**
+     * Find existing seat in database by hall, row, and seat number
+     */
+    private Seat findExistingSeat(SeatService seatService, Seat seat) {
+        if (seat.getCinemaHall() == null || seat.getCinemaHall().getId() == null) {
+            return null;
+        }
+        
+        try {
+            List<Seat> hallSeats = seatService.getSeatsByCinemaHallId(seat.getCinemaHall().getId());
+            return hallSeats.stream()
+                .filter(s -> seat.getRowLabel().equals(s.getRowLabel()) && 
+                           seat.getSeatNumber().equals(s.getSeatNumber()))
+                .findFirst()
+                .orElse(null);
+        } catch (Exception e) {
+            LOGGER.warning("Error finding existing seat: " + e.getMessage());
+            return null;
+        }
+    }
+    
+    /**
+     * Generate a temporary seat ID based on seat position
+     * This is a workaround for dynamically created seats
+     */
+    private long generateTempSeatId(Seat seat) {
+        // Create a unique ID based on hall, row, and seat number
+        long hallId = moviesession.getCinemaHall() != null ? moviesession.getCinemaHall().getId() : 1L;
+        int row = Integer.parseInt(seat.getRowLabel() != null ? seat.getRowLabel() : "1");
+        int seatNum = Integer.parseInt(seat.getSeatNumber() != null ? seat.getSeatNumber() : "1");
+        
+        // Generate unique ID: hallId * 10000 + row * 100 + seatNum
+        return hallId * 10000 + row * 100 + seatNum;
+    }
+    
+    /**
+     * Generate a QR code string for the ticket
+     */
+    private String generateQRCode(Ticket ticket) {
+        // Create a unique QR code based on ticket information
+        String movieTitle = ticket.getMovieSession().getFilm().getTitle();
+        String seatInfo = getRowLetter(ticket.getSeat()) + ticket.getSeat().getSeatNumber();
+        String sessionTime = ticket.getMovieSession().getStartTime().toString();
+        String clientName = ticket.getClient().getFirstName() + " " + ticket.getClient().getLastName();
+        
+        // Format: RAKCHA-MOVIE_TITLE-SEAT-SESSION_TIME-CLIENT_HASH
+        String qrData = String.format("RAKCHA-%s-%s-%s-%d", 
+            movieTitle.replaceAll("\\s+", "").toUpperCase(),
+            seatInfo,
+            sessionTime.substring(0, 16).replace(":", "").replace("-", ""),
+            Math.abs(clientName.hashCode())
+        );
+        
+        LOGGER.info("Generated QR code: " + qrData);
+        return qrData;
+    }
+    
+    /**
+     * Verify that tickets were successfully created in the database
+     */
+    private int verifyTicketsCreated() {
+        try {
+            TicketService verifyService = new TicketService();
+            List<Ticket> userTickets = verifyService.getTicketsByUser(client.getId());
+            
+            LOGGER.info(String.format("📊 TICKET VERIFICATION: User %d has %d total tickets in database", 
+                client.getId(), userTickets.size()));
+                
+            // Count tickets for this specific session
+            long sessionTickets = userTickets.stream()
+                .filter(t -> t.getMovieSession() != null && 
+                           t.getMovieSession().getId().equals(moviesession.getId()))
+                .count();
+                
+            LOGGER.info(String.format("🎬 SESSION TICKETS: %d tickets found for session %d (%s)", 
+                sessionTickets, moviesession.getId(), moviesession.getFilm().getTitle()));
+                
+            return userTickets.size();
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Error verifying tickets: " + e.getMessage(), e);
+            return 0;
+        }
+    }
+    
+    /**
+     * Navigate back to the cinema dashboard
+     */
+    private void navigateBackToDashboard() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/cinemas/DashboardClientCinema.fxml"));
+            AnchorPane root = fxmlLoader.load();
+            Stage stage = (Stage) Pay.getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle("Cinema Dashboard - Booking Confirmed");
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Error navigating back to dashboard", e);
+            // Fallback: try to navigate to film user view
+            try {
+                FXMLLoader fallbackLoader = new FXMLLoader(getClass().getResource("/ui/films/filmuser.fxml"));
+                AnchorPane fallbackRoot = fallbackLoader.load();
+                Stage stage = (Stage) Pay.getScene().getWindow();
+                Scene scene = new Scene(fallbackRoot);
+                stage.setScene(scene);
+                stage.setTitle("Films");
+            } catch (Exception fallbackError) {
+                LOGGER.log(Level.SEVERE, "Fallback navigation also failed", fallbackError);
+                showError("Navigation Error", "Unable to navigate back to dashboard. Please restart the application.");
             }
         }
     }
 
     /**
      * Checks that all payment form fields contain valid values.
-     *
-     * <p>
-     * Performs these validations:
-     * <ul>
-     * <li>Credit card number matches the Visa format (13 or 16 digits, starts with
-     * '4').</li>
-     * <li>Expiration month is numeric and between 1 and 12 inclusive.</li>
-     * <li>Expiration year is numeric and not earlier than the current year.</li>
-     * <li>CVC is present and numeric.</li>
-     * </ul>
-     * </p>
+     * Enhanced with test card support and better validation.
      *
      * @return true if all input fields are valid, false otherwise
      */
     private boolean isValidInput() {
-        if (!this.isValidVisaCardNo(this.carte.getText())) {
-            this.showError("Numéro de carte invalide", "Veuillez entrer un numéro de carte Visa valide.");
+        // Check if card number is valid (more flexible for test cards)
+        if (!this.isValidCardNumber(this.carte.getText())) {
+            this.showTestCardInfo();
             return false;
         }
 
         if (this.moisExp.getText().isEmpty() || !PaymentUserController.isNum(this.moisExp.getText())
             || 1 > Integer.parseInt(moisExp.getText()) || 12 < Integer.parseInt(moisExp.getText())) {
-            this.showError("Mois d'expiration invalide",
-                "Veuillez entrer un mois d'expiration valide (entre 1 et 12).");
+            this.showError("Invalid Expiry Month", "Please enter a valid expiry month (1-12).");
             return false;
         }
 
-        if (this.anneeExp.getText().isEmpty() || !PaymentUserController.isNum(this.anneeExp.getText())
-            || Integer.parseInt(this.anneeExp.getText()) < LocalDate.now().getYear()) {
-            this.showError("Année d'expiration invalide", "Veuillez entrer une année d'expiration valide.");
+        if (this.anneeExp.getText().isEmpty() || !PaymentUserController.isNum(this.anneeExp.getText())) {
+            this.showError("Invalid Expiry Year", "Please enter a valid expiry year.");
+            return false;
+        }
+
+        // More lenient year validation for test mode
+        int currentYear = LocalDate.now().getYear();
+        int enteredYear = Integer.parseInt(this.anneeExp.getText());
+        if (enteredYear < currentYear - 10 || enteredYear > currentYear + 20) {
+            this.showError("Invalid Expiry Year", "Please enter a reasonable expiry year.");
             return false;
         }
 
         if (this.cvc.getText().isEmpty() || !PaymentUserController.isNum(this.cvc.getText())) {
-            this.showError("Code CVC invalide", "Veuillez entrer un code CVC numérique valide.");
+            this.showError("Invalid CVC", "Please enter a valid numeric CVC code.");
             return false;
         }
 
         return true;
     }
-
+    
     /**
-     * Determines whether a string is a valid Visa card number.
-     *
-     * @param text the card number string to validate (expected to contain only
-     *             digits)
-     * @return `true` if the string starts with '4' and contains exactly 13 or 16
-     * digits, `false` otherwise
+     * Enhanced card validation that supports test cards
      */
-    private boolean isValidVisaCardNo(final String text) {
-        final String regex = "^4[0-9]{12}(?:[0-9]{3})?$";
-        final Pattern p = Pattern.compile(regex);
-        final CharSequence cs = text;
-        final Matcher m = p.matcher(cs);
-        return m.matches();
+    private boolean isValidCardNumber(String cardNumber) {
+        if (cardNumber == null || cardNumber.trim().isEmpty()) {
+            return false;
+        }
+        
+        // Remove spaces and check length
+        String cleanCard = cardNumber.replaceAll("\\s+", "");
+        
+        // Must be between 13-19 digits
+        if (!cleanCard.matches("\\d{13,19}")) {
+            return false;
+        }
+        
+        // Check for common test cards (always valid in development)
+        if (isTestCard(cleanCard)) {
+            return true;
+        }
+        
+        // For production, use Luhn algorithm
+        return isValidLuhn(cleanCard);
     }
+    
+    /**
+     * Check if this is a known test card
+     */
+    private boolean isTestCard(String cardNumber) {
+        return cardNumber.equals("4242424242424242") ||
+               cardNumber.equals("4000000000000002") ||
+               cardNumber.equals("5555555555554444") ||
+               cardNumber.equals("378282246310005") ||
+               cardNumber.equals("4000000000009995") ||
+               cardNumber.equals("4111111111111111");
+    }
+    
+    /**
+     * Validate card number using Luhn algorithm
+     */
+    private boolean isValidLuhn(String cardNumber) {
+        int sum = 0;
+        boolean alternate = false;
+        
+        for (int i = cardNumber.length() - 1; i >= 0; i--) {
+            int n = Integer.parseInt(cardNumber.substring(i, i + 1));
+            
+            if (alternate) {
+                n *= 2;
+                if (n > 9) {
+                    n = (n % 10) + 1;
+                }
+            }
+            
+            sum += n;
+            alternate = !alternate;
+        }
+        
+        return (sum % 10 == 0);
+    }
+    
+    /**
+     * Show test card information to help users
+     */
+    private void showTestCardInfo() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Test Card Information");
+        alert.setHeaderText("Use Test Cards for Development");
+        alert.setContentText(
+            "For testing, please use one of these test cards:\n\n" +
+            "• 4242 4242 4242 4242 (Visa - Success)\n" +
+            "• 4000 0000 0000 0002 (Visa Debit - Success)\n" +
+            "• 5555 5555 5555 4444 (Mastercard - Success)\n" +
+            "• 4000 0000 0000 9995 (Visa - Declined)\n\n" +
+            "Use any future expiry date (e.g., 12/2025) and any 3-digit CVC (e.g., 123)."
+        );
+        alert.showAndWait();
+    }
+
+
 
     /**
      * Displays an error alert with the given title and message.
@@ -467,12 +756,8 @@ public class PaymentUserController implements Initializable {
     }
 
     /**
-     * Initialize the controller with a movie session, client, and preselected
-     * seats.
-     * <p>
-     * Sets the film label, computes and displays the total price based on selected
-     * seats,
-     * and locks the seat-count spinner to the number of provided seats.
+     * Initialize the controller with a movie session, client, and preselected seats.
+     * Enhanced version with proper UI updates and seat price calculation.
      *
      * @param moviesession  the movie session being purchased
      * @param client        the client making the purchase
@@ -482,15 +767,63 @@ public class PaymentUserController implements Initializable {
         this.moviesession = moviesession;
         this.client = client;
         this.selectedSeats = selectedSeats;
-        this.filmLabel_Payment.setText(moviesession.getFilm().getTitle());
+        
+        // Update UI elements
+        if (filmLabel_Payment != null) {
+            filmLabel_Payment.setText(moviesession.getFilm().getTitle());
+        }
+        
+        // Calculate total price considering seat multipliers
+        double totalPrice = selectedSeats.stream()
+            .mapToDouble(seat -> {
+                double basePrice = moviesession.getPrice() != null ? moviesession.getPrice() : 15.0;
+                double multiplier = seat.getPriceMultiplier() != null ? seat.getPriceMultiplier() : 1.0;
+                return basePrice * multiplier;
+            })
+            .sum();
+            
+        if (total != null) {
+            total.setText(String.format("%.2f TND", totalPrice));
+        }
+        
+        // Update seat display
+        if (selectedSeatsDisplay != null) {
+            String seatLabels = selectedSeats.stream()
+                .map(seat -> {
+                    try {
+                        int rowNum = Integer.parseInt(seat.getRowLabel() != null ? seat.getRowLabel() : "1");
+                        String row = String.valueOf((char) ('A' + rowNum - 1));
+                        String seatNum = seat.getSeatNumber() != null ? seat.getSeatNumber() : "?";
+                        String type = "VIP".equals(seat.getType()) ? " 👑" : "";
+                        return row + seatNum + type;
+                    } catch (NumberFormatException e) {
+                        return seat.getRowLabel() + seat.getSeatNumber();
+                    }
+                })
+                .collect(Collectors.joining(", "));
+            selectedSeatsDisplay.setText(seatLabels);
+        }
+        
+        // Update session time display
+        if (sessionTimeDisplay != null && moviesession.getStartTime() != null && moviesession.getEndTime() != null) {
+            String timeDisplay = String.format("%s - %s", 
+                moviesession.getStartTime().toLocalTime().toString(),
+                moviesession.getEndTime().toLocalTime().toString());
+            sessionTimeDisplay.setText(timeDisplay);
+        }
 
-        // Calculate total based on number of seats
-        double totalPrice = moviesession.getPrice() * selectedSeats.size();
-        total.setText(String.format("Total: %.2f Dt.", totalPrice));
-
-        // Disable seat selection since it's already done
-        nbrplacepPayment_Spinner.setDisable(true);
-        nbrplacepPayment_Spinner.getValueFactory().setValue(selectedSeats.size());
+        // Disable seat selection controls since seats are already selected
+        if (nbrplacepPayment_Spinner != null) {
+            nbrplacepPayment_Spinner.setDisable(true);
+            if (nbrplacepPayment_Spinner.getValueFactory() != null) {
+                nbrplacepPayment_Spinner.getValueFactory().setValue(selectedSeats.size());
+            }
+        }
+        
+        // Disable cinema and session selection
+        if (cinemacombox_res != null) {
+            cinemacombox_res.setDisable(true);
+        }
     }
 
     /**

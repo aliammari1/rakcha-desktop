@@ -270,11 +270,11 @@ public class FilmUserController {
         }
 
         final FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/ui/films/SeatSelection.fxml"));
-        final AnchorPane root = fxmlLoader.load();
+        final StackPane root = fxmlLoader.load();
         final Stage stage = (Stage) this.reserver_Film.getScene().getWindow();
         final SeatSelectionController controller = fxmlLoader.getController();
         final Client client = (Client) SessionManager.getCurrentUser();
-        controller.initialize(moviesession, client);
+        controller.initializeWithData(moviesession, client);
         final Scene scene = new Scene(root);
         stage.setScene(scene);
     }

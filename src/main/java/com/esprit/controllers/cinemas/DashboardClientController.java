@@ -682,7 +682,7 @@ public class DashboardClientController {
                 // rating)
                 Client client = (Client) SessionManager.getCurrentUser();
 
-                controller.initialize(moviesession, client);
+                controller.initializeWithData(moviesession, client);
 
                 Stage stage = (Stage) cardContainer.getScene().getWindow();
                 stage.setScene(new Scene(root));

@@ -1,17 +1,264 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.GridPane?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml"
-            xmlns="http://javafx.com/javafx"
-            fx:controller="com.esprit.controllers.films.SeatSelectionController"
-            prefHeight="800.0" prefWidth="1000.0">
-  <children>
-    <Label layoutX="20" layoutY="20" text="Select your seats:" style="-fx-font-size: 20px;"/>
-    <GridPane fx:id="seatGrid" layoutX="50" layoutY="60" hgap="5" vgap="5"/>
-    <Button fx:id="confirmButton" layoutX="400" layoutY="700" text="Confirm Selection"
-            onAction="#confirmSelection" styleClass="primary-button"/>
-  </children>
-</AnchorPane>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import org.kordamp.ikonli.javafx.*?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml/1" fx:id="rootContainer" maxWidth="1600.0" maxHeight="900.0"
+           minWidth="1200.0" minHeight="700.0" xmlns="http://javafx.com/javafx/21"
+           fx:controller="com.esprit.controllers.films.SeatSelectionController"
+           styleClass="immersive-root"
+           stylesheets="@../styles/filmStyle.css, @../styles/login-animations.css">
+
+  <!-- Cinematic Background Effects -->
+  <AnchorPane styleClass="cinematic-bg" mouseTransparent="true">
+    <!-- Ambient orbs with cinema theme -->
+    <Circle fx:id="orb1" radius="120" layoutX="150" layoutY="150" styleClass="ambient-orb, orb-primary"/>
+    <Circle fx:id="orb2" radius="80" layoutX="1300" layoutY="200" styleClass="ambient-orb, orb-secondary"/>
+    <Circle fx:id="orb3" radius="100" layoutX="1200" layoutY="600" styleClass="ambient-orb, orb-accent"/>
+    
+    <!-- Floating cinema icons -->
+    <FontIcon fx:id="floatingIcon1" iconLiteral="mdi2f-film:24" layoutX="100" layoutY="300" 
+              styleClass="floating-icon" opacity="0.3"/>
+    <FontIcon fx:id="floatingIcon2" iconLiteral="mdi2s-star:20" layoutX="1400" layoutY="400" 
+              styleClass="floating-star" opacity="0.4"/>
+    <FontIcon fx:id="floatingIcon3" iconLiteral="mdi2t-ticket:18" layoutX="80" layoutY="500" 
+              styleClass="floating-icon" opacity="0.25"/>
+  </AnchorPane>
+
+  <!-- Main Content -->
+  <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="main-scroll">
+    <VBox alignment="TOP_CENTER" spacing="25" styleClass="scroll-content" style="-fx-padding: 30;">
+
+    <!-- Cinema Header -->
+    <VBox alignment="CENTER" spacing="20" styleClass="hero-stack" style="-fx-padding: 35;">
+
+      <!-- Title Section -->
+      <HBox alignment="CENTER" spacing="20">
+        <FontIcon iconLiteral="mdi2s-seat-recline-extra:45" styleClass="star-gold"/>
+        <VBox alignment="CENTER" spacing="5">
+          <Label text="SELECT YOUR SEATS" styleClass="hero-title" style="-fx-font-size: 32px;"/>
+          <Label text="Choose the perfect seats for your cinema experience" styleClass="hero-description"/>
+        </VBox>
+        <FontIcon iconLiteral="mdi2m-movie-open:45" styleClass="star-gold"/>
+      </HBox>
+
+      <!-- Movie Information -->
+      <VBox alignment="CENTER" spacing="8">
+        <Label fx:id="movieInfoLabel" text="Movie • Cinema Hall • Showtime" styleClass="detail-title" style="-fx-font-size: 20px;"/>
+        <Label fx:id="sessionDetailsLabel" text="Base price: 15.00 TND • Duration: 120 min • Hall capacity: 100 seats" styleClass="detail-meta"/>
+      </VBox>
+
+      <!-- Seat Legend -->
+      <HBox alignment="CENTER" spacing="35" styleClass="hero-meta" style="-fx-padding: 20 0 0 0;">
+        <VBox alignment="CENTER" spacing="6">
+          <Circle radius="14" styleClass="orb-primary" style="-fx-fill: #4CAF50;"/>
+          <Label text="Available" styleClass="section-label-small"/>
+          <Label text="Standard seats" styleClass="rating-hint"/>
+        </VBox>
+        <VBox alignment="CENTER" spacing="6">
+          <Circle radius="14" style="-fx-fill: #ffc800;"/>
+          <Label text="VIP" styleClass="section-label-small"/>
+          <Label text="Premium comfort" styleClass="rating-hint"/>
+        </VBox>
+        <VBox alignment="CENTER" spacing="6">
+          <Circle radius="14" styleClass="orb-accent" style="-fx-fill: #b91c45;"/>
+          <Label text="Recommended" styleClass="section-label-small"/>
+          <Label text="Best viewing" styleClass="rating-hint"/>
+        </VBox>
+        <VBox alignment="CENTER" spacing="6">
+          <Circle radius="14" style="-fx-fill: #d42558;"/>
+          <Label text="Selected" styleClass="section-label-small"/>
+          <Label text="Your choice" styleClass="rating-hint"/>
+        </VBox>
+        <VBox alignment="CENTER" spacing="6">
+          <Circle radius="14" style="-fx-fill: #8b0023;"/>
+          <Label text="Occupied" styleClass="section-label-small"/>
+          <Label text="Not available" styleClass="rating-hint"/>
+        </VBox>
+      </HBox>
+    </VBox>
+
+    <!-- Cinema Screen -->
+    <VBox alignment="CENTER" spacing="15">
+      <VBox alignment="CENTER" spacing="8">
+        <HBox alignment="CENTER" spacing="10">
+          <FontIcon iconLiteral="mdi2p-projector-screen:20" styleClass="star-gold"/>
+          <Label text="CINEMA SCREEN" styleClass="section-title" style="-fx-font-size: 18px;"/>
+          <FontIcon iconLiteral="mdi2p-projector-screen:20" styleClass="star-gold"/>
+        </HBox>
+        <Label text="Best viewing experience from center seats" styleClass="detail-meta"/>
+      </VBox>
+      
+      <!-- Cinematic Screen Effect -->
+      <VBox alignment="CENTER" spacing="5">
+        <Rectangle width="700" height="12" arcWidth="25" arcHeight="25" styleClass="ambient-orb"
+                   style="-fx-fill: linear-gradient(to bottom, #ffc800, #d42558);"/>
+        <Rectangle width="680" height="4" arcWidth="15" arcHeight="15"
+                   style="-fx-fill: rgba(255, 200, 0, 0.6);"/>
+        <Rectangle width="660" height="2" arcWidth="10" arcHeight="10"
+                   style="-fx-fill: rgba(255, 200, 0, 0.3);"/>
+      </VBox>
+    </VBox>
+
+    <!-- Main Seat Selection Area -->
+    <HBox alignment="CENTER" spacing="30" VBox.vgrow="ALWAYS">
+      
+      <!-- Left Panel - Tips & Quick Actions -->
+      <VBox alignment="TOP_CENTER" spacing="20" prefWidth="280" styleClass="detail-sidebar">
+        
+        <VBox alignment="CENTER" spacing="10">
+          <FontIcon iconLiteral="mdi2l-lightbulb-on:30" styleClass="star-gold"/>
+          <Label text="SEAT TIPS" styleClass="section-title" style="-fx-font-size: 16px;"/>
+        </VBox>
+        
+        <VBox spacing="15">
+          <HBox alignment="CENTER_LEFT" spacing="12">
+            <FontIcon iconLiteral="mdi2s-star:16" styleClass="star-gold"/>
+            <Label text="Center seats offer the best view" styleClass="detail-meta" maxWidth="200" wrapText="true"/>
+          </HBox>
+          <HBox alignment="CENTER_LEFT" spacing="12">
+            <FontIcon iconLiteral="mdi2c-crown:16" style="-fx-fill: #ffc800; -fx-icon-color: #ffc800;"/>
+            <Label text="VIP seats include extra comfort" styleClass="detail-meta" maxWidth="200" wrapText="true"/>
+          </HBox>
+          <HBox alignment="CENTER_LEFT" spacing="12">
+            <FontIcon iconLiteral="mdi2e-eye:16" style="-fx-fill: #b91c45; -fx-icon-color: #b91c45;"/>
+            <Label text="Rows D-G provide optimal viewing" styleClass="detail-meta" maxWidth="200" wrapText="true"/>
+          </HBox>
+          <HBox alignment="CENTER_LEFT" spacing="12">
+            <FontIcon iconLiteral="mdi2a-account-group:16" style="-fx-fill: #d42558; -fx-icon-color: #d42558;"/>
+            <Label text="Select adjacent seats for groups" styleClass="detail-meta" maxWidth="200" wrapText="true"/>
+          </HBox>
+        </VBox>
+        
+        <!-- Quick Select Options -->
+        <VBox spacing="12" style="-fx-padding: 20 0 0 0;">
+          <Label text="QUICK SELECT" styleClass="section-label"/>
+          <Button fx:id="bestSeatsButton" text="🎯 Best Available" styleClass="action-btn, secondary"/>
+          <Button fx:id="centerSeatsButton" text="🎪 Center Seats" styleClass="action-btn, secondary"/>
+        </VBox>
+      </VBox>
+      
+      <!-- Center Panel - Auditorium -->
+      <VBox alignment="CENTER" spacing="20" prefWidth="700">
+        <VBox alignment="CENTER" spacing="25" styleClass="inline-detail-panel" style="-fx-padding: 40;">
+
+          <!-- Auditorium Header -->
+          <VBox alignment="CENTER" spacing="10">
+            <HBox alignment="CENTER" spacing="15">
+              <FontIcon iconLiteral="mdi2t-theater:24" styleClass="star-gold"/>
+              <Label text="AUDITORIUM LAYOUT" styleClass="section-title"/>
+              <FontIcon iconLiteral="mdi2t-theater:24" styleClass="star-gold"/>
+            </HBox>
+            <Label text="Click on available seats to select them" styleClass="detail-meta"/>
+          </VBox>
+
+          <!-- Seat Grid -->
+          <GridPane fx:id="seatGrid" hgap="12" vgap="12" alignment="CENTER" 
+                    style="-fx-padding: 20; -fx-background-color: rgba(139, 0, 35, 0.1); -fx-background-radius: 15;"/>
+
+        </VBox>
+      </VBox>
+      
+      <!-- Right Panel - Selection Summary -->
+      <VBox alignment="TOP_CENTER" spacing="20" prefWidth="300" styleClass="detail-sidebar">
+        
+        <VBox alignment="CENTER" spacing="10">
+          <FontIcon iconLiteral="mdi2t-ticket:30" styleClass="star-gold"/>
+          <Label text="YOUR SELECTION" styleClass="section-title" style="-fx-font-size: 16px;"/>
+        </VBox>
+        
+        <!-- Selection Details -->
+        <VBox spacing="20" styleClass="qr-section">
+          <VBox alignment="CENTER" spacing="8">
+            <Label text="Selected Seats" styleClass="section-label-small"/>
+            <ScrollPane prefHeight="80" fitToWidth="true" styleClass="comments-scroll">
+              <Label fx:id="selectedSeatsLabel" text="Click seats to select them" styleClass="rating-text" 
+                     maxWidth="250" wrapText="true" style="-fx-text-alignment: center;"/>
+            </ScrollPane>
+          </VBox>
+
+          <Separator styleClass="filter-separator"/>
+
+          <VBox alignment="CENTER" spacing="8">
+            <Label text="Total Amount" styleClass="section-label-small"/>
+            <Label fx:id="totalPriceLabel" text="0.00 TND" styleClass="rating-large" style="-fx-text-fill: #ffc800;"/>
+          </VBox>
+          
+          <VBox alignment="CENTER" spacing="8">
+            <Label fx:id="savingsLabel" text="" styleClass="detail-meta" visible="false"/>
+          </VBox>
+        </VBox>
+        
+        <!-- Seat Details Panel -->
+        <VBox fx:id="seatDetailsPanel" spacing="10" visible="false" styleClass="showtime-preview">
+          <Label text="SEAT DETAILS" styleClass="qr-label"/>
+          <Label fx:id="seatDetailsLabel" text="" styleClass="qr-hint" maxWidth="250" wrapText="true"/>
+        </VBox>
+      </VBox>
+      
+    </HBox>
+
+    <!-- Action Buttons -->
+    <HBox alignment="CENTER" spacing="25" styleClass="hero-actions" style="-fx-padding: 25 0 0 0;">
+      <Button fx:id="backButton" text="← BACK TO SESSIONS" onAction="#goBack" styleClass="hero-btn, secondary">
+        <graphic>
+          <FontIcon iconLiteral="mdi2a-arrow-left:16"/>
+        </graphic>
+      </Button>
+
+      <Button fx:id="clearSelectionButton" text="CLEAR ALL" onAction="#clearSelection" 
+              styleClass="action-btn, secondary" visible="false">
+        <graphic>
+          <FontIcon iconLiteral="mdi2d-delete:16"/>
+        </graphic>
+      </Button>
+
+      <Button fx:id="confirmButton" text="PROCEED TO PAYMENT" onAction="#confirmSelection" 
+              styleClass="hero-btn, primary" disable="true">
+        <graphic>
+          <FontIcon iconLiteral="mdi2c-credit-card:16"/>
+        </graphic>
+      </Button>
+    </HBox>
+
+    </VBox>
+  </ScrollPane>
+
+  <!-- Welcome Overlay -->
+  <StackPane fx:id="onboardingOverlay" visible="false" styleClass="trailer-overlay">
+    <VBox alignment="CENTER" spacing="30" maxWidth="650" styleClass="inline-detail-panel" style="-fx-padding: 50;">
+      
+      <VBox alignment="CENTER" spacing="15">
+        <FontIcon iconLiteral="mdi2h-hand-pointing-up:50" styleClass="star-gold"/>
+        <Label text="WELCOME TO SEAT SELECTION!" styleClass="detail-title"/>
+        <Label text="Choose your perfect seats for the ultimate cinema experience" 
+               styleClass="detail-description" maxWidth="500" wrapText="true" style="-fx-text-alignment: center;"/>
+      </VBox>
+      
+      <VBox spacing="20" maxWidth="500">
+        <HBox alignment="CENTER_LEFT" spacing="15">
+          <Circle radius="15" style="-fx-fill: #4CAF50;"/>
+          <Label text="Green seats are available for selection" styleClass="detail-meta"/>
+        </HBox>
+        <HBox alignment="CENTER_LEFT" spacing="15">
+          <Circle radius="15" style="-fx-fill: #ffc800;"/>
+          <Label text="Gold seats are VIP with premium comfort" styleClass="detail-meta"/>
+        </HBox>
+        <HBox alignment="CENTER_LEFT" spacing="15">
+          <Circle radius="15" style="-fx-fill: #b91c45;"/>
+          <Label text="Red highlights show recommended seats" styleClass="detail-meta"/>
+        </HBox>
+      </VBox>
+      
+      <Button fx:id="startTourButton" text="START SELECTING SEATS" onAction="#startTour" styleClass="hero-btn, primary">
+        <graphic>
+          <FontIcon iconLiteral="mdi2r-rocket-launch:16"/>
+        </graphic>
+      </Button>
+    </VBox>
+  </StackPane>
+
+</StackPane>
