@@ -230,8 +230,8 @@ public class DashboardResponsableController implements Initializable {
 
         // Create the cinema object
         final Cinema cinema = new Cinema(this.tfNom.getText(), this.tfAdresse.getText(), cinemaManager,
-            logoPath,
-            defaultStatut);
+                logoPath,
+                defaultStatut);
         // Call the CinemaService to create the cinema
         final CinemaService cs = new CinemaService();
         cs.create(cinema);
@@ -253,7 +253,7 @@ public class DashboardResponsableController implements Initializable {
         final FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Sélectionner une image");
         fileChooser.getExtensionFilters().addAll(
-            new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg", "*.gif"));
+                new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg", "*.gif"));
         final File selectedFile = fileChooser.showOpenDialog(null);
         if (null != selectedFile) {
             try {
@@ -296,18 +296,18 @@ public class DashboardResponsableController implements Initializable {
         }
 
         this.comboCinema.getSelectionModel().selectedItemProperty().addListener(
-            (final ObservableValue<? extends String> observable, final String oldValue, final String newValue) -> {
-                if (null != newValue) {
-                    final Cinema selectedCinema = acceptedCinemas.stream()
-                        .filter(cinema -> cinema.getName().equals(newValue)).findFirst().orElse(null);
-                    if (null != selectedCinema) {
-                        this.loadMoviesForCinema(selectedCinema.getId());
-                        this.loadRoomsForCinema(selectedCinema.getId());
+                (final ObservableValue<? extends String> observable, final String oldValue, final String newValue) -> {
+                    if (null != newValue) {
+                        final Cinema selectedCinema = acceptedCinemas.stream()
+                                .filter(cinema -> cinema.getName().equals(newValue)).findFirst().orElse(null);
+                        if (null != selectedCinema) {
+                            this.loadMoviesForCinema(selectedCinema.getId());
+                            this.loadRoomsForCinema(selectedCinema.getId());
+                        }
+
                     }
 
-                }
-
-            });
+                });
     }
 
     /**
@@ -319,9 +319,9 @@ public class DashboardResponsableController implements Initializable {
      */
     private void loadMoviesForCinema(final Long cinemaId) {
         this.comboMovie.getItems().clear();
-        // TODO: this logic is wrong
-        FilmService filmCinemaService = new FilmService();
-        List<Film> moviesForCinema = filmCinemaService.read(PageRequest.defaultPage()).getContent();
+        // Get films that have sessions at this specific cinema
+        MovieSessionService sessionService = new MovieSessionService();
+        List<Film> moviesForCinema = sessionService.getFilmsByCinemaId(cinemaId);
 
         for (final Film f : moviesForCinema) {
             this.comboMovie.getItems().add(f.getTitle());
@@ -355,8 +355,8 @@ public class DashboardResponsableController implements Initializable {
         final CinemaService cinemaService = new CinemaService();
         final List<Cinema> cinemas = cinemaService.read(PageRequest.defaultPage()).getContent();
         final List<Cinema> acceptedCinemasList = cinemas.stream()
-            .filter(cinema -> CinemaStatus.ACCEPTED.getStatus().equals(cinema.getStatus()))
-            .collect(Collectors.toList());
+                .filter(cinema -> CinemaStatus.ACCEPTED.getStatus().equals(cinema.getStatus()))
+                .collect(Collectors.toList());
         if (acceptedCinemasList.isEmpty()) {
             this.showAlert("No accepted cinemas are available.");
         }
@@ -402,7 +402,7 @@ public class DashboardResponsableController implements Initializable {
         cardContainer.setStyle("-fx-padding: 10px 0 0  25px;");
         final AnchorPane card = new AnchorPane();
         card.setStyle(
-            "-fx-background-color: #ffffff; -fx-border-radius: 10px; -fx-border-color: #000000; -fx-background-radius: 10px; -fx-border-width: 2px;");
+                "-fx-background-color: #ffffff; -fx-border-radius: 10px; -fx-border-color: #000000; -fx-background-radius: 10px; -fx-border-width: 2px;");
         card.setPrefWidth(400);
         final ImageView logoImageView = new ImageView();
         logoImageView.setFitWidth(70);
@@ -430,7 +430,7 @@ public class DashboardResponsableController implements Initializable {
                 final FileChooser fileChooser = new FileChooser();
                 fileChooser.setTitle("Choose a new image");
                 fileChooser.getExtensionFilters()
-                    .addAll(new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.gif"));
+                        .addAll(new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.gif"));
                 final File selectedFile = fileChooser.showOpenDialog(null);
                 if (null != selectedFile) {
                     try {
@@ -480,13 +480,13 @@ public class DashboardResponsableController implements Initializable {
         });
 
         final Label AdrsLabel = new Label(
-            "Address: ");
+                "Address: ");
         AdrsLabel.setLayoutX(115);
         AdrsLabel.setLayoutY(50);
         AdrsLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
         card.getChildren().add(AdrsLabel);
         final Label adresseLabel = new Label(cinema
-            .getAddress());
+                .getAddress());
         adresseLabel.setLayoutX(180);
         adresseLabel.setLayoutY(50);
         adresseLabel.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-size: 14px;");
@@ -566,63 +566,63 @@ public class DashboardResponsableController implements Initializable {
             this.colNameRoom.setCellValueFactory(new PropertyValueFactory<>("name"));
             this.colNbrPlaces.setCellValueFactory(new PropertyValueFactory<>("seatCapacity"));
             this.colActionRoom
-                .setCellFactory(new Callback<TableColumn<CinemaHall, Void>, TableCell<CinemaHall, Void>>() {
-                    /**
-                     * Create a table cell that shows a "Delete" button and removes the cell's
-                     * CinemaHall from storage and the table when pressed.
-                     *
-                     * @param param the TableColumn for which this cell factory is created
-                     * @return a TableCell containing a delete control that deletes its associated
-                     *         CinemaHall from persistent storage and from the table view
-                     */
-                    @Override
-                    /**
-                     * Performs call operation.
-                     *
-                     * @return the result of the operation
-                     */
-                    public TableCell<CinemaHall, Void> call(final TableColumn<CinemaHall, Void> param) {
-                        return new TableCell<CinemaHall, Void>() {
-                            private final Button deleteRoomButton = new Button("Delete");
+                    .setCellFactory(new Callback<TableColumn<CinemaHall, Void>, TableCell<CinemaHall, Void>>() {
+                        /**
+                         * Create a table cell that shows a "Delete" button and removes the cell's
+                         * CinemaHall from storage and the table when pressed.
+                         *
+                         * @param param the TableColumn for which this cell factory is created
+                         * @return a TableCell containing a delete control that deletes its associated
+                         *         CinemaHall from persistent storage and from the table view
+                         */
+                        @Override
+                        /**
+                         * Performs call operation.
+                         *
+                         * @return the result of the operation
+                         */
+                        public TableCell<CinemaHall, Void> call(final TableColumn<CinemaHall, Void> param) {
+                            return new TableCell<CinemaHall, Void>() {
+                                private final Button deleteRoomButton = new Button("Delete");
 
-                            {
-                                this.deleteRoomButton.getStyleClass().add("delete-btn");
-                                this.deleteRoomButton.setOnAction(event -> {
-                                    final CinemaHall cinemahall = this.getTableView().getItems()
-                                        .get(this.getIndex());
-                                    final CinemaHallService cinemahallService = new CinemaHallService();
-                                    cinemahallService.delete(cinemahall);
-                                    this.getTableView().getItems().remove(cinemahall);
-                                });
-                            }
-
-                            /**
-                             * Updates the table cell's graphic to show the deleteRoomButton when the cell
-                             * is not empty.
-                             *
-                             * When `empty` is true the cell's graphic is cleared; otherwise the cell's
-                             * graphic is set to an HBox
-                             * containing the deleteRoomButton.
-                             *
-                             * @param item  the cell item (ignored for this cell type)
-                             * @param empty true if the cell does not contain data and should be displayed
-                             *              empty
-                             */
-                            @Override
-                            protected void updateItem(final Void item, final boolean empty) {
-                                super.updateItem(item, empty);
-                                if (empty) {
-                                    this.setGraphic(null);
-                                } else {
-                                    this.setGraphic(new HBox(this.deleteRoomButton));
+                                {
+                                    this.deleteRoomButton.getStyleClass().add("delete-btn");
+                                    this.deleteRoomButton.setOnAction(event -> {
+                                        final CinemaHall cinemahall = this.getTableView().getItems()
+                                                .get(this.getIndex());
+                                        final CinemaHallService cinemahallService = new CinemaHallService();
+                                        cinemahallService.delete(cinemahall);
+                                        this.getTableView().getItems().remove(cinemahall);
+                                    });
                                 }
 
-                            }
+                                /**
+                                 * Updates the table cell's graphic to show the deleteRoomButton when the cell
+                                 * is not empty.
+                                 *
+                                 * When `empty` is true the cell's graphic is cleared; otherwise the cell's
+                                 * graphic is set to an HBox
+                                 * containing the deleteRoomButton.
+                                 *
+                                 * @param item  the cell item (ignored for this cell type)
+                                 * @param empty true if the cell does not contain data and should be displayed
+                                 *              empty
+                                 */
+                                @Override
+                                protected void updateItem(final Void item, final boolean empty) {
+                                    super.updateItem(item, empty);
+                                    if (empty) {
+                                        this.setGraphic(null);
+                                    } else {
+                                        this.setGraphic(new HBox(this.deleteRoomButton));
+                                    }
 
-                        };
-                    }
+                                }
 
-                });
+                            };
+                        }
+
+                    });
             this.RoomTableView.setEditable(true);
             this.colNbrPlaces.setCellFactory(tc -> new TableCell<CinemaHall, Integer>() {
                 /**
@@ -873,49 +873,49 @@ public class DashboardResponsableController implements Initializable {
         this.addRoomForm.setVisible(false);
         this.RoomTableView.setVisible(false);
         this.colMovie.setCellValueFactory(
-            new Callback<TableColumn.CellDataFeatures<MovieSession, String>, ObservableValue<String>>() {
-                /**
-                 * Provides an observable string containing the MovieSession's film name.
-                 *
-                 * @param moviesessionStringCellDataFeatures cell data features for the
-                 *                                           MovieSession row
-                 * @return an ObservableValue containing the film's name
-                 */
-                @Override
-                /**
-                 * Performs call operation.
-                 *
-                 * @return the result of the operation
-                 */
-                public ObservableValue<String> call(
-                    final TableColumn.CellDataFeatures<MovieSession, String> moviesessionStringCellDataFeatures) {
-                    return new SimpleStringProperty(
-                        moviesessionStringCellDataFeatures.getValue().getFilm().getTitle());
-                }
+                new Callback<TableColumn.CellDataFeatures<MovieSession, String>, ObservableValue<String>>() {
+                    /**
+                     * Provides an observable string containing the MovieSession's film name.
+                     *
+                     * @param moviesessionStringCellDataFeatures cell data features for the
+                     *                                           MovieSession row
+                     * @return an ObservableValue containing the film's name
+                     */
+                    @Override
+                    /**
+                     * Performs call operation.
+                     *
+                     * @return the result of the operation
+                     */
+                    public ObservableValue<String> call(
+                            final TableColumn.CellDataFeatures<MovieSession, String> moviesessionStringCellDataFeatures) {
+                        return new SimpleStringProperty(
+                                moviesessionStringCellDataFeatures.getValue().getFilm().getTitle());
+                    }
 
-            });
+                });
         this.colCinema.setCellValueFactory(
-            new Callback<TableColumn.CellDataFeatures<MovieSession, String>, ObservableValue<String>>() {
-                /**
-                 * Provide the cinema name of the MovieSession for table-cell binding.
-                 *
-                 * @param moviesessionStringCellDataFeatures cell data features for the table
-                 *                                           row containing the MovieSession
-                 * @return a SimpleStringProperty containing the session's cinema name
-                 */
-                @Override
-                /**
-                 * Performs call operation.
-                 *
-                 * @return the result of the operation
-                 */
-                public ObservableValue<String> call(
-                    final TableColumn.CellDataFeatures<MovieSession, String> moviesessionStringCellDataFeatures) {
-                    return new SimpleStringProperty(
-                        moviesessionStringCellDataFeatures.getValue().getCinemaHall().getCinema().getName());
-                }
+                new Callback<TableColumn.CellDataFeatures<MovieSession, String>, ObservableValue<String>>() {
+                    /**
+                     * Provide the cinema name of the MovieSession for table-cell binding.
+                     *
+                     * @param moviesessionStringCellDataFeatures cell data features for the table
+                     *                                           row containing the MovieSession
+                     * @return a SimpleStringProperty containing the session's cinema name
+                     */
+                    @Override
+                    /**
+                     * Performs call operation.
+                     *
+                     * @return the result of the operation
+                     */
+                    public ObservableValue<String> call(
+                            final TableColumn.CellDataFeatures<MovieSession, String> moviesessionStringCellDataFeatures) {
+                        return new SimpleStringProperty(
+                                moviesessionStringCellDataFeatures.getValue().getCinemaHall().getCinema().getName());
+                    }
 
-            });
+                });
         this.colMovieRoom.setCellValueFactory(new PropertyValueFactory<>("cinemaHall"));
         this.colDate.setCellValueFactory(new PropertyValueFactory<>("sessionDate"));
         this.colDepartTime.setCellValueFactory(new PropertyValueFactory<>("startTime"));
@@ -1146,9 +1146,12 @@ public class DashboardResponsableController implements Initializable {
                 super.commitEdit(newValue);
                 final MovieSession moviesession = this.getTableView().getItems().get(this.getIndex());
                 if (moviesession.getEndTime() != null) {
-                    moviesession.setEndTime(moviesession.getEndTime().withHour(newValue.toLocalTime().getHour()).withMinute(newValue.toLocalTime().getMinute()).withSecond(newValue.toLocalTime().getSecond()));
+                    moviesession.setEndTime(moviesession.getEndTime().withHour(newValue.toLocalTime().getHour())
+                            .withMinute(newValue.toLocalTime().getMinute())
+                            .withSecond(newValue.toLocalTime().getSecond()));
                 } else {
-                    moviesession.setEndTime(LocalDateTime.now().withHour(newValue.toLocalTime().getHour()).withMinute(newValue.toLocalTime().getMinute()));
+                    moviesession.setEndTime(LocalDateTime.now().withHour(newValue.toLocalTime().getHour())
+                            .withMinute(newValue.toLocalTime().getMinute()));
                 }
                 final MovieSessionService moviesessionService = new MovieSessionService();
                 moviesessionService.update(moviesession);
@@ -1241,9 +1244,12 @@ public class DashboardResponsableController implements Initializable {
                 super.commitEdit(newValue);
                 final MovieSession moviesession = this.getTableView().getItems().get(this.getIndex());
                 if (moviesession.getStartTime() != null) {
-                    moviesession.setStartTime(moviesession.getStartTime().withHour(newValue.toLocalTime().getHour()).withMinute(newValue.toLocalTime().getMinute()).withSecond(newValue.toLocalTime().getSecond()));
+                    moviesession.setStartTime(moviesession.getStartTime().withHour(newValue.toLocalTime().getHour())
+                            .withMinute(newValue.toLocalTime().getMinute())
+                            .withSecond(newValue.toLocalTime().getSecond()));
                 } else {
-                    moviesession.setStartTime(LocalDateTime.now().withHour(newValue.toLocalTime().getHour()).withMinute(newValue.toLocalTime().getMinute()));
+                    moviesession.setStartTime(LocalDateTime.now().withHour(newValue.toLocalTime().getHour())
+                            .withMinute(newValue.toLocalTime().getMinute()));
                 }
                 final MovieSessionService moviesessionService = new MovieSessionService();
                 moviesessionService.update(moviesession);
@@ -1318,7 +1324,8 @@ public class DashboardResponsableController implements Initializable {
                 final MovieSession moviesession = this.getTableView().getItems().get(this.getIndex());
                 java.time.LocalDate localDate = newValue.toLocalDate();
                 if (moviesession.getStartTime() != null) {
-                    moviesession.setStartTime(moviesession.getStartTime().withYear(localDate.getYear()).withMonth(localDate.getMonthValue()).withDayOfMonth(localDate.getDayOfMonth()));
+                    moviesession.setStartTime(moviesession.getStartTime().withYear(localDate.getYear())
+                            .withMonth(localDate.getMonthValue()).withDayOfMonth(localDate.getDayOfMonth()));
                 } else {
                     moviesession.setStartTime(localDate.atStartOfDay());
                 }
@@ -1357,7 +1364,7 @@ public class DashboardResponsableController implements Initializable {
                     if (2 == event.getClickCount()) {
                         final ComboBox<String> cinemaComboBox = new ComboBox<>();
                         final HashSet<Cinema> acceptedCinema = DashboardResponsableController.this
-                            .loadAcceptedCinemas();
+                                .loadAcceptedCinemas();
                         for (final Cinema cinema : acceptedCinema) {
                             cinemaComboBox.getItems().add(cinema.getName());
                         }
@@ -1417,7 +1424,7 @@ public class DashboardResponsableController implements Initializable {
                         final Cinema selectedCinema = moviesession.getCinemaHall().getCinema();
                         // Récupérer les cinemahalls associées au cinéma sélectionné
                         final List<CinemaHall> associatedCinemaHalls = this
-                            .loadAssociatedCinemaHalls(selectedCinema.getId());
+                                .loadAssociatedCinemaHalls(selectedCinema.getId());
                         for (final CinemaHall cinemahall : associatedCinemaHalls) {
                             cinemahallComboBox.getItems().add(cinemahall.getName());
                         }
@@ -1566,7 +1573,7 @@ public class DashboardResponsableController implements Initializable {
         final String endTimeText = this.tfEndTime.getText();
         final String priceText = this.tfPrice.getText();
         if (null == selectedCinemaName || null == selectedFilmName || null == selectedRoomName || null == selectedDate
-            || departureTimeText.isEmpty() || endTimeText.isEmpty() || priceText.isEmpty()) {
+                || departureTimeText.isEmpty() || endTimeText.isEmpty() || priceText.isEmpty()) {
             this.showAlert("Please complete all fields.");
             return;
         }
@@ -1604,7 +1611,7 @@ public class DashboardResponsableController implements Initializable {
         final Date date = Date.valueOf(selectedDate);
         final double price = Double.parseDouble(priceText);
         final MovieSession newMovieSession = new MovieSession(selectedRoom, selectedFilm, departureTime, endTime, date,
-            price);
+                price);
         final MovieSessionService moviesessionService = new MovieSessionService();
         moviesessionService.create(newMovieSession);
         this.showAlert("Session added successfully!");
@@ -1622,7 +1629,7 @@ public class DashboardResponsableController implements Initializable {
         PageRequest pageRequest = PageRequest.defaultPage();
         final List<MovieSession> moviesessions = moviesessionService.read(pageRequest).getContent();
         final ObservableList<MovieSession> moviesessionObservableList = FXCollections
-            .observableArrayList(moviesessions);
+                .observableArrayList(moviesessions);
         this.SessionTableView.setItems(moviesessionObservableList);
         return moviesessions;
     }
@@ -1682,8 +1689,8 @@ public class DashboardResponsableController implements Initializable {
         PageRequest pageRequest = PageRequest.defaultPage();
         final List<CinemaHall> cinemahalls = cinemahallService.read(pageRequest).getContent();
         final List<CinemaHall> cinemahalls_cinema = cinemahalls.stream()
-            .filter(cinemahall -> cinemahall.getCinema().getId().equals(this.cinemaId))
-            .collect(Collectors.toList());
+                .filter(cinemahall -> cinemahall.getCinema().getId().equals(this.cinemaId))
+                .collect(Collectors.toList());
         if (cinemahalls_cinema.isEmpty()) {
             this.showAlert("No rooms are available");
             return;

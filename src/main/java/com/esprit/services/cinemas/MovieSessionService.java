@@ -35,18 +35,21 @@ public class MovieSessionService implements IService<MovieSession> {
 
     // Allowed columns for sorting to prevent SQL injection
     private static final String[] ALLOWED_SORT_COLUMNS = {
-        "id", "movie_id", "hall_id", "start_time", "end_time", "price"
+            "id", "movie_id", "hall_id", "start_time", "end_time", "price"
     };
     private final Connection connection;
     private final CinemaHallService cinemaHallService;
     private final FilmService filmService;
 
     /**
-     * Initialize the MovieSessionService, its required service dependencies, and ensure the
+     * Initialize the MovieSessionService, its required service dependencies, and
+     * ensure the
      * movie_session database table exists.
      *
-     * <p>Sets up the database connection, constructs CinemaHallService, and
-     * FilmService instances, and creates the movie_session table if it is not already present.
+     * <p>
+     * Sets up the database connection, constructs CinemaHallService, and
+     * FilmService instances, and creates the movie_session table if it is not
+     * already present.
      */
     public MovieSessionService() {
         this.connection = DataSource.getInstance().getConnection();
@@ -54,11 +57,12 @@ public class MovieSessionService implements IService<MovieSession> {
         this.filmService = new FilmService();
     }
 
-
     /**
      * Inserts a new MovieSession row into the database.
      *
-     * @param movieSession the MovieSession to persist; must have non-null Film and CinemaHall with valid IDs, and non-null startTime, endTime, and sessionDate
+     * @param movieSession the MovieSession to persist; must have non-null Film and
+     *                     CinemaHall with valid IDs, and non-null startTime,
+     *                     endTime, and sessionDate
      */
     @Override
     /**
@@ -84,14 +88,16 @@ public class MovieSessionService implements IService<MovieSession> {
 
     }
 
-
     /**
-     * Update an existing movie_session row with values from the provided MovieSession.
+     * Update an existing movie_session row with values from the provided
+     * MovieSession.
      * <p>
      * The MovieSession's id determines which row to update; the film, cinemaHall,
-     * startTime, endTime, sessionDate, and price fields are written to the database.
+     * startTime, endTime, sessionDate, and price fields are written to the
+     * database.
      *
-     * @param movieSession the MovieSession whose id identifies the row to update and whose fields supply new values
+     * @param movieSession the MovieSession whose id identifies the row to update
+     *                     and whose fields supply new values
      */
     @Override
     /**
@@ -117,11 +123,11 @@ public class MovieSessionService implements IService<MovieSession> {
 
     }
 
-
     /**
      * Delete the specified movie session record from the database.
      *
-     * @param movieSession the MovieSession whose database row will be removed; its `id` must be set
+     * @param movieSession the MovieSession whose database row will be removed; its
+     *                     `id` must be set
      */
     @Override
     /**
@@ -142,14 +148,18 @@ public class MovieSessionService implements IService<MovieSession> {
 
     }
 
-
     /**
      * Retrieve a paginated page of MovieSession records.
      * <p>
-     * Validates the requested sort column and falls back to default sorting if the sort column is not allowed.
+     * Validates the requested sort column and falls back to default sorting if the
+     * sort column is not allowed.
      *
-     * @param pageRequest pagination and sorting parameters; if the requested sort column is invalid it will be ignored and default sorting will be used
-     * @return a Page<MovieSession> containing the sessions for the requested page and the total number of matching sessions; if a database error occurs, returns an empty page with totalElements set to 0
+     * @param pageRequest pagination and sorting parameters; if the requested sort
+     *                    column is invalid it will be ignored and default sorting
+     *                    will be used
+     * @return a Page<MovieSession> containing the sessions for the requested page
+     *         and the total number of matching sessions; if a database error
+     *         occurs, returns an empty page with totalElements set to 0
      */
     @Override
     /**
@@ -164,11 +174,10 @@ public class MovieSessionService implements IService<MovieSession> {
 
         // Validate sort column to prevent SQL injection
         if (pageRequest.hasSorting() &&
-            !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
+                !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
             log.warn("Invalid sort column: {}. Using default sorting.", pageRequest.getSortBy());
             pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
-
 
         try {
             // Get total count
@@ -179,7 +188,7 @@ public class MovieSessionService implements IService<MovieSession> {
             final String paginatedQuery = PaginationQueryBuilder.buildPaginatedQuery(baseQuery, pageRequest);
 
             try (PreparedStatement stmt = connection.prepareStatement(paginatedQuery);
-                 ResultSet rs = stmt.executeQuery()) {
+                    ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     MovieSession session = buildMovieSession(rs);
                     if (session != null) {
@@ -190,7 +199,6 @@ public class MovieSessionService implements IService<MovieSession> {
 
             }
 
-
             return new Page<>(content, pageRequest.getPage(), pageRequest.getSize(), totalElements);
 
         } catch (final SQLException e) {
@@ -200,18 +208,18 @@ public class MovieSessionService implements IService<MovieSession> {
 
     }
 
-
     /**
      * Retrieve movie sessions for a given film at a specific cinema.
      *
      * @param filmId   the ID of the film to filter sessions by
      * @param cinemaId the ID of the cinema to filter sessions by
-     * @return a list of MovieSession objects for the specified film and cinema; an empty list if none are found
+     * @return a list of MovieSession objects for the specified film and cinema; an
+     *         empty list if none are found
      */
     public List<MovieSession> getSessionsByFilmAndCinema(Long filmId, Long cinemaId) {
         List<MovieSession> movieSessions = new ArrayList<>();
         String query = "SELECT ms.* FROM screenings ms " + "JOIN cinema_halls ch ON ms.hall_id = ch.id "
-            + "WHERE ms.movie_id = ? AND ch.cinema_id = ?";
+                + "WHERE ms.movie_id = ? AND ch.cinema_id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setLong(1, filmId);
             stmt.setLong(2, cinemaId);
@@ -232,23 +240,24 @@ public class MovieSessionService implements IService<MovieSession> {
         return movieSessions;
     }
 
-
     /**
-     * Retrieve movie sessions for the given cinema grouped by session date within the specified date range.
+     * Retrieve movie sessions for the given cinema grouped by session date within
+     * the specified date range.
      *
      * @param startDate the start of the date range (inclusive)
      * @param endDate   the end of the date range (inclusive)
-     * @param cinema    the cinema to filter sessions by; if null the method returns an empty map
-     * @return a map keyed by session date where each value is the list of MovieSession objects occurring on that date
+     * @param cinema    the cinema to filter sessions by; if null the method returns
+     *                  an empty map
+     * @return a map keyed by session date where each value is the list of
+     *         MovieSession objects occurring on that date
      */
     public Map<LocalDate, List<MovieSession>> getSessionsByDateRangeAndCinema(LocalDate startDate, LocalDate endDate,
-                                                                              Cinema cinema) {
+            Cinema cinema) {
         Map<LocalDate, List<MovieSession>> sessionsByDate = new HashMap<>();
         if (cinema == null) {
             log.warn("Cinema is null");
             return sessionsByDate;
         }
-
 
         String query = "SELECT ms.* FROM screenings ms JOIN cinema_halls ch ON ms.hall_id = ch.id WHERE ms.start_time >= ? AND ms.start_time < ? AND ch.cinema_id = ? ORDER BY ms.start_time";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -274,13 +283,14 @@ public class MovieSessionService implements IService<MovieSession> {
         return sessionsByDate;
     }
 
-
     /**
-     * Finds the earliest upcoming session for the specified film (sessions with session_date >= current date),
+     * Finds the earliest upcoming session for the specified film (sessions with
+     * session_date >= current date),
      * ordered by session_date then start_time.
      *
      * @param filmId the film's id to search sessions for
-     * @return the earliest upcoming MovieSession for the film, or {@code null} if no matching session exists
+     * @return the earliest upcoming MovieSession for the film, or {@code null} if
+     *         no matching session exists
      */
     public MovieSession getFirstSessionForFilm(Long filmId) {
         String query = "SELECT * FROM screenings WHERE movie_id = ? AND start_time >= CURRENT_DATE ORDER BY start_time LIMIT 1";
@@ -300,11 +310,11 @@ public class MovieSessionService implements IService<MovieSession> {
         return null;
     }
 
-
     /**
      * Retrieves the movie session with the specified id.
      *
-     * @return the MovieSession with the specified id, or null if no session exists with that id or an error occurs
+     * @return the MovieSession with the specified id, or null if no session exists
+     *         with that id or an error occurs
      */
     public MovieSession getMovieSessionById(Long id) {
         String query = "SELECT * FROM screenings WHERE id = ?";
@@ -322,15 +332,17 @@ public class MovieSessionService implements IService<MovieSession> {
         return null;
     }
 
-
     /**
      * Constructs a MovieSession from the current row of the given ResultSet.
      * <p>
-     * Builds a MovieSession populated with Film and CinemaHall looked up by their IDs from the row;
-     * returns `null` if a required related entity is missing or if an SQL error occurs while reading the row.
+     * Builds a MovieSession populated with Film and CinemaHall looked up by their
+     * IDs from the row;
+     * returns `null` if a required related entity is missing or if an SQL error
+     * occurs while reading the row.
      *
      * @param rs the ResultSet positioned at the row to convert into a MovieSession
-     * @return the constructed MovieSession, or `null` when related entities are missing or an error prevents construction
+     * @return the constructed MovieSession, or `null` when related entities are
+     *         missing or an error prevents construction
      */
     private MovieSession buildMovieSession(ResultSet rs) {
         try {
@@ -342,10 +354,10 @@ public class MovieSessionService implements IService<MovieSession> {
                 return null;
             }
 
-
             return MovieSession.builder().id(rs.getLong("id")).film(film).cinemaHall(cinemaHall)
-                .startTime(rs.getTimestamp("start_time").toLocalDateTime()).endTime(rs.getTimestamp("end_time").toLocalDateTime())
-                .price(rs.getDouble("price")).build();
+                    .startTime(rs.getTimestamp("start_time").toLocalDateTime())
+                    .endTime(rs.getTimestamp("end_time").toLocalDateTime())
+                    .price(rs.getDouble("price")).build();
         } catch (SQLException e) {
             log.error("Error building movie session from ResultSet", e);
             return null;
@@ -394,7 +406,7 @@ public class MovieSessionService implements IService<MovieSession> {
         List<MovieSession> sessions = new ArrayList<>();
         String query = "SELECT * FROM screenings";
         try (PreparedStatement stmt = connection.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
+                ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 MovieSession session = buildMovieSession(rs);
                 if (session != null) {
@@ -416,7 +428,7 @@ public class MovieSessionService implements IService<MovieSession> {
     public int count() {
         String query = "SELECT COUNT(*) FROM screenings";
         try (PreparedStatement stmt = connection.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
+                ResultSet rs = stmt.executeQuery()) {
             if (rs.next()) {
                 return rs.getInt(1);
             }
@@ -436,9 +448,9 @@ public class MovieSessionService implements IService<MovieSession> {
     public List<MovieSession> search(String searchTerm) {
         List<MovieSession> sessions = new ArrayList<>();
         String query = "SELECT ms.* FROM screenings ms " +
-            "JOIN cinema_halls ch ON ms.hall_id = ch.id " +
-            "JOIN films f ON ms.movie_id = f.id " +
-            "WHERE f.title LIKE ? OR ch.name LIKE ?";
+                "JOIN cinema_halls ch ON ms.hall_id = ch.id " +
+                "JOIN films f ON ms.movie_id = f.id " +
+                "WHERE f.title LIKE ? OR ch.name LIKE ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             String likePattern = "%" + searchTerm + "%";
             stmt.setString(1, likePattern);
@@ -466,7 +478,7 @@ public class MovieSessionService implements IService<MovieSession> {
         List<MovieSession> sessions = new ArrayList<>();
         String query = "SELECT * FROM movie_sessions";
         try (PreparedStatement stmt = connection.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
+                ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 MovieSession session = buildMovieSession(rs);
                 if (session != null) {
@@ -512,6 +524,34 @@ public class MovieSessionService implements IService<MovieSession> {
         } catch (SQLException e) {
             log.error("Error deleting movie session with id: " + id, e);
         }
+    }
+
+    /**
+     * Get distinct films that have sessions at a specific cinema.
+     *
+     * @param cinemaId the ID of the cinema
+     * @return list of unique films with sessions at this cinema
+     */
+    public List<Film> getFilmsByCinemaId(Long cinemaId) {
+        List<Film> films = new ArrayList<>();
+        String query = "SELECT DISTINCT f.* FROM films f " +
+                "JOIN screenings ms ON f.id = ms.movie_id " +
+                "JOIN cinema_halls ch ON ms.hall_id = ch.id " +
+                "WHERE ch.cinema_id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setLong(1, cinemaId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Film film = filmService.getFilm(rs.getLong("id"));
+                    if (film != null) {
+                        films.add(film);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            log.error("Error getting films by cinema id: " + cinemaId, e);
+        }
+        return films;
     }
 
 }

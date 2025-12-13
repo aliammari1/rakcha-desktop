@@ -6,6 +6,7 @@ import com.esprit.models.films.Film;
 import com.esprit.services.cinemas.CinemaService;
 import com.esprit.services.cinemas.MovieSessionService;
 import com.esprit.services.films.FilmService;
+import com.esprit.services.films.TicketService;
 import com.esprit.utils.SlideOverNavigator;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -388,8 +389,13 @@ public class MovieSessionBrowserController implements Initializable {
     }
 
     private int calculateAvailableSeats(MovieSession session) {
-        // TODO: Implement actual available seats calculation
-        return (int) (Math.random() * 100);
+        if (session == null || session.getCinemaHall() == null) {
+            return 0;
+        }
+        int totalSeats = session.getCinemaHall().getSeatCapacity();
+        TicketService ticketService = new TicketService();
+        int bookedSeats = ticketService.countBookedSeatsForSession(session.getId());
+        return Math.max(0, totalSeats - bookedSeats);
     }
 
     private void openSessionDetails(Film film, List<MovieSession> sessions) {

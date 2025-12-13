@@ -29,14 +29,14 @@ public class ReviewService implements IService<Review> {
 
     private static final Logger LOGGER = Logger.getLogger(ReviewService.class.getName());
     private static final String[] ALLOWED_SORT_COLUMNS = {
-        "id",
-        "comment",
-        "rating",
-        "user_id",
-        "movie_id",
-        "series_id",
-        "product_id",
-        "created_at"
+            "id",
+            "comment",
+            "rating",
+            "user_id",
+            "movie_id",
+            "series_id",
+            "product_id",
+            "created_at"
     };
     private final Connection connection;
     private final UserService userService;
@@ -68,8 +68,8 @@ public class ReviewService implements IService<Review> {
     public void create(final Review review) {
         // The SQL query must include ALL possible foreign keys
         final String req = "INSERT INTO reviews " +
-            "(user_id, rating, comment, sentiment, movie_id, series_id, product_id, cinema_id, created_at) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
+                "(user_id, rating, comment, sentiment, movie_id, series_id, product_id, cinema_id, created_at) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
 
         try (final PreparedStatement pst = this.connection.prepareStatement(req)) {
 
@@ -135,7 +135,8 @@ public class ReviewService implements IService<Review> {
      */
     public void update(final Review review) {
         // We update Comment, Rating, and Sentiment.
-        // We do NOT update the Foreign Keys (user_id, movie_id, etc.) as the target shouldn't change.
+        // We do NOT update the Foreign Keys (user_id, movie_id, etc.) as the target
+        // shouldn't change.
         final String req = "UPDATE reviews SET rating = ?, comment = ?, sentiment = ? WHERE id = ?";
 
         try (final PreparedStatement statement = this.connection.prepareStatement(req)) {
@@ -197,7 +198,7 @@ public class ReviewService implements IService<Review> {
         final String baseQuery = "SELECT * FROM reviews"; // Make sure table name matches your schema
 
         if (pageRequest.hasSorting() &&
-            !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
+                !PaginationQueryBuilder.isValidSortColumn(pageRequest.getSortBy(), ALLOWED_SORT_COLUMNS)) {
             log.warn("Invalid sort column: {}. Using default sorting.", pageRequest.getSortBy());
             pageRequest = PageRequest.of(pageRequest.getPage(), pageRequest.getSize());
         }
@@ -208,7 +209,7 @@ public class ReviewService implements IService<Review> {
             final String paginatedQuery = PaginationQueryBuilder.buildPaginatedQuery(baseQuery, pageRequest);
 
             try (PreparedStatement stmt = connection.prepareStatement(paginatedQuery);
-                 ResultSet rs = stmt.executeQuery()) {
+                    ResultSet rs = stmt.executeQuery()) {
 
                 final UserService userService = new UserService();
                 final FilmService filmService = new FilmService();
@@ -244,7 +245,6 @@ public class ReviewService implements IService<Review> {
                         if (userId > 0) {
                             builder.user((Client) userService.getUserById(userId));
                         }
-
 
                         long movieId = rs.getLong("movie_id");
                         if (!rs.wasNull() && movieId > 0) {
@@ -312,25 +312,27 @@ public class ReviewService implements IService<Review> {
      * @return the AverageRatingSorted value
      */
     public List<Review> getAverageRatingSorted() {
-        // UPDATED: Filter by movie_id IS NOT NULL so we don't get Series or Product ratings
+        // UPDATED: Filter by movie_id IS NOT NULL so we don't get Series or Product
+        // ratings
         final String req = "SELECT movie_id, AVG(rating) AS averageRate " +
-            "FROM reviews " +
-            "WHERE movie_id IS NOT NULL " +
-            "GROUP BY movie_id " +
-            "ORDER BY averageRate DESC";
+                "FROM reviews " +
+                "WHERE movie_id IS NOT NULL " +
+                "GROUP BY movie_id " +
+                "ORDER BY averageRate DESC";
 
         final List<Review> aver = new ArrayList<>();
         try (final PreparedStatement preparedStatement = this.connection.prepareStatement(req);
-             final ResultSet resultSet = preparedStatement.executeQuery()) {
+                final ResultSet resultSet = preparedStatement.executeQuery()) {
 
             while (resultSet.next()) {
                 // Note: Make sure to map 'movie_id' from the result set
                 Film film = filmService.getFilm(resultSet.getLong("movie_id"));
                 if (film != null) {
                     aver.add(Review.builder()
-                        .film(film)
-                        .rating((int) Math.round(resultSet.getDouble("averageRate"))) // Rounding is usually safer for int casting
-                        .build());
+                            .film(film)
+                            .rating((int) Math.round(resultSet.getDouble("averageRate"))) // Rounding is usually safer
+                                                                                          // for int casting
+                            .build());
                 }
             }
         } catch (final SQLException e) {
@@ -359,12 +361,12 @@ public class ReviewService implements IService<Review> {
 
                     if (film != null && client != null) {
                         return Review.builder()
-                            .id(resultSet.getLong("id"))
-                            .film(film)
-                            .user(client)
-                            .rating(resultSet.getInt("rating"))
-                            .comment(resultSet.getString("comment"))
-                            .build();
+                                .id(resultSet.getLong("id"))
+                                .film(film)
+                                .user(client)
+                                .rating(resultSet.getInt("rating"))
+                                .comment(resultSet.getString("comment"))
+                                .build();
                     }
                 }
             }
@@ -394,11 +396,11 @@ public class ReviewService implements IService<Review> {
 
                     if (user != null && film != null) {
                         ratings.add(Review.builder()
-                            .id(rs.getLong("id"))
-                            .film(film)
-                            .user(user)
-                            .rating(rs.getInt("rating"))
-                            .build());
+                                .id(rs.getLong("id"))
+                                .film(film)
+                                .user(user)
+                                .rating(rs.getInt("rating"))
+                                .build());
                     }
                 }
             }
@@ -416,26 +418,60 @@ public class ReviewService implements IService<Review> {
     public List<Review> getTopRatedFilms() {
         // UPDATED: movie_id filtering
         final String req = "SELECT movie_id, AVG(rating) AS averageRate " +
-            "FROM reviews " +
-            "WHERE movie_id IS NOT NULL " +
-            "GROUP BY movie_id " +
-            "ORDER BY averageRate DESC " +
-            "LIMIT 10";
+                "FROM reviews " +
+                "WHERE movie_id IS NOT NULL " +
+                "GROUP BY movie_id " +
+                "ORDER BY averageRate DESC " +
+                "LIMIT 10";
 
         final List<Review> topRated = new ArrayList<>();
         try (final PreparedStatement statement = this.connection.prepareStatement(req);
-             final ResultSet rs = statement.executeQuery()) {
+                final ResultSet rs = statement.executeQuery()) {
             while (rs.next()) {
                 Film film = filmService.getFilm(rs.getLong("movie_id"));
                 if (film != null) {
                     topRated.add(Review.builder()
-                        .film(film)
-                        .rating((int) Math.round(rs.getDouble("averageRate")))
-                        .build());
+                            .film(film)
+                            .rating((int) Math.round(rs.getDouble("averageRate")))
+                            .build());
                 }
             }
         } catch (final SQLException e) {
             log.error("Error getting top rated films", e);
+        }
+        return topRated;
+    }
+
+    /**
+     * Retrieves the top rated cinemas based on average review ratings.
+     *
+     * @param limit the maximum number of cinemas to return
+     * @return list of Reviews containing cinema and average rating
+     */
+    public List<Review> getTopRatedCinemas(int limit) {
+        final String req = "SELECT cinema_id, AVG(rating) AS averageRate " +
+                "FROM reviews " +
+                "WHERE cinema_id IS NOT NULL " +
+                "GROUP BY cinema_id " +
+                "ORDER BY averageRate DESC " +
+                "LIMIT ?";
+
+        final List<Review> topRated = new ArrayList<>();
+        try (final PreparedStatement statement = this.connection.prepareStatement(req)) {
+            statement.setInt(1, limit);
+            try (final ResultSet rs = statement.executeQuery()) {
+                while (rs.next()) {
+                    var cinema = cinemaService.getCinemaById(rs.getLong("cinema_id"));
+                    if (cinema != null) {
+                        topRated.add(Review.builder()
+                                .cinema(cinema)
+                                .rating((int) Math.round(rs.getDouble("averageRate")))
+                                .build());
+                    }
+                }
+            }
+        } catch (final SQLException e) {
+            log.error("Error getting top rated cinemas", e);
         }
         return topRated;
     }
@@ -460,12 +496,12 @@ public class ReviewService implements IService<Review> {
 
                 if (rs.next()) {
                     review = Review.builder()
-                        .id(rs.getLong("id"))
-                        .user((Client) userService.getUserById(rs.getLong("user_id")))
-                        .comment(rs.getString("comment"))
-                        .rating(rs.getInt("rating"))
-                        .product(productService.getProductById(rs.getLong("product_id")))
-                        .build();
+                            .id(rs.getLong("id"))
+                            .user((Client) userService.getUserById(rs.getLong("user_id")))
+                            .comment(rs.getString("comment"))
+                            .rating(rs.getInt("rating"))
+                            .product(productService.getProductById(rs.getLong("product_id")))
+                            .build();
                 }
             }
         } catch (final SQLException e) {
@@ -493,13 +529,13 @@ public class ReviewService implements IService<Review> {
 
                 while (rs.next()) {
                     final Review review = Review.builder()
-                        .id(rs.getLong("id"))
-                        .user((Client) userService.getUserById(rs.getLong("user_id")))
-                        .comment(rs.getString("comment"))
-                        .rating(rs.getInt("rating"))
-                        .sentiment(rs.getString("sentiment"))
-                        .product(productService.getProductById(rs.getLong("product_id")))
-                        .build();
+                            .id(rs.getLong("id"))
+                            .user((Client) userService.getUserById(rs.getLong("user_id")))
+                            .comment(rs.getString("comment"))
+                            .rating(rs.getInt("rating"))
+                            .sentiment(rs.getString("sentiment"))
+                            .product(productService.getProductById(rs.getLong("product_id")))
+                            .build();
 
                     reviews.add(review);
                 }
@@ -519,7 +555,7 @@ public class ReviewService implements IService<Review> {
     public int count() {
         String query = "SELECT COUNT(*) FROM reviews";
         try (PreparedStatement stmt = connection.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
+                ResultSet rs = stmt.executeQuery()) {
             if (rs.next()) {
                 return rs.getInt(1);
             }
@@ -543,11 +579,11 @@ public class ReviewService implements IService<Review> {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return Review.builder()
-                    .id(rs.getLong("id"))
-                    .user((Client) userService.getUserById(rs.getLong("user_id")))
-                    .comment(rs.getString("comment"))
-                    .rating(rs.getInt("rating"))
-                    .build();
+                        .id(rs.getLong("id"))
+                        .user((Client) userService.getUserById(rs.getLong("user_id")))
+                        .comment(rs.getString("comment"))
+                        .rating(rs.getInt("rating"))
+                        .build();
             }
         } catch (SQLException e) {
             log.error("Error retrieving review by id: " + id, e);
@@ -565,14 +601,14 @@ public class ReviewService implements IService<Review> {
         final List<Review> reviews = new ArrayList<>();
         final String query = "SELECT * FROM reviews ORDER BY id DESC";
         try (final PreparedStatement stmt = this.connection.prepareStatement(query);
-             final ResultSet rs = stmt.executeQuery()) {
+                final ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 final Review review = Review.builder()
-                    .id(rs.getLong("id"))
-                    .user((Client) userService.getUserById(rs.getLong("user_id")))
-                    .comment(rs.getString("comment"))
-                    .rating(rs.getInt("rating"))
-                    .build();
+                        .id(rs.getLong("id"))
+                        .user((Client) userService.getUserById(rs.getLong("user_id")))
+                        .comment(rs.getString("comment"))
+                        .rating(rs.getInt("rating"))
+                        .build();
                 reviews.add(review);
             }
         } catch (final SQLException e) {
@@ -598,12 +634,12 @@ public class ReviewService implements IService<Review> {
             try (final ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
                     final Review review = Review.builder()
-                        .id(rs.getLong("id"))
-                        .user((Client) userService.getUserById(rs.getLong("user_id")))
-                        .comment(rs.getString("comment"))
-                        .rating(rs.getInt("rating"))
-                        .sentiment(rs.getString("sentiment"))
-                        .build();
+                            .id(rs.getLong("id"))
+                            .user((Client) userService.getUserById(rs.getLong("user_id")))
+                            .comment(rs.getString("comment"))
+                            .rating(rs.getInt("rating"))
+                            .sentiment(rs.getString("sentiment"))
+                            .build();
                     reviews.add(review);
                 }
             }
@@ -658,7 +694,8 @@ public class ReviewService implements IService<Review> {
     /**
      * Get reviews for a specific content (film, series, product, cinema).
      *
-     * @param contentType the type of content (e.g., "film", "series", "product", "cinema")
+     * @param contentType the type of content (e.g., "film", "series", "product",
+     *                    "cinema")
      * @param contentId   the ID of the content
      * @return list of reviews for the content
      */
@@ -794,5 +831,3 @@ public class ReviewService implements IService<Review> {
         log.info("Review {} reported by user {} - Reason: {}", reviewId, userId, reason);
     }
 }
-
-

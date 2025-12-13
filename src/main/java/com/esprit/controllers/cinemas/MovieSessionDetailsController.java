@@ -4,6 +4,7 @@ import com.esprit.models.cinemas.Cinema;
 import com.esprit.models.cinemas.CinemaHall;
 import com.esprit.models.cinemas.MovieSession;
 import com.esprit.models.films.Film;
+import com.esprit.services.films.TicketService;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -116,7 +117,8 @@ public class MovieSessionDetailsController implements Initializable {
     }
 
     private void populateFilmDetails() {
-        if (currentFilm == null) return;
+        if (currentFilm == null)
+            return;
 
         // Title
         if (titleLabel != null) {
@@ -126,9 +128,9 @@ public class MovieSessionDetailsController implements Initializable {
         // Metadata
         if (metaLabel != null) {
             String meta = String.format("%s • %d min • %s",
-                currentFilm.getGenre(),
-                currentFilm.getDuration(),
-                currentFilm.getCountry());
+                    currentFilm.getGenre(),
+                    currentFilm.getDuration(),
+                    currentFilm.getCountry());
             metaLabel.setText(meta);
         }
 
@@ -178,14 +180,15 @@ public class MovieSessionDetailsController implements Initializable {
     }
 
     private void setupDateSelector() {
-        if (dateSelector == null) return;
+        if (dateSelector == null)
+            return;
 
         dateSelector.getChildren().clear();
 
         // Get unique dates from sessions
         Set<LocalDate> availableDates = allSessions.stream()
-            .map(s -> s.getStartTime().toLocalDate())
-            .collect(Collectors.toSet());
+                .map(s -> s.getStartTime().toLocalDate())
+                .collect(Collectors.toSet());
 
         // Add next 7 days
         LocalDate today = LocalDate.now();
@@ -246,18 +249,19 @@ public class MovieSessionDetailsController implements Initializable {
     }
 
     private void displaySessionsForDate(LocalDate date) {
-        if (cinemasList == null) return;
+        if (cinemasList == null)
+            return;
 
         cinemasList.getChildren().clear();
 
         // Filter sessions for the selected date
         List<MovieSession> daySessions = allSessions.stream()
-            .filter(s -> s.getStartTime().toLocalDate().equals(date))
-            .collect(Collectors.toList());
+                .filter(s -> s.getStartTime().toLocalDate().equals(date))
+                .collect(Collectors.toList());
 
         // Group by cinema
         Map<Cinema, List<MovieSession>> byCinema = daySessions.stream()
-            .collect(Collectors.groupingBy(s -> s.getCinemaHall().getCinema()));
+                .collect(Collectors.groupingBy(s -> s.getCinemaHall().getCinema()));
 
         for (Map.Entry<Cinema, List<MovieSession>> entry : byCinema.entrySet()) {
             VBox cinemaSection = createCinemaSection(entry.getKey(), entry.getValue());
@@ -290,7 +294,7 @@ public class MovieSessionDetailsController implements Initializable {
 
         // Group sessions by hall
         Map<CinemaHall, List<MovieSession>> byHall = sessions.stream()
-            .collect(Collectors.groupingBy(MovieSession::getCinemaHall));
+                .collect(Collectors.groupingBy(MovieSession::getCinemaHall));
 
         // Hall tabs
         HBox hallTabs = new HBox(8);
@@ -372,8 +376,13 @@ public class MovieSessionDetailsController implements Initializable {
     }
 
     private int calculateAvailableSeats(MovieSession session) {
-        // TODO: Calculate actual available seats from reservations
-        return (int) (Math.random() * 100);
+        if (session == null || session.getCinemaHall() == null) {
+            return 0;
+        }
+        int totalSeats = session.getCinemaHall().getSeatCapacity();
+        TicketService ticketService = new TicketService();
+        int bookedSeats = ticketService.countBookedSeatsForSession(session.getId());
+        return Math.max(0, totalSeats - bookedSeats);
     }
 
     private void selectSession(MovieSession session) {
@@ -389,7 +398,8 @@ public class MovieSessionDetailsController implements Initializable {
     }
 
     private void updateBookingSummary() {
-        if (selectedSession == null) return;
+        if (selectedSession == null)
+            return;
 
         if (selectedDateLabel != null) {
             selectedDateLabel.setText(selectedDate.format(DATE_FORMATTER));

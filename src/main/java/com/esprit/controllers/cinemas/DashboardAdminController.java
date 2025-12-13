@@ -4,6 +4,7 @@ import com.esprit.enums.CinemaStatus;
 import com.esprit.models.cinemas.Cinema;
 import com.esprit.models.films.Film;
 import com.esprit.services.cinemas.CinemaService;
+import com.esprit.services.cinemas.MovieSessionService;
 import com.esprit.services.films.FilmService;
 import com.esprit.utils.PageRequest;
 import javafx.beans.property.SimpleObjectProperty;
@@ -235,9 +236,9 @@ public class DashboardAdminController {
         ScrollPane scrollPane = new ScrollPane(flowPane);
         scrollPane.setFitToWidth(true);
         scrollPane.setPrefViewportHeight(500);
-        // TODO: This logic is wrong
-        FilmService filmCinemaService = new FilmService();
-        List<Film> films = filmCinemaService.read(PageRequest.defaultPage()).getContent();
+        // Get films that have sessions at this specific cinema
+        MovieSessionService sessionService = new MovieSessionService();
+        List<Film> films = sessionService.getFilmsByCinemaId(cinema.getId());
 
         for (Film film : films) {
             AnchorPane card = createFilmCard(film);
@@ -478,9 +479,9 @@ public class DashboardAdminController {
         final List<String> selectedStatuses = this.getSelectedStatuses();
         // Filtrer les cinémas en fonction des adresses et/ou des statuts sélectionnés
         final List<Cinema> filteredCinemas = this.getAllCinemas().stream()
-            .filter(cinema -> selectedAddresses.isEmpty() || selectedAddresses.contains(cinema.getAddress()))
-            .filter(cinema -> selectedStatuses.isEmpty() || selectedStatuses.contains(cinema.getStatus()))
-            .collect(Collectors.toList());
+                .filter(cinema -> selectedAddresses.isEmpty() || selectedAddresses.contains(cinema.getAddress()))
+                .filter(cinema -> selectedStatuses.isEmpty() || selectedStatuses.contains(cinema.getStatus()))
+                .collect(Collectors.toList());
         // Mettre à jour le TableView avec les cinémas filtrés
         final ObservableList<Cinema> filteredList = FXCollections.observableArrayList(filteredCinemas);
         this.listCinema.setItems(filteredList);
@@ -490,12 +491,12 @@ public class DashboardAdminController {
      * Collects the texts of address checkboxes that are currently selected.
      *
      * @return a List<String> containing the text of each selected address checkbox;
-     * empty if none are selected.
+     *         empty if none are selected.
      */
     private List<String> getSelectedAddresses() {
         // Récupérer les adresses sélectionnées dans l'AnchorPane de filtrage
         return this.addressCheckBoxes.stream().filter(CheckBox::isSelected).map(CheckBox::getText)
-            .collect(Collectors.toList());
+                .collect(Collectors.toList());
     }
 
     /**
@@ -506,7 +507,7 @@ public class DashboardAdminController {
     private List<String> getSelectedStatuses() {
         // Récupérer les statuts sélectionnés dans l'AnchorPane de filtrage
         return this.statusCheckBoxes.stream().filter(CheckBox::isSelected).map(CheckBox::getText)
-            .collect(Collectors.toList());
+                .collect(Collectors.toList());
     }
 
     /**

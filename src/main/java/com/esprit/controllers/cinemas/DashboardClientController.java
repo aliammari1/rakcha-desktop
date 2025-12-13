@@ -159,7 +159,7 @@ public class DashboardClientController {
      * @param recherche the substring to match against each cinema's name; cinemas
      *                  with a null name are ignored and matching is case-sensitive
      * @return a List<Cinema> containing cinemas from {@code liste} whose name
-     * contains {@code recherche}
+     *         contains {@code recherche}
      */
     @FXML
     /**
@@ -217,8 +217,8 @@ public class DashboardClientController {
         PageRequest pageRequest = PageRequest.defaultPage();
         final List<Cinema> cinemas = cinemaService.read(pageRequest).getContent();
         final List<Cinema> acceptedCinemasList = cinemas.stream()
-            .filter(cinema -> CinemaStatus.ACCEPTED.getStatus().equals(cinema.getStatus()))
-            .collect(Collectors.toList());
+                .filter(cinema -> CinemaStatus.ACCEPTED.getStatus().equals(cinema.getStatus()))
+                .collect(Collectors.toList());
         if (acceptedCinemasList.isEmpty()) {
             this.showAlert("Aucun cinéma accepté n'est disponible.");
         }
@@ -260,7 +260,7 @@ public class DashboardClientController {
         cardContainer.setStyle("-fx-padding: 25px 0 0 8px ;");
         final AnchorPane card = new AnchorPane();
         card.setStyle(
-            "-fx-background-color: #ffffff; -fx-border-radius: 10px; -fx-border-color: #000000; -fx-background-radius: 10px; -fx-border-width: 2px;  ");
+                "-fx-background-color: #ffffff; -fx-border-radius: 10px; -fx-border-color: #000000; -fx-background-radius: 10px; -fx-border-width: 2px;  ");
         card.setPrefWidth(450);
         card.setPrefHeight(150);
         final ImageView logoImageView = new ImageView();
@@ -369,16 +369,19 @@ public class DashboardClientController {
      */
     public void createTopRatedCinemaCards(final AnchorPane Anchortop3) {
         final ReviewService ratingCinemaService = new ReviewService();
-        // TODO: REMEMBER FIX THIS
-        final List<Cinema> topRatedCinemas = new ArrayList<>(); /* ratingCinemaService.getTopRatedFilms(); */
+        // Get actual top rated cinemas from reviews
+        final var topRatedReviews = ratingCinemaService.getTopRatedCinemas(3);
         final double cardHeight = 100; // Hauteur de chaque carte
         final double cardSpacing = 50; // Espacement entre chaque carte
         double currentY = 10; // Position Y de la première carte
-        for (final Cinema cinema : topRatedCinemas) {
+        for (final var review : topRatedReviews) {
+            final Cinema cinema = review.getCinema();
+            if (cinema == null)
+                continue;
             // Création de la carte pour le cinéma
             final AnchorPane card = new AnchorPane();
             card.setStyle(
-                "-fx-background-color: #ffffff; -fx-border-radius: 10px; -fx-border-color: #000000; -fx-background-radius: 10px; -fx-border-width: 2px;");
+                    "-fx-background-color: #ffffff; -fx-border-radius: 10px; -fx-border-color: #000000; -fx-background-radius: 10px; -fx-border-width: 2px;");
             card.setPrefWidth(350);
             card.setPrefHeight(cardHeight);
             // Création et positionnement des éléments de la carte (nom, adresse, logo,
@@ -436,7 +439,7 @@ public class DashboardClientController {
                 connection.setRequestMethod("GET");
                 connection.setRequestProperty("User-Agent", "Mozilla/5.0");
                 final BufferedReader in = new BufferedReader(
-                    new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
+                        new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
                 String inputLine;
                 final StringBuilder content = new StringBuilder();
                 while (null != (inputLine = in.readLine())) {
@@ -540,9 +543,9 @@ public class DashboardClientController {
      * @param startDate the first date of the 7-day period (inclusive)
      * @param cinema    the cinema whose sessions are requested
      * @return a map whose keys are each date in the 7-day period beginning at
-     * {@code startDate} and whose values are
-     * the lists of {@code MovieSession} scheduled at {@code cinema} on
-     * those dates
+     *         {@code startDate} and whose values are
+     *         the lists of {@code MovieSession} scheduled at {@code cinema} on
+     *         those dates
      */
     private Map<LocalDate, List<MovieSession>> loadCurrentWeekPlanning(final LocalDate startDate, final Cinema cinema) {
         // Obtenir la date de fin de la semaine courante (dimanche)
@@ -569,7 +572,7 @@ public class DashboardClientController {
         // Charger les séances pour la date spécifiée
         final Map<LocalDate, List<MovieSession>> weekMovieSessionsMap = this.loadCurrentWeekPlanning(date, cinema);
         final List<MovieSession> moviesessionsForDate = weekMovieSessionsMap.getOrDefault(date,
-            Collections.emptyList());
+                Collections.emptyList());
         // Créer un VBox pour contenir les éléments du calendrier
         final VBox planningContent = new VBox();
         planningContent.setSpacing(10);
@@ -627,7 +630,7 @@ public class DashboardClientController {
      *
      * @param moviesession the MovieSession to represent in the card
      * @return a StackPane containing a right-aligned card that displays the film
-     * name, cinema hall name, screening time, and price
+     *         name, cinema hall name, screening time, and price
      */
     private StackPane createMovieSessionCard(final MovieSession moviesession) {
         final StackPane cardContainer = new StackPane();
@@ -636,14 +639,14 @@ public class DashboardClientController {
         cardContainer.setStyle("-fx-padding: 10 0 0 150;");
         final HBox card = new HBox();
         card.setStyle(
-            "-fx-background-color: #ffffff; -fx-border-radius: 10px; -fx-border-color: #000000; -fx-background-radius: 10px; -fx-border-width: 2px;");
+                "-fx-background-color: #ffffff; -fx-border-radius: 10px; -fx-border-color: #000000; -fx-background-radius: 10px; -fx-border-width: 2px;");
         final ImageView filmImageView = new ImageView();
         filmImageView.setFitWidth(140);
         filmImageView.setFitHeight(100);
         filmImageView.setStyle("-fx-border-color: #000000 ; -fx-border-width: 2px; -fx-border-radius: 5px;");
         try {
             if (moviesession.getFilm() != null && moviesession.getFilm().getImageUrl() != null
-                && !moviesession.getFilm().getImageUrl().isEmpty()) {
+                    && !moviesession.getFilm().getImageUrl().isEmpty()) {
                 final String logoString = moviesession.getFilm().getImageUrl();
                 final Image logoImage = new Image(logoString);
                 filmImageView.setImage(logoImage);
@@ -853,9 +856,9 @@ public class DashboardClientController {
         final List<String> selectedNames = this.getSelectedNames();
         // Filtrer les cinémas en fonction des adresses et/ou des noms sélectionnés
         final List<Cinema> filteredCinemas = getAllCinemas().stream()
-            .filter(cinema -> selectedAddresses.isEmpty() || selectedAddresses.contains(cinema.getAddress()))
-            .filter(cinema -> selectedNames.isEmpty() || selectedNames.contains(cinema.getName()))
-            .collect(Collectors.toList());
+                .filter(cinema -> selectedAddresses.isEmpty() || selectedAddresses.contains(cinema.getAddress()))
+                .filter(cinema -> selectedNames.isEmpty() || selectedNames.contains(cinema.getName()))
+                .collect(Collectors.toList());
         // Afficher les cinémas filtrés
         this.cinemaFlowPane.getChildren().clear();
         this.createCinemaCards(filteredCinemas);
@@ -865,24 +868,24 @@ public class DashboardClientController {
      * Get addresses corresponding to the selected address checkboxes.
      *
      * @return a list of address strings for each selected CheckBox; empty if none
-     * are selected.
+     *         are selected.
      */
     private List<String> getSelectedAddresses() {
         // Récupérer les adresses sélectionnées dans l'AnchorPane de filtrage
         return this.addressCheckBoxes.stream().filter(CheckBox::isSelected).map(CheckBox::getText)
-            .collect(Collectors.toList());
+                .collect(Collectors.toList());
     }
 
     /**
      * Retrieve the texts of all selected name checkboxes used for filtering.
      *
      * @return a list of selected checkbox texts representing names, or an empty
-     * list if none are selected.
+     *         list if none are selected.
      */
     private List<String> getSelectedNames() {
         // Récupérer les noms sélectionnés dans l'AnchorPane de filtrage
         return this.namesCheckBoxes.stream().filter(CheckBox::isSelected).map(CheckBox::getText)
-            .collect(Collectors.toList());
+                .collect(Collectors.toList());
     }
 
     /**
@@ -924,7 +927,7 @@ public class DashboardClientController {
     @FXML
     void afficherEventsClient(final ActionEvent event) throws IOException {
         final FXMLLoader loader = new FXMLLoader(
-            this.getClass().getResource("/ui/events/AffichageEvenementClient.fxml"));
+                this.getClass().getResource("/ui/events/AffichageEvenementClient.fxml"));
         final Parent root = loader.load();
         final Scene scene = new Scene(root);
         final Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -965,7 +968,7 @@ public class DashboardClientController {
     @FXML
     void afficherProductsClient(final ActionEvent event) throws IOException {
         final FXMLLoader loader = new FXMLLoader(
-            this.getClass().getResource("/ui/produits/AfficherProductClient.fxml"));
+                this.getClass().getResource("/ui/produits/AfficherProductClient.fxml"));
         final Parent root = loader.load();
         final Scene scene = new Scene(root);
         final Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -1017,9 +1020,9 @@ public class DashboardClientController {
             final SentimentAnalysisController sentimentAnalysisController = new SentimentAnalysisController();
             final String sentimentResult = sentimentAnalysisController.analyzeSentiment(message);
             DashboardClientController.LOGGER
-                .info(this.cinemaId + " " + new CinemaService().getCinemaById(this.cinemaId));
+                    .info(this.cinemaId + " " + new CinemaService().getCinemaById(this.cinemaId));
             final Review commentaire = new Review(new CinemaService().getCinemaById(this.cinemaId),
-                (Client) new UserService().getUserById(2L), message, sentimentResult);
+                    (Client) new UserService().getUserById(2L), message, sentimentResult);
             DashboardClientController.LOGGER.info(commentaire + " " + new UserService().getUserById(2L));
             final ReviewService cinemaCommentService = new ReviewService();
             cinemaCommentService.create(commentaire);
@@ -1075,8 +1078,8 @@ public class DashboardClientController {
      *                    commentText supply the avatar, username, and message to
      *                    display
      * @return an HBox containing the user's circular avatar and a text card with
-     * the user's name and comment, ready to be placed into the comments
-     * ScrollPane
+     *         the user's name and comment, ready to be placed into the comments
+     *         ScrollPane
      */
     private HBox addCommentToView(final Review commentaire) {
         // Création du cercle pour l'image de l'utilisateur
@@ -1109,10 +1112,10 @@ public class DashboardClientController {
         // Création du conteneur pour la carte du commentaire
         final HBox cardContainer = new HBox();
         cardContainer.setStyle(
-            "-fx-background-color: white; -fx-padding: 5px ; -fx-border-radius: 8px; -fx-border-color: #000; -fx-background-radius: 8px; ");
+                "-fx-background-color: white; -fx-padding: 5px ; -fx-border-radius: 8px; -fx-border-color: #000; -fx-background-radius: 8px; ");
         // Nom de l'utilisateur
         final Text userName = new Text(
-            commentaire.getUser().getFirstName() + " " + commentaire.getUser().getLastName());
+                commentaire.getUser().getFirstName() + " " + commentaire.getUser().getLastName());
         userName.setStyle("-fx-font-family: 'Arial Rounded MT Bold'; -fx-font-style: bold;");
         // Commentaire
         final Text commentText = new Text(commentaire.getComment());
