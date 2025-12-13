@@ -1,7 +1,7 @@
 package com.esprit.utils;
 
 import com.esprit.services.films.TicketService;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Scheduler to automatically release expired ticket reservations.
  */
-@Slf4j
+@Log4j2
 public class ReservationCleanupScheduler {
 
     private final ScheduledExecutorService scheduler;

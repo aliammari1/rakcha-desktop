@@ -1,7 +1,7 @@
 package com.esprit.utils;
 
 import com.esprit.models.users.User;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
  * @version 3.0.0
  * @since 1.0.0
  */
-@Slf4j
+@Log4j2
 public class SessionManager {
 
     // Session timeout in minutes

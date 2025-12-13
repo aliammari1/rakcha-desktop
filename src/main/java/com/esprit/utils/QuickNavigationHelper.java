@@ -4,7 +4,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Quick navigation helper for simple one-click navigation scenarios.
@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
  * @version 1.0.0
  * @since 1.0.0
  */
-@Slf4j
+@Log4j2
 public class QuickNavigationHelper {
 
     /**

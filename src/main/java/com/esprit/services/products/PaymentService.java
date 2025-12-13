@@ -3,7 +3,7 @@ package com.esprit.services.products;
 import com.esprit.models.products.Payment;
 import com.esprit.models.products.Order;
 import com.esprit.utils.DataSource;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Service for managing payments and payment processing.
  */
-@Slf4j
+@Log4j2
 public class PaymentService {
 
     private static final String TABLE_NAME = "payments";

@@ -7,7 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  * @version 1.0.0
  * @since 1.0.0
  */
-@Slf4j
+@Log4j2
 public class NavigationManager {
 
     private static final Logger LOGGER = Logger.getLogger(NavigationManager.class.getName());

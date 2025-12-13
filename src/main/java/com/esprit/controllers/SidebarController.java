@@ -18,7 +18,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.net.URL;
@@ -28,7 +28,7 @@ import java.util.ResourceBundle;
  * Controller for the application sidebar navigation.
  * Dynamically creates and manages navigation buttons based on user role.
  */
-@Slf4j
+@Log4j2
 public class SidebarController implements Initializable {
 
     // User data

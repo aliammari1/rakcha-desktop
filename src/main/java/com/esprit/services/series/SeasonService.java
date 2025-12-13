@@ -3,7 +3,7 @@ package com.esprit.services.series;
 import com.esprit.models.series.Episode;
 import com.esprit.models.series.Season;
 import com.esprit.utils.DataSource;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,7 +23,7 @@ import java.util.logging.Logger;
  * @version 1.0.0
  * @since 1.0.0
  */
-@Slf4j
+@Log4j2
 public class SeasonService {
 
     private static final Logger LOGGER = Logger.getLogger(SeasonService.class.getName());

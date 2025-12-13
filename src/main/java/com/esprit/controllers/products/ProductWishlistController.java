@@ -10,7 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -19,7 +19,7 @@ import java.util.ResourceBundle;
  * Controller for the ProductWishlist.fxml screen.
  * Manages user's product wishlist functionality.
  */
-@Slf4j
+@Log4j2
 public class ProductWishlistController implements Initializable {
 
     // Header elements

@@ -8,7 +8,7 @@ import com.esprit.utils.DataSource;
 import com.esprit.utils.Page;
 import com.esprit.utils.PageRequest;
 import com.esprit.utils.PaginationQueryBuilder;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@Slf4j
+@Log4j2
 /**
  * Service class providing business logic for the RAKCHA application. Implements
  * CRUD operations and business rules for data management.

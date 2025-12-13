@@ -5,7 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 import java.util.Stack;
 
@@ -18,7 +18,7 @@ import java.util.Stack;
  * @version 1.0.0
  * @since 1.0.0
  */
-@Slf4j
+@Log4j2
 public class ScreenNavigationHelper {
 
     // Navigation history stack

@@ -30,7 +30,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 import java.net.URL;
 import java.util.Optional;
@@ -44,7 +44,7 @@ import java.util.ResourceBundle;
  * @author RAKCHA Team
  * @version 1.0.0
  */
-@Slf4j
+@Log4j2
 public class CategoryManagementController implements Initializable {
 
     private final CategoryService categoryService = new CategoryService();

@@ -1,6 +1,6 @@
 package com.esprit.utils;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,7 +21,7 @@ import java.sql.Statement;
  * @version 1.0.0
  * @since 1.0.0
  */
-@Slf4j
+@Log4j2
 public class TableCreator {
 
     private final Connection connection;

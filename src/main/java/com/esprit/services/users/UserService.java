@@ -14,7 +14,7 @@ import com.esprit.utils.UserMail;
 import com.esprit.utils.UserPDF;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.Connection;
@@ -24,7 +24,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Slf4j
+@Log4j2
 /**
  * Service class providing business logic for the RAKCHA application. Implements
  * CRUD operations and business rules for data management.

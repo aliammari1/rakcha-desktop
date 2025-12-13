@@ -9,7 +9,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 import java.util.Stack;
 
@@ -20,7 +20,7 @@ import java.util.Stack;
  * @author RAKCHA Team
  * @version 1.0.0
  */
-@Slf4j
+@Log4j2
 public class SlideOverNavigator {
 
     private static final Duration ANIMATION_DURATION = Duration.millis(300);
