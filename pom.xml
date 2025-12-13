@@ -222,12 +222,12 @@
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
-      <version>21.0.7</version>
+      <version>21.0.10-ea+1</version>
     </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>
-      <version>21.0.7</version>
+      <version>21.0.10-ea+1</version>
     </dependency>
     <dependency>
       <groupId>org.controlsfx</groupId>
@@ -237,7 +237,7 @@
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-base</artifactId>
-      <version>21.0.7</version>
+      <version>21.0.10-ea+1</version>
     </dependency>
     <dependency>
       <groupId>com.google.http-client</groupId>
@@ -347,17 +347,17 @@
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-web</artifactId>
-      <version>21.0.7</version>
+      <version>21.0.10-ea+1</version>
     </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-swing</artifactId>
-      <version>21.0.7</version>
+      <version>21.0.10-ea+1</version>
     </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-media</artifactId>
-      <version>21.0.7</version>
+      <version>21.0.10-ea+1</version>
     </dependency>
     <dependency>
       <groupId>org.kordamp.ikonli</groupId>
