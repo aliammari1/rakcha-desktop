@@ -7,10 +7,13 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <?import org.kordamp.ikonli.javafx.*?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" prefHeight="855.0"
+<StackPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="855.0"
       prefWidth="1507.0"
       xmlns="http://javafx.com/javafx/21"
-      fx:controller="com.esprit.controllers.products.AfficherProductClientControllers">
+      fx:controller="com.esprit.controllers.products.AfficherProductClientControllers"
+      fx:id="rootStackPane"
+      stylesheets="@../styles/filmStyle.css, @../styles/produitStyle.css">
+<VBox>
 
   <HBox VBox.vgrow="ALWAYS">
     <!-- SideBar -->
@@ -115,3 +118,4 @@
     </VBox>
   </AnchorPane>
 </VBox>
+</StackPane>

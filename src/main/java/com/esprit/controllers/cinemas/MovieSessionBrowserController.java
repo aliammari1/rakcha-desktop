@@ -6,6 +6,7 @@ import com.esprit.models.films.Film;
 import com.esprit.services.cinemas.CinemaService;
 import com.esprit.services.cinemas.MovieSessionService;
 import com.esprit.services.films.FilmService;
+import com.esprit.utils.SlideOverNavigator;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -93,15 +94,16 @@ public class MovieSessionBrowserController implements Initializable {
         // Cinema filter
         List<Cinema> cinemas = cinemaService.getAll();
         List<String> cinemaNames = cinemas.stream()
-            .map(Cinema::getName)
-            .collect(Collectors.toList());
+                .map(Cinema::getName)
+                .collect(Collectors.toList());
         cinemaNames.add(0, "All Cinemas");
         cinemaFilter.setItems(FXCollections.observableArrayList(cinemaNames));
         cinemaFilter.getSelectionModel().selectFirst();
         cinemaFilter.setOnAction(e -> applyFilters());
 
         // Genre filter
-        List<String> genres = Arrays.asList("All Genres", "Action", "Comedy", "Drama", "Horror", "Romance", "Sci-Fi", "Thriller");
+        List<String> genres = Arrays.asList("All Genres", "Action", "Comedy", "Drama", "Horror", "Romance", "Sci-Fi",
+                "Thriller");
         genreFilter.setItems(FXCollections.observableArrayList(genres));
         genreFilter.getSelectionModel().selectFirst();
         genreFilter.setOnAction(e -> applyFilters());
@@ -118,7 +120,7 @@ public class MovieSessionBrowserController implements Initializable {
     }
 
     private void setupQuickFilters() {
-        String[] filters = {"All", "Now Showing", "Coming Soon", "Today", "This Week", "IMAX", "Premieres"};
+        String[] filters = { "All", "Now Showing", "Coming Soon", "Today", "This Week", "IMAX", "Premieres" };
 
         for (String filter : filters) {
             Button chip = createFilterChip(filter);
@@ -186,24 +188,24 @@ public class MovieSessionBrowserController implements Initializable {
         String searchText = searchField.getText().toLowerCase().trim();
         if (!searchText.isEmpty()) {
             filtered = filtered.stream()
-                .filter(s -> s.getFilm().getTitle().toLowerCase().contains(searchText))
-                .collect(Collectors.toList());
+                    .filter(s -> s.getFilm().getTitle().toLowerCase().contains(searchText))
+                    .collect(Collectors.toList());
         }
 
         // Apply cinema filter
         String selectedCinema = cinemaFilter.getValue();
         if (selectedCinema != null && !selectedCinema.equals("All Cinemas")) {
             filtered = filtered.stream()
-                .filter(s -> s.getCinemaHall().getCinema().getName().equals(selectedCinema))
-                .collect(Collectors.toList());
+                    .filter(s -> s.getCinemaHall().getCinema().getName().equals(selectedCinema))
+                    .collect(Collectors.toList());
         }
 
         // Apply date filter
         LocalDate selectedDate = dateFilter.getValue();
         if (selectedDate != null) {
             filtered = filtered.stream()
-                .filter(s -> s.getStartTime().toLocalDate().equals(selectedDate))
-                .collect(Collectors.toList());
+                    .filter(s -> s.getStartTime().toLocalDate().equals(selectedDate))
+                    .collect(Collectors.toList());
         }
 
         // Apply quick filter
@@ -219,17 +221,17 @@ public class MovieSessionBrowserController implements Initializable {
 
         return switch (selectedQuickFilter) {
             case "today" -> sessions.stream()
-                .filter(s -> s.getStartTime().toLocalDate().equals(today))
-                .collect(Collectors.toList());
+                    .filter(s -> s.getStartTime().toLocalDate().equals(today))
+                    .collect(Collectors.toList());
             case "this-week" -> sessions.stream()
-                .filter(s -> {
-                    LocalDate sessionDate = s.getStartTime().toLocalDate();
-                    return !sessionDate.isBefore(today) && !sessionDate.isAfter(today.plusDays(7));
-                })
-                .collect(Collectors.toList());
+                    .filter(s -> {
+                        LocalDate sessionDate = s.getStartTime().toLocalDate();
+                        return !sessionDate.isBefore(today) && !sessionDate.isAfter(today.plusDays(7));
+                    })
+                    .collect(Collectors.toList());
             case "imax" -> sessions.stream()
-                .filter(s -> s.getCinemaHall().getName().toLowerCase().contains("imax"))
-                .collect(Collectors.toList());
+                    .filter(s -> s.getCinemaHall().getName().toLowerCase().contains("imax"))
+                    .collect(Collectors.toList());
             default -> sessions;
         };
     }
@@ -246,7 +248,7 @@ public class MovieSessionBrowserController implements Initializable {
 
         // Group sessions by film
         Map<Film, List<MovieSession>> sessionsByFilm = sessions.stream()
-            .collect(Collectors.groupingBy(MovieSession::getFilm));
+                .collect(Collectors.groupingBy(MovieSession::getFilm));
 
         for (Map.Entry<Film, List<MovieSession>> entry : sessionsByFilm.entrySet()) {
             VBox card = createSessionCard(entry.getKey(), entry.getValue());
@@ -321,7 +323,7 @@ public class MovieSessionBrowserController implements Initializable {
         sessionTimes.getStyleClass().add("session-times");
 
         Map<Cinema, List<MovieSession>> byCinema = sessions.stream()
-            .collect(Collectors.groupingBy(s -> s.getCinemaHall().getCinema()));
+                .collect(Collectors.groupingBy(s -> s.getCinemaHall().getCinema()));
 
         for (Map.Entry<Cinema, List<MovieSession>> cinemaEntry : byCinema.entrySet()) {
             VBox cinemaBox = new VBox(8);
@@ -398,9 +400,11 @@ public class MovieSessionBrowserController implements Initializable {
             MovieSessionDetailsController controller = loader.getController();
             controller.initData(film, sessions);
 
-            // Navigate to details view
-            Stage stage = (Stage) sessionsGrid.getScene().getWindow();
-            stage.getScene().setRoot((javafx.scene.Parent) detailsView);
+            // Use slide-over navigation instead of full page navigation
+            StackPane rootPane = (StackPane) sessionsGrid.getScene().getRoot();
+            SlideOverNavigator.slideIn(detailsView, rootPane, () -> {
+                LOGGER.info("Session details panel closed");
+            });
 
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Failed to open session details", e);

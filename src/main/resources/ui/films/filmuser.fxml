@@ -39,62 +39,9 @@
   <!-- Main Application Shell -->
   <BorderPane fx:id="mainShell" styleClass="main-shell">
 
-    <!-- Left: Minimal Sidebar -->
+    <!-- Left: Global Sidebar -->
     <left>
-      <VBox fx:id="miniSidebar" styleClass="mini-sidebar" spacing="0" prefWidth="70">
-        <padding>
-          <Insets top="20" bottom="20" left="10" right="10"/>
-        </padding>
-
-        <!-- Logo Icon -->
-        <VBox alignment="CENTER" spacing="8">
-          <ImageView fitHeight="45" fitWidth="45" preserveRatio="true" styleClass="sidebar-logo">
-            <image>
-              <Image url="@Logo.png"/>
-            </image>
-          </ImageView>
-        </VBox>
-
-        <Region VBox.vgrow="ALWAYS" prefHeight="30"/>
-
-        <!-- Navigation Icons -->
-        <VBox alignment="CENTER" spacing="15" styleClass="nav-icons">
-          <Button fx:id="navFilms" styleClass="nav-icon-btn active" mnemonicParsing="false">
-            <graphic>
-              <FontIcon iconLiteral="mdi2m-movie:24" styleClass="nav-icon"/>
-            </graphic>
-          </Button>
-          <Button fx:id="SerieButton" onAction="#switchtoSerie" styleClass="nav-icon-btn" mnemonicParsing="false">
-            <graphic>
-              <FontIcon iconLiteral="mdi2t-television:24" styleClass="nav-icon"/>
-            </graphic>
-          </Button>
-          <Button styleClass="nav-icon-btn" mnemonicParsing="false">
-            <graphic>
-              <FontIcon iconLiteral="mdi2h-heart:24" styleClass="nav-icon"/>
-            </graphic>
-          </Button>
-          <Button styleClass="nav-icon-btn" mnemonicParsing="false">
-            <graphic>
-              <FontIcon iconLiteral="mdi2t-ticket:24" styleClass="nav-icon"/>
-            </graphic>
-          </Button>
-        </VBox>
-
-        <Region VBox.vgrow="ALWAYS"/>
-
-        <!-- Bottom Icons -->
-        <VBox alignment="CENTER" spacing="15">
-          <Button fx:id="settingsBtn" onAction="#openSettings" styleClass="nav-icon-btn" mnemonicParsing="false">
-            <graphic>
-              <FontIcon iconLiteral="mdi2c-cog:22" styleClass="nav-icon"/>
-            </graphic>
-            <tooltip>
-              <Tooltip text="Settings"/>
-            </tooltip>
-          </Button>
-        </VBox>
-      </VBox>
+      <fx:include source="/ui/sidebar.fxml"/>
     </left>
 
     <!-- Center: Main Content Area -->
